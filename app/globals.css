@@ -1,26 +1,130 @@
 @import "tailwindcss";
 
+/* ─── Design Tokens ─────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Backgrounds & Surfaces */
+  --background: #f1f5f9;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+
+  /* Foreground */
+  --foreground: #0f172a;
+  --foreground-muted: #64748b;
+
+  /* Border */
+  --border: #e2e8f0;
+
+  /* Premium Shadows (Source of Truth) */
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+
+  /* Shell Dimensions */
+  --header-height: 72px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 68px;
+
+  /* L1 Category Colors (from seed) */
+  --color-cat-skill: #2DD4BF;
+  /* Skill & Craft      – Teal    */
+  --color-cat-movement: #4ADE80;
+  /* Movement & Wellness – Green   */
+  --color-cat-gathering: #FB923C;
+  /* Gathering & Fun    – Peach   */
+  --color-cat-performance: #60A5FA;
+  /* Performance        – Blue    */
+  --color-cat-civic: #F97316;
+  /* Civic & Governance – Orange  */
+  --color-cat-practical: #FACC15;
+  /* Practical & Resource – Yellow */
+
+  /* Primary accent */
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
 }
 
-@theme inline {
+/* ─── Dark Mode ─────────────────────────────────── */
+.dark {
+  --background: #0d0d12;
+  --surface: #16161f;
+  --surface-elevated: #1e1e2a;
+  --foreground: #f8fafc;
+  --foreground-muted: #94a3b8;
+  --border: #1e293b;
+
+  /* Reset shadows for dark mode to avoid "glow" look */
+  --shadow-card: none;
+  --shadow-premium: none;
+}
+
+/* ─── Tailwind v4 Theme Extension ───────────────── */
+@theme {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-foreground: var(--foreground);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  /* Category colors available as Tailwind tokens */
+  --color-cat-skill: var(--color-cat-skill);
+  --color-cat-movement: var(--color-cat-movement);
+  --color-cat-gathering: var(--color-cat-gathering);
+  --color-cat-performance: var(--color-cat-performance);
+  --color-cat-civic: var(--color-cat-civic);
+  --color-cat-practical: var(--color-cat-practical);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-premium: var(--shadow-premium);
+
+  --spacing-header: 72px;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base Styles ───────────────────────────────── */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 9999px;
+}
+
+@layer utilities {
+  .soft-press {
+    @apply transition-transform duration-200 active:scale-95;
+  }
+
+  .skeleton {
+    @apply animate-pulse bg-border/50 rounded-lg;
+  }
 }

@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: ejam-kopa-db
+    restart: always
+    environment:
+      POSTGRES_USER: kopa_user
+      POSTGRES_PASSWORD: kopa_password
+      POSTGRES_DB: ejam_kopa
+    ports:
+      - "5433:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U kopa_user -d ejam_kopa" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  soketi:
+    image: quay.io/soketi/soketi:1.6-16-alpine
+    container_name: ejam-kopa-soketi
+    restart: always
+    environment:
+      SOKETI_DEBUG: "1"
+      SOKETI_DEFAULT_APP_ID: "app-id"
+      SOKETI_DEFAULT_APP_KEY: "app-key"
+      SOKETI_DEFAULT_APP_SECRET: "app-secret"
+    ports:
+      - "6001:6001"
+      - "9601:9601"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ejam-kopa-app
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://kopa_user:kopa_password@db:5432/ejam_kopa?schema=public"
+      NEXTAUTH_URL: "http://localhost:3000"
+      NEXTAUTH_SECRET: "super-secret-key-change-in-prod"
+      AUTH_SECRET: "super-secret-key-change-in-prod"
+      PUSHER_APP_ID: "app-id"
+      NEXT_PUBLIC_PUSHER_KEY: "app-key"
+      PUSHER_SECRET: "app-secret"
+      NEXT_PUBLIC_PUSHER_CLUSTER: "mt1"
+      NEXT_PUBLIC_PUSHER_HOST: "soketi"
+      NEXT_PUBLIC_PUSHER_PORT: "6001"
+      NEXT_PUBLIC_PUSHER_TLS: "false"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      soketi:
+        condition: service_started
+    command: npm run docker:start
+
+volumes:
+  db_data:
