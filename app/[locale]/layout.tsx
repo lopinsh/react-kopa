@@ -35,7 +35,6 @@ export default async function LocaleLayout({ children, params }: Props) {
     }
 
     const messages = await getMessages();
-    const categories = await import('@/actions/discovery-actions').then(m => m.getDiscoveryCategories(locale));
 
     return (
         <Providers locale={locale} messages={messages}>
@@ -44,9 +43,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <Header locale={locale} />
 
                 <div className="flex flex-1 overflow-hidden">
-                    {/* Desktop Sidebar */}
-                    <Sidebar categories={categories} locale={locale} />
-
+                    <Sidebar locale={locale} />
                     {/* Main Content */}
                     <main
                         className="flex-1 overflow-y-auto pb-20 md:pb-4"

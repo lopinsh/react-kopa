@@ -211,7 +211,8 @@ export const UserService = {
                     l1Slug,
                     color: accentColor
                 },
-                accentColor
+                accentColor,
+                role: m.role
             };
         });
     }

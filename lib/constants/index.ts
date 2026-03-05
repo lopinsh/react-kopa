@@ -25,7 +25,7 @@ export type City = (typeof CITIES)[number];
 /**
  * Group visibility and lifecycle types.
  */
-export const GROUP_TYPES = ['PUBLIC', 'PRIVATE', 'SINGLE_EVENT'] as const;
+export const GROUP_TYPES = ['PUBLIC', 'PRIVATE'] as const;
 
 export type GroupType = (typeof GROUP_TYPES)[number];
 

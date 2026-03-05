@@ -5,7 +5,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import {
     MapPin, Users, Calendar, Settings, LogOut, UserPlus,
     ShieldAlert, Plus, ChevronRight, MoreHorizontal, HelpCircle,
-    Globe, Instagram, MessageSquare, Check, Trash2, X, Share2, Flag
+    Globe, Instagram, MessageSquare, Check, Trash2, X, Share2, Flag,
+    Shield, User
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -21,6 +22,7 @@ import { useAuthGate } from '@/lib/useAuthGate';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { usePathname } from '@/i18n/routing';
+import { getCategoryIcon } from '@/lib/icons';
 
 import type { GroupContext } from '@/lib/services/group.service';
 
@@ -107,14 +109,17 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     if (group.category.parentTitle) {
         breadcrumbSegments.push({
             label: group.category.parentTitle,
-            href: `/?cat=${l1Slug}`
+            href: `/?cat=${l1Slug}`,
+            isL1: true,
+            slug: l1Slug
         });
     }
 
     // Add L2 (the current group category)
     breadcrumbSegments.push({
         label: group.category.title,
-        href: `/?cat=${l1Slug}&tag=${group.category.slug}`
+        href: `/?cat=${l1Slug}&tag=${group.category.slug}`,
+        isL1: false
     });
 
     return (
@@ -160,23 +165,38 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                 {/* ── Breadcrumb & Mobile Actions ─────────────────────────────── */}
                 <div className="mb-4 flex items-start justify-between gap-4">
                     <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5 text-sm" aria-label="breadcrumb">
-                        {breadcrumbSegments.map((seg, i) => (
-                            <span key={i} className="flex items-center gap-1 sm:gap-1.5">
-                                {i > 0 && <ChevronRight className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-foreground-muted/30 -mx-0.5" />}
-                                <Link
-                                    href={seg.href}
-                                    className={clsx(
-                                        "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold transition-all shadow-premium border border-white/10",
-                                        "text-[color:var(--accent-foreground)] bg-[color:var(--accent)]"
-                                    )}
-                                >
-                                    {i === breadcrumbSegments.length - 1 && (
-                                        <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-current opacity-80" />
-                                    )}
-                                    {seg.label}
-                                </Link>
-                            </span>
-                        ))}
+                        {breadcrumbSegments.map((seg: any, i) => {
+                            const L1Color = group.category.color;
+                            const Icon = seg.isL1 ? getCategoryIcon(seg.slug) : null;
+
+                            return (
+                                <span key={i} className="flex items-center gap-1 sm:gap-1.5">
+                                    {i > 0 && <ChevronRight className="h-2.5 w-2.5 sm:h-3.5 sm:w-3.5 text-foreground-muted/30 -mx-0.5" />}
+                                    <Link
+                                        href={seg.href}
+                                        className={clsx(
+                                            "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold transition-all shadow-premium border",
+                                            seg.isL1
+                                                ? "text-white border-white/10"
+                                                : "border-[color:var(--l1-color)] bg-[color:var(--l2-bg)] text-[color:var(--l1-color)]"
+                                        )}
+                                        style={{
+                                            backgroundColor: (seg.isL1 ? L1Color : undefined) as any,
+                                            ['--l1-color' as string]: L1Color,
+                                            ['--l2-bg' as string]: `${L1Color}1A`,
+                                        } as React.CSSProperties}
+                                    >
+                                        {seg.isL1 && Icon && (
+                                            <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white/90" strokeWidth={2.5} />
+                                        )}
+                                        {i === breadcrumbSegments.length - 1 && !seg.isL1 && (
+                                            <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-current opacity-80" />
+                                        )}
+                                        {seg.label}
+                                    </Link>
+                                </span>
+                            );
+                        })}
                     </nav>
 
                     {/* Mobile-only More Options (Top Aligned with Breadcrumbs) */}
@@ -329,6 +349,19 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     >
                                         <X className="h-4 w-4" />
                                     </button>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Member Status Badge - ONLY for members/admins/owners */}
+                        {(isMember || isOwner) && (
+                            <div className="flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold border border-white/10 bg-white/10 text-white shadow-premium backdrop-blur-md">
+                                {isOwner ? (
+                                    <><Shield className="h-4 w-4 text-emerald-400" /> {t('statusOwner')}</>
+                                ) : userRole === 'ADMIN' ? (
+                                    <><Shield className="h-4 w-4 text-blue-400" /> {t('statusAdmin')}</>
+                                ) : (
+                                    <><User className="h-4 w-4 text-white/70" /> {t('statusMember')}</>
                                 )}
                             </div>
                         )}

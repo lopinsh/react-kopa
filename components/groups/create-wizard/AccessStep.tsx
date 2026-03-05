@@ -21,12 +21,6 @@ const GROUP_TYPE_OPTIONS = [
         icon: Lock,
         labelKey: 'typePrivate',
         descKey: 'typePrivateDesc',
-    },
-    {
-        value: GLOBAL_GROUP_TYPES[2], // SINGLE_EVENT
-        icon: Zap,
-        labelKey: 'typeSingleEvent',
-        descKey: 'typeSingleEventDesc'
     }
 ];
 
@@ -92,33 +86,6 @@ export default function AccessStep({ accentColor }: Props) {
                         watch('isAcceptingMembers') ? "text-[var(--accent)]" : "text-foreground-muted"
                     )} />
                 </label>
-
-                <div className="grid gap-3 sm:grid-cols-3 pt-2">
-                    <div className="relative">
-                        <input
-                            {...register('discordLink')}
-                            placeholder={t('socialDiscord')}
-                            className="w-full rounded-xl border border-border bg-background pl-8 pr-3 py-2 text-xs outline-none focus:border-[var(--accent)] transition-all"
-                        />
-                        <MessageSquare className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-muted" />
-                    </div>
-                    <div className="relative">
-                        <input
-                            {...register('instagramLink')}
-                            placeholder={t('socialInstagram')}
-                            className="w-full rounded-xl border border-border bg-background pl-8 pr-3 py-2 text-xs outline-none focus:border-[var(--accent)] transition-all"
-                        />
-                        <InstagramIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-muted" />
-                    </div>
-                    <div className="relative">
-                        <input
-                            {...register('websiteLink')}
-                            placeholder={t('socialWebsite')}
-                            className="w-full rounded-xl border border-border bg-background pl-8 pr-3 py-2 text-xs outline-none focus:border-[var(--accent)] transition-all"
-                        />
-                        <Globe className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-muted" />
-                    </div>
-                </div>
             </div>
         </div>
     );

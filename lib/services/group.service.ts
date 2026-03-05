@@ -51,6 +51,7 @@ export interface GroupContext {
         level: number;
         parentTitle: string | null;
         l1Slug: string;
+        color: string | null;
     };
     tags: Array<{
         id: string;
@@ -122,7 +123,7 @@ export const GroupService = {
                             orderBy: { joinedAt: 'desc' as const },
                             select: {
                                 user: {
-                                    select: { id: true, name: true, avatarSeed: true }
+                                    select: { id: true, name: true, username: true, avatarSeed: true }
                                 }
                             }
                         }
@@ -224,14 +225,14 @@ export const GroupService = {
                     userId: true,
                     joinedAt: true,
                     user: {
-                        select: { id: true, name: true, image: true, allowDirectMessages: true, isProfilePublic: true }
+                        select: { id: true, name: true, username: true, avatarSeed: true, image: true, allowDirectMessages: true, isProfilePublic: true }
                     }
                 }
             },
             appMessages: {
                 include: {
                     sender: {
-                        select: { name: true, image: true }
+                        select: { name: true, username: true, avatarSeed: true, image: true }
                     }
                 },
                 orderBy: { createdAt: 'asc' } as const
@@ -337,7 +338,8 @@ export const GroupService = {
                 slug: categorySlug,
                 level: currentCat.level,
                 parentTitle,
-                l1Slug: (currentCat.level === 3 && currentCat.parent?.parent) ? currentCat.parent.parent.slug : (currentCat.level === 2 && currentCat.parent) ? currentCat.parent.slug : currentCat.slug
+                l1Slug: (currentCat.level === 3 && currentCat.parent?.parent) ? currentCat.parent.parent.slug : (currentCat.level === 2 && currentCat.parent) ? currentCat.parent.slug : currentCat.slug,
+                color: currentCat.color || currentCat.parent?.color || currentCat.parent?.parent?.color || null
             },
             tags: g.tags.map((t: { id: string; slug: string; level: number }) => ({
                 id: t.id,

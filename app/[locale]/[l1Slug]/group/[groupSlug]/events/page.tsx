@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
+import { clsx } from 'clsx';
 
 export async function generateMetadata({
     params,
@@ -26,10 +27,13 @@ export async function generateMetadata({
 
 export default async function GroupEventsPage({
     params,
+    searchParams,
 }: {
     params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
+    searchParams: Promise<{ tab?: string }>;
 }) {
     const { locale, groupSlug, l1Slug } = await params;
+    const { tab } = await searchParams;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
 
@@ -42,23 +46,76 @@ export default async function GroupEventsPage({
     const accentColor = group.accentColor;
     const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
 
+    const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
+    const now = new Date();
+
+    const filteredEvents = eventsData.filter(event => {
+        const startDate = new Date(event.startDate);
+        if (currentTab === 'my-rsvps') {
+            return event.isAttending;
+        } else if (currentTab === 'past') {
+            return startDate < now;
+        } else {
+            return startDate >= now;
+        }
+    });
+
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {isOwnerOrAdmin && (
-                <div className="flex justify-end mb-8">
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ '--accent': accentColor } as any}>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                {/* Events Tab Menu */}
+                <div className="flex items-center gap-6 border-b border-border overflow-x-auto no-scrollbar w-full sm:w-auto">
+                    <Link
+                        href={`/${l1Slug}/group/${groupSlug}/events?tab=upcoming` as any}
+                        className={clsx(
+                            "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                            currentTab === 'upcoming'
+                                ? "border-[var(--accent)] text-foreground"
+                                : "border-transparent text-foreground-muted hover:text-foreground"
+                        )}
+                    >
+                        {t('eventsTabUpcoming')}
+                    </Link>
+                    {session && (
+                        <Link
+                            href={`/${l1Slug}/group/${groupSlug}/events?tab=my-rsvps` as any}
+                            className={clsx(
+                                "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                                currentTab === 'my-rsvps'
+                                    ? "border-[var(--accent)] text-foreground"
+                                    : "border-transparent text-foreground-muted hover:text-foreground"
+                            )}
+                        >
+                            {t('eventsTabMyRsvps')}
+                        </Link>
+                    )}
+                    <Link
+                        href={`/${l1Slug}/group/${groupSlug}/events?tab=past` as any}
+                        className={clsx(
+                            "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                            currentTab === 'past'
+                                ? "border-[var(--accent)] text-foreground"
+                                : "border-transparent text-foreground-muted hover:text-foreground"
+                        )}
+                    >
+                        {t('eventsTabPast')}
+                    </Link>
+                </div>
+
+                {isOwnerOrAdmin && (
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
-                        className="group/cta flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-foreground text-background hover:opacity-90 shadow-sm"
+                        className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-foreground text-background hover:opacity-90 shadow-sm shrink-0"
                     >
                         <Plus className="h-4 w-4" />
                         {t('createEvent')}
                     </Link>
-                </div>
-            )}
+                )}
+            </div>
 
-            {eventsData.length > 0 ? (
+            {filteredEvents.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {eventsData.map((event) => (
+                    {filteredEvents.map((event) => (
                         <EventCard
                             key={event.id}
                             event={{
@@ -90,9 +147,13 @@ export default async function GroupEventsPage({
                     </div>
                     <h3 className="text-xl font-bold mb-2">{t('noEvents')}</h3>
                     <p className="text-foreground-muted max-w-xs mx-auto mb-8">
-                        There are no events planned for this group yet.
+                        {currentTab === 'upcoming'
+                            ? "There are no upcoming events planned for this group."
+                            : currentTab === 'past'
+                                ? "There are no past events for this group."
+                                : "You haven't RSVPed to any events in this group."}
                     </p>
-                    {isOwnerOrAdmin && (
+                    {isOwnerOrAdmin && currentTab === 'upcoming' && (
                         <Link
                             href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
                             className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold bg-surface border border-border hover:bg-surface-elevated transition-colors"

@@ -207,7 +207,7 @@ async function main() {
 
   type GroupSeed = {
     slug: string; name: string; description: string;
-    city: string; category: string; type?: 'PUBLIC' | 'PRIVATE' | 'SINGLE_EVENT';
+    city: string; category: string; type?: 'PUBLIC' | 'PRIVATE';
     bannerImage?: string;
     instructions?: string;
     accentColor?: string;
@@ -222,7 +222,7 @@ async function main() {
     {
       slug: 'pargajieni-riga', name: 'Rīgas Pārgājēji', category: 'hiking',
       description: 'Iknedēļas pārgājieni pa Latvijas skaistākajām takām. Visi gaidīti — no iesācējiem līdz pieredzējušiem tūristiem!',
-      bannerImage: 'https://picsum.photos/seed/pargajieni/1200/400',
+      bannerImage: 'https://picsum.photos/seed/pargajieni/800/400',
       instructions: 'Tikšanās vieta: Rīgas Centrālā stacija (pulkstenis). Līdzi ņemt ērtus apavus un ūdeni.',
       accentColor: '#10B981',
       discordLink: 'https://discord.gg/pargajieni',
@@ -239,7 +239,7 @@ async function main() {
     {
       slug: 'running-riga', name: 'Rīgas Skrējēji', category: 'running',
       description: 'Kopīgas rieta skrējiens Mežaparkā un Uzvaras parkā. Katru rītu plkst. 7:00. Visi tempi laipni gaidīti!',
-      bannerImage: 'https://picsum.photos/seed/running/1200/400',
+      bannerImage: 'https://picsum.photos/seed/running/800/400',
       instructions: 'Sākam precīzi 7:05. WhatsApp grupa operatīvai saziņai.',
       accentColor: '#3B82F6',
       instagramLink: 'https://instagram.com/riga_runners',
@@ -254,7 +254,7 @@ async function main() {
     {
       slug: 'boardgames-riga', name: 'Galda Spēļu Klubs Rīga', category: 'boardgames',
       description: 'Tikamies katru piektdienas vakaru, lai spēlētu galda spēles. Paši piedāvājam Catan, Ticket to Ride, Wingspan un daudz ko citu.',
-      bannerImage: 'https://picsum.photos/seed/boardgames/1200/400',
+      bannerImage: 'https://picsum.photos/seed/boardgames/800/400',
       instructions: 'Gathering at "Lude" cafe. Support the venue by ordering a drink.',
       accentColor: '#8B5CF6',
       discordLink: 'https://discord.gg/rigagames',
@@ -267,7 +267,7 @@ async function main() {
     {
       slug: 'yoga-jurmala', name: 'Jūrmalas Jogas Kopiena', category: 'yoga',
       description: 'Dvēseles un ķermeņa harmonija pie jūras. Nodarbības pludmalē vasarā, zālē ziemā. Visiem līmeņiem.',
-      bannerImage: 'https://picsum.photos/seed/yoga/1200/400',
+      bannerImage: 'https://picsum.photos/seed/yoga/800/400',
       accentColor: '#14B8A6',
       city: 'Jurmala', owner: liga,
       members: [{ user: marta, role: 'MEMBER' }, { user: anna, role: 'MEMBER' }],
@@ -275,7 +275,7 @@ async function main() {
     {
       slug: 'gleznieciba-riga', name: 'Rīgas Glezniecības Studija', category: 'painting',
       description: 'Kopīgas gleznošanas sesijas visiem līmeņiem. Materiālus nodrošinām. Vīns atļauts! 🍷',
-      bannerImage: 'https://picsum.photos/seed/painting/1200/400',
+      bannerImage: 'https://picsum.photos/seed/painting/800/400',
       instructions: 'Materials provided. Feel free to bring your own inspiration.',
       accentColor: '#D946EF',
       city: 'Riga', owner: anna,
@@ -284,7 +284,7 @@ async function main() {
     {
       slug: 'foto-valmiera', name: 'Vidzemes Fotografi', category: 'photography',
       description: 'Kopīgas fotosesijas dabā un pilsētā. Dalāmies zināšanās, kritizējam labvēlīgi.',
-      bannerImage: 'https://picsum.photos/seed/photography/1200/400',
+      bannerImage: 'https://picsum.photos/seed/photography/800/400',
       accentColor: '#F97316',
       city: 'Valmiera', owner: janis,
       members: [{ user: andris, role: 'MEMBER' }, { user: toms, role: 'MEMBER' }],
@@ -292,7 +292,7 @@ async function main() {
     {
       slug: 'salsa-riga', name: 'Rīgas Salsa Deju Klubs', category: 'salsa',
       description: 'Karstās kubāņu ritmi Rīgas sirdī! Nodarbības iesācējiem un pieredzējušiem katru trešdienu un sestdienu.',
-      bannerImage: 'https://picsum.photos/seed/salsa/1200/400',
+      bannerImage: 'https://picsum.photos/seed/salsa/800/400',
       accentColor: '#F43F5E',
       city: 'Riga', owner: marta,
       members: [{ user: anna, role: 'MEMBER' }, { user: liga, role: 'MEMBER' }],
@@ -300,7 +300,7 @@ async function main() {
     {
       slug: 'cycling-cesis', name: 'Cēsu Riteņbraucēji', category: 'cycling',
       description: 'Nedēļas nogales braucieni pa Vidzemes bezceļiem un grants ceļiem.',
-      bannerImage: 'https://picsum.photos/seed/cycling/1200/400',
+      bannerImage: 'https://picsum.photos/seed/cycling/800/400',
       accentColor: '#3B82F6',
       city: 'Cesis', owner: toms,
       members: [{ user: janis, role: 'ADMIN' }],
@@ -308,7 +308,7 @@ async function main() {
     {
       slug: 'kino-daugavpils', name: 'Daugavpils Kino Vakari', category: 'movie-nights',
       description: 'Katru svētdienu kopīgi skatāmies filmu un diskutējam.',
-      bannerImage: 'https://picsum.photos/seed/movies/1200/400',
+      bannerImage: 'https://picsum.photos/seed/movies/800/400',
       accentColor: '#EC4899',
       city: 'Daugavpils', owner: santa,
       members: [{ user: anna, role: 'MEMBER' }],
@@ -316,7 +316,7 @@ async function main() {
     {
       slug: 'english-riga', name: 'English Speaking Club Riga', category: 'languages',
       description: 'Practice your English in a friendly, welcoming environment.',
-      bannerImage: 'https://picsum.photos/seed/languages/1200/400',
+      bannerImage: 'https://picsum.photos/seed/languages/800/400',
       accentColor: '#F59E0B',
       city: 'Riga', owner: liga,
       members: [{ user: oskars, role: 'MEMBER' }, { user: andris, role: 'MEMBER' }],
@@ -324,7 +324,7 @@ async function main() {
     {
       slug: 'brivpratigais-riga', name: 'Rīgas Brīvprātīgie', category: 'volunteering',
       description: 'Kopā darām Rīgu labāku! Organizējam pasākumus, palīdzam tiem, kam tā vajadzīga.',
-      bannerImage: 'https://picsum.photos/seed/volunteering/1200/400',
+      bannerImage: 'https://picsum.photos/seed/volunteering/800/400',
       accentColor: '#22C55E',
       city: 'Riga', owner: andris,
       members: [{ user: anna, role: 'ADMIN' }, { user: liga, role: 'MEMBER' }],
@@ -332,7 +332,7 @@ async function main() {
     {
       slug: 'koris-riga', name: 'Rīgas Pilsētas Koris', category: 'choirs',
       description: 'Draudzīgs amatieru koris, kurš mēdz uzstāties pilsētas svētkos.',
-      bannerImage: 'https://picsum.photos/seed/choir/1200/400',
+      bannerImage: 'https://picsum.photos/seed/choir/800/400',
       accentColor: '#6366F1',
       city: 'Riga', owner: santa,
       members: [{ user: liga, role: 'ADMIN' }, { user: marta, role: 'MEMBER' }],
@@ -340,7 +340,7 @@ async function main() {
     {
       slug: 'camping-sigulda', name: 'Siguldas Dabas Draugi', category: 'camping',
       description: 'Kempinga ekskursijas un nakšņošana dabā.',
-      bannerImage: 'https://picsum.photos/seed/camping/1200/400',
+      bannerImage: 'https://picsum.photos/seed/camping/800/400',
       accentColor: '#10B981',
       city: 'Sigulda', owner: oskars,
       members: [{ user: andris, role: 'ADMIN' }, { user: janis, role: 'MEMBER' }],
@@ -348,7 +348,7 @@ async function main() {
     {
       slug: 'meditatija-riga', name: 'Rīgas Meditācijas Centrs', category: 'meditation',
       description: 'Nedēļas vadītās meditācijas sesijas un mindfulness apmācības.',
-      bannerImage: 'https://picsum.photos/seed/meditation/1200/400',
+      bannerImage: 'https://picsum.photos/seed/meditation/800/400',
       accentColor: '#14B8A6',
       city: 'Riga', owner: liga,
       members: [{ user: santa, role: 'MEMBER' }],
@@ -356,7 +356,7 @@ async function main() {
     {
       slug: 'sakopsana-valmiera', name: 'Valmiera Zaļā', category: 'cleanup',
       description: 'Regulāras talkas Valmierā un apkārtnē.',
-      bannerImage: 'https://picsum.photos/seed/cleanup/1200/400',
+      bannerImage: 'https://picsum.photos/seed/cleanup/800/400',
       accentColor: '#22C55E',
       city: 'Valmiera', owner: andris,
       members: [{ user: janis, role: 'MEMBER' }],
@@ -364,7 +364,7 @@ async function main() {
     {
       slug: 'rakstnieki-riga', name: 'Rīgas Rakstnieku Pulciņš', category: 'writing',
       description: 'Draudzīgs pulciņš rakstošiem cilvēkiem.',
-      bannerImage: 'https://picsum.photos/seed/writing/1200/400',
+      bannerImage: 'https://picsum.photos/seed/writing/800/400',
       accentColor: '#D946EF',
       city: 'Riga', owner: marta,
       members: [{ user: liga, role: 'MEMBER' }],
@@ -372,7 +372,7 @@ async function main() {
     {
       slug: 'suni-jurmala', name: 'Jūrmalas Suņu Klubs', category: 'dog-owners',
       description: 'Kopīgas pastaigas ar suņiem Jūrmalas pludmalē un mežā.',
-      bannerImage: 'https://picsum.photos/seed/dogs/1200/400',
+      bannerImage: 'https://picsum.photos/seed/dogs/800/400',
       accentColor: '#84CC16',
       city: 'Jurmala', owner: marta,
       members: [{ user: anna, role: 'MEMBER' }],
@@ -380,7 +380,7 @@ async function main() {
     {
       slug: 'jaunavecaki-riga', name: 'Jauno Vecāku Kopiena Rīgā', category: 'young-parents',
       description: 'Atbalsts un draudzība jaunajiem vecākiem.',
-      bannerImage: 'https://picsum.photos/seed/family/1200/400',
+      bannerImage: 'https://picsum.photos/seed/family/800/400',
       accentColor: '#0EA5E9',
       city: 'Riga', owner: anna,
       members: [{ user: liga, role: 'MEMBER' }],
@@ -388,7 +388,7 @@ async function main() {
     {
       slug: 'pc-games-liepaja', name: 'Liepājas LAN Party', category: 'pc-games',
       description: 'Regulāras LAN parties Liepājā.',
-      bannerImage: 'https://picsum.photos/seed/pc-games/1200/400',
+      bannerImage: 'https://picsum.photos/seed/pc-games/800/400',
       accentColor: '#8B5CF6',
       city: 'Liepaja', owner: janis,
       members: [{ user: toms, role: 'MEMBER' }],
@@ -396,7 +396,7 @@ async function main() {
     {
       slug: 'pargajieni', name: 'Pārgājieni', category: 'hiking',
       description: 'Testa grupa pārgājieniem un dabas mīļotājiem. Pievienojies mums!',
-      bannerImage: 'https://picsum.photos/seed/hiking-test/1200/400',
+      bannerImage: 'https://picsum.photos/seed/hiking-test/800/400',
       accentColor: '#10B981',
       city: 'Riga', owner: oskars,
       members: [{ user: liga, role: 'ADMIN' }],
@@ -542,7 +542,7 @@ async function main() {
         startDate: e.startDate,
         groupId,
         creatorId: e.creator.id,
-        bannerImage: `https://picsum.photos/seed/${e.groupSlug}/1200/400`,
+        bannerImage: `https://picsum.photos/seed/${e.groupSlug}/800/400`,
         instructions: 'Please be on time and bring a positive attitude!'
       };
     })

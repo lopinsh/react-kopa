@@ -13,14 +13,14 @@ model User {
   email               String?              @unique
   emailVerified       DateTime?
   image               String?
-  username            String?              @unique
-  bio                 String?
-  cities              String[]
-  avatarSeed          String?
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   allowDirectMessages Boolean              @default(true)
   isProfilePublic     Boolean              @default(true)
+  avatarSeed          String?
+  bio                 String?
+  cities              String[]
+  username            String?              @unique
   accounts            Account[]
   appUsers            ApplicationMessage[] @relation("ReceivedApplicationMessages")
   sentMessages        ApplicationMessage[] @relation("SentApplicationMessages")
@@ -243,7 +243,6 @@ model Report {
 enum GroupType {
   PUBLIC
   PRIVATE
-  SINGLE_EVENT
 }
 
 enum CategoryStatus {

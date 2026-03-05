@@ -24,12 +24,11 @@ type Props = {
 const TYPE_ICONS = {
     PUBLIC: Globe,
     PRIVATE: Lock,
-    SINGLE_EVENT: Zap,
 };
 
 export default function ListViewCard({ group, accentColor: globalAccentColor, locale }: Props) {
     const accentColor = group.category.color || globalAccentColor;
-    const Icon = TYPE_ICONS[group.type];
+    const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
     return (
         <Link
@@ -63,7 +62,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
                 </div>
                 <div className="hidden items-center gap-1 md:flex">
                     <Icon className="h-3.5 w-3.5" />
-                    {group.type === 'SINGLE_EVENT' ? 'Event' : group.type}
+                    {group.type}
                 </div>
                 <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />

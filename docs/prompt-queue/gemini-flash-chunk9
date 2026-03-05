@@ -1,0 +1,119 @@
+Paste AGENTS.md + execution_handoff.md + app-review-notes.md + this prompt to start the session. Also paste lib/slug.ts and prisma/seed.ts directly — Flash will need them for Tasks 4 and 5 rather than hunting for them.
+
+
+
+# Coding Agent Prompt: Chunk 9 — Quick Fixes
+
+## Before You Begin
+1. Read `AGENTS.md` in full.
+2. Read `/docs/execution_handoff.md` for current project state.
+3. Read `/docs/app-review-notes.md` for full issue context.
+4. Map all affected files before touching anything.
+5. Fix one task at a time. Run `tsc --noEmit` after each task. Do not batch fixes.
+
+---
+
+## Goal
+Clear five small pre-existing issues in a single session. No new features, no architectural changes, no scope creep.
+
+---
+
+## Task 1 — Delete orphaned `/groups` route (B11)
+
+`app/[locale]/groups/page.tsx` and `app/[locale]/groups/loading.tsx` are dead files — this route was deprecated in Chunk 6 and replaced by `/profile/my-groups`. They were missed during cleanup.
+
+- Delete both files.
+- Confirm no remaining imports or references point to this path anywhere in the codebase.
+- If `app/[locale]/groups/` directory is now empty, delete the directory too.
+
+---
+
+## Task 2 — Merge or delete `discovery-actions-updates.ts` (B12)
+
+`actions/discovery-actions-updates.ts` exists alongside `actions/discovery-actions.ts`.
+
+- Read both files carefully.
+- If the updates file contains changes already present in `discovery-actions.ts` → delete the updates file.
+- If the updates file contains changes NOT yet in `discovery-actions.ts` → merge them in, then delete the updates file.
+- Either way, the updates file must not exist after this task.
+- Confirm no imports reference `discovery-actions-updates.ts`.
+
+---
+
+## Task 3 — Fix missing translation keys (B10 partial)
+
+Two known missing translation keys are causing raw key strings to appear in the UI.
+
+**3a — `group.applyToGroup`:**
+- Find the component that uses this key (likely in `components/modals/ApplicationModal.tsx` or similar).
+- Determine the correct English and Latvian strings from surrounding context.
+- Add the key to both `en.json` and `lv.json` with 1:1 parity.
+
+**3b — Audit for other raw keys:**
+- Search the codebase for any other `t('...')` calls whose keys do not exist in `en.json`.
+- Add any missing keys found. If the correct translation is unclear, use a sensible English placeholder and mark with a `// TODO: verify translation` comment in the JSON.
+- Update `lv.json` with matching keys at the same time.
+
+---
+
+## Task 4 — Fix Unsplash 404s in seed data (B2)
+
+`prisma/seed.ts` contains Unsplash image URLs that are returning 404.
+
+- Replace all Unsplash URLs with reliable placeholder image URLs.
+- Use `https://picsum.photos/seed/{descriptive-word}/{width}/{height}` — vary the seed word per entry so images are visually distinct.
+- Appropriate dimensions: group banners `800/400`, event banners `800/400`, profile images use DiceBear (leave those unchanged).
+- After updating, run `npx prisma db seed` to verify seeding completes without errors.
+
+---
+
+## Task 5 — Fix Latvian diacritics in slug generation (B8)
+
+`lib/slug.ts` generates slugs but does not transliterate Latvian characters, causing malformed URLs.
+
+- Add a transliteration step at the top of the slug generation function, before any other processing.
+- Map all Latvian diacritics to their Latin equivalents:
+
+```
+ā → a    Ā → A
+č → c    Č → C
+ē → e    Ē → E
+ģ → g    Ģ → G
+ī → i    Ī → I
+ķ → k    Ķ → K
+ļ → l    Ļ → L
+ņ → n    Ņ → N
+š → s    Š → S
+ū → u    Ū → U
+ž → z    Ž → Z
+```
+
+- Verify the function is used consistently for group slugs, event slugs, and any other entity slug generation.
+- Test with a Latvian string (e.g. `"Rīgas Šaha Klubs"` → `"rigas-saha-klubs"`).
+
+---
+
+## Quality Gates
+
+Before marking complete:
+
+- [ ] `tsc --noEmit` — zero errors
+- [ ] `npm run build` — passes
+- [ ] `app/[locale]/groups/` directory fully deleted
+- [ ] `discovery-actions-updates.ts` deleted
+- [ ] `group.applyToGroup` key present in both `en.json` and `lv.json`
+- [ ] No other raw translation keys visible in UI
+- [ ] Seed runs cleanly with no 404 image URLs
+- [ ] Slug function correctly transliterates Latvian characters
+- [ ] No `any` types introduced
+- [ ] No hardcoded strings introduced
+
+---
+
+## Completion Report Required
+
+When done, provide:
+1. All files modified or deleted
+2. Any translation keys added beyond `group.applyToGroup`
+3. Whether `discovery-actions-updates.ts` was merged or just deleted
+4. Confirmation of all quality gates passing

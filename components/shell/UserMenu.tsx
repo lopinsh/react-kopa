@@ -80,14 +80,18 @@ export default function UserMenu({ user }: Props) {
             {mounted && isOpen && (
                 <>
                     <div className="absolute right-0 mt-3 z-50 w-56 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
-                        <div className="border-b border-border bg-surface-elevated/50 p-4">
+                        <Link
+                            href="/profile"
+                            onClick={() => setIsOpen(false)}
+                            className="block border-b border-border bg-surface-elevated/50 p-4 hover:bg-surface-elevated transition-colors"
+                        >
                             <p className="truncate text-sm font-bold text-foreground">
                                 {user.name || t('userFallback')}
                             </p>
                             <p className="truncate text-xs text-foreground-muted">
                                 {user.email || ''}
                             </p>
-                        </div>
+                        </Link>
 
                         <div className="p-2">
                             <Link
@@ -101,15 +105,6 @@ export default function UserMenu({ user }: Props) {
 
                             <div className="my-1 h-px bg-border/40 mx-2" />
 
-                            <Link
-                                href="/profile"
-                                className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <LayoutDashboard className="h-4 w-4" />
-                                {t('profile')}
-                            </Link>
-
                             {user.username && (
                                 <Link
                                     href={`/profile/${user.username}`}
@@ -120,13 +115,14 @@ export default function UserMenu({ user }: Props) {
                                     {t('viewPublicProfile')}
                                 </Link>
                             )}
-                            <button
+                            <Link
+                                href="/profile/edit"
                                 className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Settings className="h-4 w-4" />
                                 {t('settings')}
-                            </button>
+                            </Link>
                         </div>
 
                         <div className="border-t border-border p-2">

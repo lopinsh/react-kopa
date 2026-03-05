@@ -49,17 +49,17 @@ export function Footer({ locale }: { locale: string }) {
                                 {t('logoSubtitle')}
                             </span>
                         </Link>
-                        <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/50">
+                        <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground-muted">
                             {t('mission')}
                         </p>
                         <div className="mt-6 flex items-center gap-4">
-                            <a href="#" className="text-white/40 hover:text-white transition-colors">
+                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
                                 <Instagram className="h-5 w-5" />
                             </a>
-                            <a href="#" className="text-white/40 hover:text-white transition-colors">
+                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
                                 <Github className="h-5 w-5" />
                             </a>
-                            <a href="#" className="text-white/40 hover:text-white transition-colors">
+                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
                                 <Twitter className="h-5 w-5" />
                             </a>
                         </div>
@@ -68,13 +68,13 @@ export function Footer({ locale }: { locale: string }) {
                     {/* Links */}
                     {sections.map((section) => (
                         <div key={section.title}>
-                            <h3 className="text-xs font-black uppercase tracking-widest text-white/40 mb-4">{section.title}</h3>
+                            <h3 className="text-xs font-black uppercase tracking-widest text-foreground-muted mb-4">{section.title}</h3>
                             <ul className="space-y-3">
                                 {section.links.map((link) => (
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-sm text-white/60 hover:text-indigo-400 transition-colors"
+                                            className="text-sm text-foreground-muted hover:text-indigo-400 transition-colors"
                                         >
                                             {link.label}
                                         </Link>
@@ -85,12 +85,12 @@ export function Footer({ locale }: { locale: string }) {
                     ))}
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <p className="text-sm text-white/30">
+                <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
+                    <p className="text-sm text-foreground-muted">
                         © {currentYear} Ejam Kopā. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
                     </p>
                     <div className="flex items-center gap-6">
-                        <Link href={`/explore`} className="text-xs font-medium text-white/30 hover:text-white transition-colors">
+                        <Link href={`/explore`} className="text-xs font-medium text-foreground-muted hover:text-foreground transition-colors">
                             {t('languageLabel')}
                         </Link>
                     </div>

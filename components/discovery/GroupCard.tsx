@@ -38,7 +38,6 @@ type Props = {
 const TYPE_ICONS = {
     PUBLIC: Globe,
     PRIVATE: Lock,
-    SINGLE_EVENT: Zap,
 };
 
 function dicebearUrl(seed: string | null | undefined, fallbackId: string): string {
@@ -49,7 +48,7 @@ function dicebearUrl(seed: string | null | undefined, fallbackId: string): strin
 export default function GroupCard({ group, accentColor: globalAccentColor, priority, locale }: Props) {
     const t = useTranslations('discovery');
     const accentColor = group.category.color || globalAccentColor;
-    const Icon = TYPE_ICONS[group.type];
+    const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
     const categoryName = group.category.parentTitle ? group.category.title : group.category.title;
 
@@ -101,7 +100,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                     </span>
                     <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
                         <Icon className="h-3 w-3 text-white/90" />
-                        <span className="drop-shadow-sm">{group.type === 'SINGLE_EVENT' ? t('eventType') : group.type}</span>
+                        <span className="drop-shadow-sm">{group.type}</span>
                     </span>
                 </div>
             </div>

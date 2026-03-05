@@ -210,7 +210,7 @@ export const DiscoveryService = {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         try {
-            const { city, categoryId, tag, query, type, take = 12, skip = 0 } = filters;
+            const { city, categoryId, tag, tags, query, type, take = 12, skip = 0 } = filters;
             const where: any = {};
 
             where.AND = [];
@@ -253,16 +253,17 @@ export const DiscoveryService = {
             }
 
             // 2b. Specific Tag Filter (L2/L3) with Hierarchy Support
-            if (tag) {
+            const searchTags = tags?.length ? tags : (tag ? [tag] : []);
+            if (searchTags.length > 0) {
                 where.AND.push({
-                    OR: [
-                        { category: { slug: tag } },
-                        { category: { parent: { slug: tag } } },
-                        { category: { parent: { parent: { slug: tag } } } },
-                        { tags: { some: { slug: tag } } },
-                        { tags: { some: { parent: { slug: tag } } } },
-                        { tags: { some: { parent: { parent: { slug: tag } } } } }
-                    ]
+                    OR: searchTags.flatMap((t: string) => [
+                        { category: { slug: t } },
+                        { category: { parent: { slug: t } } },
+                        { category: { parent: { parent: { slug: t } } } },
+                        { tags: { some: { slug: t } } },
+                        { tags: { some: { parent: { slug: t } } } },
+                        { tags: { some: { parent: { parent: { slug: t } } } } }
+                    ])
                 });
             }
 

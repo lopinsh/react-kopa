@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Rīgas Glezniecības Studija",
+    "slug": "rigas-glezniecibas-studija",
+    "accentColor": "#D946EF"
+  },
+  {
+    "name": "Vidzemes Fotografi",
+    "slug": "vidzemes-fotografi",
+    "accentColor": "#F97316"
+  },
+  {
+    "name": "Rīgas Salsa Deju Klubs",
+    "slug": "rigas-salsa-deju-klubs",
+    "accentColor": "#F43F5E"
+  },
+  {
+    "name": "Cēsu Riteņbraucēji",
+    "slug": "cesu-ritenbrauceji",
+    "accentColor": "#3B82F6"
+  },
+  {
+    "name": "Daugavpils Kino Vakari",
+    "slug": "daugavpils-kino-vakari",
+    "accentColor": "#EC4899"
+  },
+  {
+    "name": "English Speaking Club Riga",
+    "slug": "english-speaking-club-riga",
+    "accentColor": "#F59E0B"
+  },
+  {
+    "name": "Rīgas Brīvprātīgie",
+    "slug": "rigas-brivpratigie",
+    "accentColor": "#22C55E"
+  },
+  {
+    "name": "Rīgas Pilsētas Koris",
+    "slug": "rigas-pilsetas-koris",
+    "accentColor": "#6366F1"
+  },
+  {
+    "name": "Siguldas Dabas Draugi",
+    "slug": "siguldas-dabas-draugi",
+    "accentColor": "#10B981"
+  },
+  {
+    "name": "Rīgas Meditācijas Centrs",
+    "slug": "rigas-meditacijas-centrs",
+    "accentColor": "#14B8A6"
+  },
+  {
+    "name": "Valmiera Zaļā",
+    "slug": "valmiera-zala",
+    "accentColor": "#22C55E"
+  },
+  {
+    "name": "Rīgas Pārgājēji",
+    "slug": "rigas-pargajeji",
+    "accentColor": "#10B981"
+  },
+  {
+    "name": "Rīgas Skrējēji",
+    "slug": "rigas-skrejeji",
+    "accentColor": "#3B82F6"
+  },
+  {
+    "name": "Galda Spēļu Klubs Rīga",
+    "slug": "galda-spelu-klubs-riga",
+    "accentColor": "#8B5CF6"
+  },
+  {
+    "name": "Jūrmalas Jogas Kopiena",
+    "slug": "jurmalas-jogas-kopiena",
+    "accentColor": "#14B8A6"
+  },
+  {
+    "name": "Rīgas Rakstnieku Pulciņš",
+    "slug": "rigas-rakstnieku-pulcins",
+    "accentColor": "#D946EF"
+  },
+  {
+    "name": "Jūrmalas Suņu Klubs",
+    "slug": "jurmalas-sunu-klubs",
+    "accentColor": "#84CC16"
+  },
+  {
+    "name": "Jauno Vecāku Kopiena Rīgā",
+    "slug": "jauno-vecaku-kopiena-riga",
+    "accentColor": "#0EA5E9"
+  },
+  {
+    "name": "Liepājas LAN Party",
+    "slug": "liepajas-lan-party",
+    "accentColor": "#8B5CF6"
+  },
+  {
+    "name": "Pārgājieni",
+    "slug": "pargajieni",
+    "accentColor": "#10B981"
+  }
+]

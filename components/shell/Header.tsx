@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
 import NotificationCenter from './NotificationCenter';
 import GlobalSearch from './GlobalSearch';
+import { MessageSquare } from 'lucide-react';
 
 type Props = {
     locale: string;
@@ -64,6 +65,14 @@ export default async function Header({ locale }: Props) {
                 {session?.user && (
                     <div className="flex items-center gap-1.5">
                         <div className="hidden sm:block h-5 w-px bg-border/20 mx-0.5" />
+                        <Link
+                            href="/messages"
+                            className="relative flex h-10 w-10 items-center justify-center rounded-xl text-foreground-muted transition-all active:scale-95 hover:bg-surface-elevated hover:text-foreground"
+                            aria-label={t('messages')}
+                            title={t('messages')}
+                        >
+                            <MessageSquare className="h-[22px] w-[22px]" />
+                        </Link>
                         <NotificationCenter locale={locale} />
                     </div>
                 )}

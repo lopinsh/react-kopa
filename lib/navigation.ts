@@ -3,6 +3,7 @@ import {
     Compass,
     Users,
     User,
+    MessageSquare,
     type LucideIcon,
 } from 'lucide-react';
 
@@ -22,6 +23,11 @@ export const NAV_LINKS: NavLink[] = [
         href: '/profile/my-groups',
         labelKey: 'myGroups',
         icon: Users,
+    },
+    {
+        href: '/messages',
+        labelKey: 'messages',
+        icon: MessageSquare,
     },
     {
         href: '/profile',

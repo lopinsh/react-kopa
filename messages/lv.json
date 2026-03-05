@@ -8,7 +8,8 @@
         "settings": "Iestatījumi",
         "myGroups": "Manas grupas",
         "userFallback": "Lietotājs",
-        "viewPublicProfile": "Skatīt publisko profilu"
+        "viewPublicProfile": "Skatīt publisko profilu",
+        "messages": "Ziņas"
     },
     "theme": {
         "lightMode": "Gaišais režīms",
@@ -55,12 +56,22 @@
         "memberSince": "Biedrs kopš {date}",
         "noBio": "Pievieno aprakstu, lai citi uzzinātu par tevi.",
         "viewingOwnProfileLink": "Doties uz savu lapu",
-        "noPublicGroups": "Nav publisko grupu, ko parādīt."
+        "noPublicGroups": "Nav publisko grupu, ko parādīt.",
+        "sectionOwner": "Manas grupas",
+        "sectionAdmin": "Grupas, kur esmu administrators",
+        "sectionMember": "Grupas, kurās esmu biedrs",
+        "sectionPending": "Gaida apstiprinājumu",
+        "empty": "Tu vēl neesi pievienojies nevienai grupai.",
+        "discover": "Atklāt grupas"
     },
     "discovery": {
+        "allCategory": "Viss {category}",
+        "anyCategory": "Jebkura {category}",
         "inCity": "pilsētā",
         "groupsFound": "Grupas atrastas",
+        "searchLabel": "Meklēt",
         "searchPlaceholder": "Meklēt grupas, pasākumus, biedrus...",
+        "searchInputPlaceholder": "Meklēt grupas, pasākumus, tēmas...",
         "eventsFound": "Pasākumi atrasti",
         "clearAll": "Notīrīt visu",
         "createNewGroup": "Izveidot jaunu grupu",
@@ -71,7 +82,13 @@
         "noDescription": "Šai grupai nav apraksta.",
         "memberCount": "{count} {count, plural, one {biedrs} other {biedri}}",
         "active": "Aktīva",
-        "eventType": "Pasākums"
+        "eventType": "Pasākums",
+        "topicsSection": "TĒMAS",
+        "groupsEventsSection": "GRUPAS UN PASĀKUMI",
+        "clearCategory": "Noņemt kategoriju",
+        "clearTag": "Noņemt birku",
+        "gridView": "Režģa skats",
+        "listView": "Saraksta skats"
     },
     "common": {
         "save": "Saglabāt",
@@ -148,8 +165,9 @@
     "shell": {
         "header": {
             "searchPlaceholder": "Meklēt pasākumus...",
-            "logoText": "EK",
-            "logoSubtitle": "KOPIENAS CENTRS",
+            "logoText": "Ejam Kopā",
+            "logoSubtitle": "Atrodi Savējos",
+            "messages": "Ziņas",
             "lightMode": "Pārslēgt uz gaišo režīmu",
             "darkMode": "Pārslēgt uz tumšo režīmu"
         },
@@ -242,6 +260,9 @@
         "shareGroup": "Kopīgot grupu",
         "members": "biedri",
         "events": "pasākumi",
+        "eventsTabUpcoming": "Gaidāmie",
+        "eventsTabMyRsvps": "Manas pierakstīšanās",
+        "eventsTabPast": "Pagātnes",
         "informationTitle": "Informācija",
         "eventsTitle": "Pasākumi",
         "discussionTitle": "Diskusijas",
@@ -254,8 +275,6 @@
         "approve": "Apstiprināt",
         "decline": "Noraidīt",
         "applicant": "Pieteikuma iesniedzējs",
-        "typeMessageHere": "Ierakstiet savu ziņu šeit...",
-        "sendInquiry": "Nosūtīt jautājumu",
         "sendMessage": "Sūtīt ziņu",
         "viewProfile": "Skatīt profilu",
         "private": "Privāts",
@@ -271,6 +290,9 @@
         "role_admin": "Admins",
         "role_member": "Biedrs",
         "role_pending": "Gaida",
+        "statusMember": "Biedrs",
+        "statusAdmin": "Admins",
+        "statusOwner": "Īpašnieks",
         "promote": "Paaugstināt",
         "demote": "Pazemināt",
         "kick": "Noņemt",
@@ -282,8 +304,19 @@
         "applyToGroup": "Pievienoties grupai {name}",
         "applyDescription": "Pastāstiet grupas organizatoriem, kāpēc vēlaties pievienoties un ko meklējat šajā kopienā.",
         "applyPlaceholder": "Ierakstiet ziņu šeit...",
-        "sendApplication": "Sūtīt pieteikumu",
-        "cancel": "Atcelt"
+        "sendApplication": "Nosūtīt pieteikumu",
+        "cancel": "Atcelt",
+        "inquireTitle": "Sazināties",
+        "inquirySent": "Ziņa nosūtīta!",
+        "inquirySentDesc": "Administratori ir saņēmuši jūsu ziņu.",
+        "inquiryDesc": "Vai jums ir jautājumi administratoriem? Nosūtiet viņiem ziņu zemāk.",
+        "messageRequired": "Ziņojums ir obligāts",
+        "message": "Ziņojums",
+        "typeMessageHere": "Es vēlētos uzzināt vairāk par...",
+        "sendInquiry": "Nosūtīt ziņu",
+        "error_unauthorized": "Jums jābūt pieteikušamies, lai to izdarītu.",
+        "error_not_found": "Grupa nav atrasta.",
+        "error_internal": "Radās iekšēja kļūda."
     },
     "wizard": {
         "stepOf": "{current}. solis no {total}",
@@ -312,7 +345,22 @@
         "next": "Tālāk",
         "submit": "Izveidot grupu",
         "clickToChange": "Noklikšķiniet, lai mainītu kategoriju",
-        "cancel": "Atcelt"
+        "cancel": "Atcelt",
+        "pickerPlaceholder": "Meklēt kategorijas vai intereses...",
+        "pendingReview": "Gaida pārbaudi",
+        "browseCategories": "Pārlūkot kategorijas",
+        "noMatch": "Nav atrasts",
+        "createInterest": "Izveidot jaunu interesi \"{label}\"",
+        "chooseParent": "Izvēlieties vecākkategoriju",
+        "fieldNamePlaceholder": "piemēram, Rīgas Skrējēji",
+        "fieldDescription": "Apraksts",
+        "optional": "Neobligāti",
+        "fieldDescriptionPlaceholder": "Par ko ir jūsu grupa?",
+        "acceptingMembers": "Pieņem jaunus biedrus",
+        "typePublic": "Publiska",
+        "typePublicDesc": "Ikviens var redzēt un pievienoties.",
+        "typePrivate": "Privāta",
+        "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu."
     },
     "admin": {
         "title": "Admina vadības centrs",
@@ -357,5 +405,47 @@
             "submit": "Iestatīt lietotājvārdu",
             "submitting": "Saglabā..."
         }
+    },
+    "eventWizard": {
+        "stepOf": "{current}. solis no {total}",
+        "step1Title": "Pasākuma detaļas",
+        "step1Desc": "Pamatinformācija par jūsu pasākumu.",
+        "step2Title": "Piekļuve un loģistika",
+        "step2Desc": "Kas var piedalīties un cita informācija.",
+        "fieldName": "Pasākuma nosaukums",
+        "fieldNamePlaceholder": "piem. Nedēļas nogales pārgājiens",
+        "fieldDescription": "Apraksts",
+        "fieldDescriptionPlaceholder": "Par ko būs šis pasākums?",
+        "fieldDate": "Sākuma datums un laiks",
+        "fieldLocation": "Atrašanās vieta",
+        "fieldLocationPlaceholder": "piem. Centrālais parks",
+        "fieldMaxParticipants": "Maksimālais dalībnieku skaits",
+        "fieldMaxParticipantsPlaceholder": "piem. 20 (atstājiet tukšu, ja neierobežots)",
+        "fieldVisibility": "Redzamība",
+        "typePublic": "Publisks",
+        "typePublicDesc": "Ikviens var redzēt un pievienoties šim pasākumam.",
+        "typeMembersOnly": "Tikai biedriem",
+        "typeMembersOnlyDesc": "Tikai grupas biedri var redzēt un pievienoties.",
+        "back": "Atpakaļ",
+        "next": "Tālāk",
+        "submit": "Izveidot pasākumu"
+    },
+    "report": {
+        "title": "Ziņot",
+        "description": "Lūdzu, dariet mums zināmu, kāpēc jūs par to ziņojat. Mūsu drošības komanda izskatīs šo jautājumu.",
+        "reasonSpam": "Surogātpasts vai maldinošs saturs",
+        "reasonHarassment": "Uzmākšanās vai naida runa",
+        "reasonInappropriate": "Nepiemērots saturs",
+        "reasonOther": "Cits",
+        "cancel": "Atcelt",
+        "submit": "Iesniegt ziņojumu",
+        "success": "Ziņojums veiksmīgi iesniegts. Mēs to drīzumā izskatīsim.",
+        "error": "Neizdevās iesniegt ziņojumu. Lūdzu, mēģiniet vēlāk."
+    },
+    "messages": {
+        "title": "Ziņas",
+        "comingSoon": "Drīzumā",
+        "placeholderDescription": "Tiešā saziņa ar citiem kopienas biedriem pašlaik ir izstrādes stadijā.",
+        "inDevelopment": "Izstrādes stadijā"
     }
 }

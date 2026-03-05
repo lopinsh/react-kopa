@@ -3,12 +3,12 @@ import { DiscoveryService } from '@/lib/services/discovery.service';
 import { EventService } from '@/lib/services/event.service';
 import { getGroups, getDiscoveryCategories, snapInterest, getContextualTaxonomy } from '@/actions/discovery-actions';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
-import GlobalSearchBar from '../../components/discovery/GlobalSearchBar';
-import ViewToggle from '@/components/discovery/ViewToggle';
+import DiscoveryFilterBarWrapper from '@/components/discovery/DiscoveryFilterBarWrapper';
 import ListViewCard from '@/components/discovery/ListViewCard';
 import GroupCard from '@/components/discovery/GroupCard';
 import EventCard from '@/components/discovery/EventCard';
 import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
+import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
 import { Users, Search, Plus, Calendar } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -43,12 +43,13 @@ import { CITIES } from '@/lib/constants';
 
 type Props = {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ q?: string; city?: string; category?: string; tag?: string; view?: 'grid' | 'list'; type?: string; limit?: string; tab?: 'groups' | 'events' }>;
+    searchParams: Promise<{ q?: string; city?: string; category?: string; tags?: string; view?: 'grid' | 'list'; type?: string; limit?: string; tab?: 'groups' | 'events' }>;
 };
 
 export default async function DiscoveryPage({ params, searchParams }: Props) {
     const { locale } = await params;
-    const { q, city, category, tag, view, type, limit, tab } = await searchParams;
+    const { q, city, category, tags: tagsParam, view, type, limit, tab } = await searchParams;
+    const activeTags = tagsParam ? tagsParam.split(',').filter(Boolean) : [];
     const currentTab = tab === 'events' ? 'events' : 'groups';
     const currentView = view === 'list' ? 'list' : 'grid';
     const t = await getTranslations('discovery');
@@ -88,8 +89,8 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             query: q,
             city,
             categoryId: effectiveCategoryId,
-            tag,
-            type: type as any,
+            tags: activeTags,
+            type: type as string | undefined,
             take: currentTab === 'groups' ? take : 0,
             skip
         }, locale),
@@ -112,36 +113,38 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     return (
-        <div style={accentStyle} className="min-h-full pb-20 pt-2">
-            <main className="container mx-auto px-4 max-w-7xl relative">
-                {/* Results Area */}
-                <div className="w-full">
-                    <div className="mb-6">
-                        <GlobalSearchBar
-                            taxonomy={fullTaxonomy}
-                            activeCat={category}
-                            activeTag={tag}
-                            initialQuery={q}
-                        />
-                    </div>
+        <div style={accentStyle} className="flex min-h-full">
+            {/* Discovery Sidebar */}
+            <DiscoverySidebar
+                categories={categories}
+                activeCat={category}
+                locale={locale}
+            />
 
+            {/* Main Content Area */}
+            <main className="flex-1 min-w-0 pb-20 pt-4">
+                <div className="px-4 max-w-6xl mx-auto w-full">
+                    <DiscoveryFilterBarWrapper
+                        taxonomy={fullTaxonomy}
+                        activeCat={category}
+                        activeTags={activeTags}
+                        initialQuery={q}
+                        locale={locale}
+                        currentView={currentView}
+                    />
 
-
-                    <div className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div className="flex items-center gap-4 flex-wrap">
-                            <h2 className="text-lg sm:text-xl font-bold text-foreground">
-                                {currentTab === 'groups' ? totalCount : discoverableEvents.length} {currentTab === 'groups' ? t('groupsFound') : t('eventsFound')}
-                            </h2>
-                            {(q || (city && city !== 'all') || category || tag) && (
-                                <Link
-                                    href="/"
-                                    className="text-xs font-bold text-[var(--accent)] hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"
-                                >
-                                    {t('clearAll')}
-                                </Link>
-                            )}
-                        </div>
-                        <ViewToggle currentView={currentView} />
+                    <div className="mb-4 mt-6 flex items-center gap-4 flex-wrap">
+                        <h2 className="text-lg sm:text-xl font-bold text-foreground">
+                            {currentTab === 'groups' ? totalCount : discoverableEvents.length} {currentTab === 'groups' ? t('groupsFound') : t('eventsFound')}
+                        </h2>
+                        {(q || (city && city !== 'all') || category || activeTags.length > 0) && (
+                            <Link
+                                href="/"
+                                className="text-xs font-bold text-[var(--accent)] hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"
+                            >
+                                {t('clearAll')}
+                            </Link>
+                        )}
                     </div>
 
                     {/* Results Grid / List */}

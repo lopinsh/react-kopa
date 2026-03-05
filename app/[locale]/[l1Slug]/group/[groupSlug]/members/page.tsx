@@ -15,6 +15,8 @@ interface Member {
     user: {
         id: string;
         name: string | null;
+        username?: string | null;
+        avatarSeed?: string;
         image: string | null;
         allowDirectMessages: boolean;
         isProfilePublic: boolean;
@@ -119,6 +121,7 @@ export default async function GroupMembersPage({
                             groupId={group.id}
                             currentUserRole={group.userRole as string}
                             locale={locale}
+                            l1Slug={l1Slug}
                         />
                     ))}
                 </div>

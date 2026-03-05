@@ -1,9 +1,9 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
-import { profileSchema } from '@/lib/validations/user';
 import { UserService } from '@/lib/services/user.service';
+import { revalidateTag, revalidatePath } from 'next/cache';
+import { profileSchema } from '@/lib/validations/user';
 import type { ActionResponse } from '@/types/actions';
 
 export async function updateProfile(formData: unknown): Promise<ActionResponse> {
@@ -31,6 +31,7 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
 
     if (!result.success) return { success: false, error: result.error };
 
+    revalidateTag('groups', 'max' as any);
     revalidatePath('/', 'layout');
     return { success: true };
 }

@@ -17,7 +17,8 @@ export type ScopedResult = {
 export type DiscoveryFilters = {
     city?: string;
     categoryId?: string;
-    tag?: string;
+    tag?: string;    // single tag — used by service until multi-tag is supported
+    tags?: string[]; // TODO: DiscoveryService.getGroups only supports single tag; full multi-tag support planned for a future chunk
     query?: string;
     type?: GroupType | string;
     take?: number;

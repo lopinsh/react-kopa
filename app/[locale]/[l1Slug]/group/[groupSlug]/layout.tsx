@@ -22,7 +22,7 @@ export default async function GroupLayout({
         notFound();
     }
 
-    const accentColor = ensureContrast(group.accentColor);
+    const accentColor = ensureContrast(group.accentColor || group.category.color || '#3B82F6');
     const accentForeground = getContrastForeground(accentColor);
 
     const accentStyle = {

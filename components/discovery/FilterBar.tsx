@@ -117,7 +117,6 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
                         <option value="all">All Group Types</option>
                         <option value="PUBLIC">Public</option>
                         <option value="PRIVATE">Private</option>
-                        <option value="SINGLE_EVENT">One-time Event</option>
                     </select>
                 </div>
 

@@ -14,6 +14,8 @@ export interface Member {
     user: {
         id: string;
         name: string | null;
+        username?: string | null;
+        avatarSeed?: string;
         image: string | null;
         allowDirectMessages: boolean;
         isProfilePublic: boolean;
@@ -26,9 +28,10 @@ type Props = {
     groupId: string;
     currentUserRole: string | null;
     locale: string;
+    l1Slug: string;
 };
 
-export default function MemberCard({ member, accentColor, groupId, currentUserRole, locale }: Props) {
+export default function MemberCard({ member, accentColor, groupId, currentUserRole, locale, l1Slug }: Props) {
     const t = useTranslations('group');
     const router = useRouter();
     const { success, error: toastError } = useToast();
@@ -78,18 +81,50 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
 
             <div className="flex items-center gap-4">
                 <div className="relative">
-                    <div className="h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0">
-                        {member.user.image ? (
-                            <img
-                                src={member.user.image}
-                                alt={member.user.name || ''}
-                                className="h-full w-full object-cover"
-                                referrerPolicy="no-referrer"
-                            />
-                        ) : (
-                            <UserIcon className="h-7 w-7 text-foreground-muted" />
-                        )}
-                    </div>
+                    {member.user.username ? (
+                        <Link
+                            href={`/${l1Slug}/user/${member.user.username}`}
+                            className="block h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 hover:ring-2 hover:ring-[var(--accent)]/50 transition-all"
+                        >
+                            {member.user.image ? (
+                                <img
+                                    src={member.user.image}
+                                    alt={member.user.name || ''}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
+                            ) : member.user.avatarSeed ? (
+                                <img
+                                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${member.user.avatarSeed}&radius=50&backgroundColor=transparent`}
+                                    alt={member.user.name || ''}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
+                            ) : (
+                                <UserIcon className="h-7 w-7 text-foreground-muted" />
+                            )}
+                        </Link>
+                    ) : (
+                        <div className="h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 cursor-default">
+                            {member.user.image ? (
+                                <img
+                                    src={member.user.image}
+                                    alt={member.user.name || ''}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
+                            ) : member.user.avatarSeed ? (
+                                <img
+                                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${member.user.avatarSeed}&radius=50&backgroundColor=transparent`}
+                                    alt={member.user.name || ''}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
+                            ) : (
+                                <UserIcon className="h-7 w-7 text-foreground-muted" />
+                            )}
+                        </div>
+                    )}
                     {(member.role === 'OWNER' || member.role === 'ADMIN') && (
                         <div
                             className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium"
@@ -101,9 +136,18 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <p className="font-bold text-foreground text-base tracking-tight truncate">
-                        {member.user.name || t('anonymousUser')}
-                    </p>
+                    {member.user.username ? (
+                        <Link
+                            href={`/${l1Slug}/user/${member.user.username}`}
+                            className="font-bold text-foreground text-base tracking-tight truncate hover:text-[var(--accent)] transition-colors block"
+                        >
+                            {member.user.name || t('anonymousUser')}
+                        </Link>
+                    ) : (
+                        <p className="font-bold text-foreground text-base tracking-tight truncate">
+                            {member.user.name || t('anonymousUser')}
+                        </p>
+                    )}
                     <p className={clsx(
                         "text-[10px] font-black uppercase tracking-widest mt-0.5",
                         member.role === 'OWNER' ? "text-[var(--accent)]" : "text-foreground-muted"
@@ -154,14 +198,14 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
             </div>
 
             <div className="grid grid-cols-2 gap-2 pt-2">
-                {canMessage ? (
-                    <Link
-                        href={`/messages/user/${member.user.id}`}
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:bg-[var(--accent)] hover:text-white hover:border-[var(--accent)] transition-all"
+                {canMessage && member.user.username ? (
+                    <div
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60"
+                        title="Direct Messaging coming soon"
                     >
                         <MessageSquare className="h-3.5 w-3.5" />
                         {t('sendMessage')}
-                    </Link>
+                    </div>
                 ) : (
                     <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
                         <MessageSquare className="h-3.5 w-3.5" />
@@ -169,9 +213,9 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
                     </div>
                 )}
 
-                {canViewProfile ? (
+                {canViewProfile && member.user.username ? (
                     <Link
-                        href={`/profile/${member.user.id}`}
+                        href={`/${l1Slug}/user/${member.user.username}`}
                         className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />

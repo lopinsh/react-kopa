@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { usernameOnboardingSchema } from '@/lib/validations/onboarding';
 import { UserService } from '@/lib/services/user.service';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 
 /**
@@ -45,6 +45,7 @@ export async function setUsername(username: string): Promise<ActionResponse> {
 
     if (!result.success) return { success: false, error: result.error };
 
+    revalidateTag('groups', 'max' as any);
     revalidatePath('/', 'layout');
     return { success: true };
 }

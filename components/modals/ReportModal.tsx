@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function ReportModal({ isOpen, onClose, targetGroupId, targetEventId }: Props) {
-    const t = useTranslations('group');
+    const t = useTranslations('report');
     const [reason, setReason] = useState('Spam');
     const [isPending, startTransition] = useTransition();
 
@@ -23,10 +23,10 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
         startTransition(async () => {
             const res = await createReport({ targetGroupId, targetEventId, reason });
             if (res.success) {
-                alert('Report submitted successfully. We will review it shortly.');
+                alert(t('success'));
                 onClose();
             } else {
-                alert('Failed to submit report. Please try again later.');
+                alert(t('error'));
             }
         });
     };
@@ -37,7 +37,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2 text-red-500">
                         <ShieldAlert className="h-5 w-5" />
-                        Report
+                        {t('title')}
                     </h2>
                     <button
                         onClick={onClose}
@@ -49,7 +49,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
 
                 <div className="space-y-4">
                     <p className="text-sm text-foreground-muted leading-relaxed">
-                        Please let us know why you are reporting this. Our safety team will review the issue.
+                        {t('description')}
                     </p>
 
                     <select
@@ -57,10 +57,10 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                         onChange={(e) => setReason(e.target.value)}
                         className="w-full cursor-pointer rounded-xl border border-border bg-surface-elevated px-4 py-3 outline-none focus:border-red-500/50 transition-all text-sm font-medium text-foreground"
                     >
-                        <option value="Spam">Spam or Misleading</option>
-                        <option value="Harassment">Harassment or Hate Speech</option>
-                        <option value="Inappropriate">Inappropriate Content</option>
-                        <option value="Other">Other</option>
+                        <option value="Spam">{t('reasonSpam')}</option>
+                        <option value="Harassment">{t('reasonHarassment')}</option>
+                        <option value="Inappropriate">{t('reasonInappropriate')}</option>
+                        <option value="Other">{t('reasonOther')}</option>
                     </select>
                 </div>
 
@@ -70,7 +70,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                         disabled={isPending}
                         className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
                     >
-                        Cancel
+                        {t('cancel')}
                     </button>
                     <button
                         onClick={handleSubmit}
@@ -80,11 +80,11 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                         {isPending ? (
                             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                         ) : (
-                            'Submit Report'
+                            t('submit')
                         )}
                     </button>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

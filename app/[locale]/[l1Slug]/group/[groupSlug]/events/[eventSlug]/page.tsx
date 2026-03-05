@@ -154,77 +154,106 @@ export default async function EventPage({
                 </div>
             </div>
 
-            <main className="container mx-auto max-w-5xl px-4 py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <main className="container mx-auto max-w-5xl px-4 py-8 md:py-12">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
                     {/* Left Column: Content */}
-                    <div className="lg:col-span-2 space-y-12">
-                        {/* Highlights Grid */}
+                    <div className="lg:col-span-2 space-y-8">
+                        {/* Event Details Cards */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="rounded-2xl border border-border bg-surface p-5 flex items-start gap-4 shadow-sm">
-                                <div className="p-3 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
-                                    <Calendar className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-xs font-bold text-foreground-muted uppercase tracking-wider">When</p>
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-elevated text-foreground-muted">
-                                        <Users className="h-4 w-4" />
+                            {/* Date & Time */}
+                            <div className="rounded-3xl border border-border bg-surface p-6 flex flex-col gap-4 shadow-sm transition-colors hover:border-border/80 text-left">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-3 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+                                        <Calendar className="h-6 w-6" />
                                     </div>
-                                    <span className="text-sm font-bold text-foreground">
-                                        {event._count?.attendees || 0} spot{event._count?.attendees === 1 ? '' : 's'} taken
-                                    </span>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">Date & Time</p>
+                                        <p className="text-sm font-bold text-foreground leading-snug">
+                                            {format(startDate, 'EEEE, MMMM d, yyyy')}
+                                            <br />
+                                            {format(startDate, 'HH:mm')} {endDate && `- ${format(endDate, 'HH:mm')}`}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="rounded-2xl border border-border bg-surface p-5 flex items-start gap-4 shadow-sm">
-                                <div className="p-3 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
-                                    <MapPin className="h-6 w-6" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-bold text-foreground-muted uppercase tracking-wider">Where</p>
-                                    <p className="text-sm font-bold text-foreground mt-1 truncate">
-                                        {event.location}
-                                    </p>
-                                    <button className="text-[10px] font-black text-[var(--accent)] uppercase tracking-widest mt-1 hover:underline">
-                                        Open in Maps
-                                    </button>
+                            {/* Location */}
+                            <div className="rounded-3xl border border-border bg-surface p-6 flex flex-col gap-4 shadow-sm transition-colors hover:border-border/80 text-left">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-3 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
+                                        <MapPin className="h-6 w-6" />
+                                    </div>
+                                    <div className="min-w-0 flex-1">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">Location</p>
+                                        <p className="text-sm font-bold text-foreground leading-snug truncate">
+                                            {event.location || 'TBA'}
+                                        </p>
+                                        {event.location && !event.location.includes('http') && (
+                                            <a
+                                                href={`https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
+                                            >
+                                                Open in Maps
+                                            </a>
+                                        )}
+                                        {event.location && event.location.includes('http') && (
+                                            <a
+                                                href={event.location}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
+                                            >
+                                                Join Link
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
                         {/* About the Event */}
-                        <section className="space-y-4">
-                            <div className="flex items-center gap-3 text-sm font-black uppercase tracking-[0.2em] text-foreground opacity-90">
-                                <span className="h-px w-8 bg-[var(--accent)]" />
-                                Details
+                        <div className="rounded-3xl border border-border bg-surface p-6 md:p-8 space-y-6 shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-surface-elevated text-foreground border border-border">
+                                    <Info className="h-5 w-5" />
+                                </div>
+                                <h2 className="text-xl font-black tracking-tight text-foreground">About Event</h2>
                             </div>
                             <div
                                 className="prose prose-invert max-w-none text-foreground-muted leading-relaxed"
                                 dangerouslySetInnerHTML={{ __html: event.description || '' }}
                             />
-                        </section>
+                        </div>
 
                         {/* Special Instructions */}
                         {event.instructions && (
-                            <section className="rounded-3xl bg-surface-elevated/50 border border-border p-8 space-y-4">
-                                <div className="inline-flex items-center gap-2 text-sm font-bold text-foreground">
-                                    <Info className="h-5 w-5 text-[var(--accent)]" />
-                                    Important Info
+                            <div className="rounded-3xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 p-6 md:p-8 space-y-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="p-2.5 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+                                        <Info className="h-5 w-5" />
+                                    </div>
+                                    <h2 className="text-xl font-black tracking-tight text-[var(--accent)]">Important Info</h2>
                                 </div>
                                 <div
-                                    className="text-sm text-foreground-muted leading-relaxed"
+                                    className="prose prose-invert max-w-none text-foreground-muted leading-relaxed prose-a:text-[var(--accent)]"
                                     dangerouslySetInnerHTML={{ __html: event.instructions }}
                                 />
-                            </section>
+                            </div>
                         )}
                     </div>
 
                     {/* Right Column: Sidebar Actions */}
-                    <aside className="space-y-8">
+                    <aside className="space-y-6">
                         {/* RSVP Card */}
                         <div className="sticky top-[calc(var(--header-height)+2rem)] space-y-6">
-                            <div className="rounded-3xl border border-border bg-surface p-8 shadow-xl space-y-6">
+                            <div className="rounded-3xl border border-border bg-surface p-6 md:p-8 shadow-xl space-y-6 relative overflow-hidden">
+                                {/* Subtle Accent Gradient Background */}
+                                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-[var(--accent)]/5 blur-3xl pointer-events-none" />
+
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-bold text-foreground">Are you coming?</h3>
+                                    <h3 className="text-xl font-black tracking-tight text-foreground">Are you coming?</h3>
                                     <p className="text-sm text-foreground-muted">Join the community at this event.</p>
                                 </div>
 
@@ -235,7 +264,7 @@ export default async function EventPage({
                                     locale={locale}
                                 />
 
-                                <div className="pt-2 flex flex-col gap-4">
+                                <div className="pt-4 border-t border-border flex flex-col gap-4">
                                     <AddToCalendar
                                         event={{
                                             title: event.title,
@@ -246,32 +275,32 @@ export default async function EventPage({
                                         }}
                                         accentColor={accentColor}
                                     />
-                                    <button className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors">
-                                        <Share2 className="h-3 w-3" />
+                                    <button className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors group/share">
+                                        <Share2 className="h-3.5 w-3.5 group-hover/share:text-[var(--accent)] transition-colors" />
                                         Share Event
                                     </button>
                                 </div>
                             </div>
 
                             {/* Organizer Info */}
-                            <div className="rounded-3xl border border-border bg-white/[0.02] p-6 space-y-4">
+                            <div className="rounded-3xl border border-border bg-surface p-6 shadow-sm space-y-4">
                                 <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">Organizer</p>
                                 <Link
                                     href={`/${l1Slug}/group/${group.slug}`}
-                                    className="flex items-center gap-3 group"
+                                    className="flex items-center gap-3 group/org"
                                 >
-                                    <div className="h-10 w-10 overflow-hidden rounded-xl border border-white/10 bg-surface-elevated flex items-center justify-center">
+                                    <div className="h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-surface-elevated flex items-center justify-center shrink-0 shadow-sm">
                                         {group.bannerImage ? (
                                             <img src={group.bannerImage || undefined} alt="" className="h-full w-full object-cover" />
                                         ) : (
-                                            <Users className="h-5 w-5 text-foreground-muted/40" />
+                                            <Users className="h-6 w-6 text-foreground-muted/40" />
                                         )}
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-sm font-bold text-foreground group-hover:text-[var(--accent)] transition-colors truncate">
+                                        <p className="text-sm font-bold text-foreground group-hover/org:text-[var(--accent)] transition-colors truncate">
                                             {group.name}
                                         </p>
-                                        <div className="flex items-center gap-1.5 text-xs text-foreground-muted">
+                                        <div className="flex items-center gap-1.5 mt-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted group-hover/org:text-foreground transition-colors">
                                             Visit Community
                                             <ExternalLink className="h-3 w-3" />
                                         </div>

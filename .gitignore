@@ -41,7 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 # logs
-ts_errors.log
+*.log
 tsc_output*.txt
 
 # scripts

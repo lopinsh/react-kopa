@@ -89,6 +89,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             wildcardParentId: undefined,
             tagIds: [],
             type: 'PUBLIC',
+            isAcceptingMembers: true,
         },
         mode: 'onChange',
     });
