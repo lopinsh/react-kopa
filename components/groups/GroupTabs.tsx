@@ -4,12 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
-import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu } from 'lucide-react';
+import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon } from 'lucide-react';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
+import type { GroupContext } from '@/lib/services/group.service';
 
 type Props = {
-    group: any;
+    group: GroupContext;
     l1Slug: string;
     pendingCount: number;
 };
@@ -27,7 +28,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
         id: string;
         label: string;
         href: string;
-        icon: any;
+        icon: LucideIcon;
         memberOnly?: boolean;
         adminOnly?: boolean;
         needsInstructions?: boolean;
@@ -177,7 +178,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                     </div>
 
                     <nav
-                        ref={navRef as any}
+                        ref={navRef}
                         className="flex-1 flex items-center gap-1 -mb-px overflow-x-auto no-scrollbar scroll-smooth [mask-image:linear-gradient(to_right,black_calc(100%-40px),transparent)]"
                     >
                         {tabs.map((tab) => {
@@ -185,7 +186,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             const active = isAbout ? activeSection === 'about' || activeSection === sections[0]?.id : activeSection === tab.id;
 
                             if (tab.memberOnly && !isMember) return null;
-                            if ((tab as any).needsInstructions && !group.hasInstructions) return null;
+                            if (tab.needsInstructions && !group.instructions) return null;
                             if (tab.adminOnly && !isOwnerOrAdmin) return null;
 
                             return (

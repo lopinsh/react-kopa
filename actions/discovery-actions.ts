@@ -2,16 +2,14 @@
 
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import type {
-    DiscoveryFilters,
-    ScopedResult,
-    ContextualTaxonomy
+    DiscoveryFilters
 } from '@/lib/types/discovery';
 
 /**
  * Fetches groups based on discovery filters.
  * Thin wrapper around DiscoveryService.getGroups.
  */
-export async function getGroups(filters: any, locale: string) {
+export async function getGroups(filters: DiscoveryFilters, locale: string) {
     return DiscoveryService.getGroups(filters, locale);
 }
 

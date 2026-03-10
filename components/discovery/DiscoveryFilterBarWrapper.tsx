@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useTransition } from 'react';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import DiscoveryFilterBar from '@/components/discovery/DiscoveryFilterBar';
 
 type Props = {

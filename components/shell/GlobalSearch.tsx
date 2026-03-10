@@ -1,16 +1,18 @@
 'use client';
 
 import { Search } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import SearchModal from './SearchModal';
 
 export default function GlobalSearch() {
-    const [isMac, setIsMac] = useState(true);
+    const isMac = useSyncExternalStore(
+        () => () => { },
+        () => navigator.platform.toUpperCase().indexOf('MAC') >= 0,
+        () => true
+    );
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
-
         const handleKeyDown = (e: KeyboardEvent) => {
             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
                 e.preventDefault();

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, MapPin, Users } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -17,7 +17,7 @@ type ReportItem = {
     event: { id: string; title: string } | null;
 };
 
-export default function ReportList({ initialReports }: { initialReports: any[] }) {
+export default function ReportList({ initialReports }: { initialReports: ReportItem[] }) {
     const t = useTranslations('admin');
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
@@ -97,7 +97,7 @@ export default function ReportList({ initialReports }: { initialReports: any[] }
                                     )}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">Reported By</p>
+                                    <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">{t('reportedByLabel')}</p>
                                     <div className="flex items-center gap-2">
                                         {report.reporter.image ? (
                                             <img src={report.reporter.image || undefined} alt="" className="h-6 w-6 rounded-full object-cover" />

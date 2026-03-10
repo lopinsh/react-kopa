@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormContext } from 'react-hook-form';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { GroupFormValues } from '@/lib/validations/group';
 import type { TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';

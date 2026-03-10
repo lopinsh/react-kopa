@@ -11,6 +11,7 @@ import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
 import { useAuthGate } from '@/lib/useAuthGate';
 import AuthGateModal from '@/components/modals/AuthGateModal';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 
 type Post = {
     id: string;
@@ -27,11 +28,10 @@ type Props = {
     groupId: string;
     locale: string;
     currentUserId?: string;
-    isMember: boolean;
-    userRole: string | null;
 };
 
-export default function DiscussionBoard({ groupId, locale, currentUserId, isMember, userRole }: Props) {
+export default function DiscussionBoard({ groupId, locale, currentUserId }: Props) {
+    const { isMember, userRole } = useGroupContext();
     const t = useTranslations('group');
     const tAuth = useTranslations('auth');
     const [posts, setPosts] = useState<Post[]>([]);
@@ -45,7 +45,11 @@ export default function DiscussionBoard({ groupId, locale, currentUserId, isMemb
     useEffect(() => {
         const fetchPosts = async () => {
             const data = await getGroupPosts(groupId);
-            setPosts(data as Post[]);
+            if (data && Array.isArray(data)) {
+                setPosts(data as Post[]);
+            } else {
+                setPosts([]);
+            }
             setIsLoading(false);
         };
         fetchPosts();
@@ -78,11 +82,11 @@ export default function DiscussionBoard({ groupId, locale, currentUserId, isMemb
 
         startTransition(async () => {
             const result = await createPost(groupId, content, locale);
-            if (result.success && result.post) {
+            if (result.success && result.data?.post) {
                 // Manually add current userId if missing in result author object to satisfy Post type
                 const postWithId = {
-                    ...result.post,
-                    author: { ...result.post.author, id: currentUserId! }
+                    ...result.data.post,
+                    author: { ...result.data.post.author, id: currentUserId! }
                 };
                 setPosts([postWithId as unknown as Post, ...posts]);
                 setContent('');

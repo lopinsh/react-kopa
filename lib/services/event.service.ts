@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
-import { Prisma, AttendanceStatus } from '@prisma/client';
+import { Prisma, AttendanceStatus, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
 
@@ -25,9 +25,12 @@ export class EventService {
     static getEventWithContext = cache(async (
         eventSlug: string,
         groupSlug: string,
-        locale: string,
-        userId?: string
+        _locale: string,
+        _userId?: string
     ) => {
+        void _locale;
+        void _userId;
+
         const groupRecord = await prisma.group.findFirst({
             where: { slug: groupSlug },
             select: { id: true }
@@ -86,7 +89,7 @@ export class EventService {
     /**
      * Create a new event within a group.
      */
-    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: any; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
+    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: EventModel; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
         const membership = await prisma.membership.findUnique({
             where: {
                 userId_groupId: {
@@ -148,7 +151,7 @@ export class EventService {
             select: { userId: true }
         });
 
-        const group = (event as any).group;
+        const group = event.group;
         let l1Slug = group.category.slug;
         if (group.category.level === 3 && group.category.parent?.parent) {
             l1Slug = group.category.parent.parent.slug;

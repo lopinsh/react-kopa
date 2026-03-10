@@ -17,7 +17,7 @@ export function ToastContainer() {
 
     return createPortal(
         <div
-            className="fixed bottom-4 left-1/2 z-[100] flex w-full -translate-x-1/2 flex-col-reverse items-center gap-2 p-4 md:max-w-[420px] lg:bottom-8"
+            className="fixed bottom-4 left-1/2 z-[100] flex w-full -translate-x-1/2 flex-col-reverse items-center gap-2 p-4 md:max-w-[420px] lg:bottom-8 pointer-events-none"
         >
             {toasts.map((toast) => (
                 <Toast key={toast.id} toast={toast} onClose={removeToast} />

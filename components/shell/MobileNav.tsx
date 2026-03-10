@@ -32,7 +32,7 @@ export default function MobileNav() {
                         <MobileNavLink
                             key={href}
                             href={href}
-                            label={t(labelKey as any)}
+                            label={t(labelKey)}
                             isActive={isActive}
                         >
                             <Icon
@@ -61,7 +61,7 @@ export default function MobileNav() {
                         <MobileNavLink
                             key={href}
                             href={href}
-                            label={t(labelKey as any)}
+                            label={t(labelKey)}
                             isActive={isActive}
                         >
                             <Icon

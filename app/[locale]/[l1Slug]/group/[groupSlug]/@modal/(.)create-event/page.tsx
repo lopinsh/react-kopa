@@ -7,14 +7,14 @@ import DialogModal from '@/components/ui/DialogModal';
 export default async function CreateEventModal({
     params
 }: {
-    params: Promise<{ locale: string; slug: string }>
+    params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>
 }) {
-    const { locale, groupSlug, l1Slug } = await params as any;
+    const { locale, groupSlug, l1Slug } = await params;
 
     // Auth Check
     const session = await auth();
     if (!session?.user?.id) {
-        redirect(`/${locale}/api/auth/signin`);
+        redirect(`/api/auth/signin`);
     }
 
     // Role Check

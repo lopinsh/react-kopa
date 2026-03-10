@@ -34,12 +34,10 @@ export default async function GroupPage({
         <div className="relative animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Decorative background glows */}
             <div
-                className="absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full opacity-[0.03] blur-[120px] pointer-events-none"
-                style={{ backgroundColor: accentColor }}
+                className="absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full opacity-[0.03] blur-[120px] pointer-events-none bg-[var(--accent)]"
             />
             <div
-                className="absolute top-[40%] -left-40 h-[400px] w-[400px] rounded-full opacity-[0.02] blur-[100px] pointer-events-none"
-                style={{ backgroundColor: accentColor }}
+                className="absolute top-[40%] -left-40 h-[400px] w-[400px] rounded-full opacity-[0.02] blur-[100px] pointer-events-none bg-[var(--accent)]"
             />
 
             {/* Identity Bar */}
@@ -138,7 +136,6 @@ export default async function GroupPage({
                             </div>
                             <MemberAvatarList
                                 members={group.members.filter(m => m.role !== 'PENDING')}
-                                accentColor={accentColor}
                                 groupId={group.id}
                                 groupName={group.name}
                                 isMember={group.isMember}
@@ -150,7 +147,6 @@ export default async function GroupPage({
                                     discordLink={group.discordLink}
                                     websiteLink={group.websiteLink}
                                     instagramLink={group.instagramLink}
-                                    accentColor={accentColor}
                                 />
                             </div>
                         </div>

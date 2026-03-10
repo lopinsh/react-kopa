@@ -9,7 +9,8 @@
         "myGroups": "My Groups",
         "userFallback": "User",
         "viewPublicProfile": "View Public Profile",
-        "messages": "Messages"
+        "messages": "Messages",
+        "adminPanel": "Admin Panel"
     },
     "theme": {
         "lightMode": "Light Mode",
@@ -118,6 +119,10 @@
     },
     "errors": {
         "UNAUTHORIZED": "Unauthorized access. Please log in.",
+        "UNAUTHORIZED_ADMIN": "Admin access is required for this action.",
+        "TAG_NOT_FOUND": "Tag was not found.",
+        "TAG_ALREADY_EXISTS": "This tag already exists.",
+        "ALIAS_CONFLICT": "This alias already exists for the selected locale.",
         "FORBIDDEN": "You do not have permission to perform this action.",
         "NOT_FOUND": "The requested resource was not found.",
         "VALIDATION_FAILED": "Validation failed. Please check your input.",
@@ -157,10 +162,16 @@
         "title_APPLICATION_RECEIVED": "Application Received",
         "title_APPLICATION_ACCEPTED": "Membership Approved",
         "title_INQUIRY_RECEIVED": "New Inquiry",
+        "title_TAG_MERGED": "Tag Updated",
+        "type_TAG_MERGED": "Taxonomy",
         "newEvent": "A new event \"{title}\" has been created in \"{groupName}\".",
         "newPost": "{authorName} posted in \"{groupName}\".",
         "inquiryReceived": "{authorName} sent an inquiry about \"{groupName}\".",
-        "applicationAccepted": "Your request to join \"{groupName}\" was approved!"
+        "applicationAccepted": "Your request to join \"{groupName}\" was approved!",
+        "tagMerged": {
+            "title": "Tag updated",
+            "message": "Your group tag \"{originalTag}\" was merged into \"{canonicalTag}\"."
+        }
     },
     "shell": {
         "header": {
@@ -376,6 +387,7 @@
         "noPendingReports": "No pending reports.",
         "reportLabel": "REPORT",
         "reportedBy": "by {name}",
+        "reportedByLabel": "Reported by",
         "reportedGroup": "Group: {name}",
         "reportedEvent": "Event: {title}",
         "dismiss": "Dismiss",
@@ -390,7 +402,95 @@
         "deleteContent": "Delete Content",
         "moderationReports": "Admin: Moderation Reports",
         "moderationReportsDesc": "Review and resolve flagged groups and events.",
-        "resolvedByAdmin": "Resolved by Admin"
+        "resolvedByAdmin": "Resolved by Admin",
+        "taxonomy": {
+            "navLink": "Taxonomy",
+            "title": "Taxonomy",
+            "tabs": {
+                "pending": "Pending",
+                "categories": "Categories",
+                "aliases": "Aliases"
+            },
+            "pending": {
+                "empty": "No pending tags.",
+                "approveAs": "Approve as new",
+                "mergeInto": "Merge into",
+                "mergeAction": "Merge",
+                "submittedBy": "Submitted by",
+                "approved": "Tag approved.",
+                "merged": "Tag merged."
+            },
+            "categories": {
+                "saved": "Category saved."
+            },
+            "aliases": {
+                "add": "Add alias",
+                "empty": "No aliases.",
+                "added": "Alias added.",
+                "deleted": "Alias deleted.",
+                "valuePlaceholder": "Alias value",
+                "searchCategories": "Search categories",
+                "anyLocale": "Any locale",
+                "anyLocaleShort": "all",
+                "selectCategory": "Select category"
+            },
+            "fields": {
+                "nameEn": "Name EN",
+                "nameLv": "Name LV",
+                "slugEn": "Slug EN",
+                "slugLv": "Slug LV",
+                "color": "Color"
+            },
+            "override": {
+                "title": "Admin categorization override",
+                "saved": "Group tags updated."
+            },
+            "tree": {
+                "title": "Taxonomy Tree",
+                "expandAll": "Expand All",
+                "collapseAll": "Collapse All",
+                "edit": "Edit"
+            },
+            "inbox": {
+                "title": "Pending Review",
+                "empty": "No items pending review",
+                "approve": "Approve",
+                "merge": "Merge into...",
+                "reject": "Reject",
+                "confirmReject": "Are you sure you want to reject and delete this tag?",
+                "submittedBy": "Submitted by {name} on {date}",
+                "usedByGroups": "Used by groups:"
+            },
+            "bulk": {
+                "selected": "selected",
+                "clearSelection": "Clear selection",
+                "approve": "Approve",
+                "merge": "Merge",
+                "mergeRequiresTwo": "Select at least 2 tags to merge",
+                "delete": "Delete"
+            },
+            "merge": {
+                "title": "Merge Tags",
+                "description": "Select the primary tag that will be kept. The others will be deleted and converted into aliases for the primary tag.",
+                "selectCanonical": "Select Primary Tag",
+                "editDetails": "Edit Primary Tag Details",
+                "confirm": "Confirm Merge"
+            },
+            "slideover": {
+                "l1Title": "Category Details",
+                "l2Title": "Tag Details",
+                "pendingTitle": "Pending Tag",
+                "aliases": "Aliases",
+                "aliasHelper": "Aliases let alternate spellings or translations find this tag",
+                "addAlias": "Add",
+                "groups": "Groups using this tag",
+                "editTags": "Edit tags",
+                "save": "Save Changes",
+                "createSubcategory": "Create Subcategory",
+                "addSubcategory": "Add Subcategory",
+                "subcategoryCreated": "Subcategory created successfully"
+            }
+        }
     },
     "onboarding": {
         "username": {

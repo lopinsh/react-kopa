@@ -8,6 +8,15 @@ import { GroupService } from '@/lib/services/group.service';
 import { createNotification } from './notification-actions';
 import { ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
+import type { MembershipRole } from '@prisma/client';
+
+type GroupDetailsResult = Record<string, unknown> & {
+    members: Array<Record<string, unknown> & { applicationMessage?: string | null }>;
+    isMember: boolean;
+    userRole: MembershipRole | null;
+    tags: Array<{ id: string; slug: string; title: string; isWildcard: boolean; parentId: string | null }>;
+    inquiries: Array<{ id: string; content: string; createdAt: Date; senderId: string }>;
+};
 
 /**
  * Creates a new group and handles optional wildcard category creation.
@@ -26,8 +35,8 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
         const { slug, l1Slug } = result.data!;
 
         revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}`);
-        revalidatePath(`/${locale}/discover`);
+        revalidatePath(`/${locale}`, 'page');
+        revalidatePath(`/${locale}/discover`, 'page');
 
         return { success: true, data: { slug, l1Slug } };
     } catch (error) {
@@ -49,7 +58,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
         // Invalidate paths
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
 
         return { success: true, data: { pending: true } };
@@ -71,9 +80,9 @@ export async function cancelJoinRequest(groupId: string, locale: string): Promis
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
-        revalidatePath(`/${locale}/discover`);
+        revalidatePath(`/${locale}/discover`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'CANCEL_FAILED');
@@ -120,7 +129,7 @@ export async function leaveGroup(groupId: string, locale: string): Promise<Actio
         const result = await GroupService.leaveGroup(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        revalidatePath(`/${locale}/discover`);
+        revalidatePath(`/${locale}/discover`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'LEAVE_FAILED');
@@ -154,8 +163,8 @@ export async function manageMembership(
             });
         }
 
-        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}`);
-        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}/members`);
+        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}`, 'page');
+        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}/members`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
@@ -180,7 +189,7 @@ export async function sendApplicationInquiry(
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
         }
 
         return { success: true };
@@ -231,15 +240,15 @@ export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
 
         const sections = (group.sections && group.sections.length > 0)
             ? group.sections
-            : GroupService.getVirtualSections(group as any);
+            : GroupService.getVirtualSections({ description: null, instructions: group.instructions });
 
         return {
-            role: role as any,
+            role,
             hasInstructions: !!group.instructions,
             pendingCount,
             sections: sections.map((s: { id: string; title: string; visibility: string }) => ({ id: s.id, title: s.title, visibility: s.visibility }))
         };
-    } catch (e) {
+    } catch {
         return { role: null, hasInstructions: false, pendingCount: 0, sections: [] };
     }
 }
@@ -247,7 +256,7 @@ export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
 /**
  * Fetches group details by slug for the landing page.
  */
-export async function getGroupDetails(l1Slug: string, groupSlug: string, locale: string): Promise<any> {
+export async function getGroupDetails(l1Slug: string, groupSlug: string, locale: string): Promise<GroupDetailsResult | null> {
     const lang = locale === 'en' ? 'en' : 'lv';
     const session = await auth();
     const currentUserId = session?.user?.id;
@@ -308,7 +317,7 @@ export async function getGroupDetails(l1Slug: string, groupSlug: string, locale:
         const isMember = !!userMembership && userMembership.role !== 'PENDING';
         const userRole = userMembership?.role || null;
 
-        let membersWithMessages = group.members as any[];
+        let membersWithMessages = group.members;
 
         if (userRole === 'OWNER' || userRole === 'ADMIN') {
             membersWithMessages = group.members.map((m) => {
@@ -368,8 +377,8 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
 
         const { slug, l1Slug } = result.data!;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
         return { success: true, data: { slug, l1Slug } };
     } catch (error) {
@@ -388,8 +397,8 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
         const result = await GroupService.deleteGroup(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        revalidatePath(`/${locale}/discover`);
-        revalidatePath(`/${locale}`);
+        revalidatePath(`/${locale}/discover`, 'page');
+        revalidatePath(`/${locale}`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -414,8 +423,8 @@ export async function upsertSectionAction(
 
         const { slug, l1Slug } = result.data!;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -437,8 +446,8 @@ export async function reorderSectionsAction(
 
         const { slug, l1Slug } = result.data!;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -459,9 +468,9 @@ export async function deleteSectionAction(
 
         const { slug, l1Slug } = result.data!;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`);
-        revalidatePath(`/${locale}`);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidatePath(`/${locale}`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -482,7 +491,7 @@ export async function promoteMember(groupId: string, targetUserId: string, local
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
         }
 
         return { success: true };
@@ -504,7 +513,7 @@ export async function demoteMember(groupId: string, targetUserId: string, locale
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
         }
 
         return { success: true };
@@ -526,7 +535,7 @@ export async function kickMember(groupId: string, targetUserId: string, locale: 
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`);
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
         }
 
         return { success: true };
@@ -547,11 +556,12 @@ export async function deletePostAction(postId: string, locale: string): Promise<
         if (!result.success) return result as ActionResponse;
 
         const { slug, l1Slug } = result.data!;
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/discussion`);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/discussion`, 'page');
 
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
     }
 }
+

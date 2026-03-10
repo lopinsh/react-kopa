@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
@@ -43,7 +43,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
     const [serverError, setServerError] = useState<string | null>(null);
 
     const form = useForm<EventFormData>({
-        resolver: zodResolver(eventSchema) as any,
+        resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
         defaultValues: {
             title: '',
             slug: '',
@@ -81,7 +81,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
     const onSubmit = handleSubmit((data) => {
         setServerError(null);
         startTransition(async () => {
-            const result = await createEvent(groupId, data as any, locale);
+            const result = await createEvent(groupId, data as unknown as EventFormValues, locale);
             if (!result.success) {
                 setServerError(result.error);
             } else {
@@ -321,23 +321,23 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                     {t('fieldVisibility')}
                                 </label>
                                 {[
-                                    { val: 'PUBLIC', key: 'typePublic', desc: 'typePublicDesc' },
-                                    { val: 'MEMBERS_ONLY', key: 'typeMembersOnly', desc: 'typeMembersOnlyDesc' }
+                                    { val: 'PUBLIC', key: 'typePublic' as const, desc: 'typePublicDesc' as const },
+                                    { val: 'MEMBERS_ONLY', key: 'typeMembersOnly' as const, desc: 'typeMembersOnlyDesc' as const }
                                 ].map(({ val, key, desc }) => {
                                     const isSelected = watch('visibility') === val;
                                     return (
                                         <button
                                             key={val}
                                             type="button"
-                                            onClick={() => setValue('visibility', val as any)}
+                                            onClick={() => setValue('visibility', val as "PUBLIC" | "MEMBERS_ONLY")}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
                                                 isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
                                             )}
                                             style={isSelected ? { borderColor: accentColor, backgroundColor: `${accentColor}10` } : undefined}
                                         >
-                                            <span className="font-semibold">{t(key as any)}</span>
-                                            <span className="text-xs text-foreground-muted">{t(desc as any)}</span>
+                                            <span className="font-semibold">{t(key)}</span>
+                                            <span className="text-xs text-foreground-muted">{t(desc)}</span>
                                         </button>
                                     );
                                 })}

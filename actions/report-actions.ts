@@ -1,31 +1,35 @@
 'use server';
-
-import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
+import { ReportService } from '@/lib/services/report.service';
+import { ActionError, type ActionResponse } from '@/types/actions';
+import { revalidatePath } from 'next/cache';
 
 export async function createReport(data: {
     targetGroupId?: string;
     targetEventId?: string;
     reason: string;
-}) {
+}): Promise<ActionResponse<void>> {
     const session = await auth();
     if (!session?.user?.id) {
-        return { error: 'UNAUTHORIZED' };
+        return { success: false, error: 'UNAUTHORIZED' };
     }
 
     try {
-        await prisma.report.create({
-            data: {
-                reporterId: session.user.id,
-                targetGroupId: data.targetGroupId,
-                targetEventId: data.targetEventId,
-                reason: data.reason,
-            }
+        await ReportService.createReport({
+            reporterId: session.user.id,
+            targetGroupId: data.targetGroupId,
+            targetEventId: data.targetEventId,
+            reason: data.reason,
         });
+
+        // Ensure path revalidation as per Action Consistency Law
+        revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error) {
-        console.error('[createReport] Error:', error);
-        return { error: 'REPORT_FAILED' };
+        if (error instanceof ActionError) {
+            return { success: false, error: error.code };
+        }
+        return { success: false, error: 'REPORT_FAILED' };
     }
 }
 
@@ -34,87 +38,38 @@ export async function getReports() {
     // In a real app, verify admin status here. For now, we'll allow any logged-in user to see reports for testing, or assume we have an admin role logic later.
     if (!session?.user?.id) return [];
 
-    const rawReports = await prisma.report.findMany({
-        where: { status: 'PENDING' },
-        include: {
-            reporter: { select: { id: true, name: true, image: true } },
-            group: {
-                select: {
-                    id: true, name: true, slug: true,
-                    category: { include: { parent: { include: { parent: true } } } }
-                }
-            },
-            event: { select: { id: true, title: true } }
-        },
-        orderBy: { createdAt: 'desc' }
-    });
-
-    return rawReports.map(report => {
-        let l1Slug = '';
-        if (report.group?.category) {
-            l1Slug = report.group.category.parent?.parent?.slug
-                || report.group.category.parent?.slug
-                || report.group.category.slug;
-        }
-
-        return {
-            ...report,
-            group: report.group ? {
-                id: report.group.id,
-                name: report.group.name,
-                slug: report.group.slug,
-                l1Slug
-            } : null
-        };
-    });
+    return ReportService.getPendingReports();
 }
 
-export async function resolveReport(reportId: string, resolutionReason: string) {
+export async function resolveReport(reportId: string, resolutionReason: string): Promise<ActionResponse<void>> {
     const session = await auth();
-    if (!session?.user?.id) return { error: 'UNAUTHORIZED' };
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        await prisma.report.update({
-            where: { id: reportId },
-            data: { status: 'RESOLVED' }
-        });
+        await ReportService.resolveReport(reportId);
+        revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error) {
-        console.error('[resolveReport] Error:', error);
-        return { error: 'RESOLUTION_FAILED' };
+        if (error instanceof ActionError) {
+            return { success: false, error: error.code };
+        }
+        return { success: false, error: 'RESOLUTION_FAILED' };
     }
 }
 
-export async function deleteReportedContent(reportId: string) {
+export async function deleteReportedContent(reportId: string): Promise<ActionResponse<void>> {
     const session = await auth();
     // Assuming admin role is checked here in a real app
-    if (!session?.user?.id) return { error: 'UNAUTHORIZED' };
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const report = await prisma.report.findUnique({
-            where: { id: reportId },
-            include: { group: true, event: true }
-        });
-
-        if (!report) return { error: 'NOT_FOUND' };
-
-        // We use a transaction to ensure both the entity deletion and report resolution succeed
-        await prisma.$transaction(async (tx) => {
-            if (report.targetGroupId) {
-                await tx.group.delete({ where: { id: report.targetGroupId } });
-            } else if (report.targetEventId) {
-                await tx.event.delete({ where: { id: report.targetEventId } });
-            }
-
-            await tx.report.update({
-                where: { id: reportId },
-                data: { status: 'RESOLVED' }
-            });
-        });
-
+        await ReportService.deleteReportedContent(reportId);
+        revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error) {
-        console.error('[deleteReportedContent] Error:', error);
-        return { error: 'DELETION_FAILED' };
+        if (error instanceof ActionError) {
+            return { success: false, error: error.code };
+        }
+        return { success: false, error: 'DELETE_FAILED' };
     }
 }

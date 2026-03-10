@@ -164,7 +164,7 @@ export const GroupService = {
                     slug: currentCat.slug,
                     l1Slug,
                     title: currentCat.titles[0]?.title ?? currentCat.slug,
-                    parentTitle: (currentCat as any).parent?.titles[0]?.title,
+                    parentTitle: currentCat.parent?.titles[0]?.title ?? null,
                     color: inheritedColor
                 }
             };
@@ -268,10 +268,10 @@ export const GroupService = {
         const isAdmin = userRole === 'OWNER' || userRole === 'ADMIN';
 
         // 2. Format Members (with application messages for admins)
-        const formattedMembers = group.members.map((m: any) => {
+        const formattedMembers = group.members.map((m) => {
             const thread = group.appMessages
-                .filter((msg: any) => msg.applicationUserId === m.userId)
-                .map((msg: any) => ({
+                .filter((msg) => msg.applicationUserId === m.userId)
+                .map((msg) => ({
                     id: msg.id,
                     content: msg.content,
                     createdAt: msg.createdAt,
@@ -298,10 +298,10 @@ export const GroupService = {
 
         // If the main category is L1, check if there's an L2 tag we can feature in breadcrumbs
         if (currentCat.level === 1 && g.tags.length > 0) {
-            const l2Tag = g.tags.find((t: any) => t.level === 2 || t.parentId === (currentCat as any).id);
+            const l2Tag = g.tags.find((t) => t.level === 2);
             if (l2Tag) {
                 parentTitle = categoryTitle;
-                categoryTitle = (l2Tag as any).titles?.[0]?.title || l2Tag.slug;
+                categoryTitle = l2Tag.titles?.[0]?.title || l2Tag.slug;
                 categorySlug = l2Tag.slug;
             }
         }
@@ -341,9 +341,9 @@ export const GroupService = {
                 l1Slug: (currentCat.level === 3 && currentCat.parent?.parent) ? currentCat.parent.parent.slug : (currentCat.level === 2 && currentCat.parent) ? currentCat.parent.slug : currentCat.slug,
                 color: currentCat.color || currentCat.parent?.color || currentCat.parent?.parent?.color || null
             },
-            tags: g.tags.map((t: { id: string; slug: string; level: number }) => ({
+            tags: g.tags.map((t) => ({
                 id: t.id,
-                title: (t as any).titles?.[0]?.title || t.slug,
+                title: t.titles?.[0]?.title || t.slug,
                 slug: t.slug,
                 level: t.level
             })),
@@ -411,7 +411,7 @@ export const GroupService = {
                             title: 'Member Instructions',
                             content: data.instructions,
                             order: 1,
-                            visibility: 'MEMBERS_ONLY' as any
+                            visibility: 'MEMBERS_ONLY' as const
                         }] : [])
                     ]
                 }
@@ -564,16 +564,20 @@ export const GroupService = {
     },
 
     async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
-        const membership = await prisma.membership.findFirst({
-            where: { groupId, userId }
-        });
+        const [membership, actor] = await Promise.all([
+            prisma.membership.findFirst({ where: { groupId, userId } }),
+            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+        ]);
 
         const role = membership?.role;
-        if (role !== 'OWNER' && role !== 'ADMIN') return { success: false, error: 'FORBIDDEN' };
+        const isAppAdmin = actor?.role === 'ADMIN';
+        if (role !== 'OWNER' && role !== 'ADMIN' && !isAppAdmin) {
+            return { success: false, error: 'FORBIDDEN' };
+        }
 
-        const isOwner = role === 'OWNER';
+        const canEditTaxonomy = role === 'OWNER' || isAppAdmin;
 
-        // Admins cannot change taxonomy (categoryId and tagIds)
+        // Taxonomy can be edited by group owners and app admins.
         const updateData: Prisma.GroupUpdateInput = {
             name: data.name,
             description: data.description,
@@ -588,12 +592,12 @@ export const GroupService = {
             accentColor: data.accentColor || null,
         };
 
-        if (isOwner) {
+        if (canEditTaxonomy) {
             updateData.category = { connect: { id: data.categoryId } };
             const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
             updateData.tags = {
-                set: [], // Clear old tags
-                connect: tagsToConnect
+                set: [],
+                connect: tagsToConnect,
             };
         }
 
@@ -985,3 +989,6 @@ function slugify(text: string) {
         .replace(/[^\w-]+/g, '')
         .replace(/--+/g, '-');
 }
+
+
+

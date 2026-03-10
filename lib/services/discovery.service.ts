@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { unstable_cache } from 'next/cache';
+import { Prisma } from '@prisma/client';
 import type {
     ScopedResult,
     DiscoveryFilters,
@@ -34,7 +35,7 @@ export const DiscoveryService = {
         }
 
         // 2. Fetch Matching Categories within context
-        const categoryWhere: any = {
+        const categoryWhere: Prisma.CategoryWhereInput = {
             status: 'ACTIVE',
             isWildcard: false,
             titles: { some: { lang, title: q } }
@@ -67,34 +68,33 @@ export const DiscoveryService = {
         });
 
         // 3. Fetch Matching Groups within context
-        const groupWhere: any = {
+        const groupWhere: Prisma.GroupWhereInput = {
             type: 'PUBLIC',
             OR: [
                 { name: q },
                 { description: q }
             ]
         };
+        const groupAnd: Prisma.GroupWhereInput[] = [];
 
         if (contextId) {
             const categoryMatch = {
                 id: contextId,
                 status: 'ACTIVE' as const
             };
-            groupWhere.AND = [
-                {
-                    OR: [
-                        { category: categoryMatch },
-                        { tags: { some: categoryMatch } }
-                    ]
-                }
-            ];
+            groupAnd.push({
+                OR: [
+                    { category: categoryMatch },
+                    { tags: { some: categoryMatch } }
+                ]
+            });
         }
 
         // 3b. Ensure group category itself is active even if no contextId
-        if (!groupWhere.AND) groupWhere.AND = [];
-        groupWhere.AND.push({
+        groupAnd.push({
             category: { status: 'ACTIVE' }
         });
+        groupWhere.AND = groupAnd;
 
         const groups = await prisma.group.findMany({
             where: groupWhere,
@@ -109,7 +109,7 @@ export const DiscoveryService = {
         });
 
         // 3c. Fetch Matching Events within context
-        const eventWhere: any = {
+        const eventWhere: Prisma.EventWhereInput = {
             visibility: 'PUBLIC',
             OR: [
                 { title: q },
@@ -211,12 +211,11 @@ export const DiscoveryService = {
 
         try {
             const { city, categoryId, tag, tags, query, type, take = 12, skip = 0 } = filters;
-            const where: any = {};
-
-            where.AND = [];
+            const where: Prisma.GroupWhereInput = {};
+            const whereAnd: Prisma.GroupWhereInput[] = [];
 
             // 0. Content Safety: Only allow ACTIVE and non-wildcard categories
-            where.AND.push({
+            whereAnd.push({
                 category: {
                     status: 'ACTIVE',
                     isWildcard: false
@@ -229,7 +228,7 @@ export const DiscoveryService = {
             }
 
             // 2. Type Filter - Show only PUBLIC groups by default in discovery
-            if (type && type !== 'all') {
+            if (type === 'PUBLIC' || type === 'PRIVATE') {
                 where.type = type;
             } else {
                 where.type = 'PUBLIC';
@@ -244,7 +243,7 @@ export const DiscoveryService = {
                         { parent: { parentId: categoryId } } // Grandchildren (L3)
                     ]
                 };
-                where.AND.push({
+                whereAnd.push({
                     OR: [
                         { category: categoryMatch },
                         { tags: { some: categoryMatch } }
@@ -255,8 +254,8 @@ export const DiscoveryService = {
             // 2b. Specific Tag Filter (L2/L3) with Hierarchy Support
             const searchTags = tags?.length ? tags : (tag ? [tag] : []);
             if (searchTags.length > 0) {
-                where.AND.push({
-                    OR: searchTags.flatMap((t: string) => [
+                whereAnd.push({
+                    OR: searchTags.flatMap((t) => [
                         { category: { slug: t } },
                         { category: { parent: { slug: t } } },
                         { category: { parent: { parent: { slug: t } } } },
@@ -270,7 +269,7 @@ export const DiscoveryService = {
             // 3. Search Query
             if (query) {
                 const searchQuery = { contains: query, mode: 'insensitive' as const };
-                where.AND.push({
+                whereAnd.push({
                     OR: [
                         { name: searchQuery },
                         { description: searchQuery },
@@ -285,6 +284,7 @@ export const DiscoveryService = {
                     ]
                 });
             }
+            where.AND = whereAnd;
 
             // 4. Fetch Groups with Caching for Taxonomy Heavy Joins
             const fetchRawGroups = async (searchWhere: typeof where, reqLang: string, reqTake: number, reqSkip: number) => {

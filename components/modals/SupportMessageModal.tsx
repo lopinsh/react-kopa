@@ -18,7 +18,7 @@ type Props = {
     onClose: () => void;
     groupId: string;
     groupName: string;
-    accentColor: string;
+    accentColor?: string;
 };
 
 export default function SupportMessageModal({ isOpen, onClose, groupId, groupName, accentColor }: Props) {
@@ -57,7 +57,7 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                 {/* Header */}
                 <div className="flex items-center justify-between border-b border-border bg-surface p-5">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-[var(--accent)]" style={{ '--accent': accentColor } as any}>
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-[var(--accent)]">
                             <ShieldCheck className="h-6 w-6" />
                         </div>
                         <div>
@@ -102,7 +102,6 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                                         "w-full min-h-[150px] rounded-xl border bg-surface p-4 text-sm text-foreground outline-none transition-all focus:ring-2",
                                         errors.message ? "border-red-500 focus:ring-red-500/20" : "border-border focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
                                     )}
-                                    style={{ '--accent': accentColor } as any}
                                 />
                                 {errors.message && (
                                     <p className="mt-1.5 text-xs font-medium text-red-500">
@@ -128,12 +127,7 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                                 <button
                                     type="submit"
                                     disabled={isPending}
-                                    className="flex-[2] flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-bold transition-all disabled:opacity-50 active:scale-95"
-                                    style={{
-                                        backgroundColor: accentColor,
-                                        color: 'white',
-                                        boxShadow: `0 4px 14px ${accentColor}40`
-                                    }}
+                                    className="flex-[2] flex h-11 items-center justify-center gap-2 rounded-xl text-sm font-bold bg-[var(--accent)] text-white transition-all disabled:opacity-50 active:scale-95 shadow-[0_4px_14px_color-mix(in_srgb,var(--accent)_25%,transparent)]"
                                 >
                                     {isPending ? (
                                         <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />

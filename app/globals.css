@@ -127,4 +127,12 @@ body {
   .skeleton {
     @apply animate-pulse bg-border/50 rounded-lg;
   }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }

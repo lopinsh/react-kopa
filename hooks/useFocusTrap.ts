@@ -6,8 +6,8 @@ import { useEffect, useRef, RefObject } from 'react';
  * Hook to trap focus within a container.
  * Useful for modals, wizards, and drawers.
  */
-export function useFocusTrap(isActive: boolean): RefObject<HTMLElement | null> {
-    const containerRef = useRef<HTMLElement>(null);
+export function useFocusTrap<T extends HTMLElement>(isActive: boolean): RefObject<T | null> {
+    const containerRef = useRef<T>(null);
 
     useEffect(() => {
         if (!isActive) return;
@@ -53,3 +53,4 @@ export function useFocusTrap(isActive: boolean): RefObject<HTMLElement | null> {
 
     return containerRef;
 }
+

@@ -34,13 +34,13 @@ export default async function MyGroupsPage({
                     <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
                         {tAuth('modalDesc')}
                     </p>
-                    <Link
+                    <a
                         href="/api/auth/signin"
                         className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <LogIn className="h-4 w-4" />
                         {tAuth('signInButton')}
-                    </Link>
+                    </a>
                 </div>
             </div>
         );
@@ -77,9 +77,7 @@ export default async function MyGroupsPage({
             // Provide empty array — this route is deprecated in favour of /profile/my-groups.
             members: [] as { id: string; name: string | null; avatarSeed: string | null }[],
             category: {
-                // @ts-ignore - nested include correctly fetches this
                 title: m.group.category.titles[0]?.title || 'Unknown',
-                // @ts-ignore - nested include correctly fetches this
                 parentTitle: m.group.category.parent?.titles?.[0]?.title,
                 l1Slug,
                 color: m.group.category.parent?.color || m.group.category.color || '#F97316'
@@ -110,7 +108,7 @@ export default async function MyGroupsPage({
                         No groups yet
                     </h2>
                     <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
-                        You haven't joined or created any groups. Go to Discover to find a community!
+                        You haven&apos;t joined or created any groups. Go to Discover to find a community!
                     </p>
                 </div>
             )}

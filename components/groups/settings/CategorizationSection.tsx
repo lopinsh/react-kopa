@@ -6,7 +6,7 @@ import { Tags } from 'lucide-react';
 import { type GroupFormValues } from '@/lib/validations/group';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
 import TagPicker from '@/components/groups/TagPicker';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { L1Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import SettingsSection from './SettingsSection';
 
@@ -15,7 +15,7 @@ type Props = {
     taxSelection: TaxonomySelection | null;
     onTaxChange: (sel: TaxonomySelection | null) => void;
     accentColor: string;
-    selectedL1: any;
+    selectedL1: L1Category | null;
 };
 
 export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1 }: Props) {
@@ -54,3 +54,4 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
         </SettingsSection>
     );
 }
+

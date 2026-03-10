@@ -3,8 +3,8 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { User, LogOut, Settings, LayoutDashboard, Users } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-import { signOut } from 'next-auth/react';
+import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
+import { signOut, signIn } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
 import { clsx } from 'clsx';
 
@@ -14,18 +14,19 @@ type Props = {
         email?: string | null;
         image?: string | null;
         username?: string | null;
+        role?: string | null;
     } | null;
 };
 
 export default function UserMenu({ user }: Props) {
     const t = useTranslations('nav');
     const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const mounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -41,14 +42,16 @@ export default function UserMenu({ user }: Props) {
 
     const [imageError, setImageError] = useState(false);
 
+    if (!mounted) return null;
+
     if (!user) {
         return (
-            <a
-                href="/api/auth/signin"
+            <button
+                onClick={() => signIn()}
                 className="flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-white transition-opacity hover:opacity-90"
             >
                 {t('signIn')}
-            </a>
+            </button>
         );
     }
 
@@ -94,6 +97,20 @@ export default function UserMenu({ user }: Props) {
                         </Link>
 
                         <div className="p-2">
+                            {user.role === 'ADMIN' && (
+                                <>
+                                    <Link
+                                        href="/admin"
+                                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-primary hover:bg-primary/10 transition-colors"
+                                        onClick={() => setIsOpen(false)}
+                                    >
+                                        <LayoutDashboard className="h-4 w-4" />
+                                        {t('adminPanel')}
+                                    </Link>
+                                    <div className="my-1 h-px bg-border/40 mx-2" />
+                                </>
+                            )}
+
                             <Link
                                 href="/profile/my-groups"
                                 className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"

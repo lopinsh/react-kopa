@@ -63,20 +63,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         jwt: async ({ token, user, trigger, session }) => {
             if (user) {
                 token.id = user.id as string;
-                // Fetch username from DB on initial sign-in so middleware can
-                // check it without a DB call on every request.
+                // Fetch user profile data on sign-in so middleware and server code
+                // can use it without repeated DB calls.
                 const dbUser = await prisma.user.findUnique({
                     where: { id: user.id as string },
-                    select: { username: true },
+                    select: { username: true, role: true },
                 });
                 token.username = dbUser?.username ?? null;
+                token.role = dbUser?.role ?? 'USER';
             }
             if (trigger === "update" && session) {
                 if (session.name !== undefined) token.name = session.name;
                 if (session.image !== undefined) token.picture = session.image;
-                // Called after onboarding saves a username — refresh the token
-                // so the middleware intercept clears immediately.
                 if (session.username !== undefined) token.username = session.username;
+                if (session.role !== undefined) token.role = session.role;
             }
             return token;
         },
@@ -84,6 +84,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (session.user) {
                 session.user.id = token.id as string;
                 session.user.username = (token.username as string | null) ?? null;
+                session.user.role = (token.role as 'USER' | 'ADMIN') ?? 'USER';
                 if (token.picture) {
                     session.user.image = token.picture as string;
                 }
@@ -92,4 +93,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         },
     },
 });
-

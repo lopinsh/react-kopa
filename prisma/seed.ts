@@ -185,8 +185,8 @@ async function main() {
     prisma.user.upsert({ where: { email: 'santa@local' }, update: {}, create: { email: 'santa@local', name: 'Santa Pētersone', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Santa' } }),
     // legacy
     prisma.user.upsert({ where: { email: 'user@local' }, update: {}, create: { email: 'user@local', name: 'Regular User', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user' } }),
-    prisma.user.upsert({ where: { email: 'owner@local' }, update: {}, create: { email: 'owner@local', name: 'Group Owner', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=owner' } }),
-    prisma.user.upsert({ where: { email: 'admin@local' }, update: {}, create: { email: 'admin@local', name: 'Site Admin', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin' } }),
+    prisma.user.upsert({ where: { email: 'owner@local' }, update: { role: 'ADMIN' }, create: { email: 'owner@local', name: 'Group Owner', role: 'ADMIN', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=owner' } }),
+    prisma.user.upsert({ where: { email: 'admin@local' }, update: { role: 'ADMIN' }, create: { email: 'admin@local', name: 'Site Admin', role: 'ADMIN', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin' } }),
     prisma.user.upsert({ where: { email: 'member@local' }, update: {}, create: { email: 'member@local', name: 'Group Member', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=member' } }),
     prisma.user.upsert({ where: { email: 'test@example.com' }, update: {}, create: { email: 'test@example.com', name: 'Oskars Test', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=OskarsTest' } }),
   ]);
@@ -608,3 +608,4 @@ async function main() {
 main()
   .catch((e) => { console.error(e); process.exit(1); })
   .finally(async () => { await prisma.$disconnect(); });
+

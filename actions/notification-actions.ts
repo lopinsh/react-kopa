@@ -87,7 +87,7 @@ export async function createNotification({
     link
 }: {
     userId: string;
-    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED';
+    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'TAG_MERGED';
     translationKey: string;
     args?: Record<string, string | number>;
     link?: string;
@@ -117,3 +117,4 @@ export async function createNotification({
         return null;
     }
 }
+

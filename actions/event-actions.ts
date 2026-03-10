@@ -8,11 +8,12 @@ import { validateActionData, handleActionError } from '@/lib/action-utils';
 import { eventSchema, type EventFormValues } from '@/lib/validations/event';
 import { ActionResponse } from '@/types/actions';
 import { EventService } from '@/lib/services/event.service';
+import type { Event as EventModel } from '@prisma/client';
 
 /**
  * Create a new event within a group.
  */
-export async function createEvent(groupId: string, data: EventFormValues, locale: string): Promise<ActionResponse<{ event: any }>> {
+export async function createEvent(groupId: string, data: EventFormValues, locale: string): Promise<ActionResponse<{ event: EventModel }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
@@ -21,7 +22,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
         if (!validation.success) return validation;
 
         const result = await EventService.createEvent(groupId, validation.data, session.user.id);
-        if (!result.success) return result as ActionResponse<{ event: any }>;
+        if (!result.success) return result as ActionResponse<{ event: EventModel }>;
 
         const { event, membersToNotify, groupName, groupSlug, l1Slug } = result.data!;
 
@@ -37,7 +38,8 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
             ));
         }
 
-        revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/events`, 'page');
         return { success: true, data: { event } };
     } catch (error) {
         return handleActionError(error, 'CREATE_EVENT_FAILED');
@@ -65,7 +67,10 @@ export async function toggleAttendance(eventId: string, status: 'GOING' | 'INTER
         const result = await EventService.toggleAttendance(eventId, session.user.id, status);
         if (!result.success) return result as ActionResponse;
 
-        revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
+        if (result.data) {
+            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}`, 'page');
+            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}/events`, 'page');
+        }
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'TOGGLE_FAILED');
@@ -86,7 +91,10 @@ export async function updateEvent(eventId: string, data: EventFormValues, locale
         const result = await EventService.updateEvent(eventId, validation.data, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
+        if (result.data) {
+            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}`, 'page');
+            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}/events`, 'page');
+        }
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');

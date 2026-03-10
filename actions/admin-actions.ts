@@ -5,15 +5,14 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService, type WildcardWithDetails, type ReportWithDetails } from '@/lib/services/admin.service';
 
-// Basic admin check
 const isAdmin = async () => {
     const session = await auth();
-    if (!session?.user?.email) return false;
-    return session.user.email === 'admin@local' || session.user.email === 'owner@local';
+    if (!session?.user?.id) return false;
+    return session.user.role === 'ADMIN';
 };
 
 export async function getPendingWildcards(): Promise<ActionResponse<{ wildcards: WildcardWithDetails[] }>> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         const wildcards = await AdminService.getPendingWildcards();
@@ -25,7 +24,7 @@ export async function getPendingWildcards(): Promise<ActionResponse<{ wildcards:
 }
 
 export async function approveWildcard(categoryId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         await AdminService.approveWildcard(categoryId);
@@ -39,7 +38,7 @@ export async function approveWildcard(categoryId: string): Promise<ActionRespons
 }
 
 export async function rejectWildcard(categoryId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         await AdminService.rejectWildcard(categoryId);
@@ -54,7 +53,7 @@ export async function rejectWildcard(categoryId: string): Promise<ActionResponse
 }
 
 export async function getPendingReports(): Promise<ActionResponse<{ reports: ReportWithDetails[] }>> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         const reports = await AdminService.getPendingReports();
@@ -66,7 +65,7 @@ export async function getPendingReports(): Promise<ActionResponse<{ reports: Rep
 }
 
 export async function dismissReport(reportId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         await AdminService.dismissReport(reportId);
@@ -79,7 +78,7 @@ export async function dismissReport(reportId: string): Promise<ActionResponse> {
 }
 
 export async function suspendReportedGroup(reportId: string, groupId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED' };
+    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         await AdminService.suspendReportedGroup(groupId, reportId);

@@ -31,7 +31,7 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
 
     if (!result.success) return { success: false, error: result.error };
 
-    revalidateTag('groups', 'max' as any);
+    revalidateTag('groups', 'max');
     revalidatePath('/', 'layout');
     return { success: true };
 }

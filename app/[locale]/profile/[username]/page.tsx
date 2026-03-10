@@ -4,6 +4,7 @@ import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { MapPin, Calendar, MessageSquare, Info, Users, ShieldAlert } from 'lucide-react';
+import { Link } from '@/i18n/routing';
 
 export default async function PublicProfilePage({
     params
@@ -54,9 +55,9 @@ export default async function PublicProfilePage({
                         <Info className="h-5 w-5 text-primary" />
                         <p className="text-sm font-bold text-primary">{t('viewingOwnPublicProfile')}</p>
                     </div>
-                    <a href="/profile/edit" className="text-sm font-bold text-primary hover:underline">
+                    <Link href="/profile/edit" className="text-sm font-bold text-primary hover:underline">
                         {t('editTitle')}
-                    </a>
+                    </Link>
                 </div>
             )}
 

@@ -13,6 +13,7 @@ model User {
   email               String?              @unique
   emailVerified       DateTime?
   image               String?
+  role                AppRole              @default(USER)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt
   allowDirectMessages Boolean              @default(true)
@@ -31,6 +32,7 @@ model User {
   posts               Post[]
   reports             Report[]             @relation("FiledReports")
   sessions            Session[]
+  submittedCategories Category[]           @relation("SubmittedCategories")
 }
 
 model Account {
@@ -70,18 +72,35 @@ model VerificationToken {
 model Category {
   id             String                @id @default(cuid())
   slug           String                @unique
+  slugLv         String?
   level          Int
   color          String?
   parentId       String?
   isWildcard     Boolean               @default(false)
   status         CategoryStatus        @default(ACTIVE)
+  submittedById  String?
+  submittedAt    DateTime?
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
   parent         Category?             @relation("CategoryHierarchy", fields: [parentId], references: [id])
   children       Category[]            @relation("CategoryHierarchy")
   titles         CategoryTranslation[]
+  aliases        CategoryAlias[]
+  submittedBy    User?                 @relation("SubmittedCategories", fields: [submittedById], references: [id])
   groups         Group[]
   groupsWithTags Group[]               @relation("GroupTags")
+}
+
+model CategoryAlias {
+  id         String   @id @default(cuid())
+  value      String
+  locale     String?
+  categoryId String
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([value, locale])
+  @@index([categoryId])
 }
 
 model CategoryTranslation {
@@ -266,3 +285,11 @@ enum AttendanceStatus {
   GOING
   INTERESTED
 }
+
+enum AppRole {
+  USER
+  ADMIN
+}
+
+
+

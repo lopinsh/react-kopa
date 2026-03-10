@@ -4,8 +4,12 @@
  */
 export type ErrorCode =
     | 'UNAUTHORIZED'
+    | 'UNAUTHORIZED_ADMIN'
     | 'FORBIDDEN'
     | 'NOT_FOUND'
+    | 'TAG_NOT_FOUND'
+    | 'TAG_ALREADY_EXISTS'
+    | 'ALIAS_CONFLICT'
     | 'VALIDATION_FAILED'
     | 'INTERNAL_SERVER_ERROR'
     | 'DELETE_FAILED'
@@ -17,7 +21,6 @@ export type ErrorCode =
     | 'CANCEL_FAILED'
     | 'INQUIRY_FAILED'
     | 'ACTION_FAILED'
-    | 'INTERNAL_SERVER_ERROR'
     | 'CATEGORY_IN_USE'
     | 'MANAGE_FAILED'
     | 'CREATE_EVENT_FAILED'
@@ -25,8 +28,20 @@ export type ErrorCode =
     | 'EVENT_FULL'
     | 'TOGGLE_FAILED'
     | 'USERNAME_TAKEN'
-    | 'UNKNOWN_ERROR';
+    | 'UNKNOWN_ERROR'
+    | 'POST_FAILED'
+    | 'REPORT_FAILED'
+    | 'RESOLUTION_FAILED';
 
+/**
+ * Standardized ActionError for thrown errors from services.
+ */
+export class ActionError extends Error {
+    constructor(public code: ErrorCode, message?: string) {
+        super(message || code);
+        this.name = 'ActionError';
+    }
+}
 /**
  * Standardized response format for all Server Actions.
  */

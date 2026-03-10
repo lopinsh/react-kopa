@@ -18,12 +18,11 @@ export default async function AdminDashboardPage({
     const t = await getTranslations('admin');
 
     const session = await auth();
-    if (!session?.user?.email) {
-        redirect(`/${locale}/api/auth/signin`);
+    if (!session?.user?.id) {
+        redirect(`/api/auth/signin`);
     }
 
-    // Very basic authorization check
-    if (session.user.email !== 'admin@local' && session.user.email !== 'owner@local') {
+    if (session.user.role !== 'ADMIN') {
         notFound();
     }
 
@@ -67,6 +66,10 @@ export default async function AdminDashboardPage({
                     {t('title')}
                 </h1>
                 <p className="text-foreground-muted mt-2">{t('subtitle')}</p>
+                <div className="mt-3 flex items-center gap-4 text-sm font-semibold">
+                    <Link href={`/${locale}/admin/reports`} className="text-foreground-muted hover:text-foreground">{t('tabReports')}</Link>
+                    <Link href={`/${locale}/admin/taxonomy`} className="text-foreground-muted hover:text-foreground">{t('taxonomy.navLink')}</Link>
+                </div>
             </div>
 
             {/* Tabs */}
@@ -168,7 +171,7 @@ export default async function AdminDashboardPage({
                                                 {report.targetEventId ? t('reportedEvent', { title: report.event?.title || t('unknown') }) : ''}
                                             </h3>
                                             <p className="text-sm text-foreground-muted mt-1 bg-background/50 p-2 rounded border border-border/50">
-                                                "{report.reason}"
+                                                &quot;{report.reason}&quot;
                                             </p>
                                         </div>
                                         <div className="flex gap-2 w-full md:w-auto">
@@ -201,3 +204,4 @@ export default async function AdminDashboardPage({
         </div>
     );
 }
+

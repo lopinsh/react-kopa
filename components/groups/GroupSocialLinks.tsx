@@ -7,14 +7,12 @@ interface GroupSocialLinksProps {
     discordLink?: string | null;
     websiteLink?: string | null;
     instagramLink?: string | null;
-    accentColor?: string;
 }
 
 export default function GroupSocialLinks({
     discordLink,
     websiteLink,
-    instagramLink,
-    accentColor = '#6366f1'
+    instagramLink
 }: GroupSocialLinksProps) {
     const t = useTranslations('group');
 
@@ -54,7 +52,6 @@ export default function GroupSocialLinks({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.01] p-2.5 transition-all hover:bg-white/[0.05] hover:border-[var(--accent)]/30"
-                        style={{ '--accent': accentColor } as any}
                     >
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.03] text-foreground-muted group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all">
                             {link.icon}

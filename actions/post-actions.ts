@@ -1,74 +1,50 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { createNotification } from './notification-actions';
+import { PostService } from '@/lib/services/post.service';
+import { ActionError, type ActionResponse } from '@/types/actions';
+import type { Prisma } from '@prisma/client';
+
+type PostWithAuthorAndGroup = Prisma.PostGetPayload<{
+    include: {
+        author: { select: { name: true; image: true } };
+        group: {
+            include: {
+                category: {
+                    select: {
+                        slug: true; level: true;
+                        parent: { select: { slug: true; parent: { select: { slug: true } } } };
+                    };
+                };
+            };
+        };
+    };
+}>;
 
 /**
  * Create a new post in a group discussion board.
  */
-export async function createPost(groupId: string, content: string, locale: string) {
+export async function createPost(groupId: string, content: string, locale: string): Promise<ActionResponse<{ post: PostWithAuthorAndGroup }>> {
     const session = await auth();
-    if (!session?.user?.id) return { error: 'UNAUTHORIZED' };
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     if (!content.trim() || content.length > 2000) {
-        return { error: 'INVALID_CONTENT' };
+        return { success: false, error: 'VALIDATION_FAILED' };
     }
 
     try {
         const authorId = session.user.id;
 
-        // Verify membership
-        const membership = await prisma.membership.findUnique({
-            where: {
-                userId_groupId: {
-                    userId: authorId,
-                    groupId: groupId,
-                }
-            }
-        });
-
-        if (!membership) return { error: 'NOT_A_MEMBER' };
-
-        const post = await prisma.post.create({
-            data: {
-                content,
-                groupId,
-                authorId,
-            },
-            include: {
-                author: {
-                    select: { name: true, image: true }
-                },
-                group: {
-                    include: {
-                        category: {
-                            select: {
-                                slug: true,
-                                level: true,
-                                parent: {
-                                    select: {
-                                        slug: true,
-                                        parent: { select: { slug: true } }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        const post = await PostService.createPost({
+            groupId,
+            authorId,
+            content
         });
 
         // Notify group members
-        const members = await prisma.membership.findMany({
-            where: {
-                groupId,
-                userId: { not: authorId },
-                role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
-            },
-            select: { userId: true }
-        });
+        const members = await PostService.getPostGroupMembers(groupId, authorId);
 
         if (members.length > 0) {
             let l1Slug = post.group.category.slug;
@@ -89,18 +65,14 @@ export async function createPost(groupId: string, content: string, locale: strin
             ));
         }
 
-        const { pusherServer } = await import('@/lib/pusher');
-        await pusherServer.trigger(
-            `group-${groupId}`,
-            'new-post',
-            post
-        );
-
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
-        return { success: true, post };
+        return { success: true, data: { post: post as unknown as PostWithAuthorAndGroup } }; // Prisma payload shape matching 
     } catch (error) {
+        if (error instanceof ActionError) {
+            return { success: false, error: error.code };
+        }
         console.error('[createPost] Error:', error);
-        return { error: 'POST_FAILED' };
+        return { success: false, error: 'POST_FAILED' };
     }
 }
 
@@ -108,73 +80,26 @@ export async function createPost(groupId: string, content: string, locale: strin
  * Get group discussion posts.
  */
 export async function getGroupPosts(groupId: string) {
-    try {
-        const posts = await prisma.post.findMany({
-            where: { groupId },
-            orderBy: { createdAt: 'desc' },
-            include: {
-                author: {
-                    select: { id: true, name: true, image: true }
-                }
-            }
-        });
-
-        return posts;
-    } catch (error) {
-        console.error('[getGroupPosts] Error:', error);
-        return [];
-    }
+    return PostService.getPostsByGroupId(groupId);
 }
 
 /**
  * Delete a post (Author or Admin/Owner only).
  */
-export async function deletePost(postId: string, locale: string) {
+export async function deletePost(postId: string, locale: string): Promise<ActionResponse<void>> {
     const session = await auth();
-    if (!session?.user?.id) return { error: 'UNAUTHORIZED' };
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const post = await prisma.post.findUnique({
-            where: { id: postId },
-            include: { group: { select: { id: true } } }
-        });
-
-        if (!post) return { error: 'NOT_FOUND' };
-
-        const userId = session.user.id;
-        const isAuthor = post.authorId === userId;
-
-        // Check if Admin/Owner of the group
-        const membership = await prisma.membership.findUnique({
-            where: {
-                userId_groupId: {
-                    userId: userId,
-                    groupId: post.group.id,
-                }
-            }
-        });
-
-        const isPrivileged = membership && (membership.role === 'OWNER' || membership.role === 'ADMIN');
-
-        if (!isAuthor && !isPrivileged) {
-            return { error: 'FORBIDDEN' };
-        }
-
-        await prisma.post.delete({
-            where: { id: postId }
-        });
-
-        const { pusherServer } = await import('@/lib/pusher');
-        await pusherServer.trigger(
-            `group-${post.group.id}`,
-            'delete-post',
-            { postId }
-        );
+        await PostService.deletePost(postId, session.user.id);
 
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
         return { success: true };
     } catch (error) {
+        if (error instanceof ActionError) {
+            return { success: false, error: error.code };
+        }
         console.error('[deletePost] Error:', error);
-        return { error: 'DELETE_FAILED' };
+        return { success: false, error: 'DELETE_FAILED' };
     }
 }

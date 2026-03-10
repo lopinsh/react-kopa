@@ -1,17 +1,18 @@
 'use client';
 
-import { useTransition, useMemo, useState, useEffect } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useTransition, useMemo, useState } from 'react';
+import { useForm, FormProvider, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { updateGroup, deleteGroup } from '@/actions/group-actions';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Save, AlertCircle } from 'lucide-react';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import GroupSectionEditor from '@/components/groups/GroupSectionEditor';
 import { useToast } from '@/hooks/use-toast';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 
 // New Sub-components
 import ProfileSection from './settings/ProfileSection';
@@ -25,28 +26,27 @@ type Props = {
         id: string;
         name: string;
         city: string;
-        type: string;
+        type: GroupFormValues['type'];
         categoryId: string;
         isAcceptingMembers: boolean;
         discordLink: string | null;
         websiteLink: string | null;
         instagramLink: string | null;
         bannerImage: string | null;
-        sections: any[];
-        tags: any[];
-        category: any;
+        sections: Array<{ id: string; title: string; content: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY' }>;
+        tags: Array<{ id: string; title: string; slug: string; level: number }>;
+        category: { id: string; title: string; slug: string; level: number; parentTitle: string | null; l1Slug: string; color: string | null };
         slug: string;
         l1Slug: string;
         accentColor?: string | null;
     };
     taxonomy: TaxonomyTree;
     locale: string;
-    userRole: 'OWNER' | 'ADMIN';
     activeTab: string;
+    canEditCategorization: boolean;
     initialTaxonomy: {
         initialTaxSelection: TaxonomySelection | null;
         initialTagIds: string[];
-        initialWildcard: { label: string; parentId: string | null } | null;
     };
 };
 
@@ -54,30 +54,28 @@ export default function GroupSettingsForm({
     group,
     taxonomy,
     locale,
-    userRole,
     activeTab,
+    canEditCategorization,
     initialTaxonomy
 }: Props) {
+    const { userRole } = useGroupContext();
     const gt = useTranslations('group');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const { initialTaxSelection, initialTagIds, initialWildcard } = initialTaxonomy;
+    const { initialTaxSelection, initialTagIds } = initialTaxonomy;
 
     const [taxSelection, setTaxSelection] = useState<TaxonomySelection | null>(initialTaxSelection);
-    const [accentColor, setAccentColor] = useState(initialTaxSelection?.kind === 'existing' ? initialTaxSelection.l1Color : '#6366f1');
     const [serverError, setServerError] = useState<string | null>(null);
 
     const methods = useForm<GroupFormValues>({
-        resolver: zodResolver(groupFormSchema) as any,
+        resolver: zodResolver(groupFormSchema),
         defaultValues: {
             name: group.name,
-            city: group.city as any,
-            type: group.type as any,
+            city: group.city as GroupFormValues['city'],
+            type: group.type,
             categoryId: initialTaxSelection?.kind === 'existing' ? initialTaxSelection.categoryId : undefined,
             tagIds: initialTagIds,
-            wildcardLabel: initialWildcard?.label,
-            wildcardParentId: initialWildcard?.parentId || undefined,
             isAcceptingMembers: group.isAcceptingMembers,
             discordLink: group.discordLink || '',
             websiteLink: group.websiteLink || '',
@@ -87,51 +85,29 @@ export default function GroupSettingsForm({
         },
     });
 
-    const { handleSubmit, setValue, watch } = methods;
-
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
-
-    // Sync state and form with initial values if they arrive or change
-    useEffect(() => {
-        if (initialTaxSelection && !taxSelection) {
-            setTaxSelection(initialTaxSelection);
-            if (initialTaxSelection.kind === 'existing') {
-                setAccentColor(initialTaxSelection.l1Color);
-                setValue('categoryId', initialTaxSelection.categoryId);
-            }
-        }
-        const currentTagIds = watch('tagIds');
-        if (initialTagIds.length > 0 && (!currentTagIds || currentTagIds.length === 0)) {
-            setValue('tagIds', initialTagIds);
-        }
-        if (initialWildcard?.label && !watch('wildcardLabel')) {
-            setValue('wildcardLabel', initialWildcard.label);
-            setValue('wildcardParentId', initialWildcard.parentId || '');
-        }
-    }, [initialTaxSelection, initialTagIds, initialWildcard, setValue, watch, taxSelection]);
+    const { handleSubmit, setValue, control } = methods;
 
     // Sync preview color with form value
-    const watchedAccentColor = watch('accentColor');
-    useEffect(() => {
+    const watchedAccentColor = useWatch({ control, name: 'accentColor' });
+    const accentColor = useMemo(() => {
         if (watchedAccentColor && /^#[0-9A-Fa-f]{6}$/.test(watchedAccentColor)) {
-            setAccentColor(watchedAccentColor);
-        } else if (taxSelection?.kind === 'existing') {
-            setAccentColor(taxSelection.l1Color);
+            return watchedAccentColor;
         }
-    }, [watchedAccentColor, taxSelection]);
+        if (taxSelection?.kind === 'existing') {
+            return taxSelection.l1Color;
+        }
+        return '#6366f1';
+    }, [taxSelection, watchedAccentColor]);
+    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     function handleTaxChange(sel: TaxonomySelection | null) {
         setTaxSelection(sel);
         if (sel?.kind === 'existing') {
             setValue('categoryId', sel.categoryId, { shouldValidate: true });
-            setAccentColor(sel.l1Color);
         } else {
-            setValue('categoryId', '' as any);
-            setAccentColor('#6366f1');
+            setValue('categoryId', '');
         }
         setValue('tagIds', []);
-        setValue('wildcardLabel', undefined);
-        setValue('wildcardParentId', undefined);
     }
 
     const { success } = useToast();
@@ -169,7 +145,7 @@ export default function GroupSettingsForm({
 
     const selectedL1 = useMemo(() => {
         if (taxSelection?.kind === 'existing') {
-            return taxonomy.find(l1 => l1.id === taxSelection.categoryId);
+            return taxonomy.find(l1 => l1.id === taxSelection.categoryId) ?? null;
         }
         return null;
     }, [taxonomy, taxSelection]);
@@ -202,7 +178,7 @@ export default function GroupSettingsForm({
                         </div>
                     )}
 
-                    {activeTab === 'categorization' && userRole === 'OWNER' && (
+                    {activeTab === 'categorization' && canEditCategorization && (
                         <CategorizationSection
                             taxonomy={taxonomy}
                             taxSelection={taxSelection}
@@ -251,3 +227,4 @@ export default function GroupSettingsForm({
         </div>
     );
 }
+

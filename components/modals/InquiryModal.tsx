@@ -10,7 +10,7 @@ type Props = {
     onClose: () => void;
     groupId: string;
     groupName: string;
-    accentColor: string;
+    accentColor?: string;
 };
 
 export default function InquiryModal({ isOpen, onClose, groupId, groupName, accentColor }: Props) {
@@ -53,8 +53,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName, acce
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
                         <div
-                            className="flex h-10 w-10 items-center justify-center rounded-xl"
-                            style={{ backgroundColor: `${accentColor}15`, color: accentColor }}
+                            className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent)]"
                         >
                             <HelpCircle className="h-5 w-5" />
                         </div>
@@ -94,7 +93,6 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName, acce
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 className="w-full h-32 rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-foreground-muted focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/15 transition-all outline-none resize-none"
-                                style={{ '--accent': accentColor } as React.CSSProperties}
                                 placeholder={t('typeMessageHere') || "I'd like to learn more about..."}
                                 required
                             />
@@ -109,8 +107,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName, acce
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-                            style={{ backgroundColor: accentColor, boxShadow: `0 8px 16px ${accentColor}30` }}
+                            className="flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold text-white shadow-lg transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 bg-[var(--accent)] shadow-[0_8px_16px_color-mix(in_srgb,var(--accent)_30%,transparent)]"
                         >
                             {isPending ? (
                                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

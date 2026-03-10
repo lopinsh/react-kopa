@@ -31,8 +31,8 @@ export type EventFormData = {
     title: string;
     slug: string;
     description?: string | null;
-    startDate: string;
-    endDate?: string | null;
+    startDate: string | Date;
+    endDate?: string | Date | null;
     location: string;
     instructions?: string | null;
     bannerImage?: string | null;

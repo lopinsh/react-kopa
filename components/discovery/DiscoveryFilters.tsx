@@ -28,7 +28,7 @@ export default function DiscoveryFilters({
 }: Props) {
     const t = useTranslations('discovery');
 
-    function update(key: keyof Filters, value: any) {
+    function update<K extends keyof Filters>(key: K, value: Filters[K]) {
         onFilterChange({ ...filters, [key]: value || undefined });
     }
 
@@ -96,7 +96,7 @@ export default function DiscoveryFilters({
                                     ? 'bg-[var(--accent)] text-white shadow-md'
                                     : 'border border-border bg-surface text-foreground-muted hover:border-foreground-muted/40'
                             )}
-                            style={!filters.subcategoryId ? ({ ['--accent' as string]: accentColor } as any) : undefined}
+                            style={!filters.subcategoryId ? ({ '--accent': accentColor } as React.CSSProperties) : undefined}
                         >
                             {t('allSubcategories')}
                         </button>
@@ -110,7 +110,7 @@ export default function DiscoveryFilters({
                                         ? 'bg-[var(--accent)] text-white shadow-md'
                                         : 'border border-border bg-surface text-foreground-muted hover:border-foreground-muted/40'
                                 )}
-                                style={filters.subcategoryId === cat.id ? ({ ['--accent' as string]: accentColor } as any) : undefined}
+                                style={filters.subcategoryId === cat.id ? ({ '--accent': accentColor } as React.CSSProperties) : undefined}
                             >
                                 {cat.title}
                             </button>

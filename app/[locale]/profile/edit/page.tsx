@@ -15,7 +15,7 @@ export default async function ProfileEditPage({
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect(`/${locale}/api/auth/signin`);
+        redirect(`/api/auth/signin`);
     }
 
     const user = await UserService.getUserProfile(session.user.id);

@@ -1,0 +1,511 @@
+﻿
+> my-app@0.1.0 lint
+> eslint
+
+
+D:\WEB\ejam-kopa\actions\post-actions.ts
+  29:68  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+  89:50  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\actions\report-actions.ts
+  43:55  warning  'resolutionReason' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\actions\taxonomy-actions.ts
+  11:5  warning  'L1Category' is defined but never used  @typescript-eslint/no-unused-vars
+  12:5  warning  'L2Category' is defined but never used  @typescript-eslint/no-unused-vars
+  14:5  warning  'L3Tag' is defined but never used       @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\app\[locale]\[l1Slug]\group\[groupSlug]\events\[eventSlug]\page.tsx
+    2:10  warning  'GroupService' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   15:5   warning  'CheckCircle2' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   16:5   warning  'Star' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   19:10  warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   40:11  warning  't' is assigned a value but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   45:11  warning  'durationText' is assigned a value but never used                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   48:11  warning  'hasEnded' is assigned a value but never used                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   53:11  warning  'isOwner' is assigned a value but never used                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   83:91  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  108:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  294:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\app\[locale]\[l1Slug]\group\[groupSlug]\events\page.tsx
+   64:123  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   69:86   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   81:90   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   93:82   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  107:79   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:83   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\app\[locale]\[l1Slug]\group\[groupSlug]\loading.tsx
+  1:10  warning  'Calendar' is defined but never used       @typescript-eslint/no-unused-vars
+  1:20  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  1:35  warning  'Users' is defined but never used          @typescript-eslint/no-unused-vars
+  1:51  warning  'ImageIcon' is defined but never used      @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\app\[locale]\[l1Slug]\group\[groupSlug]\page.tsx
+   7:10  warning  'Info' is defined but never used                  @typescript-eslint/no-unused-vars
+   7:16  warning  'Calendar' is defined but never used              @typescript-eslint/no-unused-vars
+   7:26  warning  'MessageSquare' is defined but never used         @typescript-eslint/no-unused-vars
+   9:8   warning  'GroupHeader' is defined but never used           @typescript-eslint/no-unused-vars
+  10:10  warning  'ensureContrast' is defined but never used        @typescript-eslint/no-unused-vars
+  29:13  warning  'accentColor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  30:53  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  56:59  error    Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\app\[locale]\admin\reports\ReportList.tsx
+  103:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\app\[locale]\discover\loading.tsx
+  1:10  warning  'Search' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\app\[locale]\groups\loading.tsx
+  1:10  warning  'ShieldAlert' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\app\[locale]\groups\page.tsx
+   80:17  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+   82:17  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+  113:34  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                      react/no-unescaped-entities
+
+D:\WEB\ejam-kopa\app\[locale]\page.tsx
+   13:10  warning  'Users' is defined but never used         @typescript-eslint/no-unused-vars
+   13:31  warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+   14:10  warning  'clsx' is defined but never used          @typescript-eslint/no-unused-vars
+   42:10  warning  'CITIES' is defined but never used        @typescript-eslint/no-unused-vars
+  158:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  184:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  196:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  207:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\app\[locale]\profile\[username]\page.tsx
+   2:20  warning  'redirect' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  57:21  error    Do not use an `<a>` element to navigate to `/profile/edit/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                       @next/next/no-html-link-for-pages
+  57:21  error    Do not use an `<a>` element to navigate to `/profile/edit/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                       @next/next/no-html-link-for-pages
+  57:21  error    Do not use an `<a>` element to navigate to `/profile/edit/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                       @next/next/no-html-link-for-pages
+  57:21  error    Do not use an `<a>` element to navigate to `/profile/edit/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                       @next/next/no-html-link-for-pages
+  68:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\app\[locale]\profile\my-groups\page.tsx
+  60:114  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\app\[locale]\profile\page.tsx
+  37:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\check_keys.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+D:\WEB\ejam-kopa\components\discovery\DiscoveryFilterBar.tsx
+  196:11  warning  'handleClearTags' is assigned a value but never used                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  334:61  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\discovery\DiscoveryFilters.tsx
+    4:26   warning  'Layers' is defined but never used        @typescript-eslint/no-unused-vars
+   31:48   error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   99:105  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  113:119  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\discovery\EventCard.tsx
+   2:10   warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  40:21   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  66:187  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  88:202  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\discovery\FilterBar.tsx
+   6:18  warning  'X' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  23:57  warning  'locale' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  31:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\discovery\FilterBar.tsx:31:9
+  29 |     const [query, setQuery] = useState(''); // Keeps local state if needed but search param 'q' is now handled elsewhere
+  30 |     useEffect(() => {
+> 31 |         setQuery(searchParams.get('q') || '');
+     |         ^^^^^^^^ Avoid calling setState() directly within an effect
+  32 |     }, [searchParams]);
+  33 |
+  34 |     const currentCity = searchParams.get('city') || 'all';  react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\discovery\GroupCard.tsx
+  3:10  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+  3:38  warning  'Zap' is defined but never used    @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\discovery\ListViewCard.tsx
+  2:38  warning  'Zap' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\events\RSVPButtons.tsx
+  52:18  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\WEB\ejam-kopa\components\forms\EventCreationWizard.tsx
+   24:28   warning  'EventFormValues' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   27:7    warning  'STEP_SCHEMAS' is assigned a value but only used as a type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-unused-vars
+   46:47   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+   84:63   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  141:46   warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+D:\WEB\ejam-kopa\components\forms\EventCreationWizard.tsx:141:46
+  139 |                                     {...register('title')}
+  140 |                                     onBlur={(e) => {
+> 141 |                                         if (!watch('slug')) {
+      |                                              ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  142 |                                             const generated = e.target.value
+  143 |                                                 .toLowerCase()
+  144 |                                                 .replace(/[^a-z0-9]+/g, '-')  react-hooks/incompatible-library
+  332:90   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  339:87   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  340:104  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\forms\GroupCreationWizard.tsx
+  23:7   warning  'STEP_SCHEMAS' is assigned a value but only used as a type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  64:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\forms\GroupCreationWizard.tsx:64:13
+  62 |     useEffect(() => {
+  63 |         if (defaultTaxSelection?.kind === 'existing') {
+> 64 |             setAccentColor(defaultTaxSelection.l1Color);
+     |             ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  65 |         }
+  66 |     }, [defaultTaxSelection]);
+  67 |  react-hooks/set-state-in-effect
+  74:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\forms\GroupCreationWizard.tsx:74:13
+  72 |             return () => clearTimeout(timer);
+  73 |         } else {
+> 74 |             setCanSubmit(false);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  75 |         }
+  76 |     }, [step]);
+  77 |                                                          react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\groups\DiscussionBoard.tsx
+    8:10  warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+    9:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   57:34  error    A `require()` style import is forbidden                                                                                                                                                                                                                                                  @typescript-eslint/no-require-imports
+  170:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\groups\EventCard.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\groups\GroupHeader.tsx
+   13:10  warning  'joinGroup' is defined but never used                                                                                                           @typescript-eslint/no-unused-vars
+   38:33  warning  'accentColor' is assigned a value but never used                                                                                                @typescript-eslint/no-unused-vars
+   45:12  warning  'isContactsOpen' is assigned a value but never used                                                                                             @typescript-eslint/no-unused-vars
+   45:28  warning  'setContactsOpen' is assigned a value but never used                                                                                            @typescript-eslint/no-unused-vars
+   47:11  warning  'contactsRef' is assigned a value but never used                                                                                                @typescript-eslint/no-unused-vars
+   84:8   warning  React Hook useEffect has missing dependencies: 'clearPendingAction' and 'handleMembership'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  168:55  error    Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+  184:98  error    Unexpected any. Specify a different type                                                                                                        @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\GroupInfoDrawer.tsx
+  13:12   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  22:5    warning  'group' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  @typescript-eslint/no-unused-vars
+  32:9    error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\groups\GroupInfoDrawer.tsx:32:9
+  30 |
+  31 |     useEffect(() => {
+> 32 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  33 |         if (isOpen) {
+  34 |             document.body.style.overflow = 'hidden';
+  35 |         } else {  react-hooks/set-state-in-effect
+  69:103  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\GroupTabs.tsx
+    7:16  warning  'Calendar' is defined but never used       @typescript-eslint/no-unused-vars
+    7:26  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+    7:41  warning  'Users' is defined but never used          @typescript-eslint/no-unused-vars
+    7:60  warning  'Settings' is defined but never used       @typescript-eslint/no-unused-vars
+   12:12  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+   17:52  warning  'pendingCount' is defined but never used   @typescript-eslint/no-unused-vars
+   30:15  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  180:40  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  188:41  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  194:55  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\MemberAvatarList.tsx
+  59:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\groups\MemberCard.tsx
+    7:25  warning  'useState' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   90:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+   97:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  110:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  117:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\groups\MemberTabs.tsx
+  52:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\RequestCard.tsx
+   70:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  118:29  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+  118:69  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                          react/no-unescaped-entities
+
+D:\WEB\ejam-kopa\components\groups\SettingsTabs.tsx
+  74:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\TagPicker.tsx
+   41:11  warning  The 'tagIds' logical expression could make the dependencies of useMemo Hook (at line 199) change on every render. To fix this, wrap the initialization of 'tagIds' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-hooks/exhaustive-deps
+   41:11  warning  The 'tagIds' logical expression could make the dependencies of useMemo Hook (at line 206) change on every render. To fix this, wrap the initialization of 'tagIds' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-hooks/exhaustive-deps
+  118:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\groups\TagPicker.tsx:118:13
+  116 |     useEffect(() => {
+  117 |         if (!query.trim() || query.trim().length < 2) {
+> 118 |             setSearchResults([]);
+      |             ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  119 |             return;
+  120 |         }
+  121 |  react-hooks/set-state-in-effect
+  199:9   error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. This dependency may be mutated later, which could cause the value to change unexpectedly.
+
+D:\WEB\ejam-kopa\components\groups\TagPicker.tsx:199:9
+  197 |     const selectedTags = useMemo(() => {
+  198 |         return tagIds.map((id) => flatTags.find((tag) => tag.id === id)).filter(Boolean) as FlatTag[];
+> 199 |     }, [tagIds, flatTags]);
+      |         ^^^^^^ This dependency may be modified later
+  200 |
+  201 |     const selectedKnownIds = new Set(selectedTags.map((tag) => tag.id));
+  202 |     const selectedPending = useMemo(() => {                                                                                                                                                                                                                                                                                                            react-hooks/preserve-manual-memoization
+  201:11  warning  The 'selectedKnownIds' object construction makes the dependencies of useMemo Hook (at line 206) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'selectedKnownIds' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react-hooks/exhaustive-deps
+  206:9   error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. This dependency may be mutated later, which could cause the value to change unexpectedly.
+
+D:\WEB\ejam-kopa\components\groups\TagPicker.tsx:206:9
+  204 |             .filter((id) => !selectedKnownIds.has(id))
+  205 |             .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
+> 206 |     }, [tagIds, selectedKnownIds, pendingById, t]);
+      |         ^^^^^^ This dependency may be modified later
+  207 |
+  208 |     const hasResults = mergedResults.length > 0;
+  209 |     const showWildcardPrompt = query.trim().length >= 2;                                                                                                                                                                                                                                                                                                        react-hooks/preserve-manual-memoization
+  286:25  warning  Elements with the ARIA role "combobox" must have the following attributes defined: aria-controls,aria-expanded                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    jsx-a11y/role-has-required-aria-props
+  499:71  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react/no-unescaped-entities
+  499:79  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react/no-unescaped-entities
+
+D:\WEB\ejam-kopa\components\groups\create-wizard\AccessStep.tsx
+   6:23   warning  'Zap' is defined but never used             @typescript-eslint/no-unused-vars
+   6:28   warning  'HelpCircle' is defined but never used      @typescript-eslint/no-unused-vars
+   6:50   warning  'MessageSquare' is defined but never used   @typescript-eslint/no-unused-vars
+   6:78   warning  'InstagramIcon' is defined but never used   @typescript-eslint/no-unused-vars
+   8:8    warning  'RichTextEditor' is defined but never used  @typescript-eslint/no-unused-vars
+  43:66   error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  62:97   error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  63:113  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\groups\create-wizard\L1Picker.tsx
+  18:63  warning  'accentColor' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-unused-vars
+  44:30  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+D:\WEB\ejam-kopa\components\groups\create-wizard\L1Picker.tsx:44:30
+  42 |                     <div className="flex items-center gap-4">
+  43 |                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+> 44 |                             <CatIcon className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
+     |                              ^^^^^^^ This component is created during render
+  45 |                         </div>
+  46 |                         <div>
+  47 |                             <span className="block text-base font-bold text-foreground">
+
+D:\WEB\ejam-kopa\components\groups\create-wizard\L1Picker.tsx:30:25
+  28 |
+  29 |     if (!explicitlyExpanded && selectedL1) {
+> 30 |         const CatIcon = getCategoryIcon(selectedL1.slug);
+     |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  31 |         return (
+  32 |             <div className="space-y-4 animate-in fade-in duration-300">
+  33 |                 <label className="mb-2 block text-sm font-medium text-foreground">  react-hooks/static-components
+
+D:\WEB\ejam-kopa\components\modals\MemberMoreModal.tsx
+  28:12  warning  'selectedAdmin' is assigned a value but never used                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  66:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\modals\SupportMessageModal.tsx
+   5:10  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  35:35  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  46:18  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\profile\ProfileEditForm.tsx
+  58:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+D:\WEB\ejam-kopa\components\providers\RealtimeProvider.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\shell\CookieConsent.tsx
+  15:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\shell\CookieConsent.tsx:15:13
+  13 |         const consent = localStorage.getItem('cookie-consent');
+  14 |         if (!consent) {
+> 15 |             setIsVisible(true);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  16 |         }
+  17 |     }, []);
+  18 |  react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\shell\Footer.tsx
+  4:38  warning  'Mail' is defined but never used    @typescript-eslint/no-unused-vars
+  7:26  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\shell\GlobalSearch.tsx
+  12:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\shell\GlobalSearch.tsx:12:9
+  10 |
+  11 |     useEffect(() => {
+> 12 |         setIsMac(navigator.platform.toUpperCase().indexOf('MAC') >= 0);
+     |         ^^^^^^^^ Avoid calling setState() directly within an effect
+  13 |
+  14 |         const handleKeyDown = (e: KeyboardEvent) => {
+  15 |             if ((e.metaKey || e.ctrlKey) && e.key === 'k') {  react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\shell\GroupSidebarContent.tsx
+    7:52  warning  'Lock' is defined but never used                   @typescript-eslint/no-unused-vars
+   23:11  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   78:39  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  114:56  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\shell\MobileNav.tsx
+  35:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  64:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\shell\NotificationCenter.tsx
+   27:74  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   27:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:38  error  A `require()` style import is forbidden   @typescript-eslint/no-require-imports
+  166:69  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\components\shell\SearchModal.tsx
+  18:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\shell\SearchModal.tsx:18:9
+  16 |
+  17 |     useEffect(() => {
+> 18 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  19 |         if (isOpen) {
+  20 |             document.body.style.overflow = 'hidden';
+  21 |         } else {  react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\shell\Sidebar.tsx
+  14:35  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\components\shell\ThemeToggle.tsx
+  14:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\shell\ThemeToggle.tsx:14:21
+  12 |
+  13 |     // Avoid hydration mismatch
+> 14 |     useEffect(() => setMounted(true), []);
+     |                     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |
+  16 |     if (!mounted) {
+  17 |         return (  react-hooks/set-state-in-effect
+
+D:\WEB\ejam-kopa\components\shell\UserMenu.tsx
+   5:34  warning  'LayoutDashboard' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+   9:10  warning  'clsx' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+  27:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+D:\WEB\ejam-kopa\components\shell\UserMenu.tsx:27:9
+  25 |
+  26 |     useEffect(() => {
+> 27 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  28 |     }, []);
+  29 |
+  30 |     useEffect(() => {  react-hooks/set-state-in-effect
+  46:13  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-html-link-for-pages
+  46:13  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-html-link-for-pages
+  46:13  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-html-link-for-pages
+  46:13  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-html-link-for-pages
+  46:13  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @next/next/no-html-link-for-pages
+
+D:\WEB\ejam-kopa\components\ui\RichTextEditor.tsx
+  20:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\hooks\usePusher.ts
+   7:84  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  22:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\WEB\ejam-kopa\lib\icons.ts
+  4:10  warning  'Flame' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\lib\image-utils.ts
+  36:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\lib\navigation.ts
+  2:5  warning  'Home' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\WEB\ejam-kopa\tmp\audit-translations.js
+   1:12  error    A `require()` style import is forbidden      @typescript-eslint/no-require-imports
+   2:14  error    A `require()` style import is forbidden      @typescript-eslint/no-require-imports
+  24:7   warning  'lvFlat' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Ō£¢ 185 problems (85 errors, 100 warnings)
+

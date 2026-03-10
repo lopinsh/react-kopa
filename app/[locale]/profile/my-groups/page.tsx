@@ -35,13 +35,13 @@ export default async function MyGroupsPage({
                     <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
                         {tAuth('modalDesc')}
                     </p>
-                    <Link
+                    <a
                         href="/api/auth/signin"
                         className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <LogIn className="h-4 w-4" />
                         {tAuth('signInButton')}
-                    </Link>
+                    </a>
                 </div>
             </div>
         );

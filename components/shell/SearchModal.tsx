@@ -1,7 +1,7 @@
 'use client';
 
 import { Search, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 
 type Props = {
@@ -12,10 +12,15 @@ type Props = {
 export default function SearchModal({ isOpen, onClose }: Props) {
     const t = useTranslations('shell.search');
     const td = useTranslations('discovery');
-    const [mounted, setMounted] = useState(false);
+    const mounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     useEffect(() => {
-        setMounted(true);
+        if (!mounted) return;
+
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -24,7 +29,7 @@ export default function SearchModal({ isOpen, onClose }: Props) {
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, mounted]);
 
     if (!mounted || !isOpen) return null;
 

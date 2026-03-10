@@ -1,9 +1,7 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
 import DiscussionBoard from '@/components/groups/DiscussionBoard';
-import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
-import { MessageSquare } from 'lucide-react';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({
@@ -40,17 +38,12 @@ export default async function GroupDiscussionsPage({
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
-    const t = await getTranslations('group');
-    const accentColor = group.accentColor;
-
     return (
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
             <DiscussionBoard
                 groupId={group.id}
                 locale={locale}
                 currentUserId={session?.user?.id}
-                isMember={group.isMember}
-                userRole={group.userRole as any}
             />
         </section>
     );

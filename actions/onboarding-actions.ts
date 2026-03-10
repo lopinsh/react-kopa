@@ -45,7 +45,7 @@ export async function setUsername(username: string): Promise<ActionResponse> {
 
     if (!result.success) return { success: false, error: result.error };
 
-    revalidateTag('groups', 'max' as any);
+    revalidateTag('groups', 'max');
     revalidatePath('/', 'layout');
     return { success: true };
 }

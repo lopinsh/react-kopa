@@ -17,13 +17,12 @@ type Props = {
             image: string | null;
         };
     }[];
-    accentColor: string;
     groupId: string;
     groupName: string;
     isMember?: boolean;
 };
 
-export default function MemberMoreModal({ isOpen, onClose, members, accentColor, groupId, groupName, isMember }: Props) {
+export default function MemberMoreModal({ isOpen, onClose, members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     const [selectedAdmin, setSelectedAdmin] = useState<{ id: string; name: string | null } | null>(null);
@@ -61,7 +60,6 @@ export default function MemberMoreModal({ isOpen, onClose, members, accentColor,
                                 "flex items-center gap-3 p-3 rounded-2xl border border-border bg-surface-elevated/50 transition-all",
                                 isMember && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:bg-surface-elevated hover:border-[var(--accent)]/50"
                             )}
-                            style={isMember && (role === 'OWNER' || role === 'ADMIN') ? { '--accent': accentColor } as any : undefined}
                         >
                             <div className="relative h-12 w-12 overflow-hidden rounded-full bg-surface-elevated shrink-0">
                                 {user.image ? (
@@ -83,8 +81,10 @@ export default function MemberMoreModal({ isOpen, onClose, members, accentColor,
                                     {user.name || 'Anonymous User'}
                                 </span>
                                 <span
-                                    className="text-[10px] font-bold uppercase tracking-wider"
-                                    style={{ color: role === 'OWNER' ? '#f59e0b' : accentColor }}
+                                    className={clsx(
+                                        "text-[10px] font-bold uppercase tracking-wider",
+                                        role === 'OWNER' ? 'text-[#f59e0b]' : 'text-[var(--accent)]'
+                                    )}
                                 >
                                     {t(`role_${role.toLowerCase()}`)}
                                 </span>
@@ -106,7 +106,6 @@ export default function MemberMoreModal({ isOpen, onClose, members, accentColor,
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
-                accentColor={accentColor}
             />
         </div>
     );

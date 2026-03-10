@@ -4,7 +4,7 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, X, Check, ChevronRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
-import type { TaxonomyTree, L1Category, L2Category } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree, L1Category, L2Category } from '@/lib/services/taxonomy.service';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -24,17 +24,17 @@ type Props = {
     taxonomy: TaxonomyTree;
     value: string[]; // Array of selected category IDs
     onChange: (value: string[]) => void;
-    accentColor?: string;
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentColor }: Props) {
+export default function MultiTaxonomyPicker({ taxonomy, value, onChange }: Props) {
     const t = useTranslations('wizard');
     const [query, setQuery] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const listboxId = 'multi-taxonomy-picker-listbox';
 
     // Flatten tags for search (including L2s)
     const flatTags = useMemo<FlatTag[]>(() => {
@@ -111,7 +111,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentC
         onChange(value.filter(id => id !== tagId));
     }
 
-    const accent = accentColor ?? '#6366f1';
+    const accent = '#6366f1';
 
     // Get selected tag objects to display them as pills
     const selectedTags = useMemo(() => {
@@ -155,7 +155,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentC
                         ref={inputRef}
                         type="text"
                         className="flex-1 bg-transparent text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
-                        placeholder="Search for additional topics..."
+                        placeholder={t('pickerPlaceholder')}
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
@@ -168,6 +168,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentC
                         }}
                         onFocus={() => setIsOpen(true)}
                         aria-expanded={isOpen}
+                        aria-controls={listboxId}
                         role="combobox"
                         aria-autocomplete="list"
                     />
@@ -184,12 +185,12 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentC
 
             {/* Dropdown */}
             {isOpen && (
-                <div className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium">
+                <div id={listboxId} className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium">
                     {/* No query yet → browse by L1 */}
                     {!query.trim() && (
                         <div className="p-2">
                             <p className="px-2 py-1 text-xs font-semibold uppercase tracking-wider text-foreground-muted">
-                                Browse Categories
+                                {t('browseCategories')}
                             </p>
                             {taxonomy.map((l1) => (
                                 <L1Row key={l1.id} l1={l1} selectedIds={value} onToggleTag={toggleTag} />
@@ -231,7 +232,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange, accentC
                     {query.trim() && !hasResults && (
                         <div className="p-3">
                             <p className="mb-2 text-sm text-foreground-muted">
-                                No topics found matching <span className="font-semibold text-foreground">"{query}"</span>
+                                {t('noMatch')} <span className="font-semibold text-foreground">&quot;{query}&quot;</span>
                             </p>
                         </div>
                     )}

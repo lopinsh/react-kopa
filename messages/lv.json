@@ -9,7 +9,8 @@
         "myGroups": "Manas grupas",
         "userFallback": "Lietotājs",
         "viewPublicProfile": "Skatīt publisko profilu",
-        "messages": "Ziņas"
+        "messages": "Ziņas",
+        "adminPanel": "Admina panelis"
     },
     "theme": {
         "lightMode": "Gaišais režīms",
@@ -117,7 +118,11 @@
         "learnMore": "Privātuma politika"
     },
     "errors": {
-        "UNAUTHORIZED": "Neautorizēta piekļuve. Lūdzu, ielogojieties.",
+        "UNAUTHORIZED": "Neautoriz\u0113ta piek\u013cuve. L\u016bdzu, ielogojieties.",
+        "UNAUTHORIZED_ADMIN": "\u0160ai darb\u012bbai nepiecie\u0161amas administratora ties\u012bbas.",
+        "TAG_NOT_FOUND": "Birka netika atrasta.",
+        "TAG_ALREADY_EXISTS": "\u0160\u0101da birka jau past\u0101v.",
+        "ALIAS_CONFLICT": "\u0160\u0101ds aizst\u0101jv\u0101rds izv\u0113l\u0113tajai valodai jau past\u0101v.",
         "FORBIDDEN": "Jums nav atļaujas veikt šo darbību.",
         "NOT_FOUND": "Pieprasītais resurss netika atrasts.",
         "VALIDATION_FAILED": "Validācijas kļūda. Lūdzu, pārbaudiet ievadi.",
@@ -157,10 +162,16 @@
         "title_APPLICATION_RECEIVED": "Pieteikums saņemts",
         "title_APPLICATION_ACCEPTED": "Dalība apstiprināta",
         "title_INQUIRY_RECEIVED": "Jauns jautājums",
+        "title_TAG_MERGED": "Birka atjaunināta",
+        "type_TAG_MERGED": "Taksonomija",
         "newEvent": "Grupā \"{groupName}\" ir izveidots jauns pasākums \"{title}\".",
         "newPost": "{authorName} publicēja ierakstu grupā \"{groupName}\".",
         "inquiryReceived": "{authorName} nosūtīja jautājumu par grupu \"{groupName}\".",
-        "applicationAccepted": "Jūsu pieprasījums pievienoties grupai \"{groupName}\" tika apstiprināts!"
+        "applicationAccepted": "Jūsu pieprasījums pievienoties grupai \"{groupName}\" tika apstiprināts!",
+        "tagMerged": {
+            "title": "Birka atjaunināta",
+            "message": "Jūsu grupas birka \"{originalTag}\" tika apvienota ar \"{canonicalTag}\"."
+        }
     },
     "shell": {
         "header": {
@@ -376,6 +387,7 @@
         "noPendingReports": "Nav neatrisinātu ziņojumu.",
         "reportLabel": "ZIŅOJUMS",
         "reportedBy": "ziņoja {name}",
+        "reportedByLabel": "Ziņoja",
         "reportedGroup": "Grupa: {name}",
         "reportedEvent": "Pasākums: {title}",
         "dismiss": "Noraidīt ziņojumu",
@@ -390,7 +402,95 @@
         "deleteContent": "Dzēst saturu",
         "moderationReports": "Admin: Moderācijas ziņojumi",
         "moderationReportsDesc": "Pārskatiet un atrisiniet atzīmētās grupas un pasākumus.",
-        "resolvedByAdmin": "Atrisina administrators"
+        "resolvedByAdmin": "Atrisina administrators",
+        "taxonomy": {
+            "navLink": "Taksonomija",
+            "title": "Taksonomija",
+            "tabs": {
+                "pending": "Gaida apstiprināšanu",
+                "categories": "Kategorijas",
+                "aliases": "Aizstājvārdi"
+            },
+            "pending": {
+                "empty": "Nav gaidāmo birku.",
+                "approveAs": "Apstiprināt kā jaunu",
+                "mergeInto": "Apvienot ar",
+                "mergeAction": "Apvienot",
+                "submittedBy": "Iesniedzējs",
+                "approved": "Birka apstiprināta.",
+                "merged": "Birka apvienota."
+            },
+            "categories": {
+                "saved": "Kategorija saglabāta."
+            },
+            "aliases": {
+                "add": "Pievienot aizstājvārdu",
+                "empty": "Nav aizstājvārdu.",
+                "added": "Aizstājvārds pievienots.",
+                "deleted": "Aizstājvārds dzēsts.",
+                "valuePlaceholder": "Aizstājvārda vērtība",
+                "searchCategories": "Meklēt kategorijas",
+                "anyLocale": "Jebkura valoda",
+                "anyLocaleShort": "visas",
+                "selectCategory": "Izvēlieties kategoriju"
+            },
+            "fields": {
+                "nameEn": "Nosaukums EN",
+                "nameLv": "Nosaukums LV",
+                "slugEn": "Adreses daļa EN",
+                "slugLv": "Adreses daļa LV",
+                "color": "Krāsa"
+            },
+            "override": {
+                "title": "Administratora kategoriju pārrakstīšana",
+                "saved": "Grupas birkas atjauninātas."
+            },
+            "tree": {
+                "title": "Taksonomijas koks",
+                "expandAll": "Izvērst visus",
+                "collapseAll": "Sakļaut visus",
+                "edit": "Labot"
+            },
+            "inbox": {
+                "title": "Gaida apstiprinājumu",
+                "empty": "Nav nevienas birkas, kas gaidītu apstiprinājumu",
+                "approve": "Apstiprināt",
+                "merge": "Apvienot ar...",
+                "reject": "Noraidīt",
+                "confirmReject": "Vai tiešām vēlaties noraidīt un dzēst šo birku?",
+                "submittedBy": "Iesniedza {name} {date}",
+                "usedByGroups": "Izmanto grupas:"
+            },
+            "bulk": {
+                "selected": "atzīmēti",
+                "clearSelection": "Notīrīt izvēli",
+                "approve": "Apstiprināt",
+                "merge": "Apvienot",
+                "mergeRequiresTwo": "Izvēlieties vismaz 2 atzīmes, lai apvienotu",
+                "delete": "Dzēst"
+            },
+            "merge": {
+                "title": "Apvienot atzīmes",
+                "description": "Izvēlieties galveno atzīmi, kas tiks saglabāta. Pārējās tiks dzēstas un pārveidotas par galvenās atzīmes sinonīmiem.",
+                "selectCanonical": "Izvēlieties galveno atzīmi",
+                "editDetails": "Labot galvenās atzīmes informāciju",
+                "confirm": "Apstiprināt apvienošanu"
+            },
+            "slideover": {
+                "l1Title": "Kategorijas detaļas",
+                "l2Title": "Birkas detaļas",
+                "pendingTitle": "Gaidāmā birka",
+                "aliases": "Aizstājvārdi",
+                "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu",
+                "addAlias": "Pievienot",
+                "groups": "Grupas, kas izmanto šo birku",
+                "editTags": "Labot birkas",
+                "save": "Saglabāt izmaiņas",
+                "createSubcategory": "Izveidot apakškategoriju",
+                "addSubcategory": "Pievienot apakškategoriju",
+                "subcategoryCreated": "Apakškategorija veiksmīgi izveidota"
+            }
+        }
     },
     "onboarding": {
         "username": {

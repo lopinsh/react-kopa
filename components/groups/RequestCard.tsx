@@ -115,7 +115,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                 {messages.length > 0 && !inquiryMode && !showHistory && (
                     <div className="relative p-4 rounded-2xl bg-surface border border-border/50 group/msg cursor-pointer" onClick={() => setShowHistory(true)}>
                         <p className="text-sm text-foreground/80 leading-relaxed italic line-clamp-2">
-                            "{messages[messages.length - 1].content}"
+                            &quot;{messages[messages.length - 1].content}&quot;
                         </p>
                         <div className="absolute top-2 right-2 opacity-0 group-hover/msg:opacity-100 transition-opacity">
                             <MessageSquare className="h-3.5 w-3.5 text-foreground-muted" />

@@ -4,23 +4,15 @@ import { CITIES, GROUP_TYPES } from '@/lib/constants';
 
 export type City = (typeof CITIES)[number];
 
-// ─── Step 1: Categorization ───────────────────────────────────────────────────
+// Step 1: Categorization
 export const step1Object = z.object({
     categoryId: z.string().min(1, 'CATEGORY_REQUIRED'),
-    wildcardLabel: z.string().min(2).max(60).optional(),
-    wildcardParentId: z.string().optional(),
-    tagIds: z.array(z.string()).optional(),
+    tagIds: z.array(z.string()).min(1, 'TOPIC_REQUIRED'),
 });
 
-export const step1Schema = step1Object.refine(
-    (data) => (data.tagIds && data.tagIds.length > 0) || (data.wildcardLabel && data.wildcardLabel.length > 0),
-    {
-        message: "TOPIC_REQUIRED",
-        path: ["tagIds"],
-    }
-);
+export const step1Schema = step1Object;
 
-// ─── Step 2: The Basics ───────────────────────────────────────────────────────
+// Step 2: The Basics
 export const step2Schema = z.object({
     name: z
         .string()
@@ -46,25 +38,18 @@ export const step2Schema = z.object({
     instagramLink: z.string().url().or(z.literal('')).optional().nullable(),
 });
 
-// ─── Step 3: Access & Privacy ────────────────────────────────────────────────
+// Step 3: Access & Privacy
 export const step3Object = z.object({
     type: z.enum(GROUP_TYPES),
-    isAcceptingMembers: z.boolean().default(true),
+    isAcceptingMembers: z.boolean(),
 });
 
 export const step3Schema = step3Object;
 
-// ─── Combined Form Schema ────────────────────────────────────────────────────
+// Combined Form Schema
 export const groupFormSchema = step1Object
     .merge(step2Schema)
-    .merge(step3Object)
-    .refine(
-        (data) => (data.tagIds && data.tagIds.length > 0) || (data.wildcardLabel && data.wildcardLabel.length > 0),
-        {
-            message: "TOPIC_REQUIRED",
-            path: ["tagIds"],
-        }
-    );
+    .merge(step3Object);
 
 export type GroupFormValues = z.infer<typeof groupFormSchema>;
 export type Step1Values = z.infer<typeof step1Schema>;

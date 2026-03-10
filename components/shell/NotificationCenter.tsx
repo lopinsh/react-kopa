@@ -9,6 +9,7 @@ import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notificat
 import { clsx } from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
+import { pusherClient } from '@/lib/pusher';
 
 type Notification = {
     id: string;
@@ -24,7 +25,9 @@ type Props = {
     locale: string;
 };
 
-function NotificationContent({ n, t, dateLocale }: { n: Notification, t: any, dateLocale: any }) {
+import type { Locale } from 'date-fns';
+
+function NotificationContent({ n, t, dateLocale }: { n: Notification, t: (key: string, args?: any) => string, dateLocale: Locale }) {
     const parsed = JSON.parse(n.message);
     const title = t(`title_${n.type}`);
     const message = t(parsed.key, parsed.args || {});
@@ -83,7 +86,6 @@ export default function NotificationCenter({ locale }: Props) {
         fetchNotifications();
 
         if (session?.user?.id) {
-            const { pusherClient } = require('@/lib/pusher');
             const channelName = `private-user-${session.user.id}`;
             const channel = pusherClient.subscribe(channelName);
 
@@ -163,7 +165,7 @@ export default function NotificationCenter({ locale }: Props) {
                                         >
                                             {n.link ? (
                                                 <Link
-                                                    href={n.link as any}
+                                                    href={n.link}
                                                     className="block p-4"
                                                     onClick={() => {
                                                         handleMarkAsRead(n.id);

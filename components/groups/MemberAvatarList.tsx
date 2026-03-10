@@ -18,11 +18,10 @@ type Props = {
     }[];
     groupId: string;
     groupName: string;
-    accentColor: string;
     isMember?: boolean;
 };
 
-export default function MemberAvatarList({ members, accentColor, groupId, groupName, isMember }: Props) {
+export default function MemberAvatarList({ members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
     const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
@@ -52,7 +51,6 @@ export default function MemberAvatarList({ members, accentColor, groupId, groupN
                             "group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-2 transition-all hover:bg-white/[0.05] hover:shadow-sm relative overflow-hidden",
                             isMember && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:border-[var(--accent)]/30"
                         )}
-                        style={isMember && (role === 'OWNER' || role === 'ADMIN') ? { '--accent': accentColor } as any : undefined}
                     >
                         {/* Avatar */}
                         <div className="relative shrink-0">
@@ -73,8 +71,10 @@ export default function MemberAvatarList({ members, accentColor, groupId, groupN
 
                             {(role === 'OWNER' || role === 'ADMIN') && (
                                 <div
-                                    className="absolute -top-1.5 -right-1.5 p-0.5 rounded-full border border-background shadow-xs scale-90"
-                                    style={{ backgroundColor: role === 'OWNER' ? '#f59e0b' : accentColor }}
+                                    className={clsx(
+                                        "absolute -top-1.5 -right-1.5 p-0.5 rounded-full border border-background shadow-xs scale-90",
+                                        role === 'OWNER' ? 'bg-[#f59e0b]' : 'bg-[var(--accent)]'
+                                    )}
                                 >
                                     <div className="bg-white/20 rounded-full p-0.5">
                                         <MessageSquare className="h-2 w-2 text-white" />
@@ -89,8 +89,10 @@ export default function MemberAvatarList({ members, accentColor, groupId, groupN
                                 {user.name || 'Anonymous'}
                             </span>
                             <span
-                                className="text-[9px] font-black uppercase tracking-[0.05em] opacity-50"
-                                style={{ color: role === 'OWNER' ? '#f59e0b' : accentColor }}
+                                className={clsx(
+                                    "text-[9px] font-black uppercase tracking-[0.05em] opacity-50",
+                                    role === 'OWNER' ? 'text-[#f59e0b]' : 'text-[var(--accent)]'
+                                )}
                             >
                                 {t(`role_${role.toLowerCase()}`)}
                             </span>
@@ -124,7 +126,6 @@ export default function MemberAvatarList({ members, accentColor, groupId, groupN
                 isOpen={isMoreModalOpen}
                 onClose={() => setIsMoreModalOpen(false)}
                 members={members}
-                accentColor={accentColor}
                 groupId={groupId}
                 groupName={groupName}
                 isMember={isMember}
@@ -135,7 +136,6 @@ export default function MemberAvatarList({ members, accentColor, groupId, groupN
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
-                accentColor={accentColor}
             />
         </>
     );

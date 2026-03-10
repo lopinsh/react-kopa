@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ActionResponse } from '@/types/actions';
+import { ActionResponse, ErrorCode } from '@/types/actions';
 
 /**
  * Validates data against a Zod schema and returns a standardized ActionResponse.
@@ -21,8 +21,7 @@ export async function validateActionData<T>(
 /**
  * Simple wrapper for catching errors in actions and returning a standardized fallback.
  */
-export function handleActionError(error: unknown, fallback: string = 'INTERNAL_SERVER_ERROR'): ActionResponse<any> {
-    console.error(`[Action Error]:`, error);
-    // In a real app, we might check if 'error' is a known type to return specific codes
-    return { success: false, error: fallback as any };
+export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
+    console.error('[Action Error]:', error);
+    return { success: false, error: fallback };
 }

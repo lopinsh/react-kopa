@@ -15,7 +15,7 @@ export default async function CreateGroupPage({
     const { category } = await searchParams;
 
     if (!session?.user) {
-        redirect(`/${locale}/api/auth/signin`);
+        redirect(`/api/auth/signin`);
     }
 
     const taxonomyResponse = await getTaxonomy(locale);

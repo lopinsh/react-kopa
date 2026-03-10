@@ -5,12 +5,19 @@ import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
-export default async function AdminReportsPage() {
+export default async function AdminReportsPage({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}) {
+    const { locale } = await params;
     const t = await getTranslations('admin');
     const session = await auth();
-    // In a real app, verify admin role here
     if (!session?.user?.id) {
-        redirect('/api/auth/signin');
+        redirect(`/api/auth/signin`);
+    }
+    if (session.user.role !== 'ADMIN') {
+        redirect(`/${locale}`);
     }
 
     const reports = await getReports();

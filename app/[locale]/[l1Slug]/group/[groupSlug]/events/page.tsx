@@ -126,13 +126,11 @@ export default async function GroupEventsPage({
                                 location: event.location,
                                 isAttending: event.isAttending,
                                 attendeeCount: event.attendeeCount,
-                                attendeeList: (event as any).attendeeList,
-                                // @ts-ignore
+                                attendeeList: event.attendeeList,
                                 isRecurring: event.isRecurring,
-                                // @ts-ignore
                                 recurrencePattern: event.recurrencePattern,
-                                bannerImage: (event as any).bannerImage,
-                                instructions: (event as any).instructions,
+                                bannerImage: event.bannerImage,
+                                instructions: event.instructions,
                             }}
                             locale={locale}
                             accentColor={accentColor}

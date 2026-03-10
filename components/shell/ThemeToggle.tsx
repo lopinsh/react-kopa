@@ -3,15 +3,16 @@
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 
 export default function ThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme();
     const t = useTranslations('theme');
-    const [mounted, setMounted] = useState(false);
-
-    // Avoid hydration mismatch
-    useEffect(() => setMounted(true), []);
+    const mounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     if (!mounted) {
         return (

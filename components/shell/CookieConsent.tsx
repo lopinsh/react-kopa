@@ -1,20 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, ShieldCheck } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 
 export default function CookieConsent() {
     const t = useTranslations('common');
+    const isMounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
+
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const consent = localStorage.getItem('cookie-consent');
-        if (!consent) {
-            setIsVisible(true);
+        if (isMounted) {
+            const consent = localStorage.getItem('cookie-consent');
+            if (!consent) {
+                setIsVisible(true);
+            }
         }
-    }, []);
+    }, [isMounted]);
 
     const handleAccept = () => {
         localStorage.setItem('cookie-consent', 'accepted');

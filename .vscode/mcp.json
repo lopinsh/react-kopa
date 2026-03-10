@@ -28,6 +28,16 @@
 			},
 			"gallery": "https://api.mcp.github.com",
 			"version": "1.0.31"
+		},
+		"next-devtools/mcp": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"--yes",
+				"next-devtools-mcp@latest"
+			],
+			"gallery": "https://api.mcp.github.com",
+			"version": "latest"
 		}
 	}
 }

@@ -2,9 +2,7 @@ import { GroupService } from '@/lib/services/group.service';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { getTranslations } from 'next-intl/server';
 import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
-import { Settings } from 'lucide-react';
 import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
@@ -17,41 +15,42 @@ export default async function GroupSettingsPage(props: {
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect(`/${locale}/api/auth/signin`);
+        redirect(`/api/auth/signin`);
     }
 
-    const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
-
+    const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session.user.id);
     if (!group) {
         notFound();
     }
 
-    // Must be a member to see any settings
-    if (!group.isMember) {
+    const isAppAdmin = session.user.role === 'ADMIN';
+
+    // Group members can access settings; app admins can override without membership.
+    if (!group.isMember && !isAppAdmin) {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
-    const t = await getTranslations('group');
     const taxonomyRes = await getTaxonomy(locale);
     if (!taxonomyRes.success) {
         notFound();
     }
-    const taxonomy = taxonomyRes.data!;
+    const taxonomy = taxonomyRes.data ?? [];
 
-    // Server-side taxonomy derivation
     const initialTaxonomy = deriveInitialTaxonomy(group, taxonomy);
 
-    const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
     const isOwner = group.userRole === 'OWNER';
-    const pendingMembers = isOwnerOrAdmin ? (group.members || []).filter((m: any) => m.role === 'PENDING') : [];
+    const isOwnerOrAdmin = isOwner || group.userRole === 'ADMIN' || isAppAdmin;
+    const canEditCategorization = isOwner || isAppAdmin;
+    const pendingMembers = isOwnerOrAdmin ? (group.members || []).filter((m: { role: string }) => m.role === 'PENDING') : [];
 
     const searchParams = await props.searchParams;
     const currentTab = searchParams.tab || 'profile';
 
-    // Role-based tab gating
     const allowedTabs = isOwner
         ? ['profile', 'social', 'sections', 'categorization', 'privacy', 'danger']
-        : ['profile', 'social', 'sections'];
+        : isAppAdmin
+            ? ['profile', 'social', 'sections', 'categorization']
+            : ['profile', 'social', 'sections'];
 
     const activeTab = allowedTabs.includes(currentTab) ? currentTab : 'profile';
 
@@ -66,7 +65,7 @@ export default async function GroupSettingsPage(props: {
             )}
 
             <div className="grid gap-6">
-                <SettingsTabs accentColor={group.accentColor} isOwner={isOwner} />
+                <SettingsTabs isOwner={isOwner} />
 
                 <div className="space-y-12">
                     <div className="rounded-[40px] border border-border bg-surface p-8 md:p-12 shadow-sm min-h-[400px]">
@@ -87,12 +86,11 @@ export default async function GroupSettingsPage(props: {
                                 category: group.category,
                                 slug: group.slug,
                                 l1Slug: group.category.l1Slug,
-                                accentColor: group.accentColor
                             }}
                             taxonomy={taxonomy}
                             locale={locale}
-                            userRole={group.userRole as 'OWNER' | 'ADMIN'}
                             activeTab={activeTab}
+                            canEditCategorization={canEditCategorization}
                             initialTaxonomy={initialTaxonomy}
                         />
                     </div>

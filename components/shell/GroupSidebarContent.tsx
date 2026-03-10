@@ -75,7 +75,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                 return (
                     <Link
                         key={id}
-                        href={href as any}
+                        href={href}
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all text-left w-full soft-press relative',
                             active
@@ -111,7 +111,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
             {isOwnerOrAdmin && (
                 <div className="mt-4 pt-4 border-t border-border/50">
                     <Link
-                        href={`${baseUrl}/settings` as any}
+                        href={`${baseUrl}/settings`}
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-all text-left w-full soft-press',
                             pathname.includes('/settings')

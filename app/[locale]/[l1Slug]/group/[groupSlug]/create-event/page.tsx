@@ -12,7 +12,7 @@ export default async function CreateEventPage({
     const session = await auth();
 
     if (!session) {
-        redirect(`/${locale}/api/auth/signin`);
+        redirect(`/api/auth/signin`);
     }
 
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);

@@ -3,7 +3,7 @@
 import { X, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import GroupSidebarContent from '../shell/GroupSidebarContent';
 
@@ -26,10 +26,15 @@ export default function GroupInfoDrawer({
 }: GroupInfoDrawerProps) {
     const t = useTranslations('group');
 
-    const [mounted, setMounted] = useState(false);
+    const mounted = useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     useEffect(() => {
-        setMounted(true);
+        if (!mounted) return;
+
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -38,7 +43,7 @@ export default function GroupInfoDrawer({
         return () => {
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen]);
+    }, [isOpen, mounted]);
 
     if (!mounted) return null;
 

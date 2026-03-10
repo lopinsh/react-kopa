@@ -9,7 +9,7 @@ import {
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
 import { CITIES } from '@/lib/constants';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { ScopedResult } from '@/lib/types/discovery';
 import { searchContextual } from '@/actions/discovery-actions';
 import { Link } from '@/i18n/routing';

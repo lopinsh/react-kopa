@@ -9,7 +9,7 @@ import {
 
 export type NavLink = {
     href: string;
-    labelKey: string; // key in messages/nav namespace
+    labelKey: 'discover' | 'myGroups' | 'messages' | 'profile'; // key in messages/nav namespace
     icon: LucideIcon;
 };
 

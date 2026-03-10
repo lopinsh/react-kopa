@@ -9,7 +9,7 @@ import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
 import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { createGroup } from '@/actions/group-actions';
-import type { TaxonomyTree } from '@/actions/taxonomy-actions';
+import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 
 import TaxonomyStep from '@/components/groups/create-wizard/TaxonomyStep';
@@ -22,6 +22,8 @@ import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 const STEP_SCHEMAS = [0, 1, 2, 3] as const;
 type StepIndex = (typeof STEP_SCHEMAS)[number];
+const STEP_TITLE_KEYS = ['step1Title', 'step2Title', 'step3Title', 'step4Title'] as const;
+const STEP_DESC_KEYS = ['step1Desc', 'step2Desc', 'step3Desc', 'step4Desc'] as const;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -40,7 +42,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
-    const containerRef = useFocusTrap(true);
+    const containerRef = useFocusTrap<HTMLDivElement>(true);
 
     // Default pre-select based on URL
     const defaultTaxSelection = useMemo(() => {
@@ -79,14 +81,12 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     }, [step]);
 
     const form = useForm<GroupFormValues>({
-        resolver: zodResolver(groupFormSchema) as any,
+        resolver: zodResolver(groupFormSchema),
         defaultValues: {
             categoryId: defaultTaxSelection?.kind === 'existing' ? defaultTaxSelection.categoryId : undefined,
             name: '',
             description: '',
             city: undefined,
-            wildcardLabel: undefined,
-            wildcardParentId: undefined,
             tagIds: [],
             type: 'PUBLIC',
             isAcceptingMembers: true,
@@ -103,18 +103,16 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             setValue('categoryId', sel.categoryId, { shouldValidate: true });
             setAccentColor(sel.l1Color);
         } else {
-            setValue('categoryId', '' as any);
+            setValue('categoryId', '');
             setAccentColor('#6366f1');
         }
         // Reset sub-tags whenever L1 changes to ensure data consistency
         setValue('tagIds', []);
-        setValue('wildcardLabel', undefined);
-        setValue('wildcardParentId', undefined);
     }
 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['categoryId', 'tagIds', 'wildcardLabel']); // Taxonomy
+        if (s === 0) return trigger(['categoryId', 'tagIds']); // Taxonomy
         if (s === 1) return trigger(['name', 'description']); // Basic Info
         if (s === 2) return trigger(['city']); // Location
         if (s === 3) return trigger(['type']); // Access
@@ -151,7 +149,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
     return (
         <div
-            ref={containerRef as any}
+            ref={containerRef}
             className="mx-auto w-full max-w-lg rounded-2xl border border-border bg-surface shadow-lg"
             style={accentStyle}
         >
@@ -189,10 +187,10 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             tabIndex={-1}
                             className="mt-2 text-3xl font-black tracking-tight text-foreground outline-none"
                         >
-                            {t(`step${step + 1}Title` as any)}
+                            {t(STEP_TITLE_KEYS[step])}
                         </h2>
                         <p className="mt-1.5 text-base text-foreground-muted">
-                            {t(`step${step + 1}Desc` as any)}
+                            {t(STEP_DESC_KEYS[step])}
                         </p>
                     </div>
 
@@ -259,3 +257,4 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         </div>
     );
 }
+
