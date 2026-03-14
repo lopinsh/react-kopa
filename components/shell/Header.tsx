@@ -34,7 +34,7 @@ export default async function Header({ locale }: Props) {
                             className="relative flex h-8 w-8 items-center justify-center rounded-xl text-[12px] font-black text-white shadow-xl transition-all duration-500 ease-out group-hover:rotate-3 group-hover:scale-105 sm:h-8.5 sm:w-8.5 sm:text-[13px]"
                             style={{ backgroundColor: 'var(--group-accent, var(--primary))' }}
                         >
-                            EK
+                            {t('brandShort', { fallback: 'EK' })}
                         </span>
                     </div>
                     <div className="flex flex-col leading-tight py-0.5">
