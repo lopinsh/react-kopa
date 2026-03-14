@@ -2,8 +2,14 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Plus, Trash2, ChevronUp, ChevronDown, Eye, EyeOff, GripVertical, HelpCircle, Save, Layout } from 'lucide-react';
+import { Plus, Trash2, ChevronUp, ChevronDown, Eye, EyeOff, GripVertical, HelpCircle, Save, Layout, Lock, Globe, Settings2 } from 'lucide-react';
 import { clsx } from 'clsx';
+
+const stripHtml = (html: string) => {
+    if (typeof window === 'undefined') return html.replace(/<[^>]*>/g, '');
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+};
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import { upsertSectionAction, reorderSectionsAction, deleteSectionAction } from '@/actions/group-actions';
 import { useRouter } from '@/i18n/routing';
@@ -20,18 +26,15 @@ interface Props {
     groupId: string;
     initialSections: GroupSection[];
     locale: string;
-    accentColor?: string;
 }
 
-export default function GroupSectionEditor({ groupId, initialSections, locale, accentColor = '#6366f1' }: Props) {
+export default function GroupSectionEditor({ groupId, initialSections, locale }: Props) {
     const t = useTranslations('group');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [sections, setSections] = useState<GroupSection[]>(initialSections.sort((a, b) => a.order - b.order));
     const [editingId, setEditingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     const handleSaveSection = (section: Partial<GroupSection>) => {
         setError(null);
@@ -96,7 +99,32 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
 
         const newSection: GroupSection = {
             id: 'new-' + Date.now(),
-            title: 'New Section',
+            title: t('sections.newSection'),
+            content: '',
+            order: sections.length,
+            visibility: 'PUBLIC'
+        };
+        setSections([...sections, newSection]);
+        setEditingId(newSection.id);
+    };
+
+    // Helper to update a section's properties
+    const updateSection = (id: string, updates: Partial<GroupSection>) => {
+        setSections(prev => prev.map(s => s.id === id ? { ...s, ...updates } : s));
+    };
+
+    // Helper to remove a section
+    const removeSection = (id: string) => {
+        if (!window.confirm(t('deleteConfirm'))) return;
+        handleDeleteSection(id);
+    };
+
+    const addSection = () => {
+        if (sections.length >= 6) return;
+
+        const newSection: GroupSection = {
+            id: 'new-' + Date.now(),
+            title: t('sections.newSection'),
             content: '',
             order: sections.length,
             visibility: 'PUBLIC'
@@ -106,19 +134,19 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
     };
 
     return (
-        <div className="space-y-8" style={accentStyle}>
+        <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-                        <Layout className="h-5 w-5 text-[var(--accent)]" />
-                        Page Sections
+                    <h2 className="text-xl font-bold flex items-center gap-2">
+                        <Layout className="h-5 w-5 text-primary" />
+                        {t('sections.title')}
                     </h2>
-                    <p className="text-xs text-foreground-muted mt-1">
-                        Customize your group page with up to 6 sections.
+                    <p className="text-sm text-foreground-muted mt-1">
+                        {t('sections.subtitle')}
                     </p>
                 </div>
                 <div className="px-3 py-1 bg-surface-elevated border border-border rounded-full text-[10px] font-black uppercase tracking-widest text-foreground-muted">
-                    {sections.length} / 6 Sections
+                    {t('sections.count', { count: sections.length })}
                 </div>
             </div>
 
@@ -151,16 +179,18 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
 
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
-                                    <h3 className="font-bold text-foreground truncate">{index === 0 ? "Home / About us" : section.title}</h3>
+                                    <h3 className="font-semibold text-foreground">
+                                        {section.id === 'initial' ? t('sections.homeAbout') : section.title}
+                                    </h3>
                                     {section.visibility === 'MEMBERS_ONLY' && (
-                                        <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 text-[10px] font-bold uppercase tracking-wider">
-                                            <EyeOff className="h-3 w-3" />
-                                            Members Only
+                                        <span className="flex items-center gap-1 text-[10px] font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded-full uppercase">
+                                            <Lock className="h-2.5 w-2.5" />
+                                            {t('sections.membersOnly')}
                                         </span>
                                     )}
                                 </div>
-                                <p className="text-xs text-foreground-muted mt-0.5 truncate max-w-md">
-                                    {section.content.replace(/<[^>]*>/g, '').substring(0, 100) || "Empty section..."}
+                                <p className="text-xs text-foreground-muted line-clamp-1 mt-0.5">
+                                    {section.content ? stripHtml(section.content) : t('sections.emptyContent')}
                                 </p>
                             </div>
 
@@ -187,16 +217,11 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
                                 )}
 
                                 <button
-                                    type="button"
                                     onClick={() => setEditingId(editingId === section.id ? null : section.id)}
-                                    className={clsx(
-                                        "px-4 py-2 rounded-xl text-sm font-bold transition-all",
-                                        editingId === section.id
-                                            ? "bg-[var(--accent)] text-white shadow-premium"
-                                            : "bg-surface-elevated text-foreground hover:bg-border"
-                                    )}
+                                    className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-surface-elevated text-foreground-muted hover:text-primary transition-colors cursor-pointer"
+                                    title={editingId === section.id ? t('sections.done') : t('sections.edit')}
                                 >
-                                    {editingId === section.id ? "Done" : "Edit"}
+                                    <Settings2 className="h-4 w-4" />
                                 </button>
                             </div>
                         </div>
@@ -206,96 +231,73 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
                             <div className="p-6 pt-0 border-t border-border/50 animate-in fade-in slide-in-from-top-4 duration-300">
                                 <div className="space-y-6 pt-6">
                                     <div className="grid gap-6 md:grid-cols-2">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-black uppercase tracking-wider text-foreground-muted">Section Title</label>
+                                        <div>
+                                            <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
+                                                {t('sections.fieldTitle')}
+                                            </label>
                                             <input
                                                 type="text"
-                                                defaultValue={section.title}
-                                                disabled={index === 0}
-                                                onChange={(e) => {
-                                                    const updated = sections.map(s => s.id === section.id ? { ...s, title: e.target.value } : s);
-                                                    setSections(updated);
-                                                }}
-                                                placeholder="e.g. FAQ, Rules, Schedule..."
-                                                className="w-full rounded-xl border border-border bg-surface px-4 py-2.5 outline-none focus:border-[var(--accent)] transition-all disabled:opacity-50"
+                                                value={section.title}
+                                                disabled={section.id === 'initial'}
+                                                onChange={(e) => updateSection(section.id, { title: e.target.value })}
+                                                placeholder={t('sections.fieldTitlePlaceholder')}
+                                                className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary disabled:opacity-50"
                                             />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-black uppercase tracking-wider text-foreground-muted">Visibility</label>
-                                            <div className={clsx(
-                                                "flex p-1 bg-surface-elevated rounded-xl border border-border",
-                                                index === 0 && "opacity-50 pointer-events-none"
-                                            )}>
+
+                                        <div>
+                                            <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
+                                                {t('sections.fieldVisibility')}
+                                            </label>
+                                            <div className="flex gap-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => {
-                                                        const updated = sections.map(s => s.id === section.id ? { ...s, visibility: 'PUBLIC' as const } : s);
-                                                        setSections(updated);
-                                                    }}
-                                                    className={clsx(
-                                                        "flex-1 flex items-center justify-center gap-2 py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                        section.visibility === 'PUBLIC'
-                                                            ? "bg-[var(--accent)] text-white shadow-sm"
-                                                            : "text-foreground-muted hover:text-foreground"
-                                                    )}
+                                                    onClick={() => updateSection(section.id, { visibility: 'PUBLIC' })}
+                                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border text-xs font-medium transition-all ${section.visibility === 'PUBLIC' ? 'bg-primary/5 border-primary text-primary' : 'bg-surface border-border text-foreground-muted hover:bg-surface-elevated'}`}
                                                 >
-                                                    <Eye className="h-3.5 w-3.5" />
-                                                    Public
+                                                    <Globe className="h-3.5 w-3.5" />
+                                                    {t('sections.visibilityPublic')}
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    onClick={() => {
-                                                        const updated = sections.map(s => s.id === section.id ? { ...s, visibility: 'MEMBERS_ONLY' as const } : s);
-                                                        setSections(updated);
-                                                    }}
-                                                    className={clsx(
-                                                        "flex-1 flex items-center justify-center gap-2 py-1.5 rounded-lg text-xs font-bold transition-all",
-                                                        section.visibility === 'MEMBERS_ONLY'
-                                                            ? "bg-[var(--accent)] text-white shadow-sm"
-                                                            : "text-foreground-muted hover:text-foreground"
-                                                    )}
+                                                    disabled={section.id === 'initial'}
+                                                    onClick={() => updateSection(section.id, { visibility: 'MEMBERS_ONLY' })}
+                                                    className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border text-xs font-medium transition-all ${section.visibility === 'MEMBERS_ONLY' ? 'bg-primary/5 border-primary text-primary' : 'bg-surface border-border text-foreground-muted hover:bg-surface-elevated'}`}
                                                 >
-                                                    <EyeOff className="h-3.5 w-3.5" />
-                                                    Members Only
+                                                    <Lock className="h-3.5 w-3.5" />
+                                                    {t('sections.visibilityMembersOnly')}
                                                 </button>
                                             </div>
-                                            {index === 0 && (
-                                                <p className="text-[10px] text-foreground-muted mt-1 px-1 flex items-center gap-1">
-                                                    <HelpCircle className="h-2.5 w-2.5" />
-                                                    Home section must remain public.
-                                                </p>
+                                            {section.id === 'initial' && (
+                                                <span className="text-[10px] text-foreground-muted mt-1 inline-block">
+                                                    {t('sections.homeVisibilityWarning')}
+                                                </span>
                                             )}
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black uppercase tracking-wider text-foreground-muted">Content</label>
+                                        <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
+                                            {t('sections.fieldContent')}
+                                        </label>
                                         <RichTextEditor
                                             value={section.content}
-                                            onChange={(val) => {
-                                                const updated = sections.map(s => s.id === section.id ? { ...s, content: val } : s);
-                                                setSections(updated);
-                                            }}
-                                            placeholder="Tell members more about this section..."
+                                            onChange={(val) => updateSection(section.id, { content: val })}
+                                            placeholder={t('sections.fieldContentPlaceholder')}
                                         />
                                     </div>
 
                                     <div className="flex items-center justify-between pt-4 border-t border-border">
-                                        {index > 0 ? (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleDeleteSection(section.id)}
-                                                className="flex items-center gap-2 text-red-500 hover:text-red-600 font-bold text-xs px-2 py-1 rounded-lg hover:bg-red-500/5 transition-all"
-                                            >
-                                                <Trash2 className="h-3.5 w-3.5" />
-                                                Delete Section
-                                            </button>
-                                        ) : (
-                                            <div className="text-[10px] text-foreground-muted italic flex items-center gap-2">
-                                                <HelpCircle className="h-3 w-3" />
-                                                Initial section cannot be deleted or renamed.
-                                            </div>
-                                        )}
+                                        <button
+                                            type="button"
+                                            disabled={section.id === 'initial'}
+                                            onClick={() => removeSection(section.id)}
+                                            className="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors disabled:opacity-30 disabled:grayscale"
+                                            title={section.id === 'initial' ? t('sections.deleteDisabledWarning') : t('sections.deleteSection')}
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                            {t('sections.deleteSection')}
+                                        </button>
 
                                         <button
                                             type="button"
@@ -304,7 +306,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale, a
                                             className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 font-bold text-white shadow-premium hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                                         >
                                             <Save className="h-4 w-4" />
-                                            Save Section
+                                            {t('sections.saveSection')}
                                         </button>
                                     </div>
                                 </div>

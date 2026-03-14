@@ -1,7 +1,6 @@
-'use server';
+﻿'use server';
 
-import { prisma } from '@/lib/prisma';
-import { revalidatePath, unstable_noStore as noStore } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 import { GroupFormValues, groupFormSchema } from '@/lib/validations/group';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
@@ -200,6 +199,7 @@ export async function sendApplicationInquiry(
 
 /**
  * Lightweight action to get current user's role for a specific group.
+ * Delegates all DB logic to GroupService.getGroupRole.
  */
 export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
@@ -208,157 +208,17 @@ export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
     sections: Array<{ id: string; title: string; visibility: string }>;
 }> {
     const session = await auth();
-    try {
-        const group = await prisma.group.findFirst({
-            where: { slug: groupSlug, category: { slug: l1Slug } },
-            select: {
-                instructions: true,
-                sections: {
-                    orderBy: { order: 'asc' },
-                    select: { id: true, title: true, visibility: true }
-                },
-                members: {
-                    where: { userId: session?.user?.id || 'none' },
-                    select: { role: true }
-                }
-            }
-        });
-
-        if (!group) return { role: null, hasInstructions: false, pendingCount: 0, sections: [] };
-
-        const role = group.members?.length > 0 ? group.members[0].role : null;
-
-        let pendingCount = 0;
-        if (role === 'OWNER' || role === 'ADMIN') {
-            pendingCount = await prisma.membership.count({
-                where: {
-                    group: { slug: groupSlug, category: { slug: l1Slug } },
-                    role: 'PENDING'
-                }
-            });
-        }
-
-        const sections = (group.sections && group.sections.length > 0)
-            ? group.sections
-            : GroupService.getVirtualSections({ description: null, instructions: group.instructions });
-
-        return {
-            role,
-            hasInstructions: !!group.instructions,
-            pendingCount,
-            sections: sections.map((s: { id: string; title: string; visibility: string }) => ({ id: s.id, title: s.title, visibility: s.visibility }))
-        };
-    } catch {
-        return { role: null, hasInstructions: false, pendingCount: 0, sections: [] };
-    }
+    return GroupService.getGroupRole(l1Slug, groupSlug, session?.user?.id);
 }
 
 /**
  * Fetches group details by slug for the landing page.
+ * Delegates all DB work to GroupService.getGroupWithContext.
  */
 export async function getGroupDetails(l1Slug: string, groupSlug: string, locale: string): Promise<GroupDetailsResult | null> {
-    const lang = locale === 'en' ? 'en' : 'lv';
     const session = await auth();
-    const currentUserId = session?.user?.id;
-
-    noStore();
-
-    try {
-        const group = await prisma.group.findFirst({
-            where: {
-                slug: groupSlug,
-                category: {
-                    OR: [
-                        { slug: l1Slug, level: 1 },
-                        { parent: { slug: l1Slug, level: 1 } },
-                        { parent: { parent: { slug: l1Slug, level: 1 } } }
-                    ]
-                }
-            },
-            include: {
-                category: {
-                    include: {
-                        titles: { where: { lang } },
-                        parent: {
-                            include: {
-                                titles: { where: { lang } },
-                                parent: {
-                                    include: { titles: { where: { lang } } }
-                                }
-                            }
-                        }
-                    }
-                },
-                tags: {
-                    include: {
-                        titles: { where: { lang } }
-                    }
-                },
-                members: {
-                    include: {
-                        user: true,
-                    }
-                },
-                appMessages: {
-                    orderBy: { createdAt: 'desc' }
-                },
-                _count: {
-                    select: { members: true, events: true }
-                }
-            }
-        });
-
-        if (!group) return null;
-
-        const userMembership = currentUserId
-            ? group.members.find((m) => m.userId === currentUserId)
-            : null;
-
-        const isMember = !!userMembership && userMembership.role !== 'PENDING';
-        const userRole = userMembership?.role || null;
-
-        let membersWithMessages = group.members;
-
-        if (userRole === 'OWNER' || userRole === 'ADMIN') {
-            membersWithMessages = group.members.map((m) => {
-                if (m.role === 'PENDING') {
-                    const msg = group.appMessages.find((msg) => msg.applicationUserId === m.userId);
-                    return { ...m, applicationMessage: msg?.content || null };
-                }
-                return m;
-            });
-        }
-
-        const formattedTags = group.tags.map((t) => ({
-            id: t.id,
-            slug: t.slug,
-            title: t.titles?.[0]?.title || t.slug,
-            isWildcard: t.isWildcard,
-            parentId: t.parentId
-        }));
-
-        const memberUserIds = new Set(group.members.map((m) => m.userId));
-        const inquiries = group.appMessages
-            .filter((msg) => !memberUserIds.has(msg.senderId))
-            .map((msg) => ({
-                id: msg.id,
-                content: msg.content,
-                createdAt: msg.createdAt,
-                senderId: msg.senderId,
-            }));
-
-        return {
-            ...group,
-            members: membersWithMessages,
-            isMember,
-            userRole,
-            tags: formattedTags,
-            inquiries: (userRole === 'OWNER' || userRole === 'ADMIN') ? inquiries : [],
-        };
-    } catch (error) {
-        console.error('[getGroupDetails] Error:', error);
-        return null;
-    }
+    const context = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
+    return context as GroupDetailsResult | null;
 }
 
 /**

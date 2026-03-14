@@ -13,7 +13,6 @@ interface GroupInfoDrawerProps {
     group: any;
     l1Slug: string;
     groupSlug: string;
-    accentColor: string;
 }
 
 export default function GroupInfoDrawer({
@@ -22,7 +21,6 @@ export default function GroupInfoDrawer({
     group,
     l1Slug,
     groupSlug,
-    accentColor
 }: GroupInfoDrawerProps) {
     const t = useTranslations('group');
 
@@ -70,8 +68,7 @@ export default function GroupInfoDrawer({
                     <div className="flex h-16 items-center justify-between border-b border-border/50 px-6 shrink-0">
                         <div className="flex items-center gap-4">
                             <div
-                                className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"
-                                style={{ color: accentColor, backgroundColor: `${accentColor}15` } as any}
+                                className="flex h-10 w-10 items-center justify-center rounded-xl bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[color:var(--accent)]"
                             >
                                 <Menu className="h-5 w-5" />
                             </div>

@@ -4,6 +4,7 @@ import { MembershipRole } from '@prisma/client';
 import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
+import { hasAdminRights } from '@/lib/utils/permissions';
 
 export interface GroupContext {
     id: string;
@@ -265,7 +266,7 @@ export const GroupService = {
         const userMembership = currentUserId ? g.members.find((m: { userId: string }) => m.userId === currentUserId) : null;
         const isMember = !!userMembership && userMembership.role !== 'PENDING';
         const userRole = userMembership?.role || null;
-        const isAdmin = userRole === 'OWNER' || userRole === 'ADMIN';
+        const isAdmin = hasAdminRights(userRole);
 
         // 2. Format Members (with application messages for admins)
         const formattedMembers = group.members.map((m) => {
@@ -430,7 +431,7 @@ export const GroupService = {
             where: { userId_groupId: { userId: adminId, groupId } }
         });
 
-        if (!adminMembership || (adminMembership.role !== 'OWNER' && adminMembership.role !== 'ADMIN')) {
+        if (!adminMembership || !hasAdminRights(adminMembership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
 
@@ -571,7 +572,7 @@ export const GroupService = {
 
         const role = membership?.role;
         const isAppAdmin = actor?.role === 'ADMIN';
-        if (role !== 'OWNER' && role !== 'ADMIN' && !isAppAdmin) {
+        if (!hasAdminRights(role) && !isAppAdmin) {
             return { success: false, error: 'FORBIDDEN' };
         }
 
@@ -674,6 +675,59 @@ export const GroupService = {
     },
 
     /**
+     * Fetches the current user's role, sections, and pending count for a given group.
+     */
+    async getGroupRole(l1Slug: string, groupSlug: string, userId?: string): Promise<{
+        role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
+        hasInstructions: boolean;
+        pendingCount: number;
+        sections: Array<{ id: string; title: string; visibility: string }>;
+    }> {
+        const group = await prisma.group.findFirst({
+            where: { slug: groupSlug, category: { slug: l1Slug } },
+            select: {
+                instructions: true,
+                sections: {
+                    orderBy: { order: 'asc' },
+                    select: { id: true, title: true, visibility: true }
+                },
+                members: {
+                    where: { userId: userId || 'none' },
+                    select: { role: true }
+                }
+            }
+        });
+
+        if (!group) return { role: null, hasInstructions: false, pendingCount: 0, sections: [] };
+
+        const role = group.members?.length > 0 ? group.members[0].role : null;
+
+        let pendingCount = 0;
+        if (hasAdminRights(role)) {
+            pendingCount = await prisma.membership.count({
+                where: {
+                    group: { slug: groupSlug, category: { slug: l1Slug } },
+                    role: 'PENDING'
+                }
+            });
+        }
+
+        const sections = (group.sections && group.sections.length > 0)
+            ? group.sections
+            : GroupService.getVirtualSections({ description: null, instructions: group.instructions });
+
+        return {
+            role,
+            hasInstructions: !!group.instructions,
+            pendingCount,
+            sections: sections.map((s: { id: string; title: string; visibility: string }) => ({
+                id: s.id,
+                title: s.title,
+                visibility: s.visibility
+            }))
+        };
+    },
+    /**
      * Internal helper to resolve group slugs.
      */
     async getGroupSlugs(groupId: string): Promise<{ slug: string; l1Slug: string } | null> {
@@ -741,7 +795,7 @@ export const GroupService = {
         });
 
         const role = membership?.role;
-        if (role !== 'OWNER' && role !== 'ADMIN') return { success: false, error: 'FORBIDDEN' };
+        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
 
         if (data.id) {
             await prisma.groupSection.update({
@@ -788,7 +842,7 @@ export const GroupService = {
         });
 
         const role = membership?.role;
-        if (role !== 'OWNER' && role !== 'ADMIN') return { success: false, error: 'FORBIDDEN' };
+        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
 
         await Promise.all(
             sectionIds.map((id, index) =>
@@ -813,7 +867,7 @@ export const GroupService = {
 
         const membership = section.group.members[0];
         const role = membership?.role;
-        if (role !== 'OWNER' && role !== 'ADMIN') return { success: false, error: 'FORBIDDEN' };
+        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
 
         // Guard: Prevent deleting Section 1 (order 0)
         if (section.order === 0) {
@@ -871,7 +925,7 @@ export const GroupService = {
             }
         });
 
-        if (!requesterMembership || (requesterMembership.role !== 'OWNER' && requesterMembership.role !== 'ADMIN')) {
+        if (!requesterMembership || !hasAdminRights(requesterMembership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
 
@@ -907,7 +961,7 @@ export const GroupService = {
             where: { userId_groupId: { userId: actorId, groupId } }
         });
 
-        if (!actorMembership || (actorMembership.role !== 'OWNER' && actorMembership.role !== 'ADMIN')) {
+        if (!actorMembership || !hasAdminRights(actorMembership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
 
@@ -962,7 +1016,7 @@ export const GroupService = {
 
         const actorMembership = post.group.members[0];
         const isAuthor = post.authorId === actorId;
-        const isAdminOrOwner = actorMembership && (actorMembership.role === 'OWNER' || actorMembership.role === 'ADMIN');
+        const isAdminOrOwner = actorMembership && hasAdminRights(actorMembership.role);
 
         if (!isAuthor && !isAdminOrOwner) {
             return { success: false, error: 'FORBIDDEN' };
@@ -989,6 +1043,3 @@ function slugify(text: string) {
         .replace(/[^\w-]+/g, '')
         .replace(/--+/g, '-');
 }
-
-
-

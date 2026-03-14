@@ -18,10 +18,9 @@ type Props = {
     onClose: () => void;
     groupId: string;
     groupName: string;
-    accentColor?: string;
 };
 
-export default function SupportMessageModal({ isOpen, onClose, groupId, groupName, accentColor }: Props) {
+export default function SupportMessageModal({ isOpen, onClose, groupId, groupName }: Props) {
     const t = useTranslations('group');
     const [isSent, setIsSent] = useState(false);
     const [error, setError] = useState<string | null>(null);

@@ -43,7 +43,6 @@ export default async function GroupEventsPage({
 
     const eventsData = await getGroupEvents(group.id);
     const t = await getTranslations('group');
-    const accentColor = group.accentColor;
     const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
 
     const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
@@ -61,7 +60,7 @@ export default async function GroupEventsPage({
     });
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500" style={{ '--accent': accentColor } as any}>
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 {/* Events Tab Menu */}
                 <div className="flex items-center gap-6 border-b border-border overflow-x-auto no-scrollbar w-full sm:w-auto">
@@ -133,7 +132,6 @@ export default async function GroupEventsPage({
                                 instructions: event.instructions,
                             }}
                             locale={locale}
-                            accentColor={accentColor}
                             isMember={group.isMember}
                         />
                     ))}

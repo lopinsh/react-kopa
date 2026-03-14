@@ -41,7 +41,28 @@ export const NotificationService = {
     },
 
     /**
+     * Marks a single notification as read, verifying userId ownership.
+     */
+    async markAsReadForUser(notificationId: string, userId: string) {
+        return await prisma.notification.update({
+            where: { id: notificationId, userId },
+            data: { read: true },
+        });
+    },
+
+    /**
+     * Marks all unread notifications as read for the given user.
+     */
+    async markAllAsReadForUser(userId: string) {
+        return await prisma.notification.updateMany({
+            where: { userId, read: false },
+            data: { read: true },
+        });
+    },
+
+    /**
      * Marks a notification as read.
+     * @deprecated Use markAsReadForUser for ownership-checked mutations.
      */
     async markAsRead(notificationId: string) {
         return await prisma.notification.update({
@@ -59,3 +80,4 @@ export const NotificationService = {
         });
     },
 };
+

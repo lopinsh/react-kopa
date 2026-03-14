@@ -33,11 +33,10 @@ type Props = {
         attendeeList: { id: string; name: string | null; image: string | null }[];
     };
     locale: string;
-    accentColor: string;
     isMember: boolean;
 };
 
-export default function EventCard({ event, locale, accentColor, isMember }: Props) {
+export default function EventCard({ event, locale, isMember }: Props) {
     const t = useTranslations('group');
     const [isPending, startTransition] = useTransition();
     const dateLocale = locale === 'lv' ? lv : enUS;
@@ -55,7 +54,6 @@ export default function EventCard({ event, locale, accentColor, isMember }: Prop
     return (
         <div
             className="group relative flex flex-col gap-6 overflow-hidden rounded-3xl border border-border bg-surface p-6 transition-all hover:border-[var(--accent)] hover:shadow-premium"
-            style={{ ['--accent' as string]: accentColor }}
         >
             {/* Banner Background */}
             {event.bannerImage && (

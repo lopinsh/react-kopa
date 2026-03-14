@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { Loader2 } from 'lucide-react';
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 };
 
 export default function InfiniteScrollTrigger({ hasMore, currentLimit, increment = 12 }: Props) {
+    const t = useTranslations('discovery');
     const router = useRouter();
     const searchParams = useSearchParams();
     const observerTarget = useRef<HTMLDivElement>(null);
@@ -42,7 +44,7 @@ export default function InfiniteScrollTrigger({ hasMore, currentLimit, increment
         <div ref={observerTarget} className="py-12 flex justify-center w-full">
             <div className="flex items-center gap-3 text-foreground-muted animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span className="text-sm font-medium tracking-wide font-mono uppercase">Loading more groups...</span>
+                <span className="text-sm font-medium tracking-wide font-mono uppercase">{t('loadingMore')}</span>
             </div>
         </div>
     );

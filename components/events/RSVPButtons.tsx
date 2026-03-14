@@ -9,11 +9,10 @@ import { useRouter } from 'next/navigation';
 type Props = {
     eventId: string;
     initialStatus: 'GOING' | 'INTERESTED' | 'NONE';
-    accentColor: string;
     locale: string;
 };
 
-export default function RSVPButtons({ eventId, initialStatus, accentColor, locale }: Props) {
+export default function RSVPButtons({ eventId, initialStatus, locale }: Props) {
     const [status, setStatus] = useState(initialStatus);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -38,10 +37,9 @@ export default function RSVPButtons({ eventId, initialStatus, accentColor, local
                 className={clsx(
                     "flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all shadow-lg active:scale-95 group relative overflow-hidden",
                     status === 'GOING'
-                        ? "text-white"
+                        ? "bg-[color:var(--accent)] text-white"
                         : "bg-surface-elevated text-foreground hover:bg-white/5 border border-white/5"
                 )}
-                style={status === 'GOING' ? { backgroundColor: accentColor } : {}}
             >
                 {isPending && status === 'GOING' && (
                     <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
@@ -58,10 +56,9 @@ export default function RSVPButtons({ eventId, initialStatus, accentColor, local
                 className={clsx(
                     "flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all group relative overflow-hidden",
                     status === 'INTERESTED'
-                        ? "border-2"
+                        ? "border-2 border-[color:var(--accent)] text-[color:var(--accent)]"
                         : "border-2 border-border text-foreground-muted hover:border-foreground-muted/50 hover:text-foreground"
                 )}
-                style={status === 'INTERESTED' ? { borderColor: accentColor, color: accentColor } : {}}
             >
                 {isPending && status === 'INTERESTED' && (
                     <div className="absolute inset-0 bg-black/5 flex items-center justify-center">

@@ -10,10 +10,9 @@ type Props = {
     onClose: () => void;
     groupId: string;
     groupName: string;
-    accentColor?: string;
 };
 
-export default function InquiryModal({ isOpen, onClose, groupId, groupName, accentColor }: Props) {
+export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Props) {
     const t = useTranslations('group');
     const [message, setMessage] = useState('');
     const [isPending, startTransition] = useTransition();

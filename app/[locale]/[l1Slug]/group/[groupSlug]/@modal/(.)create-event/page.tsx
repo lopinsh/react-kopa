@@ -27,7 +27,7 @@ export default async function CreateEventModal({
 
     return (
         <DialogModal>
-            <EventCreationWizard groupId={group.id} groupSlug={group.slug} l1Slug={l1Slug} accentColor={group.accentColor} />
+            <EventCreationWizard groupId={group.id} groupSlug={group.slug} l1Slug={l1Slug} />
         </DialogModal>
     );
 }

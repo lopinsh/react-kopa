@@ -7,6 +7,7 @@ import { Link, useRouter } from '@/i18n/routing';
 import { useTransition, useState } from 'react';
 import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions';
 import { useToast } from '@/hooks/use-toast';
+import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 export interface Member {
     id: string;
@@ -24,14 +25,13 @@ export interface Member {
 
 type Props = {
     member: Member;
-    accentColor: string;
     groupId: string;
     currentUserRole: string | null;
     locale: string;
     l1Slug: string;
 };
 
-export default function MemberCard({ member, accentColor, groupId, currentUserRole, locale, l1Slug }: Props) {
+export default function MemberCard({ member, groupId, currentUserRole, locale, l1Slug }: Props) {
     const t = useTranslations('group');
     const router = useRouter();
     const { success, error: toastError } = useToast();
@@ -41,10 +41,10 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
     const canViewProfile = member.user.isProfilePublic;
 
     // Management permissions (matches GroupService logic)
-    const isOwner = currentUserRole === 'OWNER';
-    const isAdmin = currentUserRole === 'ADMIN';
-    const isTargetOwner = member.role === 'OWNER';
-    const isTargetAdmin = member.role === 'ADMIN';
+    const isOwner = checkIsOwner(currentUserRole);
+    const isAdmin = hasAdminRights(currentUserRole); // Note: hasAdminRights includes Owner, but here we likely want "is at least admin"
+    const isTargetOwner = checkIsOwner(member.role);
+    const isTargetAdmin = member.role === 'ADMIN'; // Explicit admin check for target
     const isTargetMember = member.role === 'MEMBER';
 
     // Owners can promote/demote and kick anyone except themselves (or rather, except other owners if we had multiple)
@@ -74,7 +74,6 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
     return (
         <div
             className="flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-[var(--accent)]/30 transition-all group relative overflow-hidden"
-            style={{ '--accent': accentColor } as React.CSSProperties}
         >
             {/* Subtle background glow on hover */}
             <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[var(--accent)] opacity-0 blur-[40px] transition-opacity group-hover:opacity-[0.03] pointer-events-none" />
@@ -125,10 +124,9 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
                             )}
                         </div>
                     )}
-                    {(member.role === 'OWNER' || member.role === 'ADMIN') && (
+                    {hasAdminRights(member.role) && (
                         <div
-                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium"
-                            style={{ backgroundColor: accentColor }}
+                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium bg-[color:var(--accent)]"
                             title={t(`role_${member.role.toLowerCase()}`)}
                         >
                             <Shield className="h-3 w-3 text-white" />
@@ -150,7 +148,7 @@ export default function MemberCard({ member, accentColor, groupId, currentUserRo
                     )}
                     <p className={clsx(
                         "text-[10px] font-black uppercase tracking-widest mt-0.5",
-                        member.role === 'OWNER' ? "text-[var(--accent)]" : "text-foreground-muted"
+                        checkIsOwner(member.role) ? "text-[var(--accent)]" : "text-foreground-muted"
                     )}>
                         {t(`role_${member.role.toLowerCase()}`)}
                     </p>

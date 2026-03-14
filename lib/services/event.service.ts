@@ -4,6 +4,7 @@ import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
+import { hasAdminRights } from '@/lib/utils/permissions';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -99,7 +100,7 @@ export class EventService {
             }
         });
 
-        if (!membership || (membership.role !== 'OWNER' && membership.role !== 'ADMIN')) {
+        if (!membership || !hasAdminRights(membership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
 
@@ -192,7 +193,7 @@ export class EventService {
         });
 
         const isOwner = event.creatorId === userId;
-        const isAdmin = membership && (membership.role === 'OWNER' || membership.role === 'ADMIN');
+        const isAdmin = membership && hasAdminRights(membership.role);
 
         if (!isOwner && !isAdmin) {
             return { success: false, error: 'FORBIDDEN' };

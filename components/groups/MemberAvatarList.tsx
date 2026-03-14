@@ -6,6 +6,7 @@ import { User, ChevronRight, MessageSquare } from 'lucide-react';
 import { clsx } from 'clsx';
 import MemberMoreModal from '../modals/MemberMoreModal';
 import SupportMessageModal from '../modals/SupportMessageModal';
+import { hasAdminRights } from '@/lib/utils/permissions';
 
 type Props = {
     members: {
@@ -43,13 +44,13 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                     <div
                         key={user.id}
                         onClick={() => {
-                            if (isMember && (role === 'OWNER' || role === 'ADMIN')) {
+                            if (isMember && hasAdminRights(role)) {
                                 setIsSupportModalOpen(true);
                             }
                         }}
                         className={clsx(
                             "group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-2 transition-all hover:bg-white/[0.05] hover:shadow-sm relative overflow-hidden",
-                            isMember && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:border-[var(--accent)]/30"
+                            isMember && hasAdminRights(role) && "cursor-pointer hover:border-[var(--accent)]/30"
                         )}
                     >
                         {/* Avatar */}
@@ -69,7 +70,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                                 )}
                             </div>
 
-                            {(role === 'OWNER' || role === 'ADMIN') && (
+                            {hasAdminRights(role) && (
                                 <div
                                     className={clsx(
                                         "absolute -top-1.5 -right-1.5 p-0.5 rounded-full border border-background shadow-xs scale-90",
@@ -99,7 +100,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                         </div>
 
                         {/* Hover Background Accent */}
-                        {isMember && (role === 'OWNER' || role === 'ADMIN') && (
+                        {isMember && hasAdminRights(role) && (
                             <div className="absolute right-2 opacity-0 group-hover:opacity-100 transition-all translate-x-1 group-hover:translate-x-0">
                                 <ChevronRight className="h-3.5 w-3.5 text-foreground-muted" />
                             </div>

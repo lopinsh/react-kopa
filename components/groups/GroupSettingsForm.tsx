@@ -173,7 +173,6 @@ export default function GroupSettingsForm({
                                 groupId={group.id}
                                 initialSections={group.sections || []}
                                 locale={locale}
-                                accentColor={accentColor}
                             />
                         </div>
                     )}

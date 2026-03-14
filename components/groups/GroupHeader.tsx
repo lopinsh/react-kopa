@@ -10,19 +10,22 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
+import dynamic from 'next/dynamic';
 import { joinGroup, leaveGroup, deleteGroup, cancelJoinRequest } from '@/actions/group-actions';
 import { Link, useRouter } from '@/i18n/routing';
 import { clsx } from 'clsx';
-import ApplicationModal from '../modals/ApplicationModal';
-import ReportModal from '../modals/ReportModal';
-import AuthGateModal from '../modals/AuthGateModal';
-import InquiryModal from '../modals/InquiryModal';
-import SupportMessageModal from '../modals/SupportMessageModal';
+const ApplicationModal = dynamic(() => import('../modals/ApplicationModal'), { ssr: false });
+const ReportModal = dynamic(() => import('../modals/ReportModal'), { ssr: false });
+const InquiryModal = dynamic(() => import('../modals/InquiryModal'), { ssr: false });
+const SupportMessageModal = dynamic(() => import('../modals/SupportMessageModal'), { ssr: false });
+const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
+
 import { useAuthGate } from '@/lib/useAuthGate';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { usePathname } from '@/i18n/routing';
 import { getCategoryIcon } from '@/lib/icons';
+import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 import type { GroupContext } from '@/lib/services/group.service';
 import { getContrastForeground } from '@/lib/color-utils';
@@ -36,7 +39,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const t = useTranslations('group');
     const locale = useLocale();
     const router = useRouter();
-    const { userRole, isMember, accentColor } = useGroupContext();
+    const { userRole, isMember } = useGroupContext();
     const [isPending, startTransition] = useTransition();
     const [isAppModalOpen, setAppModalOpen] = useState(false);
     const [isReportModalOpen, setReportModalOpen] = useState(false);
@@ -49,8 +52,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
     const pathname = usePathname();
 
-    const isOwnerOrAdmin = userRole === 'OWNER' || userRole === 'ADMIN';
-    const isOwner = userRole === 'OWNER';
+    const isOwnerOrAdmin = hasAdminRights(userRole);
+    const isOwner = checkIsOwner(userRole);
 
     // Close more menu on outside click
     useEffect(() => {
@@ -103,8 +106,15 @@ export default function GroupHeader({ group, l1Slug }: Props) {
         alert(t('linkCopied')); // We might need to add this key or just use a generic message
     };
 
+    interface BreadcrumbSegment {
+        label: string;
+        href: string;
+        isL1: boolean;
+        slug?: string;
+    }
+
     // Build breadcrumb segments: L1 > L2
-    const breadcrumbSegments = [];
+    const breadcrumbSegments: BreadcrumbSegment[] = [];
 
     // Add L1 if it exists
     if (group.category.parentTitle) {
@@ -166,7 +176,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                 {/* ── Breadcrumb & Mobile Actions ─────────────────────────────── */}
                 <div className="mb-4 flex items-start justify-between gap-4">
                     <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5 text-sm" aria-label="breadcrumb">
-                        {breadcrumbSegments.map((seg: any, i) => {
+                        {breadcrumbSegments.map((seg, i) => {
                             const L1Color = group.category.color;
                             const Icon = seg.isL1 && seg.slug ? getCategoryIcon(seg.slug) : null;
                             const l1Text = getContrastForeground(L1Color || '#3B82F6');
@@ -463,38 +473,44 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                 </div>
             </div>
 
-            <ApplicationModal
-                isOpen={isAppModalOpen}
-                onClose={() => setAppModalOpen(false)}
-                groupId={group.id}
-                groupName={group.name}
-                locale={locale}
-            />
+            {isAppModalOpen && (
+                <ApplicationModal
+                    isOpen={isAppModalOpen}
+                    onClose={() => setAppModalOpen(false)}
+                    groupId={group.id}
+                    groupName={group.name}
+                    locale={locale}
+                />
+            )}
 
-            <ReportModal
-                isOpen={isReportModalOpen}
-                onClose={() => setReportModalOpen(false)}
-                targetGroupId={group.id}
-            />
+            {isReportModalOpen && (
+                <ReportModal
+                    isOpen={isReportModalOpen}
+                    onClose={() => setReportModalOpen(false)}
+                    targetGroupId={group.id}
+                />
+            )}
 
-            <InquiryModal
-                isOpen={isInquiryModalOpen}
-                onClose={() => setInquiryModalOpen(false)}
-                groupId={group.id}
-                groupName={group.name}
-                accentColor={accentColor ?? undefined}
-            />
+            {isInquiryModalOpen && (
+                <InquiryModal
+                    isOpen={isInquiryModalOpen}
+                    onClose={() => setInquiryModalOpen(false)}
+                    groupId={group.id}
+                    groupName={group.name}
+                />
+            )}
 
-            <SupportMessageModal
-                isOpen={isSupportModalOpen}
-                onClose={() => setSupportModalOpen(false)}
-                groupId={group.id}
-                groupName={group.name}
-                accentColor={accentColor ?? undefined}
-            />
+            {isSupportModalOpen && (
+                <SupportMessageModal
+                    isOpen={isSupportModalOpen}
+                    onClose={() => setSupportModalOpen(false)}
+                    groupId={group.id}
+                    groupName={group.name}
+                />
+            )}
 
 
-            <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />
+            {isModalOpen && <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />}
         </header >
     );
 }

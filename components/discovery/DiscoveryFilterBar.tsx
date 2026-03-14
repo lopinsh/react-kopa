@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
-import { CITIES } from '@/lib/constants';
+import { CITIES, DISCOVERY_TABS, DISCOVERY_VIEWS, type DiscoveryView, type DiscoveryTab } from '@/lib/constants';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { ScopedResult } from '@/lib/types/discovery';
 import { searchContextual } from '@/actions/discovery-actions';
@@ -22,8 +22,8 @@ type Props = {
     activeTags?: string[];
     initialQuery?: string;
     locale: string;
-    currentView: 'grid' | 'list';
-    onViewChange: (view: 'grid' | 'list') => void;
+    currentView: DiscoveryView;
+    onViewChange: (view: DiscoveryView) => void;
 };
 
 // ─── Helper: tag-aware query string builder ───────────────────────────────────
@@ -84,7 +84,7 @@ export default function DiscoveryFilterBar({
     const tSidebar = useTranslations('shell.sidebar');
     const [, startTransition] = useTransition();
 
-    const currentTab = searchParams.get('tab') || 'groups';
+    const currentTab = searchParams.get('tab') || DISCOVERY_TABS[0];
     const city = searchParams.get('city') || 'all';
 
     // ── Search state ────────────────────────────────────────────────────────
@@ -198,8 +198,9 @@ export default function DiscoveryFilterBar({
     const handleCityChange = (val: string) =>
         push(build({ city: val === 'all' ? null : val }));
 
-    const handleTabChange = (tab: 'groups' | 'events') =>
-        push(build({ tab }));
+    const handleTabChange = (tab: DiscoveryTab) => {
+        router.push(`${pathname}?${build({ tab, tags: null, cat: null })}`);
+    };
 
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -383,23 +384,23 @@ export default function DiscoveryFilterBar({
                 {/* Groups / Events toggle — shrink-0 */}
                 <div className="flex h-9 bg-surface-elevated/50 p-0.5 rounded-lg border border-border shrink-0">
                     <button
-                        onClick={() => handleTabChange('groups')}
+                        onClick={() => handleTabChange(DISCOVERY_TABS[0])}
                         className={clsx(
                             'flex items-center justify-center gap-1.5 px-3 text-xs font-bold rounded-md transition-all',
-                            currentTab === 'groups' ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
+                            currentTab === DISCOVERY_TABS[0] ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
                         )}
                     >
-                        <Users className={clsx('h-3.5 w-3.5', currentTab === 'groups' ? 'text-primary' : 'text-foreground-muted')} />
+                        <Users className={clsx('h-3.5 w-3.5', currentTab === DISCOVERY_TABS[0] ? 'text-primary' : 'text-foreground-muted')} />
                         <span className="hidden lg:inline">{tSidebar('groups')}</span>
                     </button>
                     <button
-                        onClick={() => handleTabChange('events')}
+                        onClick={() => handleTabChange(DISCOVERY_TABS[1])}
                         className={clsx(
                             'flex items-center justify-center gap-1.5 px-3 text-xs font-bold rounded-md transition-all',
-                            currentTab === 'events' ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
+                            currentTab === DISCOVERY_TABS[1] ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
                         )}
                     >
-                        <Calendar className={clsx('h-3.5 w-3.5', currentTab === 'events' ? 'text-primary' : 'text-foreground-muted')} />
+                        <Calendar className={clsx('h-3.5 w-3.5', currentTab === DISCOVERY_TABS[1] ? 'text-primary' : 'text-foreground-muted')} />
                         <span className="hidden lg:inline">{tSidebar('events')}</span>
                     </button>
                 </div>
@@ -407,20 +408,20 @@ export default function DiscoveryFilterBar({
                 {/* View toggle — shrink-0 */}
                 <div className="flex h-9 items-center gap-1 rounded-lg border border-border bg-surface p-1 shrink-0">
                     <button
-                        onClick={() => onViewChange('grid')}
+                        onClick={() => onViewChange(DISCOVERY_VIEWS[0])}
                         className={clsx(
                             'flex items-center justify-center rounded-md p-1.5 transition-colors',
-                            currentView === 'grid' ? 'text-primary bg-surface-elevated shadow-sm' : 'text-foreground-muted hover:text-foreground'
+                            currentView === DISCOVERY_VIEWS[0] ? 'text-primary bg-surface-elevated shadow-sm' : 'text-foreground-muted hover:text-foreground'
                         )}
                         aria-label={tDiscover('gridView')}
                     >
                         <LayoutGrid className="h-4 w-4" />
                     </button>
                     <button
-                        onClick={() => onViewChange('list')}
+                        onClick={() => onViewChange(DISCOVERY_VIEWS[1])}
                         className={clsx(
                             'flex items-center justify-center rounded-md p-1.5 transition-colors',
-                            currentView === 'list' ? 'text-primary bg-surface-elevated shadow-sm' : 'text-foreground-muted hover:text-foreground'
+                            currentView === DISCOVERY_VIEWS[1] ? 'text-primary bg-surface-elevated shadow-sm' : 'text-foreground-muted hover:text-foreground'
                         )}
                         aria-label={tDiscover('listView')}
                     >

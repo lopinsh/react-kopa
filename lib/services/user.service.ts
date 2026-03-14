@@ -29,6 +29,18 @@ export const UserService = {
         });
     },
 
+    /**
+     * Checks if a username is available. Returns true if no user with that username exists.
+     */
+    async checkUsernameAvailability(username: string): Promise<boolean> {
+        const existing = await prisma.user.findUnique({
+            where: { username },
+            select: { id: true },
+        });
+        return existing === null;
+    },
+
+
     async updateProfile(userId: string, data: {
         name?: string;
         image?: string;

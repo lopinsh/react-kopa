@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -17,7 +17,7 @@ type Props = {
     placeholder?: string;
 };
 
-const MenuBar = ({ editor }: { editor: any }) => {
+const MenuBar = ({ editor }: { editor: Editor | null }) => {
     if (!editor) return null;
 
     const setLink = () => {
@@ -155,7 +155,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
             }),
         ],
         content: value,
-        immediatelyRender: false,
         onUpdate: ({ editor }) => {
             onChange(editor.getHTML());
         },

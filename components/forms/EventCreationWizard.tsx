@@ -23,6 +23,7 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent } from '@/actions/event-actions';
+import { EVENT_VISIBILITY, type EventVisibility } from '@/lib/constants';
 
 const STEP_SCHEMAS = [0, 1] as const;
 type StepIndex = (typeof STEP_SCHEMAS)[number];
@@ -52,7 +53,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
             startDate: '',
             endDate: '',
             maxParticipants: undefined,
-            visibility: 'PUBLIC',
+            visibility: EVENT_VISIBILITY[0],
             isRecurring: false,
             recurrencePattern: '',
             bannerImage: '',
@@ -61,7 +62,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
         mode: 'onChange',
     });
 
-    const { register, handleSubmit, formState: { errors }, setValue, watch, trigger } = form;
+    const { register, handleSubmit, formState: { errors }, setValue, getValues, watch, trigger } = form;
 
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['title', 'slug', 'startDate', 'endDate', 'location']);
@@ -138,7 +139,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                     type="text"
                                     {...register('title')}
                                     onBlur={(e) => {
-                                        if (!watch('slug')) {
+                                        if (!getValues('slug')) {
                                             const generated = e.target.value
                                                 .toLowerCase()
                                                 .replace(/[^a-z0-9]+/g, '-')
@@ -158,14 +159,14 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                             <div>
                                 <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                     <Type className="h-3.5 w-3.5 text-foreground-muted" />
-                                    URL Slug
+                                    {t('fieldSlug')}
                                 </label>
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs text-foreground-muted">/events/</span>
                                     <input
                                         type="text"
                                         {...register('slug')}
-                                        placeholder="event-slug"
+                                        placeholder={t('fieldSlugPlaceholder')}
                                         className={clsx(
                                             'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
                                             errors.slug ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
@@ -190,13 +191,13 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                             <div>
                                 <label htmlFor="event-banner" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                     <ImageIcon className="h-3.5 w-3.5 text-foreground-muted" />
-                                    Banner Image URL
+                                    {t('fieldBannerImage')}
                                 </label>
                                 <input
                                     id="event-banner"
                                     type="text"
                                     {...register('bannerImage')}
-                                    placeholder="https://images.unsplash.com/..."
+                                    placeholder={t('fieldBannerImagePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
                                         errors.bannerImage ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
@@ -208,12 +209,12 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                             <div>
                                 <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                     <HelpCircle className="h-3.5 w-3.5 text-foreground-muted" />
-                                    Special Instructions
+                                    {t('fieldInstructions')}
                                 </label>
                                 <RichTextEditor
                                     value={watch('instructions') || ''}
                                     onChange={(val) => setValue('instructions', val)}
-                                    placeholder="e.g. Find us near the big oak tree, knock thrice, etc."
+                                    placeholder={t('fieldInstructionsPlaceholder')}
                                 />
                             </div>
 
@@ -237,7 +238,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 <div>
                                     <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                         <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
-                                        End Date (Optional)
+                                        {t('fieldEndDate')}
                                     </label>
                                     <input
                                         type="datetime-local"
@@ -276,8 +277,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         className="h-4 w-4 rounded border-border text-[var(--accent)] focus:ring-[var(--accent)]"
                                     />
                                     <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-foreground">Recurring Event</span>
-                                        <span className="text-xs text-foreground-muted">This event happens on a regular basis</span>
+                                        <span className="text-sm font-bold text-foreground">{t('recurringEvent')}</span>
+                                        <span className="text-xs text-foreground-muted">{t('recurringEventDesc')}</span>
                                     </div>
                                 </label>
                             </div>
@@ -286,12 +287,12 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 <div className="animate-in fade-in slide-in-from-top-2 duration-200">
                                     <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                         <Loader2 className="h-3.5 w-3.5 text-foreground-muted" />
-                                        Recurrence Pattern
+                                        {t('recurrencePattern')}
                                     </label>
                                     <input
                                         type="text"
                                         {...register('recurrencePattern')}
-                                        placeholder="e.g. Every second Tuesday at 19:00"
+                                        placeholder={t('recurrencePatternPlaceholder')}
                                         className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus:border-[var(--accent)] focus:outline-none"
                                     />
                                 </div>
@@ -321,15 +322,15 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                     {t('fieldVisibility')}
                                 </label>
                                 {[
-                                    { val: 'PUBLIC', key: 'typePublic' as const, desc: 'typePublicDesc' as const },
-                                    { val: 'MEMBERS_ONLY', key: 'typeMembersOnly' as const, desc: 'typeMembersOnlyDesc' as const }
+                                    { val: EVENT_VISIBILITY[0], key: 'typePublic' as const, desc: 'typePublicDesc' as const },
+                                    { val: EVENT_VISIBILITY[1], key: 'typeMembersOnly' as const, desc: 'typeMembersOnlyDesc' as const }
                                 ].map(({ val, key, desc }) => {
                                     const isSelected = watch('visibility') === val;
                                     return (
                                         <button
                                             key={val}
                                             type="button"
-                                            onClick={() => setValue('visibility', val as "PUBLIC" | "MEMBERS_ONLY")}
+                                            onClick={() => setValue('visibility', val as EventVisibility)}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
                                                 isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'

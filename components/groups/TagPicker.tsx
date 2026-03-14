@@ -115,12 +115,11 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
 
     useEffect(() => {
         if (!query.trim() || query.trim().length < 2) {
-            setSearchResults([]);
             return;
         }
 
         let cancelled = false;
-        setIsSearching(true);
+        // setIsSearching is now done in handlers to avoid sync effect update
 
         const timer = setTimeout(async () => {
             const result = await searchL2Tags(query, l1.id, locale);
@@ -128,12 +127,11 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                 setSearchResults(result.success ? result.data ?? [] : []);
                 setIsSearching(false);
             }
-        }, 200);
+        }, 500);
 
         return () => {
             cancelled = true;
             clearTimeout(timer);
-            setIsSearching(false);
         };
     }, [query, l1.id, locale]);
 
@@ -194,16 +192,14 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
         setIsOpen(false);
     }
 
-    const selectedTags = useMemo(() => {
-        return tagIds.map((id) => flatTags.find((tag) => tag.id === id)).filter(Boolean) as FlatTag[];
-    }, [tagIds, flatTags]);
+    const selectedTags = tagIds
+        .map((id) => flatTags.find((tag) => tag.id === id))
+        .filter((tag): tag is FlatTag => tag !== undefined);
 
     const selectedKnownIds = new Set(selectedTags.map((tag) => tag.id));
-    const selectedPending = useMemo(() => {
-        return tagIds
-            .filter((id) => !selectedKnownIds.has(id))
-            .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
-    }, [tagIds, selectedKnownIds, pendingById, t]);
+    const selectedPending = tagIds
+        .filter((id) => !selectedKnownIds.has(id))
+        .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
 
     const hasResults = mergedResults.length > 0;
     const showWildcardPrompt = query.trim().length >= 2;
@@ -272,9 +268,16 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                         placeholder={t('searchTopicsPlaceholder', { category: l1.title })}
                         value={query}
                         onChange={(e) => {
-                            setQuery(e.target.value);
+                            const val = e.target.value;
+                            setQuery(val);
                             setIsOpen(true);
                             setWildcardMode(false);
+                            if (val.trim().length < 2) {
+                                setSearchResults([]);
+                                setIsSearching(false);
+                            } else {
+                                setIsSearching(true);
+                            }
                         }}
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -285,6 +288,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                         aria-expanded={isOpen}
                         role="combobox"
                         aria-autocomplete="list"
+                        aria-controls="tag-picker-results"
                     />
                     {query && (
                         <button
@@ -292,6 +296,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                             onClick={(e) => {
                                 e.preventDefault();
                                 setQuery('');
+                                setSearchResults([]);
+                                setIsSearching(false);
                                 inputRef.current?.focus();
                             }}
                             className="text-foreground-muted hover:text-foreground"
@@ -305,7 +311,10 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
             {errors.tagIds && <p className="text-xs text-red-500 font-medium">{errors.tagIds.message}</p>}
 
             {isOpen && (
-                <div className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium max-h-[300px] overflow-y-auto">
+                <div 
+                    id="tag-picker-results"
+                    className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium max-h-[300px] overflow-y-auto"
+                >
                     {wildcardMode ? (
                         <div className="p-3">
                             <p className="mb-2 text-sm text-foreground-muted">{t('confirmCreateSubtopic', { name: query, category: l1.title })}</p>

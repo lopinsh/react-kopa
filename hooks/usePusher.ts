@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { pusherClient } from '@/lib/pusher';
 import { Channel } from 'pusher-js';
 
-export function usePusher(channelName: string, eventName: string, callback: (data: any) => void) {
+export function usePusher<T>(channelName: string, eventName: string, callback: (data: T) => void) {
     const callbackRef = useRef(callback);
 
     // Keep the latest callback reference
@@ -19,7 +19,7 @@ export function usePusher(channelName: string, eventName: string, callback: (dat
         const channel: Channel = pusherClient.subscribe(channelName);
 
         // Define the bound function that calls the latest callback
-        const boundCallback = (data: any) => {
+        const boundCallback = (data: T) => {
             callbackRef.current(data);
         };
 

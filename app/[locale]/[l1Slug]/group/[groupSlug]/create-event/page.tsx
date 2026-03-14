@@ -40,7 +40,6 @@ export default async function CreateEventPage({
                     groupId={group.id}
                     groupSlug={groupSlug}
                     l1Slug={l1Slug}
-                    accentColor={group.accentColor}
                 />
             </div>
         </div>

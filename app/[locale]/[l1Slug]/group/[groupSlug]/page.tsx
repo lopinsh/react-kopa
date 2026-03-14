@@ -26,7 +26,6 @@ export default async function GroupPage({
         notFound();
     }
 
-    const { accentColor } = group;
     const pendingMembers = group.members.filter((m: any) => m.role === 'PENDING');
     const pendingCount = pendingMembers.length;
 

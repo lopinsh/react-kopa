@@ -10,10 +10,9 @@ type Props = {
         startDate: Date;
         endDate?: Date;
     };
-    accentColor: string;
 };
 
-export default function AddToCalendar({ event, accentColor }: Props) {
+export default function AddToCalendar({ event }: Props) {
     const generateGoogleLink = () => {
         const base = 'https://www.google.com/calendar/render?action=TEMPLATE';
         const text = encodeURIComponent(event.title);
@@ -31,7 +30,7 @@ export default function AddToCalendar({ event, accentColor }: Props) {
             rel="noopener noreferrer"
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-3 text-[11px] font-bold text-foreground transition-all hover:bg-surface-elevated active:scale-[0.98]"
         >
-            <Calendar className="h-3.5 w-3.5" style={{ color: accentColor }} />
+            <Calendar className="h-3.5 w-3.5 text-[color:var(--accent)]" />
             ADD TO GOOGLE CALENDAR
         </a>
     );

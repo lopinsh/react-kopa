@@ -7,12 +7,11 @@ import { clsx } from 'clsx';
 import { Users, UserPlus } from 'lucide-react';
 
 type Props = {
-    accentColor: string;
     pendingCount: number;
     showRequests: boolean;
 };
 
-export default function MemberTabs({ accentColor, pendingCount, showRequests }: Props) {
+export default function MemberTabs({ pendingCount, showRequests }: Props) {
     const t = useTranslations('group');
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -36,11 +35,8 @@ export default function MemberTabs({ accentColor, pendingCount, showRequests }: 
         }] : [])
     ];
 
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
-
     return (
         <div
-            style={accentStyle}
             className="mb-8 border-b border-border/50 sticky top-0 bg-surface/80 backdrop-blur-md z-20 -mx-4 px-4 md:-mx-8 md:px-8 pt-2"
         >
             <nav className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-0.5">

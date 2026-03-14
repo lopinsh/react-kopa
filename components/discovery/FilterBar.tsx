@@ -3,8 +3,9 @@
 import { useTranslations } from 'next-intl';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useState, useCallback, useEffect } from 'react';
-import { MapPin, X, Users } from 'lucide-react';
+import { MapPin, Users } from 'lucide-react';
 import { clsx } from 'clsx';
+import { GROUP_TYPES } from '@/lib/constants';
 
 type Category = {
     id: string;
@@ -26,11 +27,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const [query, setQuery] = useState(''); // Keeps local state if needed but search param 'q' is now handled elsewhere
-    useEffect(() => {
-        setQuery(searchParams.get('q') || '');
-    }, [searchParams]);
-
+    const currentQ = searchParams.get('q') || '';
     const currentCity = searchParams.get('city') || 'all';
     const currentCategory = activeCategoryId || searchParams.get('cat') || '';
     const currentType = searchParams.get('type') || 'all';
@@ -69,15 +66,14 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
     };
 
     const clearFilters = () => {
-        setQuery('');
         router.push(pathname);
     };
 
     return (
         <div className="space-y-6 rounded-3xl border border-border bg-surface p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-border pb-4">
-                <h3 className="font-bold text-foreground">Filters</h3>
-                {(query || currentCity !== 'all' || currentCategory) && (
+                <h3 className="font-bold text-foreground">{t('filtersTitle')}</h3>
+                {(currentQ || currentCity !== 'all' || currentCategory) && (
                     <button
                         onClick={clearFilters}
                         className="text-xs font-bold text-red-500 hover:text-red-600 transition-colors"
@@ -114,9 +110,12 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
                         onChange={(e) => handleTypeChange(e.target.value)}
                         className="h-12 w-full appearance-none rounded-2xl border border-border bg-surface pl-10 pr-10 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
                     >
-                        <option value="all">All Group Types</option>
-                        <option value="PUBLIC">Public</option>
-                        <option value="PRIVATE">Private</option>
+                        <option value="all">{t('allTypes')}</option>
+                        {GROUP_TYPES.map((type) => (
+                            <option key={type} value={type}>
+                                {type.charAt(0) + type.slice(1).toLowerCase()}
+                            </option>
+                        ))}
                     </select>
                 </div>
 
@@ -124,7 +123,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
 
             {/* L1 Category Bar */}
             <div className="space-y-3 pt-2">
-                <h4 className="text-sm font-semibold text-foreground">Categories</h4>
+                <h4 className="text-sm font-semibold text-foreground">{t('categoriesTitle')}</h4>
                 <div className="flex flex-col gap-2">
                     {categories.map((cat) => {
                         const isActive = currentCategory === cat.slug;
@@ -158,7 +157,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
             {/* Contextual Filters (Mocked) */}
             {currentCategory && (
                 <div className="space-y-3 pt-4 border-t border-border">
-                    <h4 className="text-sm font-semibold text-foreground">Specific Options</h4>
+                    <h4 className="text-sm font-semibold text-foreground">{t('specificOptions')}</h4>
                     <div className="flex flex-wrap gap-2">
                         {['Option 1', 'Option 2', 'Option 3'].map((opt) => (
                             <button

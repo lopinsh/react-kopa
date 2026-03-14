@@ -35,11 +35,17 @@
         },
         "edit": {
             "bio": "Par mani",
+            "infoText": "Atjauniniet savu publisko profila informāciju.",
+            "bioPlaceholder": "Pastāsti kopienai par sevi...",
+            "citiesLabel": "Pilsētas (atdalītas ar komatu)",
+            "citiesPlaceholder": "Rīga, Liepāja, Valmāja...",
+            "avatarSeed": "Avatāra sēkla (DiceBear)",
+            "avatarSeedPlaceholder": "Pielāgota avatāra sēklas virkne",
             "username": "Lietotājvārds",
             "usernameHint": "Tavs publiskais iesauka. Tikai burti, cipari un pasvītras.",
             "cities": "Pilsētas",
             "citiesHint": "Pievieno pilsētas, kur tu dzīvo, strādā vai pavadi laiku.",
-            "avatarSeed": "Avatāra atslēgvārds",
+            "avatarSeedOld": "Avatāra atslēgvārds",
             "avatarSeedHint": "Ievadi jebkuru vārdu, lai pielāgotu savu avatāra izskatu.",
             "avatarSeedDisabled": "Avatāra pielāgošana drīz būs pieejama."
         },
@@ -77,6 +83,12 @@
         "clearAll": "Notīrīt visu",
         "createNewGroup": "Izveidot jaunu grupu",
         "inThisCategory": "šajā kategorijā",
+        "allCities": "Visas pilsētas",
+        "allTypes": "Visi grupu veidi",
+        "clearFilters": "Notīrīt filtrus",
+        "filtersTitle": "Filtri",
+        "categoriesTitle": "Kategorijas",
+        "specificOptions": "Īpašās opcijas",
         "noGroupsFound": "Grupas netika atrastas",
         "noEventsFound": "Pasākumi netika atrasti",
         "adjustFilters": "Mēģiniet pielāgot filtrus vai meklēšanas vaicājumu, lai atrastu meklēto.",
@@ -89,7 +101,8 @@
         "clearCategory": "Noņemt kategoriju",
         "clearTag": "Noņemt birku",
         "gridView": "Režģa skats",
-        "listView": "Saraksta skats"
+        "listView": "Saraksta skats",
+        "loadingMore": "Ielādē vairāk grupu..."
     },
     "common": {
         "save": "Saglabāt",
@@ -212,6 +225,7 @@
             "contact": "Sazināties",
             "madeWith": "Radīts ar",
             "logoSubtitle": "Atrodi savējos, augam kopā.",
+            "logoInitials": "EK",
             "forCommunity": "kopienai",
             "languageLabel": "Latvija (LV)"
         }
@@ -327,7 +341,30 @@
         "sendInquiry": "Nosūtīt ziņu",
         "error_unauthorized": "Jums jābūt pieteikušamies, lai to izdarītu.",
         "error_not_found": "Grupa nav atrasta.",
-        "error_internal": "Radās iekšēja kļūda."
+        "error_internal": "Radās iekšēja kļūda.",
+        "sections": {
+            "title": "Lapas sadaļas",
+            "subtitle": "Pielāgojiet savas grupas lapu ar līdz pat 6 sadaļām.",
+            "count": "{count} / 6 sadaļas",
+            "newSection": "Jauna sadaļa",
+            "homeAbout": "Sākums / Par mums",
+            "membersOnly": "Tikai biedriem",
+            "emptyContent": "Sadaļa ir tukša...",
+            "edit": "Labot",
+            "done": "Gatavs",
+            "fieldTitle": "Sadaļas nosaukums",
+            "fieldTitlePlaceholder": "piem. BUJ, Noteikumi, Grafiks...",
+            "fieldVisibility": "Redzamība",
+            "visibilityPublic": "Publiska",
+            "visibilityMembersOnly": "Tikai biedriem",
+            "homeVisibilityWarning": "Sākuma sadaļai jāpaliek publiskai.",
+            "fieldContent": "Saturs",
+            "fieldContentPlaceholder": "Pastāstiet biedriem vairāk par šo sadaļu...",
+            "deleteSection": "Dzēst sadaļu",
+            "deleteDisabledWarning": "Sākuma sadaļu nevar dzēst vai pārdēvēt.",
+            "saveSection": "Saglabāt sadaļu",
+            "addSection": "Pievienot jaunu sadaļu"
+        }
     },
     "wizard": {
         "stepOf": "{current}. solis no {total}",
@@ -368,10 +405,15 @@
         "optional": "Neobligāti",
         "fieldDescriptionPlaceholder": "Par ko ir jūsu grupa?",
         "acceptingMembers": "Pieņem jaunus biedrus",
-        "typePublic": "Publiska",
         "typePublicDesc": "Ikviens var redzēt un pievienoties.",
         "typePrivate": "Privāta",
-        "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu."
+        "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
+        "fieldBannerImage": "Banera attēla URL",
+        "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
+        "fieldBannerImageHint": "Ielīmējiet fona banera URL.",
+        "fieldInstructions": "Instrukcijas",
+        "fieldInstructionsPlaceholder": "Tikai biedriem redzamas instrukcijas (piemēram, tikšanās vietas detaļas)...",
+        "fieldInstructionsHint": "Šīs instrukcijas ir redzamas tikai grupas biedriem."
     },
     "admin": {
         "title": "Admina vadības centrs",
@@ -458,8 +500,13 @@
                 "merge": "Apvienot ar...",
                 "reject": "Noraidīt",
                 "confirmReject": "Vai tiešām vēlaties noraidīt un dzēst šo birku?",
-                "submittedBy": "Iesniedza {name} {date}",
-                "usedByGroups": "Izmanto grupas:"
+                "submittedBy": "Iesniedza {name} {date, date, short}",
+                "usedByGroups": "Izmanto grupas:",
+                "parentLabel": "Zem: {title}",
+                "mergeCanonicalTitle": "Apvienot ar aktīvu kanonisko birku",
+                "selectCategoryPlaceholder": "Izvēlieties aktīvu kategoriju...",
+                "selectedCanonicalLabel": "Izvēlētā kanoniskā birka:",
+                "mergeAndNotify": "Apvienot un paziņot grupas īpašniekiem"
             },
             "bulk": {
                 "selected": "atzīmēti",
@@ -525,7 +572,18 @@
         "typePublic": "Publisks",
         "typePublicDesc": "Ikviens var redzēt un pievienoties šim pasākumam.",
         "typeMembersOnly": "Tikai biedriem",
-        "typeMembersOnlyDesc": "Tikai grupas biedri var redzēt un pievienoties.",
+        "typeMembersOnlyDesc": "Tikau grupas biedri var redzēt un pievienoties.",
+        "fieldSlug": "URL adrese",
+        "fieldSlugPlaceholder": "pasakuma-adrese",
+        "fieldBannerImage": "Fona attēla URL",
+        "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
+        "fieldInstructions": "Īpašas instrukcijas",
+        "fieldInstructionsPlaceholder": "piem. Atrodiet mūs pie lielā ozola, klauvējiet trīsreiz u.t.t.",
+        "fieldEndDate": "Beigu datums (pēc izvēles)",
+        "recurringEvent": "Atkārtots pasākums",
+        "recurringEventDesc": "Šis pasākums notiek regulāri",
+        "recurrencePattern": "Atkārtošanās modelis",
+        "recurrencePatternPlaceholder": "piem. Katru otro otrdienu plkst. 19:00",
         "back": "Atpakaļ",
         "next": "Tālāk",
         "submit": "Izveidot pasākumu"

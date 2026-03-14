@@ -260,7 +260,6 @@ export default async function EventPage({
                                 <RSVPButtons
                                     eventId={event.id}
                                     initialStatus={attendanceStatus}
-                                    accentColor={accentColor}
                                     locale={locale}
                                 />
 
@@ -273,7 +272,6 @@ export default async function EventPage({
                                             startDate: event.startDate,
                                             endDate: event.endDate || undefined
                                         }}
-                                        accentColor={accentColor}
                                     />
                                     <button className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors group/share">
                                         <Share2 className="h-3.5 w-3.5 group-hover/share:text-[var(--accent)] transition-colors" />

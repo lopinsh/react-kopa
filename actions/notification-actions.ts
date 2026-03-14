@@ -1,27 +1,23 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
-import { ActionResponse } from '@/types/actions';
+import type { ActionResponse } from '@/types/actions';
+import { NotificationService, type NotificationPayload } from '@/lib/services/notification.service';
 
 /**
  * Fetch notifications for the current user.
  */
-export async function getNotifications() {
+export async function getNotifications(): Promise<ActionResponse<Awaited<ReturnType<typeof NotificationService.getUserNotifications>>>> {
     const session = await auth();
-    if (!session?.user?.id) return [];
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const notifications = await prisma.notification.findMany({
-            where: { userId: session.user.id },
-            orderBy: { createdAt: 'desc' },
-            take: 20
-        });
-        return notifications;
+        const notifications = await NotificationService.getUserNotifications(session.user.id, 20);
+        return { success: true, data: notifications };
     } catch (error) {
         console.error('[getNotifications] Error:', error);
-        return [];
+        return { success: false, error: 'ACTION_FAILED' };
     }
 }
 
@@ -33,15 +29,7 @@ export async function markAsRead(id: string): Promise<ActionResponse> {
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        await prisma.notification.update({
-            where: {
-                id,
-                userId: session.user.id // Ensure user owns the notification
-            },
-            data: { read: true }
-        });
-
-        // Revalidate where notifications are shown (usually layout/nav)
+        await NotificationService.markAsReadForUser(id, session.user.id);
         revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {
@@ -58,14 +46,7 @@ export async function markAllAsRead(): Promise<ActionResponse> {
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        await prisma.notification.updateMany({
-            where: {
-                userId: session.user.id,
-                read: false
-            },
-            data: { read: true }
-        });
-
+        await NotificationService.markAllAsReadForUser(session.user.id);
         revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {
@@ -75,46 +56,15 @@ export async function markAllAsRead(): Promise<ActionResponse> {
 }
 
 /**
- * Internal utility to create a notification.
- * This is NOT an exported server action for client use (no 'use server' needed if used only from other actions).
- * But we keep it in the same file for organization.
+ * Internal utility to create a notification with Pusher delivery.
+ * Called from other actions (e.g. group-actions.ts) after mutations.
+ * Delegates all DB work to NotificationService.
  */
-export async function createNotification({
-    userId,
-    type,
-    translationKey,
-    args,
-    link
-}: {
-    userId: string;
-    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'TAG_MERGED';
-    translationKey: string;
-    args?: Record<string, string | number>;
-    link?: string;
-}) {
+export async function createNotification(payload: NotificationPayload) {
     try {
-        const notification = await prisma.notification.create({
-            data: {
-                userId,
-                type,
-                title: type, // Store the raw type in the title since we will use dynamic `title_${type}` in the frontend.
-                message: JSON.stringify({ key: translationKey, args }),
-                link,
-            }
-        });
-
-        // Trigger real-time event for this specific user
-        const { pusherServer } = await import('@/lib/pusher');
-        await pusherServer.trigger(
-            `private-user-${userId}`,
-            'new-notification',
-            notification
-        );
-
-        return notification;
+        return await NotificationService.createNotification(payload);
     } catch (error) {
         console.error('[createNotification] Error:', error);
         return null;
     }
 }
-

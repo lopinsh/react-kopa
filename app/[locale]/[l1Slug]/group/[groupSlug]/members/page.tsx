@@ -69,8 +69,6 @@ export default async function GroupMembersPage({
     }
 
     const t = await getTranslations('group');
-    const accentColor = group.accentColor;
-
     const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
     const pendingMembers = group.members.filter((m) => m.role === 'PENDING') as Member[];
     const acceptedMembers = group.members.filter((m) => m.role !== 'PENDING')
@@ -86,7 +84,6 @@ export default async function GroupMembersPage({
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-[400px]">
             {/* Contextual In-Page Navigation */}
             <MemberTabs
-                accentColor={accentColor}
                 pendingCount={pendingMembers.length}
                 showRequests={isOwnerOrAdmin}
             />
@@ -117,7 +114,6 @@ export default async function GroupMembersPage({
                         <MemberCard
                             key={member.id}
                             member={member}
-                            accentColor={accentColor}
                             groupId={group.id}
                             currentUserRole={group.userRole as string}
                             locale={locale}

@@ -40,7 +40,6 @@ export default async function GroupLayout({
             slug: group.slug,
             userRole: group.userRole,
             isMember: group.isMember,
-            accentColor: group.accentColor,
             pendingCount,
             sections: group.sections
         }}>

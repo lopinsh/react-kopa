@@ -27,7 +27,7 @@ type Props = {
 
 import type { Locale } from 'date-fns';
 
-function NotificationContent({ n, t, dateLocale }: { n: Notification, t: (key: string, args?: any) => string, dateLocale: Locale }) {
+function NotificationContent({ n, t, dateLocale }: { n: Notification, t: any, dateLocale: Locale }) {
     const parsed = JSON.parse(n.message);
     const title = t(`title_${n.type}`);
     const message = t(parsed.key, parsed.args || {});
@@ -80,8 +80,10 @@ export default function NotificationCenter({ locale }: Props) {
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            const data = await getNotifications();
-            setNotifications(data as Notification[]);
+            const result = await getNotifications();
+            if (result.success && result.data) {
+                setNotifications(result.data as Notification[]);
+            }
         };
         fetchNotifications();
 

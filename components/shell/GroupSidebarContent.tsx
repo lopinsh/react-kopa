@@ -9,6 +9,7 @@ import { clsx } from 'clsx';
 import { getGroupRole } from '@/actions/group-actions';
 import { useSearchParams } from 'next/navigation';
 import { MembershipRole } from '@prisma/client';
+import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
 
 type Props = {
     l1Slug: string;
@@ -39,8 +40,8 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     }, [l1Slug, groupSlug]);
 
     const baseUrl = `/${l1Slug}/group/${groupSlug}`;
-    const isMember = state.role === 'OWNER' || state.role === 'ADMIN' || state.role === 'MEMBER';
-    const isOwnerOrAdmin = state.role === 'OWNER' || state.role === 'ADMIN';
+    const isMember = isAtLeastMember(state.role);
+    const isOwnerOrAdmin = hasAdminRights(state.role);
 
     const GROUP_NAV = [
         { id: 'info', icon: Info, label: t('informationTitle'), href: baseUrl, memberOnly: false },

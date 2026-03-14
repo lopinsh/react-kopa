@@ -81,11 +81,14 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         {item.submittedLabel}
                     </h3>
                     <p className="text-sm text-foreground-muted mt-1">
-                        {t('submittedBy', { name: item.submitter?.username || 'Unknown', date: item.submittedAt?.toLocaleDateString() || 'Unknown' })}
+                        {t('submittedBy', { 
+                            name: item.submitter?.username || t('unknown'), 
+                            date: item.submittedAt || new Date() 
+                        })}
                     </p>
                     {item.parent && (
                         <p className="text-sm font-medium mt-1">
-                            Under: {item.parent.title}
+                            {t('parentLabel', { title: item.parent.title })}
                         </p>
                     )}
                 </div>
@@ -191,13 +194,13 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
             {activeAction === 'merge' && (
                 <div className="mt-4 p-4 bg-surface-elevated rounded-lg border border-border">
-                    <label className="block text-xs font-semibold text-foreground-muted mb-2">Merge into Active Canonical Tag</label>
+                    <label className="block text-xs font-semibold text-foreground-muted mb-2">{t('mergeCanonicalTitle')}</label>
                     <select
                         value={mergeIntoId}
                         onChange={e => setMergeIntoId(e.target.value)}
                         className="w-full bg-surface border border-border rounded px-3 py-2 text-sm mb-4"
                     >
-                        <option value="">Select an active category...</option>
+                        <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (
                             <option key={opt.id} value={opt.id}>
                                 {opt.translations.find(t => t.lang === 'en')?.title || opt.slug}
@@ -207,7 +210,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
                     {mergeIntoId && (
                         <div className="mb-4">
-                            <p className="text-xs text-foreground-muted mb-1">Selected canonical:</p>
+                            <p className="text-xs text-foreground-muted mb-1">{t('selectedCanonicalLabel')}</p>
                             <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
                                 {canonicalOptions.find(o => o.id === mergeIntoId)?.translations.find(t => t.lang === 'en')?.title || canonicalOptions.find(o => o.id === mergeIntoId)?.slug}
                             </span>
@@ -224,7 +227,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                             disabled={isPending || !mergeIntoId}
                             className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded hover:bg-amber-600 transition-colors disabled:opacity-50"
                         >
-                            Merge and notify group owners
+                            {t('mergeAndNotify')}
                         </button>
                     </div>
                 </div>

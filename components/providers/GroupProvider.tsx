@@ -8,7 +8,6 @@ export interface GroupState {
     slug: string;
     userRole: MembershipRole | 'PENDING' | null;
     isMember: boolean;
-    accentColor: string;
     pendingCount?: number;
     sections: Array<{
         id: string;

@@ -8,6 +8,7 @@ import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, Lucid
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';
+import { hasAdminRights } from '@/lib/utils/permissions';
 
 type Props = {
     group: GroupContext;
@@ -19,7 +20,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const t = useTranslations('group');
     const pathname = usePathname();
     const locale = useLocale();
-    const { isMember, userRole, accentColor, sections } = useGroupContext();
+    const { isMember, userRole, sections } = useGroupContext();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navRef = useRef<HTMLElement>(null);
@@ -128,8 +129,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
         }
     };
 
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
-    const isOwnerOrAdmin = userRole === 'OWNER' || userRole === 'ADMIN';
+    const isOwnerOrAdmin = hasAdminRights(userRole);
 
     // Handle sticky state detection using IntersectionObserver
     const sentinelRef = useRef<HTMLDivElement>(null);
@@ -154,7 +154,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
 
     return (
         <div
-            style={accentStyle}
             className={clsx(
                 "z-30 transition-all duration-300 sticky top-0 bg-surface",
                 isScrolled
@@ -192,7 +191,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             return (
                                 <Link
                                     key={tab.id}
-                                    href={tab.href as any}
+                                    href={tab.href as string}
                                     onClick={(e) => handleTabClick(e, tab.id)}
                                     className={clsx(
                                         "relative flex items-center gap-2 px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
@@ -222,7 +221,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                 group={group}
                 l1Slug={l1Slug}
                 groupSlug={group.slug}
-                accentColor={accentColor}
             />
         </div>
     );

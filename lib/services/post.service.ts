@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { hasAdminRights } from '@/lib/utils/permissions';
 import { ActionError } from '@/types/actions';
 import { pusherServer } from '@/lib/pusher';
 
@@ -117,7 +118,7 @@ export const PostService = {
                 }
             });
 
-            const isPrivileged = membership && (membership.role === 'OWNER' || membership.role === 'ADMIN');
+            const isPrivileged = membership && hasAdminRights(membership.role);
 
             if (!isAuthor && !isPrivileged) {
                 throw new ActionError('FORBIDDEN');
