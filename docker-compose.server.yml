@@ -38,6 +38,7 @@ services:
       NEXTAUTH_URL: "https://ejam.lumm.eu"
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       AUTH_SECRET: ${AUTH_SECRET}
+      AUTH_TRUST_HOST: "true"
       PUSHER_APP_ID: ${SOKETI_APP_ID}
       NEXT_PUBLIC_PUSHER_KEY: ${SOKETI_APP_KEY}
       PUSHER_SECRET: ${SOKETI_APP_SECRET}
@@ -45,7 +46,6 @@ services:
       NEXT_PUBLIC_PUSHER_HOST: "soketi"
       NEXT_PUBLIC_PUSHER_PORT: "6001"
       NEXT_PUBLIC_PUSHER_TLS: "false"
-      AUTH_TRUST_HOST: "true"
     ports:
       - "3000:3000"
     depends_on:
@@ -61,11 +61,3 @@ volumes:
       type: none
       o: bind
       device: /srv/dev-disk-by-uuid-61316c2e-d3f3-489a-aa11-0f361612db56/Config/EJAM-APP/db_data
-
-# Note: make sure your Dockerfile includes these ARG declarations before the build step:
-# ARG NEXT_PUBLIC_PUSHER_KEY
-# ARG NEXT_PUBLIC_PUSHER_HOST
-# ARG NEXT_PUBLIC_PUSHER_PORT
-# ENV NEXT_PUBLIC_PUSHER_KEY=$NEXT_PUBLIC_PUSHER_KEY
-# ENV NEXT_PUBLIC_PUSHER_HOST=$NEXT_PUBLIC_PUSHER_HOST
-# ENV NEXT_PUBLIC_PUSHER_PORT=$NEXT_PUBLIC_PUSHER_PORT
