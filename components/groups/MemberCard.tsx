@@ -4,8 +4,9 @@ import { useTranslations } from 'next-intl';
 import { Shield, User as UserIcon, MessageSquare, ExternalLink, MoreVertical, Trash2, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Link, useRouter } from '@/i18n/routing';
-import { useTransition, useState } from 'react';
+import { useTransition } from 'react';
 import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions';
+import { getOrCreateConversation } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
@@ -67,6 +68,19 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 router.refresh();
             } else {
                 toastError(t('ACTION_FAILED'));
+            }
+        });
+    };
+
+    const handleMessage = () => {
+        if (!canMessage || isPending) return;
+
+        startTransition(async () => {
+            const result = await getOrCreateConversation(member.user.id);
+            if (result.success) {
+                router.push('/messages');
+            } else {
+                toastError(t('messageFailed'));
             }
         });
     };
@@ -197,13 +211,21 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
 
             <div className="grid grid-cols-2 gap-2 pt-2">
                 {canMessage && member.user.username ? (
-                    <div
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60"
-                        title="Direct Messaging coming soon"
+                    <button
+                        onClick={handleMessage}
+                        disabled={isPending}
+                        className={clsx(
+                            "flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-border text-[10px] font-bold uppercase tracking-wider text-foreground transition-all",
+                            isPending ? "opacity-50 cursor-not-allowed" : "hover:border-[var(--accent)] hover:text-[var(--accent)] bg-surface-elevated"
+                        )}
                     >
-                        <MessageSquare className="h-3.5 w-3.5" />
+                        {isPending ? (
+                            <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                        ) : (
+                            <MessageSquare className="h-3.5 w-3.5" />
+                        )}
                         {t('sendMessage')}
-                    </div>
+                    </button>
                 ) : (
                     <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
                         <MessageSquare className="h-3.5 w-3.5" />

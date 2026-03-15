@@ -33,6 +33,8 @@ model User {
   reports             Report[]             @relation("FiledReports")
   sessions            Session[]
   submittedCategories Category[]           @relation("SubmittedCategories")
+  conversations       Conversation[]       @relation("ConversationParticipants")
+  directMessages      Message[]            @relation("SentMessages")
 }
 
 model Account {
@@ -216,10 +218,36 @@ model Post {
   content   String
   authorId  String
   groupId   String
+  parentId  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  parent    Post?    @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Post[]   @relation("PostReplies")
+}
+
+model Conversation {
+  id           String    @id @default(cuid())
+  isBlocked    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  participants User[]    @relation("ConversationParticipants")
+  messages     Message[]
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  content        String
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  conversationId String
+  senderId       String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([senderId])
 }
 
 model Notification {
