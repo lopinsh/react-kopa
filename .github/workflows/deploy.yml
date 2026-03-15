@@ -60,6 +60,17 @@ jobs:
             prisma \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/prisma
 
+      - name: Run migrations
+        run: |
+          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "docker run --rm \
+              --network ejam-kopa_default \
+              -e DATABASE_URL='postgresql://kopa_user:kopa_password@ejam-kopa-db:5432/ejam_kopa?schema=public' \
+              -v /root/ejam-kopa/prisma:/app/prisma \
+              node:20-alpine \
+              sh -c 'cd /app && npm install prisma@6 --legacy-peer-deps 2>/dev/null && npx prisma migrate deploy'"
+
       - name: Deploy on server
         run: |
           ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
