@@ -308,7 +308,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                 </div>
             </div>
 
-            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{errors.tagIds.message}</p>}
+            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{/* @ts-ignore */}{t(errors.tagIds.message)}</p>}
 
             {isOpen && (
                 <div 
@@ -519,7 +519,11 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                                     type="button"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        setIsOpen(false);
+                                        if (query.trim().length >= 2 && !wildcardMode) {
+                                            createPending(l1.id, query);
+                                        } else {
+                                            setIsOpen(false);
+                                        }
                                     }}
                                     className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98]"
                                     style={{ backgroundColor: accentColor }}

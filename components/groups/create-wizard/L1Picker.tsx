@@ -31,7 +31,7 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
         return (
             <div className="space-y-4 animate-in fade-in duration-300">
                 <label className="mb-2 block text-sm font-medium text-foreground">
-                    {t('step1Title')}
+                    {t('step1Title')} <span className="text-red-500">*</span>
                 </label>
                 <button
                     type="button"
@@ -65,7 +65,7 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
     return (
         <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
             <label className="mb-2 flex items-center justify-between text-sm font-medium text-foreground">
-                <span>{t('step1Title')}</span>
+                <span>{t('step1Title')} <span className="text-red-500">*</span></span>
                 {value && (
                     <button
                         type="button"

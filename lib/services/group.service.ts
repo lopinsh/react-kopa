@@ -389,7 +389,6 @@ export const GroupService = {
                 type: data.type,
                 categoryId: targetCategoryId,
                 bannerImage: data.bannerImage,
-                instructions: data.instructions,
                 discordLink: data.discordLink,
                 websiteLink: data.websiteLink,
                 instagramLink: data.instagramLink,
@@ -408,13 +407,7 @@ export const GroupService = {
                             content: data.description || '',
                             order: 0,
                             visibility: 'PUBLIC'
-                        },
-                        ...(data.instructions ? [{
-                            title: 'Member Instructions',
-                            content: data.instructions,
-                            order: 1,
-                            visibility: 'MEMBERS_ONLY' as const
-                        }] : [])
+                        }
                     ]
                 }
             }
@@ -579,14 +572,24 @@ export const GroupService = {
 
         const canEditTaxonomy = role === 'OWNER' || isAppAdmin;
 
+        // Check for slug collisions if slug is being updated
+        if (data.slug) {
+            const existingSlug = await prisma.group.findFirst({
+                where: { slug: data.slug, id: { not: groupId } }
+            });
+            if (existingSlug) {
+                return { success: false, error: 'VALIDATION_FAILED' }; // Slug taken
+            }
+        }
+
         // Taxonomy can be edited by group owners and app admins.
         const updateData: Prisma.GroupUpdateInput = {
             name: data.name,
+            slug: data.slug || undefined,
             description: data.description,
             city: data.city,
             type: data.type,
             bannerImage: data.bannerImage,
-            instructions: data.instructions,
             discordLink: data.discordLink,
             websiteLink: data.websiteLink,
             instagramLink: data.instagramLink,

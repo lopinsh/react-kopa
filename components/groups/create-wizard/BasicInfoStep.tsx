@@ -22,6 +22,7 @@ export default function BasicInfoStep({ accentColor }: Props) {
                 <label htmlFor="group-name" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                     <Type className="h-3.5 w-3.5 text-foreground-muted" />
                     {t('fieldName')}
+                    <span className="text-red-500">*</span>
                 </label>
                 <input
                     id="group-name"
@@ -35,7 +36,7 @@ export default function BasicInfoStep({ accentColor }: Props) {
                     )}
                     style={{ ['--tw-ring-color' as string]: accentColor }}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
+                {errors.name && <p className="mt-1 text-xs text-red-500">{/* @ts-ignore */}{t(errors.name.message)}</p>}
             </div>
 
             {/* Description */}
@@ -73,22 +74,6 @@ export default function BasicInfoStep({ accentColor }: Props) {
                 />
                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{errors.bannerImage.message}</p>}
                 <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
-            </div>
-
-            {/* Instructions */}
-            <div>
-                <label htmlFor="group-instructions" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <HelpCircle className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldInstructions')}
-                    <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
-                </label>
-                <RichTextEditor
-                    value={watch('instructions') || ''}
-                    onChange={(val) => setValue('instructions', val)}
-                    placeholder={t('fieldInstructionsPlaceholder')}
-                />
-                {errors.instructions && <p className="mt-1 text-xs text-red-500">{errors.instructions.message}</p>}
-                <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldInstructionsHint')}</p>
             </div>
         </div>
     );
