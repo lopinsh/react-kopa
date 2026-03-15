@@ -62,5 +62,5 @@ jobs:
           ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "cd /root/ejam-kopa && \
-             docker compose -f docker-compose.server.yml pull && \
-             docker compose -f docker-compose.server.yml up -d"
+             docker-compose -f docker-compose.server.yml pull && \
+             docker-compose -f docker-compose.server.yml up -d"
