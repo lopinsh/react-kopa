@@ -12,7 +12,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -45,6 +45,7 @@ services:
       NEXT_PUBLIC_PUSHER_HOST: "soketi"
       NEXT_PUBLIC_PUSHER_PORT: "6001"
       NEXT_PUBLIC_PUSHER_TLS: "false"
+      AUTH_TRUST_HOST: "true"
     ports:
       - "3000:3000"
     depends_on:
