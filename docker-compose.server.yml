@@ -55,11 +55,16 @@ services:
 
 volumes:
   db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/dev-disk-by-uuid-61316c2e-d3f3-489a-aa11-0f361612db56/Config/EJAM-APP/db_data
 
-    # Note: make sure your Dockerfile includes these ARG declarations before the build step:
-    # ARG NEXT_PUBLIC_PUSHER_KEY
-    # ARG NEXT_PUBLIC_PUSHER_HOST
-    # ARG NEXT_PUBLIC_PUSHER_PORT
-    # ENV NEXT_PUBLIC_PUSHER_KEY=$NEXT_PUBLIC_PUSHER_KEY
-    # ENV NEXT_PUBLIC_PUSHER_HOST=$NEXT_PUBLIC_PUSHER_HOST
-    # ENV NEXT_PUBLIC_PUSHER_PORT=$NEXT_PUBLIC_PUSHER_PORT
+# Note: make sure your Dockerfile includes these ARG declarations before the build step:
+# ARG NEXT_PUBLIC_PUSHER_KEY
+# ARG NEXT_PUBLIC_PUSHER_HOST
+# ARG NEXT_PUBLIC_PUSHER_PORT
+# ENV NEXT_PUBLIC_PUSHER_KEY=$NEXT_PUBLIC_PUSHER_KEY
+# ENV NEXT_PUBLIC_PUSHER_HOST=$NEXT_PUBLIC_PUSHER_HOST
+# ENV NEXT_PUBLIC_PUSHER_PORT=$NEXT_PUBLIC_PUSHER_PORT
