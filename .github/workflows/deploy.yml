@@ -32,6 +32,9 @@ jobs:
           build-args: |
             NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
+            NEXT_PUBLIC_PUSHER_KEY=${{ secrets.NEXT_PUBLIC_PUSHER_KEY }}
+            NEXT_PUBLIC_PUSHER_HOST=${{ secrets.NEXT_PUBLIC_PUSHER_HOST }}
+            NEXT_PUBLIC_PUSHER_PORT=${{ secrets.NEXT_PUBLIC_PUSHER_PORT }}
 
   deploy:
     runs-on: ubuntu-latest
