@@ -34,15 +34,15 @@ export default async function ProfileEditPage({
                     className="mb-8 flex items-center gap-2 text-sm font-bold text-foreground-muted transition-colors hover:text-primary"
                 >
                     <ChevronLeft className="h-4 w-4" />
-                    {t('backToProfile', { fallback: 'Back to Profile' })}
+                    {t('backToProfile')}
                 </Link>
 
                 <div className="mb-12">
                     <h1 className="text-4xl font-black tracking-tight text-foreground md:text-5xl">
-                        {t('editTitle', { fallback: 'Edit Profile' })}
+                        {t('editTitle')}
                     </h1>
                     <p className="mt-4 text-lg text-foreground-muted">
-                        {t('editDesc', { fallback: 'Update your public profile information.' })}
+                        {t('editDesc')}
                     </p>
                 </div>
 

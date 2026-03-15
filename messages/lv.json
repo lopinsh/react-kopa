@@ -21,7 +21,7 @@
   "profile": {
     "handle": "@{username}",
     "editTitle": "Labot profilu",
-    "editDesc": "Atjauniniet savu personīgo informāciju.",
+    "editDesc": "Atjaunini savu publisko profila informāciju.",
     "myGroups": "Manas grupas",
     "noOwnedGroups": "Jums vēl nepieder neviena grupa.",
     "joinedGroups": "Pievienotās grupas",
@@ -69,7 +69,8 @@
     "sectionMember": "Grupas, kurās esmu biedrs",
     "sectionPending": "Gaida apstiprinājumu",
     "empty": "Tu vēl neesi pievienojies nevienai grupai.",
-    "discover": "Atklāt grupas"
+    "discover": "Atklāt grupas",
+    "backToProfile": "Atpakaļ uz profilu"
   },
   "discovery": {
     "allCategory": "Viss {category}",
@@ -102,7 +103,9 @@
     "clearTag": "Noņemt birku",
     "gridView": "Režģa skats",
     "listView": "Saraksta skats",
-    "loadingMore": "Ielādē vairāk grupu..."
+    "loadingMore": "Ielādē vairāk grupu...",
+    "typePublic": "Publiska",
+    "typePrivate": "Privāta"
   },
   "common": {
     "save": "Saglabāt",
@@ -365,7 +368,11 @@
       "deleteDisabledWarning": "Sākuma sadaļu nevar dzēst vai pārdēvēt.",
       "saveSection": "Saglabāt sadaļu",
       "addSection": "Pievienot jaunu sadaļu"
-    }
+    },
+    "noEvents": "Nav notikumu.",
+    "postPlaceholder": "Raksti ziņu...",
+    "attending": "piedalās",
+    "attendButton": "Piedalīties"
   },
   "wizard": {
     "stepOf": "{current}. solis no {total}",

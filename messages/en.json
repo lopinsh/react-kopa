@@ -21,7 +21,7 @@
   "profile": {
     "handle": "@{username}",
     "editTitle": "Edit Profile",
-    "editDesc": "Update your personal information.",
+    "editDesc": "Update your public profile information.",
     "myGroups": "My Groups",
     "noOwnedGroups": "You don't own any groups yet.",
     "joinedGroups": "Joined Groups",
@@ -68,7 +68,8 @@
     "sectionMember": "Groups I'm in",
     "sectionPending": "Pending approval",
     "empty": "You haven't joined any groups yet.",
-    "discover": "Discover groups"
+    "discover": "Discover groups",
+    "backToProfile": "Back to Profile"
   },
   "discovery": {
     "allCategory": "All {category}",
@@ -101,7 +102,9 @@
     "clearTag": "Clear tag",
     "gridView": "Grid view",
     "listView": "List view",
-    "loadingMore": "Loading more groups..."
+    "loadingMore": "Loading more groups...",
+    "typePublic": "Public",
+    "typePrivate": "Private"
   },
   "common": {
     "save": "Save",
@@ -364,7 +367,11 @@
       "deleteDisabledWarning": "Initial section cannot be deleted or renamed.",
       "saveSection": "Save Section",
       "addSection": "Add New Section"
-    }
+    },
+    "noEvents": "No events found.",
+    "postPlaceholder": "Write a post...",
+    "attending": "attending",
+    "attendButton": "Attend"
   },
   "wizard": {
     "stepOf": "Step {current} of {total}",
