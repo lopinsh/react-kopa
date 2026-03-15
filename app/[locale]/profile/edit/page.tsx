@@ -34,7 +34,7 @@ export default async function ProfileEditPage({
                     className="mb-8 flex items-center gap-2 text-sm font-bold text-foreground-muted transition-colors hover:text-primary"
                 >
                     <ChevronLeft className="h-4 w-4" />
-                    Back to Profile
+                    {t('backToProfile')}
                 </Link>
 
                 <div className="mb-12">

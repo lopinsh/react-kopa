@@ -120,7 +120,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     if (group.category.parentTitle) {
         breadcrumbSegments.push({
             label: group.category.parentTitle,
-            href: `/?cat=${l1Slug}`,
+            href: `/discover?cat=${l1Slug}`,
             isL1: true,
             slug: l1Slug
         });
@@ -129,7 +129,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     // Add L2 (the current group category)
     breadcrumbSegments.push({
         label: group.category.title,
-        href: `/?cat=${l1Slug}&tag=${group.category.slug}`,
+        href: `/discover?cat=${l1Slug}&tag=${group.category.slug}`,
         isL1: false
     });
 

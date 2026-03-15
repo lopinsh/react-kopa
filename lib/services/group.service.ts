@@ -5,6 +5,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
+import { slugify } from '@/lib/slug';
 
 export interface GroupContext {
     id: string;
@@ -1031,15 +1032,3 @@ export const GroupService = {
     }
 };
 
-/**
- * Internal helper to slugify strings.
- */
-function slugify(text: string) {
-    return text
-        .toString()
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, '-')
-        .replace(/[^\w-]+/g, '')
-        .replace(/--+/g, '-');
-}

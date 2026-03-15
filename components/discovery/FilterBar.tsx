@@ -113,7 +113,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
                         <option value="all">{t('allTypes')}</option>
                         {GROUP_TYPES.map((type) => (
                             <option key={type} value={type}>
-                                {type.charAt(0) + type.slice(1).toLowerCase()}
+                                {type === 'PUBLIC' ? t('typePublic') : t('typePrivate')}
                             </option>
                         ))}
                     </select>
