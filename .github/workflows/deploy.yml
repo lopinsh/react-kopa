@@ -51,11 +51,14 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy docker-compose to server
+      - name: Copy files to server
         run: |
           scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} \
             docker-compose.server.yml \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/docker-compose.server.yml
+          scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} -r \
+            prisma \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/prisma
 
       - name: Deploy on server
         run: |
