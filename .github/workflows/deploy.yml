@@ -41,6 +41,26 @@ jobs:
     needs: build-and-push
 
     steps:
-      - name: Trigger Portainer webhook
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
         run: |
-          curl -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Copy docker-compose to server
+        run: |
+          scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} \
+            docker-compose.server.yml \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/docker-compose.server.yml
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd /root/ejam-kopa && \
+             docker compose -f docker-compose.server.yml pull && \
+             docker compose -f docker-compose.server.yml up -d"
