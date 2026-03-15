@@ -1,0 +1,295 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  name                String?
+  email               String?              @unique
+  emailVerified       DateTime?
+  image               String?
+  role                AppRole              @default(USER)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  allowDirectMessages Boolean              @default(true)
+  isProfilePublic     Boolean              @default(true)
+  avatarSeed          String?
+  bio                 String?
+  cities              String[]
+  username            String?              @unique
+  accounts            Account[]
+  appUsers            ApplicationMessage[] @relation("ReceivedApplicationMessages")
+  sentMessages        ApplicationMessage[] @relation("SentApplicationMessages")
+  attendances         Attendance[]
+  createdEvents       Event[]              @relation("CreatedEvents")
+  memberships         Membership[]
+  notifications       Notification[]
+  posts               Post[]
+  reports             Report[]             @relation("FiledReports")
+  sessions            Session[]
+  submittedCategories Category[]           @relation("SubmittedCategories")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Category {
+  id             String                @id @default(cuid())
+  slug           String                @unique
+  slugLv         String?
+  level          Int
+  color          String?
+  parentId       String?
+  isWildcard     Boolean               @default(false)
+  status         CategoryStatus        @default(ACTIVE)
+  submittedById  String?
+  submittedAt    DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  parent         Category?             @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children       Category[]            @relation("CategoryHierarchy")
+  titles         CategoryTranslation[]
+  aliases        CategoryAlias[]
+  submittedBy    User?                 @relation("SubmittedCategories", fields: [submittedById], references: [id])
+  groups         Group[]
+  groupsWithTags Group[]               @relation("GroupTags")
+}
+
+model CategoryAlias {
+  id         String   @id @default(cuid())
+  value      String
+  locale     String?
+  categoryId String
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([value, locale])
+  @@index([categoryId])
+}
+
+model CategoryTranslation {
+  id         String   @id @default(cuid())
+  lang       String
+  title      String
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, lang])
+}
+
+model Group {
+  id                 String               @id @default(cuid())
+  name               String
+  slug               String
+  description        String?
+  city               String
+  type               GroupType            @default(PUBLIC)
+  categoryId         String
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  discordLink        String?
+  instagramLink      String?
+  isAcceptingMembers Boolean              @default(true)
+  websiteLink        String?
+  accentColor        String?
+  bannerImage        String?
+  instructions       String?
+  appMessages        ApplicationMessage[]
+  events             Event[]
+  category           Category             @relation(fields: [categoryId], references: [id])
+  sections           GroupSection[]
+  members            Membership[]
+  posts              Post[]
+  reports            Report[]
+  tags               Category[]           @relation("GroupTags")
+
+  @@unique([categoryId, slug])
+  @@index([slug])
+  @@index([city])
+  @@index([createdAt])
+}
+
+model GroupSection {
+  id         String     @id @default(cuid())
+  groupId    String
+  title      String
+  content    String
+  order      Int
+  visibility Visibility @default(PUBLIC)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  group      Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@index([groupId])
+  @@index([order])
+}
+
+model Event {
+  id                String       @id @default(cuid())
+  title             String
+  description       String?
+  location          String?
+  visibility        Visibility   @default(PUBLIC)
+  groupId           String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  creatorId         String
+  maxParticipants   Int?
+  startDate         DateTime
+  isRecurring       Boolean      @default(false)
+  recurrencePattern String?
+  bannerImage       String?
+  endDate           DateTime?
+  instructions      String?
+  slug              String
+  attendees         Attendance[]
+  creator           User         @relation("CreatedEvents", fields: [creatorId], references: [id])
+  group             Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  reports           Report[]
+
+  @@unique([groupId, slug])
+  @@index([slug])
+}
+
+model Attendance {
+  id       String           @id @default(cuid())
+  userId   String
+  eventId  String
+  joinedAt DateTime         @default(now())
+  status   AttendanceStatus @default(GOING)
+  event    Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, eventId])
+}
+
+model Membership {
+  id       String         @id @default(cuid())
+  role     MembershipRole @default(MEMBER)
+  userId   String
+  groupId  String
+  joinedAt DateTime       @default(now())
+  group    Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  content   String
+  authorId  String
+  groupId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ApplicationMessage {
+  id                String   @id @default(cuid())
+  content           String
+  senderId          String
+  applicationUserId String
+  groupId           String
+  createdAt         DateTime @default(now())
+  applicationUser   User     @relation("ReceivedApplicationMessages", fields: [applicationUserId], references: [id], onDelete: Cascade)
+  group             Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  sender            User     @relation("SentApplicationMessages", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  reporterId    String
+  targetGroupId String?
+  targetEventId String?
+  reason        String
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+  reporter      User     @relation("FiledReports", fields: [reporterId], references: [id], onDelete: Cascade)
+  event         Event?   @relation(fields: [targetEventId], references: [id])
+  group         Group?   @relation(fields: [targetGroupId], references: [id])
+}
+
+enum GroupType {
+  PUBLIC
+  PRIVATE
+}
+
+enum CategoryStatus {
+  ACTIVE
+  PENDING_REVIEW
+}
+
+enum Visibility {
+  PUBLIC
+  MEMBERS_ONLY
+}
+
+enum MembershipRole {
+  OWNER
+  ADMIN
+  MEMBER
+  PENDING
+}
+
+enum AttendanceStatus {
+  GOING
+  INTERESTED
+}
+
+enum AppRole {
+  USER
+  ADMIN
+}
+
+
+
