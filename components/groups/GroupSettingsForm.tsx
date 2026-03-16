@@ -72,6 +72,7 @@ export default function GroupSettingsForm({
         resolver: zodResolver(groupFormSchema),
         defaultValues: {
             name: group.name,
+            slug: group.slug,
             city: group.city as GroupFormValues['city'],
             type: group.type,
             categoryId: initialTaxSelection?.kind === 'existing' ? initialTaxSelection.categoryId : undefined,

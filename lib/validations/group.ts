@@ -18,6 +18,12 @@ export const step2Schema = z.object({
         .string()
         .min(3, 'NAME_TOO_SHORT')
         .max(80, 'NAME_TOO_LONG'),
+    slug: z
+        .string()
+        .min(3, 'SLUG_TOO_SHORT')
+        .max(80, 'SLUG_TOO_LONG')
+        .regex(/^[a-z0-9-]+$/, 'SLUG_INVALID')
+        .optional(),
     description: z
         .string()
         .max(10000, 'DESCRIPTION_TOO_LONG')
@@ -25,12 +31,6 @@ export const step2Schema = z.object({
         .nullable()
         .or(z.literal('')),
     bannerImage: z.string().url().or(z.literal('')).optional().nullable(),
-    instructions: z
-        .string()
-        .max(5000, 'INSTRUCTIONS_TOO_LONG')
-        .optional()
-        .nullable()
-        .or(z.literal('')),
     city: z.enum(CITIES),
     accentColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'INVALID_COLOR').optional().nullable().or(z.literal('')),
     discordLink: z.string().url().or(z.literal('')).optional().nullable(),
