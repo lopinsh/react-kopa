@@ -13,6 +13,29 @@ import { useAuthGate } from '@/lib/useAuthGate';
 import AuthGateModal from '@/components/modals/AuthGateModal';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 
+type NestedReply = {
+    id: string;
+    content: string;
+    createdAt: Date;
+    author: {
+        id: string;
+        name: string | null;
+        image: string | null;
+    };
+};
+
+type Reply = {
+    id: string;
+    content: string;
+    createdAt: Date;
+    author: {
+        id: string;
+        name: string | null;
+        image: string | null;
+    };
+    replies: NestedReply[];
+};
+
 type Post = {
     id: string;
     content: string;
@@ -22,6 +45,7 @@ type Post = {
         name: string | null;
         image: string | null;
     };
+    replies: Reply[];
 };
 
 type Props = {
@@ -36,6 +60,8 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
     const tAuth = useTranslations('auth');
     const [posts, setPosts] = useState<Post[]>([]);
     const [content, setContent] = useState('');
+    const [replyContent, setReplyContent] = useState<Record<string, string>>({});
+    const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const [isLoading, setIsLoading] = useState(true);
     const { gateAction, isModalOpen, closeModal, isAuthenticated } = useAuthGate();
@@ -62,12 +88,48 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
             setPosts((currentPosts) => {
                 // Prevent duplicate posts if this client created it (relies on ID check)
                 if (currentPosts.some(p => p.id === post.id)) return currentPosts;
-                return [post, ...currentPosts];
+                return [{ ...post, replies: [] }, ...currentPosts];
+            });
+        });
+
+        channel.bind('new-reply', (reply: Reply & { parentId: string } | NestedReply & { parentId: string }) => {
+            setPosts((currentPosts) => {
+                return currentPosts.map(post => {
+                    // Is it a reply to the main post?
+                    if (post.id === reply.parentId) {
+                        if (post.replies.some(r => r.id === reply.id)) return post;
+                        return { ...post, replies: [...post.replies, { ...reply, replies: [] } as Reply] };
+                    }
+
+                    // Is it a reply to a reply? (Level 2)
+                    const updatedReplies = post.replies.map(r => {
+                        if (r.id === reply.parentId) {
+                            if (r.replies.some(nr => nr.id === reply.id)) return r;
+                            return { ...r, replies: [...r.replies, reply as NestedReply] };
+                        }
+                        return r;
+                    });
+
+                    return { ...post, replies: updatedReplies };
+                });
             });
         });
 
         channel.bind('delete-post', ({ postId }: { postId: string }) => {
-            setPosts((current) => current.filter(p => p.id !== postId));
+            setPosts((current) => {
+                // Remove if it's a top-level post
+                const filteredPosts = current.filter(p => p.id !== postId);
+                if (filteredPosts.length !== current.length) return filteredPosts;
+
+                // Remove if it's a reply
+                return current.map(post => ({
+                    ...post,
+                    replies: post.replies.filter(r => r.id !== postId).map(r => ({
+                        ...r,
+                        replies: r.replies.filter(nr => nr.id !== postId)
+                    }))
+                }));
+            });
         });
 
         return () => {
@@ -83,13 +145,46 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
         startTransition(async () => {
             const result = await createPost(groupId, content, locale);
             if (result.success && result.data?.post) {
-                // Manually add current userId if missing in result author object to satisfy Post type
                 const postWithId = {
                     ...result.data.post,
                     author: { ...result.data.post.author, id: currentUserId! }
                 };
                 setPosts([postWithId as unknown as Post, ...posts]);
                 setContent('');
+            }
+        });
+    };
+
+    const handleReply = async (e: React.FormEvent, parentId: string) => {
+        e.preventDefault();
+        const rContent = replyContent[parentId];
+        if (!rContent?.trim() || isPending) return;
+
+        startTransition(async () => {
+            const result = await createPost(groupId, rContent, locale, parentId);
+            if (result.success && result.data?.post) {
+                const newReply = {
+                    ...result.data.post,
+                    author: { ...result.data.post.author, id: currentUserId! }
+                };
+
+                setPosts(posts.map(p => {
+                    if (p.id === parentId) {
+                        return { ...p, replies: [...p.replies, { ...newReply, replies: [] } as Reply] };
+                    }
+
+                    const updatedReplies = p.replies.map(r => {
+                        if (r.id === parentId) {
+                            return { ...r, replies: [...r.replies, newReply as NestedReply] };
+                        }
+                        return r;
+                    });
+
+                    return { ...p, replies: updatedReplies };
+                }));
+
+                setReplyContent(prev => ({ ...prev, [parentId]: '' }));
+                setActiveReplyId(null);
             }
         });
     };
@@ -205,6 +300,158 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                 <div className="rounded-2xl rounded-tl-none bg-surface-elevated p-4 text-sm leading-relaxed text-foreground shadow-card">
                                     {post.content}
                                 </div>
+
+                                <div className="mt-2 flex items-center gap-4">
+                                    <button
+                                        onClick={() => gateAction(() => setActiveReplyId(activeReplyId === post.id ? null : post.id))}
+                                        className="text-xs font-bold text-foreground-muted hover:text-primary transition-colors"
+                                    >
+                                        {t('reply')}
+                                    </button>
+                                </div>
+
+                                {activeReplyId === post.id && isMember && (
+                                    <form onSubmit={(e) => handleReply(e, post.id)} className="mt-3 flex gap-2">
+                                        <input
+                                            type="text"
+                                            value={replyContent[post.id] || ''}
+                                            onChange={(e) => setReplyContent({ ...replyContent, [post.id]: e.target.value })}
+                                            placeholder={t('replyPlaceholder')}
+                                            className="flex-1 rounded-xl border border-border bg-surface px-4 py-2 text-sm focus:border-primary focus:outline-none"
+                                        />
+                                        <button
+                                            type="submit"
+                                            disabled={!replyContent[post.id]?.trim() || isPending}
+                                            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                        >
+                                            <Send className="h-4 w-4" />
+                                        </button>
+                                    </form>
+                                )}
+
+                                {/* Replies list */}
+                                {post.replies && post.replies.length > 0 && (
+                                    <div className="mt-4 flex flex-col gap-4 border-l-2 border-border pl-4">
+                                        {post.replies.map((reply) => (
+                                            <div key={reply.id} className="group/reply relative flex gap-3">
+                                                <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
+                                                    {reply.author.image ? (
+                                                        <img
+                                                            src={reply.author.image || undefined}
+                                                            alt={reply.author.name || ''}
+                                                            className="h-full w-full object-cover"
+                                                            referrerPolicy="no-referrer"
+                                                        />
+                                                    ) : (
+                                                        <div className="flex h-full w-full items-center justify-center">
+                                                            <UserIcon className="h-4 w-4 text-foreground-muted" />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="flex flex-1 flex-col gap-1">
+                                                    <div className="flex items-center justify-between gap-2">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="text-xs font-bold text-foreground">
+                                                                {reply.author.name || 'User'}
+                                                            </span>
+                                                            <span className="text-[10px] text-foreground-muted uppercase font-bold tracking-tighter">
+                                                                {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true, locale: dateLocale })}
+                                                            </span>
+                                                        </div>
+                                                        {(currentUserId === reply.author.id || userRole === 'OWNER' || userRole === 'ADMIN') && (
+                                                            <button
+                                                                onClick={() => handleDelete(reply.id)}
+                                                                className="opacity-0 group-hover/reply:opacity-100 transition-opacity p-1 text-foreground-muted hover:text-red-500"
+                                                                title={t('deletePost')}
+                                                            >
+                                                                <Trash2 className="h-3 w-3" />
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                    <div className="rounded-2xl rounded-tl-none bg-surface-elevated/50 p-3 text-sm leading-relaxed text-foreground">
+                                                        {reply.content}
+                                                    </div>
+
+                                                    <div className="mt-1 flex items-center gap-4">
+                                                        <button
+                                                            onClick={() => gateAction(() => setActiveReplyId(activeReplyId === reply.id ? null : reply.id))}
+                                                            className="text-[10px] font-bold text-foreground-muted hover:text-primary transition-colors"
+                                                        >
+                                                            {t('reply')}
+                                                        </button>
+                                                    </div>
+
+                                                    {activeReplyId === reply.id && isMember && (
+                                                        <form onSubmit={(e) => handleReply(e, reply.id)} className="mt-2 flex gap-2">
+                                                            <input
+                                                                type="text"
+                                                                value={replyContent[reply.id] || ''}
+                                                                onChange={(e) => setReplyContent({ ...replyContent, [reply.id]: e.target.value })}
+                                                                placeholder={t('replyPlaceholder')}
+                                                                className="flex-1 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs focus:border-primary focus:outline-none"
+                                                            />
+                                                            <button
+                                                                type="submit"
+                                                                disabled={!replyContent[reply.id]?.trim() || isPending}
+                                                                className="rounded-xl bg-primary px-3 py-1.5 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                                            >
+                                                                <Send className="h-3 w-3" />
+                                                            </button>
+                                                        </form>
+                                                    )}
+
+                                                    {/* Nested Replies (Level 2) */}
+                                                    {reply.replies && reply.replies.length > 0 && (
+                                                        <div className="mt-3 flex flex-col gap-3 border-l-2 border-border/50 pl-3">
+                                                            {reply.replies.map((nestedReply) => (
+                                                                <div key={nestedReply.id} className="group/nested-reply relative flex gap-2">
+                                                                    <div className="h-6 w-6 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
+                                                                        {nestedReply.author.image ? (
+                                                                            <img
+                                                                                src={nestedReply.author.image || undefined}
+                                                                                alt={nestedReply.author.name || ''}
+                                                                                className="h-full w-full object-cover"
+                                                                                referrerPolicy="no-referrer"
+                                                                            />
+                                                                        ) : (
+                                                                            <div className="flex h-full w-full items-center justify-center">
+                                                                                <UserIcon className="h-3 w-3 text-foreground-muted" />
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="flex flex-1 flex-col gap-0.5">
+                                                                        <div className="flex items-center justify-between gap-2">
+                                                                            <div className="flex items-center gap-1.5">
+                                                                                <span className="text-[11px] font-bold text-foreground">
+                                                                                    {nestedReply.author.name || 'User'}
+                                                                                </span>
+                                                                                <span className="text-[9px] text-foreground-muted uppercase font-bold tracking-tighter">
+                                                                                    {formatDistanceToNow(new Date(nestedReply.createdAt), { addSuffix: true, locale: dateLocale })}
+                                                                                </span>
+                                                                            </div>
+                                                                            {(currentUserId === nestedReply.author.id || userRole === 'OWNER' || userRole === 'ADMIN') && (
+                                                                                <button
+                                                                                    onClick={() => handleDelete(nestedReply.id)}
+                                                                                    className="opacity-0 group-hover/nested-reply:opacity-100 transition-opacity p-0.5 text-foreground-muted hover:text-red-500"
+                                                                                    title={t('deletePost')}
+                                                                                >
+                                                                                    <Trash2 className="h-2.5 w-2.5" />
+                                                                                </button>
+                                                                            )}
+                                                                        </div>
+                                                                        <div className="rounded-2xl rounded-tl-none bg-surface-elevated/30 p-2 text-xs leading-relaxed text-foreground">
+                                                                            {nestedReply.content}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))

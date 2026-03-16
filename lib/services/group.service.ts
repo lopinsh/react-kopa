@@ -454,6 +454,48 @@ export const GroupService = {
             }
         });
 
+        // Initialize a 1-on-1 Conversation between Admin and Pending User
+        const { MessageService } = await import('@/lib/services/message.service');
+
+        // Note: we fetch the existing application messages to pre-populate the new Conversation
+        const initialAppMessages = await prisma.applicationMessage.findMany({
+            where: { applicationUserId: targetUserId, groupId },
+            orderBy: { createdAt: 'asc' }
+        });
+
+        let conversation = await prisma.conversation.findFirst({
+            where: {
+                AND: [
+                    { participants: { some: { id: adminId } } },
+                    { participants: { some: { id: targetUserId } } }
+                ]
+            }
+        });
+
+        if (!conversation) {
+            conversation = await prisma.conversation.create({
+                data: {
+                    participants: {
+                        connect: [{ id: adminId }, { id: targetUserId }]
+                    }
+                }
+            });
+
+            // Seed it with the previous app messages
+            if (initialAppMessages.length > 0) {
+                await prisma.message.createMany({
+                    data: initialAppMessages.map(msg => ({
+                        content: msg.content,
+                        senderId: msg.senderId,
+                        conversationId: conversation!.id,
+                        createdAt: msg.createdAt,
+                    }))
+                });
+            }
+        } else {
+             await MessageService.sendMessage(conversation.id, adminId, message);
+        }
+
         return { success: true };
     },
 
