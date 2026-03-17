@@ -43,7 +43,7 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
                             const IconC = getCategoryIcon(selectedL1.slug);
                             return (
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
-                                    {IconC({ className: "h-6 w-6 stroke-2", style: { color: selectedL1.color } })}
+                                    <IconC className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
                                 </div>
                             );
                         })()}
@@ -114,7 +114,7 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
                             )}
                             {(() => {
                                 const IconC = getCategoryIcon(l1.slug);
-                                return IconC({ className: "h-6 w-6 stroke-2", style: { color: l1.color } });
+                                return <IconC className="h-6 w-6 stroke-2" style={{ color: l1.color }} />;
                             })()}
                             <span className={clsx("text-sm font-semibold", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
                                 {l1.title}
