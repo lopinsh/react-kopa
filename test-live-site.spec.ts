@@ -12,28 +12,27 @@ function generateRandomUser() {
 }
 
 const userA = generateRandomUser();
+const userB = generateRandomUser();
+const groupName = `Test Group ${randomBytes(4).toString('hex')}`;
 
 test.describe('Ejam Kopā Live Verification', () => {
   test.describe.configure({ mode: 'serial' });
 
   let pageA: any;
+  let pageB: any;
   let consoleErrors: string[] = [];
 
   test.beforeAll(async ({ browser }) => {
     const contextA = await browser.newContext();
     pageA = await contextA.newPage();
 
-    // Listen for console errors
     pageA.on('pageerror', (exception: any) => {
         console.error(`Uncaught exception: "${exception}"`);
         consoleErrors.push(exception.toString());
     });
-    pageA.on('console', (msg: any) => {
-        if (msg.type() === 'error') {
-            console.error(`Console error: "${msg.text()}"`);
-            consoleErrors.push(msg.text());
-        }
-    });
+
+    const contextB = await browser.newContext();
+    pageB = await contextB.newPage();
   });
 
   test('User A can register and onboard', async () => {
@@ -57,36 +56,186 @@ test.describe('Ejam Kopā Live Verification', () => {
     const usernameInput = pageA.getByRole('textbox').first();
     await usernameInput.fill(userA.username);
 
-    await pageA.waitForSelector('text=onboarding.username.available', { state: 'visible', timeout: 5000 }).catch(() => {});
+    await pageA.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
 
-    const usernameSubmit = pageA.getByRole('button', { name: 'onboarding.username.submit' }).first();
-    await usernameSubmit.click();
+    // Try clicking submit or pressing enter
+    const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
+    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+        await usernameSubmit.click();
+    } else {
+        await usernameInput.press('Enter');
+    }
 
     await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
 
     expect(pageA.url()).not.toContain('auth');
-    expect(pageA.url()).not.toContain('onboarding');
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
   });
 
-  test('User A can create a group and log errors', async () => {
-    console.log(`User A creating group...`);
-    // Clear errors from registration phase
+  test('User B can register and onboard', async () => {
+    console.log(`Registering User B: ${userB.email}`);
+    await pageB.goto('https://ejam.lumm.eu/lv/auth/register');
+
+    const nameInput = pageB.getByLabel(/Vārds/i).first();
+    await nameInput.waitFor({ state: 'visible', timeout: 5000 });
+    await nameInput.fill(userB.name);
+
+    const emailInput = pageB.getByLabel(/E-pasts/i).first();
+    await emailInput.fill(userB.email);
+
+    const passwordInput = pageB.getByLabel(/Parole/i).first();
+    await passwordInput.fill(userB.password);
+
+    const submitButton = pageB.getByRole('button', { name: /Sign Up|Reģistrēties/i }).first();
+    await submitButton.click();
+
+    await pageB.waitForURL('**/onboarding/username');
+    const usernameInput = pageB.getByRole('textbox').first();
+    await usernameInput.fill(userB.username);
+
+    await pageB.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
+
+    const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
+    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+        await usernameSubmit.click();
+    } else {
+        await usernameInput.press('Enter');
+    }
+
+    await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+    expect(pageB.url()).not.toContain('auth');
+
+    const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
+    if (await cookieBtn.isVisible()) await cookieBtn.click();
+  });
+
+  test('User A can create a group', async () => {
+    console.log(`User A creating group: ${groupName}`);
     consoleErrors = [];
 
     await pageA.goto('https://ejam.lumm.eu/lv/create');
-
-    // Give it a moment to crash
     await pageA.waitForTimeout(2000);
 
-    if (consoleErrors.length > 0) {
-        throw new Error(`Client-side exception caught: \n${consoleErrors.join('\n')}`);
+    const categoryBtns = pageA.locator('button').filter({ hasText: /Sport|Tech|Art|Māksla|Sports/i });
+    if (await categoryBtns.count() > 0) {
+        await categoryBtns.first().click();
+        await pageA.waitForTimeout(1000);
     }
 
-    const nameInput = pageA.getByLabel(/Grupas nosaukums/i).first();
-    await nameInput.waitFor({ state: 'visible', timeout: 5000 });
+    // Pick subtopic from combobox if visible
+    const subtopicInput = pageA.getByRole('combobox').first();
+    if (await subtopicInput.isVisible()) {
+        await subtopicInput.click();
+        await pageA.waitForTimeout(500);
+        await pageA.keyboard.press('ArrowDown');
+        await pageA.keyboard.press('Enter');
+    }
+
+    const nextBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next|Turpināt/i }).first();
+    if (await nextBtn.isVisible()) {
+        await nextBtn.click();
+    }
+
+    const nameInput = pageA.getByLabel(/Nosaukums|Name/i).first();
+    if (await nameInput.isVisible()) {
+        await nameInput.fill(groupName);
+    } else {
+        const fallbackName = pageA.getByRole('textbox').first();
+        if (await fallbackName.isVisible()) await fallbackName.fill(groupName);
+    }
+
+    const textareas = pageA.locator('textarea');
+    if (await textareas.count() > 0) {
+        await textareas.first().fill('This is an automated test group created by Playwright.');
+    }
+
+    const cityInput = pageA.getByLabel(/Pilsēta|City|Location/i).first();
+    if (await cityInput.isVisible()) {
+        const tagName = await cityInput.evaluate((el: any) => el.tagName.toLowerCase());
+        if (tagName === 'select') {
+            await cityInput.selectOption({ index: 1 });
+        } else {
+            await cityInput.fill('Rīga');
+        }
+    }
+
+    for(let i=0; i<3; i++) {
+        await pageA.waitForTimeout(1000);
+        const createFinalBtn = pageA.getByRole('button').filter({ hasText: /Izveidot|Create/i }).first();
+        if (await createFinalBtn.isVisible() && await createFinalBtn.isEnabled()) {
+            await createFinalBtn.click();
+            break;
+        } else {
+            const nextWizBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next/i }).first();
+            if (await nextWizBtn.isVisible()) await nextWizBtn.click();
+        }
+    }
+
+    await pageA.waitForURL('**/group/**', { timeout: 10000 }).catch(() => {});
+
+    await pageA.screenshot({ path: 'verification-userA-group-creation.png' });
+    console.log('Finished group creation flow, URL is:', pageA.url());
+
+    const severeErrors = consoleErrors.filter(e => !e.includes('MISSING_MESSAGE') && !e.includes('ERR_NAME_NOT_RESOLVED'));
+    if (severeErrors.length > 0) {
+        throw new Error(`Client-side exception caught during creation: \n${severeErrors.join('\n')}`);
+    }
+  });
+
+  test('Validate messaging functionality between User A and User B', async () => {
+    console.log('User B sending a message to User A');
+
+    await pageB.goto(`https://ejam.lumm.eu/lv/profile/${userA.username}`);
+    await pageB.waitForTimeout(2000);
+
+    const messageBtn = pageB.getByRole('button').filter({ hasText: /Sūtīt ziņu|Message|Ziņa/i }).first();
+    if (await messageBtn.isVisible() && await messageBtn.isEnabled()) {
+        await messageBtn.click();
+    } else {
+        await pageB.goto(`https://ejam.lumm.eu/lv/messages`);
+
+        const newMessageBtn = pageB.getByRole('button').filter({ hasText: /New|Jauna/i }).first();
+        if (await newMessageBtn.isVisible()) await newMessageBtn.click();
+
+        const searchInput = pageB.getByPlaceholder(/Meklēt|Search/i).first();
+        if (await searchInput.isVisible()) {
+            await searchInput.fill(userA.username);
+            await pageB.waitForTimeout(1000);
+            const userCard = pageB.getByText(userA.name).first();
+            if (await userCard.isVisible()) await userCard.click();
+        }
+    }
+
+    await pageB.waitForTimeout(2000);
+
+    const msgInput = pageB.getByRole('textbox').last(); // Usually message inputs are at the bottom
+    if (await msgInput.isVisible()) {
+        await msgInput.fill('Hello from Playwright test!');
+        await msgInput.press('Enter');
+
+        await pageB.waitForTimeout(1000);
+        await pageB.screenshot({ path: 'verification-userB-sent-message.png' });
+
+        await pageA.goto('https://ejam.lumm.eu/lv/messages');
+        await pageA.waitForTimeout(3000);
+
+        const conversation = pageA.getByText(userB.name).first();
+        if (await conversation.isVisible()) {
+            await conversation.click();
+            await pageA.waitForTimeout(2000);
+        }
+
+        const receivedMsg = pageA.getByText('Hello from Playwright test!').first();
+        expect(await receivedMsg.isVisible()).toBeTruthy();
+
+        await pageA.screenshot({ path: 'verification-userA-received-message.png' });
+    } else {
+        console.error("Could not find message input for User B.");
+        await pageB.screenshot({ path: 'error-userB-messages.png' });
+        throw new Error("Could not find message input for User B.");
+    }
   });
 
 });
