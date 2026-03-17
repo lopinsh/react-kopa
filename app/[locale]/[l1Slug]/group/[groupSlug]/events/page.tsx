@@ -43,6 +43,7 @@ export default async function GroupEventsPage({
 
     const eventsData = await getGroupEvents(group.id);
     const t = await getTranslations('group');
+  const c_common_get = await getTranslations('common');
     const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
 
     const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
@@ -73,7 +74,7 @@ export default async function GroupEventsPage({
                                 : "border-transparent text-foreground-muted hover:text-foreground"
                         )}
                     >
-                        {t('eventsTabUpcoming')}
+                        {c_common_get('eventsTabUpcoming')}
                     </Link>
                     {session && (
                         <Link
@@ -85,7 +86,7 @@ export default async function GroupEventsPage({
                                     : "border-transparent text-foreground-muted hover:text-foreground"
                             )}
                         >
-                            {t('eventsTabMyRsvps')}
+                            {c_common_get('eventsTabMyRsvps')}
                         </Link>
                     )}
                     <Link
@@ -97,7 +98,7 @@ export default async function GroupEventsPage({
                                 : "border-transparent text-foreground-muted hover:text-foreground"
                         )}
                     >
-                        {t('eventsTabPast')}
+                        {c_common_get('eventsTabPast')}
                     </Link>
                 </div>
 

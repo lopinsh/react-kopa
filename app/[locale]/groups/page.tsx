@@ -13,6 +13,7 @@ export default async function MyGroupsPage({
     const { locale } = await params;
     const session = await auth();
     const t = await getTranslations('nav');
+  const c_common_get = await getTranslations('common');
     const tAuth = await getTranslations('auth');
 
     // Guest view — show sign-in prompt instead of redirecting
@@ -21,7 +22,7 @@ export default async function MyGroupsPage({
             <div className="container mx-auto px-4 py-12 min-h-full">
                 <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                     <Users className="h-8 w-8 text-primary" />
-                    {t('myGroups')}
+                    {c_common_get('myGroups')}
                 </h1>
 
                 <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
@@ -90,7 +91,7 @@ export default async function MyGroupsPage({
         <div className="container mx-auto px-4 py-12 min-h-full">
             <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                 <Users className="h-8 w-8 text-primary" />
-                {t('myGroups')}
+                {c_common_get('myGroups')}
             </h1>
 
             {formattedGroups.length > 0 ? (

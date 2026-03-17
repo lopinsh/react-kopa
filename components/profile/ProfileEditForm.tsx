@@ -23,6 +23,7 @@ type Props = {
 
 export default function ProfileEditForm({ user }: Props) {
     const t = useTranslations('profile');
+  const c_common = useTranslations('common');
     const router = useRouter();
     const { update } = useSession();
     const [isPending, startTransition] = useTransition();
@@ -73,7 +74,7 @@ export default function ProfileEditForm({ user }: Props) {
             <div className="space-y-6">
                 <div className="space-y-2">
                     <label htmlFor="username" className="block text-sm font-medium text-foreground-muted mb-1.5 uppercase tracking-wider">
-                    {t('edit.username')}
+                    {c_common('username')}
                 </label>
                     <input
                         {...form.register('name')}
@@ -171,7 +172,7 @@ export default function ProfileEditForm({ user }: Props) {
                 className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-8 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
             >
                 <Save className="h-4 w-4" />
-                {t('saveChanges')}
+                {c_common('saveChanges')}
             </button>
         </form>
     );

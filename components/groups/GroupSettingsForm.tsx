@@ -60,6 +60,7 @@ export default function GroupSettingsForm({
 }: Props) {
     const { userRole } = useGroupContext();
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
@@ -118,7 +119,7 @@ export default function GroupSettingsForm({
         startTransition(async () => {
             const result = await updateGroup(group.id, data, locale);
             if (result.success) {
-                success(gt('updateSuccess'));
+                success(c_common('updateSuccess'));
 
                 // If slug or L1 changed, we need to update the URL but stay in settings
                 if (result.data?.slug && (result.data.slug !== group.slug || result.data.l1Slug !== group.l1Slug)) {
@@ -164,10 +165,10 @@ export default function GroupSettingsForm({
                             <div className="mb-8">
                                 <h3 className="text-xl font-black text-foreground mb-1 flex items-center gap-2">
                                     <Save className="h-6 w-6 text-[var(--accent)]" />
-                                    {gt('tabSections')}
+                                    {c_common('tabSections')}
                                 </h3>
                                 <p className="text-sm text-foreground-muted">
-                                    {gt('tabSectionsDescription')}
+                                    {c_common('tabSectionsDescription')}
                                 </p>
                             </div>
                             <GroupSectionEditor
@@ -207,7 +208,7 @@ export default function GroupSettingsForm({
                                 ) : (
                                     <Save className="h-5 w-5" />
                                 )}
-                                {gt('saveChanges')}
+                                {c_common('saveChanges')}
                             </button>
 
                             {serverError && (

@@ -39,6 +39,7 @@ export async function generateMetadata({
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
     const t = await getTranslations('group');
+  const c_common_get = await getTranslations('common');
 
     if (!group) return {};
 
@@ -69,6 +70,7 @@ export default async function GroupMembersPage({
     }
 
     const t = await getTranslations('group');
+    const c_common_get = await getTranslations('common');
     const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
     const pendingMembers = group.members.filter((m) => m.role === 'PENDING') as Member[];
     const acceptedMembers = group.members.filter((m) => m.role !== 'PENDING')
@@ -101,7 +103,7 @@ export default async function GroupMembersPage({
                             <div className="h-16 w-16 rounded-full bg-surface-elevated flex items-center justify-center mb-4">
                                 <UserIcon className="h-8 w-8 text-foreground-muted/30" />
                             </div>
-                            <h3 className="text-lg font-bold text-foreground">{t('noActivity')}</h3>
+                            <h3 className="text-lg font-bold text-foreground">{c_common_get('noActivity')}</h3>
                             <p className="text-sm text-foreground-muted mt-1 max-w-xs mx-auto">
                                 {t('noPendingRequests')}
                             </p>

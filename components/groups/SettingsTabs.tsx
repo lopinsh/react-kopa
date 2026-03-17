@@ -12,6 +12,7 @@ type Props = {
 
 export default function SettingsTabs({ isOwner }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const currentTab = searchParams.get('tab') || 'profile';
@@ -19,21 +20,21 @@ export default function SettingsTabs({ isOwner }: Props) {
     const tabs = [
         {
             id: 'profile',
-            label: t('tabProfile'),
+            label: c_common('profile'),
             icon: Settings,
             href: `${pathname}?tab=profile`,
             active: currentTab === 'profile'
         },
         {
             id: 'social',
-            label: t('tabSocial'),
+            label: c_common('tabSocial'),
             icon: Share2,
             href: `${pathname}?tab=social`,
             active: currentTab === 'social'
         },
         {
             id: 'sections',
-            label: t('tabSections'),
+            label: c_common('tabSections'),
             icon: Layout,
             href: `${pathname}?tab=sections`,
             active: currentTab === 'sections'
@@ -41,21 +42,21 @@ export default function SettingsTabs({ isOwner }: Props) {
         ...(isOwner ? [
             {
                 id: 'categorization',
-                label: t('tabCategorization'),
+                label: c_common('tabCategorization'),
                 icon: Tags,
                 href: `${pathname}?tab=categorization`,
                 active: currentTab === 'categorization'
             },
             {
                 id: 'privacy',
-                label: t('tabPrivacy'),
+                label: c_common('tabPrivacy'),
                 icon: Lock,
                 href: `${pathname}?tab=privacy`,
                 active: currentTab === 'privacy'
             },
             {
                 id: 'danger',
-                label: t('tabDanger'),
+                label: c_common('tabDanger'),
                 icon: AlertTriangle,
                 href: `${pathname}?tab=danger`,
                 active: currentTab === 'danger'

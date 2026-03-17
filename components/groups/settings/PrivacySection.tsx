@@ -9,18 +9,19 @@ import SettingsSection from './SettingsSection';
 
 export default function PrivacySection() {
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
     const { register, watch } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
-            title={gt('tabPrivacy')}
-            description={gt('tabPrivacyDescription')}
+            title={c_common('tabPrivacy')}
+            description={c_common('tabPrivacyDescription')}
             icon={LockIcon}
         >
             <div className="grid gap-6 md:grid-cols-2 max-w-2xl">
                 {[
-                    { id: 'PUBLIC', icon: Globe, label: gt('visibilityPublic'), desc: gt('visibilityPublicDesc') },
-                    { id: 'PRIVATE', icon: LockIcon, label: gt('visibilityMembersOnly'), desc: gt('visibilityMembersOnlyDesc') },
+                    { id: 'PUBLIC', icon: Globe, label: gt('visibilityPublic'), desc: c_common('visibilityPublicDesc') },
+                    { id: 'PRIVATE', icon: LockIcon, label: c_common('visibilityMembersOnly'), desc: c_common('visibilityMembersOnlyDesc') },
                 ].map((type) => (
                     <label
                         key={type.id}

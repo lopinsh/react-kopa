@@ -18,6 +18,7 @@ type Props = {
 
 export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const pathname = usePathname();
     const locale = useLocale();
     const { isMember, userRole, sections } = useGroupContext();
@@ -170,7 +171,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                         <button
                             onClick={() => setIsDrawerOpen(true)}
                             className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-elevated border border-border/50 text-foreground shadow-card active:scale-95 transition-all"
-                            aria-label={t('navigationMenu')}
+                            aria-label={c_common('navigationMenu')}
                         >
                             <Menu className="h-5 w-5" />
                         </button>

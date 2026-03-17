@@ -51,7 +51,6 @@ export default function AdminGroupCategorizationForm({
             websiteLink: '',
             instagramLink: '',
             bannerImage: '',
-            instructions: '',
             accentColor: selectedL1.color,
         },
     });

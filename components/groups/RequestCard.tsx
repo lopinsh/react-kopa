@@ -30,6 +30,7 @@ type Props = {
 
 export default function RequestCard({ groupId, membershipId, targetUser, messages, locale }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [isPending, startTransition] = useTransition();
     const [inquiryMode, setInquiryMode] = useState(false);
     const [inquiryText, setInquiryText] = useState('');
@@ -95,7 +96,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                         onClick={() => handleAction('APPROVE')}
                         disabled={isPending}
                         className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10 text-green-500 border border-green-500/20 hover:bg-green-500 hover:text-white disabled:opacity-50 transition-all font-bold shadow-sm"
-                        title={t('approve')}
+                        title={c_common('approve')}
                     >
                         <Check className="h-4 w-4" />
                     </button>
@@ -103,7 +104,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                         onClick={() => handleAction('DECLINE')}
                         disabled={isPending}
                         className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white disabled:opacity-50 transition-all font-bold shadow-sm"
-                        title={t('decline')}
+                        title={c_common('decline')}
                     >
                         <X className="h-4 w-4" />
                     </button>
@@ -144,7 +145,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                                         {msg.content}
                                     </div>
                                     <span className="text-[9px] font-black uppercase tracking-tighter text-foreground-muted px-1">
-                                        {isAdmin ? t('role_admin') : targetUser.name || t('applicant')} • {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true, locale: dateLocale })}
+                                        {isAdmin ? c_common('role_admin') : targetUser.name || c_common('applicant')} • {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true, locale: dateLocale })}
                                     </span>
                                 </div>
                             );
@@ -161,14 +162,14 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                         className="mt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-[var(--accent)] transition-colors flex items-center gap-1.5"
                     >
                         <MessageSquare className="h-3.5 w-3.5" />
-                        {t('inquire')}
+                        {c_common('inquire')}
                     </button>
                 ) : (
                     <div className="mt-2 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
                         <textarea
                             value={inquiryText}
                             onChange={(e) => setInquiryText(e.target.value)}
-                            placeholder={t('typeMessageHere')}
+                            placeholder={c_common('typeMessageHere')}
                             className="w-full bg-surface border border-border rounded-2xl p-4 text-sm focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] outline-none transition-all placeholder:text-foreground-muted min-h-[100px] resize-none"
                         />
                         <div className="flex items-center justify-end gap-2">
@@ -176,7 +177,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                                 onClick={() => setInquiryMode(false)}
                                 className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors"
                             >
-                                {t('cancel')}
+                                {c_common('cancel')}
                             </button>
                             <button
                                 onClick={handleSendInquiry}
@@ -184,7 +185,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                                 className="px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-[10px] font-black uppercase tracking-widest shadow-premium hover:scale-105 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2"
                             >
                                 <Send className="h-3 w-3" />
-                                {t('sendInquiry')}
+                                {c_common('sendInquiry')}
                             </button>
                         </div>
                     </div>

@@ -20,11 +20,12 @@ type Props = {
 
 export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1 }: Props) {
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
     const { formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
-            title={gt('tabCategorization')}
+            title={c_common('tabCategorization')}
             description={gt('tabCategorizationDescription')}
             icon={Tags}
         >

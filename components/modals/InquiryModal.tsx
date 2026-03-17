@@ -14,6 +14,7 @@ type Props = {
 
 export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [message, setMessage] = useState('');
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
@@ -26,7 +27,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
         setError(null);
 
         if (!message.trim()) {
-            setError(t('messageRequired') || 'Message is required');
+            setError(c_common('messageRequired') || 'Message is required');
             return;
         }
 
@@ -57,7 +58,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
                             <HelpCircle className="h-5 w-5" />
                         </div>
                         <h2 className="text-xl font-bold text-foreground">
-                            {t('inquireTitle') || 'Reach Out'}
+                            {c_common('inquireTitle') || 'Reach Out'}
                         </h2>
                     </div>
                     <button
@@ -73,9 +74,9 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
                         <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-500/10 text-green-500">
                             <Send className="h-6 w-6" />
                         </div>
-                        <h3 className="text-lg font-bold text-foreground">{t('inquirySent') || 'Message Sent!'}</h3>
+                        <h3 className="text-lg font-bold text-foreground">{c_common('messageSent') || 'Message Sent!'}</h3>
                         <p className="mt-2 text-sm text-foreground-muted">
-                            {t('inquirySentDesc') || 'The admins have received your inquiry.'}
+                            {c_common('inquirySentDesc') || 'The admins have received your inquiry.'}
                         </p>
                     </div>
                 ) : (
@@ -92,7 +93,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 className="w-full h-32 rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-foreground-muted focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)]/15 transition-all outline-none resize-none"
-                                placeholder={t('typeMessageHere') || "I'd like to learn more about..."}
+                                placeholder={c_common('typeMessageHere') || "I'd like to learn more about..."}
                                 required
                             />
                         </div>
@@ -113,7 +114,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
                             ) : (
                                 <>
                                     <Send className="h-4 w-4" />
-                                    {t('sendInquiry') || 'Send Inquiry'}
+                                    {c_common('sendInquiry') || 'Send Inquiry'}
                                 </>
                             )}
                         </button>

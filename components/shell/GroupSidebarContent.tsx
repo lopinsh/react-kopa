@@ -20,6 +20,7 @@ type Props = {
 
 export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const locale = useLocale();
@@ -44,17 +45,17 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     const isOwnerOrAdmin = hasAdminRights(state.role);
 
     const GROUP_NAV = [
-        { id: 'info', icon: Info, label: t('informationTitle'), href: baseUrl, memberOnly: false },
-        { id: 'events', icon: Calendar, label: t('eventsTitle'), href: `${baseUrl}/events`, memberOnly: false },
-        { id: 'discussions', icon: MessageSquare, label: t('discussionTitle'), href: `${baseUrl}/discussions`, memberOnly: true },
-        { id: 'members', icon: Users, label: t('membersTitle'), href: `${baseUrl}/members`, memberOnly: true },
+        { id: 'info', icon: Info, label: c_common('informationTitle'), href: baseUrl, memberOnly: false },
+        { id: 'events', icon: Calendar, label: c_common('eventsTitle'), href: `${baseUrl}/events`, memberOnly: false },
+        { id: 'discussions', icon: MessageSquare, label: c_common('discussionTitle'), href: `${baseUrl}/discussions`, memberOnly: true },
+        { id: 'members', icon: Users, label: c_common('membersTitle'), href: `${baseUrl}/members`, memberOnly: true },
     ];
 
     return (
         <div className="mt-6 flex flex-col gap-1 px-1">
             {!collapsed && !hideHeader && (
                 <div className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted px-2 mb-1">
-                    {t('groupMenu')}
+                    {c_common('groupMenu')}
                 </div>
             )}
 
@@ -123,13 +124,13 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                             backgroundColor: 'color-mix(in srgb, var(--group-accent, var(--primary)) 12%, transparent)',
                             color: 'var(--group-accent, var(--primary))'
                         } : undefined}
-                        title={collapsed ? t('editGroup') : undefined}
+                        title={collapsed ? c_common('editGroup') : undefined}
                     >
                         <Settings
                             className={clsx('h-5 w-5 shrink-0', !pathname.includes('/settings') && 'text-foreground-muted group-hover:text-foreground')}
                             style={pathname.includes('/settings') ? { color: 'var(--group-accent, var(--primary))' } : undefined}
                         />
-                        {!collapsed && <span className="truncate">{t('editGroup')}</span>}
+                        {!collapsed && <span className="truncate">{c_common('editGroup')}</span>}
                     </Link>
                 </div>
             )}

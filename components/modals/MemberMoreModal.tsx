@@ -24,6 +24,7 @@ type Props = {
 
 export default function MemberMoreModal({ isOpen, onClose, members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     const [selectedAdmin, setSelectedAdmin] = useState<{ id: string; name: string | null } | null>(null);
 
@@ -35,7 +36,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                     <h2 className="text-xl font-bold text-foreground">
-                        {t('membersTitle')} ({members.length})
+                        {c_common('membersTitle')} ({members.length})
                     </h2>
                     <button
                         onClick={onClose}

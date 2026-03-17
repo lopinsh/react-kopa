@@ -16,6 +16,7 @@ type Props = {
 
 export default function ApplicationModal({ isOpen, onClose, groupId, groupName, locale }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [message, setMessage] = useState('');
     const [isPending, startTransition] = useTransition();
 
@@ -61,7 +62,7 @@ export default function ApplicationModal({ isOpen, onClose, groupId, groupName, 
                         <textarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            placeholder={t('applyPlaceholder')}
+                            placeholder={c_common('messagePlaceholder')}
                             rows={5}
                             className="w-full resize-none rounded-2xl border border-border bg-surface-elevated p-5 text-sm outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all placeholder:text-foreground-muted/50"
                         />
@@ -77,7 +78,7 @@ export default function ApplicationModal({ isOpen, onClose, groupId, groupName, 
                         disabled={isPending}
                         className="rounded-xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-foreground-muted hover:text-foreground transition-all disabled:opacity-50"
                     >
-                        {t('cancel')}
+                        {c_common('cancel')}
                     </button>
                     <button
                         onClick={handleSubmit}
@@ -91,7 +92,7 @@ export default function ApplicationModal({ isOpen, onClose, groupId, groupName, 
                         ) : (
                             <>
                                 <Send className="h-3.5 w-3.5" />
-                                {t('sendApplication')}
+                                {c_common('sendApplication')}
                             </>
                         )}
                     </button>

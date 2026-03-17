@@ -308,7 +308,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                 </div>
             </div>
 
-            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{/* @ts-ignore */}{t(errors.tagIds.message)}</p>}
+            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{t(errors.tagIds.message as any)}</p>}
 
             {isOpen && (
                 <div 

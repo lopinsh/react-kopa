@@ -34,6 +34,7 @@ type Props = {
 
 export default function MemberCard({ member, groupId, currentUserRole, locale, l1Slug }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
@@ -64,7 +65,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
             else if (action === 'kick') result = await kickMember(groupId, member.user.id, locale);
 
             if (result?.success) {
-                success(t('manageSuccess'));
+                success(c_common('manageSuccess'));
                 router.refresh();
             } else {
                 toastError(t('ACTION_FAILED'));
@@ -185,7 +186,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                                     className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
                                     <ArrowUpCircle className="h-4 w-4 text-green-500" />
-                                    {t('promote')}
+                                    {c_common('promote')}
                                 </button>
                             )}
                             {canDemote && (
@@ -194,7 +195,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                                     className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
                                     <ArrowDownCircle className="h-4 w-4 text-orange-500" />
-                                    {t('demote')}
+                                    {c_common('demote')}
                                 </button>
                             )}
                             <button
@@ -202,7 +203,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                                 className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-500/5 transition-colors"
                             >
                                 <Trash2 className="h-4 w-4" />
-                                {t('kick')}
+                                {c_common('kick')}
                             </button>
                         </div>
                     </div>
@@ -239,7 +240,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                         className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />
-                        {t('viewProfile')}
+                        {c_common('viewProfile')}
                     </Link>
                 ) : (
                     <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">

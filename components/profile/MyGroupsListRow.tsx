@@ -26,6 +26,7 @@ type Props = {
 
 export default function MyGroupsListRow({ group, locale }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const accentColor = group.category.color || group.accentColor;
 
     return (
@@ -80,10 +81,10 @@ export default function MyGroupsListRow({ group, locale }: Props) {
                     {group.role === 'PENDING' && <Clock className="h-3.5 w-3.5" />}
 
                     <span>
-                        {group.role === 'OWNER' ? t('role_owner') :
-                            group.role === 'ADMIN' ? t('role_admin') :
+                        {group.role === 'OWNER' ? c_common('role_owner') :
+                            group.role === 'ADMIN' ? c_common('role_admin') :
                                 group.role === 'PENDING' ? t('role_pending') :
-                                    t('role_member')}
+                                    c_common('role_member')}
                     </span>
                 </div>
             </div>

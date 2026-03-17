@@ -8,19 +8,20 @@ import SettingsSection from './SettingsSection';
 
 export default function SocialSection() {
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
     const { register } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
-            title={gt('tabSocial')}
-            description={gt('tabSocialDescription')}
+            title={c_common('tabSocial')}
+            description={c_common('tabSocialDescription')}
             icon={Share2}
         >
             <div className="grid gap-8 md:grid-cols-1 max-w-2xl">
                 <div className="space-y-3">
                     <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
                         <Globe className="h-3 w-3" />
-                        {gt('social_website')}
+                        {c_common('social_website')}
                     </label>
                     <div className="relative group">
                         <input
@@ -37,7 +38,7 @@ export default function SocialSection() {
                 <div className="space-y-3">
                     <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
                         <MessageSquare className="h-3 w-3" />
-                        {gt('social_discord')}
+                        {c_common('social_discord')}
                     </label>
                     <div className="relative group">
                         <input
@@ -54,7 +55,7 @@ export default function SocialSection() {
                 <div className="space-y-3">
                     <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
                         <InstagramIcon className="h-3 w-3" />
-                        {gt('social_instagram')}
+                        {c_common('social_instagram')}
                     </label>
                     <div className="relative group">
                         <input

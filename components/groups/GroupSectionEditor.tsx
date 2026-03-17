@@ -30,6 +30,7 @@ interface Props {
 
 export default function GroupSectionEditor({ groupId, initialSections, locale }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [sections, setSections] = useState<GroupSection[]>(initialSections.sort((a, b) => a.order - b.order));
@@ -99,7 +100,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
 
         const newSection: GroupSection = {
             id: 'new-' + Date.now(),
-            title: t('sections.newSection'),
+            title: c_common('newSection'),
             content: '',
             order: sections.length,
             visibility: 'PUBLIC'
@@ -124,7 +125,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
 
         const newSection: GroupSection = {
             id: 'new-' + Date.now(),
-            title: t('sections.newSection'),
+            title: c_common('newSection'),
             content: '',
             order: sections.length,
             visibility: 'PUBLIC'
@@ -139,10 +140,10 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                 <div>
                     <h2 className="text-xl font-bold flex items-center gap-2">
                         <Layout className="h-5 w-5 text-primary" />
-                        {t('sections.title')}
+                        {c_common('title')}
                     </h2>
                     <p className="text-sm text-foreground-muted mt-1">
-                        {t('sections.subtitle')}
+                        {c_common('subtitle')}
                     </p>
                 </div>
                 <div className="px-3 py-1 bg-surface-elevated border border-border rounded-full text-[10px] font-black uppercase tracking-widest text-foreground-muted">
@@ -180,17 +181,17 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
                                     <h3 className="font-semibold text-foreground">
-                                        {section.id === 'initial' ? t('sections.homeAbout') : section.title}
+                                        {section.id === 'initial' ? c_common('homeAbout') : section.title}
                                     </h3>
                                     {section.visibility === 'MEMBERS_ONLY' && (
                                         <span className="flex items-center gap-1 text-[10px] font-medium bg-primary/10 text-primary px-1.5 py-0.5 rounded-full uppercase">
                                             <Lock className="h-2.5 w-2.5" />
-                                            {t('sections.membersOnly')}
+                                            {c_common('visibilityMembersOnly')}
                                         </span>
                                     )}
                                 </div>
                                 <p className="text-xs text-foreground-muted line-clamp-1 mt-0.5">
-                                    {section.content ? stripHtml(section.content) : t('sections.emptyContent')}
+                                    {section.content ? stripHtml(section.content) : c_common('emptyContent')}
                                 </p>
                             </div>
 
@@ -219,7 +220,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                 <button
                                     onClick={() => setEditingId(editingId === section.id ? null : section.id)}
                                     className="h-8 w-8 flex items-center justify-center rounded-lg hover:bg-surface-elevated text-foreground-muted hover:text-primary transition-colors cursor-pointer"
-                                    title={editingId === section.id ? t('sections.done') : t('sections.edit')}
+                                    title={editingId === section.id ? c_common('done') : c_common('edit')}
                                 >
                                     <Settings2 className="h-4 w-4" />
                                 </button>
@@ -233,21 +234,21 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                     <div className="grid gap-6 md:grid-cols-2">
                                         <div>
                                             <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
-                                                {t('sections.fieldTitle')}
+                                                {c_common('fieldTitle')}
                                             </label>
                                             <input
                                                 type="text"
                                                 value={section.title}
                                                 disabled={section.id === 'initial'}
                                                 onChange={(e) => updateSection(section.id, { title: e.target.value })}
-                                                placeholder={t('sections.fieldTitlePlaceholder')}
+                                                placeholder={c_common('fieldTitlePlaceholder')}
                                                 className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary disabled:opacity-50"
                                             />
                                         </div>
 
                                         <div>
                                             <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
-                                                {t('sections.fieldVisibility')}
+                                                {c_common('fieldVisibility')}
                                             </label>
                                             <div className="flex gap-2">
                                                 <button
@@ -265,12 +266,12 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                                     className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border text-xs font-medium transition-all ${section.visibility === 'MEMBERS_ONLY' ? 'bg-primary/5 border-primary text-primary' : 'bg-surface border-border text-foreground-muted hover:bg-surface-elevated'}`}
                                                 >
                                                     <Lock className="h-3.5 w-3.5" />
-                                                    {t('sections.visibilityMembersOnly')}
+                                                    {c_common('visibilityMembersOnly')}
                                                 </button>
                                             </div>
                                             {section.id === 'initial' && (
                                                 <span className="text-[10px] text-foreground-muted mt-1 inline-block">
-                                                    {t('sections.homeVisibilityWarning')}
+                                                    {c_common('homeVisibilityWarning')}
                                                 </span>
                                             )}
                                         </div>
@@ -278,12 +279,12 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
 
                                     <div className="space-y-2">
                                         <label className="block text-xs font-semibold text-foreground-muted mb-1.5 uppercase tracking-wider">
-                                            {t('sections.fieldContent')}
+                                            {c_common('fieldContent')}
                                         </label>
                                         <RichTextEditor
                                             value={section.content}
                                             onChange={(val) => updateSection(section.id, { content: val })}
-                                            placeholder={t('sections.fieldContentPlaceholder')}
+                                            placeholder={c_common('fieldContentPlaceholder')}
                                         />
                                     </div>
 
@@ -293,10 +294,10 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                             disabled={section.id === 'initial'}
                                             onClick={() => removeSection(section.id)}
                                             className="flex items-center gap-1.5 text-xs font-medium text-red-500 hover:text-red-600 transition-colors disabled:opacity-30 disabled:grayscale"
-                                            title={section.id === 'initial' ? t('sections.deleteDisabledWarning') : t('sections.deleteSection')}
+                                            title={section.id === 'initial' ? c_common('deleteDisabledWarning') : c_common('deleteSection')}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
-                                            {t('sections.deleteSection')}
+                                            {c_common('deleteSection')}
                                         </button>
 
                                         <button
@@ -306,7 +307,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                             className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 font-bold text-white shadow-premium hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
                                         >
                                             <Save className="h-4 w-4" />
-                                            {t('sections.saveSection')}
+                                            {c_common('saveSection')}
                                         </button>
                                     </div>
                                 </div>
