@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import github from "next-auth/providers/github";
 import google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
 
 // Simple per-user password map for local development.
 // Key: email, Value: password
@@ -36,21 +37,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             clientSecret: process.env.GOOGLE_SECRET,
         }),
         Credentials({
-            name: "Test Login",
+            name: "Login",
             credentials: {
-                email: { label: "Email", type: "email", placeholder: "user@local" },
+                email: { label: "Email", type: "email", placeholder: "you@example.com" },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
                 const email = credentials?.email as string;
                 const password = credentials?.password as string;
 
-                // Check password against the dev map
-                const expectedPassword = DEV_PASSWORDS[email];
-                if (!expectedPassword || password !== expectedPassword) return null;
+                if (!email || !password) return null;
 
                 const user = await prisma.user.findUnique({ where: { email } });
                 if (!user) return null;
+
+                if (user.password) {
+                    const isValid = await bcrypt.compare(password, user.password);
+                    if (!isValid) return null;
+                } else {
+                    // Fallback for dev passwords
+                    const expectedPassword = DEV_PASSWORDS[email];
+                    if (!expectedPassword || password !== expectedPassword) return null;
+                }
 
                 return { id: user.id, name: user.name, email: user.email, image: user.image };
             },
