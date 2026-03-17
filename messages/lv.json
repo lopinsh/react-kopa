@@ -915,11 +915,13 @@
         "success": "Ziņojums veiksmīgi iesniegts. Mēs to drīzumā izskatīsim.",
         "error": "Neizdevās iesniegt ziņojumu. Lūdzu, mēģiniet vēlāk."
     },
-    "messages": {
+    "messagesPlaceholder": {
         "title": "Ziņas",
         "comingSoon": "Drīzumā",
         "placeholderDescription": "Tiešā saziņa ar citiem kopienas biedriem pašlaik ir izstrādes stadijā.",
         "inDevelopment": "Izstrādes stadijā"
+    },
+    "groupAdminTaxonomy": {
         "merge": "Apvienot",
         "mergeRequiresTwo": "Izvēlieties vismaz 2 atzīmes, lai apvienotu",
         "delete": "Dzēst"
@@ -959,59 +961,4 @@
       "taken": "Šis lietotājvārds jau ir aizņemts",
       "submit": "Iestatīt lietotājvārdu",
       "submitting": "Saglabā..."
-    }
-  },
-  "eventWizard": {
-    "stepOf": "{current}. solis no {total}",
-    "step1Title": "Pasākuma detaļas",
-    "step1Desc": "Pamatinformācija par jūsu pasākumu.",
-    "step2Title": "Piekļuve un loģistika",
-    "step2Desc": "Kas var piedalīties un cita informācija.",
-    "fieldName": "Pasākuma nosaukums",
-    "fieldNamePlaceholder": "piem. Nedēļas nogales pārgājiens",
-    "fieldDescription": "Apraksts",
-    "fieldDescriptionPlaceholder": "Par ko būs šis pasākums?",
-    "fieldDate": "Sākuma datums un laiks",
-    "fieldLocation": "Atrašanās vieta",
-    "fieldLocationPlaceholder": "piem. Centrālais parks",
-    "fieldMaxParticipants": "Maksimālais dalībnieku skaits",
-    "fieldMaxParticipantsPlaceholder": "piem. 20 (atstājiet tukšu, ja neierobežots)",
-    "fieldVisibility": "Redzamība",
-    "typePublic": "Publisks",
-    "typePublicDesc": "Ikviens var redzēt un pievienoties šim pasākumam.",
-    "typeMembersOnly": "Tikai biedriem",
-    "typeMembersOnlyDesc": "Tikau grupas biedri var redzēt un pievienoties.",
-    "fieldSlug": "URL adrese",
-    "fieldSlugPlaceholder": "pasakuma-adrese",
-    "fieldBannerImage": "Fona attēla URL",
-    "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
-    "fieldInstructions": "Īpašas instrukcijas",
-    "fieldInstructionsPlaceholder": "piem. Atrodiet mūs pie lielā ozola, klauvējiet trīsreiz u.t.t.",
-    "fieldEndDate": "Beigu datums (pēc izvēles)",
-    "recurringEvent": "Atkārtots pasākums",
-    "recurringEventDesc": "Šis pasākums notiek regulāri",
-    "recurrencePattern": "Atkārtošanās modelis",
-    "recurrencePatternPlaceholder": "piem. Katru otro otrdienu plkst. 19:00",
-    "back": "Atpakaļ",
-    "next": "Tālāk",
-    "submit": "Izveidot pasākumu"
-  },
-  "report": {
-    "title": "Ziņot",
-    "description": "Lūdzu, dariet mums zināmu, kāpēc jūs par to ziņojat. Mūsu drošības komanda izskatīs šo jautājumu.",
-    "reasonSpam": "Surogātpasts vai maldinošs saturs",
-    "reasonHarassment": "Uzmākšanās vai naida runa",
-    "reasonInappropriate": "Nepiemērots saturs",
-    "reasonOther": "Cits",
-    "cancel": "Atcelt",
-    "submit": "Iesniegt ziņojumu",
-    "success": "Ziņojums veiksmīgi iesniegts. Mēs to drīzumā izskatīsim.",
-    "error": "Neizdevās iesniegt ziņojumu. Lūdzu, mēģiniet vēlāk."
-  },
-  "messages": {
-    "title": "Ziņas",
-    "comingSoon": "Drīzumā",
-    "placeholderDescription": "Tiešā saziņa ar citiem kopienas biedriem pašlaik ir izstrādes stadijā.",
-    "inDevelopment": "Izstrādes stadijā"
-  }
 }

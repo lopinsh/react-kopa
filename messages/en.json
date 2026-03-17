@@ -33,7 +33,7 @@
       "groupsJoined": "Groups Joined",
       "eventsAttended": "Events Attended"
     },
-    "saveChanges": "Save Changes",
+  "saveChanges": "Save Changes",
     "fieldName": "Name",
     "fieldImage": "Profile Image URL",
     "memberSince": "Member since {date}",
@@ -55,7 +55,7 @@
       "avatarSeedHint": "Enter any word to customize your avatar style.",
       "avatarSeedDisabled": "Avatar customization coming soon."
     },
-    "privateProfile": "Private Profile",
+  "privateProfile": "Private Profile",
     "privateProfileDesc": "This profile is private.",
     "viewingOwnPublicProfile": "You're viewing your public profile.",
     "message": "Message",
@@ -198,7 +198,7 @@
       "darkMode": "Switch to dark mode",
       "brandShort": "EK"
     },
-    "sidebar": {
+  "sidebar": {
       "filters": "Filters",
       "groups": "GROUPS",
       "events": "EVENTS",
@@ -208,12 +208,12 @@
       "collapse": "Collapse sidebar",
       "groupMenu": "GROUP MENU"
     },
-    "search": {
+  "search": {
       "title": "Global Search",
       "placeholderDesc": "This is a placeholder for the global search functionality. In the final version, you'll see instant results for groups, events, and more.",
       "pressEsc": "Press ESC to close"
     },
-    "footer": {
+  "footer": {
       "platform": "Platform",
       "support": "Support",
       "about": "About",
@@ -368,7 +368,7 @@
       "saveSection": "Save Section",
       "addSection": "Add New Section"
     },
-    "group": {
+  "group": {
         "tabSocial": "Social Links",
         "tabSocialDescription": "Connect your group with external platforms.",
         "tabProfile": "Profile",
@@ -513,7 +513,7 @@
             "addSection": "Add New Section"
         }
     },
-    "wizard": {
+  "wizard": {
         "stepOf": "Step {current} of {total}",
         "step1Title": "Category",
         "step2Title": "Basic Info",
@@ -562,7 +562,7 @@
         "fieldInstructionsPlaceholder": "Member-only instructions (e.g. meeting point details)...",
         "fieldInstructionsHint": "These instructions are only visible to group members."
     },
-    "admin": {
+  "admin": {
         "title": "Admin Control Center",
         "subtitle": "Manage user reports and community taxonomy.",
         "tabTags": "Pending Tags",
@@ -668,7 +668,7 @@
         "categories": "Categories",
         "aliases": "Aliases"
       },
-      "pending": {
+  "pending": {
         "empty": "No pending tags.",
         "approveAs": "Approve as new",
         "mergeInto": "Merge into",
@@ -677,10 +677,10 @@
         "approved": "Tag approved.",
         "merged": "Tag merged."
       },
-      "categories": {
+  "categories": {
         "saved": "Category saved."
       },
-      "aliases": {
+  "aliases": {
         "add": "Add alias",
         "empty": "No aliases.",
         "added": "Alias added.",
@@ -691,24 +691,24 @@
         "anyLocaleShort": "all",
         "selectCategory": "Select category"
       },
-      "fields": {
+  "fields": {
         "nameEn": "Name EN",
         "nameLv": "Name LV",
         "slugEn": "Slug EN",
         "slugLv": "Slug LV",
         "color": "Color"
       },
-      "override": {
+  "override": {
         "title": "Admin categorization override",
         "saved": "Group tags updated."
       },
-      "tree": {
+  "tree": {
         "title": "Taxonomy Tree",
         "expandAll": "Expand All",
         "collapseAll": "Collapse All",
         "edit": "Edit"
       },
-      "inbox": {
+  "inbox": {
         "title": "Pending Review",
         "empty": "No items pending review",
         "approve": "Approve",
@@ -723,7 +723,7 @@
         "selectedCanonicalLabel": "Selected canonical:",
         "mergeAndNotify": "Merge and notify group owners"
       },
-      "bulk": {
+  "bulk": {
         "selected": "selected",
         "clearSelection": "Clear selection",
         "approve": "Approve",
@@ -754,7 +754,7 @@
                 "categories": "Categories",
                 "aliases": "Aliases"
             },
-            "pending": {
+  "pending": {
                 "empty": "No pending tags.",
                 "approveAs": "Approve as new",
                 "mergeInto": "Merge into",
@@ -763,10 +763,10 @@
                 "approved": "Tag approved.",
                 "merged": "Tag merged."
             },
-            "categories": {
+  "categories": {
                 "saved": "Category saved."
             },
-            "aliases": {
+  "aliases": {
                 "add": "Add alias",
                 "empty": "No aliases.",
                 "added": "Alias added.",
@@ -777,24 +777,24 @@
                 "anyLocaleShort": "all",
                 "selectCategory": "Select category"
             },
-            "fields": {
+  "fields": {
                 "nameEn": "Name EN",
                 "nameLv": "Name LV",
                 "slugEn": "Slug EN",
                 "slugLv": "Slug LV",
                 "color": "Color"
             },
-            "override": {
+  "override": {
                 "title": "Admin categorization override",
                 "saved": "Group tags updated."
             },
-            "tree": {
+  "tree": {
                 "title": "Taxonomy Tree",
                 "expandAll": "Expand All",
                 "collapseAll": "Collapse All",
                 "edit": "Edit"
             },
-            "inbox": {
+  "inbox": {
                 "title": "Pending Review",
                 "empty": "No items pending review",
                 "approve": "Approve",
@@ -809,7 +809,7 @@
                 "selectedCanonicalLabel": "Selected canonical:",
                 "mergeAndNotify": "Merge and notify group owners"
             },
-            "bulk": {
+  "bulk": {
                 "selected": "selected",
                 "clearSelection": "Clear selection",
                 "approve": "Approve",
@@ -817,14 +817,14 @@
                 "mergeRequiresTwo": "Select at least 2 tags to merge",
                 "delete": "Delete"
             },
-            "merge": {
+  "merge": {
                 "title": "Merge Tags",
                 "description": "Select the primary tag that will be kept. The others will be deleted and converted into aliases for the primary tag.",
                 "selectCanonical": "Select Primary Tag",
                 "editDetails": "Edit Primary Tag Details",
                 "confirm": "Confirm Merge"
             },
-            "slideover": {
+  "slideover": {
                 "l1Title": "Category Details",
                 "l2Title": "Tag Details",
                 "pendingTitle": "Pending Tag",
@@ -840,7 +840,7 @@
             }
         }
     },
-    "onboarding": {
+  "onboarding": {
         "username": {
             "heading": "Choose your username",
             "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
@@ -853,8 +853,8 @@
             "submit": "Set username",
             "submitting": "Saving..."
         }
-    },
-    "eventWizard": {
+  },
+  "eventWizard": {
         "stepOf": "Step {current} of {total}",
         "step1Title": "Event Details",
         "step1Desc": "Basic information about your event.",
@@ -889,7 +889,7 @@
         "next": "Next",
         "submit": "Create Event"
     },
-    "messages": {
+  "messages": {
         "title": "Messages",
         "blocked": "Blocked",
         "noMessages": "No messages yet",
@@ -902,7 +902,7 @@
         "confirmBlock": "Are you sure you want to block/unblock this conversation?",
         "blockFailed": "Failed to block. You cannot block group admins or owners."
     },
-    "report": {
+  "report": {
         "title": "Report",
         "description": "Please let us know why you are reporting this. Our safety team will review the issue.",
         "reasonSpam": "Spam or Misleading",
@@ -914,23 +914,25 @@
         "success": "Report submitted successfully. We will review it shortly.",
         "error": "Failed to submit report. Please try again later."
     },
-    "messages": {
+  "messagesPlaceholder": {
         "title": "Messages",
         "comingSoon": "Coming Soon",
         "placeholderDescription": "Direct messaging with other community members is currently in development.",
         "inDevelopment": "In Development"
+    },
+  "groupAdminTaxonomy": {
         "merge": "Merge",
         "mergeRequiresTwo": "Select at least 2 tags to merge",
         "delete": "Delete"
       },
-      "merge": {
+  "merge": {
         "title": "Merge Tags",
         "description": "Select the primary tag that will be kept. The others will be deleted and converted into aliases for the primary tag.",
         "selectCanonical": "Select Primary Tag",
         "editDetails": "Edit Primary Tag Details",
         "confirm": "Confirm Merge"
       },
-      "slideover": {
+  "slideover": {
         "l1Title": "Category Details",
         "l2Title": "Tag Details",
         "pendingTitle": "Pending Tag",
@@ -959,58 +961,5 @@
       "submit": "Set username",
       "submitting": "Saving..."
     }
-  },
-  "eventWizard": {
-    "stepOf": "Step {current} of {total}",
-    "step1Title": "Event Details",
-    "step1Desc": "Basic information about your event.",
-    "step2Title": "Access & Logistics",
-    "step2Desc": "Who can attend and other details.",
-    "fieldName": "Event Name",
-    "fieldNamePlaceholder": "e.g. Weekend Hike",
-    "fieldDescription": "Description",
-    "fieldDescriptionPlaceholder": "What's this event about?",
-    "fieldDate": "Start Date & Time",
-    "fieldLocation": "Location",
-    "fieldLocationPlaceholder": "e.g. Central Park",
-    "fieldMaxParticipants": "Maximum Participants",
-    "fieldMaxParticipantsPlaceholder": "e.g. 20 (leave empty for unlimited)",
-    "fieldVisibility": "Visibility",
-    "typePublic": "Public",
-    "typePublicDesc": "Anyone can see and join this event.",
-    "typeMembersOnly": "Members Only",
-    "typeMembersOnlyDesc": "Only group members can see and join.",
-    "fieldSlug": "URL Slug",
-    "fieldSlugPlaceholder": "event-slug",
-    "fieldBannerImage": "Banner Image URL",
-    "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
-    "fieldInstructions": "Special Instructions",
-    "fieldInstructionsPlaceholder": "e.g. Find us near the big oak tree, knock thrice, etc.",
-    "fieldEndDate": "End Date (Optional)",
-    "recurringEvent": "Recurring Event",
-    "recurringEventDesc": "This event happens on a regular basis",
-    "recurrencePattern": "Recurrence Pattern",
-    "recurrencePatternPlaceholder": "e.g. Every second Tuesday at 19:00",
-    "back": "Back",
-    "next": "Next",
-    "submit": "Create Event"
-  },
-  "report": {
-    "title": "Report",
-    "description": "Please let us know why you are reporting this. Our safety team will review the issue.",
-    "reasonSpam": "Spam or Misleading",
-    "reasonHarassment": "Harassment or Hate Speech",
-    "reasonInappropriate": "Inappropriate Content",
-    "reasonOther": "Other",
-    "cancel": "Cancel",
-    "submit": "Submit Report",
-    "success": "Report submitted successfully. We will review it shortly.",
-    "error": "Failed to submit report. Please try again later."
-  },
-  "messages": {
-    "title": "Messages",
-    "comingSoon": "Coming Soon",
-    "placeholderDescription": "Direct messaging with other community members is currently in development.",
-    "inDevelopment": "In Development"
   }
 }
