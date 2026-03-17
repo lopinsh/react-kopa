@@ -11,11 +11,12 @@ type Props = {
 
 export default function DangerZoneSection({ onDelete, isPending }: Props) {
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
 
     return (
         <SettingsSection
-            title={gt('tabDanger')}
-            description={gt('tabDangerDescription')}
+            title={c_common('tabDanger')}
+            description={c_common('tabDangerDescription')}
             icon={AlertTriangle}
         >
             <div className="rounded-[40px] border border-red-500/10 bg-red-500/[0.02] p-8 md:p-12">
@@ -24,7 +25,7 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
                         <Trash2 className="h-6 w-6" />
                     </div>
                     <div className="flex-1 space-y-4">
-                        <h3 className="text-2xl font-black text-red-600 tracking-tight">{gt('deleteGroupTitle')}</h3>
+                        <h3 className="text-2xl font-black text-red-600 tracking-tight">{c_common('deleteGroupTitle')}</h3>
                         <p className="text-base text-red-600/70 leading-relaxed max-w-xl font-medium">
                             {gt('deleteConfirm')}
                         </p>
@@ -36,7 +37,7 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
                                 className="flex h-12 items-center gap-3 rounded-2xl bg-red-600 px-8 font-black text-white transition-all hover:bg-red-700 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 shadow-lg shadow-red-600/20"
                             >
                                 <AlertCircle className="h-5 w-5" />
-                                {gt('deleteButton')}
+                                {c_common('deleteGroupTitle')}
                             </button>
                         </div>
                     </div>

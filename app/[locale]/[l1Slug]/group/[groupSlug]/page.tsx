@@ -21,6 +21,7 @@ export default async function GroupPage({
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
     const t = await getTranslations('group');
+  const c_common_get = await getTranslations('common');
 
     if (!group) {
         notFound();
@@ -84,8 +85,8 @@ export default async function GroupPage({
                                                         <Lock className="h-6 w-6 text-[var(--accent)]" />
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <h3 className="font-bold">{t('membersOnlySection')}</h3>
-                                                        <p className="text-sm text-foreground-muted">{t('membersOnlySectionDescription')}</p>
+                                                        <h3 className="font-bold">{c_common_get('membersOnlySection')}</h3>
+                                                        <p className="text-sm text-foreground-muted">{c_common_get('membersOnlySectionDescription')}</p>
                                                     </div>
                                                 </div>
                                             ) : (
@@ -127,7 +128,7 @@ export default async function GroupPage({
                                     <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
                                         <UsersIcon className="h-3.5 w-3.5 text-[var(--accent)]" />
                                     </span>
-                                    {t('membersTitle')}
+                                    {c_common_get('membersTitle')}
                                 </div>
                                 <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-0.5 text-[10px] font-black text-[var(--accent)] border border-[var(--accent)]/20">
                                     {group.memberCount}

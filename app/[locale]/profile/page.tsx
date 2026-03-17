@@ -15,6 +15,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     }
 
     const t = await getTranslations('profile');
+  const c_common_get = await getTranslations('common');
     const format = await getFormatter();
 
     const dbUser = await UserService.getOwnProfile(session.user.id);
@@ -108,7 +109,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                             <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                                 <span className="h-2 w-2 rounded-full bg-secondary" />
                                 {/* Reuse nav translation since in previous versions it mapped to My Groups */}
-                                {t('myGroups')}
+                                {c_common_get('myGroups')}
                             </h2>
                             <Link
                                 href="/profile/my-groups"

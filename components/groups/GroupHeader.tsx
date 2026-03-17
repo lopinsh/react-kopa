@@ -37,6 +37,7 @@ type Props = {
 
 export default function GroupHeader({ group, l1Slug }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const locale = useLocale();
     const router = useRouter();
     const { userRole, isMember } = useGroupContext();
@@ -103,7 +104,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.href);
         // Show a brief toast or alert? For now just alert or silent
-        alert(t('linkCopied')); // We might need to add this key or just use a generic message
+        alert(c_common('linkCopied')); // We might need to add this key or just use a generic message
     };
 
     interface BreadcrumbSegment {
@@ -232,7 +233,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                             className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-surface-elevated transition-colors"
                                         >
                                             <Settings className="h-4 w-4" />
-                                            {t('groupSettings')}
+                                            {c_common('groupSettings')}
                                         </Link>
                                         <div className="my-1 border-t border-border/50" />
                                     </>
@@ -242,14 +243,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     className="flex w-full items-center gap-3 px-4 py-2.5 text-sm hover:bg-surface-elevated transition-colors"
                                 >
                                     <Share2 className="h-4 w-4" />
-                                    {t('shareGroup')}
+                                    {c_common('shareGroup')}
                                 </button>
                                 <button
                                     onClick={handleReport}
                                     className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/5 transition-colors"
                                 >
                                     <Flag className="h-4 w-4" />
-                                    {t('reportGroup')}
+                                    {c_common('reportGroup')}
                                 </button>
                             </div>
                         )}
@@ -278,7 +279,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 <Users className="h-4 w-4 text-white" />
                                 <span>
                                     <strong className="font-bold text-sm tracking-tight">{group.memberCount}</strong>
-                                    <span className="ml-1 font-medium opacity-80">{t('members')}</span>
+                                    <span className="ml-1 font-medium opacity-80">{c_common('members')}</span>
                                 </span>
                             </Link>
 
@@ -289,7 +290,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 <Calendar className="h-4 w-4 text-white" />
                                 <span>
                                     <strong className="font-bold text-sm tracking-tight">{group.eventCount}</strong>
-                                    <span className="ml-1 font-medium opacity-80">{t('events')}</span>
+                                    <span className="ml-1 font-medium opacity-80">{c_common('events')}</span>
                                 </span>
                             </Link>
 
@@ -340,17 +341,17 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     ) : userRole === 'PENDING' ? (
                                         <>
                                             <Check className="h-4 w-4 text-[var(--accent)]" />
-                                            {t('requested')}
+                                            {c_common('requested')}
                                         </>
                                     ) : !group.isAcceptingMembers ? (
                                         <>
                                             <HelpCircle className="h-4 w-4" />
-                                            {t('inquire')}
+                                            {c_common('inquire')}
                                         </>
                                     ) : (
                                         <>
                                             <UserPlus className="h-4 w-4" />
-                                            {t('joinGroup')}
+                                            {c_common('joinGroup')}
                                         </>
                                     )}
                                 </button>
@@ -371,11 +372,11 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         {(isMember || isOwner) && (
                             <div className="flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold border border-white/10 bg-white/10 text-white shadow-premium backdrop-blur-md">
                                 {isOwner ? (
-                                    <><Shield className="h-4 w-4 text-emerald-400" /> {t('statusOwner')}</>
+                                    <><Shield className="h-4 w-4 text-emerald-400" /> {c_common('role_owner')}</>
                                 ) : userRole === 'ADMIN' ? (
-                                    <><Shield className="h-4 w-4 text-blue-400" /> {t('statusAdmin')}</>
+                                    <><Shield className="h-4 w-4 text-blue-400" /> {c_common('role_admin')}</>
                                 ) : (
-                                    <><User className="h-4 w-4 text-white/70" /> {t('statusMember')}</>
+                                    <><User className="h-4 w-4 text-white/70" /> {c_common('role_member')}</>
                                 )}
                             </div>
                         )}
@@ -400,7 +401,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                                 onClick={() => setMoreOpen(false)}
                                             >
                                                 <Settings className="h-4 w-4 text-foreground-muted" />
-                                                {t('groupSettings')}
+                                                {c_common('groupSettings')}
                                             </Link>
                                             <div className="h-px bg-border my-1 mx-2" />
                                         </>
@@ -410,7 +411,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                         className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
                                     >
                                         <Plus className="h-4 w-4 text-foreground-muted" />
-                                        {t('copyLink')}
+                                        {c_common('copyLink')}
                                     </button>
 
                                     <div className="h-px bg-border my-1 mx-2" />
@@ -418,7 +419,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     {isMember && !isOwner && (
                                         <button
                                             onClick={() => {
-                                                if (confirm(t('confirmLeave'))) {
+                                                if (confirm(c_common('confirmLeave'))) {
                                                     startTransition(async () => {
                                                         await leaveGroup(group.id, locale);
                                                         setMoreOpen(false);
@@ -429,7 +430,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                             className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50/10 transition-colors"
                                         >
                                             <LogOut className="h-4 w-4" />
-                                            {t('leaveGroup')}
+                                            {c_common('leaveGroup')}
                                         </button>
                                     )}
 
@@ -438,7 +439,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                         className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground-muted hover:text-red-500 hover:bg-red-50/10 transition-colors"
                                     >
                                         <ShieldAlert className="h-4 w-4" />
-                                        {t('reportGroup')}
+                                        {c_common('reportGroup')}
                                     </button>
 
                                     {isOwner && (

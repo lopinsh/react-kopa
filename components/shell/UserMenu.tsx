@@ -20,6 +20,7 @@ type Props = {
 
 export default function UserMenu({ user }: Props) {
     const t = useTranslations('nav');
+  const c_common = useTranslations('common');
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const mounted = useSyncExternalStore(
@@ -117,7 +118,7 @@ export default function UserMenu({ user }: Props) {
                                 onClick={() => setIsOpen(false)}
                             >
                                 <Users className="h-4 w-4" />
-                                {t('myGroups')}
+                                {c_common('myGroups')}
                             </Link>
 
                             <div className="my-1 h-px bg-border/40 mx-2" />

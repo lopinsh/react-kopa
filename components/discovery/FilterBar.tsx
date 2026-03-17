@@ -23,6 +23,7 @@ type Props = {
 
 export default function FilterBar({ categories, cities, locale, activeCategoryId }: Props) {
     const t = useTranslations('discovery');
+  const c_common = useTranslations('common');
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -72,7 +73,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
     return (
         <div className="space-y-6 rounded-3xl border border-border bg-surface p-5 shadow-sm">
             <div className="flex items-center justify-between border-b border-border pb-4">
-                <h3 className="font-bold text-foreground">{t('filtersTitle')}</h3>
+                <h3 className="font-bold text-foreground">{c_common('filtersTitle')}</h3>
                 {(currentQ || currentCity !== 'all' || currentCategory) && (
                     <button
                         onClick={clearFilters}
@@ -123,7 +124,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
 
             {/* L1 Category Bar */}
             <div className="space-y-3 pt-2">
-                <h4 className="text-sm font-semibold text-foreground">{t('categoriesTitle')}</h4>
+                <h4 className="text-sm font-semibold text-foreground">{c_common('categoriesTitle')}</h4>
                 <div className="flex flex-col gap-2">
                     {categories.map((cat) => {
                         const isActive = currentCategory === cat.slug;

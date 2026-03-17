@@ -13,6 +13,7 @@ type Props = {
 
 export default function MemberTabs({ pendingCount, showRequests }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const currentTab = searchParams.get('tab') || 'members';
@@ -20,14 +21,14 @@ export default function MemberTabs({ pendingCount, showRequests }: Props) {
     const tabs = [
         {
             id: 'members',
-            label: t('membersList'),
+            label: c_common('membersList'),
             icon: Users,
             href: `${pathname}?tab=members`,
             active: currentTab === 'members'
         },
         ...(showRequests ? [{
             id: 'requests',
-            label: t('requestsTab'),
+            label: c_common('requestsTab'),
             icon: UserPlus,
             href: `${pathname}?tab=requests`,
             active: currentTab === 'requests',

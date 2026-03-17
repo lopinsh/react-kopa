@@ -27,6 +27,7 @@ export default function DiscoveryFilters({
     accentColor,
 }: Props) {
     const t = useTranslations('discovery');
+  const c_common = useTranslations('common');
 
     function update<K extends keyof Filters>(key: K, value: Filters[K]) {
         onFilterChange({ ...filters, [key]: value || undefined });
@@ -43,7 +44,7 @@ export default function DiscoveryFilters({
             {/* Search */}
             <div>
                 <label className="mb-2 block text-xs font-bold uppercase tracking-widest text-foreground-muted">
-                    {t('searchLabel')}
+                    {c_common('search')}
                 </label>
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted" />

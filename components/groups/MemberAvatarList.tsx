@@ -24,6 +24,7 @@ type Props = {
 
 export default function MemberAvatarList({ members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
@@ -117,7 +118,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                             <ChevronRight className="h-4 w-4" />
                         </div>
                         <span className="text-[11px] font-bold text-foreground-muted group-hover:text-foreground transition-colors">
-                            +{members.length - MAX_VISIBLE} {t('moreMembers')}
+                            +{members.length - MAX_VISIBLE} {c_common('moreMembers')}
                         </span>
                     </button>
                 )}

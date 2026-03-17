@@ -11,11 +11,12 @@ import SettingsSection from './SettingsSection';
 export default function ProfileSection() {
     const t = useTranslations('wizard');
     const gt = useTranslations('group');
+  const c_common = useTranslations('common');
     const { register, formState: { errors }, watch } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
-            title={gt('tabProfile')}
+            title={c_common('profile')}
             description={gt('tabProfileDescription')}
             icon={Settings}
         >
@@ -74,7 +75,7 @@ export default function ProfileSection() {
 
             <div className="space-y-4">
                 <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1">
-                    {gt('accentColorLabel')}
+                    {c_common('accentColorLabel')}
                 </label>
                 <div className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface-elevated/10">
                     <input
@@ -83,7 +84,7 @@ export default function ProfileSection() {
                         className="h-12 w-12 rounded-lg cursor-pointer bg-transparent border-none p-0 overflow-hidden"
                     />
                     <div className="flex-1">
-                        <p className="text-sm font-bold text-foreground">{gt('accentColorTitle')}</p>
+                        <p className="text-sm font-bold text-foreground">{c_common('accentColorTitle')}</p>
                         <p className="text-xs text-foreground-muted">{gt('accentColorDesc')}</p>
                     </div>
                 </div>

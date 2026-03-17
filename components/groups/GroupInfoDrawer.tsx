@@ -23,6 +23,7 @@ export default function GroupInfoDrawer({
     groupSlug,
 }: GroupInfoDrawerProps) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
 
     const mounted = useSyncExternalStore(
         () => () => { },
@@ -73,13 +74,13 @@ export default function GroupInfoDrawer({
                                 <Menu className="h-5 w-5" />
                             </div>
                             <h2 className="text-[11px] font-bold uppercase tracking-wider text-foreground">
-                                {t('groupMenu')}
+                                {c_common('groupMenu')}
                             </h2>
                         </div>
                         <button
                             onClick={onClose}
                             className="rounded-xl p-2.5 text-foreground hover:bg-white/5 transition-all active:scale-95"
-                            aria-label={t('closeDrawer')}
+                            aria-label={c_common('closeDrawer')}
                         >
                             <X className="h-5 w-5" />
                         </button>
@@ -101,7 +102,7 @@ export default function GroupInfoDrawer({
                             onClick={onClose}
                             className="w-full rounded-xl bg-surface-elevated py-3 text-[10px] font-black uppercase tracking-[0.2em] text-foreground shadow-card hover:bg-white/5 transition-all active:scale-[0.98] border border-border/50"
                         >
-                            {t('closeDrawer')}
+                            {c_common('closeDrawer')}
                         </button>
                     </div>
                 </div>

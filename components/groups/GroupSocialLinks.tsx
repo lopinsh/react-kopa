@@ -15,25 +15,26 @@ export default function GroupSocialLinks({
     instagramLink
 }: GroupSocialLinksProps) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
 
     if (!discordLink && !websiteLink && !instagramLink) return null;
 
     const links = [
         {
             icon: <Globe className="h-4 w-4" />,
-            label: t('social_website'),
+            label: c_common('social_website'),
             href: websiteLink,
             active: !!websiteLink
         },
         {
             icon: <Instagram className="h-4 w-4" />,
-            label: t('social_instagram'),
+            label: c_common('social_instagram'),
             href: instagramLink,
             active: !!instagramLink
         },
         {
             icon: <MessageSquare className="h-4 w-4" />,
-            label: t('social_discord'),
+            label: c_common('social_discord'),
             href: discordLink,
             active: !!discordLink
         }
@@ -42,7 +43,7 @@ export default function GroupSocialLinks({
     return (
         <div className="pt-4 mt-6 border-t border-white/[0.05]">
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40 mb-3 ml-1">
-                {t('socialLinksTitle')}
+                {c_common('tabSocial')}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2">
                 {links.map((link, idx) => (

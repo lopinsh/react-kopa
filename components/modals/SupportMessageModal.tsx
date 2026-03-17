@@ -22,6 +22,7 @@ type Props = {
 
 export default function SupportMessageModal({ isOpen, onClose, groupId, groupName }: Props) {
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const [isSent, setIsSent] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isPending, setIsPending] = useState(false);
@@ -60,7 +61,7 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                             <ShieldCheck className="h-6 w-6" />
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-foreground">{t('messageAdmins')}</h2>
+                            <h2 className="text-lg font-bold text-foreground">{c_common('messageAdmins')}</h2>
                             <p className="text-xs text-foreground-muted">{groupName}</p>
                         </div>
                     </div>
@@ -75,8 +76,8 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
                                 <Send className="h-8 w-8" />
                             </div>
-                            <h3 className="text-xl font-bold text-foreground">{t('messageSent')}</h3>
-                            <p className="mt-2 text-foreground-muted">{t('messageSuccess')}</p>
+                            <h3 className="text-xl font-bold text-foreground">{c_common('messageSent')}</h3>
+                            <p className="mt-2 text-foreground-muted">{c_common('messageSuccess')}</p>
                             <button
                                 onClick={onClose}
                                 className="mt-8 inline-flex h-11 items-center justify-center rounded-xl bg-foreground px-8 font-bold text-background transition-all hover:bg-foreground/90 active:scale-95"
@@ -92,11 +93,11 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
 
                             <div>
                                 <label className="mb-2 block text-sm font-semibold text-foreground">
-                                    {t('yourMessageLabel')}
+                                    {c_common('yourMessageLabel')}
                                 </label>
                                 <textarea
                                     {...register('message')}
-                                    placeholder={t('messagePlaceholder')}
+                                    placeholder={c_common('messagePlaceholder')}
                                     className={clsx(
                                         "w-full min-h-[150px] rounded-xl border bg-surface p-4 text-sm text-foreground outline-none transition-all focus:ring-2",
                                         errors.message ? "border-red-500 focus:ring-red-500/20" : "border-border focus:border-[var(--accent)] focus:ring-[var(--accent)]/20"
@@ -121,7 +122,7 @@ export default function SupportMessageModal({ isOpen, onClose, groupId, groupNam
                                     onClick={onClose}
                                     className="flex-1 h-11 rounded-xl border border-border text-sm font-bold text-foreground-muted transition-all hover:bg-surface active:scale-95"
                                 >
-                                    {t('cancel')}
+                                    {c_common('cancel')}
                                 </button>
                                 <button
                                     type="submit"

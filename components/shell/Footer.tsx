@@ -6,22 +6,23 @@ import { useTranslations } from 'next-intl';
 
 export function Footer({ locale }: { locale: string }) {
     const t = useTranslations('shell.footer');
+  const c_common = useTranslations('common');
     const currentYear = new Date().getFullYear();
 
     const sections = [
         {
-            title: t('platform'),
+            title: c_common('platform'),
             links: [
-                { label: t('discover'), href: `/explore` },
-                { label: t('myGroups'), href: `/profile/my-groups` },
-                { label: t('createGroup'), href: `/create` },
+                { label: c_common('discover'), href: `/explore` },
+                { label: c_common('myGroups'), href: `/profile/my-groups` },
+                { label: c_common('createGroup'), href: `/create` },
             ]
         },
         {
-            title: t('support'),
+            title: c_common('support'),
             links: [
                 { label: t('helpCenter'), href: '#' },
-                { label: t('privacyPolicy'), href: '#' },
+                { label: c_common('learnMore'), href: '#' },
                 { label: t('terms'), href: '#' },
             ]
         },
@@ -43,7 +44,7 @@ export function Footer({ locale }: { locale: string }) {
                     <div className="col-span-1">
                         <Link href={`/`} className="flex items-center gap-2 group">
                             <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
-                                <span className="text-white font-bold text-sm">{t('logoInitials')}</span>
+                                <span className="text-white font-bold text-sm">{c_common('brandShort')}</span>
                             </div>
                             <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-rose-500">
                                 {t('logoSubtitle')}

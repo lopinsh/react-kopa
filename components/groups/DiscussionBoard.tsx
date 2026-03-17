@@ -57,6 +57,7 @@ type Props = {
 export default function DiscussionBoard({ groupId, locale, currentUserId }: Props) {
     const { isMember, userRole } = useGroupContext();
     const t = useTranslations('group');
+  const c_common = useTranslations('common');
     const tAuth = useTranslations('auth');
     const [posts, setPosts] = useState<Post[]>([]);
     const [content, setContent] = useState('');
@@ -291,7 +292,7 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                         <button
                                             onClick={() => handleDelete(post.id)}
                                             className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-foreground-muted hover:text-red-500"
-                                            title={t('deletePost')}
+                                            title={c_common('deletePost')}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
                                         </button>
@@ -362,7 +363,7 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                                             <button
                                                                 onClick={() => handleDelete(reply.id)}
                                                                 className="opacity-0 group-hover/reply:opacity-100 transition-opacity p-1 text-foreground-muted hover:text-red-500"
-                                                                title={t('deletePost')}
+                                                                title={c_common('deletePost')}
                                                             >
                                                                 <Trash2 className="h-3 w-3" />
                                                             </button>
@@ -433,7 +434,7 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                                                                 <button
                                                                                     onClick={() => handleDelete(nestedReply.id)}
                                                                                     className="opacity-0 group-hover/nested-reply:opacity-100 transition-opacity p-0.5 text-foreground-muted hover:text-red-500"
-                                                                                    title={t('deletePost')}
+                                                                                    title={c_common('deletePost')}
                                                                                 >
                                                                                     <Trash2 className="h-2.5 w-2.5" />
                                                                                 </button>

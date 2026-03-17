@@ -13,6 +13,7 @@ type SidebarProps = {
 
 export default function Sidebar({ locale }: SidebarProps) {
     const t = useTranslations('shell.sidebar');
+  const c_common = useTranslations('common');
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathname = usePathname();
 
@@ -40,7 +41,7 @@ export default function Sidebar({ locale }: SidebarProps) {
                 {!isCollapsed && (
                     <div className="flex items-center justify-between px-2 mb-2">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted">
-                            {t('filters')}
+                            {c_common('filtersTitle')}
                         </span>
                         <button
                             onClick={() => setIsCollapsed(!isCollapsed)}

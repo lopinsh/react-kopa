@@ -36,7 +36,7 @@ export default function BasicInfoStep({ accentColor }: Props) {
                     )}
                     style={{ ['--tw-ring-color' as string]: accentColor }}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-500">{/* @ts-ignore */}{t(errors.name.message)}</p>}
+                {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as any)}</p>}
             </div>
 
             {/* Description */}
