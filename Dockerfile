@@ -18,6 +18,9 @@ COPY . .
 # Generate Prisma Client
 RUN npx prisma generate
 
+# Compile seed script for production
+RUN npx tsc prisma/seed.ts --esModuleInterop --target ES2022 --module CommonJS
+
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
 
