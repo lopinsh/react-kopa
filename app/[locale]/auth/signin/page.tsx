@@ -84,6 +84,12 @@ export default function SignInPage() {
                     </button>
                 </form>
 
+                <div className="text-center text-sm">
+                    <a href="/auth/register" className="text-primary hover:underline">
+                        Don't have an account? Sign up
+                    </a>
+                </div>
+
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-border" />
