@@ -27,11 +27,10 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
         : null;
 
     if (!explicitlyExpanded && selectedL1) {
-        const CatIcon = getCategoryIcon(selectedL1.slug);
         return (
             <div className="space-y-4 animate-in fade-in duration-300">
                 <label className="mb-2 block text-sm font-medium text-foreground">
-                    {t('step1Title')}
+                    {t('step1Title')} <span className="text-red-500">*</span>
                 </label>
                 <button
                     type="button"
@@ -40,9 +39,14 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
                     style={{ borderColor: selectedL1.color }}
                 >
                     <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
-                            <CatIcon className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
-                        </div>
+                        {(() => {
+                            const IconC = getCategoryIcon(selectedL1.slug);
+                            return (
+                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+                                    {IconC({ className: "h-6 w-6 stroke-2", style: { color: selectedL1.color } })}
+                                </div>
+                            );
+                        })()}
                         <div>
                             <span className="block text-base font-bold text-foreground">
                                 {selectedL1.title}
@@ -65,7 +69,7 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
     return (
         <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
             <label className="mb-2 flex items-center justify-between text-sm font-medium text-foreground">
-                <span>{t('step1Title')}</span>
+                <span>{t('step1Title')} <span className="text-red-500">*</span></span>
                 {value && (
                     <button
                         type="button"
@@ -79,7 +83,6 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {taxonomy.map((l1) => {
                     const isSelected = value?.kind === 'existing' && value.categoryId === l1.id;
-                    const CatIcon = getCategoryIcon(l1.slug);
                     return (
                         <button
                             key={l1.id}
@@ -109,7 +112,10 @@ export default function L1Picker({ taxonomy, value, onChange, accentColor }: Pro
                                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                 </div>
                             )}
-                            <CatIcon className="h-6 w-6 stroke-2" style={{ color: l1.color }} />
+                            {(() => {
+                                const IconC = getCategoryIcon(l1.slug);
+                                return IconC({ className: "h-6 w-6 stroke-2", style: { color: l1.color } });
+                            })()}
                             <span className={clsx("text-sm font-semibold", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
                                 {l1.title}
                             </span>

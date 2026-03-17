@@ -389,7 +389,6 @@ export const GroupService = {
                 type: data.type,
                 categoryId: targetCategoryId,
                 bannerImage: data.bannerImage,
-                instructions: data.instructions,
                 discordLink: data.discordLink,
                 websiteLink: data.websiteLink,
                 instagramLink: data.instagramLink,
@@ -408,13 +407,7 @@ export const GroupService = {
                             content: data.description || '',
                             order: 0,
                             visibility: 'PUBLIC'
-                        },
-                        ...(data.instructions ? [{
-                            title: 'Member Instructions',
-                            content: data.instructions,
-                            order: 1,
-                            visibility: 'MEMBERS_ONLY' as const
-                        }] : [])
+                        }
                     ]
                 }
             }
@@ -453,6 +446,48 @@ export const GroupService = {
                 groupId: groupId
             }
         });
+
+        // Initialize a 1-on-1 Conversation between Admin and Pending User
+        const { MessageService } = await import('@/lib/services/message.service');
+
+        // Note: we fetch the existing application messages to pre-populate the new Conversation
+        const initialAppMessages = await prisma.applicationMessage.findMany({
+            where: { applicationUserId: targetUserId, groupId },
+            orderBy: { createdAt: 'asc' }
+        });
+
+        let conversation = await prisma.conversation.findFirst({
+            where: {
+                AND: [
+                    { participants: { some: { id: adminId } } },
+                    { participants: { some: { id: targetUserId } } }
+                ]
+            }
+        });
+
+        if (!conversation) {
+            conversation = await prisma.conversation.create({
+                data: {
+                    participants: {
+                        connect: [{ id: adminId }, { id: targetUserId }]
+                    }
+                }
+            });
+
+            // Seed it with the previous app messages
+            if (initialAppMessages.length > 0) {
+                await prisma.message.createMany({
+                    data: initialAppMessages.map(msg => ({
+                        content: msg.content,
+                        senderId: msg.senderId,
+                        conversationId: conversation!.id,
+                        createdAt: msg.createdAt,
+                    }))
+                });
+            }
+        } else {
+             await MessageService.sendMessage(conversation.id, adminId, message);
+        }
 
         return { success: true };
     },
@@ -579,14 +614,24 @@ export const GroupService = {
 
         const canEditTaxonomy = role === 'OWNER' || isAppAdmin;
 
+        // Check for slug collisions if slug is being updated
+        if (data.slug) {
+            const existingSlug = await prisma.group.findFirst({
+                where: { slug: data.slug, id: { not: groupId } }
+            });
+            if (existingSlug) {
+                return { success: false, error: 'VALIDATION_FAILED' }; // Slug taken
+            }
+        }
+
         // Taxonomy can be edited by group owners and app admins.
         const updateData: Prisma.GroupUpdateInput = {
             name: data.name,
+            slug: data.slug || undefined,
             description: data.description,
             city: data.city,
             type: data.type,
             bannerImage: data.bannerImage,
-            instructions: data.instructions,
             discordLink: data.discordLink,
             websiteLink: data.websiteLink,
             instagramLink: data.instagramLink,

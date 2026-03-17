@@ -8,6 +8,7 @@ export const PostService = {
         groupId: string;
         authorId: string;
         content: string;
+        parentId?: string;
     }) {
         try {
             const membership = await prisma.membership.findUnique({
@@ -28,6 +29,7 @@ export const PostService = {
                     content: data.content,
                     groupId: data.groupId,
                     authorId: data.authorId,
+                    parentId: data.parentId,
                 },
                 include: {
                     author: {
@@ -53,11 +55,19 @@ export const PostService = {
             });
 
             // Trigger Pusher event
-            await pusherServer.trigger(
-                `group-${data.groupId}`,
-                'new-post',
-                post
-            );
+            if (data.parentId) {
+                await pusherServer.trigger(
+                    `group-${data.groupId}`,
+                    'new-reply',
+                    post
+                );
+            } else {
+                await pusherServer.trigger(
+                    `group-${data.groupId}`,
+                    'new-post',
+                    post
+                );
+            }
 
             return post;
         } catch (error) {
@@ -81,11 +91,27 @@ export const PostService = {
     async getPostsByGroupId(groupId: string) {
         try {
             return await prisma.post.findMany({
-                where: { groupId },
+                where: { groupId, parentId: null },
                 orderBy: { createdAt: 'desc' },
                 include: {
                     author: {
                         select: { id: true, name: true, image: true }
+                    },
+                    replies: {
+                        orderBy: { createdAt: 'asc' },
+                        include: {
+                            author: {
+                                select: { id: true, name: true, image: true }
+                            },
+                            replies: {
+                                orderBy: { createdAt: 'asc' },
+                                include: {
+                                    author: {
+                                        select: { id: true, name: true, image: true }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             });

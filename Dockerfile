@@ -21,14 +21,20 @@ RUN npx prisma generate
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
 
+ARG NEXTAUTH_SECRET
+ARG AUTH_SECRET
 ARG NEXT_PUBLIC_PUSHER_KEY
 ARG NEXT_PUBLIC_PUSHER_HOST
 ARG NEXT_PUBLIC_PUSHER_PORT
+
+# Export public variables
 ENV NEXT_PUBLIC_PUSHER_KEY=$NEXT_PUBLIC_PUSHER_KEY
 ENV NEXT_PUBLIC_PUSHER_HOST=$NEXT_PUBLIC_PUSHER_HOST
 ENV NEXT_PUBLIC_PUSHER_PORT=$NEXT_PUBLIC_PUSHER_PORT
 
-RUN npm run build
+# Do not export secrets as ENV for runtime security!
+# They are only used by the `RUN npm run build` process during the builder stage.
+RUN AUTH_SECRET=$AUTH_SECRET NEXTAUTH_SECRET=$NEXTAUTH_SECRET npm run build
 
 # Production image - lean standalone
 FROM base AS runner

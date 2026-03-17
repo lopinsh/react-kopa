@@ -18,20 +18,8 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy prisma to server
-        run: |
-          scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} -r \
-            prisma \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/prisma
-
       - name: Run seed
         run: |
           ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            "source /root/ejam-kopa/.env && \
-             docker run --rm \
-              --network ejam-kopa_default \
-              -e DATABASE_URL=\"postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@ejam-kopa-db:5432/\${POSTGRES_DB}?schema=public\" \
-              -v /root/ejam-kopa/prisma:/app/prisma \
-              node:20-alpine \
-              sh -c 'cd /app && npm install prisma@6 ts-node typescript @types/node --legacy-peer-deps 2>/dev/null && npx ts-node --skip-project prisma/seed.ts'"
+            "docker exec ejam-kopa-app npx prisma db seed"

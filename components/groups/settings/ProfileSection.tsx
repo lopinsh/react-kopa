@@ -35,6 +35,23 @@ export default function ProfileSection() {
 
                 <div className="space-y-2">
                     <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1">
+                        {t('fieldSlug', { fallback: 'URL Slug' })}
+                    </label>
+                    <div className="relative flex items-center">
+                        <span className="absolute left-4 text-sm font-medium text-foreground-muted opacity-50">/group/</span>
+                        <input
+                            {...register('slug')}
+                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-[4.5rem] pr-4 py-4 outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5 transition-all font-medium text-foreground"
+                            placeholder="my-awesome-group"
+                        />
+                    </div>
+                    {errors.slug && (
+                        <p className="text-xs text-red-500 ml-1">{errors.slug.message}</p>
+                    )}
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1">
                         {t('fieldCity')}
                     </label>
                     <select

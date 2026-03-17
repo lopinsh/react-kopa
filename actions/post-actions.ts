@@ -24,9 +24,9 @@ type PostWithAuthorAndGroup = Prisma.PostGetPayload<{
 }>;
 
 /**
- * Create a new post in a group discussion board.
+ * Create a new post or reply in a group discussion board.
  */
-export async function createPost(groupId: string, content: string, locale: string): Promise<ActionResponse<{ post: PostWithAuthorAndGroup }>> {
+export async function createPost(groupId: string, content: string, locale: string, parentId?: string): Promise<ActionResponse<{ post: PostWithAuthorAndGroup }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
@@ -40,7 +40,8 @@ export async function createPost(groupId: string, content: string, locale: strin
         const post = await PostService.createPost({
             groupId,
             authorId,
-            content
+            content,
+            parentId
         });
 
         // Notify group members
