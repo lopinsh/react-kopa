@@ -1,0 +1,113 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "Ejam Kopā" [ref=e5] [cursor=pointer]:
+        - /url: /lv
+        - generic [ref=e8]: EK
+        - generic [ref=e9]:
+          - generic [ref=e10]: Ejam Kopā
+          - generic [ref=e11]: Atrodi Savējos
+      - generic [ref=e13] [cursor=pointer]:
+        - img [ref=e14]
+        - generic [ref=e17]: Find groups, events...
+        - generic [ref=e18]:
+          - generic [ref=e19]: Ctrl
+          - text: K
+      - generic [ref=e20]:
+        - generic [ref=e21]:
+          - generic "Language switcher" [ref=e22]:
+            - button "LV" [pressed] [ref=e23]
+            - button "EN" [ref=e24]
+          - button "Pārslēgt uz tumšo režīmu" [ref=e26]:
+            - img [ref=e27]
+        - generic [ref=e29]:
+          - link "Ziņas" [ref=e31] [cursor=pointer]:
+            - /url: /lv/messages
+            - img [ref=e32]
+          - button "Paziņojumi" [ref=e35]:
+            - img [ref=e36]
+        - button [ref=e41]:
+          - img [ref=e43]
+    - main [ref=e47]:
+      - generic [ref=e50]:
+        - generic [ref=e51]:
+          - generic [ref=e52]: EK
+          - paragraph [ref=e53]: Ejam Kopā
+        - heading "onboarding.username.heading" [level=1] [ref=e54]
+        - paragraph [ref=e55]: onboarding.username.subtext
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]: onboarding.username.label
+            - generic [ref=e60]:
+              - generic:
+                - img
+              - textbox "onboarding.username.label" [active] [ref=e61]:
+                - /placeholder: onboarding.username.placeholder
+            - generic [ref=e62]: onboarding.username.hint
+          - button "onboarding.username.submit" [disabled] [ref=e63]
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - link "EK Atrodi savējos, augam kopā." [ref=e68] [cursor=pointer]:
+              - /url: /lv
+              - generic [ref=e70]: EK
+              - generic [ref=e71]: Atrodi savējos, augam kopā.
+            - paragraph [ref=e72]: Ejam Kopā – veicinām vietējās kopienas saziņu.
+            - generic [ref=e73]:
+              - link [ref=e74] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e75]
+              - link [ref=e78] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e79]
+              - link [ref=e82] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e83]
+          - generic [ref=e85]:
+            - heading "Platforma" [level=3] [ref=e86]
+            - list [ref=e87]:
+              - listitem [ref=e88]:
+                - link "Atklāt" [ref=e89] [cursor=pointer]:
+                  - /url: /lv/explore
+              - listitem [ref=e90]:
+                - link "Manas grupas" [ref=e91] [cursor=pointer]:
+                  - /url: /lv/profile/my-groups
+              - listitem [ref=e92]:
+                - link "Izveidot grupu" [ref=e93] [cursor=pointer]:
+                  - /url: /lv/create
+          - generic [ref=e94]:
+            - heading "Atbalsts" [level=3] [ref=e95]
+            - list [ref=e96]:
+              - listitem [ref=e97]:
+                - link "Palīdzības centrs" [ref=e98] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e99]:
+                - link "Privātuma politika" [ref=e100] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e101]:
+                - link "Lietošanas noteikumi" [ref=e102] [cursor=pointer]:
+                  - /url: "#"
+          - generic [ref=e103]:
+            - heading "Par mums" [level=3] [ref=e104]
+            - list [ref=e105]:
+              - listitem [ref=e106]:
+                - link "Ejam Kopā – veicinām vietējās kopienas saziņu." [ref=e107] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e108]:
+                - link "Kopienas vadlīnijas" [ref=e109] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e110]:
+                - link "Sazināties" [ref=e111] [cursor=pointer]:
+                  - /url: "#"
+        - generic [ref=e112]:
+          - paragraph [ref=e113]:
+            - text: © 2026 Ejam Kopā. Radīts ar
+            - img [ref=e114]
+            - text: kopienai
+          - link "Latvija (LV)" [ref=e117] [cursor=pointer]:
+            - /url: /lv/explore
+  - alert [ref=e119]
+```

@@ -442,7 +442,28 @@
       "TOPIC_REQUIRED": "Please select at least one sub-topic.",
       "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
       "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
-      "typePublic": "Public Group"
+      "typePublic": "Public Group",
+      "next": "Next",
+      "back": "Back"
+    },
+    "onboarding": {
+      "username": {
+        "heading": "Choose a username",
+        "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
+        "label": "Username",
+        "placeholder": "e.g. jdoe99",
+        "hint": "3–30 characters. Letters, numbers, and underscores only.",
+        "submit": "Continue",
+        "available": "Available!",
+        "taken": "Username is already taken.",
+        "checking": "Checking...",
+        "submitting": "Saving..."
+      }
+    },
+    "nav": {
+      "discover": "Discover",
+      "myGroups": "My Groups",
+      "profile": "Profile"
     },
     "admin": {
       "title": "Admin Control Center",

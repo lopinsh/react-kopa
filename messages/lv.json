@@ -441,7 +441,28 @@
       "TOPIC_REQUIRED": "Lūdzu, izvēlieties vismaz vienu apakštēmu.",
       "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm garam.",
       "NAME_TOO_LONG": "Nosaukums nevar pārsniegt 80 rakstzīmes.",
-      "typePublic": "Publiska Grupa"
+      "typePublic": "Publiska Grupa",
+      "next": "Tālāk",
+      "back": "Atpakaļ"
+    },
+    "onboarding": {
+      "username": {
+        "heading": "Izvēlieties lietotājvārdu",
+        "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
+        "label": "Lietotājvārds",
+        "placeholder": "piem. jdoe99",
+        "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
+        "submit": "Turpināt",
+        "available": "Pieejams!",
+        "taken": "Lietotājvārds jau ir aizņemts.",
+        "checking": "Pārbauda...",
+        "submitting": "Saglabā..."
+      }
+    },
+    "nav": {
+      "discover": "Atklāt",
+      "myGroups": "Manas grupas",
+      "profile": "Profils"
     },
     "admin": {
       "title": "Admina vadības centrs",
