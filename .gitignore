@@ -46,3 +46,4 @@ tsc_output*.txt
 
 # scripts
 test.ts
+\ntest-results/\nplaywright-report/\n*-context.md\n*.png\n*.webm\n*.zip
