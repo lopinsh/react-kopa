@@ -36,18 +36,18 @@
         - generic [ref=e51]:
           - generic [ref=e52]: EK
           - paragraph [ref=e53]: Ejam Kopā
-        - heading "onboarding.username.heading" [level=1] [ref=e54]
-        - paragraph [ref=e55]: onboarding.username.subtext
+        - heading "Izvēlieties lietotājvārdu" [level=1] [ref=e54]
+        - paragraph [ref=e55]: Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.
         - generic [ref=e57]:
           - generic [ref=e58]:
-            - generic [ref=e59]: onboarding.username.label
+            - generic [ref=e59]: Lietotājvārds
             - generic [ref=e60]:
               - generic:
                 - img
-              - textbox "onboarding.username.label" [active] [ref=e61]:
-                - /placeholder: onboarding.username.placeholder
-            - generic [ref=e62]: onboarding.username.hint
-          - button "onboarding.username.submit" [disabled] [ref=e63]
+              - textbox "Lietotājvārds" [active] [ref=e61]:
+                - /placeholder: piem. jdoe99
+            - generic [ref=e62]: 3–30 rakstzīmes. Tikai burti, cipari un pasvitras.
+          - button "Turpināt" [disabled] [ref=e63]
       - generic [ref=e65]:
         - generic [ref=e66]:
           - generic [ref=e67]:

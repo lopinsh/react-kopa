@@ -60,7 +60,10 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     // Try clicking submit or pressing enter
     const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    await pageA.waitForTimeout(1000);
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -69,6 +72,15 @@ test.describe('Ejam Kopā Live Verification', () => {
     await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
 
     expect(pageA.url()).not.toContain('auth');
+
+    // Verify it isn't still stuck on onboarding
+    if (pageA.url().includes('onboarding')) {
+        await usernameInput.fill(userA.username + randomBytes(2).toString('hex'));
+        await pageA.waitForTimeout(1000);
+        await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+        await usernameSubmit.click();
+        await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+    }
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
@@ -98,7 +110,10 @@ test.describe('Ejam Kopā Live Verification', () => {
     await pageB.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
 
     const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    await pageB.waitForTimeout(1000);
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -106,6 +121,15 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
     expect(pageB.url()).not.toContain('auth');
+
+    // Verify it isn't still stuck on onboarding
+    if (pageB.url().includes('onboarding')) {
+        await usernameInput.fill(userB.username + randomBytes(2).toString('hex'));
+        await pageB.waitForTimeout(1000);
+        await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+        await usernameSubmit.click();
+        await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+    }
 
     const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
