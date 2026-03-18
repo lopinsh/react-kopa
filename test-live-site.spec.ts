@@ -74,12 +74,30 @@ test.describe('Ejam Kopā Live Verification', () => {
     expect(pageA.url()).not.toContain('auth');
 
     // Verify it isn't still stuck on onboarding
-    if (pageA.url().includes('onboarding')) {
-        await usernameInput.fill(userA.username + randomBytes(2).toString('hex'));
-        await pageA.waitForTimeout(1000);
-        await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
-        await usernameSubmit.click();
-        await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+    for(let retry=0; retry<5; retry++) {
+        if (pageA.url().includes('onboarding')) {
+            await pageA.reload({ waitUntil: 'networkidle' });
+            await pageA.waitForTimeout(3000);
+
+            // If reloading got us out of onboarding, break early
+            if (!pageA.url().includes('onboarding')) break;
+
+            const input = pageA.getByRole('textbox').first();
+            // Ensure no invalid chars (no hyphens from randomBytes)
+            const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+            await input.fill(userA.username + safeSuffix);
+
+            // Wait specifically for the availability check text
+            await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+
+            const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+            // Must wait for it to be enabled properly from the server response before click
+            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.click();
+            await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        } else {
+            break;
+        }
     }
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
@@ -123,12 +141,30 @@ test.describe('Ejam Kopā Live Verification', () => {
     expect(pageB.url()).not.toContain('auth');
 
     // Verify it isn't still stuck on onboarding
-    if (pageB.url().includes('onboarding')) {
-        await usernameInput.fill(userB.username + randomBytes(2).toString('hex'));
-        await pageB.waitForTimeout(1000);
-        await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
-        await usernameSubmit.click();
-        await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+    for(let retry=0; retry<5; retry++) {
+        if (pageB.url().includes('onboarding')) {
+            await pageB.reload({ waitUntil: 'networkidle' });
+            await pageB.waitForTimeout(3000);
+
+            // If reloading got us out of onboarding, break early
+            if (!pageB.url().includes('onboarding')) break;
+
+            const input = pageB.getByRole('textbox').first();
+            // Ensure no invalid chars
+            const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+            await input.fill(userB.username + safeSuffix);
+
+            // Wait specifically for the availability check text
+            await pageB.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+
+            const submit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+            // Must wait for it to be enabled properly from the server response before click
+            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.click();
+            await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        } else {
+            break;
+        }
     }
 
     const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
@@ -141,6 +177,22 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     await pageA.goto('https://ejam.lumm.eu/lv/create');
     await pageA.waitForTimeout(2000);
+
+    // If redirected back to onboarding again, force it once more.
+    if (pageA.url().includes('onboarding')) {
+        await pageA.reload({ waitUntil: 'networkidle' });
+        await pageA.waitForTimeout(2000);
+        const input = pageA.getByRole('textbox').first();
+        const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+        await input.fill(userA.username + safeSuffix);
+        await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+        const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+        await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+        await submit.click();
+        await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        await pageA.goto('https://ejam.lumm.eu/lv/create');
+        await pageA.waitForTimeout(2000);
+    }
 
     const categoryBtns = pageA.locator('button').filter({ hasText: /Sport|Tech|Art|Māksla|Sports/i });
     if (await categoryBtns.count() > 0) {

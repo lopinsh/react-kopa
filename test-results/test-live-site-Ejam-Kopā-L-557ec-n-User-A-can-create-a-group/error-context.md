@@ -32,82 +32,121 @@
         - button [ref=e41]:
           - img [ref=e43]
     - main [ref=e47]:
-      - generic [ref=e50]:
-        - generic [ref=e51]:
-          - generic [ref=e52]: EK
-          - paragraph [ref=e53]: Ejam Kopā
-        - heading "Izvēlieties lietotājvārdu" [level=1] [ref=e54]
-        - paragraph [ref=e55]: Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.
-        - generic [ref=e57]:
-          - generic [ref=e58]:
-            - generic [ref=e59]: Lietotājvārds
-            - generic [ref=e60]:
-              - generic:
-                - img
-              - textbox "Lietotājvārds" [active] [ref=e61]:
-                - /placeholder: piem. jdoe99
-            - generic [ref=e62]: 3–30 rakstzīmes. Tikai burti, cipari un pasvitras.
-          - button "Turpināt" [disabled] [ref=e63]
-      - generic [ref=e65]:
-        - generic [ref=e66]:
-          - generic [ref=e67]:
-            - link "EK Atrodi savējos, augam kopā." [ref=e68] [cursor=pointer]:
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - paragraph [ref=e57]: 1. solis no 3
+          - heading "wizard.step1Title" [level=2] [ref=e58]
+          - paragraph [ref=e59]: Izvēlieties, kā jūsu grupa tiks kategorizēta.
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: wizard.step1Title *
+            - button "Sports un fitness Noklikšķiniet, lai mainītu kategoriju" [ref=e64]:
+              - generic [ref=e65]:
+                - img [ref=e67]
+                - generic [ref=e69]:
+                  - generic [ref=e70]: Sports un fitness
+                  - text: Noklikšķiniet, lai mainītu kategoriju
+              - img [ref=e72]
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - generic [ref=e77]: Apakštēmas *
+              - generic [ref=e79]:
+                - img [ref=e80]
+                - combobox "Meklēt tēmas kategorijā Sports un fitness..." [expanded] [active] [ref=e83]
+              - generic [ref=e84]:
+                - generic [ref=e85]:
+                  - button "Skriešana" [ref=e87]:
+                    - generic [ref=e88]: Skriešana
+                    - img [ref=e90]
+                  - button "Riteņbraukšana" [ref=e93]:
+                    - generic [ref=e94]: Riteņbraukšana
+                    - img [ref=e96]
+                  - button "Kultūrisms" [ref=e99]:
+                    - generic [ref=e100]: Kultūrisms
+                    - img [ref=e102]
+                  - button "Pievienot apakštēmu" [ref=e105]:
+                    - img [ref=e107]
+                    - generic [ref=e108]: Pievienot apakštēmu
+                - button "Pabeigts" [ref=e110]
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - img [ref=e114]
+                - text: Pilsēta
+              - combobox "Pilsēta" [ref=e117]:
+                - option "Izvēlieties pilsētu" [selected]
+                - option "Riga"
+                - option "Jurmala"
+                - option "Liepaja"
+                - option "Daugavpils"
+                - option "Ventspils"
+                - option "Jelgava"
+                - option "Jekabpils"
+                - option "Sigulda"
+                - option "Cesis"
+                - option "Valmiera"
+        - button "Tālāk" [ref=e119]:
+          - text: Tālāk
+          - img [ref=e120]
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - generic [ref=e125]:
+            - link "EK Atrodi savējos, augam kopā." [ref=e126] [cursor=pointer]:
               - /url: /lv
-              - generic [ref=e70]: EK
-              - generic [ref=e71]: Atrodi savējos, augam kopā.
-            - paragraph [ref=e72]: Ejam Kopā – veicinām vietējās kopienas saziņu.
-            - generic [ref=e73]:
-              - link [ref=e74] [cursor=pointer]:
+              - generic [ref=e128]: EK
+              - generic [ref=e129]: Atrodi savējos, augam kopā.
+            - paragraph [ref=e130]: Ejam Kopā – veicinām vietējās kopienas saziņu.
+            - generic [ref=e131]:
+              - link [ref=e132] [cursor=pointer]:
                 - /url: "#"
-                - img [ref=e75]
-              - link [ref=e78] [cursor=pointer]:
+                - img [ref=e133]
+              - link [ref=e136] [cursor=pointer]:
                 - /url: "#"
-                - img [ref=e79]
-              - link [ref=e82] [cursor=pointer]:
+                - img [ref=e137]
+              - link [ref=e140] [cursor=pointer]:
                 - /url: "#"
-                - img [ref=e83]
-          - generic [ref=e85]:
-            - heading "Platforma" [level=3] [ref=e86]
-            - list [ref=e87]:
-              - listitem [ref=e88]:
-                - link "Atklāt" [ref=e89] [cursor=pointer]:
+                - img [ref=e141]
+          - generic [ref=e143]:
+            - heading "Platforma" [level=3] [ref=e144]
+            - list [ref=e145]:
+              - listitem [ref=e146]:
+                - link "Atklāt" [ref=e147] [cursor=pointer]:
                   - /url: /lv/explore
-              - listitem [ref=e90]:
-                - link "Manas grupas" [ref=e91] [cursor=pointer]:
+              - listitem [ref=e148]:
+                - link "Manas grupas" [ref=e149] [cursor=pointer]:
                   - /url: /lv/profile/my-groups
-              - listitem [ref=e92]:
-                - link "Izveidot grupu" [ref=e93] [cursor=pointer]:
+              - listitem [ref=e150]:
+                - link "Izveidot grupu" [ref=e151] [cursor=pointer]:
                   - /url: /lv/create
-          - generic [ref=e94]:
-            - heading "Atbalsts" [level=3] [ref=e95]
-            - list [ref=e96]:
-              - listitem [ref=e97]:
-                - link "Palīdzības centrs" [ref=e98] [cursor=pointer]:
+          - generic [ref=e152]:
+            - heading "Atbalsts" [level=3] [ref=e153]
+            - list [ref=e154]:
+              - listitem [ref=e155]:
+                - link "Palīdzības centrs" [ref=e156] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e99]:
-                - link "Privātuma politika" [ref=e100] [cursor=pointer]:
+              - listitem [ref=e157]:
+                - link "Privātuma politika" [ref=e158] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e101]:
-                - link "Lietošanas noteikumi" [ref=e102] [cursor=pointer]:
+              - listitem [ref=e159]:
+                - link "Lietošanas noteikumi" [ref=e160] [cursor=pointer]:
                   - /url: "#"
-          - generic [ref=e103]:
-            - heading "Par mums" [level=3] [ref=e104]
-            - list [ref=e105]:
-              - listitem [ref=e106]:
-                - link "Ejam Kopā – veicinām vietējās kopienas saziņu." [ref=e107] [cursor=pointer]:
+          - generic [ref=e161]:
+            - heading "Par mums" [level=3] [ref=e162]
+            - list [ref=e163]:
+              - listitem [ref=e164]:
+                - link "Ejam Kopā – veicinām vietējās kopienas saziņu." [ref=e165] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e108]:
-                - link "Kopienas vadlīnijas" [ref=e109] [cursor=pointer]:
+              - listitem [ref=e166]:
+                - link "Kopienas vadlīnijas" [ref=e167] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e110]:
-                - link "Sazināties" [ref=e111] [cursor=pointer]:
+              - listitem [ref=e168]:
+                - link "Sazināties" [ref=e169] [cursor=pointer]:
                   - /url: "#"
-        - generic [ref=e112]:
-          - paragraph [ref=e113]:
+        - generic [ref=e170]:
+          - paragraph [ref=e171]:
             - text: © 2026 Ejam Kopā. Radīts ar
-            - img [ref=e114]
+            - img [ref=e172]
             - text: kopienai
-          - link "Latvija (LV)" [ref=e117] [cursor=pointer]:
+          - link "Latvija (LV)" [ref=e175] [cursor=pointer]:
             - /url: /lv/explore
-  - alert [ref=e119]
+  - alert [ref=e177]
 ```
