@@ -56,11 +56,16 @@ test.describe('Ejam Kopā Live Verification', () => {
     const usernameInput = pageA.getByRole('textbox').first();
     await usernameInput.fill(userA.username);
 
-    await pageA.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
+    await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
 
     // Try clicking submit or pressing enter
-    const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+    await usernameSubmit.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+
+    // Wait until it is enabled, as debounced check might take a moment
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -69,9 +74,14 @@ test.describe('Ejam Kopā Live Verification', () => {
     await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
 
     expect(pageA.url()).not.toContain('auth');
+    expect(pageA.url()).not.toContain('onboarding');
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Check if we are still on onboarding
+    await pageA.goto('https://ejam.lumm.eu/lv/profile');
+    await pageA.waitForTimeout(2000);
   });
 
   test('User B can register and onboard', async () => {
@@ -95,10 +105,15 @@ test.describe('Ejam Kopā Live Verification', () => {
     const usernameInput = pageB.getByRole('textbox').first();
     await usernameInput.fill(userB.username);
 
-    await pageB.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
+    await pageB.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
 
-    const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+    await usernameSubmit.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+
+    // Wait until it is enabled
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -106,9 +121,14 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
     expect(pageB.url()).not.toContain('auth');
+    expect(pageB.url()).not.toContain('onboarding');
 
     const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
+
+    // Check if we are still on onboarding
+    await pageB.goto('https://ejam.lumm.eu/lv/profile');
+    await pageB.waitForTimeout(2000);
   });
 
   test('User A can create a group', async () => {
