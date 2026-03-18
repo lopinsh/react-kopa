@@ -403,6 +403,48 @@
         "visibilityPublic": "Publiska"
       }
     },
+    "wizard": {
+      "stepOf": "{current}. solis no {total}",
+      "step2Title": "Pamatinformācija",
+      "step4Title": "Piekļuve",
+      "step1Desc": "Izvēlieties, kā jūsu grupa tiks kategorizēta.",
+      "step2Desc": "Pastāstiet mums savas grupas nosaukumu un misiju.",
+      "step4Desc": "Kurš var pievienoties jūsu grupai?",
+      "fieldName": "Grupas nosaukums",
+      "fieldCity": "Pilsēta",
+      "fieldCityPlaceholder": "Izvēlieties pilsētu",
+      "tagsAndSubtopics": "Tagi un apakštēmas",
+      "subtopics": "Apakštēmas",
+      "searchTopicsPlaceholder": "Meklēt tēmas kategorijā {category}...",
+      "noTopicsFound": "Kategorijā {category} nekas netika atrasts.",
+      "createSubtopic": "Izveidot apakštēmu",
+      "proposeAsNewSubtopic": "Ieteikt kā jaunu apakštēmu",
+      "nameOfSubtopicPlaceholder": "Apakštēmas nosaukums...",
+      "addSubtopic": "Pievienot apakštēmu",
+      "clickToChange": "Noklikšķiniet, lai mainītu kategoriju",
+      "pickerPlaceholder": "Meklēt kategorijas vai intereses...",
+      "pendingReview": "Gaida pārbaudi",
+      "browseCategories": "Pārlūkot kategorijas",
+      "noMatch": "Nav atrasts",
+      "fieldNamePlaceholder": "piemēram, Rīgas Skrējēji",
+      "optional": "Neobligāti",
+      "fieldDescriptionPlaceholder": "Par ko ir jūsu grupa?",
+      "acceptingMembers": "Pieņem jaunus biedrus",
+      "typePublicDesc": "Ikviens var redzēt un pievienoties.",
+      "typePrivate": "Privāta",
+      "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
+      "fieldBannerImage": "Banera attēla URL",
+      "fieldBannerImageHint": "Ielīmējiet fona banera URL.",
+      "fieldInstructions": "Instrukcijas",
+      "fieldInstructionsPlaceholder": "Tikai biedriem redzamas instrukcijas (piemēram, tikšanās vietas detaļas)...",
+      "CATEGORY_REQUIRED": "Lūdzu, izvēlieties kategoriju.",
+      "TOPIC_REQUIRED": "Lūdzu, izvēlieties vismaz vienu apakštēmu.",
+      "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm garam.",
+      "NAME_TOO_LONG": "Nosaukums nevar pārsniegt 80 rakstzīmes.",
+      "typePublic": "Publiska Grupa",
+      "next": "Tālāk",
+      "back": "Atpakaļ"
+    },
     "nav": {
       "discover": "Atklāt",
       "myGroups": "Manas grupas",
@@ -528,6 +570,33 @@
           "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu"
         }
       }
+    }
+  },
+  "messages": {
+    "title": "Ziņojumi",
+    "blocked": "Bloķēts",
+    "noMessages": "Pagaidām nav ziņojumu",
+    "emptyInbox": "Jums vēl nav ziņojumu. Pievienojieties grupām, lai sazinātos.",
+    "selectConversation": "Izvēlieties sarunu, lai sāktu tērzēšanu",
+    "block": "Bloķēt",
+    "unblock": "Atbloķēt",
+    "conversationBlocked": "Šī saruna ir bloķēta.",
+    "typeMessage": "Rakstiet ziņu...",
+    "confirmBlock": "Vai tiešām vēlaties bloķēt/atbloķēt šo lietotāju?",
+    "blockFailed": "Neizdevās bloķēt. Jūs nevarat bloķēt grupas administratorus vai īpašniekus."
+  },
+  "onboarding": {
+    "username": {
+      "heading": "Izvēlieties lietotājvārdu",
+      "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
+      "label": "Lietotājvārds",
+      "placeholder": "piem. jdoe99",
+      "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
+      "submit": "Turpināt",
+      "available": "Pieejams!",
+      "taken": "Lietotājvārds jau ir aizņemts.",
+      "checking": "Pārbauda...",
+      "submitting": "Saglabā..."
     }
   },
   "messages": {

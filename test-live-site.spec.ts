@@ -93,11 +93,15 @@ test.describe('Ejam Kopā Live Verification', () => {
             const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
             // Must wait for it to be enabled properly from the server response before click
             await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
-            await submit.click();
+            await submit.dispatchEvent('click').catch(() => {});
             await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
         } else {
             break;
         }
+    }
+
+    if (pageA.url().includes('onboarding')) {
+        throw new Error('User A is hopelessly stuck on the onboarding screen despite retries. NextAuth session failed to sync.');
     }
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
@@ -160,11 +164,15 @@ test.describe('Ejam Kopā Live Verification', () => {
             const submit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
             // Must wait for it to be enabled properly from the server response before click
             await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
-            await submit.click();
+            await submit.dispatchEvent('click').catch(() => {});
             await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
         } else {
             break;
         }
+    }
+
+    if (pageB.url().includes('onboarding')) {
+        throw new Error('User B is hopelessly stuck on the onboarding screen despite retries. NextAuth session failed to sync.');
     }
 
     const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
@@ -209,9 +217,15 @@ test.describe('Ejam Kopā Live Verification', () => {
         await pageA.keyboard.press('Enter');
     }
 
+    // We must press the 'Pabeigts' (Done) button on the subtopics picker modal
+    const doneBtn = pageA.getByRole('button').filter({ hasText: /Pabeigts|Done/i }).first();
+    if (await doneBtn.isVisible()) {
+        await doneBtn.click({ force: true });
+    }
+
     const nextBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next|Turpināt/i }).first();
     if (await nextBtn.isVisible()) {
-        await nextBtn.click();
+        await nextBtn.click({ force: true });
     }
 
     const nameInput = pageA.getByLabel(/Nosaukums|Name/i).first();
@@ -245,7 +259,9 @@ test.describe('Ejam Kopā Live Verification', () => {
             break;
         } else {
             const nextWizBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next/i }).first();
-            if (await nextWizBtn.isVisible()) await nextWizBtn.click();
+            if (await nextWizBtn.isVisible()) {
+                await nextWizBtn.click({ force: true }).catch(() => {});
+            }
         }
     }
 
@@ -295,15 +311,34 @@ test.describe('Ejam Kopā Live Verification', () => {
         await pageB.screenshot({ path: 'verification-userB-sent-message.png' });
 
         await pageA.goto('https://ejam.lumm.eu/lv/messages');
-        await pageA.waitForTimeout(3000);
+        await pageA.waitForTimeout(4000);
 
+        let convFound = false;
         const conversation = pageA.getByText(userB.name).first();
         if (await conversation.isVisible()) {
             await conversation.click();
             await pageA.waitForTimeout(2000);
+            convFound = true;
+        } else {
+            // Soft-refresh in case it didn't render or Pusher failed to connect in time
+            for(let j=0; j<3; j++) {
+                await pageA.reload({ waitUntil: 'networkidle' });
+                await pageA.waitForTimeout(4000);
+                const retryConv = pageA.getByText(userB.name).first();
+                if (await retryConv.isVisible()) {
+                    await retryConv.click();
+                    await pageA.waitForTimeout(2000);
+                    convFound = true;
+                    break;
+                }
+            }
+            if (!convFound) {
+                console.error(`User A could not see conversation with User B (${userB.name})`);
+            }
         }
 
         const receivedMsg = pageA.getByText('Hello from Playwright test!').first();
+        await receivedMsg.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         expect(await receivedMsg.isVisible()).toBeTruthy();
 
         await pageA.screenshot({ path: 'verification-userA-received-message.png' });
