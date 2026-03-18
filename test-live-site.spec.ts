@@ -17,7 +17,6 @@ const groupName = `Test Group ${randomBytes(4).toString('hex')}`;
 
 test.describe('Ejam Kopā Live Verification', () => {
   test.describe.configure({ mode: 'serial' });
-  test.setTimeout(90000); // Allow long E2E tests
 
   let pageA: any;
   let pageB: any;
@@ -278,7 +277,6 @@ test.describe('Ejam Kopā Live Verification', () => {
   });
 
   test('Validate messaging functionality between User A and User B', async () => {
-    test.setTimeout(90000); // Give plenty of time for live websocket sync
     console.log('User B sending a message to User A');
 
     await pageB.goto(`https://ejam.lumm.eu/lv/profile/${userA.username}`);
