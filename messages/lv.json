@@ -445,20 +445,6 @@
       "next": "Tālāk",
       "back": "Atpakaļ"
     },
-    "onboarding": {
-      "username": {
-        "heading": "Izvēlieties lietotājvārdu",
-        "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
-        "label": "Lietotājvārds",
-        "placeholder": "piem. jdoe99",
-        "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
-        "submit": "Turpināt",
-        "available": "Pieejams!",
-        "taken": "Lietotājvārds jau ir aizņemts.",
-        "checking": "Pārbauda...",
-        "submitting": "Saglabā..."
-      }
-    },
     "nav": {
       "discover": "Atklāt",
       "myGroups": "Manas grupas",
@@ -516,12 +502,6 @@
             "slideover": {
               "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu"
             }
-          }
-        },
-        "onboarding": {
-          "username": {
-            "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
-            "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras."
           }
         },
         "eventWizard": {
@@ -590,12 +570,33 @@
           "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu"
         }
       }
-    },
-    "onboarding": {
-      "username": {
-        "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
-        "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras."
-      }
+    }
+  },
+  "messages": {
+    "title": "Ziņojumi",
+    "blocked": "Bloķēts",
+    "noMessages": "Pagaidām nav ziņojumu",
+    "emptyInbox": "Jums vēl nav ziņojumu. Pievienojieties grupām, lai sazinātos.",
+    "selectConversation": "Izvēlieties sarunu, lai sāktu tērzēšanu",
+    "block": "Bloķēt",
+    "unblock": "Atbloķēt",
+    "conversationBlocked": "Šī saruna ir bloķēta.",
+    "typeMessage": "Rakstiet ziņu...",
+    "confirmBlock": "Vai tiešām vēlaties bloķēt/atbloķēt šo lietotāju?",
+    "blockFailed": "Neizdevās bloķēt. Jūs nevarat bloķēt grupas administratorus vai īpašniekus."
+  },
+  "onboarding": {
+    "username": {
+      "heading": "Izvēlieties lietotājvārdu",
+      "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
+      "label": "Lietotājvārds",
+      "placeholder": "piem. jdoe99",
+      "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
+      "submit": "Turpināt",
+      "available": "Pieejams!",
+      "taken": "Lietotājvārds jau ir aizņemts.",
+      "checking": "Pārbauda...",
+      "submitting": "Saglabā..."
     }
   }
 }

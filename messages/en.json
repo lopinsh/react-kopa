@@ -446,20 +446,6 @@
       "next": "Next",
       "back": "Back"
     },
-    "onboarding": {
-      "username": {
-        "heading": "Choose a username",
-        "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-        "label": "Username",
-        "placeholder": "e.g. jdoe99",
-        "hint": "3–30 characters. Letters, numbers, and underscores only.",
-        "submit": "Continue",
-        "available": "Available!",
-        "taken": "Username is already taken.",
-        "checking": "Checking...",
-        "submitting": "Saving..."
-      }
-    },
     "nav": {
       "discover": "Discover",
       "myGroups": "My Groups",
@@ -517,12 +503,6 @@
             "slideover": {
               "aliasHelper": "Aliases let alternate spellings or translations find this tag"
             }
-          }
-        },
-        "onboarding": {
-          "username": {
-            "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-            "hint": "3–30 characters. Letters, numbers, and underscores only."
           }
         },
         "eventWizard": {
@@ -591,12 +571,33 @@
           "aliasHelper": "Aliases let alternate spellings or translations find this tag"
         }
       }
-    },
-    "onboarding": {
-      "username": {
-        "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-        "hint": "3–30 characters. Letters, numbers, and underscores only."
-      }
+    }
+  },
+  "messages": {
+    "title": "Messages",
+    "blocked": "Blocked",
+    "noMessages": "No messages yet",
+    "emptyInbox": "You have no messages yet. Join groups and participate to connect with others.",
+    "selectConversation": "Select a conversation to start chatting",
+    "block": "Block User",
+    "unblock": "Unblock User",
+    "conversationBlocked": "This conversation is blocked.",
+    "typeMessage": "Type a message...",
+    "confirmBlock": "Are you sure you want to block/unblock this conversation?",
+    "blockFailed": "Failed to block. You cannot block group admins or owners."
+  },
+  "onboarding": {
+    "username": {
+      "heading": "Choose a username",
+      "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
+      "label": "Username",
+      "placeholder": "e.g. jdoe99",
+      "hint": "3–30 characters. Letters, numbers, and underscores only.",
+      "submit": "Continue",
+      "available": "Available!",
+      "taken": "Username is already taken.",
+      "checking": "Checking...",
+      "submitting": "Saving..."
     }
   }
 }
