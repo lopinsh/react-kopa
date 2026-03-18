@@ -1,7 +1,7 @@
 # Page snapshot
 
 ```yaml
-- generic [ref=e1]:
+- generic [active] [ref=e1]:
   - generic [ref=e2]:
     - banner [ref=e3]:
       - link "Ejam Kopā" [ref=e5] [cursor=pointer]:
@@ -32,82 +32,73 @@
         - button [ref=e41]:
           - img [ref=e43]
     - main [ref=e47]:
-      - generic [ref=e50]:
-        - generic [ref=e51]:
-          - generic [ref=e52]: EK
-          - paragraph [ref=e53]: Ejam Kopā
-        - heading "onboarding.username.heading" [level=1] [ref=e54]
-        - paragraph [ref=e55]: onboarding.username.subtext
-        - generic [ref=e57]:
-          - generic [ref=e58]:
-            - generic [ref=e59]: onboarding.username.label
-            - generic [ref=e60]:
-              - generic:
-                - img
-              - textbox "onboarding.username.label" [active] [ref=e61]:
-                - /placeholder: onboarding.username.placeholder
-            - generic [ref=e62]: onboarding.username.hint
-          - button "onboarding.username.submit" [disabled] [ref=e63]
-      - generic [ref=e65]:
-        - generic [ref=e66]:
-          - generic [ref=e67]:
-            - link "EK Atrodi savējos, augam kopā." [ref=e68] [cursor=pointer]:
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e51]: Ziņojumi
+          - generic [ref=e53]: Jums vēl nav ziņojumu. Pievienojieties grupām, lai sazinātos.
+        - generic [ref=e55]:
+          - img [ref=e56]
+          - paragraph [ref=e59]: Izvēlieties sarunu, lai sāktu tērzēšanu
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - link "EK Atrodi savējos, augam kopā." [ref=e64] [cursor=pointer]:
               - /url: /lv
-              - generic [ref=e70]: EK
-              - generic [ref=e71]: Atrodi savējos, augam kopā.
-            - paragraph [ref=e72]: Ejam Kopā – veicinām vietējās kopienas saziņu.
-            - generic [ref=e73]:
+              - generic [ref=e66]: EK
+              - generic [ref=e67]: Atrodi savējos, augam kopā.
+            - paragraph [ref=e68]: Ejam Kopā – veicinām vietējās kopienas saziņu.
+            - generic [ref=e69]:
+              - link [ref=e70] [cursor=pointer]:
+                - /url: "#"
+                - img [ref=e71]
               - link [ref=e74] [cursor=pointer]:
                 - /url: "#"
                 - img [ref=e75]
               - link [ref=e78] [cursor=pointer]:
                 - /url: "#"
                 - img [ref=e79]
-              - link [ref=e82] [cursor=pointer]:
-                - /url: "#"
-                - img [ref=e83]
-          - generic [ref=e85]:
-            - heading "Platforma" [level=3] [ref=e86]
-            - list [ref=e87]:
-              - listitem [ref=e88]:
-                - link "Atklāt" [ref=e89] [cursor=pointer]:
+          - generic [ref=e81]:
+            - heading "Platforma" [level=3] [ref=e82]
+            - list [ref=e83]:
+              - listitem [ref=e84]:
+                - link "Atklāt" [ref=e85] [cursor=pointer]:
                   - /url: /lv/explore
-              - listitem [ref=e90]:
-                - link "Manas grupas" [ref=e91] [cursor=pointer]:
+              - listitem [ref=e86]:
+                - link "Manas grupas" [ref=e87] [cursor=pointer]:
                   - /url: /lv/profile/my-groups
-              - listitem [ref=e92]:
-                - link "Izveidot grupu" [ref=e93] [cursor=pointer]:
+              - listitem [ref=e88]:
+                - link "Izveidot grupu" [ref=e89] [cursor=pointer]:
                   - /url: /lv/create
-          - generic [ref=e94]:
-            - heading "Atbalsts" [level=3] [ref=e95]
-            - list [ref=e96]:
+          - generic [ref=e90]:
+            - heading "Atbalsts" [level=3] [ref=e91]
+            - list [ref=e92]:
+              - listitem [ref=e93]:
+                - link "Palīdzības centrs" [ref=e94] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=e95]:
+                - link "Privātuma politika" [ref=e96] [cursor=pointer]:
+                  - /url: "#"
               - listitem [ref=e97]:
-                - link "Palīdzības centrs" [ref=e98] [cursor=pointer]:
+                - link "Lietošanas noteikumi" [ref=e98] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e99]:
-                - link "Privātuma politika" [ref=e100] [cursor=pointer]:
+          - generic [ref=e99]:
+            - heading "Par mums" [level=3] [ref=e100]
+            - list [ref=e101]:
+              - listitem [ref=e102]:
+                - link "Ejam Kopā – veicinām vietējās kopienas saziņu." [ref=e103] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e101]:
-                - link "Lietošanas noteikumi" [ref=e102] [cursor=pointer]:
+              - listitem [ref=e104]:
+                - link "Kopienas vadlīnijas" [ref=e105] [cursor=pointer]:
                   - /url: "#"
-          - generic [ref=e103]:
-            - heading "Par mums" [level=3] [ref=e104]
-            - list [ref=e105]:
               - listitem [ref=e106]:
-                - link "Ejam Kopā – veicinām vietējās kopienas saziņu." [ref=e107] [cursor=pointer]:
+                - link "Sazināties" [ref=e107] [cursor=pointer]:
                   - /url: "#"
-              - listitem [ref=e108]:
-                - link "Kopienas vadlīnijas" [ref=e109] [cursor=pointer]:
-                  - /url: "#"
-              - listitem [ref=e110]:
-                - link "Sazināties" [ref=e111] [cursor=pointer]:
-                  - /url: "#"
-        - generic [ref=e112]:
-          - paragraph [ref=e113]:
+        - generic [ref=e108]:
+          - paragraph [ref=e109]:
             - text: © 2026 Ejam Kopā. Radīts ar
-            - img [ref=e114]
+            - img [ref=e110]
             - text: kopienai
-          - link "Latvija (LV)" [ref=e117] [cursor=pointer]:
+          - link "Latvija (LV)" [ref=e113] [cursor=pointer]:
             - /url: /lv/explore
-  - alert [ref=e119]
+  - alert [ref=e115]
 ```

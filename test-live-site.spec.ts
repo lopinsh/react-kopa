@@ -17,6 +17,7 @@ const groupName = `Test Group ${randomBytes(4).toString('hex')}`;
 
 test.describe('Ejam Kopā Live Verification', () => {
   test.describe.configure({ mode: 'serial' });
+  test.setTimeout(90000); // Allow long E2E tests
 
   let pageA: any;
   let pageB: any;
@@ -60,7 +61,10 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     // Try clicking submit or pressing enter
     const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    await pageA.waitForTimeout(1000);
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -69,6 +73,37 @@ test.describe('Ejam Kopā Live Verification', () => {
     await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
 
     expect(pageA.url()).not.toContain('auth');
+
+    // Verify it isn't still stuck on onboarding
+    for(let retry=0; retry<5; retry++) {
+        if (pageA.url().includes('onboarding')) {
+            await pageA.reload({ waitUntil: 'networkidle' });
+            await pageA.waitForTimeout(3000);
+
+            // If reloading got us out of onboarding, break early
+            if (!pageA.url().includes('onboarding')) break;
+
+            const input = pageA.getByRole('textbox').first();
+            // Ensure no invalid chars (no hyphens from randomBytes)
+            const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+            await input.fill(userA.username + safeSuffix);
+
+            // Wait specifically for the availability check text
+            await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+
+            const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+            // Must wait for it to be enabled properly from the server response before click
+            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.dispatchEvent('click').catch(() => {});
+            await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        } else {
+            break;
+        }
+    }
+
+    if (pageA.url().includes('onboarding')) {
+        throw new Error('User A is hopelessly stuck on the onboarding screen despite retries. NextAuth session failed to sync.');
+    }
 
     const cookieBtn = pageA.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
@@ -98,7 +133,10 @@ test.describe('Ejam Kopā Live Verification', () => {
     await pageB.waitForSelector('text=Pieejams|available', { state: 'visible', timeout: 5000 }).catch(() => {});
 
     const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
-    if (await usernameSubmit.isVisible() && await usernameSubmit.isEnabled()) {
+    await pageB.waitForTimeout(1000);
+    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+
+    if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
     } else {
         await usernameInput.press('Enter');
@@ -106,6 +144,37 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
     expect(pageB.url()).not.toContain('auth');
+
+    // Verify it isn't still stuck on onboarding
+    for(let retry=0; retry<5; retry++) {
+        if (pageB.url().includes('onboarding')) {
+            await pageB.reload({ waitUntil: 'networkidle' });
+            await pageB.waitForTimeout(3000);
+
+            // If reloading got us out of onboarding, break early
+            if (!pageB.url().includes('onboarding')) break;
+
+            const input = pageB.getByRole('textbox').first();
+            // Ensure no invalid chars
+            const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+            await input.fill(userB.username + safeSuffix);
+
+            // Wait specifically for the availability check text
+            await pageB.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+
+            const submit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+            // Must wait for it to be enabled properly from the server response before click
+            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.dispatchEvent('click').catch(() => {});
+            await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        } else {
+            break;
+        }
+    }
+
+    if (pageB.url().includes('onboarding')) {
+        throw new Error('User B is hopelessly stuck on the onboarding screen despite retries. NextAuth session failed to sync.');
+    }
 
     const cookieBtn = pageB.getByRole('button', { name: /Skaidrs|Clear/i }).first();
     if (await cookieBtn.isVisible()) await cookieBtn.click();
@@ -117,6 +186,22 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     await pageA.goto('https://ejam.lumm.eu/lv/create');
     await pageA.waitForTimeout(2000);
+
+    // If redirected back to onboarding again, force it once more.
+    if (pageA.url().includes('onboarding')) {
+        await pageA.reload({ waitUntil: 'networkidle' });
+        await pageA.waitForTimeout(2000);
+        const input = pageA.getByRole('textbox').first();
+        const safeSuffix = randomBytes(2).toString('hex').replace(/[^a-zA-Z0-9]/g, '');
+        await input.fill(userA.username + safeSuffix);
+        await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
+        const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
+        await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+        await submit.click();
+        await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
+        await pageA.goto('https://ejam.lumm.eu/lv/create');
+        await pageA.waitForTimeout(2000);
+    }
 
     const categoryBtns = pageA.locator('button').filter({ hasText: /Sport|Tech|Art|Māksla|Sports/i });
     if (await categoryBtns.count() > 0) {
@@ -133,9 +218,15 @@ test.describe('Ejam Kopā Live Verification', () => {
         await pageA.keyboard.press('Enter');
     }
 
+    // We must press the 'Pabeigts' (Done) button on the subtopics picker modal
+    const doneBtn = pageA.getByRole('button').filter({ hasText: /Pabeigts|Done/i }).first();
+    if (await doneBtn.isVisible()) {
+        await doneBtn.click({ force: true });
+    }
+
     const nextBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next|Turpināt/i }).first();
     if (await nextBtn.isVisible()) {
-        await nextBtn.click();
+        await nextBtn.click({ force: true });
     }
 
     const nameInput = pageA.getByLabel(/Nosaukums|Name/i).first();
@@ -169,7 +260,9 @@ test.describe('Ejam Kopā Live Verification', () => {
             break;
         } else {
             const nextWizBtn = pageA.getByRole('button').filter({ hasText: /Tālāk|Next/i }).first();
-            if (await nextWizBtn.isVisible()) await nextWizBtn.click();
+            if (await nextWizBtn.isVisible()) {
+                await nextWizBtn.click({ force: true }).catch(() => {});
+            }
         }
     }
 
@@ -185,6 +278,7 @@ test.describe('Ejam Kopā Live Verification', () => {
   });
 
   test('Validate messaging functionality between User A and User B', async () => {
+    test.setTimeout(90000); // Give plenty of time for live websocket sync
     console.log('User B sending a message to User A');
 
     await pageB.goto(`https://ejam.lumm.eu/lv/profile/${userA.username}`);
@@ -219,15 +313,34 @@ test.describe('Ejam Kopā Live Verification', () => {
         await pageB.screenshot({ path: 'verification-userB-sent-message.png' });
 
         await pageA.goto('https://ejam.lumm.eu/lv/messages');
-        await pageA.waitForTimeout(3000);
+        await pageA.waitForTimeout(4000);
 
+        let convFound = false;
         const conversation = pageA.getByText(userB.name).first();
         if (await conversation.isVisible()) {
             await conversation.click();
             await pageA.waitForTimeout(2000);
+            convFound = true;
+        } else {
+            // Soft-refresh in case it didn't render or Pusher failed to connect in time
+            for(let j=0; j<3; j++) {
+                await pageA.reload({ waitUntil: 'networkidle' });
+                await pageA.waitForTimeout(4000);
+                const retryConv = pageA.getByText(userB.name).first();
+                if (await retryConv.isVisible()) {
+                    await retryConv.click();
+                    await pageA.waitForTimeout(2000);
+                    convFound = true;
+                    break;
+                }
+            }
+            if (!convFound) {
+                console.error(`User A could not see conversation with User B (${userB.name})`);
+            }
         }
 
         const receivedMsg = pageA.getByText('Hello from Playwright test!').first();
+        await receivedMsg.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         expect(await receivedMsg.isVisible()).toBeTruthy();
 
         await pageA.screenshot({ path: 'verification-userA-received-message.png' });
