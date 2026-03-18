@@ -46,6 +46,9 @@
                 - img
               - textbox "onboarding.username.label" [active] [ref=e61]:
                 - /placeholder: onboarding.username.placeholder
+                - text: Test Group 8cbb6bea
+              - generic:
+                - img
             - generic [ref=e62]: onboarding.username.hint
           - button "onboarding.username.submit" [disabled] [ref=e63]
       - generic [ref=e65]:
