@@ -11,7 +11,7 @@ export default async function AdminReportsPage({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
-    const t = await getTranslations('admin');
+    const t = await getTranslations('group.admin');
     const session = await auth();
     if (!session?.user?.id) {
         redirect(`/api/auth/signin`);

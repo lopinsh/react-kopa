@@ -15,7 +15,7 @@ export default async function AdminDashboardPage({
     const { locale } = await params;
     const { tab } = await searchParams;
     const activeTab = tab || 'tags';
-    const t = await getTranslations('admin');
+    const t = await getTranslations('group.admin');
 
     const session = await auth();
     if (!session?.user?.id) {

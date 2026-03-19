@@ -30,7 +30,7 @@ export default function AdminGroupCategorizationForm({
     selectedL1,
     initialTagIds,
 }: Props) {
-    const t = useTranslations('admin');
+    const t = useTranslations('group.admin');
     const c = useTranslations('common');
     const te = useTranslations('errors');
     const { success, error } = useToast();
