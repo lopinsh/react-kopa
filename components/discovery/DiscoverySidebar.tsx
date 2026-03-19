@@ -74,11 +74,17 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     const isAllActive = !activeCat;
 
     return (
-        <div className="flex shrink-0 sticky top-0 z-30 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]">
+        <div className="flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]">
             {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
             {isManualOpen && (
                 <div
-                    className="fixed inset-0 z-20 md:hidden bg-transparent"
+                    className="fixed inset-0 z-40 md:hidden bg-transparent cursor-default touch-none"
+                    onPointerDown={(e) => {
+                        // Capture it at the pointer level before it becomes a click
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setIsManualOpen(false);
+                    }}
                     onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
@@ -92,17 +98,21 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                 onMouseLeave={() => setIsHovered(false)}
                 className={clsx(
                     'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full',
-                    isExpanded ? 'w-[240px] shadow-premium absolute md:relative z-30' : 'w-16 relative z-10'
+                    isExpanded ? 'w-[240px] shadow-premium absolute md:relative z-50' : 'w-16 relative z-30'
                 )}
             >
             {/* Mobile Toggle Trigger */}
             <button
+                type="button"
+                onPointerDown={(e) => {
+                    e.stopPropagation();
+                }}
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     setIsManualOpen(!isManualOpen);
                 }}
-                className="flex h-12 w-full items-center justify-center border-b border-border/50 text-foreground-muted hover:text-foreground transition-colors md:hidden"
+                className="flex h-12 w-full items-center justify-center border-b border-border/50 text-foreground-muted hover:text-foreground transition-colors md:hidden cursor-pointer"
                 title={isExpanded ? t('collapse') : t('everything')}
             >
                 <div className={clsx(
