@@ -32,7 +32,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
 
     return (
         <Link
-            href={`/${locale}/${group.category.l1Slug}/group/${group.slug}`}
+            href={`/${group.category.l1Slug}/group/${group.slug}`}
             className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
@@ -47,11 +47,19 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
                 <h3 className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
                     {group.name}
                 </h3>
-                {group.category.parentTitle && (
-                    <span className="hidden shrink-0 rounded-md bg-surface-elevated px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground-muted sm:inline-block">
+                <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
+                    {group.category.parentTitle && (
+                        <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm">
+                            {group.category.parentTitle}
+                        </span>
+                    )}
+                    <span
+                        className="rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                        style={{ color: 'white', backgroundColor: accentColor }}
+                    >
                         {group.category.title}
                     </span>
-                )}
+                </div>
             </div>
 
             {/* Metadata (Right aligned) */}
@@ -59,10 +67,6 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
                 <div className="hidden items-center gap-1 sm:flex uppercase tracking-wide">
                     <MapPin className="h-3.5 w-3.5" />
                     {group.city}
-                </div>
-                <div className="hidden items-center gap-1 md:flex">
-                    <Icon className="h-3.5 w-3.5" />
-                    {group.type}
                 </div>
                 <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />

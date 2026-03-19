@@ -39,27 +39,24 @@ export default function Sidebar({ locale }: SidebarProps) {
         >
             <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden px-2 py-4 min-h-0">
                 {!isCollapsed && (
-                    <div className="flex items-center justify-between px-2 mb-2">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted">
-                            {c_common('filtersTitle')}
-                        </span>
+                    <div className="flex items-center justify-end px-2 mb-2">
                         <button
                             onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="p-1 hover:bg-white/5 rounded-md transition-colors text-white/40 hover:text-white"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-elevated text-foreground-muted hover:bg-surface-elevated/80 hover:text-foreground transition-all shadow-sm"
                             title={t('collapse')}
                         >
-                            <ChevronLeft className="w-4 h-4 transition-transform" />
+                            <ChevronLeft className="h-5 w-5 transition-transform" />
                         </button>
                     </div>
                 )}
                 {isCollapsed && (
-                    <div className="shrink-0 flex flex-col items-center mb-4 mt-2">
+                    <div className="shrink-0 flex flex-col items-center mb-4">
                         <button
                             onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="p-1 hover:bg-white/5 rounded-md transition-colors text-white/40 hover:text-white"
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-elevated text-foreground-muted hover:bg-surface-elevated/80 hover:text-foreground transition-all shadow-sm"
                             title={t('collapse')}
                         >
-                            <ChevronLeft className="w-4 h-4 transition-transform rotate-180" />
+                            <ChevronLeft className="h-5 w-5 transition-transform rotate-180" />
                         </button>
                     </div>
                 )}
