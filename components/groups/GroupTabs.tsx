@@ -41,14 +41,28 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     // Track active section for scroll-spy
     const [activeSection, setActiveSection] = useState<string>('about');
 
-    // Map dynamic sections to tabs
-    const tabs: Tab[] = sections.map((s, index) => ({
+    // Check if we are on the base URL (information page)
+    const normalizedPath = pathname.replace(`/${locale}`, '') || '/';
+    const isLandingPage = normalizedPath === baseUrl || normalizedPath === `${baseUrl}/`;
+
+    // Static horizontal tabs for non-landing pages (matching sidebar links)
+    const BASE_NAV = [
+        { id: 'info', icon: Info, label: c_common('informationTitle'), href: baseUrl, memberOnly: false },
+        { id: 'events', icon: Calendar, label: c_common('eventsTitle'), href: `${baseUrl}/events`, memberOnly: false },
+        { id: 'discussions', icon: MessageSquare, label: c_common('discussionTitle'), href: `${baseUrl}/discussions`, memberOnly: true },
+        { id: 'members', icon: Users, label: c_common('membersTitle'), href: `${baseUrl}/members`, memberOnly: true },
+    ];
+
+    // Map dynamic sections to tabs (only used on the information page)
+    const sectionTabs: Tab[] = sections.map((s, index) => ({
         id: index === 0 ? 'about' : s.id,
         label: index === 0 ? c_common('about') : s.title,
-        href: `#${index === 0 ? 'about' : s.id}`,
+        href: `${baseUrl}#${index === 0 ? 'about' : s.id}`, // prepend baseUrl so navigating from other tabs works
         icon: index === 0 ? Info : HelpCircle,
         memberOnly: s.visibility === 'MEMBERS_ONLY',
     }));
+
+    const tabs: Tab[] = isLandingPage ? sectionTabs : BASE_NAV;
 
     // Scroll-Spy Implementation
     useEffect(() => {
@@ -107,9 +121,8 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     }, [sections]);
 
     const handleTabClick = (e: React.MouseEvent<HTMLAnchorElement>, tabId: string) => {
-        const isLandingPage = pathname.replace(`/${locale}`, '') === baseUrl || pathname.replace(`/${locale}`, '') === `${baseUrl}/`;
-
-        if (isLandingPage && tabId) {
+        // If we're on the landing page, handle scroll-spy behavior for section tabs
+        if (isLandingPage && tabId && sectionTabs.some(t => t.id === tabId)) {
             e.preventDefault();
 
             if (tabId === 'about') {
@@ -189,24 +202,43 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             if (tab.needsInstructions && !group.instructions) return null;
                             if (tab.adminOnly && !isOwnerOrAdmin) return null;
 
+
+                            // For base nav, active state relies on the URL
+                            let isBaseNavActive = false;
+                            if (!isLandingPage) {
+                                const normalizedHref = (tab.href as string).split('?')[0] || '/';
+                                isBaseNavActive = tab.id === 'info'
+                                    ? normalizedPath === normalizedHref || normalizedPath === `${normalizedHref}/`
+                                    : normalizedPath.startsWith(normalizedHref) && !pathname.includes('/settings');
+                            }
+
+                            const finalActive = isLandingPage ? active : isBaseNavActive;
+
                             return (
                                 <Link
                                     key={tab.id}
-                                    href={tab.href as string}
+                                    href={tab.href as any}
                                     onClick={(e) => handleTabClick(e, tab.id)}
                                     className={clsx(
                                         "relative flex items-center gap-2 px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
                                         isScrolled ? "pt-4 pb-5" : "pt-5 pb-6",
-                                        active
+                                        finalActive
                                             ? "border-[var(--accent)] text-[var(--accent)]"
                                             : "border-transparent text-foreground-muted hover:text-foreground hover:border-border"
                                     )}
-                                    style={active ? {
+                                    style={finalActive ? {
                                         boxShadow: `0 1px 0 0 var(--accent)`,
                                         filter: `drop-shadow(0 0 8px color-mix(in srgb, var(--accent), transparent 60%))`
                                     } : undefined}
                                 >
-                                    <tab.icon className="h-3.5 w-3.5" />
+                                    <div className="relative">
+                                        <tab.icon className="h-3.5 w-3.5" />
+                                        {tab.id === 'members' && pendingCount > 0 && isOwnerOrAdmin && (
+                                            <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-black text-white shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
+                                                {pendingCount}
+                                            </span>
+                                        )}
+                                    </div>
                                     {tab.label}
                                 </Link>
                             );

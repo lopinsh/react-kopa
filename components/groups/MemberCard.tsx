@@ -97,7 +97,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 <div className="relative">
                     {member.user.username ? (
                         <Link
-                            href={`/${l1Slug}/user/${member.user.username}`}
+                            href={`/profile/${member.user.username}` as any}
                             className="block h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 hover:ring-2 hover:ring-[var(--accent)]/50 transition-all"
                         >
                             {member.user.image ? (
@@ -151,7 +151,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 <div className="flex-1 min-w-0">
                     {member.user.username ? (
                         <Link
-                            href={`/${l1Slug}/user/${member.user.username}`}
+                            href={`/profile/${member.user.username}` as any}
                             className="font-bold text-foreground text-base tracking-tight truncate hover:text-[var(--accent)] transition-colors block"
                         >
                             {member.user.name || t('anonymousUser')}
@@ -236,7 +236,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
 
                 {canViewProfile && member.user.username ? (
                     <Link
-                        href={`/${l1Slug}/user/${member.user.username}`}
+                        href={`/profile/${member.user.username}` as any}
                         className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />

@@ -193,13 +193,32 @@ export const UserService = {
                                 titles: { where: { lang: locale } }
                             }
                         },
-                        _count: { select: { members: true } },
+                        _count: {
+                            select: {
+                                members: { where: { role: { not: 'PENDING' } } }
+                            }
+                        },
                         ...MEMBER_PREVIEW_SELECT
                     }
                 }
             },
             orderBy: { joinedAt: 'desc' }
         });
+
+        // Re-fetch pending count for each group manually since Prisma _count doesn't allow multiple where clauses on the same relation easily
+        // But wait, we can just do a parallel query or raw count, or better: we just pull `members: { where: { role: 'PENDING' } }` since we only need the count.
+        // Actually let's query the pending counts for these groups.
+        const groupIds = memberships.map(m => m.group.id);
+        const pendingCounts = await prisma.membership.groupBy({
+            by: ['groupId'],
+            where: {
+                groupId: { in: groupIds },
+                role: 'PENDING'
+            },
+            _count: true
+        });
+
+        const pendingCountMap = new Map(pendingCounts.map(pc => [pc.groupId, pc._count]));
 
         return memberships.map(m => {
             const l1Slug = m.group.category.parent?.parent?.slug
@@ -216,6 +235,7 @@ export const UserService = {
                 type: m.group.type,
                 bannerImage: m.group.bannerImage,
                 memberCount: m.group._count.members,
+                pendingCount: pendingCountMap.get(m.group.id) || 0,
                 members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
                 category: {
                     title: m.group.category.titles[0]?.title || 'Unknown',

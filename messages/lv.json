@@ -84,6 +84,7 @@
     "typePrivate": "Privāta"
   },
   "common": {
+    "actionRequired": "Nepieciešama rīcība",
     "save": "Saglabāt",
     "saved": "Saglabāts",
     "loading": "Ielādē...",
@@ -345,6 +346,16 @@
     }
   },
   "group": {
+    "role_member": "Biedrs",
+    "role_owner": "Īpašnieks",
+    "role_admin": "Administrators",
+    "pendingRequests": "{count} gaida apstiprinājumu",
+    "postPlaceholder": "Rakstīt ziņu...",
+    "postButton": "Publicēt",
+    "replyPlaceholder": "Atbildēt uz šo ziņu...",
+    "joinToDiscuss": "Pievienojieties grupai, lai piedalītos diskusijās.",
+    "noPostsYet": "Pagaidām nav nevienas ziņas. Sāciet sarunu!",
+    "confirmDeletePost": "Vai tiešām vēlaties dzēst šo ziņu?",
     "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu.",
     "tabCategorizationDescription": "Izvēlieties kā jūsu grupa tiek atrasta platformas katalogā.",
     "visibilityPublic": "Publiska",

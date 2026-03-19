@@ -82,6 +82,7 @@
     "loadingMore": "Loading more groups..."
   },
   "common": {
+    "actionRequired": "Action Required",
     "save": "Save",
     "saved": "Saved",
     "loading": "Loading...",
@@ -341,6 +342,16 @@
     }
   },
   "group": {
+    "role_member": "Member",
+    "role_owner": "Owner",
+    "role_admin": "Admin",
+    "pendingRequests": "{count} pending requests",
+    "postPlaceholder": "Write a post...",
+    "postButton": "Post",
+    "replyPlaceholder": "Reply to this post...",
+    "joinToDiscuss": "Join the group to participate in discussions.",
+    "noPostsYet": "No posts yet. Start the conversation!",
+    "confirmDeletePost": "Are you sure you want to delete this post?",
     "tabProfileDescription": "Update your group's identity and recruitment status.",
     "tabCategorizationDescription": "Choose how your group is discovered in the platform hierarchy.",
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",

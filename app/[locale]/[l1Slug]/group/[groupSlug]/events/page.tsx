@@ -61,17 +61,17 @@ export default async function GroupEventsPage({
     });
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-screen-2xl mx-auto px-4 md:px-8 py-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                {/* Events Tab Menu */}
-                <div className="flex items-center gap-6 border-b border-border overflow-x-auto no-scrollbar w-full sm:w-auto">
+                {/* Sub-Events Tab Menu */}
+                <div className="flex items-center gap-2 bg-surface-elevated p-1 rounded-xl w-full sm:w-auto overflow-x-auto no-scrollbar">
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/events?tab=upcoming` as any}
                         className={clsx(
-                            "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                            "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
                             currentTab === 'upcoming'
-                                ? "border-[var(--accent)] text-foreground"
-                                : "border-transparent text-foreground-muted hover:text-foreground"
+                                ? "bg-surface shadow-sm text-foreground"
+                                : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
                         )}
                     >
                         {c_common_get('eventsTabUpcoming')}
@@ -80,10 +80,10 @@ export default async function GroupEventsPage({
                         <Link
                             href={`/${l1Slug}/group/${groupSlug}/events?tab=my-rsvps` as any}
                             className={clsx(
-                                "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                                "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
                                 currentTab === 'my-rsvps'
-                                    ? "border-[var(--accent)] text-foreground"
-                                    : "border-transparent text-foreground-muted hover:text-foreground"
+                                    ? "bg-surface shadow-sm text-foreground"
+                                    : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
                             )}
                         >
                             {c_common_get('eventsTabMyRsvps')}
@@ -92,10 +92,10 @@ export default async function GroupEventsPage({
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/events?tab=past` as any}
                         className={clsx(
-                            "pb-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors",
+                            "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
                             currentTab === 'past'
-                                ? "border-[var(--accent)] text-foreground"
-                                : "border-transparent text-foreground-muted hover:text-foreground"
+                                ? "bg-surface shadow-sm text-foreground"
+                                : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
                         )}
                     >
                         {c_common_get('eventsTabPast')}
@@ -105,7 +105,7 @@ export default async function GroupEventsPage({
                 {isOwnerOrAdmin && (
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
-                        className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-foreground text-background hover:opacity-90 shadow-sm shrink-0"
+                        className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-[var(--accent)] text-white hover:opacity-90 shadow-sm shrink-0"
                     >
                         <Plus className="h-4 w-4" />
                         {t('createEvent')}

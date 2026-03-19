@@ -2,6 +2,7 @@ import { GroupService } from '@/lib/services/group.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import GroupHeader from '@/components/groups/GroupHeader';
+import GroupTabs from '@/components/groups/GroupTabs';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { ensureContrast, getContrastForeground } from '@/lib/color-utils';
 
@@ -60,6 +61,12 @@ export default async function GroupLayout({
                 <GroupHeader
                     group={group}
                     l1Slug={l1Slug}
+                />
+
+                <GroupTabs
+                    group={group}
+                    l1Slug={l1Slug}
+                    pendingCount={pendingCount}
                 />
 
                 <main>

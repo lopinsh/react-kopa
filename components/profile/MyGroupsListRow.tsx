@@ -12,6 +12,7 @@ type Props = {
         city: string;
         type: GroupType;
         memberCount: number;
+        pendingCount?: number;
         role: MembershipRole;
         category: {
             title: string;
@@ -22,12 +23,18 @@ type Props = {
         accentColor: string;
     };
     locale: string;
+    actionRequired?: boolean;
 };
 
-export default function MyGroupsListRow({ group, locale }: Props) {
+export default function MyGroupsListRow({ group, locale, actionRequired }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const accentColor = group.category.color || group.accentColor;
+
+    // If action required is true, link directly to the requests tab
+    const targetHref = actionRequired
+        ? `/${locale}/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`
+        : `/${locale}/${group.category.l1Slug}/group/${group.slug}`;
 
     return (
         <Link
@@ -61,10 +68,21 @@ export default function MyGroupsListRow({ group, locale }: Props) {
 
             {/* Metadata (Right aligned) */}
             <div className="flex shrink-0 items-center justify-between sm:justify-end gap-4 text-xs font-semibold text-foreground-muted ml-6 sm:ml-4">
-                <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
-                    <Users className="h-3.5 w-3.5 text-foreground-muted" />
-                    {group.memberCount}
-                </div>
+                {actionRequired && group.pendingCount && group.pendingCount > 0 && (
+                    <div className="flex items-center gap-1.5 rounded-lg bg-red-500/10 px-2.5 py-1 text-red-600 dark:text-red-400 font-bold animate-in zoom-in">
+                        <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
+                            {group.pendingCount}
+                        </span>
+                        <span className="hidden sm:inline text-[10px] uppercase tracking-wider">{t('pendingRequests', { count: group.pendingCount }).replace(/[0-9]+/, '').trim()}</span>
+                    </div>
+                )}
+
+                {!actionRequired && (
+                    <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
+                        <Users className="h-3.5 w-3.5 text-foreground-muted" />
+                        {group.memberCount}
+                    </div>
+                )}
 
                 <div
                     className={clsx(

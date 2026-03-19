@@ -2,7 +2,6 @@ import { GroupService } from '@/lib/services/group.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getTranslations } from 'next-intl/server';
-import GroupTabs from '@/components/groups/GroupTabs';
 import MemberAvatarList from '@/components/groups/MemberAvatarList';
 import { Info, Calendar, MessageSquare, Users as UsersIcon, HelpCircle, Lock } from 'lucide-react';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
@@ -27,9 +26,6 @@ export default async function GroupPage({
         notFound();
     }
 
-    const pendingMembers = group.members.filter((m: any) => m.role === 'PENDING');
-    const pendingCount = pendingMembers.length;
-
     return (
         <div className="relative animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Decorative background glows */}
@@ -38,13 +34,6 @@ export default async function GroupPage({
             />
             <div
                 className="absolute top-[40%] -left-40 h-[400px] w-[400px] rounded-full opacity-[0.02] blur-[100px] pointer-events-none bg-[var(--accent)]"
-            />
-
-            {/* Identity Bar */}
-            <GroupTabs
-                group={group}
-                l1Slug={l1Slug}
-                pendingCount={pendingCount}
             />
 
             {/* Content Container (Reduced top padding for flush feel) */}
