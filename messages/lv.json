@@ -50,7 +50,8 @@
     "sectionPending": "Gaida apstiprinājumu",
     "empty": "Tu vēl neesi pievienojies nevienai grupai.",
     "discover": "Atklāt grupas",
-    "backToProfile": "Atpakaļ uz profilu"
+    "backToProfile": "Atpakaļ uz profilu",
+    "sharedGroups": "Kopīgās grupas"
   },
   "discovery": {
     "anyCategory": "Jebkura {category}",
@@ -537,6 +538,9 @@
     "next": "Tālāk",
     "back": "Atpakaļ",
     "done": "Pabeigts",
-    "submit": "Izveidot"
+    "submit": "Izveidot",
+    "step1Title": "Kategorizēšana",
+    "fieldDescription": "Apraksts",
+    "fieldBannerImagePlaceholder": "https://images.unsplash.com/..."
   }
 }
