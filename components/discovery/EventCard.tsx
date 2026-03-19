@@ -31,7 +31,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
 
     return (
         <Link
-            href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
+            href={`/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
             className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-border bg-surface transition-all hover:-translate-y-1 hover:border-border-hover hover:shadow-2xl"
         >
             {/* Banner Image */}

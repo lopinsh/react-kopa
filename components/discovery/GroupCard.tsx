@@ -50,8 +50,6 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
     const accentColor = group.category.color || globalAccentColor;
     const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
-    const categoryName = group.category.parentTitle ? group.category.title : group.category.title;
-
     // Pattern for image thumbnail fallback
     const patternStyle = {
         background: `radial-gradient(circle at top left, ${accentColor} 0%, transparent 70%),
@@ -70,7 +68,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
 
     return (
         <Link
-            href={group.category.l1Slug ? `/${locale}/${group.category.l1Slug}/group/${group.slug}` : `/${locale}/groups/${group.slug}`}
+            href={group.category.l1Slug ? `/${group.category.l1Slug}/group/${group.slug}` : `/groups/${group.slug}`}
             className="group relative flex flex-col h-full overflow-hidden rounded-[20px] bg-surface text-foreground 
                 border-slate-200 border shadow-sm transition-transform duration-200 ease-out 
                 hover:shadow-md hover:border-[var(--accent)] hover:scale-[1.02] soft-press"
@@ -98,10 +96,6 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                         <MapPin className="h-3 w-3 text-white/90" />
                         <span className="drop-shadow-sm">{group.city}</span>
                     </span>
-                    <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
-                        <Icon className="h-3 w-3 text-white/90" />
-                        <span className="drop-shadow-sm">{group.type}</span>
-                    </span>
                 </div>
             </div>
 
@@ -109,13 +103,22 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
             <div className="flex flex-1 flex-col px-5 py-4 pb-5">
                 {/* Header: Title */}
                 <div className="mb-2 flex flex-col items-start justify-start gap-1">
-                    <span
-                        className="flex items-center gap-1.5 rounded-md text-[10px] font-bold uppercase tracking-wider mt-0.5"
-                        style={{ color: accentColor }}
-                    >
-                        <span className="h-2 w-2 rounded-full" style={{ backgroundColor: accentColor }} />
-                        {categoryName}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                        <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: accentColor }} />
+                        {group.category.parentTitle && (
+                            <span
+                                className="flex items-center rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm"
+                            >
+                                {group.category.parentTitle}
+                            </span>
+                        )}
+                        <span
+                            className="flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                            style={{ color: 'white', backgroundColor: accentColor }}
+                        >
+                            {group.category.title}
+                        </span>
+                    </div>
                     <h3 className="line-clamp-2 text-lg font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-[var(--accent)]">
                         {group.name}
                     </h3>

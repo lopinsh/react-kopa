@@ -388,7 +388,7 @@ export const DiscoveryService = {
                         slug: g.category.slug,
                         l1Slug,
                         title: g.category.titles[0]?.title ?? g.category.slug,
-                        parentTitle: g.category.parent?.titles[0]?.title,
+                        parentTitle: g.category.parent?.parent?.titles[0]?.title ?? g.category.parent?.titles[0]?.title,
                         color: inheritedColor || '#6366f1'
                     },
                 };

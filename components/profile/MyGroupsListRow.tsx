@@ -38,7 +38,7 @@ export default function MyGroupsListRow({ group, locale, actionRequired }: Props
 
     return (
         <Link
-            href={targetHref as any}
+            href={`/${group.category.l1Slug}/group/${group.slug}`}
             className="group relative flex h-auto min-h-[3.5rem] flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-surface px-4 py-3 sm:py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
