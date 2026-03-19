@@ -1,9 +1,8 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { Globe } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
 
@@ -28,9 +27,22 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
 
     const [isHovered, setIsHovered] = useState(false);
     const [isManualOpen, setIsManualOpen] = useState(false);
+    const sidebarRef = useRef<HTMLElement>(null);
 
     // Sidebar is expanded if either hovered (desktop) or manually toggled (mobile/desktop)
     const isExpanded = isHovered || isManualOpen;
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (isManualOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                setIsManualOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isManualOpen]);
 
     const createQueryString = useCallback(
         (params: Record<string, string | null>) => {
@@ -54,25 +66,42 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
         } else {
             router.push(`${pathname}?${createQueryString({ category: slug, tags: null })}`);
         }
-        // Auto-close on mobile after selection
+        // Always auto-close when a category is selected (whether desktop manual open or mobile)
         if (isManualOpen) setIsManualOpen(false);
     };
 
     const isAllActive = !activeCat;
 
     return (
+        <>
+        {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
+        {isManualOpen && (
+            <div
+                className="fixed inset-0 z-20 md:hidden bg-transparent"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setIsManualOpen(false);
+                }}
+            />
+        )}
         <aside
+            ref={sidebarRef}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className={clsx(
-                'flex shrink-0 flex-col border-r border-border bg-surface transition-all duration-300 sticky top-0 md:top-[var(--header-height)] z-30',
-                'h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]',
-                isExpanded ? 'w-[240px] shadow-premium' : 'w-16'
+                'flex shrink-0 flex-col border-r border-border bg-surface transition-all duration-300 sticky top-0 z-30',
+                'h-[calc(100dvh-64px)] md:h-full max-h-screen',
+                isExpanded ? 'w-[240px] shadow-premium absolute md:relative' : 'w-16 relative'
             )}
         >
             {/* Mobile Toggle Trigger */}
             <button
-                onClick={() => setIsManualOpen(!isManualOpen)}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setIsManualOpen(!isManualOpen);
+                }}
                 className="flex h-12 w-full items-center justify-center border-b border-border/50 text-foreground-muted hover:text-foreground transition-colors md:hidden"
                 title={isExpanded ? t('collapse') : t('everything')}
             >
@@ -89,41 +118,21 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
             {/* Category List */}
             <nav className="flex flex-col gap-1 overflow-y-auto py-4 flex-1 scrollbar-none">
                 {/* "Everything" / "All" entry */}
-                <button
-                    onClick={() => handleCategoryClick(null)}
-                    title={!isExpanded ? t('everything') : undefined}
-                    className={clsx(
-                        'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                        isExpanded ? 'w-[calc(100%-16px)] px-3 gap-3 h-12' : 'w-12 h-12 justify-center px-0 gap-0',
-                        isAllActive && isExpanded && 'bg-primary/10',
-                        !isAllActive && 'hover:bg-surface-elevated'
+                <div className={clsx("flex justify-center transition-all duration-300", isExpanded ? "h-8 opacity-100 mb-2 mt-1" : "h-0 opacity-0 overflow-hidden m-0")}>
+                    {!isAllActive && (
+                        <button
+                            onClick={() => handleCategoryClick(null)}
+                            className="text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors py-1 px-3 rounded-full hover:bg-surface-elevated"
+                        >
+                            {t('everything')}
+                        </button>
                     )}
-                >
-                    {isAllActive && isExpanded && <div className="absolute left-0 top-2 bottom-2 w-[4px] rounded-r-lg bg-primary" />}
-
-                    <span
-                        className={clsx(
-                            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all',
-                            isAllActive
-                                ? 'bg-primary text-white shadow-sm'
-                                : 'text-foreground-muted group-hover:bg-surface-elevated group-hover:text-foreground'
-                        )}
-                    >
-                        <Globe className="h-5 w-5" />
-                    </span>
-
-                    <span
-                        className={clsx(
-                            'truncate text-sm transition-all duration-300 overflow-hidden',
-                            isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0',
-                            isAllActive ? 'font-bold text-primary' : 'font-semibold text-foreground-muted group-hover:text-foreground'
-                        )}
-                    >
-                        {t('everything')}
-                    </span>
-                </button>
-
-                <div className="mx-4 my-2 h-px bg-border/40" />
+                    {isAllActive && (
+                        <span className="text-xs font-semibold text-foreground-muted/50 py-1 px-3">
+                            {t('everything')}
+                        </span>
+                    )}
+                </div>
 
                 {/* Category Entries */}
                 {categories.map((cat) => {
@@ -137,7 +146,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                             title={!isExpanded ? cat.title : undefined}
                             className={clsx(
                                 'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                                isExpanded ? 'w-[calc(100%-16px)] px-3 gap-3 h-12' : 'w-12 h-12 justify-center px-0 gap-0',
+                                isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-12' : 'w-12 h-12 px-1.5',
                                 !isActive && 'hover:bg-surface-elevated'
                             )}
                             style={
@@ -165,8 +174,8 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
 
                             <span
                                 className={clsx(
-                                    'truncate text-sm transition-all duration-300 overflow-hidden',
-                                    isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0',
+                                    'truncate text-sm transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
+                                    isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
                                     isActive ? 'font-bold' : 'font-semibold text-foreground-muted group-hover:text-foreground'
                                 )}
                                 style={isActive && isExpanded ? { color: cat.color } : undefined}
@@ -178,6 +187,6 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                 })}
             </nav>
         </aside>
-
+        </>
     );
 }
