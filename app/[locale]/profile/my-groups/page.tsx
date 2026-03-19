@@ -55,6 +55,11 @@ export default async function MyGroupsPage({
     const memberGroups = formattedGroups.filter(g => g.role === 'MEMBER');
     const pendingGroups = formattedGroups.filter(g => g.role === 'PENDING');
 
+    // Groups needing attention (user is admin/owner AND there are pending requests)
+    const actionRequiredGroups = formattedGroups.filter(
+        g => (g.role === 'OWNER' || g.role === 'ADMIN') && g.pendingCount > 0
+    );
+
     return (
         <div className="container mx-auto px-4 py-12 min-h-full max-w-5xl">
             <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
@@ -64,6 +69,23 @@ export default async function MyGroupsPage({
 
             {formattedGroups.length > 0 ? (
                 <div className="flex flex-col gap-10">
+                    {actionRequiredGroups.length > 0 && (
+                        <section className="bg-red-500/5 -mx-4 px-4 py-6 rounded-3xl border border-red-500/20 shadow-sm animate-in fade-in slide-in-from-top-4">
+                            <h2 className="mb-4 text-xl font-bold text-red-600 dark:text-red-400 flex items-center gap-2">
+                                <span className="relative flex h-3 w-3">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                                {c_common_get('actionRequired')}
+                            </h2>
+                            <div className="flex flex-col gap-3">
+                                {actionRequiredGroups.map(group => (
+                                    <MyGroupsListRow key={`req-${group.id}`} group={group} locale={locale} actionRequired />
+                                ))}
+                            </div>
+                        </section>
+                    )}
+
                     {ownerGroups.length > 0 && (
                         <section>
                             <h2 className="mb-4 text-xl font-bold text-foreground">{tProfile('sectionOwner')}</h2>
