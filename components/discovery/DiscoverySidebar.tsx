@@ -74,28 +74,27 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     const isAllActive = !activeCat;
 
     return (
-        <>
-        {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
-        {isManualOpen && (
-            <div
-                className="fixed inset-0 z-20 md:hidden bg-transparent"
-                onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setIsManualOpen(false);
-                }}
-            />
-        )}
-        <aside
-            ref={sidebarRef}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className={clsx(
-                'flex shrink-0 flex-col border-r border-border bg-surface transition-all duration-300 sticky top-0 z-30',
-                'h-[calc(100dvh-64px)] md:h-full max-h-screen',
-                isExpanded ? 'w-[240px] shadow-premium absolute md:relative' : 'w-16 relative'
+        <div className="flex shrink-0 sticky top-0 z-30 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]">
+            {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
+            {isManualOpen && (
+                <div
+                    className="fixed inset-0 z-20 md:hidden bg-transparent"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setIsManualOpen(false);
+                    }}
+                />
             )}
-        >
+            <aside
+                ref={sidebarRef}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                className={clsx(
+                    'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full',
+                    isExpanded ? 'w-[240px] shadow-premium absolute md:relative z-30' : 'w-16 relative z-10'
+                )}
+            >
             {/* Mobile Toggle Trigger */}
             <button
                 onClick={(e) => {
@@ -124,27 +123,29 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     title={!isExpanded ? t('everything') : undefined}
                     className={clsx(
                         'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-12' : 'w-12 h-12 px-1.5',
+                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-9 mb-1' : 'w-12 h-9 px-1.5 mb-1',
                         isAllActive && isExpanded && 'bg-primary/5',
                         !isAllActive && 'hover:bg-surface-elevated'
                     )}
                 >
-                    {isAllActive && isExpanded && <div className="absolute left-0 top-2 bottom-2 w-[4px] rounded-r-lg bg-primary/60" />}
+                    {isAllActive && isExpanded && <div className="absolute left-0 top-1.5 bottom-1.5 w-[4px] rounded-r-lg bg-primary/60" />}
 
-                    <span
-                        className={clsx(
-                            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all border border-dashed',
-                            isAllActive
-                                ? 'bg-primary/10 text-primary border-primary/30 shadow-sm'
-                                : 'bg-transparent border-border/50 text-foreground-muted group-hover:bg-surface-elevated group-hover:text-foreground group-hover:border-border'
-                        )}
-                    >
-                        <LayoutGrid className="h-4 w-4" />
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center">
+                        <span
+                            className={clsx(
+                                'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all border border-dashed',
+                                isAllActive
+                                    ? 'bg-primary/10 text-primary border-primary/30 shadow-sm'
+                                    : 'bg-transparent border-border/50 text-foreground-muted group-hover:bg-surface-elevated group-hover:text-foreground group-hover:border-border'
+                            )}
+                        >
+                            <LayoutGrid className="h-3 w-3" />
+                        </span>
                     </span>
 
                     <span
                         className={clsx(
-                            'truncate text-sm transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
+                            'truncate text-xs transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
                             isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
                             isAllActive ? 'font-bold text-primary' : 'font-semibold text-foreground-muted group-hover:text-foreground'
                         )}
@@ -153,7 +154,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     </span>
                 </button>
 
-                <div className="mx-4 my-2 h-px bg-border/40" />
+                <div className="mx-4 my-1 h-px bg-border/40 shrink-0" />
 
                 {/* Category Entries */}
                 {categories.map((cat) => {
@@ -207,7 +208,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     );
                 })}
             </nav>
-        </aside>
-        </>
+            </aside>
+        </div>
     );
 }
