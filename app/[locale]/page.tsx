@@ -7,6 +7,7 @@ import DiscoveryFilterBarWrapper from '@/components/discovery/DiscoveryFilterBar
 import ListViewCard from '@/components/discovery/ListViewCard';
 import GroupCard from '@/components/discovery/GroupCard';
 import EventCard from '@/components/discovery/EventCard';
+import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
 import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
@@ -191,28 +192,53 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                         ) : null
                     ) : (
                         discoverableEvents.length > 0 ? (
-                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                {discoverableEvents.map((event) => {
-                                    const group = (event as any).group;
-                                    let eventL1Slug = group.category.slug;
-                                    if (group.category.level === 3 && group.category.parent?.parent) {
-                                        eventL1Slug = group.category.parent.parent.slug;
-                                    } else if (group.category.level === 2 && group.category.parent) {
-                                        eventL1Slug = group.category.parent.slug;
-                                    }
+                            currentView === 'grid' ? (
+                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                    {discoverableEvents.map((event) => {
+                                        const group = (event as any).group;
+                                        let eventL1Slug = group.category.slug;
+                                        if (group.category.level === 3 && group.category.parent?.parent) {
+                                            eventL1Slug = group.category.parent.parent.slug;
+                                        } else if (group.category.level === 2 && group.category.parent) {
+                                            eventL1Slug = group.category.parent.slug;
+                                        }
 
-                                    return (
-                                        <EventCard
-                                            key={event.id}
-                                            event={event as any}
-                                            locale={locale}
-                                            l1Slug={eventL1Slug}
-                                            groupSlug={group.slug}
-                                            accentColor={group.accentColor || accentColor}
-                                        />
-                                    );
-                                })}
-                            </div>
+                                        return (
+                                            <EventCard
+                                                key={event.id}
+                                                event={event as any}
+                                                locale={locale}
+                                                l1Slug={eventL1Slug}
+                                                groupSlug={group.slug}
+                                                accentColor={group.accentColor || accentColor}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-3">
+                                    {discoverableEvents.map((event) => {
+                                        const group = (event as any).group;
+                                        let eventL1Slug = group.category.slug;
+                                        if (group.category.level === 3 && group.category.parent?.parent) {
+                                            eventL1Slug = group.category.parent.parent.slug;
+                                        } else if (group.category.level === 2 && group.category.parent) {
+                                            eventL1Slug = group.category.parent.slug;
+                                        }
+
+                                        return (
+                                            <ListViewEventCard
+                                                key={event.id}
+                                                event={event as any}
+                                                locale={locale}
+                                                l1Slug={eventL1Slug}
+                                                groupSlug={group.slug}
+                                                accentColor={group.accentColor || accentColor}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            )
                         ) : null
                     )}
 
