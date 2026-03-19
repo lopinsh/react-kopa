@@ -62,47 +62,8 @@ export default async function GroupEventsPage({
 
     return (
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-screen-2xl mx-auto px-4 md:px-8 py-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                {/* Sub-Events Tab Menu */}
-                <div className="flex items-center gap-2 bg-surface-elevated p-1 rounded-xl w-full sm:w-auto overflow-x-auto no-scrollbar">
-                    <Link
-                        href={`/${l1Slug}/group/${groupSlug}/events?tab=upcoming` as any}
-                        className={clsx(
-                            "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
-                            currentTab === 'upcoming'
-                                ? "bg-surface shadow-sm text-foreground"
-                                : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
-                        )}
-                    >
-                        {c_common_get('eventsTabUpcoming')}
-                    </Link>
-                    {session && (
-                        <Link
-                            href={`/${l1Slug}/group/${groupSlug}/events?tab=my-rsvps` as any}
-                            className={clsx(
-                                "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
-                                currentTab === 'my-rsvps'
-                                    ? "bg-surface shadow-sm text-foreground"
-                                    : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
-                            )}
-                        >
-                            {c_common_get('eventsTabMyRsvps')}
-                        </Link>
-                    )}
-                    <Link
-                        href={`/${l1Slug}/group/${groupSlug}/events?tab=past` as any}
-                        className={clsx(
-                            "px-4 py-2 text-sm font-bold whitespace-nowrap rounded-lg transition-all flex-1 text-center sm:flex-none",
-                            currentTab === 'past'
-                                ? "bg-surface shadow-sm text-foreground"
-                                : "text-foreground-muted hover:text-foreground hover:bg-surface/50"
-                        )}
-                    >
-                        {c_common_get('eventsTabPast')}
-                    </Link>
-                </div>
-
-                {isOwnerOrAdmin && (
+            {isOwnerOrAdmin && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 mb-8">
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
                         className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-[var(--accent)] text-white hover:opacity-90 shadow-sm shrink-0"
@@ -110,8 +71,8 @@ export default async function GroupEventsPage({
                         <Plus className="h-4 w-4" />
                         {t('createEvent')}
                     </Link>
-                )}
-            </div>
+                </div>
+            )}
 
             {filteredEvents.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

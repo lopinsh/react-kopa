@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon } from 'lucide-react';
+import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon, UserPlus } from 'lucide-react';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';
@@ -20,6 +21,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const pathname = usePathname();
+    const searchParams = useSearchParams();
     const locale = useLocale();
     const { isMember, userRole, sections } = useGroupContext();
     const [isScrolled, setIsScrolled] = useState(false);
@@ -45,13 +47,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const normalizedPath = pathname.replace(`/${locale}`, '') || '/';
     const isLandingPage = normalizedPath === baseUrl || normalizedPath === `${baseUrl}/`;
 
-    // Static horizontal tabs for non-landing pages (matching sidebar links)
-    const BASE_NAV = [
-        { id: 'info', icon: Info, label: c_common('informationTitle'), href: baseUrl, memberOnly: false },
-        { id: 'events', icon: Calendar, label: c_common('eventsTitle'), href: `${baseUrl}/events`, memberOnly: false },
-        { id: 'discussions', icon: MessageSquare, label: c_common('discussionTitle'), href: `${baseUrl}/discussions`, memberOnly: true },
-        { id: 'members', icon: Users, label: c_common('membersTitle'), href: `${baseUrl}/members`, memberOnly: true },
-    ];
+    const isOwnerOrAdmin = hasAdminRights(userRole);
 
     // Map dynamic sections to tabs (only used on the information page)
     const sectionTabs: Tab[] = sections.map((s, index) => ({
@@ -62,7 +58,32 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
         memberOnly: s.visibility === 'MEMBERS_ONLY',
     }));
 
-    const tabs: Tab[] = isLandingPage ? sectionTabs : BASE_NAV;
+    // Events Page Tabs
+    const eventsTabs: Tab[] = [
+        { id: 'upcoming', icon: Calendar, label: c_common('eventsTabUpcoming'), href: `${baseUrl}/events?tab=upcoming` },
+        { id: 'my-rsvps', icon: Calendar, label: c_common('eventsTabMyRsvps'), href: `${baseUrl}/events?tab=my-rsvps`, memberOnly: true }, // Should only show for logged in / members technically, but memberOnly checks it
+        { id: 'past', icon: Calendar, label: c_common('eventsTabPast'), href: `${baseUrl}/events?tab=past` },
+    ];
+
+    // Members Page Tabs
+    const membersTabs: Tab[] = [
+        { id: 'members', icon: Users, label: c_common('membersList'), href: `${baseUrl}/members?tab=members` },
+        ...(isOwnerOrAdmin ? [{ id: 'requests', icon: UserPlus, label: c_common('requestsTab'), href: `${baseUrl}/members?tab=requests` }] : [])
+    ];
+
+    // Determine the active set of tabs based on current path
+    let tabs: Tab[] = [];
+    if (isLandingPage) {
+        tabs = sectionTabs;
+    } else if (normalizedPath.startsWith(`${baseUrl}/events`)) {
+        tabs = eventsTabs;
+    } else if (normalizedPath.startsWith(`${baseUrl}/members`)) {
+        tabs = membersTabs;
+    } else if (normalizedPath.startsWith(`${baseUrl}/discussions`)) {
+        tabs = []; // Currently no sub-tabs for discussions defined
+    } else {
+        tabs = [];
+    }
 
     // Scroll-Spy Implementation
     useEffect(() => {
@@ -143,8 +164,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
         }
     };
 
-    const isOwnerOrAdmin = hasAdminRights(userRole);
-
     // Handle sticky state detection using IntersectionObserver
     const sentinelRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -203,16 +222,21 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             if (tab.adminOnly && !isOwnerOrAdmin) return null;
 
 
-                            // For base nav, active state relies on the URL
-                            let isBaseNavActive = false;
+                            // Sub-page active state relies on URL search params
+                            let isSubPageActive = false;
                             if (!isLandingPage) {
-                                const normalizedHref = (tab.href as string).split('?')[0] || '/';
-                                isBaseNavActive = tab.id === 'info'
-                                    ? normalizedPath === normalizedHref || normalizedPath === `${normalizedHref}/`
-                                    : normalizedPath.startsWith(normalizedHref) && !pathname.includes('/settings');
+                                const currentTabQuery = searchParams.get('tab');
+
+                                if (normalizedPath.startsWith(`${baseUrl}/events`)) {
+                                    const effectiveTab = currentTabQuery || 'upcoming';
+                                    isSubPageActive = tab.id === effectiveTab;
+                                } else if (normalizedPath.startsWith(`${baseUrl}/members`)) {
+                                    const effectiveTab = currentTabQuery || 'members';
+                                    isSubPageActive = tab.id === effectiveTab;
+                                }
                             }
 
-                            const finalActive = isLandingPage ? active : isBaseNavActive;
+                            const finalActive = isLandingPage ? active : isSubPageActive;
 
                             return (
                                 <Link
@@ -233,7 +257,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                 >
                                     <div className="relative">
                                         <tab.icon className="h-3.5 w-3.5" />
-                                        {tab.id === 'members' && pendingCount > 0 && isOwnerOrAdmin && (
+                                        {tab.id === 'requests' && pendingCount > 0 && isOwnerOrAdmin && (
                                             <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-black text-white shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
                                                 {pendingCount}
                                             </span>

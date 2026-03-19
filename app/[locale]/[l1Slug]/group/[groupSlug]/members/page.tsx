@@ -4,7 +4,6 @@ import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { User as UserIcon } from 'lucide-react';
 import MembershipPanel from '@/components/groups/MembershipPanel';
-import MemberTabs from '@/components/groups/MemberTabs';
 import MemberCard from '@/components/groups/MemberCard';
 import type { Metadata } from 'next';
 import { MembershipRole } from '@prisma/client';
@@ -84,14 +83,8 @@ export default async function GroupMembersPage({
 
     return (
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-[400px]">
-            {/* Contextual In-Page Navigation */}
-            <MemberTabs
-                pendingCount={pendingMembers.length}
-                showRequests={isOwnerOrAdmin}
-            />
-
             {currentTab === 'requests' && isOwnerOrAdmin ? (
-                <div className="space-y-8">
+                <div className="space-y-8 mt-8">
                     {pendingMembers.length > 0 ? (
                         <MembershipPanel
                             groupId={group.id}
@@ -111,7 +104,7 @@ export default async function GroupMembersPage({
                     )}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                     {acceptedMembers.map((member) => (
                         <MemberCard
                             key={member.id}
