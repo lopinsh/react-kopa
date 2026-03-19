@@ -18,7 +18,7 @@ type ReportItem = {
 };
 
 export default function ReportList({ initialReports }: { initialReports: ReportItem[] }) {
-    const t = useTranslations('admin');
+    const t = useTranslations('group.admin');
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
 
