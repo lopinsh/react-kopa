@@ -50,7 +50,8 @@
     "sectionPending": "Pending approval",
     "empty": "You haven't joined any groups yet.",
     "discover": "Discover groups",
-    "backToProfile": "Back to Profile"
+    "backToProfile": "Back to Profile",
+    "sharedGroups": "Shared Groups"
   },
   "discovery": {
     "anyCategory": "Any {category}",
@@ -516,6 +517,10 @@
     "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
     "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
     "typePublic": "Public Group",
-    "submit": "Create"
+    "submit": "Create",
+    "step1Title": "Categorization",
+    "fieldDescription": "Description",
+    "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
+    "typePrivate": "Private"
   }
 }
