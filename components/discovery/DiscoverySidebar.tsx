@@ -3,6 +3,7 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { LayoutGrid } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
 
@@ -118,21 +119,41 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
             {/* Category List */}
             <nav className="flex flex-col gap-1 overflow-y-auto py-4 flex-1 scrollbar-none">
                 {/* "Everything" / "All" entry */}
-                <div className={clsx("flex justify-center transition-all duration-300", isExpanded ? "h-8 opacity-100 mb-2 mt-1" : "h-0 opacity-0 overflow-hidden m-0")}>
-                    {!isAllActive && (
-                        <button
-                            onClick={() => handleCategoryClick(null)}
-                            className="text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors py-1 px-3 rounded-full hover:bg-surface-elevated"
-                        >
-                            {t('everything')}
-                        </button>
+                <button
+                    onClick={() => handleCategoryClick(null)}
+                    title={!isExpanded ? t('everything') : undefined}
+                    className={clsx(
+                        'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
+                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-12' : 'w-12 h-12 px-1.5',
+                        isAllActive && isExpanded && 'bg-primary/5',
+                        !isAllActive && 'hover:bg-surface-elevated'
                     )}
-                    {isAllActive && (
-                        <span className="text-xs font-semibold text-foreground-muted/50 py-1 px-3">
-                            {t('everything')}
-                        </span>
-                    )}
-                </div>
+                >
+                    {isAllActive && isExpanded && <div className="absolute left-0 top-2 bottom-2 w-[4px] rounded-r-lg bg-primary/60" />}
+
+                    <span
+                        className={clsx(
+                            'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all border border-dashed',
+                            isAllActive
+                                ? 'bg-primary/10 text-primary border-primary/30 shadow-sm'
+                                : 'bg-transparent border-border/50 text-foreground-muted group-hover:bg-surface-elevated group-hover:text-foreground group-hover:border-border'
+                        )}
+                    >
+                        <LayoutGrid className="h-4 w-4" />
+                    </span>
+
+                    <span
+                        className={clsx(
+                            'truncate text-sm transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
+                            isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
+                            isAllActive ? 'font-bold text-primary' : 'font-semibold text-foreground-muted group-hover:text-foreground'
+                        )}
+                    >
+                        {t('everything')}
+                    </span>
+                </button>
+
+                <div className="mx-4 my-2 h-px bg-border/40" />
 
                 {/* Category Entries */}
                 {categories.map((cat) => {
