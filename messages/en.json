@@ -381,18 +381,102 @@
       "reportedEvent": "Event: {title}",
       "dismiss": "Dismiss",
       "suspendGroup": "Suspend Group",
+      "pendingTitle": "Pending items",
+      "id": "ID",
+      "l1Title": "L1 Category",
+      "l2Title": "L2 Category",
       "taxonomy": {
         "navLink": "Taxonomy",
-        "title": "Taxonomy Management"
+        "title": "Taxonomy Management",
+        "override": {
+          "title": "Taxonomy Override",
+          "saved": "Taxonomy saved successfully"
+        },
+        "inbox": {
+          "title": "Pending Review",
+          "confirmReject": "Are you sure you want to reject and delete this tag?",
+          "submittedBy": "Submitted by {name} on {date, date, short}",
+          "parentLabel": "Under: {title}",
+          "approve": "Approve",
+          "reject": "Reject"
+        },
+        "fields": {
+          "color": "Color",
+          "nameEn": "Name (EN)",
+          "nameLv": "Name (LV)",
+          "slugEn": "Slug (EN)",
+          "slugLv": "Slug (LV)"
+        },
+        "aliases": {
+          "added": "Alias added",
+          "deleted": "Alias deleted",
+          "anyLocale": "Any locale",
+          "anyLocaleShort": "Any",
+          "empty": "No aliases yet",
+          "valuePlaceholder": "Enter alias..."
+        },
+        "merge": {
+          "title": "Merge Tags",
+          "description": "Select the primary tag that will be kept. The others will be deleted and converted into aliases for the primary tag.",
+          "selectCanonical": "Select Primary Tag",
+          "selectCategoryPlaceholder": "Select a category...",
+          "selectedCanonicalLabel": "Primary tag:",
+          "mergeRequiresTwo": "Merge requires at least two tags",
+          "mergeCanonicalTitle": "Keep:",
+          "mergeAndNotify": "Merge and notify users"
+        },
+        "slideover": {
+          "title": "Edit Taxonomy",
+          "editDetails": "Edit Details",
+          "description": "Update category information",
+          "aliasHelper": "Aliases let alternate spellings or translations find this tag",
+          "aliases": "Aliases",
+          "save": "Save Changes",
+          "delete": "Delete Category",
+          "confirm": "Are you sure you want to delete this category?",
+          "usedByGroups": "Used by {count} groups",
+          "unknown": "Unknown"
+        },
+        "tree": {
+          "title": "Taxonomy Tree",
+          "expandAll": "Expand All",
+          "collapseAll": "Collapse All",
+          "addSubcategory": "Add Subcategory",
+          "createSubcategory": "Create Subcategory",
+          "subcategoryCreated": "Subcategory created",
+          "l1Title": "Level 1 Category",
+          "l2Title": "Level 2 Category",
+          "addAlias": "Add Alias",
+          "edit": "Edit",
+          "delete": "Delete",
+          "description": "View and manage the category hierarchy"
+        },
+        "bulk": {
+          "pendingTitle": "Pending Selection",
+          "clearSelection": "Clear Selection",
+          "selected": "{count} selected",
+          "approve": "Approve Selected",
+          "reject": "Reject Selected",
+          "merge": "Merge Selected"
+        }
       },
       "noEvents": "No events found.",
       "postPlaceholder": "Write a post...",
       "attending": "attending",
       "attendButton": "Attend",
-      "reportedBy": "by {name}",
-      "reportedGroup": "Group: {name}",
-      "reportedEvent": "Event: {title}",
+      "moderationReports": "Moderation Reports",
+      "moderationReportsDesc": "Review and resolve flagged groups and events.",
+      "allClear": "All clear",
       "allClearDesc": "There are no pending reports. Great job keeping the community safe.",
+      "reportedEntity": "Reported Entity",
+      "reportedByLabel": "Reported By",
+      "reportId": "Report ID",
+      "groupId": "Group ID",
+      "description": "Description",
+      "deleteContent": "Delete Content",
+      "deleteFailed": "Failed to delete content",
+      "resolvedByAdmin": "Resolved",
+      "markAsResolved": "Mark as Resolved",
       "anonymousUser": "Anonymous User",
       "confirmDeleteContent": "Are you sure you want to permanently delete this content? This action cannot be undone.",
       "taxonomy": {
