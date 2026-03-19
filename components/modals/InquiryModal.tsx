@@ -86,7 +86,7 @@ export default function InquiryModal({ isOpen, onClose, groupId, groupName }: Pr
                                 {t('inquiryDesc') || `Have questions for the admins of ${groupName}? Send them a message below.`}
                             </p>
                             <label htmlFor="inquiry-message" className="sr-only">
-                                {t('message')}
+                                {c_common('message')}
                             </label>
                             <textarea
                                 id="inquiry-message"

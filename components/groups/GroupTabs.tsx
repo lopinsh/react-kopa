@@ -44,7 +44,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     // Map dynamic sections to tabs
     const tabs: Tab[] = sections.map((s, index) => ({
         id: index === 0 ? 'about' : s.id,
-        label: index === 0 ? t('descriptionTitle') : s.title,
+        label: index === 0 ? c_common('about') : s.title,
         href: `#${index === 0 ? 'about' : s.id}`,
         icon: index === 0 ? Info : HelpCircle,
         memberOnly: s.visibility === 'MEMBERS_ONLY',

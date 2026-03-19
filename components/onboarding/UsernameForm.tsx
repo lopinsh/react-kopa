@@ -13,6 +13,7 @@ type AvailabilityState = 'idle' | 'checking' | 'available' | 'taken' | 'invalid'
 
 export default function UsernameForm() {
     const t = useTranslations('onboarding.username');
+    const c = useTranslations('common');
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { update } = useSession();
@@ -82,7 +83,7 @@ export default function UsernameForm() {
                     htmlFor="username-input"
                     className="block text-sm font-semibold text-foreground"
                 >
-                    {t('label')}
+                    {c('username')}
                 </label>
 
                 <div className="relative">
@@ -153,7 +154,7 @@ export default function UsernameForm() {
                 {isPending ? (
                     <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        {t('submitting')}
+                        {c('saving')}
                     </>
                 ) : (
                     t('submit')

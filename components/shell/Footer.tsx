@@ -27,7 +27,7 @@ export function Footer({ locale }: { locale: string }) {
             ]
         },
         {
-            title: t('about'),
+            title: c_common('about'),
             links: [
                 { label: t('mission'), href: '#' },
                 { label: t('guidelines'), href: '#' },

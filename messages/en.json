@@ -42,7 +42,6 @@
     "privateProfile": "Private Profile",
     "privateProfileDesc": "This profile is private.",
     "viewingOwnPublicProfile": "You're viewing your public profile.",
-    "message": "Message",
     "messagingComingSoon": "Messaging coming soon",
     "messagingDisabled": "Messaging disabled",
     "sectionOwner": "Groups I own",
@@ -79,9 +78,7 @@
     "clearTag": "Clear tag",
     "gridView": "Grid view",
     "listView": "List view",
-    "loadingMore": "Loading more groups...",
-    "typePublic": "Public",
-    "typePrivate": "Private"
+    "loadingMore": "Loading more groups..."
   },
   "common": {
     "save": "Save",
@@ -264,7 +261,12 @@
     "available": "Username is available",
     "taken": "This username is already taken",
     "submit": "Set username",
-    "submitting": "Saving..."
+    "submitting": "Saving...",
+    "message": "Message",
+    "public": "Public",
+    "private": "Private",
+    "saving": "Saving...",
+    "reply": "Reply"
   },
   "errors": {
     "UNAUTHORIZED": "Unauthorized access. Please log in.",
@@ -290,7 +292,6 @@
     "type_info": "Info",
     "type_warning": "Warning",
     "type_mention": "Mention",
-    "type_reply": "Reply",
     "type_group_invite": "Group Invite",
     "type_group_request": "Group Request",
     "type_group_role": "Role Change",
@@ -327,7 +328,6 @@
       "pressEsc": "Press ESC to close"
     },
     "footer": {
-      "about": "About",
       "helpCenter": "Help Center",
       "terms": "Terms of Service",
       "mission": "Ejam Kopā – localizing community connection.",
@@ -342,7 +342,6 @@
   "group": {
     "tabProfileDescription": "Update your group's identity and recruitment status.",
     "tabCategorizationDescription": "Choose how your group is discovered in the platform hierarchy.",
-    "visibilityPublic": "Public",
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
     "bannerImageUrlLabel": "Banner Image URL",
     "bannerImageUrlDesc": "Paste a URL for a background banner. Recommended: 1200x400px.",
@@ -350,106 +349,18 @@
     "acceptingMembersDesc": "Toggle visibility of the Join button for non-members.",
     "saveChangesDesc": "Changes will be applied immediately across the platform.",
     "deleteConfirm": "Are you sure you want to permanently delete this group? This action cannot be undone.",
-    "descriptionTitle": "About",
     "confirmCancelRequest": "Are you sure you want to withdraw your join request?",
     "membersPageTitle": "{name} | Members",
     "noPendingRequests": "All sorted! No pending membership requests at the moment.",
     "anonymousUser": "Anonymous User",
     "sendMessage": "Send Message",
-    "private": "Private",
     "messageWarning": "This message will be sent directly to the group owner and moderators. Use this for support or private questions.",
     "role_pending": "Pending",
     "applyToGroup": "Join {name}",
     "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
     "inquiryDesc": "Have questions for the admins? Send them a message below.",
-    "message": "Message",
     "sections": {
-      "count": "{count} / 6 Sections",
-      "visibilityPublic": "Public"
-    },
-    "group": {
-      "tabProfileDescription": "Update your group's identity and recruitment status.",
-      "tabCategorizationDescription": "Choose how your group is discovered in the platform hierarchy.",
-      "visibilityPublic": "Public",
-      "accentColorDesc": "Customize the primary color for your group pages and buttons.",
-      "bannerImageUrlLabel": "Banner Image URL",
-      "bannerImageUrlDesc": "Paste a URL for a background banner. Recommended: 1200x400px.",
-      "acceptingMembersLabel": "Accepting New Members",
-      "acceptingMembersDesc": "Toggle visibility of the Join button for non-members.",
-      "saveChangesDesc": "Changes will be applied immediately across the platform.",
-      "deleteConfirm": "Are you sure you want to permanently delete this group? This action cannot be undone.",
-      "descriptionTitle": "About",
-      "confirmCancelRequest": "Are you sure you want to withdraw your join request?",
-      "sendMessage": "Message",
-      "messageFailed": "Failed to open conversation.",
-      "membersPageTitle": "{name} | Members",
-      "noPendingRequests": "All sorted! No pending membership requests at the moment.",
-      "anonymousUser": "Anonymous User",
-      "private": "Private",
-      "messageWarning": "This message will be sent directly to the group owner and moderators. Use this for support or private questions.",
-      "role_pending": "Pending",
-      "reply": "Reply",
-      "replyPlaceholder": "Write a reply...",
-      "confirmDeletePost": "Are you sure you want to delete this post?",
-      "noPostsYet": "No posts yet. Be the first to start a discussion!",
-      "postPlaceholder": "Write something...",
-      "postButton": "Post",
-      "joinToDiscuss": "Join the group to participate in discussions.",
-      "applyToGroup": "Join {name}",
-      "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
-      "inquiryDesc": "Have questions for the admins? Send them a message below.",
-      "message": "Message",
-      "sections": {
-        "count": "{count} / 6 Sections",
-        "visibilityPublic": "Public"
-      }
-    },
-    "wizard": {
-      "stepOf": "Step {current} of {total}",
-      "step2Title": "Basic Info",
-      "step4Title": "Access",
-      "step1Desc": "Choose how your group will be categorized.",
-      "step2Desc": "Tell us about your group's name and mission.",
-      "step4Desc": "Who can join your group?",
-      "fieldName": "Group Name",
-      "fieldCity": "City",
-      "fieldCityPlaceholder": "Select a city",
-      "tagsAndSubtopics": "Tags & Sub-topics",
-      "subtopics": "Sub-topics",
-      "searchTopicsPlaceholder": "Search topics in {category}...",
-      "noTopicsFound": "No topics found in {category}.",
-      "createSubtopic": "Create sub-topic",
-      "proposeAsNewSubtopic": "Propose as a new sub-topic",
-      "nameOfSubtopicPlaceholder": "Name of sub-topic...",
-      "addSubtopic": "Add a sub-topic",
-      "clickToChange": "Click to change category",
-      "pickerPlaceholder": "Search categories or interests...",
-      "pendingReview": "Pending Review",
-      "browseCategories": "Browse Categories",
-      "noMatch": "No matches found for",
-      "fieldNamePlaceholder": "e.g. Riga Runners",
-      "optional": "Optional",
-      "fieldDescriptionPlaceholder": "What is your group about?",
-      "acceptingMembers": "Accepting New Members",
-      "typePublicDesc": "Anyone can see and join this group.",
-      "typePrivate": "Private",
-      "typePrivateDesc": "Approval or invite only.",
-      "fieldBannerImage": "Banner Image URL",
-      "fieldBannerImageHint": "Paste a URL for a background banner image.",
-      "fieldInstructions": "Instructions",
-      "fieldInstructionsPlaceholder": "Member-only instructions (e.g. meeting point details)...",
-      "CATEGORY_REQUIRED": "Please select a category.",
-      "TOPIC_REQUIRED": "Please select at least one sub-topic.",
-      "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
-      "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
-      "typePublic": "Public Group",
-      "next": "Next",
-      "back": "Back"
-    },
-    "nav": {
-      "discover": "Discover",
-      "myGroups": "My Groups",
-      "profile": "Profile"
+      "count": "{count} / 6 Sections"
     },
     "admin": {
       "title": "Admin Control Center",
@@ -486,24 +397,7 @@
           "reportedEvent": "Event: {title}",
           "allClearDesc": "There are no pending reports. Great job keeping the community safe.",
           "anonymousUser": "Anonymous User",
-          "confirmDeleteContent": "Are you sure you want to permanently delete this content? This action cannot be undone.",
-          "taxonomy": {
-            "tabs": {
-              "pending": "Pending"
-            },
-            "inbox": {
-              "title": "Pending Review",
-              "confirmReject": "Are you sure you want to reject and delete this tag?",
-              "submittedBy": "Submitted by {name} on {date, date, short}",
-              "parentLabel": "Under: {title}"
-            },
-            "merge": {
-              "description": "Select the primary tag that will be kept. The others will be deleted and converted into aliases for the primary tag."
-            },
-            "slideover": {
-              "aliasHelper": "Aliases let alternate spellings or translations find this tag"
-            }
-          }
+          "confirmDeleteContent": "Are you sure you want to permanently delete this content? This action cannot be undone."
         },
         "eventWizard": {
           "stepOf": "Step {current} of {total}",
@@ -519,7 +413,6 @@
           "fieldLocationPlaceholder": "e.g. Central Park",
           "fieldMaxParticipants": "Maximum Participants",
           "fieldMaxParticipantsPlaceholder": "e.g. 20 (leave empty for unlimited)",
-          "typePublic": "Public",
           "typePublicDesc": "Anyone can see and join this event.",
           "typeMembersOnlyDesc": "Only group members can see and join.",
           "fieldSlug": "URL Slug",
@@ -533,19 +426,6 @@
           "recurrencePattern": "Recurrence Pattern",
           "recurrencePatternPlaceholder": "e.g. Every second Tuesday at 19:00",
           "submit": "Create Event"
-        },
-        "messages": {
-          "title": "Messages",
-          "blocked": "Blocked",
-          "noMessages": "No messages yet",
-          "emptyInbox": "You have no messages yet. Join groups and participate to connect with others.",
-          "selectConversation": "Select a conversation to start chatting",
-          "block": "Block User",
-          "unblock": "Unblock User",
-          "conversationBlocked": "This conversation is blocked.",
-          "typeMessage": "Type a message...",
-          "confirmBlock": "Are you sure you want to block/unblock this conversation?",
-          "blockFailed": "Failed to block. You cannot block group admins or owners."
         },
         "report": {
           "title": "Report",
@@ -590,41 +470,12 @@
     "username": {
       "heading": "Choose a username",
       "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-      "label": "Username",
       "placeholder": "e.g. jdoe99",
       "hint": "3–30 characters. Letters, numbers, and underscores only.",
       "submit": "Continue",
       "available": "Available!",
       "taken": "Username is already taken.",
-      "checking": "Checking...",
-      "submitting": "Saving..."
-    }
-  },
-  "messages": {
-    "title": "Messages",
-    "blocked": "Blocked",
-    "noMessages": "No messages yet",
-    "emptyInbox": "You have no messages yet. Join groups and participate to connect with others.",
-    "selectConversation": "Select a conversation to start chatting",
-    "block": "Block User",
-    "unblock": "Unblock User",
-    "conversationBlocked": "This conversation is blocked.",
-    "typeMessage": "Type a message...",
-    "confirmBlock": "Are you sure you want to block/unblock this conversation?",
-    "blockFailed": "Failed to block. You cannot block group admins or owners."
-  },
-  "onboarding": {
-    "username": {
-      "heading": "Choose a username",
-      "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-      "label": "Username",
-      "placeholder": "e.g. jdoe99",
-      "hint": "3–30 characters. Letters, numbers, and underscores only.",
-      "submit": "Continue",
-      "available": "Available!",
-      "taken": "Username is already taken.",
-      "checking": "Checking...",
-      "submitting": "Saving..."
+      "checking": "Checking..."
     }
   },
   "wizard": {
@@ -655,7 +506,6 @@
     "fieldDescriptionPlaceholder": "What is your group about?",
     "acceptingMembers": "Accepting New Members",
     "typePublicDesc": "Anyone can see and join this group.",
-    "typePrivate": "Private",
     "typePrivateDesc": "Approval or invite only.",
     "fieldBannerImage": "Banner Image URL",
     "fieldBannerImageHint": "Paste a URL for a background banner image.",
@@ -666,9 +516,6 @@
     "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
     "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
     "typePublic": "Public Group",
-    "next": "Next",
-    "back": "Back",
-    "done": "Done",
     "submit": "Create"
   }
 }
