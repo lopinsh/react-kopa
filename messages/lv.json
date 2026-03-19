@@ -263,7 +263,12 @@
     "available": "Lietotājvārds ir pieejams",
     "taken": "Šis lietotājvārds jau ir aizņemts",
     "submit": "Iestatīt lietotājvārdu",
-    "submitting": "Saglabā..."
+    "submitting": "Saglabā...",
+    "message": "Ziņojums",
+    "public": "Publisks",
+    "private": "Privāta",
+    "saving": "Saglabā...",
+    "reply": "Atbildēt"
   },
   "errors": {
     "UNAUTHORIZED": "Neautorizēta piekļuve. Lūdzu, ielogojieties.",
@@ -366,85 +371,6 @@
       "count": "{count} / 6 sadaļas",
       "visibilityPublic": "Publiska"
     },
-    "group": {
-      "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu.",
-      "tabCategorizationDescription": "Izvēlieties kā jūsu grupa tiek atrasta platformas katalogā.",
-      "visibilityPublic": "Publiska",
-      "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
-      "bannerImageUrlLabel": "Banera attēla URL",
-      "bannerImageUrlDesc": "Ielīmējiet fona banera URL. Ieteicams: 1200x400px.",
-      "acceptingMembersLabel": "Uzņem jaunus biedrus",
-      "acceptingMembersDesc": "Pārslēdziet 'Pievienoties' pogas redzamību tiem, kas nav grupas biedri.",
-      "saveChangesDesc": "Izmaiņas tiks piemērotas nekavējoties visā platformā.",
-      "deleteConfirm": "Vai tiešām vēlaties neatgriezeniski dzēst šo grupu? Šī darbība ir neatgriezeniska.",
-      "descriptionTitle": "Par grupu",
-      "confirmCancelRequest": "Vai tiešām vēlaties atsaukt pievienošanās pieprasījumu?",
-      "sendMessage": "Ziņa",
-      "messageFailed": "Neizdevās atvērt sarunu.",
-      "membersPageTitle": "{name} | Biedri",
-      "noPendingRequests": "Viss kārtībā! Šobrīd nav neviena jauna pievienošanās pieprasījuma.",
-      "anonymousUser": "Anonīms lietotājs",
-      "private": "Privāts",
-      "messageWarning": "Šī ziņa tiks nosūtīta tieši grupas īpašniekam un moderatoriem. Izmantojiet šo atbalstam vai privātiem jautājumiem.",
-      "role_pending": "Gaida",
-      "reply": "Atbildēt",
-      "replyPlaceholder": "Rakstīt atbildi...",
-      "confirmDeletePost": "Vai tiešām vēlaties dzēst šo ierakstu?",
-      "noPostsYet": "Pagaidām nav neviena ieraksta. Esiet pirmais, kurš sāk diskusiju!",
-      "postPlaceholder": "Uzrakstiet kaut ko...",
-      "postButton": "Publicēt",
-      "joinToDiscuss": "Pievienojieties grupai, lai piedalītos diskusijās.",
-      "applyToGroup": "Pievienoties grupai {name}",
-      "applyDescription": "Pastāstiet grupas organizatoriem, kāpēc vēlaties pievienoties un ko meklējat šajā kopienā.",
-      "inquiryDesc": "Vai jums ir jautājumi administratoriem? Nosūtiet viņiem ziņu zemāk.",
-      "message": "Ziņojums",
-      "sections": {
-        "count": "{count} / 6 sadaļas",
-        "visibilityPublic": "Publiska"
-      }
-    },
-    "wizard": {
-      "stepOf": "{current}. solis no {total}",
-      "step2Title": "Pamatinformācija",
-      "step4Title": "Piekļuve",
-      "step1Desc": "Izvēlieties, kā jūsu grupa tiks kategorizēta.",
-      "step2Desc": "Pastāstiet mums savas grupas nosaukumu un misiju.",
-      "step4Desc": "Kurš var pievienoties jūsu grupai?",
-      "fieldName": "Grupas nosaukums",
-      "fieldCity": "Pilsēta",
-      "fieldCityPlaceholder": "Izvēlieties pilsētu",
-      "tagsAndSubtopics": "Tagi un apakštēmas",
-      "subtopics": "Apakštēmas",
-      "searchTopicsPlaceholder": "Meklēt tēmas kategorijā {category}...",
-      "noTopicsFound": "Kategorijā {category} nekas netika atrasts.",
-      "createSubtopic": "Izveidot apakštēmu",
-      "proposeAsNewSubtopic": "Ieteikt kā jaunu apakštēmu",
-      "nameOfSubtopicPlaceholder": "Apakštēmas nosaukums...",
-      "addSubtopic": "Pievienot apakštēmu",
-      "clickToChange": "Noklikšķiniet, lai mainītu kategoriju",
-      "pickerPlaceholder": "Meklēt kategorijas vai intereses...",
-      "pendingReview": "Gaida pārbaudi",
-      "browseCategories": "Pārlūkot kategorijas",
-      "noMatch": "Nav atrasts",
-      "fieldNamePlaceholder": "piemēram, Rīgas Skrējēji",
-      "optional": "Neobligāti",
-      "fieldDescriptionPlaceholder": "Par ko ir jūsu grupa?",
-      "acceptingMembers": "Pieņem jaunus biedrus",
-      "typePublicDesc": "Ikviens var redzēt un pievienoties.",
-      "typePrivate": "Privāta",
-      "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
-      "fieldBannerImage": "Banera attēla URL",
-      "fieldBannerImageHint": "Ielīmējiet fona banera URL.",
-      "fieldInstructions": "Instrukcijas",
-      "fieldInstructionsPlaceholder": "Tikai biedriem redzamas instrukcijas (piemēram, tikšanās vietas detaļas)...",
-      "CATEGORY_REQUIRED": "Lūdzu, izvēlieties kategoriju.",
-      "TOPIC_REQUIRED": "Lūdzu, izvēlieties vismaz vienu apakštēmu.",
-      "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm garam.",
-      "NAME_TOO_LONG": "Nosaukums nevar pārsniegt 80 rakstzīmes.",
-      "typePublic": "Publiska Grupa",
-      "next": "Tālāk",
-      "back": "Atpakaļ"
-    },
     "nav": {
       "discover": "Atklāt",
       "myGroups": "Manas grupas",
@@ -485,24 +411,7 @@
           "reportedEvent": "Pasākums: {title}",
           "allClearDesc": "Nav gaidāmu ziņojumu. Lielisks darbs kopienas drošības uzturēšanā.",
           "anonymousUser": "Anonīms lietotājs",
-          "confirmDeleteContent": "Vai tiešām vēlaties neatgriezeniski dzēst šo saturu? Šī darbība ir neatgriezeniska.",
-          "taxonomy": {
-            "tabs": {
-              "pending": "Gaida apstiprināšanu"
-            },
-            "inbox": {
-              "title": "Gaida apstiprinājumu",
-              "confirmReject": "Vai tiešām vēlaties noraidīt un dzēst šo birku?",
-              "submittedBy": "Iesniedza {name} {date, date, short}",
-              "parentLabel": "Zem: {title}"
-            },
-            "merge": {
-              "description": "Izvēlieties galveno atzīmi, kas tiks saglabāta. Pārējās tiks dzēstas un pārveidotas par galvenās atzīmes sinonīmiem."
-            },
-            "slideover": {
-              "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu"
-            }
-          }
+          "confirmDeleteContent": "Vai tiešām vēlaties neatgriezeniski dzēst šo saturu? Šī darbība ir neatgriezeniska."
         },
         "eventWizard": {
           "stepOf": "{current}. solis no {total}",
@@ -533,19 +442,6 @@
           "recurrencePatternPlaceholder": "piem. Katru otro otrdienu plkst. 19:00",
           "submit": "Izveidot pasākumu"
         },
-        "messages": {
-          "title": "Ziņojumi",
-          "blocked": "Bloķēts",
-          "noMessages": "Pagaidām nav ziņojumu",
-          "emptyInbox": "Jums vēl nav ziņojumu. Pievienojieties grupām, lai sazinātos.",
-          "selectConversation": "Izvēlieties sarunu, lai sāktu tērzēšanu",
-          "block": "Bloķēt",
-          "unblock": "Atbloķēt",
-          "conversationBlocked": "Šī saruna ir bloķēta.",
-          "typeMessage": "Rakstiet ziņu...",
-          "confirmBlock": "Vai tiešām vēlaties bloķēt/atbloķēt šo lietotāju?",
-          "blockFailed": "Neizdevās bloķēt. Jūs nevarat bloķēt grupas administratorus vai īpašniekus."
-        },
         "report": {
           "title": "Ziņot",
           "description": "Lūdzu, dariet mums zināmu, kāpēc jūs par to ziņojat. Mūsu drošības komanda izskatīs šo jautājumu.",
@@ -570,33 +466,6 @@
           "aliasHelper": "Aizstājvārdi ļauj atrast šo birku ar citu rakstību vai tulkojumu"
         }
       }
-    }
-  },
-  "messages": {
-    "title": "Ziņojumi",
-    "blocked": "Bloķēts",
-    "noMessages": "Pagaidām nav ziņojumu",
-    "emptyInbox": "Jums vēl nav ziņojumu. Pievienojieties grupām, lai sazinātos.",
-    "selectConversation": "Izvēlieties sarunu, lai sāktu tērzēšanu",
-    "block": "Bloķēt",
-    "unblock": "Atbloķēt",
-    "conversationBlocked": "Šī saruna ir bloķēta.",
-    "typeMessage": "Rakstiet ziņu...",
-    "confirmBlock": "Vai tiešām vēlaties bloķēt/atbloķēt šo lietotāju?",
-    "blockFailed": "Neizdevās bloķēt. Jūs nevarat bloķēt grupas administratorus vai īpašniekus."
-  },
-  "onboarding": {
-    "username": {
-      "heading": "Izvēlieties lietotājvārdu",
-      "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
-      "label": "Lietotājvārds",
-      "placeholder": "piem. jdoe99",
-      "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
-      "submit": "Turpināt",
-      "available": "Pieejams!",
-      "taken": "Lietotājvārds jau ir aizņemts.",
-      "checking": "Pārbauda...",
-      "submitting": "Saglabā..."
     }
   },
   "messages": {

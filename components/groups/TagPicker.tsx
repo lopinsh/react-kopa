@@ -528,7 +528,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                                     className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98]"
                                     style={{ backgroundColor: accentColor }}
                                 >
-                                    {t('done')}
+                                    {c('done')}
                                 </button>
                             </div>
                         </>

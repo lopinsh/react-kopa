@@ -257,7 +257,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                                     className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border text-xs font-medium transition-all ${section.visibility === 'PUBLIC' ? 'bg-primary/5 border-primary text-primary' : 'bg-surface border-border text-foreground-muted hover:bg-surface-elevated'}`}
                                                 >
                                                     <Globe className="h-3.5 w-3.5" />
-                                                    {t('sections.visibilityPublic')}
+                                                    {c_common('public')}
                                                 </button>
                                                 <button
                                                     type="button"

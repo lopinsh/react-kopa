@@ -33,6 +33,7 @@ type Props = {
 
 export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) {
     const t = useTranslations('wizard');
+    const c = useTranslations('common');
     const locale = useLocale();
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
@@ -223,7 +224,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 className="flex h-12 items-center gap-1.5 rounded-xl border border-border px-6 font-medium text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground soft-press"
                             >
                                 <ChevronLeft className="h-4 w-4" />
-                                {t('back')}
+                                {c('back')}
                             </button>
                         ) : <div />}
 
@@ -234,7 +235,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 className="flex h-12 items-center gap-2 rounded-xl px-8 font-bold text-white shadow-lg transition-all soft-press"
                                 style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${accentColor}40` }}
                             >
-                                {t('next')}
+                                {c('next')}
                                 <ChevronRight className="h-4 w-4" />
                             </button>
                         ) : (

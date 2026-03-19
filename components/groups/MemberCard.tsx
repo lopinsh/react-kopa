@@ -230,7 +230,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 ) : (
                     <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
                         <MessageSquare className="h-3.5 w-3.5" />
-                        {t('private')}
+                        {c_common('private')}
                     </div>
                 )}
 
@@ -245,7 +245,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 ) : (
                     <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
                         <UserIcon className="h-3.5 w-3.5" />
-                        {t('private')}
+                        {c_common('private')}
                     </div>
                 )}
             </div>

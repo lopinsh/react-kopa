@@ -20,7 +20,7 @@ export default function PrivacySection() {
         >
             <div className="grid gap-6 md:grid-cols-2 max-w-2xl">
                 {[
-                    { id: 'PUBLIC', icon: Globe, label: gt('visibilityPublic'), desc: c_common('visibilityPublicDesc') },
+                    { id: 'PUBLIC', icon: Globe, label: c_common('public'), desc: c_common('visibilityPublicDesc') },
                     { id: 'PRIVATE', icon: LockIcon, label: c_common('visibilityMembersOnly'), desc: c_common('visibilityMembersOnlyDesc') },
                 ].map((type) => (
                     <label
