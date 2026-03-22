@@ -50,25 +50,25 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                 <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
 
                 {/* Date Badge Overlay */}
-                <div className="absolute top-4 left-4 flex flex-col items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 px-3 py-2 text-white">
+                <div className="absolute top-4 left-4 flex flex-col items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 px-2 py-1.5 sm:px-3 sm:py-2 text-white">
                     <span className="text-[10px] font-black uppercase tracking-widest opacity-70">{format(startDate, 'MMM')}</span>
                     <span className="text-xl font-black leading-none">{format(startDate, 'd')}</span>
                 </div>
             </div>
 
             {/* Content */}
-            <div className="flex flex-1 flex-col p-6 space-y-4">
+            <div className="flex flex-1 flex-col p-4 sm:p-6 space-y-3 sm:space-y-4">
                 <div className="space-y-2">
                     <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-foreground-muted">
                         <span className="h-1 w-1 rounded-full bg-[var(--accent)]" style={{ backgroundColor: accentColor }} />
                         {event.group.name}
                     </div>
-                    <h3 className="text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as any}>
+                    <h3 className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as any}>
                         {event.title}
                     </h3>
                 </div>
 
-                <div className="mt-auto space-y-3 pt-2">
+                <div className="mt-auto space-y-2 sm:space-y-3 pt-2">
                     <div className="flex items-center justify-between text-xs text-foreground-muted">
                         <div className="flex items-center gap-1.5">
                             <MapPin className="h-3.5 w-3.5" />

@@ -152,7 +152,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                     {currentTab === 'groups' ? (
                         groups.length > 0 ? (
                             currentView === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                     {groups.map((group) => (
                                         <GroupCard
                                             key={group.id}
@@ -193,7 +193,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                     ) : (
                         discoverableEvents.length > 0 ? (
                             currentView === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                     {discoverableEvents.map((event) => {
                                         const group = (event as any).group;
                                         let eventL1Slug = group.category.slug;
