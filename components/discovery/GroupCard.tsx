@@ -100,7 +100,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
             </div>
 
             {/* Content Body */}
-            <div className="flex flex-1 flex-col px-5 py-4 pb-5">
+            <div className="flex flex-1 flex-col px-3 py-3 sm:px-5 sm:py-4 sm:pb-5">
                 {/* Header: Title */}
                 <div className="mb-2 flex flex-col items-start justify-start gap-1">
                     <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
@@ -119,18 +119,18 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                             {group.category.title}
                         </span>
                     </div>
-                    <h3 className="line-clamp-2 text-lg font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-[var(--accent)]">
+                    <h3 className="line-clamp-2 text-base sm:text-lg font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-[var(--accent)]">
                         {group.name}
                     </h3>
                 </div>
 
                 {/* Description - Exactly 2 lines tight leading */}
-                <p className="line-clamp-2 text-[13px] leading-[1.4] text-slate-500 mb-6 flex-1 text-balance">
+                <p className="line-clamp-2 text-[13px] leading-[1.4] text-slate-500 mb-4 sm:mb-6 flex-1 text-balance">
                     {cleanDescription || t('noDescription')}
                 </p>
 
                 {/* Footer Section */}
-                <div className="mt-auto border-t border-slate-100 pt-4 flex flex-col gap-3">
+                <div className="mt-auto border-t border-slate-100 pt-3 sm:pt-4 flex flex-col gap-2 sm:gap-3">
 
                     {/* Real Member Avatars & Active Status */}
                     <div className="flex items-center justify-between">
