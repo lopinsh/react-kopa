@@ -21,7 +21,7 @@ export default async function CreateEventModal({
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session.user.id);
     if (!group) notFound();
 
-    if (group.userRole !== 'OWNER' && group.userRole !== 'ADMIN') {
+    if (!group.user.isAdmin) {
         notFound();
     }
 

@@ -58,7 +58,8 @@ export default function GroupSettingsForm({
     canEditCategorization,
     initialTaxonomy
 }: Props) {
-    const { userRole } = useGroupContext();
+    const { user } = useGroupContext();
+    const userRole = user.role;
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const router = useRouter();

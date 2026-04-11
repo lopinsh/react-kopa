@@ -6,6 +6,7 @@ import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { slugify } from '@/lib/slug';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 export interface GroupContext {
     id: string;
@@ -18,14 +19,23 @@ export interface GroupContext {
     bannerImage: string | null;
     instructions: string | null;
     isAcceptingMembers: boolean;
-    discordLink: string | null;
-    websiteLink: string | null;
-    instagramLink: string | null;
-    memberCount: number;
-    eventCount: number;
-    isMember: boolean;
-    userRole: MembershipRole | 'PENDING' | null;
-    accentColor: string;
+    socialLinks: {
+        discord: string | null;
+        website: string | null;
+        instagram: string | null;
+    };
+    stats: {
+        memberCount: number;
+        eventCount: number;
+    };
+    user: {
+        isMember: boolean;
+        role: MembershipRole | 'PENDING' | null;
+        isAdmin: boolean;
+    };
+    theme: {
+        accentColor: string;
+    };
     sections: Array<{
         id: string;
         title: string;
@@ -109,15 +119,7 @@ export const GroupService = {
                 group: {
                     include: {
                         category: {
-                            include: {
-                                titles: { where: { lang } },
-                                parent: {
-                                    include: {
-                                        titles: { where: { lang } },
-                                        parent: { include: { titles: { where: { lang } } } }
-                                    }
-                                }
-                            }
+                            include: TaxonomyResolver.getInclude(lang)
                         },
                         _count: { select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } } } },
                         members: {
@@ -136,18 +138,7 @@ export const GroupService = {
 
         return memberships.map(m => {
             const g = m.group;
-            const currentCat = g.category;
-
-            // Resolve L1/L2 details for the card
-            const inheritedColor = g.accentColor
-                || currentCat.color
-                || currentCat.parent?.color
-                || currentCat.parent?.parent?.color
-                || '#6366f1';
-
-            const l1Slug = currentCat.parent?.parent?.slug
-                || currentCat.parent?.slug
-                || currentCat.slug;
+            const resolved = TaxonomyResolver.resolve(g.category);
 
             return {
                 id: g.id,
@@ -160,14 +151,14 @@ export const GroupService = {
                 role: m.role,
                 memberCount: g._count?.members ?? 0,
                 members: g.members.map(mb => mb.user),
-                accentColor: inheritedColor,
+                accentColor: g.accentColor || resolved.accentColor,
                 category: {
-                    id: currentCat.id,
-                    slug: currentCat.slug,
-                    l1Slug,
-                    title: currentCat.titles[0]?.title ?? currentCat.slug,
-                    parentTitle: currentCat.parent?.titles[0]?.title ?? null,
-                    color: inheritedColor
+                    id: resolved.categoryId,
+                    slug: resolved.categorySlug,
+                    l1Slug: resolved.l1Slug,
+                    title: resolved.categoryTitle,
+                    parentTitle: resolved.parentTitle,
+                    color: resolved.accentColor
                 }
             };
         });
@@ -198,19 +189,7 @@ export const GroupService = {
 
         const groupInclude = {
             category: {
-                include: {
-                    titles: { where: { lang }, select: { title: true } },
-                    parent: {
-                        include: {
-                            titles: { where: { lang }, select: { title: true } },
-                            parent: {
-                                include: {
-                                    titles: { where: { lang }, select: { title: true } }
-                                }
-                            }
-                        }
-                    }
-                }
+                include: TaxonomyResolver.getInclude(lang)
             },
             tags: {
                 select: {
@@ -291,15 +270,14 @@ export const GroupService = {
         });
 
         // 3. Resolve Taxonomy & Breadcrumbs
-        const currentCat = g.category;
-        const currentCatTitle = currentCat.titles?.[0]?.title || currentCat.slug;
-        let categoryTitle = currentCatTitle;
-        let categorySlug = currentCat.slug;
-        let parentTitle = currentCat.parent?.titles?.[0]?.title || null;
-        const accentColor = g.accentColor || currentCat.color || currentCat.parent?.color || currentCat.parent?.parent?.color || '#6366f1';
+        const resolved = TaxonomyResolver.resolve(g.category);
+        let categoryTitle = resolved.categoryTitle;
+        let categorySlug = resolved.categorySlug;
+        let parentTitle = resolved.parentTitle;
+        const accentColor = g.accentColor || resolved.accentColor;
 
         // If the main category is L1, check if there's an L2 tag we can feature in breadcrumbs
-        if (currentCat.level === 1 && g.tags.length > 0) {
+        if (resolved.level === 1 && g.tags.length > 0) {
             const l2Tag = g.tags.find((t) => t.level === 2);
             if (l2Tag) {
                 parentTitle = categoryTitle;
@@ -324,24 +302,33 @@ export const GroupService = {
             bannerImage: g.bannerImage,
             instructions: g.instructions,
             isAcceptingMembers: g.isAcceptingMembers,
-            discordLink: g.discordLink,
-            websiteLink: g.websiteLink,
-            instagramLink: g.instagramLink,
-            memberCount: g._count.members,
-            eventCount: g._count.events,
-            isMember,
-            userRole: userRole as MembershipRole | null,
-            accentColor,
+            socialLinks: {
+                discord: g.discordLink,
+                website: g.websiteLink,
+                instagram: g.instagramLink,
+            },
+            stats: {
+                memberCount: g._count.members,
+                eventCount: g._count.events,
+            },
+            user: {
+                isMember,
+                role: userRole as MembershipRole | null,
+                isAdmin,
+            },
+            theme: {
+                accentColor,
+            },
             sections: sections as GroupContext['sections'],
             members: formattedMembers as GroupContext['members'],
             category: {
-                id: currentCat.id,
+                id: resolved.categoryId,
                 title: categoryTitle,
                 slug: categorySlug,
-                level: currentCat.level,
+                level: resolved.level,
                 parentTitle,
-                l1Slug: (currentCat.level === 3 && currentCat.parent?.parent) ? currentCat.parent.parent.slug : (currentCat.level === 2 && currentCat.parent) ? currentCat.parent.slug : currentCat.slug,
-                color: currentCat.color || currentCat.parent?.color || currentCat.parent?.parent?.color || null
+                l1Slug: resolved.l1Slug,
+                color: resolved.accentColor
             },
             tags: g.tags.map((t) => ({
                 id: t.id,
@@ -376,9 +363,12 @@ export const GroupService = {
         // Pre-fetch category to get l1Slug
         const category = await prisma.category.findUnique({
             where: { id: targetCategoryId },
-            include: { parent: { include: { parent: true } } }
+            include: TaxonomyResolver.getInclude('lv')
         });
-        const l1Slug = (category?.level === 3 && category?.parent?.parent) ? category.parent.parent.slug : (category?.level === 2 && category?.parent) ? category.parent.slug : category?.slug || '';
+
+        if (!category) return { success: false, error: 'NOT_FOUND' };
+
+        const resolved = TaxonomyResolver.resolve(category);
 
         const group = await prisma.group.create({
             data: {
@@ -413,7 +403,7 @@ export const GroupService = {
             }
         });
 
-        return { success: true, data: { slug: group.slug, id: group.id, l1Slug } };
+        return { success: true, data: { slug: group.slug, id: group.id, l1Slug: resolved.l1Slug } };
     },
 
     /**
@@ -528,7 +518,7 @@ export const GroupService = {
         };
     },
 
-    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean }>> {
+    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; slugs: { slug: string; l1Slug: string } | null }>> {
         const existing = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
@@ -538,6 +528,8 @@ export const GroupService = {
         if (!message?.trim()) {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
+
+        const slugs = await this.getGroupSlugs(groupId);
 
         await prisma.membership.create({
             data: {
@@ -558,7 +550,7 @@ export const GroupService = {
             });
         }
 
-        return { success: true, data: { pending: true } };
+        return { success: true, data: { pending: true, slugs } };
     },
 
     async leaveGroup(groupId: string, userId: string): Promise<GroupServiceResult> {
@@ -568,7 +560,7 @@ export const GroupService = {
         return { success: true };
     },
 
-    async cancelJoinRequest(groupId: string, userId: string): Promise<GroupServiceResult> {
+    async cancelJoinRequest(groupId: string, userId: string): Promise<GroupServiceResult<{ slugs: { slug: string; l1Slug: string } | null }>> {
         const membership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
@@ -576,6 +568,8 @@ export const GroupService = {
         if (!membership || membership.role !== 'PENDING') {
             return { success: false, error: 'NOT_FOUND' };
         }
+
+        const slugs = await this.getGroupSlugs(groupId);
 
         await prisma.membership.delete({
             where: { id: membership.id },
@@ -586,7 +580,7 @@ export const GroupService = {
             where: { senderId: userId, groupId }
         });
 
-        return { success: true };
+        return { success: true, data: { slugs } };
     },
 
     async deleteGroup(groupId: string, userId: string): Promise<GroupServiceResult> {
@@ -653,26 +647,14 @@ export const GroupService = {
             data: updateData,
             include: {
                 category: {
-                    include: {
-                        parent: {
-                            include: {
-                                parent: true
-                            }
-                        }
-                    }
+                    include: TaxonomyResolver.getInclude('lv')
                 }
             }
         });
 
-        // Resolve l1Slug for navigation
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
+        const resolved = TaxonomyResolver.resolve(group.category);
 
-        return { success: true, data: { slug: group.slug, l1Slug } };
+        return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
     },
 
     /**
@@ -781,27 +763,15 @@ export const GroupService = {
             where: { id: groupId },
             include: {
                 category: {
-                    include: {
-                        parent: {
-                            include: {
-                                parent: true
-                            }
-                        }
-                    }
+                    include: TaxonomyResolver.getInclude('lv')
                 }
             }
         });
 
         if (!group) return null;
 
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
-
-        return { slug: group.slug, l1Slug };
+        const resolved = TaxonomyResolver.resolve(group.category);
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
     /**
@@ -812,27 +782,15 @@ export const GroupService = {
             where: { slug },
             include: {
                 category: {
-                    include: {
-                        parent: {
-                            include: {
-                                parent: true
-                            }
-                        }
-                    }
+                    include: TaxonomyResolver.getInclude('lv')
                 }
             }
         });
 
         if (!group) return null;
 
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
-
-        return { slug: group.slug, l1Slug };
+        const resolved = TaxonomyResolver.resolve(group.category);
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
     async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
@@ -1048,7 +1006,7 @@ export const GroupService = {
                 group: {
                     include: {
                         category: {
-                            include: { parent: { include: { parent: true } } }
+                            include: TaxonomyResolver.getInclude('lv')
                         },
                         members: {
                             where: { userId: actorId }
@@ -1068,9 +1026,8 @@ export const GroupService = {
             return { success: false, error: 'FORBIDDEN' };
         }
 
-        const category = post.group.category;
-        const l1Slug = (category.level === 3 && category.parent?.parent) ? category.parent.parent.slug : (category.level === 2 && category.parent) ? category.parent.slug : category.slug;
-        const slugs = { slug: post.group.slug, l1Slug };
+        const resolved = TaxonomyResolver.resolve(post.group.category);
+        const slugs = { slug: post.group.slug, l1Slug: resolved.l1Slug };
 
         await prisma.post.delete({ where: { id: postId } });
         return { success: true, data: slugs };

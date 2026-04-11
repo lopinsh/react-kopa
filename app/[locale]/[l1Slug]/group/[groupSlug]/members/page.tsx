@@ -64,13 +64,13 @@ export default async function GroupMembersPage({
     }
 
     // Gated for members only
-    if (!group.isMember) {
+    if (!group.user.isMember) {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
     const t = await getTranslations('group');
     const c_common_get = await getTranslations('common');
-    const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
+    const isOwnerOrAdmin = group.user.isAdmin;
     const pendingMembers = group.members.filter((m) => m.role === 'PENDING') as Member[];
     const acceptedMembers = group.members.filter((m) => m.role !== 'PENDING')
         .sort((a, b) => {
@@ -110,7 +110,7 @@ export default async function GroupMembersPage({
                             key={member.id}
                             member={member}
                             groupId={group.id}
-                            currentUserRole={group.userRole as string}
+                            currentUserRole={group.user.role as string}
                             locale={locale}
                             l1Slug={l1Slug}
                         />

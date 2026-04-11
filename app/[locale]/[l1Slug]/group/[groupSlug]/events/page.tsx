@@ -44,7 +44,7 @@ export default async function GroupEventsPage({
     const eventsData = await getGroupEvents(group.id);
     const t = await getTranslations('group');
   const c_common_get = await getTranslations('common');
-    const isOwnerOrAdmin = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
+    const isOwnerOrAdmin = group.user.isAdmin;
 
     const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
     const now = new Date();
@@ -94,7 +94,7 @@ export default async function GroupEventsPage({
                                 instructions: event.instructions,
                             }}
                             locale={locale}
-                            isMember={group.isMember}
+                            isMember={group.user.isMember}
                         />
                     ))}
                 </div>

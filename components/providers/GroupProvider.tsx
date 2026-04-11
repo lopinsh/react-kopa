@@ -6,8 +6,11 @@ import { MembershipRole } from '@prisma/client';
 export interface GroupState {
     id: string;
     slug: string;
-    userRole: MembershipRole | 'PENDING' | null;
-    isMember: boolean;
+    user: {
+        role: MembershipRole | 'PENDING' | null;
+        isMember: boolean;
+        isAdmin: boolean;
+    };
     pendingCount?: number;
     sections: Array<{
         id: string;

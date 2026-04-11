@@ -54,8 +54,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
         const result = await GroupService.joinGroup(groupId, session.user.id, message);
         if (!result.success) return result as ActionResponse<{ pending: boolean }>;
 
-        // Invalidate paths
-        const slugs = await GroupService.getGroupSlugs(groupId);
+        const { slugs } = result.data!;
         if (slugs) {
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
@@ -77,7 +76,7 @@ export async function cancelJoinRequest(groupId: string, locale: string): Promis
         const result = await GroupService.cancelJoinRequest(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        const slugs = await GroupService.getGroupSlugs(groupId);
+        const slugs = result.data?.slugs;
         if (slugs) {
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }

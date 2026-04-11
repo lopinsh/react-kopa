@@ -44,7 +44,7 @@ export default async function GroupPage({
                         <div className="space-y-10">
                             {group.sections.map((section: any, index: number) => {
                                 const isPublic = section.visibility === 'PUBLIC';
-                                const isVisible = isPublic || group.isMember;
+                                const isVisible = isPublic || group.user.isMember;
 
                                 return (
                                     <section
@@ -120,22 +120,22 @@ export default async function GroupPage({
                                     {c_common_get('membersTitle')}
                                 </div>
                                 <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-0.5 text-[10px] font-black text-[var(--accent)] border border-[var(--accent)]/20">
-                                    {group.memberCount}
+                                    {group.stats.memberCount}
                                 </span>
                             </div>
                             <MemberAvatarList
                                 members={group.members.filter(m => m.role !== 'PENDING')}
                                 groupId={group.id}
                                 groupName={group.name}
-                                isMember={group.isMember}
+                                isMember={group.user.isMember}
                             />
 
                             {/* Social Links */}
                             <div className="mt-8 pt-8 border-t border-border/50">
                                 <GroupSocialLinks
-                                    discordLink={group.discordLink}
-                                    websiteLink={group.websiteLink}
-                                    instagramLink={group.instagramLink}
+                                    discordLink={group.socialLinks.discord}
+                                    websiteLink={group.socialLinks.website}
+                                    instagramLink={group.socialLinks.instagram}
                                 />
                             </div>
                         </div>

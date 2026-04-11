@@ -5,6 +5,7 @@ import { Prisma, AttendanceStatus, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -26,10 +27,10 @@ export class EventService {
     static getEventWithContext = cache(async (
         eventSlug: string,
         groupSlug: string,
-        _locale: string,
+        locale: string,
         _userId?: string
     ) => {
-        void _locale;
+        const lang = locale === 'en' ? 'en' : 'lv';
         void _userId;
 
         const groupRecord = await prisma.group.findFirst({
@@ -46,24 +47,11 @@ export class EventService {
             } as Prisma.EventWhereInput,
             include: {
                 group: {
-                    select: {
-                        id: true,
-                        name: true,
-                        slug: true,
-                        accentColor: true,
-                        bannerImage: true,
+                    include: {
                         category: {
-                            select: {
-                                slug: true,
-                                parent: {
-                                    select: {
-                                        slug: true,
-                                        parent: { select: { slug: true } }
-                                    }
-                                }
-                            }
+                            include: TaxonomyResolver.getInclude(lang)
                         }
-                    } as Prisma.GroupSelect
+                    }
                 },
                 attendees: {
                     include: {
@@ -127,16 +115,7 @@ export class EventService {
                         name: true,
                         slug: true,
                         category: {
-                            select: {
-                                slug: true,
-                                level: true,
-                                parent: {
-                                    select: {
-                                        slug: true,
-                                        parent: { select: { slug: true } }
-                                    }
-                                }
-                            }
+                            include: TaxonomyResolver.getInclude('lv')
                         }
                     }
                 }
@@ -152,22 +131,16 @@ export class EventService {
             select: { userId: true }
         });
 
-        const group = event.group;
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
+        const resolved = TaxonomyResolver.resolve(event.group.category);
 
         return {
             success: true,
             data: {
                 event,
                 membersToNotify,
-                groupName: group.name,
-                groupSlug: group.slug,
-                l1Slug
+                groupName: event.group.name,
+                groupSlug: event.group.slug,
+                l1Slug: resolved.l1Slug
             }
         };
     }
@@ -178,7 +151,16 @@ export class EventService {
     static async updateEvent(eventId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ l1Slug: string; groupSlug: string }>> {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
-            select: { creatorId: true, groupId: true, group: { select: { slug: true, category: { select: { slug: true, level: true, parent: { select: { slug: true, parent: { select: { slug: true } } } } } } } } }
+            include: {
+                group: {
+                    select: {
+                        slug: true,
+                        category: {
+                            include: TaxonomyResolver.getInclude('lv')
+                        }
+                    }
+                }
+            }
         });
 
         if (!event) return { success: false, error: 'EVENT_NOT_FOUND' };
@@ -217,15 +199,9 @@ export class EventService {
             }
         });
 
-        const group = event.group;
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
+        const resolved = TaxonomyResolver.resolve(event.group.category);
 
-        return { success: true, data: { l1Slug, groupSlug: group.slug } };
+        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug } };
     }
 
     /**
@@ -279,11 +255,7 @@ export class EventService {
                     select: {
                         slug: true,
                         category: {
-                            select: {
-                                slug: true,
-                                level: true,
-                                parent: { select: { slug: true, parent: { select: { slug: true } } } }
-                            }
+                            include: TaxonomyResolver.getInclude('lv')
                         }
                     }
                 }
@@ -314,15 +286,9 @@ export class EventService {
             });
         }
 
-        const group = event.group;
-        let l1Slug = group.category.slug;
-        if (group.category.level === 3 && group.category.parent?.parent) {
-            l1Slug = group.category.parent.parent.slug;
-        } else if (group.category.level === 2 && group.category.parent) {
-            l1Slug = group.category.parent.slug;
-        }
+        const resolved = TaxonomyResolver.resolve(event.group.category);
 
-        return { success: true, data: { l1Slug, groupSlug: group.slug } };
+        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug } };
     }
 
     /**

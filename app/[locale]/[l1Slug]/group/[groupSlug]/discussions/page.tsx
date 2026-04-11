@@ -34,7 +34,7 @@ export default async function GroupDiscussionsPage({
     }
 
     // Gated for members only
-    if (!group.isMember) {
+    if (!group.user.isMember) {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 

@@ -23,7 +23,8 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const locale = useLocale();
-    const { isMember, userRole, sections } = useGroupContext();
+    const { user, sections } = useGroupContext();
+    const { isMember, role: userRole } = user;
     const [isScrolled, setIsScrolled] = useState(false);
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const navRef = useRef<HTMLElement>(null);

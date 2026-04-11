@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import type { ActionResponse } from '@/types/actions';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 /** Minimal user shape used in group member avatar stacks */
 export interface GroupMemberPreview {
@@ -101,10 +102,8 @@ export const UserService = {
         if (!user) return null;
 
         const formattedGroups = user.memberships.map(m => {
-            const l1Slug = m.group.category.parent?.parent?.slug
-                || m.group.category.parent?.slug
-                || m.group.category.slug;
-            const accentColor = m.group.category.parent?.color || m.group.category.color || '#F97316';
+            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
+            const accentColor = m.group.accentColor || resolved.accentColor;
             return {
                 id: m.group.id,
                 name: m.group.name,
@@ -116,10 +115,10 @@ export const UserService = {
                 memberCount: m.group._count.members,
                 members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
                 category: {
-                    title: m.group.category.titles[0]?.title || m.group.category.slug,
-                    parentTitle: m.group.category.parent?.titles?.[0]?.title,
-                    l1Slug,
-                    color: accentColor
+                    title: resolved.categoryTitle,
+                    parentTitle: resolved.parentTitle,
+                    l1Slug: resolved.l1Slug,
+                    color: resolved.accentColor
                 },
                 accentColor
             };
@@ -154,10 +153,8 @@ export const UserService = {
         if (!user) return null;
 
         const formattedGroups = user.memberships.map(m => {
-            const l1Slug = m.group.category.parent?.parent?.slug
-                || m.group.category.parent?.slug
-                || m.group.category.slug;
-            const accentColor = m.group.category.parent?.color || m.group.category.color || '#F97316';
+            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
+            const accentColor = m.group.accentColor || resolved.accentColor;
             return {
                 id: m.group.id,
                 name: m.group.name,
@@ -169,10 +166,10 @@ export const UserService = {
                 memberCount: m.group._count.members,
                 members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
                 category: {
-                    title: m.group.category.titles[0]?.title || m.group.category.slug,
-                    parentTitle: m.group.category.parent?.titles?.[0]?.title,
-                    l1Slug,
-                    color: accentColor
+                    title: resolved.categoryTitle,
+                    parentTitle: resolved.parentTitle,
+                    l1Slug: resolved.l1Slug,
+                    color: resolved.accentColor
                 },
                 accentColor
             };
@@ -182,16 +179,14 @@ export const UserService = {
     },
 
     async getMyGroups(userId: string, locale: string) {
+        const lang = locale === 'en' ? 'en' : 'lv';
         const memberships = await prisma.membership.findMany({
             where: { userId },
             include: {
                 group: {
                     include: {
                         category: {
-                            include: {
-                                parent: { include: { parent: true, titles: { where: { lang: locale } } } },
-                                titles: { where: { lang: locale } }
-                            }
+                            include: TaxonomyResolver.getInclude(lang)
                         },
                         _count: {
                             select: {
@@ -221,10 +216,8 @@ export const UserService = {
         const pendingCountMap = new Map(pendingCounts.map(pc => [pc.groupId, pc._count]));
 
         return memberships.map(m => {
-            const l1Slug = m.group.category.parent?.parent?.slug
-                || m.group.category.parent?.slug
-                || m.group.category.slug;
-            const accentColor = m.group.category.parent?.color || m.group.category.color || '#F97316';
+            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
+            const accentColor = m.group.accentColor || resolved.accentColor;
 
             return {
                 id: m.group.id,
@@ -238,10 +231,10 @@ export const UserService = {
                 pendingCount: pendingCountMap.get(m.group.id) || 0,
                 members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
                 category: {
-                    title: m.group.category.titles[0]?.title || 'Unknown',
-                    parentTitle: m.group.category.parent?.titles?.[0]?.title,
-                    l1Slug,
-                    color: accentColor
+                    title: resolved.categoryTitle,
+                    parentTitle: resolved.parentTitle,
+                    l1Slug: resolved.l1Slug,
+                    color: resolved.accentColor
                 },
                 accentColor,
                 role: m.role

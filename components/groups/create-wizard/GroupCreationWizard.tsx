@@ -15,14 +15,15 @@ import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import TaxonomyStep from '@/components/groups/create-wizard/TaxonomyStep';
 import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';
 import AccessStep from '@/components/groups/create-wizard/AccessStep';
+import SocialLinksStep from '@/components/groups/create-wizard/SocialLinksStep';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const STEP_SCHEMAS = [0, 1, 2] as const;
+const STEP_SCHEMAS = [0, 1, 2, 3] as const;
 type StepIndex = (typeof STEP_SCHEMAS)[number];
-const STEP_TITLE_KEYS = ['step1Title', 'step2Title', 'step4Title'] as const;
-const STEP_DESC_KEYS = ['step1Desc', 'step2Desc', 'step4Desc'] as const;
+const STEP_TITLE_KEYS = ['step1Title', 'step2Title', 'step3Title', 'step4Title'] as const;
+const STEP_DESC_KEYS = ['step1Desc', 'step2Desc', 'step3Desc', 'step4Desc'] as const;
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -67,7 +68,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
     // Only allow submission after being on the last step for a moment to prevent auto-subs
     useEffect(() => {
-        if (step === 2) {
+        if (step === 3) {
             const timer = setTimeout(() => setCanSubmit(true), 500);
             return () => clearTimeout(timer);
         } else {
@@ -114,13 +115,14 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['categoryId', 'tagIds', 'city']); // Taxonomy + City
         if (s === 1) return trigger(['name', 'description']); // Basic Info
-        if (s === 2) return trigger(['type']); // Access
+        if (s === 2) return trigger(['discordLink', 'instagramLink', 'websiteLink']); // Social
+        if (s === 3) return trigger(['type']); // Access
         return true;
     }
 
     async function nextStep() {
         const valid = await validateStep(step);
-        if (valid) setStep((s) => Math.min(s + 1, 2) as StepIndex);
+        if (valid) setStep((s) => Math.min(s + 1, 3) as StepIndex);
     }
 
     function prevStep() {
@@ -128,7 +130,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     }
 
     const onSubmit = handleSubmit((data) => {
-        if (step < 2 || (!canSubmit && !isPending)) {
+        if (step < 3 || (!canSubmit && !isPending)) {
             // Do nothing if we aren't ready to submit
             return;
         }
@@ -154,7 +156,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         >
             {/* Progress Bar */}
             <div className="flex gap-1 rounded-t-2xl overflow-hidden">
-                {[0, 1, 2].map((i) => (
+                {[0, 1, 2, 3].map((i) => (
                     <div
                         key={i}
                         className="h-1 flex-1 transition-all duration-500"
@@ -167,7 +169,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             <FormProvider {...form}>
                 <form
                     onSubmit={(e) => {
-                        if (step < 2) {
+                        if (step < 3) {
                             e.preventDefault();
                             e.stopPropagation();
                             return;
@@ -179,7 +181,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                     {/* Step Header */}
                     <div className="mb-8">
                         <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: accentColor }}>
-                            {t('stepOf', { current: step + 1, total: 3 })}
+                            {t('stepOf', { current: step + 1, total: 4 })}
                         </p>
                         <h2
                             ref={titleRef}
@@ -203,7 +205,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             />
                         )}
                         {step === 1 && <BasicInfoStep accentColor={accentColor} />}
-                        {step === 2 && <AccessStep accentColor={accentColor} />}
+                        {step === 2 && <SocialLinksStep accentColor={accentColor} />}
+                        {step === 3 && <AccessStep accentColor={accentColor} />}
 
                         {serverError && (
                             <p
@@ -228,7 +231,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             </button>
                         ) : <div />}
 
-                        {step < 2 ? (
+                        {step < 3 ? (
                             <button
                                 type="button"
                                 onClick={nextStep}
