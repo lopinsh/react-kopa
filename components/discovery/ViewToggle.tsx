@@ -2,6 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { LayoutGrid, List } from 'lucide-react';
 import { clsx } from 'clsx';
 
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export default function ViewToggle({ currentView }: Props) {
+    const t = useTranslations('discovery');
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -35,7 +37,8 @@ export default function ViewToggle({ currentView }: Props) {
                     'flex items-center justify-center rounded-md p-1.5 transition-colors',
                     currentView === 'grid' ? 'bg-surface-elevated text-foreground shadow-sm' : 'text-foreground-muted hover:text-foreground'
                 )}
-                aria-label="Grid view"
+                aria-label={t('gridView')}
+                title={t('gridView')}
             >
                 <LayoutGrid className="h-4 w-4" />
             </button>
@@ -45,7 +48,8 @@ export default function ViewToggle({ currentView }: Props) {
                     'flex items-center justify-center rounded-md p-1.5 transition-colors',
                     currentView === 'list' ? 'bg-surface-elevated text-foreground shadow-sm' : 'text-foreground-muted hover:text-foreground'
                 )}
-                aria-label="List view"
+                aria-label={t('listView')}
+                title={t('listView')}
             >
                 <List className="h-4 w-4" />
             </button>

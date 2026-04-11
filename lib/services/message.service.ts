@@ -45,13 +45,17 @@ export const MessageService = {
 
             if (existing) return existing;
 
-            // Verify they share a group
+            // Verify they share a group and both are at least members
             const sharedGroups = await prisma.membership.findMany({
                 where: {
                     userId: userId1,
+                    role: { in: ['OWNER', 'ADMIN', 'MEMBER'] },
                     group: {
                         members: {
-                            some: { userId: userId2 }
+                            some: {
+                                userId: userId2,
+                                role: { in: ['OWNER', 'ADMIN', 'MEMBER'] }
+                            }
                         }
                     }
                 }
@@ -112,7 +116,9 @@ export const MessageService = {
                     participants: { some: { id: senderId } }
                 },
                 include: {
-                    participants: true
+                    participants: {
+                        select: { id: true }
+                    }
                 }
             });
 
@@ -137,13 +143,20 @@ export const MessageService = {
             });
 
             // Trigger Pusher events for all participants
-            conversation.participants.forEach(participant => {
-                pusherServer.trigger(
-                    `private-user-${participant.id}`,
-                    'new-message',
-                    message
-                );
-            });
+            try {
+                conversation.participants.forEach(participant => {
+                    pusherServer.trigger(
+                        `private-user-${participant.id}`,
+                        'new-message',
+                        {
+                            ...message,
+                            createdAt: message.createdAt.toISOString()
+                        }
+                    );
+                });
+            } catch (pusherError) {
+                console.error('[MessageService.sendMessage] Pusher trigger failed:', pusherError);
+            }
 
             return message;
         } catch (error) {

@@ -20,8 +20,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     const { locale } = await params;
     const { city, category, q } = await searchParams;
 
-    let title = 'Discover Groups';
     const t = await getTranslations({ locale, namespace: 'discovery' });
+    let title = t('groupsFound');
 
     if (q) {
         title = `"${q}"`;

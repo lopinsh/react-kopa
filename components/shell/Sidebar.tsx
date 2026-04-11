@@ -33,33 +33,20 @@ export default function Sidebar({ locale }: SidebarProps) {
         <aside
             className={clsx(
                 'hidden md:flex flex-col border-r border-border bg-surface transition-all duration-300 ease-in-out shrink-0 relative',
-                isCollapsed ? 'w-[56px]' : 'w-[260px]'
+                isCollapsed ? 'w-16' : 'w-[260px]'
             )}
             aria-label="Sidebar"
         >
+            {/* Desktop Toggle Button */}
+            <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="hidden md:flex absolute -right-3 top-6 z-50 h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted shadow-sm hover:text-foreground transition-all hover:scale-110 active:scale-95"
+                title={isCollapsed ? t('expand') : t('collapse')}
+            >
+                <ChevronLeft className={clsx("h-4 w-4 transition-transform", isCollapsed && "rotate-180")} />
+            </button>
+
             <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden px-2 py-4 min-h-0">
-                {!isCollapsed && (
-                    <div className="flex items-center justify-end px-2 mb-2">
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-elevated text-foreground-muted hover:bg-surface-elevated/80 hover:text-foreground transition-all shadow-sm"
-                            title={t('collapse')}
-                        >
-                            <ChevronLeft className="h-5 w-5 transition-transform" />
-                        </button>
-                    </div>
-                )}
-                {isCollapsed && (
-                    <div className="shrink-0 flex flex-col items-center mb-4">
-                        <button
-                            onClick={() => setIsCollapsed(!isCollapsed)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-elevated text-foreground-muted hover:bg-surface-elevated/80 hover:text-foreground transition-all shadow-sm"
-                            title={t('collapse')}
-                        >
-                            <ChevronLeft className="h-5 w-5 transition-transform rotate-180" />
-                        </button>
-                    </div>
-                )}
                 <GroupSidebarContent l1Slug={l1Slug!} groupSlug={groupSlug!} collapsed={isCollapsed} />
             </div>
         </aside>

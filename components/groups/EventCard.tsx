@@ -77,7 +77,7 @@ export default function EventCard({ event, locale, isMember }: Props) {
                         </span>
                         {event.isRecurring && (
                             <span className="rounded-full bg-[var(--accent)]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-[var(--accent)]">
-                                {t('recurring') || 'Recurring'}
+                                {t('recurring')}
                             </span>
                         )}
                     </div>
@@ -129,7 +129,7 @@ export default function EventCard({ event, locale, isMember }: Props) {
                     <div className="relative z-10 rounded-xl border border-[var(--accent)]/10 bg-[var(--accent)]/5 p-3 text-xs">
                         <div className="flex items-center gap-1.5 font-bold text-[var(--accent)] mb-1">
                             <HelpCircle className="h-3 w-3" />
-                            Special Instructions
+                            {t('specialInstructions')}
                         </div>
                         <div
                             className="prose prose-xs prose-invert max-w-none text-foreground-muted/80"
