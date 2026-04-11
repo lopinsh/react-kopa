@@ -590,9 +590,11 @@
   "wizard": {
     "stepOf": "Step {current} of {total}",
     "step2Title": "Basic Info",
+    "step3Title": "Social Links",
     "step4Title": "Access",
     "step1Desc": "Choose how your group will be categorized.",
     "step2Desc": "Tell us about your group's name and mission.",
+    "step3Desc": "Connect with your community on other platforms.",
     "step4Desc": "Who can join your group?",
     "fieldName": "Group Name",
     "fieldCity": "City",
@@ -629,6 +631,9 @@
     "step1Title": "Categorization",
     "fieldDescription": "Description",
     "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
-    "typePrivate": "Private"
+    "typePrivate": "Private",
+    "fieldDiscord": "Discord Invite Link",
+    "fieldInstagram": "Instagram Profile",
+    "fieldWebsite": "Official Website"
   }
 }

@@ -40,7 +40,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
   const c_common = useTranslations('common');
     const locale = useLocale();
     const router = useRouter();
-    const { userRole, isMember } = useGroupContext();
+    const { user } = useGroupContext();
+    const { role: userRole, isMember } = user;
     const [isPending, startTransition] = useTransition();
     const [isAppModalOpen, setAppModalOpen] = useState(false);
     const [isReportModalOpen, setReportModalOpen] = useState(false);
@@ -133,6 +134,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
         href: `/discover?cat=${l1Slug}&tag=${group.category.slug}`,
         isL1: false
     });
+
+    const { socialLinks, stats, user: groupUser, theme } = group;
 
     return (
         <header
@@ -278,7 +281,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             >
                                 <Users className="h-4 w-4 text-white" />
                                 <span>
-                                    <strong className="font-bold text-sm tracking-tight">{group.memberCount}</strong>
+                                    <strong className="font-bold text-sm tracking-tight">{stats.memberCount}</strong>
                                     <span className="ml-1 font-medium opacity-80">{c_common('members')}</span>
                                 </span>
                             </Link>
@@ -289,28 +292,28 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             >
                                 <Calendar className="h-4 w-4 text-white" />
                                 <span>
-                                    <strong className="font-bold text-sm tracking-tight">{group.eventCount}</strong>
+                                    <strong className="font-bold text-sm tracking-tight">{stats.eventCount}</strong>
                                     <span className="ml-1 font-medium opacity-80">{c_common('events')}</span>
                                 </span>
                             </Link>
 
                             {/* Social Links */}
-                            {(group.discordLink || group.websiteLink || group.instagramLink) && (
+                            {(socialLinks.discord || socialLinks.website || socialLinks.instagram) && (
                                 <>
                                     <span className="h-1 w-1 rounded-full bg-white/30" />
                                     <div className="flex items-center gap-3 drop-shadow-sm">
-                                        {group.websiteLink && (
-                                            <a href={group.websiteLink} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Website">
+                                        {socialLinks.website && (
+                                            <a href={socialLinks.website} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Website">
                                                 <Globe className="h-4 w-4" />
                                             </a>
                                         )}
-                                        {group.discordLink && (
-                                            <a href={group.discordLink} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Discord">
+                                        {socialLinks.discord && (
+                                            <a href={socialLinks.discord} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Discord">
                                                 <MessageSquare className="h-4 w-4" />
                                             </a>
                                         )}
-                                        {group.instagramLink && (
-                                            <a href={group.instagramLink} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Instagram">
+                                        {socialLinks.instagram && (
+                                            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Instagram">
                                                 <Instagram className="h-4 w-4" />
                                             </a>
                                         )}

@@ -26,7 +26,7 @@ export default async function GroupSettingsPage(props: {
     const isAppAdmin = session.user.role === 'ADMIN';
 
     // Group members can access settings; app admins can override without membership.
-    if (!group.isMember && !isAppAdmin) {
+    if (!group.user.isMember && !isAppAdmin) {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
@@ -38,8 +38,8 @@ export default async function GroupSettingsPage(props: {
 
     const initialTaxonomy = deriveInitialTaxonomy(group, taxonomy);
 
-    const isOwner = group.userRole === 'OWNER';
-    const isOwnerOrAdmin = isOwner || group.userRole === 'ADMIN' || isAppAdmin;
+    const isOwner = group.user.role === 'OWNER';
+    const isOwnerOrAdmin = group.user.isAdmin || isAppAdmin;
     const canEditCategorization = isOwner || isAppAdmin;
     const pendingMembers = isOwnerOrAdmin ? (group.members || []).filter((m: { role: string }) => m.role === 'PENDING') : [];
 
@@ -77,9 +77,9 @@ export default async function GroupSettingsPage(props: {
                                 type: group.type,
                                 categoryId: group.categoryId,
                                 isAcceptingMembers: group.isAcceptingMembers,
-                                discordLink: group.discordLink,
-                                websiteLink: group.websiteLink,
-                                instagramLink: group.instagramLink,
+                                discordLink: group.socialLinks.discord,
+                                websiteLink: group.socialLinks.website,
+                                instagramLink: group.socialLinks.instagram,
                                 bannerImage: group.bannerImage,
                                 sections: group.sections || [],
                                 tags: group.tags || [],

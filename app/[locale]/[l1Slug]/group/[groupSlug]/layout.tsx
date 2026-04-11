@@ -23,7 +23,7 @@ export default async function GroupLayout({
         notFound();
     }
 
-    const accentColor = ensureContrast(group.accentColor || group.category.color || '#3B82F6');
+    const accentColor = ensureContrast(group.theme.accentColor || group.category.color || '#3B82F6');
     const accentForeground = getContrastForeground(accentColor);
 
     const accentStyle = {
@@ -39,8 +39,7 @@ export default async function GroupLayout({
         <GroupProvider value={{
             id: group.id,
             slug: group.slug,
-            userRole: group.userRole,
-            isMember: group.isMember,
+            user: group.user,
             pendingCount,
             sections: group.sections
         }}>

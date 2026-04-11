@@ -1,0 +1,497 @@
+
+> my-app@0.1.0 lint
+> eslint
+
+
+/app/actions/message-actions.ts
+   8:66   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:93   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  34:83   error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  47:100  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/actions/post-actions.ts
+  90:50  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/actions/report-actions.ts
+  44:55  warning  'resolutionReason' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/actions/taxonomy-actions.ts
+  11:5  warning  'L1Category' is defined but never used  @typescript-eslint/no-unused-vars
+  12:5  warning  'L2Category' is defined but never used  @typescript-eslint/no-unused-vars
+  14:5  warning  'L3Tag' is defined but never used       @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/[l1Slug]/group/[groupSlug]/events/[eventSlug]/page.tsx
+    2:10  warning  'GroupService' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   15:5   warning  'CheckCircle2' is defined but never used                                                                                                                                                                                                                                                 @typescript-eslint/no-unused-vars
+   16:5   warning  'Star' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   19:10  warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   40:11  warning  't' is assigned a value but never used                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   45:11  warning  'durationText' is assigned a value but never used                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   48:11  warning  'hasEnded' is assigned a value but never used                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+   53:11  warning  'isOwner' is assigned a value but never used                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   83:91  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  108:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  292:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/app/[locale]/[l1Slug]/group/[groupSlug]/events/page.tsx
+   10:10  warning  'clsx' is defined but never used                   @typescript-eslint/no-unused-vars
+   46:9   warning  'c_common_get' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   68:79  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+  116:83  error    Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+/app/app/[locale]/[l1Slug]/group/[groupSlug]/loading.tsx
+  1:10  warning  'Calendar' is defined but never used       @typescript-eslint/no-unused-vars
+  1:20  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  1:35  warning  'Users' is defined but never used          @typescript-eslint/no-unused-vars
+  1:51  warning  'ImageIcon' is defined but never used      @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/[l1Slug]/group/[groupSlug]/members/page.tsx
+  41:9  warning  'c_common_get' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/[l1Slug]/group/[groupSlug]/page.tsx
+   6:10  warning  'Info' is defined but never used            @typescript-eslint/no-unused-vars
+   6:16  warning  'Calendar' is defined but never used        @typescript-eslint/no-unused-vars
+   6:26  warning  'MessageSquare' is defined but never used   @typescript-eslint/no-unused-vars
+   8:8   warning  'GroupHeader' is defined but never used     @typescript-eslint/no-unused-vars
+   9:10  warning  'ensureContrast' is defined but never used  @typescript-eslint/no-unused-vars
+  22:11  warning  't' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  45:59  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+/app/app/[locale]/admin/reports/ReportList.tsx
+  103:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/app/[locale]/admin/taxonomy/SlideoverL1View.tsx
+  99:26  error  Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/app/app/[locale]/admin/taxonomy/SlideoverL1View.tsx:99:26
+   97 |                 <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
+   98 |                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: `${color}20`, color: color }}>
+>  99 |                         <Icon className="w-6 h-6" />
+      |                          ^^^^ This component is created during render
+  100 |                     </div>
+  101 |                     <div>
+  102 |                         <h2 className="text-2xl font-bold">{l1.title}</h2>
+
+/app/app/[locale]/admin/taxonomy/SlideoverL1View.tsx:26:18
+  24 |     const [isPending, startTransition] = useTransition();
+  25 |
+> 26 |     const Icon = getCategoryIcon(l1.slug);
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  27 |
+  28 |     const [color, setColor] = useState(l1.color || '#6366f1');
+  29 |  react-hooks/static-components
+
+/app/app/[locale]/admin/taxonomy/SlideoverL2View.tsx
+    3:10  warning  'Link' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   19:47  warning  'categories' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  100:49  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/app/app/[locale]/admin/taxonomy/SlideoverL2View.tsx:100:49
+   98 |                         <div className="flex items-center gap-3">
+   99 |                             <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: `${parentL1.color}20`, color: parentL1.color }}>
+> 100 |                                 {ParentIcon && <ParentIcon className="w-4 h-4" />}
+      |                                                 ^^^^^^^^^^ This component is created during render
+  101 |                             </div>
+  102 |                             <div>
+  103 |                                 <h4 className="font-semibold text-sm">{parentL1.title}</h4>
+
+/app/app/[locale]/admin/taxonomy/SlideoverL2View.tsx:85:35
+  83 |
+  84 |     const parentL1 = tree.find(l1 => l1.id === l2.parentId);
+> 85 |     const ParentIcon = parentL1 ? getCategoryIcon(parentL1.slug) : null;
+     |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  86 |
+  87 |     return (
+  88 |         <div className="space-y-8 pb-12">  react-hooks/static-components
+
+/app/app/[locale]/admin/taxonomy/SlideoverPendingView.tsx
+  11:75  warning  'onClose' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/admin/taxonomy/TaxonomyAdminClient.tsx
+  21:12  warning  'isPendingTransitions' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/admin/taxonomy/TaxonomySlideover.tsx
+  4:15  warning  'L1Category' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/admin/taxonomy/TaxonomyTree.tsx
+  3:49  warning  'L1Category' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/admin/taxonomy/TaxonomyTreeNode.tsx
+   38:22  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/app/app/[locale]/admin/taxonomy/TaxonomyTreeNode.tsx:38:22
+  36 |
+  37 |                 <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: `${l1.color}20`, color: l1.color }}>
+> 38 |                     <Icon className="w-4 h-4" />
+     |                      ^^^^ This component is created during render
+  39 |                 </div>
+  40 |
+  41 |                 <span className="font-semibold">{l1.title}</span>
+
+/app/app/[locale]/admin/taxonomy/TaxonomyTreeNode.tsx:23:18
+  21 |
+  22 |     const isSelected = selectedNode?.type === 'l1' && selectedNode.id === l1.id;
+> 23 |     const Icon = getCategoryIcon(l1.slug);
+     |                  ^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  24 |
+  25 |     return (
+  26 |         <div className="flex flex-col border-b border-border last:border-b-0">  react-hooks/static-components
+   99:5   warning  'id' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  100:5   warning  'l1Id' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/auth/register/page.tsx
+   44:18  warning  'err' is defined but never used                                                                                                                                    @typescript-eslint/no-unused-vars
+  117:21  error    Do not use an `<a>` element to navigate to `/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  117:21  error    Do not use an `<a>` element to navigate to `/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  117:21  error    Do not use an `<a>` element to navigate to `/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  117:21  error    Do not use an `<a>` element to navigate to `/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/app/app/[locale]/auth/signin/page.tsx
+  88:21  error  Do not use an `<a>` element to navigate to `/auth/register/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  88:21  error  Do not use an `<a>` element to navigate to `/auth/register/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  88:21  error  Do not use an `<a>` element to navigate to `/auth/register/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  88:21  error  Do not use an `<a>` element to navigate to `/auth/register/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  89:28  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                      react/no-unescaped-entities
+
+/app/app/[locale]/discover/loading.tsx
+  1:10  warning  'Search' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/groups/loading.tsx
+  1:10  warning  'ShieldAlert' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/app/[locale]/groups/page.tsx
+   6:10  warning  'Link' is defined but never used                                                                                                                                       @typescript-eslint/no-unused-vars
+  15:11  warning  't' is assigned a value but never used                                                                                                                                 @typescript-eslint/no-unused-vars
+  38:21  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  38:21  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  38:21  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  38:21  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  38:21  error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+
+/app/app/[locale]/page.tsx
+   14:10  warning  'Users' is defined but never used         @typescript-eslint/no-unused-vars
+   14:31  warning  'Calendar' is defined but never used      @typescript-eslint/no-unused-vars
+   15:10  warning  'clsx' is defined but never used          @typescript-eslint/no-unused-vars
+   43:10  warning  'CITIES' is defined but never used        @typescript-eslint/no-unused-vars
+  159:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  185:61  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  198:65  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  209:65  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  221:65  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  232:65  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/app/[locale]/profile/[username]/page.tsx
+   2:20  warning  'redirect' is defined but never used                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  69:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/app/[locale]/profile/my-groups/page.tsx
+  15:11   warning  'tNav' is assigned a value but never used                                                                                                                              @typescript-eslint/no-unused-vars
+  39:21   error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  39:21   error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  39:21   error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  39:21   error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  39:21   error    Do not use an `<a>` element to navigate to `/api/auth/signin/`. Use `<Link />` from `next/link` instead. See: https://nextjs.org/docs/messages/no-html-link-for-pages  @next/next/no-html-link-for-pages
+  66:114  error    Unexpected any. Specify a different type                                                                                                                               @typescript-eslint/no-explicit-any
+
+/app/app/[locale]/profile/page.tsx
+  38:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/discovery/DiscoveryFilterBar.tsx
+  196:11  warning  'handleClearTags' is assigned a value but never used                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  335:61  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/discovery/DiscoveryFilters.tsx
+  4:26  warning  'Layers' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/discovery/EventCard.tsx
+   2:10   warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  29:44   warning  'locale' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  40:21   warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  66:200  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  88:202  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/app/components/discovery/FilterBar.tsx
+   5:10  warning  'useState' is defined but never used   @typescript-eslint/no-unused-vars
+   5:33  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  24:57  warning  'locale' is defined but never used     @typescript-eslint/no-unused-vars
+
+/app/components/discovery/GroupCard.tsx
+   3:10  warning  'Users' is defined but never used          @typescript-eslint/no-unused-vars
+   3:38  warning  'Zap' is defined but never used            @typescript-eslint/no-unused-vars
+  48:86  warning  'locale' is defined but never used         @typescript-eslint/no-unused-vars
+  51:11  warning  'Icon' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/discovery/ListViewCard.tsx
+   2:38  warning  'Zap' is defined but never used            @typescript-eslint/no-unused-vars
+  29:79  warning  'locale' is defined but never used         @typescript-eslint/no-unused-vars
+  31:11  warning  'Icon' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/discovery/ListViewEventCard.tsx
+  26:52  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/events/RSVPButtons.tsx
+  50:18  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+/app/components/forms/EventCreationWizard.tsx
+   28:7   warning  'STEP_SCHEMAS' is assigned a value but only used as a type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  328:56  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/app/components/forms/EventCreationWizard.tsx:328:56
+  326 |                                     { val: EVENT_VISIBILITY[1], key: 'typeMembersOnly' as const, desc: 'typeMembersOnlyDesc' as const }
+  327 |                                 ].map(({ val, key, desc }) => {
+> 328 |                                     const isSelected = watch('visibility') === val;
+      |                                                        ^^^^^ React Hook Form's `useForm()` API returns a `watch()` function which cannot be memoized safely.
+  329 |                                     return (
+  330 |                                         <button
+  331 |                                             key={val}  react-hooks/incompatible-library
+
+/app/components/groups/DiscussionBoard.tsx
+    8:10  warning  'clsx' is defined but never used                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+    9:8   warning  'Image' is defined but never used                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+   85:34  error    A `require()` style import is forbidden                                                                                                                                                                                                                                                  @typescript-eslint/no-require-imports
+  267:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  341:57  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  412:77  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/groups/EventCard.tsx
+  3:10  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/groups/GroupHeader.tsx
+   14:10  warning  'joinGroup' is defined but never used                                                                                                           @typescript-eslint/no-unused-vars
+   51:12  warning  'isContactsOpen' is assigned a value but never used                                                                                             @typescript-eslint/no-unused-vars
+   51:28  warning  'setContactsOpen' is assigned a value but never used                                                                                            @typescript-eslint/no-unused-vars
+   53:11  warning  'contactsRef' is assigned a value but never used                                                                                                @typescript-eslint/no-unused-vars
+   90:8   warning  React Hook useEffect has missing dependencies: 'clearPendingAction' and 'handleMembership'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  138:39  warning  'groupUser' is assigned a value but never used                                                                                                  @typescript-eslint/no-unused-vars
+  138:50  warning  'theme' is assigned a value but never used                                                                                                      @typescript-eslint/no-unused-vars
+
+/app/components/groups/GroupInfoDrawer.tsx
+   6:21  warning  'useState' is defined but never used      @typescript-eslint/no-unused-vars
+  13:12  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:5   warning  'group' is defined but never used         @typescript-eslint/no-unused-vars
+  25:11  warning  't' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/app/components/groups/GroupSectionEditor.tsx
+    5:48  warning  'Eye' is defined but never used                  @typescript-eslint/no-unused-vars
+    5:53  warning  'EyeOff' is defined but never used               @typescript-eslint/no-unused-vars
+    5:75  warning  'HelpCircle' is defined but never used           @typescript-eslint/no-unused-vars
+  123:11  warning  'addSection' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/groups/GroupSocialLinks.tsx
+  17:11  warning  't' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/groups/GroupTabs.tsx
+    8:26  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+    8:60  warning  'Settings' is defined but never used       @typescript-eslint/no-unused-vars
+   21:11  warning  't' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  245:55  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/app/components/groups/MemberAvatarList.tsx
+  61:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/groups/MemberCard.tsx
+   35:80  warning  'l1Slug' is defined but never used                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  100:73  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  104:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  111:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  124:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  131:33  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  154:73  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  239:69  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+
+/app/components/groups/RequestCard.tsx
+  71:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/groups/SettingsTabs.tsx
+  14:11  warning  't' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  75:47  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/components/groups/TagPicker.tsx
+  311:107  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/components/groups/create-wizard/AccessStep.tsx
+   6:23   warning  'Zap' is defined but never used             @typescript-eslint/no-unused-vars
+   6:28   warning  'HelpCircle' is defined but never used      @typescript-eslint/no-unused-vars
+   6:50   warning  'MessageSquare' is defined but never used   @typescript-eslint/no-unused-vars
+   6:78   warning  'InstagramIcon' is defined but never used   @typescript-eslint/no-unused-vars
+   8:8    warning  'RichTextEditor' is defined but never used  @typescript-eslint/no-unused-vars
+  43:66   error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  62:97   error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  63:113  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+/app/components/groups/create-wizard/BasicInfoStep.tsx
+   6:47   warning  'HelpCircle' is defined but never used    @typescript-eslint/no-unused-vars
+  39:100  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/components/groups/create-wizard/GroupCreationWizard.tsx
+  23:7   warning  'STEP_SCHEMAS' is assigned a value but only used as a type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  65:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/app/components/groups/create-wizard/GroupCreationWizard.tsx:65:13
+  63 |     useEffect(() => {
+  64 |         if (defaultTaxSelection?.kind === 'existing') {
+> 65 |             setAccentColor(defaultTaxSelection.l1Color);
+     |             ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  66 |         }
+  67 |     }, [defaultTaxSelection]);
+  68 |  react-hooks/set-state-in-effect
+  75:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/app/components/groups/create-wizard/GroupCreationWizard.tsx:75:13
+  73 |             return () => clearTimeout(timer);
+  74 |         } else {
+> 75 |             setCanSubmit(false);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  76 |         }
+  77 |     }, [step]);
+  78 |                                                          react-hooks/set-state-in-effect
+
+/app/components/groups/create-wizard/L1Picker.tsx
+  18:63  warning  'accentColor' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  46:38  error    Error: Cannot create components during render
+
+Components created during render will reset their state each time they are created. Declare components outside of render.
+
+/app/components/groups/create-wizard/L1Picker.tsx:46:38
+  44 |                             return (
+  45 |                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+> 46 |                                     <IconC className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
+     |                                      ^^^^^ This component is created during render
+  47 |                                 </div>
+  48 |                             );
+  49 |                         })()}
+
+/app/components/groups/create-wizard/L1Picker.tsx:43:43
+  41 |                     <div className="flex items-center gap-4">
+  42 |                         {(() => {
+> 43 |                             const IconC = getCategoryIcon(selectedL1.slug);
+     |                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ The component is created during render here
+  44 |                             return (
+  45 |                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+  46 |                                     <IconC className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />  react-hooks/static-components
+
+/app/components/groups/create-wizard/SocialLinksStep.tsx
+  6:60  warning  'Zap' is defined but never used          @typescript-eslint/no-unused-vars
+  9:43  warning  'accentColor' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/groups/create-wizard/TaxonomyStep.tsx
+  39:22  error  Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free  @typescript-eslint/ban-ts-comment
+
+/app/components/groups/settings/PrivacySection.tsx
+  11:11  warning  'gt' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/groups/settings/SocialSection.tsx
+  10:11  warning  'gt' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/messages/MessagesLayout.tsx
+   39:22  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  155:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  213:41  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/modals/MemberMoreModal.tsx
+  29:12  warning  'selectedAdmin' is assigned a value but never used                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  67:37  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/modals/SupportMessageModal.tsx
+   5:10  warning  'MessageSquare' is defined but never used  @typescript-eslint/no-unused-vars
+  36:35  error    Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  47:18  warning  'e' is defined but never used              @typescript-eslint/no-unused-vars
+
+/app/components/profile/MyGroupsListRow.tsx
+  35:11  warning  'targetHref' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/profile/ProfileEditForm.tsx
+  59:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/app/components/providers/RealtimeProvider.tsx
+  3:20  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/shell/CookieConsent.tsx
+  22:17  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/app/components/shell/CookieConsent.tsx:22:17
+  20 |             const consent = localStorage.getItem('cookie-consent');
+  21 |             if (!consent) {
+> 22 |                 setIsVisible(true);
+     |                 ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  23 |             }
+  24 |         }
+  25 |     }, [isMounted]);  react-hooks/set-state-in-effect
+
+/app/components/shell/Footer.tsx
+  4:38  warning  'Mail' is defined but never used    @typescript-eslint/no-unused-vars
+  7:26  warning  'locale' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/shell/GroupSidebarContent.tsx
+   7:52  warning  'Lock' is defined but never used                   @typescript-eslint/no-unused-vars
+  22:11  warning  't' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  25:11  warning  'searchParams' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/shell/NotificationCenter.tsx
+  30:74  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/app/components/shell/SearchModal.tsx
+  4:21  warning  'useState' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/components/shell/Sidebar.tsx
+  14:35  warning  'locale' is defined but never used             @typescript-eslint/no-unused-vars
+  16:9   warning  'c_common' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/components/shell/ThemeToggle.tsx
+  6:10  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+  6:21  warning  'useState' is defined but never used   @typescript-eslint/no-unused-vars
+
+/app/components/shell/UserMenu.tsx
+  9:10  warning  'clsx' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/lib/icons.ts
+  4:10  warning  'Flame' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/lib/image-utils.ts
+  36:14  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/lib/navigation.ts
+  2:5  warning  'Home' is defined but never used  @typescript-eslint/no-unused-vars
+
+/app/lib/services/taxonomy-resolver.service.ts
+   1:10  warning  'Prisma' is defined but never used       @typescript-eslint/no-unused-vars
+  48:15  warning  'l2' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/app/test-live-site.spec.ts
+   21:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   22:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   29:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   64:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  136:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  198:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  246:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 207 problems (69 errors, 138 warnings)

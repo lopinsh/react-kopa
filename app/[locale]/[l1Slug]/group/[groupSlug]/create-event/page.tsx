@@ -22,7 +22,7 @@ export default async function CreateEventPage({
     }
 
     // Only Owner/Admin can create events (Logic also enforced in action)
-    const canCreate = group.userRole === 'OWNER' || group.userRole === 'ADMIN';
+    const canCreate = group.user.isAdmin;
 
     if (!canCreate) {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);

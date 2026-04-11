@@ -6,6 +6,7 @@ import type {
     DiscoveryFilters,
     ContextualTaxonomy
 } from '@/lib/types/discovery';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 /**
  * Service to handle discovery logic (searching groups and categories).
@@ -150,25 +151,24 @@ export const DiscoveryService = {
 
         // 4. Map and Combine
         const mappedCategories: ScopedResult[] = categories.map(c => {
-            const l1 = c.level === 1 ? c : (c.level === 2 ? c.parent : c.parent?.parent);
+            const resolved = TaxonomyResolver.resolve(c);
             const l2 = c.level === 2 ? c : (c.level === 3 ? c.parent : undefined);
 
             return {
                 type: 'category',
-                id: c.id,
-                slug: c.slug,
-                title: c.titles[0]?.title ?? c.slug,
-                l1Slug: l1?.slug || activeCat || 'sigulda',
+                id: resolved.categoryId,
+                slug: resolved.categorySlug,
+                title: resolved.categoryTitle,
+                l1Slug: resolved.l1Slug || activeCat || 'sigulda',
                 l2Slug: l2?.slug,
-                color: l1?.color ?? '#6366f1',
-                level: c.level,
-                subtitle: c.level === 3 ? `${l1?.slug} • ${l2?.slug}` : l1?.slug
+                color: resolved.accentColor,
+                level: resolved.level,
+                subtitle: resolved.level === 3 ? `${resolved.l1Slug} • ${l2?.slug}` : resolved.l1Slug
             };
         });
 
         const mappedGroups: ScopedResult[] = groups.map(g => {
-            const l1Color = g.category.color || g.category.parent?.color || g.category.parent?.parent?.color || '#6366f1';
-            const l1Slug = g.category.parent?.parent?.slug || g.category.parent?.slug || g.category.slug;
+            const resolved = TaxonomyResolver.resolve(g.category);
 
             return {
                 type: 'group',
@@ -176,27 +176,25 @@ export const DiscoveryService = {
                 slug: g.slug,
                 title: g.name,
                 subtitle: g.city,
-                l1Slug: l1Slug || 'sigulda',
-                color: l1Color,
+                l1Slug: resolved.l1Slug || 'sigulda',
+                color: resolved.accentColor,
                 image: g.bannerImage
             };
         });
 
         const mappedEvents: ScopedResult[] = events.map(e => {
-            const g = e.group;
-            const l1Color = g.category.color || g.category.parent?.color || g.category.parent?.parent?.color || '#6366f1';
-            const l1Slug = g.category.parent?.parent?.slug || g.category.parent?.slug || g.category.slug;
+            const resolved = TaxonomyResolver.resolve(e.group.category);
 
             return {
                 type: 'event',
                 id: e.id,
                 slug: e.slug,
                 title: e.title,
-                subtitle: e.location || g.city,
-                l1Slug: l1Slug || 'sigulda',
-                color: l1Color,
-                image: e.bannerImage || g.bannerImage,
-                groupSlug: g.slug
+                subtitle: e.location || e.group.city,
+                l1Slug: resolved.l1Slug || 'sigulda',
+                color: resolved.accentColor,
+                image: e.bannerImage || e.group.bannerImage,
+                groupSlug: e.group.slug
             };
         });
 
@@ -302,28 +300,7 @@ export const DiscoveryService = {
                         bannerImage: true,
                         createdAt: true,
                         category: {
-                            select: {
-                                id: true,
-                                slug: true,
-                                color: true,
-                                titles: { where: { lang: reqLang }, select: { title: true } },
-                                parent: {
-                                    select: {
-                                        id: true,
-                                        slug: true,
-                                        color: true,
-                                        titles: { where: { lang: reqLang }, select: { title: true } },
-                                        parent: {
-                                            select: {
-                                                id: true,
-                                                slug: true,
-                                                color: true,
-                                                titles: { where: { lang: reqLang }, select: { title: true } }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            include: TaxonomyResolver.getInclude(reqLang)
                         },
                         _count: {
                             select: { members: true }
@@ -363,14 +340,7 @@ export const DiscoveryService = {
             const totalCount = await prisma.group.count({ where });
 
             const mappedGroups = groups.map((g) => {
-                // Inherit color from the highest ancestor that has one (usually L1)
-                const inheritedColor = g.category.color
-                    || g.category.parent?.color
-                    || g.category.parent?.parent?.color;
-
-                const l1Slug = g.category.parent?.parent?.slug
-                    || g.category.parent?.slug
-                    || g.category.slug;
+                const resolved = TaxonomyResolver.resolve(g.category);
 
                 return {
                     id: g.id,
@@ -382,14 +352,14 @@ export const DiscoveryService = {
                     bannerImage: g.bannerImage,
                     memberCount: g._count.members,
                     members: g.members.map(m => m.user),
-                    accentColor: inheritedColor || '#6366f1',
+                    accentColor: resolved.accentColor,
                     category: {
-                        id: g.category.id,
-                        slug: g.category.slug,
-                        l1Slug,
-                        title: g.category.titles[0]?.title ?? g.category.slug,
-                        parentTitle: g.category.parent?.parent?.titles[0]?.title ?? g.category.parent?.titles[0]?.title,
-                        color: inheritedColor || '#6366f1'
+                        id: resolved.categoryId,
+                        slug: resolved.categorySlug,
+                        l1Slug: resolved.l1Slug,
+                        title: resolved.categoryTitle,
+                        parentTitle: resolved.parentTitle,
+                        color: resolved.accentColor
                     },
                 };
             });

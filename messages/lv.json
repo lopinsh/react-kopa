@@ -607,9 +607,11 @@
   "wizard": {
     "stepOf": "{current}. solis no {total}",
     "step2Title": "Pamatinformācija",
+    "step3Title": "Sociālās saites",
     "step4Title": "Piekļuve",
     "step1Desc": "Izvēlieties, kā jūsu grupa tiks kategorizēta.",
     "step2Desc": "Pastāstiet mums savas grupas nosaukumu un misiju.",
+    "step3Desc": "Sazinieties ar savu kopienu citās platformās.",
     "step4Desc": "Kurš var pievienoties jūsu grupai?",
     "fieldName": "Grupas nosaukums",
     "fieldCity": "Pilsēta",
@@ -649,6 +651,9 @@
     "submit": "Izveidot",
     "step1Title": "Kategorizēšana",
     "fieldDescription": "Apraksts",
-    "fieldBannerImagePlaceholder": "https://images.unsplash.com/..."
+    "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
+    "fieldDiscord": "Discord uzaicinājuma saite",
+    "fieldInstagram": "Instagram profils",
+    "fieldWebsite": "Oficiālā mājaslapa"
   }
 }

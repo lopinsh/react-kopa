@@ -1,5 +1,5 @@
 import { getTaxonomy } from '@/actions/taxonomy-actions';
-import GroupCreationWizard from '@/components/forms/GroupCreationWizard';
+import GroupCreationWizard from '@/components/groups/create-wizard/GroupCreationWizard';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 

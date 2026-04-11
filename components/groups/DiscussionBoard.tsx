@@ -55,7 +55,8 @@ type Props = {
 };
 
 export default function DiscussionBoard({ groupId, locale, currentUserId }: Props) {
-    const { isMember, userRole } = useGroupContext();
+    const { user } = useGroupContext();
+    const { isMember, role: userRole } = user;
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tAuth = useTranslations('auth');
