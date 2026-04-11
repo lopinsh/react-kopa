@@ -45,18 +45,26 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
 
             const channel = pusherClient.subscribe(channelName);
 
-            channel.bind('new-message', (message: { id: string; content: string; createdAt: Date; senderId: string; conversationId: string; }) => {
+            channel.bind('new-message', (message: { id: string; content: string; createdAt: string | Date; senderId: string; conversationId: string; sender: any }) => {
+                const formattedMessage = {
+                    ...message,
+                    createdAt: new Date(message.createdAt)
+                };
+
                 // Update active messages if this conversation is open
-                if (activeConversationId === message.conversationId) {
-                    setMessages(prev => [...prev, message]);
+                if (activeConversationId === formattedMessage.conversationId) {
+                    setMessages(prev => {
+                        if (prev.some(m => m.id === formattedMessage.id)) return prev;
+                        return [...prev, formattedMessage];
+                    });
                 }
 
                 // Update conversation list preview
                 setConversations(prev => {
                     const updated = [...prev];
-                    const idx = updated.findIndex(c => c.id === message.conversationId);
+                    const idx = updated.findIndex(c => c.id === formattedMessage.conversationId);
                     if (idx > -1) {
-                        updated[idx].messages = [message];
+                        updated[idx].messages = [formattedMessage];
                         // Move to top
                         const [conv] = updated.splice(idx, 1);
                         updated.unshift(conv);

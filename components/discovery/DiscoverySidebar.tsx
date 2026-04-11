@@ -3,7 +3,7 @@
 import { useCallback, useState, useRef, useEffect } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { LayoutGrid } from 'lucide-react';
+import { LayoutGrid, ChevronLeft } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
 
@@ -26,24 +26,24 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     const searchParams = useSearchParams();
     const t = useTranslations('shell.sidebar');
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isManualOpen, setIsManualOpen] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const [isMobileOpen, setIsMobileOpen] = useState(false);
     const sidebarRef = useRef<HTMLElement>(null);
 
-    // Sidebar is expanded if either hovered (desktop) or manually toggled (mobile/desktop)
-    const isExpanded = isHovered || isManualOpen;
+    // Sidebar is expanded if either not collapsed (desktop) or manually toggled (mobile)
+    const isExpanded = !isCollapsed || isMobileOpen;
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (isManualOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-                setIsManualOpen(false);
+            if (isMobileOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+                setIsMobileOpen(false);
             }
         }
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [isManualOpen]);
+    }, [isMobileOpen]);
 
     const createQueryString = useCallback(
         (params: Record<string, string | null>) => {
@@ -68,7 +68,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
             router.push(`${pathname}?${createQueryString({ category: slug, tags: null })}`);
         }
         // Always auto-close when a category is selected (whether desktop manual open or mobile)
-        if (isManualOpen) setIsManualOpen(false);
+        if (isMobileOpen) setIsMobileOpen(false);
     };
 
     const isAllActive = !activeCat;
@@ -76,31 +76,38 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     return (
         <div className="flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]">
             {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
-            {isManualOpen && (
+            {isMobileOpen && (
                 <div
                     className="fixed inset-0 z-40 md:hidden bg-transparent cursor-default touch-none"
                     onPointerDown={(e) => {
                         // Capture it at the pointer level before it becomes a click
                         e.stopPropagation();
                         e.preventDefault();
-                        setIsManualOpen(false);
+                        setIsMobileOpen(false);
                     }}
                     onClick={(e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        setIsManualOpen(false);
+                        setIsMobileOpen(false);
                     }}
                 />
             )}
             <aside
                 ref={sidebarRef}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
                 className={clsx(
-                    'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full',
+                    'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full relative',
                     isExpanded ? 'w-[240px] shadow-premium absolute md:relative z-50' : 'w-16 relative z-30'
                 )}
             >
+            {/* Desktop Toggle Button */}
+            <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                className="hidden md:flex absolute -right-3 top-6 z-50 h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted shadow-sm hover:text-foreground transition-all hover:scale-110 active:scale-95"
+                title={isCollapsed ? t('expand') : t('collapse')}
+            >
+                <ChevronLeft className={clsx("h-4 w-4 transition-transform", isCollapsed && "rotate-180")} />
+            </button>
+
             {/* Mobile Toggle Trigger */}
             <button
                 type="button"
@@ -110,7 +117,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                 onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    setIsManualOpen(!isManualOpen);
+                    setIsMobileOpen(!isMobileOpen);
                 }}
                 className="flex h-12 w-full items-center justify-center border-b border-border/50 text-foreground-muted hover:text-foreground transition-colors md:hidden cursor-pointer"
                 title={isExpanded ? t('collapse') : t('everything')}

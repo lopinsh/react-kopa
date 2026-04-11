@@ -91,7 +91,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const handleCancelRequest = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (confirm(t('confirmCancelRequest') || 'Withdraw join request?')) {
+        if (confirm(t('confirmCancelRequest'))) {
             startTransition(async () => {
                 await cancelJoinRequest(group.id, locale);
             });
@@ -104,8 +104,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const handleCopyLink = () => {
         navigator.clipboard.writeText(window.location.href);
-        // Show a brief toast or alert? For now just alert or silent
-        alert(c_common('linkCopied')); // We might need to add this key or just use a generic message
+        alert(c_common('linkCopied'));
     };
 
     interface BreadcrumbSegment {
