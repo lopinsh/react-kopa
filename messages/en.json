@@ -252,7 +252,30 @@
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
     "acceptingMembersDesc": "Toggle visibility of the Join button for non-members.",
     "acceptingMembersLabel": "Accepting New Members",
-    "admin": null,
+    "admin": {
+      "title": "Admin Dashboard",
+      "subtitle": "Manage user reports and community taxonomy.",
+      "tabTags": "Pending Tags",
+      "tabReports": "Safety Queue",
+      "pendingCustomTags": "Pending Custom Tags",
+      "noPendingTags": "No pending tags.",
+      "proposedUnder": "Proposed under: {parent}",
+      "unknown": "Unknown",
+      "reject": "Reject",
+      "approve": "Approve",
+      "noPendingReports": "No pending reports.",
+      "reportLabel": "REPORT",
+      "reportedBy": "reported by {name}",
+      "reportedGroup": "Group: {name}",
+      "reportedEvent": "Event: {title}",
+      "dismiss": "Dismiss",
+      "suspendGroup": "Suspend Group",
+      "allClear": "All Clear!",
+      "taxonomy": {
+        "navLink": "Taxonomy",
+        "title": "Taxonomy Management"
+      }
+    },
     "anonymousUser": "Anonymous User",
     "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
     "applyToGroup": "Join {name}",
@@ -289,7 +312,12 @@
     "sendMessage": "Send Message",
     "specialInstructions": "Special Instructions",
     "tabCategorizationDescription": "Choose how your group is discovered in the platform hierarchy.",
-    "tabProfileDescription": "Update your group's identity and recruitment status."
+    "tabProfileDescription": "Update your group's identity and recruitment status.",
+    "nav": {
+      "discover": "Discover",
+      "myGroups": "My Groups",
+      "profile": "Profile"
+    }
   },
   "messages": {
     "block": "Block User",
@@ -312,7 +340,10 @@
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "userFallback": "User",
-    "viewPublicProfile": "View Public Profile"
+    "viewPublicProfile": "View Public Profile",
+    "discover": "Discover",
+    "myGroups": "My Groups",
+    "profile": "Profile"
   },
   "notifications": {
     "empty": "No notifications yet",
@@ -336,7 +367,23 @@
     "type_info": "Info",
     "type_mention": "Mention",
     "type_warning": "Warning",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "applicationAccepted": "Your request to join \"{groupName}\" was approved!",
+    "applicationReceived": "New application for \"{groupName}\" from {authorName}.",
+    "inquiryReceived": "New inquiry for \"{groupName}\" from {authorName}.",
+    "joinRequest": "{authorName} wants to join \"{groupName}\".",
+    "newPost": "New post in \"{groupName}\" by {authorName}.",
+    "newEvent": "New event in \"{groupName}\": {eventTitle}.",
+    "requestApproved": "Your request for \"{groupName}\" has been approved.",
+    "type_APPLICATION_ACCEPTED": "Membership Approved",
+    "type_APPLICATION_RECEIVED": "New Application",
+    "type_INQUIRY_RECEIVED": "Inquiry",
+    "type_JOIN_REQUEST": "Join Request",
+    "type_NEW_POST": "New Post",
+    "type_NEW_EVENT": "New Event",
+    "type_REQUEST_APPROVED": "Request Approved",
+    "type_TAG_MERGED": "Tag Update",
+    "type_application_accepted": "Membership Approved"
   },
   "onboarding": {
     "username": {
@@ -419,7 +466,8 @@
       "collapse": "Collapse sidebar",
       "events": "EVENTS",
       "everything": "Show all",
-      "groups": "GROUPS"
+      "groups": "GROUPS",
+      "expand": "Expand sidebar"
     }
   },
   "theme": {

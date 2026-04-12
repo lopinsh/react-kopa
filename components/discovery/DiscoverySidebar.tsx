@@ -28,10 +28,20 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
 
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
     const sidebarRef = useRef<HTMLElement>(null);
 
-    // Sidebar is expanded if either not collapsed (desktop) or manually toggled (mobile)
-    const isExpanded = !isCollapsed || isMobileOpen;
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    // Sidebar is expanded if:
+    // 1. Desktop and not collapsed
+    // 2. Mobile and isMobileOpen
+    const isExpanded = isMobile ? isMobileOpen : !isCollapsed;
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -74,96 +84,74 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     const isAllActive = !activeCat;
 
     return (
-        <div className="flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))]">
-            {/* Invisible backdrop for mobile to handle click-outside without triggering underlying elements */}
+        <div className="flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))] w-0 md:w-auto">
+            {/* Modal backdrop for mobile */}
             {isMobileOpen && (
                 <div
-                    className="fixed inset-0 z-40 md:hidden bg-transparent cursor-default touch-none"
-                    onPointerDown={(e) => {
-                        // Capture it at the pointer level before it becomes a click
-                        e.stopPropagation();
-                        e.preventDefault();
-                        setIsMobileOpen(false);
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        setIsMobileOpen(false);
-                    }}
+                    className="fixed inset-0 z-[60] md:hidden bg-background/40 backdrop-blur-md transition-all duration-500 animate-in fade-in"
+                    onClick={() => setIsMobileOpen(false)}
                 />
             )}
             <aside
                 ref={sidebarRef}
                 className={clsx(
-                    'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full relative',
-                    isExpanded ? 'w-[240px] shadow-premium absolute md:relative z-50' : 'w-16 relative z-30'
+                    'flex flex-col border-r border-border bg-surface transition-all duration-300 h-full',
+                    // Mobile: floating
+                    isMobile ? 'absolute z-[70]' : 'relative z-30',
+                    // Width logic
+                    isExpanded ? 'w-[280px]' : 'w-16',
+                    // Desktop adjustments
+                    'md:relative md:z-30',
+                    isExpanded && isMobile && 'shadow-premium'
                 )}
             >
-            {/* Desktop Toggle Button */}
+            {/* Unified Toggle Button Handle */}
             <button
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="hidden md:flex absolute -right-3 top-6 z-50 h-6 w-6 items-center justify-center rounded-full border border-border bg-surface text-foreground-muted shadow-sm hover:text-foreground transition-all hover:scale-110 active:scale-95"
-                title={isCollapsed ? t('expand') : t('collapse')}
-            >
-                <ChevronLeft className={clsx("h-4 w-4 transition-transform", isCollapsed && "rotate-180")} />
-            </button>
-
-            {/* Mobile Toggle Trigger */}
-            <button
-                type="button"
-                onPointerDown={(e) => {
-                    e.stopPropagation();
+                onClick={() => {
+                    if (isMobile) {
+                        setIsMobileOpen(!isMobileOpen);
+                    } else {
+                        setIsCollapsed(!isCollapsed);
+                    }
                 }}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setIsMobileOpen(!isMobileOpen);
-                }}
-                className="flex h-12 w-full items-center justify-center border-b border-border/50 text-foreground-muted hover:text-foreground transition-colors md:hidden cursor-pointer"
-                title={isExpanded ? t('collapse') : t('everything')}
+                className="absolute -right-3 top-1/2 -translate-y-1/2 z-50 h-10 w-6 flex items-center justify-center rounded-r-xl border border-l-0 border-border bg-surface text-foreground-muted shadow-sm hover:text-foreground transition-all hover:scale-105 active:scale-95"
+                title={isExpanded ? t('collapse') : t('expand')}
             >
-                <div className={clsx(
-                    'flex flex-col gap-1 transition-transform duration-300',
-                    isExpanded && 'rotate-180'
-                )}>
-                    <span className={clsx('h-0.5 w-5 rounded-full bg-current transition-all', isExpanded && 'translate-y-1.5 rotate-45')} />
-                    <span className={clsx('h-0.5 w-5 rounded-full bg-current transition-all', isExpanded && 'opacity-0')} />
-                    <span className={clsx('h-0.5 w-5 rounded-full bg-current transition-all', isExpanded && '-translate-y-1.5 -rotate-45')} />
-                </div>
+                <ChevronLeft className={clsx("h-5 w-5 transition-transform", !isExpanded && "rotate-180")} />
             </button>
 
             {/* Category List */}
-            <nav className="flex flex-col gap-1 overflow-y-auto py-4 flex-1 scrollbar-none">
+            <nav className="flex flex-col gap-1 overflow-y-auto py-3 flex-1 scrollbar-none">
                 {/* "Everything" / "All" entry */}
                 <button
                     onClick={() => handleCategoryClick(null)}
                     title={!isExpanded ? t('everything') : undefined}
                     className={clsx(
                         'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-9 mb-1' : 'w-12 h-9 px-1.5 mb-1',
+                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-10 mb-1' : 'w-12 h-10 px-1 mb-1',
                         isAllActive && isExpanded && 'bg-primary/5',
                         !isAllActive && 'hover:bg-surface-elevated'
                     )}
                 >
-                    {isAllActive && isExpanded && <div className="absolute left-0 top-1.5 bottom-1.5 w-[4px] rounded-r-lg bg-primary/60" />}
+                    {isAllActive && isExpanded && <div className="absolute left-0 top-2 bottom-2 w-[4px] rounded-r-lg bg-primary/60" />}
 
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center">
                         <span
                             className={clsx(
-                                'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg transition-all border border-dashed',
+                                'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-all border border-dashed',
                                 isAllActive
                                     ? 'bg-primary/10 text-primary border-primary/30 shadow-sm'
                                     : 'bg-transparent border-border/50 text-foreground-muted group-hover:bg-surface-elevated group-hover:text-foreground group-hover:border-border'
                             )}
                         >
-                            <LayoutGrid className="h-3 w-3" />
+                            <LayoutGrid className="h-4 w-4" />
                         </span>
                     </span>
 
                     <span
                         className={clsx(
-                            'truncate text-xs transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
-                            isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
+                            'truncate text-sm transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
+                            isExpanded ? 'max-w-[180px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
                             isAllActive ? 'font-bold text-primary' : 'font-semibold text-foreground-muted group-hover:text-foreground'
                         )}
                     >
@@ -171,7 +159,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     </span>
                 </button>
 
-                <div className="mx-4 my-1 h-px bg-border/40 shrink-0" />
+                <div className="mx-4 my-1.5 h-px bg-border/40 shrink-0" />
 
                 {/* Category Entries */}
                 {categories.map((cat) => {
@@ -214,7 +202,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                             <span
                                 className={clsx(
                                     'truncate text-sm transition-all duration-300 overflow-hidden whitespace-nowrap text-left pl-3',
-                                    isExpanded ? 'max-w-[160px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
+                                    isExpanded ? 'max-w-[180px] opacity-100 flex-1' : 'max-w-0 opacity-0 pl-0',
                                     isActive ? 'font-bold' : 'font-semibold text-foreground-muted group-hover:text-foreground'
                                 )}
                                 style={isActive && isExpanded ? { color: cat.color } : undefined}
