@@ -254,7 +254,30 @@
     "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
     "acceptingMembersDesc": "Pārslēdziet 'Pievienoties' pogas redzamību tiem, kas nav grupas biedri.",
     "acceptingMembersLabel": "Uzņem jaunus biedrus",
-    "admin": null,
+    "admin": {
+      "title": "Admina vadības centrs",
+      "subtitle": "Pārvaldiet lietotāju ziņojumus un kopienas taksonomiju.",
+      "tabTags": "Gaidāmās birkas",
+      "tabReports": "Drošības rinda",
+      "pendingCustomTags": "Gaidāmās pielāgotās birkas",
+      "noPendingTags": "Gaidāmo birku nav.",
+      "proposedUnder": "Ierosināts zem: {parent}",
+      "unknown": "Nezināms",
+      "reject": "Noraidīt",
+      "approve": "Apstiprināt",
+      "noPendingReports": "Nav neatrisinātu ziņojumu.",
+      "reportLabel": "ZIŅOJUMS",
+      "reportedBy": "ziņoja {name}",
+      "reportedGroup": "Grupa: {name}",
+      "reportedEvent": "Pasākums: {title}",
+      "dismiss": "Noraidīt ziņojumu",
+      "suspendGroup": "Apturēt grupu",
+      "allClear": "Viss tīrs!",
+      "taxonomy": {
+        "navLink": "Taksonomija",
+        "title": "Taksonomija"
+      }
+    },
     "anonymousUser": "Anonīms lietotājs",
     "applyDescription": "Pastāstiet grupas organizatoriem, kāpēc vēlaties pievienoties un ko meklējat šajā kopienā.",
     "applyToGroup": "Pievienoties grupai {name}",
@@ -324,7 +347,10 @@
     "signIn": "Ienākt",
     "signOut": "Iziet",
     "userFallback": "Lietotājs",
-    "viewPublicProfile": "Skatīt publisko profilu"
+    "viewPublicProfile": "Skatīt publisko profilu",
+    "discover": "Atklāt",
+    "myGroups": "Manas grupas",
+    "profile": "Profils"
   },
   "notifications": {
     "empty": "Vēl nav paziņojumu",
@@ -349,7 +375,23 @@
     "type_mention": "Pieminēšana",
     "type_reply": "Atbilde",
     "type_warning": "Brīdinājums",
-    "viewDetails": "Skatīt detaļas"
+    "viewDetails": "Skatīt detaļas",
+    "applicationAccepted": "Jūsu pieprasījums pievienoties grupai \"{groupName}\" tika apstiprināts!",
+    "applicationReceived": "Jauns pieteikums grupai \"{groupName}\" no {authorName}.",
+    "inquiryReceived": "Jauna ziņa grupai \"{groupName}\" no {authorName}.",
+    "joinRequest": "{authorName} vēlas pievienoties grupai \"{groupName}\".",
+    "newPost": "Jauns ieraksts grupā \"{groupName}\" no {authorName}.",
+    "newEvent": "Jauns pasākums grupā \"{groupName}\": {eventTitle}.",
+    "requestApproved": "Jūsu pieprasījums grupai \"{groupName}\" tika apstiprināts.",
+    "type_APPLICATION_ACCEPTED": "Dalība apstiprināta",
+    "type_APPLICATION_RECEIVED": "Jauns pieteikums",
+    "type_INQUIRY_RECEIVED": "Jautājums",
+    "type_JOIN_REQUEST": "Pieteikums",
+    "type_NEW_POST": "Jauns ieraksts",
+    "type_NEW_EVENT": "Jauns pasākums",
+    "type_REQUEST_APPROVED": "Apstiprināts",
+    "type_TAG_MERGED": "Birka atjaunināta",
+    "type_application_accepted": "Dalība apstiprināta"
   },
   "onboarding": {
     "username": {
@@ -435,7 +477,8 @@
       "collapse": "Izvērst sānu joslu",
       "events": "PASĀKUMI",
       "everything": "Rādīt visus",
-      "groups": "GRUPAS"
+      "groups": "GRUPAS",
+      "expand": "Izvērst sānu joslu"
     }
   },
   "theme": {
