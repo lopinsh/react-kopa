@@ -44,6 +44,7 @@ export const MessageService = {
             });
 
             const existing = userConversations.find(conv =>
+                conv.participants.length === 2 &&
                 conv.participants.some(p => p.id === userId2)
             );
 

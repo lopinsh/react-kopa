@@ -1,7 +1,8 @@
 'use server';
 import { auth } from '@/lib/auth';
 import { ReportService } from '@/lib/services/report.service';
-import { ActionError, type ActionResponse } from '@/types/actions';
+import { type ActionResponse } from '@/types/actions';
+import { handleActionError } from '@/lib/action-utils';
 import { revalidatePath } from 'next/cache';
 
 export async function createReport(data: {
@@ -26,10 +27,7 @@ export async function createReport(data: {
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error: any) {
-        if (error.name === 'ActionError') {
-            return { success: false, error: error.code };
-        }
-        return { success: false, error: 'REPORT_FAILED' };
+        return handleActionError(error, 'REPORT_FAILED');
     }
 }
 
@@ -50,10 +48,7 @@ export async function resolveReport(reportId: string, resolutionReason: string):
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error: any) {
-        if (error.name === 'ActionError') {
-            return { success: false, error: error.code };
-        }
-        return { success: false, error: 'RESOLUTION_FAILED' };
+        return handleActionError(error, 'RESOLUTION_FAILED');
     }
 }
 
@@ -67,9 +62,6 @@ export async function deleteReportedContent(reportId: string): Promise<ActionRes
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
     } catch (error: any) {
-        if (error.name === 'ActionError') {
-            return { success: false, error: error.code };
-        }
-        return { success: false, error: 'DELETE_FAILED' };
+        return handleActionError(error, 'DELETE_FAILED');
     }
 }

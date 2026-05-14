@@ -4,7 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { createNotification } from './notification-actions';
 import { PostService } from '@/lib/services/post.service';
-import { ActionError, type ActionResponse } from '@/types/actions';
+import { type ActionResponse } from '@/types/actions';
+import { handleActionError } from '@/lib/action-utils';
 import type { Prisma } from '@prisma/client';
 
 type PostWithAuthorAndGroup = Prisma.PostGetPayload<{
@@ -69,11 +70,7 @@ export async function createPost(groupId: string, content: string, locale: strin
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
         return { success: true, data: { post: post as unknown as PostWithAuthorAndGroup } }; // Prisma payload shape matching 
     } catch (error: any) {
-        if (error.name === 'ActionError') {
-            return { success: false, error: error.code };
-        }
-        console.error('[createPost] Error:', error);
-        return { success: false, error: 'POST_FAILED' };
+        return handleActionError(error, 'POST_FAILED');
     }
 }
 
@@ -97,10 +94,6 @@ export async function deletePost(postId: string, locale: string): Promise<Action
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
         return { success: true };
     } catch (error: any) {
-        if (error.name === 'ActionError') {
-            return { success: false, error: error.code };
-        }
-        console.error('[deletePost] Error:', error);
-        return { success: false, error: 'DELETE_FAILED' };
+        return handleActionError(error, 'DELETE_FAILED');
     }
 }
