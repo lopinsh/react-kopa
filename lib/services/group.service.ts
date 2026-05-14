@@ -490,6 +490,23 @@ export const GroupService = {
         // Send the message via MessageService to ensure Pusher trigger and database sync
         await MessageService.sendMessage(conversation.id, adminId, message);
 
+        // Notify the target user about the inquiry
+        const group = await prisma.group.findUnique({
+            where: { id: groupId },
+            select: { name: true, category: { select: { slug: true } }, slug: true }
+        });
+
+        if (group) {
+            const { NotificationService } = await import('@/lib/services/notification.service');
+            await NotificationService.createNotification({
+                userId: targetUserId,
+                type: 'APPLICATION_INQUIRY',
+                translationKey: 'applicationInquiry',
+                args: { groupName: group.name },
+                link: `/${group.category.slug}/group/${group.slug}/members`
+            });
+        }
+
         return { success: true };
     },
 

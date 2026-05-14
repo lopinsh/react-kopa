@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 
 export type NotificationPayload = {
     userId: string;
-    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'TAG_MERGED';
+    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'APPLICATION_INQUIRY' | 'TAG_MERGED';
     translationKey: string;
     args?: Record<string, string | number>;
     link?: string;
