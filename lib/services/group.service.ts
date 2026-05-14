@@ -441,6 +441,7 @@ export const GroupService = {
         });
 
         let conversation = userConversations.find(conv =>
+            conv.participants.length === 2 &&
             conv.participants.some(p => p.id === targetUserId)
         );
 
@@ -457,6 +458,9 @@ export const GroupService = {
                     participants: {
                         connect: [{ id: adminId }, { id: targetUserId }]
                     }
+                },
+                include: {
+                    participants: { select: { id: true } }
                 }
             });
 

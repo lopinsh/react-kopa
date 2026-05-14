@@ -3,7 +3,8 @@
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { MessageService } from '@/lib/services/message.service';
-import { ActionError, type ActionResponse } from '@/types/actions';
+import { type ActionResponse } from '@/types/actions';
+import { handleActionError } from '@/lib/action-utils';
 
 export async function getConversations(): Promise<ActionResponse<any>> {
     const session = await auth();
@@ -13,8 +14,7 @@ export async function getConversations(): Promise<ActionResponse<any>> {
         const conversations = await MessageService.getConversations(session.user.id);
         return { success: true, data: conversations };
     } catch (error: any) {
-        if (error.name === 'ActionError') return { success: false, error: error.code };
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
+        return handleActionError(error);
     }
 }
 
@@ -26,8 +26,7 @@ export async function getOrCreateConversation(targetUserId: string): Promise<Act
         const conversation = await MessageService.getOrCreateConversation(session.user.id, targetUserId);
         return { success: true, data: conversation };
     } catch (error: any) {
-        if (error.name === 'ActionError') return { success: false, error: error.code };
-        return { success: false, error: 'CREATE_FAILED' };
+        return handleActionError(error, 'CREATE_FAILED');
     }
 }
 
@@ -39,8 +38,7 @@ export async function getMessages(conversationId: string): Promise<ActionRespons
         const messages = await MessageService.getMessages(conversationId, session.user.id);
         return { success: true, data: messages };
     } catch (error: any) {
-        if (error.name === 'ActionError') return { success: false, error: error.code };
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
+        return handleActionError(error);
     }
 }
 
@@ -53,8 +51,7 @@ export async function sendMessage(conversationId: string, content: string): Prom
         const message = await MessageService.sendMessage(conversationId, session.user.id, content);
         return { success: true, data: message };
     } catch (error: any) {
-        if (error.name === 'ActionError') return { success: false, error: error.code };
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
+        return handleActionError(error);
     }
 }
 
@@ -67,7 +64,6 @@ export async function blockConversation(conversationId: string, isBlocked: boole
         revalidatePath(`/[locale]/messages`, 'page');
         return { success: true };
     } catch (error: any) {
-        if (error.name === 'ActionError') return { success: false, error: error.code };
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
+        return handleActionError(error);
     }
 }

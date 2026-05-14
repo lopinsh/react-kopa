@@ -21,7 +21,13 @@ export async function validateActionData<T>(
 /**
  * Simple wrapper for catching errors in actions and returning a standardized fallback.
  */
-export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
+export function handleActionError(error: any, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
     console.error('[Action Error]:', error);
+
+    // Check for our custom ActionError in a way that survives serialization
+    if (error?.name === 'ActionError' || error?.__isActionError || error?.code) {
+        return { success: false, error: error.code || fallback };
+    }
+
     return { success: false, error: fallback };
 }
