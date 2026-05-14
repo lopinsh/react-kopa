@@ -26,7 +26,14 @@ export function handleActionError(error: any, fallback: ErrorCode = 'INTERNAL_SE
 
     // Check for our custom ActionError in a way that survives serialization
     if (error?.name === 'ActionError' || error?.__isActionError || error?.code) {
+        // If it's a known Prisma error code, map it
+        if (error.code === 'P2021') return { success: false, error: 'DB_MIGRATION_REQUIRED' };
         return { success: false, error: error.code || fallback };
+    }
+
+    // Prisma error check for generic errors that aren't ActionErrors
+    if (error?.code === 'P2021') {
+        return { success: false, error: 'DB_MIGRATION_REQUIRED' };
     }
 
     return { success: false, error: fallback };

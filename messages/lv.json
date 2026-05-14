@@ -238,6 +238,7 @@
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
     "ALIAS_CONFLICT": "Šāds aizstājvārds izvēlētajai valodai jau pastāv.",
     "CATEGORY_IN_USE": "Šī kategorija tiek izmantota un to nevar dzēst.",
+    "DB_MIGRATION_REQUIRED": "Šīs funkcijas atbalstam nepieciešama datu bāzes shēmas atjaunināšana. Lūdzu, sazinieties ar administratoru.",
     "CREATE_FAILED": "Neizdevās izveidot resursu.",
     "DELETE_FAILED": "Neizdevās dzēst resursu.",
     "FORBIDDEN": "Jums nav atļaujas veikt šo darbību.",

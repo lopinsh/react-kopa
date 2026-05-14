@@ -31,7 +31,8 @@ export type ErrorCode =
     | 'UNKNOWN_ERROR'
     | 'POST_FAILED'
     | 'REPORT_FAILED'
-    | 'RESOLUTION_FAILED';
+    | 'RESOLUTION_FAILED'
+    | 'DB_MIGRATION_REQUIRED';
 
 /**
  * Standardized ActionError for thrown errors from services.
