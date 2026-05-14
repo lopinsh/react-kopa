@@ -431,14 +431,18 @@ export const GroupService = {
         // Initialize a 1-on-1 Conversation between Admin and Pending User
         const { MessageService } = await import('@/lib/services/message.service');
 
-        let conversation = await prisma.conversation.findFirst({
+        const userConversations = await prisma.conversation.findMany({
             where: {
-                AND: [
-                    { participants: { some: { id: adminId } } },
-                    { participants: { some: { id: targetUserId } } }
-                ]
+                participants: { some: { id: adminId } }
+            },
+            include: {
+                participants: { select: { id: true } }
             }
         });
+
+        let conversation = userConversations.find(conv =>
+            conv.participants.some(p => p.id === targetUserId)
+        );
 
         if (!conversation) {
             // Fetch initial application messages BEFORE creating the current one in ApplicationMessage

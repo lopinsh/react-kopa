@@ -37,9 +37,12 @@ export type ErrorCode =
  * Standardized ActionError for thrown errors from services.
  */
 export class ActionError extends Error {
+    public readonly __isActionError = true;
     constructor(public code: ErrorCode, message?: string) {
         super(message || code);
         this.name = 'ActionError';
+        // Ensure name property is kept after serialization if possible
+        Object.defineProperty(this, 'name', { value: 'ActionError', enumerable: true });
     }
 }
 /**

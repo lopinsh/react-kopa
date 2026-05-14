@@ -33,18 +33,19 @@ export const MessageService = {
         try {
             if (!userId1 || !userId2 || userId1 === userId2) throw new ActionError('FORBIDDEN');
 
-            // Find existing conversation
-            const existing = await prisma.conversation.findFirst({
+            // Find existing conversation (manual filter for maximum reliability)
+            const userConversations = await prisma.conversation.findMany({
                 where: {
-                    AND: [
-                        { participants: { some: { id: userId1 } } },
-                        { participants: { some: { id: userId2 } } }
-                    ]
+                    participants: { some: { id: userId1 } }
                 },
                 include: {
                     participants: { select: { id: true, name: true, image: true } }
                 }
             });
+
+            const existing = userConversations.find(conv =>
+                conv.participants.some(p => p.id === userId2)
+            );
 
             if (existing) return existing;
 
@@ -64,8 +65,8 @@ export const MessageService = {
             const groupRoles: Record<string, { role1?: string, role2?: string }> = {};
             for (const m of memberships) {
                 if (!groupRoles[m.groupId]) groupRoles[m.groupId] = {};
-                if (m.userId === userId1) groupRoles[m.groupId].role1 = m.role;
-                if (m.userId === userId2) groupRoles[m.groupId].role2 = m.role;
+                if (m.userId === userId1) groupRoles[m.groupId].role1 = m.role as string;
+                if (m.userId === userId2) groupRoles[m.groupId].role2 = m.role as string;
             }
 
             const canChat = Object.values(groupRoles).some(({ role1, role2 }) => {
