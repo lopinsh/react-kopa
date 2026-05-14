@@ -64,4 +64,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "server.js"]
+# Use npm to run the docker:start script which includes prisma migrate deploy
+CMD ["npm", "run", "docker:start"]

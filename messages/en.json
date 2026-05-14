@@ -236,6 +236,7 @@
     "ACTION_FAILED": "The action could not be completed.",
     "ALIAS_CONFLICT": "This alias already exists for the selected locale.",
     "CATEGORY_IN_USE": "This category is in use and cannot be removed.",
+    "DB_MIGRATION_REQUIRED": "A database schema update is required to support this feature. Please contact the administrator.",
     "CREATE_FAILED": "Failed to create resource.",
     "DELETE_FAILED": "Failed to delete resource.",
     "FORBIDDEN": "You do not have permission to perform this action.",
