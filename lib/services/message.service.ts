@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import { pusherServer } from '@/lib/pusher';
+import { MembershipRole } from '@prisma/client';
 
 export const MessageService = {
     async getConversations(userId: string) {
@@ -30,6 +31,8 @@ export const MessageService = {
 
     async getOrCreateConversation(userId1: string, userId2: string) {
         try {
+            if (userId1 === userId2) throw new ActionError('FORBIDDEN');
+
             // Find existing conversation
             const existing = await prisma.conversation.findFirst({
                 where: {
@@ -45,23 +48,53 @@ export const MessageService = {
 
             if (existing) return existing;
 
-            // Verify they share a group and both are at least members
+            // Verify they share a group and the permissions are correct
             const sharedGroups = await prisma.membership.findMany({
                 where: {
                     userId: userId1,
-                    role: { in: ['OWNER', 'ADMIN', 'MEMBER'] },
                     group: {
                         members: {
                             some: {
-                                userId: userId2,
-                                role: { in: ['OWNER', 'ADMIN', 'MEMBER'] }
+                                userId: userId2
+                            }
+                        }
+                    }
+                },
+                include: {
+                    group: {
+                        include: {
+                            members: {
+                                where: {
+                                    userId: { in: [userId1, userId2] }
+                                }
                             }
                         }
                     }
                 }
             });
 
-            if (sharedGroups.length === 0) {
+            const canChat = sharedGroups.some(m => {
+                const g = m.group;
+                const m1 = g.members.find(mb => mb.userId === userId1);
+                const m2 = g.members.find(mb => mb.userId === userId2);
+                if (!m1 || !m2) return false;
+
+                const isM1Admin = m1.role === MembershipRole.OWNER || m1.role === MembershipRole.ADMIN;
+                const isM2Admin = m2.role === MembershipRole.OWNER || m2.role === MembershipRole.ADMIN;
+                const isM1Member = m1.role === MembershipRole.MEMBER;
+                const isM2Member = m2.role === MembershipRole.MEMBER;
+
+                // Case 1: Both are at least members
+                if ((isM1Admin || isM1Member) && (isM2Admin || isM2Member)) return true;
+
+                // Case 2: One is Admin, the other is Pending (allows admins to contact applicants)
+                if (isM1Admin && m2.role === MembershipRole.PENDING) return true;
+                if (isM2Admin && m1.role === MembershipRole.PENDING) return true;
+
+                return false;
+            });
+
+            if (!canChat) {
                 throw new ActionError('FORBIDDEN');
             }
 
@@ -190,7 +223,7 @@ export const MessageService = {
                 const sharedAdminMembership = await prisma.membership.findFirst({
                     where: {
                         userId: otherParticipantId.id,
-                        role: { in: ['ADMIN', 'OWNER'] },
+                        role: { in: [MembershipRole.ADMIN, MembershipRole.OWNER] },
                         group: {
                             members: {
                                 some: { userId } // Only check groups the current user is also in
