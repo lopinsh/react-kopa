@@ -25,8 +25,8 @@ export async function createReport(data: {
         // Ensure path revalidation as per Action Consistency Law
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
-    } catch (error) {
-        if (error instanceof ActionError) {
+    } catch (error: any) {
+        if (error.name === 'ActionError') {
             return { success: false, error: error.code };
         }
         return { success: false, error: 'REPORT_FAILED' };
@@ -49,8 +49,8 @@ export async function resolveReport(reportId: string, resolutionReason: string):
         await ReportService.resolveReport(reportId);
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
-    } catch (error) {
-        if (error instanceof ActionError) {
+    } catch (error: any) {
+        if (error.name === 'ActionError') {
             return { success: false, error: error.code };
         }
         return { success: false, error: 'RESOLUTION_FAILED' };
@@ -66,8 +66,8 @@ export async function deleteReportedContent(reportId: string): Promise<ActionRes
         await ReportService.deleteReportedContent(reportId);
         revalidatePath('/[locale]/admin/reports', 'page');
         return { success: true };
-    } catch (error) {
-        if (error instanceof ActionError) {
+    } catch (error: any) {
+        if (error.name === 'ActionError') {
             return { success: false, error: error.code };
         }
         return { success: false, error: 'DELETE_FAILED' };

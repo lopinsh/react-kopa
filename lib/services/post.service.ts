@@ -70,8 +70,8 @@ export const PostService = {
             }
 
             return post;
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[PostService.createPost] Error:', error);
             throw new ActionError('CREATE_FAILED');
         }
@@ -161,8 +161,8 @@ export const PostService = {
             );
 
             return true;
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[PostService.deletePost] Error:', error);
             throw new ActionError('DELETE_FAILED');
         }

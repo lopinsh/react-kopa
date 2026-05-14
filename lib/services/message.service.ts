@@ -101,8 +101,8 @@ export const MessageService = {
                     participants: { select: { id: true, name: true, image: true } }
                 }
             });
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[MessageService.getOrCreateConversation] Error:', error);
             throw new ActionError('CREATE_FAILED');
         }
