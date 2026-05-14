@@ -424,27 +424,12 @@ export const GroupService = {
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        if (!targetMembership || targetMembership.role !== 'PENDING') {
+        if (!targetMembership || targetMembership.role !== MembershipRole.PENDING) {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
-        await prisma.applicationMessage.create({
-            data: {
-                content: message,
-                senderId: adminId,
-                applicationUserId: targetUserId,
-                groupId: groupId
-            }
-        });
-
         // Initialize a 1-on-1 Conversation between Admin and Pending User
         const { MessageService } = await import('@/lib/services/message.service');
-
-        // Note: we fetch the existing application messages to pre-populate the new Conversation
-        const initialAppMessages = await prisma.applicationMessage.findMany({
-            where: { applicationUserId: targetUserId, groupId },
-            orderBy: { createdAt: 'asc' }
-        });
 
         let conversation = await prisma.conversation.findFirst({
             where: {
@@ -456,6 +441,13 @@ export const GroupService = {
         });
 
         if (!conversation) {
+            // Fetch initial application messages BEFORE creating the current one in ApplicationMessage
+            // to avoid duplication in the Conversation seeding
+            const initialAppMessages = await prisma.applicationMessage.findMany({
+                where: { applicationUserId: targetUserId, groupId },
+                orderBy: { createdAt: 'asc' }
+            });
+
             conversation = await prisma.conversation.create({
                 data: {
                     participants: {
@@ -475,9 +467,20 @@ export const GroupService = {
                     }))
                 });
             }
-        } else {
-             await MessageService.sendMessage(conversation.id, adminId, message);
         }
+
+        // Create the application message record
+        await prisma.applicationMessage.create({
+            data: {
+                content: message,
+                senderId: adminId,
+                applicationUserId: targetUserId,
+                groupId: groupId
+            }
+        });
+
+        // Send the message via MessageService to ensure Pusher trigger and database sync
+        await MessageService.sendMessage(conversation.id, adminId, message);
 
         return { success: true };
     },

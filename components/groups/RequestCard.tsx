@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Check, X, User, Send, MessageSquare, History } from 'lucide-react';
 import { manageMembership, sendApplicationInquiry } from '@/actions/group-actions';
+import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
@@ -31,6 +32,7 @@ type Props = {
 export default function RequestCard({ groupId, membershipId, targetUser, messages, locale }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
+    const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
     const [inquiryMode, setInquiryMode] = useState(false);
     const [inquiryText, setInquiryText] = useState('');
@@ -41,9 +43,10 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
     const handleAction = (action: 'APPROVE' | 'DECLINE') => {
         startTransition(async () => {
             const result = await manageMembership(membershipId, action, locale);
-            if (!result.success) {
-                // We could add a toast here
-                console.error(result.error);
+            if (result.success) {
+                success(c_common('manageSuccess'));
+            } else {
+                toastError(t('ACTION_FAILED'));
             }
         });
     };
@@ -53,11 +56,12 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
         startTransition(async () => {
             const result = await sendApplicationInquiry(groupId, targetUser.id, inquiryText, locale);
             if (result.success) {
+                success(c_common('messageSent'));
                 setInquiryText('');
                 setInquiryMode(false);
                 setShowHistory(true);
             } else {
-                console.error(result.error);
+                toastError(t('messageFailed'));
             }
         });
     };
