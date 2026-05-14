@@ -68,8 +68,8 @@ export async function createPost(groupId: string, content: string, locale: strin
 
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
         return { success: true, data: { post: post as unknown as PostWithAuthorAndGroup } }; // Prisma payload shape matching 
-    } catch (error) {
-        if (error instanceof ActionError) {
+    } catch (error: any) {
+        if (error.name === 'ActionError') {
             return { success: false, error: error.code };
         }
         console.error('[createPost] Error:', error);
@@ -96,8 +96,8 @@ export async function deletePost(postId: string, locale: string): Promise<Action
 
         revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
         return { success: true };
-    } catch (error) {
-        if (error instanceof ActionError) {
+    } catch (error: any) {
+        if (error.name === 'ActionError') {
             return { success: false, error: error.code };
         }
         console.error('[deletePost] Error:', error);

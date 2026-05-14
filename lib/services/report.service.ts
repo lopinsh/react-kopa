@@ -98,8 +98,8 @@ export const ReportService = {
             });
 
             return true;
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[ReportService.deleteReportedContent] Error:', error);
             throw new ActionError('DELETE_FAILED');
         }
