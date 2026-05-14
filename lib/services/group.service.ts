@@ -424,7 +424,7 @@ export const GroupService = {
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        if (!targetMembership || targetMembership.role !== MembershipRole.PENDING) {
+        if (!targetMembership || targetMembership.role !== 'PENDING') {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
