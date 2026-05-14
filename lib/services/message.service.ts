@@ -31,7 +31,7 @@ export const MessageService = {
 
     async getOrCreateConversation(userId1: string, userId2: string) {
         try {
-            if (userId1 === userId2) throw new ActionError('FORBIDDEN');
+            if (!userId1 || !userId2 || userId1 === userId2) throw new ActionError('FORBIDDEN');
 
             // Find existing conversation
             const existing = await prisma.conversation.findFirst({
@@ -48,48 +48,40 @@ export const MessageService = {
 
             if (existing) return existing;
 
-            // Verify they share a group and the permissions are correct
-            const sharedGroups = await prisma.membership.findMany({
+            // Check if they share any groups and what their roles are
+            const memberships = await prisma.membership.findMany({
                 where: {
-                    userId: userId1,
-                    group: {
-                        members: {
-                            some: {
-                                userId: userId2
-                            }
-                        }
-                    }
+                    userId: { in: [userId1, userId2] }
                 },
-                include: {
-                    group: {
-                        include: {
-                            members: {
-                                where: {
-                                    userId: { in: [userId1, userId2] }
-                                }
-                            }
-                        }
-                    }
+                select: {
+                    groupId: true,
+                    userId: true,
+                    role: true
                 }
             });
 
-            const canChat = sharedGroups.some(m => {
-                const g = m.group;
-                const m1 = g.members.find(mb => mb.userId === userId1);
-                const m2 = g.members.find(mb => mb.userId === userId2);
-                if (!m1 || !m2) return false;
+            // Manual grouping for maximum reliability
+            const groupRoles: Record<string, { role1?: string, role2?: string }> = {};
+            for (const m of memberships) {
+                if (!groupRoles[m.groupId]) groupRoles[m.groupId] = {};
+                if (m.userId === userId1) groupRoles[m.groupId].role1 = m.role;
+                if (m.userId === userId2) groupRoles[m.groupId].role2 = m.role;
+            }
 
-                const isM1Admin = m1.role === MembershipRole.OWNER || m1.role === MembershipRole.ADMIN;
-                const isM2Admin = m2.role === MembershipRole.OWNER || m2.role === MembershipRole.ADMIN;
-                const isM1Member = m1.role === MembershipRole.MEMBER;
-                const isM2Member = m2.role === MembershipRole.MEMBER;
+            const canChat = Object.values(groupRoles).some(({ role1, role2 }) => {
+                if (!role1 || !role2) return false;
+
+                const is1Admin = role1 === 'OWNER' || role1 === 'ADMIN';
+                const is2Admin = role2 === 'OWNER' || role2 === 'ADMIN';
+                const is1Member = role1 === 'MEMBER';
+                const is2Member = role2 === 'MEMBER';
 
                 // Case 1: Both are at least members
-                if ((isM1Admin || isM1Member) && (isM2Admin || isM2Member)) return true;
+                if ((is1Admin || is1Member) && (is2Admin || is2Member)) return true;
 
-                // Case 2: One is Admin, the other is Pending (allows admins to contact applicants)
-                if (isM1Admin && m2.role === MembershipRole.PENDING) return true;
-                if (isM2Admin && m1.role === MembershipRole.PENDING) return true;
+                // Case 2: Admin contacting a Pending applicant
+                if (is1Admin && role2 === 'PENDING') return true;
+                if (is2Admin && role1 === 'PENDING') return true;
 
                 return false;
             });
@@ -134,8 +126,8 @@ export const MessageService = {
                     sender: { select: { id: true, name: true, image: true } }
                 }
             });
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[MessageService.getMessages] Error:', error);
             return [];
         }
@@ -192,8 +184,8 @@ export const MessageService = {
             }
 
             return message;
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[MessageService.sendMessage] Error:', error);
             throw new ActionError('POST_FAILED');
         }
@@ -223,7 +215,7 @@ export const MessageService = {
                 const sharedAdminMembership = await prisma.membership.findFirst({
                     where: {
                         userId: otherParticipantId.id,
-                        role: { in: [MembershipRole.ADMIN, MembershipRole.OWNER] },
+                        role: { in: ['ADMIN', 'OWNER'] },
                         group: {
                             members: {
                                 some: { userId } // Only check groups the current user is also in
@@ -242,8 +234,8 @@ export const MessageService = {
                 where: { id: conversationId },
                 data: { isBlocked }
             });
-        } catch (error) {
-            if (error instanceof ActionError) throw error;
+        } catch (error: any) {
+            if (error.name === 'ActionError') throw error;
             console.error('[MessageService.blockConversation] Error:', error);
             throw new ActionError('UPDATE_FAILED');
         }
