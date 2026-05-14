@@ -16,6 +16,14 @@ type NotificationEvent = {
     link?: string;
 };
 
+type MessageEvent = {
+    id: string;
+    content: string;
+    senderId: string;
+    conversationId: string;
+    sender: { name: string | null; image: string | null };
+};
+
 export default function RealtimeProvider({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
     const router = useRouter();
@@ -32,10 +40,36 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         }, 5000);
     }, [router]);
 
+    const handleNewMessage = useCallback((data: MessageEvent) => {
+        // Don't show toast if we are already on the messages page
+        if (typeof window !== 'undefined' && window.location.pathname.includes('/messages')) return;
+        // Don't show toast if it's our own message
+        if (data.senderId === session?.user?.id) return;
+
+        setToast({
+            id: data.id,
+            type: 'MESSAGE',
+            title: data.sender.name || 'New Message',
+            message: data.content,
+            link: '/messages'
+        });
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            setToast((current) => (current?.id === data.id ? null : current));
+        }, 5000);
+    }, [session?.user?.id]);
+
     usePusher(
         session?.user?.id ? `private-user-${session.user.id}` : '',
         'new-notification',
         handleNotification
+    );
+
+    usePusher(
+        session?.user?.id ? `private-user-${session.user.id}` : '',
+        'new-message',
+        handleNewMessage
     );
 
     return (
