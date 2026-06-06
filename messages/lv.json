@@ -29,6 +29,7 @@
     "approve": "Apstiprināt",
     "available": "Lietotājvārds ir pieejams",
     "back": "Atpakaļ",
+    "brandName": "Ejam Kopā",
     "brandShort": "EK",
     "cancel": "Atcelt",
     "categoriesTitle": "Kategorijas",
@@ -255,30 +256,6 @@
     "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
     "acceptingMembersDesc": "Pārslēdziet 'Pievienoties' pogas redzamību tiem, kas nav grupas biedri.",
     "acceptingMembersLabel": "Uzņem jaunus biedrus",
-    "admin": {
-      "title": "Admina vadības centrs",
-      "subtitle": "Pārvaldiet lietotāju ziņojumus un kopienas taksonomiju.",
-      "tabTags": "Gaidāmās birkas",
-      "tabReports": "Drošības rinda",
-      "pendingCustomTags": "Gaidāmās pielāgotās birkas",
-      "noPendingTags": "Gaidāmo birku nav.",
-      "proposedUnder": "Ierosināts zem: {parent}",
-      "unknown": "Nezināms",
-      "reject": "Noraidīt",
-      "approve": "Apstiprināt",
-      "noPendingReports": "Nav neatrisinātu ziņojumu.",
-      "reportLabel": "ZIŅOJUMS",
-      "reportedBy": "ziņoja {name}",
-      "reportedGroup": "Grupa: {name}",
-      "reportedEvent": "Pasākums: {title}",
-      "dismiss": "Noraidīt ziņojumu",
-      "suspendGroup": "Apturēt grupu",
-      "allClear": "Viss tīrs!",
-      "taxonomy": {
-        "navLink": "Taksonomija",
-        "title": "Taksonomija"
-      }
-    },
     "anonymousUser": "Anonīms lietotājs",
     "applyDescription": "Pastāstiet grupas organizatoriem, kāpēc vēlaties pievienoties un ko meklējat šajā kopienā.",
     "applyToGroup": "Pievienoties grupai {name}",
@@ -294,7 +271,7 @@
     "deleteConfirm": "Vai tiešām vēlaties neatgriezeniski dzēst šo grupu? Šī darbība ir neatgriezeniska.",
     "descriptionTitle": "Par grupu",
     "inquiryDesc": "Vai jums ir jautājumi administratoriem? Nosūtiet viņiem ziņu zemāk.",
-    "joinToDiscuss": "Pievienojieties grupai, lai piedalītos diskusijās.",
+    "joinToDiscuss": "Pievienojietis grupai, lai piedalītos diskusijās.",
     "membersPageTitle": "{name} | Biedri",
     "message": "Ziņojums",
     "messageFailed": "Neizdevās uzsākt sarunu.",
@@ -309,7 +286,6 @@
     "pendingRequests": "{count} gaida apstiprinājumu",
     "postButton": "Publicēt",
     "postPlaceholder": "Rakstīt ziņu...",
-    "private": "Privāts",
     "recurring": "Atkārtojas",
     "replyPlaceholder": "Atbildēt uz šo ziņu...",
     "role_admin": "Administrators",
@@ -318,14 +294,71 @@
     "role_pending": "Gaida",
     "saveChangesDesc": "Izmaiņas tiks piemērotas nekavējoties visā platformā.",
     "sections": {
-      "count": "{count} / 6 sadaļas",
-      "visibilityPublic": "Publiska"
+      "count": "{count} / 6 sadaļas"
     },
     "sendMessage": "Sūtīt ziņu",
     "specialInstructions": "Īpašas instrukcijas",
     "tabCategorizationDescription": "Izvēlieties kā jūsu grupa tiek atrasta platformas katalogā.",
-    "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu.",
-    "visibilityPublic": "Publiska"
+    "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu."
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admina vadības centrs",
+      "subtitle": "Pārvaldiet lietotāju ziņojumus un kopienas taksonomiju."
+    },
+    "taxonomy": {
+      "navLink": "Taksonomija",
+      "title": "Taksonomija",
+      "tree": {
+        "title": "Struktūra",
+        "expandAll": "Izvērst visus",
+        "collapseAll": "Sakļaut visus"
+      },
+      "inbox": {
+        "title": "Gaidāmās birkas",
+        "noPendingTags": "Gaidāmo birku nav.",
+        "proposedUnder": "Ierosināts zem: {parent}",
+        "unknown": "Nezināms",
+        "submittedBy": "Iesniedzis {name} ({date})",
+        "parentLabel": "Ieteiktā kategorija: {title}",
+        "mergeCanonicalTitle": "Apvienot ar aktīvu kanonisko birku",
+        "selectCategoryPlaceholder": "Izvēlieties aktīvu kategoriju...",
+        "selectedCanonicalLabel": "Izvēlētā kanoniskā birka:",
+        "mergeAndNotify": "Apvienot un paziņot grupas īpašniekiem",
+        "usedByGroups": "Izmanto grupas:",
+        "confirmReject": "Vai tiešām vēlaties noraidīt šo birku? Tā tiks neatgriezeniski dzēsta."
+      },
+      "fields": {
+        "nameEn": "Nosaukums EN",
+        "nameLv": "Nosaukums LV",
+        "slugEn": "Adreses daļa EN",
+        "slugLv": "Adreses daļa LV"
+      },
+      "bulk": {
+        "selected": "atzīmti",
+        "clearSelection": "Notīrīt izvēli",
+        "mergeRequiresTwo": "Izvēlieties vismaz 2 atzīmes, lai apvienotu"
+      },
+      "slideover": {
+        "details": "Detaļas",
+        "pendingTitle": "Birkas detaļas"
+      },
+      "node": {
+        "children": "{count} {count, plural, zero {apakšvienību} one {apakšvienība} other {apakšvienības}}",
+        "pending": "gaida",
+        "wildcard": "{count} {count, plural, zero {brīvo birku} one {brīvā birka} other {brīvās birkas}}",
+        "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}"
+      }
+    },
+    "reports": {
+      "title": "Drošības rinda",
+      "noPendingReports": "Nav neatrisinātu ziņojumu.",
+      "reportedBy": "ziņoja {name}",
+      "reportedGroup": "Grupa: {name}",
+      "reportedEvent": "Pasākums: {title}",
+      "allClear": "Viss tīrs!",
+      "allClearDesc": "Nav neatrisinātu ziņojumu, kam nepieciešama uzmanība."
+    }
   },
   "messages": {
     "block": "Bloķēt",

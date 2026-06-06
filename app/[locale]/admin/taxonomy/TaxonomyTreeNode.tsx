@@ -18,6 +18,8 @@ type Props = {
 
 export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeSelect, isExpanded, onToggle, selectedActionIds, onToggleActionId }: Props) {
     const t = useTranslations('admin.taxonomy.tree');
+    const tNode = useTranslations('admin.taxonomy.node');
+    const c = useTranslations('common');
 
     const isSelected = selectedNode?.type === 'l1' && selectedNode.id === l1.id;
     const Icon = getCategoryIcon(l1.slug);
@@ -41,7 +43,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                 <span className="font-semibold">{l1.title}</span>
 
                 <span className="ml-auto text-xs font-semibold bg-surface-elevated text-foreground-muted px-2 py-0.5 rounded-full">
-                    {l1.subcategories.length} children
+                    {tNode('children', { count: l1.subcategories.length })}
                 </span>
 
                 <button
@@ -52,7 +54,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                     }}
                     className="ml-2 text-xs font-semibold bg-surface border border-border px-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
                 >
-                    {t('edit')}
+                    {c('edit')}
                 </button>
             </div>
 
@@ -65,7 +67,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                             id={l2.id}
                             l1Id={l1.id}
                             title={l2.title}
-                            groupCount={0} /* Group count isn't fully in this type yet, might need adjustment or alias count */
+                            groupCount={0}
                             tagsCount={l2.tags.length}
                             isPending={false}
                             isSelected={selectedNode?.type === 'l2' && selectedNode.id === l2.id}
@@ -118,6 +120,7 @@ function L2Node({
     isChecked: boolean;
     onCheck: () => void;
 }) {
+    const tNode = useTranslations('admin.taxonomy.node');
     return (
         <div
             className={`group flex items-center gap-3 pl-6 pr-4 py-2 cursor-pointer hover:bg-surface-elevated transition-colors border-l-2 ml-[-1px] ${isPending
@@ -152,18 +155,18 @@ function L2Node({
             </span>
 
             {isPending && (
-                <span className="text-xs text-foreground-muted">(pending)</span>
+                <span className="text-xs text-foreground-muted">({tNode('pending')})</span>
             )}
 
             <div className="ml-auto flex gap-2">
                 {tagsCount > 0 && !isPending && (
-                    <span className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-border" title="Includes user-generated L3 wildcards">
-                        {tagsCount} wildcards
+                    <span className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-border">
+                        {tNode('wildcard', { count: tagsCount })}
                     </span>
                 )}
                 {groupCount > 0 && (
                     <span className="text-xs font-semibold bg-surface px-2 py-0.5 rounded-full border border-border">
-                        {groupCount} {groupCount === 1 ? 'group' : 'groups'}
+                        {tNode('group', { count: groupCount })}
                     </span>
                 )}
             </div>

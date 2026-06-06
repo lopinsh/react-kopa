@@ -30,7 +30,7 @@ export default function AdminGroupCategorizationForm({
     selectedL1,
     initialTagIds,
 }: Props) {
-    const t = useTranslations('group.admin');
+    const t = useTranslations('admin.taxonomy');
     const c = useTranslations('common');
     const te = useTranslations('errors');
     const { success, error } = useToast();
@@ -63,7 +63,7 @@ export default function AdminGroupCategorizationForm({
                 return;
             }
 
-            success(t('taxonomy.override.saved'));
+            success(t('override.saved'));
             router.push(`/${l1Slug}/group/${groupSlug}`);
         });
     });
@@ -72,7 +72,7 @@ export default function AdminGroupCategorizationForm({
         <FormProvider {...methods}>
             <form onSubmit={onSubmit} className="space-y-6">
                 <div className="rounded-2xl border border-border bg-surface p-6">
-                    <p className="text-xs font-semibold uppercase text-foreground-muted">{t('taxonomy.override.title')}</p>
+                    <p className="text-xs font-semibold uppercase text-foreground-muted">{t('override.title')}</p>
                     <h1 className="mt-1 text-2xl font-bold text-foreground">{groupName}</h1>
                     <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
 

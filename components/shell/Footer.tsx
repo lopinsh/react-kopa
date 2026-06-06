@@ -88,7 +88,7 @@ export function Footer({ locale }: { locale: string }) {
 
                 <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
                     <p className="text-sm text-foreground-muted">
-                        © {currentYear} Ejam Kopā. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
+                        © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
                     </p>
                     <div className="flex items-center gap-6">
                         <Link href={`/explore`} className="text-xs font-medium text-foreground-muted hover:text-foreground transition-colors">

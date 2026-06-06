@@ -21,6 +21,7 @@ export default function FloatingActionBar({
     hasPending,
 }: Props) {
     const t = useTranslations('admin.taxonomy.bulk');
+    const c = useTranslations('common');
 
     if (selectedIds.length === 0) return null;
 
@@ -54,7 +55,7 @@ export default function FloatingActionBar({
                         >
                             <span className="pointer-events-none flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
-                                {t('approve')}
+                                {c('approve')}
                             </span>
                         </button>
                     )}
@@ -68,7 +69,7 @@ export default function FloatingActionBar({
                     >
                         <span className="pointer-events-none flex items-center gap-2">
                             <Merge className="w-4 h-4" />
-                            {t('merge')}
+                            {c('merge')}
                         </span>
                     </button>
 
@@ -79,7 +80,7 @@ export default function FloatingActionBar({
                     >
                         <span className="pointer-events-none flex items-center gap-2">
                             <Trash2 className="w-4 h-4" />
-                            {t('delete')}
+                            {c('delete')}
                         </span>
                     </button>
                 </div>

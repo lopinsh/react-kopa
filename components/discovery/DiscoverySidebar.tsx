@@ -84,7 +84,12 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
     const isAllActive = !activeCat;
 
     return (
-        <div className="flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))] w-0 md:w-auto">
+        <div
+            className={clsx(
+                "flex shrink-0 sticky top-0 z-40 h-[calc(100dvh-64px)] md:h-[calc(100vh-var(--header-height))] transition-all duration-300",
+                isMobile ? (isExpanded ? 'w-0' : 'w-12') : 'w-auto'
+            )}
+        >
             {/* Modal backdrop for mobile */}
             {isMobileOpen && (
                 <div
@@ -99,7 +104,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     // Mobile: floating
                     isMobile ? 'absolute z-[70]' : 'relative z-30',
                     // Width logic
-                    isExpanded ? 'w-[280px]' : 'w-16',
+                    isExpanded ? 'w-[280px]' : 'w-12',
                     // Desktop adjustments
                     'md:relative md:z-30',
                     isExpanded && isMobile && 'shadow-premium'
@@ -128,14 +133,14 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     title={!isExpanded ? t('everything') : undefined}
                     className={clsx(
                         'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-10 mb-1' : 'w-12 h-10 px-1 mb-1',
+                        isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-10 mb-1' : 'w-9 h-9 mb-1',
                         isAllActive && isExpanded && 'bg-primary/5',
                         !isAllActive && 'hover:bg-surface-elevated'
                     )}
                 >
                     {isAllActive && isExpanded && <div className="absolute left-0 top-2 bottom-2 w-[4px] rounded-r-lg bg-primary/60" />}
 
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center">
                         <span
                             className={clsx(
                                 'flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-all border border-dashed',
@@ -159,7 +164,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     </span>
                 </button>
 
-                <div className="mx-4 my-1.5 h-px bg-border/40 shrink-0" />
+                <div className={clsx("my-1.5 h-px bg-border/40 shrink-0", isExpanded ? "mx-4" : "mx-2")} />
 
                 {/* Category Entries */}
                 {categories.map((cat) => {
@@ -173,7 +178,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                             title={!isExpanded ? cat.title : undefined}
                             className={clsx(
                                 'relative flex items-center rounded-xl transition-all duration-200 soft-press group mx-auto',
-                                isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-12' : 'w-12 h-12 px-1.5',
+                                isExpanded ? 'w-[calc(100%-16px)] px-1.5 h-12' : 'w-9 h-9',
                                 !isActive && 'hover:bg-surface-elevated'
                             )}
                             style={

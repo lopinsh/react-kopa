@@ -29,6 +29,7 @@
     "approve": "Approve",
     "available": "Username is available",
     "back": "Back",
+    "brandName": "Ejam Kopā",
     "brandShort": "EK",
     "cancel": "Cancel",
     "categoriesTitle": "Categories",
@@ -253,30 +254,6 @@
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
     "acceptingMembersDesc": "Toggle visibility of the Join button for non-members.",
     "acceptingMembersLabel": "Accepting New Members",
-    "admin": {
-      "title": "Admin Dashboard",
-      "subtitle": "Manage user reports and community taxonomy.",
-      "tabTags": "Pending Tags",
-      "tabReports": "Safety Queue",
-      "pendingCustomTags": "Pending Custom Tags",
-      "noPendingTags": "No pending tags.",
-      "proposedUnder": "Proposed under: {parent}",
-      "unknown": "Unknown",
-      "reject": "Reject",
-      "approve": "Approve",
-      "noPendingReports": "No pending reports.",
-      "reportLabel": "REPORT",
-      "reportedBy": "reported by {name}",
-      "reportedGroup": "Group: {name}",
-      "reportedEvent": "Event: {title}",
-      "dismiss": "Dismiss",
-      "suspendGroup": "Suspend Group",
-      "allClear": "All Clear!",
-      "taxonomy": {
-        "navLink": "Taxonomy",
-        "title": "Taxonomy Management"
-      }
-    },
     "anonymousUser": "Anonymous User",
     "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
     "applyToGroup": "Join {name}",
@@ -318,6 +295,65 @@
       "discover": "Discover",
       "myGroups": "My Groups",
       "profile": "Profile"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "subtitle": "Manage user reports and community taxonomy."
+    },
+    "taxonomy": {
+      "navLink": "Taxonomy",
+      "title": "Taxonomy Management",
+      "tree": {
+        "title": "Taxonomy Tree",
+        "expandAll": "Expand All",
+        "collapseAll": "Collapse All"
+      },
+      "inbox": {
+        "title": "Pending Tags",
+        "noPendingTags": "No pending tags.",
+        "proposedUnder": "Proposed under: {parent}",
+        "unknown": "Unknown",
+        "submittedBy": "Submitted by {name} on {date}",
+        "parentLabel": "Suggested Category: {title}",
+        "mergeCanonicalTitle": "Merge into Active Canonical Tag",
+        "selectCategoryPlaceholder": "Select an active category...",
+        "selectedCanonicalLabel": "Selected canonical:",
+        "mergeAndNotify": "Merge and notify group owners",
+        "usedByGroups": "Used by groups:",
+        "confirmReject": "Are you sure you want to reject this request? This will permanently delete the suggestion."
+      },
+      "fields": {
+        "nameEn": "Name EN",
+        "nameLv": "Name LV",
+        "slugEn": "Slug EN",
+        "slugLv": "Slug LV"
+      },
+      "bulk": {
+        "selected": "selected",
+        "clearSelection": "Clear selection",
+        "mergeRequiresTwo": "Select at least 2 tags to merge"
+      },
+      "slideover": {
+        "details": "Details",
+        "pendingTitle": "Pending Tag Details"
+      },
+      "node": {
+        "children": "{count} {count, plural, one {child} other {children}}",
+        "pending": "pending",
+        "wildcard": "{count} {count, plural, one {wildcard} other {wildcards}}",
+        "group": "{count} {count, plural, one {group} other {groups}}"
+      }
+    },
+    "reports": {
+      "title": "Safety Queue",
+      "noPendingReports": "No pending reports.",
+      "reportedBy": "reported by {name}",
+      "reportedGroup": "Group: {name}",
+      "reportedEvent": "Event: {title}",
+      "allClear": "All Clear!",
+      "allClearDesc": "No active reports require attention."
     }
   },
   "messages": {
