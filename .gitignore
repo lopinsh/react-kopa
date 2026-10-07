@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -46,4 +47,16 @@ tsc_output*.txt
 
 # scripts
 test.ts
-\ntest-results/\nplaywright-report/\n*-context.md\n*.png\n*.webm\n*.zip
+
+# playwright / agent verification artifacts
+/test-results/
+/playwright-report/
+*-context.md
+/*.png
+*.webm
+*.zip
+
+# ad-hoc tool output (lint/build/seed logs, scratch dumps)
+/*.txt
+/tmp/
+/tmp-*

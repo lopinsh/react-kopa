@@ -1,170 +1,127 @@
-# AGENTS.md: Project Context & Rules
+# AGENTS.md
 
-> **This file is the source of truth for all AI and human developers.**
-> Before starting any task, read this file in full. No exceptions.
+Source of truth for AI agents and human contributors working on **Ejam Kopā** ("Let's Go Together"): a Latvian community platform for low-friction creation of groups and local events. Read this file in full before starting a task. `CLAUDE.md` imports this file; `.agents/rules/project-rules.md` is a condensed copy for always-on rule loading — keep both in sync when changing the Laws.
 
----
+## Stack
 
-## 🎯 Project Goal
-**"Ejam Kopā"** (Let's Go Together) is a Latvian community platform built to minimize friction for creating groups and events. Optimized for local connections and hyper-local activities.
-
----
-
-## 🛠 Technology Stack
 | Layer | Technology |
 |---|---|
-| Framework | Next.js 16 (App Router) |
-| Language | TypeScript 5+ (Strict Mode — no `any`) |
-| Styling | Tailwind CSS v4 (CSS variable–driven theming) |
-| Database | PostgreSQL via Prisma ORM v6 |
-| Auth | NextAuth.js v5 (Auth.js) |
-| Icons | Lucide-React **only** |
-| Localization | next-intl (full LV/EN parity required) |
+| Framework | Next.js 16 (App Router, `output: 'standalone'`) |
+| Language | TypeScript 5 strict — no `any` |
+| Styling | Tailwind CSS v4 (CSS-variable theming in `app/globals.css`) |
+| Database | PostgreSQL 15 via Prisma ORM 6 |
+| Auth | Auth.js / NextAuth v5 (beta) |
+| Realtime | Pusher protocol via self-hosted Soketi |
+| i18n | next-intl, locales `lv` (default) and `en` |
+| Icons | `lucide-react` only |
 
----
+## Setup
 
-## ⚖️ The Senior Dev Laws
-These are non-negotiable. Violating them is grounds to stop and refactor before continuing.
+Requires Node 20+ and Docker.
 
-### 1. The Service Law
-- **No direct Prisma calls** in Components, Pages, or Layouts — ever.
-- All data must flow through dedicated services in `/lib/services` (e.g., `GroupService`).
-- Services must return a unified **context object** containing: the entity, resolved user permissions/role, and pre-resolved localized metadata.
-- Services must accept a `locale` parameter for localized DB content.
-
-### 2. The Context Law
-- Layouts fetch server-side context via the Service Layer.
-- Providers (e.g., `GroupProvider`) hydrate client state from that context — no redundant client-side fetching.
-- Client components must consume context via hooks (e.g., `useGroupContext()`) — **no prop-drilling** of `userRole`, `accentColor`, or `membershipStatus`.
-
-### 3. The Taxonomy Law (Zero-Flicker Branding)
-- Group visual identity (colors, borders) derives from its L1 category.
-- CSS variables (e.g., `--accent`) must be defined at the **layout level** via a `<style>` block to prevent hydration flickering.
-- Never resolve accent color on the client side.
-
-### 4. The Defensive Coding Law
-- All forms and mutations must include a submission guard (`isPending` / `isSubmitting`) to prevent double-submissions.
-- Use shared Zod schemas from `@/lib/validations` for both client and server validation — never duplicate schema logic.
-
-### 5. The Action Consistency Law
-- All Server Actions must return `ActionResponse<T>` from `@/types/actions.ts`.
-- Errors must use **uppercase codes** (e.g., `UNAUTHORIZED`, `NOT_FOUND`, `JOIN_FAILED`) — never hardcoded English strings.
-- Actions are responsible for: authentication checks, `revalidatePath`, and UI notifications.
-- Actions must **never** contain raw DB logic — delegate to the Service Layer.
-
-### 6. The Zero-Any Law
-- `any` is prohibited. Use Prisma-generated types, strict interfaces, or `unknown` with type guards.
-- All component props, service return types, and action payloads must have explicit TypeScript definitions.
-
-### 7. The Constants Law (Single Source of Truth)
-- Static lists (cities, group types, category slugs) must live in `@/lib/constants/index.ts`.
-- Components and Zod schemas must import from this central registry — no local duplications.
-- Purpose: ensures consistent dropdowns and validation across the platform.
-
----
-
-## 🎨 UI & Styling Rules
-- **Tailwind v4 only.** No CSS modules, no inline styles, no styled-components.
-- Use semantic CSS variables from the `@theme` block in `globals.css`: `var(--background)`, `var(--surface)`, `var(--accent)`, etc.
-- Use established utility classes: `shadow-premium`, `soft-press`, smooth transitions.
-- **Icons:** `lucide-react` exclusively — no other icon libraries.
-- **Mobile-first:** All layouts must be responsive. Start from mobile breakpoint up.
-- **Server Components by default.** Add `"use client"` only when interactivity is explicitly required.
-- Minor UI inconsistencies (shadows, border radius) must use Tailwind v4 theme variables — never hardcode values.
-
----
-
-## 🌍 Localization (i18n)
-- **Zero hardcoded strings** in UI components. Every user-facing label lives in `messages/*.json`.
-- `en.json` and `lv.json` must maintain **1:1 key parity** at all times.
-- Use descriptive, namespaced keys: `footer.nav.about`, `group.members.requestsTab`, etc.
-- Dates, numbers, and currencies must use `next-intl` formatters — never `toLocaleDateString()` or similar.
-- Action error codes map to translation keys on the client — never return UI-visible English strings from actions.
-
----
-
-## 📂 Directory Structure
-```
-/actions              → Server Actions (auth checks, revalidation, notifications)
-/lib/services         → Business logic & DB queries (Service Law enforced here)
-/lib/validations      → Shared Zod schemas (used by both client & server)
-/lib/constants        → Centralized constants (cities, group types, category meta)
-/types/actions.ts     → Shared ActionResponse<T> type & error code registry
-/components/shell     → Global App Shell (Header, Sidebar, Footer)
-/components/ui        → Atomic components (Button, Input, Modal, etc.)
-/components/providers → Context Providers (GroupProvider, etc.)
-/messages             → Translation files (en.json, lv.json)
+```bash
+cp .env.example .env          # local defaults match docker-compose
+npm ci                        # .npmrc sets legacy-peer-deps (next-auth beta vs Next 16)
+npm run db:up                 # Postgres on :5433, Soketi on :6001
+npx prisma migrate deploy     # apply existing migrations
+npm run db:seed               # optional demo data (prisma/seed.ts)
+npm run dev                   # http://localhost:3000
 ```
 
-All session reference documents (audit reports, walkthroughs, implementation plans)
-live in /docs/. AGENTS.md remains in the project root.
+## Commands
 
----
+| Task | Command |
+|---|---|
+| Dev server | `npm run dev` |
+| Typecheck | `npm run typecheck` |
+| Lint | `npm run lint` (or `npx eslint <files>` for changed files only) |
+| Locale key parity | `npm run i18n:check` |
+| All checks | `npm run check` |
+| Production build | `npm run build` (needs `AUTH_SECRET` + `DATABASE_URL`) |
+| New migration | `npm run db:migrate -- --name <snake_case_name>` (stop dev server first) |
+| Regenerate client | `npm run db:generate` (after every schema change) |
+| Seed | `npm run db:seed` |
+| E2E (live site) | `npx playwright test test-live-site.spec.ts` |
 
-## 🔁 Common Patterns
+There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck; lint and i18n parity are report-only until existing debt is cleared.
 
-### Action / Service Separation
+## Definition of done
+
+Before reporting a task complete:
+1. `npm run typecheck` passes.
+2. `npx eslint <changed files>` reports no new errors.
+3. `npm run i18n:check` reports no new drift (both `messages/en.json` and `messages/lv.json` updated together).
+4. UI changes verified in a running app (both locales, mobile and desktop widths).
+5. Schema changes ship with a named migration in `prisma/migrations/`.
+
+## Directory map
+
+```
+app/[locale]/        Routes (App Router). Group pages: app/[locale]/[l1Slug]/group/[groupSlug]/
+actions/             Server Actions — auth, call service, revalidatePath, notify
+lib/services/        Business logic + all Prisma access (*.service.ts)
+lib/validations/     Shared Zod schemas (client + server)
+lib/constants/       Static lists (cities, group types, category slugs)
+types/actions.ts     ActionResponse<T> and error-code registry
+components/shell/    App shell (Header, Sidebar, Footer)
+components/ui/       Atomic components
+components/providers/ Context providers (GroupProvider, …)
+messages/            en.json, lv.json
+prisma/              schema.prisma, migrations/, seed.ts
+scripts/             Maintenance scripts; scripts/debug/ holds ad-hoc local DB probes
+docs/                Audit reports, handoff notes, philosophy; docs/archive/ is historical
+```
+
+Project status and priorities: `docs/execution_handoff.md`, `docs/audit_report.md`, `docs/core_philosophy.md`.
+
+## The Laws (non-negotiable)
+
+1. **Service Law** — No Prisma calls outside `lib/services/`. Services accept `locale` and return a typed context object (entity + resolved role/permissions + localized `title`), never a raw Prisma result.
+2. **Context Law** — Layouts fetch context through services; providers (e.g. `GroupProvider`) hydrate client state from it; client components read it via hooks (`useGroupContext()`). Never prop-drill `userRole`, `accentColor`, or `membershipStatus`.
+3. **Taxonomy Law (zero-flicker branding)** — Group colors derive from the L1 category. `--accent` and related CSS variables are set server-side in the layout via a `<style>` block; never resolve accent color on the client.
+4. **Defensive Coding Law** — Every form/mutation has a submission guard (`isPending`/`isSubmitting`). Validation uses shared Zod schemas from `@/lib/validations`; never duplicate schema logic.
+5. **Action Consistency Law** — Every Server Action returns `ActionResponse<T>` from `@/types/actions.ts`. Errors are uppercase codes (`UNAUTHORIZED`, `NOT_FOUND`, `JOIN_FAILED`), never English strings. Actions do auth, `revalidatePath`, and notifications; DB and permission logic live in services.
+6. **Zero-Any Law** — No `any`, `as any`, or `@ts-ignore`. Use Prisma-generated types (`Prisma.GroupGetPayload<…>`), explicit interfaces, or `unknown` + type guards.
+7. **Constants Law** — Static lists live in `@/lib/constants/index.ts`; components and Zod schemas import from there.
+
 | Responsibility | Action | Service |
 |---|---|---|
-| Auth check | ✅ | ❌ |
-| DB query | ❌ | ✅ |
-| Business logic | ❌ | ✅ |
-| `revalidatePath` | ✅ | ❌ |
-| UI notification | ✅ | ❌ |
-| Permission check | ❌ | ✅ |
+| Auth check | yes | no |
+| DB query / business logic / permission check | no | yes |
+| `revalidatePath`, UI notification | yes | no |
 
-### Post-Mutation Navigation
-- After creation or major updates, always redirect to the entity's **public page** (not an admin/settings view).
-- Goal: immediate user validation of the live state.
-
-### Display Title Resolution
-- Never resolve titles manually from slugs in UI components.
-- The Service context must return a pre-resolved, i18n-aware `title` field.
-
-### Standardized Responses
 ```ts
 // @/types/actions.ts
 type ActionResponse<T> =
   | { success: true; data?: T }
-  | { success: false; error: string } // error = uppercase code e.g. "UNAUTHORIZED"
+  | { success: false; error: string } // uppercase code, mapped to errors.* on the client
 ```
 
----
+## UI & styling
 
-## 🤖 Agent Behavioral Protocols
-These rules govern how the AI approaches every task.
+- Tailwind v4 only — no CSS modules, styled-components, or inline `style` (except setting CSS variables at layout level).
+- Use theme variables (`var(--background)`, `var(--surface)`, `var(--accent)`) and existing utilities (`shadow-premium`, `soft-press`); never hardcode colors, radii, or shadows.
+- Mobile-first. Server Components by default; add `"use client"` only for interactivity.
+- Keep components small; consider splitting past ~150 lines.
 
-### Before Writing Any Code
-1. **Read this file** (`AGENTS.md`) in full.
-2. **Check `audit_report.md`** for known issues relevant to the task.
-3. **Map the affected files** — identify existing services, actions, components, and translation keys before touching anything.
-4. **Check for existing patterns** — reuse before creating. Search for similar components, service methods, or Zod schemas first.
+## Localization
 
-### Planning Requirement
-- **Always produce an implementation plan before writing code.**
-- Every plan must include a **"Motivation & Design Alignment"** section explaining *why* the chosen approach fits the project architecture.
-- Wait for explicit approval before implementing — unless the task is trivially small (e.g., a single string fix).
+- No hardcoded user-facing strings; every label lives in `messages/*.json` with namespaced keys (`group.members.requestsTab`).
+- `en.json` and `lv.json` keep 1:1 key parity — add keys to both in the same change. Unknown Latvian copy: use `"[LV: key]"` placeholder rather than omitting the key.
+- Dates/numbers/currency via next-intl formatters (`useFormatter`, `getFormatter`), never `toLocale*`.
 
-### MCP Tool Usage (Mandatory)
-These tools are available and **must be used proactively**, not as a last resort:
+## Conventions
 
-| Tool | When to Use |
-|---|---|
-| `context7` | Before implementing any `next-intl`, Next.js, Prisma, or Auth.js logic — read the docs first |
-| `next-devtools` | Inspect route structure, component tree, and server/client boundaries at runtime |
-| `chrome-devtools` | Audit live UI for layout issues, console errors, and network requests after every change |
+- After creating or significantly updating an entity, redirect to its public page.
+- Never derive display titles from slugs in UI; use the service-provided `title`.
+- Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.
+- Reuse before creating: search `lib/services`, `lib/validations`, `components/ui`, and `messages/` for existing pieces first.
+- Session artifacts (plans, audits, walkthroughs) go in `docs/`, not the repo root. Screenshots and tool output are git-ignored — don't commit them.
+- Never commit secrets. `.env*` is ignored (except `.env.example`); MCP API keys are supplied via `${input:…}` prompts in `.vscode/mcp.json`.
 
-- **Verify in the live environment** after every phase before concluding a task.
-- Do not assume — use tools to confirm.
+## Agent workflow
 
-### Code Quality Standards
-- Strict TypeScript throughout — no `any`, no loose props.
-- Modular, small components. If a component exceeds ~150 lines, consider splitting.
-- Prefer Server Components. Justify every `"use client"` directive.
-- All new strings must have translation keys added to **both** `en.json` and `lv.json` in the same commit/change.
-- All new mutations must include submission guards and return `ActionResponse<T>`.
-
-### When in Doubt
-- **Do not guess.** Use `context7` to read documentation or `next-devtools` to inspect runtime behavior.
-- **Do not invent patterns.** Follow what already exists in the codebase.
-- **Do not skip the plan.** Even for small tasks, briefly state what you're changing and why.
+- Non-trivial changes: produce a short plan first, including a **Motivation & Design Alignment** note tying the approach to the Laws, and wait for approval. Trivial fixes (typos, single strings) can proceed directly.
+- Task-specific playbooks live in `.agents/workflows/` (`new-feature`, `db-work`, `localization`, `audit`, `prisma-migration`, `seed-database`); the UI role is in `.agents/roles/ui-designer.md`.
+- When available, use MCP tools rather than guessing: `context7` for Next.js / Prisma / next-intl / Auth.js docs, `next-devtools` for route and server/client boundary inspection, `chrome-devtools` for verifying live UI (console, network, layout).
+- Known debt is tracked in `docs/audit_report.md` (Service Law violations in some actions, `any` usages, hardcoded strings, locale drift). Don't add to it; fix adjacent violations only when in scope.
