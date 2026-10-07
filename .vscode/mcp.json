@@ -1,4 +1,12 @@
 {
+	"inputs": [
+		{
+			"type": "promptString",
+			"id": "context7-api-key",
+			"description": "Context7 API key (https://context7.com/dashboard)",
+			"password": true
+		}
+	],
 	"servers": {
 		"io.github.ChromeDevTools/chrome-devtools-mcp": {
 			"type": "stdio",
@@ -24,7 +32,7 @@
 				"@upstash/context7-mcp@1.0.31"
 			],
 			"env": {
-				"CONTEXT7_API_KEY": "ctx7sk-c4f001b0-fa82-4af7-8988-1b9302f2708a"
+				"CONTEXT7_API_KEY": "${input:context7-api-key}"
 			},
 			"gallery": "https://api.mcp.github.com",
 			"version": "1.0.31"
