@@ -106,10 +106,10 @@ export default async function GroupEventsPage({
                     <h3 className="text-xl font-bold mb-2">{t('noEvents')}</h3>
                     <p className="text-foreground-muted max-w-xs mx-auto mb-8">
                         {currentTab === 'upcoming'
-                            ? "There are no upcoming events planned for this group."
+                            ? t('noUpcomingEvents')
                             : currentTab === 'past'
-                                ? "There are no past events for this group."
-                                : "You haven't RSVPed to any events in this group."}
+                                ? t('noPastEvents')
+                                : t('noRsvps')}
                     </p>
                     {isOwnerOrAdmin && currentTab === 'upcoming' && (
                         <Link
@@ -117,7 +117,7 @@ export default async function GroupEventsPage({
                             className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold bg-surface border border-border hover:bg-surface-elevated transition-colors"
                         >
                             <Plus className="h-4 w-4" />
-                            Create the first event
+                            {t('createFirstEvent')}
                         </Link>
                     )}
                 </div>
