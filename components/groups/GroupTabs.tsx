@@ -76,6 +76,8 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     let tabs: Tab[] = [];
     if (isLandingPage) {
         tabs = sectionTabs;
+    } else if (normalizedPath.startsWith(`${baseUrl}/events/`)) {
+        tabs = []; // An event page has its own "All events" link
     } else if (normalizedPath.startsWith(`${baseUrl}/events`)) {
         tabs = eventsTabs;
     } else if (normalizedPath.startsWith(`${baseUrl}/members`)) {
@@ -212,7 +214,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
 
                     <nav
                         ref={navRef}
-                        className="flex-1 flex items-center gap-1 -mb-px overflow-x-auto no-scrollbar scroll-smooth [mask-image:linear-gradient(to_right,black_calc(100%-40px),transparent)]"
+                        className="flex-1 flex items-center gap-1 -mb-px overflow-x-auto scrollbar-none scroll-smooth [mask-image:linear-gradient(to_right,black_calc(100%-40px),transparent)]"
                     >
                         {tabs.map((tab) => {
                             const isAbout = tab.id === 'about';

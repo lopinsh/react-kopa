@@ -30,6 +30,7 @@ import { getCategoryIcon } from '@/lib/icons';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 import type { GroupContext } from '@/lib/services/group.service';
+import CompactGroupBar from './CompactGroupBar';
 import { getContrastForeground } from '@/lib/color-utils';
 
 type Props = {
@@ -141,6 +142,12 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     });
 
     const { socialLinks, stats, user: groupUser, theme } = group;
+
+    // The Events tab and event pages get a slim bar so the events themselves start near the top.
+    const normalizedPath = pathname.replace(`/${locale}`, '') || '/';
+    if (normalizedPath.startsWith(`/${l1Slug}/group/${group.slug}/events`)) {
+        return <CompactGroupBar group={group} l1Slug={l1Slug} />;
+    }
 
     return (
         <header

@@ -487,7 +487,7 @@ export default function DiscoveryFilterBar({
                     {/* Right section: Browse chips (horizontal scroll) */}
                     <div
                         ref={l3DropdownRef}
-                        className="flex items-center gap-2 overflow-x-auto no-scrollbar mask-linear-fade pb-1 flex-1 min-w-0"
+                        className="flex items-center gap-2 overflow-x-auto scrollbar-none mask-linear-fade pb-1 flex-1 min-w-0"
                     >
                         {/* L2 browse chips */}
                         {activeL1.subcategories

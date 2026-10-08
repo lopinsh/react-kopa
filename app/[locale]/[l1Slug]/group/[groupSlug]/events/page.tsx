@@ -2,12 +2,12 @@ import { GroupService } from '@/lib/services/group.service';
 import { getGroupEvents } from '@/actions/event-actions';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import EventCard from '@/components/groups/EventCard';
+import EventRow from '@/components/groups/EventRow';
+import { signInUrl } from '@/lib/auth-redirect';
 import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
-import { clsx } from 'clsx';
 
 export async function generateMetadata({
     params,
@@ -44,7 +44,6 @@ export default async function GroupEventsPage({
 
     const eventsData = await getGroupEvents(group.id);
     const t = await getTranslations('group');
-  const c_common_get = await getTranslations('common');
     const isOwnerOrAdmin = group.user.isAdmin;
 
     const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
@@ -53,7 +52,8 @@ export default async function GroupEventsPage({
     const filteredEvents = eventsData.filter(event => {
         const startDate = new Date(event.startDate);
         if (currentTab === 'my-rsvps') {
-            return event.isAttending;
+            // Going, waiting for approval or on the waitlist
+            return startDate >= now && !!event.viewer.myStatus && event.viewer.myStatus !== 'DECLINED';
         } else if (currentTab === 'past') {
             return startDate < now;
         } else {
@@ -62,9 +62,9 @@ export default async function GroupEventsPage({
     });
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-screen-2xl mx-auto px-4 md:px-8 py-8">
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-3xl mx-auto px-4 md:px-8 py-6">
             {isOwnerOrAdmin && (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 mb-4">
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/create-event`}
                         className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-[var(--accent)] text-white hover:opacity-90 shadow-sm shrink-0"
@@ -76,28 +76,29 @@ export default async function GroupEventsPage({
             )}
 
             {filteredEvents.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col gap-3">
                     {filteredEvents.map((event) => (
-                        <EventCard
+                        <EventRow
                             key={event.id}
                             event={{
                                 id: event.id,
-                                joinMode: event.joinMode,
                                 title: event.title,
-                                description: event.description,
                                 startDate: event.startDate,
+                                endDate: event.endDate,
                                 location: event.location,
-                                isAttending: event.isAttending,
-                                attendeeCount: event.attendeeCount,
-                                attendeeList: event.attendeeList,
+                                maxParticipants: event.maxParticipants,
                                 isMembersOnly: event.visibility === 'MEMBERS_ONLY',
-                                isRecurring: event.isRecurring,
-                                recurrencePattern: event.recurrencePattern,
-                                bannerImage: event.bannerImage,
-                                instructions: event.instructions,
+                                joinMode: event.joinMode,
+                                isFull: event.isFull,
+                                goingCount: event.viewer.goingCount,
+                                myStatus: event.viewer.myStatus,
+                                canManage: event.viewer.canManage,
+                                pendingCount: event.viewer.pendingCount,
                             }}
                             locale={locale}
                             href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
+                            signInHref={session?.user?.id ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${event.slug}`)}
+                            isPast={new Date(event.startDate) < now}
                         />
                     ))}
                 </div>

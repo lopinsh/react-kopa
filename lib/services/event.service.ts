@@ -31,6 +31,8 @@ export interface EventViewer {
     myStatus: AttendanceStatus | null;
     goingCount: number;
     waitlistCount: number;
+    /** Organisers only: requests waiting for a decision. */
+    pendingCount: number;
 }
 
 /** Everything the actions need to revalidate paths and send notifications. */
@@ -189,7 +191,8 @@ export class EventService {
             instructionsLocked: !canSeeInstructions && !!event.instructions,
             myStatus,
             goingCount: event.attendees.filter(a => a.status === 'GOING').length,
-            waitlistCount: event.attendees.filter(a => a.status === 'WAITLISTED').length
+            waitlistCount: event.attendees.filter(a => a.status === 'WAITLISTED').length,
+            pendingCount: event.attendees.filter(a => a.status === 'PENDING').length
         };
 
         // Only organisers get the full people lists (pending, waitlist); everyone else gets none.
@@ -368,13 +371,14 @@ export class EventService {
                     })
                     : Promise.resolve([]),
                 prisma.attendance.groupBy({
-                    by: ['eventId'],
-                    where: { eventId: { in: events.map(e => e.id) }, status: 'WAITLISTED' },
+                    by: ['eventId', 'status'],
+                    where: { eventId: { in: events.map(e => e.id) }, status: { in: ['WAITLISTED', 'PENDING'] } },
                     _count: { _all: true }
                 })
             ]);
             const myStatus = new Map(mine.map(a => [a.eventId, a.status]));
-            const waitlist = new Map(waitlistCounts.map(w => [w.eventId, w._count._all]));
+            const waiting = (eventId: string, status: AttendanceStatus) =>
+                waitlistCounts.find(w => w.eventId === eventId && w.status === status)?._count._all ?? 0;
 
             return events.map(e => {
                 const status = myStatus.get(e.id) ?? null;
@@ -386,7 +390,8 @@ export class EventService {
                     instructionsLocked: !EventService.instructionsVisible(e.joinMode, canManage, status) && !!e.instructions,
                     myStatus: status,
                     goingCount: e._count.attendees,
-                    waitlistCount: canManage ? (waitlist.get(e.id) ?? 0) : 0
+                    waitlistCount: canManage ? waiting(e.id, 'WAITLISTED') : 0,
+                    pendingCount: canManage ? waiting(e.id, 'PENDING') : 0
                 };
                 return {
                     ...e,

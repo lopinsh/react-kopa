@@ -87,7 +87,7 @@ export default function GroupInfoDrawer({
                     </div>
 
                     {/* Scrollable Navigation - Identical to Desktop Sidebar */}
-                    <div className="flex-1 overflow-y-auto no-scrollbar">
+                    <div className="flex-1 overflow-y-auto scrollbar-none">
                         <GroupSidebarContent
                             l1Slug={l1Slug}
                             groupSlug={groupSlug}

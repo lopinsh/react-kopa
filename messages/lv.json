@@ -98,7 +98,7 @@
     "emptyContent": "Sadaļa ir tukša...",
     "error": "Kļūda",
     "events": "pasākumi",
-    "eventsTabMyRsvps": "Manas pierakstīšanās",
+    "eventsTabMyRsvps": "Mani pasākumi",
     "eventsTabPast": "Pagātnes",
     "eventsTabUpcoming": "Gaidāmie",
     "eventsTitle": "Pasākumi",
@@ -769,7 +769,10 @@
     "letIn": "Uzņemt",
     "noRequests": "Nav gaidošu pieteikumu.",
     "noWaitlist": "Gaidīšanas sarakstā neviena nav.",
-    "noOneYet": "Pagaidām neviena."
+    "noOneYet": "Pagaidām neviena.",
+    "manage": "Pārvaldīt",
+    "requestsWaiting": "{count} jauni",
+    "allEvents": "Visi pasākumi"
   },
   "cities": {
     "Cesis": "Cēsis",

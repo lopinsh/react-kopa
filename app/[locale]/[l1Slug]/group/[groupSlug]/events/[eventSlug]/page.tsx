@@ -1,5 +1,4 @@
 import { EventService } from '@/lib/services/event.service';
-import { GroupService } from '@/lib/services/group.service';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -12,9 +11,8 @@ import {
     Clock,
     Info,
     Lock,
-    ExternalLink
+    UserCheck
 } from 'lucide-react';
-import { clsx } from 'clsx';
 import Link from 'next/link';
 import EventParticipation from '@/components/events/EventParticipation';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
@@ -53,21 +51,16 @@ export default async function EventPage({
     const formatter = await getFormatter();
     const group = event.group;
 
-    const durationMs = event.endDate ? new Date(event.endDate).getTime() - new Date(event.startDate).getTime() : 0;
-    const durationHours = Math.round(durationMs / (1000 * 60 * 60));
-    const durationText = durationHours > 0 ? `${durationHours}h` : '';
-
-    const accentColor = event.group?.accentColor || '#6366f1';
-    const hasEnded = event.endDate ? new Date(event.endDate) < new Date() : new Date(event.startDate) < new Date();
-
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : null;
+    const ended = (endDate ?? startDate) < new Date();
     const timeZone = 'Europe/Riga';
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;
     const isRequest = event.joinMode === 'REQUEST';
     const toPerson = (a: (typeof event.attendees)[number]) => ({ userId: a.userId, name: a.user.name, username: a.user.username });
+    const isOnlineLocation = !!event.location && event.location.includes('http');
 
     // JSON-LD for SEO
     const jsonLd = {
@@ -95,193 +88,68 @@ export default async function EventPage({
     };
 
     return (
-        <div className="min-h-screen bg-background" style={{ '--accent': accentColor } as React.CSSProperties}>
+        <div className="bg-background">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            {/* Sticky Header for Mobile */}
-            <div className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-background/80 backdrop-blur-xl lg:hidden">
-                <div className="flex h-16 items-center justify-between px-4">
-                    <Link
-                        href={`/${l1Slug}/group/${group.slug}`}
-                        className="p-2 -ml-2 text-foreground-muted hover:text-foreground"
-                    >
-                        <ArrowLeft className="h-5 w-5" />
-                    </Link>
-                    <span className="font-bold truncate max-w-[200px]">{event.title}</span>
-                    <span className="w-9" aria-hidden="true" />
-                </div>
-            </div>
+            <main className="container mx-auto max-w-5xl px-4 py-6 md:py-8">
+                <Link
+                    href={`/${l1Slug}/group/${group.slug}/events`}
+                    className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground-muted hover:text-foreground"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    {t('allEvents')}
+                </Link>
 
-            {/* Desktop Banner Hero */}
-            <div className="relative h-[40vh] min-h-[400px] w-full overflow-hidden">
-                {event.bannerImage ? (
-                    <img
-                        src={event.bannerImage || undefined}
-                        alt={event.title}
-                        className="h-full w-full object-cover"
-                    />
-                ) : (
-                    <div className="h-full w-full bg-surface-elevated flex items-center justify-center">
-                        <Calendar className="h-20 w-20 text-white/10" />
+                {event.bannerImage && (
+                    <div className="mb-6 h-40 w-full overflow-hidden rounded-3xl border border-border md:h-56">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={event.bannerImage} alt="" className="h-full w-full object-cover" />
                     </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
 
-                {/* Hero Content Overlay */}
-                <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 lg:p-20">
-                    <div className="container mx-auto max-w-5xl">
-                        <Link
-                            href={`/${l1Slug}/group/${group.slug}`}
-                            className="hidden lg:flex items-center gap-2 text-sm font-bold text-white/70 hover:text-white mb-6 transition-colors"
-                        >
-                            <ArrowLeft className="h-4 w-4" />
-                            {group.name}
-                        </Link>
-
-                        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-                            <div className="space-y-4 max-w-3xl">
-                                <div className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-xl">
-                                    <Clock className="h-3 w-3" />
-                                    {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric', timeZone })}
-                                </div>
-                                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight text-shadow-xl">
-                                    {event.title}
-                                </h1>
-                            </div>
-
-                            {/* Participation summary for Desktop */}
-                            <div className="hidden lg:flex flex-col items-center gap-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 min-w-[160px]">
-                                <div className="flex items-center gap-2">
-                                    <Users className="h-5 w-5 text-[var(--accent)]" />
-                                    <span className="text-lg font-black text-white">
-                                        {isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount })}
-                                    </span>
-                                </div>
-                                {event.maxParticipants ? (
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
-                                        {t('aboutPeople', { count: event.maxParticipants })}
-                                    </span>
-                                ) : null}
-                                {event.isFull && (
-                                    <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-white">{t('full')}</span>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <main className="container mx-auto max-w-5xl px-4 py-8 md:py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
-                    {/* Left Column: Content */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Event Details Cards */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {/* Date & Time */}
-                            <div className="rounded-3xl border border-border bg-surface p-6 flex flex-col gap-4 shadow-sm transition-colors hover:border-border/80 text-left">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
-                                        <Calendar className="h-6 w-6" />
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">{t('dateAndTime')}</p>
-                                        <p className="text-sm font-bold text-foreground leading-snug">
-                                            {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone })}
-                                            <br />
-                                            {formatter.dateTime(startDate, timeFormat)} {endDate && `- ${formatter.dateTime(endDate, timeFormat)}`}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Location */}
-                            <div className="rounded-3xl border border-border bg-surface p-6 flex flex-col gap-4 shadow-sm transition-colors hover:border-border/80 text-left">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-3 rounded-2xl bg-[var(--accent)]/10 text-[var(--accent)] shrink-0">
-                                        <MapPin className="h-6 w-6" />
-                                    </div>
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">{t('location')}</p>
-                                        <p className="text-sm font-bold text-foreground leading-snug truncate">
-                                            {event.location || t('tba')}
-                                        </p>
-                                        {event.location && !event.location.includes('http') && (
-                                            <a
-                                                href={`https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
-                                            >
-                                                {t('openInMaps')}
-                                            </a>
-                                        )}
-                                        {event.location && event.location.includes('http') && (
-                                            <a
-                                                href={event.location}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
-                                            >
-                                                {t('joinLink')}
-                                            </a>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* About the Event */}
-                        <div className="rounded-3xl border border-border bg-surface p-6 md:p-8 space-y-6 shadow-sm">
-                            <div className="flex items-center gap-3">
-                                <div className="p-2.5 rounded-xl bg-surface-elevated text-foreground border border-border">
-                                    <Info className="h-5 w-5" />
-                                </div>
-                                <h2 className="text-xl font-black tracking-tight text-foreground">{t('aboutEvent')}</h2>
-                            </div>
-                            <div
-                                className="prose prose-invert max-w-none text-foreground-muted leading-relaxed"
-                                dangerouslySetInnerHTML={{ __html: event.description || '' }}
-                            />
-                        </div>
-
-                        {/* Special Instructions: stripped server-side on Request-to-join events until approved */}
-                        {instructionsLocked && (
-                            <div className="flex items-center gap-3 rounded-3xl border border-dashed border-border bg-surface/50 p-6 text-sm text-foreground-muted">
-                                <Lock className="h-5 w-5 shrink-0" />
-                                {t('instructionsLocked')}
-                            </div>
+                {/* Title block */}
+                <header className="mb-6 space-y-3">
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-wide">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1 text-white">
+                            <Clock className="h-3.5 w-3.5" />
+                            {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric', timeZone })}
+                        </span>
+                        {event.visibility === 'MEMBERS_ONLY' && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
+                                <Lock className="h-3 w-3" />
+                                {t('membersOnly')}
+                            </span>
                         )}
-                        {event.instructions && (
-                            <div className="rounded-3xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 p-6 md:p-8 space-y-6">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2.5 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
-                                        <Info className="h-5 w-5" />
-                                    </div>
-                                    <h2 className="text-xl font-black tracking-tight text-[var(--accent)]">{t('importantInfo')}</h2>
-                                </div>
-                                <div
-                                    className="prose prose-invert max-w-none text-foreground-muted leading-relaxed prose-a:text-[var(--accent)]"
-                                    dangerouslySetInnerHTML={{ __html: event.instructions }}
-                                />
-                            </div>
+                        {isRequest && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
+                                <UserCheck className="h-3 w-3" />
+                                {t('badgeRequest')}
+                            </span>
+                        )}
+                        {event.isFull && (
+                            <span className="rounded-full bg-[var(--accent)] px-2.5 py-1 text-white">{t('full')}</span>
                         )}
                     </div>
+                    <h1 className="text-3xl font-black leading-tight tracking-tight text-foreground md:text-4xl">{event.title}</h1>
+                    <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
+                        <Users className="h-4 w-4" />
+                        {[
+                            isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
+                            event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
+                        ].filter(Boolean).join(' · ')}
+                    </p>
+                </header>
 
-                    {/* Right Column: Sidebar Actions */}
-                    <aside className="space-y-6">
-                        {/* RSVP Card */}
-                        <div className="sticky top-[calc(var(--header-height)+2rem)] space-y-6">
-                            <div className="rounded-3xl border border-border bg-surface p-6 md:p-8 shadow-xl space-y-6 relative overflow-hidden">
-                                {/* Subtle Accent Gradient Background */}
-                                <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-[var(--accent)]/5 blur-3xl pointer-events-none" />
-
-                                <h3 className="text-xl font-black tracking-tight text-foreground">{t('areYouComing')}</h3>
-
-                                {/* Organisers of Request-to-join events are in by definition; the panel below is their view. */}
-                                {!(isRequest && canManage) && (
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-10">
+                    {/* On small screens participation comes first; organisers see the details first, then their panel */}
+                    <aside className={canManage ? "order-2" : "order-1 lg:order-2"}>
+                        <div className="space-y-4 lg:sticky lg:top-[calc(var(--header-height)+1rem)]">
+                            {!ended && !(isRequest && canManage) && (
+                                <div className="space-y-4 rounded-3xl border border-border bg-surface p-5 shadow-sm">
+                                    <h2 className="text-lg font-black tracking-tight text-foreground">{t('areYouComing')}</h2>
                                     <EventParticipation
                                         eventId={event.id}
                                         joinMode={event.joinMode}
@@ -290,21 +158,8 @@ export default async function EventPage({
                                         locale={locale}
                                         signInHref={userId ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`)}
                                     />
-                                )}
-
-                                <div className="pt-4 border-t border-border flex flex-col gap-4">
-                                    <AddToCalendar
-                                        event={{
-                                            title: event.title,
-                                            description: event.description || '',
-                                            location: event.location || '',
-                                            startDate: event.startDate,
-                                            endDate: event.endDate || undefined
-                                        }}
-                                    />
-                                    <ShareEventButton title={event.title} />
                                 </div>
-                            </div>
+                            )}
 
                             {canManage && (
                                 <EventOrganiserPanel
@@ -318,33 +173,89 @@ export default async function EventPage({
                                 />
                             )}
 
-                            {/* Organizer Info */}
-                            <div className="rounded-3xl border border-border bg-surface p-6 shadow-sm space-y-4">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('organizer')}</p>
-                                <Link
-                                    href={`/${l1Slug}/group/${group.slug}`}
-                                    className="flex items-center gap-3 group/org"
-                                >
-                                    <div className="h-12 w-12 overflow-hidden rounded-2xl border border-white/10 bg-surface-elevated flex items-center justify-center shrink-0 shadow-sm">
-                                        {group.bannerImage ? (
-                                            <img src={group.bannerImage || undefined} alt="" className="h-full w-full object-cover" />
-                                        ) : (
-                                            <Users className="h-6 w-6 text-foreground-muted/40" />
-                                        )}
-                                    </div>
-                                    <div className="min-w-0">
-                                        <p className="text-sm font-bold text-foreground group-hover/org:text-[var(--accent)] transition-colors truncate">
-                                            {group.name}
-                                        </p>
-                                        <div className="flex items-center gap-1.5 mt-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted group-hover/org:text-foreground transition-colors">
-                                            {t('visitCommunity')}
-                                            <ExternalLink className="h-3 w-3" />
-                                        </div>
-                                    </div>
-                                </Link>
+                            <div className="flex flex-col gap-3 rounded-3xl border border-border bg-surface p-4 shadow-sm">
+                                <AddToCalendar
+                                    event={{
+                                        title: event.title,
+                                        description: event.description || '',
+                                        location: event.location || '',
+                                        startDate: event.startDate,
+                                        endDate: event.endDate || undefined
+                                    }}
+                                />
+                                <ShareEventButton title={event.title} />
                             </div>
                         </div>
                     </aside>
+
+                    <div className={canManage ? "order-1 space-y-6 lg:col-span-2" : "order-2 space-y-6 lg:order-1 lg:col-span-2"}>
+                        {/* When and where */}
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-4">
+                                <div className="shrink-0 rounded-xl bg-[var(--accent)]/10 p-3 text-[var(--accent)]">
+                                    <Calendar className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('dateAndTime')}</p>
+                                    <p className="text-sm font-bold leading-snug text-foreground">
+                                        {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone })}
+                                        <br />
+                                        {formatter.dateTime(startDate, timeFormat)}{endDate && ` – ${formatter.dateTime(endDate, timeFormat)}`}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-4 rounded-2xl border border-border bg-surface p-4">
+                                <div className="shrink-0 rounded-xl bg-[var(--accent)]/10 p-3 text-[var(--accent)]">
+                                    <MapPin className="h-5 w-5" />
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('location')}</p>
+                                    <p className="truncate text-sm font-bold leading-snug text-foreground">{event.location || t('tba')}</p>
+                                    {event.location && (
+                                        <a
+                                            href={isOnlineLocation ? event.location : `https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-1 inline-block text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
+                                        >
+                                            {isOnlineLocation ? t('joinLink') : t('openInMaps')}
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                        {event.description && (
+                            <section className="space-y-3 rounded-2xl border border-border bg-surface p-5 md:p-6">
+                                <h2 className="text-lg font-black tracking-tight text-foreground">{t('aboutEvent')}</h2>
+                                <div
+                                    className="prose prose-invert max-w-none leading-relaxed text-foreground-muted"
+                                    dangerouslySetInnerHTML={{ __html: event.description }}
+                                />
+                            </section>
+                        )}
+
+                        {/* Instructions are stripped server-side on Request-to-join events until approved */}
+                        {instructionsLocked && (
+                            <div className="flex items-center gap-3 rounded-2xl border border-dashed border-border bg-surface/50 p-5 text-sm text-foreground-muted">
+                                <Lock className="h-5 w-5 shrink-0" />
+                                {t('instructionsLocked')}
+                            </div>
+                        )}
+                        {event.instructions && (
+                            <section className="space-y-3 rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/5 p-5 md:p-6">
+                                <h2 className="flex items-center gap-2 text-lg font-black tracking-tight text-[var(--accent)]">
+                                    <Info className="h-5 w-5" />
+                                    {t('importantInfo')}
+                                </h2>
+                                <div
+                                    className="prose prose-invert max-w-none leading-relaxed text-foreground-muted prose-a:text-[var(--accent)]"
+                                    dangerouslySetInnerHTML={{ __html: event.instructions }}
+                                />
+                            </section>
+                        )}
+                    </div>
                 </div>
             </main>
         </div>

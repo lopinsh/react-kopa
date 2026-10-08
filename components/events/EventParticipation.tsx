@@ -22,8 +22,9 @@ type Props = {
     compact?: boolean;
 };
 
-const PRIMARY = 'flex w-full items-center justify-center gap-2 rounded-2xl bg-[color:var(--accent)] px-4 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-lg transition-all active:scale-95 disabled:opacity-60';
-const NEUTRAL = 'flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-surface-elevated px-4 py-3.5 text-sm font-black uppercase tracking-wide text-foreground-muted';
+const PRIMARY_BASE = 'flex w-full items-center justify-center gap-2 bg-[color:var(--accent)] font-black uppercase tracking-wide text-white transition-all active:scale-95 disabled:opacity-60';
+const NEUTRAL_BASE = 'flex w-full items-center justify-center gap-2 border border-border bg-surface-elevated font-black uppercase tracking-wide text-foreground-muted';
+const DONE_BASE = 'flex w-full cursor-default items-center justify-center gap-2 border-2 border-[color:var(--accent)] bg-transparent font-black uppercase tracking-wide text-[color:var(--accent)]';
 const LINK_BUTTON = 'text-xs font-semibold text-foreground-muted underline-offset-2 hover:text-foreground hover:underline disabled:opacity-60';
 
 export default function EventParticipation({ eventId, joinMode, isFull, myStatus, locale, signInHref, compact = false }: Props) {
@@ -32,6 +33,10 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const size = compact ? 'rounded-xl px-3 py-2 text-xs' : 'rounded-2xl px-4 py-3.5 text-sm shadow-lg';
+    const PRIMARY = clsx(PRIMARY_BASE, size);
+    const NEUTRAL = clsx(NEUTRAL_BASE, size);
+    const DONE = clsx(DONE_BASE, compact ? 'rounded-xl px-3 py-2 text-xs' : 'rounded-2xl px-4 py-3.5 text-sm');
 
     function run(action: () => Promise<{ success: boolean; error?: string }>) {
         setError(null);
@@ -65,7 +70,7 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
     if (joinMode === 'OPEN') {
         if (myStatus === 'GOING') {
             main = (
-                <div className={clsx(PRIMARY, 'cursor-default')}>
+                <div className={DONE}>
                     <CheckCircle2 className="h-4 w-4" />
                     {t('goingDone')}
                 </div>
@@ -82,7 +87,7 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
         }
     } else if (myStatus === 'GOING') {
         main = (
-            <div className={clsx(PRIMARY, 'cursor-default')}>
+            <div className={DONE}>
                 <CheckCircle2 className="h-4 w-4" />
                 {t('approved')}
             </div>

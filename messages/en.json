@@ -98,7 +98,7 @@
     "emptyContent": "Empty section...",
     "error": "Error",
     "events": "events",
-    "eventsTabMyRsvps": "My RSVPs",
+    "eventsTabMyRsvps": "My events",
     "eventsTabPast": "Past",
     "eventsTabUpcoming": "Upcoming",
     "eventsTitle": "Events",
@@ -769,7 +769,10 @@
     "letIn": "Let in",
     "noRequests": "No requests waiting.",
     "noWaitlist": "Nobody on the waitlist.",
-    "noOneYet": "Nobody yet."
+    "noOneYet": "Nobody yet.",
+    "manage": "Manage",
+    "requestsWaiting": "{count} new",
+    "allEvents": "All events"
   },
   "cities": {
     "Cesis": "Cēsis",
