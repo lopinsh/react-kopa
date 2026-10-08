@@ -385,7 +385,6 @@
       "inbox": {
         "approve": "Approved",
         "merge": "Merged",
-        "rejectUnavailable": "Rejecting tags is not available yet.",
         "title": "Pending Tags",
         "noPendingTags": "No pending tags.",
         "proposedUnder": "Proposed under: {parent}",

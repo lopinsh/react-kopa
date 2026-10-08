@@ -81,14 +81,10 @@ Noticed, not changed:
 
 ## Next session (Opus) — review of the 2026-10-08 Sonnet session
 
-Review `git log --oneline 004a5b0..HEAD` (3 commits: `d197cab` 2.0b moderation, `16d7d44` 2.1 wizard, `272a493` 2.2/2.3 join + privacy fix). Typecheck and i18n parity pass; each item was clicked through locally (dev server, `admin@local` / `member@local`). Nothing pushed.
+Review `git log --oneline 004a5b0..HEAD` (commits: `d197cab` 2.0b moderation, `16d7d44` 2.1 wizard, `272a493` 2.2/2.3 join + privacy fix). Typecheck and i18n parity pass; each item was clicked through locally (dev server, `admin@local` / `member@local`). Nothing pushed.
 
-**Open bug — blocks the 2.0b production step:** the user logged in but could not hide a group. Not reproduced locally (hide → 404 → log → restore worked as `admin@local`). Start here. Hypotheses, most likely first:
-1. Production DB has no `add_group_moderation` migration yet (or code not deployed) — check what the user ran against.
-2. The "Hide group" item only shows when `group.moderation.isSiteAdmin && !isOwner && !hidden` (`GroupHeader.tsx`, `canHide`). A site admin who is *owner* of the group never sees it (use Delete instead) — maybe too surprising; and `isSiteAdmin` comes from `User.role` in the DB, so the user's account must really be `ADMIN`.
-3. Menu discoverability: item sits at the bottom of the ··· menu (desktop and mobile variants); no entry on `/admin`, and report-based hiding exists only via Reports → "Suspend group".
-4. Hydration: in dev, first clicks before hydration are ignored.
-Ask the user which page/button, locale, and any error text before changing code.
+**User report (2026-10-08, later):** as admin they saw no UI to hide a group; "Apturēt grupu" on a report left the group visible and reachable; they could approve suggested sub-categories but not dismiss them. Diagnosis: `main` is 5+ commits ahead of `origin/main` (nothing pushed), so they were almost certainly on production with the *old* code — there "Apturēt grupu" only set `type = PRIVATE` (which still leaves the page reachable by URL) and no Hide menu exists. Confirm with the user which environment they tested; after deploy, re-test hide (··· menu on a group page you don't own, and Reports → Apturēt grupu, which now hides). The Hide item is hidden for groups the admin owns and is buried in the ··· menu — consider making it more discoverable.
+Dismissing suggestions was a real bug, fixed in the 4th commit: the taxonomy inbox "Reject" was an alert-only placeholder, and `/admin` Reject silently failed whenever any group used the tag. Rejecting now detaches the tag from its groups and deletes it; only a tag that is some group's *primary* category is refused (translated error). Tested via script; not clicked in the UI.
 
 **Review focus (highest risk first):**
 - `lib/services/group.service.ts` `getGroupWithContext`: now hides hidden groups from non-admins, an extra `user.findUnique` per request, and filters PENDING members/application messages for non-admins. Check nothing relied on pending members being in `members` for non-admins (e.g. the applicant's own "Requested" state uses the membership looked up *before* filtering).

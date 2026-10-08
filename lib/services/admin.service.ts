@@ -54,19 +54,16 @@ export class AdminService {
      * Reject a wildcard category
      */
     static async rejectWildcard(categoryId: string) {
-        // Find if any groups use this category
-        const groupsUsingCategory = await prisma.group.count({
-            where: {
-                OR: [
-                    { categoryId: categoryId },
-                    { tags: { some: { id: categoryId } } }
-                ]
-            }
-        });
-
-        if (groupsUsingCategory > 0) {
+        // A group's primary category cannot be removed; a rejected suggestion used only as a tag is detached from its groups.
+        const groupsUsingAsPrimary = await prisma.group.count({ where: { categoryId } });
+        if (groupsUsingAsPrimary > 0) {
             throw new Error('CATEGORY_IN_USE');
         }
+
+        await prisma.category.update({
+            where: { id: categoryId },
+            data: { groupsWithTags: { set: [] } }
+        });
 
         // Must delete translations first due to foreign key constraints
         await prisma.categoryTranslation.deleteMany({

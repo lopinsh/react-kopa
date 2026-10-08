@@ -385,7 +385,6 @@
       "inbox": {
         "approve": "Apstiprināts",
         "merge": "Apvienots",
-        "rejectUnavailable": "Tagu noraidīšana vēl nav pieejama.",
         "title": "Gaidāmās birkas",
         "noPendingTags": "Gaidāmo birku nav.",
         "proposedUnder": "Ierosināts zem: {parent}",

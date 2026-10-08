@@ -4,6 +4,7 @@ import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { slugify } from '@/lib/slug';
 import { approveTag, mergeTag } from '@/actions/taxonomy-actions';
+import { rejectWildcard } from '@/actions/admin-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { PendingCategoryWithContext, ActiveL2WithAliases } from '@/lib/services/taxonomy.service';
 
@@ -17,6 +18,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     const t = useTranslations('admin.taxonomy.inbox');
     const tFields = useTranslations('admin.taxonomy.fields');
     const c = useTranslations('common');
+    const tErrors = useTranslations('errors');
     const { success, error } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
@@ -66,8 +68,15 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
     const handleReject = async () => {
         if (!confirm(t('confirmReject'))) return;
-        // TODO: no reject/delete action exists in taxonomy-actions.ts yet.
-        alert(t('rejectUnavailable'));
+        startTransition(async () => {
+            const res = await rejectWildcard(item.id);
+            if (res.success) {
+                success(c('reject') + ' - ' + c('success'));
+                router.refresh();
+            } else {
+                error(res.error === 'CATEGORY_IN_USE' ? tErrors('CATEGORY_IN_USE') : c('error'));
+            }
+        });
     };
 
     return (
@@ -108,6 +117,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={handleReject}
+                        disabled={isPending}
                         className="px-3 py-1.5 text-sm font-semibold rounded text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors"
                     >
                         {c('reject')}
