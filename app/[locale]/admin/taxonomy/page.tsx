@@ -11,7 +11,7 @@ export default async function AdminTaxonomyPage({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
-    const t = await getTranslations('group.admin');
+    const t = await getTranslations('admin.taxonomy');
 
     const session = await auth();
     if (!session?.user?.id) {
@@ -31,7 +31,7 @@ export default async function AdminTaxonomyPage({
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
             <div className="mb-6">
-                <h1 className="text-3xl font-bold">{t('taxonomy.title')}</h1>
+                <h1 className="text-3xl font-bold">{t('title')}</h1>
             </div>
             <TaxonomyAdminClient
                 locale={locale}

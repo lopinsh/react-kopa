@@ -311,6 +311,10 @@
   },
   "admin": {
     "dashboard": {
+      "pendingCustomTags": "Gaidošie jaunie tagi",
+      "suspendGroup": "Apturēt grupu",
+      "tabReports": "Ziņojumi",
+      "tabTags": "Tagi",
       "title": "Admina vadības centrs",
       "subtitle": "Pārvaldiet lietotāju ziņojumus un kopienas taksonomiju."
     },
@@ -323,6 +327,9 @@
         "collapseAll": "Sakļaut visus"
       },
       "inbox": {
+        "approve": "Apstiprināts",
+        "merge": "Apvienots",
+        "rejectUnavailable": "Tagu noraidīšana vēl nav pieejama.",
         "title": "Gaidāmās birkas",
         "noPendingTags": "Gaidāmo birku nav.",
         "proposedUnder": "Ierosināts zem: {parent}",
@@ -337,28 +344,70 @@
         "confirmReject": "Vai tiešām vēlaties noraidīt šo birku? Tā tiks neatgriezeniski dzēsta."
       },
       "fields": {
+        "color": "Krāsa",
         "nameEn": "Nosaukums EN",
         "nameLv": "Nosaukums LV",
         "slugEn": "Adreses daļa EN",
         "slugLv": "Adreses daļa LV"
       },
       "bulk": {
+        "confirmDelete": "Vai tiešām dzēst izvēlētās kategorijas? Tās tiks neatgriezeniski noņemtas no visām grupām.",
         "selected": "atzīmti",
         "clearSelection": "Notīrīt izvēli",
         "mergeRequiresTwo": "Izvēlieties vismaz 2 atzīmes, lai apvienotu"
       },
       "slideover": {
+        "addAlias": "Pievienot aizstājvārdu",
+        "addSubcategory": "Pievienot apakškategoriju",
+        "aliasHelper": "Alternatīvi nosaukumi, ko cilvēki var meklēt. Meklējot aizstājvārdu, tiks atrasta šī kategorija.",
+        "aliases": "Aizstājvārdi",
+        "createSubcategory": "Izveidot apakškategoriju",
         "details": "Detaļas",
-        "pendingTitle": "Birkas detaļas"
+        "l1Title": "Kategorija",
+        "l2Title": "Apakškategorija",
+        "noSubcategories": "Apakškategoriju nav.",
+        "pendingTitle": "Birkas detaļas",
+        "save": "Saglabāt",
+        "subcategories": "Apakškategorijas ({count})",
+        "subcategoryCreated": "Apakškategorija izveidota",
+        "unsavedChanges": "Nesaglabātas izmaiņas"
       },
       "node": {
         "children": "{count} {count, plural, zero {apakšvienību} one {apakšvienība} other {apakšvienības}}",
         "pending": "gaida",
         "wildcard": "{count} {count, plural, zero {brīvo birku} one {brīvā birka} other {brīvās birkas}}",
         "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}"
+      },
+      "override": {
+        "saved": "Kategorijas atjauninātas",
+        "title": "Grupas kategoriju labošana"
+      },
+      "aliases": {
+        "added": "Aizstājvārds pievienots",
+        "anyLocale": "Jebkura valoda",
+        "anyLocaleShort": "jebkura",
+        "deleted": "Aizstājvārds dzēsts",
+        "empty": "Aizstājvārdu vēl nav.",
+        "valuePlaceholder": "Jauns aizstājvārds..."
+      },
+      "merge": {
+        "confirm": "Apvienot",
+        "description": "Apvieno izvēlētos tagus vienā. Grupas, kas lieto kādu no tiem, izmantos tagu, ko paturēsi.",
+        "editDetails": "Labo paturamā taga datus",
+        "selectCanonical": "Izvēlies tagu, ko paturēt",
+        "title": "Apvienot tagus"
       }
     },
     "reports": {
+      "anonymousUser": "Anonīms lietotājs",
+      "confirmDeleteContent": "Dzēst ziņoto saturu? To nevar atsaukt.",
+      "deleteContent": "Dzēst saturu",
+      "deleteFailed": "Neizdevās izdzēst saturu.",
+      "markAsResolved": "Atzīmēt kā atrisinātu",
+      "reportedByLabel": "Ziņoja",
+      "reportedEntity": "Ziņotais objekts",
+      "resolvedByAdmin": "Atrisināja administrators",
+      "subtitle": "Pārskati un atrisini atzīmētās grupas un pasākumus.",
       "title": "Drošības rinda",
       "noPendingReports": "Nav neatrisinātu ziņojumu.",
       "reportedBy": "ziņoja {name}",

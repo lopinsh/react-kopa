@@ -311,6 +311,10 @@
   },
   "admin": {
     "dashboard": {
+      "pendingCustomTags": "Pending custom tags",
+      "suspendGroup": "Suspend group",
+      "tabReports": "Reports",
+      "tabTags": "Tags",
       "title": "Admin Dashboard",
       "subtitle": "Manage user reports and community taxonomy."
     },
@@ -323,6 +327,9 @@
         "collapseAll": "Collapse All"
       },
       "inbox": {
+        "approve": "Approved",
+        "merge": "Merged",
+        "rejectUnavailable": "Rejecting tags is not available yet.",
         "title": "Pending Tags",
         "noPendingTags": "No pending tags.",
         "proposedUnder": "Proposed under: {parent}",
@@ -337,28 +344,70 @@
         "confirmReject": "Are you sure you want to reject this request? This will permanently delete the suggestion."
       },
       "fields": {
+        "color": "Color",
         "nameEn": "Name EN",
         "nameLv": "Name LV",
         "slugEn": "Slug EN",
         "slugLv": "Slug LV"
       },
       "bulk": {
+        "confirmDelete": "Are you sure you want to delete the selected categories? This will permanently remove them from all groups.",
         "selected": "selected",
         "clearSelection": "Clear selection",
         "mergeRequiresTwo": "Select at least 2 tags to merge"
       },
       "slideover": {
+        "addAlias": "Add alias",
+        "addSubcategory": "Add subcategory",
+        "aliasHelper": "Alternative names people may search for. Searching an alias finds this category.",
+        "aliases": "Aliases",
+        "createSubcategory": "Create subcategory",
         "details": "Details",
-        "pendingTitle": "Pending Tag Details"
+        "l1Title": "Category",
+        "l2Title": "Subcategory",
+        "noSubcategories": "No subcategories found.",
+        "pendingTitle": "Pending Tag Details",
+        "save": "Save",
+        "subcategories": "Subcategories ({count})",
+        "subcategoryCreated": "Subcategory created",
+        "unsavedChanges": "Unsaved changes"
       },
       "node": {
         "children": "{count} {count, plural, one {child} other {children}}",
         "pending": "pending",
         "wildcard": "{count} {count, plural, one {wildcard} other {wildcards}}",
         "group": "{count} {count, plural, one {group} other {groups}}"
+      },
+      "override": {
+        "saved": "Categories updated",
+        "title": "Edit categories for group"
+      },
+      "aliases": {
+        "added": "Alias added",
+        "anyLocale": "Any language",
+        "anyLocaleShort": "any",
+        "deleted": "Alias deleted",
+        "empty": "No aliases yet.",
+        "valuePlaceholder": "New alias..."
+      },
+      "merge": {
+        "confirm": "Merge",
+        "description": "Merge the selected tags into one. Groups using any of them will use the tag you keep.",
+        "editDetails": "Edit details of the kept tag",
+        "selectCanonical": "Choose the tag to keep",
+        "title": "Merge tags"
       }
     },
     "reports": {
+      "anonymousUser": "Anonymous user",
+      "confirmDeleteContent": "Delete the reported content? This cannot be undone.",
+      "deleteContent": "Delete content",
+      "deleteFailed": "Could not delete the content.",
+      "markAsResolved": "Mark as resolved",
+      "reportedByLabel": "Reported by",
+      "reportedEntity": "Reported item",
+      "resolvedByAdmin": "Resolved by admin",
+      "subtitle": "Review and resolve flagged groups and events.",
       "title": "Safety Queue",
       "noPendingReports": "No pending reports.",
       "reportedBy": "reported by {name}",

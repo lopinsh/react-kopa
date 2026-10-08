@@ -12,7 +12,7 @@ export default async function AdminReportsPage({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
-    const t = await getTranslations('group.admin');
+    const t = await getTranslations('admin.reports');
     const session = await auth();
     if (!session?.user?.id) {
         redirect(signInUrl(locale, '/admin/reports'));
@@ -31,10 +31,10 @@ export default async function AdminReportsPage({
                 </div>
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-foreground">
-                        {t('moderationReports')}
+                        {t('title')}
                     </h1>
                     <p className="text-foreground-muted mt-1">
-                        {t('moderationReportsDesc')}
+                        {t('subtitle')}
                     </p>
                 </div>
             </div>

@@ -114,7 +114,7 @@ export default function SlideoverL2View({ l2, categories, tree, onNodeSelect }: 
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{t('l2Title')}</h3>
                     {(nameEn !== initialEn || nameLv !== initialLv || slugEn !== l2.slug || slugLv !== (l2.slugLv || l2.slug)) && (
-                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">Unsaved changes</span>
+                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
 

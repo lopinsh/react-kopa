@@ -16,7 +16,11 @@ export default async function AdminDashboardPage({
     const { locale } = await params;
     const { tab } = await searchParams;
     const activeTab = tab || 'tags';
-    const t = await getTranslations('group.admin');
+    const t = await getTranslations('admin.dashboard');
+    const tReports = await getTranslations('admin.reports');
+    const tTax = await getTranslations('admin.taxonomy');
+    const tInbox = await getTranslations('admin.taxonomy.inbox');
+    const c = await getTranslations('common');
 
     const session = await auth();
     if (!session?.user?.id) {
@@ -69,7 +73,7 @@ export default async function AdminDashboardPage({
                 <p className="text-foreground-muted mt-2">{t('subtitle')}</p>
                 <div className="mt-3 flex items-center gap-4 text-sm font-semibold">
                     <Link href={`/${locale}/admin/reports`} className="text-foreground-muted hover:text-foreground">{t('tabReports')}</Link>
-                    <Link href={`/${locale}/admin/taxonomy`} className="text-foreground-muted hover:text-foreground">{t('taxonomy.navLink')}</Link>
+                    <Link href={`/${locale}/admin/taxonomy`} className="text-foreground-muted hover:text-foreground">{tTax('navLink')}</Link>
                 </div>
             </div>
 
@@ -114,7 +118,7 @@ export default async function AdminDashboardPage({
                     <div>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{t('pendingCustomTags')}</h2>
                         {!wildcards || wildcards.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-12">{t('noPendingTags')}</p>
+                            <p className="text-foreground-muted text-center py-12">{tInbox('noPendingTags')}</p>
                         ) : (
                             <div className="space-y-4">
                                 {wildcards.map(tag => (
@@ -123,7 +127,7 @@ export default async function AdminDashboardPage({
                                             {/* We use [0] because we included titles. In a real app we'd filter by locale. */}
                                             <h3 className="font-bold text-foreground text-lg">{tag.titles[0]?.title || tag.slug}</h3>
                                             <p className="text-sm text-foreground-muted">
-                                                {t('proposedUnder', { parent: tag.parent?.titles?.[0]?.title || tag.parent?.slug || t('unknown') })}
+                                                {tInbox('proposedUnder', { parent: tag.parent?.titles?.[0]?.title || tag.parent?.slug || tInbox('unknown') })}
                                             </p>
                                         </div>
                                         <div className="flex gap-2">
@@ -131,14 +135,14 @@ export default async function AdminDashboardPage({
                                                 <input type="hidden" name="id" value={tag.id} />
                                                 <button type="submit" className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-foreground bg-surface hover:bg-surface-elevated border border-border rounded-lg transition-colors">
                                                     <X className="h-4 w-4" />
-                                                    {t('reject')}
+                                                    {c('reject')}
                                                 </button>
                                             </form>
                                             <form action={handleApproveWildcard}>
                                                 <input type="hidden" name="id" value={tag.id} />
                                                 <button type="submit" className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">
                                                     <Check className="h-4 w-4" />
-                                                    {t('approve')}
+                                                    {c('approve')}
                                                 </button>
                                             </form>
                                         </div>
@@ -153,7 +157,7 @@ export default async function AdminDashboardPage({
                     <div>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{t('tabReports')}</h2>
                         {!reports || reports.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-12">{t('noPendingReports')}</p>
+                            <p className="text-foreground-muted text-center py-12">{tReports('noPendingReports')}</p>
                         ) : (
                             <div className="space-y-4">
                                 {reports.map(report => (
@@ -161,15 +165,15 @@ export default async function AdminDashboardPage({
                                         <div className="mb-4 md:mb-0">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <span className="bg-red-500/10 text-red-500 text-xs font-bold px-2 py-0.5 rounded-full">
-                                                    {t('reportLabel')}
+                                                    {c('reportLabel')}
                                                 </span>
                                                 <span className="text-sm text-foreground-muted">
-                                                    {t('reportedBy', { name: report.reporter.name || t('unknown') })}
+                                                    {tReports('reportedBy', { name: report.reporter.name || tInbox('unknown') })}
                                                 </span>
                                             </div>
                                             <h3 className="font-bold text-foreground">
-                                                {report.targetGroupId ? t('reportedGroup', { name: report.group?.name || t('unknown') }) : ''}
-                                                {report.targetEventId ? t('reportedEvent', { title: report.event?.title || t('unknown') }) : ''}
+                                                {report.targetGroupId ? tReports('reportedGroup', { name: report.group?.name || tInbox('unknown') }) : ''}
+                                                {report.targetEventId ? tReports('reportedEvent', { title: report.event?.title || tInbox('unknown') }) : ''}
                                             </h3>
                                             <p className="text-sm text-foreground-muted mt-1 bg-background/50 p-2 rounded border border-border/50">
                                                 &quot;{report.reason}&quot;
@@ -180,7 +184,7 @@ export default async function AdminDashboardPage({
                                                 <input type="hidden" name="id" value={report.id} />
                                                 <button type="submit" className="w-full flex justify-center items-center gap-2 px-3 py-2 text-sm font-medium text-foreground bg-surface hover:bg-surface-elevated border border-border rounded-lg transition-colors">
                                                     <Check className="h-4 w-4" />
-                                                    {t('dismiss')}
+                                                    {c('dismiss')}
                                                 </button>
                                             </form>
                                             {report.targetGroupId && (

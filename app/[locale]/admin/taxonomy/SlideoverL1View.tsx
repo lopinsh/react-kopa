@@ -18,6 +18,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
     const tFields = useTranslations('admin.taxonomy.fields');
     const tAliases = useTranslations('admin.taxonomy.aliases');
+    const tNode = useTranslations('admin.taxonomy.node');
     const c = useTranslations('common');
     const { success, error } = useToast();
     const router = useRouter();
@@ -113,7 +114,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{tFields('color')}</h3>
                     {color !== l1.color && (
-                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">Unsaved changes</span>
+                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
                 <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
@@ -216,7 +217,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             {/* Subcategories View */}
             <section>
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold">Subcategories ({l1.subcategories.length})</h3>
+                    <h3 className="text-lg font-bold">{t('subcategories', { count: l1.subcategories.length })}</h3>
                 </div>
                 <div className="border border-border rounded-xl divide-y divide-border bg-surface mb-6">
                     {l1.subcategories.map(l2 => (
@@ -229,14 +230,14 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             <span className="font-medium text-sm">{l2.title}</span>
                             <div className="flex gap-2">
                                 <span className="text-xs text-foreground-muted bg-surface-elevated px-2 py-0.5 rounded-full border border-border">
-                                    {l2.tags.length} wildcards
+                                    {tNode('wildcard', { count: l2.tags.length })}
                                 </span>
                             </div>
                         </button>
                     ))}
                     {l1.subcategories.length === 0 && (
                         <div className="p-4 text-sm text-foreground-muted text-center">
-                            No subcategories found.
+                            {t('noSubcategories')}
                         </div>
                     )}
                 </div>

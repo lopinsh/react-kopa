@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 import type { ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
 import PendingInbox from './PendingInbox';
 import TaxonomyTree, { SelectedTaxonomyNode } from './TaxonomyTree';
@@ -16,6 +17,7 @@ type Props = {
 };
 
 export default function TaxonomyAdminClient({ pending, categories, tree }: Props) {
+    const t = useTranslations('admin.taxonomy.bulk');
     const [selectedNode, setSelectedNode] = useState<SelectedTaxonomyNode | null>(null);
     const [selectedActionIds, setSelectedActionIds] = useState<string[]>([]);
     const [isPendingTransitions, startTransition] = useTransition();
@@ -38,7 +40,7 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
     };
 
     const handleDelete = () => {
-        if (window.confirm('Are you sure you want to delete the selected categories? This will permanently remove them from all groups.')) {
+        if (window.confirm(t('confirmDelete'))) {
             startTransition(async () => {
                 const res = await bulkDeleteAction(selectedActionIds);
                 if (res.success) {

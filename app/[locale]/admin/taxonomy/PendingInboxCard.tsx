@@ -66,11 +66,8 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
     const handleReject = async () => {
         if (!confirm(t('confirmReject'))) return;
-        // The instructions do not mention a reject action endpoint existing yet, so checking taxonomy-actions.ts for what to call.
-        // Wait, the specification says: "Reject - confirm prompt, then deletes the pending category".
-        // But there is no deleteTag action. I will implement delete capability in the action later or just use API if it exists.
-        // Actually, there's no `deleteTag` or `rejectTag` in taxonomy-actions.ts. I need to make one. For now I'll alert.
-        alert("Reject action not fully implemented in actions yet");
+        // TODO: no reject/delete action exists in taxonomy-actions.ts yet.
+        alert(t('rejectUnavailable'));
     };
 
     return (

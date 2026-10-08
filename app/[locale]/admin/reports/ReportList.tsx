@@ -3,9 +3,8 @@
 import { useState, useTransition } from 'react';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users } from 'lucide-react';
-import { format } from 'date-fns';
 import { Link } from '@/i18n/routing';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 
 type ReportItem = {
     id: string;
@@ -18,7 +17,8 @@ type ReportItem = {
 };
 
 export default function ReportList({ initialReports }: { initialReports: ReportItem[] }) {
-    const t = useTranslations('group.admin');
+    const t = useTranslations('admin.reports');
+    const format = useFormatter();
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
 
@@ -73,7 +73,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {report.reason}
                                 </span>
                                 <span className="text-sm font-medium text-foreground-muted">
-                                    {format(new Date(report.createdAt), 'MMM d, yyyy h:mm a')}
+                                    {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
                             </div>
 
