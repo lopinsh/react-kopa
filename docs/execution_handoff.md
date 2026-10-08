@@ -79,18 +79,31 @@ Noticed, not changed:
 - "Please be on time…" on events is English seed data, not code.
 - Local DB only: `admin@local` now has username `admin_local` (set while testing onboarding return path).
 
-## Next session (Sonnet) — planned 2026-10-08
+## Next session (Opus) — review of the 2026-10-08 Sonnet session
 
-Scope, in order: **2.0b → 2.1 → 2.2 → 2.3.** Stop after 2.3 even if time is left (2.4 messaging is the fragile part and gets its own session). One commit per item, never push; the user pushes after a short Opus review at the end.
+Review `git log --oneline 004a5b0..HEAD` (3 commits: `d197cab` 2.0b moderation, `16d7d44` 2.1 wizard, `272a493` 2.2/2.3 join + privacy fix). Typecheck and i18n parity pass; each item was clicked through locally (dev server, `admin@local` / `member@local`). Nothing pushed.
 
-Session rules learned on 2026-10-08:
-- Start the dev server only via the browser pane (`.claude/launch.json`, config "dev"). Before starting, make sure nothing else listens on :3000 and that no other Claude session has a browser pane open on localhost — two open dev clients make each other reload endlessly.
-- Don't run `npm run build` while the dev server is running; stop it first (a build alongside dev left the watcher stale and served old translations).
-- Switching between **local seed accounts** in the browser pane (sign out / sign in as `owner@local`, `member@local`, …) is fine on localhost — that's how 2.3 needs two users. Never do it on ejam.lumm.eu.
-- Most seed accounts have no username, so they land on `/onboarding/username` after sign-in (now pre-filled) — that's expected; it also covers the open 2.0 check below.
-- 2.1–2.3 are test-and-fix items: walk the flow in both locales (mobile + desktop), fix what's broken if small, and **list** anything that needs a product decision instead of fixing it.
+**Open bug — blocks the 2.0b production step:** the user logged in but could not hide a group. Not reproduced locally (hide → 404 → log → restore worked as `admin@local`). Start here. Hypotheses, most likely first:
+1. Production DB has no `add_group_moderation` migration yet (or code not deployed) — check what the user ran against.
+2. The "Hide group" item only shows when `group.moderation.isSiteAdmin && !isOwner && !hidden` (`GroupHeader.tsx`, `canHide`). A site admin who is *owner* of the group never sees it (use Delete instead) — maybe too surprising; and `isSiteAdmin` comes from `User.role` in the DB, so the user's account must really be `ADMIN`.
+3. Menu discoverability: item sits at the bottom of the ··· menu (desktop and mobile variants); no entry on `/admin`, and report-based hiding exists only via Reports → "Suspend group".
+4. Hydration: in dev, first clicks before hydration are ignored.
+Ask the user which page/button, locale, and any error text before changing code.
 
-Open from 2.0 for the user: one real sign-up on production to confirm the end-to-end flow.
+**Review focus (highest risk first):**
+- `lib/services/group.service.ts` `getGroupWithContext`: now hides hidden groups from non-admins, an extra `user.findUnique` per request, and filters PENDING members/application messages for non-admins. Check nothing relied on pending members being in `members` for non-admins (e.g. the applicant's own "Requested" state uses the membership looked up *before* filtering).
+- `hiddenAt: null` coverage — added to discovery search/listing, global event discovery, event page, `getUserMemberships`, `getMyGroups`, profile groups, `app/[locale]/groups/page.tsx`. Not covered: `getGroupRole`, `getGroupSlugs*`, post/message services, `unstable_cache` keys (revalidated via tags `groups`/`events` on hide/restore).
+- `moderation.service.ts` + `actions/moderation-actions.ts`; `AdminService.suspendReportedGroup` now delegates to hide (uses the report text as reason, prefixes "Reported:" if under 5 chars).
+- `joinGroup` now notifies OWNER/ADMIN (`JOIN_REQUEST`) and rejects when `isAcceptingMembers` is false (`JOIN_FAILED`).
+
+**Product direction stated by the user (2026-10-08) — implement/decide next:**
+- **Public** = listed, findable via filters and search. **Private** = invite only; a non-invited user cannot join. Whether request-to-join changes is still undecided (groups can toggle `isAcceptingMembers` even when public). Today every join needs approval and there is no invite mechanism; the wizard text "Anyone can see and join" for Public is misleading.
+- A hidden or private group stays reachable by its exact URL (intended). Note hidden-by-moderation is different: it 404s for non-admins by design — confirm that is still wanted given this statement.
+- Search (diacritics: "lugsanu" vs "lūgšanu") is **deferred to its own session**.
+
+**Still open:** header ⌘K search overlay is a visible placeholder (hide or build); sidebar Requests badge stale after approve; dev-only sidebar flash on mobile; user to hide the three junk groups on production once the bug above is solved; one real sign-up on production (2.0).
+
+Next in line after review: 2.4 messaging (fragile — own session), then 2.5 events.
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
