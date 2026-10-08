@@ -37,7 +37,7 @@ export default async function LocaleLayout({ children, params }: Props) {
         <Providers locale={locale} messages={messages}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
-                <Header locale={locale} />
+                <Header />
 
                 <div className="flex flex-1 overflow-hidden">
                     <Sidebar locale={locale} />

@@ -8,6 +8,15 @@ export type NotificationPayload = {
     link?: string;
 };
 
+const EXCERPT_MAX = 160;
+
+/** Notifications show a preview of what someone wrote, not the whole text. */
+function withShortExcerpt(args: NotificationPayload['args']): NotificationPayload['args'] {
+    if (!args || typeof args.excerpt !== 'string') return args;
+    const text = args.excerpt.replace(/\s+/g, ' ').trim();
+    return { ...args, excerpt: text.length > EXCERPT_MAX ? `${text.slice(0, EXCERPT_MAX - 1).trimEnd()}…` : text };
+}
+
 export const NotificationService = {
     /**
      * Fetches the most recent notifications for a user.
@@ -29,7 +38,7 @@ export const NotificationService = {
                 userId: payload.userId,
                 type: payload.type,
                 title: payload.type,
-                message: JSON.stringify({ key: payload.translationKey, args: payload.args }),
+                message: JSON.stringify({ key: payload.translationKey, args: withShortExcerpt(payload.args) }),
                 link: payload.link,
             },
         });

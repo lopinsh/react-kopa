@@ -8,11 +8,7 @@ import NotificationCenter from './NotificationCenter';
 import GlobalSearch from './GlobalSearch';
 import { MessageSquare } from 'lucide-react';
 
-type Props = {
-    locale: string;
-};
-
-export default async function Header({ locale }: Props) {
+export default async function Header() {
     const t = await getTranslations('shell.header');
   const c_common_get = await getTranslations('common');
     const session = await auth();
@@ -74,7 +70,7 @@ export default async function Header({ locale }: Props) {
                         >
                             <MessageSquare className="h-[22px] w-[22px]" />
                         </Link>
-                        <NotificationCenter locale={locale} />
+                        <NotificationCenter />
                     </div>
                 )}
 

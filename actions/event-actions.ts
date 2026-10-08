@@ -32,7 +32,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
                     userId: m.userId,
                     type: 'NEW_EVENT',
                     translationKey: 'newEvent',
-                    args: { title: event.title, groupName },
+                    args: { eventTitle: event.title, groupName },
                     link: `/${l1Slug}/group/${groupSlug}/events/${event.slug}`
                 })
             ));

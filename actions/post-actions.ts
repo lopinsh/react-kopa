@@ -61,7 +61,7 @@ export async function createPost(groupId: string, content: string, locale: strin
                     userId: m.userId,
                     type: 'NEW_POST',
                     translationKey: 'newPost',
-                    args: { authorName: post.author.name || '', groupName: post.group.name },
+                    args: { authorName: post.author.name || '', groupName: post.group.name, excerpt: content },
                     link: `/${l1Slug}/group/${post.group.slug}?tab=discussion`
                 })
             ));

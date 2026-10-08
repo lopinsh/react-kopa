@@ -521,7 +521,7 @@ export const GroupService = {
                 userId: targetUserId,
                 type: 'APPLICATION_INQUIRY',
                 translationKey: 'applicationInquiry',
-                args: { groupName: group.name },
+                args: { groupName: group.name, excerpt: message },
                 link: `/${group.category.slug}/group/${group.slug}/members`
             });
         }

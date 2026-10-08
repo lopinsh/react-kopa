@@ -217,6 +217,7 @@ export async function mergeTag(pendingId: string, canonicalId: string, locale: s
                 args: {
                     originalTag: pending.submittedLabel,
                     canonicalTag: canonicalName,
+                    groupName: group.name,
                 },
                 link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,
             });
@@ -376,6 +377,7 @@ export async function bulkMergeAction(
                     args: {
                         originalTag: pending.submittedLabel,
                         canonicalTag: canonicalName,
+                        groupName: group.name,
                     },
                     link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,
                 });

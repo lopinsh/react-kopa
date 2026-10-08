@@ -1,14 +1,12 @@
 'use client';
 
 import { useState, useEffect, useTransition, useRef } from 'react';
-import { useTranslations } from 'next-intl';
-import { Bell, Check, ExternalLink } from 'lucide-react';
+import { useTranslations, useFormatter, useNow } from 'next-intl';
+import { Bell, Check } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
 import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notification-actions';
 import { clsx } from 'clsx';
-import { formatDistanceToNow } from 'date-fns';
-import { lv, enUS } from 'date-fns/locale';
 import { pusherClient } from '@/lib/pusher';
 
 type Notification = {
@@ -21,49 +19,56 @@ type Notification = {
     createdAt: Date;
 };
 
-type Props = {
-    locale: string;
-};
+type NotificationArgs = Record<string, string | number | undefined>;
 
-import type { Locale } from 'date-fns';
+// Types whose detail line is something a person wrote, shown in quotes.
+const QUOTED_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY', 'NEW_POST']);
+const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN']);
 
-function NotificationContent({ n, t, dateLocale }: { n: Notification, t: any, dateLocale: Locale }) {
-    const parsed = JSON.parse(n.message);
-    const title = t(`title_${n.type}`);
-    const args = { ...(parsed.args || {}) };
-    if ('authorName' in args && !args.authorName) args.authorName = t('someone');
-    const message = t(parsed.key, args);
+/** Context line (group · time), one headline (who did what), then the content itself. */
+function NotificationContent({ n }: { n: Notification }) {
+    const t = useTranslations('notifications');
+    const format = useFormatter();
+    const now = useNow({ updateInterval: 60_000 });
+
+    let args: NotificationArgs = {};
+    try {
+        args = (JSON.parse(n.message) as { args?: NotificationArgs }).args ?? {};
+    } catch {
+        // Malformed legacy payload: render the headline without arguments.
+    }
+    const authorName = args.authorName ? String(args.authorName) : t('someone');
+    const type = KNOWN_TYPES.has(n.type) ? n.type : 'GENERIC';
+    const headline = t(`headline.${type}` as 'headline.GENERIC', {
+        authorName,
+        originalTag: String(args.originalTag ?? ''),
+        canonicalTag: String(args.canonicalTag ?? '')
+    });
+    // Older notifications stored the event title as `title`.
+    const detail = args.excerpt ?? args.reason ?? args.eventTitle ?? args.title;
 
     return (
-        <div className="flex flex-col gap-1">
-            <div className="flex items-start justify-between gap-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-primary">
-                    {t(`type_${n.type}`)}
-                </span>
-                <span className="text-[9px] text-foreground-muted font-medium">
-                    {formatDistanceToNow(new Date(n.createdAt), { addSuffix: true, locale: dateLocale })}
-                </span>
+        <div className="flex flex-col gap-1 pr-6">
+            <div className="flex items-baseline justify-between gap-2 text-[11px] text-foreground-muted">
+                <span className="truncate font-semibold">{args.groupName}</span>
+                <span className="shrink-0">{format.relativeTime(new Date(n.createdAt), now)}</span>
             </div>
-            <h4 className="text-sm font-bold text-foreground leading-tight">{title}</h4>
-            <p className="text-xs text-foreground-muted leading-relaxed line-clamp-2">{message}</p>
-
-            {n.link && (
-                <div className="mt-2 flex items-center gap-1 text-[11px] font-bold text-primary opacity-80 group-hover:opacity-100 group-hover:underline">
-                    <ExternalLink className="h-3 w-3" />
-                    {t('viewDetails')}
-                </div>
+            <p className="text-sm font-bold text-foreground leading-snug">{headline}</p>
+            {detail !== undefined && detail !== '' && (
+                <p className="text-xs text-foreground-muted leading-relaxed line-clamp-2 break-words">
+                    {QUOTED_TYPES.has(n.type) ? `“${detail}”` : detail}
+                </p>
             )}
         </div>
     );
 }
 
-export default function NotificationCenter({ locale }: Props) {
+export default function NotificationCenter() {
     const t = useTranslations('notifications');
     const { data: session } = useSession();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
-    const dateLocale = locale === 'lv' ? lv : enUS;
     const menuRef = useRef<HTMLDivElement>(null);
 
     const unreadCount = notifications.filter(n => !n.read).length;
@@ -142,7 +147,7 @@ export default function NotificationCenter({ locale }: Props) {
 
             {isOpen && (
                 <>
-                    <div className="absolute right-0 mt-3 z-50 w-80 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
+                    <div className="fixed inset-x-4 top-16 z-50 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-80 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
                         <div className="flex items-center justify-between border-b border-border bg-surface-elevated/50 p-4">
                             <h3 className="text-sm font-bold text-foreground">{t('title')}</h3>
                             {unreadCount > 0 && (
@@ -176,11 +181,11 @@ export default function NotificationCenter({ locale }: Props) {
                                                         setIsOpen(false);
                                                     }}
                                                 >
-                                                    <NotificationContent n={n} t={t} dateLocale={dateLocale} />
+                                                    <NotificationContent n={n} />
                                                 </Link>
                                             ) : (
                                                 <div className="p-4">
-                                                    <NotificationContent n={n} t={t} dateLocale={dateLocale} />
+                                                    <NotificationContent n={n} />
                                                 </div>
                                             )}
 
@@ -192,7 +197,8 @@ export default function NotificationCenter({ locale }: Props) {
                                                         handleMarkAsRead(n.id);
                                                     }}
                                                     className="absolute bottom-4 right-4 flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary opacity-0 transition-opacity group-hover:opacity-100"
-                                                    title="Mark as read"
+                                                    title={t('markRead')}
+                                                    aria-label={t('markRead')}
                                                 >
                                                     <Check className="h-3 w-3" />
                                                 </button>

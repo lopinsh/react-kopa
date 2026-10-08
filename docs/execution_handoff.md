@@ -79,36 +79,38 @@ Noticed, not changed:
 - "Please be on time…" on events is English seed data, not code.
 - Local DB only: `admin@local` now has username `admin_local` (set while testing onboarding return path).
 
-## Next session (Opus) — review of the 2026-10-08 Sonnet session
+## Session rules (every session)
 
-Session rules learned on 2026-10-08 (apply to every session):
-- Workflow: Opus plans a task → Sonnet implements and reports here → a **new** Opus session reviews, fixes, and pushes. Earlier sessions are never resumed, so whatever they left running is orphaned.
+- Workflow: Opus plans a task with the user → Sonnet implements and reports here → a **new** Opus session reviews, fixes, and pushes. Earlier sessions are never resumed, so whatever they left running is orphaned.
 - Start the dev server only via the browser pane (`.claude/launch.json`, config "dev"). Two dev clients on localhost make each other reload endlessly, so only one session may run it.
+- **Start of session:** if something already listens on :3000 (`Get-NetTCPConnection -LocalPort 3000 -State Listen`), it is a leftover `next dev` from an earlier session — confirm the command line is this repo's `next dev`, stop it with `Stop-Process -Id <pids> -Force` (allowed via `.claude/settings.local.json`), then start your own.
 - **End of session:** stop your dev server (`preview_stop`) before reporting done.
-- **Start of session:** if something already listens on :3000 (check with `Get-NetTCPConnection -LocalPort 3000 -State Listen`), it is a leftover `next dev` from an earlier session — stop it with `Stop-Process -Id <pids> -Force` (allowed via `.claude/settings.local.json`; confirm the command line is this repo's `next dev` first), then start your own.
 - Don't run `npm run build` while the dev server is running; stop it first (a build alongside dev left the watcher stale and served old translations).
-- Switching between **local seed accounts** in the browser pane (sign out / sign in as `owner@local`, `member@local`, …) is fine on localhost. Never do it on ejam.lumm.eu.
-- Most seed accounts have no username, so they land on `/onboarding/username` after sign-in (pre-filled) — expected.
+- Switching between **local seed accounts** in the browser pane (sign out / sign in as `owner@local`, `member@local`, …) is fine on localhost. Never on ejam.lumm.eu. Most seed accounts have no username and land on `/onboarding/username` (pre-filled) — expected.
+- Native `confirm()` dialogs block the browser pane; when testing, override `window.confirm = () => true` via the JS tool first.
 
-Review `git log --oneline 004a5b0..HEAD` (commits: `d197cab` 2.0b moderation, `16d7d44` 2.1 wizard, `272a493` 2.2/2.3 join + privacy fix, `e0e8d85` taxonomy Reject, plus an Opus review fix on top). Typecheck and i18n parity pass; each item was clicked through locally (dev server, `admin@local` / `member@local`). **Reviewed by Opus and pushed 2026-10-08** — no blockers. Follow-ups found in review, fixed the same day: `/admin` form actions now return to their tab with a translated error banner (`?error=CODE`); a report reason is trimmed/padded to the 5–500 char hide rule; `hideGroup`/`restoreGroup` update + log run in one transaction; notifications no longer hardcode English `'Someone'` (empty `authorName` → `notifications.someone`); `AdminAction.admin` is optional with `SetNull` (migration `update_admin_action_admin_relation`), so the log survives a deleted admin.
+## Product decisions (2026-10-08, later)
 
-**User report (2026-10-08, later):** as admin they saw no UI to hide a group; "Apturēt grupu" on a report left the group visible and reachable; they could approve suggested sub-categories but not dismiss them. Diagnosis: `main` is 5+ commits ahead of `origin/main` (nothing pushed), so they were almost certainly on production with the *old* code — there "Apturēt grupu" only set `type = PRIVATE` (which still leaves the page reachable by URL) and no Hide menu exists. Confirm with the user which environment they tested; after deploy, re-test hide (··· menu on a group page you don't own, and Reports → Apturēt grupu, which now hides). The Hide item is hidden for groups the admin owns and is buried in the ··· menu — consider making it more discoverable.
-Dismissing suggestions was a real bug, fixed in `e0e8d85`: the taxonomy inbox "Reject" was an alert-only placeholder, and `/admin` Reject failed whenever any group used the tag. Rejecting now detaches the tag from its groups and deletes it, in one transaction; only pending suggestions can be rejected, and a tag that is some group's *primary* category or has child categories is refused (translated error in the taxonomy inbox and on `/admin`). Opus review (2026-10-08): verified via script and clicked through in the taxonomy inbox (EN desktop, LV mobile) — tag detached from its group and deleted, toast shown. Same review fixed the inbox card's "Submitted by … on {date}" (raw key shown because a Date was passed to a plain `{date}` argument) and its button row overflowing on mobile.
+- **Joining always needs approval** — public or private. No instant join ("can get out of control fast"). Owners can still close a group to new requests (`isAcceptingMembers`).
+- **Public** = listed and findable via filters and search; anyone can request to join.
+- **Private** = invite only. A non-member opening its URL sees a short card only (name, category, city, member count, "invite only") — no description, posts, events, members, no join button. Needs an invite mechanism first → Opus queue.
+- **Hidden by moderation:** the owner can still open their group and sees "Hidden by a site admin: <reason>" (no restore button); everyone else except site admins gets 404.
+- **Existing features need a quality pass.** Many were added as placeholders without attention to detail or to how they fit the whole site. Before polishing (Stage 3), take an inventory (2.7), then decide per feature with the user: keep & fix / hide / remove.
+- **Notifications** (redone 2026-10-08): one compact layout for all types — group · time, one headline with the person's name, then the content itself (their message, post excerpt, event title, hide reason). Keys: `notifications.headline.<TYPE>`; the text someone wrote goes in the `excerpt` arg (trimmed to 160 chars by `NotificationService`). New notification types must follow this.
 
-**Review focus (highest risk first):**
-- `lib/services/group.service.ts` `getGroupWithContext`: now hides hidden groups from non-admins, an extra `user.findUnique` per request, and filters PENDING members/application messages for non-admins. Check nothing relied on pending members being in `members` for non-admins (e.g. the applicant's own "Requested" state uses the membership looked up *before* filtering).
-- `hiddenAt: null` coverage — added to discovery search/listing, global event discovery, event page, `getUserMemberships`, `getMyGroups`, profile groups, `app/[locale]/groups/page.tsx`. Not covered: `getGroupRole`, `getGroupSlugs*`, post/message services, `unstable_cache` keys (revalidated via tags `groups`/`events` on hide/restore).
-- `moderation.service.ts` + `actions/moderation-actions.ts`; `AdminService.suspendReportedGroup` now delegates to hide (uses the report text as reason, prefixes "Reported:" if under 5 chars).
-- `joinGroup` now notifies OWNER/ADMIN (`JOIN_REQUEST`) and rejects when `isAcceptingMembers` is false (`JOIN_FAILED`).
+## Opus queue (not for Sonnet)
 
-**Product direction stated by the user (2026-10-08) — implement/decide next:**
-- **Public** = listed, findable via filters and search. **Private** = invite only; a non-invited user cannot join. Whether request-to-join changes is still undecided (groups can toggle `isAcceptingMembers` even when public). Today every join needs approval and there is no invite mechanism; the wizard text "Anyone can see and join" for Public is misleading.
-- A hidden or private group stays reachable by its exact URL (intended). Note hidden-by-moderation is different: it 404s for non-admins by design — confirm that is still wanted given this statement.
-- Search (diacritics: "lugsanu" vs "lūgšanu") is **deferred to its own session**.
+- 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session.
+- Private groups: invite mechanism + restricted card view for non-members.
+- Search diacritics ("lugsanu" vs "lūgšanu").
+- Decisions on the 2.7 feature inventory, together with the user.
+- Minor, unexplained: dev-only sidebar flash on mobile.
 
-**Still open:** header ⌘K search overlay is a visible placeholder (hide or build); sidebar Requests badge stale after approve; dev-only sidebar flash on mobile; user to hide the three junk groups on production once the bug above is solved; one real sign-up on production (2.0).
+**For the user (production):** hide the three junk groups (··· menu on the group page → Hide, or `/admin` → Reports); do one real sign-up (2.0).
 
-Next in line after review: 2.4 messaging (fragile — own session), then 2.5 events.
+## Next session (Sonnet) — planned 2026-10-08
+
+Scope, in order: **2.5 → 2.6 → 2.7**. One commit per item (tiny 2.6 sub-items may share a commit), tick the box in the same commit, **never push**. Follow "Instructions for the agent working through a stage" above and the session rules. If an item needs a product decision, stop and write the question here instead of guessing.
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
@@ -135,8 +137,24 @@ Goal: each step of create → find → join → talk works end to end, logged in
 - [x] 2.1 Create a group (wizard), both locales (2026-10-08: walked all 4 steps on desktop EN; LV + mobile step 1 checked. Fixed: city error showed raw Zod text; invalid URL errors were untranslated/invisible on Social step; banner URL wasn't validated before advancing; server error showed a raw code. Created group redirects to its page.)
 - [x] 2.2 Find it via discovery (category, city, search) (2026-10-08: category, city, combined and text search all work in EN/LV, desktop + mobile; new group appears immediately. **Decisions needed:** search is diacritic-sensitive — "lugsanu" does not find "lūgšanu" (Postgres `unaccent` or a normalised column?); the header ⌘K search overlay is a visible placeholder ("Global Search … placeholder") — hide it or build it, Stage 3.4.)
 - [x] 2.3 Join as a second user (2026-10-08: member@local → onboarding → back to group → apply with message → owner notified → approved on Requests tab → member notified, role MEMBER. Fixed: owners/admins were never notified of join requests; server ignored `isAcceptingMembers`; application modal swallowed errors; **privacy leak** — group page payload sent applicants' messages and pending members to anonymous visitors (now admin/applicant only). **Decisions needed:** every join needs approval, but the wizard says Public = "Anyone can see and join" — either add an open-join option or reword; PRIVATE groups are hidden from discovery but their page is fully readable by URL; sidebar Requests badge stays stale after approving until reload.)
-- [ ] 2.4 Talk: group inquiry / DM between members, notifications
-- [ ] 2.5 Events: create public + members-only event, RSVP, check visibility rules
+- [ ] 2.4 Talk: group inquiry / DM between members, notifications → **Opus queue**, not Sonnet.
+- [ ] 2.5 Events, walk and fix (test-and-fix like 2.1–2.3; EN + LV, desktop + mobile; as `owner@local`, `member@local` and logged out):
+  - As group owner create one **public** and one **members-only** event (all form fields; validation errors translated; dates via next-intl formatters).
+  - Members get a `NEW_EVENT` notification showing the event title (check it renders; don't redesign notifications).
+  - RSVP as a member; change/cancel RSVP; capacity (`maxParticipants`) respected with a translated error; RSVP count updates.
+  - Visibility: members-only events must not appear for non-members or logged-out users — group Events tab, global event discovery, direct event URL (404 or a clear "members only" state — use what the code already intends and report which). Public events visible to everyone.
+  - Events of a hidden group disappear with it.
+  - Fix what's broken if small; **list** anything needing a product decision (past events, editing/deleting events, time zones…) instead of building it.
+- [ ] 2.6 Small fixes (each verified in the app, both locales):
+  - a. **Header ⌘K search overlay** is a visible placeholder ("Global Search … placeholder") → hide the trigger until search exists (`components/shell/GlobalSearch.tsx`, `Header.tsx`). No placeholder features.
+  - b. **Sidebar Requests badge** stays stale after approving/declining a request until reload → refresh it after the action.
+  - c. **Event "Share event" button** has no handler → `navigator.share` when available, else copy the URL with a translated toast.
+  - d. **Search dropdown subtitles** (`lib/services/discovery.service.ts`) show raw city values ("Jurmala") → translated display names (`cities.*`, see 1.8).
+  - e. **404 under `/…/group/…`**: the desktop sidebar still shows the group menu (Informācija / Pasākumi) linking to the missing group → hide it when the group doesn't exist.
+  - f. **Wizard access step**: Public says "Anyone can see and join", but every join needs approval (decided) → reword Public to "anyone can find it and ask to join". Leave Private text alone until invites exist. LV + EN.
+  - g. **Hidden group, owner view**: `getGroupWithContext` (`lib/services/group.service.ts`) returns null for everyone except site admins → also let the group OWNER in; show `HiddenGroupBanner` with the reason but **without** the restore button (restore stays admin-only). Everyone else still 404.
+  - h. **Notification links** from `sendInquiry`, `manageMembership` and `sendApplicationInquiry` (`lib/services/group.service.ts`) use `group.category.slug` as the URL's L1 segment, but the group route only accepts a level-1 slug there → use `TaxonomyResolver.resolve(category).l1Slug` like the other call sites (works today only because all groups use L1 categories).
+- [ ] 2.7 **Feature inventory — report only, no fixes.** Walk every user-facing feature as logged-out visitor, member, group owner and site admin (EN + LV, desktop + mobile). Add a table under this item, one row per feature: *feature · where (route/component) · who uses it · works? · what feels unfinished or out of place* — be concrete: placeholder text, dead buttons, English strings, duplicated info, styling inconsistent with the rest, unclear purpose. Cover at least: discovery (filters, cards, search), group page tabs (about, discussion, events, members, settings, sections editor), create wizard, profile (own + public), onboarding, messages/inbox, notifications, header/sidebar/footer/mobile nav, admin (dashboard, reports, taxonomy), about/privacy. Keep rows short; this feeds the keep/fix/hide/remove decisions with the user.
 
 ## Stage 3 — Make it calm
 
