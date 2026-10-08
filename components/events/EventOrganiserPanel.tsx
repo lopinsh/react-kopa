@@ -70,20 +70,22 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
             </div>
 
             {isRequest && (
-                <label className="flex cursor-pointer items-start justify-between gap-4 rounded-2xl border border-border bg-background p-4">
-                    <span className="flex flex-col">
-                        <span className="text-sm font-bold text-foreground">{t('markFull')}</span>
-                        <span className="text-xs text-foreground-muted">{t('markFullHint')}</span>
-                    </span>
-                    <input
-                        type="checkbox"
-                        role="switch"
-                        checked={isFull}
+                <div className="space-y-1.5">
+                    <button
+                        type="button"
                         disabled={isPending}
-                        onChange={(e) => run(() => setEventFull(eventId, e.target.checked, locale))}
-                        className="mt-1 h-5 w-5 shrink-0 accent-[var(--accent)]"
-                    />
-                </label>
+                        onClick={() => run(() => setEventFull(eventId, !isFull, locale))}
+                        className={clsx(
+                            'w-full rounded-2xl px-4 py-3 text-sm font-bold transition-colors disabled:opacity-60',
+                            isFull
+                                ? 'bg-[var(--accent)] text-white hover:opacity-90'
+                                : 'border border-border bg-background text-foreground hover:bg-surface-elevated'
+                        )}
+                    >
+                        {isFull ? t('reopenSignups') : t('closeSignups')}
+                    </button>
+                    <p className="text-center text-xs text-foreground-muted">{t('closeSignupsHint')}</p>
+                </div>
             )}
 
             {isRequest && section(
