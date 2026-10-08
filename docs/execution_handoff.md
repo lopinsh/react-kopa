@@ -1,137 +1,79 @@
 # Execution Handoff: Ejam Kopā
 
-> This document is the living progress reference for ongoing development.
-> Agents must also read `AGENTS.md` before starting any task.
-> Completed chunk history lives in `execution_handoff.archive.md`.
+> The living "what's next" list. Read `AGENTS.md` first, then `docs/core_philosophy.md`.
+> **How to use:** when starting a session, take the first unchecked item in the current stage. Keep items small (30–60 min), finish them fully, tick them off here in the same commit.
+> Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git and `docs/archive/`.
+
+**Last updated:** 2026-10-08
 
 ---
 
-## Project State Summary
+## North star
 
-The core platform is built and functional. Authentication, group/event creation, discovery, profiles, notifications, and real-time messaging infrastructure are all in place. The codebase is clean, strictly typed, and follows the Service Law throughout.
+Ejam Kopā is a non-profit, non-addictive place to find people to do things with — a gym buddy in Jelgava, a book club, a choir looking for singers. It removes the social awkwardness of reaching out.
 
-**Stack:** Next.js 16 (App Router) · TypeScript strict · Tailwind CSS v4 · PostgreSQL + Prisma v6 · NextAuth.js v5 · next-intl (LV/EN) · Pusher · Lucide icons
+**The core loop:** create a group → be found → join → talk.
+Every task is judged by whether it makes this loop work better. If it doesn't, it waits.
 
----
+## Product decisions (2026-10-08)
 
-## Locked-In Architectural Decisions
+- **Groups are the heart; events belong to groups.** Events are for things a group does: public ones anyone can join (concerts, neighbourhood cleanups) and members-only ones (rehearsals). Schema already supports this via `Event.visibility` (`PUBLIC` / `MEMBERS_ONLY`).
+- **At-a-glance cards are a core idea, not noise.** A visitor should understand a group without reading the title: colour = category, city, member count (introverts may prefer small groups). "Calm" means making these few signals clear and consistent while removing everything else that competes with them.
+- **Moderation matters.** Admin taxonomy tools (tag approval/merge) stay — they keep groups findable as content grows. Not a current priority because they already work.
+- **Footer stays, but only with links that lead somewhere real.** No `#` links. One honest About page beats five empty ones.
+- **No placeholder features.** Don't build half-features behind links; hide things until they exist.
 
-### Discovery UI
-- `DiscoverySidebar` — L1 navigation only, expressive hover-to-expand, discovery page only
-- `DiscoveryFilterBar` — L2 chips (multi-select, `?tags=slug1,slug2` OR logic) + search + city + view toggle, inline on discovery page
-- `Sidebar` — group/internal pages only, classic nav style
-- These are intentionally separate components with different visual languages
+## Working rules
 
-### Taxonomy
-- L2 tags use a `CategoryAlias` model for cross-language deduplication (planned — Chunk 15)
-- `slugLv` optional field on `Category` — falls back to `slug` if missing
-- New L2 tags created by users enter as `PENDING_REVIEW`, groups save normally
-- Admin approves, edits, or merges pending tags into existing canonicals
-
-### DM System (Chunk 14)
-- New `DirectMessage` model, Pusher delivery (Option B — decided)
-- `/messages` route exists as placeholder shell
-
-### Profiles
-- `setUsername` action is intentionally separate from `updateProfile` — do not merge
-- DiceBear avatars stored as `avatarSeed` field; customization UI planned (Chunk 17)
-
-### Group Creation
-- `SINGLE_EVENT` group type removed from enum
-- Step 4 defaults `acceptsInvitations: true`; social links moved to Settings only
-- Post-creation redirect goes to the group's public page
-
-### Admin
-- Existing `/admin` page with `/admin/reports` sub-route
-- Admin taxonomy management planned at `/admin/taxonomy` (Chunk 15)
-- Admin group categorization override at `/admin/groups/[groupSlug]/categorization` (Chunk 15)
-
-### URL Routing
-- Translated URL slugs via next-intl `pathnames` config — planned (Chunk 16)
-- Group routes: `/[locale]/[l1Slug]/group/[groupSlug]/`
-
-### Notifications
-- Existing notification system used for all user-facing events
-- Delivery: in-app only (no email for now)
+- Pushing to `main` deploys to ejam.lumm.eu. Before any push: `npm run typecheck`, `npx eslint <changed files>`, `npm run i18n:check`.
+- Simple, well-described items here are suitable for a cheaper model session (e.g. Sonnet). Use Opus for design direction, messaging, and anything that "feels wrong" without a clear cause.
 
 ---
 
-## Backlog
+## Stage 1 — Stop looking broken  ← CURRENT
 
-| Chunk | Title | Notes |
-|---|---|---|
-| **14** | DM System | `DirectMessage` model, Pusher channels, inbox UI. `/messages` placeholder exists. |
-| **15** | L2 Tag Lifecycle + Admin Taxonomy | See full scope below |
-| **16** | Translated URL Slugs | next-intl `pathnames` config, `slugLv` on Category |
-| **17** | Avatar Customization UI | DiceBear toggle groups in `/profile/edit`. `avatarSeed` field exists. |
-| **18** | Rich Text Bio Editor | TipTap in `/profile/edit` |
-| **19** | Notification Preferences UI | Toggles in `/profile/edit` |
-| **20** | Event Waitlist Flow | — |
-| **21** | Mobile Experience Audit | — |
+Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2026-10-08 (logged-out only).
 
----
+- [ ] **1.1 Footer links.** `components/shell/Footer.tsx`: "Discover" and the language link point to `/explore` (404) → use `/discover` / a real locale switch. Remove all `href="#"` links (Help Center, Guidelines, Contact, social icons, tagline link). Keep: Discover, My Groups, Create Group, About, Privacy.
+- [ ] **1.2 About + Privacy pages.** Create simple static `app/[locale]/about` and `app/[locale]/privacy` pages (LV + EN text via `messages/*.json`). The cookie banner's "Privacy Policy" link currently 404s. About = short honest "what this is and why" (see North star).
+- [ ] **1.3 Sign-in heading.** `app/[locale]/auth/signin/page.tsx:37` hardcodes "Ienākt" → translation key.
+- [ ] **1.4 Sign-in return path.** Visiting a protected page (e.g. `/en/create`) logged out lands on sign-in with `callbackUrl` = homepage. Should return to the original page. Also some routes redirect via `/api/auth/signin` and `/messages` via `/[locale]/auth/signin` — unify.
+- [ ] **1.5 Event page translations.** `app/[locale]/[l1Slug]/group/[groupSlug]/events/[eventSlug]/page.tsx` and `components/events/RSVPButtons.tsx`: hardcoded English ("Important Info", "I'M GOING", "Capacity", "About Event", "Add to Google Calendar", "Share event", "Organizer", "Visit community", "Open in maps", "Please be on time…"). Dates must use next-intl formatters (show Latvian dates on `/lv`). Hide "Capacity" when `maxParticipants` is null/0.
+- [ ] **1.6 Raw key `group.noEvents`.** Group Events tab shows the key itself (`events/page.tsx:106`). Fix the namespace/key.
+- [ ] **1.7 Plurals & spacing.** "1members", "3biedri", "2pasākumi" in the group header → space + ICU plural messages (Latvian has its own plural rules: 1 biedrs / 2 biedri / 0 biedru).
+- [ ] **1.8 City names with diacritics.** Cards/headers show "Jurmala", "Cesis". Display names should be "Jūrmala", "Cēsis" (check `lib/constants`; keep slugs ASCII).
+- [ ] **1.9 Page titles.** Layout template is `'%s | Ejam kopā'` but pages also append it → "Ejam kopā | Ejam kopā". Group and event pages should have their own name as title (`generateMetadata`).
+- [ ] **1.10 i18n parity.** `npm run i18n:check` fails: `profile.message`, `shell.footer.about`, `wizard.back`, `wizard.done`, `wizard.next` exist in `lv.json` but not `en.json`.
+- [ ] **1.11 Real 404 for missing groups.** `/en/dancing/group/nonexistent` returns HTTP 200 with a not-found message → call `notFound()`.
+- [ ] **1.12 Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
 
-## Chunk 15 — L2 Tag Lifecycle + Admin Taxonomy
+## Stage 2 — Walk the loop
 
-### Schema changes
-- `Category` — add `status: ACTIVE | PENDING_REVIEW`, `submittedById`, `submittedAt`, `slugLv?`
-- `CategoryAlias` — new model: `(id, categoryId, value, locale?)`
-- `CategoryTranslation` — already exists; admin fills EN + LV at approval time
+Goal: each step of create → find → join → talk works end to end, logged in, on desktop and mobile. User signs in in the browser; agent tests and fixes. Expect messaging to be the fragile part (8 "final fix" PRs in May 2026; `actions/message-actions.ts` and `lib/services/message.service.ts` have the most lint errors).
 
-### New service: `taxonomy.service.ts`
-- `searchL2(query, l1Id)` — fuzzy search across `CategoryTranslation.title` + `CategoryAlias.value`
-- `createPendingL2(name, l1Id, submittedById)` — creates `PENDING_REVIEW` category
-- `approveL2(id, { nameEn, nameLv, slugEn, slugLv })` — sets ACTIVE, upserts translations
-- `mergeL2(pendingId, canonicalId)` — migrates all group tag relations, creates alias, deletes pending (atomic)
-- `createAlias(value, canonicalId, locale?)` — manual alias creation
-- `adminUpdateGroupTags(groupId, tagIds)` — admin override for group categorization
+- [ ] 2.1 Create a group (wizard), both locales
+- [ ] 2.2 Find it via discovery (category, city, search)
+- [ ] 2.3 Join as a second user (public + approval-required groups)
+- [ ] 2.4 Talk: group inquiry / DM between members, notifications
+- [ ] 2.5 Events: create public + members-only event, RSVP, check visibility rules
 
-### Updated components
-- `TagPicker.tsx`, `TaxonomyStep.tsx`, `CategorizationSection.tsx` — fuzzy search with "create pending" fallback; pending tags show a subtle unreviewed badge
-- `CategorizationSection.tsx` — admin role unlocks editing regardless of group ownership
+## Stage 3 — Make it calm
 
-### New routes
-- `/admin/taxonomy` — Replaced tab-based design with a full-width Taxonomy Tree + Slide-over panel interface:
-  - **Pending Inbox** — Collapsible strip for pending tags with quick approve/reject/merge actions.
-  - **Tree View** — Visual representation of L1 and active L2 categories with bulk selection.
-  - **Floating Action Bar** — Gmail-style bottom bar for bulk Approve, Merge, and Delete.
-  - **Slide-over Panel** — Unified contextual editor with interactive cross-navigation.
-- `/admin/groups/[groupSlug]/categorization` — admin override categorization editor
+Goal: content first. One screen at a time; agree direction with the user before each.
 
-### Notifications
-- On merge/replace: group owner notified via existing notification system
+- [ ] 3.1 Discovery cards — sharpen at-a-glance signals (category colour, city, size), drop the rest; fix missing-image grey cards; mobile filter bar overflow
+- [ ] 3.2 Group page
+- [ ] 3.3 Event page — currently stacks full group header + oversized hero with unreadable title
+- [ ] 3.4 Header / navigation / footer
 
-### Admin nav
-- Extend `/admin` with Taxonomy link alongside Reports
+## Stage 4 — Invite real people
 
-### Suggested agent execution order
-1. [x] Schema migration
-2. [x] `taxonomy.service.ts`
-3. [x] `taxonomy-actions.ts` updates
-4. [x] `TagPicker` / `TaxonomyStep` / `CategorizationSection` fuzzy search + pending flow
-5. [x] `/admin/taxonomy` page (Tree + Slide-over + Inbox)
-6. [x] Sidebar Navigation (L1/L2 clicking)
-7. [x] Bulk Actions (Checkboxes + Floating Bar + Merge Sidebar)
-8. [ ] `/admin/groups/[groupSlug]/categorization` override route
-9. [x] Notifications
-10. [x] Translations (EN + LV parity)
+- [ ] 4.1 User creates their own real group (e.g. gym in Jelgava) and invites a few people; collect what confuses them
 
 ---
 
-## Lint Baseline
+## Known code debt (fix when touching nearby code, not as a project)
 
-| Date | TSC | ESLint Errors | ESLint Warnings |
-|---|---|---|---|
-| 2026-03-05 (post-audit) | ✅ 0 | 85 | 100 |
-| 2026-03-05 (post-lint cleanup) | ✅ 0 | 45 | 102 |
-
-Remaining 45 errors are in unrelated/older modules. Not regressions.
-
----
-
-## Open Items
-
-| ID | Description |
-|---|---|
-| P2 | Notification preferences UI — `/profile/edit` missing toggles (Chunk 19) |
-| P3 | Avatar customization — `avatarSeed` field exists, UI not exposed (Chunk 17) |
+- ESLint (2026-10-08): 88 errors / 138 warnings — mostly `no-explicit-any` (59) and `no-html-link-for-pages` (18 raw `<a>` causing full reloads).
+- `docs/audit_report.md` (2026-03) items are unverified: Service Law violations in some actions, orphaned `app/[locale]/groups/` route, accent colour prop-drilling/inline styles, five modals mounted in `GroupHeader`.
+- Unfinished from the taxonomy work: `/admin/groups/[groupSlug]/categorization` override route.
