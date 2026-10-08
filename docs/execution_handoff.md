@@ -43,7 +43,7 @@ Every task is judged by whether it makes this loop work better. If it doesn't, i
 - [x] **0.1 Local environment** (done 2026-10-08). Start of every session: Docker Desktop on → `npm run db:up` → `npm run dev` → http://localhost:3000. DB data persists in the `db_data` volume. Local test accounts: see `DEV_PASSWORDS` in `lib/auth.ts` (e.g. `member@local`, `admin@local`); they only work outside production. Docker Desktop is a per-user install: if `docker` isn't on PATH in an agent shell, use `~/AppData/Local/Programs/DockerDesktop/resources/bin`.
 - [x] **0.2 Security: dev passwords worked in production** (fixed and deployed 2026-10-08; user's own real account promoted to ADMIN first). `lib/auth.ts` accepted the hardcoded `DEV_PASSWORDS` (e.g. `admin@local`/`admin`, an ADMIN account) on the live site, and the live DB was seeded via `.github/workflows/seed.yml`. Fixed locally (guarded by `NODE_ENV`); deploy ASAP after confirming the user has another way to sign in to production (own account with a real password, or Google/GitHub). Afterwards consider whether production should hold seed accounts at all.
 
-## Stage 1 — Stop looking broken  ← CURRENT
+## Stage 1 — Stop looking broken  (done, deployed 2026-10-08)
 
 Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2026-10-08 (logged-out only). Item 1.10 first so the i18n check is green before other translation work.
 
@@ -79,7 +79,20 @@ Noticed, not changed:
 - "Please be on time…" on events is English seed data, not code.
 - Local DB only: `admin@local` now has username `admin_local` (set while testing onboarding return path).
 
-## Stage 2 — Walk the loop
+## Next session (Sonnet) — planned 2026-10-08
+
+Scope, in order: **2.0b → 2.1 → 2.2 → 2.3.** Stop after 2.3 even if time is left (2.4 messaging is the fragile part and gets its own session). One commit per item, never push; the user pushes after a short Opus review at the end.
+
+Session rules learned on 2026-10-08:
+- Start the dev server only via the browser pane (`.claude/launch.json`, config "dev"). Before starting, make sure nothing else listens on :3000 and that no other Claude session has a browser pane open on localhost — two open dev clients make each other reload endlessly.
+- Don't run `npm run build` while the dev server is running; stop it first (a build alongside dev left the watcher stale and served old translations).
+- Switching between **local seed accounts** in the browser pane (sign out / sign in as `owner@local`, `member@local`, …) is fine on localhost — that's how 2.3 needs two users. Never do it on ejam.lumm.eu.
+- Most seed accounts have no username, so they land on `/onboarding/username` after sign-in (now pre-filled) — that's expected; it also covers the open 2.0 check below.
+- 2.1–2.3 are test-and-fix items: walk the flow in both locales (mobile + desktop), fix what's broken if small, and **list** anything that needs a product decision instead of fixing it.
+
+Open from 2.0 for the user: one real sign-up on production to confirm the end-to-end flow.
+
+## Stage 2 — Walk the loop  ← CURRENT
 
 Goal: each step of create → find → join → talk works end to end, logged in, on desktop and mobile. User signs in in the browser; agent tests and fixes. Expect messaging to be the fragile part (8 "final fix" PRs in May 2026; `actions/message-actions.ts` and `lib/services/message.service.ts` have the most lint errors).
 
@@ -94,6 +107,13 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - **Admin action log** (who, what, when, reason), viewable in `/admin`; also covers the existing admin power to edit any group (`isAppAdmin` in `group.service.ts`).
   - Then hide the three junk groups from 1.12 via the UI.
   - Later, when someone else moderates: add a `MODERATOR` role (hide groups, handle reports); `ADMIN` keeps role management, taxonomy and the log. Not now — no half-features.
+  - **Spec (follow it; stop and ask if it doesn't fit):**
+    - One migration `add_group_moderation`: `Group.hiddenAt DateTime?`, `Group.hiddenReason String?`, `Group.hiddenById String?` (optional relation to `User`); new model `AdminAction { id, adminId → User, action String (GROUP_HIDE | GROUP_RESTORE | GROUP_EDIT), targetType String, targetId String, reason String?, createdAt }`.
+    - New `lib/services/moderation.service.ts`: `hideGroup(groupId, adminId, reason)`, `restoreGroup(groupId, adminId)`, `listActions(limit)`. Service checks `User.role === 'ADMIN'`, writes the `AdminAction` row and notifies the group owner(s) via `NotificationService.createNotification` (reason in the message, translated title key). Reason: required, 5–500 chars, Zod schema in `lib/validations`.
+    - Hidden groups: filter `hiddenAt: null` in every public group query — currently ~14 `prisma.group.find*/count` calls in `group.service.ts`, `discovery.service.ts`, `event.service.ts`, `admin.service.ts` (grep them; decide per call). Events of hidden groups disappear with them. Group page: non-admins get `notFound()`; admins see a banner ("Hidden: <reason>") with a Restore button.
+    - UI: on the group page, admins (not group owners) get "Hide group" in the existing settings/menu area → small modal with reason textarea. `/admin` gets a "Moderation log" list (latest 50 actions, admin name, action, target link, reason, date).
+    - `updateGroup` by an app admin who is not a group admin/owner also writes a `GROUP_EDIT` action.
+    - Done when: hide → group gone from discovery/search for a normal user (404 on its URL), owner has a notification, log shows it; restore brings it back. Then the **user** hides the three junk groups on production.
 - [ ] 2.1 Create a group (wizard), both locales
 - [ ] 2.2 Find it via discovery (category, city, search)
 - [ ] 2.3 Join as a second user (public + approval-required groups)
