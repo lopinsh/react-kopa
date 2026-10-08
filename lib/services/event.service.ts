@@ -50,6 +50,33 @@ type EventWithGroup = Prisma.EventGetPayload<{
     include: { group: { select: { id: true; name: true; slug: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
 }>;
 
+/** One discovery result: just what the cards need (no instructions, no attendee lists). */
+export interface DiscoverableEvent {
+    id: string;
+    title: string;
+    slug: string;
+    startDate: Date;
+    location: string | null;
+    bannerImage: string | null;
+    joinMode: EventJoinMode;
+    isFull: boolean;
+    isMembersOnly: boolean;
+    /** GOING attendees — "approved" for Request-to-join events. */
+    goingCount: number;
+    group: {
+        name: string;
+        slug: string;
+        city: string | null;
+        bannerImage: string | null;
+        accentColor: string | null;
+        category: {
+            slug: string;
+            level: number;
+            parent: { slug: string; parent: { slug: string } | null } | null;
+        };
+    };
+}
+
 export class EventService {
     /** Role of the user in the group plus site-admin flag. */
     private static async getAccess(groupId: string, userId?: string) {
@@ -582,84 +609,90 @@ export class EventService {
 
     /**
      * Fetch events for global discovery with filters.
-     * Cached for 60 seconds to handle rapid filter switching.
+     * Public events come from a 60-second shared cache (the key has no user in it).
+     * Members-only events of the viewer's own groups are fetched uncached and merged in,
+     * so one user's members-only events can never reach another user's results.
      */
     static async getDiscoverableEvents(filters: {
         category?: string;
         city?: string;
         search?: string;
         status?: 'upcoming' | 'past';
-    }, locale: string) {
+    }, locale: string, userId?: string): Promise<DiscoverableEvent[]> {
         const now = new Date();
         const { category, city, search, status } = filters;
 
-        const rows = await unstable_cache(
-            async (fCity, fCategory, fSearch, fStatus) => {
-                return await prisma.event.findMany({
-                    where: {
-                        visibility: 'PUBLIC',
-                        AND: [{ group: { hiddenAt: null } }],
-                        startDate: fStatus === 'past' ? { lt: now } : { gte: now },
-                        ...(fCity && {
-                            group: {
-                                city: fCity
-                            }
-                        }),
-                        ...(fCategory && {
-                            group: {
-                                OR: [
-                                    { category: { slug: fCategory } },
-                                    { category: { parent: { slug: fCategory } } },
-                                    { category: { parent: { parent: { slug: fCategory } } } }
-                                ]
-                            }
-                        }),
-                        ...(fSearch && {
-                            OR: [
-                                { title: { contains: fSearch, mode: 'insensitive' } },
-                                { description: { contains: fSearch, mode: 'insensitive' } },
-                                {
-                                    group: {
-                                        OR: [
-                                            { name: { contains: fSearch, mode: 'insensitive' } },
-                                            { description: { contains: fSearch, mode: 'insensitive' } }
-                                        ]
-                                    }
+        const buildWhere = (fCity?: string, fCategory?: string, fSearch?: string, fStatus?: string): Prisma.EventWhereInput => {
+            const groupFilters: Prisma.GroupWhereInput[] = [{ hiddenAt: null }];
+            if (fCity) groupFilters.push({ city: fCity });
+            if (fCategory) {
+                groupFilters.push({
+                    OR: [
+                        { category: { slug: fCategory } },
+                        { category: { parent: { slug: fCategory } } },
+                        { category: { parent: { parent: { slug: fCategory } } } }
+                    ]
+                });
+            }
+            return {
+                startDate: fStatus === 'past' ? { lt: now } : { gte: now },
+                AND: [
+                    { group: { AND: groupFilters } },
+                    ...(fSearch ? [{
+                        OR: [
+                            { title: { contains: fSearch, mode: 'insensitive' as const } },
+                            { description: { contains: fSearch, mode: 'insensitive' as const } },
+                            {
+                                group: {
+                                    OR: [
+                                        { name: { contains: fSearch, mode: 'insensitive' as const } },
+                                        { description: { contains: fSearch, mode: 'insensitive' as const } }
+                                    ]
                                 }
-                            ]
-                        })
-                    },
-                    include: {
-                        group: {
-                            select: {
-                                name: true,
-                                slug: true,
-                                city: true,
-                                bannerImage: true,
-                                accentColor: true,
-                                category: {
-                                    select: {
-                                        slug: true,
-                                        level: true,
-                                        parent: {
-                                            select: {
-                                                slug: true,
-                                                parent: { select: { slug: true } }
-                                            }
-                                        }
-                                    }
+                            }
+                        ]
+                    }] : [])
+                ]
+            };
+        };
+
+        const include = {
+            group: {
+                select: {
+                    name: true,
+                    slug: true,
+                    city: true,
+                    bannerImage: true,
+                    accentColor: true,
+                    category: {
+                        select: {
+                            slug: true,
+                            level: true,
+                            parent: {
+                                select: {
+                                    slug: true,
+                                    parent: { select: { slug: true } }
                                 }
-                            } as Prisma.GroupSelect
-                        },
-                        _count: {
-                            select: {
-                                attendees: { where: { status: 'GOING' } }
                             }
                         }
-                    },
-                    orderBy: {
-                        startDate: fStatus === 'past' ? 'desc' : 'asc'
                     }
+                }
+            },
+            _count: {
+                select: {
+                    attendees: { where: { status: 'GOING' as const } }
+                }
+            }
+        } satisfies Prisma.EventInclude;
+
+        const orderBy = { startDate: status === 'past' ? 'desc' : 'asc' } as const;
+
+        const loadPublic = unstable_cache(
+            async (fCity?: string, fCategory?: string, fSearch?: string, fStatus?: string) => {
+                return await prisma.event.findMany({
+                    where: { AND: [buildWhere(fCity, fCategory, fSearch, fStatus), { visibility: 'PUBLIC' }] },
+                    include,
+                    orderBy
                 });
             },
             [`events-discovery-${locale}-${city}-${category}-${search}-${status}`],
@@ -667,9 +700,43 @@ export class EventService {
                 revalidate: 60,
                 tags: ['events']
             }
-        )(city, category, search, status);
+        );
 
-        // Discovery cards never need instructions; they may be restricted on Request-to-join events.
-        return rows.map(e => ({ ...e, instructions: null }));
+        const [publicRows, memberRows] = await Promise.all([
+            loadPublic(city, category, search, status),
+            userId
+                ? prisma.event.findMany({
+                    where: {
+                        AND: [
+                            buildWhere(city, category, search, status),
+                            {
+                                visibility: 'MEMBERS_ONLY',
+                                group: { members: { some: { userId, role: { not: 'PENDING' } } } }
+                            }
+                        ]
+                    },
+                    include,
+                    orderBy
+                })
+                : Promise.resolve([])
+        ]);
+
+        const direction = status === 'past' ? -1 : 1;
+        // Cached rows come back with dates as strings in some Next versions; normalise before sorting.
+        return [...publicRows, ...memberRows]
+            .map(e => ({
+                id: e.id,
+                title: e.title,
+                slug: e.slug,
+                startDate: new Date(e.startDate),
+                location: e.location,
+                bannerImage: e.bannerImage,
+                joinMode: e.joinMode,
+                isFull: e.isFull,
+                isMembersOnly: e.visibility === 'MEMBERS_ONLY',
+                goingCount: e._count.attendees,
+                group: e.group
+            }))
+            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()));
     }
 }

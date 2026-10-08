@@ -11,6 +11,7 @@ import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
 import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
+import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
 import { Users, Search, Plus, Calendar } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -56,6 +57,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const currentTab = tab === 'events' ? 'events' : 'groups';
     const currentView = view === 'list' ? 'list' : 'grid';
     const t = await getTranslations('discovery');
+    const session = await auth();
 
     const rawLimit = Math.max(12, parseInt(limit as string || '12'));
     const take = rawLimit;
@@ -103,7 +105,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                 city,
                 search: q,
                 status: 'upcoming'
-            }, locale)
+            }, locale, session?.user?.id)
             : Promise.resolve([]),
         getContextualTaxonomy(effectiveCategoryId || null, locale)
     ]);
@@ -197,7 +199,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             currentView === 'grid' ? (
                                 <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                                     {discoverableEvents.map((event) => {
-                                        const group = (event as any).group;
+                                        const group = event.group;
                                         let eventL1Slug = group.category.slug;
                                         if (group.category.level === 3 && group.category.parent?.parent) {
                                             eventL1Slug = group.category.parent.parent.slug;
@@ -208,7 +210,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                         return (
                                             <EventCard
                                                 key={event.id}
-                                                event={event as any}
+                                                event={event}
                                                 locale={locale}
                                                 l1Slug={eventL1Slug}
                                                 groupSlug={group.slug}
@@ -220,7 +222,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             ) : (
                                 <div className="flex flex-col gap-3">
                                     {discoverableEvents.map((event) => {
-                                        const group = (event as any).group;
+                                        const group = event.group;
                                         let eventL1Slug = group.category.slug;
                                         if (group.category.level === 3 && group.category.parent?.parent) {
                                             eventL1Slug = group.category.parent.parent.slug;
@@ -231,7 +233,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                         return (
                                             <ListViewEventCard
                                                 key={event.id}
-                                                event={event as any}
+                                                event={event}
                                                 locale={locale}
                                                 l1Slug={eventL1Slug}
                                                 groupSlug={group.slug}

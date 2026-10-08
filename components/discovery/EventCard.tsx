@@ -1,27 +1,13 @@
-import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowRight, Lock, UserCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
+import type { DiscoverableEvent } from '@/lib/services/event.service';
 
 type Props = {
-    event: {
-        id: string;
-        title: string;
-        slug: string;
-        startDate: Date;
-        location: string | null;
-        bannerImage: string | null;
-        group: {
-            name: string;
-            city: string | null;
-            bannerImage: string | null;
-        };
-        _count: {
-            attendees: number;
-        };
-    };
+    event: DiscoverableEvent;
     locale: string;
     l1Slug: string;
     groupSlug: string;
@@ -30,6 +16,8 @@ type Props = {
 
 export default function EventCard({ event, locale, l1Slug, groupSlug, accentColor = '#6366f1' }: Props) {
     const tCities = useTranslations('cities');
+    const t = useTranslations('event');
+    const isRequest = event.joinMode === 'REQUEST';
     const startDate = new Date(event.startDate);
 
     return (
@@ -66,20 +54,37 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                         <span className="h-1 w-1 rounded-full bg-[var(--accent)]" style={{ backgroundColor: accentColor }} />
                         {event.group.name}
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as any}>
+                    <h3 className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as React.CSSProperties}>
                         {event.title}
                     </h3>
+                    {(event.isMembersOnly || isRequest || event.isFull) && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {event.isMembersOnly && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
+                                    <Lock className="h-3 w-3" />{t('membersOnly')}
+                                </span>
+                            )}
+                            {isRequest && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
+                                    <UserCheck className="h-3 w-3" />{t('badgeRequest')}
+                                </span>
+                            )}
+                            {event.isFull && (
+                                <span className="inline-flex items-center rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white" style={{ backgroundColor: accentColor }}>{t('full')}</span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 <div className="mt-auto space-y-2 sm:space-y-3 pt-2">
                     <div className="flex items-center justify-between text-xs text-foreground-muted">
-                        <div className="flex items-center gap-1.5">
-                            <MapPin className="h-3.5 w-3.5" />
-                            <span className="truncate max-w-[120px]">{event.location || cityLabel(tCities, event.group.city)}</span>
+                        <div className="flex min-w-0 items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 shrink-0" />
+                            <span className="truncate">{event.location || cityLabel(tCities, event.group.city)}</span>
                         </div>
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex shrink-0 items-center gap-1.5 whitespace-nowrap pl-2">
                             <Users className="h-3.5 w-3.5" />
-                            <span>{event._count.attendees} going</span>
+                            <span>{isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount })}</span>
                         </div>
                     </div>
 
@@ -88,7 +93,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                             <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
                             {format(startDate, 'HH:mm')}
                         </div>
-                        <div className="rounded-full bg-surface-elevated p-2 text-foreground transition-all group-hover:bg-[var(--accent)] group-hover:text-white" style={{ '--accent': accentColor } as any}>
+                        <div className="rounded-full bg-surface-elevated p-2 text-foreground transition-all group-hover:bg-[var(--accent)] group-hover:text-white" style={{ '--accent': accentColor } as React.CSSProperties}>
                             <ArrowRight className="h-4 w-4" />
                         </div>
                     </div>

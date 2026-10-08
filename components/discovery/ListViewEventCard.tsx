@@ -1,24 +1,12 @@
 import Link from 'next/link';
-import { Users, MapPin, Calendar } from 'lucide-react';
+import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
 import { format } from 'date-fns';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
+import type { DiscoverableEvent } from '@/lib/services/event.service';
 
 type Props = {
-    event: {
-        id: string;
-        title: string;
-        slug: string;
-        startDate: Date;
-        location: string | null;
-        group: {
-            name: string;
-            city: string | null;
-        };
-        _count: {
-            attendees: number;
-        };
-    };
+    event: DiscoverableEvent;
     locale: string;
     l1Slug: string;
     groupSlug: string;
@@ -27,6 +15,8 @@ type Props = {
 
 export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, accentColor = '#6366f1' }: Props) {
     const tCities = useTranslations('cities');
+    const t = useTranslations('event');
+    const isRequest = event.joinMode === 'REQUEST';
     const startDate = new Date(event.startDate);
 
     return (
@@ -46,6 +36,16 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                 <h3 className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
                     {event.title}
                 </h3>
+                {event.isMembersOnly && <Lock className="h-3.5 w-3.5 shrink-0 text-foreground-muted" aria-label={t('membersOnly')} />}
+                {isRequest && (
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
+                        <UserCheck className="h-3 w-3" />
+                        <span className="hidden sm:inline">{t('badgeRequest')}</span>
+                    </span>
+                )}
+                {event.isFull && (
+                    <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white">{t('full')}</span>
+                )}
                 <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
                     <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm">
                         {event.group.name}
@@ -63,9 +63,9 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                     <MapPin className="h-3.5 w-3.5" />
                     {event.location || cityLabel(tCities, event.group.city)}
                 </div>
-                <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
+                <div className="flex items-center gap-1.5 justify-end whitespace-nowrap font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />
-                    {event._count.attendees}
+                    {isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount })}
                 </div>
             </div>
         </Link>
