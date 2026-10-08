@@ -82,6 +82,7 @@ export default async function GroupEventsPage({
                             key={event.id}
                             event={{
                                 id: event.id,
+                                joinMode: event.joinMode,
                                 title: event.title,
                                 description: event.description,
                                 startDate: event.startDate,

@@ -26,6 +26,8 @@ export interface EventViewer {
     canManage: boolean;
     /** Instructions on Request-to-join events are shown only to approved people and organisers. */
     canSeeInstructions: boolean;
+    /** True when instructions exist but are hidden from this viewer. */
+    instructionsLocked: boolean;
     myStatus: AttendanceStatus | null;
     goingCount: number;
     waitlistCount: number;
@@ -184,6 +186,7 @@ export class EventService {
             canSee: true,
             canManage,
             canSeeInstructions,
+            instructionsLocked: !canSeeInstructions && !!event.instructions,
             myStatus,
             goingCount: event.attendees.filter(a => a.status === 'GOING').length,
             waitlistCount: event.attendees.filter(a => a.status === 'WAITLISTED').length
@@ -380,6 +383,7 @@ export class EventService {
                     canSee: true,
                     canManage,
                     canSeeInstructions: EventService.instructionsVisible(e.joinMode, canManage, status),
+                    instructionsLocked: !EventService.instructionsVisible(e.joinMode, canManage, status) && !!e.instructions,
                     myStatus: status,
                     goingCount: e._count.attendees,
                     waitlistCount: canManage ? (waitlist.get(e.id) ?? 0) : 0
@@ -447,11 +451,6 @@ export class EventService {
         if (!loaded.event) return { success: false, error: loaded.error };
         const { event } = loaded;
         if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
-
-        // Taking part in a group's event needs group membership.
-        if (!(await EventService.canSeeMembersOnly(event.groupId, userId))) {
-            return { success: false, error: 'MEMBERS_ONLY' };
-        }
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
         const context = await EventService.buildContext(event);

@@ -1,0 +1,141 @@
+'use client';
+
+import { useState, useTransition } from 'react';
+import { CheckCircle2, Clock, Loader2, ListPlus, Send } from 'lucide-react';
+import { clsx } from 'clsx';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { setAttendance, requestToJoin, cancelAttendance } from '@/actions/event-actions';
+import type { EventJoinModeValue } from '@/lib/constants';
+import type { AttendanceStatus } from '@prisma/client';
+
+type Props = {
+    eventId: string;
+    joinMode: EventJoinModeValue;
+    isFull: boolean;
+    myStatus: AttendanceStatus | null;
+    locale: string;
+    /** Set for logged-out visitors: shows a sign-in link instead of the buttons. */
+    signInHref?: string;
+    /** Compact rows (Events tab) hide the explanatory notes. */
+    compact?: boolean;
+};
+
+const PRIMARY = 'flex w-full items-center justify-center gap-2 rounded-2xl bg-[color:var(--accent)] px-4 py-3.5 text-sm font-black uppercase tracking-wide text-white shadow-lg transition-all active:scale-95 disabled:opacity-60';
+const NEUTRAL = 'flex w-full items-center justify-center gap-2 rounded-2xl border border-border bg-surface-elevated px-4 py-3.5 text-sm font-black uppercase tracking-wide text-foreground-muted';
+const LINK_BUTTON = 'text-xs font-semibold text-foreground-muted underline-offset-2 hover:text-foreground hover:underline disabled:opacity-60';
+
+export default function EventParticipation({ eventId, joinMode, isFull, myStatus, locale, signInHref, compact = false }: Props) {
+    const t = useTranslations('event');
+    const tErrors = useTranslations('errors');
+    const router = useRouter();
+    const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+
+    function run(action: () => Promise<{ success: boolean; error?: string }>) {
+        setError(null);
+        startTransition(async () => {
+            const result = await action();
+            if (!result.success) setError(result.error ?? 'ACTION_FAILED');
+            // Also refresh on errors: a stale page (e.g. the event just became Full) shows the right state afterwards.
+            router.refresh();
+        });
+    }
+
+    if (signInHref) {
+        return (
+            <Link href={signInHref} className={PRIMARY}>
+                {t('signInToRsvp')}
+            </Link>
+        );
+    }
+
+    const spinner = isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : null;
+    const cancel = (label: string) => (
+        <button type="button" className={LINK_BUTTON} disabled={isPending} onClick={() => run(() => cancelAttendance(eventId, locale))}>
+            {label}
+        </button>
+    );
+
+    let main: React.ReactNode;
+    let note: string | null = null;
+    let secondary: React.ReactNode = null;
+
+    if (joinMode === 'OPEN') {
+        if (myStatus === 'GOING') {
+            main = (
+                <div className={clsx(PRIMARY, 'cursor-default')}>
+                    <CheckCircle2 className="h-4 w-4" />
+                    {t('goingDone')}
+                </div>
+            );
+            secondary = cancel(t('cancelGoing'));
+        } else {
+            main = (
+                <button type="button" className={PRIMARY} disabled={isPending} onClick={() => run(() => setAttendance(eventId, 'GOING', locale))}>
+                    {spinner ?? <CheckCircle2 className="h-4 w-4" />}
+                    {t('going')}
+                </button>
+            );
+            note = t('openNote');
+        }
+    } else if (myStatus === 'GOING') {
+        main = (
+            <div className={clsx(PRIMARY, 'cursor-default')}>
+                <CheckCircle2 className="h-4 w-4" />
+                {t('approved')}
+            </div>
+        );
+        secondary = cancel(t('leaveEvent'));
+    } else if (myStatus === 'PENDING') {
+        main = (
+            <div className={NEUTRAL}>
+                <Send className="h-4 w-4" />
+                {t('requestSent')}
+            </div>
+        );
+        secondary = cancel(t('withdrawRequest'));
+    } else if (myStatus === 'DECLINED') {
+        main = <div className={NEUTRAL}>{t('declined')}</div>;
+    } else if (myStatus === 'WAITLISTED' && isFull) {
+        main = (
+            <div className={NEUTRAL}>
+                <Clock className="h-4 w-4" />
+                {t('onWaitlist')}
+            </div>
+        );
+        note = t('waitlistNote');
+        secondary = cancel(t('leaveWaitlist'));
+    } else if (isFull) {
+        main = (
+            <button type="button" className={PRIMARY} disabled={isPending} onClick={() => run(() => requestToJoin(eventId, true, locale))}>
+                {spinner ?? <ListPlus className="h-4 w-4" />}
+                {t('joinWaitlist')}
+            </button>
+        );
+        note = t('fullNote');
+    } else {
+        // Not asked yet, or waitlisted before the organiser switched Full off (asks again).
+        main = (
+            <button type="button" className={PRIMARY} disabled={isPending} onClick={() => run(() => requestToJoin(eventId, false, locale))}>
+                {spinner ?? <Send className="h-4 w-4" />}
+                {t('requestToJoin')}
+            </button>
+        );
+        note = t('requestNote');
+    }
+
+    return (
+        <div className="flex flex-col items-stretch gap-2">
+            {main}
+            {!compact && note && <p className="text-center text-xs text-foreground-muted">{note}</p>}
+            {secondary && <div className="text-center">{secondary}</div>}
+            {error && (
+                <p role="alert" className="text-sm text-red-500">
+                    {tErrors(error as 'ACTION_FAILED')}
+                </p>
+            )}
+        </div>
+    );
+}

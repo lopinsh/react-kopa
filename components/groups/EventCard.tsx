@@ -15,6 +15,7 @@ import Image from 'next/image';
 type Props = {
     event: {
         id: string;
+        joinMode: 'OPEN' | 'REQUEST';
         title: string;
         description: string | null;
         startDate: Date;
@@ -184,6 +185,14 @@ export default function EventCard({ event, locale, href }: Props) {
             }
 
             <div className="mt-auto flex items-center gap-2">
+                {event.joinMode === 'REQUEST' ? (
+                    <Link
+                        href={href}
+                        className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-surface-elevated py-3 text-sm font-bold text-foreground shadow-card transition-all hover:bg-[var(--accent)] hover:text-white"
+                    >
+                        {tEvent('requestToJoin')}
+                    </Link>
+                ) : (
                 <button
                     onClick={handleRSVP}
                     disabled={isPending}
@@ -205,6 +214,7 @@ export default function EventCard({ event, locale, href }: Props) {
                         t('attendButton')
                     )}
                 </button>
+                )}
 
                 <Link
                     href={href}

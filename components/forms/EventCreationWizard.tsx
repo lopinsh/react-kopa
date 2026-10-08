@@ -18,12 +18,13 @@ import {
     Eye,
     Image as ImageIcon,
     HelpCircle,
+    UserCheck,
 } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent } from '@/actions/event-actions';
-import { EVENT_VISIBILITY, type EventVisibility } from '@/lib/constants';
+import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 
 const STEP_SCHEMAS = [0, 1] as const;
 type StepIndex = (typeof STEP_SCHEMAS)[number];
@@ -55,8 +56,9 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
             endDate: '',
             maxParticipants: undefined,
             visibility: EVENT_VISIBILITY[0],
+            joinMode: EVENT_JOIN_MODES[0],
             isRecurring: false,
-            recurrencePattern: '',
+            recurrencePattern: null,
             bannerImage: '',
             instructions: '',
         },
@@ -67,7 +69,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
 
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['title', 'slug', 'startDate', 'endDate', 'location']);
-        if (s === 1) return trigger(['visibility', 'maxParticipants']);
+        if (s === 1) return trigger(['visibility', 'joinMode', 'maxParticipants']);
         return true;
     }
 
@@ -207,18 +209,6 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                             </div>
 
-                            <div>
-                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                                    <HelpCircle className="h-3.5 w-3.5 text-foreground-muted" />
-                                    {t('fieldInstructions')}
-                                </label>
-                                <RichTextEditor
-                                    value={watch('instructions') || ''}
-                                    onChange={(val) => setValue('instructions', val)}
-                                    placeholder={t('fieldInstructionsPlaceholder')}
-                                />
-                            </div>
-
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
@@ -269,58 +259,12 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 />
                                 {errors.location && <p className="mt-1 text-xs text-red-500">{t(errors.location.message as 'INVALID_URL')}</p>}
                             </div>
-
-                            <div className="pt-2">
-                                <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-border bg-background p-4 transition-all hover:bg-surface-elevated/50">
-                                    <input
-                                        type="checkbox"
-                                        {...register('isRecurring')}
-                                        className="h-4 w-4 rounded border-border text-[var(--accent)] focus:ring-[var(--accent)]"
-                                    />
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-foreground">{t('recurringEvent')}</span>
-                                        <span className="text-xs text-foreground-muted">{t('recurringEventDesc')}</span>
-                                    </div>
-                                </label>
-                            </div>
-
-                            {watch('isRecurring') && (
-                                <div className="animate-in fade-in slide-in-from-top-2 duration-200">
-                                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                                        <Loader2 className="h-3.5 w-3.5 text-foreground-muted" />
-                                        {t('recurrencePattern')}
-                                    </label>
-                                    <input
-                                        type="text"
-                                        {...register('recurrencePattern')}
-                                        placeholder={t('recurrencePatternPlaceholder')}
-                                        className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus:border-[var(--accent)] focus:outline-none"
-                                    />
-                                </div>
-                            )}
                         </div>
                     )}
 
                     {/* Step 2: Permissions */}
                     {step === 1 && (
                         <div className="space-y-6">
-                            <div>
-                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                                    <Users className="h-3.5 w-3.5 text-foreground-muted" />
-                                    {t('fieldMaxParticipants')}
-                                </label>
-                                <input
-                                    type="number"
-                                    {...register('maxParticipants', { setValueAs: (v) => (v === '' || v == null ? null : Number(v)) })}
-                                    placeholder={t('fieldMaxParticipantsPlaceholder')}
-                                    className={clsx(
-                                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
-                                    )}
-                                />
-                                {errors.maxParticipants && <p className="mt-1 text-xs text-red-500">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
-                            </div>
-
                             <div className="space-y-3">
                                 <label className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                                     <Eye className="h-3.5 w-3.5 text-foreground-muted" />
@@ -347,6 +291,69 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         </button>
                                     );
                                 })}
+                            </div>
+
+                            <div className="space-y-3">
+                                <label className="flex items-center gap-1.5 text-sm font-medium text-foreground">
+                                    <UserCheck className="h-3.5 w-3.5 text-foreground-muted" />
+                                    {t('fieldJoinMode')}
+                                </label>
+                                {[
+                                    { val: EVENT_JOIN_MODES[0], key: 'joinOpen' as const, desc: 'joinOpenDesc' as const },
+                                    { val: EVENT_JOIN_MODES[1], key: 'joinRequest' as const, desc: 'joinRequestDesc' as const }
+                                ].map(({ val, key, desc }) => {
+                                    const isSelected = watch('joinMode') === val;
+                                    return (
+                                        <button
+                                            key={val}
+                                            type="button"
+                                            onClick={() => setValue('joinMode', val as EventJoinModeValue)}
+                                            aria-pressed={isSelected}
+                                            className={clsx(
+                                                'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
+                                                isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                                            )}
+                                            style={isSelected ? { borderColor: accentColor, backgroundColor: `${accentColor}10` } : undefined}
+                                        >
+                                            <span className="font-semibold">{t(key)}</span>
+                                            <span className="text-xs text-foreground-muted">{t(desc)}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <div>
+                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                                    <Users className="h-3.5 w-3.5 text-foreground-muted" />
+                                    {t('fieldMaxParticipants')}
+                                </label>
+                                <input
+                                    type="number"
+                                    {...register('maxParticipants', { setValueAs: (v) => (v === '' || v == null ? null : Number(v)) })}
+                                    placeholder={t('fieldMaxParticipantsPlaceholder')}
+                                    className={clsx(
+                                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
+                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                    )}
+                                />
+                                <p className="mt-1 text-xs text-foreground-muted">{t('fieldMaxParticipantsHint')}</p>
+                                {errors.maxParticipants && <p className="mt-1 text-xs text-red-500">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
+                            </div>
+
+
+                            <div>
+                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                                    <HelpCircle className="h-3.5 w-3.5 text-foreground-muted" />
+                                    {t('fieldInstructions')}
+                                </label>
+                                <p className="mb-1.5 text-xs text-foreground-muted">
+                                    {watch('joinMode') === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
+                                </p>
+                                <RichTextEditor
+                                    value={watch('instructions') || ''}
+                                    onChange={(val) => setValue('instructions', val)}
+                                    placeholder={t('fieldInstructionsPlaceholder')}
+                                />
                             </div>
                         </div>
                     )}

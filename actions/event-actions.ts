@@ -7,7 +7,7 @@ import { validateActionData, handleActionError } from '@/lib/action-utils';
 
 import { eventSchema, type EventFormValues } from '@/lib/validations/event';
 import { ActionResponse } from '@/types/actions';
-import { EventService } from '@/lib/services/event.service';
+import { EventService, type EventActionContext } from '@/lib/services/event.service';
 import type { Event as EventModel } from '@prisma/client';
 
 /**
@@ -66,6 +66,29 @@ function revalidateEventPaths(locale: string, ctx: EventPaths) {
     revalidatePath(`${base}/events/${ctx.eventSlug}`, 'page');
 }
 
+type EventNotificationType = 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN';
+
+/** One compact notification about an event; `authorName` is the person it is about. */
+function notifyEvent(
+    userId: string,
+    type: EventNotificationType,
+    ctx: EventActionContext,
+    extra: { authorName?: string; waitlistCount?: number } = {}
+) {
+    return createNotification({
+        userId,
+        type,
+        translationKey: type,
+        args: {
+            groupName: ctx.groupName,
+            eventTitle: ctx.eventTitle,
+            ...(extra.authorName !== undefined && { authorName: extra.authorName }),
+            ...(extra.waitlistCount !== undefined && { waitlistCount: extra.waitlistCount })
+        },
+        link: `/${ctx.l1Slug}/group/${ctx.groupSlug}/events/${ctx.eventSlug}`
+    });
+}
+
 /**
  * Open events: "I'm going" or cancel.
  */
@@ -93,7 +116,14 @@ export async function requestToJoin(eventId: string, allowWaitlist: boolean, loc
     try {
         const result = await EventService.requestToJoin(eventId, session.user.id, allowWaitlist);
         if (!result.success) return result;
-        revalidateEventPaths(locale, result.data!);
+        const ctx = result.data!;
+        if (ctx.created && ctx.status === 'PENDING') {
+            const authorName = session.user.name || session.user.username || '';
+            await Promise.all(ctx.organiserIds
+                .filter(id => id !== session.user.id)
+                .map(id => notifyEvent(id, 'EVENT_REQUEST', ctx, { authorName })));
+        }
+        revalidateEventPaths(locale, ctx);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'TOGGLE_FAILED');
@@ -110,7 +140,15 @@ export async function cancelAttendance(eventId: string, locale: string): Promise
     try {
         const result = await EventService.cancel(eventId, session.user.id);
         if (!result.success) return result;
-        revalidateEventPaths(locale, result.data!);
+        const ctx = result.data!;
+        // An approved person left a Full event: the organisers decide whether to let someone in.
+        if (ctx.wasGoing && ctx.isFull) {
+            const authorName = session.user.name || session.user.username || '';
+            await Promise.all(ctx.organiserIds
+                .filter(id => id !== session.user.id)
+                .map(id => notifyEvent(id, 'EVENT_SPOT_FREED', ctx, { authorName, waitlistCount: ctx.waitlistCount })));
+        }
+        revalidateEventPaths(locale, ctx);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'CANCEL_FAILED');
@@ -127,6 +165,7 @@ export async function decideAttendance(eventId: string, targetUserId: string, de
     try {
         const result = await EventService.decide(eventId, targetUserId, session.user.id, decision);
         if (!result.success) return result;
+        await notifyEvent(targetUserId, decision === 'approve' ? 'EVENT_APPROVED' : 'EVENT_DECLINED', result.data!);
         revalidateEventPaths(locale, result.data!);
         return { success: true };
     } catch (error) {
@@ -144,6 +183,7 @@ export async function letInFromWaitlist(eventId: string, targetUserId: string, l
     try {
         const result = await EventService.letInFromWaitlist(eventId, targetUserId, session.user.id);
         if (!result.success) return result;
+        await notifyEvent(targetUserId, 'EVENT_LET_IN', result.data!);
         revalidateEventPaths(locale, result.data!);
         return { success: true };
     } catch (error) {
@@ -161,6 +201,7 @@ export async function setEventFull(eventId: string, isFull: boolean, locale: str
     try {
         const result = await EventService.setFull(eventId, session.user.id, isFull);
         if (!result.success) return result;
+        await Promise.all(result.data!.waitlistedUserIds.map(id => notifyEvent(id, 'EVENT_ROOM_AGAIN', result.data!)));
         revalidateEventPaths(locale, result.data!);
         return { success: true };
     } catch (error) {

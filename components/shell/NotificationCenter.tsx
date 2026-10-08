@@ -23,7 +23,7 @@ type NotificationArgs = Record<string, string | number | undefined>;
 
 // Types whose detail line is something a person wrote, shown in quotes.
 const QUOTED_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY', 'NEW_POST']);
-const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN']);
+const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN']);
 
 /** Context line (group · time), one headline (who did what), then the content itself. */
 function NotificationContent({ n }: { n: Notification }) {
@@ -42,7 +42,8 @@ function NotificationContent({ n }: { n: Notification }) {
     const headline = t(`headline.${type}` as 'headline.GENERIC', {
         authorName,
         originalTag: String(args.originalTag ?? ''),
-        canonicalTag: String(args.canonicalTag ?? '')
+        canonicalTag: String(args.canonicalTag ?? ''),
+        waitlistCount: Number(args.waitlistCount ?? 0)
     });
     // Older notifications stored the event title as `title`.
     const detail = args.excerpt ?? args.reason ?? args.eventTitle ?? args.title;

@@ -11,13 +11,13 @@ import {
     ArrowLeft,
     Clock,
     Info,
-    CheckCircle2,
-    Star,
+    Lock,
     ExternalLink
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
-import RSVPButtons from '@/components/events/RSVPButtons';
+import EventParticipation from '@/components/events/EventParticipation';
+import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
 import { signInUrl } from '@/lib/auth-redirect';
@@ -65,9 +65,9 @@ export default async function EventPage({
     const timeZone = 'Europe/Riga';
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
-    const isOwner = event.creatorId === userId;
-    const { goingCount } = event.viewer;
-    const attendanceStatus = event.viewer.myStatus === 'GOING' ? 'GOING' : 'NONE';
+    const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;
+    const isRequest = event.joinMode === 'REQUEST';
+    const toPerson = (a: (typeof event.attendees)[number]) => ({ userId: a.userId, name: a.user.name, username: a.user.username });
 
     // JSON-LD for SEO
     const jsonLd = {
@@ -152,18 +152,23 @@ export default async function EventPage({
                                 </h1>
                             </div>
 
-                            {/* RSVP Summary for Desktop */}
-                            {event.maxParticipants ? (
+                            {/* Participation summary for Desktop */}
                             <div className="hidden lg:flex flex-col items-center gap-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 min-w-[160px]">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{t('capacity')}</span>
                                 <div className="flex items-center gap-2">
                                     <Users className="h-5 w-5 text-[var(--accent)]" />
-                                    <span className="text-2xl font-black text-white">
-                                        {goingCount}/{event.maxParticipants}
+                                    <span className="text-lg font-black text-white">
+                                        {isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount })}
                                     </span>
                                 </div>
+                                {event.maxParticipants ? (
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
+                                        {t('aboutPeople', { count: event.maxParticipants })}
+                                    </span>
+                                ) : null}
+                                {event.isFull && (
+                                    <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-white">{t('full')}</span>
+                                )}
                             </div>
-                            ) : null}
                         </div>
                     </div>
                 </div>
@@ -242,7 +247,13 @@ export default async function EventPage({
                             />
                         </div>
 
-                        {/* Special Instructions */}
+                        {/* Special Instructions: stripped server-side on Request-to-join events until approved */}
+                        {instructionsLocked && (
+                            <div className="flex items-center gap-3 rounded-3xl border border-dashed border-border bg-surface/50 p-6 text-sm text-foreground-muted">
+                                <Lock className="h-5 w-5 shrink-0" />
+                                {t('instructionsLocked')}
+                            </div>
+                        )}
                         {event.instructions && (
                             <div className="rounded-3xl bg-[var(--accent)]/5 border border-[var(--accent)]/20 p-6 md:p-8 space-y-6">
                                 <div className="flex items-center gap-3">
@@ -267,17 +278,19 @@ export default async function EventPage({
                                 {/* Subtle Accent Gradient Background */}
                                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-[var(--accent)]/5 blur-3xl pointer-events-none" />
 
-                                <div className="space-y-1">
-                                    <h3 className="text-xl font-black tracking-tight text-foreground">{t('areYouComing')}</h3>
-                                    <p className="text-sm text-foreground-muted">{t('joinCommunity')}</p>
-                                </div>
+                                <h3 className="text-xl font-black tracking-tight text-foreground">{t('areYouComing')}</h3>
 
-                                <RSVPButtons
-                                    eventId={event.id}
-                                    initialStatus={attendanceStatus}
-                                    locale={locale}
-                                    signInHref={userId ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`)}
-                                />
+                                {/* Organisers of Request-to-join events are in by definition; the panel below is their view. */}
+                                {!(isRequest && canManage) && (
+                                    <EventParticipation
+                                        eventId={event.id}
+                                        joinMode={event.joinMode}
+                                        isFull={event.isFull}
+                                        myStatus={myStatus}
+                                        locale={locale}
+                                        signInHref={userId ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`)}
+                                    />
+                                )}
 
                                 <div className="pt-4 border-t border-border flex flex-col gap-4">
                                     <AddToCalendar
@@ -292,6 +305,18 @@ export default async function EventPage({
                                     <ShareEventButton title={event.title} />
                                 </div>
                             </div>
+
+                            {canManage && (
+                                <EventOrganiserPanel
+                                    eventId={event.id}
+                                    joinMode={event.joinMode}
+                                    isFull={event.isFull}
+                                    locale={locale}
+                                    going={event.attendees.filter(a => a.status === 'GOING').map(toPerson)}
+                                    pending={event.attendees.filter(a => a.status === 'PENDING').map(toPerson)}
+                                    waitlist={event.attendees.filter(a => a.status === 'WAITLISTED').map(toPerson)}
+                                />
+                            )}
 
                             {/* Organizer Info */}
                             <div className="rounded-3xl border border-border bg-surface p-6 shadow-sm space-y-4">
