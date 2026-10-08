@@ -2,7 +2,7 @@
 
 > The living "what's next" list. Read `AGENTS.md` first, then `docs/core_philosophy.md`.
 > **How to use:** when starting a session, take the first unchecked item in the current stage. Keep items small (30–60 min), finish them fully, tick them off here in the same commit.
-> Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git and `docs/archive/`.
+> Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git.
 
 **Last updated:** 2026-10-08
 
@@ -75,5 +75,5 @@ Goal: content first. One screen at a time; agree direction with the user before 
 ## Known code debt (fix when touching nearby code, not as a project)
 
 - ESLint (2026-10-08): 88 errors / 138 warnings — mostly `no-explicit-any` (59) and `no-html-link-for-pages` (18 raw `<a>` causing full reloads).
-- `docs/audit_report.md` (2026-03) items are unverified: Service Law violations in some actions, orphaned `app/[locale]/groups/` route, accent colour prop-drilling/inline styles, five modals mounted in `GroupHeader`.
+- From the 2026-03 audit (unverified, file removed — see git history): Service Law violations in some actions, orphaned `app/[locale]/groups/` route, accent colour prop-drilling/inline styles, five modals mounted in `GroupHeader`.
 - Unfinished from the taxonomy work: `/admin/groups/[groupSlug]/categorization` override route.

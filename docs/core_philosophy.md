@@ -1,46 +1,37 @@
-# Core Philosophy & Project Alignment: Ejam Kopā
+# Core Philosophy: Ejam Kopā
 
-This document serves as the true north for all human and AI contributors working on **Ejam Kopā** (Let's Go Together). It outlines our values, core mission, project scope, and the guiding principles for all future development.
+The "why" behind the project. Read once per task that touches product behaviour or UI. Current priorities live in `docs/execution_handoff.md`; code rules live in `AGENTS.md`.
 
----
+## Why it exists
 
-## 🌍 1. Core Mission & Values
-**Ejam Kopā is fundamentally a non-profit, community-driven platform.**
-Our primary goal is to minimize friction in the real world. We exist to help people discover local interest groups—such as folk-dancing, choirs, or casual meetups like weekend rafting trips—and connect with like-minded individuals.
+Most platforms for meeting people are built for profit, so they are built to keep people hooked. Ejam Kopā is non-profit and does the opposite: it helps people see what others do with their free time and, when a group is open to newcomers, safely find each other — then get off the screen and meet.
 
-* **Community over Commerce:** While groups (like choirs) may have membership fees, the platform's focus is on facilitating the *connection*, not on generating profit. Future features may help groups manage these administrative fees, but our core DNA is non-profit and community-centric.
-* **Trust & Safety:** Influenced by platforms like Couchsurfing, we value authentic, safe real-world interactions. In the future, we will explore vouching or reputation systems to further enhance community trust.
+Typical situations it should solve:
 
-## 📍 2. Geographic Scope & Scaling
-* **Starting Hyper-Local:** The platform is currently optimized for Latvia, focusing on hyper-local discovery, Latvian/English parity, and local cultural nuances. This allows us to rapidly prototype, test what works, and build a strong foundational community.
-* **Built for the World:** While we start locally, our architecture, taxonomy system, and localization (`next-intl`) are built with scale in mind. We do not restrict our potential—if the platform proves successful, it is technically and philosophically ready to expand to other countries.
+- **A gym buddy in Jelgava.** None of your friends live in your city, and posting a classifieds ad feels weird. Instead: create a group "gym, beginner level, Jelgava" and let interested people join.
+- **A book club, a hiking crew, a board-game night** — small informal groups that today only exist if you already know someone.
+- **Official groups** (choirs, dance groups) that today advertise with posters in culture centres — you have to be there to know.
+- **Events from groups**: public ones anyone can join (a concert, a neighbourhood cleanup) and members-only ones (a rehearsal).
 
-## 🏗 3. Architectural Pillars (The "Laws")
-Our codebase relies on strict architectural boundaries to maintain scalability and prevent tech debt. All developers (AI and human) must adhere to the rules defined in `AGENTS.md`. Key pillars include:
+The real job is removing the social awkwardness of reaching out — on both sides: finding a group, and finding members.
 
-* **The Service Law:** Server Actions must *never* contain raw database (`Prisma`) queries. All data interactions must be delegated to dedicated services in `/lib/services`.
-* **The Taxonomy Law (Zero-Flicker Branding):** Group visual identity is inherited from its parent category. CSS variables (`--accent`) are resolved on the server to prevent UI flickering.
-* **Localization Parity:** Every user-facing string must be localized in `messages/en.json` and `messages/lv.json`. Hardcoded UI strings are strictly prohibited.
-* **Defensive & Strict Typing:** TypeScript strict mode is enforced. The use of `any` or `as any` is banned to prevent silent runtime failures.
+## The core loop
 
-## 🛠 4. Current State & Immediate Priorities
-The platform is currently in a **prototyping and validation phase**.
+**Create a group → be found → join → talk.**
 
-**The Immediate Problem:** Recent architectural refactoring by previous AI agents successfully enforced "The Service Law" but introduced significant UI/UX regressions.
+Every feature, fix and idea is judged against this loop. If it doesn't make the loop work better, it waits.
 
-**Immediate Priorities for Next Development Cycles:**
-1. **Fix UI/UX Regressions:** Identify and resolve missing translations, broken links, non-functional buttons, and layout shifts that were introduced during backend refactoring.
-2. **Performance Optimization:** Address slow-loading content, particularly on discovery and group pages. Ensure caching strategies (`unstable_cache`) and component rendering are optimized.
-3. **Validate Existing Tech Debt:** Before building massive new features (e.g., Chunk 14: DM System), we must validate if the remaining items in `audit_report.md` (like lingering Service Law violations) are still relevant or if they were resolved.
-4. **Iterative Prototyping:** Continue moving through the platform, testing user flows (group creation, event RSVP, discovery), and documenting what works and what is missing.
+## How it should feel
 
-## 🚀 5. Feature Roadmap (Post-Stabilization)
-Once the current UI/UX and performance regressions are resolved, the platform will look toward the following features (tracked in `execution_handoff.md`):
+- **Content first, calm, obvious.** It should "just make sense" without explanation.
+- **Understand a group at a glance**, before reading the title: colour = category, city, member count (an introvert may prefer a small group). These signals are the heart of a card; everything that competes with them is noise.
+- **Trust matters.** People meet strangers in real life through this. Moderation (tag approval/merging, reports) keeps content tidy and findable; later, reputation or vouching (Couchsurfing-style) may help.
+- **Honest, not hollow.** No fake placeholders or dead links — hide things until they exist.
 
-* **Direct Messaging (Chunk 14):** Implementing peer-to-peer real-time communication using Soketi/Pusher.
-* **L2 Tag Lifecycle & Admin (Chunk 15):** Allowing users to suggest tags ("wildcards") and giving admins the tools to approve and merge them.
-* **Trust & Safety Mechanics:** Researching and implementing a vouching system (Couchsurfing style) to build community reputation.
-* **Administrative Tools:** Helping established groups (e.g., choirs) manage their internal rosters and potential membership fee tracking in the future.
+## Scope
 
----
-*Note: Before starting any new development task, always cross-reference this document, `AGENTS.md`, and the latest `audit_report.md` to ensure your work aligns with the platform's current priorities.*
+Starts hyper-local in Latvia, Latvian-first with full English parity. Built so it could grow to other countries if it works, but not designed for that yet.
+
+## How we work
+
+Built by one person with a full-time job and a young family, in bursts of inspiration. So: small self-contained steps, each leaving the site better, with the next step always written down in `docs/execution_handoff.md`. Simplicity beats cleverness; removing beats adding.
