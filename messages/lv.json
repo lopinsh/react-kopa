@@ -488,16 +488,11 @@
   },
   "shell": {
     "footer": {
-      "about": "Par mums",
-      "contact": "Sazināties",
       "forCommunity": "kopienai",
-      "guidelines": "Kopienas vadlīnijas",
-      "helpCenter": "Palīdzības centrs",
-      "languageLabel": "Latvija (LV)",
       "logoSubtitle": "Atrodi savējos, augam kopā.",
       "madeWith": "Radīts ar",
       "mission": "Ejam Kopā – veicinām vietējās kopienas saziņu.",
-      "terms": "Lietošanas noteikumi"
+      "privacy": "Privātums"
     },
     "header": {
       "logoSubtitle": "Atrodi Savējos",

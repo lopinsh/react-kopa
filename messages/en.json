@@ -488,16 +488,11 @@
   },
   "shell": {
     "footer": {
-      "about": "About",
-      "contact": "Contact Us",
       "forCommunity": "for the community",
-      "guidelines": "Community Guidelines",
-      "helpCenter": "Help Center",
-      "languageLabel": "English (EN)",
       "logoSubtitle": "Find your tribe, grow together.",
       "madeWith": "Built with",
       "mission": "Ejam Kopā – localizing community connection.",
-      "terms": "Terms of Service"
+      "privacy": "Privacy"
     },
     "header": {
       "logoSubtitle": "Find Your People",

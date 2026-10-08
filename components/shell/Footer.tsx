@@ -1,8 +1,9 @@
 'use client';
 
 import { Link } from '@/i18n/routing';
-import { Github, Twitter, Instagram, Mail, Heart } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export function Footer({ locale }: { locale: string }) {
     const t = useTranslations('shell.footer');
@@ -13,25 +14,16 @@ export function Footer({ locale }: { locale: string }) {
         {
             title: c_common('platform'),
             links: [
-                { label: c_common('discover'), href: `/explore` },
+                { label: c_common('discover'), href: `/discover` },
                 { label: c_common('myGroups'), href: `/profile/my-groups` },
                 { label: c_common('createGroup'), href: `/create` },
             ]
         },
         {
-            title: c_common('support'),
-            links: [
-                { label: t('helpCenter'), href: '#' },
-                { label: c_common('learnMore'), href: '#' },
-                { label: t('terms'), href: '#' },
-            ]
-        },
-        {
             title: c_common('about'),
             links: [
-                { label: t('mission'), href: '#' },
-                { label: t('guidelines'), href: '#' },
-                { label: t('contact'), href: '#' },
+                { label: c_common('about'), href: '/about' },
+                { label: t('privacy'), href: '/privacy' },
             ]
         }
     ];
@@ -39,7 +31,7 @@ export function Footer({ locale }: { locale: string }) {
     return (
         <footer className="border-t border-border bg-surface-elevated/30 py-12 pb-24 md:pb-12">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {/* Brand */}
                     <div className="col-span-1">
                         <Link href={`/`} className="flex items-center gap-2 group">
@@ -53,17 +45,6 @@ export function Footer({ locale }: { locale: string }) {
                         <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground-muted">
                             {t('mission')}
                         </p>
-                        <div className="mt-6 flex items-center gap-4">
-                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
-                                <Instagram className="h-5 w-5" />
-                            </a>
-                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
-                                <Github className="h-5 w-5" />
-                            </a>
-                            <a href="#" className="text-foreground-muted hover:text-foreground transition-colors">
-                                <Twitter className="h-5 w-5" />
-                            </a>
-                        </div>
                     </div>
 
                     {/* Links */}
@@ -91,9 +72,7 @@ export function Footer({ locale }: { locale: string }) {
                         © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
                     </p>
                     <div className="flex items-center gap-6">
-                        <Link href={`/explore`} className="text-xs font-medium text-foreground-muted hover:text-foreground transition-colors">
-                            {t('languageLabel')}
-                        </Link>
+                        <LanguageSwitcher />
                     </div>
                 </div>
             </div>
