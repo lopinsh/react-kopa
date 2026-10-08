@@ -54,24 +54,31 @@ export class AdminService {
      * Reject a wildcard category
      */
     static async rejectWildcard(categoryId: string) {
-        // A group's primary category cannot be removed; a rejected suggestion used only as a tag is detached from its groups.
-        const groupsUsingAsPrimary = await prisma.group.count({ where: { categoryId } });
-        if (groupsUsingAsPrimary > 0) {
-            throw new Error('CATEGORY_IN_USE');
-        }
+        return prisma.$transaction(async (tx) => {
+            // Only pending suggestions can be rejected; active categories are managed in the taxonomy editor.
+            const category = await tx.category.findFirst({
+                where: { id: categoryId, isWildcard: true, status: 'PENDING_REVIEW' },
+                select: { id: true, _count: { select: { groups: true, children: true } } }
+            });
+            if (!category) {
+                throw new Error('NOT_FOUND');
+            }
 
-        await prisma.category.update({
-            where: { id: categoryId },
-            data: { groupsWithTags: { set: [] } }
-        });
+            // A group's primary category or a parent of other categories cannot be removed;
+            // a rejected suggestion used only as a tag is detached from its groups.
+            if (category._count.groups > 0 || category._count.children > 0) {
+                throw new Error('CATEGORY_IN_USE');
+            }
 
-        // Must delete translations first due to foreign key constraints
-        await prisma.categoryTranslation.deleteMany({
-            where: { categoryId }
-        });
+            await tx.category.update({
+                where: { id: categoryId },
+                data: { groupsWithTags: { set: [] } }
+            });
 
-        return prisma.category.delete({
-            where: { id: categoryId }
+            // Translations and aliases cascade on delete.
+            return tx.category.delete({
+                where: { id: categoryId }
+            });
         });
     }
 

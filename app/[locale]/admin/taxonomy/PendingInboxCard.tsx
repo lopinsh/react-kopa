@@ -81,9 +81,9 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
     return (
         <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
-            <div className="flex items-start justify-between">
-                <div>
-                    <h3 className="text-xl font-bold cursor-pointer hover:underline" onClick={onSelect}>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                    <h3 className="text-xl font-bold cursor-pointer hover:underline break-words" onClick={onSelect}>
                         {item.submittedLabel}
                     </h3>
                     <p className="text-sm text-foreground-muted mt-1">
@@ -99,7 +99,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     )}
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2 shrink-0">
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'approve' ? null : 'approve')}

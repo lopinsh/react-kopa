@@ -389,7 +389,7 @@
         "noPendingTags": "Gaidāmo birku nav.",
         "proposedUnder": "Ierosināts zem: {parent}",
         "unknown": "Nezināms",
-        "submittedBy": "Iesniedzis {name} ({date})",
+        "submittedBy": "Iesniedzis {name} ({date, date, medium})",
         "parentLabel": "Ieteiktā kategorija: {title}",
         "mergeCanonicalTitle": "Apvienot ar aktīvu kanonisko birku",
         "selectCategoryPlaceholder": "Izvēlieties aktīvu kategoriju...",

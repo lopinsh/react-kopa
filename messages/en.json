@@ -389,7 +389,7 @@
         "noPendingTags": "No pending tags.",
         "proposedUnder": "Proposed under: {parent}",
         "unknown": "Unknown",
-        "submittedBy": "Submitted by {name} on {date}",
+        "submittedBy": "Submitted by {name} on {date, date, medium}",
         "parentLabel": "Suggested Category: {title}",
         "mergeCanonicalTitle": "Merge into Active Canonical Tag",
         "selectCategoryPlaceholder": "Select an active category...",

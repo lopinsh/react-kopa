@@ -44,10 +44,12 @@ export async function rejectWildcard(categoryId: string): Promise<ActionResponse
         await AdminService.rejectWildcard(categoryId);
         revalidatePath('/admin', 'page');
         revalidateTag('categories', 'max');
+        revalidateTag('groups', 'max');
         return { success: true };
     } catch (error: unknown) {
         console.error('[rejectWildcard] Error:', error);
         if (error instanceof Error && error.message === 'CATEGORY_IN_USE') return { success: false, error: 'CATEGORY_IN_USE' };
+        if (error instanceof Error && error.message === 'NOT_FOUND') return { success: false, error: 'NOT_FOUND' };
         return { success: false, error: 'ACTION_FAILED' };
     }
 }
