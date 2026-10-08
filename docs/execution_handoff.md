@@ -93,4 +93,6 @@ Goal: content first. One screen at a time; agree direction with the user before 
 
 - ESLint (2026-10-08): 88 errors / 138 warnings — mostly `no-explicit-any` (59) and `no-html-link-for-pages` (18 raw `<a>` causing full reloads).
 - From the 2026-03 audit (unverified, file removed — see git history): Service Law violations in some actions, orphaned `app/[locale]/groups/` route, accent colour prop-drilling/inline styles, five modals mounted in `GroupHeader`.
+- `package.json` `overrides` pins `@swc/core` to 1.15.47 (pulled in by next-intl's plugin). 1.16.x refuses to start on the user's Windows machine because of a cache-folder permission check (`ERR_SWC_NATIVE_CACHE`), breaking `npm run dev` and `npm run build`. next-intl is held at 4.13.x for the same reason (4.14 requires SWC ~1.16). Revisit when SWC relaxes the check.
+- Remaining `npm audit` runtime finding: `deepmerge-ts` inside the Prisma CLI (only runs during migrations, no user input); fixing needs a breaking Prisma change — accepted for now.
 - Unfinished from the taxonomy work: `/admin/groups/[groupSlug]/categorization` override route.

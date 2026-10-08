@@ -20,14 +20,18 @@ export default function SignInPage() {
         const res = await signIn('credentials', {
             email,
             password,
-            redirect: true,
-            callbackUrl,
+            redirect: false,
+            redirectTo: callbackUrl,
         });
 
-        if (res?.error) {
+        if (!res || res.error) {
             setError('Invalid email or password.');
             setLoading(false);
+            return;
         }
+
+        // Full navigation so server components pick up the new session.
+        window.location.assign(res.url ?? callbackUrl);
     };
 
     return (
