@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import DiscussionBoard from '@/components/groups/DiscussionBoard';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({
     params,
@@ -12,11 +13,12 @@ export async function generateMetadata({
     const { locale, groupSlug, l1Slug } = await params;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
+    const tCommon = await getTranslations({ locale, namespace: 'common' });
 
     if (!group) return {};
 
     return {
-        title: `${group.name} | Discussions | Ejam kopā`,
+        title: `${group.name} | ${tCommon('discussionTitle')}`,
     };
 }
 

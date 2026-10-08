@@ -17,11 +17,12 @@ export async function generateMetadata({
     const { locale, groupSlug, l1Slug } = await params;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
+    const tCommon = await getTranslations({ locale, namespace: 'common' });
 
     if (!group) return {};
 
     return {
-        title: `${group.name} | Events | Ejam kopā`,
+        title: `${group.name} | ${tCommon('eventsTitle')}`,
     };
 }
 

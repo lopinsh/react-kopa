@@ -9,11 +9,8 @@ import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
 
+// The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
-    title: {
-        default: 'Ejam kopā',
-        template: '%s | Ejam kopā',
-    },
     description: 'Atklāj pasākumus, grupiņas un aktivitātes savā apkārtnē.',
 };
 

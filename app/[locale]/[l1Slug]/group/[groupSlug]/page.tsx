@@ -10,6 +10,19 @@ import { ensureContrast } from '@/lib/color-utils';
 import { clsx } from 'clsx';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import Image from 'next/image';
+import type { Metadata } from 'next';
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
+}): Promise<Metadata> {
+    const { locale, groupSlug, l1Slug } = await params;
+    const session = await auth();
+    const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
+
+    return group ? { title: group.name } : {};
+}
 
 export default async function GroupPage({
     params

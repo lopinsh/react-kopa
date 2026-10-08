@@ -43,7 +43,7 @@ export async function generateMetadata({
     if (!group) return {};
 
     return {
-        title: `${t('membersPageTitle', { name: group.name })} | Ejam kopā`,
+        title: t('membersPageTitle', { name: group.name }),
     };
 }
 

@@ -2,6 +2,7 @@ import { EventService } from '@/lib/services/event.service';
 import { GroupService } from '@/lib/services/group.service';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import {
     Calendar,
@@ -20,6 +21,18 @@ import { clsx } from 'clsx';
 import Link from 'next/link';
 import RSVPButtons from '@/components/events/RSVPButtons';
 import AddToCalendar from '@/components/events/AddToCalendar';
+
+export async function generateMetadata({
+    params,
+}: {
+    params: Promise<{ locale: string; l1Slug: string; groupSlug: string; eventSlug: string }>;
+}): Promise<Metadata> {
+    const { locale, groupSlug, eventSlug } = await params;
+    const session = await auth();
+    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session?.user?.id);
+
+    return event ? { title: `${event.title} | ${event.group.name}` } : {};
+}
 
 export default async function EventPage({
     params,
