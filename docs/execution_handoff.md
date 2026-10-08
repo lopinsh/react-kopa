@@ -28,24 +28,36 @@ Every task is judged by whether it makes this loop work better. If it doesn't, i
 - Pushing to `main` deploys to ejam.lumm.eu. Before any push: `npm run typecheck`, `npx eslint <changed files>`, `npm run i18n:check`.
 - Simple, well-described items here are suitable for a cheaper model session (e.g. Sonnet). Use Opus for design direction, messaging, and anything that "feels wrong" without a clear cause.
 
+## Instructions for the agent working through a stage
+
+- Items in the current stage are **pre-approved** — no separate plan/approval round per item. But if an item turns out bigger than described, ambiguous, or needs a product/architecture decision, **stop and ask** instead of guessing.
+- One commit per item; tick the checkbox in the same commit. **Never push** — the stage ends with a review, then the user pushes.
+- Items marked **(needs user)** — skip them and list them at the end.
+- Verify every fix in the running app (`npm run dev`, both `/lv` and `/en`) — typecheck can't catch raw keys or wrong-language text. If the app can't run locally (see 0.1), say so clearly per item; never report an unverified UI fix as done.
+- When finished, report: done items, skipped items, anything surprising you noticed but didn't fix.
+
 ---
+
+## Stage 0 — Local setup (needs user, once)
+
+- [ ] **0.1 Local database.** `.env` points to Postgres on `localhost`, but Docker is not installed on this machine, so the app can't run locally and fixes can't be verified before deploy. Install Docker Desktop, then `npm run db:up`, `npx prisma migrate deploy`, `npm run db:seed`. Needed for Stage 1 verification and essential for Stage 2.
 
 ## Stage 1 — Stop looking broken  ← CURRENT
 
-Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2026-10-08 (logged-out only).
+Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2026-10-08 (logged-out only). Item 1.10 first so the i18n check is green before other translation work.
 
 - [ ] **1.1 Footer links.** `components/shell/Footer.tsx`: "Discover" and the language link point to `/explore` (404) → use `/discover` / a real locale switch. Remove all `href="#"` links (Help Center, Guidelines, Contact, social icons, tagline link). Keep: Discover, My Groups, Create Group, About, Privacy.
-- [ ] **1.2 About + Privacy pages.** Create simple static `app/[locale]/about` and `app/[locale]/privacy` pages (LV + EN text via `messages/*.json`). The cookie banner's "Privacy Policy" link currently 404s. About = short honest "what this is and why" (see North star).
+- [ ] **1.2 About + Privacy pages.** Create simple static `app/[locale]/about` and `app/[locale]/privacy` pages (LV + EN text via `messages/*.json`). The cookie banner's "Privacy Policy" link currently 404s. About = short honest "what this is and why", drafted from `docs/core_philosophy.md` in plain warm language — mark it as a draft for the user to rewrite in their own voice. Privacy = only true statements about what the app actually stores (check `prisma/schema.prisma`, auth providers, cookie banner); no invented legal claims; flag it for user review.
 - [ ] **1.3 Sign-in heading.** `app/[locale]/auth/signin/page.tsx:37` hardcodes "Ienākt" → translation key.
-- [ ] **1.4 Sign-in return path.** Visiting a protected page (e.g. `/en/create`) logged out lands on sign-in with `callbackUrl` = homepage. Should return to the original page. Also some routes redirect via `/api/auth/signin` and `/messages` via `/[locale]/auth/signin` — unify.
+- [ ] **1.4 Sign-in return path.** Visiting a protected page (e.g. `/en/create`) logged out lands on sign-in with `callbackUrl` = homepage. Should return to the original page. Also some routes redirect via `/api/auth/signin` and `/messages` via `/[locale]/auth/signin` — unify on the localized page (check Auth.js `pages.signIn` config and `proxy.ts`). Only same-origin relative callback paths may be honoured (no open redirect).
 - [ ] **1.5 Event page translations.** `app/[locale]/[l1Slug]/group/[groupSlug]/events/[eventSlug]/page.tsx` and `components/events/RSVPButtons.tsx`: hardcoded English ("Important Info", "I'M GOING", "Capacity", "About Event", "Add to Google Calendar", "Share event", "Organizer", "Visit community", "Open in maps", "Please be on time…"). Dates must use next-intl formatters (show Latvian dates on `/lv`). Hide "Capacity" when `maxParticipants` is null/0.
 - [ ] **1.6 Raw key `group.noEvents`.** Group Events tab shows the key itself (`events/page.tsx:106`). Fix the namespace/key.
-- [ ] **1.7 Plurals & spacing.** "1members", "3biedri", "2pasākumi" in the group header → space + ICU plural messages (Latvian has its own plural rules: 1 biedrs / 2 biedri / 0 biedru).
-- [ ] **1.8 City names with diacritics.** Cards/headers show "Jurmala", "Cesis". Display names should be "Jūrmala", "Cēsis" (check `lib/constants`; keep slugs ASCII).
+- [ ] **1.7 Plurals & spacing.** "1members", "3biedri", "2pasākumi" in the group header → space + ICU plural messages. Latvian plural categories are `zero` / `one` / `other` (one = ends in 1 but not 11, e.g. 1 and 21 biedrs; zero = 0, 10–20, ends in 0, e.g. 0 biedru; other = 2 biedri). English uses `one` / `other`.
+- [ ] **1.8 City names with diacritics.** Cards/headers show "Jurmala", "Cesis". Display names should be "Jūrmala", "Cēsis". **Do not change the values in `CITIES`** (`lib/constants/index.ts`) — they are stored in `Group.city`, validated by `z.enum(CITIES)` and used in filters/URLs. Add display names as translations (e.g. `cities.Jurmala` in both message files) and use them wherever a city is shown (cards, headers, filter dropdowns, wizard, settings).
 - [ ] **1.9 Page titles.** Layout template is `'%s | Ejam kopā'` but pages also append it → "Ejam kopā | Ejam kopā". Group and event pages should have their own name as title (`generateMetadata`).
 - [ ] **1.10 i18n parity.** `npm run i18n:check` fails: `profile.message`, `shell.footer.about`, `wizard.back`, `wizard.done`, `wizard.next` exist in `lv.json` but not `en.json`.
 - [ ] **1.11 Real 404 for missing groups.** `/en/dancing/group/nonexistent` returns HTTP 200 with a not-found message → call `notFound()`.
-- [ ] **1.12 Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
+- [ ] **1.12 (needs user) Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
 
 ## Stage 2 — Walk the loop
 
