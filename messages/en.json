@@ -569,5 +569,33 @@
     "typePrivateDesc": "Approval or invite only.",
     "typePublic": "Public Group",
     "typePublicDesc": "Anyone can see and join this group."
+  },
+  "pages": {
+    "draftNotice": "Draft — this text is a first version and will be rewritten.",
+    "about": {
+      "cta": "Find a group",
+      "lead": "Ejam Kopā means “Let’s go together”. It is a place to find people to do things with.",
+      "p1": "Maybe you want a gym buddy in Jelgava, but none of your friends live in your city and posting an ad feels strange. Maybe you’d love a book club, a hiking crew or a board-game night, but those only exist if you already know someone. Or you lead a choir or a dance group and want newcomers to find you without a poster in the culture centre.",
+      "p2": "Here you can create a group, let others find it, join, and talk. Groups can also organise events: open ones anyone can join, and members-only ones like rehearsals. The aim is to make reaching out less awkward — and then to get you off the screen and out meeting people.",
+      "p3": "Ejam Kopā is a non-profit project. It has no ads and is not built to keep you scrolling. It starts in Latvia, in Latvian and English, and is made by one person, step by step.",
+      "title": "About Ejam Kopā"
+    },
+    "privacy": {
+      "cookies1": "A sign-in session cookie keeps you logged in, and a language cookie remembers your language. Both are needed for the site to work.",
+      "cookies2": "Your browser also stores a small note that you dismissed the cookie banner.",
+      "cookies3": "We do not use advertising or third-party analytics, and we do not sell data.",
+      "cookiesTitle": "Cookies and local storage",
+      "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
+      "data2": "Your profile: username, optional bio, cities, and your privacy choices (whether your profile is public and whether people may message you).",
+      "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file.",
+      "dataTitle": "What we store",
+      "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
+      "rights1": "You can edit your profile at any time. This page is a draft and does not yet describe how to request deletion of your account.",
+      "rightsTitle": "Your data",
+      "title": "Privacy",
+      "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",
+      "visibility2": "Messages are stored on our server and are not end-to-end encrypted.",
+      "visibilityTitle": "Who can see it"
+    }
   }
 }

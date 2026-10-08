@@ -569,5 +569,33 @@
     "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
     "typePublic": "Publiska Grupa",
     "typePublicDesc": "Ikviens var redzēt un pievienoties."
+  },
+  "pages": {
+    "draftNotice": "Melnraksts — šis teksts ir pirmā versija, un tas tiks pārrakstīts.",
+    "about": {
+      "cta": "Atrast grupu",
+      "lead": "Ejam Kopā nozīmē “iesim kopā”. Tā ir vieta, kur atrast cilvēkus, ar kuriem kaut ko darīt.",
+      "p1": "Varbūt gribi treniņbiedru Jelgavā, bet neviens no draugiem tavā pilsētā nedzīvo, un sludinājuma izlikšana šķiet dīvaina. Varbūt gribi grāmatu klubu, pārgājienu kompāniju vai galda spēļu vakaru, bet tādi ir tikai tad, ja jau kādu pazīsti. Vai arī vadi kori vai deju kolektīvu un vēlies, lai jaunie dalībnieki tevi atrod bez plakāta kultūras namā.",
+      "p2": "Šeit vari izveidot grupu, ļaut citiem to atrast, pievienoties un sarunāties. Grupas var rīkot arī pasākumus: atvērtus, kuriem var pievienoties ikviens, un tikai dalībniekiem paredzētus, piemēram, mēģinājumus. Mērķis ir padarīt sazināšanos mazāk neveiklu — un tad aizvilināt tevi no ekrāna uz tikšanos klātienē.",
+      "p3": "Ejam Kopā ir bezpeļņas projekts. Tajā nav reklāmu, un tas nav veidots, lai tevi paturētu ekrānā. Tas sākas Latvijā, latviešu un angļu valodā, un to soli pa solim veido viens cilvēks.",
+      "title": "Par Ejam Kopā"
+    },
+    "privacy": {
+      "cookies1": "Pieslēgšanās sesijas sīkdatne tur tevi pieslēgtu, un valodas sīkdatne atceras tavu valodu. Abas ir nepieciešamas, lai vietne darbotos.",
+      "cookies2": "Pārlūks glabā arī nelielu atzīmi, ka esi aizvēris sīkdatņu paziņojumu.",
+      "cookies3": "Mēs neizmantojam reklāmu vai trešo pušu analītiku un nepārdodam datus.",
+      "cookiesTitle": "Sīkdatnes un vietējā krātuve",
+      "data1": "Tavu kontu: vārdu, e-pasta adresi un paroli (glabājas tikai kā vienvirziena jaucējkods). Ja pieslēdzies ar Google vai GitHub, mēs no tiem saņemam tavu vārdu, e-pasta adresi un profila attēlu.",
+      "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas un tavas privātuma izvēles (vai profils ir publisks un vai tev drīkst rakstīt ziņas).",
+      "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz.",
+      "dataTitle": "Ko mēs glabājam",
+      "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
+      "rights1": "Savu profilu vari labot jebkurā laikā. Šī lapa ir melnraksts, un tajā vēl nav aprakstīts, kā pieprasīt konta dzēšanu.",
+      "rightsTitle": "Tavi dati",
+      "title": "Privātums",
+      "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
+      "visibility2": "Ziņas tiek glabātas mūsu serverī, un tās nav šifrētas no gala līdz galam.",
+      "visibilityTitle": "Kas to var redzēt"
+    }
   }
 }
