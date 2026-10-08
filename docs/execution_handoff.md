@@ -63,11 +63,11 @@ Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2
 - [x] **1.13 Admin pages translations.** User reports many broken strings on `/lv/admin` (2026-10-08). Sweep `app/[locale]/admin/**` for raw keys and hardcoded text (sign in locally as `admin@local`).
 - [x] **1.14 Proxy matcher.** `proxy.ts` matcher `(?!.*api|…)` skipped every URL containing "api" anywhere (e.g. `capital-runners`, *terapija*) — no locale redirect, no onboarding intercept. Anchored to `/api/` only.
 - [x] **1.15 Privacy copy for a live work-in-progress.** Cookie banner no longer claims traffic analysis; About drops the draft notice; Privacy notice and "your data" section reworded to stay true without "draft" wording. Still open: a public contact for data requests (needs user).
-- [ ] **1.12 (needs user) Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
+- [~] **1.12 Junk test groups** ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd") — moved to Stage 2.0b. They are owned by the seed `admin@local`, which cannot sign in on production, and only owners can delete groups. Seed groups stay on production as test content.
 
 ### Stage 1 review notes (agent, 2026-10-08)
 
-Commits: `git log --oneline f893691..HEAD`. Done: 1.1–1.11, 1.13–1.15. Open: 1.12 (needs user). Reviewed by Opus: typecheck, i18n parity, production build pass; no new lint errors in changed files; open-redirect guard probed. Highest-risk change: auth redirects (`lib/auth-redirect.ts`, `proxy.ts`, sign-in page, `UsernameForm`).
+Commits: `git log --oneline f893691..HEAD`. Done: 1.1–1.11, 1.13–1.15. Open: none (1.12 moved to 2.0b; Privacy contact address deferred by user). Reviewed by Opus: typecheck, i18n parity, production build pass; no new lint errors in changed files; open-redirect guard probed. Highest-risk change: auth redirects (`lib/auth-redirect.ts`, `proxy.ts`, sign-in page, `UsernameForm`).
 
 Noticed, not changed:
 - On a 404 under `/group/…` the desktop sidebar still shows the group menu (Informācija / Pasākumi) linking to the missing group.
@@ -86,6 +86,12 @@ Goal: each step of create → find → join → talk works end to end, logged in
 - [ ] 2.0 Sign up (user feedback 2026-10-08 after registering on production):
   - Registration has no "repeat password" field — add confirmation (shared Zod schema, both client and server).
   - User wants two separate fields: a **display name** ("Oskars Feldmanis", capitals and spaces allowed, shown everywhere) and a **username/handle** auto-generated from it ("oskars_feldmanis", Latvian diacritics transliterated, editable, uniqueness checked). Today `actions/auth.ts` takes `name` and `app/[locale]/onboarding/username` asks for the handle separately, and in practice the user ended up entering the handle where they expected their name — investigate the actual flow before changing it.
+- [ ] 2.0b Moderation: site admins can remove any group (decided 2026-10-08). Safeguards over role tiers, since the user is the only admin today:
+  - **Hide, never hard-delete:** admin removal sets a hidden state (restorable); permanent delete stays owner-only. Hidden groups disappear from discovery and return 404 to non-admins.
+  - **Reason required**, shown to the owner via a notification.
+  - **Admin action log** (who, what, when, reason), viewable in `/admin`; also covers the existing admin power to edit any group (`isAppAdmin` in `group.service.ts`).
+  - Then hide the three junk groups from 1.12 via the UI.
+  - Later, when someone else moderates: add a `MODERATOR` role (hide groups, handle reports); `ADMIN` keeps role management, taxonomy and the log. Not now — no half-features.
 - [ ] 2.1 Create a group (wizard), both locales
 - [ ] 2.2 Find it via discovery (category, city, search)
 - [ ] 2.3 Join as a second user (public + approval-required groups)
