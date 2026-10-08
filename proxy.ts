@@ -44,9 +44,13 @@ export default auth(async function proxy(req: NextRequest) {
 
         // New user (no username): redirect to onboarding, unless already exempt.
         if (!hasUsername && !isExempt(pathname)) {
-            return NextResponse.redirect(
-                new URL(`/${locale}/onboarding/username`, req.url),
-            );
+            const target = new URL(`/${locale}/onboarding/username`, req.url);
+            // Remember where the user was heading so onboarding can send them back.
+            const returnPath = pathname + req.nextUrl.search;
+            if (returnPath !== `/${locale}` && returnPath !== '/') {
+                target.searchParams.set('callbackUrl', returnPath);
+            }
+            return NextResponse.redirect(target);
         }
     }
 

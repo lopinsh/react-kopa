@@ -2,6 +2,7 @@ import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
 import { auth } from '@/lib/auth';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function CreateEventPage({
     params,
@@ -12,7 +13,7 @@ export default async function CreateEventPage({
     const session = await auth();
 
     if (!session) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, `/${l1Slug}/group/${groupSlug}/create-event`));
     }
 
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);

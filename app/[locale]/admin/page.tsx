@@ -4,6 +4,7 @@ import { auth } from '@/lib/auth';
 import { ShieldAlert, Tags, Check, X, AlertTriangle, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function AdminDashboardPage({
     params,
@@ -19,7 +20,7 @@ export default async function AdminDashboardPage({
 
     const session = await auth();
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, '/admin'));
     }
 
     if (session.user.role !== 'ADMIN') {

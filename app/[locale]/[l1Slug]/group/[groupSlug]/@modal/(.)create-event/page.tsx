@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
 import { auth } from '@/lib/auth';
 import DialogModal from '@/components/ui/DialogModal';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function CreateEventModal({
     params
@@ -14,7 +15,7 @@ export default async function CreateEventModal({
     // Auth Check
     const session = await auth();
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, `/${l1Slug}/group/${groupSlug}/create-event`));
     }
 
     // Role Check

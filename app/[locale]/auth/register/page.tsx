@@ -4,9 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { registerUser } from '@/actions/auth';
 import { signIn } from 'next-auth/react';
+import { useLocale } from 'next-intl';
 
 export default function RegisterPage() {
     const router = useRouter();
+    const locale = useLocale();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -38,7 +40,7 @@ export default function RegisterPage() {
                 setError('Could not sign in automatically.');
                 setLoading(false);
             } else {
-                router.push('/');
+                router.push(`/${locale}`);
                 router.refresh();
             }
         } catch (err) {
@@ -114,7 +116,7 @@ export default function RegisterPage() {
                 </form>
 
                 <div className="text-center text-sm">
-                    <a href="/auth/signin" className="text-primary hover:underline">
+                    <a href={`/${locale}/auth/signin`} className="text-primary hover:underline">
                         Already have an account? Sign in
                     </a>
                 </div>

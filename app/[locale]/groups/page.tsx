@@ -4,6 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import GroupCard from '@/components/discovery/GroupCard';
 import { Users, LogIn } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function MyGroupsPage({
     params
@@ -36,7 +37,7 @@ export default async function MyGroupsPage({
                         {tAuth('modalDesc')}
                     </p>
                     <a
-                        href="/api/auth/signin"
+                        href={signInUrl(locale, '/groups')}
                         className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <LogIn className="h-4 w-4" />

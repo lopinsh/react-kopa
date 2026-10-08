@@ -2,6 +2,7 @@ import { getTaxonomy } from '@/actions/taxonomy-actions';
 import GroupCreationWizard from '@/components/groups/create-wizard/GroupCreationWizard';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function CreateGroupPage({
     params,
@@ -15,7 +16,7 @@ export default async function CreateGroupPage({
     const { category } = await searchParams;
 
     if (!session?.user) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, '/create'));
     }
 
     const taxonomyResponse = await getTaxonomy(locale);

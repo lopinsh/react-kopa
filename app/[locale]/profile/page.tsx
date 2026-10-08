@@ -5,13 +5,14 @@ import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { Settings, MapPin, Calendar, Users, CalendarDays, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect('/api/auth/signin');
+        redirect(signInUrl(locale, '/profile'));
     }
 
     const t = await getTranslations('profile');

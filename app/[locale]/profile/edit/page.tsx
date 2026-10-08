@@ -5,6 +5,7 @@ import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import { Link } from '@/i18n/routing';
 import { ChevronLeft } from 'lucide-react';
 import { UserService } from '@/lib/services/user.service';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function ProfileEditPage({
     params,
@@ -15,7 +16,7 @@ export default async function ProfileEditPage({
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, '/profile/edit'));
     }
 
     const user = await UserService.getUserProfile(session.user.id);

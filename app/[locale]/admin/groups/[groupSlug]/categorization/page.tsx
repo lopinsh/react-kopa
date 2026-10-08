@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import { GroupService } from '@/lib/services/group.service';
 import AdminGroupCategorizationForm from './AdminGroupCategorizationForm';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function AdminGroupCategorizationPage({
     params,
@@ -13,7 +14,7 @@ export default async function AdminGroupCategorizationPage({
 
     const session = await auth();
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, `/admin/groups/${groupSlug}/categorization`));
     }
 
     if (session.user.role !== 'ADMIN') {

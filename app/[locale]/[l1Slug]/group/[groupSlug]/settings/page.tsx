@@ -6,6 +6,7 @@ import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
 import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function GroupSettingsPage(props: {
     params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
@@ -15,7 +16,7 @@ export default async function GroupSettingsPage(props: {
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, `/${l1Slug}/group/${groupSlug}/settings`));
     }
 
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session.user.id);

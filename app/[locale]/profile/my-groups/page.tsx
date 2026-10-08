@@ -3,6 +3,7 @@ import { UserService } from '@/lib/services/user.service';
 import { getTranslations } from 'next-intl/server';
 import { Users, LogIn, Compass } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { signInUrl } from '@/lib/auth-redirect';
 import MyGroupsListRow from '@/components/profile/MyGroupsListRow';
 
 export default async function MyGroupsPage({
@@ -37,7 +38,7 @@ export default async function MyGroupsPage({
                         {tAuth('modalDesc')}
                     </p>
                     <a
-                        href="/api/auth/signin"
+                        href={signInUrl(locale, '/profile/my-groups')}
                         className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <LogIn className="h-4 w-4" />

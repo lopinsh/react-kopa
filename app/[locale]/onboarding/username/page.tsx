@@ -2,6 +2,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import UsernameForm from '@/components/onboarding/UsernameForm';
+import { signInUrl } from '@/lib/auth-redirect';
 
 /**
  * Onboarding — username selection page.
@@ -13,18 +14,23 @@ import UsernameForm from '@/components/onboarding/UsernameForm';
  *  - No session → redirect to sign-in
  *  - Session with username already set → redirect to /profile
  */
-export default async function UsernameOnboardingPage() {
+export default async function UsernameOnboardingPage({
+    params,
+}: {
+    params: Promise<{ locale: string }>;
+}) {
+    const { locale } = await params;
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect('/api/auth/signin');
+        redirect(signInUrl(locale, '/onboarding/username'));
     }
 
     // If the user already has a username, they shouldn't be here.
     // The middleware handles this for normal navigation, but we guard
     // here too for direct URL access and SSR consistency.
     if (session.user.username) {
-        redirect('/profile');
+        redirect(`/${locale}/profile`);
     }
 
     const t = await getTranslations('onboarding.username');

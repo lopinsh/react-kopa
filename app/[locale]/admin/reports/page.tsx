@@ -4,6 +4,7 @@ import { getReports } from '@/actions/report-actions';
 import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export default async function AdminReportsPage({
     params,
@@ -14,7 +15,7 @@ export default async function AdminReportsPage({
     const t = await getTranslations('group.admin');
     const session = await auth();
     if (!session?.user?.id) {
-        redirect(`/api/auth/signin`);
+        redirect(signInUrl(locale, '/admin/reports'));
     }
     if (session.user.role !== 'ADMIN') {
         redirect(`/${locale}`);

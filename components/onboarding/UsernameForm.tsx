@@ -2,6 +2,8 @@
 
 import { useState, useTransition, useCallback } from 'react';
 import { useRouter } from '@/i18n/routing';
+import { useSearchParams } from 'next/navigation';
+import { safeCallbackPath } from '@/lib/auth-redirect';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { usernameOnboardingSchema } from '@/lib/validations/onboarding';
@@ -16,6 +18,7 @@ export default function UsernameForm() {
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
     const router = useRouter();
+    const searchParams = useSearchParams();
     const { update } = useSession();
 
     const [isPending, startTransition] = useTransition();
@@ -65,7 +68,13 @@ export default function UsernameForm() {
             if (result.success) {
                 // Mandatory: refresh JWT token so middleware intercept clears immediately.
                 await update({ username: value });
-                router.push('/profile');
+                const returnTo = safeCallbackPath(searchParams.get('callbackUrl'), '');
+                if (returnTo) {
+                    // Full navigation so server components pick up the refreshed session.
+                    window.location.assign(returnTo);
+                } else {
+                    router.push('/profile');
+                }
             } else {
                 if (result.error === 'USERNAME_TAKEN') {
                     setAvailability('taken');
