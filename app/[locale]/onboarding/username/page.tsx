@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import UsernameForm from '@/components/onboarding/UsernameForm';
 import { signInUrl } from '@/lib/auth-redirect';
+import { usernameFromName } from '@/lib/username';
+import { usernameSchema } from '@/lib/validations/onboarding';
+import { UserService } from '@/lib/services/user.service';
 
 /**
  * Onboarding — username selection page.
@@ -35,6 +38,12 @@ export default async function UsernameOnboardingPage({
 
     const t = await getTranslations('onboarding.username');
 
+    // Pre-fill a free handle from the account name (e.g. "Līga Kalniņa" from Google -> liga_kalnina).
+    const base = usernameFromName(session.user.name ?? '');
+    const suggestedUsername = usernameSchema.safeParse(base).success
+        ? await UserService.suggestAvailableUsername(base)
+        : '';
+
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-16">
             {/* Minimal card */}
@@ -59,7 +68,7 @@ export default async function UsernameOnboardingPage({
 
                 {/* Form — client component handles all interactivity */}
                 <div className="rounded-[2rem] border border-border bg-surface p-8 shadow-premium">
-                    <UsernameForm />
+                    <UsernameForm suggestedUsername={suggestedUsername} />
                 </div>
             </div>
         </div>

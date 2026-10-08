@@ -1,19 +1,22 @@
 'use client';
 
-import { useState, useTransition, useCallback } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
 import { safeCallbackPath } from '@/lib/auth-redirect';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import { usernameOnboardingSchema } from '@/lib/validations/onboarding';
 import { setUsername } from '@/actions/onboarding-actions';
-import { checkUsernameAvailability } from '@/actions/onboarding-actions';
-import { CheckCircle, XCircle, Loader2, AtSign } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import UsernameField from '@/components/auth/UsernameField';
+import { useUsernameAvailability } from '@/components/auth/useUsernameAvailability';
 
-type AvailabilityState = 'idle' | 'checking' | 'available' | 'taken' | 'invalid';
+interface UsernameFormProps {
+    /** Free username derived from the account name (e.g. from Google), or empty. */
+    suggestedUsername: string;
+}
 
-export default function UsernameForm() {
+export default function UsernameForm({ suggestedUsername }: UsernameFormProps) {
     const t = useTranslations('onboarding.username');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -22,41 +25,22 @@ export default function UsernameForm() {
     const { update } = useSession();
 
     const [isPending, startTransition] = useTransition();
-    const [value, setValue] = useState('');
-    const [availability, setAvailability] = useState<AvailabilityState>('idle');
+    const [value, setValue] = useState(suggestedUsername);
     const [serverError, setServerError] = useState<string | null>(null);
-    const [debounceTimer, setDebounceTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
+    const { status, suggestion, check } = useUsernameAvailability();
 
-    /** Validate format client-side and trigger debounced availability check. */
-    const handleChange = useCallback(
-        (e: React.ChangeEvent<HTMLInputElement>) => {
-            const raw = e.target.value;
-            setValue(raw);
-            setServerError(null);
+    // Validate the pre-filled suggestion once on mount.
+    useEffect(() => {
+        check(suggestedUsername);
+    }, [check, suggestedUsername]);
 
-            // Clear previous debounce timer
-            if (debounceTimer) clearTimeout(debounceTimer);
+    const handleChange = (next: string) => {
+        setValue(next);
+        setServerError(null);
+        check(next);
+    };
 
-            const parsed = usernameOnboardingSchema.safeParse({ username: raw });
-            if (!parsed.success) {
-                setAvailability(raw.length === 0 ? 'idle' : 'invalid');
-                return;
-            }
-
-            setAvailability('checking');
-            const timer = setTimeout(async () => {
-                const result = await checkUsernameAvailability(raw);
-                setAvailability(result.available ? 'available' : 'taken');
-            }, 300);
-            setDebounceTimer(timer);
-        },
-        [debounceTimer],
-    );
-
-    const canSubmit =
-        !isPending &&
-        availability === 'available' &&
-        usernameOnboardingSchema.safeParse({ username: value }).success;
+    const canSubmit = !isPending && status === 'available';
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -75,78 +59,25 @@ export default function UsernameForm() {
                 } else {
                     router.push('/profile');
                 }
+            } else if (result.error === 'USERNAME_TAKEN') {
+                check(value);
             } else {
-                if (result.error === 'USERNAME_TAKEN') {
-                    setAvailability('taken');
-                } else {
-                    setServerError(tErrors(result.error));
-                }
+                setServerError(tErrors(result.error));
             }
         });
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-            <div className="space-y-2">
-                <label
-                    htmlFor="username-input"
-                    className="block text-sm font-semibold text-foreground"
-                >
-                    {c('username')}
-                </label>
-
-                <div className="relative">
-                    {/* @ prefix */}
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                        <AtSign className="h-4 w-4 text-foreground-muted" />
-                    </div>
-
-                    <input
-                        id="username-input"
-                        type="text"
-                        value={value}
-                        onChange={handleChange}
-                        placeholder={t('placeholder')}
-                        autoComplete="username"
-                        autoFocus
-                        maxLength={30}
-                        disabled={isPending}
-                        className="w-full rounded-2xl border border-border bg-surface py-3 pl-10 pr-12 text-base outline-none ring-0 transition-all placeholder:text-foreground-muted focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
-                    />
-
-                    {/* Trailing status icon */}
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4">
-                        {availability === 'checking' && (
-                            <Loader2 className="h-4 w-4 animate-spin text-foreground-muted" />
-                        )}
-                        {availability === 'available' && (
-                            <CheckCircle className="h-4 w-4 text-emerald-500" />
-                        )}
-                        {(availability === 'taken' || availability === 'invalid') && value.length > 0 && (
-                            <XCircle className="h-4 w-4 text-red-500" />
-                        )}
-                    </div>
-                </div>
-
-                {/* Inline feedback */}
-                <div className="min-h-[1.25rem] text-xs">
-                    {availability === 'checking' && (
-                        <span className="text-foreground-muted">{t('checking')}</span>
-                    )}
-                    {availability === 'available' && (
-                        <span className="text-emerald-500 font-medium">{t('available')}</span>
-                    )}
-                    {availability === 'taken' && (
-                        <span className="text-red-500 font-medium">{t('taken')}</span>
-                    )}
-                    {availability === 'idle' && (
-                        <span className="text-foreground-muted">{t('hint')}</span>
-                    )}
-                    {availability === 'invalid' && value.length > 0 && (
-                        <span className="text-foreground-muted">{t('hint')}</span>
-                    )}
-                </div>
-            </div>
+            <UsernameField
+                id="username-input"
+                value={value}
+                status={status}
+                suggestion={suggestion}
+                onChange={handleChange}
+                disabled={isPending}
+                autoFocus
+            />
 
             {/* Server-level error (unexpected failures) */}
             {serverError && (

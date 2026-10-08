@@ -1,6 +1,6 @@
 {
   "auth": {
-    "invalidCredentials": "Nepareizi dati.",
+    "invalidCredentials": "Nepareizs e-pasts vai parole.",
     "modalDesc": "Piesakieties, lai sazinātos.",
     "modalTitle": "Pievienojies kopienai",
     "or": "vai",
@@ -9,7 +9,38 @@
     "signInTitle": "Ienākt",
     "signInToParticipate": "Lūdzu, piesakieties, lai piedalītos diskusijās.",
     "signInToSeeGroups": "Lūdzu, piesakieties, lai redzētu savas grupas.",
-    "signingIn": "Ienāk..."
+    "signingIn": "Ienāk...",
+    "email": "E-pasts",
+    "signInSubtitle": "Ienāc savā Ejam Kopā kontā",
+    "noAccount": "Nav konta? Reģistrējies",
+    "orContinueWith": "Vai turpini ar",
+    "register": {
+      "title": "Izveidot kontu",
+      "subtitle": "Atrodi cilvēkus, ar kuriem kopā darīt.",
+      "name": "Vārds",
+      "namePlaceholder": "piem. Anna Ozola",
+      "nameHint": "Redzams tavā profilā un grupās. Tavs īstais vārds vai tas, kā tevi sauc draugi.",
+      "email": "E-pasts",
+      "password": "Parole",
+      "passwordHint": "Vismaz 8 rakstzīmes.",
+      "confirmPassword": "Atkārto paroli",
+      "submit": "Reģistrēties",
+      "submitting": "Izveido kontu…",
+      "haveAccount": "Jau ir konts? Ienāc",
+      "autoSignInFailed": "Konts ir izveidots, bet ienākt neizdevās. Lūdzu, ienāc."
+    },
+    "validation": {
+      "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmes garam.",
+      "NAME_TOO_LONG": "Vārds nedrīkst būt garāks par 50 rakstzīmēm.",
+      "USERNAME_TOO_SHORT": "Lietotājvārdam jābūt vismaz 3 rakstzīmes garam.",
+      "USERNAME_TOO_LONG": "Lietotājvārds nedrīkst būt garāks par 30 rakstzīmēm.",
+      "USERNAME_INVALID_CHARS": "Tikai mazie burti, cipari un pasvītras.",
+      "EMAIL_INVALID": "Ievadi derīgu e-pasta adresi.",
+      "EMAIL_TAKEN": "Konts ar šo e-pastu jau eksistē. Ienāc tā vietā.",
+      "PASSWORD_TOO_SHORT": "Parolei jābūt vismaz 8 rakstzīmes garai.",
+      "PASSWORD_TOO_LONG": "Parole nedrīkst būt garāka par 72 rakstzīmēm.",
+      "PASSWORDS_DONT_MATCH": "Paroles nesakrīt."
+    }
   },
   "common": {
     "about": "Par mums",
@@ -251,7 +282,8 @@
     "UNAUTHORIZED": "Neautorizēta piekļuve. Lūdzu, ielogojieties.",
     "UPDATE_FAILED": "Neizdevās atjaunināt resursu.",
     "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts. Lūdzu, izvēlieties citu.",
-    "VALIDATION_FAILED": "Validācijas kļūda. Lūdzu, pārbaudiet ievadi."
+    "VALIDATION_FAILED": "Validācijas kļūda. Lūdzu, pārbaudiet ievadi.",
+    "EMAIL_TAKEN": "Konts ar šo e-pastu jau eksistē."
   },
   "group": {
     "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
@@ -491,14 +523,15 @@
     "username": {
       "available": "Pieejams!",
       "checking": "Pārbauda...",
-      "heading": "Izvēlieties lietotājvārdu",
-      "hint": "3–30 rakstzīmes. Tikai burti, cipari un pasvitras.",
+      "heading": "Izvēlies lietotājvārdu",
+      "hint": "3–30 rakstzīmes: mazie burti, cipari un pasvītras.",
       "label": "Lietotājvārds",
-      "placeholder": "piem. jdoe99",
+      "placeholder": "piem. anna_ozola",
       "submit": "Turpināt",
       "submitting": "Saglabā...",
-      "subtext": "Tas ir tavs publiskais iesaukums Ejam Kopā. Tas var būt pseidonīms, segvārds vai jebkas cits — tam nav jābūt tavam īstajam vārdam.",
-      "taken": "Lietotājvārds jau ir aizņemts."
+      "subtext": "Tavs @lietotājvārds ir unikāls: tas ir tavā profila saitē un palīdz citiem tevi atrast. Tavs vārds tiek rādīts atsevišķi.",
+      "taken": "Jau aizņemts.",
+      "useSuggestion": "Izmantot @{suggestion}"
     }
   },
   "profile": {

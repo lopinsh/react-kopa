@@ -1,124 +1,43 @@
-'use client';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import RegisterForm from '@/components/auth/RegisterForm';
+import { safeCallbackPath } from '@/lib/auth-redirect';
+import { Link } from '@/i18n/routing';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { registerUser } from '@/actions/auth';
-import { signIn } from 'next-auth/react';
-import { useLocale } from 'next-intl';
+type Props = {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ callbackUrl?: string }>;
+};
 
-export default function RegisterPage() {
-    const router = useRouter();
-    const locale = useLocale();
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'auth.register' });
+    return { title: t('title') };
+}
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setError('');
-        setLoading(true);
-
-        const formData = new FormData(e.currentTarget);
-        const email = formData.get('email') as string;
-        const password = formData.get('password') as string;
-
-        try {
-            const res = await registerUser(formData);
-            if (!res.success) {
-                setError(res.error || 'Registration failed');
-                setLoading(false);
-                return;
-            }
-
-            // Immediately sign in after registration
-            const signInRes = await signIn('credentials', {
-                email,
-                password,
-                redirect: false,
-            });
-
-            if (signInRes?.error) {
-                setError('Could not sign in automatically.');
-                setLoading(false);
-            } else {
-                router.push(`/${locale}`);
-                router.refresh();
-            }
-        } catch (err) {
-            setError('An error occurred');
-            setLoading(false);
-        }
-    };
+export default async function RegisterPage({ params, searchParams }: Props) {
+    const { locale } = await params;
+    const { callbackUrl } = await searchParams;
+    const t = await getTranslations('auth.register');
+    const returnTo = safeCallbackPath(callbackUrl, `/${locale}`);
 
     return (
-        <div className="flex min-h-[60vh] items-center justify-center">
+        <div className="flex min-h-[60vh] items-center justify-center px-4 py-8">
             <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-surface p-8 shadow-xl">
                 <div className="text-center">
-                    <h1 className="text-2xl font-bold text-foreground">Reģistrēties</h1>
-                    <p className="mt-2 text-sm text-foreground-muted">
-                        Create your Ejam Kopā account
-                    </p>
+                    <h1 className="text-2xl font-bold text-foreground">{t('title')}</h1>
+                    <p className="mt-2 text-sm text-foreground-muted">{t('subtitle')}</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-foreground">
-                            Vārds (Name)
-                        </label>
-                        <input
-                            id="name"
-                            name="name"
-                            type="text"
-                            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="Your Name"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground">
-                            E-pasts (Email)
-                        </label>
-                        <input
-                            id="email"
-                            name="email"
-                            type="email"
-                            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="you@example.com"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                            Parole (Password)
-                        </label>
-                        <input
-                            id="password"
-                            name="password"
-                            type="password"
-                            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-
-                    {error && (
-                        <p className="text-sm text-red-500">{error}</p>
-                    )}
-
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
-                    >
-                        {loading ? 'Registering...' : 'Sign Up'}
-                    </button>
-                </form>
+                <RegisterForm callbackUrl={returnTo} />
 
                 <div className="text-center text-sm">
-                    <a href={`/${locale}/auth/signin`} className="text-primary hover:underline">
-                        Already have an account? Sign in
-                    </a>
+                    <Link
+                        href={{ pathname: '/auth/signin', query: { callbackUrl: returnTo } }}
+                        className="text-primary hover:underline"
+                    >
+                        {t('haveAccount')}
+                    </Link>
                 </div>
             </div>
         </div>

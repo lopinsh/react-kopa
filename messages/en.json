@@ -1,6 +1,6 @@
 {
   "auth": {
-    "invalidCredentials": "Invalid credentials.",
+    "invalidCredentials": "Wrong email or password.",
     "modalDesc": "Sign in to connect.",
     "modalTitle": "Join the Community",
     "or": "or",
@@ -9,7 +9,38 @@
     "signInTitle": "Sign in",
     "signInToParticipate": "Please sign in to participate in discussions.",
     "signInToSeeGroups": "Please sign in to see your groups.",
-    "signingIn": "Signing in..."
+    "signingIn": "Signing in...",
+    "email": "Email",
+    "signInSubtitle": "Sign in to your Ejam Kopā account",
+    "noAccount": "Don’t have an account? Sign up",
+    "orContinueWith": "Or continue with",
+    "register": {
+      "title": "Create an account",
+      "subtitle": "Find people to do things with.",
+      "name": "Name",
+      "namePlaceholder": "e.g. Anna Ozola",
+      "nameHint": "Shown on your profile and in groups. Your real name or what friends call you.",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 8 characters.",
+      "confirmPassword": "Repeat password",
+      "submit": "Sign up",
+      "submitting": "Creating account…",
+      "haveAccount": "Already have an account? Sign in",
+      "autoSignInFailed": "Your account was created, but signing in failed. Please sign in."
+    },
+    "validation": {
+      "NAME_TOO_SHORT": "Name must be at least 2 characters.",
+      "NAME_TOO_LONG": "Name must be at most 50 characters.",
+      "USERNAME_TOO_SHORT": "Username must be at least 3 characters.",
+      "USERNAME_TOO_LONG": "Username must be at most 30 characters.",
+      "USERNAME_INVALID_CHARS": "Only lowercase letters, numbers and underscores.",
+      "EMAIL_INVALID": "Enter a valid email address.",
+      "EMAIL_TAKEN": "An account with this email already exists. Sign in instead.",
+      "PASSWORD_TOO_SHORT": "Password must be at least 8 characters.",
+      "PASSWORD_TOO_LONG": "Password must be at most 72 characters.",
+      "PASSWORDS_DONT_MATCH": "Passwords don’t match."
+    }
   },
   "common": {
     "about": "About",
@@ -251,7 +282,8 @@
     "UNAUTHORIZED": "Unauthorized access. Please log in.",
     "UPDATE_FAILED": "Failed to update resource.",
     "USERNAME_TAKEN": "This username is already taken. Please choose another.",
-    "VALIDATION_FAILED": "Validation failed. Please check your input."
+    "VALIDATION_FAILED": "Validation failed. Please check your input.",
+    "EMAIL_TAKEN": "An account with this email already exists."
   },
   "group": {
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
@@ -491,14 +523,15 @@
     "username": {
       "available": "Available!",
       "checking": "Checking...",
-      "heading": "Choose a username",
-      "hint": "3–30 characters. Letters, numbers, and underscores only.",
+      "heading": "Choose your username",
+      "hint": "3–30 characters: lowercase letters, numbers and underscores.",
       "label": "Username",
-      "placeholder": "e.g. jdoe99",
+      "placeholder": "e.g. anna_ozola",
       "submit": "Continue",
       "submitting": "Saving...",
-      "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
-      "taken": "Username is already taken."
+      "subtext": "Your @username is your handle: it appears in your profile link and helps people find you. Your name is shown separately.",
+      "taken": "Already taken.",
+      "useSuggestion": "Use @{suggestion}"
     }
   },
   "profile": {

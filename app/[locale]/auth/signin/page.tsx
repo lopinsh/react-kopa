@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { safeCallbackPath } from '@/lib/auth-redirect';
+import { Link } from '@/i18n/routing';
+import AuthTextField from '@/components/auth/AuthTextField';
 
 export default function SignInPage() {
     const [email, setEmail] = useState('');
@@ -32,7 +34,7 @@ export default function SignInPage() {
         });
 
         if (!res || res.error) {
-            setError('Invalid email or password.');
+            setError(t('invalidCredentials'));
             setLoading(false);
             return;
         }
@@ -46,41 +48,29 @@ export default function SignInPage() {
             <div className="w-full max-w-md space-y-8 rounded-2xl border border-border bg-surface p-8 shadow-xl">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-foreground">{t('signInTitle')}</h1>
-                    <p className="mt-2 text-sm text-foreground-muted">
-                        Sign in to your Ejam Kopā account
-                    </p>
+                    <p className="mt-2 text-sm text-foreground-muted">{t('signInSubtitle')}</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label htmlFor="email" className="block text-sm font-medium text-foreground">
-                            Email
-                        </label>
-                        <input
-                            id="email"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="test@example.com"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium text-foreground">
-                            Password
-                        </label>
-                        <input
-                            id="password"
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
+                    <AuthTextField
+                        id="email"
+                        type="email"
+                        label={t('email')}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@example.com"
+                        autoComplete="username"
+                        required
+                    />
+                    <AuthTextField
+                        id="password"
+                        type="password"
+                        label={t('password')}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        autoComplete="current-password"
+                        required
+                    />
 
                     {error && (
                         <p className="text-sm text-red-500">{error}</p>
@@ -91,14 +81,17 @@ export default function SignInPage() {
                         disabled={loading}
                         className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                     >
-                        {loading ? 'Signing in...' : 'Sign In'}
+                        {loading ? t('signingIn') : t('signInButton')}
                     </button>
                 </form>
 
                 <div className="text-center text-sm">
-                    <a href={`/${locale}/auth/register`} className="text-primary hover:underline">
-                        Don't have an account? Sign up
-                    </a>
+                    <Link
+                        href={{ pathname: '/auth/register', query: { callbackUrl: safeCallbackPath(searchParams.get('callbackUrl'), `/${locale}`) } }}
+                        className="text-primary hover:underline"
+                    >
+                        {t('noAccount')}
+                    </Link>
                 </div>
 
                 <div className="relative">
@@ -106,7 +99,7 @@ export default function SignInPage() {
                         <div className="w-full border-t border-border" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-surface px-2 text-foreground-muted">Or continue with</span>
+                        <span className="bg-surface px-2 text-foreground-muted">{t('orContinueWith')}</span>
                     </div>
                 </div>
 
