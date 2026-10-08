@@ -279,9 +279,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 className="flex items-center gap-2 hover:text-white transition-colors group/meta drop-shadow-sm"
                             >
                                 <Users className="h-4 w-4 text-white" />
-                                <span>
-                                    <strong className="font-bold text-sm tracking-tight">{stats.memberCount}</strong>
-                                    <span className="ml-1 font-medium opacity-80">{c_common('members')}</span>
+                                <span className="font-medium">
+                                    {t.rich('membersCount', { count: stats.memberCount, b: (chunks) => <strong className="font-bold text-sm tracking-tight">{chunks}</strong> })}
                                 </span>
                             </Link>
 
@@ -290,9 +289,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 className="flex items-center gap-2 hover:text-white transition-colors group/meta drop-shadow-sm"
                             >
                                 <Calendar className="h-4 w-4 text-white" />
-                                <span>
-                                    <strong className="font-bold text-sm tracking-tight">{stats.eventCount}</strong>
-                                    <span className="ml-1 font-medium opacity-80">{c_common('events')}</span>
+                                <span className="font-medium">
+                                    {t.rich('eventsCount', { count: stats.eventCount, b: (chunks) => <strong className="font-bold text-sm tracking-tight">{chunks}</strong> })}
                                 </span>
                             </Link>
 
