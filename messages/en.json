@@ -231,7 +231,9 @@
     "searchInputPlaceholder": "Search groups, events, topics...",
     "searchPlaceholder": "Search groups, events, members...",
     "specificOptions": "Specific Options",
-    "topicsSection": "TOPICS"
+    "topicsSection": "TOPICS",
+    "typePrivate": "Private",
+    "typePublic": "Public"
   },
   "errors": {
     "ACTION_FAILED": "The action could not be completed.",
@@ -267,9 +269,11 @@
     "confirmKick": "Are you sure you want to remove this member?",
     "confirmPromote": "Are you sure you want to promote this member to Admin?",
     "deleteConfirm": "Are you sure you want to permanently delete this group? This action cannot be undone.",
+    "descriptionTitle": "About the group",
     "inquiryDesc": "Have questions for the admins? Send them a message below.",
     "joinToDiscuss": "Join the group to participate in discussions.",
     "membersPageTitle": "{name} | Members",
+    "message": "Message",
     "messageFailed": "Failed to initiate conversation.",
     "messageWarning": "This message will be sent directly to the group owner and moderators. Use this for support or private questions.",
     "noPendingRequests": "All sorted! No pending membership requests at the moment.",
@@ -404,6 +408,7 @@
     "type_group_role": "Role Change",
     "type_info": "Info",
     "type_mention": "Mention",
+    "type_reply": "Reply",
     "type_warning": "Warning",
     "viewDetails": "View Details",
     "applicationAccepted": "Your request to join \"{groupName}\" was approved!",
@@ -431,8 +436,10 @@
       "checking": "Checking...",
       "heading": "Choose a username",
       "hint": "3–30 characters. Letters, numbers, and underscores only.",
+      "label": "Username",
       "placeholder": "e.g. jdoe99",
       "submit": "Continue",
+      "submitting": "Saving...",
       "subtext": "This is your public handle on Ejam Kopā. It can be an alias, nickname, or anything you like — you don't need to use your real name.",
       "taken": "Username is already taken."
     }
@@ -458,6 +465,7 @@
     "fieldName": "Name",
     "handle": "@{username}",
     "memberSince": "Member since {date}",
+    "message": "Message",
     "messagingComingSoon": "Messaging coming soon",
     "messagingDisabled": "Messaging disabled",
     "noActivity": "No activity yet.",
@@ -480,6 +488,7 @@
   },
   "shell": {
     "footer": {
+      "about": "About",
       "contact": "Contact Us",
       "forCommunity": "for the community",
       "guidelines": "Community Guidelines",
@@ -521,9 +530,11 @@
     "TOPIC_REQUIRED": "Please select at least one sub-topic.",
     "acceptingMembers": "Accepting New Members",
     "addSubtopic": "Add a sub-topic",
+    "back": "Back",
     "browseCategories": "Browse Categories",
     "clickToChange": "Click to change category",
     "createSubtopic": "Create sub-topic",
+    "done": "Done",
     "fieldBannerImage": "Banner Image URL",
     "fieldBannerImageHint": "Paste a URL for a background banner image.",
     "fieldBannerImagePlaceholder": "https://images.unsplash.com/...",
@@ -539,6 +550,7 @@
     "fieldNamePlaceholder": "e.g. Riga Runners",
     "fieldWebsite": "Official Website",
     "nameOfSubtopicPlaceholder": "Name of sub-topic...",
+    "next": "Next",
     "noMatch": "No matches found for",
     "noTopicsFound": "No topics found in {category}.",
     "optional": "Optional",

@@ -445,6 +445,7 @@
     }
   },
   "profile": {
+    "anonymousUser": "Anonīms lietotājs",
     "backToProfile": "Atpakaļ uz profilu",
     "discover": "Atklāt grupas",
     "edit": {
