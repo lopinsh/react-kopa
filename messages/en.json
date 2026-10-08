@@ -558,8 +558,9 @@
     "backToProfile": "Back to Profile",
     "discover": "Discover groups",
     "edit": {
-      "avatarSeed": "Avatar Seed (DiceBear)",
-      "avatarSeedPlaceholder": "Custom Avatar Seed string",
+      "avatarSeed": "Avatar",
+      "avatarSeedPlaceholder": "Type any word for a different figure",
+      "avatarShuffle": "New figure",
       "bio": "About Me",
       "bioPlaceholder": "Tell the community about yourself...",
       "cities": "Cities",

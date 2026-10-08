@@ -132,7 +132,7 @@ export const GroupService = {
                             orderBy: { joinedAt: 'desc' as const },
                             select: {
                                 user: {
-                                    select: { id: true, name: true, username: true, avatarSeed: true }
+                                    select: { id: true, name: true, username: true, avatarSeed: true, image: true }
                                 }
                             }
                         }
@@ -218,7 +218,7 @@ export const GroupService = {
             appMessages: {
                 include: {
                     sender: {
-                        select: { name: true, username: true, avatarSeed: true, image: true }
+                        select: { id: true, name: true, username: true, avatarSeed: true, image: true }
                     }
                 },
                 orderBy: { createdAt: 'asc' } as const

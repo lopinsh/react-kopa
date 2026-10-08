@@ -77,7 +77,7 @@ export default async function MyGroupsPage({
             memberCount: m.group._count.members,
             // Legacy page: GroupCard requires members but this query doesn't fetch them.
             // Provide empty array — this route is deprecated in favour of /profile/my-groups.
-            members: [] as { id: string; name: string | null; avatarSeed: string | null }[],
+            members: [] as { id: string; name: string | null; avatarSeed: string | null; image: string | null }[],
             category: {
                 title: m.group.category.titles[0]?.title || 'Unknown',
                 parentTitle: m.group.category.parent?.titles?.[0]?.title,

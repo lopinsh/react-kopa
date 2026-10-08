@@ -8,10 +8,12 @@ import { updateProfile } from '@/actions/user-actions';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
-import { Save, User } from 'lucide-react';
+import { Dices, Save } from 'lucide-react';
+import { avatarUrl } from '@/lib/avatar';
 
 type Props = {
     user: {
+        id: string;
         name: string | null;
         image: string | null;
         username?: string | null;
@@ -40,11 +42,15 @@ export default function ProfileEditForm({ user }: Props) {
         },
     });
 
+    // Live preview: a photo URL wins, otherwise the clay figure for the typed seed.
+    const [watchedImage, watchedSeed] = form.watch(['image', 'avatarSeed']);
+    const previewSrc = avatarUrl({ id: user.id, image: watchedImage, avatarSeed: watchedSeed });
+
     const onSubmit = (data: ProfileFormValues) => {
         startTransition(async () => {
             const result = await updateProfile(data);
             if (result.success) {
-                await update({ name: data.name, image: data.image });
+                await update({ name: data.name, image: data.image, avatarSeed: data.avatarSeed || null });
                 router.push('/profile');
                 router.refresh();
             }
@@ -54,13 +60,12 @@ export default function ProfileEditForm({ user }: Props) {
     return (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <div className="flex items-center gap-6 mb-8">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                    {user.image ? (
-                        <img src={user.image || undefined} alt="" className="h-full w-full rounded-3xl object-cover" />
-                    ) : (
-                        <User className="h-10 w-10" />
-                    )}
-                </div>
+                <img
+                    src={previewSrc}
+                    alt=""
+                    className="h-20 w-20 shrink-0 rounded-3xl bg-surface-elevated object-cover"
+                    referrerPolicy="no-referrer"
+                />
                 <div className="mb-8">
                 <h2 className="text-2xl font-bold text-foreground">
                     {user?.name || t('anonymousUser')}
@@ -153,12 +158,22 @@ export default function ProfileEditForm({ user }: Props) {
                         <label htmlFor="avatarSeed" className="block text-xs font-semibold text-foreground-muted mb-1 uppercase tracking-tighter">
                             {t('edit.avatarSeed')}
                         </label>
-                        <input
-                            id="avatarSeed"
-                            {...form.register('avatarSeed')}
-                            placeholder={t('edit.avatarSeedPlaceholder')}
-                            className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-indigo-500"
-                        />
+                        <div className="flex gap-2">
+                            <input
+                                id="avatarSeed"
+                                {...form.register('avatarSeed')}
+                                placeholder={t('edit.avatarSeedPlaceholder')}
+                                className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:border-indigo-500"
+                            />
+                            <button
+                                type="button"
+                                onClick={() => form.setValue('avatarSeed', Math.random().toString(36).slice(2, 10), { shouldDirty: true })}
+                                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-semibold text-foreground hover:bg-surface-elevated soft-press"
+                            >
+                                <Dices className="h-4 w-4" />
+                                {t('edit.avatarShuffle')}
+                            </button>
+                        </div>
                     </div>
 {form.formState.errors.avatarSeed && (
                         <p className="text-xs text-red-500">{form.formState.errors.avatarSeed.message}</p>

@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
+import { avatarUrl } from '@/lib/avatar';
 
 interface Message {
     id: string;
@@ -25,6 +26,7 @@ type Props = {
         id: string;
         name: string | null;
         image: string | null;
+        avatarSeed?: string | null;
     };
     messages: Message[];
     locale: string;
@@ -74,18 +76,12 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
             <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-border bg-surface relative shadow-inner">
-                        {targetUser.image ? (
-                            <img
-                                src={targetUser.image}
-                                alt={targetUser.name || ''}
-                                className="h-full w-full object-cover"
-                                referrerPolicy="no-referrer"
-                            />
-                        ) : (
-                            <div className="flex h-full w-full items-center justify-center">
-                                <User className="h-6 w-6 text-foreground-muted" />
-                            </div>
-                        )}
+                        <img
+                            src={avatarUrl(targetUser)}
+                            alt={targetUser.name || ''}
+                            className="h-full w-full object-cover"
+                            referrerPolicy="no-referrer"
+                        />
                     </div>
                     <div className="min-w-0">
                         <span className="font-bold text-base text-foreground tracking-tight block truncate">

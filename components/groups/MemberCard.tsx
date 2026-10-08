@@ -8,6 +8,7 @@ import { useTransition } from 'react';
 import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions';
 import { getOrCreateConversation } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
+import { avatarUrl } from '@/lib/avatar';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 export interface Member {
@@ -100,43 +101,21 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                             href={`/profile/${member.user.username}` as any}
                             className="block h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 hover:ring-2 hover:ring-[var(--accent)]/50 transition-all"
                         >
-                            {member.user.image ? (
-                                <img
-                                    src={member.user.image}
-                                    alt={member.user.name || ''}
-                                    className="h-full w-full object-cover"
-                                    referrerPolicy="no-referrer"
-                                />
-                            ) : member.user.avatarSeed ? (
-                                <img
-                                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${member.user.avatarSeed}&radius=50&backgroundColor=transparent`}
-                                    alt={member.user.name || ''}
-                                    className="h-full w-full object-cover"
-                                    referrerPolicy="no-referrer"
-                                />
-                            ) : (
-                                <UserIcon className="h-7 w-7 text-foreground-muted" />
-                            )}
+                            <img
+                                src={avatarUrl(member.user)}
+                                alt={member.user.name || ''}
+                                className="h-full w-full object-cover"
+                                referrerPolicy="no-referrer"
+                            />
                         </Link>
                     ) : (
                         <div className="h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 cursor-default">
-                            {member.user.image ? (
-                                <img
-                                    src={member.user.image}
-                                    alt={member.user.name || ''}
-                                    className="h-full w-full object-cover"
-                                    referrerPolicy="no-referrer"
-                                />
-                            ) : member.user.avatarSeed ? (
-                                <img
-                                    src={`https://api.dicebear.com/9.x/micah/svg?seed=${member.user.avatarSeed}&radius=50&backgroundColor=transparent`}
-                                    alt={member.user.name || ''}
-                                    className="h-full w-full object-cover"
-                                    referrerPolicy="no-referrer"
-                                />
-                            ) : (
-                                <UserIcon className="h-7 w-7 text-foreground-muted" />
-                            )}
+                            <img
+                                src={avatarUrl(member.user)}
+                                alt={member.user.name || ''}
+                                className="h-full w-full object-cover"
+                                referrerPolicy="no-referrer"
+                            />
                         </div>
                     )}
                     {hasAdminRights(member.role) && (

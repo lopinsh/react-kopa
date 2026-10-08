@@ -1,15 +1,17 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { User, LogOut, Settings, LayoutDashboard, Users } from 'lucide-react';
 import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { signOut, signIn } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
 import { clsx } from 'clsx';
+import { avatarUrl } from '@/lib/avatar';
 
 type Props = {
     user: {
+        id: string;
+        avatarSeed?: string | null;
         name?: string | null;
         email?: string | null;
         image?: string | null;
@@ -56,7 +58,8 @@ export default function UserMenu({ user }: Props) {
         );
     }
 
-    const isValidImageUrl = user.image?.startsWith('http') || user.image?.startsWith('/') || user.image?.startsWith('data:');
+    // A broken photo URL falls back to the generated avatar.
+    const avatarSrc = avatarUrl(imageError ? { id: user.id, avatarSeed: user.avatarSeed } : user);
 
     return (
         <div className="relative" ref={menuRef}>
@@ -64,21 +67,13 @@ export default function UserMenu({ user }: Props) {
                 onClick={() => setIsOpen(!isOpen)}
                 className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border bg-surface-elevated transition-all active:scale-95 hover:ring-2 ring-primary/20"
             >
-                {user.image && isValidImageUrl && !imageError ? (
-                    <Image
-                        src={user.image}
-                        alt={user.name || t('userFallback')}
-                        width={40}
-                        height={40}
-                        className="h-full w-full object-cover"
-                        unoptimized={user.image.includes('.svg') || user.image.includes('api.dicebear.com')}
-                        onError={() => setImageError(true)}
-                    />
-                ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-surface-elevated">
-                        <User className="h-5 w-5 text-foreground-muted" />
-                    </div>
-                )}
+                <img
+                    src={avatarSrc}
+                    alt={user.name || t('userFallback')}
+                    className="h-full w-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={() => setImageError(true)}
+                />
             </button>
 
             {mounted && isOpen && (

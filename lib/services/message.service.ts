@@ -14,7 +14,7 @@ export const MessageService = {
                 },
                 include: {
                     participants: {
-                        select: { id: true, name: true, image: true }
+                        select: { id: true, name: true, image: true, avatarSeed: true }
                     },
                     messages: {
                         orderBy: { createdAt: 'desc' },
@@ -39,7 +39,7 @@ export const MessageService = {
                     participants: { some: { id: userId1 } }
                 },
                 include: {
-                    participants: { select: { id: true, name: true, image: true } }
+                    participants: { select: { id: true, name: true, image: true, avatarSeed: true } }
                 }
             });
 
@@ -100,7 +100,7 @@ export const MessageService = {
                     }
                 },
                 include: {
-                    participants: { select: { id: true, name: true, image: true } }
+                    participants: { select: { id: true, name: true, image: true, avatarSeed: true } }
                 }
             });
         } catch (error: any) {
@@ -125,7 +125,7 @@ export const MessageService = {
                 where: { conversationId },
                 orderBy: { createdAt: 'asc' },
                 include: {
-                    sender: { select: { id: true, name: true, image: true } }
+                    sender: { select: { id: true, name: true, image: true, avatarSeed: true } }
                 }
             });
         } catch (error: any) {
@@ -159,7 +159,7 @@ export const MessageService = {
                     senderId
                 },
                 include: {
-                    sender: { select: { id: true, name: true, image: true } }
+                    sender: { select: { id: true, name: true, image: true, avatarSeed: true } }
                 }
             });
 

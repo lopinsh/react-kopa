@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 import MemberMoreModal from '../modals/MemberMoreModal';
 import SupportMessageModal from '../modals/SupportMessageModal';
 import { hasAdminRights } from '@/lib/utils/permissions';
+import { avatarUrl } from '@/lib/avatar';
 
 type Props = {
     members: {
@@ -15,6 +16,7 @@ type Props = {
             id: string;
             name: string | null;
             image: string | null;
+            avatarSeed?: string | null;
         };
     }[];
     groupId: string;
@@ -57,18 +59,12 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                         {/* Avatar */}
                         <div className="relative shrink-0">
                             <div className="h-9 w-9 overflow-hidden rounded-lg bg-surface-elevated border border-white/10 ring-2 ring-white/[0.01]">
-                                {user.image ? (
-                                    <img
-                                        src={user.image || undefined}
-                                        alt={user.name || 'User'}
-                                        className="h-full w-full object-cover transition-transform group-hover:scale-110"
-                                        referrerPolicy="no-referrer"
-                                    />
-                                ) : (
-                                    <div className="flex h-full w-full items-center justify-center text-foreground-muted">
-                                        <User className="h-4 w-4" />
-                                    </div>
-                                )}
+                                <img
+                                    src={avatarUrl(user)}
+                                    alt={user.name || 'User'}
+                                    className="h-full w-full object-cover transition-transform group-hover:scale-110"
+                                    referrerPolicy="no-referrer"
+                                />
                             </div>
 
                             {hasAdminRights(role) && (

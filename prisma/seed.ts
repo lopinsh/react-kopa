@@ -175,20 +175,20 @@ async function main() {
   console.log('👤 Seeding users...');
 
   const users = await Promise.all([
-    prisma.user.upsert({ where: { email: 'oskars@local' }, update: {}, create: { email: 'oskars@local', name: 'Oskars Bērziņš', username: 'oskars_b', bio: 'Outdoor enthusiast and hiking guide.', cities: ['Riga', 'Sigulda'], image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Oskars' } }),
-    prisma.user.upsert({ where: { email: 'liga@local' }, update: {}, create: { email: 'liga@local', name: 'Līga Kalniņa', username: 'liga_k', bio: 'Yoga instructor and nature lover.', cities: ['Jurmala', 'Riga'], image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Liga' } }),
-    prisma.user.upsert({ where: { email: 'andris@local' }, update: {}, create: { email: 'andris@local', name: 'Andris Ozols', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Andris' } }),
-    prisma.user.upsert({ where: { email: 'marta@local' }, update: {}, create: { email: 'marta@local', name: 'Marta Liepiņa', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marta' } }),
-    prisma.user.upsert({ where: { email: 'janis@local' }, update: {}, create: { email: 'janis@local', name: 'Jānis Krūmiņš', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Janis' } }),
-    prisma.user.upsert({ where: { email: 'anna@local' }, update: {}, create: { email: 'anna@local', name: 'Anna Zariņa', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Anna' } }),
-    prisma.user.upsert({ where: { email: 'toms@local' }, update: {}, create: { email: 'toms@local', name: 'Toms Siliņš', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Toms' } }),
-    prisma.user.upsert({ where: { email: 'santa@local' }, update: {}, create: { email: 'santa@local', name: 'Santa Pētersone', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Santa' } }),
+    prisma.user.upsert({ where: { email: 'oskars@local' }, update: {}, create: { email: 'oskars@local', name: 'Oskars Bērziņš', username: 'oskars_b', bio: 'Outdoor enthusiast and hiking guide.', cities: ['Riga', 'Sigulda'] } }),
+    prisma.user.upsert({ where: { email: 'liga@local' }, update: {}, create: { email: 'liga@local', name: 'Līga Kalniņa', username: 'liga_k', bio: 'Yoga instructor and nature lover.', cities: ['Jurmala', 'Riga'] } }),
+    prisma.user.upsert({ where: { email: 'andris@local' }, update: {}, create: { email: 'andris@local', name: 'Andris Ozols' } }),
+    prisma.user.upsert({ where: { email: 'marta@local' }, update: {}, create: { email: 'marta@local', name: 'Marta Liepiņa' } }),
+    prisma.user.upsert({ where: { email: 'janis@local' }, update: {}, create: { email: 'janis@local', name: 'Jānis Krūmiņš' } }),
+    prisma.user.upsert({ where: { email: 'anna@local' }, update: {}, create: { email: 'anna@local', name: 'Anna Zariņa' } }),
+    prisma.user.upsert({ where: { email: 'toms@local' }, update: {}, create: { email: 'toms@local', name: 'Toms Siliņš' } }),
+    prisma.user.upsert({ where: { email: 'santa@local' }, update: {}, create: { email: 'santa@local', name: 'Santa Pētersone' } }),
     // legacy
-    prisma.user.upsert({ where: { email: 'user@local' }, update: {}, create: { email: 'user@local', name: 'Regular User', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user' } }),
-    prisma.user.upsert({ where: { email: 'owner@local' }, update: { role: 'ADMIN' }, create: { email: 'owner@local', name: 'Group Owner', role: 'ADMIN', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=owner' } }),
-    prisma.user.upsert({ where: { email: 'admin@local' }, update: { role: 'ADMIN' }, create: { email: 'admin@local', name: 'Site Admin', role: 'ADMIN', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=admin' } }),
-    prisma.user.upsert({ where: { email: 'member@local' }, update: {}, create: { email: 'member@local', name: 'Group Member', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=member' } }),
-    prisma.user.upsert({ where: { email: 'test@example.com' }, update: {}, create: { email: 'test@example.com', name: 'Oskars Test', image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=OskarsTest' } }),
+    prisma.user.upsert({ where: { email: 'user@local' }, update: {}, create: { email: 'user@local', name: 'Regular User' } }),
+    prisma.user.upsert({ where: { email: 'owner@local' }, update: { role: 'ADMIN' }, create: { email: 'owner@local', name: 'Group Owner', role: 'ADMIN' } }),
+    prisma.user.upsert({ where: { email: 'admin@local' }, update: { role: 'ADMIN' }, create: { email: 'admin@local', name: 'Site Admin', role: 'ADMIN' } }),
+    prisma.user.upsert({ where: { email: 'member@local' }, update: {}, create: { email: 'member@local', name: 'Group Member' } }),
+    prisma.user.upsert({ where: { email: 'test@example.com' }, update: {}, create: { email: 'test@example.com', name: 'Oskars Test' } }),
   ]);
 
   const [oskars, liga, andris, marta, janis, anna, toms, santa] = users;

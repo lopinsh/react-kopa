@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { avatarUrl } from '@/lib/avatar';
 import Link from 'next/link';
 import { Users, MapPin, Globe, Lock, Zap, Clock } from 'lucide-react';
 import { getSmartImageUrl } from '@/lib/image-utils';
@@ -11,6 +12,7 @@ interface GroupMemberPreview {
     id: string;
     name: string | null;
     avatarSeed: string | null;
+    image: string | null;
 }
 
 type Props = {
@@ -40,11 +42,6 @@ const TYPE_ICONS = {
     PUBLIC: Globe,
     PRIVATE: Lock,
 };
-
-function dicebearUrl(seed: string | null | undefined, fallbackId: string): string {
-    const s = seed || fallbackId;
-    return `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(s)}`;
-}
 
 export default function GroupCard({ group, accentColor: globalAccentColor, priority, locale }: Props) {
     const t = useTranslations('discovery');
@@ -142,7 +139,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                                 {visibleMembers.map((member) => (
                                     <Image
                                         key={member.id}
-                                        src={dicebearUrl(member.avatarSeed ?? member.name, member.id)}
+                                        src={avatarUrl(member)}
                                         alt={member.name ?? 'Member'}
                                         width={24}
                                         height={24}

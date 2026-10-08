@@ -7,11 +7,12 @@ import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
 import { getMessages, sendMessage, blockConversation } from '@/actions/message-actions';
 import { clsx } from 'clsx';
+import { avatarUrl } from '@/lib/avatar';
 
 type Conversation = {
     id: string;
     isBlocked: boolean;
-    participants: { id: string; name: string | null; image: string | null }[];
+    participants: { id: string; name: string | null; image: string | null; avatarSeed?: string | null }[];
     messages: { id: string; content: string; createdAt: Date; senderId: string }[];
 };
 
@@ -159,13 +160,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                                     )}
                                 >
                                     <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-surface">
-                                        {otherUser?.image ? (
-                                            <img src={otherUser.image} alt="" className="h-full w-full object-cover" />
-                                        ) : (
-                                            <div className="flex h-full w-full items-center justify-center">
-                                                <UserIcon className="h-5 w-5 text-foreground-muted" />
-                                            </div>
-                                        )}
+                                        {otherUser && <img src={avatarUrl(otherUser)} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />}
                                     </div>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex justify-between items-center">
@@ -217,13 +212,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                                     ←
                                 </button>
                                 <div className="h-8 w-8 overflow-hidden rounded-full border border-border bg-surface">
-                                    {otherParticipant?.image ? (
-                                        <img src={otherParticipant.image} alt="" className="h-full w-full object-cover" />
-                                    ) : (
-                                        <div className="flex h-full w-full items-center justify-center">
-                                            <UserIcon className="h-4 w-4 text-foreground-muted" />
-                                        </div>
-                                    )}
+                                    {otherParticipant && <img src={avatarUrl(otherParticipant)} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />}
                                 </div>
                                 <span className="font-bold">{otherParticipant?.name || 'User'}</span>
                             </div>

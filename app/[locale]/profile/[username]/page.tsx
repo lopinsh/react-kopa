@@ -6,6 +6,7 @@ import { getTranslations, getFormatter } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { MapPin, Calendar, MessageSquare, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { avatarUrl } from '@/lib/avatar';
 
 export default async function PublicProfilePage({
     params
@@ -44,10 +45,7 @@ export default async function PublicProfilePage({
     }
 
     const memberSince = format.dateTime(dbUser.createdAt, { year: 'numeric', month: 'long', day: 'numeric' });
-    const avatarSeed = dbUser.avatarSeed || dbUser.name || dbUser.id;
-    const avatarUrl = dbUser.image?.startsWith('http') || dbUser.image?.startsWith('data:')
-        ? dbUser.image
-        : `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(avatarSeed)}`;
+    const avatarSrc = avatarUrl(dbUser);
 
     return (
         <div className="container mx-auto px-4 py-12 max-w-5xl">
@@ -68,7 +66,7 @@ export default async function PublicProfilePage({
                 <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/10 opacity-50" />
 
                 <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface shadow-xl relative z-10 bg-primary/10">
-                    <img src={avatarUrl} alt={dbUser.name || 'Avatar'} className="h-full w-full object-cover" />
+                    <img src={avatarSrc} alt={dbUser.name || 'Avatar'} className="h-full w-full object-cover" />
                 </div>
 
                 <div className="flex-1 text-center md:text-left relative z-10 w-full">

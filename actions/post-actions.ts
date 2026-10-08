@@ -10,7 +10,7 @@ import type { Prisma } from '@prisma/client';
 
 type PostWithAuthorAndGroup = Prisma.PostGetPayload<{
     include: {
-        author: { select: { name: true; image: true } };
+        author: { select: { id: true; name: true; image: true; avatarSeed: true } };
         group: {
             include: {
                 category: {

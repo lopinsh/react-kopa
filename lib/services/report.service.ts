@@ -27,7 +27,7 @@ export const ReportService = {
         const rawReports = await prisma.report.findMany({
             where: { status: 'PENDING' },
             include: {
-                reporter: { select: { id: true, name: true, image: true } },
+                reporter: { select: { id: true, name: true, image: true, avatarSeed: true } },
                 group: {
                     select: {
                         id: true, name: true, slug: true,

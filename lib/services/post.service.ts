@@ -33,7 +33,7 @@ export const PostService = {
                 },
                 include: {
                     author: {
-                        select: { name: true, image: true }
+                        select: { id: true, name: true, image: true, avatarSeed: true }
                     },
                     group: {
                         include: {
@@ -95,19 +95,19 @@ export const PostService = {
                 orderBy: { createdAt: 'desc' },
                 include: {
                     author: {
-                        select: { id: true, name: true, image: true }
+                        select: { id: true, name: true, image: true, avatarSeed: true }
                     },
                     replies: {
                         orderBy: { createdAt: 'asc' },
                         include: {
                             author: {
-                                select: { id: true, name: true, image: true }
+                                select: { id: true, name: true, image: true, avatarSeed: true }
                             },
                             replies: {
                                 orderBy: { createdAt: 'asc' },
                                 include: {
                                     author: {
-                                        select: { id: true, name: true, image: true }
+                                        select: { id: true, name: true, image: true, avatarSeed: true }
                                     }
                                 }
                             }

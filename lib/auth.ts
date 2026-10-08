@@ -79,16 +79,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // can use it without repeated DB calls.
                 const dbUser = await prisma.user.findUnique({
                     where: { id: user.id as string },
-                    select: { username: true, role: true },
+                    select: { username: true, role: true, avatarSeed: true },
                 });
                 token.username = dbUser?.username ?? null;
                 token.role = dbUser?.role ?? 'USER';
+                token.avatarSeed = dbUser?.avatarSeed ?? null;
             }
             if (trigger === "update" && session) {
                 if (session.name !== undefined) token.name = session.name;
                 if (session.image !== undefined) token.picture = session.image;
                 if (session.username !== undefined) token.username = session.username;
                 if (session.role !== undefined) token.role = session.role;
+                if (session.avatarSeed !== undefined) token.avatarSeed = session.avatarSeed;
             }
             return token;
         },
@@ -97,6 +99,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 session.user.id = token.id as string;
                 session.user.username = (token.username as string | null) ?? null;
                 session.user.role = (token.role as 'USER' | 'ADMIN') ?? 'USER';
+                session.user.avatarSeed = (token.avatarSeed as string | null | undefined) ?? null;
                 if (token.picture) {
                     session.user.image = token.picture as string;
                 }

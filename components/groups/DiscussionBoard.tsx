@@ -12,6 +12,7 @@ import { lv, enUS } from 'date-fns/locale';
 import { useAuthGate } from '@/lib/useAuthGate';
 import AuthGateModal from '@/components/modals/AuthGateModal';
 import { useGroupContext } from '@/components/providers/GroupProvider';
+import { avatarUrl } from '@/lib/avatar';
 
 type NestedReply = {
     id: string;
@@ -21,6 +22,7 @@ type NestedReply = {
         id: string;
         name: string | null;
         image: string | null;
+        avatarSeed?: string | null;
     };
 };
 
@@ -32,6 +34,7 @@ type Reply = {
         id: string;
         name: string | null;
         image: string | null;
+        avatarSeed?: string | null;
     };
     replies: NestedReply[];
 };
@@ -44,6 +47,7 @@ type Post = {
         id: string;
         name: string | null;
         image: string | null;
+        avatarSeed?: string | null;
     };
     replies: Reply[];
 };
@@ -263,18 +267,12 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                         <div key={post.id} className="group relative flex gap-4">
                             {/* Avatar */}
                             <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
-                                {post.author.image ? (
-                                    <img
-                                        src={post.author.image || undefined}
-                                        alt={post.author.name || ''}
-                                        className="h-full w-full object-cover"
-                                        referrerPolicy="no-referrer"
-                                    />
-                                ) : (
-                                    <div className="flex h-full w-full items-center justify-center">
-                                        <UserIcon className="h-5 w-5 text-foreground-muted" />
-                                    </div>
-                                )}
+                                <img
+                                    src={avatarUrl(post.author)}
+                                    alt={post.author.name || ''}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
                             </div>
 
                             {/* Content Bubble */}
@@ -337,18 +335,12 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                         {post.replies.map((reply) => (
                                             <div key={reply.id} className="group/reply relative flex gap-3">
                                                 <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
-                                                    {reply.author.image ? (
-                                                        <img
-                                                            src={reply.author.image || undefined}
-                                                            alt={reply.author.name || ''}
-                                                            className="h-full w-full object-cover"
-                                                            referrerPolicy="no-referrer"
-                                                        />
-                                                    ) : (
-                                                        <div className="flex h-full w-full items-center justify-center">
-                                                            <UserIcon className="h-4 w-4 text-foreground-muted" />
-                                                        </div>
-                                                    )}
+                                                    <img
+                                                        src={avatarUrl(reply.author)}
+                                                        alt={reply.author.name || ''}
+                                                        className="h-full w-full object-cover"
+                                                        referrerPolicy="no-referrer"
+                                                    />
                                                 </div>
                                                 <div className="flex flex-1 flex-col gap-1">
                                                     <div className="flex items-center justify-between gap-2">
@@ -408,18 +400,12 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                                             {reply.replies.map((nestedReply) => (
                                                                 <div key={nestedReply.id} className="group/nested-reply relative flex gap-2">
                                                                     <div className="h-6 w-6 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
-                                                                        {nestedReply.author.image ? (
-                                                                            <img
-                                                                                src={nestedReply.author.image || undefined}
-                                                                                alt={nestedReply.author.name || ''}
-                                                                                className="h-full w-full object-cover"
-                                                                                referrerPolicy="no-referrer"
-                                                                            />
-                                                                        ) : (
-                                                                            <div className="flex h-full w-full items-center justify-center">
-                                                                                <UserIcon className="h-3 w-3 text-foreground-muted" />
-                                                                            </div>
-                                                                        )}
+                                                                        <img
+                                                                            src={avatarUrl(nestedReply.author)}
+                                                                            alt={nestedReply.author.name || ''}
+                                                                            className="h-full w-full object-cover"
+                                                                            referrerPolicy="no-referrer"
+                                                                        />
                                                                     </div>
                                                                     <div className="flex flex-1 flex-col gap-0.5">
                                                                         <div className="flex items-center justify-between gap-2">

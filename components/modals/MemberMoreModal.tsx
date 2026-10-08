@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 import SupportMessageModal from './SupportMessageModal';
+import { avatarUrl } from '@/lib/avatar';
 
 type Props = {
     isOpen: boolean;
@@ -15,6 +16,7 @@ type Props = {
             id: string;
             name: string | null;
             image: string | null;
+            avatarSeed?: string | null;
         };
     }[];
     groupId: string;
@@ -63,18 +65,12 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                             )}
                         >
                             <div className="relative h-12 w-12 overflow-hidden rounded-full bg-surface-elevated shrink-0">
-                                {user.image ? (
-                                    <img
-                                        src={user.image || undefined}
-                                        alt={user.name || 'User'}
-                                        className="h-full w-full object-cover"
-                                        referrerPolicy="no-referrer"
-                                    />
-                                ) : (
-                                    <div className="flex h-full w-full items-center justify-center text-foreground-muted">
-                                        <User className="h-6 w-6" />
-                                    </div>
-                                )}
+                                <img
+                                    src={avatarUrl(user)}
+                                    alt={user.name || 'User'}
+                                    className="h-full w-full object-cover"
+                                    referrerPolicy="no-referrer"
+                                />
                             </div>
 
                             <div className="flex flex-col min-w-0">

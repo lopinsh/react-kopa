@@ -317,7 +317,7 @@ export const DiscoveryService = {
                             orderBy: { joinedAt: 'desc' as const },
                             select: {
                                 user: {
-                                    select: { id: true, name: true, avatarSeed: true }
+                                    select: { id: true, name: true, avatarSeed: true, image: true }
                                 }
                             }
                         }

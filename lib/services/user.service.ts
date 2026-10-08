@@ -10,6 +10,7 @@ export interface GroupMemberPreview {
     id: string;
     name: string | null;
     avatarSeed: string | null;
+    image: string | null;
 }
 
 /** Shared query fragment for fetching up to 5 recent member previews per group */
@@ -19,7 +20,7 @@ const MEMBER_PREVIEW_SELECT = {
         orderBy: { joinedAt: 'desc' as const },
         select: {
             user: {
-                select: { id: true, name: true, avatarSeed: true }
+                select: { id: true, name: true, avatarSeed: true, image: true }
             }
         }
     }

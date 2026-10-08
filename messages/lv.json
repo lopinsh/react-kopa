@@ -558,8 +558,9 @@
     "backToProfile": "Atpakaļ uz profilu",
     "discover": "Atklāt grupas",
     "edit": {
-      "avatarSeed": "Avatāra sēkla (DiceBear)",
-      "avatarSeedPlaceholder": "Pielāgota avatāra sēklas virkne",
+      "avatarSeed": "Avatārs",
+      "avatarSeedPlaceholder": "Ieraksti jebkuru vārdu, lai iegūtu citu figūru",
+      "avatarShuffle": "Cita figūra",
       "bio": "Par mani",
       "bioPlaceholder": "Pastāsti kopienai par sevi...",
       "cities": "Pilsētas",

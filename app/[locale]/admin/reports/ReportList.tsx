@@ -5,13 +5,14 @@ import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useFormatter, useTranslations } from 'next-intl';
+import { avatarUrl } from '@/lib/avatar';
 
 type ReportItem = {
     id: string;
     reason: string;
     status: string;
     createdAt: Date;
-    reporter: { id: string; name: string | null; image: string | null };
+    reporter: { id: string; name: string | null; image: string | null; avatarSeed?: string | null };
     group: { id: string; name: string; slug: string; l1Slug: string } | null;
     event: { id: string; title: string } | null;
 };
@@ -99,13 +100,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 <div>
                                     <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">{t('reportedByLabel')}</p>
                                     <div className="flex items-center gap-2">
-                                        {report.reporter.image ? (
-                                            <img src={report.reporter.image || undefined} alt="" className="h-6 w-6 rounded-full object-cover" />
-                                        ) : (
-                                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
-                                                {report.reporter.name?.[0]?.toUpperCase() || 'U'}
-                                            </div>
-                                        )}
+                                        <img src={avatarUrl(report.reporter)} alt="" className="h-6 w-6 rounded-full object-cover" referrerPolicy="no-referrer" />
                                         <span className="text-sm font-medium text-foreground">{report.reporter.name || t('anonymousUser')}</span>
                                     </div>
                                 </div>
