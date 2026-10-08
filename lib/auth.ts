@@ -55,7 +55,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     const isValid = await bcrypt.compare(password, user.password);
                     if (!isValid) return null;
                 } else {
-                    // Fallback for dev passwords
+                    // Fallback for seeded dev accounts — never in production,
+                    // where these well-known passwords would be a public backdoor.
+                    if (process.env.NODE_ENV === "production") return null;
                     const expectedPassword = DEV_PASSWORDS[email];
                     if (!expectedPassword || password !== expectedPassword) return null;
                 }

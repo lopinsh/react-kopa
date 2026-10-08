@@ -1,6 +1,10 @@
 # AGENTS.md
 
-Source of truth for AI agents and human contributors working on **Ejam Kopā** ("Let's Go Together"): a Latvian community platform for low-friction creation of groups and local events. Read this file in full before starting a task. `CLAUDE.md` imports this file; `.agents/rules/project-rules.md` is a condensed copy for always-on rule loading — keep both in sync when changing the Laws.
+Source of truth for AI agents and human contributors working on **Ejam Kopā** ("Let's Go Together"): a non-profit Latvian platform for finding people to do things with — create a group, be found, join, talk. Read this file in full before starting a task. `CLAUDE.md` and `.agents/rules/project-rules.md` only point here.
+
+**Before any task:** read `docs/execution_handoff.md` (current stage and next item). For product/UI decisions also read `docs/core_philosophy.md` (the why).
+
+**Pushing to `main` deploys to production (ejam.lumm.eu)** via `.github/workflows/deploy.yml`. Never push without the user's explicit OK, and only after the Definition of done passes.
 
 ## Stack
 
@@ -69,10 +73,8 @@ components/providers/ Context providers (GroupProvider, …)
 messages/            en.json, lv.json
 prisma/              schema.prisma, migrations/, seed.ts
 scripts/             Maintenance scripts; scripts/debug/ holds ad-hoc local DB probes
-docs/                Audit reports, handoff notes, philosophy; docs/archive/ is historical
+docs/                execution_handoff.md (plan) and core_philosophy.md (why)
 ```
-
-Project status and priorities: `docs/execution_handoff.md`, `docs/audit_report.md`, `docs/core_philosophy.md`.
 
 ## The Laws (non-negotiable)
 
@@ -116,12 +118,11 @@ type ActionResponse<T> =
 - Never derive display titles from slugs in UI; use the service-provided `title`.
 - Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.
 - Reuse before creating: search `lib/services`, `lib/validations`, `components/ui`, and `messages/` for existing pieces first.
-- Session artifacts (plans, audits, walkthroughs) go in `docs/`, not the repo root. Screenshots and tool output are git-ignored — don't commit them.
+- Don't create new docs (plans, audits, walkthroughs, reports). Progress goes into `docs/execution_handoff.md` as ticked items; anything else belongs in the commit message. Screenshots and tool output are git-ignored — don't commit them.
 - Never commit secrets. `.env*` is ignored (except `.env.example`); MCP API keys are supplied via `${input:…}` prompts in `.vscode/mcp.json`.
 
 ## Agent workflow
 
 - Non-trivial changes: produce a short plan first, including a **Motivation & Design Alignment** note tying the approach to the Laws, and wait for approval. Trivial fixes (typos, single strings) can proceed directly.
-- Task-specific playbooks live in `.agents/workflows/` (`new-feature`, `db-work`, `localization`, `audit`, `prisma-migration`, `seed-database`); the UI role is in `.agents/roles/ui-designer.md`.
-- When available, use MCP tools rather than guessing: `context7` for Next.js / Prisma / next-intl / Auth.js docs, `next-devtools` for route and server/client boundary inspection, `chrome-devtools` for verifying live UI (console, network, layout).
-- Known debt is tracked in `docs/audit_report.md` (Service Law violations in some actions, `any` usages, hardcoded strings, locale drift). Don't add to it; fix adjacent violations only when in scope.
+- Verify library APIs against current docs rather than guessing (Next.js 16, Prisma 6, next-intl 4, Auth.js v5 have all changed recently), and verify UI changes in a real browser.
+- Known debt is listed under "Known code debt" in `docs/execution_handoff.md`. Don't add to it; fix adjacent violations only when in scope.
