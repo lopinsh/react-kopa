@@ -64,6 +64,9 @@ Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2
 
 Goal: each step of create → find → join → talk works end to end, logged in, on desktop and mobile. User signs in in the browser; agent tests and fixes. Expect messaging to be the fragile part (8 "final fix" PRs in May 2026; `actions/message-actions.ts` and `lib/services/message.service.ts` have the most lint errors).
 
+- [ ] 2.0 Sign up (user feedback 2026-10-08 after registering on production):
+  - Registration has no "repeat password" field — add confirmation (shared Zod schema, both client and server).
+  - User wants two separate fields: a **display name** ("Oskars Feldmanis", capitals and spaces allowed, shown everywhere) and a **username/handle** auto-generated from it ("oskars_feldmanis", Latvian diacritics transliterated, editable, uniqueness checked). Today `actions/auth.ts` takes `name` and `app/[locale]/onboarding/username` asks for the handle separately, and in practice the user ended up entering the handle where they expected their name — investigate the actual flow before changing it.
 - [ ] 2.1 Create a group (wizard), both locales
 - [ ] 2.2 Find it via discovery (category, city, search)
 - [ ] 2.3 Join as a second user (public + approval-required groups)
