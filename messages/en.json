@@ -309,6 +309,8 @@
     "VALIDATION_FAILED": "Validation failed. Please check your input.",
     "EMAIL_TAKEN": "An account with this email already exists.",
     "EVENT_FULL": "The organiser has marked this event as full.",
+    "CANCEL_FAILED": "Could not cancel. Please try again.",
+    "MANAGE_FAILED": "Could not save the change. Please try again.",
     "EVENT_MODE_MISMATCH": "This action is not available for this event.",
     "EVENT_NOT_FOUND": "Event not found.",
     "EVENT_SLUG_TAKEN": "This group already has an event with that link name.",

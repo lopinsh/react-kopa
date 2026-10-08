@@ -648,7 +648,7 @@ export class EventService {
                         },
                         _count: {
                             select: {
-                                attendees: true
+                                attendees: { where: { status: 'GOING' } }
                             }
                         }
                     },
