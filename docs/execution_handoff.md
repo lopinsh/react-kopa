@@ -60,6 +60,8 @@ Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2
 - [ ] **1.11 Real 404 for missing groups.** `/en/dancing/group/nonexistent` returns HTTP 200 with a not-found message → call `notFound()`.
   - 2026-10-08 (agent): pages already call `notFound()`, but the `loading.tsx` files above them (`app/[locale]/loading.tsx` etc.) start streaming first, so Next sends 200 + `noindex` (see `node_modules/next/dist/docs/01-app/02-guides/streaming.md`, "Status codes"). A real 404 needs the group lookup before any Suspense boundary (remove those skeletons, or check in `proxy.ts`). Needs a decision; left open.
 - [x] **1.13 Admin pages translations.** User reports many broken strings on `/lv/admin` (2026-10-08). Sweep `app/[locale]/admin/**` for raw keys and hardcoded text (sign in locally as `admin@local`).
+- [x] **1.14 Proxy matcher.** `proxy.ts` matcher `(?!.*api|…)` skipped every URL containing "api" anywhere (e.g. `capital-runners`, *terapija*) — no locale redirect, no onboarding intercept. Anchored to `/api/` only.
+- [x] **1.15 Privacy copy for a live work-in-progress.** Cookie banner no longer claims traffic analysis; About drops the draft notice; Privacy notice and "your data" section reworded to stay true without "draft" wording. Still open: a public contact for data requests (needs user).
 - [ ] **1.12 (needs user) Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
 
 ### Stage 1 review notes (agent, 2026-10-08)
@@ -68,7 +70,6 @@ Commits: `git log --oneline f893691..HEAD`. Done: 1.1–1.10, 1.13. Open: 1.11 (
 
 Noticed, not changed:
 - Sign-in and register pages are still mostly hardcoded English (only the heading was fixed).
-- Cookie banner says "analyze site traffic" but no analytics exist; the Privacy draft says there are none. Fix the banner text.
 - Event page "Share event" button has no handler. Taxonomy inbox "Reject" is an unimplemented placeholder (alert only).
 - Search-dropdown subtitles (`discovery.service.ts`) still show raw city values.
 - Event page times use `Europe/Riga` explicitly (agent's choice; `i18n/request.ts` default is UTC).

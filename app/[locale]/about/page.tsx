@@ -15,9 +15,6 @@ export default async function AboutPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <p className="mb-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground-muted">
-                {t('draftNotice')}
-            </p>
             <h1 className="text-4xl font-black tracking-tight text-foreground">{t('about.title')}</h1>
             <p className="mt-4 text-xl font-medium text-foreground">{t('about.lead')}</p>
             <div className="mt-8 space-y-5 leading-relaxed text-foreground-muted">

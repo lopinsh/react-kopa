@@ -132,7 +132,7 @@
     "pendingTitle": "Pending Tag",
     "placeholder": "e.g. kalns_janis",
     "platform": "Platform",
-    "privacyDescription": "We use cookies to enhance your experience and analyze site traffic.",
+    "privacyDescription": "We only use the cookies the site needs to work: to keep you signed in and to remember your language. No ads, no tracking.",
     "privacyTitle": "We respect your privacy",
     "private": "Private",
     "profile": "Profile",
@@ -628,7 +628,7 @@
     "typePublicDesc": "Anyone can see and join this group."
   },
   "pages": {
-    "draftNotice": "Draft — this text is a first version and will be rewritten.",
+    "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",
     "about": {
       "cta": "Find a group",
       "lead": "Ejam Kopā means “Let’s go together”. It is a place to find people to do things with.",
@@ -647,7 +647,7 @@
       "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
-      "rights1": "You can edit your profile at any time. This page is a draft and does not yet describe how to request deletion of your account.",
+      "rights1": "You can edit your profile at any time. Deleting your account from within the site is not available yet.",
       "rightsTitle": "Your data",
       "title": "Privacy",
       "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",

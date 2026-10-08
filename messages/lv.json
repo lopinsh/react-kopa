@@ -132,7 +132,7 @@
     "pendingTitle": "Gaidāmā birka",
     "placeholder": "piem. kalns_janis",
     "platform": "Platforma",
-    "privacyDescription": "Mēs izmantojam sīkfailus, lai uzlabotu jūsu pieredzi un analizētu vietnes plūsmu.",
+    "privacyDescription": "Mēs izmantojam tikai vietnes darbībai nepieciešamās sīkdatnes — lai saglabātu jūsu pieslēgšanos un valodas izvēli. Bez reklāmām un izsekošanas.",
     "privacyTitle": "Mēs cienām jūsu privātumu",
     "private": "Privāta",
     "profile": "Profils",
@@ -628,7 +628,7 @@
     "typePublicDesc": "Ikviens var redzēt un pievienoties."
   },
   "pages": {
-    "draftNotice": "Melnraksts — šis teksts ir pirmā versija, un tas tiks pārrakstīts.",
+    "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",
     "about": {
       "cta": "Atrast grupu",
       "lead": "Ejam Kopā nozīmē “iesim kopā”. Tā ir vieta, kur atrast cilvēkus, ar kuriem kaut ko darīt.",
@@ -647,7 +647,7 @@
       "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz.",
       "dataTitle": "Ko mēs glabājam",
       "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
-      "rights1": "Savu profilu vari labot jebkurā laikā. Šī lapa ir melnraksts, un tajā vēl nav aprakstīts, kā pieprasīt konta dzēšanu.",
+      "rights1": "Savu profilu vari labot jebkurā laikā. Konta dzēšana pašā vietnē vēl nav pieejama.",
       "rightsTitle": "Tavi dati",
       "title": "Privātums",
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
