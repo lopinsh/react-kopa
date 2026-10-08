@@ -1,6 +1,9 @@
 import { prisma } from '@/lib/prisma';
 import type { ActionResponse } from '@/types/actions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import bcrypt from 'bcryptjs';
+import type { RegisterValues } from '@/lib/validations/auth';
+import { USERNAME_MAX_LENGTH } from '@/lib/username';
 
 /** Minimal user shape used in group member avatar stacks */
 export interface GroupMemberPreview {
@@ -31,14 +34,62 @@ export const UserService = {
     },
 
     /**
-     * Checks if a username is available. Returns true if no user with that username exists.
+     * Checks if a username is available, ignoring case so `Oskars` and `oskars`
+     * can't belong to different people. `exceptUserId` lets a user keep their own.
      */
-    async checkUsernameAvailability(username: string): Promise<boolean> {
-        const existing = await prisma.user.findUnique({
-            where: { username },
+    async checkUsernameAvailability(username: string, exceptUserId?: string): Promise<boolean> {
+        const existing = await prisma.user.findFirst({
+            where: { username: { equals: username, mode: 'insensitive' } },
             select: { id: true },
         });
-        return existing === null;
+        return existing === null || existing.id === exceptUserId;
+    },
+
+    /**
+     * Returns `base` if it is free, otherwise the first free `base2`, `base3`, …
+     * (trimming `base` so the result stays within the length limit).
+     */
+    async suggestAvailableUsername(base: string): Promise<string> {
+        const taken = await prisma.user.findMany({
+            where: { username: { startsWith: base.slice(0, USERNAME_MAX_LENGTH - 3), mode: 'insensitive' } },
+            select: { username: true },
+        });
+        const takenSet = new Set(taken.map((u) => u.username?.toLowerCase()));
+        if (!takenSet.has(base)) return base;
+
+        for (let n = 2; ; n++) {
+            const suffix = String(n);
+            const candidate = base.slice(0, USERNAME_MAX_LENGTH - suffix.length) + suffix;
+            if (!takenSet.has(candidate)) return candidate;
+        }
+    },
+
+    /** Creates an email + password account. Email and username are unique regardless of case. */
+    async createCredentialsUser(data: RegisterValues): Promise<ActionResponse> {
+        try {
+            const emailTaken = await prisma.user.findFirst({
+                where: { email: { equals: data.email, mode: 'insensitive' } },
+                select: { id: true },
+            });
+            if (emailTaken) return { success: false, error: 'EMAIL_TAKEN' };
+
+            if (!(await this.checkUsernameAvailability(data.username))) {
+                return { success: false, error: 'USERNAME_TAKEN' };
+            }
+
+            await prisma.user.create({
+                data: {
+                    name: data.name,
+                    username: data.username,
+                    email: data.email,
+                    password: await bcrypt.hash(data.password, 10),
+                },
+            });
+            return { success: true };
+        } catch (error) {
+            console.error('[UserService.createCredentialsUser] Error:', error);
+            return { success: false, error: 'CREATE_FAILED' };
+        }
     },
 
 
@@ -52,14 +103,8 @@ export const UserService = {
     }): Promise<ActionResponse> {
         try {
             // Username uniqueness check — only when a username is being set
-            if (data.username) {
-                const existing = await prisma.user.findUnique({
-                    where: { username: data.username },
-                    select: { id: true }
-                });
-                if (existing && existing.id !== userId) {
-                    return { success: false, error: 'USERNAME_TAKEN' };
-                }
+            if (data.username && !(await this.checkUsernameAvailability(data.username, userId))) {
+                return { success: false, error: 'USERNAME_TAKEN' };
             }
 
             await prisma.user.update({

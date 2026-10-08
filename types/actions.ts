@@ -28,6 +28,7 @@ export type ErrorCode =
     | 'EVENT_FULL'
     | 'TOGGLE_FAILED'
     | 'USERNAME_TAKEN'
+    | 'EMAIL_TAKEN'
     | 'UNKNOWN_ERROR'
     | 'POST_FAILED'
     | 'REPORT_FAILED'

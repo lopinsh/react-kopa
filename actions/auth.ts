@@ -1,36 +1,13 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import { registerSchema } from '@/lib/validations/auth';
+import { UserService } from '@/lib/services/user.service';
+import type { ActionResponse } from '@/types/actions';
 
-export async function registerUser(formData: FormData) {
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const name = formData.get('name') as string;
+/** Creates an email + password account. The client signs in afterwards. */
+export async function registerUser(input: unknown): Promise<ActionResponse> {
+    const parsed = registerSchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
-    if (!email || !password || !name) {
-        return { success: false, error: 'All fields are required' };
-    }
-
-    try {
-        const existingUser = await prisma.user.findUnique({ where: { email } });
-        if (existingUser) {
-            return { success: false, error: 'User already exists' };
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await prisma.user.create({
-            data: {
-                email,
-                password: hashedPassword,
-                name,
-            },
-        });
-
-        return { success: true };
-    } catch (e) {
-        console.error(e);
-        return { success: false, error: 'Registration failed' };
-    }
+    return UserService.createCredentialsUser(parsed.data);
 }

@@ -1,6 +1,5 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { usernameOnboardingSchema } from '@/lib/validations/onboarding';
 import { UserService } from '@/lib/services/user.service';
@@ -9,22 +8,23 @@ import type { ActionResponse } from '@/types/actions';
 
 /**
  * Lightweight read-only check for username availability.
- * Called by the UsernameForm debounce handler — NOT a mutation.
- * Returns { available: true } when the username is free to claim.
+ * Called by the debounced username fields (registration, onboarding) — NOT a mutation.
+ * When the username is taken, `suggestion` is the first free numbered variant.
  */
 export async function checkUsernameAvailability(
     username: string,
-): Promise<{ available: boolean }> {
+): Promise<{ available: boolean; suggestion?: string }> {
     // Reject obviously invalid formats before hitting the DB.
     const parsed = usernameOnboardingSchema.safeParse({ username });
     if (!parsed.success) return { available: false };
 
-    const existing = await prisma.user.findUnique({
-        where: { username },
-        select: { id: true },
-    });
-
-    return { available: existing === null };
+    if (await UserService.checkUsernameAvailability(parsed.data.username)) {
+        return { available: true };
+    }
+    return {
+        available: false,
+        suggestion: await UserService.suggestAvailableUsername(parsed.data.username),
+    };
 }
 
 /**
