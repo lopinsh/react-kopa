@@ -17,6 +17,8 @@ type Props = {
 export default function ApplicationModal({ isOpen, onClose, groupId, groupName, locale }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
+    const tErrors = useTranslations('errors');
+    const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState('');
     const [isPending, startTransition] = useTransition();
 
@@ -25,12 +27,13 @@ export default function ApplicationModal({ isOpen, onClose, groupId, groupName, 
     const handleSubmit = () => {
         if (!message.trim()) return;
 
+        setError(null);
         startTransition(async () => {
             const result = await joinGroup(groupId, locale, message);
             if (result.success) {
                 onClose();
             } else {
-                console.error(result.error);
+                setError(tErrors(result.error));
             }
         });
     };
@@ -67,6 +70,7 @@ export default function ApplicationModal({ isOpen, onClose, groupId, groupName, 
                             className="w-full resize-none rounded-2xl border border-border bg-surface-elevated p-5 text-sm outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-all placeholder:text-foreground-muted/50"
                         />
                     </div>
+                    {error && <p role="alert" className="text-sm font-medium text-red-500">{error}</p>}
                 </div>
 
                 <div className="mt-8 flex items-center justify-end gap-3">

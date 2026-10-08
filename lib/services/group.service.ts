@@ -261,9 +261,12 @@ export const GroupService = {
         const isAdmin = hasAdminRights(userRole);
 
         // 2. Format Members (with application messages for admins)
-        const formattedMembers = group.members.map((m) => {
+        // Pending applicants and their messages are only visible to group admins, site admins and the applicant themselves.
+        const canSeeApplications = isAdmin || isSiteAdmin;
+        const visibleMembers = canSeeApplications ? group.members : group.members.filter((m) => m.role !== 'PENDING');
+        const formattedMembers = visibleMembers.map((m) => {
             const thread = group.appMessages
-                .filter((msg) => msg.applicationUserId === m.userId)
+                .filter((msg) => msg.applicationUserId === m.userId && (canSeeApplications || m.userId === currentUserId))
                 .map((msg) => ({
                     id: msg.id,
                     content: msg.content,
@@ -562,7 +565,7 @@ export const GroupService = {
         };
     },
 
-    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; slugs: { slug: string; l1Slug: string } | null }>> {
+    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; slugs: { slug: string; l1Slug: string } | null; groupName: string; adminIds: string[] }>> {
         const existing = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
@@ -572,6 +575,13 @@ export const GroupService = {
         if (!message?.trim()) {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
+
+        const group = await prisma.group.findFirst({
+            where: { id: groupId, hiddenAt: null },
+            select: { name: true, isAcceptingMembers: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
+        });
+        if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (!group.isAcceptingMembers) return { success: false, error: 'JOIN_FAILED' };
 
         const slugs = await this.getGroupSlugs(groupId);
 
@@ -594,7 +604,7 @@ export const GroupService = {
             });
         }
 
-        return { success: true, data: { pending: true, slugs } };
+        return { success: true, data: { pending: true, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) } };
     },
 
     async leaveGroup(groupId: string, userId: string): Promise<GroupServiceResult> {

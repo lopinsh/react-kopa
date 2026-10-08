@@ -54,10 +54,18 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
         const result = await GroupService.joinGroup(groupId, session.user.id, message);
         if (!result.success) return result as ActionResponse<{ pending: boolean }>;
 
-        const { slugs } = result.data!;
+        const { slugs, groupName, adminIds } = result.data!;
         if (slugs) {
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
+
+        await Promise.all(adminIds.map(adminId => createNotification({
+            userId: adminId,
+            type: 'JOIN_REQUEST',
+            translationKey: 'joinRequest',
+            args: { authorName: session.user?.name || 'Someone', groupName },
+            link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members` : undefined
+        })));
 
         return { success: true, data: { pending: true } };
     } catch (error) {
