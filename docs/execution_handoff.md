@@ -98,19 +98,27 @@ Noticed, not changed:
 - **Existing features need a quality pass.** Many were added as placeholders without attention to detail or to how they fit the whole site. Before polishing (Stage 3), take an inventory (2.7), then decide per feature with the user: keep & fix / hide / remove.
 - **Notifications** (redone 2026-10-08): one compact layout for all types — group · time, one headline with the person's name, then the content itself (their message, post excerpt, event title, hide reason). Keys: `notifications.headline.<TYPE>`; the text someone wrote goes in the `excerpt` arg (trimmed to 160 chars by `NotificationService`). New notification types must follow this.
 
+- **Events** (decided 2026-10-08):
+  - Two independent settings. **Visibility** = who can see the event: *Public* (everyone, incl. logged out, discovery and search) or *Members only* (group members only — on the Events tab **and** in discovery/search; everyone else 404). **Join mode** = how people take part: *Open* or *Request to join*. Any combination is allowed.
+  - **Open:** button "I'm going" (count shown, to encourage others). The size number ("About how many people?") is context only — never blocks, going count may exceed it. Instructions visible to everyone who can see the event.
+  - **Request to join:** button "Request to join" → pending → organiser approves/declines. Description is visible to everyone who can see the event; **instructions only to approved people and organisers** (stripped server-side). Organiser can manually mark the event **"Full"** (and unmark it). Never automatic. When Full, the button becomes "Join waitlist"; organiser sees the waitlist in join order and lets people in by hand. If an approved person cancels while Full, the organiser is notified (with waitlist size). Unmarking Full keeps the waitlist and notifies waitlisted people that there is room again (they request again / organiser lets them in).
+  - **"Interested" is removed.** Wording must fit any event type (rehearsal, birthday, hike): no seats/tickets/places — people and joining.
+  - **Recurrence:** later, members-only events only (public events never recur — no abandoned public series). Planned as a real series (each date its own event, RSVP per date). Until then the wizard has no recurring option.
+
 ## Opus queue (not for Sonnet)
 
 - 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session.
 - Private groups: invite mechanism + restricted card view for non-members.
 - Search diacritics ("lugsanu" vs "lūgšanu").
 - Decisions on the 2.7 feature inventory, together with the user.
+- Event recurrence as a series (members-only events only) — after 2.8.
 - Minor, unexplained: dev-only sidebar flash on mobile.
 
 **For the user (production):** hide the three junk groups (··· menu on the group page → Hide, or `/admin` → Reports); do one real sign-up (2.0).
 
-## Next session — 2.5, 2.6, 2.7 done 2026-10-08 (Sonnet); awaiting Opus review and keep/fix/hide/remove decisions with the user
+## Next session — 2.8 Events: join modes, waitlist, Events tab (Sonnet)
 
-Scope, in order: **2.5 → 2.6 → 2.7**. One commit per item (tiny 2.6 sub-items may share a commit), tick the box in the same commit, **never push**. Follow "Instructions for the agent working through a stage" above and the session rules. If an item needs a product decision, stop and write the question here instead of guessing.
+Scope: **2.8a → 2.8b → 2.8c → 2.8d**. One commit per sub-item, tick the box in the same commit, **never push**. Follow "Instructions for the agent working through a stage" above, the session rules and the **Events** product decision. **2.8c: stop after the mockup and wait for the user's OK before building.** If something needs a product decision, stop and write the question here instead of guessing.
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
@@ -195,6 +203,12 @@ Goal: each step of create → find → join → talk works end to end, logged in
     | Admin taxonomy | `/admin/taxonomy` | admin | yes | Tree with Edit buttons; fine for one admin. `categorization` override route unfinished (debt list). |
     | Moderation log | `/admin` → Moderation | admin | yes | Done in 2.0b. |
     | Auth-gate modal | `AuthGateModal.tsx` | visitors | yes | Event page now uses a sign-in link; the group-list card button still opens the modal — two patterns for the same thing. |
+
+- [ ] 2.8 Events: join modes, waitlist, Events tab (spec: product decision **Events** above; test as `owner@local` (organiser), `member@local`, `user@local` (non-member) and logged out; EN + LV, desktop + mobile)
+  - **2.8a Model + permissions.** One migration `add_event_join_mode`: enum `EventJoinMode { OPEN, REQUEST }` → `Event.joinMode` default `OPEN`; `Event.isFull Boolean @default(false)`; `AttendanceStatus` becomes `GOING | PENDING | DECLINED | WAITLISTED` (delete existing `INTERESTED` rows in the migration; existing rows on REQUEST events don't exist yet). Rename nothing else; keep `maxParticipants` as the "about how many people" number (context only — remove the capacity check that blocks GOING). `EventService` returns a typed viewer context with the event: `{ canSee, canManage, canSeeInstructions, myStatus, goingCount, waitlistCount }`; `instructions` is **set to null server-side** when `!canSeeInstructions` (event page, Events tab, any other payload). Organisers = event creator + group OWNER/ADMIN. Service methods: `setAttendance` (OPEN: GOING/none), `requestToJoin` (REQUEST: PENDING, or WAITLISTED when `isFull`), `cancel`, `decide(approve|decline)`, `letInFromWaitlist`, `setFull(bool)`. `EVENT_FULL` only when someone tries to join a Full event directly (stale page) — the UI then offers the waitlist. Members-only rules from 2.5 stay. Group header `eventCount` must not count members-only events for outsiders.
+  - **2.8b Flows + notifications.** Wizard: remove the recurring toggle; add "How do people join?" (Open / Request to join, one-line explanation each); size field labelled "About how many people?" (optional); instructions field hint changes with the mode ("Shown only to people you approve" for Request to join). Event page: participant button per mode and state (I'm going / Going ✓ · Request to join / Request sent / You're in / Not this time · Join waitlist / On the waitlist); organiser panel with Full on/off switch, pending requests (approve/decline), waitlist in join order (Let in), going/approved list. Notifications (follow the compact notification layout rule): organiser ← new request; requester ← approved / declined / let in from waitlist; organiser ← approved person cancelled while Full (+ waitlist size); waitlisted ← room again after Full is switched off. All new strings in EN + LV; mark uncertain Latvian copy `[LV: …]` for the user.
+  - **2.8c Events tab + event page design — mockup first.** Problems today: the full group header (banner zone, white title on light background, blank white pill) eats a third of the screen above the tabs; event cards are tall and mostly empty, attendee avatar renders as a broken image, the owner sees a generic "Sign up". Target: compact group header on the Events tab and event page; compact event rows (date block · title · time and place · badges Members only / Request to join / Full · "N going" or "N approved · about M people" · one button per mode and state). Make a desktop + mobile mockup (screenshots of a quick prototype in the running app), **show the user and wait for OK**, then build. Also resolve inventory notes on these pages (two auth-gate patterns → use the sign-in link everywhere).
+  - **2.8d Discovery.** Members see members-only events of their groups in discovery and search (logged out / non-members never do). `getDiscoverableEvents` is cached with `unstable_cache` keyed without the user — keep the public part cached, fetch the member part uncached or key it by user. Fix the filter bug: `city` and `category` both set the `group` key via object spread, so selecting both drops one — combine them with `AND`. Request-to-join events show their mode badge in results.
 
 ## Stage 3 — Make it calm
 
