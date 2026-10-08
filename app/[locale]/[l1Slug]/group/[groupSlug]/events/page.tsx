@@ -66,7 +66,7 @@ export default async function GroupEventsPage({
             {isOwnerOrAdmin && (
                 <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 mb-8">
                     <Link
-                        href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
+                        href={`/${l1Slug}/group/${groupSlug}/create-event`}
                         className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-[var(--accent)] text-white hover:opacity-90 shadow-sm shrink-0"
                     >
                         <Plus className="h-4 w-4" />
@@ -115,7 +115,7 @@ export default async function GroupEventsPage({
                     </p>
                     {isOwnerOrAdmin && currentTab === 'upcoming' && (
                         <Link
-                            href={`/${l1Slug}/group/${groupSlug}/create-event` as any}
+                            href={`/${l1Slug}/group/${groupSlug}/create-event`}
                             className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold bg-surface border border-border hover:bg-surface-elevated transition-colors"
                         >
                             <Plus className="h-4 w-4" />

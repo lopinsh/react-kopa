@@ -96,7 +96,7 @@ export default async function EventPage({
     };
 
     return (
-        <div className="min-h-screen bg-background" style={{ '--accent': accentColor } as any}>
+        <div className="min-h-screen bg-background" style={{ '--accent': accentColor } as React.CSSProperties}>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
