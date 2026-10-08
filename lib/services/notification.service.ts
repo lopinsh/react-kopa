@@ -43,8 +43,8 @@ export const NotificationService = {
             },
         });
 
-        const { pusherServer } = await import('@/lib/pusher');
-        await pusherServer.trigger(`private-user-${payload.userId}`, 'new-notification', notification);
+        const { triggerRealtime } = await import('@/lib/pusher');
+        await triggerRealtime(`private-user-${payload.userId}`, 'new-notification', notification);
 
         return notification;
     },

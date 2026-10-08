@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
-import { pusherServer } from '@/lib/pusher';
+import { triggerRealtime } from '@/lib/pusher';
 import { MembershipRole } from '@prisma/client';
 
 export const MessageService = {
@@ -170,20 +170,16 @@ export const MessageService = {
             });
 
             // Trigger Pusher events for all participants
-            try {
-                conversation.participants.forEach(participant => {
-                    pusherServer.trigger(
-                        `private-user-${participant.id}`,
-                        'new-message',
-                        {
-                            ...message,
-                            createdAt: message.createdAt.toISOString()
-                        }
-                    );
-                });
-            } catch (pusherError) {
-                console.error('[MessageService.sendMessage] Pusher trigger failed:', pusherError);
-            }
+            await Promise.all(conversation.participants.map(participant =>
+                triggerRealtime(
+                    `private-user-${participant.id}`,
+                    'new-message',
+                    {
+                        ...message,
+                        createdAt: message.createdAt.toISOString()
+                    }
+                )
+            ));
 
             return message;
         } catch (error: any) {

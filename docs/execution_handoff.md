@@ -112,6 +112,7 @@ Noticed, not changed:
 - Search diacritics ("lugsanu" vs "lūgšanu").
 - Decisions on the 2.7 feature inventory, together with the user.
 - Event recurrence as a series (members-only events only) — after 2.8.
+- **Realtime is broken on production.** The client bundle has `wsHost: "soketi"` baked in (GitHub secret `NEXT_PUBLIC_PUSHER_HOST` = Docker service name), which browsers cannot resolve; and server-side triggers to Soketi were failing (2026-10-08: admin hide showed "action failed" although the group was hidden). Server triggers are now best-effort (`triggerRealtime` in `lib/pusher.ts`). Real fix needs a public WebSocket endpoint (reverse proxy to Soketi with TLS) and separate server/client host settings — needs the user's server access.
 - Minor, unexplained: dev-only sidebar flash on mobile.
 
 **For the user (production):** hide the three junk groups (··· menu on the group page → Hide, or `/admin` → Reports); do one real sign-up (2.0).

@@ -45,3 +45,14 @@ export const pusherServer = new Proxy({} as PusherServer, {
 export const pusherClient = new Proxy({} as PusherClient, {
     get: (_, prop) => getPusherClient()[prop as keyof PusherClient],
 });
+/**
+ * Sends a realtime event. Best-effort: the data is already saved, so a Soketi
+ * outage or misconfiguration is logged and must not fail the user's action.
+ */
+export async function triggerRealtime(channel: string, event: string, data: unknown): Promise<void> {
+    try {
+        await getPusherServer().trigger(channel, event, data);
+    } catch (error) {
+        console.error(`[realtime] ${event} on ${channel} failed:`, error);
+    }
+}

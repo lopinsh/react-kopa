@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { ActionError } from '@/types/actions';
-import { pusherServer } from '@/lib/pusher';
+import { triggerRealtime } from '@/lib/pusher';
 
 export const PostService = {
     async createPost(data: {
@@ -56,13 +56,13 @@ export const PostService = {
 
             // Trigger Pusher event
             if (data.parentId) {
-                await pusherServer.trigger(
+                await triggerRealtime(
                     `group-${data.groupId}`,
                     'new-reply',
                     post
                 );
             } else {
-                await pusherServer.trigger(
+                await triggerRealtime(
                     `group-${data.groupId}`,
                     'new-post',
                     post
@@ -154,7 +154,7 @@ export const PostService = {
                 where: { id: postId }
             });
 
-            await pusherServer.trigger(
+            await triggerRealtime(
                 `group-${post.group.id}`,
                 'delete-post',
                 { postId }
