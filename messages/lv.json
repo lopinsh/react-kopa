@@ -598,5 +598,23 @@
       "visibility2": "Ziņas tiek glabātas mūsu serverī, un tās nav šifrētas no gala līdz galam.",
       "visibilityTitle": "Kas to var redzēt"
     }
+  },
+  "event": {
+    "aboutEvent": "Par pasākumu",
+    "addToGoogleCalendar": "Pievienot Google kalendāram",
+    "areYouComing": "Vai nāksi?",
+    "capacity": "Vietu skaits",
+    "dateAndTime": "Datums un laiks",
+    "going": "Es nāku",
+    "importantInfo": "Svarīga informācija",
+    "interested": "Interesē",
+    "joinCommunity": "Pievienojies grupai šajā pasākumā.",
+    "joinLink": "Pievienošanās saite",
+    "location": "Vieta",
+    "openInMaps": "Atvērt kartē",
+    "organizer": "Organizators",
+    "shareEvent": "Dalīties ar pasākumu",
+    "tba": "Tiks precizēta",
+    "visitCommunity": "Apmeklēt grupu"
   }
 }

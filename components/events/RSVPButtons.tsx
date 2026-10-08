@@ -5,6 +5,7 @@ import { CheckCircle2, Star, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { toggleAttendance } from '@/actions/event-actions';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 type Props = {
     eventId: string;
@@ -16,6 +17,7 @@ export default function RSVPButtons({ eventId, initialStatus, locale }: Props) {
     const [status, setStatus] = useState(initialStatus);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    const t = useTranslations('event');
 
     const handleToggle = (newStatus: 'GOING' | 'INTERESTED') => {
         const finalStatus = status === newStatus ? 'NONE' : newStatus;
@@ -35,7 +37,7 @@ export default function RSVPButtons({ eventId, initialStatus, locale }: Props) {
                 onClick={() => handleToggle('GOING')}
                 disabled={isPending}
                 className={clsx(
-                    "flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all shadow-lg active:scale-95 group relative overflow-hidden",
+                    "flex items-center justify-center gap-2 rounded-2xl py-4 font-black uppercase transition-all shadow-lg active:scale-95 group relative overflow-hidden",
                     status === 'GOING'
                         ? "bg-[color:var(--accent)] text-white"
                         : "bg-surface-elevated text-foreground hover:bg-white/5 border border-white/5"
@@ -47,14 +49,14 @@ export default function RSVPButtons({ eventId, initialStatus, locale }: Props) {
                     </div>
                 )}
                 <CheckCircle2 className={clsx("h-5 w-5", status === 'GOING' ? "text-white" : "text-foreground-muted group-hover:text-foreground")} />
-                I'M GOING
+                {t('going')}
             </button>
 
             <button
                 onClick={() => handleToggle('INTERESTED')}
                 disabled={isPending}
                 className={clsx(
-                    "flex items-center justify-center gap-2 rounded-2xl py-4 font-black transition-all group relative overflow-hidden",
+                    "flex items-center justify-center gap-2 rounded-2xl py-4 font-black uppercase transition-all group relative overflow-hidden",
                     status === 'INTERESTED'
                         ? "border-2 border-[color:var(--accent)] text-[color:var(--accent)]"
                         : "border-2 border-border text-foreground-muted hover:border-foreground-muted/50 hover:text-foreground"
@@ -66,7 +68,7 @@ export default function RSVPButtons({ eventId, initialStatus, locale }: Props) {
                     </div>
                 )}
                 <Star className={clsx("h-5 w-5 fill-current", status === 'INTERESTED' ? "text-[var(--accent)]" : "text-transparent stroke-foreground-muted group-hover:stroke-foreground")} />
-                INTERESTED
+                {t('interested')}
             </button>
         </div>
     );

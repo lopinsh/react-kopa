@@ -598,5 +598,23 @@
       "visibility2": "Messages are stored on our server and are not end-to-end encrypted.",
       "visibilityTitle": "Who can see it"
     }
+  },
+  "event": {
+    "aboutEvent": "About the event",
+    "addToGoogleCalendar": "Add to Google Calendar",
+    "areYouComing": "Are you coming?",
+    "capacity": "Capacity",
+    "dateAndTime": "Date & Time",
+    "going": "I'm going",
+    "importantInfo": "Important info",
+    "interested": "Interested",
+    "joinCommunity": "Join the community at this event.",
+    "joinLink": "Join Link",
+    "location": "Location",
+    "openInMaps": "Open in Maps",
+    "organizer": "Organizer",
+    "shareEvent": "Share event",
+    "tba": "TBA",
+    "visitCommunity": "Visit group"
   }
 }

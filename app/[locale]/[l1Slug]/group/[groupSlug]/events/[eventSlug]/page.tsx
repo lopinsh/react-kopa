@@ -2,7 +2,7 @@ import { EventService } from '@/lib/services/event.service';
 import { GroupService } from '@/lib/services/group.service';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
-import { getTranslations } from 'next-intl/server';
+import { getFormatter, getTranslations } from 'next-intl/server';
 import {
     Calendar,
     MapPin,
@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
-import { format } from 'date-fns';
 import RSVPButtons from '@/components/events/RSVPButtons';
 import AddToCalendar from '@/components/events/AddToCalendar';
 
@@ -38,6 +37,7 @@ export default async function EventPage({
     }
 
     const t = await getTranslations('event');
+    const formatter = await getFormatter();
     const group = event.group;
 
     const durationMs = event.endDate ? new Date(event.endDate).getTime() - new Date(event.startDate).getTime() : 0;
@@ -49,6 +49,8 @@ export default async function EventPage({
 
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : null;
+    const timeZone = 'Europe/Riga';
+    const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const isOwner = event.creatorId === userId;
     const userAttendance = event.attendees.find(a => a.userId === userId);
@@ -132,7 +134,7 @@ export default async function EventPage({
                             <div className="space-y-4 max-w-3xl">
                                 <div className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-xl">
                                     <Clock className="h-3 w-3" />
-                                    {format(startDate, 'EEEE, MMM d')}
+                                    {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric', timeZone })}
                                 </div>
                                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tight text-shadow-xl">
                                     {event.title}
@@ -140,15 +142,17 @@ export default async function EventPage({
                             </div>
 
                             {/* RSVP Summary for Desktop */}
+                            {event.maxParticipants ? (
                             <div className="hidden lg:flex flex-col items-center gap-2 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 p-4 min-w-[160px]">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50">Capacity</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/50">{t('capacity')}</span>
                                 <div className="flex items-center gap-2">
                                     <Users className="h-5 w-5 text-[var(--accent)]" />
                                     <span className="text-2xl font-black text-white">
-                                        {event._count.attendees}{event.maxParticipants ? `/${event.maxParticipants}` : ''}
+                                        {event._count.attendees}/{event.maxParticipants}
                                     </span>
                                 </div>
                             </div>
+                            ) : null}
                         </div>
                     </div>
                 </div>
@@ -167,11 +171,11 @@ export default async function EventPage({
                                         <Calendar className="h-6 w-6" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">Date & Time</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">{t('dateAndTime')}</p>
                                         <p className="text-sm font-bold text-foreground leading-snug">
-                                            {format(startDate, 'EEEE, MMMM d, yyyy')}
+                                            {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone })}
                                             <br />
-                                            {format(startDate, 'HH:mm')} {endDate && `- ${format(endDate, 'HH:mm')}`}
+                                            {formatter.dateTime(startDate, timeFormat)} {endDate && `- ${formatter.dateTime(endDate, timeFormat)}`}
                                         </p>
                                     </div>
                                 </div>
@@ -184,9 +188,9 @@ export default async function EventPage({
                                         <MapPin className="h-6 w-6" />
                                     </div>
                                     <div className="min-w-0 flex-1">
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">Location</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted mb-1">{t('location')}</p>
                                         <p className="text-sm font-bold text-foreground leading-snug truncate">
-                                            {event.location || 'TBA'}
+                                            {event.location || t('tba')}
                                         </p>
                                         {event.location && !event.location.includes('http') && (
                                             <a
@@ -195,7 +199,7 @@ export default async function EventPage({
                                                 rel="noopener noreferrer"
                                                 className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
                                             >
-                                                Open in Maps
+                                                {t('openInMaps')}
                                             </a>
                                         )}
                                         {event.location && event.location.includes('http') && (
@@ -205,7 +209,7 @@ export default async function EventPage({
                                                 rel="noopener noreferrer"
                                                 className="inline-block mt-2 text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
                                             >
-                                                Join Link
+                                                {t('joinLink')}
                                             </a>
                                         )}
                                     </div>
@@ -219,7 +223,7 @@ export default async function EventPage({
                                 <div className="p-2.5 rounded-xl bg-surface-elevated text-foreground border border-border">
                                     <Info className="h-5 w-5" />
                                 </div>
-                                <h2 className="text-xl font-black tracking-tight text-foreground">About Event</h2>
+                                <h2 className="text-xl font-black tracking-tight text-foreground">{t('aboutEvent')}</h2>
                             </div>
                             <div
                                 className="prose prose-invert max-w-none text-foreground-muted leading-relaxed"
@@ -234,7 +238,7 @@ export default async function EventPage({
                                     <div className="p-2.5 rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
                                         <Info className="h-5 w-5" />
                                     </div>
-                                    <h2 className="text-xl font-black tracking-tight text-[var(--accent)]">Important Info</h2>
+                                    <h2 className="text-xl font-black tracking-tight text-[var(--accent)]">{t('importantInfo')}</h2>
                                 </div>
                                 <div
                                     className="prose prose-invert max-w-none text-foreground-muted leading-relaxed prose-a:text-[var(--accent)]"
@@ -253,8 +257,8 @@ export default async function EventPage({
                                 <div className="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 rounded-full bg-[var(--accent)]/5 blur-3xl pointer-events-none" />
 
                                 <div className="space-y-1">
-                                    <h3 className="text-xl font-black tracking-tight text-foreground">Are you coming?</h3>
-                                    <p className="text-sm text-foreground-muted">Join the community at this event.</p>
+                                    <h3 className="text-xl font-black tracking-tight text-foreground">{t('areYouComing')}</h3>
+                                    <p className="text-sm text-foreground-muted">{t('joinCommunity')}</p>
                                 </div>
 
                                 <RSVPButtons
@@ -275,14 +279,14 @@ export default async function EventPage({
                                     />
                                     <button className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors group/share">
                                         <Share2 className="h-3.5 w-3.5 group-hover/share:text-[var(--accent)] transition-colors" />
-                                        Share Event
+                                        {t('shareEvent')}
                                     </button>
                                 </div>
                             </div>
 
                             {/* Organizer Info */}
                             <div className="rounded-3xl border border-border bg-surface p-6 shadow-sm space-y-4">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">Organizer</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('organizer')}</p>
                                 <Link
                                     href={`/${l1Slug}/group/${group.slug}`}
                                     className="flex items-center gap-3 group/org"
@@ -299,7 +303,7 @@ export default async function EventPage({
                                             {group.name}
                                         </p>
                                         <div className="flex items-center gap-1.5 mt-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted group-hover/org:text-foreground transition-colors">
-                                            Visit Community
+                                            {t('visitCommunity')}
                                             <ExternalLink className="h-3 w-3" />
                                         </div>
                                     </div>
