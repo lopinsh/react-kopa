@@ -62,6 +62,20 @@ Goal: a first-time visitor doesn't bounce. All found in the live-site sweep on 2
 - [x] **1.13 Admin pages translations.** User reports many broken strings on `/lv/admin` (2026-10-08). Sweep `app/[locale]/admin/**` for raw keys and hardcoded text (sign in locally as `admin@local`).
 - [ ] **1.12 (needs user) Remove junk test groups** from the live DB ("sdfasdfasdf", "hhhhhh", "gcbdchbdfhd"). Needs the user — done via admin UI or a one-off script, not a migration.
 
+### Stage 1 review notes (agent, 2026-10-08)
+
+Commits: `git log --oneline f893691..HEAD`. Done: 1.1–1.10, 1.13. Open: 1.11 (decision, see above), 1.12 (needs user). Not run: `npm run build`, lint beyond changed files. Highest-risk change: auth redirects (`lib/auth-redirect.ts`, `proxy.ts`, sign-in page, `UsernameForm`).
+
+Noticed, not changed:
+- Sign-in and register pages are still mostly hardcoded English (only the heading was fixed).
+- Cookie banner says "analyze site traffic" but no analytics exist; the Privacy draft says there are none. Fix the banner text.
+- Event page "Share event" button has no handler. Taxonomy inbox "Reject" is an unimplemented placeholder (alert only).
+- Search-dropdown subtitles (`discovery.service.ts`) still show raw city values.
+- Event page times use `Europe/Riga` explicitly (agent's choice; `i18n/request.ts` default is UTC).
+- `/discover` just redirects to `/`; footer links to `/` directly.
+- "Please be on time…" on events is English seed data, not code.
+- Local DB only: `admin@local` now has username `admin_local` (set while testing onboarding return path).
+
 ## Stage 2 — Walk the loop
 
 Goal: each step of create → find → join → talk works end to end, logged in, on desktop and mobile. User signs in in the browser; agent tests and fixes. Expect messaging to be the fragile part (8 "final fix" PRs in May 2026; `actions/message-actions.ts` and `lib/services/message.service.ts` have the most lint errors).
