@@ -33,8 +33,9 @@ jobs:
             NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
             AUTH_SECRET=${{ secrets.AUTH_SECRET }}
             NEXT_PUBLIC_PUSHER_KEY=${{ secrets.NEXT_PUBLIC_PUSHER_KEY }}
-            NEXT_PUBLIC_PUSHER_HOST=${{ secrets.NEXT_PUBLIC_PUSHER_HOST }}
-            NEXT_PUBLIC_PUSHER_PORT=${{ secrets.NEXT_PUBLIC_PUSHER_PORT }}
+            NEXT_PUBLIC_PUSHER_HOST=ejam.lumm.eu
+            NEXT_PUBLIC_PUSHER_PORT=443
+            NEXT_PUBLIC_PUSHER_TLS=true
 
   deploy:
     runs-on: ubuntu-latest
