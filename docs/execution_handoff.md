@@ -108,7 +108,7 @@ Noticed, not changed:
 
 **For the user (production):** hide the three junk groups (··· menu on the group page → Hide, or `/admin` → Reports); do one real sign-up (2.0).
 
-## Next session (Sonnet) — planned 2026-10-08
+## Next session — 2.5, 2.6, 2.7 done 2026-10-08 (Sonnet); awaiting Opus review and keep/fix/hide/remove decisions with the user
 
 Scope, in order: **2.5 → 2.6 → 2.7**. One commit per item (tiny 2.6 sub-items may share a commit), tick the box in the same commit, **never push**. Follow "Instructions for the agent working through a stage" above and the session rules. If an item needs a product decision, stop and write the question here instead of guessing.
 
@@ -156,7 +156,45 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - f. **Wizard access step**: Public says "Anyone can see and join", but every join needs approval (decided) → reword Public to "anyone can find it and ask to join". Leave Private text alone until invites exist. LV + EN.
   - g. **Hidden group, owner view**: `getGroupWithContext` (`lib/services/group.service.ts`) returns null for everyone except site admins → also let the group OWNER in; show `HiddenGroupBanner` with the reason but **without** the restore button (restore stays admin-only). Everyone else still 404.
   - h. **Notification links** from `sendInquiry`, `manageMembership` and `sendApplicationInquiry` (`lib/services/group.service.ts`) use `group.category.slug` as the URL's L1 segment, but the group route only accepts a level-1 slug there → use `TaxonomyResolver.resolve(category).l1Slug` like the other call sites (works today only because all groups use L1 categories).
-- [ ] 2.7 **Feature inventory — report only, no fixes.** Walk every user-facing feature as logged-out visitor, member, group owner and site admin (EN + LV, desktop + mobile). Add a table under this item, one row per feature: *feature · where (route/component) · who uses it · works? · what feels unfinished or out of place* — be concrete: placeholder text, dead buttons, English strings, duplicated info, styling inconsistent with the rest, unclear purpose. Cover at least: discovery (filters, cards, search), group page tabs (about, discussion, events, members, settings, sections editor), create wizard, profile (own + public), onboarding, messages/inbox, notifications, header/sidebar/footer/mobile nav, admin (dashboard, reports, taxonomy), about/privacy. Keep rows short; this feeds the keep/fix/hide/remove decisions with the user.
+- [x] 2.7 (done 2026-10-08, table below) **Feature inventory — report only, no fixes.** Walk every user-facing feature as logged-out visitor, member, group owner and site admin (EN + LV, desktop + mobile). Add a table under this item, one row per feature: *feature · where (route/component) · who uses it · works? · what feels unfinished or out of place* — be concrete: placeholder text, dead buttons, English strings, duplicated info, styling inconsistent with the rest, unclear purpose. Cover at least: discovery (filters, cards, search), group page tabs (about, discussion, events, members, settings, sections editor), create wizard, profile (own + public), onboarding, messages/inbox, notifications, header/sidebar/footer/mobile nav, admin (dashboard, reports, taxonomy), about/privacy. Keep rows short; this feeds the keep/fix/hide/remove decisions with the user.
+  - **Inventory (2026-10-08, Sonnet, local seed data; viewed as member, group owner, site admin and logged out; EN + LV, desktop + mobile where noted).** "Works?" = does what it says. A walk, not a pixel audit.
+
+    | Feature | Where | Who | Works? | Unfinished / out of place |
+    |---|---|---|---|---|
+    | Discovery: group grid + filters | `app/[locale]/page.tsx`, `components/discovery/*` | everyone | yes | Cards with no banner are a grey gradient (3.1). Every card says "Active" — unclear what it means. Browser tab title is "Groups Found" / "Grupas atrastas" (a result heading, not a title). Category rail flashes full width on mobile load (Opus queue). `/discover` redirects to `/`; `/groups` looks like a "My groups" duplicate (orphaned route, see debt list). |
+    | Discovery: events tab | `/?tab=events` | everyone | yes | Cards show a date overlay and time only; seed events all say 13:15. |
+    | Discovery search | filter-bar input, `searchContextual` | everyone | partly | Diacritic-sensitive (Opus queue). Header ⌘K overlay now hidden (2.6a); `GlobalSearch.tsx` and `SearchModal.tsx` remain as unused files. |
+    | Group page – Information | `[l1Slug]/group/[groupSlug]/page.tsx`, `GroupHeader.tsx` | everyone | yes | **Header title and meta are white on a light background when the group has no banner — unreadable** (3.2). An unlabeled shield pill (role badge, no text) and the "…" menu are unclear. |
+    | Group page – tabs + sidebar | `GroupTabs.tsx`, `GroupSidebarContent.tsx` | members | yes | Two navs for the same pages (tab bar and left menu). Sidebar shows only Information/Events until the role request returns (visible flash). Information has a single "About" tab. |
+    | Group – Discussions | `discussions/page.tsx`, `DiscussionBoard.tsx` | members | not walked end to end | Empty state fine. Posting/commenting not exercised (talk loop, 2.4). |
+    | Group – Events | `events/page.tsx`, `groups/EventCard.tsx` | everyone | yes (fixed in 2.5) | Upcoming / My RSVPs / Past tabs; no edit or delete; "recurring" is only a label. |
+    | Event page | `events/[eventSlug]/page.tsx` | everyone | yes | Stacks the full group header over its own hero; hero title unreadable on light banners (3.3). Description and instructions are rendered as raw HTML (`dangerouslySetInnerHTML`) from the rich-text editor — check sanitising before real users post. Time zone bug (see 2.5). |
+    | Group – Members | `members/page.tsx`, `MemberCard.tsx`, `RequestCard.tsx` | members/admins | yes | Stray "Private" text near the bottom of the page (leftover label?). "Inquire" and "Send message" depend on messaging (2.4). |
+    | Group – Settings | `settings/page.tsx`, `components/groups/settings/*` | owner/admin | yes | **Raw key `wizard.fieldSlug` shown as a label** (`ProfileSection.tsx:41` uses the wrong namespace). Page title is the generic site title. Six settings tabs for a small group — heavy compared with the wizard. |
+    | Group – Sections editor | `GroupSectionEditor.tsx` | owner/admin | not walked | Overlaps with description and instructions (three places to describe the group). |
+    | Create group wizard | `/create`, `components/groups/create-wizard/*` | logged in | yes (2.1) | Four steps. Banner and social links are plain URL fields (no upload). Generic page title. |
+    | Create event wizard | `create-event`, `EventCreationWizard.tsx` | owner/admin | yes (2.5) | Banner is a URL field; the "link name" slug is shown to users; opens as a modal from the group and as a full page by URL. |
+    | Join / apply / withdraw | `ApplicationModal.tsx`, `MembershipPanel.tsx` | visitors | yes (2.3) | Modal says "Join {name}" though it is a request; private groups still fully readable (needs invites). |
+    | Reports / hide | `ReportModal.tsx`, `HideGroupModal.tsx` | any / admin | yes | Reporting is only reachable from the "…" menu. |
+    | Profile (own) | `/profile` | members | yes | "Events Attended 0" is a static stat (not computed from RSVPs). My Groups cards repeat the grey-gradient problem. Category titles on profile cards come back in Latvian on `/en`. |
+    | Profile (public) | `/profile/[username]` | everyone | yes | No way to message the person from here. |
+    | Profile edit | `/profile/edit`, `ProfileEditForm.tsx` | members | not walked | Reached from the user-menu item "Settings" — it is profile editing only. |
+    | My Groups | `/profile/my-groups`, `MyGroupsListRow.tsx` | members | yes | Compact and fine; shows only "Groups I own" for this user. |
+    | Onboarding (username) | `/onboarding/username` | new users | yes | Seed accounts without a username always land here (expected). |
+    | Sign-in / register | `/auth/*` | visitors | yes (2.0) | GitHub and Google buttons always shown; only work if providers are configured in production. |
+    | Messages / inbox | `/messages`, `MessagesLayout.tsx` | members | not walked | Empty state OK. Whole feature is Opus item 2.4. |
+    | Notifications | `NotificationCenter.tsx` | members | yes | Compact layout works; "Mark all as read" present; no page for older notifications. |
+    | Header | `Header.tsx`, `UserMenu.tsx` | everyone | yes | Search gone (2.6a). Language and theme toggles share one pill. User menu: My Groups, View Public Profile, Settings, Sign Out (+ Admin for admins). |
+    | Left sidebar | `Sidebar.tsx` | group pages only | yes | Collapse works. |
+    | Mobile bottom nav | `MobileNav.tsx` | everyone | yes | Discover / My Groups / + / Messages / Profile, shown logged out too (each leads to sign-in). |
+    | Footer | `Footer.tsx` | everyone | yes | "About" appears twice (column heading and link); language switcher duplicates the header's. |
+    | About / Privacy | `/about`, `/privacy` | everyone | yes | About is a draft for the owner to rewrite; Privacy has no public contact address (needs user). |
+    | Cookie banner | `CookieConsent.tsx` | visitors | yes | Truthful after 1.15. |
+    | Admin dashboard | `/admin` | admin | yes | Tabs Tags / Reports / Moderation **and** a second link row "Reports · Taxonomy" under the title duplicate each other; Reports and Taxonomy are also separate pages with different chrome (taxonomy page has no heading context or back link). |
+    | Admin reports | `/admin/reports` | admin | yes | Clean empty state. Non-admins are redirected to `/` instead of seeing a 404. |
+    | Admin taxonomy | `/admin/taxonomy` | admin | yes | Tree with Edit buttons; fine for one admin. `categorization` override route unfinished (debt list). |
+    | Moderation log | `/admin` → Moderation | admin | yes | Done in 2.0b. |
+    | Auth-gate modal | `AuthGateModal.tsx` | visitors | yes | Event page now uses a sign-in link; the group-list card button still opens the modal — two patterns for the same thing. |
 
 ## Stage 3 — Make it calm
 
