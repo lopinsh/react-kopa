@@ -63,7 +63,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
             userId: adminId,
             type: 'JOIN_REQUEST',
             translationKey: 'joinRequest',
-            args: { authorName: session.user?.name || 'Someone', groupName },
+            args: { authorName: session.user.name || session.user.username || '', groupName },
             link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members` : undefined
         })));
 
@@ -113,7 +113,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
                 userId: ownerId,
                 type: 'INQUIRY_RECEIVED',
                 translationKey: 'inquiryReceived',
-                args: { authorName: session.user?.name || 'Someone', groupName },
+                args: { authorName: session.user.name || session.user.username || '', groupName },
                 link: `/${categorySlug}/group/${groupSlug}`
             });
         }

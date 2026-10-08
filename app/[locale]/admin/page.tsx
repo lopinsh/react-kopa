@@ -7,16 +7,22 @@ import { getTranslations } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
 import { getFormatter } from 'next-intl/server';
 import { ModerationService } from '@/lib/services/moderation.service';
+import type { ActionResponse } from '@/types/actions';
+
+/** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
+function backToTab(locale: string, tabName: string, res: ActionResponse): never {
+    redirect(`/${locale}/admin?tab=${tabName}${res.success ? '' : `&error=${res.error}`}`);
+}
 
 export default async function AdminDashboardPage({
     params,
     searchParams
 }: {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ tab?: string }>;
+    searchParams: Promise<{ tab?: string; error?: string }>;
 }) {
     const { locale } = await params;
-    const { tab } = await searchParams;
+    const { tab, error } = await searchParams;
     const activeTab = tab || 'tags';
     const t = await getTranslations('admin.dashboard');
     const tReports = await getTranslations('admin.reports');
@@ -24,6 +30,7 @@ export default async function AdminDashboardPage({
     const tInbox = await getTranslations('admin.taxonomy.inbox');
     const c = await getTranslations('common');
     const tMod = await getTranslations('moderation');
+    const tErrors = await getTranslations('errors');
     const format = await getFormatter();
 
     const session = await auth();
@@ -47,26 +54,26 @@ export default async function AdminDashboardPage({
     async function handleApproveWildcard(formData: FormData) {
         'use server';
         const id = formData.get('id') as string;
-        await approveWildcard(id);
+        backToTab(locale, 'tags', await approveWildcard(id));
     }
 
     async function handleRejectWildcard(formData: FormData) {
         'use server';
         const id = formData.get('id') as string;
-        await rejectWildcard(id);
+        backToTab(locale, 'tags', await rejectWildcard(id));
     }
 
     async function handleDismissReport(formData: FormData) {
         'use server';
         const id = formData.get('id') as string;
-        await dismissReport(id);
+        backToTab(locale, 'reports', await dismissReport(id));
     }
 
     async function handleSuspendGroup(formData: FormData) {
         'use server';
         const reportId = formData.get('reportId') as string;
         const groupId = formData.get('groupId') as string;
-        await suspendReportedGroup(reportId, groupId);
+        backToTab(locale, 'reports', await suspendReportedGroup(reportId, groupId));
     }
 
     return (
@@ -126,6 +133,12 @@ export default async function AdminDashboardPage({
                     {t('tabModeration')}
                 </Link>
             </div>
+
+            {error && (
+                <p role="alert" className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-500">
+                    {tErrors.has(error) ? tErrors(error) : tErrors('ACTION_FAILED')}
+                </p>
+            )}
 
             {/* Content */}
             <div className="bg-surface border border-border rounded-xl shadow-sm p-6">

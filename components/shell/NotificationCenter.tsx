@@ -30,7 +30,9 @@ import type { Locale } from 'date-fns';
 function NotificationContent({ n, t, dateLocale }: { n: Notification, t: any, dateLocale: Locale }) {
     const parsed = JSON.parse(n.message);
     const title = t(`title_${n.type}`);
-    const message = t(parsed.key, parsed.args || {});
+    const args = { ...(parsed.args || {}) };
+    if ('authorName' in args && !args.authorName) args.authorName = t('someone');
+    const message = t(parsed.key, args);
 
     return (
         <div className="flex flex-col gap-1">

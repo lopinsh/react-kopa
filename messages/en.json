@@ -499,6 +499,7 @@
     "profile": "Profile"
   },
   "notifications": {
+    "someone": "Someone",
     "empty": "No notifications yet",
     "markAllRead": "Mark all as read",
     "tagMerged": {

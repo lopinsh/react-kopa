@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import type { Prisma } from '@prisma/client';
 import { hideGroupSchema } from '@/lib/validations/moderation';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { NotificationService } from './notification.service';
@@ -30,8 +31,8 @@ export const ModerationService = {
     /**
      * Records an admin action. Called by services that perform admin-only overrides.
      */
-    async logAction(adminId: string, action: AdminActionType, targetType: string, targetId: string, reason?: string) {
-        return await prisma.adminAction.create({
+    async logAction(adminId: string, action: AdminActionType, targetType: string, targetId: string, reason?: string, tx: Prisma.TransactionClient = prisma) {
+        return await tx.adminAction.create({
             data: { adminId, action, targetType, targetId, reason: reason ?? null }
         });
     },
@@ -54,11 +55,13 @@ export const ModerationService = {
         });
         if (!group) return { success: false, error: 'NOT_FOUND' };
 
-        await prisma.group.update({
-            where: { id: groupId },
-            data: { hiddenAt: new Date(), hiddenReason: parsed.data.reason, hiddenById: adminId }
+        await prisma.$transaction(async (tx) => {
+            await tx.group.update({
+                where: { id: groupId },
+                data: { hiddenAt: new Date(), hiddenReason: parsed.data.reason, hiddenById: adminId }
+            });
+            await this.logAction(adminId, 'GROUP_HIDE', 'GROUP', groupId, parsed.data.reason, tx);
         });
-        await this.logAction(adminId, 'GROUP_HIDE', 'GROUP', groupId, parsed.data.reason);
 
         await Promise.all(group.members.map(m =>
             NotificationService.createNotification({
@@ -82,11 +85,13 @@ export const ModerationService = {
         });
         if (!group) return { success: false, error: 'NOT_FOUND' };
 
-        await prisma.group.update({
-            where: { id: groupId },
-            data: { hiddenAt: null, hiddenReason: null, hiddenById: null }
+        await prisma.$transaction(async (tx) => {
+            await tx.group.update({
+                where: { id: groupId },
+                data: { hiddenAt: null, hiddenReason: null, hiddenById: null }
+            });
+            await this.logAction(adminId, 'GROUP_RESTORE', 'GROUP', groupId, undefined, tx);
         });
-        await this.logAction(adminId, 'GROUP_RESTORE', 'GROUP', groupId);
 
         const resolved = TaxonomyResolver.resolve(group.category);
         return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
@@ -117,7 +122,7 @@ export const ModerationService = {
                 targetId: a.targetId,
                 reason: a.reason,
                 createdAt: a.createdAt,
-                adminName: a.admin.name || a.admin.username,
+                adminName: a.admin ? a.admin.name || a.admin.username : null,
                 target: g
                     ? { name: g.name, href: `/${TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}` }
                     : null

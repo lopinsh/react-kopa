@@ -157,13 +157,13 @@ model Group {
 
 model AdminAction {
   id         String   @id @default(cuid())
-  adminId    String
+  adminId    String?
   action     String
   targetType String
   targetId   String
   reason     String?
   createdAt  DateTime @default(now())
-  admin      User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  admin      User?    @relation(fields: [adminId], references: [id], onDelete: SetNull)
 
   @@index([createdAt])
 }

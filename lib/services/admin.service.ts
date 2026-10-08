@@ -112,7 +112,9 @@ export class AdminService {
      */
     static async suspendReportedGroup(groupId: string, reportId: string, adminId: string): Promise<ModerationResult> {
         const report = await prisma.report.findUnique({ where: { id: reportId }, select: { reason: true } });
-        const reason = report?.reason && report.reason.length >= 5 ? report.reason : `Reported: ${report?.reason ?? 'n/a'}`;
+        // The hide reason must be 5–500 chars; a report reason can be shorter or longer.
+        const reportReason = report?.reason?.trim() ?? '';
+        const reason = (reportReason.length >= 5 ? reportReason : `Reported: ${reportReason || 'n/a'}`).slice(0, 500);
 
         const result = await ModerationService.hideGroup(groupId, adminId, reason);
         if (!result.success) return result;

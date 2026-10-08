@@ -499,6 +499,7 @@
     "profile": "Profils"
   },
   "notifications": {
+    "someone": "Kāds",
     "empty": "Vēl nav paziņojumu",
     "markAllRead": "Atzīmēt visus kā izlasītus",
     "tagMerged": {
