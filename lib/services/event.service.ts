@@ -34,7 +34,7 @@ export class EventService {
         void _userId;
 
         const groupRecord = await prisma.group.findFirst({
-            where: { slug: groupSlug },
+            where: { slug: groupSlug, hiddenAt: null },
             select: { id: true }
         });
 
@@ -309,6 +309,7 @@ export class EventService {
                 return await prisma.event.findMany({
                     where: {
                         visibility: 'PUBLIC',
+                        AND: [{ group: { hiddenAt: null } }],
                         startDate: fStatus === 'past' ? { lt: now } : { gte: now },
                         ...(fCity && {
                             group: {

@@ -71,6 +71,7 @@ export const DiscoveryService = {
         // 3. Fetch Matching Groups within context
         const groupWhere: Prisma.GroupWhereInput = {
             type: 'PUBLIC',
+            hiddenAt: null,
             OR: [
                 { name: q },
                 { description: q }
@@ -112,6 +113,7 @@ export const DiscoveryService = {
         // 3c. Fetch Matching Events within context
         const eventWhere: Prisma.EventWhereInput = {
             visibility: 'PUBLIC',
+            group: { hiddenAt: null },
             OR: [
                 { title: q },
                 { description: q }
@@ -224,6 +226,8 @@ export const DiscoveryService = {
             if (city && city !== 'all') {
                 where.city = city;
             }
+
+            where.hiddenAt = null;
 
             // 2. Type Filter - Show only PUBLIC groups by default in discovery
             if (type === 'PUBLIC' || type === 'PRIVATE') {

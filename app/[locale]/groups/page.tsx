@@ -49,7 +49,7 @@ export default async function MyGroupsPage({
     }
 
     const userGroups = await prisma.membership.findMany({
-        where: { userId: session.user.id },
+        where: { userId: session.user.id, group: { hiddenAt: null } },
         include: {
             group: {
                 include: {

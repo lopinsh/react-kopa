@@ -125,9 +125,12 @@ export const UserService = {
             include: {
                 memberships: {
                     where: {
-                        group: viewerId
-                            ? { OR: [{ type: 'PUBLIC' }, { members: { some: { userId: viewerId } } }] }
-                            : { type: 'PUBLIC' }
+                        group: {
+                            hiddenAt: null,
+                            ...(viewerId
+                                ? { OR: [{ type: 'PUBLIC' }, { members: { some: { userId: viewerId } } }] }
+                                : { type: 'PUBLIC' })
+                        }
                     },
                     include: {
                         group: {
@@ -181,6 +184,7 @@ export const UserService = {
                 },
                 memberships: {
                     take: 6,
+                    where: { group: { hiddenAt: null } },
                     orderBy: { joinedAt: 'desc' },
                     include: {
                         group: {
@@ -226,7 +230,7 @@ export const UserService = {
     async getMyGroups(userId: string, locale: string) {
         const lang = locale === 'en' ? 'en' : 'lv';
         const memberships = await prisma.membership.findMany({
-            where: { userId },
+            where: { userId, group: { hiddenAt: null } },
             include: {
                 group: {
                     include: {

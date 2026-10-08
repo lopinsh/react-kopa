@@ -36,6 +36,8 @@ model User {
   submittedCategories Category[]           @relation("SubmittedCategories")
   conversations       Conversation[]       @relation("ConversationParticipants")
   directMessages      Message[]            @relation("SentMessages")
+  hiddenGroups        Group[]              @relation("HiddenGroups")
+  adminActions        AdminAction[]
 }
 
 model Account {
@@ -133,6 +135,10 @@ model Group {
   accentColor        String?
   bannerImage        String?
   instructions       String?
+  hiddenAt           DateTime?
+  hiddenReason       String?
+  hiddenById         String?
+  hiddenBy           User?                @relation("HiddenGroups", fields: [hiddenById], references: [id], onDelete: SetNull)
   appMessages        ApplicationMessage[]
   events             Event[]
   category           Category             @relation(fields: [categoryId], references: [id])
@@ -145,6 +151,20 @@ model Group {
   @@unique([categoryId, slug])
   @@index([slug])
   @@index([city])
+  @@index([createdAt])
+  @@index([hiddenAt])
+}
+
+model AdminAction {
+  id         String   @id @default(cuid())
+  adminId    String
+  action     String
+  targetType String
+  targetId   String
+  reason     String?
+  createdAt  DateTime @default(now())
+  admin      User     @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
   @@index([createdAt])
 }
 

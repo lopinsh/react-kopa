@@ -5,6 +5,8 @@ import { ShieldAlert, Tags, Check, X, AlertTriangle, EyeOff } from 'lucide-react
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
+import { getFormatter } from 'next-intl/server';
+import { ModerationService } from '@/lib/services/moderation.service';
 
 export default async function AdminDashboardPage({
     params,
@@ -21,6 +23,8 @@ export default async function AdminDashboardPage({
     const tTax = await getTranslations('admin.taxonomy');
     const tInbox = await getTranslations('admin.taxonomy.inbox');
     const c = await getTranslations('common');
+    const tMod = await getTranslations('moderation');
+    const format = await getFormatter();
 
     const session = await auth();
     if (!session?.user?.id) {
@@ -36,6 +40,8 @@ export default async function AdminDashboardPage({
 
     const reportsRes = await getPendingReports();
     const reports = reportsRes.success ? reportsRes.data?.reports : [];
+
+    const moderationLog = activeTab === 'moderation' ? await ModerationService.listActions(50) : [];
 
     // Inline server actions for the forms
     async function handleApproveWildcard(formData: FormData) {
@@ -109,6 +115,16 @@ export default async function AdminDashboardPage({
                         </span>
                     )}
                 </Link>
+                <Link
+                    href={`/${locale}/admin?tab=moderation`}
+                    className={`px-6 py-3 font-medium flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'moderation'
+                        ? 'border-primary text-primary'
+                        : 'border-transparent text-foreground-muted hover:text-foreground'
+                        }`}
+                >
+                    <EyeOff className="h-4 w-4" />
+                    {t('tabModeration')}
+                </Link>
             </div>
 
             {/* Content */}
@@ -148,6 +164,48 @@ export default async function AdminDashboardPage({
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {activeTab === 'moderation' && (
+                    <div>
+                        <h2 className="text-xl font-semibold mb-4 text-foreground">{tMod('logTitle')}</h2>
+                        {moderationLog.length === 0 ? (
+                            <p className="text-foreground-muted text-center py-12">{tMod('logEmpty')}</p>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="text-xs uppercase text-foreground-muted">
+                                        <tr>
+                                            <th className="py-2 pr-4">{tMod('logWhen')}</th>
+                                            <th className="py-2 pr-4">{tMod('logAdmin')}</th>
+                                            <th className="py-2 pr-4">{tMod('logAction')}</th>
+                                            <th className="py-2 pr-4">{tMod('logTarget')}</th>
+                                            <th className="py-2">{tMod('logReason')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-border">
+                                        {moderationLog.map(entry => (
+                                            <tr key={entry.id} className="align-top">
+                                                <td className="py-3 pr-4 whitespace-nowrap text-foreground-muted">
+                                                    {format.dateTime(entry.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
+                                                </td>
+                                                <td className="py-3 pr-4">{entry.adminName || tInbox('unknown')}</td>
+                                                <td className="py-3 pr-4 font-medium">{tMod(`action_${entry.action}`)}</td>
+                                                <td className="py-3 pr-4">
+                                                    {entry.target ? (
+                                                        <Link href={`/${locale}${entry.target.href}`} className="text-primary hover:underline">{entry.target.name}</Link>
+                                                    ) : (
+                                                        <span className="text-foreground-muted">{tMod('deletedTarget')}</span>
+                                                    )}
+                                                </td>
+                                                <td className="py-3 text-foreground-muted">{entry.reason || '—'}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         )}
                     </div>

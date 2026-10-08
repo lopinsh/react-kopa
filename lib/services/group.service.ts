@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { ModerationService } from './moderation.service';
 
 export interface GroupContext {
     id: string;
@@ -77,6 +78,10 @@ export interface GroupContext {
         createdAt: Date;
         senderId: string;
     }>;
+    moderation: {
+        isSiteAdmin: boolean;
+        hidden: { reason: string | null; at: Date } | null;
+    };
 }
 
 export interface GroupServiceResponse<T = void> {
@@ -114,7 +119,7 @@ export const GroupService = {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         const memberships = await prisma.membership.findMany({
-            where: { userId },
+            where: { userId, group: { hiddenAt: null } },
             include: {
                 group: {
                     include: {
@@ -240,6 +245,13 @@ export const GroupService = {
 
         if (!group) return null;
 
+        // Hidden groups exist only for site admins (who see a banner and can restore).
+        const actor = currentUserId
+            ? await prisma.user.findUnique({ where: { id: currentUserId }, select: { role: true } })
+            : null;
+        const isSiteAdmin = actor?.role === 'ADMIN';
+        if (group.hiddenAt && !isSiteAdmin) return null;
+
         const g = group;
 
         // 1. Resolve Membership & Role
@@ -341,7 +353,11 @@ export const GroupService = {
                 content: msg.content,
                 createdAt: msg.createdAt,
                 senderId: msg.senderId
-            })) : []
+            })) : [],
+            moderation: {
+                isSiteAdmin,
+                hidden: g.hiddenAt ? { reason: g.hiddenReason, at: g.hiddenAt } : null
+            }
         };
     }),
 
@@ -679,6 +695,10 @@ export const GroupService = {
                 }
             }
         });
+
+        if (isAppAdmin && !hasAdminRights(role)) {
+            await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
+        }
 
         const resolved = TaxonomyResolver.resolve(group.category);
 

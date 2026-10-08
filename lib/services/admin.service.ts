@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
+import { ModerationService, type ModerationResult } from './moderation.service';
 
 export type WildcardWithDetails = Prisma.CategoryGetPayload<{
     include: {
@@ -103,18 +104,19 @@ export class AdminService {
     }
 
     /**
-     * Take action on a report (suspend a group)
+     * Take action on a report: hide the reported group (restorable) using the report's reason.
      */
-    static async suspendReportedGroup(groupId: string, reportId: string) {
-        // Suspend the group by making it private
-        await prisma.group.update({
-            where: { id: groupId },
-            data: { type: 'PRIVATE' }
-        });
+    static async suspendReportedGroup(groupId: string, reportId: string, adminId: string): Promise<ModerationResult> {
+        const report = await prisma.report.findUnique({ where: { id: reportId }, select: { reason: true } });
+        const reason = report?.reason && report.reason.length >= 5 ? report.reason : `Reported: ${report?.reason ?? 'n/a'}`;
 
-        return prisma.report.update({
+        const result = await ModerationService.hideGroup(groupId, adminId, reason);
+        if (!result.success) return result;
+
+        await prisma.report.update({
             where: { id: reportId },
             data: { status: 'ACTION_TAKEN' }
         });
+        return { success: true };
     }
 }

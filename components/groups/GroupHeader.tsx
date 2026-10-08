@@ -7,7 +7,7 @@ import {
     MapPin, Users, Calendar, Settings, LogOut, UserPlus,
     ShieldAlert, Plus, ChevronRight, MoreHorizontal, HelpCircle,
     Globe, Instagram, MessageSquare, Check, Trash2, X, Share2, Flag,
-    Shield, User
+    Shield, User, EyeOff
 } from 'lucide-react';
 import Image from 'next/image';
 
@@ -19,6 +19,7 @@ const ApplicationModal = dynamic(() => import('../modals/ApplicationModal'), { s
 const ReportModal = dynamic(() => import('../modals/ReportModal'), { ssr: false });
 const InquiryModal = dynamic(() => import('../modals/InquiryModal'), { ssr: false });
 const SupportMessageModal = dynamic(() => import('../modals/SupportMessageModal'), { ssr: false });
+const HideGroupModal = dynamic(() => import('../modals/HideGroupModal'), { ssr: false });
 const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
 
 import { useAuthGate } from '@/lib/useAuthGate';
@@ -40,6 +41,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tCities = useTranslations('cities');
+    const tModeration = useTranslations('moderation');
     const locale = useLocale();
     const router = useRouter();
     const { user } = useGroupContext();
@@ -49,6 +51,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const [isReportModalOpen, setReportModalOpen] = useState(false);
     const [isInquiryModalOpen, setInquiryModalOpen] = useState(false);
     const [isSupportModalOpen, setSupportModalOpen] = useState(false);
+    const [isHideModalOpen, setHideModalOpen] = useState(false);
     const [isMoreOpen, setMoreOpen] = useState(false);
     const [isContactsOpen, setContactsOpen] = useState(false);
     const moreRef = useRef<HTMLDivElement>(null);
@@ -58,6 +61,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const isOwnerOrAdmin = hasAdminRights(userRole);
     const isOwner = checkIsOwner(userRole);
+    const canHide = group.moderation.isSiteAdmin && !isOwner && !group.moderation.hidden;
 
     // Close more menu on outside click
     useEffect(() => {
@@ -256,6 +260,15 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     <Flag className="h-4 w-4" />
                                     {c_common('reportGroup')}
                                 </button>
+                                {canHide && (
+                                    <button
+                                        onClick={() => setHideModalOpen(true)}
+                                        className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/5 transition-colors"
+                                    >
+                                        <EyeOff className="h-4 w-4" />
+                                        {tModeration('hideGroup')}
+                                    </button>
+                                )}
                             </div>
                         )}
                     </div>
@@ -444,6 +457,16 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                         {c_common('reportGroup')}
                                     </button>
 
+                                    {canHide && (
+                                        <button
+                                            onClick={() => { setHideModalOpen(true); setMoreOpen(false); }}
+                                            className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50/10 transition-colors"
+                                        >
+                                            <EyeOff className="h-4 w-4" />
+                                            {tModeration('hideGroup')}
+                                        </button>
+                                    )}
+
                                     {isOwner && (
                                         <>
                                             <div className="h-px bg-border my-1 mx-2" />
@@ -483,6 +506,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                     groupId={group.id}
                     groupName={group.name}
                     locale={locale}
+                />
+            )}
+
+            {isHideModalOpen && (
+                <HideGroupModal
+                    isOpen={isHideModalOpen}
+                    onClose={() => setHideModalOpen(false)}
+                    groupId={group.id}
                 />
             )}
 

@@ -81,7 +81,9 @@ export async function suspendReportedGroup(reportId: string, groupId: string): P
     if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
-        await AdminService.suspendReportedGroup(groupId, reportId);
+        const session = await auth();
+        const result = await AdminService.suspendReportedGroup(groupId, reportId, session!.user.id);
+        if (!result.success) return result;
         revalidatePath('/admin');
         return { success: true };
     } catch (error) {
