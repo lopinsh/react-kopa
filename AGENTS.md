@@ -126,3 +126,13 @@ type ActionResponse<T> =
 - Non-trivial changes: produce a short plan first, including a **Motivation & Design Alignment** note tying the approach to the Laws, and wait for approval. Trivial fixes (typos, single strings) can proceed directly.
 - Verify library APIs against current docs rather than guessing (Next.js 16, Prisma 6, next-intl 4, Auth.js v5 have all changed recently), and verify UI changes in a real browser.
 - Known debt is listed under "Known code debt" in `docs/execution_handoff.md`. Don't add to it; fix adjacent violations only when in scope.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
