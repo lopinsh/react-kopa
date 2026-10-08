@@ -33,7 +33,7 @@ export default function LocationStep() {
                     <option key={c} value={c}>{cityLabel(tCities, c)}</option>
                 ))}
             </select>
-            {errors.city && <p className="mt-1 text-xs text-red-500">{errors.city.message}</p>}
+            {errors.city && <p className="mt-1 text-xs text-red-500">{t(errors.city.message as 'CITY_REQUIRED')}</p>}
         </div>
     );
 }

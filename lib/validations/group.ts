@@ -30,12 +30,12 @@ export const step2Schema = z.object({
         .optional()
         .nullable()
         .or(z.literal('')),
-    bannerImage: z.string().url().or(z.literal('')).optional().nullable(),
-    city: z.enum(CITIES),
+    bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
+    city: z.enum(CITIES, { error: 'CITY_REQUIRED' }),
     accentColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'INVALID_COLOR').optional().nullable().or(z.literal('')),
-    discordLink: z.string().url().or(z.literal('')).optional().nullable(),
-    websiteLink: z.string().url().or(z.literal('')).optional().nullable(),
-    instagramLink: z.string().url().or(z.literal('')).optional().nullable(),
+    discordLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
+    websiteLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
+    instagramLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
 });
 
 // Step 3: Access & Privacy

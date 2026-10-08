@@ -51,7 +51,7 @@ export default function BasicInfoStep({ accentColor }: Props) {
                     onChange={(val) => setValue('description', val)}
                     placeholder={t('fieldDescriptionPlaceholder')}
                 />
-                {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}
+                {errors.description && <p className="mt-1 text-xs text-red-500">{t(errors.description.message as 'DESCRIPTION_TOO_LONG')}</p>}
             </div>
 
             {/* Banner Image */}
@@ -72,7 +72,7 @@ export default function BasicInfoStep({ accentColor }: Props) {
                     )}
                     style={{ ['--tw-ring-color' as string]: accentColor }}
                 />
-                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{errors.bannerImage.message}</p>}
+                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                 <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
             </div>
         </div>

@@ -114,7 +114,7 @@ Goal: each step of create → find → join → talk works end to end, logged in
     - UI: on the group page, admins (not group owners) get "Hide group" in the existing settings/menu area → small modal with reason textarea. `/admin` gets a "Moderation log" list (latest 50 actions, admin name, action, target link, reason, date).
     - `updateGroup` by an app admin who is not a group admin/owner also writes a `GROUP_EDIT` action.
     - Done when: hide → group gone from discovery/search for a normal user (404 on its URL), owner has a notification, log shows it; restore brings it back. Then the **user** hides the three junk groups on production.
-- [ ] 2.1 Create a group (wizard), both locales
+- [x] 2.1 Create a group (wizard), both locales (2026-10-08: walked all 4 steps on desktop EN; LV + mobile step 1 checked. Fixed: city error showed raw Zod text; invalid URL errors were untranslated/invisible on Social step; banner URL wasn't validated before advancing; server error showed a raw code. Created group redirects to its page.)
 - [ ] 2.2 Find it via discovery (category, city, search)
 - [ ] 2.3 Join as a second user (public + approval-required groups)
 - [ ] 2.4 Talk: group inquiry / DM between members, notifications

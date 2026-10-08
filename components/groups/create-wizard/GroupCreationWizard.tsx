@@ -35,6 +35,7 @@ type Props = {
 export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
+    const tErrors = useTranslations('errors');
     const locale = useLocale();
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
@@ -114,7 +115,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['categoryId', 'tagIds', 'city']); // Taxonomy + City
-        if (s === 1) return trigger(['name', 'description']); // Basic Info
+        if (s === 1) return trigger(['name', 'description', 'bannerImage']); // Basic Info
         if (s === 2) return trigger(['discordLink', 'instagramLink', 'websiteLink']); // Social
         if (s === 3) return trigger(['type']); // Access
         return true;
@@ -213,7 +214,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 role="alert"
                                 className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950 dark:text-red-400 border border-red-200"
                             >
-                                {serverError}
+                                {tErrors(serverError as 'ACTION_FAILED')}
                             </p>
                         )}
                     </div>

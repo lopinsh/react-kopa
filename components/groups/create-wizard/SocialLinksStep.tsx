@@ -26,6 +26,7 @@ export default function SocialLinksStep({ accentColor }: { accentColor: string }
                         errors.discordLink ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
                 />
+                {errors.discordLink && <p className="mt-1 text-xs text-red-500">{t('INVALID_URL')}</p>}
             </div>
 
             <div>
@@ -42,6 +43,7 @@ export default function SocialLinksStep({ accentColor }: { accentColor: string }
                         errors.instagramLink ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
                 />
+                {errors.instagramLink && <p className="mt-1 text-xs text-red-500">{t('INVALID_URL')}</p>}
             </div>
 
             <div>
@@ -58,6 +60,7 @@ export default function SocialLinksStep({ accentColor }: { accentColor: string }
                         errors.websiteLink ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
                 />
+                {errors.websiteLink && <p className="mt-1 text-xs text-red-500">{t('INVALID_URL')}</p>}
             </div>
         </div>
     );

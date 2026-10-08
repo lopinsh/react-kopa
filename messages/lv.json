@@ -636,6 +636,9 @@
     "toggleLight": "Pārslēgt uz gaišo režīmu"
   },
   "wizard": {
+    "CITY_REQUIRED": "Lūdzu, izvēlieties pilsētu.",
+    "INVALID_URL": "Lūdzu, ievadiet derīgu saiti (sākot ar https://).",
+    "DESCRIPTION_TOO_LONG": "Apraksts ir pārāk garš.",
     "CATEGORY_REQUIRED": "Lūdzu, izvēlieties kategoriju.",
     "NAME_TOO_LONG": "Nosaukums nevar pārsniegt 80 rakstzīmes.",
     "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm garam.",

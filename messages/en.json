@@ -636,6 +636,9 @@
     "toggleLight": "Switch to light mode"
   },
   "wizard": {
+    "CITY_REQUIRED": "Please select a city.",
+    "INVALID_URL": "Please enter a valid URL (starting with https://).",
+    "DESCRIPTION_TOO_LONG": "Description is too long.",
     "CATEGORY_REQUIRED": "Please select a category.",
     "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
     "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
