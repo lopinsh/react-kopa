@@ -653,6 +653,11 @@
       "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",
       "visibility2": "Messages are stored on our server and are not end-to-end encrypted.",
       "visibilityTitle": "Who can see it"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "This page does not exist or has been removed. The group may have been renamed or closed.",
+      "cta": "Find a group"
     }
   },
   "event": {

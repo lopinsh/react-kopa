@@ -653,6 +653,11 @@
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
       "visibility2": "Ziņas tiek glabātas mūsu serverī, un tās nav šifrētas no gala līdz galam.",
       "visibilityTitle": "Kas to var redzēt"
+    },
+    "notFound": {
+      "title": "Lapa nav atrasta",
+      "body": "Šī lapa neeksistē vai ir noņemta. Iespējams, grupa ir pārdēvēta vai slēgta.",
+      "cta": "Atrast grupu"
     }
   },
   "event": {
