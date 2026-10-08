@@ -8,9 +8,7 @@ import {
     Calendar,
     MapPin,
     Users,
-    Share2,
     ArrowLeft,
-    MoreHorizontal,
     Clock,
     Info,
     CheckCircle2,
@@ -21,6 +19,8 @@ import { clsx } from 'clsx';
 import Link from 'next/link';
 import RSVPButtons from '@/components/events/RSVPButtons';
 import AddToCalendar from '@/components/events/AddToCalendar';
+import ShareEventButton from '@/components/events/ShareEventButton';
+import { signInUrl } from '@/lib/auth-redirect';
 
 export async function generateMetadata({
     params,
@@ -66,6 +66,7 @@ export default async function EventPage({
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const isOwner = event.creatorId === userId;
+    const goingCount = event.attendees.filter(a => a.status === 'GOING').length;
     const userAttendance = event.attendees.find(a => a.userId === userId);
     const attendanceStatus = userAttendance?.status || 'NONE';
 
@@ -111,9 +112,7 @@ export default async function EventPage({
                         <ArrowLeft className="h-5 w-5" />
                     </Link>
                     <span className="font-bold truncate max-w-[200px]">{event.title}</span>
-                    <button className="p-2 -mr-2 text-foreground-muted hover:text-foreground">
-                        <MoreHorizontal className="h-5 w-5" />
-                    </button>
+                    <span className="w-9" aria-hidden="true" />
                 </div>
             </div>
 
@@ -161,7 +160,7 @@ export default async function EventPage({
                                 <div className="flex items-center gap-2">
                                     <Users className="h-5 w-5 text-[var(--accent)]" />
                                     <span className="text-2xl font-black text-white">
-                                        {event._count.attendees}/{event.maxParticipants}
+                                        {goingCount}/{event.maxParticipants}
                                     </span>
                                 </div>
                             </div>
@@ -278,6 +277,7 @@ export default async function EventPage({
                                     eventId={event.id}
                                     initialStatus={attendanceStatus}
                                     locale={locale}
+                                    signInHref={userId ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`)}
                                 />
 
                                 <div className="pt-4 border-t border-border flex flex-col gap-4">
@@ -290,10 +290,7 @@ export default async function EventPage({
                                             endDate: event.endDate || undefined
                                         }}
                                     />
-                                    <button className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors group/share">
-                                        <Share2 className="h-3.5 w-3.5 group-hover/share:text-[var(--accent)] transition-colors" />
-                                        {t('shareEvent')}
-                                    </button>
+                                    <ShareEventButton title={event.title} />
                                 </div>
                             </div>
 

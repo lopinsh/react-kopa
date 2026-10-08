@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useFormatter } from 'next-intl';
+import Link from 'next/link';
+import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, Users, ArrowRight, CheckCircle2, HelpCircle } from 'lucide-react';
-import { format } from 'date-fns';
-import { lv, enUS } from 'date-fns/locale';
 import { toggleAttendance } from '@/actions/event-actions';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
@@ -21,6 +21,7 @@ type Props = {
         location: string | null;
         isAttending: boolean;
         attendeeCount: number;
+        isMembersOnly?: boolean;
         isRecurring?: boolean;
         recurrencePattern?: string | null;
         bannerImage?: string | null;
@@ -33,20 +34,24 @@ type Props = {
         attendeeList: { id: string; name: string | null; image: string | null }[];
     };
     locale: string;
-    isMember: boolean;
+    href: string;
 };
 
-export default function EventCard({ event, locale, isMember }: Props) {
+export default function EventCard({ event, locale, href }: Props) {
     const t = useTranslations('group');
+    const tErrors = useTranslations('errors');
+    const tEvent = useTranslations('event');
+    const formatter = useFormatter();
+    const { error: toastError } = useToast();
+    const timeZone = 'Europe/Riga';
     const [isPending, startTransition] = useTransition();
-    const dateLocale = locale === 'lv' ? lv : enUS;
     const { gateAction, isModalOpen, closeModal } = useAuthGate();
 
     const handleRSVP = () => {
         gateAction(() => {
-            if (!isMember) return;
             startTransition(async () => {
-                await toggleAttendance(event.id, event.isAttending ? 'NONE' : 'GOING', locale);
+                const result = await toggleAttendance(event.id, event.isAttending ? 'NONE' : 'GOING', locale);
+                if (!result.success) toastError(tErrors(result.error as 'ACTION_FAILED'));
             });
         });
     };
@@ -73,8 +78,13 @@ export default function EventCard({ event, locale, isMember }: Props) {
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                         <span className="text-xs font-black uppercase tracking-widest text-[var(--accent)]">
-                            {format(new Date(event.startDate), 'EEEE, d. MMMM', { locale: dateLocale })}
+                            {formatter.dateTime(new Date(event.startDate), { weekday: 'long', day: 'numeric', month: 'long', timeZone })}
                         </span>
+                        {event.isMembersOnly && (
+                            <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-foreground-muted">
+                                {tEvent('membersOnly')}
+                            </span>
+                        )}
                         {event.isRecurring && (
                             <span className="rounded-full bg-[var(--accent)]/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-tighter text-[var(--accent)]">
                                 {t('recurring')}
@@ -93,15 +103,15 @@ export default function EventCard({ event, locale, isMember }: Props) {
 
                 {/* Date Badge */}
                 <div className="flex h-12 w-12 flex-col items-center justify-center rounded-2xl bg-surface-elevated font-bold shadow-sm">
-                    <span className="text-lg leading-none">{format(new Date(event.startDate), 'd')}</span>
-                    <span className="text-[10px] uppercase text-foreground-muted">{format(new Date(event.startDate), 'MMM', { locale: dateLocale })}</span>
+                    <span className="text-lg leading-none">{formatter.dateTime(new Date(event.startDate), { day: 'numeric', timeZone })}</span>
+                    <span className="text-[10px] uppercase text-foreground-muted">{formatter.dateTime(new Date(event.startDate), { month: 'short', timeZone })}</span>
                 </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-foreground-muted">
                 <div className="flex items-center gap-1.5 font-medium">
                     <Calendar className="h-4 w-4" />
-                    {format(new Date(event.startDate), 'HH:mm')}
+                    {formatter.dateTime(new Date(event.startDate), { hour: '2-digit', minute: '2-digit', hour12: false, timeZone })}
                 </div>
                 {event.location && (
                     <div className="flex items-center gap-1.5 font-medium">
@@ -125,7 +135,7 @@ export default function EventCard({ event, locale, isMember }: Props) {
             }
 
             {
-                isMember && event.instructions && (
+                event.instructions && (
                     <div className="relative z-10 rounded-xl border border-[var(--accent)]/10 bg-[var(--accent)]/5 p-3 text-xs">
                         <div className="flex items-center gap-1.5 font-bold text-[var(--accent)] mb-1">
                             <HelpCircle className="h-3 w-3" />
@@ -176,7 +186,7 @@ export default function EventCard({ event, locale, isMember }: Props) {
             <div className="mt-auto flex items-center gap-2">
                 <button
                     onClick={handleRSVP}
-                    disabled={isPending || !isMember}
+                    disabled={isPending}
                     className={clsx(
                         "flex flex-1 items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-all disabled:opacity-50",
                         event.isAttending
@@ -196,9 +206,13 @@ export default function EventCard({ event, locale, isMember }: Props) {
                     )}
                 </button>
 
-                <button className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface text-foreground-muted hover:bg-surface-elevated transition-colors">
+                <Link
+                    href={href}
+                    aria-label={event.title}
+                    className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-surface text-foreground-muted hover:bg-surface-elevated transition-colors"
+                >
                     <ArrowRight className="h-4 w-4" />
-                </button>
+                </Link>
             </div>
 
             <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />

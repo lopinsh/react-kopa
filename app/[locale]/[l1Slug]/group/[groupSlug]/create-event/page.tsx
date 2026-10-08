@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
+import { getTranslations } from 'next-intl/server';
 
 export default async function CreateEventPage({
     params,
@@ -29,12 +30,14 @@ export default async function CreateEventPage({
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
+    const t = await getTranslations('event');
+
     return (
         <div className="min-h-full bg-surface-elevated/30 py-20">
             <div className="container mx-auto px-4">
                 <div className="mb-10 text-center">
                     <h1 className="text-3xl font-bold text-foreground">{group.name}</h1>
-                    <p className="mt-2 text-foreground-muted">Create a new event for your community</p>
+                    <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
                 </div>
 
                 <EventCreationWizard

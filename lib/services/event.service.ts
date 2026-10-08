@@ -21,6 +21,21 @@ export type EventServiceResult<T = void> = EventServiceResponse<T> | EventServic
 
 export class EventService {
     /**
+     * Members-only events are visible to approved group members and site admins.
+     */
+    private static async canSeeMembersOnly(groupId: string, userId?: string): Promise<boolean> {
+        if (!userId) return false;
+        const [membership, user] = await Promise.all([
+            prisma.membership.findUnique({
+                where: { userId_groupId: { userId, groupId } },
+                select: { role: true }
+            }),
+            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+        ]);
+        return (!!membership && membership.role !== 'PENDING') || user?.role === 'ADMIN';
+    }
+
+    /**
      * Get a single event with full context (group, membership status, etc.)
      * Cached per-request to prevent redundant queries.
      */
@@ -28,10 +43,9 @@ export class EventService {
         eventSlug: string,
         groupSlug: string,
         locale: string,
-        _userId?: string
+        userId?: string
     ) => {
         const lang = locale === 'en' ? 'en' : 'lv';
-        void _userId;
 
         const groupRecord = await prisma.group.findFirst({
             where: { slug: groupSlug, hiddenAt: null },
@@ -71,6 +85,13 @@ export class EventService {
                 }
             }
         });
+
+        if (!event) return null;
+
+        // Members-only events do not exist for everyone else (404).
+        if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(groupRecord.id, userId))) {
+            return null;
+        }
 
         return event;
     });
@@ -209,14 +230,16 @@ export class EventService {
      */
     static async getGroupEvents(groupId: string, userId?: string) {
         try {
+            const canSeeAll = await EventService.canSeeMembersOnly(groupId, userId);
             const events = await prisma.event.findMany({
-                where: { groupId },
+                where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
                 orderBy: { startDate: 'asc' },
                 include: {
                     _count: {
-                        select: { attendees: true }
+                        select: { attendees: { where: { status: 'GOING' } } }
                     },
                     attendees: {
+                        where: { status: 'GOING' },
                         include: {
                             user: {
                                 select: { id: true, name: true, image: true }
@@ -227,9 +250,17 @@ export class EventService {
                 }
             });
 
+            const mine = userId
+                ? await prisma.attendance.findMany({
+                    where: { userId, eventId: { in: events.map(e => e.id) } },
+                    select: { eventId: true, status: true }
+                })
+                : [];
+            const myStatus = new Map(mine.map(a => [a.eventId, a.status]));
+
             return events.map(e => ({
                 ...e,
-                isAttending: userId ? e.attendees.some(a => a.userId === userId) : false,
+                isAttending: myStatus.get(e.id) === 'GOING',
                 attendeeCount: e._count.attendees,
                 attendeeList: e.attendees.map(a => a.user)
             }));
@@ -250,9 +281,10 @@ export class EventService {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             include: {
-                _count: { select: { attendees: true } },
                 group: {
                     select: {
+                        id: true,
+                        hiddenAt: true,
                         slug: true,
                         category: {
                             include: TaxonomyResolver.getInclude('lv')
@@ -262,7 +294,11 @@ export class EventService {
             }
         });
 
-        if (!event) return { success: false, error: 'EVENT_NOT_FOUND' };
+        if (!event || event.group.hiddenAt) return { success: false, error: 'EVENT_NOT_FOUND' };
+
+        if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(event.group.id, userId))) {
+            return { success: false, error: 'MEMBERS_ONLY' };
+        }
 
         if (status === 'NONE') {
             await prisma.attendance.deleteMany({
@@ -270,7 +306,10 @@ export class EventService {
             });
         } else {
             // Check capacity for GOING
-            if (status === 'GOING' && event.maxParticipants && event._count.attendees >= event.maxParticipants) {
+            const goingCount = status === 'GOING' && event.maxParticipants
+                ? await prisma.attendance.count({ where: { eventId, status: 'GOING' } })
+                : 0;
+            if (status === 'GOING' && event.maxParticipants && goingCount >= event.maxParticipants) {
                 const current = await prisma.attendance.findUnique({
                     where: { userId_eventId: { userId, eventId } }
                 });

@@ -306,7 +306,13 @@
     "UPDATE_FAILED": "Failed to update resource.",
     "USERNAME_TAKEN": "This username is already taken. Please choose another.",
     "VALIDATION_FAILED": "Validation failed. Please check your input.",
-    "EMAIL_TAKEN": "An account with this email already exists."
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "EVENT_FULL": "This event is full.",
+    "EVENT_NOT_FOUND": "Event not found.",
+    "EVENT_SLUG_TAKEN": "This group already has an event with that link name.",
+    "MEMBERS_ONLY": "Only group members can do this.",
+    "TOGGLE_FAILED": "Could not update your response.",
+    "CREATE_EVENT_FAILED": "Could not create the event."
   },
   "group": {
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
@@ -362,7 +368,10 @@
       "discover": "Discover",
       "myGroups": "My Groups",
       "profile": "Profile"
-    }
+    },
+    "attendButton": "Sign up",
+    "attending": "going",
+    "createEvent": "Create event"
   },
   "admin": {
     "dashboard": {
@@ -711,7 +720,13 @@
     "organizer": "Organizer",
     "shareEvent": "Share event",
     "tba": "TBA",
-    "visitCommunity": "Visit group"
+    "visitCommunity": "Visit group",
+    "createSubtitle": "Create a new event for your group",
+    "membersOnly": "Members only",
+    "signInToRsvp": "Sign in to sign up",
+    "joinToRsvp": "Join the group to sign up for this event.",
+    "shareCopied": "Link copied",
+    "shareFailed": "Could not share the link."
   },
   "cities": {
     "Cesis": "Cēsis",
@@ -724,5 +739,50 @@
     "Sigulda": "Sigulda",
     "Valmiera": "Valmiera",
     "Ventspils": "Ventspils"
+  },
+  "eventWizard": {
+    "stepOf": "Step {current} of {total}",
+    "step1Title": "What and when",
+    "step1Desc": "Name, time and place of the event.",
+    "step2Title": "Who can come",
+    "step2Desc": "Set a size limit and decide who can see the event.",
+    "fieldName": "Event name",
+    "fieldNamePlaceholder": "e.g. Saturday morning run",
+    "fieldSlug": "Link name",
+    "fieldSlugPlaceholder": "saturday-morning-run",
+    "fieldDescription": "Description",
+    "fieldDescriptionPlaceholder": "What will happen at this event?",
+    "fieldBannerImage": "Banner image URL",
+    "fieldBannerImagePlaceholder": "https://…",
+    "fieldInstructions": "Important info for attendees",
+    "fieldInstructionsPlaceholder": "What to bring, where to meet…",
+    "fieldDate": "Starts",
+    "fieldEndDate": "Ends (optional)",
+    "fieldLocation": "Location",
+    "fieldLocationPlaceholder": "Address or a meeting link",
+    "recurringEvent": "Repeating event",
+    "recurringEventDesc": "This event happens regularly.",
+    "recurrencePattern": "How often",
+    "recurrencePatternPlaceholder": "e.g. every Saturday",
+    "fieldMaxParticipants": "Maximum participants (optional)",
+    "fieldMaxParticipantsPlaceholder": "Leave empty for no limit",
+    "fieldVisibility": "Who can see this event",
+    "typePublic": "Public",
+    "typePublicDesc": "Anyone can see the event and group members can sign up.",
+    "typeMembersOnly": "Members only",
+    "typeMembersOnlyDesc": "Only group members can see it and sign up.",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Create event",
+    "TITLE_TOO_SHORT": "The name must be at least 3 characters.",
+    "TITLE_TOO_LONG": "The name cannot exceed 120 characters.",
+    "SLUG_TOO_SHORT": "The link name must be at least 3 characters.",
+    "SLUG_INVALID": "Use only lowercase letters, numbers and hyphens.",
+    "START_DATE_REQUIRED": "Please choose a start date and time.",
+    "END_DATE_INVALID": "Please enter a valid end date.",
+    "END_BEFORE_START": "The end must be after the start.",
+    "LOCATION_REQUIRED": "Please enter a location.",
+    "INVALID_URL": "Please enter a valid URL (starting with https://).",
+    "MAX_PARTICIPANTS_INVALID": "Enter a whole number greater than 0, or leave empty."
   }
 }

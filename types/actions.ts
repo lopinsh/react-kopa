@@ -26,6 +26,8 @@ export type ErrorCode =
     | 'CREATE_EVENT_FAILED'
     | 'EVENT_NOT_FOUND'
     | 'EVENT_FULL'
+    | 'EVENT_SLUG_TAKEN'
+    | 'MEMBERS_ONLY'
     | 'TOGGLE_FAILED'
     | 'USERNAME_TAKEN'
     | 'EMAIL_TAKEN'

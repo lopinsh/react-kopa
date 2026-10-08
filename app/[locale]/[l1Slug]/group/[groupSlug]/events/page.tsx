@@ -89,13 +89,14 @@ export default async function GroupEventsPage({
                                 isAttending: event.isAttending,
                                 attendeeCount: event.attendeeCount,
                                 attendeeList: event.attendeeList,
+                                isMembersOnly: event.visibility === 'MEMBERS_ONLY',
                                 isRecurring: event.isRecurring,
                                 recurrencePattern: event.recurrencePattern,
                                 bannerImage: event.bannerImage,
                                 instructions: event.instructions,
                             }}
                             locale={locale}
-                            isMember={group.user.isMember}
+                            href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
                         />
                     ))}
                 </div>

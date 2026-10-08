@@ -42,6 +42,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
         revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/events`, 'page');
         return { success: true, data: { event } };
     } catch (error) {
+        if ((error as { code?: string })?.code === 'P2002') return { success: false, error: 'EVENT_SLUG_TAKEN' };
         return handleActionError(error, 'CREATE_EVENT_FAILED');
     }
 }

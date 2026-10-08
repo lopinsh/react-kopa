@@ -37,6 +37,7 @@ type Props = {
 
 export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accentColor = '#6366f1' }: Props) {
     const t = useTranslations('eventWizard');
+    const tErrors = useTranslations('errors');
     const locale = useLocale();
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
@@ -153,7 +154,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         errors.title ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                     )}
                                 />
-                                {errors.title && <p className="mt-1 text-xs text-red-500">{errors.title.message}</p>}
+                                {errors.title && <p className="mt-1 text-xs text-red-500">{t(errors.title.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -173,7 +174,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         )}
                                     />
                                 </div>
-                                {errors.slug && <p className="mt-1 text-xs text-red-500">{errors.slug.message}</p>}
+                                {errors.slug && <p className="mt-1 text-xs text-red-500">{t(errors.slug.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -203,7 +204,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         errors.bannerImage ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                     )}
                                 />
-                                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{errors.bannerImage.message}</p>}
+                                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -232,7 +233,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                             errors.startDate ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                         )}
                                     />
-                                    {errors.startDate && <p className="mt-1 text-xs text-red-500">{errors.startDate.message}</p>}
+                                    {errors.startDate && <p className="mt-1 text-xs text-red-500">{t(errors.startDate.message as 'INVALID_URL')}</p>}
                                 </div>
 
                                 <div>
@@ -248,7 +249,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                             errors.endDate ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                         )}
                                     />
-                                    {errors.endDate && <p className="mt-1 text-xs text-red-500">{errors.endDate.message}</p>}
+                                    {errors.endDate && <p className="mt-1 text-xs text-red-500">{t(errors.endDate.message as 'INVALID_URL')}</p>}
                                 </div>
                             </div>
 
@@ -266,7 +267,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                         errors.location ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                     )}
                                 />
-                                {errors.location && <p className="mt-1 text-xs text-red-500">{errors.location.message}</p>}
+                                {errors.location && <p className="mt-1 text-xs text-red-500">{t(errors.location.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div className="pt-2">
@@ -310,10 +311,14 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 </label>
                                 <input
                                     type="number"
-                                    {...register('maxParticipants', { valueAsNumber: true })}
+                                    {...register('maxParticipants', { setValueAs: (v) => (v === '' || v == null ? null : Number(v)) })}
                                     placeholder={t('fieldMaxParticipantsPlaceholder')}
-                                    className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus:border-[var(--accent)] focus:outline-none"
+                                    className={clsx(
+                                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
+                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                    )}
                                 />
+                                {errors.maxParticipants && <p className="mt-1 text-xs text-red-500">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
                             </div>
 
                             <div className="space-y-3">
@@ -348,7 +353,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
 
                     {serverError && (
                         <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
-                            {serverError}
+                            {tErrors(serverError as 'ACTION_FAILED')}
                         </p>
                     )}
 

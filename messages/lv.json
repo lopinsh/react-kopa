@@ -306,7 +306,13 @@
     "UPDATE_FAILED": "Neizdevās atjaunināt resursu.",
     "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts. Lūdzu, izvēlieties citu.",
     "VALIDATION_FAILED": "Validācijas kļūda. Lūdzu, pārbaudiet ievadi.",
-    "EMAIL_TAKEN": "Konts ar šo e-pastu jau eksistē."
+    "EMAIL_TAKEN": "Konts ar šo e-pastu jau eksistē.",
+    "EVENT_FULL": "Pasākumā vairs nav vietu.",
+    "EVENT_NOT_FOUND": "Pasākums nav atrasts.",
+    "EVENT_SLUG_TAKEN": "Šai grupai jau ir pasākums ar šādu saites nosaukumu.",
+    "MEMBERS_ONLY": "To var darīt tikai grupas biedri.",
+    "TOGGLE_FAILED": "Neizdevās atjaunināt tavu atbildi.",
+    "CREATE_EVENT_FAILED": "Neizdevās izveidot pasākumu."
   },
   "group": {
     "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
@@ -362,7 +368,10 @@
     "sendMessage": "Sūtīt ziņu",
     "specialInstructions": "Īpašas instrukcijas",
     "tabCategorizationDescription": "Izvēlieties kā jūsu grupa tiek atrasta platformas katalogā.",
-    "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu."
+    "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu.",
+    "attendButton": "Pieteikties",
+    "attending": "pieteikušies",
+    "createEvent": "Izveidot pasākumu"
   },
   "admin": {
     "dashboard": {
@@ -711,7 +720,13 @@
     "organizer": "Organizators",
     "shareEvent": "Dalīties ar pasākumu",
     "tba": "Tiks precizēta",
-    "visitCommunity": "Apmeklēt grupu"
+    "visitCommunity": "Apmeklēt grupu",
+    "createSubtitle": "Izveido jaunu pasākumu savai grupai",
+    "membersOnly": "Tikai biedriem",
+    "signInToRsvp": "Ieej, lai pieteiktos",
+    "joinToRsvp": "Pievienojies grupai, lai pieteiktos šim pasākumam.",
+    "shareCopied": "Saite nokopēta",
+    "shareFailed": "Neizdevās kopīgot saiti."
   },
   "cities": {
     "Cesis": "Cēsis",
@@ -724,5 +739,50 @@
     "Sigulda": "Sigulda",
     "Valmiera": "Valmiera",
     "Ventspils": "Ventspils"
+  },
+  "eventWizard": {
+    "stepOf": "{current}. solis no {total}",
+    "step1Title": "Kas un kad",
+    "step1Desc": "Pasākuma nosaukums, laiks un vieta.",
+    "step2Title": "Kas var nākt",
+    "step2Desc": "Norādi dalībnieku skaita ierobežojumu un kam pasākums ir redzams.",
+    "fieldName": "Pasākuma nosaukums",
+    "fieldNamePlaceholder": "piem., Sestdienas rīta skrējiens",
+    "fieldSlug": "Saites nosaukums",
+    "fieldSlugPlaceholder": "sestdienas-rita-skrejiens",
+    "fieldDescription": "Apraksts",
+    "fieldDescriptionPlaceholder": "Kas notiks šajā pasākumā?",
+    "fieldBannerImage": "Attēla saite",
+    "fieldBannerImagePlaceholder": "https://…",
+    "fieldInstructions": "Svarīga informācija dalībniekiem",
+    "fieldInstructionsPlaceholder": "Ko ņemt līdzi, kur tiekamies…",
+    "fieldDate": "Sākas",
+    "fieldEndDate": "Beidzas (nav obligāti)",
+    "fieldLocation": "Vieta",
+    "fieldLocationPlaceholder": "Adrese vai tiešsaistes saite",
+    "recurringEvent": "Atkārtots pasākums",
+    "recurringEventDesc": "Šis pasākums notiek regulāri.",
+    "recurrencePattern": "Cik bieži",
+    "recurrencePatternPlaceholder": "piem., katru sestdienu",
+    "fieldMaxParticipants": "Maksimālais dalībnieku skaits (nav obligāti)",
+    "fieldMaxParticipantsPlaceholder": "Atstāj tukšu, ja ierobežojuma nav",
+    "fieldVisibility": "Kam pasākums ir redzams",
+    "typePublic": "Publisks",
+    "typePublicDesc": "Pasākumu var redzēt ikviens, pieteikties var grupas biedri.",
+    "typeMembersOnly": "Tikai biedriem",
+    "typeMembersOnlyDesc": "Redzams un pieteikties var tikai grupas biedri.",
+    "back": "Atpakaļ",
+    "next": "Tālāk",
+    "submit": "Izveidot pasākumu",
+    "TITLE_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm.",
+    "TITLE_TOO_LONG": "Nosaukums nedrīkst pārsniegt 120 rakstzīmes.",
+    "SLUG_TOO_SHORT": "Saites nosaukumam jābūt vismaz 3 rakstzīmēm.",
+    "SLUG_INVALID": "Izmanto tikai mazos burtus, ciparus un domuzīmes.",
+    "START_DATE_REQUIRED": "Izvēlies sākuma datumu un laiku.",
+    "END_DATE_INVALID": "Ievadi derīgu beigu datumu.",
+    "END_BEFORE_START": "Beigu laikam jābūt pēc sākuma laika.",
+    "LOCATION_REQUIRED": "Ievadi vietu.",
+    "INVALID_URL": "Ievadi derīgu saiti (sākot ar https://).",
+    "MAX_PARTICIPANTS_INVALID": "Ievadi veselu skaitli, lielāku par 0, vai atstāj tukšu."
   }
 }
