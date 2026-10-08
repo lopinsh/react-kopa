@@ -5,7 +5,7 @@ import { useTranslations, useFormatter } from 'next-intl';
 import Link from 'next/link';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, Users, ArrowRight, CheckCircle2, HelpCircle } from 'lucide-react';
-import { toggleAttendance } from '@/actions/event-actions';
+import { setAttendance } from '@/actions/event-actions';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
 import AuthGateModal from '@/components/modals/AuthGateModal';
@@ -50,7 +50,7 @@ export default function EventCard({ event, locale, href }: Props) {
     const handleRSVP = () => {
         gateAction(() => {
             startTransition(async () => {
-                const result = await toggleAttendance(event.id, event.isAttending ? 'NONE' : 'GOING', locale);
+                const result = await setAttendance(event.id, event.isAttending ? 'NONE' : 'GOING', locale);
                 if (!result.success) toastError(tErrors(result.error as 'ACTION_FAILED'));
             });
         });

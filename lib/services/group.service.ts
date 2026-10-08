@@ -234,7 +234,7 @@ export const GroupService = {
                 }
             },
             _count: {
-                select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } }, events: true }
+                select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } }, events: { where: { visibility: 'PUBLIC' as const } } }
             }
         };
 
@@ -259,6 +259,11 @@ export const GroupService = {
         const isMember = !!userMembership && userMembership.role !== 'PENDING';
         const userRole = userMembership?.role || null;
         const isAdmin = hasAdminRights(userRole);
+
+        // Members-only events count only for people who can see them.
+        const eventCount = isMember || isSiteAdmin
+            ? await prisma.event.count({ where: { groupId: g.id } })
+            : g._count.events;
 
         // 2. Format Members (with application messages for admins)
         // Pending applicants and their messages are only visible to group admins, site admins and the applicant themselves.
@@ -324,7 +329,7 @@ export const GroupService = {
             },
             stats: {
                 memberCount: g._count.members,
-                eventCount: g._count.events,
+                eventCount,
             },
             user: {
                 isMember,

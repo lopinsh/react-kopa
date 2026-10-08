@@ -11,6 +11,7 @@ export const eventSchema = z.object({
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
     maxParticipants: z.number('MAX_PARTICIPANTS_INVALID').int('MAX_PARTICIPANTS_INVALID').positive('MAX_PARTICIPANTS_INVALID').nullable().optional(),
     visibility: z.enum(['PUBLIC', 'MEMBERS_ONLY']).default('PUBLIC'),
+    joinMode: z.enum(['OPEN', 'REQUEST']).default('OPEN'),
     isRecurring: z.boolean().default(false),
     recurrencePattern: z.string().max(80).optional().nullable(),
 }).refine((data) => {
@@ -38,6 +39,7 @@ export type EventFormData = {
     bannerImage?: string | null;
     maxParticipants?: number | null;
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
+    joinMode: 'OPEN' | 'REQUEST';
     isRecurring: boolean;
     recurrencePattern?: string | null;
 };

@@ -30,6 +30,8 @@ export type GroupType = (typeof GROUP_TYPES)[number];
 
 export const EVENT_VISIBILITY = ['PUBLIC', 'MEMBERS_ONLY'] as const;
 export type EventVisibility = (typeof EVENT_VISIBILITY)[number];
+export const EVENT_JOIN_MODES = ['OPEN', 'REQUEST'] as const;
+export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 
 /**
  * Common Category Metadata (Static identifiers)

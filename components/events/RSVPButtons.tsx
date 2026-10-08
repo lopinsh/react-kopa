@@ -1,16 +1,16 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { CheckCircle2, Star, Loader2 } from 'lucide-react';
+import { CheckCircle2, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { toggleAttendance } from '@/actions/event-actions';
+import { setAttendance } from '@/actions/event-actions';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 
 type Props = {
     eventId: string;
-    initialStatus: 'GOING' | 'INTERESTED' | 'NONE';
+    initialStatus: 'GOING' | 'NONE';
     locale: string;
     /** Set for logged-out visitors: shows a sign-in link instead of the buttons. */
     signInHref?: string;
@@ -24,12 +24,12 @@ export default function RSVPButtons({ eventId, initialStatus, locale, signInHref
     const tErrors = useTranslations('errors');
     const [error, setError] = useState<string | null>(null);
 
-    const handleToggle = (newStatus: 'GOING' | 'INTERESTED') => {
-        const finalStatus = status === newStatus ? 'NONE' : newStatus;
+    const handleToggle = () => {
+        const finalStatus = status === 'GOING' ? 'NONE' : 'GOING';
 
         setError(null);
         startTransition(async () => {
-            const result = await toggleAttendance(eventId, finalStatus, locale);
+            const result = await setAttendance(eventId, finalStatus, locale);
             if (result.success) {
                 setStatus(finalStatus);
                 router.refresh();
@@ -53,7 +53,7 @@ export default function RSVPButtons({ eventId, initialStatus, locale, signInHref
     return (
         <div className="flex flex-col gap-3">
             <button
-                onClick={() => handleToggle('GOING')}
+                onClick={handleToggle}
                 disabled={isPending}
                 className={clsx(
                     "flex items-center justify-center gap-2 rounded-2xl py-4 font-black uppercase transition-all shadow-lg active:scale-95 group relative overflow-hidden",
@@ -71,24 +71,6 @@ export default function RSVPButtons({ eventId, initialStatus, locale, signInHref
                 {t('going')}
             </button>
 
-            <button
-                onClick={() => handleToggle('INTERESTED')}
-                disabled={isPending}
-                className={clsx(
-                    "flex items-center justify-center gap-2 rounded-2xl py-4 font-black uppercase transition-all group relative overflow-hidden",
-                    status === 'INTERESTED'
-                        ? "border-2 border-[color:var(--accent)] text-[color:var(--accent)]"
-                        : "border-2 border-border text-foreground-muted hover:border-foreground-muted/50 hover:text-foreground"
-                )}
-            >
-                {isPending && status === 'INTERESTED' && (
-                    <div className="absolute inset-0 bg-black/5 flex items-center justify-center">
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                    </div>
-                )}
-                <Star className={clsx("h-5 w-5 fill-current", status === 'INTERESTED' ? "text-[var(--accent)]" : "text-transparent stroke-foreground-muted group-hover:stroke-foreground")} />
-                {t('interested')}
-            </button>
             {error && (
                 <p role="alert" className="text-sm text-red-500">
                     {tErrors(error as 'ACTION_FAILED')}

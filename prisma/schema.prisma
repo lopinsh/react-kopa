@@ -201,6 +201,8 @@ model Event {
   endDate           DateTime?
   instructions      String?
   slug              String
+  joinMode          EventJoinMode @default(OPEN)
+  isFull            Boolean      @default(false)
   attendees         Attendance[]
   creator           User         @relation("CreatedEvents", fields: [creatorId], references: [id])
   group             Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
@@ -332,7 +334,14 @@ enum MembershipRole {
 
 enum AttendanceStatus {
   GOING
-  INTERESTED
+  PENDING
+  DECLINED
+  WAITLISTED
+}
+
+enum EventJoinMode {
+  OPEN
+  REQUEST
 }
 
 enum AppRole {

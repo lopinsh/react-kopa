@@ -66,9 +66,8 @@ export default async function EventPage({
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const isOwner = event.creatorId === userId;
-    const goingCount = event.attendees.filter(a => a.status === 'GOING').length;
-    const userAttendance = event.attendees.find(a => a.userId === userId);
-    const attendanceStatus = userAttendance?.status || 'NONE';
+    const { goingCount } = event.viewer;
+    const attendanceStatus = event.viewer.myStatus === 'GOING' ? 'GOING' : 'NONE';
 
     // JSON-LD for SEO
     const jsonLd = {

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
-import { Prisma, AttendanceStatus, Event as EventModel } from '@prisma/client';
+import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
@@ -19,12 +19,37 @@ export interface EventServiceError {
 
 export type EventServiceResult<T = void> = EventServiceResponse<T> | EventServiceError;
 
+/** What the current viewer may see and do with one event. */
+export interface EventViewer {
+    canSee: boolean;
+    /** Organiser: event creator or group owner/admin. */
+    canManage: boolean;
+    /** Instructions on Request-to-join events are shown only to approved people and organisers. */
+    canSeeInstructions: boolean;
+    myStatus: AttendanceStatus | null;
+    goingCount: number;
+    waitlistCount: number;
+}
+
+/** Everything the actions need to revalidate paths and send notifications. */
+export interface EventActionContext {
+    l1Slug: string;
+    groupSlug: string;
+    groupName: string;
+    eventSlug: string;
+    eventTitle: string;
+    /** Event creator + group owners/admins. */
+    organiserIds: string[];
+}
+
+type EventWithGroup = Prisma.EventGetPayload<{
+    include: { group: { select: { id: true; name: true; slug: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
+}>;
+
 export class EventService {
-    /**
-     * Members-only events are visible to approved group members and site admins.
-     */
-    private static async canSeeMembersOnly(groupId: string, userId?: string): Promise<boolean> {
-        if (!userId) return false;
+    /** Role of the user in the group plus site-admin flag. */
+    private static async getAccess(groupId: string, userId?: string) {
+        if (!userId) return { isMember: false, isGroupAdmin: false, isSiteAdmin: false };
         const [membership, user] = await Promise.all([
             prisma.membership.findUnique({
                 where: { userId_groupId: { userId, groupId } },
@@ -32,7 +57,67 @@ export class EventService {
             }),
             prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
         ]);
-        return (!!membership && membership.role !== 'PENDING') || user?.role === 'ADMIN';
+        return {
+            isMember: !!membership && membership.role !== 'PENDING',
+            isGroupAdmin: hasAdminRights(membership?.role),
+            isSiteAdmin: user?.role === 'ADMIN'
+        };
+    }
+
+    /**
+     * Members-only events are visible to approved group members and site admins.
+     */
+    private static async canSeeMembersOnly(groupId: string, userId?: string): Promise<boolean> {
+        const access = await EventService.getAccess(groupId, userId);
+        return access.isMember || access.isSiteAdmin;
+    }
+
+    /** Pure rule: may this viewer read the instructions? */
+    private static instructionsVisible(joinMode: EventJoinMode, canManage: boolean, myStatus: AttendanceStatus | null): boolean {
+        return joinMode === 'OPEN' || canManage || myStatus === 'GOING';
+    }
+
+    private static async loadEventForAction(eventId: string): Promise<EventWithGroup | null> {
+        const event = await prisma.event.findUnique({
+            where: { id: eventId },
+            include: {
+                group: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                        hiddenAt: true,
+                        category: { include: TaxonomyResolver.getInclude('lv') }
+                    }
+                }
+            }
+        });
+        if (!event || event.group.hiddenAt) return null;
+        return event;
+    }
+
+    private static async buildContext(event: EventWithGroup): Promise<EventActionContext> {
+        const admins = await prisma.membership.findMany({
+            where: { groupId: event.groupId, role: { in: ['OWNER', 'ADMIN'] } },
+            select: { userId: true }
+        });
+        return {
+            l1Slug: TaxonomyResolver.resolve(event.group.category).l1Slug,
+            groupSlug: event.group.slug,
+            groupName: event.group.name,
+            eventSlug: event.slug,
+            eventTitle: event.title,
+            organiserIds: Array.from(new Set([event.creatorId, ...admins.map(a => a.userId)]))
+        };
+    }
+
+    /** Loads the event and checks that the actor is an organiser. */
+    private static async loadForOrganiser(eventId: string, actorId: string) {
+        const event = await EventService.loadEventForAction(eventId);
+        if (!event) return { event: null, error: 'EVENT_NOT_FOUND' as const };
+        const access = await EventService.getAccess(event.groupId, actorId);
+        if (event.creatorId !== actorId && !access.isGroupAdmin) return { event: null, error: 'FORBIDDEN' as const };
+        return { event, error: undefined };
     }
 
     /**
@@ -68,19 +153,16 @@ export class EventService {
                     }
                 },
                 attendees: {
+                    orderBy: { joinedAt: 'asc' },
                     include: {
                         user: {
                             select: {
                                 id: true,
                                 name: true,
+                                username: true,
                                 image: true
                             }
                         }
-                    }
-                },
-                _count: {
-                    select: {
-                        attendees: true
                     }
                 }
             }
@@ -93,7 +175,27 @@ export class EventService {
             return null;
         }
 
-        return event;
+        const access = await EventService.getAccess(groupRecord.id, userId);
+        const canManage = !!userId && (event.creatorId === userId || access.isGroupAdmin);
+        const myStatus = event.attendees.find(a => a.userId === userId)?.status ?? null;
+        const canSeeInstructions = EventService.instructionsVisible(event.joinMode, canManage, myStatus);
+
+        const viewer: EventViewer = {
+            canSee: true,
+            canManage,
+            canSeeInstructions,
+            myStatus,
+            goingCount: event.attendees.filter(a => a.status === 'GOING').length,
+            waitlistCount: event.attendees.filter(a => a.status === 'WAITLISTED').length
+        };
+
+        // Only organisers get the full people lists (pending, waitlist); everyone else gets none.
+        return {
+            ...event,
+            instructions: canSeeInstructions ? event.instructions : null,
+            attendees: canManage ? event.attendees : [],
+            viewer
+        };
     });
 
     /**
@@ -123,6 +225,7 @@ export class EventService {
                 location: data.location,
                 maxParticipants: data.maxParticipants,
                 visibility: data.visibility,
+                joinMode: data.joinMode,
                 isRecurring: data.isRecurring,
                 recurrencePattern: data.recurrencePattern,
                 bannerImage: data.bannerImage,
@@ -213,6 +316,7 @@ export class EventService {
                 location: data.location,
                 maxParticipants: data.maxParticipants,
                 visibility: data.visibility,
+                joinMode: data.joinMode,
                 isRecurring: data.isRecurring,
                 recurrencePattern: data.recurrencePattern,
                 bannerImage: data.bannerImage,
@@ -226,11 +330,13 @@ export class EventService {
     }
 
     /**
-     * Get all events for a group with attendee status for current user.
+     * Get all events for a group with the current viewer's status.
+     * Instructions are stripped here for viewers who may not read them.
      */
     static async getGroupEvents(groupId: string, userId?: string) {
         try {
-            const canSeeAll = await EventService.canSeeMembersOnly(groupId, userId);
+            const access = await EventService.getAccess(groupId, userId);
+            const canSeeAll = access.isMember || access.isSiteAdmin;
             const events = await prisma.event.findMany({
                 where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
                 orderBy: { startDate: 'asc' },
@@ -240,6 +346,7 @@ export class EventService {
                     },
                     attendees: {
                         where: { status: 'GOING' },
+                        orderBy: { joinedAt: 'asc' },
                         include: {
                             user: {
                                 select: { id: true, name: true, image: true }
@@ -250,84 +357,223 @@ export class EventService {
                 }
             });
 
-            const mine = userId
-                ? await prisma.attendance.findMany({
-                    where: { userId, eventId: { in: events.map(e => e.id) } },
-                    select: { eventId: true, status: true }
+            const [mine, waitlistCounts] = await Promise.all([
+                userId
+                    ? prisma.attendance.findMany({
+                        where: { userId, eventId: { in: events.map(e => e.id) } },
+                        select: { eventId: true, status: true }
+                    })
+                    : Promise.resolve([]),
+                prisma.attendance.groupBy({
+                    by: ['eventId'],
+                    where: { eventId: { in: events.map(e => e.id) }, status: 'WAITLISTED' },
+                    _count: { _all: true }
                 })
-                : [];
+            ]);
             const myStatus = new Map(mine.map(a => [a.eventId, a.status]));
+            const waitlist = new Map(waitlistCounts.map(w => [w.eventId, w._count._all]));
 
-            return events.map(e => ({
-                ...e,
-                isAttending: myStatus.get(e.id) === 'GOING',
-                attendeeCount: e._count.attendees,
-                attendeeList: e.attendees.map(a => a.user)
-            }));
+            return events.map(e => {
+                const status = myStatus.get(e.id) ?? null;
+                const canManage = !!userId && (e.creatorId === userId || access.isGroupAdmin);
+                const viewer: EventViewer = {
+                    canSee: true,
+                    canManage,
+                    canSeeInstructions: EventService.instructionsVisible(e.joinMode, canManage, status),
+                    myStatus: status,
+                    goingCount: e._count.attendees,
+                    waitlistCount: canManage ? (waitlist.get(e.id) ?? 0) : 0
+                };
+                return {
+                    ...e,
+                    instructions: viewer.canSeeInstructions ? e.instructions : null,
+                    isAttending: status === 'GOING',
+                    attendeeCount: e._count.attendees,
+                    attendeeList: e.attendees.map(a => a.user),
+                    viewer
+                };
+            });
         } catch (error) {
             console.error('[EventService.getGroupEvents] Error:', error);
             return [];
         }
     }
 
+    /** Checks that the event exists, its group is visible and the user may see it. */
+    private static async loadForParticipant(eventId: string, userId: string) {
+        const event = await EventService.loadEventForAction(eventId);
+        if (!event) return { event: null, error: 'EVENT_NOT_FOUND' as const };
+        if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(event.groupId, userId))) {
+            return { event: null, error: 'MEMBERS_ONLY' as const };
+        }
+        return { event, error: undefined };
+    }
+
     /**
-     * Toggle attendance for an event.
+     * Open events: "I'm going" / cancel. The size number never blocks.
      */
-    static async toggleAttendance(
+    static async setAttendance(
         eventId: string,
         userId: string,
-        status: 'GOING' | 'INTERESTED' | 'NONE'
-    ): Promise<EventServiceResult<{ l1Slug: string; groupSlug: string }>> {
-        const event = await prisma.event.findUnique({
-            where: { id: eventId },
-            include: {
-                group: {
-                    select: {
-                        id: true,
-                        hiddenAt: true,
-                        slug: true,
-                        category: {
-                            include: TaxonomyResolver.getInclude('lv')
-                        }
-                    }
-                }
-            }
-        });
+        status: 'GOING' | 'NONE'
+    ): Promise<EventServiceResult<EventActionContext>> {
+        const loaded = await EventService.loadForParticipant(eventId, userId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+        if (event.joinMode !== 'OPEN') return { success: false, error: 'EVENT_MODE_MISMATCH' };
 
-        if (!event || event.group.hiddenAt) return { success: false, error: 'EVENT_NOT_FOUND' };
+        if (status === 'NONE') {
+            await prisma.attendance.deleteMany({ where: { eventId, userId } });
+        } else {
+            await prisma.attendance.upsert({
+                where: { userId_eventId: { userId, eventId } },
+                update: { status: 'GOING' },
+                create: { userId, eventId, status: 'GOING' }
+            });
+        }
+        return { success: true, data: await EventService.buildContext(event) };
+    }
 
-        if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(event.group.id, userId))) {
+    /**
+     * Request-to-join events. Becomes WAITLISTED when the event is Full and the person
+     * chose the waitlist; `EVENT_FULL` when they tried to join directly (stale page).
+     */
+    static async requestToJoin(
+        eventId: string,
+        userId: string,
+        allowWaitlist: boolean
+    ): Promise<EventServiceResult<EventActionContext & { status: AttendanceStatus; created: boolean }>> {
+        const loaded = await EventService.loadForParticipant(eventId, userId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+        if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
+
+        // Taking part in a group's event needs group membership.
+        if (!(await EventService.canSeeMembersOnly(event.groupId, userId))) {
             return { success: false, error: 'MEMBERS_ONLY' };
         }
 
-        if (status === 'NONE') {
-            await prisma.attendance.deleteMany({
-                where: { eventId, userId }
-            });
-        } else {
-            // Check capacity for GOING
-            const goingCount = status === 'GOING' && event.maxParticipants
-                ? await prisma.attendance.count({ where: { eventId, status: 'GOING' } })
-                : 0;
-            if (status === 'GOING' && event.maxParticipants && goingCount >= event.maxParticipants) {
-                const current = await prisma.attendance.findUnique({
-                    where: { userId_eventId: { userId, eventId } }
-                });
-                if (!current || current.status !== 'GOING') {
-                    return { success: false, error: 'EVENT_FULL' };
-                }
-            }
+        const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
+        const context = await EventService.buildContext(event);
 
-            await prisma.attendance.upsert({
-                where: { userId_eventId: { userId, eventId } },
-                update: { status: status as AttendanceStatus },
-                create: { userId, eventId, status: status as AttendanceStatus }
-            });
+        // Already in, waiting or declined: nothing changes (a declined request stays declined).
+        // A waitlisted person may ask again once the event is no longer Full.
+        if (current && (current.status !== 'WAITLISTED' || event.isFull)) {
+            return { success: true, data: { ...context, status: current.status, created: false } };
         }
 
-        const resolved = TaxonomyResolver.resolve(event.group.category);
+        if (event.isFull && !allowWaitlist) return { success: false, error: 'EVENT_FULL' };
 
-        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug } };
+        const status: AttendanceStatus = event.isFull ? 'WAITLISTED' : 'PENDING';
+        await prisma.attendance.upsert({
+            where: { userId_eventId: { userId, eventId } },
+            update: { status, joinedAt: new Date() },
+            create: { userId, eventId, status }
+        });
+        return { success: true, data: { ...context, status, created: true } };
+    }
+
+    /**
+     * Leave the event / withdraw a request. Tells the caller whether an approved person left a Full event.
+     */
+    static async cancel(
+        eventId: string,
+        userId: string
+    ): Promise<EventServiceResult<EventActionContext & { wasGoing: boolean; isFull: boolean; waitlistCount: number }>> {
+        const loaded = await EventService.loadForParticipant(eventId, userId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+
+        const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
+        await prisma.attendance.deleteMany({ where: { eventId, userId } });
+        const waitlistCount = await prisma.attendance.count({ where: { eventId, status: 'WAITLISTED' } });
+
+        return {
+            success: true,
+            data: {
+                ...(await EventService.buildContext(event)),
+                wasGoing: current?.status === 'GOING',
+                isFull: event.isFull,
+                waitlistCount
+            }
+        };
+    }
+
+    /**
+     * Organiser approves or declines a pending (or waitlisted) person.
+     */
+    static async decide(
+        eventId: string,
+        targetUserId: string,
+        actorId: string,
+        decision: 'approve' | 'decline'
+    ): Promise<EventServiceResult<EventActionContext>> {
+        const loaded = await EventService.loadForOrganiser(eventId, actorId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+
+        const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId: targetUserId, eventId } } });
+        if (!current || (current.status !== 'PENDING' && current.status !== 'WAITLISTED')) {
+            return { success: false, error: 'NOT_FOUND' };
+        }
+
+        await prisma.attendance.update({
+            where: { userId_eventId: { userId: targetUserId, eventId } },
+            data: { status: decision === 'approve' ? 'GOING' : 'DECLINED' }
+        });
+        return { success: true, data: await EventService.buildContext(event) };
+    }
+
+    /**
+     * Organiser lets a waitlisted person in by hand.
+     */
+    static async letInFromWaitlist(
+        eventId: string,
+        targetUserId: string,
+        actorId: string
+    ): Promise<EventServiceResult<EventActionContext>> {
+        const loaded = await EventService.loadForOrganiser(eventId, actorId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+
+        const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId: targetUserId, eventId } } });
+        if (!current || current.status !== 'WAITLISTED') return { success: false, error: 'NOT_FOUND' };
+
+        await prisma.attendance.update({
+            where: { userId_eventId: { userId: targetUserId, eventId } },
+            data: { status: 'GOING' }
+        });
+        return { success: true, data: await EventService.buildContext(event) };
+    }
+
+    /**
+     * Organiser switches "Full" on or off (Request-to-join events only, never automatic).
+     * Switching it off keeps the waitlist and returns who should be told there is room again.
+     */
+    static async setFull(
+        eventId: string,
+        actorId: string,
+        isFull: boolean
+    ): Promise<EventServiceResult<EventActionContext & { waitlistedUserIds: string[] }>> {
+        const loaded = await EventService.loadForOrganiser(eventId, actorId);
+        if (!loaded.event) return { success: false, error: loaded.error };
+        const { event } = loaded;
+        if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
+
+        await prisma.event.update({ where: { id: eventId }, data: { isFull } });
+
+        const waitlisted = isFull || !event.isFull
+            ? []
+            : await prisma.attendance.findMany({
+                where: { eventId, status: 'WAITLISTED' },
+                orderBy: { joinedAt: 'asc' },
+                select: { userId: true }
+            });
+
+        return {
+            success: true,
+            data: { ...(await EventService.buildContext(event)), waitlistedUserIds: waitlisted.map(w => w.userId) }
+        };
     }
 
     /**
@@ -343,7 +589,7 @@ export class EventService {
         const now = new Date();
         const { category, city, search, status } = filters;
 
-        return await unstable_cache(
+        const rows = await unstable_cache(
             async (fCity, fCategory, fSearch, fStatus) => {
                 return await prisma.event.findMany({
                     where: {
@@ -418,5 +664,8 @@ export class EventService {
                 tags: ['events']
             }
         )(city, category, search, status);
+
+        // Discovery cards never need instructions; they may be restricted on Request-to-join events.
+        return rows.map(e => ({ ...e, instructions: null }));
     }
 }
