@@ -623,5 +623,17 @@
     "shareEvent": "Share event",
     "tba": "TBA",
     "visitCommunity": "Visit group"
+  },
+  "cities": {
+    "Cesis": "Cēsis",
+    "Daugavpils": "Daugavpils",
+    "Jekabpils": "Jēkabpils",
+    "Jelgava": "Jelgava",
+    "Jurmala": "Jūrmala",
+    "Liepaja": "Liepāja",
+    "Riga": "Riga",
+    "Sigulda": "Sigulda",
+    "Valmiera": "Valmiera",
+    "Ventspils": "Ventspils"
   }
 }

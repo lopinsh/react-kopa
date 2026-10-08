@@ -14,7 +14,7 @@ export function Footer({ locale }: { locale: string }) {
         {
             title: c_common('platform'),
             links: [
-                { label: c_common('discover'), href: `/discover` },
+                { label: c_common('discover'), href: `/` },
                 { label: c_common('myGroups'), href: `/profile/my-groups` },
                 { label: c_common('createGroup'), href: `/create` },
             ]

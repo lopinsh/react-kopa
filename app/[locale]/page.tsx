@@ -11,6 +11,7 @@ import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
 import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
+import { cityLabel } from '@/lib/city-label';
 import { Users, Search, Plus, Calendar } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
@@ -31,7 +32,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     }
 
     if (city && city !== 'all') {
-        title += ` ${t('inCity')} ${city}`;
+        const tCities = await getTranslations({ locale, namespace: 'cities' });
+        title += ` ${t('inCity')} ${cityLabel(tCities, city)}`;
     }
 
     return {

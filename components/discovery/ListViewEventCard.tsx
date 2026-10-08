@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Users, MapPin, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 
 type Props = {
     event: {
@@ -24,6 +26,7 @@ type Props = {
 };
 
 export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, accentColor = '#6366f1' }: Props) {
+    const tCities = useTranslations('cities');
     const startDate = new Date(event.startDate);
 
     return (
@@ -58,7 +61,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                 </div>
                 <div className="hidden items-center gap-1 md:flex max-w-[120px] truncate">
                     <MapPin className="h-3.5 w-3.5" />
-                    {event.location || event.group.city}
+                    {event.location || cityLabel(tCities, event.group.city)}
                 </div>
                 <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />

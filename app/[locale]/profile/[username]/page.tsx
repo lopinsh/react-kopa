@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getFormatter } from 'next-intl/server';
+import { cityLabel } from '@/lib/city-label';
 import { MapPin, Calendar, MessageSquare, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 
@@ -14,6 +15,7 @@ export default async function PublicProfilePage({
     const { locale, username } = await params;
     const session = await auth();
     const t = await getTranslations('profile');
+    const tCities = await getTranslations('cities');
     const format = await getFormatter();
 
     const dbUser = await UserService.getUserByUsername(username, session?.user?.id);
@@ -100,7 +102,7 @@ export default async function PublicProfilePage({
                         {dbUser.cities.length > 0 && (
                             <div className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4 text-primary/70" />
-                                {dbUser.cities.join(', ')}
+                                {dbUser.cities.map((c) => cityLabel(tCities, c)).join(', ')}
                             </div>
                         )}
                         <div className="flex items-center gap-2">

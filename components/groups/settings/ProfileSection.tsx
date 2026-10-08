@@ -2,6 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import { ImageIcon, UserPlus, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
 import { CITIES } from '@/lib/constants';
@@ -10,6 +11,7 @@ import SettingsSection from './SettingsSection';
 
 export default function ProfileSection() {
     const t = useTranslations('wizard');
+    const tCities = useTranslations('cities');
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const { register, formState: { errors }, watch } = useFormContext<GroupFormValues>();
@@ -64,7 +66,7 @@ export default function ProfileSection() {
                     >
                         <option value="">{t('fieldCityPlaceholder')}</option>
                         {CITIES.map((city) => (
-                            <option key={city} value={city}>{city}</option>
+                            <option key={city} value={city}>{cityLabel(tCities, city)}</option>
                         ))}
                     </select>
                     {errors.city && (

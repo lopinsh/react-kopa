@@ -5,6 +5,7 @@ import { getSmartImageUrl } from '@/lib/image-utils';
 import { clsx } from 'clsx';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 
 interface GroupMemberPreview {
     id: string;
@@ -47,6 +48,7 @@ function dicebearUrl(seed: string | null | undefined, fallbackId: string): strin
 
 export default function GroupCard({ group, accentColor: globalAccentColor, priority, locale }: Props) {
     const t = useTranslations('discovery');
+    const tCities = useTranslations('cities');
     const accentColor = group.category.color || globalAccentColor;
     const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
@@ -94,7 +96,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                 <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
                     <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
                         <MapPin className="h-3 w-3 text-white/90" />
-                        <span className="drop-shadow-sm">{group.city}</span>
+                        <span className="drop-shadow-sm">{cityLabel(tCities, group.city)}</span>
                     </span>
                 </div>
             </div>

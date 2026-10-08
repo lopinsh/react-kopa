@@ -2,6 +2,7 @@ import { Link } from '@/i18n/routing';
 import { Users, MapPin, Shield, User, Clock } from 'lucide-react';
 import type { GroupType, MembershipRole } from '@prisma/client';
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import { clsx } from 'clsx';
 
 type Props = {
@@ -28,6 +29,7 @@ type Props = {
 
 export default function MyGroupsListRow({ group, locale, actionRequired }: Props) {
     const t = useTranslations('group');
+    const tCities = useTranslations('cities');
   const c_common = useTranslations('common');
     const accentColor = group.category.color || group.accentColor;
 
@@ -60,7 +62,7 @@ export default function MyGroupsListRow({ group, locale, actionRequired }: Props
                         </span>
                         <span className="flex items-center gap-0.5 shrink-0">
                             <MapPin className="h-3 w-3" />
-                            {group.city}
+                            {cityLabel(tCities, group.city)}
                         </span>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useCallback, useState, useRef, useEffect, useMemo, useTransition } from 'react';
 import {
@@ -82,6 +83,7 @@ export default function DiscoveryFilterBar({
     const { build, addTag, removeTag } = useQueryString();
     const tDiscover = useTranslations('discovery');
     const tSidebar = useTranslations('shell.sidebar');
+    const tCities = useTranslations('cities');
     const [, startTransition] = useTransition();
 
     const currentTab = searchParams.get('tab') || DISCOVERY_TABS[0];
@@ -375,7 +377,7 @@ export default function DiscoveryFilterBar({
                     >
                         <option value="all">{tSidebar('anyCity')}</option>
                         {CITIES.map((c) => (
-                            <option key={c} value={c}>{c}</option>
+                            <option key={c} value={c}>{cityLabel(tCities, c)}</option>
                         ))}
                     </select>
                     <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-muted pointer-events-none" />

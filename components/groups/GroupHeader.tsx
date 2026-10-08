@@ -2,6 +2,7 @@
 
 import { useTransition, useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import {
     MapPin, Users, Calendar, Settings, LogOut, UserPlus,
     ShieldAlert, Plus, ChevronRight, MoreHorizontal, HelpCircle,
@@ -38,6 +39,7 @@ type Props = {
 export default function GroupHeader({ group, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
+    const tCities = useTranslations('cities');
     const locale = useLocale();
     const router = useRouter();
     const { user } = useGroupContext();
@@ -271,7 +273,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         <div className="mt-6 flex flex-wrap items-center gap-y-3 gap-x-6 text-[13px] text-white/90">
                             <span className="flex items-center gap-2 group/meta drop-shadow-sm">
                                 <MapPin className="h-4 w-4 text-white" />
-                                <span className="font-semibold">{group.city}</span>
+                                <span className="font-semibold">{cityLabel(tCities, group.city)}</span>
                             </span>
 
                             <Link

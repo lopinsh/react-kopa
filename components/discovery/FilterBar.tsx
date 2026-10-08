@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useState, useCallback, useEffect } from 'react';
 import { MapPin, Users } from 'lucide-react';
@@ -23,6 +24,7 @@ type Props = {
 
 export default function FilterBar({ categories, cities, locale, activeCategoryId }: Props) {
     const t = useTranslations('discovery');
+    const tCities = useTranslations('cities');
   const c_common = useTranslations('common');
     const router = useRouter();
     const pathname = usePathname();
@@ -98,7 +100,7 @@ export default function FilterBar({ categories, cities, locale, activeCategoryId
                         <option value="all">{t('allCities')}</option>
                         {cities.map((city) => (
                             <option key={city} value={city}>
-                                {city}
+                                {cityLabel(tCities, city)}
                             </option>
                         ))}
                     </select>

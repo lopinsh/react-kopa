@@ -2,6 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 import { clsx } from 'clsx';
 import { MapPin } from 'lucide-react';
 import { CITIES } from '@/lib/constants';
@@ -9,6 +10,7 @@ import { type GroupFormValues } from '@/lib/validations/group';
 
 export default function LocationStep() {
     const t = useTranslations('wizard');
+    const tCities = useTranslations('cities');
     const { register, formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
@@ -28,7 +30,7 @@ export default function LocationStep() {
             >
                 <option value="">{t('fieldCityPlaceholder')}</option>
                 {CITIES.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>{cityLabel(tCities, c)}</option>
                 ))}
             </select>
             {errors.city && <p className="mt-1 text-xs text-red-500">{errors.city.message}</p>}

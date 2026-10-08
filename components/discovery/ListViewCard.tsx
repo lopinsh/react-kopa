@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { Users, MapPin, Globe, Lock, Zap } from 'lucide-react';
 import type { GroupType } from '@prisma/client';
+import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 
 type Props = {
     group: {
@@ -27,6 +29,7 @@ const TYPE_ICONS = {
 };
 
 export default function ListViewCard({ group, accentColor: globalAccentColor, locale }: Props) {
+    const tCities = useTranslations('cities');
     const accentColor = group.category.color || globalAccentColor;
     const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
@@ -66,7 +69,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
             <div className="ml-4 flex shrink-0 items-center justify-end gap-4 text-xs font-semibold text-foreground-muted">
                 <div className="hidden items-center gap-1 sm:flex uppercase tracking-wide">
                     <MapPin className="h-3.5 w-3.5" />
-                    {group.city}
+                    {cityLabel(tCities, group.city)}
                 </div>
                 <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />

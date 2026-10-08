@@ -2,6 +2,8 @@ import { Calendar, MapPin, Users, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { useTranslations } from 'next-intl';
+import { cityLabel } from '@/lib/city-label';
 
 type Props = {
     event: {
@@ -27,6 +29,7 @@ type Props = {
 };
 
 export default function EventCard({ event, locale, l1Slug, groupSlug, accentColor = '#6366f1' }: Props) {
+    const tCities = useTranslations('cities');
     const startDate = new Date(event.startDate);
 
     return (
@@ -72,7 +75,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                     <div className="flex items-center justify-between text-xs text-foreground-muted">
                         <div className="flex items-center gap-1.5">
                             <MapPin className="h-3.5 w-3.5" />
-                            <span className="truncate max-w-[120px]">{event.location || event.group.city}</span>
+                            <span className="truncate max-w-[120px]">{event.location || cityLabel(tCities, event.group.city)}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                             <Users className="h-3.5 w-3.5" />
