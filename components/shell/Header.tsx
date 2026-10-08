@@ -5,7 +5,6 @@ import { Link } from '@/i18n/routing';
 import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
 import NotificationCenter from './NotificationCenter';
-import GlobalSearch from './GlobalSearch';
 import { MessageSquare } from 'lucide-react';
 
 export default async function Header() {
@@ -45,10 +44,8 @@ export default async function Header() {
                 </Link>
             </div>
 
-            {/* Center Area — Global Search */}
-            <div className="flex-1 flex justify-center min-w-0 max-w-2xl px-2 sm:px-4">
-                <GlobalSearch />
-            </div>
+            {/* Spacer. The global search (components/shell/GlobalSearch.tsx) stays hidden until it is built. */}
+            <div className="flex-1" />
 
             {/* Right side controls */}
             <div className="flex shrink-0 items-center gap-1 sm:gap-2">

@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Check, X, User, Send, MessageSquare, History } from 'lucide-react';
 import { manageMembership, sendApplicationInquiry } from '@/actions/group-actions';
+import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
 import { formatDistanceToNow } from 'date-fns';
@@ -44,6 +45,8 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
         startTransition(async () => {
             const result = await manageMembership(membershipId, action, locale);
             if (result.success) {
+                // The shell sidebar is outside the group layout, so tell it to reload its badge.
+                window.dispatchEvent(new Event(GROUP_MEMBERSHIP_CHANGED));
                 success(c_common('manageSuccess'));
             } else {
                 toastError(t('ACTION_FAILED'));

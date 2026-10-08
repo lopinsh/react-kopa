@@ -106,7 +106,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
         const result = await GroupService.sendInquiry(groupId, session.user.id, message);
         if (!result.success) return result as ActionResponse;
 
-        const { ownerId, groupName, categorySlug, groupSlug } = result.data!;
+        const { ownerId, groupName, l1Slug, groupSlug } = result.data!;
 
         if (ownerId) {
             await createNotification({
@@ -114,7 +114,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
                 type: 'INQUIRY_RECEIVED',
                 translationKey: 'inquiryReceived',
                 args: { authorName: session.user.name || session.user.username || '', groupName, excerpt: message },
-                link: `/${categorySlug}/group/${groupSlug}`
+                link: `/${l1Slug}/group/${groupSlug}`
             });
         }
 
@@ -157,7 +157,7 @@ export async function manageMembership(
         const result = await GroupService.manageMembership(membershipId, action, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        const { targetUserId, groupName, groupSlug, categorySlug } = result.data!;
+        const { targetUserId, groupName, groupSlug, l1Slug } = result.data!;
 
         if (action === 'APPROVE') {
             await createNotification({
@@ -165,12 +165,12 @@ export async function manageMembership(
                 type: 'APPLICATION_ACCEPTED',
                 translationKey: 'applicationAccepted',
                 args: { groupName },
-                link: `/${categorySlug}/group/${groupSlug}`
+                link: `/${l1Slug}/group/${groupSlug}`
             });
         }
 
-        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}`, 'page');
-        revalidatePath(`/${locale}/${categorySlug}/group/${groupSlug}/members`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/members`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
@@ -209,6 +209,7 @@ export async function sendApplicationInquiry(
  * Delegates all DB logic to GroupService.getGroupRole.
  */
 export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
+    exists: boolean;
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
     hasInstructions: boolean;
     pendingCount: number;

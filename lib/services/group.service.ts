@@ -245,14 +245,14 @@ export const GroupService = {
 
         if (!group) return null;
 
-        // Hidden groups exist only for site admins (who see a banner and can restore).
+        // Hidden groups exist only for site admins (banner + restore) and the group's owner (banner only).
         const actor = currentUserId
             ? await prisma.user.findUnique({ where: { id: currentUserId }, select: { role: true } })
             : null;
         const isSiteAdmin = actor?.role === 'ADMIN';
-        if (group.hiddenAt && !isSiteAdmin) return null;
-
         const g = group;
+        const isOwner = !!currentUserId && g.members.some((m: { userId: string; role: string }) => m.userId === currentUserId && m.role === 'OWNER');
+        if (g.hiddenAt && !isSiteAdmin && !isOwner) return null;
 
         // 1. Resolve Membership & Role
         const userMembership = currentUserId ? g.members.find((m: { userId: string }) => m.userId === currentUserId) : null;
@@ -512,7 +512,7 @@ export const GroupService = {
         // Notify the target user about the inquiry
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            select: { name: true, category: { select: { slug: true } }, slug: true }
+            select: { name: true, category: { include: TaxonomyResolver.getInclude('lv') }, slug: true }
         });
 
         if (group) {
@@ -522,7 +522,7 @@ export const GroupService = {
                 type: 'APPLICATION_INQUIRY',
                 translationKey: 'applicationInquiry',
                 args: { groupName: group.name, excerpt: message },
-                link: `/${group.category.slug}/group/${group.slug}/members`
+                link: `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}/members`
             });
         }
 
@@ -532,10 +532,10 @@ export const GroupService = {
     /**
      * Sends a general inquiry message to a group.
      */
-    async sendInquiry(groupId: string, userId: string, message: string): Promise<GroupServiceResult<{ ownerId: string | null; groupName: string; categorySlug: string; groupSlug: string }>> {
+    async sendInquiry(groupId: string, userId: string, message: string): Promise<GroupServiceResult<{ ownerId: string | null; groupName: string; l1Slug: string; groupSlug: string }>> {
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            select: { name: true, slug: true, category: { select: { slug: true } } }
+            select: { name: true, slug: true, category: { include: TaxonomyResolver.getInclude('lv') } }
         });
 
         if (!group) return { success: false, error: 'NOT_FOUND' };
@@ -559,7 +559,7 @@ export const GroupService = {
             data: {
                 ownerId: owner?.userId || null,
                 groupName: group.name,
-                categorySlug: group.category.slug,
+                l1Slug: TaxonomyResolver.resolve(group.category).l1Slug,
                 groupSlug: group.slug
             }
         };
@@ -764,6 +764,8 @@ export const GroupService = {
      * Fetches the current user's role, sections, and pending count for a given group.
      */
     async getGroupRole(l1Slug: string, groupSlug: string, userId?: string): Promise<{
+        /** False when the group does not exist (or is hidden from this user), so the sidebar can hide its menu. */
+        exists: boolean;
         role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
         hasInstructions: boolean;
         pendingCount: number;
@@ -773,6 +775,7 @@ export const GroupService = {
             where: { slug: groupSlug, category: { slug: l1Slug } },
             select: {
                 instructions: true,
+                hiddenAt: true,
                 sections: {
                     orderBy: { order: 'asc' },
                     select: { id: true, title: true, visibility: true }
@@ -784,9 +787,17 @@ export const GroupService = {
             }
         });
 
-        if (!group) return { role: null, hasInstructions: false, pendingCount: 0, sections: [] };
+        if (!group) return { exists: false, role: null, hasInstructions: false, pendingCount: 0, sections: [] };
 
         const role = group.members?.length > 0 ? group.members[0].role : null;
+
+        // Hidden groups exist only for their owner and site admins (same rule as getGroupWithContext).
+        if (group.hiddenAt && role !== 'OWNER') {
+            const actor = userId ? await prisma.user.findUnique({ where: { id: userId }, select: { role: true } }) : null;
+            if (actor?.role !== 'ADMIN') {
+                return { exists: false, role: null, hasInstructions: false, pendingCount: 0, sections: [] };
+            }
+        }
 
         let pendingCount = 0;
         if (hasAdminRights(role)) {
@@ -803,6 +814,7 @@ export const GroupService = {
             : GroupService.getVirtualSections({ description: null, instructions: group.instructions });
 
         return {
+            exists: true,
             role,
             hasInstructions: !!group.instructions,
             pendingCount,
@@ -970,10 +982,10 @@ export const GroupService = {
     /**
      * Approve or decline a membership request.
      */
-    async manageMembership(membershipId: string, action: 'APPROVE' | 'DECLINE', actorId: string): Promise<GroupServiceResult<{ targetUserId: string; groupName: string; groupSlug: string; categorySlug: string }>> {
+    async manageMembership(membershipId: string, action: 'APPROVE' | 'DECLINE', actorId: string): Promise<GroupServiceResult<{ targetUserId: string; groupName: string; groupSlug: string; l1Slug: string }>> {
         const membershipToManage = await prisma.membership.findUnique({
             where: { id: membershipId },
-            include: { group: { include: { category: true } } }
+            include: { group: { include: { category: { include: TaxonomyResolver.getInclude('lv') } } } }
         });
 
         if (!membershipToManage) return { success: false, error: 'NOT_FOUND' };
@@ -1008,7 +1020,7 @@ export const GroupService = {
                 targetUserId: membershipToManage.userId,
                 groupName: membershipToManage.group.name,
                 groupSlug: membershipToManage.group.slug,
-                categorySlug: membershipToManage.group.category.slug
+                l1Slug: TaxonomyResolver.resolve(membershipToManage.group.category).l1Slug
             }
         };
     },

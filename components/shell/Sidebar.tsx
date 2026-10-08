@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft } from 'lucide-react';
@@ -15,6 +15,7 @@ export default function Sidebar({ locale }: SidebarProps) {
     const t = useTranslations('shell.sidebar');
   const c_common = useTranslations('common');
     const [isCollapsed, setIsCollapsed] = useState(false);
+    const [missingGroup, setMissingGroup] = useState<string | null>(null);
     const pathname = usePathname();
 
     // Check if we are inside a group page
@@ -25,7 +26,10 @@ export default function Sidebar({ locale }: SidebarProps) {
     const groupSlug = isGroupPage ? segments[groupKeyIndex + 1] : null;
     const l1Slug = isGroupPage ? segments[groupKeyIndex - 1] : null;
 
-    if (!isGroupPage) {
+    const handleMissing = useCallback(() => setMissingGroup(groupSlug), [groupSlug]);
+
+    // No menu for a group that does not exist (404).
+    if (!isGroupPage || missingGroup === groupSlug) {
         return null;
     }
 
@@ -47,7 +51,7 @@ export default function Sidebar({ locale }: SidebarProps) {
             </button>
 
             <div className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden px-2 py-4 min-h-0">
-                <GroupSidebarContent l1Slug={l1Slug!} groupSlug={groupSlug!} collapsed={isCollapsed} />
+                <GroupSidebarContent l1Slug={l1Slug!} groupSlug={groupSlug!} collapsed={isCollapsed} onMissing={handleMissing} />
             </div>
         </aside>
     );

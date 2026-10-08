@@ -288,7 +288,8 @@
     "action_GROUP_HIDE": "Paslēpa grupu",
     "action_GROUP_RESTORE": "Atjaunoja grupu",
     "action_GROUP_EDIT": "Rediģēja grupu",
-    "deletedTarget": "(dzēsta)"
+    "deletedTarget": "(dzēsta)",
+    "hiddenBannerOwner": "Paslēpta, to izdarīja vietnes administrators: {reason}"
   },
   "errors": {
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
@@ -371,7 +372,8 @@
     "tabProfileDescription": "Atjauniniet savas grupas identitāti un uzņemšanas statusu.",
     "attendButton": "Pieteikties",
     "attending": "pieteikušies",
-    "createEvent": "Izveidot pasākumu"
+    "createEvent": "Izveidot pasākumu",
+    "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai"
   },
   "admin": {
     "dashboard": {
@@ -669,7 +671,7 @@
     "typePrivate": "Privāta",
     "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
     "typePublic": "Publiska Grupa",
-    "typePublicDesc": "Ikviens var redzēt un pievienoties."
+    "typePublicDesc": "Ikviens to var atrast un pieteikties dalībai."
   },
   "pages": {
     "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",

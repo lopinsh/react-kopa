@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { MessageSquare, Calendar, Users, Settings, Lock, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getGroupRole } from '@/actions/group-actions';
+import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useSearchParams } from 'next/navigation';
 import { MembershipRole } from '@prisma/client';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
@@ -16,20 +17,24 @@ type Props = {
     groupSlug: string;
     collapsed: boolean;
     hideHeader?: boolean;
+    /** Called once we know the group does not exist (404), so the parent can drop the whole sidebar. */
+    onMissing?: () => void;
 };
 
-export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false }: Props) {
+export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false, onMissing }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const locale = useLocale();
     const [state, setState] = useState<{
+        exists: boolean,
         role: MembershipRole | null,
         hasInstructions: boolean,
         pendingCount: number,
         sections: Array<{ id: string; title: string; visibility: string }>
     }>({
+        exists: true,
         role: null,
         hasInstructions: false,
         pendingCount: 0,
@@ -37,8 +42,18 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     });
 
     useEffect(() => {
-        getGroupRole(l1Slug, groupSlug).then(setState);
-    }, [l1Slug, groupSlug]);
+        const load = () => {
+            getGroupRole(l1Slug, groupSlug).then((next) => {
+                setState(next);
+                if (!next.exists) onMissing?.();
+            });
+        };
+        load();
+        window.addEventListener(GROUP_MEMBERSHIP_CHANGED, load);
+        return () => window.removeEventListener(GROUP_MEMBERSHIP_CHANGED, load);
+    }, [l1Slug, groupSlug, onMissing]);
+
+    if (!state.exists) return null;
 
     const baseUrl = `/${l1Slug}/group/${groupSlug}`;
     const isMember = isAtLeastMember(state.role);

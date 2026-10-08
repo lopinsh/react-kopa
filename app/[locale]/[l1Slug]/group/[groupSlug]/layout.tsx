@@ -59,7 +59,7 @@ export default async function GroupLayout({
                     `
                 }} />
                 {group.moderation.hidden && (
-                    <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} />
+                    <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
                 )}
                 <GroupHeader
                     group={group}

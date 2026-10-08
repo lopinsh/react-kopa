@@ -147,7 +147,7 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - Visibility: members-only events must not appear for non-members or logged-out users — group Events tab, global event discovery, direct event URL (404 or a clear "members only" state — use what the code already intends and report which). Public events visible to everyone.
   - Events of a hidden group disappear with it.
   - Fix what's broken if small; **list** anything needing a product decision (past events, editing/deleting events, time zones…) instead of building it.
-- [ ] 2.6 Small fixes (each verified in the app, both locales):
+- [x] 2.6 Small fixes (2026-10-08, Sonnet; a–h all done and checked in the running app: header without search, badge clears after approving, share (done with 2.5), 404 without group menu, owner sees hidden banner without Restore, notification links use `l1Slug`; wizard/settings Public text reworded in EN + LV; search-result subtitles use `cities.*`. Extra: `getGroupRole` now returns `exists`, hidden groups also count as missing for the sidebar.):
   - a. **Header ⌘K search overlay** is a visible placeholder ("Global Search … placeholder") → hide the trigger until search exists (`components/shell/GlobalSearch.tsx`, `Header.tsx`). No placeholder features.
   - b. **Sidebar Requests badge** stays stale after approving/declining a request until reload → refresh it after the action.
   - c. **Event "Share event" button** has no handler → `navigator.share` when available, else copy the URL with a translated toast.

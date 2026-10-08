@@ -7,6 +7,8 @@ import type {
     ContextualTaxonomy
 } from '@/lib/types/discovery';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { getTranslations } from 'next-intl/server';
+import { cityLabel } from '@/lib/city-label';
 
 /**
  * Service to handle discovery logic (searching groups and categories).
@@ -152,6 +154,7 @@ export const DiscoveryService = {
         });
 
         // 4. Map and Combine
+        const tCities = await getTranslations({ locale: lang, namespace: 'cities' });
         const mappedCategories: ScopedResult[] = categories.map(c => {
             const resolved = TaxonomyResolver.resolve(c);
             const l2 = c.level === 2 ? c : (c.level === 3 ? c.parent : undefined);
@@ -177,7 +180,7 @@ export const DiscoveryService = {
                 id: g.id,
                 slug: g.slug,
                 title: g.name,
-                subtitle: g.city,
+                subtitle: cityLabel(tCities, g.city),
                 l1Slug: resolved.l1Slug || 'sigulda',
                 color: resolved.accentColor,
                 image: g.bannerImage
@@ -192,7 +195,7 @@ export const DiscoveryService = {
                 id: e.id,
                 slug: e.slug,
                 title: e.title,
-                subtitle: e.location || e.group.city,
+                subtitle: e.location || cityLabel(tCities, e.group.city),
                 l1Slug: resolved.l1Slug || 'sigulda',
                 color: resolved.accentColor,
                 image: e.bannerImage || e.group.bannerImage,

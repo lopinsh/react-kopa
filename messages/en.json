@@ -288,7 +288,8 @@
     "action_GROUP_HIDE": "Hid group",
     "action_GROUP_RESTORE": "Restored group",
     "action_GROUP_EDIT": "Edited group",
-    "deletedTarget": "(deleted)"
+    "deletedTarget": "(deleted)",
+    "hiddenBannerOwner": "Hidden by a site admin: {reason}"
   },
   "errors": {
     "ACTION_FAILED": "The action could not be completed.",
@@ -371,7 +372,8 @@
     },
     "attendButton": "Sign up",
     "attending": "going",
-    "createEvent": "Create event"
+    "createEvent": "Create event",
+    "visibilityPublicDesc": "Anyone can find it and ask to join"
   },
   "admin": {
     "dashboard": {
@@ -669,7 +671,7 @@
     "typePrivate": "Private",
     "typePrivateDesc": "Approval or invite only.",
     "typePublic": "Public Group",
-    "typePublicDesc": "Anyone can see and join this group."
+    "typePublicDesc": "Anyone can find it and ask to join."
   },
   "pages": {
     "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",
