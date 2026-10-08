@@ -3,7 +3,7 @@ import { Clock, Lock, MapPin, UserCheck, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import EventParticipation from '@/components/events/EventParticipation';
-import type { EventJoinModeValue } from '@/lib/constants';
+import { EVENT_TIME_ZONE, type EventJoinModeValue } from '@/lib/constants';
 import type { AttendanceStatus } from '@prisma/client';
 
 type Props = {
@@ -29,7 +29,6 @@ type Props = {
     isPast: boolean;
 };
 
-const TIME_ZONE = 'Europe/Riga';
 
 const BADGE = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide';
 
@@ -39,7 +38,7 @@ export default async function EventRow({ event, locale, href, signInHref, isPast
     const formatter = await getFormatter();
     const start = new Date(event.startDate);
     const end = event.endDate ? new Date(event.endDate) : null;
-    const time = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: TIME_ZONE } as const;
+    const time = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: EVENT_TIME_ZONE } as const;
     const isRequest = event.joinMode === 'REQUEST';
 
     const people = [
@@ -51,8 +50,8 @@ export default async function EventRow({ event, locale, href, signInHref, isPast
         <article className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-[var(--accent)] sm:flex-row sm:items-center sm:gap-5">
             <div className="flex min-w-0 flex-1 items-center gap-4">
                 <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
-                    <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric', timeZone: TIME_ZONE })}</span>
-                    <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short', timeZone: TIME_ZONE })}</span>
+                    <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric', timeZone: EVENT_TIME_ZONE })}</span>
+                    <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short', timeZone: EVENT_TIME_ZONE })}</span>
                 </div>
 
                 <div className="min-w-0 flex-1 space-y-1">

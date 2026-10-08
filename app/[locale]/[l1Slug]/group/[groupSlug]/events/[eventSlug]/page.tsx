@@ -19,6 +19,7 @@ import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
 import { signInUrl } from '@/lib/auth-redirect';
+import { EVENT_TIME_ZONE } from '@/lib/constants';
 
 export async function generateMetadata({
     params,
@@ -54,7 +55,7 @@ export default async function EventPage({
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : null;
     const ended = (endDate ?? startDate) < new Date();
-    const timeZone = 'Europe/Riga';
+    const timeZone = EVENT_TIME_ZONE;
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;

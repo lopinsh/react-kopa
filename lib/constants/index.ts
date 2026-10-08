@@ -57,3 +57,6 @@ export type DiscoveryTab = (typeof DISCOVERY_TABS)[number];
 
 export const DISCOVERY_VIEWS = ['grid', 'list'] as const;
 export type DiscoveryView = (typeof DISCOVERY_VIEWS)[number];
+
+/** Events are local to Latvia; show their dates and times in Riga time regardless of server zone. */
+export const EVENT_TIME_ZONE = 'Europe/Riga';
