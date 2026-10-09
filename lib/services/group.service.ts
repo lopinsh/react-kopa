@@ -726,8 +726,13 @@ export const GroupService = {
 
         if (!isOwner) return { success: false, error: 'FORBIDDEN' };
 
-        await prisma.group.delete({ where: { id: groupId } });
+        await this.deleteGroupRecord(groupId);
         return { success: true };
+    },
+
+    /** The deletion itself; memberships, sections, events, posts etc. go with it via the schema's cascades. Shared by the owner's delete and a site admin's delete of a hidden group. */
+    async deleteGroupRecord(groupId: string, tx: Prisma.TransactionClient = prisma): Promise<void> {
+        await tx.group.delete({ where: { id: groupId } });
     },
 
     /**

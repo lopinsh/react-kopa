@@ -47,3 +47,24 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
         return handleActionError(error, 'ACTION_FAILED');
     }
 }
+
+export async function deleteHiddenGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (session.user.role !== 'ADMIN') return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+
+    try {
+        const result = await ModerationService.deleteHiddenGroup(groupId, session.user.id, reason);
+        if (!result.success) return result;
+
+        revalidateTag('groups', 'max');
+        revalidateTag('events', 'max');
+        revalidatePath(`/${locale}`, 'page');
+        revalidatePath(`/${locale}/discover`, 'page');
+        revalidatePath(`/${locale}/admin`, 'page');
+        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'DELETE_FAILED');
+    }
+}

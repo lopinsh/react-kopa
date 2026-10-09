@@ -306,7 +306,19 @@
     "deletedTarget": "(dzēsta)",
     "hiddenBannerOwner": "Paslēpta, to izdarīja vietnes administrators: {reason}",
     "logFiltered": "Rādītas tikai darbības ar šo grupu.",
-    "logShowAll": "Rādīt visas"
+    "logShowAll": "Rādīt visas",
+    "action_GROUP_DELETE": "Dzēsa grupu",
+    "hiddenGroupsTitle": "Paslēptās grupas",
+    "hiddenGroupsEmpty": "Paslēptu grupu nav.",
+    "hiddenOwner": "Īpašnieks: {name}",
+    "hiddenBy": "Paslēpa {name}, {date}",
+    "restoreShort": "Atjaunot",
+    "deleteShort": "Dzēst uz visiem laikiem",
+    "deleteTitle": "Dzēst šo grupu uz visiem laikiem",
+    "deleteDescription": "Grupa un viss tajā (dalībnieki, ieraksti, pasākumi, sadaļas) tiks dzēsts neatgriezeniski. To nevar atsaukt. Īpašnieks saņems paziņojumu ar tavu iemeslu.",
+    "deleteReasonLabel": "Iemesls (redzams īpašniekam un paliek žurnālā)",
+    "deletePlaceholder": "Kāpēc šī grupa tiek dzēsta?",
+    "confirmDelete": "Dzēst uz visiem laikiem"
   },
   "errors": {
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
@@ -342,7 +354,8 @@
     "SAVE_FAILED": "Neizdevās saglabāt. Pamēģini vēlreiz.",
     "MESSAGE_INVALID": "Šis teksts nav derīgs. Pārbaudi vietturus un sintaksi.",
     "MESSAGE_KEY_UNKNOWN": "Šādas teksta atslēgas nav.",
-    "UNAUTHORIZED_ADMIN": "Šo var darīt tikai vietnes administratori."
+    "UNAUTHORIZED_ADMIN": "Šo var darīt tikai vietnes administratori.",
+    "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to."
   },
   "group": {
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
@@ -570,6 +583,7 @@
       "NEW_EVENT": "Jauns pasākums",
       "TAG_MERGED": "Birka „{originalTag}” tagad ir „{canonicalTag}”",
       "GROUP_HIDDEN": "Vietnes administrators paslēpa tavu grupu",
+      "GROUP_DELETED": "Vietnes administrators dzēsa tavu grupu",
       "EVENT_REQUEST": "{authorName} vēlas piedalīties",
       "EVENT_APPROVED": "Tavs pieteikums pasākumam apstiprināts",
       "EVENT_DECLINED": "Tavs pieteikums šoreiz netika apstiprināts",

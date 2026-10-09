@@ -306,7 +306,19 @@
     "deletedTarget": "(deleted)",
     "hiddenBannerOwner": "Hidden by a site admin: {reason}",
     "logFiltered": "Showing only the actions on this group.",
-    "logShowAll": "Show all"
+    "logShowAll": "Show all",
+    "action_GROUP_DELETE": "Deleted group",
+    "hiddenGroupsTitle": "Hidden groups",
+    "hiddenGroupsEmpty": "No hidden groups.",
+    "hiddenOwner": "Owner: {name}",
+    "hiddenBy": "Hidden by {name} on {date}",
+    "restoreShort": "Restore",
+    "deleteShort": "Delete permanently",
+    "deleteTitle": "Delete this group permanently",
+    "deleteDescription": "The group and everything in it (members, posts, events, sections) is deleted for good. This cannot be undone. The owner is notified with your reason.",
+    "deleteReasonLabel": "Reason (shown to the owner and kept in the log)",
+    "deletePlaceholder": "Why is this group being deleted?",
+    "confirmDelete": "Delete permanently"
   },
   "errors": {
     "ACTION_FAILED": "The action could not be completed.",
@@ -342,7 +354,8 @@
     "SAVE_FAILED": "Could not save. Try again.",
     "MESSAGE_INVALID": "This text isn't valid. Check the placeholders and syntax.",
     "MESSAGE_KEY_UNKNOWN": "This text key does not exist.",
-    "UNAUTHORIZED_ADMIN": "Only site admins can do this."
+    "UNAUTHORIZED_ADMIN": "Only site admins can do this.",
+    "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first."
   },
   "group": {
     "acceptingMembersDesc": "When off, new people can't ask to join.",
@@ -570,6 +583,7 @@
       "NEW_EVENT": "New event",
       "TAG_MERGED": "Tag “{originalTag}” is now “{canonicalTag}”",
       "GROUP_HIDDEN": "A site admin hid your group",
+      "GROUP_DELETED": "A site admin deleted your group",
       "EVENT_REQUEST": "{authorName} wants to join",
       "EVENT_APPROVED": "Your request to join was approved",
       "EVENT_DECLINED": "Your request to join was not approved this time",

@@ -9,6 +9,7 @@ import { signInUrl } from '@/lib/auth-redirect';
 import { getFormatter } from 'next-intl/server';
 import { ModerationService } from '@/lib/services/moderation.service';
 import type { ActionResponse } from '@/types/actions';
+import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
 
 /** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
 function backToTab(locale: string, tabName: string, res: ActionResponse): never {
@@ -60,7 +61,9 @@ export default async function AdminDashboardPage({
     const wildcardsRes = await getPendingWildcards();
     const wildcards = wildcardsRes.success ? wildcardsRes.data?.wildcards : [];
 
-    const moderationLog = activeTab === 'moderation' ? await ModerationService.listActions(50, group) : [];
+    const [moderationLog, hiddenGroups] = activeTab === 'moderation'
+        ? await Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()])
+        : [[], []];
 
     // Inline server actions for the forms
     async function handleApproveWildcard(formData: FormData) {
@@ -135,6 +138,26 @@ export default async function AdminDashboardPage({
 
                 {activeTab === 'moderation' && (
                     <div>
+                        <h2 className="text-xl font-semibold mb-4 text-foreground">{tMod('hiddenGroupsTitle')}</h2>
+                        {hiddenGroups.length === 0 ? (
+                            <p className="mb-10 text-foreground-muted text-center py-8">{tMod('hiddenGroupsEmpty')}</p>
+                        ) : (
+                            <ul className="mb-10 space-y-3">
+                                {hiddenGroups.map(g => (
+                                    <li key={g.id} className="flex flex-col gap-3 rounded-lg border border-border bg-surface-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
+                                        <div className="min-w-0 space-y-1">
+                                            <Link href={`/${locale}${g.href}`} className="font-bold text-primary hover:underline [overflow-wrap:anywhere]">{g.name}</Link>
+                                            <p className="text-sm text-foreground-muted">{g.ownerName ? tMod('hiddenOwner', { name: g.ownerName }) : tInbox('unknown')}</p>
+                                            <p className="text-sm text-foreground [overflow-wrap:anywhere]">{g.reason || '—'}</p>
+                                            <p className="text-xs text-foreground-muted">
+                                                {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
+                                            </p>
+                                        </div>
+                                        <HiddenGroupActions groupId={g.id} groupName={g.name} />
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{tMod('logTitle')}</h2>
                         {group && (
                             <p className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground-muted">
@@ -168,7 +191,9 @@ export default async function AdminDashboardPage({
                                                     {entry.target ? (
                                                         <Link href={`/${locale}${entry.target.href}`} className="text-primary hover:underline">{entry.target.name}</Link>
                                                     ) : (
-                                                        <span className="text-foreground-muted">{tMod('deletedTarget')}</span>
+                                                        <span className="text-foreground-muted [overflow-wrap:anywhere]">
+                                                            {entry.targetName ? `${entry.targetName} ${tMod('deletedTarget')}` : tMod('deletedTarget')}
+                                                        </span>
                                                     )}
                                                 </td>
                                                 <td className="py-3 max-w-md break-words text-foreground-muted [overflow-wrap:anywhere]">{entry.reason || '—'}</td>

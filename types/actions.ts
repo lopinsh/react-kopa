@@ -43,6 +43,7 @@ export type ErrorCode =
     | 'ORIGINAL_LANG_EMPTY'
     | 'MESSAGE_INVALID'
     | 'MESSAGE_KEY_UNKNOWN'
+    | 'GROUP_NOT_HIDDEN'
     | 'DB_MIGRATION_REQUIRED';
 
 /**

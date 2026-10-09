@@ -9,3 +9,6 @@ export const hideGroupSchema = z.object({
 });
 
 export type HideGroupValues = z.infer<typeof hideGroupSchema>;
+
+/** Deleting a hidden group needs the same kind of reason as hiding it. */
+export const deleteGroupSchema = hideGroupSchema;
