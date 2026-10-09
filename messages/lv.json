@@ -1,14 +1,14 @@
 {
   "auth": {
     "invalidCredentials": "Nepareizs e-pasts vai parole.",
-    "modalDesc": "Piesakies, lai sazinātos.",
+    "modalDesc": "Ienāc, lai sazinātos.",
     "modalTitle": "Pievienojies kopienai",
     "or": "vai",
     "password": "Parole",
     "signInButton": "Ienākt",
     "signInTitle": "Ienākt",
-    "signInToParticipate": "Piesakies, lai piedalītos diskusijās.",
-    "signInToSeeGroups": "Piesakies, lai redzētu savas grupas.",
+    "signInToParticipate": "Ienāc, lai piedalītos sarunās.",
+    "signInToSeeGroups": "Ienāc, lai redzētu savas grupas.",
     "signingIn": "Ienāk...",
     "email": "E-pasts",
     "signInSubtitle": "Ienāc savā Ejam Kopā kontā",
@@ -30,7 +30,7 @@
       "submit": "Reģistrēties",
       "submitting": "Izveido kontu…",
       "haveAccount": "Jau ir konts? Ienāc",
-      "autoSignInFailed": "Konts ir izveidots, bet ienākt neizdevās. Lūdzu, ienāc."
+      "autoSignInFailed": "Konts ir izveidots, bet ienākt neizdevās. Mēģini ienākt vēlreiz."
     },
     "validation": {
       "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmes garam.",
@@ -152,7 +152,7 @@
     "messageSent": "Ziņa nosūtīta!",
     "messageSuccess": "Grupas moderatoriem ir nosūtīts paziņojums.",
     "moderationReports": "Admin: Moderācijas ziņojumi",
-    "moderationReportsDesc": "Pārskati un atrisini atzīmētās grupas un pasākumus.",
+    "moderationReportsDesc": "Sūdzības par grupām un pasākumiem, kas jāizskata.",
     "moreMembers": "vairāk biedru",
     "myGroups": "Manas grupas",
     "nameEn": "Nosaukums EN",
@@ -301,7 +301,7 @@
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
     "ALIAS_CONFLICT": "Šāds aizstājvārds izvēlētajai valodai jau pastāv.",
     "CATEGORY_IN_USE": "Šī kategorija tiek izmantota un to nevar dzēst.",
-    "DB_MIGRATION_REQUIRED": "Šīs funkcijas atbalstam nepieciešama datu bāzes shēmas atjaunināšana. Lūdzu, sazinies ar administratoru.",
+    "DB_MIGRATION_REQUIRED": "Šīs funkcijas atbalstam nepieciešama datu bāzes shēmas atjaunināšana. Sazinies ar administratoru.",
     "CREATE_FAILED": "Neizdevās izveidot resursu.",
     "DELETE_FAILED": "Neizdevās dzēst resursu.",
     "FORBIDDEN": "Tev nav atļaujas veikt šo darbību.",
@@ -309,14 +309,14 @@
     "JOIN_FAILED": "Neizdevās pievienoties grupai.",
     "NOT_FOUND": "Pieprasītais resurss netika atrasts.",
     "TAG_NOT_FOUND": "Birka netika atrasta.",
-    "UNAUTHORIZED": "Neautorizēta piekļuve. Lūdzu, piesakies.",
+    "UNAUTHORIZED": "Lai turpinātu, ienāc savā kontā.",
     "UPDATE_FAILED": "Neizdevās atjaunināt resursu.",
-    "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts. Lūdzu, izvēlies citu.",
-    "VALIDATION_FAILED": "Validācijas kļūda. Lūdzu, pārbaudi ievadi.",
+    "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts. Izvēlies citu.",
+    "VALIDATION_FAILED": "Kaut kas nav aizpildīts pareizi. Pārbaudi ievadīto.",
     "EMAIL_TAKEN": "Konts ar šo e-pastu jau eksistē.",
     "EVENT_FULL": "Organizators ir atzīmējis, ka pasākums ir pilns.",
-    "CANCEL_FAILED": "Neizdevās atcelt. Lūdzu, mēģini vēlreiz.",
-    "MANAGE_FAILED": "Neizdevās saglabāt izmaiņas. Lūdzu, mēģini vēlreiz.",
+    "CANCEL_FAILED": "Neizdevās atcelt. Mēģini vēlreiz.",
+    "MANAGE_FAILED": "Neizdevās saglabāt izmaiņas. Mēģini vēlreiz.",
     "EVENT_MODE_MISMATCH": "Šī darbība šim pasākumam nav pieejama.",
     "EVENT_PAST": "Šis pasākums jau ir noticis.",
     "EVENT_NOT_FOUND": "Pasākums nav atrasts.",
@@ -332,7 +332,7 @@
     "acceptingMembersLabel": "Uzņem jaunus biedrus",
     "anonymousUser": "Anonīms lietotājs",
     "memberActions": "Dalībnieka darbības",
-    "applyDescription": "Pastāsti grupas organizatoriem, kāpēc vēlies pievienoties un ko meklē šajā kopienā.",
+    "applyDescription": "Pastāsti organizatoriem, kāpēc gribi pievienoties un ko te meklē.",
     "applyToGroup": "Pieteikties grupai {name}",
     "attendingStatus": "Piedalās",
     "bannerImageUrlDesc": "Ielīmē attēla saiti. Ieteicamais izmērs: 1200 × 400 px.",
@@ -616,7 +616,7 @@
     "sharedGroups": "Kopīgās grupas",
     "groupsHeading": "Grupas",
     "viewAllGroups": "Skatīt visu",
-    "viewingOwnPublicProfile": "Tu skati savu publisko profilu."
+    "viewingOwnPublicProfile": "Šādi tavu profilu redz citi."
   },
   "report": {
     "title": "Ziņot par grupu",
@@ -628,7 +628,7 @@
     "cancel": "Atcelt",
     "submit": "Nosūtīt",
     "success": "Paldies. Ziņojums nosūtīts.",
-    "error": "Neizdevās nosūtīt ziņojumu. Lūdzu, mēģini vēlreiz."
+    "error": "Neizdevās nosūtīt ziņojumu. Mēģini vēlreiz."
   },
   "shell": {
     "footer": {
