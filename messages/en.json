@@ -613,10 +613,6 @@
     "sectionPending": "Pending approval",
     "sharedGroups": "Shared Groups",
     "groupsHeading": "Groups",
-    "stats": {
-      "eventsAttended": "Events Attended",
-      "groupsJoined": "Groups Joined"
-    },
     "viewAllGroups": "View All",
     "viewingOwnPublicProfile": "You're viewing your public profile."
   },

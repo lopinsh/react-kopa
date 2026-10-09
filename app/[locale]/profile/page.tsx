@@ -4,7 +4,7 @@ import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
-import { Settings, MapPin, Calendar, Users, CalendarDays, Plus } from 'lucide-react';
+import { Settings, MapPin, Calendar, Users, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import { avatarUrl } from '@/lib/avatar';
@@ -75,7 +75,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                 </div>
             </div>
 
-            <div className="grid gap-12 lg:grid-cols-[1fr_300px]">
+            <div>
                 <div className="space-y-12">
                     {/* Bio Section */}
                     <section>
@@ -135,38 +135,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                     </section>
                 </div>
 
-                {/* Stats Sidebar */}
-                <div className="space-y-6">
-                    <div className="rounded-3xl bg-surface-elevated/50 p-6 border border-border/50">
-                        <h3 className="text-sm font-black uppercase tracking-widest text-foreground-muted mb-6">
-                            Stats
-                        </h3>
-
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                                    <Users className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-black text-foreground">{dbUser._count.memberships}</p>
-                                    <p className="text-xs font-bold text-foreground-muted uppercase tracking-wider">{t('stats.groupsJoined')}</p>
-                                </div>
-                            </div>
-
-                            <div className="my-4 h-px bg-border/50" />
-
-                            <div className="flex items-center gap-4">
-                                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-secondary/10 text-secondary">
-                                    <CalendarDays className="h-6 w-6" />
-                                </div>
-                                <div>
-                                    <p className="text-3xl font-black text-foreground">{dbUser._count.attendances}</p>
-                                    <p className="text-xs font-bold text-foreground-muted uppercase tracking-wider">{t('stats.eventsAttended')}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     );
