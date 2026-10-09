@@ -8,6 +8,7 @@ import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
+import { isEventPast } from '@/lib/event-dates';
 
 export async function generateMetadata({
     params,
@@ -47,17 +48,15 @@ export default async function GroupEventsPage({
     const isOwnerOrAdmin = group.user.isAdmin;
 
     const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
-    const now = new Date();
-
     const filteredEvents = eventsData.filter(event => {
-        const startDate = new Date(event.startDate);
+        const past = isEventPast(event);
         if (currentTab === 'my-rsvps') {
             // Going, waiting for approval or on the waitlist
-            return startDate >= now && !!event.viewer.myStatus && event.viewer.myStatus !== 'DECLINED';
+            return !past && !!event.viewer.myStatus && event.viewer.myStatus !== 'DECLINED';
         } else if (currentTab === 'past') {
-            return startDate < now;
+            return past;
         } else {
-            return startDate >= now;
+            return !past;
         }
     });
 
@@ -98,7 +97,7 @@ export default async function GroupEventsPage({
                             locale={locale}
                             href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
                             signInHref={session?.user?.id ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${event.slug}`)}
-                            isPast={new Date(event.startDate) < now}
+                            isPast={isEventPast(event)}
                         />
                     ))}
                 </div>

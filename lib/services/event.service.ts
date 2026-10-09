@@ -6,6 +6,7 @@ import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -457,7 +458,7 @@ export class EventService {
         if (!loaded.event) return { success: false, error: loaded.error };
         const { event } = loaded;
         if (event.joinMode !== 'OPEN') return { success: false, error: 'EVENT_MODE_MISMATCH' };
-        if (status === 'GOING' && event.startDate < new Date()) return { success: false, error: 'EVENT_PAST' };
+        if (status === 'GOING' && isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
 
         if (status === 'NONE') {
             await prisma.attendance.deleteMany({ where: { eventId, userId } });
@@ -484,7 +485,7 @@ export class EventService {
         if (!loaded.event) return { success: false, error: loaded.error };
         const { event } = loaded;
         if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
-        if (event.startDate < new Date()) return { success: false, error: 'EVENT_PAST' };
+        if (isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
         const context = await EventService.buildContext(event);
@@ -621,7 +622,7 @@ export class EventService {
         search?: string;
         status?: 'upcoming' | 'past';
     }, locale: string, userId?: string): Promise<DiscoverableEvent[]> {
-        const now = new Date();
+        const todayStart = startOfTodayInRiga();
         const { category, city, search, status } = filters;
 
         const buildWhere = (fCity?: string, fCategory?: string, fSearch?: string, fStatus?: string): Prisma.EventWhereInput => {
@@ -637,7 +638,10 @@ export class EventService {
                 });
             }
             return {
-                startDate: fStatus === 'past' ? { lt: now } : { gte: now },
+                // Past = the event's last day is before today (Latvian time); see isEventPast.
+                ...(fStatus === 'past'
+                    ? { OR: [{ endDate: { lt: todayStart } }, { endDate: null, startDate: { lt: todayStart } }] }
+                    : { OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] }),
                 AND: [
                     { group: { AND: groupFilters } },
                     ...(fSearch ? [{

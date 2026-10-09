@@ -4,7 +4,7 @@
 > **How to use:** when starting a session, take the first unchecked item in the current stage. Keep items small (30–60 min), finish them fully, tick them off here in the same commit.
 > Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git.
 
-**Last updated:** 2026-10-08
+**Last updated:** 2026-10-09
 
 ---
 
@@ -37,6 +37,48 @@ Every task is judged by whether it makes this loop work better. If it doesn't, i
 - When finished, report: done items, skipped items, anything surprising you noticed but didn't fix.
 
 ---
+
+## Screen map
+
+Every screen, grouped by the step of the core loop it serves. Update the row when a screen changes. **Status:** ✅ works and fits · 🟡 works, needs polish/decision · ❌ not walked end to end · 🧱 placeholder or dead. **Decision** (keep / fix / hide / remove) is agreed with the user; "proposed" = not agreed yet.
+
+| Step | Screen | Route / component | Who | Status | Decision · next |
+|---|---|---|---|---|---|
+| Find | Discovery – groups | `/` (`?tab=groups`) | everyone | 🟡 | keep · 3.1 at-a-glance cards (grey no-banner cards, "Active" badge, tab title) |
+| Find | Discovery – events | `/?tab=events` | everyone | ✅ | keep · paging later |
+| Find | Search (filter-bar input + dropdown) | `DiscoveryFilterBar`, `searchContextual` | everyone | 🟡 | proposed: replace with one search modal (see search discussion) · accents later |
+| Find | Header ⌘K search modal | `GlobalSearch.tsx`, `SearchModal.tsx` (unused) | — | 🧱 | proposed: becomes the real search modal |
+| Find | `/discover`, `/groups` | redirect / orphan "my groups" copy | — | 🧱 | proposed: remove `/groups` |
+| Create | Create group wizard (4 steps) | `/create` | logged in | ✅ | keep · banner upload later |
+| Join | Group page – About | `[l1]/group/[g]` | everyone | 🟡 | keep · 3.2 header (white title on light banner, blank role pill) |
+| Join | Apply / withdraw | `ApplicationModal`, `MembershipPanel` | visitors | ✅ | keep · "Join X" → "Ask to join X" |
+| Join | Auth gate | `AuthGateModal` vs sign-in link | visitors | 🟡 | proposed: sign-in link everywhere, remove modal |
+| Join | Sign in / Register / Onboarding | `/auth/*`, `/onboarding/username` | visitors | 🟡 | keep · user to click through one real sign-up (2.0) |
+| Talk | Discussions | `[g]/discussions`, `DiscussionBoard` | members | ❌ | 2.4 |
+| Talk | Ask the group (before joining) | `InquiryModal`, `SupportMessageModal` | visitors/members | ❌ | 2.4 |
+| Talk | Messages / inbox | `/messages`, `MessagesLayout` | members | ❌ | 2.4 |
+| Talk | Group-level messages page | `[l1]/messages` | — | 🧱 | proposed: remove (placeholder, redirects to a missing `/login`) |
+| Talk | Notifications | `NotificationCenter` (header) | members | ✅ | keep |
+| Group life | Members + requests | `[g]/members` | members/admins | 🟡 | keep · stray "Private" text |
+| Group life | Events tab | `[g]/events`, `EventRow`, `CompactGroupBar` | everyone | ✅ | keep |
+| Group life | Event page + organiser panel | `[g]/events/[e]` | everyone | ✅ | keep · edit/delete missing (2.10) |
+| Group life | Create event | `[g]/create-event` (modal + page) | organisers | 🟡 | keep · hide link-name field (2.10) |
+| Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | proposed: fewer tabs (decide with sections editor) |
+| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | proposed: decide — 3 places describe a group |
+| Group life | Report / hide group | `ReportModal`, `HideGroupModal` | any / admin | ✅ | keep |
+| Me | Own profile | `/profile` | members | 🟡 | keep · "Events attended 0" is static |
+| Me | Public profile | `/profile/[username]` | everyone | ✅ | keep · message button after 2.4 |
+| Me | Edit profile | `/profile/edit` | members | ✅ | keep (new avatars) |
+| Me | My groups | `/profile/my-groups` | members | ✅ | keep |
+| Shell | Header + user menu | `Header`, `UserMenu` | everyone | 🟡 | 3.4 |
+| Shell | Group sidebar + tab bar | `Sidebar`, `GroupTabs` | group pages | 🟡 | 3.4 · two navs for the same pages |
+| Shell | Mobile bottom nav | `MobileNav` | everyone | 🟡 | 3.4 |
+| Shell | Footer | `Footer` | everyone | 🟡 | 3.4 · "About" twice, second language switch |
+| Static | About / Privacy / Cookie banner | `/about`, `/privacy`, `CookieConsent` | everyone | 🟡 | keep · About in owner's voice, Privacy contact (user) |
+| Admin | Dashboard (tags, reports, moderation log) | `/admin` | admin | 🟡 | keep · duplicate nav row |
+| Admin | Reports | `/admin/reports` | admin | ✅ | keep |
+| Admin | Taxonomy | `/admin/taxonomy` | admin | ✅ | keep |
+| Admin | Categorization override | `/admin/groups/[g]/categorization` | admin | 🧱 | proposed: remove until needed |
 
 ## Stage 0 — Local setup (needs user, once)
 
@@ -108,18 +150,13 @@ Noticed, not changed:
 ## Opus queue (not for Sonnet)
 
 - 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session.
-- Private groups: invite mechanism + restricted card view for non-members.
-- Search diacritics ("lugsanu" vs "lūgšanu").
 - Decisions on the 2.7 feature inventory, together with the user.
-- Event recurrence as a series (members-only events only) — after 2.8.
+- Event recurrence as a series (members-only events only) — after 2.10.
+- **Later, not planned (user, 2026-10-09):** private groups with invites; accent-insensitive search ("lugsanu" vs "lūgšanu"). They come when the site feels stable.
 - ~~Realtime on production~~ — fixed 2026-10-08 (Opus + user): Soketi had been running with its default `app-key`/`app-secret` (the `SOKETI_*` lines were missing from the server `.env`), and the browser bundle pointed at `soketi`. Now: real `SOKETI_APP_ID/KEY/SECRET` in `/root/ejam-kopa/.env`, GitHub secret `NEXT_PUBLIC_PUSHER_KEY` = the new key, Nginx Proxy Manager routes `/app/` on ejam.lumm.eu → `192.168.0.34:6001` (Advanced tab, WebSockets on), browser build baked with `ejam.lumm.eu:443` TLS. Verified: default key rejected, new key connects over `wss://`, admin hide works. GitHub secrets `NEXT_PUBLIC_PUSHER_HOST/PORT` are unused now (can be deleted).
 - Minor, unexplained: dev-only sidebar flash on mobile.
 
 **For the user (production):** check `/admin` → Moderation that all three junk groups are hidden (hide worked after the realtime fix, 2026-10-08); do one real sign-up (2.0).
-
-## Next session — 2.8 Events: join modes, waitlist, Events tab (Sonnet)
-
-Scope: **2.8d only** (2.8a–c are done and on production). One commit, tick the box in the same commit, **never push**. Follow "Instructions for the agent working through a stage" above, the session rules and the **Events** product decision. **2.8c: stop after the mockup and wait for the user's OK before building.** If something needs a product decision, stop and write the question here instead of guessing.
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
@@ -213,7 +250,13 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - [x] **2.8d Discovery.** Members see members-only events of their groups in discovery and search (logged out / non-members never do). `getDiscoverableEvents` is cached with `unstable_cache` keyed without the user — keep the public part cached, fetch the member part uncached or key it by user. Fix the filter bug: `city` and `category` both set the `group` key via object spread, so selecting both drops one — combine them with `AND`. Request-to-join events show their mode badge in results. Discovery cards: `components/discovery/EventCard.tsx:82` has a hardcoded "going" — use `event.goingCount` (or `event.approvedCount` for Request-to-join), like the Events tab rows. Check `ListViewEventCard` too.
     - Done 2026-10-08 (Sonnet). Public events: shared 60s cache (no user in key). Members-only events of the viewer's own groups: separate uncached query merged in (`getDiscoverableEvents(filters, locale, userId)`). City + category now AND-combined. Cards show Members only / Request to join / Full badges and translated going/approved counts; returns a typed `DiscoverableEvent` (no `any` for events). Site admins who are not members do not see members-only events in discovery. Opus review: discovery card dates/times use the next-intl formatter in Riga time (`EVENT_TIME_ZONE` constant), so `/lv` shows "okt." and server time zone no longer shifts times.
 
-- [x] 2.9 Security (2026-10-09, Opus): rich text (event description/instructions, group sections) was rendered as raw HTML — any organiser could run scripts in visitors' browsers. Now cleaned at render with `sanitizeRichText` (`lib/sanitize.ts`, `sanitize-html` ≥2.17.7, editor tags only, http/https/mailto links); event JSON-LD escaped (`jsonForScript`). Joining a past event is refused server-side (`EVENT_PAST`). Verified with script/onerror/`javascript:` probes on the event and group pages.
+- [x] 2.9 Security (2026-10-09, Opus): rich text (event description/instructions, group sections) was rendered as raw HTML — any organiser could run scripts in visitors' browsers. Now cleaned at render with `sanitizeRichText` (`lib/sanitize.ts`, `sanitize-html` ≥2.17.7, editor tags only, http/https/mailto links); event JSON-LD escaped (`jsonForScript`). Joining a past event is refused server-side (`EVENT_PAST`). **Past rule (user, 2026-10-09):** an event is past once its last day (end date, else start date) is before *today in Latvian time* — on its own day it stays joinable (people may come late). One helper, `isEventPast` (`lib/event-dates.ts`), drives the server check, Upcoming/Past/My events tabs, discovery and the event page. Verified with script/onerror/`javascript:` probes on the event and group pages.
+
+- [ ] 2.10 Finish events (Sonnet; follow the **Events** product decision):
+  - Organisers can **edit** an event (reuse the create wizard pre-filled; `EventService.updateEvent` exists) and **delete** it (confirm step; attendees get a notification in the compact layout; then redirect to the group's Events tab).
+  - Hide the "link name" (slug) field in the wizard — generate it from the title, add `-2`, `-3` on clashes instead of `EVENT_SLUG_TAKEN`.
+  - Past events: no join buttons anywhere (already on rows/page), the server refuses with `EVENT_PAST` (2.9) — show its translated error if a stale page tries.
+  - Verify as organiser, member and logged out; EN + LV; desktop + mobile.
 
 ## Stage 3 — Make it calm
 
@@ -223,10 +266,6 @@ Goal: content first. One screen at a time; agree direction with the user before 
 - [ ] 3.2 Group page
 - [ ] 3.3 Event page — currently stacks full group header + oversized hero with unreadable title
 - [ ] 3.4 Header / navigation / footer
-
-## Stage 4 — Invite real people
-
-- [ ] 4.1 User creates their own real group (e.g. gym in Jelgava) and invites a few people; collect what confuses them
 
 ---
 
