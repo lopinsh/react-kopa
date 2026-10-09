@@ -43,7 +43,7 @@ export default async function GroupPage({
     }
 
     return (
-        <div className="relative animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <div className="relative overflow-x-clip animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Decorative background glows */}
             <div
                 className="absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full opacity-[0.03] blur-[120px] pointer-events-none bg-[var(--accent)]"
