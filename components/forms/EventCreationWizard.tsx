@@ -155,13 +155,22 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
 
     const opensToWaiting = !!event && event.joinMode === 'REQUEST' && watch('joinMode') === 'OPEN' && waitingCount > 0;
 
-    const onSubmit = handleSubmit((data) => {
+    const submitForm = handleSubmit((data) => {
         if (opensToWaiting) {
             setAskingToOpen(true);
             return;
         }
         save(data, false);
     });
+    // Enter in a step-1 field moves to the next step instead of creating the event early.
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        if (step < 1) {
+            e.preventDefault();
+            void nextStep();
+            return;
+        }
+        void submitForm(e);
+    };
     const onConfirmOpen = handleSubmit((data) => {
         setAskingToOpen(false);
         save(data, true);
@@ -443,8 +452,11 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                             </button>
                         )}
                         <div className="flex-1" />
+                        {/* Separate keys: React must not turn the Next button into the submit button while
+                            its click is still being handled (that submitted the form from step 1). */}
                         {step < 1 ? (
                             <button
+                                key="next"
                                 type="button"
                                 onClick={nextStep}
                                 className="flex items-center gap-1.5 rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all"
@@ -454,6 +466,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                             </button>
                         ) : (
                             <button
+                                key="submit"
                                 type="submit"
                                 disabled={isPending || askingToOpen}
                                 className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all disabled:opacity-70"
