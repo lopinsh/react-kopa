@@ -1,25 +1,25 @@
 'use client';
 
 import { useTransition, useMemo, useState } from 'react';
-import { useForm, FormProvider, useWatch } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { updateGroup, deleteGroup } from '@/actions/group-actions';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
-import { Save, AlertCircle } from 'lucide-react';
+import { Save, AlertCircle, Info } from 'lucide-react';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import GroupSectionEditor from '@/components/groups/GroupSectionEditor';
 import { useToast } from '@/hooks/use-toast';
-import { useGroupContext } from '@/components/providers/GroupProvider';
 
-// New Sub-components
-import ProfileSection from './settings/ProfileSection';
+import BasicsSection from './settings/BasicsSection';
 import SocialSection from './settings/SocialSection';
 import CategorizationSection from './settings/CategorizationSection';
 import PrivacySection from './settings/PrivacySection';
 import DangerZoneSection from './settings/DangerZoneSection';
+import TransferOwnershipSection from './settings/TransferOwnershipSection';
+import type { SettingsTab } from './SettingsTabs';
 
 type Props = {
     group: {
@@ -35,15 +35,18 @@ type Props = {
         bannerImage: string | null;
         sections: Array<{ id: string; title: string; content: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY' }>;
         tags: Array<{ id: string; title: string; slug: string; level: number }>;
-        category: { id: string; title: string; slug: string; level: number; parentTitle: string | null; l1Slug: string; color: string | null };
         slug: string;
         l1Slug: string;
-        accentColor?: string | null;
     };
     taxonomy: TaxonomyTree;
     locale: string;
-    activeTab: string;
-    canEditCategorization: boolean;
+    activeTab: SettingsTab;
+    /** Owner (and site admins): name, category, topics and access. Moderators get the rest. */
+    canEditOwnerFields: boolean;
+    /** Only the owner hands the group over or deletes it. */
+    isOwner: boolean;
+    /** Members and moderators the owner could hand the group to. */
+    transferCandidates: Array<{ userId: string; name: string; role: 'ADMIN' | 'MEMBER' }>;
     initialTaxonomy: {
         initialTaxSelection: TaxonomySelection | null;
         initialTagIds: string[];
@@ -55,13 +58,15 @@ export default function GroupSettingsForm({
     taxonomy,
     locale,
     activeTab,
-    canEditCategorization,
+    canEditOwnerFields,
+    isOwner,
+    transferCandidates,
     initialTaxonomy
 }: Props) {
-    const { user } = useGroupContext();
-    const userRole = user.role;
     const gt = useTranslations('group');
-  const c_common = useTranslations('common');
+    const gs = useTranslations('groupSettings');
+    const c_common = useTranslations('common');
+    const tErrors = useTranslations('errors');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
@@ -74,34 +79,25 @@ export default function GroupSettingsForm({
         resolver: zodResolver(groupFormSchema),
         defaultValues: {
             name: group.name,
-            slug: group.slug,
             city: group.city as GroupFormValues['city'],
             type: group.type,
-            categoryId: initialTaxSelection?.kind === 'existing' ? initialTaxSelection.categoryId : undefined,
-            tagIds: initialTagIds,
+            // Moderators never see the category picker: their form carries the stored values, which the service compares.
+            categoryId: canEditOwnerFields
+                ? (initialTaxSelection?.kind === 'existing' ? initialTaxSelection.categoryId : undefined)
+                : group.categoryId,
+            tagIds: canEditOwnerFields ? initialTagIds : group.tags.map(tag => tag.id),
             isAcceptingMembers: group.isAcceptingMembers,
             discordLink: group.discordLink || '',
             websiteLink: group.websiteLink || '',
             instagramLink: group.instagramLink || '',
             bannerImage: group.bannerImage || '',
-            accentColor: group.accentColor || '',
         },
     });
 
-    const { handleSubmit, setValue, control } = methods;
+    const { handleSubmit, setValue } = methods;
 
-    // Sync preview color with form value
-    const watchedAccentColor = useWatch({ control, name: 'accentColor' });
-    const accentColor = useMemo(() => {
-        if (watchedAccentColor && /^#[0-9A-Fa-f]{6}$/.test(watchedAccentColor)) {
-            return watchedAccentColor;
-        }
-        if (taxSelection?.kind === 'existing') {
-            return taxSelection.l1Color;
-        }
-        return '#6366f1';
-    }, [taxSelection, watchedAccentColor]);
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
+    // Colour of the category picker itself; the page colour always comes from the category (set in the layout).
+    const pickerColor = taxSelection?.kind === 'existing' ? taxSelection.l1Color : '#6366f1';
 
     function handleTaxChange(sel: TaxonomySelection | null) {
         setTaxSelection(sel);
@@ -122,14 +118,14 @@ export default function GroupSettingsForm({
             if (result.success) {
                 success(c_common('updateSuccess'));
 
-                // If slug or L1 changed, we need to update the URL but stay in settings
+                // The category (and so the first URL segment) can change; keep the person in settings.
                 if (result.data?.slug && (result.data.slug !== group.slug || result.data.l1Slug !== group.l1Slug)) {
                     router.replace(`/${result.data.l1Slug}/group/${result.data.slug}/settings?tab=${activeTab}`);
                 }
 
                 router.refresh();
             } else {
-                setServerError(result.error);
+                setServerError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
@@ -140,7 +136,7 @@ export default function GroupSettingsForm({
             startTransition(async () => {
                 const result = await deleteGroup(group.id, locale);
                 if (result.success) {
-                    router.push('/discover');
+                    router.push('/');
                 }
             });
         }
@@ -153,80 +149,98 @@ export default function GroupSettingsForm({
         return null;
     }, [taxonomy, taxSelection]);
 
+    if (activeTab === 'sections') {
+        return (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="mb-8">
+                    <h3 className="mb-1 flex items-center gap-2 text-xl font-black text-foreground">
+                        <Save className="h-6 w-6 text-[var(--accent)]" />
+                        {gs('tabSections')}
+                    </h3>
+                    <p className="text-sm text-foreground-muted">
+                        {c_common('tabSectionsDescription')}
+                    </p>
+                </div>
+                <GroupSectionEditor
+                    groupId={group.id}
+                    initialSections={group.sections || []}
+                    locale={locale}
+                />
+            </div>
+        );
+    }
+
     return (
-        <div className="space-y-12" style={accentStyle}>
+        <div className="space-y-12">
             <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
-                    {activeTab === 'profile' && <ProfileSection />}
+                    {!canEditOwnerFields && (
+                        <p className="flex items-start gap-3 rounded-2xl border border-border bg-surface-elevated/30 p-4 text-sm text-foreground-muted">
+                            <Info className="mt-0.5 h-4 w-4 shrink-0" />
+                            {gs('ownerOnlyNote')}
+                        </p>
+                    )}
 
-                    {activeTab === 'social' && <SocialSection />}
+                    <BasicsSection canEditName={canEditOwnerFields} />
 
-                    {activeTab === 'sections' && (
-                        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="mb-8">
-                                <h3 className="text-xl font-black text-foreground mb-1 flex items-center gap-2">
-                                    <Save className="h-6 w-6 text-[var(--accent)]" />
-                                    {c_common('tabSections')}
-                                </h3>
-                                <p className="text-sm text-foreground-muted">
-                                    {c_common('tabSectionsDescription')}
-                                </p>
-                            </div>
-                            <GroupSectionEditor
-                                groupId={group.id}
-                                initialSections={group.sections || []}
-                                locale={locale}
+                    {canEditOwnerFields && (
+                        <div id="category" className="scroll-mt-24">
+                            <CategorizationSection
+                                taxonomy={taxonomy}
+                                taxSelection={taxSelection}
+                                onTaxChange={handleTaxChange}
+                                accentColor={pickerColor}
+                                selectedL1={selectedL1}
                             />
                         </div>
                     )}
 
-                    {activeTab === 'categorization' && canEditCategorization && (
-                        <CategorizationSection
-                            taxonomy={taxonomy}
-                            taxSelection={taxSelection}
-                            onTaxChange={handleTaxChange}
-                            accentColor={accentColor}
-                            selectedL1={selectedL1}
-                        />
-                    )}
-
-                    {activeTab === 'privacy' && userRole === 'OWNER' && <PrivacySection />}
-
-                    {activeTab === 'danger' && userRole === 'OWNER' && (
-                        <DangerZoneSection onDelete={handleDelete} isPending={isPending} />
-                    )}
-
-                    {/* Bottom Action Bar */}
-                    {activeTab !== 'danger' && activeTab !== 'sections' && (
-                        <div className="pt-8 mt-12 border-t border-border flex items-center gap-4">
-                            <button
-                                type="submit"
-                                disabled={isPending}
-                                className="flex h-14 items-center gap-3 rounded-2xl bg-[var(--accent)] px-10 font-black text-white shadow-premium transition-all hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                            >
-                                {isPending ? (
-                                    <div className="h-5 w-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                ) : (
-                                    <Save className="h-5 w-5" />
-                                )}
-                                {c_common('saveChanges')}
-                            </button>
-
-                            {serverError && (
-                                <div className="flex items-center gap-2 text-red-500 p-4 rounded-2xl bg-red-500/5 border border-red-500/10 animate-in fade-in slide-in-from-left-4">
-                                    <AlertCircle className="h-4 w-4" />
-                                    <p className="text-sm font-bold">{serverError}</p>
-                                </div>
-                            ) || (
-                                    <p className="text-xs text-foreground-muted ml-2 font-medium">
-                                        {gt('saveChangesDesc')}
-                                    </p>
-                                )}
+                    {canEditOwnerFields && (
+                        <div id="access" className="scroll-mt-24">
+                            <PrivacySection />
                         </div>
                     )}
+
+                    <div id="links" className="scroll-mt-24">
+                        <SocialSection />
+                    </div>
+
+                    <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-border pt-8">
+                        <button
+                            type="submit"
+                            disabled={isPending}
+                            className="flex h-14 items-center gap-3 rounded-2xl bg-[var(--accent)] px-10 font-black text-[var(--accent-foreground)] shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                        >
+                            {isPending ? (
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                            ) : (
+                                <Save className="h-5 w-5" />
+                            )}
+                            {c_common('saveChanges')}
+                        </button>
+
+                        {serverError ? (
+                            <div role="alert" className="flex items-center gap-2 rounded-2xl border border-red-500/10 bg-red-500/5 p-4 text-red-500">
+                                <AlertCircle className="h-4 w-4" />
+                                <p className="text-sm font-bold">{serverError}</p>
+                            </div>
+                        ) : (
+                            <p className="ml-2 text-xs font-medium text-foreground-muted">
+                                {gt('saveChangesDesc')}
+                            </p>
+                        )}
+                    </div>
                 </form>
             </FormProvider>
+
+            {isOwner && (
+                <>
+                    <TransferOwnershipSection groupId={group.id} locale={locale} candidates={transferCandidates} />
+                    <div id="danger-zone" className="scroll-mt-24">
+                        <DangerZoneSection onDelete={handleDelete} isPending={isPending} />
+                    </div>
+                </>
+            )}
         </div>
     );
 }
-

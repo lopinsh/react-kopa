@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { EyeOff, Flag, LogOut, MoreHorizontal, Settings, Share2, Trash2 } from 'lucide-react';
+import { ArrowRightLeft, EyeOff, Flag, LogOut, MoreHorizontal, Settings, Share2 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { leaveGroup, deleteGroup } from '@/actions/group-actions';
-import { Link, useRouter } from '@/i18n/routing';
+import { leaveGroup } from '@/actions/group-actions';
+import { Link } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import type { GroupContext } from '@/lib/services/group.service';
@@ -25,12 +25,10 @@ const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium t
 
 /** The one "…" menu of the group page; the header renders it in a mobile and a desktop spot. */
 export default function GroupMoreMenu({ group, l1Slug, variant, className, onReport, onHide }: Props) {
-    const t = useTranslations('group');
     const c = useTranslations('common');
     const tModeration = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
-    const router = useRouter();
     const { success, error: toastError } = useToast();
     const { user: { role, isMember } } = useGroupContext();
     const [isOpen, setOpen] = useState(false);
@@ -71,17 +69,8 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
         if (isPending || !confirm(c('confirmLeave'))) return;
         setOpen(false);
         startTransition(async () => {
-            await leaveGroup(group.id, locale);
-        });
-    };
-
-    const handleDelete = () => {
-        if (isPending || !confirm(t('confirmDelete'))) return;
-        setOpen(false);
-        startTransition(async () => {
-            const res = await deleteGroup(group.id, locale);
-            if (res.success) router.push('/');
-            else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+            const res = await leaveGroup(group.id, locale);
+            if (!res.success) toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
 
@@ -135,6 +124,18 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                         </button>
                     )}
 
+                    {/* The owner cannot just leave: the group has to go to someone else first. */}
+                    {isOwner && (
+                        <Link
+                            href={`/${l1Slug}/group/${group.slug}/settings?tab=group#transfer`}
+                            className={ITEM}
+                            onClick={() => setOpen(false)}
+                        >
+                            <ArrowRightLeft className="h-4 w-4 text-foreground-muted" />
+                            {c('transferOwnership')}
+                        </Link>
+                    )}
+
                     <button
                         type="button"
                         onClick={() => { setOpen(false); onReport(); }}
@@ -155,15 +156,6 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                         </button>
                     )}
 
-                    {isOwner && (
-                        <>
-                            <div className="mx-2 my-1 h-px bg-border" />
-                            <button type="button" onClick={handleDelete} disabled={isPending} className={clsx(ITEM, 'text-red-600')}>
-                                <Trash2 className="h-4 w-4" />
-                                {t('deleteGroup')}
-                            </button>
-                        </>
-                    )}
                 </div>
             )}
         </div>

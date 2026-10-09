@@ -19,13 +19,13 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
             description={c_common('tabDangerDescription')}
             icon={AlertTriangle}
         >
-            <div className="rounded-[40px] border border-red-500/10 bg-red-500/[0.02] p-8 md:p-12">
-                <div className="flex flex-col md:flex-row items-start gap-8">
+            <div className="rounded-3xl border border-red-500/10 bg-red-500/[0.02] p-5 sm:p-8 md:p-10">
+                <div className="flex flex-col md:flex-row items-start gap-5 md:gap-8">
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-red-500/10 text-red-500 shadow-sm border border-red-500/5">
                         <Trash2 className="h-6 w-6" />
                     </div>
                     <div className="flex-1 space-y-4">
-                        <h3 className="text-2xl font-black text-red-600 tracking-tight">{c_common('deleteGroupTitle')}</h3>
+                        <h3 className="text-xl sm:text-2xl font-black text-red-600 tracking-tight">{c_common('deleteGroupTitle')}</h3>
                         <p className="text-base text-red-600/70 leading-relaxed max-w-xl font-medium">
                             {gt('deleteConfirm')}
                         </p>

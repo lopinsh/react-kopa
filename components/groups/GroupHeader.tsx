@@ -122,9 +122,10 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const { socialLinks, stats, user: groupUser, theme } = group;
 
-    // The Events tab and event pages get a slim bar so the events themselves start near the top.
+    // The Events tab, event pages and settings get a slim bar so the content starts near the top.
     const normalizedPath = pathname.replace(`/${locale}`, '') || '/';
-    if (normalizedPath.startsWith(`/${l1Slug}/group/${group.slug}/events`)) {
+    const groupBase = `/${l1Slug}/group/${group.slug}`;
+    if (normalizedPath.startsWith(`${groupBase}/events`) || normalizedPath.startsWith(`${groupBase}/settings`)) {
         return <CompactGroupBar group={group} l1Slug={l1Slug} />;
     }
 

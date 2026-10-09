@@ -432,3 +432,31 @@ export async function deletePostAction(postId: string, locale: string): Promise<
     }
 }
 
+
+/**
+ * Owner hands the group over to a member or moderator. The new owner is told.
+ */
+export async function transferOwnership(groupId: string, targetUserId: string, locale: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    try {
+        const result = await GroupService.transferOwnership(groupId, targetUserId, session.user.id);
+        if (!result.success) return result as ActionResponse;
+
+        const { groupName, groupSlug, l1Slug } = result.data!;
+
+        await createNotification({
+            userId: targetUserId,
+            type: 'OWNERSHIP_TRANSFERRED',
+            translationKey: 'ownershipTransferred',
+            args: { authorName: session.user.name || session.user.username || '', groupName },
+            link: `/${l1Slug}/group/${groupSlug}`
+        });
+
+        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'MANAGE_FAILED');
+    }
+}

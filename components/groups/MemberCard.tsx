@@ -36,6 +36,7 @@ type Props = {
 export default function MemberCard({ member, groupId, currentUserRole, locale, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
+    const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
@@ -50,8 +51,8 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
     const isTargetAdmin = member.role === 'ADMIN'; // Explicit admin check for target
     const isTargetMember = member.role === 'MEMBER';
 
-    // Owners can promote/demote and kick anyone except themselves (or rather, except other owners if we had multiple)
-    // Admins can kick regular members
+    // The owner promotes/demotes moderators and removes anyone but themselves.
+    // Moderators remove regular members only (never the owner or another moderator). The service enforces the same.
     const canPromote = isOwner && isTargetMember;
     const canDemote = isOwner && isTargetAdmin;
     const canKick = (isOwner && !isTargetOwner) || (isAdmin && isTargetMember);
@@ -60,16 +61,17 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
         if (!window.confirm(t(`confirm${action.charAt(0).toUpperCase() + action.slice(1)}`))) return;
 
         startTransition(async () => {
-            let result;
-            if (action === 'promote') result = await promoteMember(groupId, member.user.id, locale);
-            else if (action === 'demote') result = await demoteMember(groupId, member.user.id, locale);
-            else if (action === 'kick') result = await kickMember(groupId, member.user.id, locale);
+            const result = action === 'promote'
+                ? await promoteMember(groupId, member.user.id, locale)
+                : action === 'demote'
+                    ? await demoteMember(groupId, member.user.id, locale)
+                    : await kickMember(groupId, member.user.id, locale);
 
-            if (result?.success) {
+            if (result.success) {
                 success(c_common('manageSuccess'));
                 router.refresh();
             } else {
-                toastError(t('ACTION_FAILED'));
+                toastError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
             }
         });
     };

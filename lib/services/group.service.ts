@@ -100,6 +100,9 @@ export type GroupServiceResult<T = void> = GroupServiceResponse<T> | GroupServic
  * Service to handle business logic and data fetching for Groups.
  * This acts as the single source of truth for group state and hierarchy resolution.
  */
+/** Thrown inside the transfer transaction to roll it back. */
+class TransferRejected extends Error {}
+
 export const GroupService = {
     /**
      * Finds a category by its slug.
@@ -625,9 +628,14 @@ export const GroupService = {
     },
 
     async leaveGroup(groupId: string, userId: string): Promise<GroupServiceResult> {
-        await prisma.membership.delete({
+        const membership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
+        if (!membership) return { success: false, error: 'NOT_FOUND' };
+        // A group always has one owner: they hand it over (or delete the group) before leaving.
+        if (membership.role === 'OWNER') return { success: false, error: 'OWNER_MUST_TRANSFER' };
+
+        await prisma.membership.delete({ where: { id: membership.id } });
         return { success: true };
     },
 
@@ -665,10 +673,21 @@ export const GroupService = {
         return { success: true };
     },
 
+    /**
+     * Updates a group's settings.
+     * Owner (and site admins): everything. Moderators: only city, banner, accepting members and social links.
+     * A moderator who sends a different name, access type, category or topics is refused.
+     * The link name (slug) and accent colour are never changed here: the slug would break shared links
+     * and the colour comes from the category.
+     */
     async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
-        const [membership, actor] = await Promise.all([
+        const [membership, actor, current] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId } }),
-            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+            prisma.user.findUnique({ where: { id: userId }, select: { role: true } }),
+            prisma.group.findUnique({
+                where: { id: groupId },
+                select: { name: true, type: true, categoryId: true, tags: { select: { id: true } } }
+            })
         ]);
 
         const role = membership?.role;
@@ -676,35 +695,36 @@ export const GroupService = {
         if (!hasAdminRights(role) && !isAppAdmin) {
             return { success: false, error: 'FORBIDDEN' };
         }
+        if (!current) return { success: false, error: 'NOT_FOUND' };
 
-        const canEditTaxonomy = role === 'OWNER' || isAppAdmin;
+        const canEditOwnerFields = role === 'OWNER' || isAppAdmin;
 
-        // Check for slug collisions if slug is being updated
-        if (data.slug) {
-            const existingSlug = await prisma.group.findFirst({
-                where: { slug: data.slug, id: { not: groupId } }
-            });
-            if (existingSlug) {
-                return { success: false, error: 'VALIDATION_FAILED' }; // Slug taken
+        if (!canEditOwnerFields) {
+            const currentTags = current.tags.map(t => t.id).sort().join(',');
+            const sentTags = [...(data.tagIds ?? [])].sort().join(',');
+            if (
+                data.name !== current.name ||
+                data.type !== current.type ||
+                data.categoryId !== current.categoryId ||
+                sentTags !== currentTags
+            ) {
+                return { success: false, error: 'FORBIDDEN' };
             }
         }
 
-        // Taxonomy can be edited by group owners and app admins.
         const updateData: Prisma.GroupUpdateInput = {
-            name: data.name,
-            slug: data.slug || undefined,
             description: data.description,
             city: data.city,
-            type: data.type,
             bannerImage: data.bannerImage,
             discordLink: data.discordLink,
             websiteLink: data.websiteLink,
             instagramLink: data.instagramLink,
             isAcceptingMembers: data.isAcceptingMembers,
-            accentColor: data.accentColor || null,
         };
 
-        if (canEditTaxonomy) {
+        if (canEditOwnerFields) {
+            updateData.name = data.name;
+            updateData.type = data.type;
             updateData.category = { connect: { id: data.categoryId } };
             const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
             updateData.tags = {
@@ -867,15 +887,29 @@ export const GroupService = {
         return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
-    async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
-        const membership = await prisma.membership.findFirst({
-            where: { groupId, userId }
-        });
+    /**
+     * Who may manage a group's content: the owner, moderators and site admins.
+     * A site admin without a role in the group is logged (GROUP_EDIT) by the caller.
+     */
+    async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
+        const [membership, actor] = await Promise.all([
+            prisma.membership.findFirst({ where: { groupId, userId }, select: { role: true } }),
+            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+        ]);
+        const isManager = hasAdminRights(membership?.role);
+        const isSiteAdmin = actor?.role === 'ADMIN';
+        return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
+    },
 
-        const role = membership?.role;
-        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
+    async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+        const access = await this.getManagerAccess(groupId, userId);
+        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
 
         if (data.id) {
+            // The section must belong to this group (a manager of one group cannot edit another's).
+            const owned = await prisma.groupSection.findFirst({ where: { id: data.id, groupId }, select: { id: true } });
+            if (!owned) return { success: false, error: 'NOT_FOUND' };
+
             await prisma.groupSection.update({
                 where: { id: data.id },
                 data: {
@@ -910,26 +944,26 @@ export const GroupService = {
             });
         }
 
+        if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
+
         const slugs = await this.getGroupSlugs(groupId);
         return { success: true, data: slugs ?? undefined };
     },
 
     async reorderSections(groupId: string, sectionIds: string[], userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
-        const membership = await prisma.membership.findFirst({
-            where: { groupId, userId }
-        });
+        const access = await this.getManagerAccess(groupId, userId);
+        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
 
-        const role = membership?.role;
-        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
-
-        await Promise.all(
+        // Only sections of this group can be reordered.
+        await prisma.$transaction(
             sectionIds.map((id, index) =>
-                prisma.groupSection.update({
-                    where: { id },
+                prisma.groupSection.updateMany({
+                    where: { id, groupId },
                     data: { order: index }
                 })
             )
         );
+        if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
 
         const slugs = await this.getGroupSlugs(groupId);
         return { success: true, data: slugs ?? undefined };
@@ -937,15 +971,13 @@ export const GroupService = {
 
     async deleteSection(sectionId: string, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
         const section = await prisma.groupSection.findUnique({
-            where: { id: sectionId },
-            include: { group: { include: { members: { where: { userId } } } } }
+            where: { id: sectionId }
         });
 
         if (!section) return { success: false, error: 'NOT_FOUND' };
 
-        const membership = section.group.members[0];
-        const role = membership?.role;
-        if (!hasAdminRights(role)) return { success: false, error: 'FORBIDDEN' };
+        const access = await this.getManagerAccess(section.groupId, userId);
+        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
 
         // Guard: Prevent deleting Section 1 (order 0)
         if (section.order === 0) {
@@ -954,14 +986,15 @@ export const GroupService = {
 
         const slugs = await this.getGroupSlugs(section.groupId);
         await prisma.groupSection.delete({ where: { id: sectionId } });
+        if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', section.groupId);
         return { success: true, data: slugs ?? undefined };
     },
 
     /**
-     * Updates a member's role within a group.
-     * Only Owners can promote to ADMIN or demote from ADMIN.
+     * Makes a member a moderator (ADMIN) or takes the moderator role away (back to MEMBER).
+     * Owner only. OWNER is never set here: ownership only moves through `transferOwnership`.
      */
-    async updateMemberRole(groupId: string, targetUserId: string, newRole: MembershipRole, actorId: string): Promise<GroupServiceResult> {
+    async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupServiceResult> {
         const actorMembership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId: actorId, groupId } }
         });
@@ -970,17 +1003,61 @@ export const GroupService = {
             return { success: false, error: 'FORBIDDEN' };
         }
 
-        // Cannot change own role if it's the owner (protection)
+        // The owner keeps their own role.
         if (targetUserId === actorId) {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
-        await prisma.membership.update({
-            where: { userId_groupId: { userId: targetUserId, groupId } },
+        // Promote a member, or demote a moderator: nothing else.
+        const expectedCurrent: MembershipRole = newRole === 'ADMIN' ? 'MEMBER' : 'ADMIN';
+        const updated = await prisma.membership.updateMany({
+            where: { groupId, userId: targetUserId, role: expectedCurrent },
             data: { role: newRole }
         });
+        if (updated.count !== 1) return { success: false, error: 'VALIDATION_FAILED' };
 
         return { success: true };
+    },
+
+    /**
+     * Hands the group over to a member or moderator (owner only). One transaction: the old owner
+     * becomes a moderator, the chosen person becomes the one owner. Demoting first keeps the
+     * "one owner per group" index satisfied at every step.
+     */
+    async transferOwnership(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult<{ groupName: string; groupSlug: string; l1Slug: string }>> {
+        if (targetUserId === actorId) return { success: false, error: 'VALIDATION_FAILED' };
+
+        const group = await prisma.group.findFirst({
+            where: { id: groupId, hiddenAt: null },
+            include: { category: { include: TaxonomyResolver.getInclude('lv') } }
+        });
+        if (!group) return { success: false, error: 'NOT_FOUND' };
+
+        const outcome = await prisma.$transaction(async (tx) => {
+            const demoted = await tx.membership.updateMany({
+                where: { groupId, userId: actorId, role: 'OWNER' },
+                data: { role: 'ADMIN' }
+            });
+            if (demoted.count !== 1) return 'FORBIDDEN' as const;
+
+            const promoted = await tx.membership.updateMany({
+                where: { groupId, userId: targetUserId, role: { in: ['MEMBER', 'ADMIN'] } },
+                data: { role: 'OWNER' }
+            });
+            // Pending people and non-members cannot receive a group: roll the demotion back.
+            if (promoted.count !== 1) throw new TransferRejected();
+            return 'OK' as const;
+        }).catch((e: unknown) => {
+            if (e instanceof TransferRejected) return 'VALIDATION_FAILED' as const;
+            throw e;
+        });
+
+        if (outcome !== 'OK') return { success: false, error: outcome };
+
+        return {
+            success: true,
+            data: { groupName: group.name, groupSlug: group.slug, l1Slug: TaxonomyResolver.resolve(group.category).l1Slug }
+        };
     },
 
     /**
@@ -1007,6 +1084,11 @@ export const GroupService = {
             return { success: false, error: 'FORBIDDEN' };
         }
 
+        // Only open requests can be approved or declined (never an existing member, moderator or owner).
+        if (membershipToManage.role !== 'PENDING') {
+            return { success: false, error: 'NOT_FOUND' };
+        }
+
         if (action === 'APPROVE') {
             await prisma.membership.update({
                 where: { id: membershipId },
@@ -1031,8 +1113,8 @@ export const GroupService = {
 
     /**
      * Removes a member from a group.
-     * Owners can remove anyone except themselves.
-     * Admins can remove regular members.
+     * The owner can remove moderators, members and requests. Moderators can remove members and requests,
+     * but never the owner or another moderator. Nobody removes the owner.
      */
     async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult> {
         const actorMembership = await prisma.membership.findUnique({
@@ -1049,9 +1131,8 @@ export const GroupService = {
 
         if (!targetMembership) return { success: false, error: 'NOT_FOUND' };
 
-        // Hierarchy logic
-        // Owners can remove Admins/Members
-        // Admins can only remove Members or Pending
+        if (targetMembership.role === 'OWNER') return { success: false, error: 'FORBIDDEN' };
+
         if (actorMembership.role === 'ADMIN' && targetMembership.role !== 'MEMBER' && targetMembership.role !== 'PENDING') {
             return { success: false, error: 'FORBIDDEN' };
         }

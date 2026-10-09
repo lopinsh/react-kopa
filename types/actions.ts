@@ -30,6 +30,7 @@ export type ErrorCode =
     | 'EVENT_PAST'
     | 'EVENT_SLUG_TAKEN'
     | 'CONFIRMATION_REQUIRED'
+    | 'OWNER_MUST_TRANSFER'
     | 'MEMBERS_ONLY'
     | 'TOGGLE_FAILED'
     | 'USERNAME_TAKEN'

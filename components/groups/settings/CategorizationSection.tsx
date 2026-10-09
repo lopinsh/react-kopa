@@ -29,7 +29,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
             description={gt('tabCategorizationDescription')}
             icon={Tags}
         >
-            <div className="p-8 rounded-3xl border border-border bg-surface-elevated/5 dark:bg-surface-elevated/20 space-y-8">
+            <div className="p-4 sm:p-8 rounded-3xl border border-border bg-surface-elevated/5 dark:bg-surface-elevated/20 space-y-8">
                 <div>
                     <L1Picker
                         taxonomy={taxonomy}
