@@ -31,7 +31,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
         exists: boolean,
         role: MembershipRole | null,
         pendingCount: number,
-        sections: Array<{ id: string; title: string; visibility: string }>
+        sections: Array<{ id: string; visibility: string }>
     }>({
         exists: true,
         role: null,

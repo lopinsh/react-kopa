@@ -79,6 +79,8 @@ export default async function GroupSettingsPage(props: {
         : [];
 
     const activeTab: SettingsTab = tab === 'sections' ? 'sections' : 'group';
+    // The editor works on the text of each section's original language (managers only).
+    const editableSections = activeTab === 'sections' ? await GroupService.getEditableSections(group.id, session.user.id) : [];
 
     return (
         <div className="mx-auto w-full max-w-4xl animate-in space-y-6 px-4 py-6 fade-in slide-in-from-bottom-2 duration-500 md:px-8 md:py-8">
@@ -105,7 +107,7 @@ export default async function GroupSettingsPage(props: {
                         websiteLink: group.socialLinks.website,
                         instagramLink: group.socialLinks.instagram,
                         bannerImage: group.bannerImage,
-                        sections: group.sections || [],
+                        sections: editableSections,
                         tags: group.tags || [],
                         slug: group.slug,
                         l1Slug: group.category.l1Slug,

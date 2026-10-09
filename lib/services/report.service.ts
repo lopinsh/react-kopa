@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
+import { originalEventTitle } from '@/lib/translations';
 
 export const ReportService = {
     async createReport(data: {
@@ -34,7 +35,7 @@ export const ReportService = {
                         category: { include: { parent: { include: { parent: true } } } }
                     }
                 },
-                event: { select: { id: true, title: true } }
+                event: { select: { id: true, originalLang: true, translations: { select: { lang: true, title: true } } } }
             },
             orderBy: { createdAt: 'desc' }
         });
@@ -49,6 +50,10 @@ export const ReportService = {
 
             return {
                 ...report,
+                // The admin sees the event title as the organiser wrote it.
+                event: report.event
+                    ? { id: report.event.id, title: originalEventTitle(report.event.translations, report.event.originalLang) }
+                    : null,
                 group: report.group ? {
                     id: report.group.id,
                     name: report.group.name,

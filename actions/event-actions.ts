@@ -21,10 +21,10 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
         const validation = await validateActionData(eventSchema, data);
         if (!validation.success) return validation;
 
-        const result = await EventService.createEvent(groupId, validation.data, session.user.id);
+        const result = await EventService.createEvent(groupId, validation.data, session.user.id, locale);
         if (!result.success) return result as ActionResponse<{ event: EventModel }>;
 
-        const { event, membersToNotify, groupName, groupSlug, l1Slug } = result.data!;
+        const { event, eventTitle, membersToNotify, groupName, groupSlug, l1Slug } = result.data!;
 
         if (membersToNotify.length > 0) {
             await Promise.all(membersToNotify.map(m =>
@@ -32,7 +32,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
                     userId: m.userId,
                     type: 'NEW_EVENT',
                     translationKey: 'newEvent',
-                    args: { eventTitle: event.title, groupName },
+                    args: { eventTitle, groupName },
                     link: `/${l1Slug}/group/${groupSlug}/events/${event.slug}`
                 })
             ));
@@ -50,11 +50,11 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
 /**
  * Get all events for a group with attendee status for current user.
  */
-export async function getGroupEvents(groupId: string) {
+export async function getGroupEvents(groupId: string, locale: string) {
     const session = await auth();
     const userId = session?.user?.id;
 
-    return await EventService.getGroupEvents(groupId, userId);
+    return await EventService.getGroupEvents(groupId, locale, userId);
 }
 
 type EventPaths = { l1Slug: string; groupSlug: string; eventSlug: string };

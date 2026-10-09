@@ -40,7 +40,8 @@ export default async function GroupLayout({
             slug: group.slug,
             user: group.user,
             pendingCount,
-            sections: group.sections
+            // Titles only: the client navigation needs no section text.
+            sections: group.sections.map(({ id, title, order, visibility }) => ({ id, title, order, visibility }))
         }}>
             <div
                 style={accentStyle}

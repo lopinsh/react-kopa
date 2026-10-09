@@ -169,47 +169,73 @@ model AdminAction {
 }
 
 model GroupSection {
-  id         String     @id @default(cuid())
-  groupId    String
-  title      String
-  content    String
-  order      Int
-  visibility Visibility @default(PUBLIC)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  group      Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  id           String                    @id @default(cuid())
+  groupId      String
+  order        Int
+  visibility   Visibility                @default(PUBLIC)
+  /// Language the owner wrote the section in (`lv` | `en`); shown to visitors whose language has no text.
+  originalLang String                    @default("lv")
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  group        Group                     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  translations GroupSectionTranslation[]
 
   @@index([groupId])
   @@index([order])
 }
 
+model GroupSectionTranslation {
+  id        String       @id @default(cuid())
+  sectionId String
+  lang      String
+  title     String
+  content   String       @default("")
+  updatedAt DateTime     @updatedAt
+  section   GroupSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@unique([sectionId, lang])
+}
+
 model Event {
-  id                String       @id @default(cuid())
-  title             String
-  description       String?
+  id                String             @id @default(cuid())
   location          String?
-  visibility        Visibility   @default(PUBLIC)
+  visibility        Visibility         @default(PUBLIC)
   groupId           String
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   creatorId         String
   maxParticipants   Int?
   startDate         DateTime
-  isRecurring       Boolean      @default(false)
+  isRecurring       Boolean            @default(false)
   recurrencePattern String?
   bannerImage       String?
   endDate           DateTime?
-  instructions      String?
   slug              String
-  joinMode          EventJoinMode @default(OPEN)
-  isFull            Boolean      @default(false)
+  /// Language the organiser wrote the event in (`lv` | `en`); the slug is generated from this title.
+  originalLang      String             @default("lv")
+  joinMode          EventJoinMode      @default(OPEN)
+  isFull            Boolean            @default(false)
   attendees         Attendance[]
-  creator           User         @relation("CreatedEvents", fields: [creatorId], references: [id])
-  group             Group        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  translations      EventTranslation[]
+  creator           User               @relation("CreatedEvents", fields: [creatorId], references: [id])
+  group             Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
   reports           Report[]
 
   @@unique([groupId, slug])
   @@index([slug])
+}
+
+model EventTranslation {
+  id           String   @id @default(cuid())
+  eventId      String
+  lang         String
+  title        String
+  description  String?
+  instructions String?
+  updatedAt    DateTime @updatedAt
+  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, lang])
 }
 
 model Attendance {

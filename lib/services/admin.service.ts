@@ -13,7 +13,7 @@ export type ReportWithDetails = Prisma.ReportGetPayload<{
     include: {
         reporter: { select: { name: true, email: true } },
         group: { select: { name: true, slug: true } },
-        event: { select: { title: true } }
+        event: { select: { id: true, originalLang: true, translations: { select: { lang: true, title: true } } } }
     }
 }>;
 
@@ -100,7 +100,7 @@ export class AdminService {
             include: {
                 reporter: { select: { name: true, email: true } },
                 group: { select: { name: true, slug: true } },
-                event: { select: { title: true } }
+                event: { select: { id: true, originalLang: true, translations: { select: { lang: true, title: true } } } }
             },
             orderBy: { createdAt: 'asc' }
         });

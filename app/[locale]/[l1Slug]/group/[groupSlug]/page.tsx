@@ -12,6 +12,8 @@ import { getSmartImageUrl } from '@/lib/image-utils';
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
+import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { langAttr } from '@/lib/translations';
 
 export async function generateMetadata({
     params,
@@ -56,7 +58,7 @@ export default async function GroupPage({
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     <div className="lg:col-span-2 space-y-10 pb-24">
                         <div className="space-y-10">
-                            {group.sections.map((section: any, index: number) => {
+                            {group.sections.map((section, index) => {
                                 const isPublic = section.visibility === 'PUBLIC';
                                 const isVisible = isPublic || group.user.isMember;
 
@@ -73,7 +75,7 @@ export default async function GroupPage({
                                                     <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
                                                         <HelpCircle className="h-3.5 w-3.5" />
                                                     </span>
-                                                    {section.title}
+                                                    <span lang={langAttr(section.titleLang, locale)}>{section.title}</span>
                                                 </div>
                                             </div>
                                         )}
@@ -94,7 +96,11 @@ export default async function GroupPage({
                                                 </div>
                                             ) : (
                                                 <div>
+                                                    {section.fallbackLang && (
+                                                        <FallbackLangLabel lang={section.fallbackLang} className="mb-4" />
+                                                    )}
                                                     <div
+                                                        lang={langAttr(section.contentLang, locale)}
                                                         className="prose prose-sm prose-invert max-w-none text-foreground/90 leading-relaxed font-medium"
                                                         dangerouslySetInnerHTML={{ __html: sanitizeRichText(section.content) }}
                                                     />

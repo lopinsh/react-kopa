@@ -9,6 +9,22 @@ import type {
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { getTranslations } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
+import { toTextLang, resolveText } from '@/lib/translations';
+
+/**
+ * A group matches when one of its PUBLIC sections has the text in any language. Members-only sections
+ * are never searched, so their text cannot be found (or inferred) by outsiders.
+ */
+function publicSectionMatch(q: { contains: string; mode: 'insensitive' }): Prisma.GroupWhereInput {
+    return {
+        sections: {
+            some: {
+                visibility: 'PUBLIC',
+                translations: { some: { OR: [{ title: q }, { content: q }] } }
+            }
+        }
+    };
+}
 
 /**
  * Service to handle discovery logic (searching groups and categories).
@@ -76,7 +92,8 @@ export const DiscoveryService = {
             hiddenAt: null,
             OR: [
                 { name: q },
-                { description: q }
+                { description: q },
+                publicSectionMatch(q)
             ]
         };
         const groupAnd: Prisma.GroupWhereInput[] = [];
@@ -116,10 +133,8 @@ export const DiscoveryService = {
         const eventWhere: Prisma.EventWhereInput = {
             visibility: 'PUBLIC',
             group: { hiddenAt: null },
-            OR: [
-                { title: q },
-                { description: q }
-            ]
+            // Text in any language; instructions are restricted and never searched.
+            translations: { some: { OR: [{ title: q }, { description: q }] } }
         };
 
         if (contextId) {
@@ -141,6 +156,7 @@ export const DiscoveryService = {
             where: eventWhere,
             take: 5,
             include: {
+                translations: { select: { lang: true, title: true } },
                 group: {
                     include: {
                         category: {
@@ -194,7 +210,7 @@ export const DiscoveryService = {
                 type: 'event',
                 id: e.id,
                 slug: e.slug,
-                title: e.title,
+                title: resolveText(e.translations, toTextLang(lang), e.originalLang, (t) => t.title).value,
                 subtitle: e.location || cityLabel(tCities, e.group.city),
                 l1Slug: resolved.l1Slug || 'sigulda',
                 color: resolved.accentColor,
@@ -278,6 +294,7 @@ export const DiscoveryService = {
                     OR: [
                         { name: searchQuery },
                         { description: searchQuery },
+                        publicSectionMatch(searchQuery),
                         {
                             category: {
                                 OR: [

@@ -73,13 +73,13 @@ export type DiscoveryView = (typeof DISCOVERY_VIEWS)[number];
 export const EVENT_TIME_ZONE = 'Europe/Riga';
 
 /**
- * Titles of the sections a new group starts with, per locale. Default titles are stored as the
- * English key and shown in the viewer's language until 2.13 stores default titles per language.
+ * Titles of the sections a new group starts with. They are stored as ordinary per-language title rows
+ * (both languages at creation), so a visitor sees the default in their own language until the owner renames it.
  */
-export const DEFAULT_SECTION_TITLES: Record<string, { lv: string; en: string }> = {
-    'About us': { lv: 'Par mums', en: 'About us' },
-    'Practical info': { lv: 'Praktiskā informācija', en: 'Practical info' },
-};
+export const DEFAULT_SECTION_TITLES = {
+    about: { lv: 'Par mums', en: 'About us' },
+    practical: { lv: 'Praktiskā informācija', en: 'Practical info' },
+} as const;
 
 /** Sample text of the "Practical info" section a new group starts with, in the creator's language. */
 export const PRACTICAL_INFO_SAMPLE: Record<'lv' | 'en', string> = {
@@ -87,19 +87,8 @@ export const PRACTICAL_INFO_SAMPLE: Record<'lv' | 'en', string> = {
     en: '<p>Where and when do we meet? What should people bring? Write here what members need to know. You can rewrite this text or delete the whole section.</p>',
 };
 
-function findDefaultSectionTitle(title: string): { lv: string; en: string } | undefined {
+/** True when a section title is one of the built-in defaults (in either language), i.e. not renamed by the owner. */
+export function isDefaultSectionTitle(title: string): boolean {
     const trimmed = title.trim();
-    return Object.values(DEFAULT_SECTION_TITLES).find((d) => d.lv === trimmed || d.en === trimmed);
-}
-
-/** Shows a default section title (stored in either language) in the viewer's language; owner titles unchanged. */
-export function localizeSectionTitle(title: string, locale: string): string {
-    const defaults = findDefaultSectionTitle(title);
-    if (!defaults) return title;
-    return locale === 'lv' ? defaults.lv : defaults.en;
-}
-
-/** Stores an unchanged default title (as shown in either language) as its English key, so it stays a default. */
-export function canonicalSectionTitle(title: string): string {
-    return findDefaultSectionTitle(title)?.en ?? title;
+    return Object.values(DEFAULT_SECTION_TITLES).some((d) => d.lv === trimmed || d.en === trimmed);
 }

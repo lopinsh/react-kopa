@@ -5,10 +5,36 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
-import { canonicalSectionTitle, localizeSectionTitle, PRACTICAL_INFO_SAMPLE } from '@/lib/constants';
+import { DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
+import { resolveSectionText, toTextLang, type TextLang } from '@/lib/translations';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
+
+/** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
+export interface SectionView {
+    id: string;
+    title: string;
+    /** Language the title is written in. */
+    titleLang: TextLang;
+    content: string;
+    /** Language the content is written in. */
+    contentLang: TextLang;
+    /** Language to name in the "Latviski / In English" label; null when all shown text is in the viewer's language. */
+    fallbackLang: TextLang | null;
+    order: number;
+    visibility: 'PUBLIC' | 'MEMBERS_ONLY';
+}
+
+/** A section as the owner edits it: the text of its original language. */
+export interface EditableSection {
+    id: string;
+    title: string;
+    content: string;
+    order: number;
+    visibility: 'PUBLIC' | 'MEMBERS_ONLY';
+    originalLang: TextLang;
+}
 
 export interface GroupContext {
     id: string;
@@ -37,13 +63,7 @@ export interface GroupContext {
     theme: {
         accentColor: string;
     };
-    sections: Array<{
-        id: string;
-        title: string;
-        content: string;
-        order: number;
-        visibility: 'PUBLIC' | 'MEMBERS_ONLY';
-    }>;
+    sections: SectionView[];
     members: Array<{
         id: string;
         role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
@@ -100,6 +120,15 @@ export type GroupServiceResult<T = void> = GroupServiceResponse<T> | GroupServic
  * Service to handle business logic and data fetching for Groups.
  * This acts as the single source of truth for group state and hierarchy resolution.
  */
+/** Translation rows of a default section: title in both languages, text only in the creator's language. */
+function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, creatorLang: TextLang, content: string) {
+    return (['lv', 'en'] as const).map((lang) => ({
+        lang,
+        title: DEFAULT_SECTION_TITLES[key][lang],
+        content: lang === creatorLang ? content : ''
+    }));
+}
+
 /** Thrown inside the transfer transaction to roll it back. */
 class TransferRejected extends Error {}
 
@@ -230,10 +259,10 @@ export const GroupService = {
                 orderBy: { order: 'asc' } as const,
                 select: {
                     id: true,
-                    title: true,
-                    content: true,
                     order: true,
-                    visibility: true
+                    visibility: true,
+                    originalLang: true,
+                    translations: { select: { lang: true, title: true, content: true } }
                 }
             },
             _count: {
@@ -310,15 +339,24 @@ export const GroupService = {
         }
 
         // 4. Final Context Construction
-        const sections = ((g.sections && g.sections.length > 0)
-            ? g.sections
-            : GroupService.getVirtualSections(group)
-        ).map((s) => ({
-            ...s,
-            title: localizeSectionTitle(s.title, locale),
-            // Members-only text never leaves the server for people who may not read it (the page shows a lock).
-            content: s.visibility === 'MEMBERS_ONLY' && !isMember && !isSiteAdmin ? '' : s.content
-        }));
+        // Only the text resolved for this viewer leaves the server. Members-only content is never read
+        // (from any language) for people who may not see it; the page shows a lock instead.
+        const sections: SectionView[] = g.sections.length > 0
+            ? g.sections.map((s) => {
+                const withhold = s.visibility === 'MEMBERS_ONLY' && !isMember && !isSiteAdmin;
+                const text = resolveSectionText(s.translations, lang, s.originalLang, withhold);
+                return {
+                    id: s.id,
+                    title: text.title,
+                    titleLang: text.titleLang,
+                    content: text.content,
+                    contentLang: text.contentLang,
+                    fallbackLang: text.fallbackLang,
+                    order: s.order,
+                    visibility: s.visibility
+                };
+            })
+            : GroupService.getVirtualSections(group, lang);
 
         return {
             id: g.id,
@@ -347,7 +385,7 @@ export const GroupService = {
             theme: {
                 accentColor,
             },
-            sections: sections as GroupContext['sections'],
+            sections,
             members: formattedMembers as GroupContext['members'],
             category: {
                 id: resolved.categoryId,
@@ -378,6 +416,7 @@ export const GroupService = {
     }),
 
     async createGroup(data: GroupFormValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+        const lang = toTextLang(locale);
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
 
@@ -425,17 +464,17 @@ export const GroupService = {
                 sections: {
                     create: [
                         {
-                            title: 'About us',
-                            content: data.description || '',
                             order: 0,
-                            visibility: 'PUBLIC'
+                            visibility: 'PUBLIC',
+                            originalLang: lang,
+                            translations: { create: defaultSectionRows('about', lang, data.description || '') }
                         },
                         {
-                            // A sample the owner rewrites or deletes. Stored under the English key like other default titles.
-                            title: 'Practical info',
-                            content: PRACTICAL_INFO_SAMPLE[locale === 'en' ? 'en' : 'lv'],
+                            // A sample the owner rewrites or deletes; its text exists only in the creator's language.
                             order: 1,
-                            visibility: 'MEMBERS_ONLY'
+                            visibility: 'MEMBERS_ONLY',
+                            originalLang: lang,
+                            translations: { create: defaultSectionRows('practical', lang, PRACTICAL_INFO_SAMPLE[lang]) }
                         }
                     ]
                 }
@@ -755,36 +794,59 @@ export const GroupService = {
     /**
      * Section Management
      */
-    async getGroupSections(groupId: string) {
+    /**
+     * Sections for the owner's editor: the text of each section's original language.
+     * Managers only (owner, moderators, site admins); anyone else gets an empty list.
+     */
+    async getEditableSections(groupId: string, userId: string): Promise<EditableSection[]> {
+        const access = await this.getManagerAccess(groupId, userId);
+        if (!access.allowed) return [];
+
         const sections = await prisma.groupSection.findMany({
             where: { groupId },
-            orderBy: { order: 'asc' }
+            orderBy: { order: 'asc' },
+            include: { translations: { select: { lang: true, title: true, content: true } } }
         });
 
-        if (sections.length > 0) return sections;
+        if (sections.length === 0) {
+            const group = await prisma.group.findUnique({ where: { id: groupId }, select: { description: true } });
+            return GroupService.getVirtualSections(group ?? { description: null }, 'lv').map((s) => ({
+                id: s.id,
+                title: s.title,
+                content: s.content,
+                order: s.order,
+                visibility: s.visibility,
+                originalLang: 'lv' as const
+            }));
+        }
 
-        const group = await prisma.group.findUnique({
-            where: { id: groupId },
-            select: { description: true }
+        return sections.map((s) => {
+            const original = s.translations.find((t) => t.lang === s.originalLang);
+            return {
+                id: s.id,
+                title: original?.title ?? '',
+                content: original?.content ?? '',
+                order: s.order,
+                visibility: s.visibility,
+                originalLang: toTextLang(s.originalLang)
+            };
         });
-
-        return this.getVirtualSections(group as { description: string | null });
     },
 
     /**
-     * Internal helper to generate fallback sections if none exist in DB.
-     * Matches the logic in getGroupWithContext and createGroup seeds.
+     * Fallback for old groups that have no section rows: the group description as the first section.
      */
-    getVirtualSections(group: { description: string | null }) {
-        const sections = [];
-        sections.push({
+    getVirtualSections(group: { description: string | null }, lang: TextLang): SectionView[] {
+        return [{
             id: 'about',
-            title: 'About us',
+            title: DEFAULT_SECTION_TITLES.about[lang],
+            titleLang: lang,
             content: group?.description || '',
+            contentLang: lang,
+            fallbackLang: null,
             order: 0,
-            visibility: 'PUBLIC' as const
-        });
-        return sections;
+            visibility: 'PUBLIC'
+        }];
     },
 
     /**
@@ -795,7 +857,7 @@ export const GroupService = {
         exists: boolean;
         role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
         pendingCount: number;
-        sections: Array<{ id: string; title: string; visibility: string }>;
+        sections: Array<{ id: string; visibility: string }>;
     }> {
         const group = await prisma.group.findFirst({
             where: { slug: groupSlug, category: { slug: l1Slug } },
@@ -803,7 +865,7 @@ export const GroupService = {
                 hiddenAt: true,
                 sections: {
                     orderBy: { order: 'asc' },
-                    select: { id: true, title: true, visibility: true }
+                    select: { id: true, visibility: true }
                 },
                 members: {
                     where: { userId: userId || 'none' },
@@ -834,19 +896,15 @@ export const GroupService = {
             });
         }
 
-        const sections = (group.sections && group.sections.length > 0)
+        const sections = group.sections.length > 0
             ? group.sections
-            : GroupService.getVirtualSections({ description: null });
+            : GroupService.getVirtualSections({ description: null }, 'lv');
 
         return {
             exists: true,
             role,
             pendingCount,
-            sections: sections.map((s: { id: string; title: string; visibility: string }) => ({
-                id: s.id,
-                title: s.title,
-                visibility: s.visibility
-            }))
+            sections: sections.map((s) => ({ id: s.id, visibility: s.visibility }))
         };
     },
     /**
@@ -901,45 +959,61 @@ export const GroupService = {
         return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
     },
 
-    async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+    /**
+     * Saves a section. The text goes into the row of the section's original language only
+     * (new sections: the editor's language); other languages are left as they are.
+     */
+    async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
         const access = await this.getManagerAccess(groupId, userId);
         if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
 
         if (data.id) {
             // The section must belong to this group (a manager of one group cannot edit another's).
-            const owned = await prisma.groupSection.findFirst({ where: { id: data.id, groupId }, select: { id: true } });
+            const owned = await prisma.groupSection.findFirst({ where: { id: data.id, groupId }, select: { id: true, order: true, originalLang: true } });
             if (!owned) return { success: false, error: 'NOT_FOUND' };
+            const sectionId = owned.id;
+            const lang = owned.originalLang;
 
-            await prisma.groupSection.update({
-                where: { id: data.id },
-                data: {
-                    title: canonicalSectionTitle(data.title),
-                    content: data.content,
-                    visibility: data.visibility,
-                    order: data.order
+            await prisma.$transaction(async (tx) => {
+                await tx.groupSection.update({
+                    where: { id: sectionId },
+                    data: { visibility: data.visibility, order: data.order }
+                });
+                await tx.groupSectionTranslation.upsert({
+                    where: { sectionId_lang: { sectionId, lang } },
+                    update: { title: data.title, content: data.content },
+                    create: { sectionId, lang, title: data.title, content: data.content }
+                });
+
+                // A renamed section must not keep showing the old default title in the other language.
+                if (!isDefaultSectionTitle(data.title)) {
+                    const others = await tx.groupSectionTranslation.findMany({
+                        where: { sectionId, lang: { not: lang } },
+                        select: { id: true, title: true }
+                    });
+                    for (const other of others.filter((o) => isDefaultSectionTitle(o.title))) {
+                        await tx.groupSectionTranslation.update({ where: { id: other.id }, data: { title: '' } });
+                    }
                 }
             });
 
             // Sync with group description if it's the home section (order 0)
-            const section = await prisma.groupSection.findUnique({
-                where: { id: data.id },
-                select: { order: true, content: true }
-            });
-            if (section?.order === 0) {
+            if (owned.order === 0) {
                 await prisma.group.update({
                     where: { id: groupId },
-                    data: { description: section.content }
+                    data: { description: data.content }
                 });
             }
         } else {
+            const lang = toTextLang(locale);
             const count = await prisma.groupSection.count({ where: { groupId } });
             await prisma.groupSection.create({
                 data: {
                     groupId,
-                    title: canonicalSectionTitle(data.title),
-                    content: data.content,
                     visibility: data.visibility || 'PUBLIC',
-                    order: data.order ?? count
+                    order: data.order ?? count,
+                    originalLang: lang,
+                    translations: { create: { lang, title: data.title, content: data.content } }
                 }
             });
         }

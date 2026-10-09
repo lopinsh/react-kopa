@@ -212,7 +212,7 @@ export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
     exists: boolean;
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
     pendingCount: number;
-    sections: Array<{ id: string; title: string; visibility: string }>;
+    sections: Array<{ id: string; visibility: string }>;
 }> {
     const session = await auth();
     return GroupService.getGroupRole(l1Slug, groupSlug, session?.user?.id);
@@ -285,7 +285,7 @@ export async function upsertSectionAction(
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.upsertSection(groupId, data, session.user.id);
+        const result = await GroupService.upsertSection(groupId, data, session.user.id, locale);
         if (!result.success) return result as ActionResponse;
 
         const { slug, l1Slug } = result.data!;

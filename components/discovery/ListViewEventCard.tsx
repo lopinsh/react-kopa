@@ -4,6 +4,8 @@ import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { useFormatter, useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
+import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { langAttr } from '@/lib/translations';
 
 type Props = {
     event: DiscoverableEvent;
@@ -34,9 +36,10 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
 
             {/* Title & Group Line */}
             <div className="flex flex-1 items-center gap-3 overflow-hidden">
-                <h3 className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
+                <h3 lang={langAttr(event.titleLang, locale)} className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
                     {event.title}
                 </h3>
+                {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                 {event.isMembersOnly && <Lock className="h-3.5 w-3.5 shrink-0 text-foreground-muted" aria-label={t('membersOnly')} />}
                 {isRequest && (
                     <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">

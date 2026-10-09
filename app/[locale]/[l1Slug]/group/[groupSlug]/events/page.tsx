@@ -42,7 +42,7 @@ export default async function GroupEventsPage({
         notFound();
     }
 
-    const eventsData = await getGroupEvents(group.id);
+    const eventsData = await getGroupEvents(group.id, locale);
     const t = await getTranslations('group');
     const isOwnerOrAdmin = group.user.isAdmin;
 
@@ -81,6 +81,7 @@ export default async function GroupEventsPage({
                             event={{
                                 id: event.id,
                                 title: event.title,
+                                titleLang: event.titleLang,
                                 startDate: event.startDate,
                                 endDate: event.endDate,
                                 location: event.location,

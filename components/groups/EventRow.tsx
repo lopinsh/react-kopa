@@ -5,11 +5,15 @@ import Link from 'next/link';
 import EventParticipation from '@/components/events/EventParticipation';
 import { EVENT_TIME_ZONE, type EventJoinModeValue } from '@/lib/constants';
 import type { AttendanceStatus } from '@prisma/client';
+import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { langAttr, type TextLang } from '@/lib/translations';
 
 type Props = {
     event: {
         id: string;
         title: string;
+        /** Language the title is written in (labelled when it is not the page language). */
+        titleLang: TextLang;
         startDate: Date;
         endDate: Date | null;
         location: string | null;
@@ -63,8 +67,9 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                 <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <h3 className={clsx('min-w-0 text-base font-bold leading-snug', isPast ? 'text-foreground-muted' : 'text-foreground')}>
-                            <Link href={href} className="hover:text-[var(--accent)] hover:underline">{event.title}</Link>
+                            <Link href={href} lang={langAttr(event.titleLang, locale)} className="hover:text-[var(--accent)] hover:underline">{event.title}</Link>
                         </h3>
+                        {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                         {event.isMembersOnly && (
                             <span className={clsx(BADGE, 'bg-surface-elevated text-foreground-muted')}>
                                 <Lock className="h-3 w-3" />

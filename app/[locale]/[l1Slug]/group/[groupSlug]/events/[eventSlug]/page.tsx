@@ -25,6 +25,8 @@ import EventManageActions from '@/components/events/EventManageActions';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
+import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { langAttr } from '@/lib/translations';
 
 export async function generateMetadata({
     params,
@@ -161,7 +163,8 @@ export default async function EventPage({
                             <span className="rounded-full bg-[var(--accent)] px-2.5 py-1 text-white">{t('full')}</span>
                         )}
                     </div>
-                    <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')}>{event.title}</h1>
+                    <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')} lang={langAttr(event.titleLang, locale)}>{event.title}</h1>
+                    {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                     {peopleLine && (
                         <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
                             <Users className="h-4 w-4" />
@@ -264,8 +267,12 @@ export default async function EventPage({
 
                         {event.description && (
                             <section className="space-y-3 rounded-2xl border border-border bg-surface p-5 md:p-6">
-                                <h2 className="text-lg font-black tracking-tight text-foreground">{t('aboutEvent')}</h2>
+                                <h2 className="flex flex-wrap items-center gap-2 text-lg font-black tracking-tight text-foreground">
+                                    {t('aboutEvent')}
+                                    {langAttr(event.descriptionLang, locale) && <FallbackLangLabel lang={event.descriptionLang} />}
+                                </h2>
                                 <div
+                                    lang={langAttr(event.descriptionLang, locale)}
                                     className="prose prose-invert max-w-none leading-relaxed text-foreground-muted"
                                     dangerouslySetInnerHTML={{ __html: sanitizeRichText(event.description) }}
                                 />
@@ -284,8 +291,10 @@ export default async function EventPage({
                                 <h2 className="flex items-center gap-2 text-lg font-black tracking-tight text-[var(--accent)]">
                                     <Info className="h-5 w-5" />
                                     {t('importantInfo')}
+                                    {langAttr(event.instructionsLang, locale) && <FallbackLangLabel lang={event.instructionsLang} />}
                                 </h2>
                                 <div
+                                    lang={langAttr(event.instructionsLang, locale)}
                                     className="prose prose-invert max-w-none leading-relaxed text-foreground-muted prose-a:text-[var(--accent)]"
                                     dangerouslySetInnerHTML={{ __html: sanitizeRichText(event.instructions) }}
                                 />

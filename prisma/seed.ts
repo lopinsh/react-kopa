@@ -210,6 +210,8 @@ async function main() {
     city: string; category: string; type?: 'PUBLIC' | 'PRIVATE';
     bannerImage?: string;
     instructions?: string;
+    /** Language the instructions text is written in (default lv). */
+    instructionsLang?: 'lv' | 'en';
     accentColor?: string;
     discordLink?: string;
     instagramLink?: string;
@@ -256,6 +258,7 @@ async function main() {
       description: 'Tikamies katru piektdienas vakaru, lai spēlētu galda spēles. Paši piedāvājam Catan, Ticket to Ride, Wingspan un daudz ko citu.',
       bannerImage: 'https://picsum.photos/seed/boardgames/800/400',
       instructions: 'Gathering at "Lude" cafe. Support the venue by ordering a drink.',
+      instructionsLang: 'en',
       accentColor: '#8B5CF6',
       discordLink: 'https://discord.gg/rigagames',
       city: 'Riga', owner: toms,
@@ -277,6 +280,7 @@ async function main() {
       description: 'Kopīgas gleznošanas sesijas visiem līmeņiem. Materiālus nodrošinām. Vīns atļauts! 🍷',
       bannerImage: 'https://picsum.photos/seed/painting/800/400',
       instructions: 'Materials provided. Feel free to bring your own inspiration.',
+      instructionsLang: 'en',
       accentColor: '#D946EF',
       city: 'Riga', owner: anna,
       members: [{ user: marta, role: 'ADMIN' }, { user: liga, role: 'MEMBER' }],
@@ -431,9 +435,25 @@ async function main() {
         },
         sections: {
           create: [
-            { title: 'About us', content: g.description, order: 0, visibility: 'PUBLIC' as const },
+            {
+              order: 0, visibility: 'PUBLIC' as const, originalLang: 'lv',
+              translations: {
+                create: [
+                  { lang: 'lv', title: 'Par mums', content: g.description },
+                  { lang: 'en', title: 'About us', content: '' },
+                ],
+              },
+            },
             ...(g.instructions
-              ? [{ title: 'Practical info', content: `<p>${g.instructions}</p>`, order: 1, visibility: 'MEMBERS_ONLY' as const }]
+              ? [{
+                  order: 1, visibility: 'MEMBERS_ONLY' as const, originalLang: g.instructionsLang ?? 'lv',
+                  translations: {
+                    create: [
+                      { lang: 'lv', title: 'Praktiskā informācija', content: (g.instructionsLang ?? 'lv') === 'lv' ? `<p>${g.instructions}</p>` : '' },
+                      { lang: 'en', title: 'Practical info', content: g.instructionsLang === 'en' ? `<p>${g.instructions}</p>` : '' },
+                    ],
+                  },
+                }]
               : []),
           ],
         },
@@ -537,25 +557,31 @@ async function main() {
   await prisma.event.deleteMany({ where: { groupId: { in: groupIdsToClean } } });
   await prisma.post.deleteMany({ where: { groupId: { in: groupIdsToClean } } });
 
-  const eventCreateData = eventSeeds
-    .map(e => {
-      const groupId = groupIdBySlug[e.groupSlug];
-      if (!groupId) { console.warn(`  ⚠️ Group not found: ${e.groupSlug}`); return null; }
-      return {
-        title: e.title,
+  for (const e of eventSeeds) {
+    const groupId = groupIdBySlug[e.groupSlug];
+    if (!groupId) { console.warn(`  ⚠️ Group not found: ${e.groupSlug}`); continue; }
+    // The English-practice group writes in English; everything else in Latvian.
+    const lang = e.groupSlug === 'english-riga' ? 'en' : 'lv';
+    await prisma.event.create({
+      data: {
         slug: slugify(e.title),
-        description: e.description,
+        originalLang: lang,
+        translations: {
+          create: {
+            lang,
+            title: e.title,
+            description: e.description,
+            instructions: 'Please be on time and bring a positive attitude!',
+          },
+        },
         location: e.location,
         startDate: e.startDate,
         groupId,
         creatorId: e.creator.id,
         bannerImage: `https://picsum.photos/seed/${e.groupSlug}/800/400`,
-        instructions: 'Please be on time and bring a positive attitude!'
-      };
-    })
-    .filter((x): x is NonNullable<typeof x> => x !== null);
-
-  await prisma.event.createMany({ data: eventCreateData });
+      },
+    });
+  }
 
 
   // ─── Discussion Posts ─────────────────────────────────────────────────────────

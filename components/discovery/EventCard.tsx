@@ -5,6 +5,8 @@ import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { useFormatter, useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
+import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { langAttr } from '@/lib/translations';
 
 type Props = {
     event: DiscoverableEvent;
@@ -55,9 +57,10 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                         <span className="h-1 w-1 rounded-full bg-[var(--accent)]" style={{ backgroundColor: accentColor }} />
                         {event.group.name}
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as React.CSSProperties}>
+                    <h3 lang={langAttr(event.titleLang, locale)} className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as React.CSSProperties}>
                         {event.title}
                     </h3>
+                    {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                     {(event.isMembersOnly || isRequest || event.isFull) && (
                         <div className="flex flex-wrap gap-1.5">
                             {event.isMembersOnly && (

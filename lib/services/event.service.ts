@@ -8,6 +8,7 @@ import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
+import { resolveEventText, originalEventTitle, toTextLang, type TextLang } from '@/lib/translations';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -49,13 +50,15 @@ export interface EventActionContext {
 }
 
 type EventWithGroup = Prisma.EventGetPayload<{
-    include: { group: { select: { id: true; name: true; slug: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
+    include: { translations: { select: { lang: true; title: true } }; group: { select: { id: true; name: true; slug: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
 }>;
 
 /** One discovery result: just what the cards need (no instructions, no attendee lists). */
 export interface DiscoverableEvent {
     id: string;
     title: string;
+    /** Language the title is written in; differs from the viewer's when only another language exists. */
+    titleLang: TextLang;
     slug: string;
     startDate: Date;
     location: string | null;
@@ -128,6 +131,7 @@ export class EventService {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             include: {
+                translations: { select: { lang: true, title: true } },
                 group: {
                     select: {
                         id: true,
@@ -143,7 +147,8 @@ export class EventService {
         return event;
     }
 
-    private static async buildContext(event: EventWithGroup): Promise<EventActionContext> {
+    /** `eventTitle` is the title in the event's original language (what notifications quote); `title` overrides it (just edited). */
+    private static async buildContext(event: EventWithGroup, title?: string): Promise<EventActionContext> {
         const admins = await prisma.membership.findMany({
             where: { groupId: event.groupId, role: { in: ['OWNER', 'ADMIN'] } },
             select: { userId: true }
@@ -153,7 +158,7 @@ export class EventService {
             groupSlug: event.group.slug,
             groupName: event.group.name,
             eventSlug: event.slug,
-            eventTitle: event.title,
+            eventTitle: title ?? originalEventTitle(event.translations, event.originalLang),
             organiserIds: Array.from(new Set([event.creatorId, ...admins.map(a => a.userId)]))
         };
     }
@@ -192,6 +197,7 @@ export class EventService {
                 groupId: groupRecord.id
             } as Prisma.EventWhereInput,
             include: {
+                translations: true,
                 group: {
                     include: {
                         category: {
@@ -227,11 +233,16 @@ export class EventService {
         const myStatus = event.attendees.find(a => a.userId === userId)?.status ?? null;
         const canSeeInstructions = EventService.instructionsVisible(event.joinMode, canManage, myStatus);
 
+        // Text is resolved to the viewer's language here; withheld instructions are never read from any
+        // language row, and the raw translation rows never leave this method.
+        const text = resolveEventText(event.translations, lang, event.originalLang, !canSeeInstructions);
+        const original = canManage ? event.translations.find((t) => t.lang === event.originalLang) : undefined;
+
         const viewer: EventViewer = {
             canSee: true,
             canManage,
             canSeeInstructions,
-            instructionsLocked: !canSeeInstructions && !!event.instructions,
+            instructionsLocked: !canSeeInstructions && text.hasInstructions,
             myStatus,
             goingCount: event.attendees.filter(a => a.status === 'GOING').length,
             waitlistCount: event.attendees.filter(a => a.status === 'WAITLISTED').length,
@@ -239,9 +250,22 @@ export class EventService {
         };
 
         // Only organisers get the full people lists (pending, waitlist); everyone else gets none.
+        const { translations: _translations, ...eventFields } = event;
+        void _translations;
         return {
-            ...event,
-            instructions: canSeeInstructions ? event.instructions : null,
+            ...eventFields,
+            title: text.title,
+            titleLang: text.titleLang,
+            description: text.description,
+            descriptionLang: text.descriptionLang,
+            instructions: text.instructions,
+            instructionsLang: text.instructionsLang,
+            /** Language to name in the "Latviski / In English" label; null when all shown text is in the viewer's language. */
+            fallbackLang: text.fallbackLang,
+            /** Organisers only: the text of the event's original language, for the edit form. */
+            original: original
+                ? { lang: toTextLang(event.originalLang), title: original.title, description: original.description, instructions: original.instructions }
+                : null,
             attendees: canManage ? event.attendees : [],
             viewer
         };
@@ -284,7 +308,7 @@ export class EventService {
     /**
      * Create a new event within a group.
      */
-    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: EventModel; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
+    static async createEvent(groupId: string, data: EventFormValues, userId: string, locale: string): Promise<EventServiceResult<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
         const membership = await prisma.membership.findUnique({
             where: {
                 userId_groupId: {
@@ -298,11 +322,20 @@ export class EventService {
             return { success: false, error: 'FORBIDDEN' };
         }
 
+        // The organiser writes in their own language; that is the event's original language (and the slug's).
+        const lang = toTextLang(locale);
         const event = await prisma.event.create({
             data: {
-                title: data.title,
                 slug: await EventService.uniqueSlug(groupId, data.title),
-                description: data.description,
+                originalLang: lang,
+                translations: {
+                    create: {
+                        lang,
+                        title: data.title,
+                        description: data.description,
+                        instructions: data.instructions
+                    }
+                },
                 startDate: data.startDate,
                 endDate: data.endDate,
                 location: data.location,
@@ -312,7 +345,6 @@ export class EventService {
                 isRecurring: data.isRecurring,
                 recurrencePattern: data.recurrencePattern,
                 bannerImage: data.bannerImage,
-                instructions: data.instructions,
                 groupId: groupId,
                 creatorId: userId,
             },
@@ -347,6 +379,7 @@ export class EventService {
             success: true,
             data: {
                 event,
+                eventTitle: data.title,
                 membersToNotify,
                 groupName: event.group.name,
                 groupSlug: event.group.slug,
@@ -392,11 +425,16 @@ export class EventService {
                     converted = waiting.map(w => w.userId);
                 }
             }
+            // Only the row of the event's original language is written; other languages stay as they are.
+            const lang = event.originalLang;
+            await tx.eventTranslation.upsert({
+                where: { eventId_lang: { eventId, lang } },
+                update: { title: data.title, description: data.description, instructions: data.instructions },
+                create: { eventId, lang, title: data.title, description: data.description, instructions: data.instructions }
+            });
             await tx.event.update({
                 where: { id: eventId },
                 data: {
-                    title: data.title,
-                    description: data.description,
                     startDate: data.startDate,
                     endDate: data.endDate,
                     location: data.location,
@@ -408,7 +446,6 @@ export class EventService {
                     isRecurring: data.isRecurring,
                     recurrencePattern: data.recurrencePattern,
                     bannerImage: data.bannerImage,
-                    instructions: data.instructions,
                 }
             });
             return converted;
@@ -417,7 +454,7 @@ export class EventService {
         if (convertedUserIds === null) return { success: false, error: 'CONFIRMATION_REQUIRED' };
 
         // The context carries the title the notification should show (the new one).
-        const context = await EventService.buildContext({ ...event, title: data.title });
+        const context = await EventService.buildContext(event, data.title);
         return { success: true, data: { ...context, convertedUserIds: convertedUserIds.filter(id => id !== userId) } };
     }
 
@@ -451,7 +488,8 @@ export class EventService {
      * Get all events for a group with the current viewer's status.
      * Instructions are stripped here for viewers who may not read them.
      */
-    static async getGroupEvents(groupId: string, userId?: string) {
+    static async getGroupEvents(groupId: string, locale: string, userId?: string) {
+        const lang = toTextLang(locale);
         try {
             const access = await EventService.getAccess(groupId, userId);
             const canSeeAll = access.isMember || access.isSiteAdmin;
@@ -459,6 +497,7 @@ export class EventService {
                 where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
                 orderBy: { startDate: 'asc' },
                 include: {
+                    translations: true,
                     _count: {
                         select: { attendees: { where: { status: 'GOING' } } }
                     },
@@ -495,19 +534,28 @@ export class EventService {
             return events.map(e => {
                 const status = myStatus.get(e.id) ?? null;
                 const canManage = !!userId && (e.creatorId === userId || access.isGroupAdmin);
+                const canSeeInstructions = EventService.instructionsVisible(e.joinMode, canManage, status);
+                // Resolved to the viewer's language; restricted instructions are never read, in any language.
+                const text = resolveEventText(e.translations, lang, e.originalLang, !canSeeInstructions);
                 const viewer: EventViewer = {
                     canSee: true,
                     canManage,
-                    canSeeInstructions: EventService.instructionsVisible(e.joinMode, canManage, status),
-                    instructionsLocked: !EventService.instructionsVisible(e.joinMode, canManage, status) && !!e.instructions,
+                    canSeeInstructions,
+                    instructionsLocked: !canSeeInstructions && text.hasInstructions,
                     myStatus: status,
                     goingCount: e._count.attendees,
                     waitlistCount: canManage ? waiting(e.id, 'WAITLISTED') : 0,
                     pendingCount: canManage ? waiting(e.id, 'PENDING') : 0
                 };
+                const { translations: _translations, ...eventFields } = e;
+                void _translations;
                 return {
-                    ...e,
-                    instructions: viewer.canSeeInstructions ? e.instructions : null,
+                    ...eventFields,
+                    title: text.title,
+                    titleLang: text.titleLang,
+                    description: text.description,
+                    instructions: text.instructions,
+                    fallbackLang: text.fallbackLang,
                     isAttending: status === 'GOING',
                     attendeeCount: e._count.attendees,
                     attendeeList: e.attendees.map(a => a.user),
@@ -728,10 +776,19 @@ export class EventService {
                     : { OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] }),
                 AND: [
                     { group: { AND: groupFilters } },
+                    // Matches the text in any language (instructions are restricted and never searched).
                     ...(fSearch ? [{
                         OR: [
-                            { title: { contains: fSearch, mode: 'insensitive' as const } },
-                            { description: { contains: fSearch, mode: 'insensitive' as const } },
+                            {
+                                translations: {
+                                    some: {
+                                        OR: [
+                                            { title: { contains: fSearch, mode: 'insensitive' as const } },
+                                            { description: { contains: fSearch, mode: 'insensitive' as const } }
+                                        ]
+                                    }
+                                }
+                            },
                             {
                                 group: {
                                     OR: [
@@ -747,6 +804,8 @@ export class EventService {
         };
 
         const include = {
+            // Titles only: descriptions and instructions never go into discovery payloads.
+            translations: { select: { lang: true, title: true } },
             group: {
                 select: {
                     name: true,
@@ -785,7 +844,7 @@ export class EventService {
                     orderBy
                 });
             },
-            [`events-discovery-${locale}-${city}-${category}-${search}-${status}`],
+            [`events-discovery-v2-${locale}-${city}-${category}-${search}-${status}`],
             {
                 revalidate: 60,
                 tags: ['events']
@@ -812,11 +871,17 @@ export class EventService {
         ]);
 
         const direction = status === 'past' ? -1 : 1;
+        const lang = toTextLang(locale);
         // Cached rows come back with dates as strings in some Next versions; normalise before sorting.
         return [...publicRows, ...memberRows]
-            .map(e => ({
+            .map(e => {
+                const text = resolveEventText(e.translations.map(t => ({ ...t, description: null, instructions: null })), lang, e.originalLang, true);
+                return { e, text };
+            })
+            .map(({ e, text }) => ({
                 id: e.id,
-                title: e.title,
+                title: text.title,
+                titleLang: text.titleLang,
                 slug: e.slug,
                 startDate: new Date(e.startDate),
                 location: e.location,
