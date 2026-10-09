@@ -1,33 +1,20 @@
 import { z } from 'zod';
+import { usernameSchema } from './onboarding';
 
+/**
+ * Edit-profile form, validated identically on the client and in the server action.
+ * Error messages are translation keys under `profile.edit.validation`.
+ */
 export const profileSchema = z.object({
-    name: z
-        .string()
-        .min(2, 'Name must be at least 2 characters')
-        .max(50, 'Name must be under 50 characters'),
-    image: z
-        .string()
-        .url('Please enter a valid image URL')
-        .optional()
-        .or(z.literal('')),
-    username: z
-        .string()
-        .regex(/^[a-zA-Z0-9_]{3,30}$/, 'Username must be 3-30 characters long (letters, numbers, underscores)')
-        .optional()
-        .or(z.literal('')),
-    bio: z
-        .string()
-        .max(500, 'Bio must be under 500 characters')
-        .optional()
-        .or(z.literal('')),
-    cities: z
-        .string()
-        .optional()
-        .or(z.literal('')),
-    avatarSeed: z
-        .string()
-        .optional()
-        .or(z.literal('')),
+    name: z.string().trim().min(2, 'NAME_TOO_SHORT').max(50, 'NAME_TOO_LONG'),
+    image: z.string().url('IMAGE_INVALID').optional().or(z.literal('')),
+    username: usernameSchema.optional().or(z.literal('')),
+    bio: z.string().max(500, 'BIO_TOO_LONG').optional().or(z.literal('')),
+    cities: z.string().optional().or(z.literal('')),
+    avatarSeed: z.string().optional().or(z.literal('')),
+    isProfilePublic: z.boolean(),
+    allowDirectMessages: z.boolean(),
+    showGroupsOnProfile: z.boolean(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;

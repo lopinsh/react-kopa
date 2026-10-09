@@ -63,7 +63,7 @@ export default async function PublicProfilePage({
 
             {/* Header Section */}
             <div className="mb-12 flex flex-col items-center md:flex-row md:items-start gap-8 bg-surface-elevated/30 p-8 rounded-[3rem] border border-border relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-br from-primary/20 to-secondary/10 opacity-50" />
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-primary/5 to-transparent" />
 
                 <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface shadow-xl relative z-10 bg-primary/10">
                     <img src={avatarSrc} alt={dbUser.name || 'Avatar'} className="h-full w-full object-cover" />
@@ -127,12 +127,13 @@ export default async function PublicProfilePage({
                     </section>
                 )}
 
-                {/* Visible Groups */}
+                {/* Groups: all of them when the person opted in (or it is their own profile), otherwise only the shared ones. Logged-out visitors share none, so the section is left out. */}
+                {(dbUser.showsAllGroups || session?.user?.id) && (
                 <section>
                     <div className="mb-6 flex items-center justify-between">
                         <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                             <span className="h-2 w-2 rounded-full bg-secondary" />
-                            {t('sharedGroups')}
+                            {dbUser.showsAllGroups ? t('groupsHeading') : t('sharedGroups')}
                         </h2>
                     </div>
 
@@ -145,10 +146,11 @@ export default async function PublicProfilePage({
                     ) : (
                         <div className="rounded-3xl border border-dashed border-border py-12 text-center bg-surface">
                             <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />
-                            <p className="text-sm text-foreground-muted italic">{t('noSharedGroups')}</p>
+                            <p className="text-sm text-foreground-muted italic">{dbUser.showsAllGroups ? t('noJoinedGroups') : t('noSharedGroups')}</p>
                         </div>
                     )}
                 </section>
+                )}
             </div>
         </div>
     );

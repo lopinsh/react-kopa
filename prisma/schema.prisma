@@ -19,6 +19,7 @@ model User {
   updatedAt           DateTime             @updatedAt
   allowDirectMessages Boolean              @default(true)
   isProfilePublic     Boolean              @default(true)
+  showGroupsOnProfile Boolean              @default(false)
   avatarSeed          String?
   bio                 String?
   cities              String[]

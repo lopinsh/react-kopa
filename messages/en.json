@@ -510,7 +510,7 @@
     "adminPanel": "Admin Panel",
     "create": "Create",
     "messages": "Messages",
-    "settings": "Settings",
+    "settings": "Edit profile",
     "signIn": "Sign In",
     "signOut": "Sign Out",
     "userFallback": "User",
@@ -565,15 +565,31 @@
     "backToProfile": "Back to Profile",
     "discover": "Discover groups",
     "edit": {
-      "avatarSeed": "Avatar",
-      "avatarSeedPlaceholder": "Type any word for a different figure",
-      "avatarShuffle": "New figure",
+      "newAvatar": "New avatar",
       "bio": "About Me",
       "bioPlaceholder": "Tell the community about yourself...",
       "cities": "Cities",
       "citiesLabel": "Cities (comma separated)",
       "citiesPlaceholder": "Riga, Liepaja, Valmiera...",
-      "infoText": "Update your public profile information."
+      "privacy": {
+        "title": "Privacy",
+        "publicProfile": "Public profile",
+        "publicProfileDesc": "Anyone can open your profile page.",
+        "allowMessages": "Allow messages",
+        "allowMessagesDesc": "Other members can send you direct messages.",
+        "showGroups": "Show my groups",
+        "showGroupsDesc": "Your profile lists the public groups you belong to. Private groups are never shown."
+      },
+      "validation": {
+        "NAME_TOO_SHORT": "Name must be at least 2 characters.",
+        "NAME_TOO_LONG": "Name must be at most 50 characters.",
+        "USERNAME_TOO_SHORT": "Username must be at least 3 characters.",
+        "USERNAME_TOO_LONG": "Username must be at most 30 characters.",
+        "USERNAME_INVALID_CHARS": "Only lowercase letters, numbers and underscores.",
+        "USERNAME_TAKEN": "This username is already taken.",
+        "BIO_TOO_LONG": "The text can be at most 500 characters.",
+        "IMAGE_INVALID": "Enter a valid image address (https://…)."
+      }
     },
     "editDesc": "Update your public profile information.",
     "editTitle": "Edit Profile",
@@ -596,6 +612,7 @@
     "sectionOwner": "Groups I own",
     "sectionPending": "Pending approval",
     "sharedGroups": "Shared Groups",
+    "groupsHeading": "Groups",
     "stats": {
       "eventsAttended": "Events Attended",
       "groupsJoined": "Groups Joined"

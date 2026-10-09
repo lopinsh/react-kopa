@@ -27,6 +27,9 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
         bio: data.bio || undefined,
         cities: citiesArray,
         avatarSeed: data.avatarSeed || undefined,
+        isProfilePublic: data.isProfilePublic,
+        allowDirectMessages: data.allowDirectMessages,
+        showGroupsOnProfile: data.showGroupsOnProfile,
     });
 
     if (!result.success) return { success: false, error: result.error };

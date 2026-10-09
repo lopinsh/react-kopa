@@ -510,7 +510,7 @@
     "adminPanel": "Admina panelis",
     "create": "Izveidot",
     "messages": "Ziņas",
-    "settings": "Iestatījumi",
+    "settings": "Labot profilu",
     "signIn": "Ienākt",
     "signOut": "Iziet",
     "userFallback": "Lietotājs",
@@ -565,15 +565,31 @@
     "backToProfile": "Atpakaļ uz profilu",
     "discover": "Atklāt grupas",
     "edit": {
-      "avatarSeed": "Avatārs",
-      "avatarSeedPlaceholder": "Ieraksti jebkuru vārdu, lai iegūtu citu figūru",
-      "avatarShuffle": "Cita figūra",
+      "newAvatar": "Jauns avatārs",
       "bio": "Par mani",
       "bioPlaceholder": "Pastāsti kopienai par sevi...",
       "cities": "Pilsētas",
       "citiesLabel": "Pilsētas (atdalītas ar komatu)",
       "citiesPlaceholder": "Rīga, Liepāja, Valmāja...",
-      "infoText": "Atjauniniet savu publisko profila informāciju."
+      "privacy": {
+        "title": "Privātums",
+        "publicProfile": "Publisks profils",
+        "publicProfileDesc": "Ikviens var atvērt tavu profila lapu.",
+        "allowMessages": "Atļaut ziņas",
+        "allowMessagesDesc": "Citi biedri var tev rakstīt privātas ziņas.",
+        "showGroups": "Rādīt manas grupas",
+        "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad."
+      },
+      "validation": {
+        "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmēm.",
+        "NAME_TOO_LONG": "Vārds var būt ne garāks par 50 rakstzīmēm.",
+        "USERNAME_TOO_SHORT": "Lietotājvārdam jābūt vismaz 3 rakstzīmēm.",
+        "USERNAME_TOO_LONG": "Lietotājvārds var būt ne garāks par 30 rakstzīmēm.",
+        "USERNAME_INVALID_CHARS": "Tikai mazie burti, cipari un pasvītras.",
+        "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts.",
+        "BIO_TOO_LONG": "Teksts var būt ne garāks par 500 rakstzīmēm.",
+        "IMAGE_INVALID": "Ievadi derīgu attēla adresi (https://…)."
+      }
     },
     "editDesc": "Atjaunini savu publisko profila informāciju.",
     "editTitle": "Labot profilu",
@@ -596,6 +612,7 @@
     "sectionOwner": "Manas grupas",
     "sectionPending": "Gaida apstiprinājumu",
     "sharedGroups": "Kopīgās grupas",
+    "groupsHeading": "Grupas",
     "stats": {
       "eventsAttended": "Pasākumi",
       "groupsJoined": "Grupas"
