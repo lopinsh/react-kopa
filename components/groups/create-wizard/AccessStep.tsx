@@ -65,9 +65,9 @@ export default function AccessStep({ accentColor }: Props) {
                     </button>
                 );
             })}
-            {errors.type && <p className="mt-1 text-xs text-red-500">{errors.type.message}</p>}
+            {errors.type && <p className="mt-1 text-xs text-red-500 sm:col-span-2">{errors.type.message}</p>}
 
-            <div className="mt-6 space-y-4 pt-6 border-t border-border">
+            <div className="mt-6 space-y-4 border-t border-border pt-6 sm:col-span-2">
                 <label className="flex items-center gap-3 cursor-pointer group">
                     <div className="relative flex items-center">
                         <input

@@ -1,8 +1,16 @@
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import GroupCreationWizard from '@/components/groups/create-wizard/GroupCreationWizard';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'common' });
+    return { title: t('createGroup') };
+}
 
 export default async function CreateGroupPage({
     params,

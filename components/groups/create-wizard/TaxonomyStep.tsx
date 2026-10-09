@@ -36,8 +36,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
 
             {errors.categoryId && !taxSelection && (
                 <p className="mt-2 text-xs text-red-500 font-medium">
-                    {/* @ts-ignore */}
-                    {t(errors.categoryId.message)}
+                    {t('CATEGORY_REQUIRED')}
                 </p>
             )}
 
