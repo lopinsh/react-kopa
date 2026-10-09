@@ -32,6 +32,8 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     interface Tab {
         id: string;
         label: string;
+        /** Set when the label is owner text in another language than the page (screen readers, browser translation). */
+        lang?: string;
         href: string;
         icon: LucideIcon;
         memberOnly?: boolean;
@@ -53,6 +55,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     const sectionTabs: Tab[] = sections.map((s, index) => ({
         id: index === 0 ? 'about' : s.id,
         label: index === 0 ? c_common('about') : s.title,
+        lang: index !== 0 && s.titleLang !== locale ? s.titleLang : undefined,
         href: `${baseUrl}#${index === 0 ? 'about' : s.id}`, // prepend baseUrl so navigating from other tabs works
         icon: index === 0 ? Info : HelpCircle,
         memberOnly: s.visibility === 'MEMBERS_ONLY',
@@ -264,7 +267,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                             </span>
                                         )}
                                     </div>
-                                    {tab.label}
+                                    <span lang={tab.lang}>{tab.label}</span>
                                 </Link>
                             );
                         })}

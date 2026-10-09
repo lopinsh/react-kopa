@@ -15,6 +15,8 @@ export interface GroupState {
     sections: Array<{
         id: string;
         title: string;
+        /** Language the title is written in (may differ from the page language when not translated). */
+        titleLang: 'lv' | 'en';
         order: number;
         visibility: 'PUBLIC' | 'MEMBERS_ONLY';
     }>;
