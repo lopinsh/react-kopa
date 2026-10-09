@@ -11,6 +11,7 @@ import { clsx } from 'clsx';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import Image from 'next/image';
 import type { Metadata } from 'next';
+import { sanitizeRichText } from '@/lib/sanitize';
 
 export async function generateMetadata({
     params,
@@ -95,7 +96,7 @@ export default async function GroupPage({
                                                 <div>
                                                     <div
                                                         className="prose prose-sm prose-invert max-w-none text-foreground/90 leading-relaxed font-medium"
-                                                        dangerouslySetInnerHTML={{ __html: section.content }}
+                                                        dangerouslySetInnerHTML={{ __html: sanitizeRichText(section.content) }}
                                                     />
 
 

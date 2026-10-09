@@ -457,6 +457,7 @@ export class EventService {
         if (!loaded.event) return { success: false, error: loaded.error };
         const { event } = loaded;
         if (event.joinMode !== 'OPEN') return { success: false, error: 'EVENT_MODE_MISMATCH' };
+        if (status === 'GOING' && event.startDate < new Date()) return { success: false, error: 'EVENT_PAST' };
 
         if (status === 'NONE') {
             await prisma.attendance.deleteMany({ where: { eventId, userId } });
@@ -483,6 +484,7 @@ export class EventService {
         if (!loaded.event) return { success: false, error: loaded.error };
         const { event } = loaded;
         if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
+        if (event.startDate < new Date()) return { success: false, error: 'EVENT_PAST' };
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
         const context = await EventService.buildContext(event);

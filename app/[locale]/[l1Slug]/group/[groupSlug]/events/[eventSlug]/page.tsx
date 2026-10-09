@@ -20,6 +20,7 @@ import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
 import { signInUrl } from '@/lib/auth-redirect';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 
 export async function generateMetadata({
     params,
@@ -92,7 +93,7 @@ export default async function EventPage({
         <div className="bg-background">
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: jsonForScript(jsonLd) }}
             />
 
             <main className="container mx-auto max-w-5xl px-4 py-6 md:py-8">
@@ -232,7 +233,7 @@ export default async function EventPage({
                                 <h2 className="text-lg font-black tracking-tight text-foreground">{t('aboutEvent')}</h2>
                                 <div
                                     className="prose prose-invert max-w-none leading-relaxed text-foreground-muted"
-                                    dangerouslySetInnerHTML={{ __html: event.description }}
+                                    dangerouslySetInnerHTML={{ __html: sanitizeRichText(event.description) }}
                                 />
                             </section>
                         )}
@@ -252,7 +253,7 @@ export default async function EventPage({
                                 </h2>
                                 <div
                                     className="prose prose-invert max-w-none leading-relaxed text-foreground-muted prose-a:text-[var(--accent)]"
-                                    dangerouslySetInnerHTML={{ __html: event.instructions }}
+                                    dangerouslySetInnerHTML={{ __html: sanitizeRichText(event.instructions) }}
                                 />
                             </section>
                         )}

@@ -27,6 +27,7 @@ export type ErrorCode =
     | 'EVENT_NOT_FOUND'
     | 'EVENT_FULL'
     | 'EVENT_MODE_MISMATCH'
+    | 'EVENT_PAST'
     | 'EVENT_SLUG_TAKEN'
     | 'MEMBERS_ONLY'
     | 'TOGGLE_FAILED'

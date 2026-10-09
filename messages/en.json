@@ -312,6 +312,7 @@
     "CANCEL_FAILED": "Could not cancel. Please try again.",
     "MANAGE_FAILED": "Could not save the change. Please try again.",
     "EVENT_MODE_MISMATCH": "This action is not available for this event.",
+    "EVENT_PAST": "This event has already started.",
     "EVENT_NOT_FOUND": "Event not found.",
     "EVENT_SLUG_TAKEN": "This group already has an event with that link name.",
     "MEMBERS_ONLY": "Only group members can do this.",

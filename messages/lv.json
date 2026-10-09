@@ -312,6 +312,7 @@
     "CANCEL_FAILED": "Neizdevās atcelt. Lūdzu, mēģini vēlreiz.",
     "MANAGE_FAILED": "Neizdevās saglabāt izmaiņas. Lūdzu, mēģini vēlreiz.",
     "EVENT_MODE_MISMATCH": "Šī darbība šim pasākumam nav pieejama.",
+    "EVENT_PAST": "Šis pasākums jau ir sācies.",
     "EVENT_NOT_FOUND": "Pasākums nav atrasts.",
     "EVENT_SLUG_TAKEN": "Šai grupai jau ir pasākums ar šādu saites nosaukumu.",
     "MEMBERS_ONLY": "To var darīt tikai grupas biedri.",
