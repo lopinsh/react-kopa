@@ -173,6 +173,8 @@ Noticed, not changed:
 
 ## Next session A — Screen review prep (Sonnet, read-only)
 
+**Done 2026-10-09.** Artifact: https://claude.ai/artifact/FDMvHXWVVQKayoP7o1UEbD (private). Re-capture: dev server on :3000, then `CHROME_PATH=<chromium exe> npx tsx scripts/screen-review/capture.ts [filter]`. Screens not fully captured: onboarding (all seed accounts have usernames), second-section editor states (test group has one section), the open message-member modal.
+
 Goal: gather facts so the user and Opus can review every screen together in one sitting. **Report facts, not fixes or opinions** — change no app code.
 
 1. Start Docker, `npm run db:up`, dev server via the browser pane (session rules). Use the local seed accounts (`DEV_PASSWORDS` in `lib/auth.ts`): logged out, `user@local` (non-member), `member@local`, `owner@local` (group owner), `admin@local` (site admin).
