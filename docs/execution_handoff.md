@@ -392,6 +392,12 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - **Storage:** `messages/*.json` in the repo stay the source. Edits are saved as DB overrides (migration `create_message_override_table`: `MessageOverride { key, lang, value, updatedById, updatedAt, @@unique([key, lang]) }`), merged over the JSON at request time in the next-intl request config (cached, invalidated on save) so changes show immediately. `/admin` gets "Export changes" (download overrides as JSON in the messages structure); a Sonnet session merges the file into `messages/*.json`, then overrides are cleared.
   - **Scope:** only the site's own UI strings. Owner-written group/event text is 2.13's per-language data, not this.
 
+- [ ] 2.20 Moderation actions: delete a hidden group (user, 2026-10-09; Sonnet + Opus review, after 2.19). Today, once a site admin hides a group there is nothing more to do with it. **Changes the 2.0b rule** "permanent delete stays owner-only": site admins may now delete, but **only groups that are already hidden** (hide first = the safeguard).
+  - `/admin` → Moderation gets a **"Hidden groups"** list above the log: group name (links to the group page, admins can open hidden groups), owner, hide reason, hidden by, date, and action buttons **Restore** and **Delete permanently**.
+  - Delete: confirm modal with a required reason (5–500 chars, shared Zod schema like hide) and a plain warning that this can't be undone. Service (`moderation.service.ts`) checks `User.role === 'ADMIN'` and `hiddenAt != null`, reuses the existing group deletion logic from `group.service.ts` (same cascade/cleanup as the owner's delete), writes an `AdminAction` `GROUP_DELETE` row (keep the group's name in the log row, since the group is gone), and notifies the owner (compact notification layout, reason as content, no link). Action returns `ActionResponse`, uppercase error codes.
+  - Log rows for deleted groups show the name without a link ("(dzēsta)", like reports).
+  - LV + EN; verify as site admin (hide → delete → gone, owner notified, log entry) and that a non-hidden group can't be deleted via the service; desktop + 390px.
+
 ## Stage 3 — Make it calm
 
 Goal: content first. One screen at a time; agree direction with the user before each. The user wants every screen revisited from a design/UX perspective after the 2026-10-09 screen review (the Screen review Artifact is the starting point).
