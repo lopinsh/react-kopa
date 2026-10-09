@@ -126,6 +126,10 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                             <span className="text-sm font-medium text-foreground">{report.event.title}</span>
                                         </div>
                                     )}
+                                    {/* The group or event was deleted after the report was filed. */}
+                                    {!report.group && !report.event && (
+                                        <span className="text-sm text-foreground-muted">{tMod('deletedTarget')}</span>
+                                    )}
                                 </div>
                                 <div>
                                     <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">{t('reportedByLabel')}</p>
