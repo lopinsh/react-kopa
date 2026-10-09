@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getPendingWildcards, approveWildcard, rejectWildcard } from '@/actions/admin-actions';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
@@ -12,6 +13,20 @@ import type { ActionResponse } from '@/types/actions';
 /** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
 function backToTab(locale: string, tabName: string, res: ActionResponse): never {
     redirect(`/${locale}/admin?tab=${tabName}${res.success ? '' : `&error=${res.error}`}`);
+}
+
+export async function generateMetadata({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<{ tab?: string }>;
+}): Promise<Metadata> {
+    const { locale } = await params;
+    const { tab } = await searchParams;
+    const t = await getTranslations({ locale, namespace: 'admin.nav' });
+    const tDash = await getTranslations({ locale, namespace: 'admin.dashboard' });
+    return { title: tab === 'moderation' ? t('moderation') : tDash('title') };
 }
 
 export default async function AdminDashboardPage({

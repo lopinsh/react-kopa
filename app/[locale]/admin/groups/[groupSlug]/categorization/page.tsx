@@ -1,9 +1,17 @@
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import { GroupService } from '@/lib/services/group.service';
 import AdminGroupCategorizationForm from './AdminGroupCategorizationForm';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'admin.taxonomy' });
+    return { title: t('override.title') };
+}
 
 export default async function AdminGroupCategorizationPage({
     params,

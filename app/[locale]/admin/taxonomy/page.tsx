@@ -1,9 +1,16 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import { getAllTags, getPendingTags, getTaxonomy } from '@/actions/taxonomy-actions';
 import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'admin.nav' });
+    return { title: t('taxonomy') };
+}
 
 export default async function AdminTaxonomyPage({
     params,

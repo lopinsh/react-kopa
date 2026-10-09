@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect, notFound } from 'next/navigation';
 import { getReports } from '@/actions/report-actions';
@@ -5,6 +6,12 @@ import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'admin.nav' });
+    return { title: t('reports') };
+}
 
 export default async function AdminReportsPage({
     params,
