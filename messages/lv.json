@@ -322,7 +322,8 @@
     "EVENT_SLUG_TAKEN": "Šai grupai jau ir pasākums ar šādu saites nosaukumu.",
     "MEMBERS_ONLY": "To var darīt tikai grupas biedri.",
     "TOGGLE_FAILED": "Neizdevās atjaunināt tavu atbildi.",
-    "CREATE_EVENT_FAILED": "Neizdevās izveidot pasākumu."
+    "CREATE_EVENT_FAILED": "Neizdevās izveidot pasākumu.",
+    "CONFIRMATION_REQUIRED": "Pasākumam ir pieteicies kāds jauns. Pārbaudi skaitu un saglabā vēlreiz."
   },
   "group": {
     "accentColorDesc": "Pielāgojiet galveno krāsu grupas lapām un pogām.",
@@ -543,7 +544,8 @@
       "EVENT_LET_IN": "Tevi uzņēma no gaidīšanas saraksta",
       "EVENT_SPOT_FREED": "{authorName} vairs nevar ierasties · gaidīšanas sarakstā: {waitlistCount}",
       "EVENT_ROOM_AGAIN": "Atkal ir vieta — vari pieteikties",
-      "EVENT_CANCELLED": "Pasākums atcelts"
+      "EVENT_CANCELLED": "Pasākums atcelts",
+      "EVENT_NOW_OPEN": "Pasākums tagad ir atvērts visiem — tu esi iekšā"
     }
   },
   "onboarding": {
@@ -836,7 +838,7 @@
     "manage": "Pārvaldīt",
     "requestsWaiting": "{count} jauni",
     "allEvents": "Visi pasākumi",
-    "tookPlace": "Šis pasākums jau ir noticis ({date}).",
+    "tookPlace": "Šis pasākums jau ir noticis.",
     "wentCount": "{count} piedalījās",
     "editTitle": "Labot pasākumu",
     "editSubtitle": "Izmaiņas būs redzamas uzreiz.",
@@ -900,6 +902,9 @@
     "joinOpen": "Atvērts",
     "joinOpenDesc": "Cilvēki vienkārši paziņo, ka nāks.",
     "joinRequest": "Pieteikšanās",
-    "joinRequestDesc": "Cilvēki piesakās, un tu viņus apstiprini. Vari atzīmēt pasākumu kā pilnu un uzturēt gaidīšanas sarakstu."
+    "joinRequestDesc": "Cilvēki piesakās, un tu viņus apstiprini. Vari atzīmēt pasākumu kā pilnu un uzturēt gaidīšanas sarakstu.",
+    "openConfirm": "Šis ielaidīs visus gaidītājus ({count}) un par to paziņos. To nevar atsaukt.",
+    "openConfirmYes": "Atvērt un ielaist",
+    "openConfirmNo": "Vēl ne"
   }
 }

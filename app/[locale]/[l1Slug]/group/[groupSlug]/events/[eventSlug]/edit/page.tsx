@@ -6,6 +6,7 @@ import { Link } from '@/i18n/routing';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { EventService } from '@/lib/services/event.service';
+import { isEventPast } from '@/lib/event-dates';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
 
 type Params = { locale: string; l1Slug: string; groupSlug: string; eventSlug: string };
@@ -23,6 +24,8 @@ export default async function EditEventPage({ params }: { params: Promise<Params
     if (!event) notFound();
     // Only organisers edit; everyone else goes back to the event itself.
     if (!event.viewer.canManage) redirect(`/${locale}${eventPath}`);
+    // A finished event can't be edited (organisers can still delete it).
+    if (isEventPast(event)) redirect(`/${locale}${eventPath}`);
 
     const t = await getTranslations('event');
 
@@ -47,6 +50,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                     groupId={event.groupId}
                     groupSlug={groupSlug}
                     l1Slug={l1Slug}
+                    waitingCount={event.viewer.pendingCount + event.viewer.waitlistCount}
                     event={{
                         id: event.id,
                         title: event.title,

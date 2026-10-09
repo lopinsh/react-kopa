@@ -42,7 +42,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
     const isRequest = event.joinMode === 'REQUEST';
 
     const people = [
-        isPast ? t('wentCount', { count: event.goingCount }) : isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount }),
+        isPast ? (event.goingCount > 0 ? t('wentCount', { count: event.goingCount }) : null) : isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount }),
         !isPast && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
     ].filter(Boolean).join(' · ');
 
@@ -95,10 +95,12 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                         )}
                     </p>
 
-                    <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground-muted">
-                        <Users className="h-3.5 w-3.5 shrink-0" />
-                        {people}
-                    </p>
+                    {people && (
+                        <p className="inline-flex items-center gap-1.5 text-xs font-semibold text-foreground-muted">
+                            <Users className="h-3.5 w-3.5 shrink-0" />
+                            {people}
+                        </p>
+                    )}
                 </div>
             </div>
 

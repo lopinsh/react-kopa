@@ -66,7 +66,7 @@ function revalidateEventPaths(locale: string, ctx: EventPaths) {
     revalidatePath(`${base}/events/${ctx.eventSlug}`, 'page');
 }
 
-type EventNotificationType = 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN';
+type EventNotificationType = 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN';
 
 /** One compact notification about an event; `authorName` is the person it is about. */
 function notifyEvent(
@@ -210,9 +210,15 @@ export async function setEventFull(eventId: string, isFull: boolean, locale: str
 }
 
 /**
- * Update an existing event.
+ * Update an existing event. `confirmOpenWaiting` is the organiser's explicit OK to let in everyone
+ * who is waiting when the event changes from Request to join to Open.
  */
-export async function updateEvent(eventId: string, data: EventFormValues, locale: string): Promise<ActionResponse<{ eventSlug: string }>> {
+export async function updateEvent(
+    eventId: string,
+    data: EventFormValues,
+    locale: string,
+    confirmOpenWaiting = false
+): Promise<ActionResponse<{ eventSlug: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
@@ -220,11 +226,14 @@ export async function updateEvent(eventId: string, data: EventFormValues, locale
         const validation = await validateActionData(eventSchema, data);
         if (!validation.success) return validation;
 
-        const result = await EventService.updateEvent(eventId, validation.data, session.user.id);
+        const result = await EventService.updateEvent(eventId, validation.data, session.user.id, confirmOpenWaiting === true);
         if (!result.success) return result;
 
-        revalidateEventPaths(locale, result.data!);
-        return { success: true, data: { eventSlug: result.data!.eventSlug } };
+        const ctx = result.data!;
+        // Everyone who was waiting got in when the event opened up: tell them once.
+        await Promise.all(ctx.convertedUserIds.map(id => notifyEvent(id, 'EVENT_NOW_OPEN', ctx)));
+        revalidateEventPaths(locale, ctx);
+        return { success: true, data: { eventSlug: ctx.eventSlug } };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
     }

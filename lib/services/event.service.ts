@@ -329,14 +329,17 @@ export class EventService {
             }
         });
 
-        const membersToNotify = await prisma.membership.findMany({
-            where: {
-                groupId,
-                userId: { not: userId },
-                role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
-            },
-            select: { userId: true }
-        });
+        // Nobody is told about an event that is already over (e.g. logging last week's rehearsal).
+        const membersToNotify = isEventPast(event)
+            ? []
+            : await prisma.membership.findMany({
+                where: {
+                    groupId,
+                    userId: { not: userId },
+                    role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
+                },
+                select: { userId: true }
+            });
 
         const resolved = TaxonomyResolver.resolve(event.group.category);
 
@@ -353,34 +356,69 @@ export class EventService {
     }
 
     /**
-     * Update an existing event.
+     * Update an existing event. Past events cannot be edited.
+     *
+     * Switching Request to join -> Open lets in everyone who is waiting (pending or waitlisted),
+     * in the same transaction as the update. That only happens when the caller passes
+     * `confirmOpenWaiting`; otherwise the save is refused with `CONFIRMATION_REQUIRED` and nothing changes.
+     * Open -> Request to join needs nothing: people who are going count as approved.
      */
-    static async updateEvent(eventId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ l1Slug: string; groupSlug: string; eventSlug: string }>> {
+    static async updateEvent(
+        eventId: string,
+        data: EventFormValues,
+        userId: string,
+        confirmOpenWaiting = false
+    ): Promise<EventServiceResult<EventActionContext & { convertedUserIds: string[] }>> {
         const { event, error } = await EventService.loadForOrganiser(eventId, userId);
         if (!event) return { success: false, error };
+        if (isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
+
+        const opening = event.joinMode === 'REQUEST' && data.joinMode === 'OPEN';
 
         // The link name stays as it was: changing it would break links people already shared.
-        await prisma.event.update({
-            where: { id: eventId },
-            data: {
-                title: data.title,
-                description: data.description,
-                startDate: data.startDate,
-                endDate: data.endDate,
-                location: data.location,
-                maxParticipants: data.maxParticipants,
-                visibility: data.visibility,
-                joinMode: data.joinMode,
-                isRecurring: data.isRecurring,
-                recurrencePattern: data.recurrencePattern,
-                bannerImage: data.bannerImage,
-                instructions: data.instructions,
+        const convertedUserIds = await prisma.$transaction(async (tx) => {
+            let converted: string[] = [];
+            if (opening) {
+                const waiting = await tx.attendance.findMany({
+                    where: { eventId, status: { in: ['PENDING', 'WAITLISTED'] } },
+                    select: { userId: true }
+                });
+                if (waiting.length > 0) {
+                    if (!confirmOpenWaiting) return null;
+                    await tx.attendance.updateMany({
+                        where: { eventId, status: { in: ['PENDING', 'WAITLISTED'] } },
+                        data: { status: 'GOING' }
+                    });
+                    converted = waiting.map(w => w.userId);
+                }
             }
+            await tx.event.update({
+                where: { id: eventId },
+                data: {
+                    title: data.title,
+                    description: data.description,
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                    location: data.location,
+                    maxParticipants: data.maxParticipants,
+                    visibility: data.visibility,
+                    joinMode: data.joinMode,
+                    // "Full" only means something for Request to join events.
+                    ...(opening && { isFull: false }),
+                    isRecurring: data.isRecurring,
+                    recurrencePattern: data.recurrencePattern,
+                    bannerImage: data.bannerImage,
+                    instructions: data.instructions,
+                }
+            });
+            return converted;
         });
 
-        const resolved = TaxonomyResolver.resolve(event.group.category);
+        if (convertedUserIds === null) return { success: false, error: 'CONFIRMATION_REQUIRED' };
 
-        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug, eventSlug: event.slug } };
+        // The context carries the title the notification should show (the new one).
+        const context = await EventService.buildContext({ ...event, title: data.title });
+        return { success: true, data: { ...context, convertedUserIds: convertedUserIds.filter(id => id !== userId) } };
     }
 
     /**

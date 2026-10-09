@@ -322,7 +322,8 @@
     "EVENT_SLUG_TAKEN": "This group already has an event with that link name.",
     "MEMBERS_ONLY": "Only group members can do this.",
     "TOGGLE_FAILED": "Could not update your response.",
-    "CREATE_EVENT_FAILED": "Could not create the event."
+    "CREATE_EVENT_FAILED": "Could not create the event.",
+    "CONFIRMATION_REQUIRED": "Someone new is waiting for this event. Please check the numbers and save again."
   },
   "group": {
     "accentColorDesc": "Customize the primary color for your group pages and buttons.",
@@ -543,7 +544,8 @@
       "EVENT_LET_IN": "You were let in from the waitlist",
       "EVENT_SPOT_FREED": "{authorName} can't come anymore · {waitlistCount} on the waitlist",
       "EVENT_ROOM_AGAIN": "There is room again — you can ask to join",
-      "EVENT_CANCELLED": "The event was cancelled"
+      "EVENT_CANCELLED": "The event was cancelled",
+      "EVENT_NOW_OPEN": "The event is now open to everyone — you're in"
     }
   },
   "onboarding": {
@@ -836,7 +838,7 @@
     "manage": "Manage",
     "requestsWaiting": "{count} new",
     "allEvents": "All events",
-    "tookPlace": "This event took place on {date}.",
+    "tookPlace": "This event took place.",
     "wentCount": "{count} went",
     "editTitle": "Edit event",
     "editSubtitle": "Changes show up right away.",
@@ -900,6 +902,9 @@
     "joinOpen": "Open",
     "joinOpenDesc": "People just say they're going.",
     "joinRequest": "Request to join",
-    "joinRequestDesc": "People ask to join and you approve them. You can mark the event as full and keep a waitlist."
+    "joinRequestDesc": "People ask to join and you approve them. You can mark the event as full and keep a waitlist.",
+    "openConfirm": "This lets in all {count, plural, one {# waiting person} other {# waiting people}} and notifies them. This can't be undone.",
+    "openConfirmYes": "Open it and let them in",
+    "openConfirmNo": "Not yet"
   }
 }

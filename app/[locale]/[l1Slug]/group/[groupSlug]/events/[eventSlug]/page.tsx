@@ -76,6 +76,11 @@ export default async function EventPage({
     const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;
     const isRequest = event.joinMode === 'REQUEST';
     const toPerson = (a: (typeof event.attendees)[number]) => ({ userId: a.userId, name: a.user.name, username: a.user.username });
+    // Nothing to say when nobody went to a finished event.
+    const peopleLine = [
+        ended ? (goingCount > 0 ? t('wentCount', { count: goingCount }) : null) : isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
+        !ended && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
+    ].filter(Boolean).join(' · ');
     const isOnlineLocation = !!event.location && event.location.includes('http');
 
     // JSON-LD for SEO
@@ -122,7 +127,7 @@ export default async function EventPage({
                 {ended && (
                     <div className="mb-4 flex items-center gap-2.5 rounded-2xl border border-border bg-surface-elevated px-4 py-3 text-sm font-semibold text-foreground-muted">
                         <CalendarCheck className="h-4 w-4 shrink-0" />
-                        {t('tookPlace', { date: formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone }) })}
+                        {t('tookPlace')}
                     </div>
                 )}
 
@@ -157,19 +162,19 @@ export default async function EventPage({
                         )}
                     </div>
                     <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')}>{event.title}</h1>
-                    <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
-                        <Users className="h-4 w-4" />
-                        {[
-                            ended ? t('wentCount', { count: goingCount }) : isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
-                            !ended && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
-                        ].filter(Boolean).join(' · ')}
-                    </p>
+                    {peopleLine && (
+                        <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
+                            <Users className="h-4 w-4" />
+                            {peopleLine}
+                        </p>
+                    )}
                     {canManage && (
                         <EventManageActions
                             eventId={event.id}
                             locale={locale}
                             groupPath={`/${l1Slug}/group/${group.slug}`}
                             eventPath={`/${l1Slug}/group/${group.slug}/events/${event.slug}`}
+                            canEdit={!ended}
                         />
                     )}
                 </header>

@@ -29,6 +29,7 @@ export type ErrorCode =
     | 'EVENT_MODE_MISMATCH'
     | 'EVENT_PAST'
     | 'EVENT_SLUG_TAKEN'
+    | 'CONFIRMATION_REQUIRED'
     | 'MEMBERS_ONLY'
     | 'TOGGLE_FAILED'
     | 'USERNAME_TAKEN'

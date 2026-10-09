@@ -50,6 +50,8 @@ type Props = {
     l1Slug: string;
     /** When set, the form edits this event instead of creating one. */
     event?: EventToEdit;
+    /** Edit only: people waiting for a decision (pending + waitlisted). */
+    waitingCount?: number;
 };
 
 /** Value for a datetime-local input: the browser's local time, which is how the form reads it back. */
@@ -60,7 +62,7 @@ function toLocalInput(iso: string | null): string {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
-export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event }: Props) {
+export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event, waitingCount = 0 }: Props) {
     const t = useTranslations('eventWizard');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
@@ -68,6 +70,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event 
     const [step, setStep] = useState<StepIndex>(0);
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
+    // Opening a Request-to-join event lets in everyone waiting: ask before doing it.
+    const [askingToOpen, setAskingToOpen] = useState(false);
 
     const form = useForm<EventFormData>({
         resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
@@ -105,15 +109,17 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event 
         setStep((s) => Math.max(s - 1, 0) as StepIndex);
     }
 
-    const onSubmit = handleSubmit((data) => {
+    function save(data: EventFormData, confirmOpenWaiting: boolean) {
         setServerError(null);
         startTransition(async () => {
             const values = data as unknown as EventFormValues;
             let eventSlug: string;
             if (event) {
-                const result = await updateEvent(event.id, values, locale);
+                const result = await updateEvent(event.id, values, locale, confirmOpenWaiting);
                 if (!result.success) {
                     setServerError(result.error);
+                    // Someone new started waiting since the page loaded: refresh the count and ask again.
+                    if (result.error === 'CONFIRMATION_REQUIRED') router.refresh();
                     return;
                 }
                 eventSlug = result.data!.eventSlug;
@@ -129,6 +135,20 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event 
             router.push(`/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
             router.refresh();
         });
+    }
+
+    const opensToWaiting = !!event && event.joinMode === 'REQUEST' && watch('joinMode') === 'OPEN' && waitingCount > 0;
+
+    const onSubmit = handleSubmit((data) => {
+        if (opensToWaiting) {
+            setAskingToOpen(true);
+            return;
+        }
+        save(data, false);
+    });
+    const onConfirmOpen = handleSubmit((data) => {
+        setAskingToOpen(false);
+        save(data, true);
     });
 
     return (
@@ -358,6 +378,31 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event 
                         </div>
                     )}
 
+                    {askingToOpen && opensToWaiting && (
+                        <div role="alertdialog" aria-live="assertive" className="mt-4 space-y-3 rounded-xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 p-4">
+                            <p className="text-sm font-semibold text-foreground">{t('openConfirm', { count: waitingCount })}</p>
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => void onConfirmOpen()}
+                                    disabled={isPending}
+                                    className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--accent-foreground)] disabled:opacity-70"
+                                >
+                                    {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+                                    {t('openConfirmYes')}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setAskingToOpen(false)}
+                                    disabled={isPending}
+                                    className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground-muted hover:bg-surface-elevated"
+                                >
+                                    {t('openConfirmNo')}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {serverError && (
                         <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
                             {tErrors(serverError as 'ACTION_FAILED')}
@@ -388,7 +433,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event 
                         ) : (
                             <button
                                 type="submit"
-                                disabled={isPending}
+                                disabled={isPending || askingToOpen}
                                 className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all disabled:opacity-70"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
