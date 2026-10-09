@@ -836,13 +836,13 @@
     "manage": "Pārvaldīt",
     "requestsWaiting": "{count} jauni",
     "allEvents": "Visi pasākumi",
-    "tookPlace": "Šis pasākums notika {date}.",
-    "wentCount": "Piedalījās: {count}",
+    "tookPlace": "Šis pasākums jau ir noticis ({date}).",
+    "wentCount": "{count} piedalījās",
     "editTitle": "Labot pasākumu",
     "editSubtitle": "Izmaiņas būs redzamas uzreiz.",
     "editEvent": "Labot",
     "deleteEvent": "Dzēst",
-    "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. To nevarēs atsaukt."
+    "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot."
   },
   "cities": {
     "Cesis": "Cēsis",
