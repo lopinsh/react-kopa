@@ -44,41 +44,42 @@ Every screen, grouped by the step of the core loop it serves. Update the row whe
 
 | Step | Screen | Route / component | Who | Status | Decision · next |
 |---|---|---|---|---|---|
-| Find | Discovery – groups | `/` (`?tab=groups`) | everyone | 🟡 | keep · 3.1 at-a-glance cards (grey no-banner cards, "Active" badge, tab title) |
-| Find | Discovery – events | `/?tab=events` | everyone | ✅ | keep · paging later |
-| Find | Search (filter-bar input + dropdown) | `DiscoveryFilterBar`, `searchContextual` | everyone | 🟡 | proposed: replace with one search modal (see search discussion) · accents later |
-| Find | Header ⌘K search modal | `GlobalSearch.tsx`, `SearchModal.tsx` (unused) | — | 🧱 | proposed: becomes the real search modal |
-| Find | `/discover`, `/groups` | redirect / orphan "my groups" copy | — | 🧱 | **remove `/groups`** (2.11) |
-| Create | Create group wizard (4 steps) | `/create` | logged in | ✅ | keep · banner upload later |
-| Join | Group page – About | `[l1]/group/[g]` | everyone | 🟡 | keep · 3.2 header (white title on light banner, blank role pill) |
-| Join | Apply / withdraw | `ApplicationModal`, `MembershipPanel` | visitors | ✅ | keep · "Join X" → "Ask to join X" |
-| Join | Auth gate | `AuthGateModal` (join button, discussions, mobile nav) vs sign-in page link (events) | visitors | 🟡 | **pop-up everywhere incl. events + add "Create account"; keep sign-in page** (see Sign-in decision) |
-| Join | Sign in / Register / Onboarding | `/auth/*`, `/onboarding/username` | visitors | 🟡 | keep · user to click through one real sign-up (2.0) |
-| Talk | Discussions | `[g]/discussions`, `DiscussionBoard` | members | ❌ | 2.4 |
-| Talk | Ask the group (before joining) | `InquiryModal`, `SupportMessageModal` | visitors/members | ❌ | 2.4 |
-| Talk | Messages / inbox | `/messages`, `MessagesLayout` | members | ❌ | 2.4 |
-| Talk | Group-level messages page | `[l1]/messages` | — | 🧱 | **remove** (2.11) |
-| Talk | Notifications | `NotificationCenter` (header) | members | ✅ | keep |
-| Group life | Members + requests | `[g]/members` | members/admins | 🟡 | keep · stray "Private" text |
-| Group life | Events tab | `[g]/events`, `EventRow`, `CompactGroupBar` | everyone | ✅ | keep |
-| Group life | Event page + organiser panel | `[g]/events/[e]` | everyone | ✅ | keep · edit/delete missing (2.10) |
-| Group life | Create event | `[g]/create-event` (modal + page) | organisers | 🟡 | keep · hide link-name field (2.10) |
-| Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | keep · review together |
-| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | **keep — core feature** (see Sections decision: all content as sections, first section fixed) |
-| Group life | Report / hide group | `ReportModal`, `HideGroupModal` | any / admin | ✅ | keep |
-| Me | Own profile | `/profile` | members | 🟡 | keep · **remove static "Events attended"** (2.11) |
-| Me | Public profile | `/profile/[username]` | everyone | ✅ | keep · message button after 2.4 |
-| Me | Edit profile | `/profile/edit` | members | ✅ | keep (new avatars) |
-| Me | My groups | `/profile/my-groups` | members | ✅ | keep |
-| Shell | Header + user menu | `Header`, `UserMenu` | everyone | 🟡 | 3.4 |
-| Shell | Group sidebar + tab bar | `Sidebar`, `GroupTabs` | group pages | 🟡 | 3.4 · two navs for the same pages |
-| Shell | Mobile bottom nav | `MobileNav` | everyone | 🟡 | 3.4 |
-| Shell | Footer | `Footer` | everyone | 🟡 | 3.4 · "About" twice, second language switch |
-| Static | About / Privacy / Cookie banner | `/about`, `/privacy`, `CookieConsent` | everyone | 🟡 | keep · About in owner's voice, Privacy contact (user) |
-| Admin | Dashboard (tags, reports, moderation log) | `/admin` | admin | 🟡 | keep · duplicate nav row |
-| Admin | Reports | `/admin/reports` | admin | ✅ | keep |
-| Admin | Taxonomy | `/admin/taxonomy` | admin | ✅ | keep |
-| Admin | Categorization override | `/admin/groups/[g]/categorization` | admin | 🟡 | keep · opened from the tag inbox ("used by groups") so an admin can re-tag a group; check it works |
+| Find | Discovery – groups | `/` (`?tab=groups`) | everyone | 🟡 | **keep** (review 2026-10-09) · 3.1: category-colour tile for banner-less cards (most important), drop "Aktīva", tab title, mobile rail |
+| Find | Discovery – events | `/?tab=events` | everyone | ✅ | **keep** · 3.1: category-colour accent on event cards · paging later |
+| Find | Search (filter-bar input + dropdown) | `DiscoveryFilterBar`, `searchContextual` | everyone | 🟡 | **replace with one search modal** (3.5) · accents later |
+| Find | Header ⌘K search modal | `GlobalSearch.tsx`, `SearchModal.tsx` (unused) | — | 🧱 | **delete both files; modal built fresh** (3.5) |
+| Find | `/discover`, `/groups` | redirect / orphan "my groups" copy | — | 🧱 | **remove `/groups`; fix group-header chip links + keep query on `/discover` redirect** (2.11) |
+| Create | Create group wizard (4 steps) | `/create` | logged in | ✅ | **keep** (review 2026-10-09) · drop social-links step → 3 steps, raw step-1 error (2.14) · banner picker (3.6) · own uploads later |
+| Join | Group page – About | `[l1]/group/[g]` | everyone | 🟡 | **keep** (review 2026-10-09) · 3.2 readable header (white title on light banner, blank role pill) · one shared "…" menu with working Share (2.14b) |
+| Join | Apply / withdraw | `ApplicationModal`, `MembershipPanel` | visitors | ✅ | **keep** · "Join X" → "Ask to join X" (2.14c) |
+| Join | Auth gate | `AuthGateModal` (join button, discussions, mobile nav) vs sign-in page link (events) | visitors | 🟡 | **fix** (2.14c): no pre-filled email, translated labels, "Create account" with return, one shared form with the sign-in page, events use the pop-up |
+| Join | Sign in / Register / Onboarding | `/auth/*`, `/onboarding/username` | visitors | 🟡 | **keep** · 2.14d: no header "Ienākt" on auth pages, page titles, only configured providers (also on register) · user to click through one real sign-up (2.0) |
+| Talk | Discussions | `[g]/discussions`, `DiscussionBoard` | members | ❌ | **needs ideation** (review 2026-10-09): purpose of Discussions on the group page is unclear — design in 2.4 · already hidden from non-members' nav |
+| Talk | Ask the group (before joining) | `InquiryModal`, `SupportMessageModal` | visitors/members | ❌ | **merge with joining** (2.4): one "Contact" form with an "I'd like to join" toggle · hide "Send message" on own member card |
+| Talk | Messages / inbox | `/messages`, `MessagesLayout` | members | ❌ | **keep** (2.4): conversations record where they started (user + group, system message) · structure the inbox (open) · fix empty-state text, mobile heading |
+| Talk | Group-level messages page | `[l1]/messages` | — | 🧱 | **remove** (2.11) · user's "town hall board" idea parked for later |
+| Talk | Notifications | `NotificationCenter` (header) | members | ✅ | **keep** for now · no older-notifications page yet |
+| Group life | Members + requests | `[g]/members` | members/admins | 🟡 | **keep** (review 2026-10-09) · desktop cards overflow the column (2.14e) |
+| Group life | Events tab | `[g]/events`, `EventRow`, `CompactGroupBar` | everyone | ✅ | **keep** · mobile sub-tabs overflow (2.14f) |
+| Group life | Event page + organiser panel | `[g]/events/[e]` | everyone | ✅ | **keep** · edit/delete + past-event look (2.10) · "Visi pasākumi" link without locale (2.14f) |
+| Group life | Create event | `[g]/create-event` (modal + page) | organisers | 🟡 | **keep, full page only** (no modal) · hide link-name field (2.10) |
+| Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | **keep, 2 tabs "Grupa" + "Sadaļas"; owner vs moderator split** (2.15) |
+| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | **keep — core feature** (see Sections decision: all content as sections, first section fixed) · wrong heading "Apvienot atzīmes", English labels (2.14g) |
+| Group life | Report / hide group | `ReportModal`, `HideGroupModal` | any / admin | 🟡 | **keep** · report raw keys (2.14h) · site-admin actions move to a separate admin-tools menu (2.16) |
+| Me | Own profile | `/profile` | members | 🟡 | **keep** for now (design pass later) · **remove the whole stats card** (2.11) |
+| Me | Public profile | `/profile/[username]` | everyone | 🟡 | **fix** (2.14i): only shared groups by default, none to logged out; opt-in "show my groups" · header seam · message button after 2.4 |
+| Me | Edit profile | `/profile/edit` | members | 🟡 | **fix** (2.14i): labels, Privacy block (public profile, allow messages, show my groups), "New avatar" button instead of seed field |
+| Me | My groups | `/profile/my-groups` | members | ✅ | **keep** · duplicate heading (2.14j) |
+| Shell | Header + user menu | `Header`, `UserMenu` | everyone | 🟡 | **keep** (review 2026-10-09) · visuals in 3.4 |
+| Shell | Group sidebar + tab bar | `Sidebar`, `GroupTabs` | group pages | ✅ | **keep** (review 2026-10-09): not duplicates — sidebar picks the area (Information / Events / Discussions / Members), tab bar is the sub-navigation inside it (owner's sections on Information, Upcoming/My/Past on Events, List/Requests on Members) |
+| Shell | Mobile bottom nav | `MobileNav` | everyone | 🟡 | **keep** · hide on `/auth/*` (2.14k) |
+| Shell | Footer | `Footer` | everyone | 🟡 | **fix** (2.14k): "Par mums" twice → rename column heading; remove footer language switch |
+| Shell | 404 / access states | `not-found.tsx`, event page | everyone | 🟡 | **fix** (2.14l): members-only event → "members only" state instead of 404; private group → short card (Opus queue, invites); moderation-hidden and missing stay 404 (+ sign-in hint when logged out) |
+| Static | About / Privacy / Cookie banner | `/about`, `/privacy`, `CookieConsent` | everyone | 🟡 | **keep** (review 2026-10-09) · About rewritten in the owner's voice (2.14m) · Privacy contact `ejam@lumm.eu` (2.14m) · cookie banner keep |
+| Admin | Dashboard (tags, reports, moderation log) | `/admin` | admin | 🟡 | **fix** (2.17, review 2026-10-09): one shared admin nav, reports → "Sūdzības" |
+| Admin | Reports | `/admin/reports` | admin | 🟡 | **fix** (2.17): shared nav; report filed during capture not listed — verify submit → list after 2.14h |
+| Admin | Taxonomy | `/admin/taxonomy` | admin | ✅ | **keep** · shared nav, "apakštēmas" wording (2.17) |
+| Admin | Categorization override | `/admin/groups/[g]/categorization` | admin | 🟡 | keep · opened from the tag inbox ("used by groups") so an admin can re-tag a group; also from the admin-tools menu (2.16); check it saves (2.17) |
 
 ## Stage 0 — Local setup (needs user, once)
 
@@ -158,11 +159,17 @@ Noticed, not changed:
     - Scope: sections first; event title/description later with the same pattern; group names stay as typed; no machine translation; search covers all languages.
     - Migration: existing section text → `lv` rows; existing "About us" titles → default titles in both languages.
 - **Sign-in** (user, 2026-10-09): keep the **pop-up** for actions inside the site (join, post, mobile nav) so people stay on the group page; add a **"Create account"** link to it (registration must also return the person to where they were). Event pages switch to the pop-up too (user, 2026-10-09). Keep the **sign-in page** for direct visits, the header Sign in button and protected URLs. Goal: one streamlined flow — both should share the same form and wording. Details in the screen review.
-- **Past events look finished** (proposed 2026-10-09, awaiting user OK): event page notice "This event took place on …", greyed banner, no join button, "N went"; greyed Past-tab rows; organiser panel hidden.
+- **Past events look finished** (user OK 2026-10-09, built in 2.10): event page notice "This event took place on …", greyed banner, no join button, "N went"; greyed Past-tab rows; organiser panel hidden.
 
 ## Opus queue (not for Sonnet)
 
-- 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session.
+- 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session. **Design first, with the user** (inputs from the screen review, 2026-10-09):
+  - **Contact replaces the bare join button:** a signed-in non-member opens one "Contact" form that messages the group's owners; a toggle "I'd like to join" in the same form also creates the join request (Requests tab and approval stay as they are). Today's `InquiryModal` is unreachable.
+  - **Every conversation remembers where it started:** who + from which group (member card, profile, group contact) — shown as a system message at the top of the chat.
+  - **Inbox structure:** user wants the content structured but has no shape yet — propose options (e.g. grouped by group, since every conversation has an origin). Empty state "Pievienojieties grupām…" is wrong for members; mobile has no heading.
+  - **Discussions:** purpose on the group page needs ideation against the core loop before it is walked or polished. Members-only areas stay out of non-members' nav (already true).
+  - Hide "Send message" on your own member card.
+  - Idea parked: a "town hall" message board (user's word for the removed `[l1]/messages` placeholder) — not planned.
 - Decisions on the 2.7 feature inventory, together with the user.
 - Event recurrence as a series (members-only events only) — after 2.10.
 - **Later, not planned (user, 2026-10-09):** private groups with invites; accent-insensitive search ("lugsanu" vs "lūgšanu"). They come when the site feels stable.
@@ -189,6 +196,8 @@ Goal: gather facts so the user and Opus can review every screen together in one 
 5. Commit only the script and `.gitignore` (one commit, never push). Put the Artifact link here under this heading, stop the dev server, report.
 
 ## Next session B — Screen review with the user (Opus)
+
+**Done 2026-10-09.** All 38 screens decided with the user; decisions are in the Screen map's Decision column, fixes in 2.10–2.17, 3.1, 3.5, 3.6 and the Opus queue (2.4 design). **Suggested order:** 2.14 (c + h first — live on production) → 2.11 → 2.10 → 2.12 → 2.15 → 2.16 → 2.17 → 2.13; 2.4 as a design session with the user (Opus) whenever there is time; then Stage 3. After the review the user wants **every screen revisited from a design/UX perspective** (Stage 3).
 
 Prompt to start with: *"Read AGENTS.md, docs/execution_handoff.md (Screen map, product decisions) and docs/core_philosophy.md. Open the 'Screen review' Artifact linked under Next session A. Walk the screens with me one loop step at a time (Find → Create → Join → Talk → Group life → Me → Shell → Static → Admin). For each screen: summarise what it does and the facts noticed in 2–3 lines, give one recommendation (keep / fix / hide / remove, plus the one change that matters most), and wait for my answer. Keep it short: one default per small detail, questions only for real product decisions. Record each agreed decision in the Screen map's Decision column as we go, and turn agreed fixes into small numbered Sonnet items in the right stage. Open questions to settle along the way: search as one modal with ready-made options (categories, cities, next events) replacing the filter-bar input; sign-in pop-up details (Create account link, return path; events pages move to the pop-up); sections as the only group content (sample second section yes/no, removing legacy `Group.instructions`); past-event look; group settings tabs."*
 
@@ -290,9 +299,11 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - Organisers can **edit** an event (reuse the create wizard pre-filled; `EventService.updateEvent` exists) and **delete** it (confirm step; attendees get a notification in the compact layout; then redirect to the group's Events tab).
   - Hide the "link name" (slug) field in the wizard — generate it from the title, add `-2`, `-3` on clashes instead of `EVENT_SLUG_TAKEN`.
   - Past events: no join buttons anywhere (already on rows/page), the server refuses with `EVENT_PAST` (2.9) — show its translated error if a stale page tries.
+  - **Past-event look** (see product decision): notice "Took place on …", greyed banner, no join button, "N went"; greyed Past-tab rows; organiser panel hidden.
+  - **Create event is a full page only** (screen review 2026-10-09): "Izveidot pasākumu" navigates to `create-event`; remove the modal variant (two layouts of one form, modal taller than a laptop screen). Edit reuses the same page.
   - Verify as organiser, member and logged out; EN + LV; desktop + mobile.
 
-- [ ] 2.11 Cleanup (user-approved 2026-10-09, Sonnet): remove the orphan `app/[locale]/groups/` route; remove the placeholder `app/[locale]/[l1Slug]/messages/` page; remove the static "Events attended" stat from `/profile`. Delete now-unused components and message keys (both locales). Check nothing links to the removed routes.
+- [ ] 2.11 Cleanup (user-approved 2026-10-09, Sonnet): remove the orphan `app/[locale]/groups/` route; remove the placeholder `app/[locale]/[l1Slug]/messages/` page; remove the static "Events attended" stat from `/profile` — and with it the whole stats card (its only other number repeats the "Manas grupas" list; screen review 2026-10-09). Delete now-unused components and message keys (both locales). Check nothing links to the removed routes. Also (screen review 2026-10-09): the category/tag chips in `GroupHeader.tsx` link to `/discover?cat=…&tag=…`, but discovery reads `category` and `tags` → link to `/?category=…&tags=…`, and make the `/discover` redirect keep the query string.
 
 - [ ] 2.12 Group sections: sample section + legacy cleanup (Sonnet; see the **Sections** decision). Wizard creates two sections: "About us" (first, fixed, public — existing guard stays) and "Practical info" (members-only, short sample text in the creator's locale: when/where you meet, what to bring). Move any legacy `Group.instructions` content into a members-only section (one-off script or migration), then remove `Group.instructions` (migration `remove_group_instructions`), `getVirtualSections`' instructions branch, `hasInstructions` and the dead `needsInstructions` tab code. Default titles for now via message keys (2.13 makes them per-language data).
 
@@ -302,14 +313,46 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - [ ] **2.13c Event wizard / edit.** Same LV | EN switch for title, description, instructions (one switch for the whole form); original language from the organiser's locale. Required fields are required only in the original language.
   - Verify each as owner and visitor on `/lv` and `/en`, desktop + mobile, including fallback labels and that members-only content / instructions never leak through a translation.
 
+- [ ] 2.14 Screen review fixes (Sonnet; agreed with the user 2026-10-09, collected step by step during the review — do them together):
+  - a. **Create wizard:** remove the social-links step (Discord/Instagram/website stay in group settings only) → 3 steps; step 1 "Tālāk" without a category shows a raw `wizard.Invalid input: …` error → translated "choose a category" message; step 4 "accepting members" switch sits in a half-width block beside empty space → full width; page title (`generateMetadata`) instead of the generic "Ejam kopā". LV + EN, desktop + mobile.
+  - b. **Group page "…" menu:** desktop and mobile have two separate implementations with different items, and the mobile "Share" has an empty handler → one shared menu component; Share works like the event page (`navigator.share`, else copy link + toast).
+  - c. **Sign-in pop-up (`AuthGateModal.tsx`) — do first, it is live on production:** email starts as `test@example.com` (line 17) → empty; "Email" label hardcoded English → translated; add "Create account" → register page with `callbackUrl` back to the current page; extract one shared sign-in form used by the pop-up and `/auth/signin` (same fields, wording, providers); event pages open the pop-up instead of linking to the sign-in page; application modal title/button "Join X" → "Ask to join X" (LV: "Pieteikties grupai X").
+  - d. **Auth pages:** hide the header "Ienākt" button on `/auth/*`; page titles via `generateMetadata`; show GitHub/Google buttons only when that provider is configured (pass a server-computed list to the shared form), on sign-in and register alike.
+  - e. **Members page:** desktop member cards are wider than the content column (third card cut off) → fit the grid to the column.
+  - f. **Events tab / event page:** mobile sub-tab bar overflows ("Pagātnes" cut off); the event page "← Visi pasākumi" link has no locale prefix (works only via a 307) → use the i18n `Link`.
+  - g. **Sections editor:** heading "Apvienot atzīmes" is the wrong key → "Sadaļas"; "ADD NEW SECTION" and the default "About us" title are English on `/lv` → translated (2.13 later makes default titles per-language data).
+  - h. **Report modal shows raw keys** (`report.title`, `report.description`, `report.reasonSpam`, `report.cancel`, `report.submit`) — live on production, do with c.
+  - i. **Profile privacy + edit profile** (user-approved 2026-10-09; one migration `add_user_show_groups`):
+    - Public profile `/profile/[username]`: today "Kopīgās grupas" lists all the person's groups, even to logged-out visitors (group membership can be sensitive, e.g. religion). → By default show only groups the viewer shares with that person; logged out sees none. New `User.showGroupsOnProfile Boolean @default(false)`: when on, anyone sees all their **public** groups; private groups never. Filter in the service, not the page. Fix the header gradient seam.
+    - Edit profile: a "Privātums" block with three switches — public profile (`isProfilePublic`, existing), allow messages (`allowDirectMessages`, existing), show my groups (new). Labels: "Vārds" over the display name and "Lietotājvārds" over the handle (as on register; today "LIETOTĀJVĀRDS" and English "Username"); subtitle once. Replace the `avatarSeed` text field with a "New avatar" button (random seed, live preview, saved with Save). Account menu item "Iestatījumi" → "Labot profilu".
+  - j. **My groups:** "Manas grupas" shown twice (page title and list heading) → once.
+  - k. **Shell:** hide the mobile bottom nav on `/auth/*`; footer column heading "Par mums" duplicates its link → rename the heading (e.g. "Informācija"), and remove the footer language switch (header has one).
+  - l. **Access states instead of a bare 404** (user-approved 2026-10-09): a **members-only event** opened by a non-member shows a notice "This event is for group members only" — logged out: + sign-in button (pop-up); signed in, not a member: + link to the group (ask to join there). Never show the event's title or details (keep the server-side check; just render a state instead of `notFound()`). Missing pages and moderation-hidden groups stay 404; the 404 page gets a sign-in hint for logged-out visitors ("If you are a member, sign in"). Private groups get their short card later (Opus queue, invites).
+  - m. **About + Privacy** (user, 2026-10-09):
+    - **Rewrite About in the owner's stead** (the user rewrites it personally only at the very end). First person, one founder: a non-profit, Latvian-first place to find people to do things with; the awkwardness of reaching out on both sides; groups at the heart, events belong to groups; calm, not addictive — get off the screen and meet; honest (no fake features); built in small steps by one person. Source: `docs/core_philosophy.md` and the product decisions above. Short, warm, plain; LV first, EN with the same meaning. Button "Atrast grupu" → `/` directly (not `/discover`).
+    - **Privacy contact:** show `ejam@lumm.eu` for data requests (access, correction, deletion — handled by hand for now). The address is a placeholder for now (prototype, no real users); the user creates the mailbox later, outside this project — not a blocker for deploying. Self-service account deletion: later, own item.
+
+- [ ] 2.15 Group roles + settings (Sonnet; user-approved 2026-10-09). Roles stay `OWNER` / `ADMIN` / `MEMBER` in the DB; `ADMIN` is shown as **"Moderator"** everywhere in the UI (LV "Grupas moderators" where it could be confused with a future site moderator).
+  - **Owner only:** name, category + topics, public/private, promote/demote moderators, delete group.
+  - **Owner + moderators:** sections, banner, city, accepting members, social links; approve/decline requests; remove members (moderators cannot remove the owner or other moderators); events; delete posts.
+  - Enforce each rule in the service (`group.service.ts`: `updateGroup` must reject owner-only fields from moderators, `removeMember` the moderator limits), not only in the UI.
+  - Settings page: 6 tabs → 2: **"Grupa"** (all group fields; owner-only fields hidden for moderators; "Delete group" at the bottom, owner only) and **"Sadaļas"** (sections editor). Remove the accent-colour picker (colour comes from the category — Taxonomy Law) and the editable link name (slug; changing it breaks shared links). Fix the raw `WIZARD.FIELDSLUG` label by removing that field; fix the mobile overflow (form wider than the screen); compact group bar instead of the full banner header; page title. Old `?tab=` values redirect to the right new tab.
+  - Verify as owner, moderator and site admin; LV + EN; desktop + mobile.
+
+- [ ] 2.16 Site-admin tools menu (Sonnet; user-approved 2026-10-09). On the group page, site admins (`User.role === 'ADMIN'`) get their own button with the lucide `UserCog` icon (person with a cog — not a shield), visible only to them, opening "Admin tools": Hide / Restore group, Fix categorization (`/admin/groups/[g]/categorization`), Edit group (settings), Moderation log filtered to this group. The "…" menu keeps only what everyone gets: Copy/Share link, Report, Leave. Same button on events/profiles later, when there is something to do there.
+
+- [ ] 2.17 Admin area tidy (Sonnet; user-approved 2026-10-09). One shared admin nav on every admin page — tabs **Birkas · Sūdzības · Moderācija · Taksonomija** — replacing the dashboard's duplicate link row and giving `/admin/reports` and `/admin/taxonomy` a way back. "Ziņojumi" for reports → "Sūdzības" everywhere in admin ("Ziņojumi" means messages elsewhere); dashboard subtitle to match. Long moderation-log reasons wrap. Taxonomy says "apakštēmas" like the wizard (not "apakšvienības"). After 2.14h, verify a report goes from the group page into the Sūdzības list (the one filed during the screen-review capture never appeared). Check `/admin/groups/[g]/categorization` saves; if it does, remove it from Known code debt.
+
 ## Stage 3 — Make it calm
 
-Goal: content first. One screen at a time; agree direction with the user before each.
+Goal: content first. One screen at a time; agree direction with the user before each. The user wants every screen revisited from a design/UX perspective after the 2026-10-09 screen review (the Screen review Artifact is the starting point).
 
-- [ ] 3.1 Discovery cards — sharpen at-a-glance signals (category colour, city, size), drop the rest; fix missing-image grey cards; mobile filter bar overflow
+- [ ] 3.1 Discovery cards — sharpen at-a-glance signals (category colour, city, size), drop the rest; fix missing-image grey cards; mobile filter bar overflow. Agreed in screen review (2026-10-09): banner-less group cards get a tile in their category colour (most important); drop the "Aktīva" badge; browser tab title is the site/page name, not "Grupas atrastas"; mobile category rail gets labels or another clear form; event cards get the same category-colour accent.
 - [ ] 3.2 Group page
 - [ ] 3.3 Event page — currently stacks full group header + oversized hero with unreadable title
 - [ ] 3.4 Header / navigation / footer
+- [ ] 3.5 Search modal (user-approved 2026-10-09): one modal replaces the filter-bar search input; opened from the search field (desktop) / a search icon (mobile). Empty state offers categories, cities and the next few events; typing shows topics, groups and events (reuse `searchContextual`; topic subtitles translated, not raw slugs like "wellbeing"). Delete the unused `GlobalSearch.tsx` and `SearchModal.tsx` and build it fresh. Mockup first, user OK, then build. Accent-insensitive search stays later.
+- [ ] 3.6 Banner picker (user-decided 2026-10-09; we don't store user images for now). One picker used by the group wizard, group settings and the event wizard, replacing the plain URL field. **Default:** thumbnails of ~6–8 curated Unsplash photos for the group's L1 category (URLs + photographer credit in `lib/constants`; Sonnet drafts the list, user approves) plus a "no image" option = category-colour tile (3.1). **Search:** "Search for another photo" opens Unsplash search inside the picker via a server action (API key server-side only; needs the user to register an Unsplash app and get production approval — demo is 50 requests/hour). Follow Unsplash API rules: hotlink the returned URLs, call the photo's `download_location` when one is chosen, show "Photo by X on Unsplash" with links. Mockup first. **Later:** owners upload their own image from the group page (needs storage; not planned yet).
 
 ---
 
