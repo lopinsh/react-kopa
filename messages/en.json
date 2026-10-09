@@ -12,7 +12,10 @@
     "signingIn": "Signing in...",
     "email": "Email",
     "signInSubtitle": "Sign in to your Ejam Kopā account",
-    "noAccount": "Don’t have an account? Sign up",
+    "noAccount": "No account yet?",
+    "createAccount": "Create account",
+    "close": "Close",
+    "emailPlaceholder": "you@example.com",
     "orContinueWith": "Or continue with",
     "register": {
       "title": "Create an account",
@@ -121,7 +124,7 @@
     "inquire": "Inquire",
     "inquireTitle": "Reach Out",
     "inquirySentDesc": "The admins have received your inquiry.",
-    "joinGroup": "Join Group",
+    "joinGroup": "Ask to join",
     "kick": "Remove",
     "l1Title": "Category Details",
     "l2Title": "Tag Details",
@@ -325,7 +328,7 @@
     "acceptingMembersLabel": "Accepting New Members",
     "anonymousUser": "Anonymous User",
     "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
-    "applyToGroup": "Join {name}",
+    "applyToGroup": "Ask to join {name}",
     "attendingStatus": "Attending",
     "bannerImageUrlDesc": "Paste a URL for a background banner. Recommended: 1200x400px.",
     "bannerImageUrlLabel": "Banner Image URL",
@@ -597,9 +600,22 @@
     "viewAllGroups": "View All",
     "viewingOwnPublicProfile": "You're viewing your public profile."
   },
+  "report": {
+    "title": "Report this group",
+    "description": "Tell us what is wrong. A site admin will look at it.",
+    "reasonSpam": "Spam",
+    "reasonHarassment": "Harassment",
+    "reasonInappropriate": "Inappropriate content",
+    "reasonOther": "Something else",
+    "cancel": "Cancel",
+    "submit": "Send report",
+    "success": "Thank you. Your report was sent.",
+    "error": "Could not send the report. Please try again."
+  },
   "shell": {
     "footer": {
       "forCommunity": "for the community",
+      "information": "Information",
       "logoSubtitle": "Find your tribe, grow together.",
       "madeWith": "Built with",
       "mission": "Ejam Kopā – localizing community connection.",

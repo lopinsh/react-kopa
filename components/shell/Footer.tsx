@@ -3,7 +3,6 @@
 import { Link } from '@/i18n/routing';
 import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import LanguageSwitcher from './LanguageSwitcher';
 
 export function Footer({ locale }: { locale: string }) {
     const t = useTranslations('shell.footer');
@@ -20,7 +19,7 @@ export function Footer({ locale }: { locale: string }) {
             ]
         },
         {
-            title: c_common('about'),
+            title: t('information'),
             links: [
                 { label: c_common('about'), href: '/about' },
                 { label: t('privacy'), href: '/privacy' },
@@ -71,9 +70,6 @@ export function Footer({ locale }: { locale: string }) {
                     <p className="text-sm text-foreground-muted">
                         © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
                     </p>
-                    <div className="flex items-center gap-6">
-                        <LanguageSwitcher />
-                    </div>
                 </div>
             </div>
         </footer>

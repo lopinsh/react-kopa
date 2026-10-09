@@ -19,6 +19,8 @@ export default function MobileNav() {
     const leftLinks = NAV_LINKS.slice(0, mid);
     const rightLinks = NAV_LINKS.slice(mid);
 
+    if (pathname.startsWith('/auth')) return null;
+
     return (
         <>
             <nav

@@ -5,10 +5,12 @@ import { CheckCircle2, Clock, Loader2, ListPlus, Send } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { setAttendance, requestToJoin, cancelAttendance } from '@/actions/event-actions';
 import type { EventJoinModeValue } from '@/lib/constants';
 import type { AttendanceStatus } from '@prisma/client';
+
+const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
 
 type Props = {
     eventId: string;
@@ -16,8 +18,8 @@ type Props = {
     isFull: boolean;
     myStatus: AttendanceStatus | null;
     locale: string;
-    /** Set for logged-out visitors: shows a sign-in link instead of the buttons. */
-    signInHref?: string;
+    /** Set for logged-out visitors: shows a button that opens the sign-in pop-up instead of the buttons. */
+    requireSignIn?: boolean;
     /** Compact rows (Events tab) hide the explanatory notes. */
     compact?: boolean;
 };
@@ -27,12 +29,13 @@ const NEUTRAL_BASE = 'flex w-full items-center justify-center gap-2 border borde
 const DONE_BASE = 'flex w-full cursor-default items-center justify-center gap-2 border-2 border-[color:var(--accent)] bg-transparent font-black uppercase tracking-wide text-[color:var(--accent)]';
 const LINK_BUTTON = 'text-xs font-semibold text-foreground-muted underline-offset-2 hover:text-foreground hover:underline disabled:opacity-60';
 
-export default function EventParticipation({ eventId, joinMode, isFull, myStatus, locale, signInHref, compact = false }: Props) {
+export default function EventParticipation({ eventId, joinMode, isFull, myStatus, locale, requireSignIn, compact = false }: Props) {
     const t = useTranslations('event');
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [signInOpen, setSignInOpen] = useState(false);
     const size = compact ? 'rounded-xl px-3 py-2 text-xs' : 'rounded-2xl px-4 py-3.5 text-sm shadow-lg';
     const PRIMARY = clsx(PRIMARY_BASE, size);
     const NEUTRAL = clsx(NEUTRAL_BASE, size);
@@ -48,11 +51,14 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
         });
     }
 
-    if (signInHref) {
+    if (requireSignIn) {
         return (
-            <Link href={signInHref} className={PRIMARY}>
-                {t('signInToRsvp')}
-            </Link>
+            <>
+                <button type="button" className={PRIMARY} onClick={() => setSignInOpen(true)}>
+                    {t('signInToRsvp')}
+                </button>
+                {signInOpen && <AuthGateModal isOpen onClose={() => setSignInOpen(false)} />}
+            </>
         );
     }
 

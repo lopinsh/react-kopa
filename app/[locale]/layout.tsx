@@ -8,6 +8,7 @@ import Sidebar from '@/components/shell/Sidebar';
 import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
+import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     const messages = await getMessages();
 
     return (
-        <Providers locale={locale} messages={messages}>
+        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />

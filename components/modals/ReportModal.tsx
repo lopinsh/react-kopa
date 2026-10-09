@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { createReport } from '@/actions/report-actions';
 import { X, ShieldAlert } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 type Props = {
     isOpen: boolean;
@@ -16,17 +17,19 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
     const t = useTranslations('report');
     const [reason, setReason] = useState('Spam');
     const [isPending, startTransition] = useTransition();
+    const { success, error: toastError } = useToast();
 
     if (!isOpen) return null;
 
     const handleSubmit = () => {
+        if (isPending) return;
         startTransition(async () => {
             const res = await createReport({ targetGroupId, targetEventId, reason });
             if (res.success) {
-                alert(t('success'));
+                success(t('success'));
                 onClose();
             } else {
-                alert(t('error'));
+                toastError(t('error'));
             }
         });
     };

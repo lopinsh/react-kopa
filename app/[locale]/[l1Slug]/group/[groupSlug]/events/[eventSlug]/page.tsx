@@ -18,7 +18,6 @@ import EventParticipation from '@/components/events/EventParticipation';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
-import { signInUrl } from '@/lib/auth-redirect';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
@@ -159,7 +158,7 @@ export default async function EventPage({
                                         isFull={event.isFull}
                                         myStatus={myStatus}
                                         locale={locale}
-                                        signInHref={userId ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`)}
+                                        requireSignIn={!userId}
                                     />
                                 </div>
                             )}

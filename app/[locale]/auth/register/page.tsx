@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import RegisterForm from '@/components/auth/RegisterForm';
+import OAuthButtons from '@/components/auth/OAuthButtons';
 import { safeCallbackPath } from '@/lib/auth-redirect';
 import { Link } from '@/i18n/routing';
 
@@ -30,6 +31,8 @@ export default async function RegisterPage({ params, searchParams }: Props) {
                 </div>
 
                 <RegisterForm callbackUrl={returnTo} />
+
+                <OAuthButtons callbackUrl={returnTo} />
 
                 <div className="text-center text-sm">
                     <Link

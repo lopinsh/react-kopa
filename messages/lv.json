@@ -12,7 +12,10 @@
     "signingIn": "Ienāk...",
     "email": "E-pasts",
     "signInSubtitle": "Ienāc savā Ejam Kopā kontā",
-    "noAccount": "Nav konta? Reģistrējies",
+    "noAccount": "Vēl nav konta?",
+    "createAccount": "Izveidot kontu",
+    "close": "Aizvērt",
+    "emailPlaceholder": "jusu@epasts.lv",
     "orContinueWith": "Vai turpini ar",
     "register": {
       "title": "Izveidot kontu",
@@ -121,7 +124,7 @@
     "inquire": "Interesēties",
     "inquireTitle": "Sazināties",
     "inquirySentDesc": "Administratori ir saņēmuši jūsu ziņu.",
-    "joinGroup": "Pievienoties grupai",
+    "joinGroup": "Pieteikties",
     "kick": "Noņemt",
     "l1Title": "Kategorijas detaļas",
     "l2Title": "Birkas detaļas",
@@ -325,7 +328,7 @@
     "acceptingMembersLabel": "Uzņem jaunus biedrus",
     "anonymousUser": "Anonīms lietotājs",
     "applyDescription": "Pastāstiet grupas organizatoriem, kāpēc vēlaties pievienoties un ko meklējat šajā kopienā.",
-    "applyToGroup": "Pievienoties grupai {name}",
+    "applyToGroup": "Pieteikties grupai {name}",
     "attendingStatus": "Piedalās",
     "bannerImageUrlDesc": "Ielīmējiet fona banera URL. Ieteicams: 1200x400px.",
     "bannerImageUrlLabel": "Banera attēla URL",
@@ -597,8 +600,21 @@
     "viewAllGroups": "Skatīt visu",
     "viewingOwnPublicProfile": "Jūs apskatāt savu publisko profilu."
   },
+  "report": {
+    "title": "Ziņot par grupu",
+    "description": "Pastāsti, kas nav kārtībā. Vietnes administrators to izskatīs.",
+    "reasonSpam": "Mēstules",
+    "reasonHarassment": "Uzmākšanās",
+    "reasonInappropriate": "Nepiemērots saturs",
+    "reasonOther": "Kas cits",
+    "cancel": "Atcelt",
+    "submit": "Nosūtīt",
+    "success": "Paldies. Ziņojums nosūtīts.",
+    "error": "Neizdevās nosūtīt ziņojumu. Lūdzu, mēģini vēlreiz."
+  },
   "shell": {
     "footer": {
+      "information": "Informācija",
       "forCommunity": "kopienai",
       "logoSubtitle": "Atrodi savējos, augam kopā.",
       "madeWith": "Radīts ar",

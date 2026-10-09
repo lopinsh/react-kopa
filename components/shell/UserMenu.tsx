@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { User, LogOut, Settings, LayoutDashboard, Users } from 'lucide-react';
 import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { signOut, signIn } from 'next-auth/react';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 
@@ -23,6 +23,7 @@ type Props = {
 export default function UserMenu({ user }: Props) {
     const t = useTranslations('nav');
   const c_common = useTranslations('common');
+    const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const mounted = useSyncExternalStore(
@@ -48,6 +49,8 @@ export default function UserMenu({ user }: Props) {
     if (!mounted) return null;
 
     if (!user) {
+        // The sign-in and register pages are the sign-in button's destination already.
+        if (pathname.startsWith('/auth')) return null;
         return (
             <button
                 onClick={() => signIn()}

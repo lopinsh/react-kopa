@@ -3,7 +3,6 @@ import { getGroupEvents } from '@/actions/event-actions';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import EventRow from '@/components/groups/EventRow';
-import { signInUrl } from '@/lib/auth-redirect';
 import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
@@ -96,7 +95,7 @@ export default async function GroupEventsPage({
                             }}
                             locale={locale}
                             href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
-                            signInHref={session?.user?.id ? undefined : signInUrl(locale, `/${l1Slug}/group/${groupSlug}/events/${event.slug}`)}
+                            requireSignIn={!session?.user?.id}
                             isPast={isEventPast(event)}
                         />
                     ))}

@@ -25,7 +25,7 @@ type Props = {
     locale: string;
     href: string;
     /** Set for logged-out visitors. */
-    signInHref?: string;
+    requireSignIn?: boolean;
     isPast: boolean;
 };
 
@@ -33,7 +33,7 @@ type Props = {
 const BADGE = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide';
 
 /** One compact line per event: date · what/when/where · people · one action. */
-export default async function EventRow({ event, locale, href, signInHref, isPast }: Props) {
+export default async function EventRow({ event, locale, href, requireSignIn, isPast }: Props) {
     const t = await getTranslations('event');
     const formatter = await getFormatter();
     const start = new Date(event.startDate);
@@ -118,7 +118,7 @@ export default async function EventRow({ event, locale, href, signInHref, isPast
                             isFull={event.isFull}
                             myStatus={event.myStatus}
                             locale={locale}
-                            signInHref={signInHref}
+                            requireSignIn={requireSignIn}
                         />
                     )}
                 </div>
