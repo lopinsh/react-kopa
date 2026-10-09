@@ -720,9 +720,10 @@
     "about": {
       "cta": "Find a group",
       "lead": "Ejam Kopā means “Let’s go together”. It is a place to find people to do things with.",
-      "p1": "Maybe you want a gym buddy in Jelgava, but none of your friends live in your city and posting an ad feels strange. Maybe you’d love a book club, a hiking crew or a board-game night, but those only exist if you already know someone. Or you lead a choir or a dance group and want newcomers to find you without a poster in the culture centre.",
-      "p2": "Here you can create a group, let others find it, join, and talk. Groups can also organise events: open ones anyone can join, and members-only ones like rehearsals. The aim is to make reaching out less awkward — and then to get you off the screen and out meeting people.",
-      "p3": "Ejam Kopā is a non-profit project. It has no ads and is not built to keep you scrolling. It starts in Latvia, in Latvian and English, and is made by one person, step by step.",
+      "p1": "I started it because reaching out is awkward. You want a gym buddy in Jelgava, but none of your friends live in your city and posting an ad feels strange. You’d love a book club or a hiking crew, but those only exist if you already know someone. And if you lead a choir or a dance group, you’d like newcomers to find you without a poster in the culture centre. It is awkward on both sides, and that is the part I want to take away.",
+      "p2": "Groups are the heart of the site. You can create one, be found, join, and talk. Events belong to groups: some are open to anyone, like a concert or a neighbourhood clean-up, and some are only for members, like a rehearsal.",
+      "p3": "It is meant to be calm. There is no feed to scroll and nothing here is built to keep you hooked. The aim is the opposite: help you find your people, then get off the screen and go meet them.",
+      "p4": "Ejam Kopā is a non-profit project with no ads, made by one person, one small step at a time. It starts in Latvia, in Latvian and English. I only show what already works, so if something is missing, it is not built yet.",
       "title": "About Ejam Kopā"
     },
     "privacy": {
@@ -731,11 +732,12 @@
       "cookies3": "We do not use advertising or third-party analytics, and we do not sell data.",
       "cookiesTitle": "Cookies and local storage",
       "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
-      "data2": "Your profile: username, optional bio, cities, and your privacy choices (whether your profile is public and whether people may message you).",
+      "data2": "Your profile: username, optional bio, cities, and your privacy choices (whether your profile is public, whether people may message you, and whether it lists your groups).",
       "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
       "rights1": "You can edit your profile at any time. Deleting your account from within the site is not available yet.",
+      "rights2": "To see, correct or delete your data, write to <mail>ejam@lumm.eu</mail>. Requests are handled by hand for now.",
       "rightsTitle": "Your data",
       "title": "Privacy",
       "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",

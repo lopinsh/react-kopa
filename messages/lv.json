@@ -720,9 +720,10 @@
     "about": {
       "cta": "Atrast grupu",
       "lead": "Ejam Kopā nozīmē “iesim kopā”. Tā ir vieta, kur atrast cilvēkus, ar kuriem kaut ko darīt.",
-      "p1": "Varbūt gribi treniņbiedru Jelgavā, bet neviens no draugiem tavā pilsētā nedzīvo, un sludinājuma izlikšana šķiet dīvaina. Varbūt gribi grāmatu klubu, pārgājienu kompāniju vai galda spēļu vakaru, bet tādi ir tikai tad, ja jau kādu pazīsti. Vai arī vadi kori vai deju kolektīvu un vēlies, lai jaunie dalībnieki tevi atrod bez plakāta kultūras namā.",
-      "p2": "Šeit vari izveidot grupu, ļaut citiem to atrast, pievienoties un sarunāties. Grupas var rīkot arī pasākumus: atvērtus, kuriem var pievienoties ikviens, un tikai dalībniekiem paredzētus, piemēram, mēģinājumus. Mērķis ir padarīt sazināšanos mazāk neveiklu — un tad aizvilināt tevi no ekrāna uz tikšanos klātienē.",
-      "p3": "Ejam Kopā ir bezpeļņas projekts. Tajā nav reklāmu, un tas nav veidots, lai tevi paturētu ekrānā. Tas sākas Latvijā, latviešu un angļu valodā, un to soli pa solim veido viens cilvēks.",
+      "p1": "Es to sāku, jo sazināties ar svešiem ir neveikli. Gribi treniņbiedru Jelgavā, bet neviens no draugiem tavā pilsētā nedzīvo, un sludinājuma izlikšana šķiet dīvaina. Gribētos grāmatu klubu vai pārgājienu kompāniju, bet tādi ir tikai tad, ja jau kādu pazīsti. Un, ja vadi kori vai deju kolektīvu, gribi, lai jaunie dalībnieki tevi atrod bez plakāta kultūras namā. Neveiklums ir abās pusēs, un tieši to es gribu noņemt.",
+      "p2": "Grupas ir šīs vietnes sirds. Tu vari izveidot grupu, tikt atrasts, pievienoties un sarunāties. Pasākumi pieder grupām: daži ir atvērti ikvienam, piemēram, koncerts vai pagalma talka, un daži paredzēti tikai biedriem, piemēram, mēģinājums.",
+      "p3": "Te ir jābūt mierīgi. Nav ziņu plūsmas, ko ritināt, un nekas šeit nav veidots, lai tevi paturētu pie ekrāna. Mērķis ir pretējs: palīdzēt atrast savējos un tad aiziet no ekrāna un satikties.",
+      "p4": "Ejam Kopā ir bezpeļņas projekts bez reklāmām, ko veido viens cilvēks, soli pa solim. Tas sākas Latvijā, latviešu un angļu valodā. Es rādu tikai to, kas jau darbojas, tāpēc, ja kaut kā trūkst, tas vēl nav uzbūvēts.",
       "title": "Par Ejam Kopā"
     },
     "privacy": {
@@ -731,11 +732,12 @@
       "cookies3": "Mēs neizmantojam reklāmu vai trešo pušu analītiku un nepārdodam datus.",
       "cookiesTitle": "Sīkdatnes un vietējā krātuve",
       "data1": "Tavu kontu: vārdu, e-pasta adresi un paroli (glabājas tikai kā vienvirziena jaucējkods). Ja pieslēdzies ar Google vai GitHub, mēs no tiem saņemam tavu vārdu, e-pasta adresi un profila attēlu.",
-      "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas un tavas privātuma izvēles (vai profils ir publisks un vai tev drīkst rakstīt ziņas).",
+      "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas un tavas privātuma izvēles (vai profils ir publisks, vai tev drīkst rakstīt ziņas un vai tajā redzamas tavas grupas).",
       "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz.",
       "dataTitle": "Ko mēs glabājam",
       "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
       "rights1": "Savu profilu vari labot jebkurā laikā. Konta dzēšana pašā vietnē vēl nav pieejama.",
+      "rights2": "Lai redzētu, labotu vai dzēstu savus datus, raksti uz <mail>ejam@lumm.eu</mail>. Pieprasījumus pagaidām apstrādājam ar roku.",
       "rightsTitle": "Tavi dati",
       "title": "Privātums",
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",

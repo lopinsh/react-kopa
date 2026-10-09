@@ -33,6 +33,15 @@ export default async function PrivacyPage() {
                         {section.items.map((key) => (
                             <li key={key}>{t(key)}</li>
                         ))}
+                        {section.title === 'privacy.rightsTitle' && (
+                            <li>
+                                {t.rich('privacy.rights2', {
+                                    mail: (chunks) => (
+                                        <a href="mailto:ejam@lumm.eu" className="font-semibold text-primary hover:underline">{chunks}</a>
+                                    ),
+                                })}
+                            </li>
+                        )}
                     </ul>
                 </section>
             ))}

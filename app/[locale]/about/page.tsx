@@ -21,9 +21,10 @@ export default async function AboutPage() {
                 <p>{t('about.p1')}</p>
                 <p>{t('about.p2')}</p>
                 <p>{t('about.p3')}</p>
+                <p>{t('about.p4')}</p>
             </div>
             <Link
-                href="/discover"
+                href="/"
                 className="mt-10 inline-flex h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
                 {t('about.cta')}
