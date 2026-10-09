@@ -514,7 +514,7 @@ export const GroupService = {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
-        // One conversation per join request: the one started from this group's request, if any.
+        // One conversation per applicant and group, started from the join request.
         const { MessageService } = await import('@/lib/services/message.service');
 
         const existingConversations = await prisma.conversation.findMany({
@@ -528,40 +528,49 @@ export const GroupService = {
             },
             include: { participants: { select: { id: true } } }
         });
-        let conversation = existingConversations.find(conv => conv.participants.length === 2);
+        const existing = existingConversations.find(conv => conv.participants.length === 2);
 
-        if (!conversation) {
-            // Fetch the applicant's join message BEFORE creating the current one in ApplicationMessage
-            // to avoid duplication in the Conversation seeding
-            const initialAppMessages = await prisma.applicationMessage.findMany({
-                where: { applicationUserId: targetUserId, groupId },
-                orderBy: { createdAt: 'asc' }
-            });
-
-            conversation = await prisma.conversation.create({
-                data: {
-                    originType: 'JOIN_REQUEST',
-                    originGroupId: groupId,
-                    participants: {
-                        connect: [{ id: adminId }, { id: targetUserId }]
-                    }
+        // Seed with the applicant's own join message(s) only: earlier ApplicationMessages may come from
+        // other moderators, who are not in this conversation.
+        const joinMessages = await prisma.applicationMessage.findMany({
+            where: { applicationUserId: targetUserId, senderId: targetUserId, groupId },
+            orderBy: { createdAt: 'asc' }
+        });
+        // A reused conversation already holds the earlier ones (copied with the same time); a new
+        // request after a withdraw or decline adds its message.
+        const alreadyCopied = existing && joinMessages.length > 0
+            ? await prisma.message.findMany({
+                where: {
+                    conversationId: existing.id,
+                    senderId: targetUserId,
+                    createdAt: { in: joinMessages.map(m => m.createdAt) }
                 },
-                include: {
-                    participants: { select: { id: true } }
-                }
-            });
+                select: { createdAt: true }
+            })
+            : [];
+        const applicantMessages = joinMessages.filter(m =>
+            !alreadyCopied.some(c => c.createdAt.getTime() === m.createdAt.getTime())
+        );
 
-            // Seed it with the applicant's join message (and anything already said)
-            if (initialAppMessages.length > 0) {
-                await prisma.message.createMany({
-                    data: initialAppMessages.map(msg => ({
-                        content: msg.content,
-                        senderId: msg.senderId,
-                        conversationId: conversation!.id,
-                        createdAt: msg.createdAt,
-                    }))
-                });
+        const conversation = existing ?? await prisma.conversation.create({
+            data: {
+                originType: 'JOIN_REQUEST',
+                originGroupId: groupId,
+                participants: {
+                    connect: [{ id: adminId }, { id: targetUserId }]
+                }
             }
+        });
+
+        if (applicantMessages.length > 0) {
+            await prisma.message.createMany({
+                data: applicantMessages.map(msg => ({
+                    content: msg.content,
+                    senderId: msg.senderId,
+                    conversationId: conversation.id,
+                    createdAt: msg.createdAt,
+                }))
+            });
         }
 
         // Create the application message record
