@@ -539,6 +539,8 @@
     "empty": "No notifications yet",
     "markAllRead": "Mark all as read",
     "markRead": "Mark as read",
+    "toastOpen": "View",
+    "toastNewMessage": "New message",
     "someone": "Someone",
     "headline": {
       "GENERIC": "New notification",

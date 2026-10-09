@@ -539,6 +539,8 @@
     "empty": "Vēl nav paziņojumu",
     "markAllRead": "Atzīmēt visus kā izlasītus",
     "markRead": "Atzīmēt kā izlasītu",
+    "toastOpen": "Skatīt",
+    "toastNewMessage": "Jauna ziņa",
     "someone": "Kāds",
     "headline": {
       "GENERIC": "Jauns paziņojums",

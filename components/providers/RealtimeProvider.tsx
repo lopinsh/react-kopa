@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { usePusher } from '@/hooks/usePusher';
-import { useRouter } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import { X, Bell } from 'lucide-react';
 import { clsx } from 'clsx';
-import Link from 'next/link';
 
 type NotificationEvent = {
     id: string;
@@ -26,6 +26,7 @@ type MessageEvent = {
 
 export default function RealtimeProvider({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
+    const t = useTranslations('notifications');
     const router = useRouter();
     const [toast, setToast] = useState<NotificationEvent | null>(null);
 
@@ -49,16 +50,16 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         setToast({
             id: data.id,
             type: 'MESSAGE',
-            title: data.sender.name || 'New Message',
+            title: data.sender.name || t('toastNewMessage'),
             message: data.content,
-            link: '/messages'
+            link: `/messages?c=${data.conversationId}`
         });
 
         // Auto-hide after 5 seconds
         setTimeout(() => {
             setToast((current) => (current?.id === data.id ? null : current));
         }, 5000);
-    }, [session?.user?.id]);
+    }, [session?.user?.id, t]);
 
     usePusher(
         session?.user?.id ? `private-user-${session.user.id}` : '',
@@ -102,7 +103,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
                                         className="mt-2 text-xs font-semibold text-primary hover:underline inline-block"
                                         onClick={() => setToast(null)}
                                     >
-                                        View details
+                                        {t('toastOpen')}
                                     </Link>
                                 )}
                             </div>
