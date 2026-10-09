@@ -8,21 +8,24 @@ import RealtimeProvider from './RealtimeProvider';
 import { ToastProvider } from '@/hooks/use-toast';
 import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
+import { TranslateModeProvider } from './TranslateModeContext';
 import type { OAuthProviderId } from '@/lib/auth-providers';
 
 type ProvidersProps = {
     locale: string;
     messages: AbstractIntlMessages;
     oauthProviders: OAuthProviderId[];
+    translateMode: boolean;
     children: React.ReactNode;
 };
 
-export default function Providers({ locale, messages, oauthProviders, children }: ProvidersProps) {
+export default function Providers({ locale, messages, oauthProviders, translateMode, children }: ProvidersProps) {
     return (
         <SessionProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
                 <ToastProvider>
                   <AuthProvidersProvider value={oauthProviders}>
+                   <TranslateModeProvider value={translateMode}>
                     <RealtimeProvider>
                         <ThemeProvider
                             attribute="class"
@@ -34,6 +37,7 @@ export default function Providers({ locale, messages, oauthProviders, children }
                         </ThemeProvider>
                     </RealtimeProvider>
                     <ToastContainer />
+                   </TranslateModeProvider>
                   </AuthProvidersProvider>
                 </ToastProvider>
             </NextIntlClientProvider>

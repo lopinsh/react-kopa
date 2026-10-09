@@ -9,6 +9,8 @@ import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
 import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
+import { isTranslateModeActive } from '@/lib/translate-mode/server';
+import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -33,9 +35,11 @@ export default async function LocaleLayout({ children, params }: Props) {
     }
 
     const messages = await getMessages();
+    // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
+    const translateMode = await isTranslateModeActive();
 
     return (
-        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()}>
+        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />
@@ -60,6 +64,8 @@ export default async function LocaleLayout({ children, params }: Props) {
 
             {/* GDPR Consent */}
             <CookieConsent />
+
+            {translateMode && <TranslateModeLoader />}
         </Providers>
     );
 }

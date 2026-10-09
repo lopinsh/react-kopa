@@ -22,7 +22,7 @@ export interface AdminActionEntry {
     target: { name: string; href: string } | null;
 }
 
-async function isSiteAdmin(userId: string): Promise<boolean> {
+export async function isSiteAdmin(userId: string): Promise<boolean> {
     const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
     return user?.role === 'ADMIN';
 }

@@ -339,7 +339,10 @@
     "OWNER_MUST_TRANSFER": "The owner can't leave the group. Hand it over to another member first, or delete the group.",
     "TITLE_REQUIRED": "Add a title.",
     "ORIGINAL_LANG_EMPTY": "Write the title in the original language first.",
-    "SAVE_FAILED": "Could not save. Try again."
+    "SAVE_FAILED": "Could not save. Try again.",
+    "MESSAGE_INVALID": "This text isn't valid. Check the placeholders and syntax.",
+    "MESSAGE_KEY_UNKNOWN": "This text key does not exist.",
+    "UNAUTHORIZED_ADMIN": "Only site admins can do this."
   },
   "group": {
     "acceptingMembersDesc": "When off, new people can't ask to join.",
@@ -503,7 +506,20 @@
       "tags": "Tags",
       "reports": "Reports",
       "moderation": "Moderation",
-      "taxonomy": "Taxonomy"
+      "taxonomy": "Taxonomy",
+      "translations": "Translations"
+    },
+    "translations": {
+      "title": "Translations",
+      "subtitle": "Texts edited in translation mode. Export them to merge into the message files.",
+      "export": "Export changes",
+      "empty": "No edited texts yet. Turn on translation mode and click the pencil next to a text.",
+      "count": "{count, plural, one {# edited text} other {# edited texts}}",
+      "key": "Key",
+      "language": "Language",
+      "text": "Text",
+      "by": "Edited by",
+      "when": "Updated"
     }
   },
   "messages": {
@@ -948,5 +964,28 @@
     "fixCategorization": "Fix categorization",
     "editGroup": "Edit group",
     "moderationLog": "Moderation log for this group"
+  },
+  "translateMode": {
+    "label": "Translation mode",
+    "barLabel": "Translation mode",
+    "turnOff": "Turn off",
+    "searchButton": "Find a text",
+    "editTitle": "Edit text",
+    "keyLabel": "Key",
+    "langLv": "Latvian",
+    "langEn": "English",
+    "edited": "Edited",
+    "original": "Original",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Text saved",
+    "loading": "Loading…",
+    "searchPlaceholder": "Search by key or text",
+    "noResults": "Nothing found.",
+    "searchHint": "Texts in placeholders, tooltips, notifications and page titles can't be clicked on the page. Find them here.",
+    "syntaxHint": "Keep placeholders (in curly braces), plural options and tags exactly as they are. Only the words around them change.",
+    "issueSyntax": "This is not valid message syntax. Check the curly braces and tags.",
+    "issuePlaceholder": "Must match the original: {detail}",
+    "issueArm": "An option is missing: {detail}"
   }
 }

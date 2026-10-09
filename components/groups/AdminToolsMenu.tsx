@@ -8,6 +8,7 @@ import { Link, useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { GroupContext } from '@/lib/services/group.service';
+import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
 
 type Props = {
     group: GroupContext;
@@ -116,6 +117,8 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                         <History className="h-4 w-4 text-foreground-muted" />
                         {t('moderationLog')}
                     </Link>
+                    <div className="my-1 h-px bg-border/40" />
+                    <TranslateModeToggle className={ITEM} onToggle={() => setOpen(false)} />
                 </div>
             )}
         </div>

@@ -41,6 +41,8 @@ export type ErrorCode =
     | 'RESOLUTION_FAILED'
     | 'TITLE_REQUIRED'
     | 'ORIGINAL_LANG_EMPTY'
+    | 'MESSAGE_INVALID'
+    | 'MESSAGE_KEY_UNKNOWN'
     | 'DB_MIGRATION_REQUIRED';
 
 /**

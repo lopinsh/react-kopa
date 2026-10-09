@@ -7,6 +7,7 @@ import { signOut, signIn } from 'next-auth/react';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
+import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
 
 type Props = {
     user: {
@@ -106,6 +107,10 @@ export default function UserMenu({ user }: Props) {
                                         <LayoutDashboard className="h-4 w-4" />
                                         {t('adminPanel')}
                                     </Link>
+                                    <TranslateModeToggle
+                                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors"
+                                        onToggle={() => setIsOpen(false)}
+                                    />
                                     <div className="my-1 h-px bg-border/40 mx-2" />
                                 </>
                             )}

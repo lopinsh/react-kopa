@@ -136,3 +136,9 @@ body {
     }
   }
 }
+/* Translation mode (site admins): underline marked texts. Registered by components/translate/useMarkedText.ts. */
+::highlight(translate-mode) {
+  text-decoration: underline dotted var(--accent, currentColor);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}

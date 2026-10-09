@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Tags, AlertTriangle, EyeOff, Network, type LucideIcon } from 'lucide-react';
+import { Tags, AlertTriangle, EyeOff, Network, Languages, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 type NavItem = {
-    id: 'tags' | 'reports' | 'moderation' | 'taxonomy';
+    id: 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations';
     href: string;
     label: string;
     icon: LucideIcon;
@@ -34,6 +34,7 @@ export default function AdminNav({ pendingTags, pendingReports }: Props) {
         { id: 'reports', href: '/admin/reports', label: t('reports'), icon: AlertTriangle, active: pathname.startsWith('/admin/reports'), badge: pendingReports, danger: true },
         { id: 'moderation', href: '/admin?tab=moderation', label: t('moderation'), icon: EyeOff, active: onDashboard && tab === 'moderation', badge: 0 },
         { id: 'taxonomy', href: '/admin/taxonomy', label: t('taxonomy'), icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: 0 },
+        { id: 'translations', href: '/admin/translations', label: t('translations'), icon: Languages, active: pathname.startsWith('/admin/translations'), badge: 0 },
     ];
 
     return (

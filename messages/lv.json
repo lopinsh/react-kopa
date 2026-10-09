@@ -339,7 +339,10 @@
     "OWNER_MUST_TRANSFER": "Īpašnieks nevar pamest grupu. Vispirms nodod to citam biedram vai izdzēs grupu.",
     "TITLE_REQUIRED": "Ieraksti nosaukumu.",
     "ORIGINAL_LANG_EMPTY": "Vispirms uzraksti nosaukumu oriģinālvalodā.",
-    "SAVE_FAILED": "Neizdevās saglabāt. Pamēģini vēlreiz."
+    "SAVE_FAILED": "Neizdevās saglabāt. Pamēģini vēlreiz.",
+    "MESSAGE_INVALID": "Šis teksts nav derīgs. Pārbaudi vietturus un sintaksi.",
+    "MESSAGE_KEY_UNKNOWN": "Šādas teksta atslēgas nav.",
+    "UNAUTHORIZED_ADMIN": "Šo var darīt tikai vietnes administratori."
   },
   "group": {
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
@@ -503,7 +506,20 @@
       "tags": "Birkas",
       "reports": "Sūdzības",
       "moderation": "Moderācija",
-      "taxonomy": "Taksonomija"
+      "taxonomy": "Taksonomija",
+      "translations": "Tulkojumi"
+    },
+    "translations": {
+      "title": "Tulkojumi",
+      "subtitle": "Teksti, kas laboti tulkošanas režīmā. Eksportē tos, lai pārnestu uz ziņojumu failiem.",
+      "export": "Eksportēt izmaiņas",
+      "empty": "Vēl nav labotu tekstu. Ieslēdz tulkošanas režīmu un spied zīmuli pie teksta.",
+      "count": "{count, plural, zero {# labotu tekstu} one {# labots teksts} other {# labotu tekstu}}",
+      "key": "Atslēga",
+      "language": "Valoda",
+      "text": "Teksts",
+      "by": "Labojis",
+      "when": "Atjaunināts"
     }
   },
   "messages": {
@@ -948,5 +964,28 @@
     "fixCategorization": "Labot kategoriju",
     "editGroup": "Labot grupu",
     "moderationLog": "Šīs grupas moderācijas žurnāls"
+  },
+  "translateMode": {
+    "label": "Tulkošanas režīms",
+    "barLabel": "Tulkošanas režīms",
+    "turnOff": "Izslēgt",
+    "searchButton": "Meklēt tekstu",
+    "editTitle": "Labot tekstu",
+    "keyLabel": "Atslēga",
+    "langLv": "Latviski",
+    "langEn": "Angliski",
+    "edited": "Labots",
+    "original": "Oriģināls",
+    "save": "Saglabāt",
+    "cancel": "Atcelt",
+    "saved": "Teksts saglabāts",
+    "loading": "Ielādē…",
+    "searchPlaceholder": "Meklē pēc atslēgas vai teksta",
+    "noResults": "Nekas netika atrasts.",
+    "searchHint": "Tekstus lauku paraugos, norādēs, paziņojumos un lapu virsrakstos nevar uzklikšķināt lapā. Atrodi tos šeit.",
+    "syntaxHint": "Vietturus (figūriekavās), daudzskaitļa variantus un birkas atstāj tādus, kādi tie ir. Mainās tikai vārdi apkārt.",
+    "issueSyntax": "Nederīga ziņojuma sintakse. Pārbaudi figūriekavas un birkas.",
+    "issuePlaceholder": "Jāsakrīt ar oriģinālu: {detail}",
+    "issueArm": "Trūkst varianta: {detail}"
   }
 }
