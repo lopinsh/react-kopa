@@ -82,7 +82,7 @@ export default async function GroupMembersPage({
     const currentTab = isOwnerOrAdmin ? tab : 'members';
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-[400px]">
+        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-[400px] max-w-screen-2xl mx-auto px-4 md:px-8 pb-10">
             {currentTab === 'requests' && isOwnerOrAdmin ? (
                 <div className="space-y-8 mt-8">
                     {pendingMembers.length > 0 ? (

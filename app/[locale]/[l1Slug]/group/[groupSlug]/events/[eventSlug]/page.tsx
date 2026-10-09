@@ -13,7 +13,7 @@ import {
     Lock,
     UserCheck
 } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import EventParticipation from '@/components/events/EventParticipation';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';

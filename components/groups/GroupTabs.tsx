@@ -214,7 +214,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
 
                     <nav
                         ref={navRef}
-                        className="flex-1 flex items-center gap-1 -mb-px overflow-x-auto scrollbar-none scroll-smooth [mask-image:linear-gradient(to_right,black_calc(100%-40px),transparent)]"
+                        className="flex-1 flex items-center gap-0 md:gap-1 -mb-px overflow-x-auto scrollbar-none scroll-smooth [mask-image:linear-gradient(to_right,black_calc(100%-20px),transparent)]"
                     >
                         {tabs.map((tab) => {
                             const isAbout = tab.id === 'about';
@@ -247,7 +247,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                     href={tab.href as any}
                                     onClick={(e) => handleTabClick(e, tab.id)}
                                     className={clsx(
-                                        "relative flex items-center gap-2 px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
+                                        "relative flex items-center gap-2 px-2.5 md:px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
                                         isScrolled ? "pt-4 pb-5" : "pt-5 pb-6",
                                         finalActive
                                             ? "border-[var(--accent)] text-[var(--accent)]"
@@ -259,7 +259,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                     } : undefined}
                                 >
                                     <div className="relative">
-                                        <tab.icon className="h-3.5 w-3.5" />
+                                        <tab.icon className="hidden h-3.5 w-3.5 sm:block" />
                                         {tab.id === 'requests' && pendingCount > 0 && isOwnerOrAdmin && (
                                             <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-black text-white shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
                                                 {pendingCount}
