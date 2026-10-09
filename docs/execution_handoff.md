@@ -48,25 +48,25 @@ Every screen, grouped by the step of the core loop it serves. Update the row whe
 | Find | Discovery – events | `/?tab=events` | everyone | ✅ | keep · paging later |
 | Find | Search (filter-bar input + dropdown) | `DiscoveryFilterBar`, `searchContextual` | everyone | 🟡 | proposed: replace with one search modal (see search discussion) · accents later |
 | Find | Header ⌘K search modal | `GlobalSearch.tsx`, `SearchModal.tsx` (unused) | — | 🧱 | proposed: becomes the real search modal |
-| Find | `/discover`, `/groups` | redirect / orphan "my groups" copy | — | 🧱 | proposed: remove `/groups` |
+| Find | `/discover`, `/groups` | redirect / orphan "my groups" copy | — | 🧱 | **remove `/groups`** (2.11) |
 | Create | Create group wizard (4 steps) | `/create` | logged in | ✅ | keep · banner upload later |
 | Join | Group page – About | `[l1]/group/[g]` | everyone | 🟡 | keep · 3.2 header (white title on light banner, blank role pill) |
 | Join | Apply / withdraw | `ApplicationModal`, `MembershipPanel` | visitors | ✅ | keep · "Join X" → "Ask to join X" |
-| Join | Auth gate | `AuthGateModal` vs sign-in link | visitors | 🟡 | proposed: sign-in link everywhere, remove modal |
+| Join | Auth gate | `AuthGateModal` (join button, discussions, mobile nav) vs sign-in page link (events) | visitors | 🟡 | proposed: one pattern — decide in screen review |
 | Join | Sign in / Register / Onboarding | `/auth/*`, `/onboarding/username` | visitors | 🟡 | keep · user to click through one real sign-up (2.0) |
 | Talk | Discussions | `[g]/discussions`, `DiscussionBoard` | members | ❌ | 2.4 |
 | Talk | Ask the group (before joining) | `InquiryModal`, `SupportMessageModal` | visitors/members | ❌ | 2.4 |
 | Talk | Messages / inbox | `/messages`, `MessagesLayout` | members | ❌ | 2.4 |
-| Talk | Group-level messages page | `[l1]/messages` | — | 🧱 | proposed: remove (placeholder, redirects to a missing `/login`) |
+| Talk | Group-level messages page | `[l1]/messages` | — | 🧱 | **remove** (2.11) |
 | Talk | Notifications | `NotificationCenter` (header) | members | ✅ | keep |
 | Group life | Members + requests | `[g]/members` | members/admins | 🟡 | keep · stray "Private" text |
 | Group life | Events tab | `[g]/events`, `EventRow`, `CompactGroupBar` | everyone | ✅ | keep |
 | Group life | Event page + organiser panel | `[g]/events/[e]` | everyone | ✅ | keep · edit/delete missing (2.10) |
 | Group life | Create event | `[g]/create-event` (modal + page) | organisers | 🟡 | keep · hide link-name field (2.10) |
-| Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | proposed: fewer tabs (decide with sections editor) |
-| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | proposed: decide — 3 places describe a group |
+| Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | keep · review together |
+| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | **keep — core feature** (user): each section is its own part of the group page; review how sections, description and instructions fit together |
 | Group life | Report / hide group | `ReportModal`, `HideGroupModal` | any / admin | ✅ | keep |
-| Me | Own profile | `/profile` | members | 🟡 | keep · "Events attended 0" is static |
+| Me | Own profile | `/profile` | members | 🟡 | keep · **remove static "Events attended"** (2.11) |
 | Me | Public profile | `/profile/[username]` | everyone | ✅ | keep · message button after 2.4 |
 | Me | Edit profile | `/profile/edit` | members | ✅ | keep (new avatars) |
 | Me | My groups | `/profile/my-groups` | members | ✅ | keep |
@@ -78,7 +78,7 @@ Every screen, grouped by the step of the core loop it serves. Update the row whe
 | Admin | Dashboard (tags, reports, moderation log) | `/admin` | admin | 🟡 | keep · duplicate nav row |
 | Admin | Reports | `/admin/reports` | admin | ✅ | keep |
 | Admin | Taxonomy | `/admin/taxonomy` | admin | ✅ | keep |
-| Admin | Categorization override | `/admin/groups/[g]/categorization` | admin | 🧱 | proposed: remove until needed |
+| Admin | Categorization override | `/admin/groups/[g]/categorization` | admin | 🟡 | keep · opened from the tag inbox ("used by groups") so an admin can re-tag a group; check it works |
 
 ## Stage 0 — Local setup (needs user, once)
 
@@ -147,6 +147,9 @@ Noticed, not changed:
   - **"Interested" is removed.** Wording must fit any event type (rehearsal, birthday, hike): no seats/tickets/places — people and joining.
   - **Recurrence:** later, members-only events only (public events never recur — no abandoned public series). Planned as a real series (each date its own event, RSVP per date). Until then the wizard has no recurring option.
 
+- **Group sections are a core feature** (user, 2026-10-09): owners build their group page from several sections, each shown as its own part of the page, to cater to different needs. Never remove or merge them away; polish how they sit next to description and instructions.
+- **Past events look finished** (proposed 2026-10-09, awaiting user OK): event page notice "This event took place on …", greyed banner, no join button, "N went"; greyed Past-tab rows; organiser panel hidden.
+
 ## Opus queue (not for Sonnet)
 
 - 2.4 Messaging: group inquiry, DMs, conversations — fragile, own session.
@@ -157,6 +160,25 @@ Noticed, not changed:
 - Minor, unexplained: dev-only sidebar flash on mobile.
 
 **For the user (production):** check `/admin` → Moderation that all three junk groups are hidden (hide worked after the realtime fix, 2026-10-08); do one real sign-up (2.0).
+
+## Next session A — Screen review prep (Sonnet, read-only)
+
+Goal: gather facts so the user and Opus can review every screen together in one sitting. **Report facts, not fixes or opinions** — change no app code.
+
+1. Start Docker, `npm run db:up`, dev server via the browser pane (session rules). Use the local seed accounts (`DEV_PASSWORDS` in `lib/auth.ts`): logged out, `user@local` (non-member), `member@local`, `owner@local` (group owner), `admin@local` (site admin).
+2. Write a Playwright script `scripts/screen-review/capture.ts` (run with `npx tsx`; sign-in through the credentials form) that screenshots every screen in the **Screen map** at desktop (1440×900) and mobile (390×844), in `/lv`, as each role that can see it (skip combinations that just redirect). Include open states that matter: join modal, create-event modal, notifications open, user menu open, mobile filter sheet, organiser panel, each group-settings tab, each section in the sections editor. Save to `screen-review/` (add `/screen-review/` to `.gitignore`). Name files `<step>-<screen>-<role>-<width>.png`.
+3. Publish one **private Artifact** "Screen review" (load the artifact skills first; upload the screenshots as assets). One block per screen, ordered by the Screen map steps (Find → Create → Join → Talk → Group life → Me → Shell → Static → Admin). Per screen:
+   - desktop + mobile screenshot (click to enlarge);
+   - **who** sees it and what changes per role;
+   - **what's on it**: main elements and every action (button/link → where it goes or what it does);
+   - **how you get here** (which screens link to it) and **where you go next**;
+   - **facts noticed**: untranslated text, dead or duplicate controls, broken layout, inconsistent styling vs. other screens, empty states. One line each, no proposals.
+4. Add a final block "How it fits together": a simple diagram of screens and the links between them (from step 3).
+5. Commit only the script and `.gitignore` (one commit, never push). Put the Artifact link here under this heading, stop the dev server, report.
+
+## Next session B — Screen review with the user (Opus)
+
+Prompt to start with: *"Read AGENTS.md, docs/execution_handoff.md (Screen map, product decisions) and docs/core_philosophy.md. Open the 'Screen review' Artifact linked under Next session A. Walk the screens with me one loop step at a time (Find → Create → Join → Talk → Group life → Me → Shell → Static → Admin). For each screen: summarise what it does and the facts noticed in 2–3 lines, give one recommendation (keep / fix / hide / remove, plus the one change that matters most), and wait for my answer. Keep it short: one default per small detail, questions only for real product decisions. Record each agreed decision in the Screen map's Decision column as we go, and turn agreed fixes into small numbered Sonnet items in the right stage. Open questions to settle along the way: search as one modal with ready-made options (categories, cities, next events) replacing the filter-bar input; one sign-in pattern (pop-up vs page); how sections, description and instructions fit together; past-event look; group settings tabs."*
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
@@ -257,6 +279,8 @@ Goal: each step of create → find → join → talk works end to end, logged in
   - Hide the "link name" (slug) field in the wizard — generate it from the title, add `-2`, `-3` on clashes instead of `EVENT_SLUG_TAKEN`.
   - Past events: no join buttons anywhere (already on rows/page), the server refuses with `EVENT_PAST` (2.9) — show its translated error if a stale page tries.
   - Verify as organiser, member and logged out; EN + LV; desktop + mobile.
+
+- [ ] 2.11 Cleanup (user-approved 2026-10-09, Sonnet): remove the orphan `app/[locale]/groups/` route; remove the placeholder `app/[locale]/[l1Slug]/messages/` page; remove the static "Events attended" stat from `/profile`. Delete now-unused components and message keys (both locales). Check nothing links to the removed routes.
 
 ## Stage 3 — Make it calm
 
