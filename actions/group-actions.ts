@@ -28,7 +28,7 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
         const validation = await validateActionData(groupFormSchema, data);
         if (!validation.success) return validation;
 
-        const result = await GroupService.createGroup(validation.data, session.user.id);
+        const result = await GroupService.createGroup(validation.data, session.user.id, locale);
         if (!result.success) return result as ActionResponse<{ slug: string; l1Slug: string }>;
 
         const { slug, l1Slug } = result.data!;
@@ -211,7 +211,6 @@ export async function sendApplicationInquiry(
 export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
     exists: boolean;
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
-    hasInstructions: boolean;
     pendingCount: number;
     sections: Array<{ id: string; title: string; visibility: string }>;
 }> {

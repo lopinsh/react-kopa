@@ -135,7 +135,6 @@ model Group {
   websiteLink        String?
   accentColor        String?
   bannerImage        String?
-  instructions       String?
   hiddenAt           DateTime?
   hiddenReason       String?
   hiddenById         String?

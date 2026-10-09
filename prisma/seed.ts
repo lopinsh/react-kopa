@@ -418,7 +418,6 @@ async function main() {
         name: g.name, slug: properSlug, description: g.description,
         city: g.city, categoryId: l1CatId, type: g.type ?? 'PUBLIC',
         bannerImage: g.bannerImage,
-        instructions: g.instructions,
         accentColor: g.accentColor,
         discordLink: g.discordLink,
         instagramLink: g.instagramLink,
@@ -428,6 +427,14 @@ async function main() {
           create: [
             { userId: g.owner.id, role: 'OWNER' },
             ...g.members.map(m => ({ userId: m.user.id, role: m.role })),
+          ],
+        },
+        sections: {
+          create: [
+            { title: 'About us', content: g.description, order: 0, visibility: 'PUBLIC' as const },
+            ...(g.instructions
+              ? [{ title: 'Practical info', content: `<p>${g.instructions}</p>`, order: 1, visibility: 'MEMBERS_ONLY' as const }]
+              : []),
           ],
         },
       },

@@ -30,13 +30,11 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     const [state, setState] = useState<{
         exists: boolean,
         role: MembershipRole | null,
-        hasInstructions: boolean,
         pendingCount: number,
         sections: Array<{ id: string; title: string; visibility: string }>
     }>({
         exists: true,
         role: null,
-        hasInstructions: false,
         pendingCount: 0,
         sections: []
     });

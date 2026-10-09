@@ -36,7 +36,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
         icon: LucideIcon;
         memberOnly?: boolean;
         adminOnly?: boolean;
-        needsInstructions?: boolean;
     }
 
     const baseUrl = `/${l1Slug}/group/${group.slug}`;
@@ -221,7 +220,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             const active = isAbout ? activeSection === 'about' || activeSection === sections[0]?.id : activeSection === tab.id;
 
                             if (tab.memberOnly && !isMember) return null;
-                            if (tab.needsInstructions && !group.instructions) return null;
                             if (tab.adminOnly && !isOwnerOrAdmin) return null;
 
 

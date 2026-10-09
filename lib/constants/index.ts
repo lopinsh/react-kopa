@@ -70,6 +70,12 @@ export const DEFAULT_SECTION_TITLES: Record<string, { lv: string; en: string }> 
     'Practical info': { lv: 'Praktiskā informācija', en: 'Practical info' },
 };
 
+/** Sample text of the "Practical info" section a new group starts with, in the creator's language. */
+export const PRACTICAL_INFO_SAMPLE: Record<'lv' | 'en', string> = {
+    lv: '<p>Kur un cikos tiekamies? Ko ņemt līdzi? Uzraksti šeit to, ko biedriem vajag zināt. Šo tekstu vari pārrakstīt vai visu sadaļu izdzēst.</p>',
+    en: '<p>Where and when do we meet? What should people bring? Write here what members need to know. You can rewrite this text or delete the whole section.</p>',
+};
+
 function findDefaultSectionTitle(title: string): { lv: string; en: string } | undefined {
     const trimmed = title.trim();
     return Object.values(DEFAULT_SECTION_TITLES).find((d) => d.lv === trimmed || d.en === trimmed);

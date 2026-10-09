@@ -5,7 +5,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
-import { canonicalSectionTitle, localizeSectionTitle } from '@/lib/constants';
+import { canonicalSectionTitle, localizeSectionTitle, PRACTICAL_INFO_SAMPLE } from '@/lib/constants';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
@@ -19,7 +19,6 @@ export interface GroupContext {
     type: 'PUBLIC' | 'PRIVATE';
     categoryId: string;
     bannerImage: string | null;
-    instructions: string | null;
     isAcceptingMembers: boolean;
     socialLinks: {
         discord: string | null;
@@ -322,7 +321,6 @@ export const GroupService = {
             type: g.type as 'PUBLIC' | 'PRIVATE',
             categoryId: g.categoryId,
             bannerImage: g.bannerImage,
-            instructions: g.instructions,
             isAcceptingMembers: g.isAcceptingMembers,
             socialLinks: {
                 discord: g.discordLink,
@@ -371,7 +369,7 @@ export const GroupService = {
         };
     }),
 
-    async createGroup(data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+    async createGroup(data: GroupFormValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
 
@@ -423,6 +421,13 @@ export const GroupService = {
                             content: data.description || '',
                             order: 0,
                             visibility: 'PUBLIC'
+                        },
+                        {
+                            // A sample the owner rewrites or deletes. Stored under the English key like other default titles.
+                            title: 'Practical info',
+                            content: PRACTICAL_INFO_SAMPLE[locale === 'en' ? 'en' : 'lv'],
+                            order: 1,
+                            visibility: 'MEMBERS_ONLY'
                         }
                     ]
                 }
@@ -735,17 +740,17 @@ export const GroupService = {
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            select: { description: true, instructions: true }
+            select: { description: true }
         });
 
-        return this.getVirtualSections(group as { description: string | null; instructions: string | null });
+        return this.getVirtualSections(group as { description: string | null });
     },
 
     /**
      * Internal helper to generate fallback sections if none exist in DB.
      * Matches the logic in getGroupWithContext and createGroup seeds.
      */
-    getVirtualSections(group: { description: string | null; instructions?: string | null }) {
+    getVirtualSections(group: { description: string | null }) {
         const sections = [];
         sections.push({
             id: 'about',
@@ -754,16 +759,6 @@ export const GroupService = {
             order: 0,
             visibility: 'PUBLIC' as const
         });
-
-        if (group?.instructions) {
-            sections.push({
-                id: 'instructions',
-                title: 'Instructions',
-                content: group.instructions,
-                order: 1,
-                visibility: 'MEMBERS_ONLY' as const
-            });
-        }
         return sections;
     },
 
@@ -774,14 +769,12 @@ export const GroupService = {
         /** False when the group does not exist (or is hidden from this user), so the sidebar can hide its menu. */
         exists: boolean;
         role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
-        hasInstructions: boolean;
         pendingCount: number;
         sections: Array<{ id: string; title: string; visibility: string }>;
     }> {
         const group = await prisma.group.findFirst({
             where: { slug: groupSlug, category: { slug: l1Slug } },
             select: {
-                instructions: true,
                 hiddenAt: true,
                 sections: {
                     orderBy: { order: 'asc' },
@@ -794,7 +787,7 @@ export const GroupService = {
             }
         });
 
-        if (!group) return { exists: false, role: null, hasInstructions: false, pendingCount: 0, sections: [] };
+        if (!group) return { exists: false, role: null, pendingCount: 0, sections: [] };
 
         const role = group.members?.length > 0 ? group.members[0].role : null;
 
@@ -802,7 +795,7 @@ export const GroupService = {
         if (group.hiddenAt && role !== 'OWNER') {
             const actor = userId ? await prisma.user.findUnique({ where: { id: userId }, select: { role: true } }) : null;
             if (actor?.role !== 'ADMIN') {
-                return { exists: false, role: null, hasInstructions: false, pendingCount: 0, sections: [] };
+                return { exists: false, role: null, pendingCount: 0, sections: [] };
             }
         }
 
@@ -818,12 +811,11 @@ export const GroupService = {
 
         const sections = (group.sections && group.sections.length > 0)
             ? group.sections
-            : GroupService.getVirtualSections({ description: null, instructions: group.instructions });
+            : GroupService.getVirtualSections({ description: null });
 
         return {
             exists: true,
             role,
-            hasInstructions: !!group.instructions,
             pendingCount,
             sections: sections.map((s: { id: string; title: string; visibility: string }) => ({
                 id: s.id,
