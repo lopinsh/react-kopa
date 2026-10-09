@@ -68,13 +68,17 @@ export const ModerationService = {
         });
         if (!group) return { success: false, error: 'NOT_FOUND' };
 
-        await prisma.$transaction(async (tx) => {
-            await tx.group.update({
+        // updateMany: the group may have been deleted since the read above (no P2025 thrown).
+        const updated = await prisma.$transaction(async (tx) => {
+            const { count } = await tx.group.updateMany({
                 where: { id: groupId },
                 data: { hiddenAt: new Date(), hiddenReason: parsed.data.reason, hiddenById: adminId }
             });
+            if (count === 0) return false;
             await this.logAction(adminId, 'GROUP_HIDE', 'GROUP', groupId, parsed.data.reason, tx);
+            return true;
         });
+        if (!updated) return { success: false, error: 'NOT_FOUND' };
 
         await Promise.all(group.members.map(m =>
             NotificationService.createNotification({
@@ -98,13 +102,16 @@ export const ModerationService = {
         });
         if (!group) return { success: false, error: 'NOT_FOUND' };
 
-        await prisma.$transaction(async (tx) => {
-            await tx.group.update({
+        const updated = await prisma.$transaction(async (tx) => {
+            const { count } = await tx.group.updateMany({
                 where: { id: groupId },
                 data: { hiddenAt: null, hiddenReason: null, hiddenById: null }
             });
+            if (count === 0) return false;
             await this.logAction(adminId, 'GROUP_RESTORE', 'GROUP', groupId, undefined, tx);
+            return true;
         });
+        if (!updated) return { success: false, error: 'NOT_FOUND' };
 
         const resolved = TaxonomyResolver.resolve(group.category);
         return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
@@ -131,10 +138,16 @@ export const ModerationService = {
         if (!group) return { success: false, error: 'NOT_FOUND' };
         if (!group.hiddenAt) return { success: false, error: 'GROUP_NOT_HIDDEN' };
 
-        await prisma.$transaction(async (tx) => {
+        // Re-checked inside the delete: a restore or another admin's delete may have landed since the read above.
+        const deleted = await prisma.$transaction(async (tx) => {
+            if (!(await GroupService.deleteGroupRecord(groupId, tx, { onlyIfHidden: true }))) return false;
             await this.logAction(adminId, 'GROUP_DELETE', 'GROUP', groupId, parsed.data.reason, tx, group.name);
-            await GroupService.deleteGroupRecord(groupId, tx);
+            return true;
         });
+        if (!deleted) {
+            const stillThere = await prisma.group.findUnique({ where: { id: groupId }, select: { id: true } });
+            return { success: false, error: stillThere ? 'GROUP_NOT_HIDDEN' : 'NOT_FOUND' };
+        }
 
         await Promise.all(group.members.map(m =>
             NotificationService.createNotification({

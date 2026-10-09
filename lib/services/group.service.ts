@@ -726,13 +726,20 @@ export const GroupService = {
 
         if (!isOwner) return { success: false, error: 'FORBIDDEN' };
 
-        await this.deleteGroupRecord(groupId);
-        return { success: true };
+        const deleted = await this.deleteGroupRecord(groupId);
+        return deleted ? { success: true } : { success: false, error: 'NOT_FOUND' };
     },
 
-    /** The deletion itself; memberships, sections, events, posts etc. go with it via the schema's cascades. Shared by the owner's delete and a site admin's delete of a hidden group. */
-    async deleteGroupRecord(groupId: string, tx: Prisma.TransactionClient = prisma): Promise<void> {
-        await tx.group.delete({ where: { id: groupId } });
+    /**
+     * The deletion itself; memberships, sections, events, posts etc. go with it via the schema's cascades.
+     * Shared by the owner's delete and a site admin's delete of a hidden group. `onlyIfHidden` makes the
+     * hidden check part of the delete itself, so a restore that lands first wins. Returns false if nothing was deleted.
+     */
+    async deleteGroupRecord(groupId: string, tx: Prisma.TransactionClient = prisma, opts: { onlyIfHidden?: boolean } = {}): Promise<boolean> {
+        const { count } = await tx.group.deleteMany({
+            where: { id: groupId, ...(opts.onlyIfHidden ? { hiddenAt: { not: null } } : {}) }
+        });
+        return count > 0;
     },
 
     /**
