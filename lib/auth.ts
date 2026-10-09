@@ -57,9 +57,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     const isValid = await bcrypt.compare(password, user.password);
                     if (!isValid) return null;
                 } else {
-                    // Fallback for seeded dev accounts — never in production,
-                    // where these well-known passwords would be a public backdoor.
-                    if (process.env.NODE_ENV === "production") return null;
+                    // Fallback for seeded dev accounts. In production only when
+                    // ALLOW_DEV_PASSWORDS=true (test server, docker-compose.server.yml),
+                    // and never for the seed site admin — its password is public.
+                    if (process.env.NODE_ENV === "production") {
+                        if (process.env.ALLOW_DEV_PASSWORDS !== "true") return null;
+                        if (email === "admin@local") return null;
+                    }
                     const expectedPassword = DEV_PASSWORDS[email];
                     if (!expectedPassword || password !== expectedPassword) return null;
                 }

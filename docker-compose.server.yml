@@ -39,6 +39,9 @@ services:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
       AUTH_SECRET: ${AUTH_SECRET}
       AUTH_TRUST_HOST: "true"
+      # Test server: seed accounts (DEV_PASSWORDS in lib/auth.ts, except admin@local)
+      # can sign in so others can try the site. Remove before real users arrive.
+      ALLOW_DEV_PASSWORDS: "true"
       # Server → Soketi over the Docker network. The browser's settings (public host,
       # port 443, TLS) are baked into the image at build time, see deploy.yml.
       PUSHER_APP_ID: ${SOKETI_APP_ID}
