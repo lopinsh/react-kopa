@@ -62,16 +62,27 @@ export type DiscoveryView = (typeof DISCOVERY_VIEWS)[number];
 export const EVENT_TIME_ZONE = 'Europe/Riga';
 
 /**
- * Titles of the sections a new group starts with, per locale. Rows still holding the English
- * default are shown in the viewer's language until 2.13 stores default titles per language.
+ * Titles of the sections a new group starts with, per locale. Default titles are stored as the
+ * English key and shown in the viewer's language until 2.13 stores default titles per language.
  */
 export const DEFAULT_SECTION_TITLES: Record<string, { lv: string; en: string }> = {
     'About us': { lv: 'Par mums', en: 'About us' },
     'Practical info': { lv: 'Praktiskā informācija', en: 'Practical info' },
 };
 
+function findDefaultSectionTitle(title: string): { lv: string; en: string } | undefined {
+    const trimmed = title.trim();
+    return Object.values(DEFAULT_SECTION_TITLES).find((d) => d.lv === trimmed || d.en === trimmed);
+}
+
+/** Shows a default section title (stored in either language) in the viewer's language; owner titles unchanged. */
 export function localizeSectionTitle(title: string, locale: string): string {
-    const defaults = DEFAULT_SECTION_TITLES[title];
+    const defaults = findDefaultSectionTitle(title);
     if (!defaults) return title;
     return locale === 'lv' ? defaults.lv : defaults.en;
+}
+
+/** Stores an unchanged default title (as shown in either language) as its English key, so it stays a default. */
+export function canonicalSectionTitle(title: string): string {
+    return findDefaultSectionTitle(title)?.en ?? title;
 }

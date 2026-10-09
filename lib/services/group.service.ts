@@ -5,7 +5,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
-import { localizeSectionTitle } from '@/lib/constants';
+import { canonicalSectionTitle, localizeSectionTitle } from '@/lib/constants';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
@@ -371,7 +371,7 @@ export const GroupService = {
         };
     }),
 
-    async createGroup(data: GroupFormValues, userId: string, locale: string = 'lv'): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+    async createGroup(data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
 
@@ -419,7 +419,7 @@ export const GroupService = {
                 sections: {
                     create: [
                         {
-                            title: localizeSectionTitle('About us', locale),
+                            title: 'About us',
                             content: data.description || '',
                             order: 0,
                             visibility: 'PUBLIC'
@@ -882,7 +882,7 @@ export const GroupService = {
             await prisma.groupSection.update({
                 where: { id: data.id },
                 data: {
-                    title: data.title,
+                    title: canonicalSectionTitle(data.title),
                     content: data.content,
                     visibility: data.visibility,
                     order: data.order
@@ -905,7 +905,7 @@ export const GroupService = {
             await prisma.groupSection.create({
                 data: {
                     groupId,
-                    title: data.title,
+                    title: canonicalSectionTitle(data.title),
                     content: data.content,
                     visibility: data.visibility || 'PUBLIC',
                     order: data.order ?? count
