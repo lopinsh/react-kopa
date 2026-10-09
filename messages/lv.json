@@ -514,6 +514,8 @@
     "conversationBlocked": "Šī saruna ir bloķēta.",
     "emptyInbox": "Tev vēl nav ziņojumu. Pievienojies grupām, lai sazinātos.",
     "noMessages": "Pagaidām nav ziņojumu",
+    "originJoinRequest": "Saruna sākta no pieteikuma grupai <group>{name}</group>",
+    "originJoinRequestGone": "Saruna sākta no pieteikuma grupai",
     "selectConversation": "Izvēlies sarunu, lai sāktu tērzēšanu",
     "title": "Ziņojumi",
     "typeMessage": "Raksti ziņu...",

@@ -65,7 +65,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
             type: 'JOIN_REQUEST',
             translationKey: 'joinRequest',
             args: { authorName: session.user.name || session.user.username || '', groupName, excerpt: message ?? '' },
-            link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members` : undefined
+            link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members?tab=requests` : undefined
         })));
 
         return { success: true, data: { pending: true } };

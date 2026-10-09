@@ -514,6 +514,8 @@
     "conversationBlocked": "This conversation is blocked.",
     "emptyInbox": "You have no messages yet. Join groups and participate to connect with others.",
     "noMessages": "No messages yet",
+    "originJoinRequest": "Started from a request to join <group>{name}</group>",
+    "originJoinRequestGone": "Started from a request to join a group",
     "selectConversation": "Select a conversation to start chatting",
     "title": "Messages",
     "typeMessage": "Type a message...",

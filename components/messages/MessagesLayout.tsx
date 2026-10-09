@@ -8,24 +8,29 @@ import { lv, enUS } from 'date-fns/locale';
 import { getMessages, sendMessage, blockConversation } from '@/actions/message-actions';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
+import { Link } from '@/i18n/routing';
 
 type Conversation = {
     id: string;
     isBlocked: boolean;
     participants: { id: string; name: string | null; image: string | null; avatarSeed?: string | null }[];
     messages: { id: string; content: string; createdAt: Date; senderId: string }[];
+    origin?: { type: string; groupName: string | null; groupHref: string | null } | null;
 };
 
 type Props = {
     initialConversations: Conversation[];
     currentUserId: string;
     locale: string;
+    initialConversationId?: string | null;
 };
 
-export default function MessagesLayout({ initialConversations, currentUserId, locale }: Props) {
+export default function MessagesLayout({ initialConversations, currentUserId, locale, initialConversationId = null }: Props) {
     const t = useTranslations('messages');
     const [conversations, setConversations] = useState(initialConversations);
-    const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+    const [activeConversationId, setActiveConversationId] = useState<string | null>(
+        initialConversationId && initialConversations.some(c => c.id === initialConversationId) ? initialConversationId : null
+    );
     const [messages, setMessages] = useState<Conversation['messages']>([]);
     const [newMessage, setNewMessage] = useState('');
     const [isPending, startTransition] = useTransition();
@@ -113,7 +118,8 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
         startTransition(async () => {
             const result = await sendMessage(activeConversationId, newMessage);
             if (result.success) {
-                setMessages(prev => [...prev, result.data]);
+                // The realtime event may already have added this message.
+                setMessages(prev => prev.some(m => m.id === result.data.id) ? prev : [...prev, result.data]);
                 setNewMessage('');
             }
         });
@@ -228,6 +234,22 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
 
                         {/* Messages List */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                            {activeConversation?.origin?.type === 'JOIN_REQUEST' && (
+                                <p className="text-center text-xs text-foreground-muted">
+                                    {activeConversation.origin.groupName
+                                        ? t.rich('originJoinRequest', {
+                                            name: activeConversation.origin.groupName,
+                                            group: (chunks) => activeConversation.origin?.groupHref ? (
+                                                <Link href={activeConversation.origin.groupHref} className="font-bold text-primary hover:underline">
+                                                    {chunks}
+                                                </Link>
+                                            ) : (
+                                                <span className="font-bold">{chunks}</span>
+                                            )
+                                        })
+                                        : t('originJoinRequestGone')}
+                                </p>
+                            )}
                             {messages.map(msg => {
                                 const isMe = msg.senderId === currentUserId;
                                 return (

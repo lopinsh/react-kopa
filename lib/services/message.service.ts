@@ -2,11 +2,12 @@ import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
 import { MembershipRole } from '@prisma/client';
+import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 
 export const MessageService = {
     async getConversations(userId: string) {
         try {
-            return await prisma.conversation.findMany({
+            const conversations = await prisma.conversation.findMany({
                 where: {
                     participants: {
                         some: { id: userId }
@@ -19,10 +20,32 @@ export const MessageService = {
                     messages: {
                         orderBy: { createdAt: 'desc' },
                         take: 1
+                    },
+                    originGroup: {
+                        select: {
+                            name: true,
+                            slug: true,
+                            hiddenAt: true,
+                            category: { include: TaxonomyResolver.getInclude('lv') }
+                        }
                     }
                 },
                 orderBy: { updatedAt: 'desc' }
             });
+
+            return conversations.map(({ originGroup, originType, ...conversation }) => ({
+                ...conversation,
+                origin: originType
+                    ? {
+                        type: originType,
+                        groupName: originGroup?.name ?? null,
+                        // Hidden groups 404 for everyone but site admins, so no link.
+                        groupHref: originGroup && !originGroup.hiddenAt
+                            ? `/${TaxonomyResolver.resolve(originGroup.category).l1Slug}/group/${originGroup.slug}`
+                            : null
+                    }
+                    : null
+            }));
         } catch (error) {
             console.error('[MessageService.getConversations] Error:', error);
             return [];

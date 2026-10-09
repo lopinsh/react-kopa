@@ -514,25 +514,24 @@ export const GroupService = {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
-        // Initialize a 1-on-1 Conversation between Admin and Pending User
+        // One conversation per join request: the one started from this group's request, if any.
         const { MessageService } = await import('@/lib/services/message.service');
 
-        const userConversations = await prisma.conversation.findMany({
+        const existingConversations = await prisma.conversation.findMany({
             where: {
-                participants: { some: { id: adminId } }
+                originType: 'JOIN_REQUEST',
+                originGroupId: groupId,
+                AND: [
+                    { participants: { some: { id: adminId } } },
+                    { participants: { some: { id: targetUserId } } }
+                ]
             },
-            include: {
-                participants: { select: { id: true } }
-            }
+            include: { participants: { select: { id: true } } }
         });
-
-        let conversation = userConversations.find(conv =>
-            conv.participants.length === 2 &&
-            conv.participants.some(p => p.id === targetUserId)
-        );
+        let conversation = existingConversations.find(conv => conv.participants.length === 2);
 
         if (!conversation) {
-            // Fetch initial application messages BEFORE creating the current one in ApplicationMessage
+            // Fetch the applicant's join message BEFORE creating the current one in ApplicationMessage
             // to avoid duplication in the Conversation seeding
             const initialAppMessages = await prisma.applicationMessage.findMany({
                 where: { applicationUserId: targetUserId, groupId },
@@ -541,6 +540,8 @@ export const GroupService = {
 
             conversation = await prisma.conversation.create({
                 data: {
+                    originType: 'JOIN_REQUEST',
+                    originGroupId: groupId,
                     participants: {
                         connect: [{ id: adminId }, { id: targetUserId }]
                     }
@@ -550,7 +551,7 @@ export const GroupService = {
                 }
             });
 
-            // Seed it with the previous app messages
+            // Seed it with the applicant's join message (and anything already said)
             if (initialAppMessages.length > 0) {
                 await prisma.message.createMany({
                     data: initialAppMessages.map(msg => ({
@@ -589,7 +590,7 @@ export const GroupService = {
                 type: 'APPLICATION_INQUIRY',
                 translationKey: 'applicationInquiry',
                 args: { groupName: group.name, excerpt: message },
-                link: `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}/members`
+                link: `/messages?c=${conversation.id}`
             });
         }
 
