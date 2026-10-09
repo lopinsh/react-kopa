@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { isReportReason } from '@/lib/constants';
+import { isReportReason, EVENT_TIME_ZONE } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useFormatter, useTranslations } from 'next-intl';
@@ -101,7 +101,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {isReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
                                 <span className="text-sm font-medium text-foreground-muted">
-                                    {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short' })}
+                                    {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short', timeZone: EVENT_TIME_ZONE })}
                                 </span>
                             </div>
 
