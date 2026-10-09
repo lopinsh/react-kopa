@@ -51,6 +51,11 @@ async function loadFlatBase(lang: MessageLang): Promise<Record<string, string>> 
     return flat;
 }
 
+/** Own keys only, so names like `constructor` or `__proto__` (inherited from Object) are never taken for message keys. */
+function isKnownKey(key: string, ...bases: Record<string, string>[]): boolean {
+    return bases.some((base) => Object.hasOwn(base, key) && typeof base[key] === 'string');
+}
+
 /** Only the small override rows are cached (and tagged); the merge itself is cheap. Plain text only, never marked. */
 const loadOverrides = unstable_cache(
     async (): Promise<OverrideMap> => {
@@ -105,7 +110,7 @@ export const MessageOverrideService = {
     async getEntry(adminId: string, key: string): Promise<OverrideResult<TranslationEntry>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
-        if (!(key in lvBase) && !(key in enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
         return {
             success: true,
             data: {
@@ -113,7 +118,7 @@ export const MessageOverrideService = {
                 lv: overrides.lv[key] ?? lvBase[key] ?? '',
                 en: overrides.en[key] ?? enBase[key] ?? '',
                 source: { lv: lvBase[key] ?? '', en: enBase[key] ?? '' },
-                edited: { lv: key in overrides.lv, en: key in overrides.en },
+                edited: { lv: Object.hasOwn(overrides.lv, key), en: Object.hasOwn(overrides.en, key) },
             },
         };
     },
@@ -153,7 +158,7 @@ export const MessageOverrideService = {
 
         const [lvBase, enBase] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en')]);
         const bases: Record<MessageLang, Record<string, string>> = { lv: lvBase, en: enBase };
-        if (!(key in lvBase) && !(key in enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
 
         for (const lang of MESSAGE_LANGS) {
             if (validateMessage(parsed.data[lang], bases[lang][key])) return { success: false, error: 'MESSAGE_INVALID' };

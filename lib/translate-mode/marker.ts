@@ -6,10 +6,11 @@
 
 export const TRANSLATE_COOKIE = 'translate_mode';
 
-export const MARKER_START = '⁣';
-export const MARKER_END = '⁤';
-const BIT_ZERO = '​';
-const BIT_ONE = '‌';
+// Written as escapes: the characters themselves are invisible in an editor.
+export const MARKER_START = '\u2063'; // INVISIBLE SEPARATOR
+export const MARKER_END = '\u2064'; // INVISIBLE PLUS
+const BIT_ZERO = '\u200B'; // ZERO WIDTH SPACE
+const BIT_ONE = '\u200C'; // ZERO WIDTH NON-JOINER
 
 export type MessageTree = { [key: string]: string | MessageTree };
 
@@ -56,7 +57,7 @@ export function findMarkers(text: string): FoundMarker[] {
 
 export function stripMarkers(text: string): string {
     // Markers are only ever made of these four characters.
-    return text.replace(/⁣[​‌]*⁤/g, '');
+    return text.replace(/\u2063[\u200B\u200C]*\u2064/g, '');
 }
 
 /** Marks every string in a messages tree with its dotted key. Returns a new tree. */
