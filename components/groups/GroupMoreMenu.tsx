@@ -28,6 +28,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     const t = useTranslations('group');
     const c = useTranslations('common');
     const tModeration = useTranslations('moderation');
+    const tErrors = useTranslations('errors');
     const locale = useLocale();
     const router = useRouter();
     const { success, error: toastError } = useToast();
@@ -80,7 +81,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
         startTransition(async () => {
             const res = await deleteGroup(group.id, locale);
             if (res.success) router.push('/');
-            else toastError(res.error);
+            else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
 
