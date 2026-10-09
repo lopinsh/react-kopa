@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
+import { useFormatter, useTranslations } from 'next-intl';
 import { Send, User as UserIcon, Ban, AlertCircle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { lv, enUS } from 'date-fns/locale';
@@ -9,6 +9,7 @@ import { getMessages, sendMessage, blockConversation } from '@/actions/message-a
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import { Link } from '@/i18n/routing';
+import { EVENT_TIME_ZONE } from '@/lib/constants';
 
 type Conversation = {
     id: string;
@@ -27,6 +28,7 @@ type Props = {
 
 export default function MessagesLayout({ initialConversations, currentUserId, locale, initialConversationId = null }: Props) {
     const t = useTranslations('messages');
+    const format = useFormatter();
     const [conversations, setConversations] = useState(initialConversations);
     const [activeConversationId, setActiveConversationId] = useState<string | null>(
         initialConversationId && initialConversations.some(c => c.id === initialConversationId) ? initialConversationId : null
@@ -141,7 +143,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
     };
 
     return (
-        <div className="flex h-[calc(100vh-4rem)] max-w-6xl mx-auto border border-border bg-surface shadow-sm sm:rounded-2xl sm:my-8 overflow-hidden">
+        <div className="flex h-[calc(100dvh-var(--header-height)-4rem)] sm:h-[calc(100dvh-var(--header-height)-8rem)] md:h-[calc(100dvh-var(--header-height)-4rem)] max-w-6xl mx-auto border border-border bg-surface shadow-sm sm:rounded-2xl sm:my-8 overflow-hidden">
             {/* Sidebar List */}
             <div className={clsx(
                 "w-full sm:w-80 border-r border-border bg-surface-elevated/30 flex flex-col",
@@ -263,7 +265,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                                             {msg.content}
                                         </div>
                                         <span className="text-[10px] text-foreground-muted mt-1 px-1">
-                                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                            {format.dateTime(new Date(msg.createdAt), { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: EVENT_TIME_ZONE })}
                                         </span>
                                     </div>
                                 );
