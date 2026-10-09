@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth';
-import { redirect } from 'next/navigation';
+import { redirect, notFound } from 'next/navigation';
 import { getReports } from '@/actions/report-actions';
 import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
@@ -18,13 +18,13 @@ export default async function AdminReportsPage({
         redirect(signInUrl(locale, '/admin/reports'));
     }
     if (session.user.role !== 'ADMIN') {
-        redirect(`/${locale}`);
+        notFound();
     }
 
     const reports = await getReports();
 
     return (
-        <div className="container mx-auto px-4 py-12 min-h-full">
+        <div className="container mx-auto max-w-6xl px-4 py-8 min-h-full">
             <div className="mb-8 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 text-red-600">
                     <ShieldAlert className="h-6 w-6" />

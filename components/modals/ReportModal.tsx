@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { createReport } from '@/actions/report-actions';
 import { X, ShieldAlert } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { REPORT_REASONS, isReportReason } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -15,7 +16,7 @@ type Props = {
 
 export default function ReportModal({ isOpen, onClose, targetGroupId, targetEventId }: Props) {
     const t = useTranslations('report');
-    const [reason, setReason] = useState('Spam');
+    const [reason, setReason] = useState<string>(REPORT_REASONS[0]);
     const [isPending, startTransition] = useTransition();
     const { success, error: toastError } = useToast();
 
@@ -24,6 +25,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
     const handleSubmit = () => {
         if (isPending) return;
         startTransition(async () => {
+            if (!isReportReason(reason)) return;
             const res = await createReport({ targetGroupId, targetEventId, reason });
             if (res.success) {
                 success(t('success'));
@@ -60,10 +62,9 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                         onChange={(e) => setReason(e.target.value)}
                         className="w-full cursor-pointer rounded-xl border border-border bg-surface-elevated px-4 py-3 outline-none focus:border-red-500/50 transition-all text-sm font-medium text-foreground"
                     >
-                        <option value="Spam">{t('reasonSpam')}</option>
-                        <option value="Harassment">{t('reasonHarassment')}</option>
-                        <option value="Inappropriate">{t('reasonInappropriate')}</option>
-                        <option value="Other">{t('reasonOther')}</option>
+                        {REPORT_REASONS.map((value) => (
+                            <option key={value} value={value}>{t(`reason${value}`)}</option>
+                        ))}
                     </select>
                 </div>
 

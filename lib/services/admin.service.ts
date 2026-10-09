@@ -18,6 +18,15 @@ export type ReportWithDetails = Prisma.ReportGetPayload<{
 }>;
 
 export class AdminService {
+    /** What waits for an admin: shown as badges in the admin navigation. */
+    static async getPendingCounts(): Promise<{ tags: number; reports: number }> {
+        const [tags, reports] = await Promise.all([
+            prisma.category.count({ where: { isWildcard: true, status: 'PENDING_REVIEW' } }),
+            prisma.report.count({ where: { status: 'PENDING' } })
+        ]);
+        return { tags, reports };
+    }
+
     /**
      * Get pending wildcard categories
      */

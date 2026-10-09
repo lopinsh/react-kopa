@@ -28,6 +28,17 @@ export type City = (typeof CITIES)[number];
 export const GROUP_TYPES = ['PUBLIC', 'PRIVATE'] as const;
 export type GroupType = (typeof GROUP_TYPES)[number];
 
+/**
+ * Reasons a person can pick when reporting. The English words are what is stored in `Report.reason`
+ * (keep them stable); the label shown comes from `report.reason<Value>` in the messages.
+ */
+export const REPORT_REASONS = ['Spam', 'Harassment', 'Inappropriate', 'Other'] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+
+export function isReportReason(value: string): value is ReportReason {
+    return (REPORT_REASONS as readonly string[]).includes(value);
+}
+
 export const EVENT_VISIBILITY = ['PUBLIC', 'MEMBERS_ONLY'] as const;
 export type EventVisibility = (typeof EVENT_VISIBILITY)[number];
 export const EVENT_JOIN_MODES = ['OPEN', 'REQUEST'] as const;

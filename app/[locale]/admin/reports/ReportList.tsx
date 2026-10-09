@@ -2,7 +2,9 @@
 
 import { useState, useTransition } from 'react';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users } from 'lucide-react';
+import { suspendReportedGroup } from '@/actions/admin-actions';
+import { isReportReason } from '@/lib/constants';
+import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useFormatter, useTranslations } from 'next-intl';
 import { avatarUrl } from '@/lib/avatar';
@@ -19,15 +21,39 @@ type ReportItem = {
 
 export default function ReportList({ initialReports }: { initialReports: ReportItem[] }) {
     const t = useTranslations('admin.reports');
+    const tReason = useTranslations('report');
+    const tMod = useTranslations('moderation');
+    const tErrors = useTranslations('errors');
     const format = useFormatter();
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
+    const [error, setError] = useState<string | null>(null);
+
+    const showError = (code: string) => setError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
     const handleResolve = (id: string) => {
+        setError(null);
         startTransition(async () => {
-            const res = await resolveReport(id, t('resolvedByAdmin'));
+            const res = await resolveReport(id);
             if (res.success) {
                 setReports(current => current.filter(r => r.id !== id));
+            } else {
+                showError(res.error);
+            }
+        });
+    };
+
+    // Hides the reported group (it can be restored later) and closes the report.
+    const handleHideGroup = (report: ReportItem) => {
+        if (!report.group) return;
+        const groupId = report.group.id;
+        setError(null);
+        startTransition(async () => {
+            const res = await suspendReportedGroup(report.id, groupId);
+            if (res.success) {
+                setReports(current => current.filter(r => r.id !== report.id));
+            } else {
+                showError(res.error);
             }
         });
     };
@@ -36,12 +62,13 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
         if (!confirm(t('confirmDeleteContent'))) {
             return;
         }
+        setError(null);
         startTransition(async () => {
             const res = await deleteReportedContent(id);
             if (res.success) {
                 setReports(current => current.filter(r => r.id !== id));
             } else {
-                alert(t('deleteFailed'));
+                setError(t('deleteFailed'));
             }
         });
     };
@@ -64,6 +91,9 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
 
     return (
         <div className="grid gap-4">
+            {error && (
+                <p role="alert" className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-500">{error}</p>
+            )}
             {reports.map((report) => (
                 <div key={report.id} className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-all hover:shadow-md">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
@@ -71,7 +101,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <div className="flex items-center gap-3">
                                 <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">
                                     <AlertTriangle className="h-3.5 w-3.5" />
-                                    {report.reason}
+                                    {isReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
                                 <span className="text-sm font-medium text-foreground-muted">
                                     {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short' })}
@@ -122,6 +152,16 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     </>
                                 )}
                             </button>
+                            {report.group && (
+                                <button
+                                    onClick={() => handleHideGroup(report)}
+                                    disabled={isPending}
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-border bg-surface hover:bg-surface-elevated px-6 py-3 text-sm font-bold text-foreground shadow-sm transition-all disabled:opacity-50"
+                                >
+                                    <EyeOff className="h-4 w-4" />
+                                    {tMod('hideGroup')}
+                                </button>
+                            )}
                             <button
                                 onClick={() => handleDeleteContent(report.id)}
                                 disabled={isPending}

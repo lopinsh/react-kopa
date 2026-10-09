@@ -97,8 +97,10 @@ export const ModerationService = {
         return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
     },
 
-    async listActions(limit: number = 50): Promise<AdminActionEntry[]> {
+    /** Latest admin actions; pass `targetId` to see only the actions on one group. */
+    async listActions(limit: number = 50, targetId?: string): Promise<AdminActionEntry[]> {
         const actions = await prisma.adminAction.findMany({
+            where: targetId ? { targetId } : undefined,
             orderBy: { createdAt: 'desc' },
             take: limit,
             include: { admin: { select: { name: true, username: true } } }

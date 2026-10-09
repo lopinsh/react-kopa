@@ -1,7 +1,7 @@
-import { getPendingWildcards, getPendingReports, approveWildcard, rejectWildcard, dismissReport, suspendReportedGroup } from '@/actions/admin-actions';
+import { getPendingWildcards, approveWildcard, rejectWildcard } from '@/actions/admin-actions';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { ShieldAlert, Tags, Check, X, AlertTriangle, EyeOff } from 'lucide-react';
+import { ShieldAlert, Check, X } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
@@ -19,14 +19,14 @@ export default async function AdminDashboardPage({
     searchParams
 }: {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ tab?: string; error?: string }>;
+    searchParams: Promise<{ tab?: string; error?: string; group?: string }>;
 }) {
     const { locale } = await params;
-    const { tab, error } = await searchParams;
-    const activeTab = tab || 'tags';
+    const { tab, error, group } = await searchParams;
+    // Reports have their own page (the "Reports" tab of the admin navigation).
+    if (tab === 'reports') redirect(`/${locale}/admin/reports`);
+    const activeTab = tab === 'moderation' ? 'moderation' : 'tags';
     const t = await getTranslations('admin.dashboard');
-    const tReports = await getTranslations('admin.reports');
-    const tTax = await getTranslations('admin.taxonomy');
     const tInbox = await getTranslations('admin.taxonomy.inbox');
     const c = await getTranslations('common');
     const tMod = await getTranslations('moderation');
@@ -45,10 +45,7 @@ export default async function AdminDashboardPage({
     const wildcardsRes = await getPendingWildcards();
     const wildcards = wildcardsRes.success ? wildcardsRes.data?.wildcards : [];
 
-    const reportsRes = await getPendingReports();
-    const reports = reportsRes.success ? reportsRes.data?.reports : [];
-
-    const moderationLog = activeTab === 'moderation' ? await ModerationService.listActions(50) : [];
+    const moderationLog = activeTab === 'moderation' ? await ModerationService.listActions(50, group) : [];
 
     // Inline server actions for the forms
     async function handleApproveWildcard(formData: FormData) {
@@ -63,75 +60,14 @@ export default async function AdminDashboardPage({
         backToTab(locale, 'tags', await rejectWildcard(id));
     }
 
-    async function handleDismissReport(formData: FormData) {
-        'use server';
-        const id = formData.get('id') as string;
-        backToTab(locale, 'reports', await dismissReport(id));
-    }
-
-    async function handleSuspendGroup(formData: FormData) {
-        'use server';
-        const reportId = formData.get('reportId') as string;
-        const groupId = formData.get('groupId') as string;
-        backToTab(locale, 'reports', await suspendReportedGroup(reportId, groupId));
-    }
-
     return (
-        <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold flex items-center gap-3">
                     <ShieldAlert className="h-8 w-8 text-primary" />
                     {t('title')}
                 </h1>
                 <p className="text-foreground-muted mt-2">{t('subtitle')}</p>
-                <div className="mt-3 flex items-center gap-4 text-sm font-semibold">
-                    <Link href={`/${locale}/admin/reports`} className="text-foreground-muted hover:text-foreground">{t('tabReports')}</Link>
-                    <Link href={`/${locale}/admin/taxonomy`} className="text-foreground-muted hover:text-foreground">{tTax('navLink')}</Link>
-                </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="flex border-b border-border mb-8">
-                <Link
-                    href={`/${locale}/admin?tab=tags`}
-                    className={`px-6 py-3 font-medium flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'tags'
-                        ? 'border-primary text-primary'
-                        : 'border-transparent text-foreground-muted hover:text-foreground'
-                        }`}
-                >
-                    <Tags className="h-4 w-4" />
-                    {t('tabTags')}
-                    {wildcards && wildcards.length > 0 && (
-                        <span className="ml-2 bg-primary/10 text-primary text-xs py-0.5 px-2 rounded-full">
-                            {wildcards.length}
-                        </span>
-                    )}
-                </Link>
-                <Link
-                    href={`/${locale}/admin?tab=reports`}
-                    className={`px-6 py-3 font-medium flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'reports'
-                        ? 'border-red-500 text-red-500'
-                        : 'border-transparent text-foreground-muted hover:text-foreground'
-                        }`}
-                >
-                    <AlertTriangle className="h-4 w-4" />
-                    {t('tabReports')}
-                    {reports && reports.length > 0 && (
-                        <span className="ml-2 bg-red-500/10 text-red-500 text-xs py-0.5 px-2 rounded-full">
-                            {reports.length}
-                        </span>
-                    )}
-                </Link>
-                <Link
-                    href={`/${locale}/admin?tab=moderation`}
-                    className={`px-6 py-3 font-medium flex items-center gap-2 border-b-2 transition-colors ${activeTab === 'moderation'
-                        ? 'border-primary text-primary'
-                        : 'border-transparent text-foreground-muted hover:text-foreground'
-                        }`}
-                >
-                    <EyeOff className="h-4 w-4" />
-                    {t('tabModeration')}
-                </Link>
             </div>
 
             {error && (
@@ -185,6 +121,12 @@ export default async function AdminDashboardPage({
                 {activeTab === 'moderation' && (
                     <div>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{tMod('logTitle')}</h2>
+                        {group && (
+                            <p className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground-muted">
+                                {tMod('logFiltered')}
+                                <Link href={`/${locale}/admin?tab=moderation`} className="font-semibold text-primary hover:underline">{tMod('logShowAll')}</Link>
+                            </p>
+                        )}
                         {moderationLog.length === 0 ? (
                             <p className="text-foreground-muted text-center py-12">{tMod('logEmpty')}</p>
                         ) : (
@@ -214,63 +156,11 @@ export default async function AdminDashboardPage({
                                                         <span className="text-foreground-muted">{tMod('deletedTarget')}</span>
                                                     )}
                                                 </td>
-                                                <td className="py-3 text-foreground-muted">{entry.reason || '—'}</td>
+                                                <td className="py-3 max-w-md break-words text-foreground-muted [overflow-wrap:anywhere]">{entry.reason || '—'}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {activeTab === 'reports' && (
-                    <div>
-                        <h2 className="text-xl font-semibold mb-4 text-foreground">{t('tabReports')}</h2>
-                        {!reports || reports.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-12">{tReports('noPendingReports')}</p>
-                        ) : (
-                            <div className="space-y-4">
-                                {reports.map(report => (
-                                    <div key={report.id} className="flex flex-col md:flex-row md:justify-between items-start md:items-center bg-surface-elevated p-4 rounded-lg border border-red-500/20">
-                                        <div className="mb-4 md:mb-0">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <span className="bg-red-500/10 text-red-500 text-xs font-bold px-2 py-0.5 rounded-full">
-                                                    {c('reportLabel')}
-                                                </span>
-                                                <span className="text-sm text-foreground-muted">
-                                                    {tReports('reportedBy', { name: report.reporter.name || tInbox('unknown') })}
-                                                </span>
-                                            </div>
-                                            <h3 className="font-bold text-foreground">
-                                                {report.targetGroupId ? tReports('reportedGroup', { name: report.group?.name || tInbox('unknown') }) : ''}
-                                                {report.targetEventId ? tReports('reportedEvent', { title: report.event?.title || tInbox('unknown') }) : ''}
-                                            </h3>
-                                            <p className="text-sm text-foreground-muted mt-1 bg-background/50 p-2 rounded border border-border/50">
-                                                &quot;{report.reason}&quot;
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2 w-full md:w-auto">
-                                            <form action={handleDismissReport} className="flex-1 md:flex-none">
-                                                <input type="hidden" name="id" value={report.id} />
-                                                <button type="submit" className="w-full flex justify-center items-center gap-2 px-3 py-2 text-sm font-medium text-foreground bg-surface hover:bg-surface-elevated border border-border rounded-lg transition-colors">
-                                                    <Check className="h-4 w-4" />
-                                                    {c('dismiss')}
-                                                </button>
-                                            </form>
-                                            {report.targetGroupId && (
-                                                <form action={handleSuspendGroup} className="flex-1 md:flex-none">
-                                                    <input type="hidden" name="reportId" value={report.id} />
-                                                    <input type="hidden" name="groupId" value={report.targetGroupId} />
-                                                    <button type="submit" className="w-full flex justify-center items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors">
-                                                        <EyeOff className="h-4 w-4" />
-                                                        {t('suspendGroup')}
-                                                    </button>
-                                                </form>
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
                         )}
                     </div>

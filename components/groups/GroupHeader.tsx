@@ -32,6 +32,7 @@ import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import type { GroupContext } from '@/lib/services/group.service';
 import CompactGroupBar from './CompactGroupBar';
 import GroupMoreMenu from './GroupMoreMenu';
+import AdminToolsMenu from './AdminToolsMenu';
 import { getContrastForeground } from '@/lib/color-utils';
 
 type Props = {
@@ -209,14 +210,20 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         })}
                     </nav>
 
-                    <GroupMoreMenu
-                        group={group}
-                        l1Slug={l1Slug}
-                        variant="overlay"
-                        className="mt-0.5 md:hidden"
-                        onReport={handleReport}
-                        onHide={() => setHideModalOpen(true)}
-                    />
+                    <div className="mt-0.5 flex items-center gap-2 md:hidden">
+                        <AdminToolsMenu
+                            group={group}
+                            l1Slug={l1Slug}
+                            variant="overlay"
+                            onHide={() => setHideModalOpen(true)}
+                        />
+                        <GroupMoreMenu
+                            group={group}
+                            l1Slug={l1Slug}
+                            variant="overlay"
+                            onReport={handleReport}
+                        />
+                    </div>
                 </div>
 
                 {/* ── Title row ──────────────────────────────────────────────── */}
@@ -341,13 +348,19 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             </div>
                         )}
 
+                        <AdminToolsMenu
+                            group={group}
+                            l1Slug={l1Slug}
+                            variant="bar"
+                            className="hidden md:block"
+                            onHide={() => setHideModalOpen(true)}
+                        />
                         <GroupMoreMenu
                             group={group}
                             l1Slug={l1Slug}
                             variant="bar"
                             className="hidden md:block"
                             onReport={handleReport}
-                            onHide={() => setHideModalOpen(true)}
                         />
                     </div>
                 </div>

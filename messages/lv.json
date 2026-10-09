@@ -293,7 +293,9 @@
     "action_GROUP_RESTORE": "Atjaunoja grupu",
     "action_GROUP_EDIT": "Rediģēja grupu",
     "deletedTarget": "(dzēsta)",
-    "hiddenBannerOwner": "Paslēpta, to izdarīja vietnes administrators: {reason}"
+    "hiddenBannerOwner": "Paslēpta, to izdarīja vietnes administrators: {reason}",
+    "logFiltered": "Rādītas tikai darbības ar šo grupu.",
+    "logShowAll": "Rādīt visas"
   },
   "errors": {
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
@@ -386,16 +388,11 @@
   },
   "admin": {
     "dashboard": {
-      "pendingCustomTags": "Gaidošie jaunie tagi",
-      "suspendGroup": "Apturēt grupu",
-      "tabReports": "Ziņojumi",
-      "tabModeration": "Moderācija",
-      "tabTags": "Tagi",
+      "pendingCustomTags": "Gaidošās jaunās birkas",
       "title": "Admina vadības centrs",
-      "subtitle": "Pārvaldiet lietotāju ziņojumus un kopienas taksonomiju."
+      "subtitle": "Izskati sūdzības un jaunās birkas, un redzi, kas ir moderēts."
     },
     "taxonomy": {
-      "navLink": "Taksonomija",
       "title": "Taksonomija",
       "tree": {
         "title": "Struktūra",
@@ -439,16 +436,16 @@
         "createSubcategory": "Izveidot apakškategoriju",
         "details": "Detaļas",
         "l1Title": "Kategorija",
-        "l2Title": "Apakškategorija",
-        "noSubcategories": "Apakškategoriju nav.",
+        "l2Title": "Apakštēma",
+        "noSubcategories": "Apakštēmu nav.",
         "pendingTitle": "Birkas detaļas",
         "save": "Saglabāt",
-        "subcategories": "Apakškategorijas ({count})",
-        "subcategoryCreated": "Apakškategorija izveidota",
+        "subcategories": "Apakštēmas ({count})",
+        "subcategoryCreated": "Apakštēma izveidota",
         "unsavedChanges": "Nesaglabātas izmaiņas"
       },
       "node": {
-        "children": "{count} {count, plural, zero {apakšvienību} one {apakšvienība} other {apakšvienības}}",
+        "children": "{count} {count, plural, zero {apakštēmu} one {apakštēma} other {apakštēmas}}",
         "pending": "gaida",
         "wildcard": "{count} {count, plural, zero {brīvo birku} one {brīvā birka} other {brīvās birkas}}",
         "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}"
@@ -467,29 +464,31 @@
       },
       "merge": {
         "confirm": "Apvienot",
-        "description": "Apvieno izvēlētos tagus vienā. Grupas, kas lieto kādu no tiem, izmantos tagu, ko paturēsi.",
-        "editDetails": "Labo paturamā taga datus",
-        "selectCanonical": "Izvēlies tagu, ko paturēt",
-        "title": "Apvienot tagus"
+        "description": "Apvieno izvēlētās birkas vienā. Grupas, kas lieto kādu no tām, izmantos birku, ko paturēsi.",
+        "editDetails": "Labo paturamās birkas datus",
+        "selectCanonical": "Izvēlies birku, ko paturēt",
+        "title": "Apvienot birkas"
       }
     },
     "reports": {
       "anonymousUser": "Anonīms lietotājs",
-      "confirmDeleteContent": "Dzēst ziņoto saturu? To nevar atsaukt.",
+      "confirmDeleteContent": "Dzēst saturu, par kuru iesniegta sūdzība? To nevar atsaukt.",
       "deleteContent": "Dzēst saturu",
       "deleteFailed": "Neizdevās izdzēst saturu.",
       "markAsResolved": "Atzīmēt kā atrisinātu",
-      "reportedByLabel": "Ziņoja",
-      "reportedEntity": "Ziņotais objekts",
-      "resolvedByAdmin": "Atrisināja administrators",
-      "subtitle": "Pārskati un atrisini atzīmētās grupas un pasākumus.",
-      "title": "Drošības rinda",
-      "noPendingReports": "Nav neatrisinātu ziņojumu.",
-      "reportedBy": "ziņoja {name}",
-      "reportedGroup": "Grupa: {name}",
-      "reportedEvent": "Pasākums: {title}",
+      "reportedByLabel": "Sūdzību iesniedza",
+      "reportedEntity": "Sūdzības objekts",
+      "subtitle": "Izskati sūdzības par grupām un pasākumiem.",
+      "title": "Sūdzības",
       "allClear": "Viss tīrs!",
-      "allClearDesc": "Nav neatrisinātu ziņojumu, kam nepieciešama uzmanība."
+      "allClearDesc": "Nav neatrisinātu sūdzību, kam vajadzīga uzmanība."
+    },
+    "nav": {
+      "label": "Admina sadaļas",
+      "tags": "Birkas",
+      "reports": "Sūdzības",
+      "moderation": "Moderācija",
+      "taxonomy": "Taksonomija"
     }
   },
   "messages": {
@@ -922,5 +921,11 @@
     "transferConfirm": "{name} kļūs par grupas īpašnieku, bet tu — par moderatoru. Atpakaļ grupu varēs nodot tikai jaunais īpašnieks.",
     "transferConfirmYes": "Jā, nodot grupu",
     "transferDone": "Grupa nodota — {name} ir jaunais īpašnieks."
+  },
+  "adminTools": {
+    "label": "Admina rīki",
+    "fixCategorization": "Labot kategoriju",
+    "editGroup": "Labot grupu",
+    "moderationLog": "Šīs grupas moderācijas žurnāls"
   }
 }

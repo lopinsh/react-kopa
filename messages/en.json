@@ -293,7 +293,9 @@
     "action_GROUP_RESTORE": "Restored group",
     "action_GROUP_EDIT": "Edited group",
     "deletedTarget": "(deleted)",
-    "hiddenBannerOwner": "Hidden by a site admin: {reason}"
+    "hiddenBannerOwner": "Hidden by a site admin: {reason}",
+    "logFiltered": "Showing only the actions on this group.",
+    "logShowAll": "Show all"
   },
   "errors": {
     "ACTION_FAILED": "The action could not be completed.",
@@ -387,15 +389,10 @@
   "admin": {
     "dashboard": {
       "pendingCustomTags": "Pending custom tags",
-      "suspendGroup": "Suspend group",
-      "tabReports": "Reports",
-      "tabModeration": "Moderation",
-      "tabTags": "Tags",
       "title": "Admin Dashboard",
-      "subtitle": "Manage user reports and community taxonomy."
+      "subtitle": "Review reports and new tags, and see what has been moderated."
     },
     "taxonomy": {
-      "navLink": "Taxonomy",
       "title": "Taxonomy Management",
       "tree": {
         "title": "Taxonomy Tree",
@@ -481,15 +478,17 @@
       "markAsResolved": "Mark as resolved",
       "reportedByLabel": "Reported by",
       "reportedEntity": "Reported item",
-      "resolvedByAdmin": "Resolved by admin",
-      "subtitle": "Review and resolve flagged groups and events.",
-      "title": "Safety Queue",
-      "noPendingReports": "No pending reports.",
-      "reportedBy": "reported by {name}",
-      "reportedGroup": "Group: {name}",
-      "reportedEvent": "Event: {title}",
+      "subtitle": "Look through the reports about groups and events.",
+      "title": "Reports",
       "allClear": "All Clear!",
       "allClearDesc": "No active reports require attention."
+    },
+    "nav": {
+      "label": "Admin sections",
+      "tags": "Tags",
+      "reports": "Reports",
+      "moderation": "Moderation",
+      "taxonomy": "Taxonomy"
     }
   },
   "messages": {
@@ -922,5 +921,11 @@
     "transferConfirm": "{name} becomes the owner and you become a moderator. Only the new owner can hand it back.",
     "transferConfirmYes": "Yes, hand it over",
     "transferDone": "Done — {name} is the new owner."
+  },
+  "adminTools": {
+    "label": "Admin tools",
+    "fixCategorization": "Fix categorization",
+    "editGroup": "Edit group",
+    "moderationLog": "Moderation log for this group"
   }
 }

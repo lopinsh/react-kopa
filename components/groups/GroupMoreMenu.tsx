@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowRightLeft, EyeOff, Flag, LogOut, MoreHorizontal, Settings, Share2 } from 'lucide-react';
+import { ArrowRightLeft, Flag, LogOut, MoreHorizontal, Settings, Share2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { leaveGroup } from '@/actions/group-actions';
 import { Link } from '@/i18n/routing';
@@ -18,15 +18,13 @@ type Props = {
     variant: 'overlay' | 'bar';
     className?: string;
     onReport: () => void;
-    onHide: () => void;
 };
 
 const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated';
 
 /** The one "…" menu of the group page; the header renders it in a mobile and a desktop spot. */
-export default function GroupMoreMenu({ group, l1Slug, variant, className, onReport, onHide }: Props) {
+export default function GroupMoreMenu({ group, l1Slug, variant, className, onReport }: Props) {
     const c = useTranslations('common');
-    const tModeration = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
     const { success, error: toastError } = useToast();
@@ -37,7 +35,6 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
 
     const isOwner = checkIsOwner(role);
     const canManage = hasAdminRights(role);
-    const canHide = group.moderation.isSiteAdmin && !isOwner && !group.moderation.hidden;
 
     useEffect(() => {
         if (!isOpen) return;
@@ -144,18 +141,6 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                         <Flag className="h-4 w-4" />
                         {c('reportGroup')}
                     </button>
-
-                    {canHide && (
-                        <button
-                            type="button"
-                            onClick={() => { setOpen(false); onHide(); }}
-                            className={clsx(ITEM, 'text-red-500')}
-                        >
-                            <EyeOff className="h-4 w-4" />
-                            {tModeration('hideGroup')}
-                        </button>
-                    )}
-
                 </div>
             )}
         </div>
