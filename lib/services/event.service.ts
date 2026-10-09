@@ -7,6 +7,7 @@ import { ErrorCode } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
+import { slugify } from '@/lib/slug';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -107,6 +108,20 @@ export class EventService {
     /** Pure rule: may this viewer read the instructions? */
     private static instructionsVisible(joinMode: EventJoinMode, canManage: boolean, myStatus: AttendanceStatus | null): boolean {
         return joinMode === 'OPEN' || canManage || myStatus === 'GOING';
+    }
+
+    /** Link name from the title; `-2`, `-3` … when the group already has an event with it. */
+    private static async uniqueSlug(groupId: string, title: string): Promise<string> {
+        const base = slugify(title).slice(0, 60).replace(/-+$/g, '') || 'event';
+        const taken = await prisma.event.findMany({
+            where: { groupId, slug: { startsWith: base } },
+            select: { slug: true }
+        });
+        const used = new Set(taken.map(e => e.slug));
+        if (!used.has(base)) return base;
+        for (let n = 2; ; n++) {
+            if (!used.has(`${base}-${n}`)) return `${base}-${n}`;
+        }
     }
 
     private static async loadEventForAction(eventId: string): Promise<EventWithGroup | null> {
@@ -286,7 +301,7 @@ export class EventService {
         const event = await prisma.event.create({
             data: {
                 title: data.title,
-                slug: data.slug,
+                slug: await EventService.uniqueSlug(groupId, data.title),
                 description: data.description,
                 startDate: data.startDate,
                 endDate: data.endDate,
@@ -340,44 +355,15 @@ export class EventService {
     /**
      * Update an existing event.
      */
-    static async updateEvent(eventId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ l1Slug: string; groupSlug: string }>> {
-        const event = await prisma.event.findUnique({
-            where: { id: eventId },
-            include: {
-                group: {
-                    select: {
-                        slug: true,
-                        category: {
-                            include: TaxonomyResolver.getInclude('lv')
-                        }
-                    }
-                }
-            }
-        });
+    static async updateEvent(eventId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ l1Slug: string; groupSlug: string; eventSlug: string }>> {
+        const { event, error } = await EventService.loadForOrganiser(eventId, userId);
+        if (!event) return { success: false, error };
 
-        if (!event) return { success: false, error: 'EVENT_NOT_FOUND' };
-
-        const membership = await prisma.membership.findUnique({
-            where: {
-                userId_groupId: {
-                    userId: userId,
-                    groupId: event.groupId,
-                }
-            }
-        });
-
-        const isOwner = event.creatorId === userId;
-        const isAdmin = membership && hasAdminRights(membership.role);
-
-        if (!isOwner && !isAdmin) {
-            return { success: false, error: 'FORBIDDEN' };
-        }
-
+        // The link name stays as it was: changing it would break links people already shared.
         await prisma.event.update({
             where: { id: eventId },
             data: {
                 title: data.title,
-                slug: data.slug,
                 description: data.description,
                 startDate: data.startDate,
                 endDate: data.endDate,
@@ -394,7 +380,33 @@ export class EventService {
 
         const resolved = TaxonomyResolver.resolve(event.group.category);
 
-        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug } };
+        return { success: true, data: { l1Slug: resolved.l1Slug, groupSlug: event.group.slug, eventSlug: event.slug } };
+    }
+
+    /**
+     * Delete an event (organisers only). Returns who has to be told: everyone who was going,
+     * waiting for approval or on the waitlist (not people who were declined).
+     */
+    static async deleteEvent(eventId: string, userId: string): Promise<EventServiceResult<EventActionContext & { attendeeIds: string[] }>> {
+        const { event, error } = await EventService.loadForOrganiser(eventId, userId);
+        if (!event) return { success: false, error };
+
+        const context = await EventService.buildContext(event);
+        const attendees = await prisma.attendance.findMany({
+            where: { eventId, status: { in: ['GOING', 'PENDING', 'WAITLISTED'] } },
+            select: { userId: true }
+        });
+
+        // Reports about the event have no cascade; remove them with it.
+        await prisma.$transaction([
+            prisma.report.deleteMany({ where: { targetEventId: eventId } }),
+            prisma.event.delete({ where: { id: eventId } })
+        ]);
+
+        return {
+            success: true,
+            data: { ...context, attendeeIds: attendees.map(a => a.userId).filter(id => id !== userId) }
+        };
     }
 
     /**

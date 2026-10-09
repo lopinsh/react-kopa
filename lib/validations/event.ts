@@ -2,7 +2,6 @@ import { z } from 'zod';
 
 export const eventSchema = z.object({
     title: z.string().min(3, 'TITLE_TOO_SHORT').max(120, 'TITLE_TOO_LONG'),
-    slug: z.string().min(3, 'SLUG_TOO_SHORT').regex(/^[a-z0-9-]+$/, 'SLUG_INVALID'),
     description: z.string().max(10000).optional().nullable(),
     startDate: z.string().or(z.date()).transform((val) => new Date(val)).refine((d) => !Number.isNaN(d.getTime()), 'START_DATE_REQUIRED'),
     endDate: z.string().or(z.date()).optional().nullable().transform((val) => val ? new Date(val) : null).refine((d) => d === null || !Number.isNaN(d.getTime()), 'END_DATE_INVALID'),
@@ -30,7 +29,6 @@ export type EventFormValues = z.infer<typeof eventSchema>;
 // needs the raw string value before it is transformed to a Date by Zod.
 export type EventFormData = {
     title: string;
-    slug: string;
     description?: string | null;
     startDate: string | Date;
     endDate?: string | Date | null;

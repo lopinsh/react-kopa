@@ -9,11 +9,9 @@ import { ensureContrast, getContrastForeground } from '@/lib/color-utils';
 
 export default async function GroupLayout({
     children,
-    modal,
     params,
 }: {
     children: React.ReactNode;
-    modal: React.ReactNode;
     params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
 }) {
     const { locale, groupSlug, l1Slug } = await params;
@@ -75,7 +73,6 @@ export default async function GroupLayout({
                 <main>
                     {children}
                 </main>
-                {modal}
             </div>
         </GroupProvider>
     );

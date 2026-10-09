@@ -212,7 +212,7 @@ export async function setEventFull(eventId: string, isFull: boolean, locale: str
 /**
  * Update an existing event.
  */
-export async function updateEvent(eventId: string, data: EventFormValues, locale: string): Promise<ActionResponse> {
+export async function updateEvent(eventId: string, data: EventFormValues, locale: string): Promise<ActionResponse<{ eventSlug: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
@@ -221,15 +221,37 @@ export async function updateEvent(eventId: string, data: EventFormValues, locale
         if (!validation.success) return validation;
 
         const result = await EventService.updateEvent(eventId, validation.data, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        if (!result.success) return result;
 
-        if (result.data) {
-            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}`, 'page');
-            revalidatePath(`/${locale}/${result.data.l1Slug}/group/${result.data.groupSlug}/events`, 'page');
-        }
-        return { success: true };
+        revalidateEventPaths(locale, result.data!);
+        return { success: true, data: { eventSlug: result.data!.eventSlug } };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
+    }
+}
+
+/**
+ * Delete an event. Everyone who was going, waiting or on the waitlist is told.
+ */
+export async function deleteEvent(eventId: string, locale: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    try {
+        const result = await EventService.deleteEvent(eventId, session.user.id);
+        if (!result.success) return result;
+        const ctx = result.data!;
+        await Promise.all(ctx.attendeeIds.map(id => createNotification({
+            userId: id,
+            type: 'EVENT_CANCELLED',
+            translationKey: 'EVENT_CANCELLED',
+            args: { groupName: ctx.groupName, eventTitle: ctx.eventTitle },
+            link: `/${ctx.l1Slug}/group/${ctx.groupSlug}/events`
+        })));
+        revalidateEventPaths(locale, ctx);
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'DELETE_FAILED');
     }
 }
 

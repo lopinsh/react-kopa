@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useForm, FormProvider, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import {
     Calendar,
@@ -23,20 +23,44 @@ import {
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
-import { createEvent } from '@/actions/event-actions';
+import { createEvent, updateEvent } from '@/actions/event-actions';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 
 const STEP_SCHEMAS = [0, 1] as const;
 type StepIndex = (typeof STEP_SCHEMAS)[number];
 
+/** An existing event, for the edit page. Dates are ISO strings (they cross the server/client border). */
+export type EventToEdit = {
+    id: string;
+    title: string;
+    description: string | null;
+    location: string | null;
+    startDate: string;
+    endDate: string | null;
+    maxParticipants: number | null;
+    visibility: EventVisibility;
+    joinMode: EventJoinModeValue;
+    bannerImage: string | null;
+    instructions: string | null;
+};
+
 type Props = {
     groupId: string;
     groupSlug: string;
     l1Slug: string;
-    accentColor?: string;
+    /** When set, the form edits this event instead of creating one. */
+    event?: EventToEdit;
 };
 
-export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accentColor = '#6366f1' }: Props) {
+/** Value for a datetime-local input: the browser's local time, which is how the form reads it back. */
+function toLocalInput(iso: string | null): string {
+    if (!iso) return '';
+    const d = new Date(iso);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event }: Props) {
     const t = useTranslations('eventWizard');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
@@ -48,27 +72,26 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
     const form = useForm<EventFormData>({
         resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
         defaultValues: {
-            title: '',
-            slug: '',
-            description: '',
-            location: '',
-            startDate: '',
-            endDate: '',
-            maxParticipants: undefined,
-            visibility: EVENT_VISIBILITY[0],
-            joinMode: EVENT_JOIN_MODES[0],
+            title: event?.title ?? '',
+            description: event?.description ?? '',
+            location: event?.location ?? '',
+            startDate: toLocalInput(event?.startDate ?? null),
+            endDate: toLocalInput(event?.endDate ?? null),
+            maxParticipants: event?.maxParticipants ?? undefined,
+            visibility: event?.visibility ?? EVENT_VISIBILITY[0],
+            joinMode: event?.joinMode ?? EVENT_JOIN_MODES[0],
             isRecurring: false,
             recurrencePattern: null,
-            bannerImage: '',
-            instructions: '',
+            bannerImage: event?.bannerImage ?? '',
+            instructions: event?.instructions ?? '',
         },
         mode: 'onChange',
     });
 
-    const { register, handleSubmit, formState: { errors }, setValue, getValues, watch, trigger } = form;
+    const { register, handleSubmit, formState: { errors }, setValue, watch, trigger } = form;
 
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['title', 'slug', 'startDate', 'endDate', 'location']);
+        if (s === 0) return trigger(['title', 'startDate', 'endDate', 'location']);
         if (s === 1) return trigger(['visibility', 'joinMode', 'maxParticipants']);
         return true;
     }
@@ -85,31 +108,39 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
     const onSubmit = handleSubmit((data) => {
         setServerError(null);
         startTransition(async () => {
-            const result = await createEvent(groupId, data as unknown as EventFormValues, locale);
-            if (!result.success) {
-                setServerError(result.error);
+            const values = data as unknown as EventFormValues;
+            let eventSlug: string;
+            if (event) {
+                const result = await updateEvent(event.id, values, locale);
+                if (!result.success) {
+                    setServerError(result.error);
+                    return;
+                }
+                eventSlug = result.data!.eventSlug;
             } else {
-                // Soft redirect back to group page to unmount the modal smoothly
-                router.push(`/${l1Slug}/group/${groupSlug}`);
-                router.refresh();
+                const result = await createEvent(groupId, values, locale);
+                if (!result.success) {
+                    setServerError(result.error);
+                    return;
+                }
+                eventSlug = result.data!.event.slug;
             }
+            // Land on the event's own page.
+            router.push(`/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
+            router.refresh();
         });
     });
-
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     return (
         <div
             className="mx-auto w-full max-w-lg rounded-2xl border border-border bg-surface shadow-lg"
-            style={accentStyle}
         >
             {/* Progress Bar */}
             <div className="flex gap-1 rounded-t-2xl overflow-hidden">
                 {[0, 1].map((i) => (
                     <div
                         key={i}
-                        className="h-1 flex-1 transition-all duration-500"
-                        style={{ backgroundColor: i <= step ? accentColor : undefined }}
+                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-[var(--accent)]')}
                         aria-hidden="true"
                     />
                 ))}
@@ -119,7 +150,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                 <form onSubmit={onSubmit} className="p-6 md:p-8">
                     {/* Step Header */}
                     <div className="mb-6">
-                        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: accentColor }}>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
                             {t('stepOf', { current: step + 1, total: 2 })}
                         </p>
                         <h2 className="mt-1 text-xl font-bold text-foreground">
@@ -141,15 +172,6 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                 <input
                                     type="text"
                                     {...register('title')}
-                                    onBlur={(e) => {
-                                        if (!getValues('slug')) {
-                                            const generated = e.target.value
-                                                .toLowerCase()
-                                                .replace(/[^a-z0-9]+/g, '-')
-                                                .replace(/^-+|-+$/g, '');
-                                            setValue('slug', generated, { shouldValidate: true });
-                                        }
-                                    }}
                                     placeholder={t('fieldNamePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
@@ -157,26 +179,6 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                     )}
                                 />
                                 {errors.title && <p className="mt-1 text-xs text-red-500">{t(errors.title.message as 'INVALID_URL')}</p>}
-                            </div>
-
-                            <div>
-                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                                    <Type className="h-3.5 w-3.5 text-foreground-muted" />
-                                    {t('fieldSlug')}
-                                </label>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-xs text-foreground-muted">/events/</span>
-                                    <input
-                                        type="text"
-                                        {...register('slug')}
-                                        placeholder={t('fieldSlugPlaceholder')}
-                                        className={clsx(
-                                            'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                            errors.slug ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
-                                        )}
-                                    />
-                                </div>
-                                {errors.slug && <p className="mt-1 text-xs text-red-500">{t(errors.slug.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -282,9 +284,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                             onClick={() => setValue('visibility', val as EventVisibility)}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
-                                                isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                                                isSelected ? 'border-[var(--accent)] bg-[var(--accent)]/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
                                             )}
-                                            style={isSelected ? { borderColor: accentColor, backgroundColor: `${accentColor}10` } : undefined}
                                         >
                                             <span className="font-semibold">{t(key)}</span>
                                             <span className="text-xs text-foreground-muted">{t(desc)}</span>
@@ -311,9 +312,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                                             aria-pressed={isSelected}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
-                                                isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                                                isSelected ? 'border-[var(--accent)] bg-[var(--accent)]/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
                                             )}
-                                            style={isSelected ? { borderColor: accentColor, backgroundColor: `${accentColor}10` } : undefined}
                                         >
                                             <span className="font-semibold">{t(key)}</span>
                                             <span className="text-xs text-foreground-muted">{t(desc)}</span>
@@ -380,8 +380,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all"
-                                style={{ backgroundColor: accentColor }}
+                                className="flex items-center gap-1.5 rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all"
                             >
                                 {t('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -390,11 +389,10 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, accent
                             <button
                                 type="submit"
                                 disabled={isPending}
-                                className="flex items-center gap-2 rounded-xl px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all disabled:opacity-70"
-                                style={{ backgroundColor: accentColor }}
+                                className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all disabled:opacity-70"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
-                                {t('submit')}
+                                {event ? t('save') : t('submit')}
                             </button>
                         )}
                     </div>

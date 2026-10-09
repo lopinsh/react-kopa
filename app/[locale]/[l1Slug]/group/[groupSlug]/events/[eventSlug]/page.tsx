@@ -11,14 +11,17 @@ import {
     Clock,
     Info,
     Lock,
-    UserCheck
+    UserCheck,
+    CalendarCheck
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { clsx } from 'clsx';
 import EventParticipation from '@/components/events/EventParticipation';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
+import EventManageActions from '@/components/events/EventManageActions';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
@@ -116,17 +119,24 @@ export default async function EventPage({
                     {t('allEvents')}
                 </Link>
 
+                {ended && (
+                    <div className="mb-4 flex items-center gap-2.5 rounded-2xl border border-border bg-surface-elevated px-4 py-3 text-sm font-semibold text-foreground-muted">
+                        <CalendarCheck className="h-4 w-4 shrink-0" />
+                        {t('tookPlace', { date: formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone }) })}
+                    </div>
+                )}
+
                 {event.bannerImage && (
                     <div className="mb-6 h-40 w-full overflow-hidden rounded-3xl border border-border md:h-56">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={event.bannerImage} alt="" className="h-full w-full object-cover" />
+                        <img src={event.bannerImage} alt="" className={clsx('h-full w-full object-cover', ended && 'opacity-60 grayscale')} />
                     </div>
                 )}
 
                 {/* Title block */}
                 <header className="mb-6 space-y-3">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-wide">
-                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-1 text-white">
+                        <span className={clsx('inline-flex items-center gap-1.5 rounded-lg px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)] text-white')}>
                             <Clock className="h-3.5 w-3.5" />
                             {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric', timeZone })}
                         </span>
@@ -142,18 +152,26 @@ export default async function EventPage({
                                 {t('badgeRequest')}
                             </span>
                         )}
-                        {event.isFull && (
+                        {event.isFull && !ended && (
                             <span className="rounded-full bg-[var(--accent)] px-2.5 py-1 text-white">{t('full')}</span>
                         )}
                     </div>
-                    <h1 className="text-3xl font-black leading-tight tracking-tight text-foreground md:text-4xl">{event.title}</h1>
+                    <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')}>{event.title}</h1>
                     <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
                         <Users className="h-4 w-4" />
                         {[
-                            isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
-                            event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
+                            ended ? t('wentCount', { count: goingCount }) : isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
+                            !ended && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
                         ].filter(Boolean).join(' · ')}
                     </p>
+                    {canManage && (
+                        <EventManageActions
+                            eventId={event.id}
+                            locale={locale}
+                            groupPath={`/${l1Slug}/group/${group.slug}`}
+                            eventPath={`/${l1Slug}/group/${group.slug}/events/${event.slug}`}
+                        />
+                    )}
                 </header>
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-10">
@@ -174,7 +192,7 @@ export default async function EventPage({
                                 </div>
                             )}
 
-                            {canManage && (
+                            {canManage && !ended && (
                                 <EventOrganiserPanel
                                     eventId={event.id}
                                     joinMode={event.joinMode}
@@ -187,7 +205,7 @@ export default async function EventPage({
                             )}
 
                             <div className="flex flex-col gap-3 rounded-3xl border border-border bg-surface p-4 shadow-sm">
-                                <AddToCalendar
+                                {!ended && <AddToCalendar
                                     event={{
                                         title: event.title,
                                         description: event.description || '',
@@ -195,7 +213,7 @@ export default async function EventPage({
                                         startDate: event.startDate,
                                         endDate: event.endDate || undefined
                                     }}
-                                />
+                                />}
                                 <ShareEventButton title={event.title} />
                             </div>
                         </div>

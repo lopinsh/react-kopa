@@ -317,7 +317,7 @@
     "CANCEL_FAILED": "Neizdevās atcelt. Lūdzu, mēģini vēlreiz.",
     "MANAGE_FAILED": "Neizdevās saglabāt izmaiņas. Lūdzu, mēģini vēlreiz.",
     "EVENT_MODE_MISMATCH": "Šī darbība šim pasākumam nav pieejama.",
-    "EVENT_PAST": "Šis pasākums jau ir sācies.",
+    "EVENT_PAST": "Šis pasākums jau ir noticis.",
     "EVENT_NOT_FOUND": "Pasākums nav atrasts.",
     "EVENT_SLUG_TAKEN": "Šai grupai jau ir pasākums ar šādu saites nosaukumu.",
     "MEMBERS_ONLY": "To var darīt tikai grupas biedri.",
@@ -542,7 +542,8 @@
       "EVENT_DECLINED": "Tavs pieteikums šoreiz netika apstiprināts",
       "EVENT_LET_IN": "Tevi uzņēma no gaidīšanas saraksta",
       "EVENT_SPOT_FREED": "{authorName} vairs nevar ierasties · gaidīšanas sarakstā: {waitlistCount}",
-      "EVENT_ROOM_AGAIN": "Atkal ir vieta — vari pieteikties"
+      "EVENT_ROOM_AGAIN": "Atkal ir vieta — vari pieteikties",
+      "EVENT_CANCELLED": "Pasākums atcelts"
     }
   },
   "onboarding": {
@@ -834,7 +835,14 @@
     "noOneYet": "Pagaidām neviena.",
     "manage": "Pārvaldīt",
     "requestsWaiting": "{count} jauni",
-    "allEvents": "Visi pasākumi"
+    "allEvents": "Visi pasākumi",
+    "tookPlace": "Šis pasākums notika {date}.",
+    "wentCount": "Piedalījās: {count}",
+    "editTitle": "Labot pasākumu",
+    "editSubtitle": "Izmaiņas būs redzamas uzreiz.",
+    "editEvent": "Labot",
+    "deleteEvent": "Dzēst",
+    "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. To nevarēs atsaukt."
   },
   "cities": {
     "Cesis": "Cēsis",
@@ -856,8 +864,6 @@
     "step2Desc": "Izvēlies, kam pasākums ir redzams un kā cilvēki piedalās.",
     "fieldName": "Pasākuma nosaukums",
     "fieldNamePlaceholder": "piem., Sestdienas rīta skrējiens",
-    "fieldSlug": "Saites nosaukums",
-    "fieldSlugPlaceholder": "sestdienas-rita-skrejiens",
     "fieldDescription": "Apraksts",
     "fieldDescriptionPlaceholder": "Kas notiks šajā pasākumā?",
     "fieldBannerImage": "Attēla saite",
@@ -878,10 +884,9 @@
     "back": "Atpakaļ",
     "next": "Tālāk",
     "submit": "Izveidot pasākumu",
+    "save": "Saglabāt izmaiņas",
     "TITLE_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmes garam.",
     "TITLE_TOO_LONG": "Nosaukums nedrīkst pārsniegt 120 rakstzīmes.",
-    "SLUG_TOO_SHORT": "Saites nosaukumam jābūt vismaz 3 rakstzīmes garam.",
-    "SLUG_INVALID": "Izmanto tikai mazos burtus, ciparus un domuzīmes.",
     "START_DATE_REQUIRED": "Izvēlies sākuma datumu un laiku.",
     "END_DATE_INVALID": "Ievadi derīgu beigu datumu.",
     "END_BEFORE_START": "Beigu laikam jābūt pēc sākuma laika.",

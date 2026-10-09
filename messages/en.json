@@ -317,7 +317,7 @@
     "CANCEL_FAILED": "Could not cancel. Please try again.",
     "MANAGE_FAILED": "Could not save the change. Please try again.",
     "EVENT_MODE_MISMATCH": "This action is not available for this event.",
-    "EVENT_PAST": "This event has already started.",
+    "EVENT_PAST": "This event is over.",
     "EVENT_NOT_FOUND": "Event not found.",
     "EVENT_SLUG_TAKEN": "This group already has an event with that link name.",
     "MEMBERS_ONLY": "Only group members can do this.",
@@ -542,7 +542,8 @@
       "EVENT_DECLINED": "Your request to join was not approved this time",
       "EVENT_LET_IN": "You were let in from the waitlist",
       "EVENT_SPOT_FREED": "{authorName} can't come anymore · {waitlistCount} on the waitlist",
-      "EVENT_ROOM_AGAIN": "There is room again — you can ask to join"
+      "EVENT_ROOM_AGAIN": "There is room again — you can ask to join",
+      "EVENT_CANCELLED": "The event was cancelled"
     }
   },
   "onboarding": {
@@ -834,7 +835,14 @@
     "noOneYet": "Nobody yet.",
     "manage": "Manage",
     "requestsWaiting": "{count} new",
-    "allEvents": "All events"
+    "allEvents": "All events",
+    "tookPlace": "This event took place on {date}.",
+    "wentCount": "{count} went",
+    "editTitle": "Edit event",
+    "editSubtitle": "Changes show up right away.",
+    "editEvent": "Edit",
+    "deleteEvent": "Delete",
+    "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone."
   },
   "cities": {
     "Cesis": "Cēsis",
@@ -856,8 +864,6 @@
     "step2Desc": "Decide who can see the event and how people join.",
     "fieldName": "Event name",
     "fieldNamePlaceholder": "e.g. Saturday morning run",
-    "fieldSlug": "Link name",
-    "fieldSlugPlaceholder": "saturday-morning-run",
     "fieldDescription": "Description",
     "fieldDescriptionPlaceholder": "What will happen at this event?",
     "fieldBannerImage": "Banner image URL",
@@ -878,10 +884,9 @@
     "back": "Back",
     "next": "Next",
     "submit": "Create event",
+    "save": "Save changes",
     "TITLE_TOO_SHORT": "The name must be at least 3 characters.",
     "TITLE_TOO_LONG": "The name cannot exceed 120 characters.",
-    "SLUG_TOO_SHORT": "The link name must be at least 3 characters.",
-    "SLUG_INVALID": "Use only lowercase letters, numbers and hyphens.",
     "START_DATE_REQUIRED": "Please choose a start date and time.",
     "END_DATE_INVALID": "Please enter a valid end date.",
     "END_BEFORE_START": "The end must be after the start.",

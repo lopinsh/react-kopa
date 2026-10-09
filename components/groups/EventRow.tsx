@@ -42,21 +42,27 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
     const isRequest = event.joinMode === 'REQUEST';
 
     const people = [
-        isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount }),
-        event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
+        isPast ? t('wentCount', { count: event.goingCount }) : isRequest ? t('approvedCount', { count: event.goingCount }) : t('goingCount', { count: event.goingCount }),
+        !isPast && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
     ].filter(Boolean).join(' · ');
 
     return (
-        <article className="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 transition-colors hover:border-[var(--accent)] sm:flex-row sm:items-center sm:gap-5">
+        <article className={clsx(
+            'flex flex-col gap-3 rounded-2xl border border-border p-4 transition-colors hover:border-[var(--accent)] sm:flex-row sm:items-center sm:gap-5',
+            isPast ? 'bg-surface-elevated/50' : 'bg-surface'
+        )}>
             <div className="flex min-w-0 flex-1 items-center gap-4">
-                <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-[var(--accent)]/10 text-[var(--accent)]">
+                <div className={clsx(
+                    'flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl',
+                    isPast ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)]/10 text-[var(--accent)]'
+                )}>
                     <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric', timeZone: EVENT_TIME_ZONE })}</span>
                     <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short', timeZone: EVENT_TIME_ZONE })}</span>
                 </div>
 
                 <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                        <h3 className="min-w-0 text-base font-bold leading-snug text-foreground">
+                        <h3 className={clsx('min-w-0 text-base font-bold leading-snug', isPast ? 'text-foreground-muted' : 'text-foreground')}>
                             <Link href={href} className="hover:text-[var(--accent)] hover:underline">{event.title}</Link>
                         </h3>
                         {event.isMembersOnly && (
@@ -71,7 +77,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                                 {t('badgeRequest')}
                             </span>
                         )}
-                        {event.isFull && (
+                        {event.isFull && !isPast && (
                             <span className={clsx(BADGE, 'bg-[var(--accent)] text-white')}>{t('full')}</span>
                         )}
                     </div>
