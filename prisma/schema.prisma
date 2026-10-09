@@ -39,6 +39,7 @@ model User {
   directMessages      Message[]            @relation("SentMessages")
   hiddenGroups        Group[]              @relation("HiddenGroups")
   adminActions        AdminAction[]
+  messageOverrides    MessageOverride[]
 }
 
 model Account {
@@ -167,6 +168,19 @@ model AdminAction {
   admin      User?    @relation(fields: [adminId], references: [id], onDelete: SetNull)
 
   @@index([createdAt])
+}
+
+/// Admin-edited UI copy (translation mode), merged over messages/<lang>.json at request time.
+model MessageOverride {
+  id          String   @id @default(cuid())
+  key         String
+  lang        String
+  value       String
+  updatedById String?
+  updatedAt   DateTime @updatedAt
+  updatedBy   User?    @relation(fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@unique([key, lang])
 }
 
 model GroupSection {
