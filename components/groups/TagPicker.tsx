@@ -519,11 +519,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                                     type="button"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        if (query.trim().length >= 2 && !wildcardMode) {
-                                            createPending(l1.id, query);
-                                        } else {
-                                            setIsOpen(false);
-                                        }
+                                        // Done only closes; a new topic is created by its explicit "create" action.
+                                        setIsOpen(false);
                                     }}
                                     className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98]"
                                     style={{ backgroundColor: accentColor }}
