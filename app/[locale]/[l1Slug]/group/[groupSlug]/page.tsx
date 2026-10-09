@@ -61,6 +61,10 @@ export default async function GroupPage({
                             {group.sections.map((section, index) => {
                                 const isPublic = section.visibility === 'PUBLIC';
                                 const isVisible = isPublic || group.user.isMember;
+                                // One label per language shown: next to the title (not shown for the first section),
+                                // and above the content only when the content is in a different language than that.
+                                const titleLabel = index !== 0 ? langAttr(section.titleLang, locale) : undefined;
+                                const contentLabel = section.content && isVisible ? langAttr(section.contentLang, locale) : undefined;
 
                                 return (
                                     <section
@@ -76,6 +80,7 @@ export default async function GroupPage({
                                                         <HelpCircle className="h-3.5 w-3.5" />
                                                     </span>
                                                     <span lang={langAttr(section.titleLang, locale)}>{section.title}</span>
+                                                    {titleLabel && <FallbackLangLabel lang={titleLabel} />}
                                                 </div>
                                             </div>
                                         )}
@@ -96,8 +101,8 @@ export default async function GroupPage({
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    {section.fallbackLang && (
-                                                        <FallbackLangLabel lang={section.fallbackLang} className="mb-4" />
+                                                    {contentLabel && contentLabel !== titleLabel && (
+                                                        <FallbackLangLabel lang={contentLabel} className="mb-4" />
                                                     )}
                                                     <div
                                                         lang={langAttr(section.contentLang, locale)}

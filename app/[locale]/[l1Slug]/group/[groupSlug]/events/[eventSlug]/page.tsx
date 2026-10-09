@@ -76,6 +76,11 @@ export default async function EventPage({
     const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
 
     const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;
+    // One "Latviski / In English" label per language shown: under the title, and again on the description or
+    // instructions only when that text is in yet another language than the title.
+    const titleLabel = langAttr(event.titleLang, locale);
+    const descriptionLabel = langAttr(event.descriptionLang, locale);
+    const instructionsLabel = langAttr(event.instructionsLang, locale);
     const isRequest = event.joinMode === 'REQUEST';
     const toPerson = (a: (typeof event.attendees)[number]) => ({ userId: a.userId, name: a.user.name, username: a.user.username });
     // Nothing to say when nobody went to a finished event.
@@ -164,7 +169,7 @@ export default async function EventPage({
                         )}
                     </div>
                     <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')} lang={langAttr(event.titleLang, locale)}>{event.title}</h1>
-                    {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
+                    {titleLabel && <FallbackLangLabel lang={titleLabel} />}
                     {peopleLine && (
                         <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
                             <Users className="h-4 w-4" />
@@ -269,7 +274,7 @@ export default async function EventPage({
                             <section className="space-y-3 rounded-2xl border border-border bg-surface p-5 md:p-6">
                                 <h2 className="flex flex-wrap items-center gap-2 text-lg font-black tracking-tight text-foreground">
                                     {t('aboutEvent')}
-                                    {langAttr(event.descriptionLang, locale) && <FallbackLangLabel lang={event.descriptionLang} />}
+                                    {descriptionLabel && descriptionLabel !== titleLabel && <FallbackLangLabel lang={descriptionLabel} />}
                                 </h2>
                                 <div
                                     lang={langAttr(event.descriptionLang, locale)}
@@ -291,7 +296,7 @@ export default async function EventPage({
                                 <h2 className="flex items-center gap-2 text-lg font-black tracking-tight text-[var(--accent)]">
                                     <Info className="h-5 w-5" />
                                     {t('importantInfo')}
-                                    {langAttr(event.instructionsLang, locale) && <FallbackLangLabel lang={event.instructionsLang} />}
+                                    {instructionsLabel && instructionsLabel !== titleLabel && <FallbackLangLabel lang={instructionsLabel} />}
                                 </h2>
                                 <div
                                     lang={langAttr(event.instructionsLang, locale)}
