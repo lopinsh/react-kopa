@@ -28,7 +28,7 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
         const validation = await validateActionData(groupFormSchema, data);
         if (!validation.success) return validation;
 
-        const result = await GroupService.createGroup(validation.data, session.user.id);
+        const result = await GroupService.createGroup(validation.data, session.user.id, locale);
         if (!result.success) return result as ActionResponse<{ slug: string; l1Slug: string }>;
 
         const { slug, l1Slug } = result.data!;

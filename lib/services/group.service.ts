@@ -5,6 +5,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
+import { localizeSectionTitle } from '@/lib/constants';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
@@ -307,9 +308,10 @@ export const GroupService = {
         }
 
         // 4. Final Context Construction
-        const sections = (g.sections && g.sections.length > 0)
+        const sections = ((g.sections && g.sections.length > 0)
             ? g.sections
-            : GroupService.getVirtualSections(group);
+            : GroupService.getVirtualSections(group)
+        ).map((s) => ({ ...s, title: localizeSectionTitle(s.title, locale) }));
 
         return {
             id: g.id,
@@ -369,7 +371,7 @@ export const GroupService = {
         };
     }),
 
-    async createGroup(data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+    async createGroup(data: GroupFormValues, userId: string, locale: string = 'lv'): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
 
@@ -417,7 +419,7 @@ export const GroupService = {
                 sections: {
                     create: [
                         {
-                            title: 'About us',
+                            title: localizeSectionTitle('About us', locale),
                             content: data.description || '',
                             order: 0,
                             visibility: 'PUBLIC'

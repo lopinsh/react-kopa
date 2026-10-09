@@ -137,15 +137,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
     return (
         <div className="space-y-8">
             <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-xl font-bold flex items-center gap-2">
-                        <Layout className="h-5 w-5 text-primary" />
-                        {c_common('title')}
-                    </h2>
-                    <p className="text-sm text-foreground-muted mt-1">
-                        {c_common('subtitle')}
-                    </p>
-                </div>
+                <div />
                 <div className="px-3 py-1 bg-surface-elevated border border-border rounded-full text-[10px] font-black uppercase tracking-widest text-foreground-muted">
                     {t('sections.count', { count: sections.length })}
                 </div>
@@ -326,7 +318,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                         <div className="h-8 w-8 rounded-full bg-surface-elevated border border-border flex items-center justify-center group-hover:scale-110 group-hover:bg-[var(--accent)] group-hover:text-white transition-all">
                             <Plus className="h-4 w-4" />
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest">Add New Section</span>
+                        <span className="text-xs font-black uppercase tracking-widest">{t('sections.add')}</span>
                     </button>
                 )}
             </div>

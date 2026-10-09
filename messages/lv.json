@@ -373,7 +373,8 @@
     "role_pending": "Gaida",
     "saveChangesDesc": "Izmaiņas tiks piemērotas nekavējoties visā platformā.",
     "sections": {
-      "count": "{count} / 6 sadaļas"
+      "count": "{count} / 6 sadaļas",
+      "add": "Pievienot sadaļu"
     },
     "sendMessage": "Sūtīt ziņu",
     "specialInstructions": "Īpašas instrukcijas",

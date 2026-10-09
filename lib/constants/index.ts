@@ -60,3 +60,18 @@ export type DiscoveryView = (typeof DISCOVERY_VIEWS)[number];
 
 /** Events are local to Latvia; show their dates and times in Riga time regardless of server zone. */
 export const EVENT_TIME_ZONE = 'Europe/Riga';
+
+/**
+ * Titles of the sections a new group starts with, per locale. Rows still holding the English
+ * default are shown in the viewer's language until 2.13 stores default titles per language.
+ */
+export const DEFAULT_SECTION_TITLES: Record<string, { lv: string; en: string }> = {
+    'About us': { lv: 'Par mums', en: 'About us' },
+    'Practical info': { lv: 'Praktiskā informācija', en: 'Practical info' },
+};
+
+export function localizeSectionTitle(title: string, locale: string): string {
+    const defaults = DEFAULT_SECTION_TITLES[title];
+    if (!defaults) return title;
+    return locale === 'lv' ? defaults.lv : defaults.en;
+}

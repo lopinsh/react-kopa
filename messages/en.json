@@ -368,7 +368,8 @@
     "role_pending": "Pending",
     "saveChangesDesc": "Changes will be applied immediately across the platform.",
     "sections": {
-      "count": "{count} / 6 Sections"
+      "count": "{count} / 6 Sections",
+      "add": "Add new section"
     },
     "sendMessage": "Send Message",
     "specialInstructions": "Special Instructions",
