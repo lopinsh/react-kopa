@@ -140,6 +140,7 @@ model Group {
   hiddenById         String?
   hiddenBy           User?                @relation("HiddenGroups", fields: [hiddenById], references: [id], onDelete: SetNull)
   appMessages        ApplicationMessage[]
+  conversations      Conversation[]
   events             Event[]
   category           Category             @relation(fields: [categoryId], references: [id])
   sections           GroupSection[]
@@ -277,12 +278,17 @@ model Post {
 }
 
 model Conversation {
-  id           String    @id @default(cuid())
-  isBlocked    Boolean   @default(false)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  participants User[]    @relation("ConversationParticipants")
-  messages     Message[]
+  id            String    @id @default(cuid())
+  isBlocked     Boolean   @default(false)
+  originType    String?
+  originGroupId String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  participants  User[]    @relation("ConversationParticipants")
+  messages      Message[]
+  originGroup   Group?    @relation(fields: [originGroupId], references: [id], onDelete: SetNull)
+
+  @@index([originGroupId])
 }
 
 model Message {
