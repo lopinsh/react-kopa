@@ -6,7 +6,8 @@ import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
-import { resolveSectionText, toTextLang, type TextLang } from '@/lib/translations';
+import { resolveSectionText, toTextLang, hasText, type TextLang } from '@/lib/translations';
+import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
@@ -26,14 +27,21 @@ export interface SectionView {
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
 }
 
-/** A section as the owner edits it: the text of its original language. */
+/** A section as the owner edits it: the text of every language (a missing row is empty text). Managers only. */
 export interface EditableSection {
     id: string;
-    title: string;
-    content: string;
     order: number;
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
     originalLang: TextLang;
+    texts: Record<TextLang, { title: string; content: string }>;
+}
+
+function toEditableSection(s: { id: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY'; originalLang: string; translations: { lang: string; title: string; content: string }[] }): EditableSection {
+    const text = (lang: TextLang) => {
+        const row = s.translations.find((t) => t.lang === lang);
+        return { title: row?.title ?? '', content: row?.content ?? '' };
+    };
+    return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: { lv: text('lv'), en: text('en') } };
 }
 
 export interface GroupContext {
@@ -795,7 +803,7 @@ export const GroupService = {
      * Section Management
      */
     /**
-     * Sections for the owner's editor: the text of each section's original language.
+     * Sections for the owner's editor, with the text of every language.
      * Managers only (owner, moderators, site admins); anyone else gets an empty list.
      */
     async getEditableSections(groupId: string, userId: string): Promise<EditableSection[]> {
@@ -810,27 +818,19 @@ export const GroupService = {
 
         if (sections.length === 0) {
             const group = await prisma.group.findUnique({ where: { id: groupId }, select: { description: true } });
-            return GroupService.getVirtualSections(group ?? { description: null }, 'lv').map((s) => ({
-                id: s.id,
-                title: s.title,
-                content: s.content,
-                order: s.order,
-                visibility: s.visibility,
-                originalLang: 'lv' as const
-            }));
+            return [toEditableSection({
+                id: 'about',
+                order: 0,
+                visibility: 'PUBLIC',
+                originalLang: 'lv',
+                translations: [
+                    { lang: 'lv', title: DEFAULT_SECTION_TITLES.about.lv, content: group?.description ?? '' },
+                    { lang: 'en', title: DEFAULT_SECTION_TITLES.about.en, content: '' }
+                ]
+            })];
         }
 
-        return sections.map((s) => {
-            const original = s.translations.find((t) => t.lang === s.originalLang);
-            return {
-                id: s.id,
-                title: original?.title ?? '',
-                content: original?.content ?? '',
-                order: s.order,
-                visibility: s.visibility,
-                originalLang: toTextLang(s.originalLang)
-            };
-        });
+        return sections.map(toEditableSection);
     },
 
     /**
@@ -960,68 +960,94 @@ export const GroupService = {
     },
 
     /**
-     * Saves a section. The text goes into the row of the section's original language only
-     * (new sections: the editor's language); other languages are left as they are.
+     * Saves one language of a section: only that language's row is written (title + content);
+     * the other languages stay as they are. Saving a non-original language with no text removes
+     * its row (the text counts as not translated). The original language always keeps a title.
+     * `originalLang` may change the section's original language: no text is moved, it only decides
+     * which row visitors fall back to, so that language must already have a title.
+     * New sections get the saved language as their original language.
      */
-    async upsertSection(groupId: string, data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' }, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+    async upsertSection(groupId: string, data: SectionSaveValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string; sectionId: string }>> {
         const access = await this.getManagerAccess(groupId, userId);
         if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
 
+        const { lang } = data;
+        const title = data.title.trim();
+        let sectionId: string;
+
         if (data.id) {
             // The section must belong to this group (a manager of one group cannot edit another's).
-            const owned = await prisma.groupSection.findFirst({ where: { id: data.id, groupId }, select: { id: true, order: true, originalLang: true } });
+            const owned = await prisma.groupSection.findFirst({
+                where: { id: data.id, groupId },
+                select: { id: true, order: true, originalLang: true, translations: { select: { lang: true, title: true } } }
+            });
             if (!owned) return { success: false, error: 'NOT_FOUND' };
-            const sectionId = owned.id;
-            const lang = owned.originalLang;
+            sectionId = owned.id;
+
+            const originalLang = data.originalLang ?? toTextLang(owned.originalLang);
+            if (lang === originalLang) {
+                if (!title) return { success: false, error: 'TITLE_REQUIRED' };
+            } else if (!owned.translations.some((t) => t.lang === originalLang && t.title.trim())) {
+                return { success: false, error: 'ORIGINAL_LANG_EMPTY' };
+            }
+            const removeRow = lang !== originalLang && !title && !hasText(data.content);
 
             await prisma.$transaction(async (tx) => {
                 await tx.groupSection.update({
                     where: { id: sectionId },
-                    data: { visibility: data.visibility, order: data.order }
+                    data: { visibility: data.visibility, order: data.order, originalLang }
                 });
-                await tx.groupSectionTranslation.upsert({
-                    where: { sectionId_lang: { sectionId, lang } },
-                    update: { title: data.title, content: data.content },
-                    create: { sectionId, lang, title: data.title, content: data.content }
-                });
+                if (removeRow) {
+                    await tx.groupSectionTranslation.deleteMany({ where: { sectionId, lang } });
+                } else {
+                    await tx.groupSectionTranslation.upsert({
+                        where: { sectionId_lang: { sectionId, lang } },
+                        update: { title, content: data.content },
+                        create: { sectionId, lang, title, content: data.content }
+                    });
+                }
 
                 // A renamed section must not keep showing the old default title in the other language.
-                if (!isDefaultSectionTitle(data.title)) {
+                if (lang === originalLang && !isDefaultSectionTitle(title)) {
                     const others = await tx.groupSectionTranslation.findMany({
                         where: { sectionId, lang: { not: lang } },
-                        select: { id: true, title: true }
+                        select: { id: true, title: true, content: true }
                     });
                     for (const other of others.filter((o) => isDefaultSectionTitle(o.title))) {
-                        await tx.groupSectionTranslation.update({ where: { id: other.id }, data: { title: '' } });
+                        if (hasText(other.content)) await tx.groupSectionTranslation.update({ where: { id: other.id }, data: { title: '' } });
+                        else await tx.groupSectionTranslation.delete({ where: { id: other.id } });
                     }
                 }
             });
 
-            // Sync with group description if it's the home section (order 0)
+            // The home section (order 0) is the group's summary: keep the description equal to its original-language text.
             if (owned.order === 0) {
-                await prisma.group.update({
-                    where: { id: groupId },
-                    data: { description: data.content }
+                const original = await prisma.groupSectionTranslation.findUnique({
+                    where: { sectionId_lang: { sectionId, lang: originalLang } },
+                    select: { content: true }
                 });
+                await prisma.group.update({ where: { id: groupId }, data: { description: original?.content ?? '' } });
             }
         } else {
-            const lang = toTextLang(locale);
+            if (!title) return { success: false, error: 'TITLE_REQUIRED' };
             const count = await prisma.groupSection.count({ where: { groupId } });
-            await prisma.groupSection.create({
+            const created = await prisma.groupSection.create({
                 data: {
                     groupId,
                     visibility: data.visibility || 'PUBLIC',
                     order: data.order ?? count,
                     originalLang: lang,
-                    translations: { create: { lang, title: data.title, content: data.content } }
-                }
+                    translations: { create: { lang, title, content: data.content } }
+                },
+                select: { id: true }
             });
+            sectionId = created.id;
         }
 
         if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
 
         const slugs = await this.getGroupSlugs(groupId);
-        return { success: true, data: slugs ?? undefined };
+        return { success: true, data: slugs ? { ...slugs, sectionId } : undefined };
     },
 
     async reorderSections(groupId: string, sectionIds: string[], userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {

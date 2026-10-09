@@ -236,7 +236,16 @@
     "visibilityMembersOnlyDesc": "Invite or approval only",
     "visibilityPublicDesc": "Anyone can find it and ask to join",
     "yourMessageLabel": "Your Message",
-    "transferOwnership": "Hand over the group"
+    "transferOwnership": "Hand over the group",
+    "langSwitchLabel": "Text language",
+    "langFilled": "has text",
+    "langEmpty": "no text yet",
+    "untranslatedHint": "Not translated yet — visitors see the {original, select, lv {Latvian} other {English}} text.",
+    "startFromOriginal": "Start from the {original, select, lv {Latvian} other {English}} text",
+    "originalLangLabel": "Original language",
+    "originalLangHint": "The language you write this in. Visitors see it when there is no translation.",
+    "originalLangNeedsText": "Write the text in this language first",
+    "sectionSaved": "Saved"
   },
   "discovery": {
     "active": "Active",
@@ -327,7 +336,10 @@
     "TOGGLE_FAILED": "Could not update your response.",
     "CREATE_EVENT_FAILED": "Could not create the event.",
     "CONFIRMATION_REQUIRED": "Someone new is waiting for this event. Please check the numbers and save again.",
-    "OWNER_MUST_TRANSFER": "The owner can't leave the group. Hand it over to another member first, or delete the group."
+    "OWNER_MUST_TRANSFER": "The owner can't leave the group. Hand it over to another member first, or delete the group.",
+    "TITLE_REQUIRED": "Add a title.",
+    "ORIGINAL_LANG_EMPTY": "Write the title in the original language first.",
+    "SAVE_FAILED": "Could not save. Try again."
   },
   "group": {
     "acceptingMembersDesc": "When off, new people can't ask to join.",
@@ -906,7 +918,9 @@
     "joinRequestDesc": "People ask to join and you approve them. You can mark the event as full and keep a waitlist.",
     "openConfirm": "This lets in all {count, plural, one {# waiting person} other {# waiting people}} and notifies them. This can't be undone.",
     "openConfirmYes": "Open it and let them in",
-    "openConfirmNo": "Not yet"
+    "openConfirmNo": "Not yet",
+    "originalLangTitleError": "The title in the original language ({lang}) needs at least 3 characters.",
+    "otherLangTitleError": "The {lang} title needs at least 3 characters. Fix it or clear it."
   },
   "groupSettings": {
     "tabsLabel": "Group settings",

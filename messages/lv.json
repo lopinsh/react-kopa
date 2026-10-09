@@ -236,7 +236,16 @@
     "visibilityMembersOnlyDesc": "Tikai ar uzaicinājumu vai apstiprinājumu",
     "visibilityPublicDesc": "Ikviens to var atrast un pieteikties",
     "yourMessageLabel": "Tava ziņa",
-    "transferOwnership": "Nodot grupu citam"
+    "transferOwnership": "Nodot grupu citam",
+    "langSwitchLabel": "Teksta valoda",
+    "langFilled": "ir teksts",
+    "langEmpty": "teksta vēl nav",
+    "untranslatedHint": "Vēl nav tulkots — apmeklētāji redz tekstu {original, select, lv {latviski} other {angliski}}.",
+    "startFromOriginal": "Sākt no teksta {original, select, lv {latviski} other {angliski}}",
+    "originalLangLabel": "Oriģinālvaloda",
+    "originalLangHint": "Valoda, kurā raksti. Ja tulkojuma nav, apmeklētāji redz šo tekstu.",
+    "originalLangNeedsText": "Vispirms uzraksti tekstu šajā valodā",
+    "sectionSaved": "Saglabāts"
   },
   "discovery": {
     "active": "Aktīva",
@@ -327,7 +336,10 @@
     "TOGGLE_FAILED": "Neizdevās atjaunināt tavu atbildi.",
     "CREATE_EVENT_FAILED": "Neizdevās izveidot pasākumu.",
     "CONFIRMATION_REQUIRED": "Kopš lapas atvēršanas pieteicies vēl kāds. Pārbaudi skaitu un saglabā vēlreiz.",
-    "OWNER_MUST_TRANSFER": "Īpašnieks nevar pamest grupu. Vispirms nodod to citam biedram vai izdzēs grupu."
+    "OWNER_MUST_TRANSFER": "Īpašnieks nevar pamest grupu. Vispirms nodod to citam biedram vai izdzēs grupu.",
+    "TITLE_REQUIRED": "Ieraksti nosaukumu.",
+    "ORIGINAL_LANG_EMPTY": "Vispirms uzraksti nosaukumu oriģinālvalodā.",
+    "SAVE_FAILED": "Neizdevās saglabāt. Pamēģini vēlreiz."
   },
   "group": {
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
@@ -906,7 +918,9 @@
     "joinRequestDesc": "Cilvēki piesakās, un tu viņus apstiprini. Vari atzīmēt pasākumu kā pilnu un uzturēt gaidīšanas sarakstu.",
     "openConfirm": "Visi gaidītāji ({count}) tiks ielaisti un saņems paziņojumu. To nevar atsaukt.",
     "openConfirmYes": "Atvērt un ielaist",
-    "openConfirmNo": "Vēl ne"
+    "openConfirmNo": "Vēl ne",
+    "originalLangTitleError": "Nosaukumam oriģinālvalodā ({lang}) jābūt vismaz 3 rakstzīmes garam.",
+    "otherLangTitleError": "Nosaukumam valodā {lang} jābūt vismaz 3 rakstzīmes garam. Salabo to vai izdzēs."
   },
   "groupSettings": {
     "tabsLabel": "Grupas iestatījumi",

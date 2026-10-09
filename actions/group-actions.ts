@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { GroupFormValues, groupFormSchema } from '@/lib/validations/group';
+import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
 import { createNotification } from './notification-actions';
@@ -278,22 +279,25 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
  */
 export async function upsertSectionAction(
     groupId: string,
-    data: { id?: string; title: string; content: string; order?: number; visibility?: 'PUBLIC' | 'MEMBERS_ONLY' },
+    data: SectionSaveValues,
     locale: string
-): Promise<ActionResponse> {
+): Promise<ActionResponse<{ sectionId: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.upsertSection(groupId, data, session.user.id, locale);
-        if (!result.success) return result as ActionResponse;
+        const validation = await validateActionData(sectionSaveSchema, data);
+        if (!validation.success) return validation;
 
-        const { slug, l1Slug } = result.data!;
+        const result = await GroupService.upsertSection(groupId, validation.data, session.user.id);
+        if (!result.success) return result as ActionResponse<{ sectionId: string }>;
+
+        const { slug, l1Slug, sectionId } = result.data!;
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
-        return { success: true };
+        return { success: true, data: { sectionId } };
     } catch (error) {
         return handleActionError(error, 'SAVE_FAILED');
     }

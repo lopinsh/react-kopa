@@ -11,6 +11,7 @@ import { Save, AlertCircle, Info } from 'lucide-react';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import GroupSectionEditor from '@/components/groups/GroupSectionEditor';
+import type { EditableSection } from '@/lib/services/group.service';
 import { useToast } from '@/hooks/use-toast';
 
 import BasicsSection from './settings/BasicsSection';
@@ -33,7 +34,7 @@ type Props = {
         websiteLink: string | null;
         instagramLink: string | null;
         bannerImage: string | null;
-        sections: Array<{ id: string; title: string; content: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY' }>;
+        sections: EditableSection[];
         tags: Array<{ id: string; title: string; slug: string; level: number }>;
         slug: string;
         l1Slug: string;

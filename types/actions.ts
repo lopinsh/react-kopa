@@ -39,6 +39,8 @@ export type ErrorCode =
     | 'POST_FAILED'
     | 'REPORT_FAILED'
     | 'RESOLUTION_FAILED'
+    | 'TITLE_REQUIRED'
+    | 'ORIGINAL_LANG_EMPTY'
     | 'DB_MIGRATION_REQUIRED';
 
 /**
