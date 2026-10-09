@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Shield, User as UserIcon, MessageSquare, ExternalLink, MoreVertical, Trash2, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Link, useRouter } from '@/i18n/routing';
-import { useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions';
 import { getOrCreateConversation } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -40,6 +40,25 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
+    // Close the manage menu on outside click/tap or Escape.
+    useEffect(() => {
+        if (!menuOpen) return;
+        const onPointer = (e: PointerEvent) => {
+            if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false);
+        };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setMenuOpen(false);
+        };
+        document.addEventListener('pointerdown', onPointer);
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.removeEventListener('pointerdown', onPointer);
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [menuOpen]);
 
     const canMessage = member.user.allowDirectMessages;
     const canViewProfile = member.user.isProfilePublic;
@@ -58,6 +77,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
     const canKick = (isOwner && !isTargetOwner) || (isAdmin && isTargetMember);
 
     const handleAction = (action: 'promote' | 'demote' | 'kick') => {
+        setMenuOpen(false);
         if (!window.confirm(t(`confirm${action.charAt(0).toUpperCase() + action.slice(1)}`))) return;
 
         startTransition(async () => {
@@ -152,15 +172,26 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
 
                 {/* Management Dropdown (Visible only to authorized users) */}
                 {canKick && (
-                    <div className="relative group/menu">
+                    <div ref={menuRef} className="relative">
                         <button
+                            type="button"
+                            onClick={() => setMenuOpen((open) => !open)}
+                            aria-label={t('memberActions')}
+                            aria-haspopup="menu"
+                            aria-expanded={menuOpen}
                             disabled={isPending}
                             className="p-2 rounded-xl text-foreground-muted hover:bg-surface-elevated hover:text-foreground transition-all"
                         >
                             <MoreVertical className="h-5 w-5" />
                         </button>
 
-                        <div className="absolute right-0 top-full mt-1 w-48 rounded-2xl bg-surface border border-border shadow-premium opacity-0 invisible group-hover/menu:opacity-100 group-hover/menu:visible transition-all z-10 p-1">
+                        <div
+                            role="menu"
+                            className={clsx(
+                                'absolute right-0 top-full mt-1 w-48 rounded-2xl bg-surface border border-border shadow-premium transition-all z-10 p-1',
+                                menuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+                            )}
+                        >
                             {canPromote && (
                                 <button
                                     onClick={() => handleAction('promote')}
