@@ -331,6 +331,7 @@
     "acceptingMembersDesc": "When off, new people can't ask to join.",
     "acceptingMembersLabel": "Accepting New Members",
     "anonymousUser": "Anonymous User",
+    "memberActions": "Member actions",
     "applyDescription": "Tell the group organizers why you'd like to join and what you're looking for in this community.",
     "applyToGroup": "Ask to join {name}",
     "attendingStatus": "Attending",
