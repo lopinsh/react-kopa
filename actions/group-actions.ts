@@ -1,6 +1,6 @@
 ﻿'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { GroupFormValues, groupFormSchema } from '@/lib/validations/group';
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
@@ -265,6 +265,9 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
         const result = await GroupService.deleteGroup(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
+        // Discovery caches groups and events by tag; without this the deleted group stays listed (and 404s) until the cache expires.
+        updateTag('groups');
+        updateTag('events');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}`, 'page');
 

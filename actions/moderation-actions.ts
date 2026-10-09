@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { ModerationService } from '@/lib/services/moderation.service';
@@ -15,8 +15,8 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
         const result = await ModerationService.hideGroup(groupId, session.user.id, reason);
         if (!result.success) return result;
 
-        revalidateTag('groups', 'max');
-        revalidateTag('events', 'max');
+        updateTag('groups');
+        updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
@@ -36,8 +36,8 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
         const result = await ModerationService.restoreGroup(groupId, session.user.id);
         if (!result.success) return result;
 
-        revalidateTag('groups', 'max');
-        revalidateTag('events', 'max');
+        updateTag('groups');
+        updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
@@ -57,8 +57,8 @@ export async function deleteHiddenGroup(groupId: string, reason: string, locale:
         const result = await ModerationService.deleteHiddenGroup(groupId, session.user.id, reason);
         if (!result.success) return result;
 
-        revalidateTag('groups', 'max');
-        revalidateTag('events', 'max');
+        updateTag('groups');
+        updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');

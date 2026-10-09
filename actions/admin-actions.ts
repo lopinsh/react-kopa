@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { revalidatePath, revalidateTag } from 'next/cache';
+import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService, type WildcardWithDetails, type ReportWithDetails } from '@/lib/services/admin.service';
 
@@ -86,8 +86,8 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
         const session = await auth();
         const result = await AdminService.suspendReportedGroup(groupId, reportId, session!.user.id, reason);
         if (!result.success) return result;
-        revalidateTag('groups', 'max');
-        revalidateTag('events', 'max');
+        updateTag('groups');
+        updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
