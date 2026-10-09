@@ -117,14 +117,9 @@ export class AdminService {
     }
 
     /**
-     * Take action on a report: hide the reported group (restorable) using the report's reason.
+     * Take action on a report: hide the reported group (restorable) with the reason the admin wrote.
      */
-    static async suspendReportedGroup(groupId: string, reportId: string, adminId: string): Promise<ModerationResult> {
-        const report = await prisma.report.findUnique({ where: { id: reportId }, select: { reason: true } });
-        // The hide reason must be 5–500 chars; a report reason can be shorter or longer.
-        const reportReason = report?.reason?.trim() ?? '';
-        const reason = (reportReason.length >= 5 ? reportReason : `Reported: ${reportReason || 'n/a'}`).slice(0, 500);
-
+    static async suspendReportedGroup(groupId: string, reportId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
         const result = await ModerationService.hideGroup(groupId, adminId, reason);
         if (!result.success) return result;
 
@@ -132,6 +127,6 @@ export class AdminService {
             where: { id: reportId },
             data: { status: 'ACTION_TAKEN' }
         });
-        return { success: true };
+        return result;
     }
 }

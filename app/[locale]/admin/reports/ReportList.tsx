@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { suspendReportedGroup } from '@/actions/admin-actions';
 import { isReportReason } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useFormatter, useTranslations } from 'next-intl';
 import { avatarUrl } from '@/lib/avatar';
+
+const HideGroupModal = dynamic(() => import('@/components/modals/HideGroupModal'), { ssr: false });
 
 type ReportItem = {
     id: string;
@@ -28,6 +30,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [hidingReport, setHidingReport] = useState<ReportItem | null>(null);
 
     const showError = (code: string) => setError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
@@ -37,21 +40,6 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
             const res = await resolveReport(id);
             if (res.success) {
                 setReports(current => current.filter(r => r.id !== id));
-            } else {
-                showError(res.error);
-            }
-        });
-    };
-
-    // Hides the reported group (it can be restored later) and closes the report.
-    const handleHideGroup = (report: ReportItem) => {
-        if (!report.group) return;
-        const groupId = report.group.id;
-        setError(null);
-        startTransition(async () => {
-            const res = await suspendReportedGroup(report.id, groupId);
-            if (res.success) {
-                setReports(current => current.filter(r => r.id !== report.id));
             } else {
                 showError(res.error);
             }
@@ -91,6 +79,15 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
 
     return (
         <div className="grid gap-4">
+            {hidingReport?.group && (
+                <HideGroupModal
+                    isOpen
+                    onClose={() => setHidingReport(null)}
+                    groupId={hidingReport.group.id}
+                    reportId={hidingReport.id}
+                    onHidden={() => setReports(current => current.filter(r => r.id !== hidingReport.id))}
+                />
+            )}
             {error && (
                 <p role="alert" className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-500">{error}</p>
             )}
@@ -158,7 +155,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             </button>
                             {report.group && (
                                 <button
-                                    onClick={() => handleHideGroup(report)}
+                                    onClick={() => setHidingReport(report)}
                                     disabled={isPending}
                                     className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-border bg-surface hover:bg-surface-elevated px-6 py-3 text-sm font-bold text-foreground shadow-sm transition-all disabled:opacity-50"
                                 >

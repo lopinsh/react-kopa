@@ -79,14 +79,19 @@ export async function dismissReport(reportId: string): Promise<ActionResponse> {
     }
 }
 
-export async function suspendReportedGroup(reportId: string, groupId: string): Promise<ActionResponse> {
+export async function suspendReportedGroup(reportId: string, groupId: string, reason: string, locale: string): Promise<ActionResponse> {
     if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         const session = await auth();
-        const result = await AdminService.suspendReportedGroup(groupId, reportId, session!.user.id);
+        const result = await AdminService.suspendReportedGroup(groupId, reportId, session!.user.id, reason);
         if (!result.success) return result;
-        revalidatePath('/admin');
+        revalidateTag('groups', 'max');
+        revalidateTag('events', 'max');
+        revalidatePath(`/${locale}`, 'page');
+        revalidatePath(`/${locale}/discover`, 'page');
+        revalidatePath(`/${locale}/admin`, 'page');
+        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
         return { success: true };
     } catch (error) {
         console.error('[suspendReportedGroup] Error:', error);

@@ -5,15 +5,19 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { X, EyeOff } from 'lucide-react';
 import { hideGroup } from '@/actions/moderation-actions';
+import { suspendReportedGroup } from '@/actions/admin-actions';
 import { hideGroupSchema } from '@/lib/validations/moderation';
 
 type Props = {
     isOpen: boolean;
     onClose: () => void;
     groupId: string;
+    /** When hiding from a report: closes that report as well. */
+    reportId?: string;
+    onHidden?: () => void;
 };
 
-export default function HideGroupModal({ isOpen, onClose, groupId }: Props) {
+export default function HideGroupModal({ isOpen, onClose, groupId, reportId, onHidden }: Props) {
     const t = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
@@ -32,8 +36,11 @@ export default function HideGroupModal({ isOpen, onClose, groupId }: Props) {
         }
         setError(null);
         startTransition(async () => {
-            const res = await hideGroup(groupId, reason, locale);
+            const res = reportId
+                ? await suspendReportedGroup(reportId, groupId, reason, locale)
+                : await hideGroup(groupId, reason, locale);
             if (res.success) {
+                onHidden?.();
                 onClose();
                 router.refresh();
             } else {
