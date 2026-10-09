@@ -245,7 +245,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             return (
                                 <Link
                                     key={tab.id}
-                                    href={tab.href as any}
+                                    href={tab.href}
                                     onClick={(e) => handleTabClick(e, tab.id)}
                                     className={clsx(
                                         "relative flex items-center gap-2 px-2.5 md:px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
