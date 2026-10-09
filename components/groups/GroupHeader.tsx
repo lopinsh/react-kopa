@@ -4,16 +4,16 @@ import { useTransition, useState, useRef, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import {
-    MapPin, Users, Calendar, Settings, LogOut, UserPlus,
-    ShieldAlert, Plus, ChevronRight, MoreHorizontal, HelpCircle,
-    Globe, Instagram, MessageSquare, Check, Trash2, X, Share2, Flag,
-    Shield, User, EyeOff
+    MapPin, Users, Calendar, UserPlus,
+    ChevronRight, HelpCircle,
+    Globe, Instagram, MessageSquare, Check, X,
+    Shield, User
 } from 'lucide-react';
 import Image from 'next/image';
 
 import dynamic from 'next/dynamic';
-import { joinGroup, leaveGroup, deleteGroup, cancelJoinRequest } from '@/actions/group-actions';
-import { Link, useRouter } from '@/i18n/routing';
+import { cancelJoinRequest } from '@/actions/group-actions';
+import { Link } from '@/i18n/routing';
 import { clsx } from 'clsx';
 const ApplicationModal = dynamic(() => import('../modals/ApplicationModal'), { ssr: false });
 const ReportModal = dynamic(() => import('../modals/ReportModal'), { ssr: false });
@@ -27,10 +27,11 @@ import { useGroupContext } from '@/components/providers/GroupProvider';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { usePathname } from '@/i18n/routing';
 import { getCategoryIcon } from '@/lib/icons';
-import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
+import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 import type { GroupContext } from '@/lib/services/group.service';
 import CompactGroupBar from './CompactGroupBar';
+import GroupMoreMenu from './GroupMoreMenu';
 import { getContrastForeground } from '@/lib/color-utils';
 
 type Props = {
@@ -42,9 +43,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tCities = useTranslations('cities');
-    const tModeration = useTranslations('moderation');
     const locale = useLocale();
-    const router = useRouter();
     const { user } = useGroupContext();
     const { role: userRole, isMember } = user;
     const [isPending, startTransition] = useTransition();
@@ -53,27 +52,12 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const [isInquiryModalOpen, setInquiryModalOpen] = useState(false);
     const [isSupportModalOpen, setSupportModalOpen] = useState(false);
     const [isHideModalOpen, setHideModalOpen] = useState(false);
-    const [isMoreOpen, setMoreOpen] = useState(false);
     const [isContactsOpen, setContactsOpen] = useState(false);
-    const moreRef = useRef<HTMLDivElement>(null);
     const contactsRef = useRef<HTMLDivElement>(null);
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
     const pathname = usePathname();
 
-    const isOwnerOrAdmin = hasAdminRights(userRole);
     const isOwner = checkIsOwner(userRole);
-    const canHide = group.moderation.isSiteAdmin && !isOwner && !group.moderation.hidden;
-
-    // Close more menu on outside click
-    useEffect(() => {
-        function handleClick(e: MouseEvent) {
-            if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-                setMoreOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
-    }, []);
 
     const handleMembership = () => {
         gateAction(() => {
@@ -107,11 +91,6 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const handleReport = () => {
         gateAction(() => setReportModalOpen(true));
-    };
-
-    const handleCopyLink = () => {
-        navigator.clipboard.writeText(window.location.href);
-        alert(c_common('linkCopied'));
     };
 
     interface BreadcrumbSegment {
@@ -229,56 +208,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         })}
                     </nav>
 
-                    {/* Mobile-only More Options (Top Aligned with Breadcrumbs) */}
-                    <div className="md:hidden relative mt-0.5" ref={moreRef}>
-                        <button
-                            onClick={() => setMoreOpen(!isMoreOpen)}
-                            className="flex h-7 w-7 items-center justify-center rounded-xl bg-black/20 text-white backdrop-blur-md border border-white/10 shadow-premium transition-all active:scale-95"
-                            aria-label="More options"
-                        >
-                            <MoreHorizontal className="h-5 w-5" />
-                        </button>
-
-                        {isMoreOpen && (
-                            <div className="absolute right-0 top-9 z-[45] min-w-[220px] max-w-[calc(100vw-32px)] origin-top-right rounded-xl border border-border bg-surface shadow-2xl py-1 shadow-black/20 overflow-hidden text-foreground">
-                                {isOwnerOrAdmin && (
-                                    <>
-                                        <Link
-                                            href={`/${l1Slug}/group/${group.slug}/settings`}
-                                            className="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-surface-elevated transition-colors"
-                                        >
-                                            <Settings className="h-4 w-4" />
-                                            {c_common('groupSettings')}
-                                        </Link>
-                                        <div className="my-1 border-t border-border/50" />
-                                    </>
-                                )}
-                                <button
-                                    onClick={() => {/* Share logic */ }}
-                                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm hover:bg-surface-elevated transition-colors"
-                                >
-                                    <Share2 className="h-4 w-4" />
-                                    {c_common('shareGroup')}
-                                </button>
-                                <button
-                                    onClick={handleReport}
-                                    className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/5 transition-colors"
-                                >
-                                    <Flag className="h-4 w-4" />
-                                    {c_common('reportGroup')}
-                                </button>
-                                {canHide && (
-                                    <button
-                                        onClick={() => setHideModalOpen(true)}
-                                        className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-500/5 transition-colors"
-                                    >
-                                        <EyeOff className="h-4 w-4" />
-                                        {tModeration('hideGroup')}
-                                    </button>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                    <GroupMoreMenu
+                        group={group}
+                        l1Slug={l1Slug}
+                        variant="overlay"
+                        className="mt-0.5 md:hidden"
+                        onReport={handleReport}
+                        onHide={() => setHideModalOpen(true)}
+                    />
                 </div>
 
                 {/* ── Title row ──────────────────────────────────────────────── */}
@@ -403,105 +340,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             </div>
                         )}
 
-                        {/* ··· More menu (Settings + Leave + Report) - Desktop only (Mobile is in breadcrumb row) */}
-                        <div className="hidden md:block relative" ref={moreRef}>
-                            <button
-                                onClick={() => setMoreOpen(o => !o)}
-                                className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface text-foreground-muted hover:bg-surface-elevated transition-colors"
-                                title="More options"
-                            >
-                                <MoreHorizontal className="h-4 w-4" />
-                            </button>
-
-                            {isMoreOpen && (
-                                <div className="absolute right-0 top-12 z-[45] min-w-[220px] max-w-[calc(100vw-32px)] origin-top-right rounded-xl border border-border bg-surface shadow-2xl py-1 shadow-black/20 overflow-hidden">
-                                    {isOwnerOrAdmin && (
-                                        <>
-                                            <Link
-                                                href={`/${l1Slug}/group/${group.slug}/settings`}
-                                                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
-                                                onClick={() => setMoreOpen(false)}
-                                            >
-                                                <Settings className="h-4 w-4 text-foreground-muted" />
-                                                {c_common('groupSettings')}
-                                            </Link>
-                                            <div className="h-px bg-border my-1 mx-2" />
-                                        </>
-                                    )}
-                                    <button
-                                        onClick={() => { handleCopyLink(); setMoreOpen(false); }}
-                                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
-                                    >
-                                        <Plus className="h-4 w-4 text-foreground-muted" />
-                                        {c_common('copyLink')}
-                                    </button>
-
-                                    <div className="h-px bg-border my-1 mx-2" />
-
-                                    {isMember && !isOwner && (
-                                        <button
-                                            onClick={() => {
-                                                if (confirm(c_common('confirmLeave'))) {
-                                                    startTransition(async () => {
-                                                        await leaveGroup(group.id, locale);
-                                                        setMoreOpen(false);
-                                                    });
-                                                }
-                                            }}
-                                            disabled={isPending}
-                                            className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50/10 transition-colors"
-                                        >
-                                            <LogOut className="h-4 w-4" />
-                                            {c_common('leaveGroup')}
-                                        </button>
-                                    )}
-
-                                    <button
-                                        onClick={() => { handleReport(); setMoreOpen(false); }}
-                                        className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground-muted hover:text-red-500 hover:bg-red-50/10 transition-colors"
-                                    >
-                                        <ShieldAlert className="h-4 w-4" />
-                                        {c_common('reportGroup')}
-                                    </button>
-
-                                    {canHide && (
-                                        <button
-                                            onClick={() => { setHideModalOpen(true); setMoreOpen(false); }}
-                                            className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50/10 transition-colors"
-                                        >
-                                            <EyeOff className="h-4 w-4" />
-                                            {tModeration('hideGroup')}
-                                        </button>
-                                    )}
-
-                                    {isOwner && (
-                                        <>
-                                            <div className="h-px bg-border my-1 mx-2" />
-                                            <button
-                                                onClick={() => {
-                                                    if (confirm(t('confirmDelete'))) {
-                                                        startTransition(async () => {
-                                                            const res = await deleteGroup(group.id, locale);
-                                                            if (res.success) {
-                                                                router.push('/discover');
-                                                            } else {
-                                                                alert(res.error);
-                                                            }
-                                                        });
-                                                        setMoreOpen(false);
-                                                    }
-                                                }}
-                                                disabled={isPending}
-                                                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50/20 transition-colors"
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                                {t('deleteGroup')}
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
-                            )}
-                        </div>
+                        <GroupMoreMenu
+                            group={group}
+                            l1Slug={l1Slug}
+                            variant="bar"
+                            className="hidden md:block"
+                            onReport={handleReport}
+                            onHide={() => setHideModalOpen(true)}
+                        />
                     </div>
                 </div>
             </div>
