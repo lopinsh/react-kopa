@@ -111,10 +111,15 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
 
     return (
         <div
-            className="flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-[var(--accent)]/30 transition-all group relative overflow-hidden"
+            className={clsx(
+                "flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-[var(--accent)]/30 transition-all group relative",
+                menuOpen && "z-20"
+            )}
         >
-            {/* Subtle background glow on hover */}
-            <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[var(--accent)] opacity-0 blur-[40px] transition-opacity group-hover:opacity-[0.03] pointer-events-none" />
+            {/* Subtle background glow on hover (clipped here so the manage menu can overflow the card) */}
+            <div className="absolute inset-0 overflow-hidden rounded-3xl pointer-events-none">
+                <div className="absolute -bottom-12 -right-12 h-32 w-32 rounded-full bg-[var(--accent)] opacity-0 blur-[40px] transition-opacity group-hover:opacity-[0.03]" />
+            </div>
 
             <div className="flex items-center gap-4">
                 <div className="relative">
@@ -195,7 +200,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                             {canPromote && (
                                 <button
                                     onClick={() => handleAction('promote')}
-                                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
+                                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
                                     <ArrowUpCircle className="h-4 w-4 text-green-500" />
                                     {c_common('promote')}
@@ -204,7 +209,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                             {canDemote && (
                                 <button
                                     onClick={() => handleAction('demote')}
-                                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
+                                    className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
                                     <ArrowDownCircle className="h-4 w-4 text-orange-500" />
                                     {c_common('demote')}
@@ -212,7 +217,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                             )}
                             <button
                                 onClick={() => handleAction('kick')}
-                                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-xs font-bold text-red-500 hover:bg-red-500/5 transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-red-500 hover:bg-red-500/5 transition-colors"
                             >
                                 <Trash2 className="h-4 w-4" />
                                 {c_common('kick')}
