@@ -52,7 +52,7 @@ Every screen, grouped by the step of the core loop it serves. Update the row whe
 | Create | Create group wizard (4 steps) | `/create` | logged in | ✅ | keep · banner upload later |
 | Join | Group page – About | `[l1]/group/[g]` | everyone | 🟡 | keep · 3.2 header (white title on light banner, blank role pill) |
 | Join | Apply / withdraw | `ApplicationModal`, `MembershipPanel` | visitors | ✅ | keep · "Join X" → "Ask to join X" |
-| Join | Auth gate | `AuthGateModal` (join button, discussions, mobile nav) vs sign-in page link (events) | visitors | 🟡 | proposed: one pattern — decide in screen review |
+| Join | Auth gate | `AuthGateModal` (join button, discussions, mobile nav) vs sign-in page link (events) | visitors | 🟡 | **keep pop-up + add "Create account"; keep sign-in page** (see Sign-in decision); events pages should use the pop-up too? — review |
 | Join | Sign in / Register / Onboarding | `/auth/*`, `/onboarding/username` | visitors | 🟡 | keep · user to click through one real sign-up (2.0) |
 | Talk | Discussions | `[g]/discussions`, `DiscussionBoard` | members | ❌ | 2.4 |
 | Talk | Ask the group (before joining) | `InquiryModal`, `SupportMessageModal` | visitors/members | ❌ | 2.4 |
@@ -64,7 +64,7 @@ Every screen, grouped by the step of the core loop it serves. Update the row whe
 | Group life | Event page + organiser panel | `[g]/events/[e]` | everyone | ✅ | keep · edit/delete missing (2.10) |
 | Group life | Create event | `[g]/create-event` (modal + page) | organisers | 🟡 | keep · hide link-name field (2.10) |
 | Group life | Group settings (6 tabs) | `[g]/settings` | owner/admin | 🟡 | keep · review together |
-| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | **keep — core feature** (user): each section is its own part of the group page; review how sections, description and instructions fit together |
+| Group life | Sections editor | `GroupSectionEditor` (settings tab) | owner/admin | 🟡 | **keep — core feature** (see Sections decision: all content as sections, protect only the last one) |
 | Group life | Report / hide group | `ReportModal`, `HideGroupModal` | any / admin | ✅ | keep |
 | Me | Own profile | `/profile` | members | 🟡 | keep · **remove static "Events attended"** (2.11) |
 | Me | Public profile | `/profile/[username]` | everyone | ✅ | keep · message button after 2.4 |
@@ -147,7 +147,9 @@ Noticed, not changed:
   - **"Interested" is removed.** Wording must fit any event type (rehearsal, birthday, hike): no seats/tickets/places — people and joining.
   - **Recurrence:** later, members-only events only (public events never recur — no abandoned public series). Planned as a real series (each date its own event, RSVP per date). Until then the wizard has no recurring option.
 
-- **Group sections are a core feature** (user, 2026-10-09): owners build their group page from several sections, each shown as its own part of the page, to cater to different needs. Never remove or merge them away; polish how they sit next to description and instructions.
+- **Group sections are a core feature** (user, 2026-10-09): owners build their group page from several sections, each shown as its own part of the page, to cater to different needs. Never remove or merge them away. **Intent:** everything on the group page is sections. The owner may delete any section except the **last remaining** one. "Instructions" was meant as a *sample section* the owner can rename/rewrite, not a separate field.
+  - **Today (checked 2026-10-09):** the wizard creates one section "About us" from the description (title stored in English, so `/lv` shows English); wizard instructions go to `Group.instructions` and show as a separate "Instructions" tab, not a section (only old groups without sections get it as a virtual section); `deleteSection` locks the *first* section (order 0, also can't be moved) instead of protecting the last one. To settle in the screen review: wizard creates "About us" + a sample "Instructions" section (translated titles at creation, members-only?), retire the separate Instructions tab/field, delete guard = last section only; what discovery cards use as the short summary.
+- **Sign-in** (user, 2026-10-09): keep the **pop-up** for actions inside the site (join, post, mobile nav) so people stay on the group page; add a **"Create account"** link to it (registration must also return the person to where they were). Keep the **sign-in page** for direct visits, the header Sign in button and protected URLs. Goal: one streamlined flow — both should share the same form and wording. Details in the screen review.
 - **Past events look finished** (proposed 2026-10-09, awaiting user OK): event page notice "This event took place on …", greyed banner, no join button, "N went"; greyed Past-tab rows; organiser panel hidden.
 
 ## Opus queue (not for Sonnet)
@@ -178,7 +180,7 @@ Goal: gather facts so the user and Opus can review every screen together in one 
 
 ## Next session B — Screen review with the user (Opus)
 
-Prompt to start with: *"Read AGENTS.md, docs/execution_handoff.md (Screen map, product decisions) and docs/core_philosophy.md. Open the 'Screen review' Artifact linked under Next session A. Walk the screens with me one loop step at a time (Find → Create → Join → Talk → Group life → Me → Shell → Static → Admin). For each screen: summarise what it does and the facts noticed in 2–3 lines, give one recommendation (keep / fix / hide / remove, plus the one change that matters most), and wait for my answer. Keep it short: one default per small detail, questions only for real product decisions. Record each agreed decision in the Screen map's Decision column as we go, and turn agreed fixes into small numbered Sonnet items in the right stage. Open questions to settle along the way: search as one modal with ready-made options (categories, cities, next events) replacing the filter-bar input; one sign-in pattern (pop-up vs page); how sections, description and instructions fit together; past-event look; group settings tabs."*
+Prompt to start with: *"Read AGENTS.md, docs/execution_handoff.md (Screen map, product decisions) and docs/core_philosophy.md. Open the 'Screen review' Artifact linked under Next session A. Walk the screens with me one loop step at a time (Find → Create → Join → Talk → Group life → Me → Shell → Static → Admin). For each screen: summarise what it does and the facts noticed in 2–3 lines, give one recommendation (keep / fix / hide / remove, plus the one change that matters most), and wait for my answer. Keep it short: one default per small detail, questions only for real product decisions. Record each agreed decision in the Screen map's Decision column as we go, and turn agreed fixes into small numbered Sonnet items in the right stage. Open questions to settle along the way: search as one modal with ready-made options (categories, cities, next events) replacing the filter-bar input; sign-in pop-up details (Create account link, return path, should events use it too); sections as the only group content (sample Instructions section, last-section guard, translated default titles); past-event look; group settings tabs."*
 
 ## Stage 2 — Walk the loop  ← CURRENT
 
