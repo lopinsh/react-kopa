@@ -993,9 +993,10 @@ export const GroupService = {
             const removeRow = lang !== originalLang && !title && !hasText(data.content);
 
             await prisma.$transaction(async (tx) => {
+                // Order changes go through reorderSections; the first section always stays public.
                 await tx.groupSection.update({
                     where: { id: sectionId },
-                    data: { visibility: data.visibility, order: data.order, originalLang }
+                    data: { visibility: owned.order === 0 ? 'PUBLIC' : data.visibility, originalLang }
                 });
                 if (removeRow) {
                     await tx.groupSectionTranslation.deleteMany({ where: { sectionId, lang } });
@@ -1008,14 +1009,16 @@ export const GroupService = {
                 }
 
                 // A renamed section must not keep showing the old default title in the other language.
+                // Only the untouched default row (default title, no content) goes; a language the owner
+                // has written in is left exactly as they saved it.
                 if (lang === originalLang && !isDefaultSectionTitle(title)) {
                     const others = await tx.groupSectionTranslation.findMany({
                         where: { sectionId, lang: { not: lang } },
                         select: { id: true, title: true, content: true }
                     });
-                    for (const other of others.filter((o) => isDefaultSectionTitle(o.title))) {
-                        if (hasText(other.content)) await tx.groupSectionTranslation.update({ where: { id: other.id }, data: { title: '' } });
-                        else await tx.groupSectionTranslation.delete({ where: { id: other.id } });
+                    const untouched = others.filter((o) => isDefaultSectionTitle(o.title) && !hasText(o.content));
+                    if (untouched.length > 0) {
+                        await tx.groupSectionTranslation.deleteMany({ where: { id: { in: untouched.map((o) => o.id) } } });
                     }
                 }
             });
@@ -1030,12 +1033,14 @@ export const GroupService = {
             }
         } else {
             if (!title) return { success: false, error: 'TITLE_REQUIRED' };
-            const count = await prisma.groupSection.count({ where: { groupId } });
+            // New sections go last (orders may have gaps after a delete); the first section is always public.
+            const last = await prisma.groupSection.aggregate({ where: { groupId }, _max: { order: true } });
+            const order = last._max.order === null ? 0 : last._max.order + 1;
             const created = await prisma.groupSection.create({
                 data: {
                     groupId,
-                    visibility: data.visibility || 'PUBLIC',
-                    order: data.order ?? count,
+                    visibility: order === 0 ? 'PUBLIC' : data.visibility || 'PUBLIC',
+                    order,
                     originalLang: lang,
                     translations: { create: { lang, title, content: data.content } }
                 },

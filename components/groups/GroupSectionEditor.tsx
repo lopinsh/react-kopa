@@ -7,9 +7,9 @@ import { clsx } from 'clsx';
 import { upsertSectionAction, reorderSectionsAction, deleteSectionAction } from '@/actions/group-actions';
 import { useRouter } from '@/i18n/routing';
 import { isDefaultSectionTitle } from '@/lib/constants';
-import { toTextLang, TEXT_LANGS, type TextLang } from '@/lib/translations';
+import { toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
-import SectionEditForm, { type SectionDraft } from '@/components/groups/SectionEditForm';
+import SectionEditForm, { isTextChanged, type SectionDraft } from '@/components/groups/SectionEditForm';
 
 const MAX_SECTIONS = 6;
 
@@ -31,52 +31,81 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-    const [sections, setSections] = useState<SectionDraft[]>([...initialSections].sort((a, b) => a.order - b.order));
+    const [sections, setSections] = useState<SectionDraft[]>(() =>
+        [...initialSections].sort((a, b) => a.order - b.order).map((s) => ({ ...s, savedTexts: s.texts }))
+    );
     const [editingId, setEditingId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [saved, setSaved] = useState<{ id: string; lang: TextLang } | null>(null);
+    // Id of the section that was just saved, for the "Saved" tick.
+    const [saved, setSaved] = useState<string | null>(null);
 
     const updateSection = (id: string, updates: Partial<SectionDraft>) => {
         setSaved(null);
         setSections((prev) => prev.map((s) => (s.id === id ? { ...s, ...updates } : s)));
     };
 
-    /** Saves one language of a section (the other languages are not touched). */
-    const handleSave = (section: SectionDraft, lang: TextLang) => {
+    /**
+     * Saves the language on screen plus any other language with unsaved edits, one row per call
+     * (unchanged languages are not touched). The original language goes first, so a newly chosen
+     * original already has its title when the other language is saved.
+     */
+    const handleSave = (section: SectionDraft, currentLang: TextLang) => {
         setError(null);
         setSaved(null);
-        const { title, content } = section.texts[lang];
+        const langs = section.isNew
+            ? [currentLang]
+            : TEXT_LANGS
+                .filter((l) => l === currentLang || isTextChanged(section.texts[l], section.savedTexts[l]))
+                .sort((a, b) => Number(b === section.originalLang) - Number(a === section.originalLang));
         startTransition(async () => {
-            const result = await upsertSectionAction(
-                groupId,
-                {
-                    id: section.isNew ? undefined : section.id,
-                    lang,
-                    title,
-                    content,
-                    order: section.order,
-                    visibility: section.visibility,
-                    originalLang: section.isNew ? undefined : section.originalLang
-                },
-                locale
-            );
-            if (!result.success) {
-                setError(result.error);
-                return;
+            let sectionId = section.id;
+            let isNew = section.isNew;
+            const done: TextLang[] = [];
+            let failed: string | null = null;
+            for (const lang of langs) {
+                const { title, content } = section.texts[lang];
+                const result = await upsertSectionAction(
+                    groupId,
+                    {
+                        id: isNew ? undefined : sectionId,
+                        lang,
+                        title,
+                        content,
+                        visibility: section.visibility,
+                        originalLang: isNew ? undefined : section.originalLang
+                    },
+                    locale
+                );
+                if (!result.success) {
+                    failed = result.error;
+                    break;
+                }
+                sectionId = result.data!.sectionId;
+                isNew = false;
+                done.push(lang);
             }
-            const sectionId = result.data!.sectionId;
+            if (failed) setError(failed);
+            if (done.length === 0) return;
+
             setSections((prev) => prev.map((s) => {
                 if (s.id !== section.id) return s;
-                // The server drops a leftover default title in the other language when the original is renamed.
-                const clearDefault = lang === s.originalLang && !isDefaultSectionTitle(title);
                 const texts = { ...s.texts };
-                for (const other of TEXT_LANGS.filter((l) => l !== lang)) {
-                    if (clearDefault && isDefaultSectionTitle(texts[other].title)) texts[other] = { ...texts[other], title: '' };
+                const savedTexts = { ...s.savedTexts };
+                for (const l of done) savedTexts[l] = section.texts[l];
+                // The server drops an untouched default title row in the other language when the original is renamed.
+                const original = section.texts[section.originalLang];
+                if (done.includes(section.originalLang) && !isDefaultSectionTitle(original.title)) {
+                    for (const other of TEXT_LANGS.filter((l) => !done.includes(l))) {
+                        if (isDefaultSectionTitle(savedTexts[other].title) && !hasText(savedTexts[other].content)) {
+                            savedTexts[other] = { title: '', content: '' };
+                            if (!isTextChanged(texts[other], s.savedTexts[other])) texts[other] = savedTexts[other];
+                        }
+                    }
                 }
-                return { ...s, id: sectionId, isNew: false, texts };
+                return { ...s, id: sectionId, isNew: false, texts, savedTexts };
             }));
-            if (editingId === section.id) setEditingId(sectionId);
-            setSaved({ id: sectionId, lang });
+            if (sectionId !== section.id) setEditingId((cur) => (cur === section.id ? sectionId : cur));
+            if (!failed) setSaved(sectionId);
             router.refresh();
         });
     };
@@ -131,6 +160,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
             visibility: 'PUBLIC',
             originalLang: lang,
             texts: { lv: empty, en: empty, [lang]: { title: c_common('newSection'), content: '' } },
+            savedTexts: { lv: empty, en: empty },
             isNew: true
         };
         setSections([...sections, newSection]);
@@ -225,7 +255,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                         section={section}
                                         isPending={isPending}
                                         canDelete={index > 0}
-                                        savedLang={saved?.id === section.id ? saved.lang : null}
+                                        justSaved={saved === section.id}
                                         onChange={(updates) => updateSection(section.id, updates)}
                                         onSave={(lang) => handleSave(section, lang)}
                                         onDelete={() => handleDelete(section)}

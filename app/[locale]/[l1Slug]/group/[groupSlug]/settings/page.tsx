@@ -79,7 +79,7 @@ export default async function GroupSettingsPage(props: {
         : [];
 
     const activeTab: SettingsTab = tab === 'sections' ? 'sections' : 'group';
-    // The editor works on the text of each section's original language (managers only).
+    // The editor gets the text of every language (managers only).
     const editableSections = activeTab === 'sections' ? await GroupService.getEditableSections(group.id, session.user.id) : [];
 
     return (

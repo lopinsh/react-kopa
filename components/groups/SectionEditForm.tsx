@@ -8,15 +8,22 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 import LangSwitch from '@/components/ui/LangSwitch';
 import UntranslatedNotice from '@/components/ui/UntranslatedNotice';
 import OriginalLangControl from '@/components/ui/OriginalLangControl';
-import { isDefaultSectionTitle } from '@/lib/constants';
+import { DEFAULT_SECTION_TITLES, isDefaultSectionTitle } from '@/lib/constants';
 import { hasText, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
 
-/** A section in the editor; `isNew` until its first save. */
-export type SectionDraft = EditableSection & { isNew?: boolean };
+type SectionText = { title: string; content: string };
+
+/** A section in the editor; `savedTexts` is the last saved text (to find unsaved edits), `isNew` until its first save. */
+export type SectionDraft = EditableSection & { savedTexts: Record<TextLang, SectionText>; isNew?: boolean };
+
+/** True when a language has edits that are not saved yet. */
+export function isTextChanged(text: SectionText, saved: SectionText): boolean {
+    return text.title !== saved.title || text.content !== saved.content;
+}
 
 /** A language counts as written when it has content or an owner-written (non-default) title. */
-export function isLangFilled(text: { title: string; content: string }): boolean {
+export function isLangFilled(text: SectionText): boolean {
     return hasText(text.content) || (text.title.trim() !== '' && !isDefaultSectionTitle(text.title));
 }
 
@@ -24,14 +31,14 @@ interface Props {
     section: SectionDraft;
     isPending: boolean;
     canDelete: boolean;
-    /** Language that was just saved, for the "Saved" tick. */
-    savedLang: TextLang | null;
+    /** True right after a save, for the "Saved" tick. */
+    justSaved: boolean;
     onChange: (updates: Partial<SectionDraft>) => void;
     onSave: (lang: TextLang) => void;
     onDelete: () => void;
 }
 
-export default function SectionEditForm({ section, isPending, canDelete, savedLang, onChange, onSave, onDelete }: Props) {
+export default function SectionEditForm({ section, isPending, canDelete, justSaved, onChange, onSave, onDelete }: Props) {
     const t = useTranslations('common');
     // Opens on the original language; a new section only has that one.
     const [lang, setLang] = useState<TextLang>(section.originalLang);
@@ -42,11 +49,14 @@ export default function SectionEditForm({ section, isPending, canDelete, savedLa
     const filled = { lv: isLangFilled(section.texts.lv), en: isLangFilled(section.texts.en) };
     const isFirst = section.order === 0;
 
-    const setText = (updates: Partial<{ title: string; content: string }>) =>
+    const setText = (updates: Partial<SectionText>) =>
         onChange({ texts: { ...section.texts, [lang]: { ...text, ...updates } } });
 
     const copyFromOriginal = () => {
-        onChange({ texts: { ...section.texts, [lang]: { ...section.texts[section.originalLang] } } });
+        const original = section.texts[section.originalLang];
+        // A built-in title ("Par mums") is copied as its own translation ("About us").
+        const defaults = Object.values(DEFAULT_SECTION_TITLES).find((d) => d[section.originalLang] === original.title.trim());
+        onChange({ texts: { ...section.texts, [lang]: { title: defaults ? defaults[lang] : original.title, content: original.content } } });
         setRev((r) => r + 1);
     };
 
@@ -127,7 +137,7 @@ export default function SectionEditForm({ section, isPending, canDelete, savedLa
                 ) : <span />}
 
                 <div className="flex items-center gap-3">
-                    {savedLang === lang && (
+                    {justSaved && (
                         <span className="flex items-center gap-1 text-xs font-semibold text-foreground-muted" role="status">
                             <Check className="h-3.5 w-3.5" />
                             {t('sectionSaved')}
