@@ -714,13 +714,35 @@
   "pages": {
     "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",
     "about": {
-      "cta": "Find a group",
-      "lead": "Ejam Kopā means “Let’s go together”. It is a place to find people to do things with.",
-      "p1": "I started it because reaching out is awkward. You want a gym buddy in Jelgava, but none of your friends live in your city and posting an ad feels strange. You’d love a book club or a hiking crew, but those only exist if you already know someone. And if you lead a choir or a dance group, you’d like newcomers to find you without a poster in the culture centre. It is awkward on both sides, and that is the part I want to take away.",
-      "p2": "Groups are the heart of the site. You can create one, be found, join, and talk. Events belong to groups: some are open to anyone, like a concert or a neighbourhood clean-up, and some are only for members, like a rehearsal.",
-      "p3": "It is meant to be calm. There is no feed to scroll and nothing here is built to keep you hooked. The aim is the opposite: help you find your people, then get off the screen and go meet them.",
-      "p4": "Ejam Kopā is a non-profit project with no ads, made by one person, one small step at a time. It starts in Latvia, in Latvian and English. I only show what already works, so if something is missing, it is not built yet.",
-      "title": "About Ejam Kopā"
+      "title": "About Ejam Kopā",
+      "lead": "Ejam Kopā helps you find people to do things with. Here is what we believe in.",
+      "points": {
+        "awkward": {
+          "title": "Reaching out made easier",
+          "text": "Reaching out to strangers is awkward, whether you are looking for a group or for members. We want to make it easier."
+        },
+        "groups": {
+          "title": "Groups come first",
+          "text": "Create a group, get found, join and talk. Events belong to groups."
+        },
+        "glance": {
+          "title": "Clear at a glance",
+          "text": "Colour shows the category, and you see the city and the number of members right away."
+        },
+        "calm": {
+          "title": "Calm",
+          "text": "No endless feed and nothing built to keep you on the screen. Find your people and meet in real life."
+        },
+        "honest": {
+          "title": "Honest",
+          "text": "We only show what already works."
+        },
+        "nonprofit": {
+          "title": "Non-profit",
+          "text": "No ads. Starting in Latvia, in Latvian and English, one step at a time."
+        }
+      },
+      "cta": "Find a group"
     },
     "privacy": {
       "cookies1": "A sign-in session cookie keeps you logged in, and a language cookie remembers your language. Both are needed for the site to work.",

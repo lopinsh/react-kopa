@@ -581,9 +581,9 @@
         "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad."
       },
       "validation": {
-        "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmēm.",
+        "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmes garam.",
         "NAME_TOO_LONG": "Vārds nedrīkst būt garāks par 50 rakstzīmēm.",
-        "USERNAME_TOO_SHORT": "Lietotājvārdam jābūt vismaz 3 rakstzīmēm.",
+        "USERNAME_TOO_SHORT": "Lietotājvārdam jābūt vismaz 3 rakstzīmes garam.",
         "USERNAME_TOO_LONG": "Lietotājvārds nedrīkst būt garāks par 30 rakstzīmēm.",
         "USERNAME_INVALID_CHARS": "Tikai mazie burti, cipari un pasvītras.",
         "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts.",
@@ -622,7 +622,7 @@
     "reasonSpam": "Mēstules",
     "reasonHarassment": "Uzmākšanās",
     "reasonInappropriate": "Nepiemērots saturs",
-    "reasonOther": "Kas cits",
+    "reasonOther": "Cits",
     "cancel": "Atcelt",
     "submit": "Nosūtīt",
     "success": "Paldies. Ziņojums nosūtīts.",
@@ -667,7 +667,7 @@
     "DESCRIPTION_TOO_LONG": "Apraksts ir pārāk garš.",
     "CATEGORY_REQUIRED": "Lūdzu, izvēlieties kategoriju.",
     "NAME_TOO_LONG": "Nosaukums nevar pārsniegt 80 rakstzīmes.",
-    "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm garam.",
+    "NAME_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmes garam.",
     "TOPIC_REQUIRED": "Lūdzu, izvēlieties vismaz vienu apakštēmu.",
     "acceptingMembers": "Pieņem jaunus biedrus",
     "addSubtopic": "Pievienot apakštēmu",
@@ -714,13 +714,35 @@
   "pages": {
     "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",
     "about": {
-      "cta": "Atrast grupu",
-      "lead": "Ejam Kopā nozīmē “iesim kopā”. Tā ir vieta, kur atrast cilvēkus, ar kuriem kaut ko darīt.",
-      "p1": "Es to sāku, jo sazināties ar svešiem ir neveikli. Gribi treniņbiedru Jelgavā, bet neviens no draugiem tavā pilsētā nedzīvo, un sludinājuma izlikšana šķiet dīvaina. Gribētos grāmatu klubu vai pārgājienu kompāniju, bet tādi ir tikai tad, ja jau kādu pazīsti. Un, ja vadi kori vai deju kolektīvu, gribi, lai jaunie dalībnieki tevi atrod bez plakāta kultūras namā. Neveiklums ir abās pusēs, un tieši to es gribu noņemt.",
-      "p2": "Grupas ir šīs vietnes sirds. Tu vari izveidot grupu, tikt atrasts, pievienoties un sarunāties. Pasākumi pieder grupām: daži ir atvērti ikvienam, piemēram, koncerts vai pagalma talka, un daži paredzēti tikai biedriem, piemēram, mēģinājums.",
-      "p3": "Te ir jābūt mierīgi. Nav ziņu plūsmas, ko ritināt, un nekas šeit nav veidots, lai tevi paturētu pie ekrāna. Mērķis ir pretējs: palīdzēt atrast savējos un tad aiziet no ekrāna un satikties.",
-      "p4": "Ejam Kopā ir bezpeļņas projekts bez reklāmām, ko veido viens cilvēks, soli pa solim. Tas sākas Latvijā, latviešu un angļu valodā. Es rādu tikai to, kas jau darbojas, tāpēc, ja kaut kā trūkst, tas vēl nav uzbūvēts.",
-      "title": "Par Ejam Kopā"
+      "title": "Par Ejam Kopā",
+      "lead": "Ejam Kopā palīdz atrast cilvēkus, ar kuriem kopā kaut ko darīt. Lūk, kam mēs ticam.",
+      "points": {
+        "awkward": {
+          "title": "Uzrunāt ir vieglāk",
+          "text": "Uzrunāt svešiniekus ir neveikli, gan meklējot grupu, gan meklējot biedrus. Mēs gribam to atvieglot."
+        },
+        "groups": {
+          "title": "Grupas ir galvenais",
+          "text": "Izveido grupu, ļauj sevi atrast, pievienojies un sarunājies. Pasākumi pieder grupām."
+        },
+        "glance": {
+          "title": "Skaidrs no pirmā acu skatiena",
+          "text": "Krāsa rāda kategoriju, un uzreiz redzama pilsēta un biedru skaits."
+        },
+        "calm": {
+          "title": "Mierīgi",
+          "text": "Nav bezgalīgas plūsmas un nekā, kas tevi turētu pie ekrāna. Atrodi savējos un satiecieties dzīvē."
+        },
+        "honest": {
+          "title": "Godīgi",
+          "text": "Rādām tikai to, kas jau darbojas."
+        },
+        "nonprofit": {
+          "title": "Bezpeļņas",
+          "text": "Bez reklāmām. Sākam Latvijā, latviešu un angļu valodā, soli pa solim."
+        }
+      },
+      "cta": "Atrast grupu"
     },
     "privacy": {
       "cookies1": "Pieslēgšanās sesijas sīkdatne tur tevi pieslēgtu, un valodas sīkdatne atceras tavu valodu. Abas ir nepieciešamas, lai vietne darbotos.",
@@ -733,7 +755,7 @@
       "dataTitle": "Ko mēs glabājam",
       "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
       "rights1": "Savu profilu vari labot jebkurā laikā. Konta dzēšana pašā vietnē vēl nav pieejama.",
-      "rights2": "Lai redzētu, labotu vai dzēstu savus datus, raksti uz <mail>ejam@lumm.eu</mail>. Pieprasījumus pagaidām apstrādājam ar roku.",
+      "rights2": "Lai redzētu, labotu vai dzēstu savus datus, raksti uz <mail>ejam@lumm.eu</mail>. Pieprasījumus pagaidām apstrādājam manuāli.",
       "rightsTitle": "Tavi dati",
       "title": "Privātums",
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
@@ -856,9 +878,9 @@
     "back": "Atpakaļ",
     "next": "Tālāk",
     "submit": "Izveidot pasākumu",
-    "TITLE_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmēm.",
+    "TITLE_TOO_SHORT": "Nosaukumam jābūt vismaz 3 rakstzīmes garam.",
     "TITLE_TOO_LONG": "Nosaukums nedrīkst pārsniegt 120 rakstzīmes.",
-    "SLUG_TOO_SHORT": "Saites nosaukumam jābūt vismaz 3 rakstzīmēm.",
+    "SLUG_TOO_SHORT": "Saites nosaukumam jābūt vismaz 3 rakstzīmes garam.",
     "SLUG_INVALID": "Izmanto tikai mazos burtus, ciparus un domuzīmes.",
     "START_DATE_REQUIRED": "Izvēlies sākuma datumu un laiku.",
     "END_DATE_INVALID": "Ievadi derīgu beigu datumu.",
