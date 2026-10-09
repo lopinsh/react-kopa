@@ -12,9 +12,12 @@ export default getRequestConfig(async ({ requestLocale }) => {
         locale = routing.defaultLocale;
     }
 
+    // Read the request (cookie) before touching the database: it marks the render as dynamic first,
+    // so a build without a database never queries it.
+    const translateMode = await isTranslateModeActive();
     // Shipped messages plus admin edits (translation mode). Cached as plain text; markers are added per request.
     const merged = await MessageOverrideService.getMergedMessages(locale as 'lv' | 'en');
-    const messages = (await isTranslateModeActive()) ? markMessages(merged) : merged;
+    const messages = translateMode ? markMessages(merged) : merged;
 
     return {
         locale,

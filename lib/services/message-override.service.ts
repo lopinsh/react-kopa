@@ -91,8 +91,15 @@ function applyOverrides(base: MessageTree, overrides: Record<string, string>): M
 export const MessageOverrideService = {
     /** The shipped messages with admin edits laid over them. Plain text, safe to share between requests. */
     async getMergedMessages(lang: MessageLang): Promise<MessageTree> {
-        const [base, overrides] = await Promise.all([loadBase(lang), loadOverrides()]);
-        return applyOverrides(base, overrides[lang]);
+        const base = await loadBase(lang);
+        try {
+            const overrides = await loadOverrides();
+            return applyOverrides(base, overrides[lang]);
+        } catch (error) {
+            // Edits are a layer on top: if they can't be read, the shipped texts still render (failures aren't cached).
+            console.error('[MessageOverrideService.getMergedMessages] overrides unavailable:', error);
+            return base;
+        }
     },
 
     async getEntry(adminId: string, key: string): Promise<OverrideResult<TranslationEntry>> {
