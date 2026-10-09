@@ -21,7 +21,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
         const validation = await validateActionData(eventSchema, data);
         if (!validation.success) return validation;
 
-        const result = await EventService.createEvent(groupId, validation.data, session.user.id, locale);
+        const result = await EventService.createEvent(groupId, validation.data, session.user.id);
         if (!result.success) return result as ActionResponse<{ event: EventModel }>;
 
         const { event, eventTitle, membersToNotify, groupName, groupSlug, l1Slug } = result.data!;

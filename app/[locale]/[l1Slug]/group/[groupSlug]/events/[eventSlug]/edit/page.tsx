@@ -7,6 +7,7 @@ import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { EventService } from '@/lib/services/event.service';
 import { isEventPast } from '@/lib/event-dates';
+import { toTextLang } from '@/lib/translations';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
 
 type Params = { locale: string; l1Slug: string; groupSlug: string; eventSlug: string };
@@ -53,9 +54,9 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                     waitingCount={event.viewer.pendingCount + event.viewer.waitlistCount}
                     event={{
                         id: event.id,
-                        // The edit form works on the text of the event's original language.
-                        title: event.original?.title ?? event.title,
-                        description: event.original?.description ?? null,
+                        // The edit form works on the text of every language.
+                        originalLang: event.editable?.originalLang ?? toTextLang(locale),
+                        texts: event.editable?.texts ?? null,
                         location: event.location,
                         startDate: event.startDate.toISOString(),
                         endDate: event.endDate ? event.endDate.toISOString() : null,
@@ -63,7 +64,6 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                         visibility: event.visibility,
                         joinMode: event.joinMode,
                         bannerImage: event.bannerImage,
-                        instructions: event.original?.instructions ?? null,
                     }}
                 />
             </div>

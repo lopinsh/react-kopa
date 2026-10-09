@@ -8,7 +8,7 @@ import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
-import { resolveEventText, originalEventTitle, toTextLang, type TextLang } from '@/lib/translations';
+import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -236,7 +236,7 @@ export class EventService {
         // Text is resolved to the viewer's language here; withheld instructions are never read from any
         // language row, and the raw translation rows never leave this method.
         const text = resolveEventText(event.translations, lang, event.originalLang, !canSeeInstructions);
-        const original = canManage ? event.translations.find((t) => t.lang === event.originalLang) : undefined;
+        const editable = canManage ? EventService.toEditableTexts(event.translations, event.originalLang) : null;
 
         const viewer: EventViewer = {
             canSee: true,
@@ -262,10 +262,8 @@ export class EventService {
             instructionsLang: text.instructionsLang,
             /** Language to name in the "Latviski / In English" label; null when all shown text is in the viewer's language. */
             fallbackLang: text.fallbackLang,
-            /** Organisers only: the text of the event's original language, for the edit form. */
-            original: original
-                ? { lang: toTextLang(event.originalLang), title: original.title, description: original.description, instructions: original.instructions }
-                : null,
+            /** Organisers only: the text of every language, for the edit form. */
+            editable,
             attendees: canManage ? event.attendees : [],
             viewer
         };
@@ -305,10 +303,40 @@ export class EventService {
         };
     });
 
+    /** Text of every language for the organiser's edit form (a missing language is empty text). */
+    private static toEditableTexts(
+        translations: { lang: string; title: string; description: string | null; instructions: string | null }[],
+        originalLang: string
+    ): { originalLang: TextLang; texts: Record<TextLang, { title: string; description: string; instructions: string }> } {
+        const text = (lang: TextLang) => {
+            const row = translations.find((t) => t.lang === lang);
+            return { title: row?.title ?? '', description: row?.description ?? '', instructions: row?.instructions ?? '' };
+        };
+        return { originalLang: toTextLang(originalLang), texts: { lv: text('lv'), en: text('en') } };
+    }
+
+    /**
+     * The language rows to keep for a save: the original language always, another language only when
+     * it has any text (an empty one counts as not translated, so it has no row).
+     */
+    private static textRows(data: EventFormValues): { lang: TextLang; title: string; description: string | null; instructions: string | null }[] {
+        return TEXT_LANGS.flatMap((lang) => {
+            const { title, description, instructions } = data.texts[lang];
+            const row = {
+                lang,
+                title: title.trim(),
+                description: hasText(description) ? description! : null,
+                instructions: hasText(instructions) ? instructions! : null
+            };
+            const keep = lang === data.originalLang || row.title !== '' || row.description !== null || row.instructions !== null;
+            return keep ? [row] : [];
+        });
+    }
+
     /**
      * Create a new event within a group.
      */
-    static async createEvent(groupId: string, data: EventFormValues, userId: string, locale: string): Promise<EventServiceResult<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
+    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
         const membership = await prisma.membership.findUnique({
             where: {
                 userId_groupId: {
@@ -322,20 +350,13 @@ export class EventService {
             return { success: false, error: 'FORBIDDEN' };
         }
 
-        // The organiser writes in their own language; that is the event's original language (and the slug's).
-        const lang = toTextLang(locale);
+        // The organiser's own language is the event's original language (and the slug comes from its title).
+        const originalTitle = data.texts[data.originalLang].title.trim();
         const event = await prisma.event.create({
             data: {
-                slug: await EventService.uniqueSlug(groupId, data.title),
-                originalLang: lang,
-                translations: {
-                    create: {
-                        lang,
-                        title: data.title,
-                        description: data.description,
-                        instructions: data.instructions
-                    }
-                },
+                slug: await EventService.uniqueSlug(groupId, originalTitle),
+                originalLang: data.originalLang,
+                translations: { create: EventService.textRows(data) },
                 startDate: data.startDate,
                 endDate: data.endDate,
                 location: data.location,
@@ -379,7 +400,7 @@ export class EventService {
             success: true,
             data: {
                 event,
-                eventTitle: data.title,
+                eventTitle: originalTitle,
                 membersToNotify,
                 groupName: event.group.name,
                 groupSlug: event.group.slug,
@@ -425,16 +446,20 @@ export class EventService {
                     converted = waiting.map(w => w.userId);
                 }
             }
-            // Only the row of the event's original language is written; other languages stay as they are.
-            const lang = event.originalLang;
-            await tx.eventTranslation.upsert({
-                where: { eventId_lang: { eventId, lang } },
-                update: { title: data.title, description: data.description, instructions: data.instructions },
-                create: { eventId, lang, title: data.title, description: data.description, instructions: data.instructions }
-            });
+            // Every language in the form is saved; a language left empty loses its row (= not translated).
+            const rows = EventService.textRows(data);
+            for (const { lang, ...fields } of rows) {
+                await tx.eventTranslation.upsert({
+                    where: { eventId_lang: { eventId, lang } },
+                    update: fields,
+                    create: { eventId, lang, ...fields }
+                });
+            }
+            await tx.eventTranslation.deleteMany({ where: { eventId, lang: { notIn: rows.map((r) => r.lang) } } });
             await tx.event.update({
                 where: { id: eventId },
                 data: {
+                    originalLang: data.originalLang,
                     startDate: data.startDate,
                     endDate: data.endDate,
                     location: data.location,
@@ -454,7 +479,7 @@ export class EventService {
         if (convertedUserIds === null) return { success: false, error: 'CONFIRMATION_REQUIRED' };
 
         // The context carries the title the notification should show (the new one).
-        const context = await EventService.buildContext(event, data.title);
+        const context = await EventService.buildContext(event, data.texts[data.originalLang].title.trim());
         return { success: true, data: { ...context, convertedUserIds: convertedUserIds.filter(id => id !== userId) } };
     }
 

@@ -21,6 +21,8 @@ import {
     UserCheck,
 } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import EventLangBar from '@/components/forms/EventLangBar';
+import { toTextLang, type TextLang } from '@/lib/translations';
 
 import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent, updateEvent } from '@/actions/event-actions';
@@ -32,8 +34,9 @@ type StepIndex = (typeof STEP_SCHEMAS)[number];
 /** An existing event, for the edit page. Dates are ISO strings (they cross the server/client border). */
 export type EventToEdit = {
     id: string;
-    title: string;
-    description: string | null;
+    originalLang: TextLang;
+    /** Text of every language; null when there is none yet. */
+    texts: EventFormData['texts'] | null;
     location: string | null;
     startDate: string;
     endDate: string | null;
@@ -41,7 +44,6 @@ export type EventToEdit = {
     visibility: EventVisibility;
     joinMode: EventJoinModeValue;
     bannerImage: string | null;
-    instructions: string | null;
 };
 
 type Props = {
@@ -68,6 +70,11 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const locale = useLocale();
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
+    // One language switch for the whole form; it opens on the original language.
+    const originalAtStart = event?.originalLang ?? toTextLang(locale);
+    const [lang, setLang] = useState<TextLang>(originalAtStart);
+    // Bumped when text is copied in, so the rich-text editors reload their value.
+    const [rev, setRev] = useState(0);
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
     // Opening a Request-to-join event lets in everyone waiting: ask before doing it.
@@ -76,8 +83,11 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const form = useForm<EventFormData>({
         resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
         defaultValues: {
-            title: event?.title ?? '',
-            description: event?.description ?? '',
+            originalLang: originalAtStart,
+            texts: event?.texts ?? {
+                lv: { title: '', description: '', instructions: '' },
+                en: { title: '', description: '', instructions: '' }
+            },
             location: event?.location ?? '',
             startDate: toLocalInput(event?.startDate ?? null),
             endDate: toLocalInput(event?.endDate ?? null),
@@ -87,15 +97,15 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
             isRecurring: false,
             recurrencePattern: null,
             bannerImage: event?.bannerImage ?? '',
-            instructions: event?.instructions ?? '',
         },
         mode: 'onChange',
     });
 
     const { register, handleSubmit, formState: { errors }, setValue, watch, trigger } = form;
+    const titleError = errors.texts?.[lang]?.title;
 
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['title', 'startDate', 'endDate', 'location']);
+        if (s === 0) return trigger(['texts.lv.title', 'texts.en.title', 'startDate', 'endDate', 'location']);
         if (s === 1) return trigger(['visibility', 'joinMode', 'maxParticipants']);
         return true;
     }
@@ -103,6 +113,12 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     async function nextStep() {
         const valid = await validateStep(step);
         if (valid) setStep((s) => Math.min(s + 1, 1) as StepIndex);
+    }
+
+    function copyFromOriginal() {
+        const { texts, originalLang } = form.getValues();
+        setValue(`texts.${lang}`, { ...texts[originalLang] }, { shouldValidate: true });
+        setRev((r) => r + 1);
     }
 
     function prevStep() {
@@ -181,6 +197,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                         </p>
                     </div>
 
+                    <EventLangBar lang={lang} onLangChange={setLang} onCopy={copyFromOriginal} />
+
                     {/* Step 1: Logistics */}
                     {step === 0 && (
                         <div className="space-y-4">
@@ -190,15 +208,17 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     {t('fieldName')}
                                 </label>
                                 <input
+                                    key={`title-${lang}`}
                                     type="text"
-                                    {...register('title')}
+                                    lang={lang}
+                                    {...register(`texts.${lang}.title`)}
                                     placeholder={t('fieldNamePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.title ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                        titleError ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                                     )}
                                 />
-                                {errors.title && <p className="mt-1 text-xs text-red-500">{t(errors.title.message as 'INVALID_URL')}</p>}
+                                {titleError && <p className="mt-1 text-xs text-red-500">{t(titleError.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -207,8 +227,9 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     {t('fieldDescription')}
                                 </label>
                                 <RichTextEditor
-                                    value={watch('description') || ''}
-                                    onChange={(val) => setValue('description', val)}
+                                    key={`description-${lang}-${rev}`}
+                                    value={watch(`texts.${lang}.description`) || ''}
+                                    onChange={(val) => setValue(`texts.${lang}.description`, val)}
                                     placeholder={t('fieldDescriptionPlaceholder')}
                                 />
                             </div>
@@ -370,8 +391,9 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     {watch('joinMode') === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
                                 </p>
                                 <RichTextEditor
-                                    value={watch('instructions') || ''}
-                                    onChange={(val) => setValue('instructions', val)}
+                                    key={`instructions-${lang}-${rev}`}
+                                    value={watch(`texts.${lang}.instructions`) || ''}
+                                    onChange={(val) => setValue(`texts.${lang}.instructions`, val)}
                                     placeholder={t('fieldInstructionsPlaceholder')}
                                 />
                             </div>
