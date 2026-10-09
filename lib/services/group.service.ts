@@ -310,7 +310,12 @@ export const GroupService = {
         const sections = ((g.sections && g.sections.length > 0)
             ? g.sections
             : GroupService.getVirtualSections(group)
-        ).map((s) => ({ ...s, title: localizeSectionTitle(s.title, locale) }));
+        ).map((s) => ({
+            ...s,
+            title: localizeSectionTitle(s.title, locale),
+            // Members-only text never leaves the server for people who may not read it (the page shows a lock).
+            content: s.visibility === 'MEMBERS_ONLY' && !isMember && !isSiteAdmin ? '' : s.content
+        }));
 
         return {
             id: g.id,
