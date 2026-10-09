@@ -609,7 +609,7 @@
     "privateProfileDesc": "Šis profils ir privāts.",
     "sectionAdmin": "Grupas, kur esmu administrators",
     "sectionMember": "Grupas, kurās esmu biedrs",
-    "sectionOwner": "Manas grupas",
+    "sectionOwner": "Grupas, ko vadu",
     "sectionPending": "Gaida apstiprinājumu",
     "sharedGroups": "Kopīgās grupas",
     "groupsHeading": "Grupas",
@@ -743,6 +743,8 @@
       "visibilityTitle": "Kas to var redzēt"
     },
     "notFound": {
+      "signInHint": "Ja esi slēgtas grupas biedrs,",
+      "signInLink": "pieraksties",
       "title": "Lapa nav atrasta",
       "body": "Šī lapa neeksistē vai ir noņemta. Iespējams, grupa ir pārdēvēta vai slēgta.",
       "cta": "Atrast grupu"
@@ -764,6 +766,13 @@
     "visitCommunity": "Apmeklēt grupu",
     "createSubtitle": "Izveido jaunu pasākumu savai grupai",
     "membersOnly": "Tikai biedriem",
+    "gate": {
+      "title": "Šis pasākums paredzēts tikai grupas biedriem",
+      "bodyLoggedOut": "Ja esi šīs grupas biedrs, pieraksties, lai to redzētu.",
+      "bodyMember": "Šo pasākumu redz tikai grupas “{group}” biedri. Pieteikies grupai, lai piedalītos.",
+      "signIn": "Pierakstīties",
+      "goToGroup": "Uz grupu “{group}”"
+    },
     "signInToRsvp": "Ieej, lai pieteiktos",
     "joinToRsvp": "Pievienojies grupai, lai pieteiktos šim pasākumam.",
     "shareCopied": "Saite nokopēta",

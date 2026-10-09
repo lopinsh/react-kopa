@@ -1,8 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
+import { auth } from '@/lib/auth';
+import SignInHint from '@/components/shell/SignInHint';
 
 export default async function NotFound() {
     const t = await getTranslations('pages.notFound');
+    const session = await auth();
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-24 text-center">
@@ -15,6 +18,7 @@ export default async function NotFound() {
             >
                 {t('cta')}
             </Link>
+            {!session?.user && <SignInHint />}
         </div>
     );
 }

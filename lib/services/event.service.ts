@@ -233,6 +233,40 @@ export class EventService {
     });
 
     /**
+     * For an event the viewer may not open: tells the page whether to show a "members only"
+     * notice (the event exists, belongs to a visible group and is members-only) instead of a 404.
+     * Returns only what the group page shows publicly, never anything from the event itself.
+     */
+    static getMembersOnlyGate = cache(async (
+        eventSlug: string,
+        groupSlug: string,
+        userId?: string
+    ): Promise<{ groupName: string; groupSlug: string; l1Slug: string } | null> => {
+        const group = await prisma.group.findFirst({
+            where: { slug: groupSlug, hiddenAt: null },
+            select: {
+                id: true,
+                name: true,
+                slug: true,
+                category: { include: TaxonomyResolver.getInclude('lv') }
+            }
+        });
+        if (!group) return null;
+
+        const event = await prisma.event.findFirst({
+            where: { slug: eventSlug, groupId: group.id, visibility: 'MEMBERS_ONLY' },
+            select: { id: true }
+        });
+        if (!event || (await EventService.canSeeMembersOnly(group.id, userId))) return null;
+
+        return {
+            groupName: group.name,
+            groupSlug: group.slug,
+            l1Slug: TaxonomyResolver.resolve(group.category).l1Slug
+        };
+    });
+
+    /**
      * Create a new event within a group.
      */
     static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: EventModel; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {

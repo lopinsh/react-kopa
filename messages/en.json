@@ -743,6 +743,8 @@
       "visibilityTitle": "Who can see it"
     },
     "notFound": {
+      "signInHint": "If you are a member of a closed group,",
+      "signInLink": "sign in",
       "title": "Page not found",
       "body": "This page does not exist or has been removed. The group may have been renamed or closed.",
       "cta": "Find a group"
@@ -764,6 +766,13 @@
     "visitCommunity": "Visit group",
     "createSubtitle": "Create a new event for your group",
     "membersOnly": "Members only",
+    "gate": {
+      "title": "This event is for group members only",
+      "bodyLoggedOut": "If you are a member of this group, sign in to see it.",
+      "bodyMember": "Only members of {group} can see this event. Ask to join the group to take part.",
+      "signIn": "Sign in",
+      "goToGroup": "Go to {group}"
+    },
     "signInToRsvp": "Sign in to sign up",
     "joinToRsvp": "Join the group to sign up for this event.",
     "shareCopied": "Link copied",

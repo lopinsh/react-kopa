@@ -18,6 +18,7 @@ import EventParticipation from '@/components/events/EventParticipation';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
+import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
@@ -31,7 +32,8 @@ export async function generateMetadata({
     const session = await auth();
     const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session?.user?.id);
 
-    return event ? { title: `${event.title} | ${event.group.name}` } : {};
+    // No event means missing or members-only for this viewer: say nothing about it, and keep it out of search engines.
+    return event ? { title: `${event.title} | ${event.group.name}` } : { robots: { index: false } };
 }
 
 export default async function EventPage({
@@ -46,7 +48,16 @@ export default async function EventPage({
     const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, userId);
 
     if (!event) {
-        notFound();
+        // A members-only event gets a notice instead of a 404; anything else does not exist for this viewer.
+        const gate = await EventService.getMembersOnlyGate(eventSlug, groupSlug, userId);
+        if (!gate) notFound();
+        return (
+            <MembersOnlyNotice
+                groupName={gate.groupName}
+                groupHref={`/${gate.l1Slug}/group/${gate.groupSlug}`}
+                isLoggedIn={!!userId}
+            />
+        );
     }
 
     const t = await getTranslations('event');
