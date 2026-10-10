@@ -23,8 +23,16 @@ export function UnreadMessagesProvider({ children }: { children: React.ReactNode
 
     useEffect(() => {
         refresh();
+        // A chat read in another tab sends no event here, so recount when this tab comes back into view.
+        const onVisible = () => {
+            if (document.visibilityState === 'visible') refresh();
+        };
         window.addEventListener(MESSAGES_READ, refresh);
-        return () => window.removeEventListener(MESSAGES_READ, refresh);
+        document.addEventListener('visibilitychange', onVisible);
+        return () => {
+            window.removeEventListener(MESSAGES_READ, refresh);
+            document.removeEventListener('visibilitychange', onVisible);
+        };
     }, [refresh]);
 
     usePusher(userId ? `private-user-${userId}` : '', 'new-message', refresh);
