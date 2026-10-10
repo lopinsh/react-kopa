@@ -1,7 +1,8 @@
 /**
  * Reads and answers feedback notes left by site admins (feedback mode), through the token-protected API.
  *
- *   npm run feedback                       list open notes as markdown
+ *   npm run feedback                       compact list of open notes, grouped by page and heading
+ *   npm run feedback -- show <id>          full detail for one open note (selector, box, scope HTML, reply thread)
  *   npm run feedback -- done <id> "reply"  mark done (reply optional; added to the thread, nothing is overwritten)
  *   npm run feedback -- doing <id>
  *   npm run feedback -- wontdo <id> "reply"
@@ -97,13 +98,66 @@ function printNote(note: Note): void {
     if (note.outerHtml) console.log(`Scope HTML:\n\`\`\`html\n${note.outerHtml}\n\`\`\`\n`);
 }
 
-async function list(): Promise<void> {
+const HEADING_SEPARATOR = ' › ';
+const ELEMENT_TEXT_MAX = 120;
+
+function truncate(value: string, max: number): string {
+    const flat = value.replace(/\s+/g, ' ').trim();
+    return flat.length > max ? `${flat.slice(0, max - 1)}…` : flat;
+}
+
+function pageOf(note: Note): string {
+    return `/${note.locale}${note.path === '/' ? '' : note.path}`;
+}
+
+function printCompactNote(note: Note, sub: string): void {
+    console.log(`- ${note.id} · ${note.kind} · ${note.status}`);
+    if (sub) console.log(`  Sub-heading: ${sub}`);
+    if (note.elementText) console.log(`  On: "${truncate(note.elementText, ELEMENT_TEXT_MAX)}"`);
+    console.log(`  ${note.text.replace(/\n/g, '\n  ')}`);
+}
+
+/** Compact overview: notes grouped by page, then by the top-level heading. */
+function printCompact(notes: Note[]): void {
+    const pages = new Map<string, Map<string, { note: Note; sub: string }[]>>();
+    for (const note of notes) {
+        const [top = '', ...rest] = (note.heading ?? '').split(HEADING_SEPARATOR);
+        const page = pages.get(pageOf(note)) ?? new Map();
+        const group = page.get(top) ?? [];
+        group.push({ note, sub: rest.join(HEADING_SEPARATOR) });
+        page.set(top, group);
+        pages.set(pageOf(note), page);
+    }
+    for (const [page, headings] of pages) {
+        console.log(`## ${page}`);
+        for (const [heading, items] of headings) {
+            console.log(`### ${heading || '(no heading)'}`);
+            items.forEach(({ note, sub }) => printCompactNote(note, sub));
+        }
+        console.log('');
+    }
+    console.log(`${notes.length} open note${notes.length === 1 ? '' : 's'}. Details: npm run feedback -- show <id>`);
+}
+
+async function fetchOpen(): Promise<Note[]> {
     const res = await call('/api/feedback?status=OPEN');
     if (!res.ok) fail(`List failed: HTTP ${res.status}`);
-    const body = (await res.json()) as { notes: Note[] };
-    if (body.notes.length === 0) { console.log('No open feedback notes.'); return; }
-    console.log(`# Open feedback (${body.notes.length})\n`);
-    body.notes.forEach(printNote);
+    return ((await res.json()) as { notes: Note[] }).notes;
+}
+
+async function list(): Promise<void> {
+    const notes = await fetchOpen();
+    if (notes.length === 0) { console.log('No open feedback notes.'); return; }
+    console.log(`# Open feedback (${notes.length})\n`);
+    printCompact(notes);
+}
+
+async function show(id: string | undefined): Promise<void> {
+    if (!id) fail('Usage: npm run feedback -- show <id>');
+    // No single-note endpoint: fetch the open list and filter.
+    const note = (await fetchOpen()).find((n) => n.id === id);
+    if (!note) fail(`No open note with id ${id}.`);
+    printNote(note);
 }
 
 async function update(command: string, id: string | undefined, reply: string | undefined): Promise<void> {
@@ -136,9 +190,10 @@ async function main(): Promise<void> {
     loadEnv();
     const [command = 'list', id, reply] = process.argv.slice(2);
     if (command === 'list') await list();
+    else if (command === 'show') await show(id);
     else if (command === 'delete') await remove(id);
     else if (Object.hasOwn(STATUS_FOR_COMMAND, command)) await update(command, id, reply);
-    else fail(`Unknown command "${command}". Use: list, done <id> "reply", doing <id>, wontdo <id> "reply", delete <id>.`);
+    else fail(`Unknown command "${command}". Use: list, show <id>, done <id> "reply", doing <id>, wontdo <id> "reply", delete <id>.`);
 }
 
 main().catch((error: unknown) => fail(`Feedback script failed: ${error instanceof Error ? error.message : String(error)}`));
