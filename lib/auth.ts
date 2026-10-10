@@ -76,7 +76,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         signIn: "/auth/signin",
     },
     callbacks: {
-        jwt: async ({ token, user, trigger, session }) => {
+        jwt: async ({ token, user, trigger }) => {
             if (user) {
                 token.id = user.id as string;
                 // Fetch user profile data on sign-in so middleware and server code
@@ -89,12 +89,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.role = dbUser?.role ?? 'USER';
                 token.avatarSeed = dbUser?.avatarSeed ?? null;
             }
-            if (trigger === "update" && session) {
-                if (session.name !== undefined) token.name = session.name;
-                if (session.image !== undefined) token.picture = session.image;
-                if (session.username !== undefined) token.username = session.username;
-                if (session.role !== undefined) token.role = session.role;
-                if (session.avatarSeed !== undefined) token.avatarSeed = session.avatarSeed;
+            if (trigger === "update" && token.id) {
+                // Anyone signed in can POST any payload to /api/auth/session, so the
+                // client's values are never trusted: refresh the profile from the DB.
+                const dbUser = await prisma.user.findUnique({
+                    where: { id: token.id as string },
+                    select: { name: true, image: true, username: true, role: true, avatarSeed: true },
+                });
+                if (dbUser) {
+                    token.name = dbUser.name;
+                    token.picture = dbUser.image;
+                    token.username = dbUser.username;
+                    token.role = dbUser.role;
+                    token.avatarSeed = dbUser.avatarSeed;
+                }
             }
             return token;
         },
