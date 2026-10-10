@@ -2,7 +2,7 @@
 
 Source of truth for AI agents and human contributors working on **Ejam Kopā** ("Let's Go Together"): a non-profit Latvian platform for finding people to do things with — create a group, be found, join, talk. Read this file in full before starting a task. `CLAUDE.md` and `.agents/rules/project-rules.md` only point here.
 
-**Before any task:** read `docs/execution_handoff.md` (current stage and next item). For product/UI decisions also read `docs/core_philosophy.md` (the why).
+**Before any task:** read `docs/execution_handoff.md` (current stage and next item). For product/UI decisions read `docs/handbook/` (start with its `README.md`): values, principles, voice, behaviour and design. Every layer answers to the one above it.
 
 **Pushing to `main` deploys to production (ejam.lumm.eu)** via `.github/workflows/deploy.yml`. Never push without the user's explicit OK, and only after the Definition of done passes.
 
@@ -73,7 +73,7 @@ components/providers/ Context providers (GroupProvider, …)
 messages/            en.json, lv.json
 prisma/              schema.prisma, migrations/, seed.ts
 scripts/             Maintenance scripts; scripts/debug/ holds ad-hoc local DB probes
-docs/                execution_handoff.md (plan) and core_philosophy.md (why)
+docs/                execution_handoff.md (plan), handbook/ (values, voice, behaviour, design)
 ```
 
 ## The Laws (non-negotiable)
@@ -101,6 +101,7 @@ type ActionResponse<T> =
 
 ## UI & styling
 
+- UI work follows the Design chapter of `docs/handbook/design.md`.
 - Tailwind v4 only — no CSS modules, styled-components, or inline `style` (except setting CSS variables at layout level).
 - Use theme variables (`var(--background)`, `var(--surface)`, `var(--accent)`) and existing utilities (`shadow-premium`, `soft-press`); never hardcode colors, radii, or shadows.
 - Mobile-first. Server Components by default; add `"use client"` only for interactivity.
@@ -118,7 +119,7 @@ type ActionResponse<T> =
 - Never derive display titles from slugs in UI; use the service-provided `title`.
 - Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.
 - Reuse before creating: search `lib/services`, `lib/validations`, `components/ui`, and `messages/` for existing pieces first.
-- Don't create new docs (plans, audits, walkthroughs, reports). Progress goes into `docs/execution_handoff.md` as ticked items; anything else belongs in the commit message. Screenshots and tool output are git-ignored — don't commit them.
+- Don't create new docs (plans, audits, walkthroughs, reports). The living docs are `docs/execution_handoff.md` and the chapters in `docs/handbook/` (edit those, don't add parallel ones). Progress goes into `docs/execution_handoff.md` as ticked items; anything else belongs in the commit message. Screenshots and tool output are git-ignored — don't commit them.
 - Never commit secrets. `.env*` is ignored (except `.env.example`); MCP API keys are supplied via `${input:…}` prompts in `.vscode/mcp.json`.
 
 ## Agent workflow

@@ -4,7 +4,7 @@ A non-profit platform for finding people to do things with in Latvia — a gym b
 
 Live: https://ejam.lumm.eu
 
-- **Why and how it should feel:** [docs/core_philosophy.md](docs/core_philosophy.md)
+- **Values, voice, behaviour and design (the Handbook):** [docs/handbook/](docs/handbook/README.md)
 - **What's being worked on now:** [docs/execution_handoff.md](docs/execution_handoff.md)
 - **Setup, commands and code rules:** [AGENTS.md](AGENTS.md)
 
