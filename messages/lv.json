@@ -1118,7 +1118,7 @@
     "pause": "Pauze (saites darbojas kā parasti)",
     "resume": "Turpināt rakstīt piezīmes",
     "notesList": "Piezīmes šajā lapā: {count}",
-    "noNotes": "Šajā lapā vēl nav piezīmju. Uzklikšķini uz elementa, lai pievienotu.",
+    "noNotes": "Šajā lapā vēl nav piezīmju. Lai pievienotu, izmanto komentāra pogu pie iezīmēta elementa.",
     "elementGone": "elements nav atrasts",
     "componentLabel": "Komponente",
     "commentOn": "Atstāt piezīmi pie {name}",
