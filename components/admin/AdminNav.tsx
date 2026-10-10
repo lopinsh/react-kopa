@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Tags, AlertTriangle, EyeOff, Network, Languages, BookOpen, type LucideIcon } from 'lucide-react';
+import { Tags, AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 
 type Props = {
@@ -12,7 +12,7 @@ type Props = {
 };
 
 type NavItem = {
-    id: 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'handbook';
+    id: 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'handbook';
     href: string;
     label: string;
     icon: LucideIcon;
@@ -35,6 +35,7 @@ export default function AdminNav({ pendingTags, pendingReports }: Props) {
         { id: 'moderation', href: '/admin?tab=moderation', label: t('moderation'), icon: EyeOff, active: onDashboard && tab === 'moderation', badge: 0 },
         { id: 'taxonomy', href: '/admin/taxonomy', label: t('taxonomy'), icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: 0 },
         { id: 'translations', href: '/admin/translations', label: t('translations'), icon: Languages, active: pathname.startsWith('/admin/translations'), badge: 0 },
+        { id: 'feedback', href: '/admin/feedback', label: t('feedback'), icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
         { id: 'handbook', href: '/admin/handbook', label: t('handbook'), icon: BookOpen, active: pathname.startsWith('/admin/handbook'), badge: 0 },
     ];
 

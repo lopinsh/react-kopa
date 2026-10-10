@@ -10,6 +10,7 @@ import { ToastProvider } from '@/hooks/use-toast';
 import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
 import { TranslateModeProvider } from './TranslateModeContext';
+import { FeedbackModeProvider } from './FeedbackModeContext';
 import type { OAuthProviderId } from '@/lib/auth-providers';
 
 type ProvidersProps = {
@@ -17,16 +18,18 @@ type ProvidersProps = {
     messages: AbstractIntlMessages;
     oauthProviders: OAuthProviderId[];
     translateMode: boolean;
+    feedbackMode: boolean;
     children: React.ReactNode;
 };
 
-export default function Providers({ locale, messages, oauthProviders, translateMode, children }: ProvidersProps) {
+export default function Providers({ locale, messages, oauthProviders, translateMode, feedbackMode, children }: ProvidersProps) {
     return (
         <SessionProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
                 <ToastProvider>
                   <AuthProvidersProvider value={oauthProviders}>
                    <TranslateModeProvider value={translateMode}>
+                   <FeedbackModeProvider value={feedbackMode}>
                     <RealtimeProvider>
                       <UnreadMessagesProvider>
                         <ThemeProvider
@@ -40,6 +43,7 @@ export default function Providers({ locale, messages, oauthProviders, translateM
                       </UnreadMessagesProvider>
                     </RealtimeProvider>
                     <ToastContainer />
+                   </FeedbackModeProvider>
                    </TranslateModeProvider>
                   </AuthProvidersProvider>
                 </ToastProvider>

@@ -531,6 +531,7 @@
       "moderation": "Moderation",
       "taxonomy": "Taxonomy",
       "translations": "Translations",
+      "feedback": "Feedback",
       "handbook": "Handbook"
     },
     "handbook": {
@@ -538,6 +539,23 @@
       "overview": "Overview",
       "onThisPage": "On this page",
       "note": "Internal document, English only. Source: docs/handbook in the repository."
+    },
+    "feedback": {
+      "title": "Feedback",
+      "subtitle": "Notes left on the live site in feedback mode. Agents read them and answer here.",
+      "filterKind": "Kind",
+      "filterStatus": "Status",
+      "filterPage": "Page contains…",
+      "allKinds": "All kinds",
+      "allStatuses": "All statuses",
+      "filter": "Filter",
+      "empty": "No notes match. Turn on feedback mode in your profile menu and click an element.",
+      "count": "{count, plural, one {# note} other {# notes}}",
+      "element": "Element",
+      "status": "Status",
+      "replyPlaceholder": "Reply (optional)",
+      "save": "Save",
+      "saved": "Saved"
     },
     "translations": {
       "title": "Translations",
@@ -1007,6 +1025,41 @@
     "fixCategorization": "Fix categorization",
     "editGroup": "Edit group",
     "moderationLog": "Moderation log for this group"
+  },
+  "feedbackMode": {
+    "label": "Feedback mode",
+    "barLabel": "Feedback mode",
+    "barPaused": "Paused",
+    "turnOff": "Turn off",
+    "pause": "Pause (click links normally)",
+    "resume": "Resume leaving notes",
+    "notesList": "Notes on this page: {count}",
+    "noNotes": "No notes on this page yet. Click an element to add one.",
+    "elementGone": "element not found",
+    "newTitle": "Leave a note",
+    "about": "About: {text}",
+    "kindLabel": "Kind",
+    "textLabel": "Your note",
+    "placeholder": "What is wrong, or what would be better?",
+    "save": "Save note",
+    "cancel": "Cancel",
+    "close": "Close",
+    "noteTitle": "Note",
+    "reply": "Reply",
+    "openList": "All notes",
+    "pinLabel": "Note {n}",
+    "kind": {
+      "BUG": "Bug",
+      "IDEA": "Idea",
+      "IMPROVEMENT": "Improvement",
+      "QUESTION": "Question"
+    },
+    "status": {
+      "OPEN": "Open",
+      "DOING": "In progress",
+      "DONE": "Done",
+      "WONT_DO": "Won't do"
+    }
   },
   "translateMode": {
     "label": "Translation mode",

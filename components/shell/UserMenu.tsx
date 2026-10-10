@@ -8,6 +8,7 @@ import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
+import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
 
 type Props = {
     user: {
@@ -108,6 +109,10 @@ export default function UserMenu({ user }: Props) {
                                         {t('adminPanel')}
                                     </Link>
                                     <TranslateModeToggle
+                                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors"
+                                        onToggle={() => setIsOpen(false)}
+                                    />
+                                    <FeedbackModeToggle
                                         className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors"
                                         onToggle={() => setIsOpen(false)}
                                     />

@@ -531,6 +531,7 @@
       "moderation": "Moderācija",
       "taxonomy": "Taksonomija",
       "translations": "Tulkojumi",
+      "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata"
     },
     "handbook": {
@@ -538,6 +539,23 @@
       "overview": "Pārskats",
       "onThisPage": "Šajā lapā",
       "note": "Iekšējs dokuments, tikai angliski. Avots: docs/handbook repozitorijā."
+    },
+    "feedback": {
+      "title": "Atsauksmes",
+      "subtitle": "Piezīmes, kas atstātas dzīvajā vietnē atsauksmju režīmā. Aģenti tās lasa un atbild šeit.",
+      "filterKind": "Veids",
+      "filterStatus": "Statuss",
+      "filterPage": "Lapa satur…",
+      "allKinds": "Visi veidi",
+      "allStatuses": "Visi statusi",
+      "filter": "Filtrēt",
+      "empty": "Nav piezīmju. Ieslēdz atsauksmju režīmu profila izvēlnē un uzklikšķini uz elementa.",
+      "count": "{count, plural, zero {# piezīmju} one {# piezīme} other {# piezīmes}}",
+      "element": "Elements",
+      "status": "Statuss",
+      "replyPlaceholder": "Atbilde (nav obligāta)",
+      "save": "Saglabāt",
+      "saved": "Saglabāts"
     },
     "translations": {
       "title": "Tulkojumi",
@@ -1007,6 +1025,41 @@
     "fixCategorization": "Labot kategoriju",
     "editGroup": "Labot grupu",
     "moderationLog": "Šīs grupas moderācijas žurnāls"
+  },
+  "feedbackMode": {
+    "label": "Atsauksmju režīms",
+    "barLabel": "Atsauksmju režīms",
+    "barPaused": "Pauze",
+    "turnOff": "Izslēgt",
+    "pause": "Pauze (saites darbojas kā parasti)",
+    "resume": "Turpināt rakstīt piezīmes",
+    "notesList": "Piezīmes šajā lapā: {count}",
+    "noNotes": "Šajā lapā vēl nav piezīmju. Uzklikšķini uz elementa, lai pievienotu.",
+    "elementGone": "elements nav atrasts",
+    "newTitle": "Atstāt piezīmi",
+    "about": "Par: {text}",
+    "kindLabel": "Veids",
+    "textLabel": "Tava piezīme",
+    "placeholder": "Kas nav kārtībā vai kas varētu būt labāk?",
+    "save": "Saglabāt piezīmi",
+    "cancel": "Atcelt",
+    "close": "Aizvērt",
+    "noteTitle": "Piezīme",
+    "reply": "Atbilde",
+    "openList": "Visas piezīmes",
+    "pinLabel": "Piezīme {n}",
+    "kind": {
+      "BUG": "Kļūda",
+      "IDEA": "Ideja",
+      "IMPROVEMENT": "Uzlabojums",
+      "QUESTION": "Jautājums"
+    },
+    "status": {
+      "OPEN": "Atvērta",
+      "DOING": "Darbā",
+      "DONE": "Izdarīts",
+      "WONT_DO": "Nedarīsim"
+    }
   },
   "translateMode": {
     "label": "Tulkošanas režīms",

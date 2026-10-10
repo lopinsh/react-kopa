@@ -11,6 +11,8 @@ import { Footer } from '@/components/shell/Footer';
 import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
 import { isTranslateModeActive } from '@/lib/translate-mode/server';
 import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
+import { isFeedbackModeActive } from '@/lib/feedback/server';
+import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -37,9 +39,11 @@ export default async function LocaleLayout({ children, params }: Props) {
     const messages = await getMessages();
     // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
     const translateMode = await isTranslateModeActive();
+    // Same for feedback mode: only a site admin who switched it on gets the code.
+    const feedbackMode = await isFeedbackModeActive();
 
     return (
-        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode}>
+        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />
@@ -66,6 +70,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <CookieConsent />
 
             {translateMode && <TranslateModeLoader />}
+            {feedbackMode && <FeedbackModeLoader />}
         </Providers>
     );
 }
