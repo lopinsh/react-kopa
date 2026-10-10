@@ -83,7 +83,7 @@
     "deleteDisabledWarning": "Initial section cannot be deleted or renamed.",
     "deleteFailed": "Failed to delete content.",
     "deleteGroupTitle": "Delete Group",
-    "deletePost": "Delete Post",
+    "deletePost": "Delete announcement",
     "deleteSection": "Delete Section",
     "deleted": "Alias deleted.",
     "demote": "Remove as moderator",
