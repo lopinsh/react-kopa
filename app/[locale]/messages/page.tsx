@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { getConversations } from '@/actions/message-actions';
+import { getInbox } from '@/actions/message-actions';
 import MessagesLayout from '@/components/messages/MessagesLayout';
 import { signInUrl } from '@/lib/auth-redirect';
 
@@ -17,8 +17,8 @@ export default async function MessagesPage({ params, searchParams }: {
         redirect(signInUrl(locale, c ? `/messages?c=${encodeURIComponent(c)}` : '/messages'));
     }
 
-    const conversationsResponse = await getConversations();
-    const conversations = conversationsResponse.success ? conversationsResponse.data : [];
+    const inbox = await getInbox(locale);
+    const conversations = inbox.success ? (inbox.data ?? []) : [];
 
     return (
         <MessagesLayout

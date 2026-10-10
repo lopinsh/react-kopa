@@ -6,7 +6,7 @@ import { clsx } from 'clsx';
 import { Link, useRouter } from '@/i18n/routing';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions';
-import { getOrCreateConversation } from '@/actions/message-actions';
+import { getOrCreateDirectChat } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
 import { avatarUrl } from '@/lib/avatar';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
@@ -100,11 +100,11 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
         if (!canMessage || isPending) return;
 
         startTransition(async () => {
-            const result = await getOrCreateConversation(member.user.id);
-            if (result.success) {
-                router.push('/messages');
+            const result = await getOrCreateDirectChat(member.user.id);
+            if (result.success && result.data) {
+                router.push(`/messages?c=${result.data.conversationId}`);
             } else {
-                toastError(t('messageFailed'));
+                toastError(!result.success && result.error === 'DM_NOT_ALLOWED' ? tErrors('DM_NOT_ALLOWED') : t('messageFailed'));
             }
         });
     };
