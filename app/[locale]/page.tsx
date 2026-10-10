@@ -250,7 +250,6 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                     {/* Empty State Logic */}
                     {((currentTab === 'groups' && groups.length === 0) || (currentTab === 'events' && discoverableEvents.length === 0)) && (
                         <EmptyState
-                            className="bg-surface-elevated/30"
                             icon={<Search className="h-10 w-10" />}
                             title={currentTab === 'groups' ? t('noGroupsFound') : t('noEventsFound')}
                             description={t('adjustFilters')}

@@ -16,7 +16,7 @@ export default function EmptyState({ icon, title, description, action, className
     return (
         <div
             data-ui={UI.emptyState}
-            className={clsx('flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border bg-surface px-6 py-24 text-center', className)}
+            className={clsx('flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border bg-surface-elevated/30 px-6 py-24 text-center', className)}
         >
             <div className="mb-2 flex h-24 w-24 items-center justify-center rounded-full bg-surface-elevated text-foreground-muted opacity-40">
                 {icon}
