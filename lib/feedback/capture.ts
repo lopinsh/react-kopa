@@ -46,6 +46,91 @@ export function buildSelector(el: Element): string {
     return path;
 }
 
+export interface ElementLocator {
+    xpath: string;
+    cssPath: string;
+    outerHtml: string;
+    heading: string | null;
+    boxX: number;
+    boxY: number;
+    boxW: number;
+    boxH: number;
+}
+
+/** Index among same-tag siblings (1-based), or 0 when the element is the only one of its tag. */
+function sameTagIndex(el: Element): number {
+    const parent = el.parentElement;
+    if (!parent) return 0;
+    const same = Array.from(parent.children).filter((c) => c.tagName === el.tagName);
+    return same.length > 1 ? same.indexOf(el) + 1 : 0;
+}
+
+/** Absolute XPath from <html>, e.g. `/html/body/div[2]/main/div/section[3]/span[1]`. Needs no ids or classes. */
+export function buildXPath(el: Element): string {
+    const steps: string[] = [];
+    for (let node: Element | null = el; node; node = node.parentElement) {
+        const index = sameTagIndex(node);
+        steps.unshift(`${node.tagName.toLowerCase()}${index ? `[${index}]` : ''}`);
+    }
+    return `/${steps.join('/')}`.slice(0, 1500);
+}
+
+/** Readable CSS path like DevTools "Copy selector": tag.classes:nth-child(n) steps, starting at the nearest stable id. */
+export function buildCssPath(el: Element): string {
+    const steps: string[] = [];
+    for (let node: Element | null = el; node && node !== document.documentElement; node = node.parentElement) {
+        if (isStableId(node.id)) {
+            steps.unshift(`#${CSS.escape(node.id)}`);
+            break;
+        }
+        let step = node.tagName.toLowerCase();
+        const classes = Array.from(node.classList).filter((c) => !c.includes(':') && !c.includes('[')).slice(0, 4);
+        if (classes.length) step += classes.map((c) => `.${CSS.escape(c)}`).join('');
+        const parent = node.parentElement;
+        if (parent && parent.children.length > 1) step += `:nth-child(${Array.from(parent.children).indexOf(node) + 1})`;
+        steps.unshift(step);
+    }
+    return steps.join(' > ').slice(0, 2000);
+}
+
+/** The element's opening tag, e.g. `<span class="gpic">`, capped at 500 characters. */
+function openingTag(el: Element): string {
+    const html = el.outerHTML;
+    const end = html.indexOf('>');
+    return (end === -1 ? html : html.slice(0, end + 1)).slice(0, 500);
+}
+
+/** "Section title › nearest heading before the element", e.g. "A group page in the new look › Ko meklējam". */
+function nearestHeading(el: Element): string | null {
+    let found: Element | null = null;
+    for (const h of Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'))) {
+        const before = h.contains(el) || (h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+        if (!before) break;
+        found = h;
+    }
+    const near = found ? visibleText(found) : '';
+    // The title of the section the element sits in says more than a heading that merely comes before it.
+    const section = el.closest('section, article, [role="dialog"]')?.querySelector('h1, h2, h3');
+    const title = section ? visibleText(section) : '';
+    const parts = [title, near].filter((p, i, all) => p !== '' && all.indexOf(p) === i);
+    return parts.length ? parts.join(' › ').slice(0, 200) : null;
+}
+
+/** Everything an agent needs to find the exact element again: both paths, its tag, the nearest heading and its box. */
+export function locate(el: Element): ElementLocator {
+    const rect = el.getBoundingClientRect();
+    return {
+        xpath: buildXPath(el),
+        cssPath: buildCssPath(el),
+        outerHtml: openingTag(el),
+        heading: nearestHeading(el),
+        boxX: Math.round(rect.left + window.scrollX),
+        boxY: Math.round(rect.top + window.scrollY),
+        boxW: Math.round(rect.width),
+        boxH: Math.round(rect.height),
+    };
+}
+
 /** Finds the element for a stored selector, or null if the page no longer has it. */
 export function findBySelector(selector: string): Element | null {
     try {

@@ -6,7 +6,7 @@ import { List, MessageSquareText, MousePointerClick, Pause, Play } from 'lucide-
 import { clsx } from 'clsx';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { getPageFeedback, setFeedbackMode } from '@/actions/feedback-actions';
-import { buildSelector, componentOf, visibleText } from '@/lib/feedback/capture';
+import { buildSelector, componentOf, locate, visibleText } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import FeedbackDialog, { type FeedbackTarget } from './FeedbackDialog';
 import FeedbackNoteCard from './FeedbackNoteCard';
@@ -49,7 +49,7 @@ export default function FeedbackMode() {
         setPanelOpen(false);
         // The schema caps the path at 500 characters; a very long query would otherwise fail to save.
         setDraftPath(`${pathname}${window.location.search}`.slice(0, 500));
-        setDraft({ selector: buildSelector(el), elementText: visibleText(el), component: componentOf(el) });
+        setDraft({ selector: buildSelector(el), elementText: visibleText(el), component: componentOf(el), locator: locate(el) });
     }, [pathname]);
 
     const hover = useElementPicker(anywhere && !paused && !busy, handlePick);

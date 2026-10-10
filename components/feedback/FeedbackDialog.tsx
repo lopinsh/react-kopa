@@ -6,9 +6,10 @@ import { useTheme } from 'next-themes';
 import { clsx } from 'clsx';
 import { createFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_KINDS, FEEDBACK_TEXT_MAX, type FeedbackKindValue, type UiName } from '@/lib/constants';
+import type { ElementLocator } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
-export type FeedbackTarget = { selector: string; elementText: string; component: UiName | null };
+export type FeedbackTarget = { selector: string; elementText: string; component: UiName | null; locator: ElementLocator };
 
 type Props = {
     target: FeedbackTarget;
@@ -56,6 +57,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                 selector: target.selector,
                 elementText: target.elementText,
                 component: target.component,
+                ...target.locator,
                 userAgent: navigator.userAgent.slice(0, 400),
             });
             if (res.success && res.data) onSaved(res.data);

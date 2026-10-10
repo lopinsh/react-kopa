@@ -14,6 +14,15 @@ export const createFeedbackSchema = z.object({
     elementText: z.string().max(200),
     /** `data-ui` name of the component the note was left on; null when it was left outside any named element. */
     component: z.enum(UI_NAMES).nullable().optional(),
+    /** Exact location of the element, so an agent can find it even without a name or text. */
+    xpath: z.string().max(1500).nullable().optional(),
+    cssPath: z.string().max(2000).nullable().optional(),
+    outerHtml: z.string().max(500).nullable().optional(),
+    heading: z.string().max(200).nullable().optional(),
+    boxX: z.number().int().min(-100000).max(1000000).nullable().optional(),
+    boxY: z.number().int().min(-100000).max(1000000).nullable().optional(),
+    boxW: z.number().int().min(0).max(100000).nullable().optional(),
+    boxH: z.number().int().min(0).max(1000000).nullable().optional(),
     userAgent: z.string().max(400),
 });
 export type CreateFeedbackInput = z.infer<typeof createFeedbackSchema>;
