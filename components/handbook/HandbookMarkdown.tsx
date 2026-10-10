@@ -59,11 +59,11 @@ const components: Components = {
     hr: () => <hr className="my-8 border-border" />,
     table: ({ children }) => (
         <div className="my-6 overflow-x-auto rounded-xl border border-border bg-surface">
-            <table className="w-full min-w-max text-left text-sm">{children}</table>
+            <table className="w-full text-left text-sm">{children}</table>
         </div>
     ),
     th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted">{children}</th>,
-    td: ({ children }) => <td className="border-b border-border/60 px-4 py-2.5 align-top [tr:last-child_&]:border-0">{children}</td>,
+    td: ({ children }) => <td className="min-w-28 border-b border-border/60 px-4 py-2.5 align-top [tr:last-child_&]:border-0">{children}</td>,
     a: ({ href, children }) => {
         const target = resolveHref(href);
         if (target.kind === 'internal') return <Link href={target.href} className={linkClass}>{children}</Link>;
