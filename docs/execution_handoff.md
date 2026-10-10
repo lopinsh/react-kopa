@@ -50,6 +50,12 @@
 - Redesign discussion: https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq
 - Screen review (9 Oct screenshots): https://claude.ai/artifact/FDMvHXWVVQKayoP7o1UEbD
 
+**Admin feedback batch, 2026-10-10 (Sonnet), not pushed:**
+- [x] Max 2 sub-categories per group (`MAX_GROUP_TAGS`, `e0f659b`): picker disables its input with a hint at 2 (pending tags count); `tagIdsSchema`/`buildGroupFormSchema(maxTags)` for forms; create rejects >2 (`TAG_LIMIT_REACHED`); update and admin categorization reject only when the count grows beyond the limit, so legacy groups with 3+ can still be saved or shrunk. Admin form uses the same rule. Verified: typecheck, i18n parity. NOT verified in a browser: picker disabling, saving a legacy 3-tag group.
+- [x] Members-only sections hidden, not teased (`516141e`): filtered in `GroupService.getContext`, so text, title and tab never reach non-members/logged-out (checked with a temporary test section: logged-out HTML had neither title nor content; admin saw it). Lock block and `common.membersOnlySection*` keys removed. No other teaser uses; events show a "members only" badge only.
+- [x] Feedback mode no longer closes dropdowns (`93a489e`): cause was the menus' outside-click handlers treating the feedback layer (outside the menu in the DOM) as an outside click. They now ignore `[data-feedback-ignore]` (`inFeedbackLayer`). Added names `dropdown-menu`, `menu-item`, `notification-item`. Verified: open user menu, comment buttons appear for its items, mousedown on one keeps it open, note dialog opens, Escape closes the dialog. Pause not re-tested (code untouched).
+- [x] Notifications show "Group · Category" (`2bc77e8`): resolved in `NotificationService.getUserNotifications` from the link (group page or conversation with an origin group), same L2-or-category rule as the inbox (`groupCategoryTitle`). Pushed notifications trigger a refetch. Verified in LV with a test notification. Not checked in EN/375 px.
+
 ## North star
 
 Ejam Kopā is a non-profit, non-addictive place to find people to do things with — a gym buddy in Jelgava, a book club, a choir looking for singers. It removes the social awkwardness of reaching out.
