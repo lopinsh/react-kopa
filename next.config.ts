@@ -45,6 +45,17 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Announcements used to be the Discussions tab; the query string is kept by Next.
+      {
+        source: '/:locale(lv|en)/:l1Slug/group/:groupSlug/discussions',
+        destination: '/:locale/:l1Slug/group/:groupSlug/announcements',
+        permanent: true,
+      },
+      {
+        source: '/:l1Slug/group/:groupSlug/discussions',
+        destination: '/:l1Slug/group/:groupSlug/announcements',
+        permanent: true,
+      },
       {
         source: '/groups/:slug',
         destination: '/api/resolve-group/:slug?locale=lv',

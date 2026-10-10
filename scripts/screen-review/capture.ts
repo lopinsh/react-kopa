@@ -88,7 +88,7 @@ const SHOTS: Shot[] = [
     { name: 'join-onboarding-username', roles: ['anon'], url: '/lv/onboarding/username' },
     { name: 'join-signin-eventlink', roles: ['anon'], url: EV_REQ },
     // Talk
-    { name: 'talk-discussions', roles: ['anon', 'member', 'owner'], url: `${G}/discussions` },
+    { name: 'talk-announcements', roles: ['anon', 'member', 'owner'], url: `${G}/announcements` },
     { name: 'talk-message-member-modal', roles: ['member'], url: `${G}/members`, act: async (p) => { await p.getByRole('button', { name: /sūtīt ziņu/i }).first().click({ timeout: 3000 }); await sleep(600); } },
     { name: 'talk-messages', roles: ['member'], url: '/lv/messages' },
     { name: 'talk-messages-anon', roles: ['anon'], url: '/lv/messages' },

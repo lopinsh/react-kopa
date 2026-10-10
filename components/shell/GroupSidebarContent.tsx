@@ -60,7 +60,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     const GROUP_NAV = [
         { id: 'info', icon: Info, label: c_common('informationTitle'), href: baseUrl, memberOnly: false },
         { id: 'events', icon: Calendar, label: c_common('eventsTitle'), href: `${baseUrl}/events`, memberOnly: false },
-        { id: 'announcements', icon: Megaphone, label: c_common('announcementsTitle'), href: `${baseUrl}/discussions`, memberOnly: true },
+        { id: 'announcements', icon: Megaphone, label: c_common('announcementsTitle'), href: `${baseUrl}/announcements`, memberOnly: true },
         { id: 'members', icon: Users, label: c_common('membersTitle'), href: `${baseUrl}/members`, memberOnly: true },
     ];
 
