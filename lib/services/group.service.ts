@@ -778,8 +778,10 @@ export const GroupService = {
             });
         }
 
+        // Members-only sections are not even listed for people who may not read them (same rule as the group page).
+        const canSeeMembersOnly = !!role && role !== 'PENDING';
         const sections = group.sections.length > 0
-            ? group.sections
+            ? group.sections.filter((s) => s.visibility !== 'MEMBERS_ONLY' || canSeeMembersOnly)
             : GroupService.getVirtualSections({ description: null }, 'lv');
 
         return {
