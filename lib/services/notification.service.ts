@@ -50,6 +50,19 @@ export const NotificationService = {
     },
 
     /**
+     * Like createNotification, but a failure is only logged: a saved change must not be reported
+     * as failed because its notification could not be sent. Not a Server Action on purpose.
+     */
+    async notify(payload: NotificationPayload) {
+        try {
+            return await NotificationService.createNotification(payload);
+        } catch (error) {
+            console.error('[NotificationService.notify] Error:', error);
+            return null;
+        }
+    },
+
+    /**
      * The same notification for many people: one insert, then one realtime event per person.
      */
     async createForUsers(userIds: string[], payload: Omit<NotificationPayload, 'userId'>) {

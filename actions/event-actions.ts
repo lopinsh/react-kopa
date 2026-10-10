@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
-import { createNotification } from './notification-actions';
+import { NotificationService } from '@/lib/services/notification.service';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 
 import { eventSchema, type EventFormValues } from '@/lib/validations/event';
@@ -28,7 +28,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
 
         if (membersToNotify.length > 0) {
             await Promise.all(membersToNotify.map(m =>
-                createNotification({
+                NotificationService.notify({
                     userId: m.userId,
                     type: 'NEW_EVENT',
                     translationKey: 'newEvent',
@@ -75,7 +75,7 @@ function notifyEvent(
     ctx: EventActionContext,
     extra: { authorName?: string; waitlistCount?: number } = {}
 ) {
-    return createNotification({
+    return NotificationService.notify({
         userId,
         type,
         translationKey: type,
@@ -250,7 +250,7 @@ export async function deleteEvent(eventId: string, locale: string): Promise<Acti
         const result = await EventService.deleteEvent(eventId, session.user.id);
         if (!result.success) return result;
         const ctx = result.data!;
-        await Promise.all(ctx.attendeeIds.map(id => createNotification({
+        await Promise.all(ctx.attendeeIds.map(id => NotificationService.notify({
             userId: id,
             type: 'EVENT_CANCELLED',
             translationKey: 'EVENT_CANCELLED',

@@ -5,7 +5,7 @@ import { GroupFormValues, groupFormSchema } from '@/lib/validations/group';
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
-import { createNotification } from './notification-actions';
+import { NotificationService } from '@/lib/services/notification.service';
 import { ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 import type { MembershipRole } from '@prisma/client';
@@ -61,7 +61,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
 
-        await Promise.all(adminIds.map(adminId => createNotification({
+        await Promise.all(adminIds.map(adminId => NotificationService.notify({
             userId: adminId,
             type: 'JOIN_REQUEST',
             translationKey: 'joinRequest',
@@ -112,7 +112,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
         const { conversationId, teamIds, groupName } = result.data!;
 
         // Owner and admins can all answer the group chat, so all of them hear about it.
-        await Promise.all(teamIds.map(teamUserId => createNotification({
+        await Promise.all(teamIds.map(teamUserId => NotificationService.notify({
             userId: teamUserId,
             type: 'INQUIRY_RECEIVED',
             translationKey: 'inquiryReceived',
@@ -162,7 +162,7 @@ export async function manageMembership(
         const { targetUserId, groupName, groupSlug, l1Slug } = result.data!;
 
         if (action === 'APPROVE') {
-            await createNotification({
+            await NotificationService.notify({
                 userId: targetUserId,
                 type: 'APPLICATION_ACCEPTED',
                 translationKey: 'applicationAccepted',
@@ -405,7 +405,7 @@ export async function deletePostAction(postId: string, locale: string): Promise<
 
         const { slug, l1Slug } = result.data!;
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/discussions`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -427,7 +427,7 @@ export async function transferOwnership(groupId: string, targetUserId: string, l
 
         const { groupName, groupSlug, l1Slug } = result.data!;
 
-        await createNotification({
+        await NotificationService.notify({
             userId: targetUserId,
             type: 'OWNERSHIP_TRANSFERRED',
             translationKey: 'ownershipTransferred',

@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
-import { NotificationService, type NotificationPayload } from '@/lib/services/notification.service';
+import { NotificationService } from '@/lib/services/notification.service';
 
 /**
  * Fetch notifications for the current user.
@@ -52,19 +52,5 @@ export async function markAllAsRead(): Promise<ActionResponse> {
     } catch (error) {
         console.error('[markAllAsRead] Error:', error);
         return { success: false, error: 'UPDATE_FAILED' };
-    }
-}
-
-/**
- * Internal utility to create a notification with Pusher delivery.
- * Called from other actions (e.g. group-actions.ts) after mutations.
- * Delegates all DB work to NotificationService.
- */
-export async function createNotification(payload: NotificationPayload) {
-    try {
-        return await NotificationService.createNotification(payload);
-    } catch (error) {
-        console.error('[createNotification] Error:', error);
-        return null;
     }
 }
