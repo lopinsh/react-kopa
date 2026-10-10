@@ -2,7 +2,7 @@
  * Reads and answers feedback notes left by site admins (feedback mode), through the token-protected API.
  *
  *   npm run feedback                       list open notes as markdown
- *   npm run feedback -- done <id> "reply"  mark done (reply optional)
+ *   npm run feedback -- done <id> "reply"  mark done (reply optional; added to the thread, nothing is overwritten)
  *   npm run feedback -- doing <id>
  *   npm run feedback -- wontdo <id> "reply"
  *   npm run feedback -- delete <id>        delete a note for good
@@ -32,7 +32,7 @@ interface Note {
     commit?: string | null;
     heading?: string | null;
     box?: { x: number; y: number; w: number; h: number } | null;
-    reply: string | null;
+    replies: { text: string; byAgent: boolean; authorName: string | null; createdAt: string }[];
     createdAt: string;
     authorName: string | null;
 }
@@ -90,8 +90,10 @@ function printNote(note: Note): void {
     if (note.commit) console.log(`- Built from commit: ${note.commit}`);
     console.log(`- Viewport: ${note.viewportW}x${note.viewportH}, ${note.theme} theme`);
     console.log(`- By: ${note.authorName ?? 'unknown'}, ${date} UTC`);
-    if (note.reply) console.log(`- Reply: ${note.reply}`);
     console.log(`\n${note.text}\n`);
+    for (const r of note.replies) {
+        console.log(`> Reply by ${r.byAgent ? 'agent' : r.authorName ?? 'admin'}, ${r.createdAt.slice(0, 16).replace('T', ' ')} UTC: ${r.text}\n`);
+    }
     if (note.outerHtml) console.log(`Scope HTML:\n\`\`\`html\n${note.outerHtml}\n\`\`\`\n`);
 }
 

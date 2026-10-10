@@ -8,7 +8,7 @@ import { handleActionError } from '@/lib/action-utils';
 import { FeedbackService, type FeedbackItem } from '@/lib/services/feedback.service';
 import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
-import type { CreateFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
+import type { CreateFeedbackInput, ReplyFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'FORBIDDEN' };
 
@@ -69,6 +69,20 @@ export async function updateFeedback(id: string, input: UpdateFeedbackInput): Pr
     if (!check.ok) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.update(check.adminId, id, input);
+        if (!result.success) return result;
+        revalidatePath('/admin/feedback');
+        return { success: true, data: result.data };
+    } catch (error) {
+        return handleActionError(error, 'UPDATE_FAILED');
+    }
+}
+
+/** Adds a message to the note's thread; the original text and earlier replies stay as they are. */
+export async function replyToFeedback(id: string, input: ReplyFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
+    const check = await requireAdmin();
+    if (!check.ok) return { success: false, error: check.error };
+    try {
+        const result = await FeedbackService.reply(check.adminId, id, input);
         if (!result.success) return result;
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };

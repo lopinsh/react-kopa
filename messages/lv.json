@@ -637,7 +637,6 @@
       "count": "{count, plural, zero {# piezīmju} one {# piezīme} other {# piezīmes}}",
       "element": "Elements",
       "status": "Statuss",
-      "replyPlaceholder": "Atbilde (nav obligāta)",
       "save": "Saglabāt",
       "saved": "Saglabāts",
       "component": "Komponente"
@@ -1204,6 +1203,10 @@
     "close": "Aizvērt",
     "noteTitle": "Piezīme",
     "reply": "Atbilde",
+    "threadAgent": "Aģents",
+    "threadAdmin": "Administrators",
+    "threadPlaceholder": "Pievienot atbildi…",
+    "threadSend": "Nosūtīt atbildi",
     "openList": "Visas piezīmes",
     "delete": "Dzēst",
     "deleteTitle": "Dzēst šo piezīmi?",

@@ -80,6 +80,11 @@ export default function FeedbackMode() {
         setOpenNote(null);
     };
 
+    const handleChanged = (note: FeedbackItem) => {
+        setNotes((prev) => prev.map((n) => (n.id === note.id ? note : n)));
+        setOpenNote(note);
+    };
+
     const handleOpen = (note: FeedbackItem) => {
         setPanelOpen(false);
         setOpenNote(note);
@@ -126,7 +131,7 @@ export default function FeedbackMode() {
 
             {panelOpen && <FeedbackNotesPanel notes={notes} missing={missing} onOpen={handleOpen} />}
             {draft && <FeedbackDialog target={draft} path={draftPath} onSaved={handleSaved} onClose={() => setDraft(null)} />}
-            {openNote && <FeedbackNoteCard note={openNote} onClose={() => setOpenNote(null)} onDeleted={handleDeleted} />}
+            {openNote && <FeedbackNoteCard note={openNote} onClose={() => setOpenNote(null)} onDeleted={handleDeleted} onChanged={handleChanged} />}
         </div>
     );
 }

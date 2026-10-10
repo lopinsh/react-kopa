@@ -4,32 +4,35 @@ import { useState, useTransition } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { updateFeedback } from '@/actions/feedback-actions';
-import { FEEDBACK_STATUSES, FEEDBACK_TEXT_MAX, type FeedbackStatusValue } from '@/lib/constants';
+import { FEEDBACK_STATUSES, type FeedbackStatusValue } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
 import FeedbackDeleteButton from '@/components/feedback/FeedbackDeleteButton';
+import FeedbackThread from '@/components/feedback/FeedbackThread';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 /** One note on the admin feedback page: what was said and where, plus status and reply. */
-export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
+export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem }) {
     const t = useTranslations('feedbackMode');
     const tAdmin = useTranslations('admin.feedback');
     const tErrors = useTranslations('errors');
     const format = useFormatter();
     const { success: toastSuccess, error: toastError } = useToast();
-    const [status, setStatus] = useState<FeedbackStatusValue>(note.status);
-    const [reply, setReply] = useState(note.reply ?? '');
+    const [note, setNote] = useState(initial);
+    const [status, setStatus] = useState<FeedbackStatusValue>(initial.status);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const [deleted, setDeleted] = useState(false);
 
-    const dirty = status !== note.status || reply !== (note.reply ?? '');
+    const dirty = status !== note.status;
 
     const handleSave = () => {
         if (isPending || !dirty) return;
         startTransition(async () => {
-            const res = await updateFeedback(note.id, { status, reply });
-            if (res.success) toastSuccess(tAdmin('saved'));
-            else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+            const res = await updateFeedback(note.id, { status });
+            if (res.success && res.data) {
+                setNote(res.data);
+                toastSuccess(tAdmin('saved'));
+            } else if (!res.success) toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
 
@@ -53,7 +56,7 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
                 {` · ${note.locale.toUpperCase()} · ${note.viewportW}×${note.viewportH} · ${note.theme}`}
             </p>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-[10rem_1fr_auto] sm:items-start">
+            <div className="mt-4 grid gap-3 sm:grid-cols-[10rem_auto] sm:items-start">
                 <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as FeedbackStatusValue)}
@@ -62,15 +65,6 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
                 >
                     {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
                 </select>
-                <textarea
-                    value={reply}
-                    onChange={(e) => setReply(e.target.value)}
-                    maxLength={FEEDBACK_TEXT_MAX}
-                    rows={2}
-                    placeholder={tAdmin('replyPlaceholder')}
-                    aria-label={t('reply')}
-                    className="resize-none rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm text-foreground"
-                />
                 <div className="flex gap-2 sm:flex-col">
                     <button
                         type="button"
@@ -87,6 +81,7 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
                     />
                 </div>
             </div>
+            <FeedbackThread note={note} onChanged={setNote} />
         </li>
     );
 }

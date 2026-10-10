@@ -29,7 +29,13 @@ export const createFeedbackSchema = z.object({
 });
 export type CreateFeedbackInput = z.infer<typeof createFeedbackSchema>;
 
-/** Status change plus an optional reply; used by the admin page and the agent API. */
+/** A message added to a note's thread. */
+export const replyFeedbackSchema = z.object({
+    text: z.string().trim().min(1).max(FEEDBACK_TEXT_MAX),
+});
+export type ReplyFeedbackInput = z.infer<typeof replyFeedbackSchema>;
+
+/** Status change plus an optional reply (appended to the thread); used by the admin page and the agent API. */
 export const updateFeedbackSchema = z.object({
     status: z.enum(FEEDBACK_STATUSES),
     reply: z.string().trim().max(FEEDBACK_TEXT_MAX).optional(),

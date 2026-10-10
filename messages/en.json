@@ -637,7 +637,6 @@
       "count": "{count, plural, one {# note} other {# notes}}",
       "element": "Element",
       "status": "Status",
-      "replyPlaceholder": "Reply (optional)",
       "save": "Save",
       "saved": "Saved",
       "component": "Component"
@@ -1204,6 +1203,10 @@
     "close": "Close",
     "noteTitle": "Note",
     "reply": "Reply",
+    "threadAgent": "Agent",
+    "threadAdmin": "Admin",
+    "threadPlaceholder": "Add a reply…",
+    "threadSend": "Send reply",
     "openList": "All notes",
     "delete": "Delete",
     "deleteTitle": "Delete this note?",

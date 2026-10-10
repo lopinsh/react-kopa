@@ -8,40 +8,41 @@ datasource db {
 }
 
 model User {
-  id                   String             @id @default(cuid())
+  id                   String              @id @default(cuid())
   name                 String?
-  email                String?            @unique
+  email                String?             @unique
   emailVerified        DateTime?
   image                String?
   password             String?
-  role                 AppRole            @default(USER)
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime           @updatedAt
-  allowDirectMessages  Boolean            @default(true)
-  isProfilePublic      Boolean            @default(true)
-  showGroupsOnProfile  Boolean            @default(false)
+  role                 AppRole             @default(USER)
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  allowDirectMessages  Boolean             @default(true)
+  isProfilePublic      Boolean             @default(true)
+  showGroupsOnProfile  Boolean             @default(false)
   avatarSeed           String?
   bio                  String?
   cities               String[]
-  username             String?            @unique
+  username             String?             @unique
   accounts             Account[]
-  contactConversations Conversation[]     @relation("ConversationContact")
-  conversationReads    ConversationRead[] @relation("ConversationReads")
+  contactConversations Conversation[]      @relation("ConversationContact")
+  conversationReads    ConversationRead[]  @relation("ConversationReads")
   attendances          Attendance[]
-  createdEvents        Event[]            @relation("CreatedEvents")
+  createdEvents        Event[]             @relation("CreatedEvents")
   memberships          Membership[]
   notifications        Notification[]
   posts                Post[]
-  reports              Report[]           @relation("FiledReports")
+  reports              Report[]            @relation("FiledReports")
   sessions             Session[]
-  submittedCategories  Category[]         @relation("SubmittedCategories")
-  conversations        Conversation[]     @relation("ConversationParticipants")
-  directMessages       Message[]          @relation("SentMessages")
-  hiddenGroups         Group[]            @relation("HiddenGroups")
+  submittedCategories  Category[]          @relation("SubmittedCategories")
+  conversations        Conversation[]      @relation("ConversationParticipants")
+  directMessages       Message[]           @relation("SentMessages")
+  hiddenGroups         Group[]             @relation("HiddenGroups")
   adminActions         AdminAction[]
   messageOverrides     MessageOverride[]
   messageSuggestions   MessageSuggestion[]
   feedback             Feedback[]
+  feedbackReplies      FeedbackReply[]     @relation("FeedbackReplyAuthor")
 }
 
 model Account {
@@ -445,11 +446,11 @@ enum FeedbackStatus {
 
 /// A note a site admin left on a page while testing (feedback mode). Agents read and answer them through /api/feedback.
 model Feedback {
-  id          String         @id @default(cuid())
+  id          String          @id @default(cuid())
   authorId    String
   kind        FeedbackKind
   text        String
-  status      FeedbackStatus @default(OPEN)
+  status      FeedbackStatus  @default(OPEN)
   path        String
   locale      String
   viewportW   Int
@@ -470,14 +471,28 @@ model Feedback {
   boxW        Int?
   boxH        Int?
   userAgent   String
-  reply       String?
   resolvedAt  DateTime?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  author      User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  author      User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  replies     FeedbackReply[]
 
   @@index([status, createdAt])
   @@index([path])
+}
+
+/// One message in a note's thread, under the original text. `authorId` is null and `byAgent` true when it came through the API token / CLI.
+model FeedbackReply {
+  id         String   @id @default(cuid())
+  feedbackId String
+  authorId   String?
+  byAgent    Boolean  @default(false)
+  text       String
+  createdAt  DateTime @default(now())
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  author     User?    @relation("FeedbackReplyAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([feedbackId, createdAt])
 }
 
 /// The site's look (Admin > Design). At most one row is published; the others are an admin's preview drafts.

@@ -6,15 +6,17 @@ import { X } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import FeedbackDeleteButton from './FeedbackDeleteButton';
+import FeedbackThread from './FeedbackThread';
 
 type Props = {
     note: FeedbackItem;
     onClose: () => void;
     onDeleted: (id: string) => void;
+    onChanged: (note: FeedbackItem) => void;
 };
 
-/** One saved note with its status and the agent's reply. Opened from a pin or from the notes list. */
-export default function FeedbackNoteCard({ note, onClose, onDeleted }: Props) {
+/** One saved note with its status and the thread of replies. Opened from a pin or from the notes list. */
+export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }: Props) {
     const t = useTranslations('feedbackMode');
     const format = useFormatter();
     const [confirming, setConfirming] = useState(false);
@@ -36,7 +38,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted }: Props) {
             className="fixed inset-0 z-[70] flex items-end justify-center bg-black/50 p-4 backdrop-blur-sm sm:items-center"
             onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
         >
-            <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="w-full max-w-md rounded-3xl bg-surface p-5 shadow-2xl">
+            <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-2xl">
                 <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
                         <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
@@ -53,12 +55,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted }: Props) {
                 {note.elementText && (
                     <p className="mt-3 truncate rounded-xl bg-surface-elevated px-3 py-2 text-xs text-foreground-muted">{note.elementText}</p>
                 )}
-                {note.reply && (
-                    <div className="mt-3 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2">
-                        <p className="text-xs font-bold text-primary">{t('reply')}</p>
-                        <p className="mt-1 whitespace-pre-wrap break-words text-sm text-foreground">{note.reply}</p>
-                    </div>
-                )}
+                <FeedbackThread note={note} onChanged={onChanged} />
                 <div className="mt-4 flex items-center justify-between gap-3 text-xs text-foreground-muted">
                     <span>{format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}</span>
                     <div className="flex items-center gap-3">

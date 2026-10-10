@@ -2,8 +2,17 @@ import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
 import type { FeedbackKindValue, FeedbackStatusValue } from '@/lib/constants';
-import { createFeedbackSchema, updateFeedbackSchema, type FeedbackFilter } from '@/lib/validations/feedback';
+import { createFeedbackSchema, updateFeedbackSchema, replyFeedbackSchema, type FeedbackFilter } from '@/lib/validations/feedback';
 import { isSiteAdmin } from './moderation.service';
+
+export interface FeedbackReplyItem {
+    id: string;
+    text: string;
+    /** True when the reply came through the API token / CLI rather than a signed-in admin. */
+    byAgent: boolean;
+    authorName: string | null;
+    createdAt: Date;
+}
 
 export interface FeedbackItem {
     id: string;
@@ -25,7 +34,8 @@ export interface FeedbackItem {
     /** Element box in page pixels (from the top-left of the document) when the note was made. */
     box: { x: number; y: number; w: number; h: number } | null;
     userAgent: string;
-    reply: string | null;
+    /** The thread under the original text, oldest first. The original `text` is never edited. */
+    replies: FeedbackReplyItem[];
     resolvedAt: Date | null;
     createdAt: Date;
     authorName: string | null;
@@ -35,7 +45,12 @@ export type FeedbackResult<T = void> =
     | { success: true; data?: T }
     | { success: false; error: ErrorCode };
 
-const itemArgs = { include: { author: { select: { name: true, username: true } } } } satisfies Prisma.FeedbackDefaultArgs;
+const itemArgs = {
+    include: {
+        author: { select: { name: true, username: true } },
+        replies: { orderBy: { createdAt: 'asc' }, include: { author: { select: { name: true, username: true } } } },
+    },
+} satisfies Prisma.FeedbackDefaultArgs;
 
 function toItem(row: Prisma.FeedbackGetPayload<typeof itemArgs>): FeedbackItem {
     return {
@@ -59,7 +74,13 @@ function toItem(row: Prisma.FeedbackGetPayload<typeof itemArgs>): FeedbackItem {
             ? { x: row.boxX, y: row.boxY, w: row.boxW, h: row.boxH }
             : null,
         userAgent: row.userAgent,
-        reply: row.reply,
+        replies: row.replies.map((r) => ({
+            id: r.id,
+            text: r.text,
+            byAgent: r.byAgent,
+            authorName: r.author ? r.author.username ?? r.author.name : null,
+            createdAt: r.createdAt,
+        })),
         resolvedAt: row.resolvedAt,
         createdAt: row.createdAt,
         authorName: row.author.username ?? row.author.name,
@@ -71,7 +92,8 @@ function resolvedAtFor(status: FeedbackStatusValue): Date | null {
     return status === 'DONE' || status === 'WONT_DO' ? new Date() : null;
 }
 
-async function updateNote(id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
+/** Status change; a non-empty `reply` is appended to the thread (never replaces anything). `authorId` null means the agent. */
+async function updateNote(id: string, authorId: string | null, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
     const parsed = updateFeedbackSchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
     const existing = await prisma.feedback.findUnique({ where: { id }, select: { status: true } });
@@ -81,10 +103,23 @@ async function updateNote(id: string, input: unknown): Promise<FeedbackResult<Fe
         where: { id },
         data: {
             status: parsed.data.status,
-            reply: parsed.data.reply === undefined ? undefined : parsed.data.reply || null,
-            // Only a status change moves the time; editing just the reply keeps when it was resolved.
+            // Only a status change moves the time; a reply alone keeps when it was resolved.
             resolvedAt: existing.status === parsed.data.status ? undefined : resolvedAtFor(parsed.data.status),
+            replies: parsed.data.reply ? { create: { text: parsed.data.reply, authorId, byAgent: authorId === null } } : undefined,
         },
+        ...itemArgs,
+    });
+    return { success: true, data: toItem(row) };
+}
+
+async function addReply(id: string, authorId: string | null, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
+    const parsed = replyFeedbackSchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+    const existing = await prisma.feedback.findUnique({ where: { id }, select: { id: true } });
+    if (!existing) return { success: false, error: 'NOT_FOUND' };
+    const row = await prisma.feedback.update({
+        where: { id },
+        data: { replies: { create: { text: parsed.data.text, authorId, byAgent: authorId === null } } },
         ...itemArgs,
     });
     return { success: true, data: toItem(row) };
@@ -134,7 +169,7 @@ export const FeedbackService = {
 
     async update(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
-        return updateNote(id, input);
+        return updateNote(id, adminId, input);
     },
 
     async remove(adminId: string, id: string): Promise<FeedbackResult> {
@@ -148,6 +183,12 @@ export const FeedbackService = {
         return rows.map(toItem);
     },
 
-    updateForAgent: updateNote,
+    async reply(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        return addReply(id, adminId, input);
+    },
+
+    updateForAgent: (id: string, input: unknown) => updateNote(id, null, input),
+    replyForAgent: (id: string, input: unknown) => addReply(id, null, input),
     removeForAgent: deleteNote,
 };
