@@ -92,7 +92,7 @@ function printNote(note: Note): void {
     console.log(`- By: ${note.authorName ?? 'unknown'}, ${date} UTC`);
     console.log(`\n${note.text}\n`);
     for (const r of note.replies) {
-        console.log(`> Reply by ${r.byAgent ? 'agent' : r.authorName ?? 'admin'}, ${r.createdAt.slice(0, 16).replace('T', ' ')} UTC: ${r.text}\n`);
+        console.log(`> Reply by ${r.byAgent ? 'agent' : r.authorName ?? 'admin'}, ${r.createdAt.slice(0, 16).replace('T', ' ')} UTC:\n> ${r.text.replace(/\n/g, '\n> ')}\n`);
     }
     if (note.outerHtml) console.log(`Scope HTML:\n\`\`\`html\n${note.outerHtml}\n\`\`\`\n`);
 }
