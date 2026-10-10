@@ -5,6 +5,11 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // The Handbook pages read markdown from disk at request time; the standalone trace can't see that.
+  outputFileTracingIncludes: {
+    '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
+    '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*'],
+  },
   images: {
     remotePatterns: [
       {

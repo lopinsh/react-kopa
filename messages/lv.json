@@ -530,7 +530,14 @@
       "reports": "Sūdzības",
       "moderation": "Moderācija",
       "taxonomy": "Taksonomija",
-      "translations": "Tulkojumi"
+      "translations": "Tulkojumi",
+      "handbook": "Rokasgrāmata"
+    },
+    "handbook": {
+      "chapters": "Nodaļas",
+      "overview": "Pārskats",
+      "onThisPage": "Šajā lapā",
+      "note": "Iekšējs dokuments, tikai angliski. Avots: docs/handbook repozitorijā."
     },
     "translations": {
       "title": "Tulkojumi",

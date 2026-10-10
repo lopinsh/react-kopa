@@ -530,7 +530,14 @@
       "reports": "Reports",
       "moderation": "Moderation",
       "taxonomy": "Taxonomy",
-      "translations": "Translations"
+      "translations": "Translations",
+      "handbook": "Handbook"
+    },
+    "handbook": {
+      "chapters": "Chapters",
+      "overview": "Overview",
+      "onThisPage": "On this page",
+      "note": "Internal document, English only. Source: docs/handbook in the repository."
     },
     "translations": {
       "title": "Translations",
