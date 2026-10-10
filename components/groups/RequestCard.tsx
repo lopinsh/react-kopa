@@ -70,10 +70,12 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                         <span className="font-bold text-base text-foreground tracking-tight block truncate">
                             {targetUser.name || t('anonymousUser')}
                         </span>
-                        <span className="text-[10px] font-black uppercase text-foreground-muted tracking-widest flex items-center gap-1.5">
-                            <History className="h-3 w-3" />
-                            {latest && format.relativeTime(new Date(latest.createdAt), now)}
-                        </span>
+                        {latest && (
+                            <span className="text-[10px] font-black uppercase text-foreground-muted tracking-widest flex items-center gap-1.5">
+                                <History className="h-3 w-3" />
+                                {format.relativeTime(new Date(latest.createdAt), now)}
+                            </span>
+                        )}
                     </div>
                 </div>
 
@@ -106,7 +108,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                                 &quot;{latest.content}&quot;
                             </p>
                             <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted">
-                                {latest.senderId === targetUser.id ? targetUser.name || c_common('applicant') : c_common('role_admin')}
+                                {latest.senderId === targetUser.id ? targetUser.name || c_common('applicant') : latest.sender.name || c_common('role_admin')}
                                 {' · '}
                                 {format.relativeTime(new Date(latest.createdAt), now)}
                             </p>
