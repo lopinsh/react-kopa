@@ -223,6 +223,7 @@ Noticed, not changed:
 - Decisions on the 2.7 feature inventory, together with the user.
 - Event recurrence as a series (members-only events only) — after 2.10.
 - **Later, not planned (user, 2026-10-09):** private groups with invites; accent-insensitive search ("lugsanu" vs "lūgšanu"). They come when the site feels stable.
+- **Idea (user feedback, 2026-10-10):** let people suggest a city that is not in the list yet, approved by a site admin, the same way as sub-categories. Not planned yet.
 - ~~Realtime on production~~ — fixed 2026-10-08 (Opus + user): Soketi had been running with its default `app-key`/`app-secret` (the `SOKETI_*` lines were missing from the server `.env`), and the browser bundle pointed at `soketi`. Now: real `SOKETI_APP_ID/KEY/SECRET` in `/root/ejam-kopa/.env`, GitHub secret `NEXT_PUBLIC_PUSHER_KEY` = the new key, Nginx Proxy Manager routes `/app/` on ejam.lumm.eu → `192.168.0.34:6001` (Advanced tab, WebSockets on), browser build baked with `ejam.lumm.eu:443` TLS. Verified: default key rejected, new key connects over `wss://`, admin hide works. GitHub secrets `NEXT_PUBLIC_PUSHER_HOST/PORT` are unused now (can be deleted).
 - Minor, unexplained: dev-only sidebar flash on mobile.
 
