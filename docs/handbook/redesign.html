@@ -374,6 +374,44 @@ html.dark .rd{
 .rd .evx-b{padding:0 0 14px 58px;display:grid;gap:8px;justify-items:start;font-size:15px}
 .rd .evx-b p{margin:0}
 .rd .going{font-size:14px;color:var(--muted)}
+.rd .nt-pop{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-soft);overflow:hidden;width:100%;min-width:0}
+.rd .nt-pop.old{max-width:320px}.rd .nt-pop.new{max-width:400px}
+.rd .nt-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.rd .nt-h b{font:600 17px var(--display)}
+.rd .nt-h a{font-size:13px;color:var(--brand);font-weight:600}
+.rd .nt-sec{font:600 12px var(--body);color:var(--muted);letter-spacing:.02em;padding:12px 16px 4px}
+.rd .nt-o{padding:14px 16px;border-top:1px solid var(--line);display:grid;gap:4px;min-width:0}
+.rd .nt-o.u{background:color-mix(in srgb,var(--brand) 6%,var(--surface))}
+.rd .nt-o .a{display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}
+.rd .nt-o .a b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd .nt-o .h{font-size:14px;font-weight:700;line-height:1.35;margin:0}
+.rd .nt-o .d{font-size:12px;color:var(--muted);margin:0}
+.rd .nt-i{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;padding:12px 16px;border-top:1px solid var(--line);align-items:start;min-width:0}
+.rd .nt-sec+.nt-i{border-top:0}
+.rd .nt-av{position:relative;width:40px;height:40px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font:600 15px var(--display);color:var(--fg)}
+.rd .nt-av.g{border-radius:12px;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:var(--c)}
+.rd .nt-av.g svg.i{width:20px;height:20px}
+.rd .nt-ty{position:absolute;right:-4px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:var(--surface);color:var(--muted);display:grid;place-items:center;box-shadow:0 0 0 1px var(--line)}
+.rd .nt-ty svg{width:10px;height:10px;stroke-width:2.4}
+.rd .nt-b{display:grid;gap:2px;min-width:0}
+.rd .nt-b .w{font-size:15px;line-height:1.4;margin:0}
+.rd .nt-i.u .nt-b .w{font-weight:600}
+.rd .nt-b .q{font-size:13px;color:var(--muted);margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd .nt-b .m{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.rd .nt-b .m .tag{font-size:12px;gap:5px}
+.rd .nt-b .m .tag.cat::before{width:7px;height:7px}
+.rd .nt-b .m .sub{font-size:12px}
+.rd .nt-tm{font-size:12px;color:var(--muted);white-space:nowrap;display:grid;justify-items:end;gap:6px}
+.rd .nt-dot{width:8px;height:8px;border-radius:50%;background:var(--brand)}
+.rd .nt-empty{padding:34px 20px 38px;display:grid;justify-items:center;gap:8px;text-align:center}
+.rd .nt-empty p{margin:0}
+.rd .nt-empty .spec-i{max-width:30ch}
+.rd .nt-full{display:flex;flex-direction:column;background:var(--surface)}
+.rd .nt-full .nt-top{display:flex;align-items:center;gap:8px;padding:12px 10px 12px 8px;border-bottom:1px solid var(--line)}
+.rd .nt-full .nt-top b{font:600 18px var(--display);flex:1}
+.rd .nt-full .nt-top a{font-size:13px;color:var(--brand);font-weight:600;padding-right:6px}
+.rd .nt-full .nt-i{padding-inline:14px}
+.rd .nt-full .nt-b .q{white-space:normal}
 </style>
 <div class="rd">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -816,6 +854,43 @@ html.dark .rd{
   <p class="why">Neutral note: a group page today has about four sections, which fits either. Nothing is decided; see "Still open".</p>
 </section>
 
+<section aria-labelledby="h-notif">
+  <h2 id="h-notif">Paziņojumi: kas ir svarīgākais</h2>
+  <p class="lead">Your note: today the notification <i>type</i> gets the heading treatment, but the type is the least useful part. Proposal: lead with <b>who or which group</b>, then <b>what happened</b> in one plain sentence, then the quiet line (group, category, sub-category), then the time. The type shrinks to a small icon on the avatar. Unread is a small dot and slightly stronger text, not a coloured block.</p>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol></svg>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 280px;max-width:320px"><div class="cap">Today · dropdown, 320 px</div>
+      <div class="nt-pop old"><div class="nt-h"><b style="font:700 14px var(--body)">Paziņojumi</b><a style="font-size:11px;font-weight:700">Atzīmēt visus kā izlasītus</a></div><div class="nt-o u"><div class="a"><b>Vēja zirdžiņš · Dejas</b><span>12 min</span></div><p class="h">Anna vēlas pievienoties</p><p class="d">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p></div>
+<div class="nt-o u"><div class="a"><b>Pārgājieni · Ceļošana un daba</b><span>2 h</span></div><p class="h">Tavs pieteikums apstiprināts</p></div>
+<div class="nt-o u"><div class="a"><b>Vēja zirdžiņš · Dejas</b><span>3 h</span></div><p class="h">Jauns pasākums</p><p class="d">Mēģinājums</p></div>
+<div class="nt-o"><div class="a"><b>Jelgavas kori · Mūzika</b><span>Vakar</span></div><p class="h">Marta publicēja jaunumu</p><p class="d">“Mēģinājums pārcelts uz Kultūras namu.”</p></div>
+<div class="nt-o"><div class="a"><b>Bezmaksas velo</b><span>Otrd.</span></div><p class="h">Jauns paziņojums</p></div></div>
+      <p class="why">Sketch of the current component: group and category (small, bold) with the time on the first line, the type as a bold headline, the person's words under it. Unread rows are a tinted block. "Anna vēlas pievienoties" does not say which group without reading the small line above it.</p>
+    </div>
+    <div class="shot" style="flex:1 1 340px;max-width:400px"><div class="cap">Proposed · dropdown, 400 px</div>
+      <div class="nt-pop new"><div class="nt-h"><b>Paziņojumi</b><a>Atzīmēt visus kā izlasītus</a></div><div class="nt-sec">Šodien</div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-av">A<span class="nt-ty"><svg class="i"><use href="#i-user"/></svg></span></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#10B981"><span class="nt-av g"><svg class="i"><use href="#i-mount"/></svg><span class="nt-ty"><svg class="i"><use href="#i-check"/></svg></span></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-av g"><svg class="i"><use href="#i-dance"/></svg><span class="nt-ty"><svg class="i"><use href="#i-cal"/></svg></span></span><div class="nt-b"><p class="w">Jauns pasākums: <b>Mēģinājums</b> ceturtdien 19:00</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-sec">Agrāk</div><div class="nt-i" style="--c:#6366F1"><span class="nt-av">M<span class="nt-ty"><svg class="i"><use href="#i-list"/></svg></span></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p><div class="m"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Kori</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#F43F5E"><span class="nt-av">J<span class="nt-ty"><svg class="i"><use href="#i-msg"/></svg></span></span><div class="nt-b"><p class="w"><b>Jānis</b> uzrakstīja tev</p><p class="q">“Vai vari atnest pastiprinātāju?”</p><div class="m"><span>Personīga ziņa</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#64748B"><span class="nt-av g"><svg class="i"><use href="#i-pol"/></svg><span class="nt-ty"><svg class="i"><use href="#i-flag"/></svg></span></span><div class="nt-b"><p class="w">Ziņojums par grupu <b>Bezmaksas velo</b>: reklāma</p><div class="m"><span class="tag cat" style="--c:#64748B">Moderēšana</span><span class="sub">redzams tikai administratoriem</span></div></div><span class="nt-tm">Otrd.</span></div></div>
+      <p class="why">Face or group mark first; the sentence names the person and the group; the quiet line carries category and sub-category. The report line is seen by admins only.</p>
+    </div>
+    <div class="shot" style="flex:0 1 340px"><div class="cap">Proposed · phone, full-screen list</div>
+      <div class="mob"><div class="nt-full"><div class="nt-top"><svg class="i"><use href="#i-left"/></svg><b>Paziņojumi</b><a>Visi izlasīti</a></div><div class="nt-sec">Šodien</div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-av">A<span class="nt-ty"><svg class="i"><use href="#i-user"/></svg></span></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#10B981"><span class="nt-av g"><svg class="i"><use href="#i-mount"/></svg><span class="nt-ty"><svg class="i"><use href="#i-check"/></svg></span></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-av g"><svg class="i"><use href="#i-dance"/></svg><span class="nt-ty"><svg class="i"><use href="#i-cal"/></svg></span></span><div class="nt-b"><p class="w">Jauns pasākums: <b>Mēģinājums</b> ceturtdien 19:00</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-sec">Agrāk</div><div class="nt-i" style="--c:#6366F1"><span class="nt-av">M<span class="nt-ty"><svg class="i"><use href="#i-list"/></svg></span></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p><div class="m"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Kori</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#F43F5E"><span class="nt-av">J<span class="nt-ty"><svg class="i"><use href="#i-msg"/></svg></span></span><div class="nt-b"><p class="w"><b>Jānis</b> uzrakstīja tev</p><p class="q">“Vai vari atnest pastiprinātāju?”</p><div class="m"><span>Personīga ziņa</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#64748B"><span class="nt-av g"><svg class="i"><use href="#i-pol"/></svg><span class="nt-ty"><svg class="i"><use href="#i-flag"/></svg></span></span><div class="nt-b"><p class="w">Ziņojums par grupu <b>Bezmaksas velo</b>: reklāma</p><div class="m"><span class="tag cat" style="--c:#64748B">Moderēšana</span><span class="sub">redzams tikai administratoriem</span></div></div><span class="nt-tm">Otrd.</span></div></div></div>
+    </div>
+  </div>
+  <div class="idgrid">
+    <div class="box"><span class="lbl">Empty state</span>
+      <div class="nt-empty"><span class="mk" aria-hidden="true"></span><b style="font:600 17px var(--display)">Pagaidām kluss</b><p class="spec-i">Kad kāds pieteiksies tavā grupā vai parādīsies jauns pasākums, tas būs šeit.</p></div>
+      <p class="why">English: "Quiet for now. When someone joins your group or a new event appears, it will show here." The two circles replace the grey bell.</p></div>
+    <div class="box wide"><span class="lbl">Why this order</span>
+      <p class="spec-i">People scan a list for "whose is this", so a face or a group mark goes first.</p>
+      <p class="spec-i">One plain sentence ("Anna pieteicās grupā Vēja zirdžiņš") replaces a type label plus a detail; the type only helps as a small icon.</p>
+      <p class="spec-i">The quiet line repeats the group's category and sub-category, so a glance tells the topic without opening anything.</p>
+      <p class="spec-i">Unread as a dot and heavier text still works in the dark theme and without colour, and the list stays calm.</p></div>
+  </div>
+  <div class="open">
+    <div><b>Collapse notifications from one group?</b><p>Three events in Vēja zirdžiņš could become one line: "3 jauni pasākumi grupā Vēja zirdžiņš". Cleaner, but one tap deeper. Collapse, or keep every line?</p></div>
+    <div><b>When does an item count as read?</b><p>Today it is read when you tap it. Should the whole list count as read once the dropdown has been open for a moment?</p></div>
+  </div>
+</section>
+
 <section aria-labelledby="h-agreed">
   <h2 id="h-agreed">Agreed so far</h2>
   <ul class="agreed">
@@ -826,6 +901,7 @@ html.dark .rd{
     <li><b>Subcategories matter</b><p>Shown after the category on cards, events and the group header: all of them, smaller and lighter than the category.</p></li>
     <li><b>"Ko meklējam?"</b><p>A new optional group field (up to 60 characters) shown as the card's note; when empty, the card shows the next meeting.</p></li>
     <li><b>Two levels of group navigation</b><p>Tabs for the group's pages; a small switch inside a page (Events: upcoming · past; Members: members · requests; Settings: group · sections · owner).</p></li>
+    <li><b>Messages</b><p>Ziņas: a side drawer from the right for quick replies from any page; /messages stays the full view (user agreed 2026-10-10).</p></li>
     <li><b>Encourage, don't count</b><p>Faces of who is coming instead of "0 apstiprināti"; sentence case, no capitals.</p></li>
   </ul>
 </section>
