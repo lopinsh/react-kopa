@@ -192,6 +192,34 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
         setIsOpen(false);
     }
 
+    /**
+     * Text typed but not yet added when "Done" is pressed: an existing sub-category with the same name
+     * (case-insensitive) is selected, otherwise the text becomes a new pending one.
+     */
+    async function commitTypedText() {
+        const typed = (inlineWildcardParentId === l1.id ? inlineWildcardText : query).trim();
+        if (typed.length < 2) {
+            setIsOpen(false);
+            return;
+        }
+        const key = typed.toLowerCase();
+        const pendingMatch = Object.values(pendingById).find((p) => p.title.toLowerCase() === key && tagIds.includes(p.id));
+        const known =
+            flatTags.find((tag) => tag.title.toLowerCase() === key) ??
+            searchResults.find((tag) => tag.title.toLowerCase() === key);
+
+        if (!pendingMatch && known && !tagIds.includes(known.id)) {
+            setValue('tagIds', [...tagIds, known.id], { shouldValidate: true });
+        } else if (!pendingMatch && !known) {
+            await createPending(l1.id, typed);
+            return;
+        }
+        setQuery('');
+        setInlineWildcardParentId(null);
+        setInlineWildcardText('');
+        setIsOpen(false);
+    }
+
     const selectedTags = tagIds
         .map((id) => flatTags.find((tag) => tag.id === id))
         .filter((tag): tag is FlatTag => tag !== undefined);
@@ -416,21 +444,6 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                                                     >
                                                         <X className="h-4 w-4" />
                                                     </button>
-                                                    <button
-                                                        type="button"
-                                                        title={c('save')}
-                                                        disabled={!inlineWildcardText.trim() || isSubmittingPending}
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            if (inlineWildcardText.trim()) {
-                                                                createPending(l1.id, inlineWildcardText.trim());
-                                                            }
-                                                        }}
-                                                        className="text-white rounded flex items-center justify-center p-0.5 disabled:opacity-60"
-                                                        style={{ backgroundColor: accentColor }}
-                                                    >
-                                                        <Check className="h-4 w-4" />
-                                                    </button>
                                                 </div>
                                             ) : (
                                                 <button
@@ -519,10 +532,10 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                                     type="button"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        // Done only closes; a new topic is created by its explicit "create" action.
-                                        setIsOpen(false);
+                                        void commitTypedText();
                                     }}
-                                    className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98]"
+                                    disabled={isSubmittingPending}
+                                    className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                                     style={{ backgroundColor: accentColor }}
                                 >
                                     {c('done')}
