@@ -19,12 +19,13 @@ export type ReportWithDetails = Prisma.ReportGetPayload<{
 
 export class AdminService {
     /** What waits for an admin: shown as badges in the admin navigation. */
-    static async getPendingCounts(): Promise<{ tags: number; reports: number }> {
-        const [tags, reports] = await Promise.all([
+    static async getPendingCounts(): Promise<{ tags: number; reports: number; suggestions: number }> {
+        const [tags, reports, suggestions] = await Promise.all([
             prisma.category.count({ where: { isWildcard: true, status: 'PENDING_REVIEW' } }),
-            prisma.report.count({ where: { status: 'PENDING' } })
+            prisma.report.count({ where: { status: 'PENDING' } }),
+            prisma.messageSuggestion.count()
         ]);
-        return { tags, reports };
+        return { tags, reports, suggestions };
     }
 
     /**

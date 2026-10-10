@@ -65,14 +65,43 @@ export async function searchTranslations(query: string): Promise<ActionResponse<
     }
 }
 
-export async function saveTranslation(input: { key: string; lv: string; en: string }): Promise<ActionResponse> {
+/** Proposes a text. The live site only changes when an admin approves it. */
+export async function suggestTranslation(input: { key: string; lv: string; en: string }): Promise<ActionResponse> {
     const check = await requireAdmin();
     if (!check.ok) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.saveEntry(check.adminId, input);
+        const result = await MessageOverrideService.suggestEntry(check.adminId, input);
+        if (!result.success) return result;
+
+        revalidatePath('/', 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'SAVE_FAILED');
+    }
+}
+
+export async function approveSuggestion(id: string): Promise<ActionResponse> {
+    const check = await requireAdmin();
+    if (!check.ok) return { success: false, error: check.error };
+    try {
+        const result = await MessageOverrideService.approveSuggestion(check.adminId, id);
         if (!result.success) return result;
 
         updateTag(MESSAGE_OVERRIDES_TAG);
+        revalidatePath('/', 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'SAVE_FAILED');
+    }
+}
+
+export async function rejectSuggestion(id: string): Promise<ActionResponse> {
+    const check = await requireAdmin();
+    if (!check.ok) return { success: false, error: check.error };
+    try {
+        const result = await MessageOverrideService.rejectSuggestion(check.adminId, id);
+        if (!result.success) return result;
+
         revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
-import { getTranslationEntry, saveTranslation } from '@/actions/translation-actions';
+import { getTranslationEntry, suggestTranslation } from '@/actions/translation-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { TranslationEntry } from '@/lib/services/message-override.service';
 import { MESSAGE_LANGS, type MessageLang } from '@/lib/translate-mode/messages';
@@ -36,7 +36,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
             if (cancelled) return;
             if (res.success && res.data) {
                 setEntry(res.data);
-                setValues({ lv: res.data.lv, en: res.data.en });
+                setValues({ lv: res.data.pending.lv ?? res.data.lv, en: res.data.pending.en ?? res.data.en });
             } else {
                 setLoadError(res.success ? 'ACTION_FAILED' : res.error);
             }
@@ -69,9 +69,9 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
         if (isPending || !entry || hasIssue || isEmpty) return;
         setSaveError(null);
         startTransition(async () => {
-            const res = await saveTranslation({ key: entry.key, lv: values.lv, en: values.en });
+            const res = await suggestTranslation({ key: entry.key, lv: values.lv, en: values.en });
             if (res.success) {
-                toastSuccess(t('saved'));
+                toastSuccess(t('suggested'));
                 router.refresh();
                 onClose();
             } else {
@@ -116,6 +116,9 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                             {entry.edited[lang] && (
                                                 <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">{t('edited')}</span>
                                             )}
+                                            {entry.pending[lang] !== null && (
+                                                <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-600">{t('waiting')}</span>
+                                            )}
                                         </label>
                                         <textarea
                                             id={`tm-${lang}`}
@@ -131,6 +134,11 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                             )}
                                         />
                                         {issue && <p role="alert" className="mt-1 text-xs font-medium text-red-500">{describe(issue)}</p>}
+                                        {entry.pending[lang] !== null && (
+                                            <p className="mt-1 text-xs text-foreground-muted">
+                                                {t('live')}: <span className="font-mono">{entry[lang]}</span>
+                                            </p>
+                                        )}
                                         {entry.edited[lang] && (
                                             <p className="mt-1 text-xs text-foreground-muted">
                                                 {t('original')}: <span className="font-mono">{entry.source[lang]}</span>
@@ -140,14 +148,15 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                 );
                             })}
                         </div>
-                        <p className="mt-3 text-xs text-foreground-muted">{t('syntaxHint')}</p>
+                        <p className="mt-3 text-xs text-foreground-muted">{t('suggestHint')}</p>
+                        <p className="mt-1 text-xs text-foreground-muted">{t('syntaxHint')}</p>
                         {saveError && <p role="alert" className="mt-2 text-sm font-medium text-red-500">{saveError}</p>}
                         <div className="mt-4 flex justify-end gap-3">
                             <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                                 {t('cancel')}
                             </button>
                             <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-50">
-                                {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('save')}
+                                {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                             </button>
                         </div>
                     </>

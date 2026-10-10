@@ -645,7 +645,7 @@
     },
     "translations": {
       "title": "Tulkojumi",
-      "subtitle": "Teksti, kas laboti tulkošanas režīmā. Eksportē tos, lai pārnestu uz ziņojumu failiem.",
+      "subtitle": "Teksti, kas laboti tulkošanas režīmā. Jauni labojumi te gaida apstiprinājumu; eksportē spēkā esošos, lai pārnestu uz ziņojumu failiem.",
       "export": "Eksportēt izmaiņas",
       "empty": "Vēl nav labotu tekstu. Ieslēdz tulkošanas režīmu un spied zīmuli pie teksta.",
       "count": "{count, plural, zero {# labotu tekstu} one {# labots teksts} other {# laboti teksti}}",
@@ -653,7 +653,17 @@
       "language": "Valoda",
       "text": "Teksts",
       "by": "Labojis",
-      "when": "Atjaunināts"
+      "when": "Atjaunināts",
+      "suggestionsTitle": "Ieteikumi",
+      "suggestionsEmpty": "Nav ieteikumu, kas gaida.",
+      "liveTitle": "Spēkā esošie labotie teksti",
+      "current": "Pašreizējais teksts",
+      "suggested": "Ieteiktais teksts",
+      "suggestedBy": "Ieteica {name}, {when}",
+      "approve": "Apstiprināt",
+      "reject": "Noraidīt",
+      "approved": "Ieteikums apstiprināts. Teksts ir spēkā.",
+      "rejected": "Ieteikums noraidīts."
     },
     "design": {
       "title": "Dizains",
@@ -1233,7 +1243,12 @@
     "syntaxHint": "Vietturus (figūriekavās), daudzskaitļa variantus un birkas atstāj tādus, kādi tie ir. Mainās tikai vārdi apkārt.",
     "issueSyntax": "Nederīga ziņojuma sintakse. Pārbaudi figūriekavas un birkas.",
     "issuePlaceholder": "Jāsakrīt ar oriģinālu: {detail}",
-    "issueArm": "Trūkst varianta: {detail}"
+    "issueArm": "Trūkst varianta: {detail}",
+    "suggest": "Ieteikt",
+    "suggested": "Ieteikums nosūtīts. Tas gaida apstiprinājumu.",
+    "waiting": "Gaida apstiprinājumu",
+    "live": "Spēkā esošais teksts",
+    "suggestHint": "Labojums nemaina vietni, kamēr administrators to neapstiprina sadaļā Administrēšana, Tulkojumi."
   },
   "contactForm": {
     "title": "Sazināties ar grupu {name}",

@@ -645,7 +645,7 @@
     },
     "translations": {
       "title": "Translations",
-      "subtitle": "Texts edited in translation mode. Export them to merge into the message files.",
+      "subtitle": "Texts edited in translation mode. New edits wait here for approval; export the live ones to merge into the message files.",
       "export": "Export changes",
       "empty": "No edited texts yet. Turn on translation mode and click the pencil next to a text.",
       "count": "{count, plural, one {# edited text} other {# edited texts}}",
@@ -653,7 +653,17 @@
       "language": "Language",
       "text": "Text",
       "by": "Edited by",
-      "when": "Updated"
+      "when": "Updated",
+      "suggestionsTitle": "Suggestions",
+      "suggestionsEmpty": "No suggestions waiting.",
+      "liveTitle": "Live edited texts",
+      "current": "Current text",
+      "suggested": "Suggested text",
+      "suggestedBy": "Suggested by {name}, {when}",
+      "approve": "Approve",
+      "reject": "Reject",
+      "approved": "Suggestion approved. The text is live.",
+      "rejected": "Suggestion rejected."
     },
     "design": {
       "title": "Design",
@@ -1233,7 +1243,12 @@
     "syntaxHint": "Keep placeholders (in curly braces), plural options and tags exactly as they are. Only the words around them change.",
     "issueSyntax": "This is not valid message syntax. Check the curly braces and tags.",
     "issuePlaceholder": "Must match the original: {detail}",
-    "issueArm": "An option is missing: {detail}"
+    "issueArm": "An option is missing: {detail}",
+    "suggest": "Suggest",
+    "suggested": "Suggestion sent. It waits for approval.",
+    "waiting": "Waiting for approval",
+    "live": "Live text",
+    "suggestHint": "Your edit does not change the site until an admin approves it under Admin, Translations."
   },
   "contactForm": {
     "title": "Contact {name}",

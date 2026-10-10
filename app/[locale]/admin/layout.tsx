@@ -10,7 +10,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
     return (
         <>
-            {counts && <AdminNav pendingTags={counts.tags} pendingReports={counts.reports} />}
+            {counts && <AdminNav pendingTags={counts.tags} pendingReports={counts.reports} pendingSuggestions={counts.suggestions} />}
             {children}
         </>
     );

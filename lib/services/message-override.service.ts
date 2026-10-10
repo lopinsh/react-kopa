@@ -22,6 +22,18 @@ export interface TranslationEntry {
     /** Shipped text (messages/*.json), what validation compares against. */
     source: Record<MessageLang, string>;
     edited: Record<MessageLang, boolean>;
+    /** A suggestion waiting for approval, per language (null when there is none). */
+    pending: Record<MessageLang, string | null>;
+}
+
+export interface SuggestionRow {
+    id: string;
+    key: string;
+    lang: MessageLang;
+    current: string;
+    value: string;
+    createdAt: Date;
+    createdBy: string | null;
 }
 
 export interface TranslationSearchHit {
@@ -111,10 +123,16 @@ export const MessageOverrideService = {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
         if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        const pendingRows = await prisma.messageSuggestion.findMany({ where: { key }, select: { lang: true, value: true } });
+        const pending: Record<MessageLang, string | null> = { lv: null, en: null };
+        for (const row of pendingRows) {
+            if (row.lang === 'lv' || row.lang === 'en') pending[row.lang] = row.value;
+        }
         return {
             success: true,
             data: {
                 key,
+                pending,
                 lv: overrides.lv[key] ?? lvBase[key] ?? '',
                 en: overrides.en[key] ?? enBase[key] ?? '',
                 source: { lv: lvBase[key] ?? '', en: enBase[key] ?? '' },
@@ -143,8 +161,11 @@ export const MessageOverrideService = {
         return { success: true, data: hits };
     },
 
-    /** Saves both languages of one key. A value equal to the shipped text removes its override. */
-    async saveEntry(adminId: string, input: unknown): Promise<OverrideResult> {
+    /**
+     * Proposes new texts for one key. The live text is not touched: each changed language becomes a pending
+     * suggestion (replacing an older one for the same key and language). A language left as it is clears its pending one.
+     */
+    async suggestEntry(adminId: string, input: unknown): Promise<OverrideResult> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
         const raw = typeof input === 'object' && input !== null ? (input as Record<string, unknown>) : {};
@@ -156,7 +177,7 @@ export const MessageOverrideService = {
         if (!parsed.success) return { success: false, error: 'MESSAGE_INVALID' };
         const { key } = parsed.data;
 
-        const [lvBase, enBase] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en')]);
+        const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
         const bases: Record<MessageLang, Record<string, string>> = { lv: lvBase, en: enBase };
         if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
 
@@ -167,17 +188,76 @@ export const MessageOverrideService = {
         await prisma.$transaction(
             MESSAGE_LANGS.map((lang) => {
                 const value = parsed.data[lang];
-                if (value === bases[lang][key]) {
-                    return prisma.messageOverride.deleteMany({ where: { key, lang } });
-                }
-                return prisma.messageOverride.upsert({
+                const live = overrides[lang][key] ?? bases[lang][key];
+                if (value === live) return prisma.messageSuggestion.deleteMany({ where: { key, lang } });
+                return prisma.messageSuggestion.upsert({
                     where: { key_lang: { key, lang } },
-                    create: { key, lang, value, updatedById: adminId },
-                    update: { value, updatedById: adminId },
+                    create: { key, lang, value, createdById: adminId },
+                    update: { value, createdById: adminId, createdAt: new Date() },
                 });
             })
         );
         return { success: true };
+    },
+
+    async listSuggestions(adminId: string): Promise<OverrideResult<SuggestionRow[]>> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+        const [lvBase, enBase, overrides, rows] = await Promise.all([
+            loadFlatBase('lv'),
+            loadFlatBase('en'),
+            loadOverrides(),
+            prisma.messageSuggestion.findMany({
+                orderBy: { createdAt: 'desc' },
+                include: { createdBy: { select: { name: true } } },
+            }),
+        ]);
+        const bases: Record<MessageLang, Record<string, string>> = { lv: lvBase, en: enBase };
+        const data: SuggestionRow[] = [];
+        for (const row of rows) {
+            if (row.lang !== 'lv' && row.lang !== 'en') continue;
+            data.push({
+                id: row.id,
+                key: row.key,
+                lang: row.lang,
+                current: overrides[row.lang][row.key] ?? bases[row.lang][row.key] ?? '',
+                value: row.value,
+                createdAt: row.createdAt,
+                createdBy: row.createdBy?.name ?? null,
+            });
+        }
+        return { success: true, data };
+    },
+
+    /** Makes a suggestion the live text (equal to the shipped text removes the override, like a direct save used to). */
+    async approveSuggestion(adminId: string, id: string): Promise<OverrideResult> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+        const row = await prisma.messageSuggestion.findUnique({ where: { id } });
+        if (!row) return { success: false, error: 'NOT_FOUND' };
+        if (row.lang !== 'lv' && row.lang !== 'en') return { success: false, error: 'MESSAGE_INVALID' };
+        const lang: MessageLang = row.lang;
+
+        const base = await loadFlatBase(lang);
+        if (!isKnownKey(row.key, base)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        if (validateMessage(row.value, base[row.key])) return { success: false, error: 'MESSAGE_INVALID' };
+
+        const { key, value } = row;
+        await prisma.$transaction([
+            value === base[key]
+                ? prisma.messageOverride.deleteMany({ where: { key, lang } })
+                : prisma.messageOverride.upsert({
+                    where: { key_lang: { key, lang } },
+                    create: { key, lang, value, updatedById: adminId },
+                    update: { value, updatedById: adminId },
+                }),
+            prisma.messageSuggestion.deleteMany({ where: { id } }),
+        ]);
+        return { success: true };
+    },
+
+    async rejectSuggestion(adminId: string, id: string): Promise<OverrideResult> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+        const { count } = await prisma.messageSuggestion.deleteMany({ where: { id } });
+        return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
     },
 
     async listOverrides(adminId: string): Promise<OverrideResult<{ key: string; lang: string; value: string; updatedAt: Date; updatedBy: string | null }[]>> {

@@ -9,6 +9,7 @@ import { Link, usePathname } from '@/i18n/routing';
 type Props = {
     pendingTags: number;
     pendingReports: number;
+    pendingSuggestions: number;
 };
 
 type NavItem = {
@@ -22,7 +23,7 @@ type NavItem = {
 };
 
 /** The one navigation shared by every admin page. */
-export default function AdminNav({ pendingTags, pendingReports }: Props) {
+export default function AdminNav({ pendingTags, pendingReports, pendingSuggestions }: Props) {
     const t = useTranslations('admin.nav');
     const pathname = usePathname();
     const tab = useSearchParams().get('tab');
@@ -34,7 +35,7 @@ export default function AdminNav({ pendingTags, pendingReports }: Props) {
         { id: 'reports', href: '/admin/reports', label: t('reports'), icon: AlertTriangle, active: pathname.startsWith('/admin/reports'), badge: pendingReports, danger: true },
         { id: 'moderation', href: '/admin?tab=moderation', label: t('moderation'), icon: EyeOff, active: onDashboard && tab === 'moderation', badge: 0 },
         { id: 'taxonomy', href: '/admin/taxonomy', label: t('taxonomy'), icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: 0 },
-        { id: 'translations', href: '/admin/translations', label: t('translations'), icon: Languages, active: pathname.startsWith('/admin/translations'), badge: 0 },
+        { id: 'translations', href: '/admin/translations', label: t('translations'), icon: Languages, active: pathname.startsWith('/admin/translations'), badge: pendingSuggestions },
         { id: 'feedback', href: '/admin/feedback', label: t('feedback'), icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
         { id: 'design', href: '/admin/design', label: t('design'), icon: Palette, active: pathname.startsWith('/admin/design'), badge: 0 },
         { id: 'handbook', href: '/admin/handbook', label: t('handbook'), icon: BookOpen, active: pathname.startsWith('/admin/handbook'), badge: 0 },

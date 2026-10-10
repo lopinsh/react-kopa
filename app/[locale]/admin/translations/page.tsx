@@ -4,6 +4,7 @@ import { Download, Languages } from 'lucide-react';
 import { getFormatter, getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
+import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -23,6 +24,8 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
     const result = await MessageOverrideService.listOverrides(session.user.id);
     const rows = result.success ? result.data ?? [] : [];
+    const suggestionsResult = await MessageOverrideService.listSuggestions(session.user.id);
+    const suggestions = suggestionsResult.success ? suggestionsResult.data ?? [] : [];
 
     return (
         <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -47,6 +50,29 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                 </a>
             </div>
 
+            <section aria-labelledby="suggestions-heading" className="mb-10">
+                <h2 id="suggestions-heading" className="mb-3 text-xl font-bold text-foreground">{t('suggestionsTitle')}</h2>
+                {suggestions.length === 0 ? (
+                    <p className="rounded-2xl border border-border bg-surface p-6 text-sm text-foreground-muted">{t('suggestionsEmpty')}</p>
+                ) : (
+                    <ul className="space-y-3">
+                        {suggestions.map((s) => (
+                            <SuggestionRow
+                                key={s.id}
+                                id={s.id}
+                                messageKey={s.key}
+                                lang={s.lang}
+                                current={s.current}
+                                value={s.value}
+                                by={s.createdBy ?? '—'}
+                                when={format.dateTime(s.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}
+                            />
+                        ))}
+                    </ul>
+                )}
+            </section>
+
+            <h2 className="mb-3 text-xl font-bold text-foreground">{t('liveTitle')}</h2>
             {rows.length === 0 ? (
                 <p className="rounded-2xl border border-border bg-surface p-6 text-sm text-foreground-muted">{t('empty')}</p>
             ) : (
