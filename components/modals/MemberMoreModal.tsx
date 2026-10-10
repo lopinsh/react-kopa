@@ -21,15 +21,15 @@ type Props = {
     }[];
     groupId: string;
     groupName: string;
-    isMember?: boolean;
+    /** The viewer may write to the owner and admins (a member who is not on the team). */
+    canWriteTeam?: boolean;
 };
 
-export default function MemberMoreModal({ isOpen, onClose, members, groupId, groupName, isMember }: Props) {
+export default function MemberMoreModal({ isOpen, onClose, members, groupId, groupName, canWriteTeam }: Props) {
     const t = useTranslations('group');
     const locale = useLocale();
   const c_common = useTranslations('common');
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
-    const [selectedAdmin, setSelectedAdmin] = useState<{ id: string; name: string | null } | null>(null);
 
     if (!isOpen) return null;
 
@@ -55,20 +55,19 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                         <div
                             key={user.id}
                             onClick={() => {
-                                if (isMember && (role === 'OWNER' || role === 'ADMIN')) {
-                                    setSelectedAdmin({ id: user.id, name: user.name });
+                                if (canWriteTeam && (role === 'OWNER' || role === 'ADMIN')) {
                                     setIsSupportModalOpen(true);
                                 }
                             }}
                             className={clsx(
                                 "flex items-center gap-3 p-3 rounded-2xl border border-border bg-surface-elevated/50 transition-all",
-                                isMember && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:bg-surface-elevated hover:border-[var(--accent)]/50"
+                                canWriteTeam && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:bg-surface-elevated hover:border-[var(--accent)]/50"
                             )}
                         >
                             <div className="relative h-12 w-12 overflow-hidden rounded-full bg-surface-elevated shrink-0">
                                 <img
                                     src={avatarUrl(user)}
-                                    alt={user.name || 'User'}
+                                    alt={user.name || ''}
                                     className="h-full w-full object-cover"
                                     referrerPolicy="no-referrer"
                                 />
@@ -76,7 +75,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
 
                             <div className="flex flex-col min-w-0">
                                 <span className="truncate text-sm font-bold text-foreground">
-                                    {user.name || 'Anonymous User'}
+                                    {user.name || t('anonymousUser')}
                                 </span>
                                 <span
                                     className={clsx(
@@ -89,7 +88,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                             </div>
 
                             {/* Hover hint for messaging admins */}
-                            {isMember && (role === 'OWNER' || role === 'ADMIN') && (
+                            {canWriteTeam && (role === 'OWNER' || role === 'ADMIN') && (
                                 <div className="ml-auto flex bg-[var(--accent)]/10 text-[var(--accent)] p-2 rounded-full">
                                     <MessageSquare className="h-4 w-4" />
                                 </div>
@@ -99,14 +98,14 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                 </div>
             </div>
 
-            <ContactGroupModal
+            {isSupportModalOpen && <ContactGroupModal
                 isOpen={isSupportModalOpen}
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
                 locale={locale}
                 allowJoin={false}
-            />
+            />}
         </div>
     );
 }

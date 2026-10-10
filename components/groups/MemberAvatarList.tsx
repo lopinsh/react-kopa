@@ -8,6 +8,7 @@ import MemberMoreModal from '../modals/MemberMoreModal';
 import ContactGroupModal from '../modals/ContactGroupModal';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { avatarUrl } from '@/lib/avatar';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 
 type Props = {
     members: {
@@ -30,6 +31,9 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
   const c_common = useTranslations('common');
     const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+    // Members write to the owner and admins through the group chat; the team itself has no chat with itself.
+    const { user: viewer } = useGroupContext();
+    const canWriteTeam = !!isMember && !hasAdminRights(viewer.role);
 
     // Sorting Logic: OWNER > ADMIN > MEMBER
     const sortedMembers = [...members].sort((a, b) => {
@@ -48,13 +52,13 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                     <div
                         key={user.id}
                         onClick={() => {
-                            if (isMember && hasAdminRights(role)) {
+                            if (canWriteTeam && hasAdminRights(role)) {
                                 setIsSupportModalOpen(true);
                             }
                         }}
                         className={clsx(
                             "group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-2 transition-all hover:bg-white/[0.05] hover:shadow-sm relative overflow-hidden",
-                            isMember && hasAdminRights(role) && "cursor-pointer hover:border-[var(--accent)]/30"
+                            canWriteTeam && hasAdminRights(role) && "cursor-pointer hover:border-[var(--accent)]/30"
                         )}
                     >
                         {/* Avatar */}
@@ -62,7 +66,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                             <div className="h-9 w-9 overflow-hidden rounded-lg bg-surface-elevated border border-white/10 ring-2 ring-white/[0.01]">
                                 <img
                                     src={avatarUrl(user)}
-                                    alt={user.name || 'User'}
+                                    alt={user.name || ''}
                                     className="h-full w-full object-cover transition-transform group-hover:scale-110"
                                     referrerPolicy="no-referrer"
                                 />
@@ -85,7 +89,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                         {/* Info */}
                         <div className="flex flex-col min-w-0 pr-1">
                             <span className="truncate text-[13px] font-bold text-foreground">
-                                {user.name || 'Anonymous'}
+                                {user.name || t('anonymousUser')}
                             </span>
                             <span
                                 className={clsx(
@@ -98,7 +102,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                         </div>
 
                         {/* Hover Background Accent */}
-                        {isMember && hasAdminRights(role) && (
+                        {canWriteTeam && hasAdminRights(role) && (
                             <div className="absolute right-2 opacity-0 group-hover:opacity-100 transition-all translate-x-1 group-hover:translate-x-0">
                                 <ChevronRight className="h-3.5 w-3.5 text-foreground-muted" />
                             </div>
@@ -127,17 +131,17 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                 members={members}
                 groupId={groupId}
                 groupName={groupName}
-                isMember={isMember}
+                canWriteTeam={canWriteTeam}
             />
 
-            <ContactGroupModal
+            {isSupportModalOpen && <ContactGroupModal
                 isOpen={isSupportModalOpen}
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
                 locale={locale}
                 allowJoin={false}
-            />
+            />}
         </>
     );
 }
