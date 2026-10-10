@@ -1,264 +1,482 @@
+import { Prisma, type ConversationKind, type MembershipRole } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import { ActionError } from '@/types/actions';
+import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
-import { MembershipRole } from '@prisma/client';
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 
+/**
+ * Two kinds of chat (see `Conversation.kind`):
+ *  - DIRECT: two people. Both are `participants`.
+ *  - GROUP: one chat per person x group. The person is `contactUserId` (and the only participant);
+ *    the group's *current* OWNER/ADMIN members are the team. The team is never stored, so promoting
+ *    or demoting an admin changes who sees the chat immediately.
+ * Every access decision goes through `canAccess` (and `accessWhere`, its query form).
+ */
+
+const PERSON_SELECT = { id: true, name: true, image: true, avatarSeed: true } as const;
+const TEAM_ROLES: MembershipRole[] = ['OWNER', 'ADMIN'];
+
+export type OriginType = 'JOIN_REQUEST' | 'GROUP_CONTACT';
+
+export interface PersonView {
+    id: string;
+    name: string | null;
+    image: string | null;
+    avatarSeed: string | null;
+}
+
+export interface MessageView {
+    id: string;
+    content: string;
+    createdAt: Date;
+    senderId: string;
+    conversationId: string;
+    sender: PersonView;
+}
+
+export interface InboxRow {
+    id: string;
+    kind: ConversationKind;
+    isBlocked: boolean;
+    /** The group of a group chat was deleted: nobody can write any more. */
+    readOnly: boolean;
+    canBlock: boolean;
+    /** The viewer is the outside person of a group chat (not a DIRECT chat, not the team). */
+    viewerIsContact: boolean;
+    unread: boolean;
+    updatedAt: Date;
+    /** The person on the other side: the partner (DIRECT) or the outside person (seen by the team). Null for the contact person's own view of a group chat. */
+    other: PersonView | null;
+    /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
+    group: { name: string; l1Slug: string; accentColor: string; href: string | null } | null;
+    lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
+    origin: { type: string; groupName: string | null; groupHref: string | null } | null;
+}
+
+export interface ConversationAccess {
+    id: string;
+    kind: ConversationKind;
+    isBlocked: boolean;
+    originGroupId: string | null;
+    contactUserId: string | null;
+    viewerIsContact: boolean;
+    viewerIsTeam: boolean;
+}
+
+export interface RequestThreadMessage {
+    id: string;
+    content: string;
+    createdAt: Date;
+    senderId: string;
+    sender: { name: string | null; username: string | null; avatarSeed: string | null; image: string | null };
+}
+
+export interface RequestThread {
+    conversationId: string;
+    messages: RequestThreadMessage[];
+}
+
+function fail(error: unknown, label: string, code: ErrorCode): never {
+    if (error instanceof ActionError) throw error;
+    console.error(`[MessageService.${label}] Error:`, error);
+    throw new ActionError(code);
+}
+
+/** Which conversations the user may see: their own DIRECT chats, group chats they started, and group chats of groups they currently own/administer. */
+function accessWhere(userId: string): Prisma.ConversationWhereInput {
+    return {
+        OR: [
+            { participants: { some: { id: userId } } },
+            { kind: 'GROUP', contactUserId: userId },
+            { kind: 'GROUP', originGroup: { members: { some: { userId, role: { in: TEAM_ROLES } } } } }
+        ]
+    };
+}
+
+async function teamUserIds(groupId: string | null): Promise<string[]> {
+    if (!groupId) return [];
+    const members = await prisma.membership.findMany({
+        where: { groupId, role: { in: TEAM_ROLES } },
+        select: { userId: true }
+    });
+    return members.map(m => m.userId);
+}
+
+async function isTeamMember(groupId: string, userId: string): Promise<boolean> {
+    const membership = await prisma.membership.findUnique({
+        where: { userId_groupId: { userId, groupId } },
+        select: { role: true }
+    });
+    return !!membership && TEAM_ROLES.includes(membership.role);
+}
+
+/** Newest message per conversation that someone else wrote: the basis of "unread". */
+async function newestFromOthers(conversationIds: string[], userId: string): Promise<Map<string, Date>> {
+    if (conversationIds.length === 0) return new Map();
+    const rows = await prisma.message.findMany({
+        where: { conversationId: { in: conversationIds }, senderId: { not: userId } },
+        orderBy: [{ conversationId: 'asc' }, { createdAt: 'desc' }],
+        distinct: ['conversationId'],
+        select: { conversationId: true, createdAt: true }
+    });
+    return new Map(rows.map(r => [r.conversationId, r.createdAt]));
+}
+
+function toMessageView(message: {
+    id: string; content: string; createdAt: Date; senderId: string; conversationId: string; sender: PersonView;
+}): MessageView {
+    return {
+        id: message.id,
+        content: message.content,
+        createdAt: message.createdAt,
+        senderId: message.senderId,
+        conversationId: message.conversationId,
+        sender: message.sender
+    };
+}
+
+function groupHref(group: { slug: string; hiddenAt: Date | null; category: Parameters<typeof TaxonomyResolver.resolve>[0] }): string | null {
+    // Hidden groups 404 for everyone but site admins, so no link.
+    return group.hiddenAt ? null : `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}`;
+}
+
 export const MessageService = {
-    async getConversations(userId: string) {
+    /**
+     * The one access check. Returns how the user relates to the conversation, or null when they may not see it.
+     */
+    async canAccess(conversationId: string, userId: string): Promise<ConversationAccess | null> {
+        if (!conversationId || !userId) return null;
+        const conversation = await prisma.conversation.findFirst({
+            where: { id: conversationId, AND: [accessWhere(userId)] },
+            select: { id: true, kind: true, isBlocked: true, originGroupId: true, contactUserId: true }
+        });
+        if (!conversation) return null;
+        const isGroup = conversation.kind === 'GROUP';
+        return {
+            ...conversation,
+            viewerIsContact: isGroup && conversation.contactUserId === userId,
+            viewerIsTeam: isGroup && conversation.contactUserId !== userId
+        };
+    },
+
+    async listInbox(userId: string, locale: string): Promise<InboxRow[]> {
         try {
             const conversations = await prisma.conversation.findMany({
-                where: {
-                    participants: {
-                        some: { id: userId }
-                    }
-                },
-                include: {
-                    participants: {
-                        select: { id: true, name: true, image: true, avatarSeed: true }
-                    },
-                    messages: {
-                        orderBy: { createdAt: 'desc' },
-                        take: 1
-                    },
+                where: accessWhere(userId),
+                orderBy: { updatedAt: 'desc' },
+                select: {
+                    id: true,
+                    kind: true,
+                    isBlocked: true,
+                    originType: true,
+                    originGroupId: true,
+                    contactUserId: true,
+                    updatedAt: true,
+                    participants: { select: PERSON_SELECT },
+                    contactUser: { select: PERSON_SELECT },
                     originGroup: {
                         select: {
                             name: true,
                             slug: true,
                             hiddenAt: true,
-                            category: { include: TaxonomyResolver.getInclude('lv') }
+                            category: { include: TaxonomyResolver.getInclude(locale) }
                         }
-                    }
-                },
-                orderBy: { updatedAt: 'desc' }
+                    },
+                    messages: {
+                        orderBy: { createdAt: 'desc' },
+                        take: 1,
+                        select: { id: true, content: true, createdAt: true, senderId: true }
+                    },
+                    reads: { where: { userId }, select: { lastReadAt: true } }
+                }
             });
 
-            return conversations.map(({ originGroup, originType, ...conversation }) => ({
-                ...conversation,
-                origin: originType
-                    ? {
-                        type: originType,
-                        groupName: originGroup?.name ?? null,
-                        // Hidden groups 404 for everyone but site admins, so no link.
-                        groupHref: originGroup && !originGroup.hiddenAt
-                            ? `/${TaxonomyResolver.resolve(originGroup.category).l1Slug}/group/${originGroup.slug}`
-                            : null
-                    }
-                    : null
-            }));
+            const newest = await newestFromOthers(conversations.map(c => c.id), userId);
+
+            return conversations.map((c): InboxRow => {
+                const isGroup = c.kind === 'GROUP';
+                const viewerIsContact = isGroup && c.contactUserId === userId;
+                const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
+                const href = c.originGroup ? groupHref(c.originGroup) : null;
+                const lastFromOthers = newest.get(c.id);
+                const lastReadAt = c.reads[0]?.lastReadAt;
+
+                return {
+                    id: c.id,
+                    kind: c.kind,
+                    isBlocked: c.isBlocked,
+                    readOnly: isGroup && !c.originGroupId,
+                    canBlock: !isGroup || !viewerIsContact,
+                    viewerIsContact,
+                    unread: !!lastFromOthers && (!lastReadAt || lastFromOthers > lastReadAt),
+                    updatedAt: c.updatedAt,
+                    other: isGroup
+                        ? (viewerIsContact ? null : c.contactUser)
+                        : (c.participants.find(p => p.id !== userId) ?? null),
+                    group: c.originGroup && resolved
+                        ? { name: c.originGroup.name, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
+                        : null,
+                    lastMessage: c.messages[0] ?? null,
+                    origin: c.originType
+                        ? { type: c.originType, groupName: c.originGroup?.name ?? null, groupHref: href }
+                        : null
+                };
+            });
         } catch (error) {
-            console.error('[MessageService.getConversations] Error:', error);
+            console.error('[MessageService.listInbox] Error:', error);
             return [];
         }
     },
 
-    async getOrCreateConversation(userId1: string, userId2: string) {
+    async getMessages(conversationId: string, userId: string): Promise<MessageView[]> {
         try {
-            if (!userId1 || !userId2 || userId1 === userId2) throw new ActionError('FORBIDDEN');
-
-            // Find existing conversation (manual filter for maximum reliability)
-            const userConversations = await prisma.conversation.findMany({
-                where: {
-                    participants: { some: { id: userId1 } }
-                },
-                include: {
-                    participants: { select: { id: true, name: true, image: true, avatarSeed: true } }
-                }
-            });
-
-            const existing = userConversations.find(conv =>
-                conv.participants.length === 2 &&
-                conv.participants.some(p => p.id === userId2)
-            );
-
-            if (existing) return existing;
-
-            // Check if they share any groups and what their roles are
-            const memberships = await prisma.membership.findMany({
-                where: {
-                    userId: { in: [userId1, userId2] }
-                },
-                select: {
-                    groupId: true,
-                    userId: true,
-                    role: true
-                }
-            });
-
-            // Manual grouping for maximum reliability
-            const groupRoles: Record<string, { role1?: string, role2?: string }> = {};
-            for (const m of memberships) {
-                if (!groupRoles[m.groupId]) groupRoles[m.groupId] = {};
-                if (m.userId === userId1) groupRoles[m.groupId].role1 = m.role as string;
-                if (m.userId === userId2) groupRoles[m.groupId].role2 = m.role as string;
-            }
-
-            const canChat = Object.values(groupRoles).some(({ role1, role2 }) => {
-                if (!role1 || !role2) return false;
-
-                const is1Admin = role1 === 'OWNER' || role1 === 'ADMIN';
-                const is2Admin = role2 === 'OWNER' || role2 === 'ADMIN';
-                const is1Member = role1 === 'MEMBER';
-                const is2Member = role2 === 'MEMBER';
-
-                // Case 1: Both are at least members
-                if ((is1Admin || is1Member) && (is2Admin || is2Member)) return true;
-
-                // Case 2: Admin contacting a Pending applicant
-                if (is1Admin && role2 === 'PENDING') return true;
-                if (is2Admin && role1 === 'PENDING') return true;
-
-                return false;
-            });
-
-            if (!canChat) {
-                throw new ActionError('FORBIDDEN');
-            }
-
-            // Create new conversation
-            return await prisma.conversation.create({
-                data: {
-                    participants: {
-                        connect: [{ id: userId1 }, { id: userId2 }]
-                    }
-                },
-                include: {
-                    participants: { select: { id: true, name: true, image: true, avatarSeed: true } }
-                }
-            });
-        } catch (error: any) {
-            if (error.name === 'ActionError') throw error;
-            console.error('[MessageService.getOrCreateConversation] Error:', error);
-            throw new ActionError('CREATE_FAILED');
-        }
-    },
-
-    async getMessages(conversationId: string, userId: string) {
-        try {
-            const conversation = await prisma.conversation.findFirst({
-                where: {
-                    id: conversationId,
-                    participants: { some: { id: userId } }
-                }
-            });
-
-            if (!conversation) throw new ActionError('NOT_FOUND');
-
-            return await prisma.message.findMany({
+            if (!(await MessageService.canAccess(conversationId, userId))) throw new ActionError('NOT_FOUND');
+            const messages = await prisma.message.findMany({
                 where: { conversationId },
                 orderBy: { createdAt: 'asc' },
-                include: {
-                    sender: { select: { id: true, name: true, image: true, avatarSeed: true } }
+                select: {
+                    id: true, content: true, createdAt: true, senderId: true, conversationId: true,
+                    sender: { select: PERSON_SELECT }
                 }
             });
-        } catch (error: any) {
-            if (error.name === 'ActionError') throw error;
-            console.error('[MessageService.getMessages] Error:', error);
-            return [];
+            return messages.map(toMessageView);
+        } catch (error) {
+            return fail(error, 'getMessages', 'INTERNAL_SERVER_ERROR');
         }
     },
 
-    async sendMessage(conversationId: string, senderId: string, content: string) {
+    async sendMessage(conversationId: string, senderId: string, content: string): Promise<MessageView> {
         try {
-            const conversation = await prisma.conversation.findFirst({
-                where: {
-                    id: conversationId,
-                    participants: { some: { id: senderId } }
-                },
-                include: {
-                    participants: {
-                        select: { id: true }
+            const access = await MessageService.canAccess(conversationId, senderId);
+            if (!access) throw new ActionError('NOT_FOUND');
+            if (access.kind === 'GROUP' && !access.originGroupId) throw new ActionError('GROUP_GONE');
+            if (access.isBlocked) throw new ActionError('FORBIDDEN');
+
+            const now = new Date();
+            const [message] = await prisma.$transaction([
+                prisma.message.create({
+                    data: { content, conversationId, senderId, createdAt: now },
+                    select: {
+                        id: true, content: true, createdAt: true, senderId: true, conversationId: true,
+                        sender: { select: PERSON_SELECT }
                     }
-                }
-            });
+                }),
+                prisma.conversation.update({ where: { id: conversationId }, data: { updatedAt: now } }),
+                // Whoever writes has seen everything up to now.
+                prisma.conversationRead.upsert({
+                    where: { conversationId_userId: { conversationId, userId: senderId } },
+                    create: { conversationId, userId: senderId, lastReadAt: now },
+                    update: { lastReadAt: now }
+                })
+            ]);
 
-            if (!conversation) throw new ActionError('NOT_FOUND');
-            if (conversation.isBlocked) throw new ActionError('FORBIDDEN');
+            const view = toMessageView(message);
 
-            const message = await prisma.message.create({
-                data: {
-                    content,
-                    conversationId,
-                    senderId
-                },
-                include: {
-                    sender: { select: { id: true, name: true, image: true, avatarSeed: true } }
-                }
-            });
-
-            // Update conversation updatedAt timestamp
-            await prisma.conversation.update({
+            // Realtime goes to everyone who can see the chat right now: the participants, the contact person and the current team.
+            const participants = await prisma.conversation.findUnique({
                 where: { id: conversationId },
-                data: { updatedAt: new Date() }
+                select: { participants: { select: { id: true } } }
             });
+            const recipients = new Set<string>([
+                ...(participants?.participants.map(p => p.id) ?? []),
+                ...(access.contactUserId ? [access.contactUserId] : []),
+                ...(await teamUserIds(access.originGroupId))
+            ]);
+            await Promise.all([...recipients].map(id => triggerRealtime(
+                `private-user-${id}`,
+                'new-message',
+                { ...view, createdAt: view.createdAt.toISOString() }
+            )));
 
-            // Trigger Pusher events for all participants
-            await Promise.all(conversation.participants.map(participant =>
-                triggerRealtime(
-                    `private-user-${participant.id}`,
-                    'new-message',
-                    {
-                        ...message,
-                        createdAt: message.createdAt.toISOString()
-                    }
-                )
-            ));
-
-            return message;
-        } catch (error: any) {
-            if (error.name === 'ActionError') throw error;
-            console.error('[MessageService.sendMessage] Error:', error);
-            throw new ActionError('POST_FAILED');
+            return view;
+        } catch (error) {
+            return fail(error, 'sendMessage', 'POST_FAILED');
         }
     },
 
-    async blockConversation(conversationId: string, userId: string, isBlocked: boolean) {
+    async markRead(conversationId: string, userId: string): Promise<void> {
         try {
-            const conversation = await prisma.conversation.findFirst({
-                where: {
-                    id: conversationId,
-                    participants: { some: { id: userId } }
-                }
+            if (!(await MessageService.canAccess(conversationId, userId))) throw new ActionError('NOT_FOUND');
+            const now = new Date();
+            await prisma.conversationRead.upsert({
+                where: { conversationId_userId: { conversationId, userId } },
+                create: { conversationId, userId, lastReadAt: now },
+                update: { lastReadAt: now }
             });
+        } catch (error) {
+            fail(error, 'markRead', 'UPDATE_FAILED');
+        }
+    },
 
-            if (!conversation) throw new ActionError('NOT_FOUND');
+    /** Number of chats with something unread: messages after my `lastReadAt` that I did not write. */
+    async unreadCount(userId: string): Promise<number> {
+        try {
+            const conversations = await prisma.conversation.findMany({
+                where: accessWhere(userId),
+                select: { id: true, reads: { where: { userId }, select: { lastReadAt: true } } }
+            });
+            const newest = await newestFromOthers(conversations.map(c => c.id), userId);
+            return conversations.filter(c => {
+                const last = newest.get(c.id);
+                const lastReadAt = c.reads[0]?.lastReadAt;
+                return !!last && (!lastReadAt || last > lastReadAt);
+            }).length;
+        } catch (error) {
+            console.error('[MessageService.unreadCount] Error:', error);
+            return 0;
+        }
+    },
 
-            // Find the other participant to check if they are an admin/owner IN A SHARED GROUP
-            const otherParticipantId = await prisma.user.findFirst({
+    /**
+     * The one chat between a person and a group's team. Reused when it exists (whatever its origin);
+     * `originType` only records how a new one started.
+     */
+    async getOrCreateGroupChat(groupId: string, personId: string, originType: OriginType = 'GROUP_CONTACT'): Promise<{ id: string; created: boolean }> {
+        try {
+            const existing = await prisma.conversation.findUnique({
+                where: { originGroupId_contactUserId: { originGroupId: groupId, contactUserId: personId } },
+                select: { id: true }
+            });
+            if (existing) return { id: existing.id, created: false };
+
+            const group = await prisma.group.findFirst({ where: { id: groupId, hiddenAt: null }, select: { id: true } });
+            if (!group) throw new ActionError('NOT_FOUND');
+            // The team does not write to itself.
+            if (await isTeamMember(groupId, personId)) throw new ActionError('FORBIDDEN');
+
+            try {
+                const created = await prisma.conversation.create({
+                    data: {
+                        kind: 'GROUP',
+                        originType,
+                        originGroupId: groupId,
+                        contactUserId: personId,
+                        participants: { connect: { id: personId } }
+                    },
+                    select: { id: true }
+                });
+                return { id: created.id, created: true };
+            } catch (error) {
+                // Two requests at once: the other one won.
+                if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                    const raced = await prisma.conversation.findUnique({
+                        where: { originGroupId_contactUserId: { originGroupId: groupId, contactUserId: personId } },
+                        select: { id: true }
+                    });
+                    if (raced) return { id: raced.id, created: false };
+                }
+                throw error;
+            }
+        } catch (error) {
+            return fail(error, 'getOrCreateGroupChat', 'CREATE_FAILED');
+        }
+    },
+
+    /**
+     * The chat between two people. A new one can only start between two full members (not PENDING)
+     * of at least one shared group, and only if the other person accepts direct messages. An existing
+     * pair chat is reused and stays writable unless it is blocked.
+     */
+    async getOrCreateDirectChat(userId: string, otherUserId: string): Promise<{ id: string; created: boolean }> {
+        try {
+            if (!userId || !otherUserId || userId === otherUserId) throw new ActionError('FORBIDDEN');
+
+            const candidates = await prisma.conversation.findMany({
                 where: {
-                    conversations: { some: { id: conversationId } },
-                    id: { not: userId }
+                    kind: 'DIRECT',
+                    AND: [
+                        { participants: { some: { id: userId } } },
+                        { participants: { some: { id: otherUserId } } }
+                    ]
+                },
+                select: { id: true, _count: { select: { participants: true } } }
+            });
+            const existing = candidates.find(c => c._count.participants === 2);
+            if (existing) return { id: existing.id, created: false };
+
+            const target = await prisma.user.findUnique({ where: { id: otherUserId }, select: { allowDirectMessages: true } });
+            if (!target) throw new ActionError('NOT_FOUND');
+            if (!target.allowDirectMessages) throw new ActionError('DM_NOT_ALLOWED');
+
+            const shared = await prisma.membership.findFirst({
+                where: {
+                    userId,
+                    role: { not: 'PENDING' },
+                    group: { members: { some: { userId: otherUserId, role: { not: 'PENDING' } } } }
                 },
                 select: { id: true }
             });
+            if (!shared) throw new ActionError('DM_NOT_ALLOWED');
 
-            if (otherParticipantId) {
-                const sharedAdminMembership = await prisma.membership.findFirst({
-                    where: {
-                        userId: otherParticipantId.id,
-                        role: { in: ['ADMIN', 'OWNER'] },
-                        group: {
-                            members: {
-                                some: { userId } // Only check groups the current user is also in
-                            }
-                        }
+            const created = await prisma.conversation.create({
+                data: {
+                    kind: 'DIRECT',
+                    participants: { connect: [{ id: userId }, { id: otherUserId }] }
+                },
+                select: { id: true }
+            });
+            return { id: created.id, created: true };
+        } catch (error) {
+            return fail(error, 'getOrCreateDirectChat', 'CREATE_FAILED');
+        }
+    },
+
+    /**
+     * Group chats of the given people with a group, newest data first: what the Requests tab shows.
+     * The caller decides who may see them.
+     */
+    async listGroupThreads(groupId: string, personIds: string[]): Promise<Map<string, RequestThread>> {
+        if (personIds.length === 0) return new Map();
+        const conversations = await prisma.conversation.findMany({
+            where: { kind: 'GROUP', originGroupId: groupId, contactUserId: { in: personIds } },
+            select: {
+                id: true,
+                contactUserId: true,
+                messages: {
+                    orderBy: { createdAt: 'asc' },
+                    select: {
+                        id: true, content: true, createdAt: true, senderId: true,
+                        sender: { select: { name: true, username: true, avatarSeed: true, image: true } }
                     }
-                });
+                }
+            }
+        });
+        const threads = new Map<string, RequestThread>();
+        for (const c of conversations) {
+            if (c.contactUserId) threads.set(c.contactUserId, { conversationId: c.id, messages: c.messages });
+        }
+        return threads;
+    },
 
-                if (sharedAdminMembership && isBlocked) {
-                    throw new ActionError('FORBIDDEN'); // Cannot block admins/owners of shared groups
+    /** Block or unblock. Group chats: only the team. Direct chats: either person, except people who administer a group the blocker is in. */
+    async blockConversation(conversationId: string, userId: string, isBlocked: boolean): Promise<void> {
+        try {
+            const access = await MessageService.canAccess(conversationId, userId);
+            if (!access) throw new ActionError('NOT_FOUND');
+
+            if (access.kind === 'GROUP') {
+                if (!access.viewerIsTeam) throw new ActionError('FORBIDDEN');
+            } else if (isBlocked) {
+                const other = await prisma.user.findFirst({
+                    where: { conversations: { some: { id: conversationId } }, id: { not: userId } },
+                    select: { id: true }
+                });
+                if (other) {
+                    const sharedAdminMembership = await prisma.membership.findFirst({
+                        where: {
+                            userId: other.id,
+                            role: { in: TEAM_ROLES },
+                            group: { members: { some: { userId } } }
+                        },
+                        select: { id: true }
+                    });
+                    if (sharedAdminMembership) throw new ActionError('FORBIDDEN'); // Cannot block admins/owners of shared groups
                 }
             }
 
-
-            return await prisma.conversation.update({
-                where: { id: conversationId },
-                data: { isBlocked }
-            });
-        } catch (error: any) {
-            if (error.name === 'ActionError') throw error;
-            console.error('[MessageService.blockConversation] Error:', error);
-            throw new ActionError('UPDATE_FAILED');
+            await prisma.conversation.update({ where: { id: conversationId }, data: { isBlocked } });
+        } catch (error) {
+            fail(error, 'blockConversation', 'UPDATE_FAILED');
         }
     }
 };

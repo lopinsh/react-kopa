@@ -42,6 +42,8 @@ export type ErrorCode =
     | 'TITLE_REQUIRED'
     | 'ORIGINAL_LANG_EMPTY'
     | 'MESSAGE_INVALID'
+    | 'DM_NOT_ALLOWED'
+    | 'GROUP_GONE'
     | 'MESSAGE_KEY_UNKNOWN'
     | 'GROUP_NOT_HIDDEN'
     | 'DB_MIGRATION_REQUIRED';

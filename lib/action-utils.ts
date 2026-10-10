@@ -21,19 +21,20 @@ export async function validateActionData<T>(
 /**
  * Simple wrapper for catching errors in actions and returning a standardized fallback.
  */
-export function handleActionError(error: any, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
+export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
     console.error('[Action Error]:', error);
 
-    // Check for our custom ActionError in a way that survives serialization
-    if (error?.name === 'ActionError' || error?.__isActionError || error?.code) {
-        // If it's a known Prisma error code, map it
-        if (error.code === 'P2021') return { success: false, error: 'DB_MIGRATION_REQUIRED' };
-        return { success: false, error: error.code || fallback };
-    }
+    const info = (typeof error === 'object' && error !== null ? error : {}) as {
+        name?: unknown; __isActionError?: unknown; code?: unknown;
+    };
+    const code = typeof info.code === 'string' ? info.code : null;
 
-    // Prisma error check for generic errors that aren't ActionErrors
-    if (error?.code === 'P2021') {
-        return { success: false, error: 'DB_MIGRATION_REQUIRED' };
+    // Unmigrated database (Prisma "table does not exist")
+    if (code === 'P2021') return { success: false, error: 'DB_MIGRATION_REQUIRED' };
+
+    // Our custom ActionError, recognised in a way that survives serialization
+    if (info.name === 'ActionError' || info.__isActionError || code) {
+        return { success: false, error: (code ?? fallback) as ErrorCode };
     }
 
     return { success: false, error: fallback };
