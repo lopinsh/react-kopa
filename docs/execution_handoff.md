@@ -4,7 +4,7 @@
 > **How to use:** when starting a session, take the first unchecked item in the current stage. Keep items small (30–60 min), finish them fully, tick them off here in the same commit.
 > Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git.
 
-**Last updated:** 2026-10-10 (2.4d done and Opus-reviewed; next push 2.4c+2.4d; then 2.22, then 3.0 style book)
+**Last updated:** 2026-10-10 evening (2.4 messaging complete and pushed; style guide draft 1 published. Next: review the style guide with the user → 3.0, then 2.22)
 
 ---
 
@@ -457,7 +457,7 @@ Goal: each step of create → find → join → talk works end to end, logged in
 
 Goal: content first. One screen at a time; agree direction with the user before each. The user wants every screen revisited from a design/UX perspective after the 2026-10-09 screen review (the Screen review Artifact is the starting point).
 
-- [ ] 3.0 **Style book (user, 2026-10-10)**, first in Stage 3, so every redesign follows it. An admin-only page in the app (e.g. `/[locale]/admin/style`) that renders the *real* components: group header + slim bar, buttons, cards (group, event), form fields (incl. the 2.22 date/time fields), tabs, chips, badges, modals, empty states, chat bubbles; light + dark, and a 375 px preview. Plus a short "UI rules" list in `AGENTS.md` (e.g. full header only on a group's Information page, slim bar elsewhere; one primary button per screen). It is code, not a doc, so it cannot drift. Make a first version, show the user and agree on it before 3.1.
+- [ ] 3.0 **Style book (user, 2026-10-10)**, first in Stage 3, so every redesign follows it. **Draft 1 published 2026-10-10:** https://claude.ai/artifact/SFyAH7GD15LLoUNXeoafgJ (private). It covers philosophy, voice and words, behaviour patterns, who sees what, six page layouts (A Browse, B Group home, C Group page, D Focus, E Two panes, F Reading) with every screen mapped, foundations (colours incl. new danger/success/warning tokens, a 4-step type scale, 3 corner roundings) and components. It ends with 3 open questions. **Next session: go through the user's comments on it, agree, then turn it into rules in `AGENTS.md` + components here.** The user sees "style" broadly: philosophy and behaviour, not only CSS. An admin-only page in the app (e.g. `/[locale]/admin/style`) that renders the *real* components: group header + slim bar, buttons, cards (group, event), form fields (incl. the 2.22 date/time fields), tabs, chips, badges, modals, empty states, chat bubbles; light + dark, and a 375 px preview. Plus a short "UI rules" list in `AGENTS.md` (e.g. full header only on a group's Information page, slim bar elsewhere; one primary button per screen). It is code, not a doc, so it cannot drift. Make a first version, show the user and agree on it before 3.1.
 - [ ] 3.1 Discovery cards — sharpen at-a-glance signals (category colour, city, size), drop the rest; fix missing-image grey cards; mobile filter bar overflow. Agreed in screen review (2026-10-09): banner-less group cards get a tile in their category colour (most important); drop the "Aktīva" badge; browser tab title is the site/page name, not "Grupas atrastas"; mobile category rail gets labels or another clear form; event cards get the same category-colour accent.
 - [ ] 3.2 Group page
 - [ ] 3.3 Event page — currently stacks full group header + oversized hero with unreadable title
