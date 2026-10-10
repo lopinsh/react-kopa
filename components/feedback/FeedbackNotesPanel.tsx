@@ -29,6 +29,7 @@ export default function FeedbackNotesPanel({ notes, missing, onOpen }: Props) {
                                     <span className="block truncate text-sm text-foreground">{note.text}</span>
                                     <span className="block text-xs text-foreground-muted">
                                         {t(`kind.${note.kind}`)} · {t(`status.${note.status}`)}
+                                        {note.component && ` · ${note.component}`}
                                         {missing.includes(note.id) && ` · ${t('elementGone')}`}
                                     </span>
                                 </span>

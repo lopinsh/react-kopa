@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { clsx } from 'clsx';
 import ContactGroupModal from './ContactGroupModal';
 import { avatarUrl } from '@/lib/avatar';
+import { UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -35,7 +36,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-2xl rounded-3xl bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
+            <div data-ui={UI.modal} className="w-full max-w-2xl rounded-3xl bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                     <h2 className="text-xl font-bold text-foreground">

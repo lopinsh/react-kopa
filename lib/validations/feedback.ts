@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FEEDBACK_KINDS, FEEDBACK_STATUSES, FEEDBACK_TEXT_MAX } from '@/lib/constants';
+import { FEEDBACK_KINDS, FEEDBACK_STATUSES, FEEDBACK_TEXT_MAX, UI_NAMES } from '@/lib/constants';
 
 /** A new note, as captured by feedback mode. Everything except kind and text is filled in automatically. */
 export const createFeedbackSchema = z.object({
@@ -12,6 +12,8 @@ export const createFeedbackSchema = z.object({
     theme: z.string().max(20),
     selector: z.string().max(400),
     elementText: z.string().max(200),
+    /** `data-ui` name of the component the note was left on; null when it was left outside any named element. */
+    component: z.enum(UI_NAMES).nullable().optional(),
     userAgent: z.string().max(400),
 });
 export type CreateFeedbackInput = z.infer<typeof createFeedbackSchema>;

@@ -5,6 +5,7 @@ import { X, LogIn } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import SignInForm from '@/components/auth/SignInForm';
 import { safeCallbackPath } from '@/lib/auth-redirect';
+import { UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -23,7 +24,7 @@ export default function AuthGateModal({ isOpen, onClose }: Props) {
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl bg-surface p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div data-ui={UI.modal} className="w-full max-w-md rounded-3xl bg-surface p-8 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
                 <div className="mb-2 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">

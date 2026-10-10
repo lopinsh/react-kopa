@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { findBySelector } from '@/lib/feedback/capture';
+import { findBySelector, isCovered } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 type Props = {
@@ -13,18 +13,6 @@ type Props = {
 };
 
 type Spot = { id: string; n: number; x: number; y: number };
-
-/**
- * True when something else (e.g. an open pop-up and its backdrop) lies over the element's centre,
- * so its pin would float on top of that pop-up. Feedback mode's own layers don't count.
- */
-function isCovered(el: Element, rect: DOMRect): boolean {
-    const x = Math.min(Math.max(rect.left + rect.width / 2, 0), window.innerWidth - 1);
-    const y = Math.min(Math.max(rect.top + rect.height / 2, 0), window.innerHeight - 1);
-    const top = document.elementFromPoint(x, y);
-    if (!top || top.closest('[data-feedback-ignore]')) return false;
-    return !el.contains(top) && !top.contains(el);
-}
 
 /**
  * Numbered pins over the elements the notes were left on. A fixed layer that follows each element's

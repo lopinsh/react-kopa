@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
-import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { EVENT_TIME_ZONE, UI } from '@/lib/constants';
 import { useFormatter, useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
@@ -25,6 +25,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
     return (
         <Link
             href={`/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
+            data-ui={UI.eventListRow}
             className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >

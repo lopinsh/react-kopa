@@ -6,7 +6,8 @@ import { getSmartImageUrl } from '@/lib/image-utils';
 import { clsx } from 'clsx';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import { cityLabel } from '@/lib/city-label';
+import { UI } from '@/lib/constants';
 
 interface GroupMemberPreview {
     id: string;
@@ -68,6 +69,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
     return (
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
+            data-ui={UI.groupCard}
             className="group relative flex flex-col h-full overflow-hidden rounded-[20px] bg-surface text-foreground 
                 border-slate-200 border shadow-sm transition-transform duration-200 ease-out 
                 hover:shadow-md hover:border-[var(--accent)] hover:scale-[1.02] soft-press"

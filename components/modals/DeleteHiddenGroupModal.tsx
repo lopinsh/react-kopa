@@ -6,6 +6,7 @@ import { useRouter } from '@/i18n/routing';
 import { X, Trash2 } from 'lucide-react';
 import { deleteHiddenGroup } from '@/actions/moderation-actions';
 import { deleteGroupSchema } from '@/lib/validations/moderation';
+import { UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -45,7 +46,7 @@ export default function DeleteHiddenGroupModal({ isOpen, onClose, groupId, group
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl bg-surface p-6 shadow-2xl">
+            <div data-ui={UI.modal} className="w-full max-w-md rounded-3xl bg-surface p-6 shadow-2xl">
                 <div className="mb-4 flex items-center justify-between gap-2">
                     <h2 className="flex items-center gap-2 text-xl font-bold text-red-500">
                         <Trash2 className="h-5 w-5 shrink-0" />

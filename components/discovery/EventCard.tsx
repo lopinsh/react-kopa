@@ -1,11 +1,12 @@
 import { Calendar, MapPin, Users, ArrowRight, Lock, UserCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
-import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { EVENT_TIME_ZONE, UI } from '@/lib/constants';
 import { useFormatter, useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
 
 type Props = {
@@ -26,6 +27,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
     return (
         <Link
             href={`/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
+            data-ui={UI.eventCard}
             className="group relative flex flex-col overflow-hidden rounded-[2rem] border border-border bg-surface transition-all hover:-translate-y-1 hover:border-border-hover hover:shadow-2xl"
         >
             {/* Banner Image */}
@@ -64,17 +66,13 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                     {(event.isMembersOnly || isRequest || event.isFull) && (
                         <div className="flex flex-wrap gap-1.5">
                             {event.isMembersOnly && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
-                                    <Lock className="h-3 w-3" />{t('membersOnly')}
-                                </span>
+                                <Badge><Lock className="h-3 w-3" />{t('membersOnly')}</Badge>
                             )}
                             {isRequest && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
-                                    <UserCheck className="h-3 w-3" />{t('badgeRequest')}
-                                </span>
+                                <Badge><UserCheck className="h-3 w-3" />{t('badgeRequest')}</Badge>
                             )}
                             {event.isFull && (
-                                <span className="inline-flex items-center rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white" style={{ backgroundColor: accentColor }}>{t('full')}</span>
+                                <Badge tone="accent" color={accentColor}>{t('full')}</Badge>
                             )}
                         </div>
                     )}

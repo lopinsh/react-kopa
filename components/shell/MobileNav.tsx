@@ -7,7 +7,8 @@ import { Plus } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
 import UnreadBadge from './UnreadBadge';
-import AuthGateModal from '@/components/modals/AuthGateModal';
+import AuthGateModal from '@/components/modals/AuthGateModal';
+import { UI } from '@/lib/constants';
 
 export default function MobileNav() {
     const t = useTranslations('nav');
@@ -25,6 +26,7 @@ export default function MobileNav() {
     return (
         <>
             <nav
+                data-ui={UI.mobileNav}
                 className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch border-t border-border bg-surface md:hidden"
                 aria-label="Mobile navigation"
             >

@@ -7,6 +7,7 @@ import { cityLabel } from '@/lib/city-label';
 import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import type { GroupContext } from '@/lib/services/group.service';
+import { UI } from '@/lib/constants';
 
 type Props = {
     group: GroupContext;
@@ -22,7 +23,7 @@ export default function CompactGroupBar({ group, l1Slug }: Props) {
     const isOwner = checkIsOwner(user.role);
 
     return (
-        <div className="border-b border-border bg-surface">
+        <div data-ui={UI.slimBar} className="border-b border-border bg-surface">
             <div className="mx-auto flex max-w-screen-2xl items-center gap-3 px-4 py-3 md:px-8">
                 <span className="h-9 w-1.5 shrink-0 rounded-full bg-[var(--accent)]" aria-hidden="true" />
                 <div className="min-w-0 flex-1">

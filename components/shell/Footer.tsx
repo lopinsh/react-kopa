@@ -2,7 +2,8 @@
 
 import { Link } from '@/i18n/routing';
 import { Heart } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { UI } from '@/lib/constants';
 
 export function Footer({ locale }: { locale: string }) {
     const t = useTranslations('shell.footer');
@@ -28,7 +29,7 @@ export function Footer({ locale }: { locale: string }) {
     ];
 
     return (
-        <footer className="border-t border-border bg-surface-elevated/30 py-12 pb-24 md:pb-12">
+        <footer data-ui={UI.footer} className="border-t border-border bg-surface-elevated/30 py-12 pb-24 md:pb-12">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
                     {/* Brand */}

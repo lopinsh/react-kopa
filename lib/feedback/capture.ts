@@ -1,3 +1,5 @@
+import { UI_NAMES, type UiName } from '@/lib/constants';
+
 /** Browser-side helpers for feedback mode: describe a clicked element, and find it again later. */
 
 const MAX_SEGMENTS = 6;
@@ -57,4 +59,22 @@ export function findBySelector(selector: string): Element | null {
 export function visibleText(el: Element): string {
     const raw = el instanceof HTMLElement ? el.innerText : el.textContent ?? '';
     return raw.replace(/\s+/g, ' ').trim().slice(0, TEXT_LENGTH);
+}
+
+/**
+ * True when something else (e.g. an open pop-up and its backdrop) lies over the element's centre,
+ * so its pin would float on top of that pop-up. Feedback mode's own layers don't count.
+ */
+export function isCovered(el: Element, rect: DOMRect): boolean {
+    const x = Math.min(Math.max(rect.left + rect.width / 2, 0), window.innerWidth - 1);
+    const y = Math.min(Math.max(rect.top + rect.height / 2, 0), window.innerHeight - 1);
+    const top = document.elementFromPoint(x, y);
+    if (!top || top.closest('[data-feedback-ignore]')) return false;
+    return !el.contains(top) && !top.contains(el);
+}
+
+/** The `data-ui` name of the closest named component around (or at) an element, if it is a known one. */
+export function componentOf(el: Element | null): UiName | null {
+    const name = el?.closest('[data-ui]')?.getAttribute('data-ui');
+    return UI_NAMES.find((n) => n === name) ?? null;
 }

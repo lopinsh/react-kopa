@@ -25,6 +25,7 @@ interface Note {
     theme: string;
     selector: string;
     elementText: string;
+    component: string | null;
     reply: string | null;
     createdAt: string;
     authorName: string | null;
@@ -72,6 +73,7 @@ function printNote(note: Note): void {
     const date = note.createdAt.slice(0, 16).replace('T', ' ');
     console.log(`## ${note.id} · ${note.kind} · ${note.status}`);
     console.log(`- Page: /${note.locale}${note.path === '/' ? '' : note.path}`);
+    if (note.component) console.log(`- Component: ${note.component}`);
     console.log(`- Element: \`${note.selector}\`${note.elementText ? ` ("${note.elementText}")` : ''}`);
     console.log(`- Viewport: ${note.viewportW}x${note.viewportH}, ${note.theme} theme`);
     console.log(`- By: ${note.authorName ?? 'unknown'}, ${date} UTC`);

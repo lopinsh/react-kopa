@@ -17,6 +17,7 @@ export interface FeedbackItem {
     theme: string;
     selector: string;
     elementText: string;
+    component: string | null;
     userAgent: string;
     reply: string | null;
     resolvedAt: Date | null;
@@ -43,6 +44,7 @@ function toItem(row: Prisma.FeedbackGetPayload<typeof itemArgs>): FeedbackItem {
         theme: row.theme,
         selector: row.selector,
         elementText: row.elementText,
+        component: row.component,
         userAgent: row.userAgent,
         reply: row.reply,
         resolvedAt: row.resolvedAt,

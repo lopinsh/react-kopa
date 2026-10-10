@@ -4,7 +4,8 @@ import { useTransition } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { EyeOff } from 'lucide-react';
-import { restoreGroup } from '@/actions/moderation-actions';
+import { restoreGroup } from '@/actions/moderation-actions';
+import { UI } from '@/lib/constants';
 
 type Props = {
     groupId: string;
@@ -28,7 +29,7 @@ export default function HiddenGroupBanner({ groupId, reason, canRestore }: Props
     };
 
     return (
-        <div className="flex flex-wrap items-center justify-between gap-3 bg-red-600 px-4 py-3 text-sm font-medium text-white">
+        <div data-ui={UI.banner} className="flex flex-wrap items-center justify-between gap-3 bg-red-600 px-4 py-3 text-sm font-medium text-white">
             <span className="flex items-center gap-2">
                 <EyeOff className="h-4 w-4 shrink-0" />
                 {t(canRestore ? 'hiddenBanner' : 'hiddenBannerOwner', { reason: reason ?? '' })}

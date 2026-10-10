@@ -4,7 +4,8 @@ import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, Send } from 'lucide-react';
 import { createPost } from '@/actions/post-actions';
-import { announcementSchema, ANNOUNCEMENT_TITLE_MAX, ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
+import { announcementSchema, ANNOUNCEMENT_TITLE_MAX, ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
+import { UI } from '@/lib/constants';
 
 type Props = {
     groupId: string;
@@ -50,7 +51,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-300">
-            <div role="dialog" aria-modal="true" aria-labelledby="announcement-modal-title" className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl sm:p-8">
+            <div role="dialog" aria-modal="true" aria-labelledby="announcement-modal-title" data-ui={UI.modal} className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl sm:p-8">
                 <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
                 <div className="mb-6 flex items-center justify-between gap-4">
                     <h2 id="announcement-modal-title" className="text-xl font-black tracking-tight text-foreground sm:text-2xl">{t('announcementNew')}</h2>

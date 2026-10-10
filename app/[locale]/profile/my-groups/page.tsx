@@ -5,6 +5,7 @@ import { Users, LogIn, Compass } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import MyGroupsListRow from '@/components/profile/MyGroupsListRow';
+import { UI } from '@/lib/constants';
 
 export default async function MyGroupsPage({
     params
@@ -27,7 +28,7 @@ export default async function MyGroupsPage({
                     {c_common_get('myGroups')}
                 </h1>
 
-                <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
+                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
                         <LogIn className="h-10 w-10" />
                     </div>
@@ -132,7 +133,7 @@ export default async function MyGroupsPage({
                     )}
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
+                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-20">
                         <Users className="h-10 w-10" />
                     </div>

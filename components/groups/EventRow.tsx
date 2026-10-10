@@ -3,9 +3,10 @@ import { Clock, Lock, MapPin, UserCheck, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import EventParticipation from '@/components/events/EventParticipation';
-import { EVENT_TIME_ZONE, type EventJoinModeValue } from '@/lib/constants';
+import { EVENT_TIME_ZONE, type EventJoinModeValue, UI } from '@/lib/constants';
 import type { AttendanceStatus } from '@prisma/client';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import Badge from '@/components/ui/Badge';
 import { langAttr, type TextLang } from '@/lib/translations';
 
 type Props = {
@@ -34,8 +35,6 @@ type Props = {
 };
 
 
-const BADGE = 'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-black uppercase tracking-wide';
-
 /** One compact line per event: date · what/when/where · people · one action. */
 export default async function EventRow({ event, locale, href, requireSignIn, isPast }: Props) {
     const t = await getTranslations('event');
@@ -51,7 +50,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
     ].filter(Boolean).join(' · ');
 
     return (
-        <article className={clsx(
+        <article data-ui={UI.eventRow} className={clsx(
             'flex flex-col gap-3 rounded-2xl border border-border p-4 transition-colors hover:border-[var(--accent)] sm:flex-row sm:items-center sm:gap-5',
             isPast ? 'bg-surface-elevated/50' : 'bg-surface'
         )}>
@@ -71,19 +70,19 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                         </h3>
                         {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                         {event.isMembersOnly && (
-                            <span className={clsx(BADGE, 'bg-surface-elevated text-foreground-muted')}>
+                            <Badge>
                                 <Lock className="h-3 w-3" />
                                 {t('membersOnly')}
-                            </span>
+                            </Badge>
                         )}
                         {isRequest && (
-                            <span className={clsx(BADGE, 'bg-surface-elevated text-foreground-muted')}>
+                            <Badge>
                                 <UserCheck className="h-3 w-3" />
                                 {t('badgeRequest')}
-                            </span>
+                            </Badge>
                         )}
                         {event.isFull && !isPast && (
-                            <span className={clsx(BADGE, 'bg-[var(--accent)] text-white')}>{t('full')}</span>
+                            <Badge tone="accent">{t('full')}</Badge>
                         )}
                     </div>
 

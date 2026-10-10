@@ -6,7 +6,9 @@ import { Users, Ban } from 'lucide-react';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import type { InboxRow } from '@/lib/services/message.service';
-import { useMessageTime } from './useMessageTime';
+import FilterChip from '@/components/ui/FilterChip';
+import { useMessageTime } from './useMessageTime';
+import { UI } from '@/lib/constants';
 
 type Props = {
     conversations: InboxRow[];
@@ -52,7 +54,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
     );
 
     return (
-        <div className={clsx('w-full flex-col border-r border-border bg-surface-elevated/30 sm:w-80', className)}>
+        <div data-ui={UI.conversationList} className={clsx('w-full flex-col border-r border-border bg-surface-elevated/30 sm:w-80', className)}>
             <div className="border-b border-border bg-surface p-4">
                 <h1 className="text-lg font-bold">{t('title')}</h1>
                 {conversations.length > 0 && (
@@ -67,6 +69,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                 {visible.length > 0 ? visible.map(conv => (
                     <button
                         key={conv.id}
+                        data-ui={UI.chatListItem}
                         onClick={() => onOpen(conv.id)}
                         className={clsx(
                             'flex w-full items-center gap-3 border-b border-border p-4 text-left transition-colors hover:bg-surface-elevated/50',
@@ -105,21 +108,5 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                 )}
             </div>
         </div>
-    );
-}
-
-function FilterChip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            aria-pressed={active}
-            className={clsx(
-                'shrink-0 rounded-full border px-3 py-1 text-xs font-bold transition-colors',
-                active ? 'border-primary bg-primary text-white' : 'border-border bg-surface text-foreground-muted hover:text-foreground'
-            )}
-        >
-            {children}
-        </button>
     );
 }

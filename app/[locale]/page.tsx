@@ -8,6 +8,7 @@ import ListViewCard from '@/components/discovery/ListViewCard';
 import GroupCard from '@/components/discovery/GroupCard';
 import EventCard from '@/components/discovery/EventCard';
 import ListViewEventCard from '@/components/discovery/ListViewEventCard';
+import EmptyState from '@/components/ui/EmptyState';
 import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
 import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
@@ -248,17 +249,12 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
 
                     {/* Empty State Logic */}
                     {((currentTab === 'groups' && groups.length === 0) || (currentTab === 'events' && discoverableEvents.length === 0)) && (
-                        <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border bg-surface-elevated/30 py-24 text-center">
-                            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-surface-elevated text-foreground-muted opacity-40 mb-2">
-                                <Search className="h-10 w-10" />
-                            </div>
-                            <h2 className="mt-6 text-3xl font-black tracking-tight text-foreground">
-                                {currentTab === 'groups' ? t('noGroupsFound') : t('noEventsFound')}
-                            </h2>
-                            <p className="mt-3 text-lg text-foreground-muted max-w-sm mx-auto">
-                                {t('adjustFilters')}
-                            </p>
-                        </div>
+                        <EmptyState
+                            className="bg-surface-elevated/30"
+                            icon={<Search className="h-10 w-10" />}
+                            title={currentTab === 'groups' ? t('noGroupsFound') : t('noEventsFound')}
+                            description={t('adjustFilters')}
+                        />
                     )}
 
                     {/* Lazy Load Action */}

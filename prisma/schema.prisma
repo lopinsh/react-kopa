@@ -443,6 +443,8 @@ model Feedback {
   theme       String
   selector    String
   elementText String
+  /// Stable UI-element name (data-ui) the note was left on; null for free clicks outside any named element.
+  component   String?
   userAgent   String
   reply       String?
   resolvedAt  DateTime?

@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { isReportReason, EVENT_TIME_ZONE } from '@/lib/constants';
+import { isReportReason, EVENT_TIME_ZONE, UI } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useFormatter, useTranslations } from 'next-intl';
@@ -63,7 +63,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
 
     if (reports.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center bg-surface">
+            <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center bg-surface">
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-green-50 text-green-500">
                     <CheckCircle2 className="h-10 w-10" />
                 </div>

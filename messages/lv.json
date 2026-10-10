@@ -555,7 +555,8 @@
       "status": "Statuss",
       "replyPlaceholder": "Atbilde (nav obligāta)",
       "save": "Saglabāt",
-      "saved": "Saglabāts"
+      "saved": "Saglabāts",
+      "component": "Komponente"
     },
     "translations": {
       "title": "Tulkojumi",
@@ -1036,6 +1037,10 @@
     "notesList": "Piezīmes šajā lapā: {count}",
     "noNotes": "Šajā lapā vēl nav piezīmju. Uzklikšķini uz elementa, lai pievienotu.",
     "elementGone": "elements nav atrasts",
+    "componentLabel": "Komponente",
+    "commentOn": "Atstāt piezīmi pie {name}",
+    "anywhere": "Komentēt jebkur",
+    "anywhereHint": "Izvēlēties jebkuru elementu, arī bez nosaukuma",
     "newTitle": "Atstāt piezīmi",
     "about": "Par: {text}",
     "kindLabel": "Veids",

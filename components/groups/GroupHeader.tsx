@@ -31,7 +31,8 @@ import type { GroupContext } from '@/lib/services/group.service';
 import CompactGroupBar from './CompactGroupBar';
 import GroupMoreMenu from './GroupMoreMenu';
 import AdminToolsMenu from './AdminToolsMenu';
-import { getContrastForeground } from '@/lib/color-utils';
+import { getContrastForeground } from '@/lib/color-utils';
+import { UI } from '@/lib/constants';
 
 type Props = {
     group: GroupContext;
@@ -123,6 +124,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     return (
         <header
+            data-ui={UI.groupHeader}
             className="relative z-40 bg-surface border-b border-border shadow-premium transition-shadow duration-300"
             suppressHydrationWarning
         >
@@ -285,6 +287,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         {!isMember && !isOwner && (
                             <div className="flex items-center gap-1.5">
                                 <button
+                                    data-ui={UI.joinButton}
                                     onClick={handleMembership}
                                     disabled={isPending || userRole === 'PENDING'}
                                     className={clsx(

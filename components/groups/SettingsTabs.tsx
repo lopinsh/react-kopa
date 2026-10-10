@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { Settings, Layout, type LucideIcon } from 'lucide-react';
+import { UI } from '@/lib/constants';
 
 export type SettingsTab = 'group' | 'sections';
 
@@ -22,7 +23,7 @@ export default function SettingsTabs({ active }: Props) {
     ];
 
     return (
-        <div className="mb-6 border-b border-border/60">
+        <div data-ui={UI.tabs} className="mb-6 border-b border-border/60">
             <nav className="flex items-center gap-1 overflow-x-auto scrollbar-none" aria-label={t('tabsLabel')}>
                 {tabs.map(({ id, label, icon: Icon }) => (
                     <Link

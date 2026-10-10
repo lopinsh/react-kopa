@@ -4,6 +4,7 @@ import { useTranslations, useFormatter, useNow } from 'next-intl';
 import { Archive, ArchiveRestore, Trash2 } from 'lucide-react';
 import { relativeTo } from '@/lib/utils/relative-time';
 import type { AnnouncementRow } from '@/lib/services/post.service';
+import { UI } from '@/lib/constants';
 
 type Props = {
     post: AnnouncementRow;
@@ -32,7 +33,7 @@ export default function AnnouncementCard({ post, canManage, busy, onArchive, onD
         : format.dateTime(created, { dateStyle: 'long', timeZone: TIME_ZONE });
 
     return (
-        <article className="rounded-2xl border border-border bg-surface p-5 shadow-premium sm:p-6">
+        <article data-ui={UI.announcementCard} className="rounded-2xl border border-border bg-surface p-5 shadow-premium sm:p-6">
             <h3 className="break-words text-lg font-black leading-snug tracking-tight text-foreground">{post.title}</h3>
             <p className="mt-1 text-xs font-medium text-foreground-muted">
                 <time dateTime={created.toISOString()}>{when}</time>

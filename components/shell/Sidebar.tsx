@@ -5,7 +5,8 @@ import { usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft } from 'lucide-react';
 import { clsx } from 'clsx';
-import GroupSidebarContent from './GroupSidebarContent';
+import GroupSidebarContent from './GroupSidebarContent';
+import { UI } from '@/lib/constants';
 
 type SidebarProps = {
     locale: string;
@@ -35,6 +36,7 @@ export default function Sidebar({ locale }: SidebarProps) {
 
     return (
         <aside
+            data-ui={UI.sidebar}
             className={clsx(
                 'hidden md:flex flex-col border-r border-border bg-surface transition-all duration-300 ease-in-out shrink-0 relative',
                 isCollapsed ? 'w-16' : 'w-[260px]'

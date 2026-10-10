@@ -2,15 +2,17 @@
 
 import { useCallback, useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { List, MessageSquareText, Pause, Play } from 'lucide-react';
+import { List, MessageSquareText, MousePointerClick, Pause, Play } from 'lucide-react';
+import { clsx } from 'clsx';
 import { useRouter, usePathname } from '@/i18n/routing';
 import { getPageFeedback, setFeedbackMode } from '@/actions/feedback-actions';
-import { buildSelector, visibleText } from '@/lib/feedback/capture';
+import { buildSelector, componentOf, visibleText } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import FeedbackDialog, { type FeedbackTarget } from './FeedbackDialog';
 import FeedbackNoteCard from './FeedbackNoteCard';
 import FeedbackNotesPanel from './FeedbackNotesPanel';
 import FeedbackPins from './FeedbackPins';
+import FeedbackNamedElements from './FeedbackNamedElements';
 import FeedbackModeToggle from './FeedbackModeToggle';
 import { useElementPicker } from './useElementPicker';
 
@@ -30,6 +32,8 @@ export default function FeedbackMode() {
     const [openNote, setOpenNote] = useState<FeedbackItem | null>(null);
     const [panelOpen, setPanelOpen] = useState(false);
     const [paused, setPaused] = useState(false);
+    // Default: notes go on named components. "Comment anywhere" is the fallback for anything without a name.
+    const [anywhere, setAnywhere] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -45,10 +49,10 @@ export default function FeedbackMode() {
         setPanelOpen(false);
         // The schema caps the path at 500 characters; a very long query would otherwise fail to save.
         setDraftPath(`${pathname}${window.location.search}`.slice(0, 500));
-        setDraft({ selector: buildSelector(el), elementText: visibleText(el) });
+        setDraft({ selector: buildSelector(el), elementText: visibleText(el), component: componentOf(el) });
     }, [pathname]);
 
-    const hover = useElementPicker(!paused && !busy, handlePick);
+    const hover = useElementPicker(anywhere && !paused && !busy, handlePick);
 
     // Escape closes what is open first; with nothing open it leaves the mode. While paused the page is
     // used normally, so Escape belongs to the page (closing its menus and pop-ups), not to feedback mode.
@@ -87,6 +91,8 @@ export default function FeedbackMode() {
                 />
             )}
 
+            <FeedbackNamedElements enabled={!anywhere && !paused && !busy} onPick={handlePick} />
+
             <FeedbackPins notes={notes} onOpen={handleOpen} onMissing={setMissing} />
 
             <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-full border border-border bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
@@ -94,6 +100,17 @@ export default function FeedbackMode() {
                 <span className="mr-1">{paused ? t('barPaused') : t('barLabel')}</span>
                 <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? t('resume') : t('pause')} title={paused ? t('resume') : t('pause')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
                     {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setAnywhere((a) => !a)}
+                    aria-pressed={anywhere}
+                    aria-label={t('anywhere')}
+                    title={t('anywhereHint')}
+                    className={clsx('flex items-center gap-1 rounded-full p-1.5', anywhere ? 'bg-primary text-white' : 'text-foreground-muted hover:bg-surface-elevated')}
+                >
+                    <MousePointerClick className="h-4 w-4" />
+                    <span className="hidden sm:inline">{t('anywhere')}</span>
                 </button>
                 <button type="button" onClick={() => setPanelOpen((o) => !o)} aria-label={t('notesList', { count: notes.length })} title={t('notesList', { count: notes.length })} className="flex items-center gap-1 rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
                     <List className="h-4 w-4" />

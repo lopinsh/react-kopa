@@ -9,7 +9,8 @@ import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, Lucid
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';
-import { hasAdminRights } from '@/lib/utils/permissions';
+import { hasAdminRights } from '@/lib/utils/permissions';
+import { UI } from '@/lib/constants';
 
 type Props = {
     group: GroupContext;
@@ -192,6 +193,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
 
     return (
         <div
+            data-ui={UI.tabs}
             className={clsx(
                 "z-30 transition-all duration-300 sticky top-0 bg-surface",
                 isScrolled

@@ -1,4 +1,5 @@
 import type { ComponentPropsWithRef } from 'react';
+import { UI } from '@/lib/constants';
 
 interface AuthTextFieldProps extends ComponentPropsWithRef<'input'> {
     id: string;
@@ -12,7 +13,7 @@ export default function AuthTextField({ id, label, hint, error, ...inputProps }:
     const note = error ?? hint;
 
     return (
-        <div className="space-y-1">
+        <div data-ui={UI.formField} className="space-y-1">
             <label htmlFor={id} className="block text-sm font-medium text-foreground">
                 {label}
             </label>

@@ -7,7 +7,8 @@ import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
-import { isEventPast } from '@/lib/event-dates';
+import { isEventPast } from '@/lib/event-dates';
+import { UI } from '@/lib/constants';
 
 export async function generateMetadata({
     params,
@@ -102,7 +103,7 @@ export default async function GroupEventsPage({
                     ))}
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-20 text-center bg-surface/30">
+                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-20 text-center bg-surface/30">
                     <div className="h-16 w-16 rounded-2xl bg-surface border border-border flex items-center justify-center mb-6 shadow-sm">
                         <Calendar className="h-8 w-8 text-foreground-muted" />
                     </div>

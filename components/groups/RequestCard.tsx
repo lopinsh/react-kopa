@@ -7,7 +7,8 @@ import { manageMembership } from '@/actions/group-actions';
 import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from '@/i18n/routing';
-import { avatarUrl } from '@/lib/avatar';
+import { avatarUrl } from '@/lib/avatar';
+import { UI } from '@/lib/constants';
 
 interface Message {
     id: string;
@@ -55,7 +56,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
     };
 
     return (
-        <div className="flex flex-col p-5 rounded-3xl bg-surface-elevated/50 border border-border group/card hover:border-[var(--accent)]/30 transition-all shadow-card">
+        <div data-ui={UI.requestCard} className="flex flex-col p-5 rounded-3xl bg-surface-elevated/50 border border-border group/card hover:border-[var(--accent)]/30 transition-all shadow-card">
             <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-border bg-surface relative shadow-inner">

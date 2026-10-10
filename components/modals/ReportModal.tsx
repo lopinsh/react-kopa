@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { createReport } from '@/actions/report-actions';
 import { X, ShieldAlert } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { REPORT_REASONS, isReportReason } from '@/lib/constants';
+import { REPORT_REASONS, isReportReason, UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -38,7 +38,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-            <div className="w-full max-w-md rounded-3xl bg-surface p-6 shadow-2xl">
+            <div data-ui={UI.modal} className="w-full max-w-md rounded-3xl bg-surface p-6 shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-foreground flex items-center gap-2 text-red-500">
                         <ShieldAlert className="h-5 w-5" />

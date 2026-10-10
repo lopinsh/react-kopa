@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 import { joinGroup, sendInquiry } from '@/actions/group-actions';
 import { Link } from '@/i18n/routing';
 import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message';
+import { UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -53,7 +54,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-300">
-            <div role="dialog" aria-modal="true" className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl sm:p-8">
+            <div role="dialog" aria-modal="true" data-ui={UI.modal} className="relative w-full max-w-lg overflow-hidden rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl sm:p-8">
                 <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />
 
                 <div className="mb-6 flex items-center justify-between gap-4">

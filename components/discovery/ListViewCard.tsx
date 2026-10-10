@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { Users, MapPin, Globe, Lock, Zap } from 'lucide-react';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import { cityLabel } from '@/lib/city-label';
+import { UI } from '@/lib/constants';
 
 type Props = {
     group: {
@@ -36,6 +37,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
     return (
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
+            data-ui={UI.groupListRow}
             className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >

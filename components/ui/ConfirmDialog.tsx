@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
+import { UI } from '@/lib/constants';
 
 type Props = {
     isOpen: boolean;
@@ -39,7 +40,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
-            <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" className="w-full max-w-sm rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl">
+            <div role="alertdialog" aria-modal="true" data-ui={UI.confirmDialog} aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" className="w-full max-w-sm rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl">
                 <h2 id="confirm-dialog-title" className="text-lg font-black tracking-tight text-foreground">{title}</h2>
                 <p id="confirm-dialog-message" className="mt-2 text-sm font-medium leading-relaxed text-foreground-muted">{message}</p>
                 <div className="mt-6 flex items-center justify-end gap-3">

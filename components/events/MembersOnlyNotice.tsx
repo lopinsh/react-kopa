@@ -5,6 +5,8 @@ import dynamic from 'next/dynamic';
 import { Lock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import Button, { buttonClass } from '@/components/ui/Button';
+import { UI } from '@/lib/constants';
 
 const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
 
@@ -20,7 +22,7 @@ export default function MembersOnlyNotice({ groupName, groupHref, isLoggedIn }: 
     const [signInOpen, setSignInOpen] = useState(false);
 
     return (
-        <div className="container mx-auto max-w-2xl px-4 py-24 text-center">
+        <div data-ui={UI.notice} className="container mx-auto max-w-2xl px-4 py-24 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-elevated text-foreground-muted">
                 <Lock className="h-8 w-8" />
             </div>
@@ -30,20 +32,13 @@ export default function MembersOnlyNotice({ groupName, groupHref, isLoggedIn }: 
             </p>
 
             {isLoggedIn ? (
-                <Link
-                    href={groupHref}
-                    className="mt-10 inline-flex h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                >
+                <Link href={groupHref} data-ui={UI.buttonPrimary} className={buttonClass('primary', 'mt-10')}>
                     {t('goToGroup', { group: groupName })}
                 </Link>
             ) : (
-                <button
-                    type="button"
-                    onClick={() => setSignInOpen(true)}
-                    className="mt-10 inline-flex h-11 items-center rounded-xl bg-primary px-6 text-sm font-semibold text-white transition-opacity hover:opacity-90"
-                >
+                <Button onClick={() => setSignInOpen(true)} className="mt-10">
                     {t('signIn')}
-                </button>
+                </Button>
             )}
 
             {signInOpen && <AuthGateModal isOpen onClose={() => setSignInOpen(false)} />}

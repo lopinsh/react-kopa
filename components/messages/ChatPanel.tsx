@@ -11,6 +11,7 @@ import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import { GroupLabel } from './ConversationList';
 import { useMessageTime } from './useMessageTime';
+import { UI } from '@/lib/constants';
 
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
 
@@ -119,7 +120,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         ? (conversation.viewerIsContact && conversation.group ? `${senderName} · ${conversation.group.name}` : senderName)
                         : null;
                     return (
-                        <div key={msg.id} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start')}>
+                        <div key={msg.id} data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start')}>
                             {speaker && <span className="mb-1 px-1 text-[10px] font-bold text-foreground-muted">{speaker}</span>}
                             <div className={clsx(
                                 'whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-relaxed',

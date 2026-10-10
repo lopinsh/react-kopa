@@ -103,3 +103,44 @@ export const FEEDBACK_STATUSES = ['OPEN', 'DOING', 'DONE', 'WONT_DO'] as const;
 export type FeedbackStatusValue = (typeof FEEDBACK_STATUSES)[number];
 
 export const FEEDBACK_TEXT_MAX = 2000;
+
+/**
+ * Stable names of the shared UI components, set as `data-ui` on each component's root element.
+ * Feedback mode outlines every named element and stores the name with a note, so a note leads an agent
+ * straight to the component. The UI-elements page in the Handbook shows each one with its file path.
+ */
+export const UI = {
+    groupCard: 'group-card',
+    groupListRow: 'group-list-row',
+    eventCard: 'event-card',
+    eventListRow: 'event-list-row',
+    eventRow: 'event-row',
+    groupHeader: 'group-header',
+    slimBar: 'slim-bar',
+    joinButton: 'join-button',
+    memberCard: 'member-card',
+    requestCard: 'request-card',
+    announcementCard: 'announcement-card',
+    conversationList: 'conversation-list',
+    chatListItem: 'chat-list-item',
+    chatBubble: 'chat-bubble',
+    modal: 'modal',
+    confirmDialog: 'confirm-dialog',
+    emptyState: 'empty-state',
+    toast: 'toast',
+    tabs: 'tabs',
+    formField: 'form-field',
+    filterChip: 'filter-chip',
+    badge: 'badge',
+    buttonPrimary: 'button-primary',
+    buttonSecondary: 'button-secondary',
+    buttonDanger: 'button-danger',
+    banner: 'banner',
+    notice: 'notice',
+    header: 'header',
+    sidebar: 'sidebar',
+    mobileNav: 'mobile-nav',
+    footer: 'footer',
+} as const;
+export type UiName = (typeof UI)[keyof typeof UI];
+export const UI_NAMES = Object.values(UI) as [UiName, ...UiName[]];

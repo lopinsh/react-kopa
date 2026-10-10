@@ -555,7 +555,8 @@
       "status": "Status",
       "replyPlaceholder": "Reply (optional)",
       "save": "Save",
-      "saved": "Saved"
+      "saved": "Saved",
+      "component": "Component"
     },
     "translations": {
       "title": "Translations",
@@ -1036,6 +1037,10 @@
     "notesList": "Notes on this page: {count}",
     "noNotes": "No notes on this page yet. Click an element to add one.",
     "elementGone": "element not found",
+    "componentLabel": "Component",
+    "commentOn": "Leave a note on {name}",
+    "anywhere": "Comment anywhere",
+    "anywhereHint": "Pick any element, also ones without a name",
     "newTitle": "Leave a note",
     "about": "About: {text}",
     "kindLabel": "Kind",

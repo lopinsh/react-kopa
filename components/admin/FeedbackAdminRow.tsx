@@ -34,6 +34,7 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
         <li className="rounded-2xl border border-border bg-surface p-4">
             <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
+                {note.component && <span title={tAdmin('component')} className="rounded-full bg-surface-elevated px-2.5 py-1 font-mono font-semibold text-foreground-muted">{note.component}</span>}
                 <Link href={note.path} locale={note.locale === 'en' ? 'en' : 'lv'} className="break-all font-mono font-semibold text-foreground-muted hover:text-primary hover:underline">
                     {note.path}
                 </Link>

@@ -4,7 +4,8 @@ import React from 'react';
 import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react';
 import { ToastMessage, ToastType } from '@/hooks/use-toast';
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from 'tailwind-merge';
+import { UI } from '@/lib/constants';
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -25,6 +26,7 @@ interface ToastProps {
 export function Toast({ toast, onClose }: ToastProps) {
     return (
         <div
+            data-ui={UI.toast}
             className={cn(
                 "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-2xl border p-4 pr-8 shadow-premium transition-all animate-in slide-in-from-bottom-full duration-300",
                 "bg-surface/80 backdrop-blur-xl border-border/50",

@@ -8,7 +8,8 @@ import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
 import { MessageService } from '@/lib/services/message.service';
-import MessageUserButton from '@/components/messages/MessageUserButton';
+import MessageUserButton from '@/components/messages/MessageUserButton';
+import { UI } from '@/lib/constants';
 
 export default async function PublicProfilePage({
     params
@@ -33,7 +34,7 @@ export default async function PublicProfilePage({
     if (!dbUser.isProfilePublic && !isOwnProfile) {
         return (
             <div className="container mx-auto px-4 py-24 max-w-2xl text-center">
-                <div className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 bg-surface">
+                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 bg-surface">
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-50 mb-6">
                         <ShieldAlert className="h-10 w-10" />
                     </div>

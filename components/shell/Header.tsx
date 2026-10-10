@@ -6,7 +6,8 @@ import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
-import UnreadBadge from './UnreadBadge';
+import UnreadBadge from './UnreadBadge';
+import { UI } from '@/lib/constants';
 
 export default async function Header() {
     const t = await getTranslations('shell.header');
@@ -15,6 +16,7 @@ export default async function Header() {
 
     return (
         <header
+            data-ui={UI.header}
             className="sticky top-0 z-50 flex h-header w-full items-center justify-between border-b border-border/40 bg-background/60 px-4 sm:px-6 backdrop-blur-xl transition-all duration-300 shadow-premium"
             role="banner"
         >

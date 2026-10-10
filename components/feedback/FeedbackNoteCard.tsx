@@ -43,6 +43,9 @@ export default function FeedbackNoteCard({ note, onClose }: Props) {
                     </button>
                 </div>
                 <p className="whitespace-pre-wrap break-words text-sm text-foreground">{note.text}</p>
+                {note.component && (
+                    <p className="mt-3 font-mono text-xs font-semibold text-foreground-muted">{t('componentLabel')}: {note.component}</p>
+                )}
                 {note.elementText && (
                     <p className="mt-3 truncate rounded-xl bg-surface-elevated px-3 py-2 text-xs text-foreground-muted">{note.elementText}</p>
                 )}
