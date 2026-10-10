@@ -540,6 +540,7 @@
       "onThisPage": "On this page",
       "note": "Internal document, English only. Source: docs/handbook in the repository.",
       "uiElements": "UI elements",
+      "redesign": "Redesign (discussion)",
       "ui": {
         "title": "UI elements",
         "intro": "Every shared component as it looks on the site today, built from the real code with sample data. Each caption gives the component's data-ui name (the one feedback mode shows) and its file, so a note on a sample leads straight to the code.",

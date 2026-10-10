@@ -11,7 +11,7 @@ interface Props {
     headings: HandbookHeading[];
     children: ReactNode;
     /** Set on the UI-elements page, which is not a chapter. */
-    active?: 'ui-elements';
+    active?: 'ui-elements' | 'redesign';
     /** The UI-elements page needs more than a reading column. */
     wide?: boolean;
 }
@@ -60,6 +60,15 @@ async function ChapterList({ chapters, current, headings, active }: Pick<Props, 
                     className={`${itemClass} font-semibold ${active === 'ui-elements' ? 'bg-primary/10 text-primary' : 'text-foreground-muted hover:text-foreground'}`}
                 >
                     {t('uiElements')}
+                </Link>
+            </li>
+            <li>
+                <Link
+                    href="/admin/handbook/redesign"
+                    aria-current={active === 'redesign' ? 'page' : undefined}
+                    className={`${itemClass} font-semibold ${active === 'redesign' ? 'bg-primary/10 text-primary' : 'text-foreground-muted hover:text-foreground'}`}
+                >
+                    {t('redesign')}
                 </Link>
             </li>
         </ul>

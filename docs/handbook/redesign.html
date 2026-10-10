@@ -1,0 +1,615 @@
+<!-- Redesign discussion (from the artifact https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq). Discussion only. Rendered at /admin/handbook/redesign. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,500;0,7..72,600;1,7..72,500&family=Commissioner:wght@400;500;600&family=Atkinson+Hyperlegible+Next:wght@400;700;800&family=Alegreya:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+.rd{
+  --bg:#f4f4ef;--surface:#fdfdfb;--tint:#e8eae1;--line:#dcdfd4;--fg:#1f221c;--muted:#5f6558;--brand:#4B5E3B;--on-brand:#ffffff;
+  --display:"Literata",Georgia,"Times New Roman",serif;--body:"Commissioner",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-soft:16px;--r-in:12px}
+.rd:has(#pal-sea:checked){--bg:#f3f5f5;--surface:#fdfefe;--tint:#e4eaec;--line:#d7dfe2;--fg:#1b2124;--muted:#5a666b;--brand:#34586A}
+.rd:has(#pal-rye:checked){--bg:#f5f3ef;--surface:#fdfcfa;--tint:#ebe6de;--line:#dfd9cf;--fg:#221e1a;--muted:#665e55;--brand:#5E4A38}
+html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:#eceee7;--muted:#a8ae9f;--brand:#b5c79e;--on-brand:#1a2213;color-scheme:dark}
+html.dark .rd:has(#pal-sea:checked){--bg:#141819;--surface:#1c2123;--tint:#252c2f;--line:#323b3e;--fg:#e9eef0;--muted:#a2afb4;--brand:#a6c4d2;--on-brand:#10202a}
+html.dark .rd:has(#pal-rye:checked){--bg:#181614;--surface:#211e1b;--tint:#2b2723;--line:#39342e;--fg:#efebe5;--muted:#b0a79c;--brand:#d2bfa8;--on-brand:#241b12}
+html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:#eceee7;--muted:#a8ae9f;--brand:#b5c79e;--on-brand:#1a2213;color-scheme:dark}
+html.dark .rd:has(#pal-sea:checked){--bg:#141819;--surface:#1c2123;--tint:#252c2f;--line:#323b3e;--fg:#e9eef0;--muted:#a2afb4;--brand:#a6c4d2;--on-brand:#10202a}
+html.dark .rd:has(#pal-rye:checked){--bg:#181614;--surface:#211e1b;--tint:#2b2723;--line:#39342e;--fg:#efebe5;--muted:#b0a79c;--brand:#d2bfa8;--on-brand:#241b12}
+.rd .palbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--muted)}
+.rd .palbar button{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--body);cursor:pointer}
+.rd .palbar button i{width:20px;height:20px;border-radius:50%;background:var(--p)}
+.rd .palbar button[aria-pressed="true"]{border-color:var(--fg);font-weight:600}
+.rd .palbar button:focus-visible,.rd .drawer-t:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.rd *{box-sizing:border-box}
+.rd{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);margin:0}
+.rd h1,.rd h2,.rd h3,.rd h4{font-family:var(--display);font-weight:600;margin:0;text-wrap:balance;line-height:1.15}
+.rd .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:28px 88px;display:grid;gap:60px}
+.rd .intro{display:grid;gap:10px}
+.rd .intro .status{justify-self:start;font-size:13px;font-weight:600;color:var(--brand);background:var(--tint);border-radius:999px;padding:3px 12px}
+.rd .intro h1{font-size:clamp(32px,5vw,48px)}
+.rd .intro p{color:var(--muted);max-width:64ch;margin:0;font-size:17px}
+.rd section{display:grid;gap:18px;min-width:0}
+.rd section>h2{font-size:30px}
+.rd .lead{color:var(--muted);max-width:68ch;margin:0}
+.rd .idgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.rd .idgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.rd .idgrid{grid-template-columns:minmax(0,1fr)}}
+.rd .box{background:var(--surface);border-radius:var(--r-soft);padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.rd .box.wide{grid-column:span 2}
+@media (max-width:600px){.rd .box.wide{grid-column:auto}}
+.rd .box .lbl{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.rd .box .why{margin:0;font-size:14px;color:var(--muted)}
+.rd .wm{font:600 36px/1 var(--display);color:var(--brand);display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
+.rd .wm em{font-weight:500}
+.rd .wm::after{content:"";width:30px;height:18px;flex:none;background:radial-gradient(circle at 9px 9px,var(--brand) 8px,transparent 8.5px),radial-gradient(circle at 21px 9px,color-mix(in srgb,var(--brand) 45%,transparent) 8px,transparent 8.5px)}
+.rd .wm.sm{font-size:21px;gap:6px}
+.rd .wm.sm::after{transform:scale(.7);transform-origin:left center}
+.rd .mk{width:40px;height:40px;border-radius:12px;background:var(--tint);position:relative;flex:none}
+.rd .mk::after{content:"";position:absolute;inset:11px 6px;background:radial-gradient(circle at 10px 9px,var(--brand) 8px,transparent 8.5px),radial-gradient(circle at 18px 9px,color-mix(in srgb,var(--brand) 45%,transparent) 8px,transparent 8.5px)}
+.rd .row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rd .swl{display:grid;gap:0}
+.rd .swl>div{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.rd .swl>div:first-child{border-top:0}
+.rd .sw{width:34px;height:34px;border-radius:50%;background:var(--s);flex:none;box-shadow:inset 0 0 0 1px var(--line)}
+.rd .swl b{font-size:14px;font-weight:600;display:block;line-height:1.3}
+.rd .swl small{font-size:13px;color:var(--muted)}
+.rd .spec-h{font:600 30px/1.15 var(--display);margin:0}
+.rd .spec-b{font:400 17px/1.6 var(--body);margin:0;max-width:62ch}
+.rd .spec-i{font:italic 400 14px var(--body);color:var(--brand);margin:0}
+.rd .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding-inline:18px;border-radius:999px;font:500 15px var(--body);white-space:nowrap;border:0}
+.rd .btn.p{background:var(--brand);color:var(--on-brand)}
+.rd .btn.s{background:var(--tint);color:var(--fg)}
+.rd .btn.sm{height:34px;padding-inline:14px;font-size:14px}
+.rd .tag{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);white-space:nowrap}
+.rd .tag.cat{color:var(--fg);font-weight:500}
+.rd .tag.cat::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c,var(--muted))}
+.rd .sub{font-size:13px;color:var(--muted)}
+.rd .tags{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.rd .from{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.rd .from li{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.rd .from li:first-child{border-top:0}
+.rd .from li span{color:var(--muted)}
+@media (max-width:600px){.rd .from li{grid-template-columns:minmax(0,1fr);gap:2px}}
+.rd .screens{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
+.rd .shot{display:grid;gap:8px;min-width:0}
+.rd .shot>.cap{font-size:13px;color:var(--muted);font-weight:600}
+.rd .desk{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)}
+.rd .mob{width:340px;max-width:100%;border:7px solid var(--fg);border-radius:30px;overflow:hidden;background:var(--bg);flex:none}
+.rd .hdr{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+.rd .search{flex:1;min-width:0;height:40px;border-radius:999px;background:var(--tint);display:flex;align-items:center;gap:8px;padding-inline:14px;color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden}
+.rd svg.i{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.rd .av{width:32px;height:32px;border-radius:50%;background:var(--tint);flex:none}
+.rd .disc{display:grid;grid-template-columns:232px minmax(0,1fr);gap:0;transition:grid-template-columns .2s}
+.rd .disc.shut{grid-template-columns:60px minmax(0,1fr)}
+@media (prefers-reduced-motion:reduce){.rd .disc{transition:none}}
+.rd .catlist{padding:14px 10px;border-right:1px solid var(--line);display:grid;gap:1px;align-content:start;font-size:14px;min-width:0;overflow:hidden}
+.rd .cl-h{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 4px 8px 8px}
+.rd .cl-h b{font:600 13px var(--body);color:var(--muted);white-space:nowrap}
+.rd .drawer-t{width:30px;height:30px;border-radius:50%;border:0;background:var(--tint);color:var(--fg);display:grid;place-items:center;cursor:pointer;flex:none}
+.rd .drawer-t svg{transition:transform .2s}
+.rd .shut .drawer-t svg{transform:rotate(180deg)}
+.rd .shut .cl-h{padding:0 0 8px;justify-content:center}
+.rd .shut .cl-h b,.rd .shut .catlist .nm{display:none}
+.rd .catlist .ci{display:flex;align-items:center;gap:10px;padding:3px 6px;border-radius:12px;white-space:nowrap;min-width:0}
+.rd .catlist .ci .ic{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,var(--surface));color:var(--c)}
+.rd .catlist .ci .ic svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rd .catlist .nm{overflow:hidden;text-overflow:ellipsis}
+.rd .catlist .ci.on{background:var(--tint);font-weight:600}
+.rd .shut .catlist .ci{justify-content:center;padding:3px 0}
+.rd .pg{padding:20px 22px;display:grid;gap:18px;min-width:0}
+.rd .hello h3{font-size:26px}
+.rd .hello p{margin:2px 0 0;color:var(--muted);font-size:15px}
+.rd .row-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.rd .row-h h4{font-size:19px}
+.rd .row-h small{color:var(--muted);font-size:14px}
+.rd .evlist{display:grid;background:var(--surface);border-radius:var(--r-soft);padding:2px 16px}
+.rd .ev{display:flex;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line);min-width:0}
+.rd .ev:first-child{border-top:0}
+.rd .date{flex:none;width:44px;text-align:center;line-height:1}
+.rd .date small{display:block;font-size:12px;color:var(--muted)}
+.rd .date b{display:block;font:600 24px var(--display);margin-top:2px}
+.rd .ev .t{flex:1;min-width:0;font-size:14px;color:var(--muted)}
+.rd .ev .t b{display:block;font:600 16px var(--display);color:var(--fg)}
+.rd .ev .t i{font-size:13px;color:var(--brand)}
+.rd .ev .t .tags{margin-top:2px}
+.rd .faces{display:inline-flex;align-items:center;vertical-align:-4px;margin-right:4px}
+.rd .faces i{width:18px;height:18px;border-radius:50%;border:2px solid var(--surface);margin-left:-5px;display:block}
+.rd .faces i:first-child{margin-left:0}
+.rd .gcards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:1000px){.rd .gcards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rd .gc{background:var(--surface);border-radius:var(--r-soft);overflow:hidden;display:grid;min-width:0}
+.rd .gc .pic{height:84px;background:color-mix(in srgb,var(--c) 22%,var(--surface));display:grid;place-items:center;color:var(--c)}
+.rd .gc .pic svg{width:34px;height:34px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.rd .gc .in{padding:12px 14px 0;display:grid;gap:3px;min-width:0}
+.rd .gc .in b{font:600 18px/1.25 var(--display)}
+.rd .gc .meta{font-size:14px;color:var(--muted)}
+.rd .gc .note{margin:10px 14px 0;padding:9px 0 12px;border-top:1px solid var(--line);font:italic 400 13px var(--body);color:var(--brand)}
+.rd .hdr .ico{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--fg);position:relative;flex:none}
+.rd .hdr .ico .dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--brand);box-shadow:0 0 0 2px var(--surface)}
+.rd .navb{display:flex;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);padding:8px 0 10px;font-size:11px;color:var(--muted)}
+.rd .navb span{display:grid;justify-items:center;gap:2px}
+.rd .navb .on{color:var(--brand);font-weight:600}
+.rd .ghead{background:var(--surface);border-bottom:1px solid var(--line)}
+.rd .gban{background:linear-gradient(120deg,color-mix(in srgb,var(--c) 22%,var(--surface)),color-mix(in srgb,var(--c) 7%,var(--surface)));padding:26px 22px 20px}
+.rd .gid{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.rd .gpic{width:64px;height:64px;border-radius:18px;background:var(--c);flex:none}
+.rd .gid .t{flex:1;min-width:180px;padding-bottom:2px;display:grid;gap:4px}
+.rd .gid h3{font-size:26px}
+.rd .gtabs{display:flex;gap:22px;padding:14px 22px 0;font-size:14px;color:var(--muted);overflow:hidden}
+.rd .gtabs span{padding-bottom:10px;border-bottom:2px solid transparent;white-space:nowrap}
+.rd .gtabs .on{color:var(--fg);font-weight:600;border-color:var(--brand)}
+.rd .gbody{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:22px;padding:20px 22px}
+@media (max-width:760px){.rd .gbody{grid-template-columns:minmax(0,1fr)}}
+.rd .art{background:var(--surface);border-radius:var(--r-soft);padding:6px 18px;display:grid}
+.rd .art>div{padding:14px 0;border-top:1px solid var(--line);display:grid;gap:6px}
+.rd .art>div:first-child{border-top:0}
+.rd .art h4{font-size:18px}
+.rd .art p{margin:0;font-size:15px}
+.rd .side{display:grid;gap:14px;align-content:start}
+.rd .toc{display:grid;font-size:14px}
+.rd .toc b{font:600 13px var(--body);color:var(--muted);padding-bottom:6px}
+.rd .toc span{padding:7px 0;border-top:1px solid var(--line)}
+.rd .toc span.on{color:var(--brand);font-weight:600}
+.rd .subsw{display:flex;gap:18px;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line)}
+.rd .subsw span{padding-bottom:8px}
+.rd .subsw .on{color:var(--fg);font-weight:600;border-bottom:2px solid var(--fg)}
+.rd .slimbar{display:flex;gap:12px;align-items:center;padding:12px 14px 0}
+.rd .slimbar .gpic{width:40px;height:40px;border-radius:12px;border:0}
+.rd .agreed{display:grid;margin:0;padding:0;list-style:none;background:var(--surface);border-radius:var(--r-soft);padding-inline:18px}
+.rd .agreed li{display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.rd .agreed li:first-child{border-top:0}
+.rd .agreed b{font:600 16px/1.35 var(--display)}
+.rd .agreed p{margin:0;font-size:15px;color:var(--muted)}
+@media (max-width:640px){.rd .agreed li{grid-template-columns:minmax(0,1fr);gap:2px}}
+.rd .open{display:grid;gap:12px;counter-reset:q}
+.rd .open div{background:var(--surface);border-radius:var(--r-soft);padding:16px 18px;display:grid;grid-template-columns:32px minmax(0,1fr);gap:2px 12px}
+.rd .open div::before{counter-increment:q;content:counter(q);grid-row:span 2;width:28px;height:28px;border-radius:50%;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;font:600 14px var(--display)}
+.rd .open b{font:600 17px var(--display)}
+.rd .open p{margin:0;color:var(--muted);font-size:15px}
+.rd details.old{background:var(--surface);border-radius:var(--r-soft);padding:14px 18px}
+.rd details.old summary{cursor:pointer;font:600 18px var(--display)}
+.rd details.old summary:focus-visible{outline:2px solid var(--brand);outline-offset:4px;border-radius:4px}
+.rd details.old[open]>summary{margin-bottom:16px}
+.rd details.old .inner{display:grid;gap:18px}
+.rd .saw{display:grid;margin:0;padding:0;list-style:none}
+.rd .saw li{padding:10px 0;border-top:1px solid var(--line);font-size:15px}
+.rd .saw li:first-child{border-top:0}
+.rd .saw b{font-family:var(--display);font-weight:600}
+.rd{--r-card:16px;
+  --a-brand:#1E3A5F;--a-paper:#ffffff;--a-line:#c9cfd8;--a-fg:#141a22;--a-muted:#5b6573;--a-on:#ffffff;
+  --b-brand:#7A2440;--b-paper:#f7f1ec;--b-tint:#efe4dc;--b-fg:#2a1e1c;--b-muted:#6e5d58;--b-on:#ffffff;
+  --c-brand:#244A3B;--c-paper:#ffffff;--c-line:#d8dcd9;--c-fg:#161a18;--c-muted:#5d6661;--c-on:#ffffff;
+  --fA:"Atkinson Hyperlegible Next","Atkinson Hyperlegible",system-ui,sans-serif;
+  --fBh:"Alegreya",Georgia,serif;--fBb:"Alegreya Sans",system-ui,sans-serif;
+  --fCh:"Literata",Georgia,serif;--fCb:"Commissioner",system-ui,sans-serif}
+html.dark .rd{
+  --a-brand:#9cb8de;--a-paper:#151a21;--a-line:#36404d;--a-fg:#e8edf3;--a-muted:#a2adbb;--a-on:#0f1620;
+  --b-brand:#e59ab0;--b-paper:#221a19;--b-tint:#2f2523;--b-fg:#f3e9e4;--b-muted:#bba9a3;--b-on:#2a1018;
+  --c-brand:#93c3ad;--c-paper:#151917;--c-line:#323a36;--c-fg:#e9eeeb;--c-muted:#a3aea8;--c-on:#0f1d17}
+html.dark .rd{
+  --a-brand:#9cb8de;--a-paper:#151a21;--a-line:#36404d;--a-fg:#e8edf3;--a-muted:#a2adbb;--a-on:#0f1620;
+  --b-brand:#e59ab0;--b-paper:#221a19;--b-tint:#2f2523;--b-fg:#f3e9e4;--b-muted:#bba9a3;--b-on:#2a1018;
+  --c-brand:#93c3ad;--c-paper:#151917;--c-line:#323a36;--c-fg:#e9eeeb;--c-muted:#a3aea8;--c-on:#0f1d17}
+.rd .idx{display:grid;gap:22px}
+.rd .idx>.lead{margin:0}
+.rd .pangram-note{margin:0;font-size:14px;color:var(--muted)}
+.rd .dir{border:1px solid var(--line);border-radius:var(--r-card);overflow:hidden;background:var(--surface)}
+.rd .dir-h{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.rd .dir-n{width:40px;height:40px;border-radius:50%;background:var(--ink);color:var(--on-ink);display:grid;place-items:center;font:800 18px var(--display)}
+.rd .dir-h h3{font-size:22px;font-weight:800}
+.rd .dir-h p{margin:2px 0 0;color:var(--muted);font-size:15px;max-width:70ch}
+.rd .dir-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line)}
+@media (max-width:900px){.rd .dir-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.rd .dir-grid{grid-template-columns:minmax(0,1fr)}}
+.rd .tile{background:var(--P);color:var(--F);padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.rd .type-tile{grid-column:span 2}
+@media (max-width:600px){.rd .type-tile{grid-column:auto}}
+.rd .tile .lbl{font:600 12px var(--body);color:var(--M);letter-spacing:.02em}
+.rd .tile .why{margin:0;font:14px/1.5 var(--body);color:var(--M)}
+.rd .wm-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.rd .sw-row{display:flex;gap:12px;align-items:center}
+.rd .sw-row b{display:block;font-size:15px}
+.rd .sw-row small{color:var(--M);font-size:13px}
+.rd .sw{width:44px;height:44px;flex:none;background:var(--s);border:1px solid var(--line)}
+.rd .shape-demo{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rd .t-h,.rd .t-b{margin:0}
+.rd .dA{--P:var(--a-paper);--F:var(--a-fg);--M:var(--a-muted)}
+.rd .dA .sw{border-radius:4px}
+.rd .wmA{font:800 34px/1 var(--fA);color:var(--a-brand);letter-spacing:-.01em;display:inline-block;padding-bottom:9px;background:linear-gradient(var(--a-brand),var(--a-brand)) left bottom/100% 4px no-repeat}
+.rd .wmA.sm{font-size:20px;padding-bottom:5px;background-size:100% 3px}
+.rd .badgeA{width:40px;height:40px;border-radius:4px;background:var(--a-brand);position:relative}
+.rd .badgeA{font-size:0}
+.rd .badgeA::after{content:"";position:absolute;left:9px;right:9px;bottom:11px;height:4px;background:var(--a-on)}
+.rd .dA .t-h{font:800 28px/1.15 var(--fA)}
+.rd .dA .t-b{font:400 17px/1.55 var(--fA)}
+.rd .btnA{font:700 15px var(--fA);height:42px;padding:0 18px;display:inline-flex;align-items:center;border-radius:4px;background:var(--a-brand);color:var(--a-on);border:1.5px solid var(--a-brand)}
+.rd .btnA.o{background:transparent;color:var(--a-brand)}
+.rd .chipA{font:700 13px var(--fA);padding:3px 8px;border:1.5px solid var(--a-line);border-radius:3px}
+.rd .cardA{border:1.5px solid var(--a-line);border-radius:4px;overflow:hidden;display:grid}
+.rd .pA{height:70px;background:color-mix(in srgb,var(--c) 22%,var(--a-paper));border-bottom:1.5px solid var(--a-line)}
+.rd .iA{padding:12px;display:grid;gap:3px;font-family:var(--fA)}
+.rd .iA b{font-size:18px;font-weight:800}
+.rd .sA,.rd .sB,.rd .sC{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700}
+.rd .sA i{width:10px;height:10px;background:var(--c);border-radius:2px}
+.rd .mA,.rd .mB,.rd .mC{font-size:14px;color:var(--M)}
+.rd .nA{font-size:13px;font-weight:700;color:var(--a-brand);margin-top:4px}
+.rd .dB{--P:var(--b-paper);--F:var(--b-fg);--M:var(--b-muted)}
+.rd .dB .sw{border-radius:50%;border:0}
+.rd .wmB{font:700 38px/1 var(--fBh);color:var(--b-brand);text-transform:lowercase;display:inline-flex;align-items:center;gap:6px}
+.rd .wmB::after{content:"";width:30px;height:18px;flex:none;background:radial-gradient(circle at 9px 9px,var(--b-brand) 8px,transparent 8.5px),radial-gradient(circle at 21px 9px,color-mix(in srgb,var(--b-brand) 45%,transparent) 8px,transparent 8.5px)}
+.rd .wmB.sm{font-size:22px}
+.rd .wmB.sm::after{transform:scale(.7);transform-origin:left center}
+.rd .badgeB{width:40px;height:40px;border-radius:14px;background:var(--b-tint);font-size:0;position:relative}
+.rd .badgeB::after{content:"";position:absolute;inset:11px 6px;background:radial-gradient(circle at 10px 9px,var(--b-brand) 8px,transparent 8.5px),radial-gradient(circle at 18px 9px,color-mix(in srgb,var(--b-brand) 45%,transparent) 8px,transparent 8.5px)}
+.rd .dB .t-h{font:700 30px/1.15 var(--fBh)}
+.rd .dB .t-b{font:400 18px/1.55 var(--fBb)}
+.rd .btnB{font:500 16px var(--fBb);height:42px;padding:0 20px;display:inline-flex;align-items:center;border-radius:999px;background:var(--b-brand);color:var(--b-on)}
+.rd .btnB.o{background:var(--b-tint);color:var(--b-fg)}
+.rd .chipB{font:500 14px var(--fBb);padding:4px 12px;border-radius:999px;background:var(--b-tint)}
+.rd .cardB{border-radius:16px;overflow:hidden;display:grid;background:var(--b-tint)}
+.rd .pB{height:70px;background:color-mix(in srgb,var(--c) 26%,var(--b-tint))}
+.rd .iB{padding:12px 14px 14px;display:grid;gap:3px;font-family:var(--fBb)}
+.rd .iB b{font:700 20px var(--fBh)}
+.rd .sB{font-weight:500}
+.rd .sB i{width:10px;height:10px;background:var(--c);border-radius:50%}
+.rd .nB{font-size:14px;color:var(--b-brand);margin-top:4px;font-style:italic}
+.rd .dC{--P:var(--c-paper);--F:var(--c-fg);--M:var(--c-muted)}
+.rd .dC .sw{border-radius:2px}
+.rd .wmC{font:600 34px/1 var(--fCh);color:var(--c-brand);display:inline-block;padding:8px 0;border-block:1px solid var(--c-brand)}
+.rd .wmC em{font-weight:500}
+.rd .wmC.sm{font-size:21px;padding:0;border:0}
+.rd .badgeC{width:40px;height:40px;border:1px solid var(--c-brand);border-radius:2px;color:var(--c-brand);display:grid;place-items:center;font:italic 600 13px var(--fCh)}
+.rd .dC .t-h{font:600 29px/1.15 var(--fCh)}
+.rd .dC .t-b{font:400 17px/1.6 var(--fCb)}
+.rd .btnC{font:500 15px var(--fCb);height:42px;padding:0 18px;display:inline-flex;align-items:center;border-radius:2px;background:var(--c-brand);color:var(--c-on);border:1px solid var(--c-brand)}
+.rd .btnC.o{background:transparent;color:var(--c-brand)}
+.rd .chipC{font:400 14px var(--fCb);display:inline-flex;align-items:center;gap:6px;padding-right:8px}
+.rd .chipC::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--c-muted)}
+.rd .cardC{display:grid;border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line)}
+.rd .pC{height:70px;background:color-mix(in srgb,var(--c) 18%,var(--c-paper))}
+.rd .iC{padding:12px 0;display:grid;gap:3px;font-family:var(--fCb)}
+.rd .iC b{font:600 20px var(--fCh)}
+.rd .sC{font-weight:500}
+.rd .sC i{width:8px;height:8px;background:var(--c);border-radius:50%}
+.rd .nC{font-size:14px;color:var(--c-brand);margin-top:4px;padding-top:6px;border-top:1px solid var(--c-line)}
+.rd .dir{border:1px solid var(--line)}
+.rd .dir-n{background:var(--brand);color:var(--on-brand);font:600 18px var(--display)}
+.rd .dir-h h3{font-weight:600}
+.rd .palbar label{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px 0 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--body);cursor:pointer}
+.rd .palbar label i{width:20px;height:20px;border-radius:50%;background:var(--p)}
+.rd .palbar input,.rd .sr{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.rd .palbar label:has(input:checked){border-color:var(--fg);font-weight:600}
+.rd .palbar label:has(input:focus-visible),.rd .drawer-t:has(input:focus-visible){outline:2px solid var(--brand);outline-offset:2px}
+.rd .disc:has(#rd-fold:checked){grid-template-columns:60px minmax(0,1fr)}
+.rd .disc:has(#rd-fold:checked) .drawer-t svg{transform:rotate(180deg)}
+.rd .disc:has(#rd-fold:checked) .cl-h{padding:0 0 8px;justify-content:center}
+.rd .disc:has(#rd-fold:checked) .cl-h b,.rd .disc:has(#rd-fold:checked) .catlist .nm{display:none}
+.rd .disc:has(#rd-fold:checked) .catlist .ci{justify-content:center;padding:3px 0}
+.rd{border-radius:16px}
+</style>
+<div class="rd">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1.5"/><rect x="14" y="4" width="6" height="6" rx="1.5"/><rect x="4" y="14" width="6" height="6" rx="1.5"/><rect x="14" y="14" width="6" height="6" rx="1.5"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+  <symbol id="i-all" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></symbol>
+  <symbol id="i-dance" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><path d="M12 7v6l-4 7M12 13l4 7M7 9l5-2 5 3"/></symbol>
+  <symbol id="i-mount" viewBox="0 0 24 24"><path d="m3 20 6-10 4 6 3-4 5 8z"/><circle cx="16" cy="6" r="2"/></symbol>
+  <symbol id="i-hobby" viewBox="0 0 24 24"><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z"/></symbol>
+  <symbol id="i-comm" viewBox="0 0 24 24"><path d="M12 3l6 9h-4l4 6H6l4-6H6z"/><path d="M12 18v3"/></symbol>
+  <symbol id="i-pol" viewBox="0 0 24 24"><path d="M3 10v4h4l8 5V5l-8 5z"/><path d="M18 9a4 4 0 0 1 0 6"/></symbol>
+  <symbol id="i-pets" viewBox="0 0 24 24"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 11c-3 0-5 4-5 6.5 0 1.5 1.5 2 2.5 2 1 0 1.5-.6 2.5-.6s1.5.6 2.5.6 2.5-.5 2.5-2c0-2.5-2-6.5-5-6.5z"/></symbol>
+  <symbol id="i-art" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.5-4-8-9-8z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></symbol>
+  <symbol id="i-rel" viewBox="0 0 24 24"><path d="M12 3c1.5 2 1.5 3 0 4.5-1.5-1.5-1.5-2.5 0-4.5z"/><path d="M9 10h6v11H9z"/></symbol>
+  <symbol id="i-social" viewBox="0 0 24 24"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M16 11h2a2 2 0 0 1 0 4h-2M8 3v3M12 3v3"/></symbol>
+  <symbol id="i-games" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/><circle cx="15" cy="9" r="1"/><circle cx="9" cy="15" r="1"/></symbol>
+  <symbol id="i-sport" viewBox="0 0 24 24"><path d="M6 7v10M3 10v4M18 7v10M21 10v4M6 12h12"/></symbol>
+  <symbol id="i-family" viewBox="0 0 24 24"><circle cx="8" cy="6" r="2.5"/><circle cx="16.5" cy="9" r="2"/><path d="M4 20c0-4 2-7 4-7s4 3 4 7M13 20c0-3 1.5-5.5 3.5-5.5S20 17 20 20"/></symbol>
+  <symbol id="i-well" viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 15-14 0 9-6 15-14 15"/><path d="M5 19l7-7"/></symbol>
+  <symbol id="i-edu" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .6 3.3 2.6 3.5 5.5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></symbol>
+</svg>
+
+<div class="wrap">
+<header class="intro">
+  <span class="status">Discussion only · nothing is being built from this page</span>
+  <h1>Ejam kopā: the new look</h1>
+  <p>Round three. Your notes from the last pass are applied: natural colours (three to compare, switch below), one text font with its own small italic, a dot only on the category, quieter subcategories, category icons in a drawer that folds to an icon rail, the group title fully inside the header, and the header for a signed-in person.</p>
+  <div class="palbar" role="radiogroup" aria-label="Colour to preview"><span>Preview the page in:</span>
+<label><input type="radio" name="rd-pal" id="pal-moss" checked><i style="--p:#4B5E3B"></i>Sūna</label>
+<label><input type="radio" name="rd-pal" id="pal-sea"><i style="--p:#34586A"></i>Jūra</label>
+<label><input type="radio" name="rd-pal" id="pal-rye"><i style="--p:#5E4A38"></i>Rudzu maize</label></div>
+</header>
+
+<section aria-labelledby="h-id">
+  <h2 id="h-id">The identity, from your notes</h2>
+  <p class="lead">Literata for headings and the logo only. Commissioner for everything else, including the small italic notes. Soft corners, thin dividing lines, quiet labels. Colour from nature, on a neutral background with no red in it.</p>
+  <div class="idgrid">
+    <div class="box"><span class="lbl">Wordmark</span>
+      <span class="wm">Ejam <em>kopā</em></span>
+      <div class="row"><span class="wm sm">Ejam <em>kopā</em></span><span class="mk" aria-label="Small icon"></span></div>
+      <p class="why">Literata, with "kopā" in italic, and two overlapping circles for two people. The circles alone are the small icon.</p>
+    </div>
+    <div class="box"><span class="lbl">Colour, three natural options</span>
+      <div class="swl">
+        <div><span class="sw" style="--s:#4B5E3B"></span><span><b>Sūna (moss)</b><small>#4B5E3B · muted olive, far from the bright green categories</small></span></div>
+        <div><span class="sw" style="--s:#34586A"></span><span><b>Jūra (Baltic sea)</b><small>#34586A · grey-blue, darker than Sports and Religion</small></span></div>
+        <div><span class="sw" style="--s:#5E4A38"></span><span><b>Rudzu maize (rye bread)</b><small>#5E4A38 · warm brown, no category is brown</small></span></div>
+      </div>
+      <p class="why">Each comes with a neutral background tuned to it (no pink). Use the switch at the top to see the whole page in each.</p>
+    </div>
+    <div class="box"><span class="lbl">Shapes and labels</span>
+      <div class="row"><span class="btn p">Pieteikties</span><span class="btn s">Vairāk</span></div>
+      <div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="tag">Jelgava</span><span class="tag">12 biedri</span></div>
+      <p class="why">Soft corners, pill buttons, no borders. The dot belongs to the category only; city and size are plain quiet text.</p>
+    </div>
+    <div class="box wide"><span class="lbl">Type · Literata headings, Commissioner text</span>
+      <p class="spec-h">Meklē bundzinieku Jelgavā</p>
+      <p class="spec-b">Glāžšķūņa rūķīši dzērumā čiepj Baha koncertflīģeļu vākus. Tiekamies otrdienās 19:00 Ģimnāzijas ielā, iesācēji gaidīti.</p>
+      <p class="spec-i">Nākamā tikšanās: sestdien, 12. oktobrī</p>
+      <p class="why">Two fonts only. The human notes (next meeting, "what we're looking for") are the text font, smaller and in italic, in the site colour.</p>
+    </div>
+    <div class="box"><span class="lbl">On a card</span>
+      <div class="gc" style="--c:#10B981;background:var(--bg)"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note">Nākamā tikšanās: sest., 12. okt.</div></div>
+    </div>
+  </div>
+  <ul class="from">
+    <li><b>Fonts</b><span>Literata + Commissioner; notes in the text font, small and italic ("fonts are too diverse")</span></li>
+    <li><b>Corners, softness</b><span>Handwriting direction: "softness and humanness"</span></li>
+    <li><b>Dividing lines</b><span>Booklet direction: horizontal lines cleanly separating content</span></li>
+    <li><b>Labels</b><span>Dot on the category only; subcategories after it, smaller and lighter, as many as the group has</span></li>
+    <li><b>Colour</b><span>Plum and the pinkish background dropped; natural colours instead</span></li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-disc">
+  <h2 id="h-disc">Discovery in the new look</h2>
+  <p class="lead">Categories keep their icons and sit in a drawer. Open, it shows all 15 with names; folded (the arrow), it becomes a rail of icons and the groups get the room. Events and cards show the category and its subcategories.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · signed out (try the arrow next to "Kategorijas")</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Visa Latvija</span><span class="btn p sm">Ienākt</span></div>
+        <div class="disc" id="disc">
+          <div class="catlist">
+            <div class="cl-h"><b>Kategorijas</b><label class="drawer-t" title="Fold or open categories"><input type="checkbox" id="rd-fold" class="sr"><svg class="i"><use href="#i-left"/></svg></label></div>
+            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span><span class="nm">Visas</span></span>
+            <span class="ci" style="--c:#10B981"><span class="ic"><svg><use href="#i-mount"/></svg></span><span class="nm">Ceļošana un daba</span></span>
+            <span class="ci" style="--c:#F43F5E"><span class="ic"><svg><use href="#i-dance"/></svg></span><span class="nm">Dejas</span></span>
+            <span class="ci" style="--c:#F97316"><span class="ic"><svg><use href="#i-hobby"/></svg></span><span class="nm">Hobiji un aizraušanās</span></span>
+            <span class="ci" style="--c:#22C55E"><span class="ic"><svg><use href="#i-comm"/></svg></span><span class="nm">Kopiena un vide</span></span>
+            <span class="ci" style="--c:#EF4444"><span class="ic"><svg><use href="#i-pol"/></svg></span><span class="nm">Kustības un politika</span></span>
+            <span class="ci" style="--c:#84CC16"><span class="ic"><svg><use href="#i-pets"/></svg></span><span class="nm">Mājdzīvnieki</span></span>
+            <span class="ci" style="--c:#D946EF"><span class="ic"><svg><use href="#i-art"/></svg></span><span class="nm">Māksla un kultūra</span></span>
+            <span class="ci" style="--c:#6366F1"><span class="ic"><svg><use href="#i-music"/></svg></span><span class="nm">Mūzika</span></span>
+            <span class="ci" style="--c:#64748B"><span class="ic"><svg><use href="#i-rel"/></svg></span><span class="nm">Reliģija un garīgums</span></span>
+            <span class="ci" style="--c:#EC4899"><span class="ic"><svg><use href="#i-social"/></svg></span><span class="nm">Sociālās aktivitātes</span></span>
+            <span class="ci" style="--c:#8B5CF6"><span class="ic"><svg><use href="#i-games"/></svg></span><span class="nm">Spēles</span></span>
+            <span class="ci" style="--c:#3B82F6"><span class="ic"><svg><use href="#i-sport"/></svg></span><span class="nm">Sports un fitness</span></span>
+            <span class="ci" style="--c:#0EA5E9"><span class="ic"><svg><use href="#i-family"/></svg></span><span class="nm">Vecāki un ģimene</span></span>
+            <span class="ci" style="--c:#14B8A6"><span class="ic"><svg><use href="#i-well"/></svg></span><span class="nm">Veselība un labsajūta</span></span>
+            <span class="ci" style="--c:#F59E0B"><span class="ic"><svg><use href="#i-edu"/></svg></span><span class="nm">Zinātne un izglītība</span></span>
+          </div>
+          <div class="pg">
+            <div class="hello"><h3>Ko tu gribētu darīt?</h3><p>Atrodi cilvēkus, ar kuriem darīt to, kas tev patīk.</p></div>
+            <div class="row-h"><h4>Šonedēļ notiek</h4><small>Visi pasākumi →</small></div>
+            <div class="evlist">
+              <div class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span><i>Būsi viens no pirmajiem</i></div></span></div>
+              <div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri · <span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4<div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></span></div>
+            </div>
+            <div class="row-h"><h4>Grupas</h4><small>26</small></div>
+            <div class="gcards">
+              <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
+              <div class="gc" style="--c:#10B981"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+              <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b>Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cap" style="margin-top:12px">Desktop header · signed in</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="btn p sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span><span class="ico" aria-label="Ziņas, 2 nelasītas"><svg class="i"><use href="#i-msg"/></svg><span class="dot"></span></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+      </div>
+      <p class="lead" style="font-size:14px;margin-top:6px">Signed in: the place you chose replaces "Visa Latvija", "Izveidot grupu" is the one filled button, messages and notifications show a dot only when something is unread, and the avatar opens the profile menu (language and theme live there).</p>
+    </div>
+    <div class="shot">
+      <div class="cap">Phone · signed in</div>
+      <div class="mob">
+        <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="pg" style="padding:16px 14px;gap:14px">
+          <div class="hello"><h3 style="font-size:23px">Ko tu gribētu darīt?</h3></div>
+          <span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span>
+          <div class="row"><span class="btn s sm"><svg class="i"><use href="#i-grid"/></svg>Kategorijas</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span></div>
+          <div class="evlist" style="padding-inline:12px"><div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri<div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="sub">Pārgājieni</span></div></span></div></div>
+          <div class="gc" style="--c:#F43F5E"><div class="pic" style="height:70px"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
+        </div>
+        <div class="navb"><span class="on"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-plus"/></svg>Izveidot</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-group">
+  <h2 id="h-group">A group page in the new look</h2>
+  <p class="lead">The title now sits fully inside the coloured header zone instead of on its edge. Below it, tabs for the group's pages; inside a page, a small switch or a list of contents.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · Information · signed in</div>
+      <div class="desk" style="--c:#10B981">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="ghead">
+          <div class="gban">
+            <div class="gid"><span class="gpic"></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
+          </div>
+          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
+        </div>
+        <div class="gbody">
+          <div class="art">
+            <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
+            <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas. Apmēram 3 stundas, 10–12 km.</p></div>
+            <div><h4>Ko meklējam</h4><p>Gaidām iesācējus, arī tos, kas staigā lēni.</p></div>
+          </div>
+          <div class="side">
+            <div class="toc"><b>Šajā lapā</b><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Ko meklējam</span></div>
+            <div class="evlist" style="padding-inline:14px"><div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00</span></div><div class="ev"><span class="faces"><i style="background:#c9b8a6;width:26px;height:26px"></i><i style="background:#a8bfa0;width:26px;height:26px"></i><i style="background:#d6a99a;width:26px;height:26px"></i></span><span class="t">Līga, Oskars un Anna</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="cap">Phone · Events tab (compact header)</div>
+      <div class="mob" style="--c:#10B981">
+        <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="ghead">
+          <div class="gban" style="padding:14px"><div class="slimbar" style="padding:0"><span class="gpic"></span><div style="flex:1;min-width:0"><b style="font:600 17px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="tag">Rīga · 3</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
+          <div class="gtabs" style="padding:12px 14px 0;gap:16px"><span>Info</span><span class="on">Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
+        </div>
+        <div class="pg" style="padding:14px;gap:12px">
+          <div class="subsw"><span class="on">Gaidāmie</span><span>Pagājušie</span></div>
+          <div class="evlist" style="padding-inline:12px">
+            <div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri<br><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i></span>Anna un vēl 5</span></div>
+            <div class="ev"><span class="date"><small>okt</small><b>26</b></span><span class="t"><b>Gaujas krasts</b>Sv. 09:30 · Sigulda<br><i>Būsi viens no pirmajiem</i></span></div>
+          </div>
+        </div>
+        <div class="navb"><span><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span class="on"><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-plus"/></svg>Izveidot</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="h-agreed">
+  <h2 id="h-agreed">Agreed so far</h2>
+  <ul class="agreed">
+    <li><b>Identity first</b><p>No screen is redesigned before the identity is settled. This page stays discussion only.</p></li>
+    <li><b>Fonts and shapes</b><p>Literata headings, Commissioner text with small italic notes; soft corners, pill buttons, thin dividing lines, quiet labels.</p></li>
+    <li><b>Colour means category</b><p>The 15 category colours appear only as dots, icons, soft tints and pictures, never as buttons. The site's own colour is natural and none of them.</p></li>
+    <li><b>Categories with icons, in a drawer</b><p>All 15 always listed, alphabetical, each with its icon. The drawer folds to an icon rail on desktop; on phones a "Kategorijas" sheet.</p></li>
+    <li><b>Subcategories matter</b><p>Shown after the category on cards, events and the group header: all of them, smaller and lighter than the category.</p></li>
+    <li><b>"Ko meklējam?"</b><p>A new optional group field (up to 60 characters) shown as the card's note; when empty, the card shows the next meeting.</p></li>
+    <li><b>Two levels of group navigation</b><p>Tabs for the group's pages; a small switch inside a page (Events: upcoming · past; Members: members · requests; Settings: group · sections · owner).</p></li>
+    <li><b>Encourage, don't count</b><p>Faces of who is coming instead of "0 apstiprināti"; sentence case, no capitals.</p></li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-open">
+  <h2 id="h-open">Still open</h2>
+  <div class="open">
+    <div><b>Which natural colour?</b><p>Sūna, Jūra or Rudzu maize. Switch at the top and comment.</p></div>
+    <div><b>Group tabs replace the group sidebar</b><p>The layouts above assume it. Confirm, or say what the sidebar should keep.</p></div>
+    <div><b>Then</b><p>Once both are settled, the agreed parts become Handbook rules and real components, screen by screen, starting with discovery.</p></div>
+  </div>
+</section>
+
+<details class="old">
+  <summary>The three starting directions (A, B, C)</summary>
+  <div class="inner">
+<article class="dir dA">
+    <header class="dir-h"><span class="dir-n">A</span><div><h3>Ziņojumu dēlis</h3><p>The community notice board. Plain, public and very readable, like a well-made sign in a library or a town hall. Trustworthy rather than charming.</p></div></header>
+    <div class="dir-grid">
+      <div class="tile mark-tile"><span class="lbl">Wordmark</span>
+        <div class="wm wmA">Ejam kopā</div>
+        <div class="wm-row"><span class="wm wmA sm">Ejam kopā</span><span class="badgeA">EK</span></div>
+        <p class="why">Heavy, upright, in the site colour. The macron of "ā" is stretched into a bar under the word: the road we go along together. The bar on its own works as the small icon.</p>
+      </div>
+      <div class="tile"><span class="lbl">Site colour</span>
+        <div class="sw-row"><span class="sw" style="--s:var(--a-brand)"></span><div><b>Daugavas zils</b><small>#1E3A5F · buttons, links, the logo</small></div></div>
+        <div class="sw-row"><span class="sw" style="--s:var(--a-paper)"></span><div><b>Paper</b><small>cool white, grey borders</small></div></div>
+        <p class="why">Nearest category colour: Sports (#3B82F6), but much darker and greyer, so the two never read as the same.</p>
+      </div>
+      <div class="tile type-tile"><span class="lbl">Type · Atkinson Hyperlegible Next, one family</span>
+        <p class="t-h">Meklē bundzinieku Jelgavā</p>
+        <p class="t-b">Glāžšķūņa rūķīši dzērumā čiepj Baha koncertflīģeļu vākus. Tiekamies otrdienās 19:00 Ģimnāzijas ielā, iesācēji gaidīti.</p>
+        <p class="why">Designed for people with low vision: every letter is easy to tell apart (I l 1, O 0). Unusual enough not to look generated, but never decorative.</p>
+      </div>
+      <div class="tile"><span class="lbl">Shapes</span>
+        <div class="shape-demo"><span class="btnA">Pieteikties</span><span class="btnA o">Vairāk</span></div>
+        <div class="shape-demo"><span class="chipA">Dejas</span><span class="chipA">Jelgava</span><span class="chipA">12 biedri</span></div>
+        <p class="why">4 px corners, firm 1.5 px borders, no shadows. Chips are small rectangles like labels on a board.</p>
+      </div>
+      <div class="tile card-tile"><span class="lbl">On a card</span>
+        <div class="cardA" style="--c:#10B981"><div class="pA"></div><div class="iA"><b>Pārgājieni</b><span class="sA"><i></i>Ceļošana · Kempings</span><span class="mA">Rīga · 3 biedri</span><span class="nA">Nākamā tikšanās: sest., 12. okt.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Direction B -->
+  <article class="dir dB">
+    <header class="dir-h"><span class="dir-n">B</span><div><h3>Rokraksts</h3><p>Handwriting. Warm and human, like a note left on the kitchen table or a choir's hand-made programme. The friendliest of the three.</p></div></header>
+    <div class="dir-grid">
+      <div class="tile mark-tile"><span class="lbl">Wordmark</span>
+        <div class="wm wmB">Ejam kopā</div>
+        <div class="wm-row"><span class="wm wmB sm">Ejam kopā</span><span class="badgeB">ek</span></div>
+        <p class="why">A calligraphic serif in lowercase, with two small overlapping circles after it: two people. The circles alone are the icon.</p>
+      </div>
+      <div class="tile"><span class="lbl">Site colour</span>
+        <div class="sw-row"><span class="sw" style="--s:var(--b-brand)"></span><div><b>Dzērveņu</b><small>#7A2440 · buttons, links, the logo</small></div></div>
+        <div class="sw-row"><span class="sw" style="--s:var(--b-paper)"></span><div><b>Paper</b><small>light linen, no borders</small></div></div>
+        <p class="why">Nearest category colour: Dancing (#F43F5E). Cranberry is far darker and bluer, closer to wine than to pink.</p>
+      </div>
+      <div class="tile type-tile"><span class="lbl">Type · Alegreya headings, Alegreya Sans text</span>
+        <p class="t-h">Meklē bundzinieku Jelgavā</p>
+        <p class="t-b">Glāžšķūņa rūķīši dzērumā čiepj Baha koncertflīģeļu vākus. Tiekamies otrdienās 19:00 Ģimnāzijas ielā, iesācēji gaidīti.</p>
+        <p class="why">A matched serif and sans from the same designers, with roots in pen writing. Lively and literary, still easy to read in long text.</p>
+      </div>
+      <div class="tile"><span class="lbl">Shapes</span>
+        <div class="shape-demo"><span class="btnB">Pieteikties</span><span class="btnB o">Vairāk</span></div>
+        <div class="shape-demo"><span class="chipB">Dejas</span><span class="chipB">Jelgava</span><span class="chipB">12 biedri</span></div>
+        <p class="why">Soft 16 px corners, no borders: surfaces are set apart by a light tint instead. Round avatars, pill buttons.</p>
+      </div>
+      <div class="tile card-tile"><span class="lbl">On a card</span>
+        <div class="cardB" style="--c:#10B981"><div class="pB"></div><div class="iB"><b>Pārgājieni</b><span class="sB"><i></i>Ceļošana · Kempings</span><span class="mB">Rīga · 3 biedri</span><span class="nB">Nākamā tikšanās: sest., 12. okt.</span></div></div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Direction C -->
+  <article class="dir dC">
+    <header class="dir-h"><span class="dir-n">C</span><div><h3>Dziesmu svētku buklets</h3><p>The song festival booklet. Classic print: a serif for headings, clean text, thin rules, generous white space. Calm and a little dignified.</p></div></header>
+    <div class="dir-grid">
+      <div class="tile mark-tile"><span class="lbl">Wordmark</span>
+        <div class="wm wmC">Ejam <em>kopā</em></div>
+        <div class="wm-row"><span class="wm wmC sm">Ejam <em>kopā</em></span><span class="badgeC">E·K</span></div>
+        <p class="why">A book serif, "kopā" in italic: the word that matters is the one that sounds different. A thin rule above and below on larger uses, like a printed title page.</p>
+      </div>
+      <div class="tile"><span class="lbl">Site colour</span>
+        <div class="sw-row"><span class="sw" style="--s:var(--c-brand)"></span><div><b>Skuju zaļš</b><small>#244A3B · buttons, links, the logo</small></div></div>
+        <div class="sw-row"><span class="sw" style="--s:var(--c-paper)"></span><div><b>Paper</b><small>plain white, hairline rules</small></div></div>
+        <p class="why">Nearest category colours: Travel and Community (bright greens). Pine is almost black-green, so it reads as ink, not as a category.</p>
+      </div>
+      <div class="tile type-tile"><span class="lbl">Type · Literata headings, Commissioner text</span>
+        <p class="t-h">Meklē bundzinieku Jelgavā</p>
+        <p class="t-b">Glāžšķūņa rūķīši dzērumā čiepj Baha koncertflīģeļu vākus. Tiekamies otrdienās 19:00 Ģimnāzijas ielā, iesācēji gaidīti.</p>
+        <p class="why">Literata was made for reading books on screens; Commissioner is a warm sans with slightly flared ends. Classic without looking old.</p>
+      </div>
+      <div class="tile"><span class="lbl">Shapes</span>
+        <div class="shape-demo"><span class="btnC">Pieteikties</span><span class="btnC o">Vairāk</span></div>
+        <div class="shape-demo"><span class="chipC">Dejas</span><span class="chipC">Jelgava</span><span class="chipC">12 biedri</span></div>
+        <p class="why">Square corners (2 px), hairline rules between things instead of boxes around them, underlined tabs. Chips are plain text with a dot.</p>
+      </div>
+      <div class="tile card-tile"><span class="lbl">On a card</span>
+        <div class="cardC" style="--c:#10B981"><div class="pC"></div><div class="iC"><b>Pārgājieni</b><span class="sC"><i></i>Ceļošana · Kempings</span><span class="mC">Rīga · 3 biedri</span><span class="nC">Nākamā tikšanās: sest., 12. okt.</span></div></div>
+      </div>
+    </div>
+  </article>
+  </div>
+</details>
+
+<details class="old">
+  <summary>What I saw on the live site (10 October)</summary>
+  <ul class="saw">
+    <li><b>The brand has no fixed face.</b> "EK" badge, spaced capitals, a gradient slogan; on a group page the logo takes the group's colour.</li>
+    <li><b>The site's purple is a category colour.</b> Indigo buttons match the Music category; every page has a different main colour.</li>
+    <li><b>A wall of 15 coloured icons</b> opens discovery and pushes the groups aside.</li>
+    <li><b>Cards are mostly photo;</b> the useful facts are small.</li>
+    <li><b>Capital letters everywhere</b> read as shouting.</li>
+    <li><b>Two navigations on a group</b> (sidebar and tabs) around very little content.</li>
+    <li><b>Numbers that discourage:</b> "0 apstiprināti", "1 Pasākumi atrasti".</li>
+    <li><b>Settings in the spotlight:</b> language and theme switches in every header.</li>
+  </ul>
+</details>
+</div>
+</div>

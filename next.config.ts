@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
     '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*'],
+    '/[locale]/admin/handbook/redesign': ['./docs/handbook/**/*'],
   },
   images: {
     remotePatterns: [

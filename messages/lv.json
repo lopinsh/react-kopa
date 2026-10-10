@@ -540,6 +540,7 @@
       "onThisPage": "Šajā lapā",
       "note": "Iekšējs dokuments, tikai angliski. Avots: docs/handbook repozitorijā.",
       "uiElements": "Saskarnes elementi",
+      "redesign": "Pārveide (diskusija)",
       "ui": {
         "title": "Saskarnes elementi",
         "intro": "Visi kopīgie komponenti tādi, kādi tie šobrīd ir vietnē, uzbūvēti no īstā koda ar parauga datiem. Parakstā ir komponenta data-ui nosaukums (to rāda atsauksmju režīms) un fails, tāpēc piezīme pie parauga ved tieši uz kodu.",

@@ -82,4 +82,9 @@ export const HandbookService = {
         const { title, headings } = parse(markdown);
         return { slug, title, markdown, headings };
     },
+
+    /** The redesign discussion page: a self-contained, scoped HTML fragment kept in `docs/handbook/redesign.html`. */
+    async getRedesignHtml(): Promise<string> {
+        return fs.readFile(path.join(HANDBOOK_DIR, 'redesign.html'), 'utf8');
+    },
 };
