@@ -59,7 +59,7 @@ function resolvedAtFor(status: FeedbackStatusValue): Date | null {
 async function updateNote(id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
     const parsed = updateFeedbackSchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
-    const existing = await prisma.feedback.findUnique({ where: { id }, select: { id: true } });
+    const existing = await prisma.feedback.findUnique({ where: { id }, select: { status: true } });
     if (!existing) return { success: false, error: 'NOT_FOUND' };
 
     const row = await prisma.feedback.update({
@@ -67,7 +67,8 @@ async function updateNote(id: string, input: unknown): Promise<FeedbackResult<Fe
         data: {
             status: parsed.data.status,
             reply: parsed.data.reply === undefined ? undefined : parsed.data.reply || null,
-            resolvedAt: resolvedAtFor(parsed.data.status),
+            // Only a status change moves the time; editing just the reply keeps when it was resolved.
+            resolvedAt: existing.status === parsed.data.status ? undefined : resolvedAtFor(parsed.data.status),
         },
         ...itemArgs,
     });
