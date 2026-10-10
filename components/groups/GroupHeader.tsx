@@ -58,14 +58,15 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const handleMembership = () => {
         gateAction(() => {
-            if (isMember) return;
+            // Members and people with a request already waiting have nothing to send here.
+            if (isMember || userRole === 'PENDING') return;
             setContactModalOpen(true);
         }, 'join_group');
     };
 
-    // Auto-resume action after login
+    // Auto-resume action after login. The stored URL keeps the locale prefix, which next-intl's pathname drops.
     useEffect(() => {
-        if (isAuthenticated && pendingAction === 'join_group' && pendingUrl === pathname) {
+        if (isAuthenticated && pendingAction === 'join_group' && pendingUrl === window.location.pathname) {
             clearPendingAction();
             handleMembership();
         }
