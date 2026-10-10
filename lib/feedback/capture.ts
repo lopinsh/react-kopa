@@ -121,6 +121,7 @@ export function buildScopeHtml(el: Element): string {
         }
         for (const attr of Array.from(node.attributes)) {
             if (attr.name === 'style' || attr.name.startsWith('data-feedback')) node.removeAttribute(attr.name);
+            else if (attr.name !== 'class' && attr.value.length > SCOPE_TEXT_MAX) node.setAttribute(attr.name, attr.value.slice(0, SCOPE_TEXT_MAX) + '…');
         }
         if (node.hasAttribute('class')) {
             const kept = ownClasses(node, 3);
@@ -160,7 +161,7 @@ export function locate(el: Element): ElementLocator {
         breadcrumb: buildBreadcrumb(el),
         outerHtml: buildScopeHtml(el),
         heading: nearestHeading(el),
-        commit: (process.env.NEXT_PUBLIC_COMMIT_SHA ?? 'dev').slice(0, 40),
+        commit: (process.env.NEXT_PUBLIC_COMMIT_SHA || 'dev').slice(0, 40),
         boxX: Math.round(rect.left + window.scrollX),
         boxY: Math.round(rect.top + window.scrollY),
         boxW: Math.round(rect.width),
