@@ -26,9 +26,9 @@ interface Note {
     selector: string;
     elementText: string;
     component: string | null;
-    xpath?: string | null;
-    cssPath?: string | null;
+    breadcrumb?: string | null;
     outerHtml?: string | null;
+    commit?: string | null;
     heading?: string | null;
     box?: { x: number; y: number; w: number; h: number } | null;
     reply: string | null;
@@ -80,15 +80,18 @@ function printNote(note: Note): void {
     console.log(`- Page: /${note.locale}${note.path === '/' ? '' : note.path}`);
     if (note.component) console.log(`- Component: ${note.component}`);
     console.log(`- Element: \`${note.selector}\`${note.elementText ? ` ("${note.elementText}")` : ''}`);
+    if (note.breadcrumb) console.log(`- Breadcrumb: ${note.breadcrumb}`);
     if (note.heading) console.log(`- Under heading: "${note.heading}"`);
-    if (note.outerHtml) console.log(`- Tag: \`${note.outerHtml}\``);
-    if (note.cssPath) console.log(`- CSS path: \`${note.cssPath}\``);
-    if (note.xpath) console.log(`- XPath: \`${note.xpath}\``);
-    if (note.box) console.log(`- Box: x ${note.box.x}, y ${note.box.y}, ${note.box.w}x${note.box.h} px (page coordinates)`);
+    if (note.box) {
+        const share = note.viewportW > 0 ? Math.round((note.box.w / note.viewportW) * 100) : 0;
+        console.log(`- Box: x ${note.box.x}, y ${note.box.y}, ${note.box.w}x${note.box.h} px (page coordinates), ${share}% of viewport width`);
+    }
+    if (note.commit) console.log(`- Built from commit: ${note.commit}`);
     console.log(`- Viewport: ${note.viewportW}x${note.viewportH}, ${note.theme} theme`);
     console.log(`- By: ${note.authorName ?? 'unknown'}, ${date} UTC`);
     if (note.reply) console.log(`- Reply: ${note.reply}`);
     console.log(`\n${note.text}\n`);
+    if (note.outerHtml) console.log(`Scope HTML:\n\`\`\`html\n${note.outerHtml}\n\`\`\`\n`);
 }
 
 async function list(): Promise<void> {

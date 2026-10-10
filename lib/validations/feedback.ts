@@ -15,9 +15,11 @@ export const createFeedbackSchema = z.object({
     /** `data-ui` name of the component the note was left on; null when it was left outside any named element. */
     component: z.enum(UI_NAMES).nullable().optional(),
     /** Exact location of the element, so an agent can find it even without a name or text. */
-    xpath: z.string().max(1500).nullable().optional(),
-    cssPath: z.string().max(2000).nullable().optional(),
-    outerHtml: z.string().max(500).nullable().optional(),
+    breadcrumb: z.string().max(600).nullable().optional(),
+    /** Trimmed HTML of the element (scope), not the whole page. */
+    outerHtml: z.string().max(1500).nullable().optional(),
+    /** Git commit the page was built from ('dev' locally). */
+    commit: z.string().max(40).nullable().optional(),
     heading: z.string().max(200).nullable().optional(),
     boxX: z.number().int().min(-100000).max(1000000).nullable().optional(),
     boxY: z.number().int().min(-100000).max(1000000).nullable().optional(),

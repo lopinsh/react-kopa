@@ -445,11 +445,11 @@ model Feedback {
   elementText String
   /// Stable UI-element name (data-ui) the note was left on; null for free clicks outside any named element.
   component   String?
-  /// Exact address of the element the outline was on: absolute XPath and a full CSS path (classes + :nth-child).
-  xpath       String?
-  cssPath     String?
-  /// Opening tag of the element, the nearest heading above it, and its box in page pixels.
+  /// Readable path of the meaningful ancestors down to the element, e.g. `main > section "Title" > group-header > span.gpic (40x40, empty)`.
+  breadcrumb  String?
+  /// Trimmed HTML of the element (scope), the git commit it was built from, the nearest heading above it, and its box in page pixels.
   outerHtml   String?
+  commit      String?
   heading     String?
   boxX        Int?
   boxY        Int?

@@ -47,57 +47,94 @@ export function buildSelector(el: Element): string {
 }
 
 export interface ElementLocator {
-    xpath: string;
-    cssPath: string;
+    breadcrumb: string;
     outerHtml: string;
     heading: string | null;
+    commit: string;
     boxX: number;
     boxY: number;
     boxW: number;
     boxH: number;
 }
 
-/** Index among same-tag siblings (1-based), or 0 when the element is the only one of its tag. */
-function sameTagIndex(el: Element): number {
-    const parent = el.parentElement;
-    if (!parent) return 0;
-    const same = Array.from(parent.children).filter((c) => c.tagName === el.tagName);
-    return same.length > 1 ? same.indexOf(el) + 1 : 0;
+const UTILITY_CLASS = /[:[/]|^-?(?:p[xytrbl]?|m[xytrbl]?|w|h|gap|min|max|shadow|font|leading|tracking|text|bg|border|rounded|flex|grid|items|justify|container|inline|block|hidden|absolute|relative|fixed|sticky|overflow|z|top|left|right|bottom|inset|opacity|transition|duration|ease|cursor|select|space|col|row|order|self|place|object|aspect|size|ring|outline|fill|stroke|truncate|whitespace|underline|uppercase|lowercase|capitalize|sr-only|pointer-events|animate|backdrop|blur|from|to|via|line|break|list|decoration|tabular|tap)(?:-|$)/;
+
+/** Classes worth showing: the project's own names, not Tailwind utilities. */
+function ownClasses(el: Element, max: number): string[] {
+    return Array.from(el.classList).filter((c) => !UTILITY_CLASS.test(c)).slice(0, max);
 }
 
-/** Absolute XPath from <html>, e.g. `/html/body/div[2]/main/div/section[3]/span[1]`. Needs no ids or classes. */
-export function buildXPath(el: Element): string {
-    const steps: string[] = [];
-    for (let node: Element | null = el; node; node = node.parentElement) {
-        const index = sameTagIndex(node);
-        steps.unshift(`${node.tagName.toLowerCase()}${index ? `[${index}]` : ''}`);
+const LANDMARKS = new Set(['main', 'nav', 'header', 'footer', 'aside', 'dialog']);
+
+function firstHeading(el: Element): string {
+    const h = el.querySelector('h1, h2, h3');
+    return h ? visibleText(h).slice(0, 60) : '';
+}
+
+/** One step of the breadcrumb for an ancestor, or null when it carries no meaning. */
+function ancestorLabel(el: Element): string | null {
+    const ui = el.getAttribute('data-ui');
+    if (ui) return ui;
+    const tag = el.tagName.toLowerCase();
+    if (tag === 'section' || tag === 'article') {
+        const title = firstHeading(el);
+        return title ? `${tag} "${title}"` : tag;
     }
-    return `/${steps.join('/')}`.slice(0, 1500);
+    if (el.getAttribute('role') === 'dialog') return 'dialog';
+    if (LANDMARKS.has(tag)) return tag;
+    const label = el.getAttribute('aria-label');
+    if (label) return `"${label.slice(0, 60)}"`;
+    if (isStableId(el.id)) return `#${el.id}`;
+    return null;
 }
 
-/** Readable CSS path like DevTools "Copy selector": tag.classes:nth-child(n) steps, starting at the nearest stable id. */
-export function buildCssPath(el: Element): string {
+/**
+ * A readable path of the meaningful ancestors, ending with the element itself, e.g.
+ * `main › section "A group page" › group-header › span.gpic (40×40, empty)`.
+ */
+export function buildBreadcrumb(el: Element): string {
+    const rect = el.getBoundingClientRect();
+    const classes = ownClasses(el, 2).map((c) => `.${c}`).join('');
+    const empty = visibleText(el) === '' ? ', empty' : '';
+    const self = `${el.tagName.toLowerCase()}${classes} (${Math.round(rect.width)}\u00d7${Math.round(rect.height)}${empty})`;
     const steps: string[] = [];
-    for (let node: Element | null = el; node && node !== document.documentElement; node = node.parentElement) {
-        if (isStableId(node.id)) {
-            steps.unshift(`#${CSS.escape(node.id)}`);
-            break;
+    for (let node = el.parentElement; node && node !== document.body && node !== document.documentElement; node = node.parentElement) {
+        const label = ancestorLabel(node);
+        if (label && label !== steps[0]) steps.unshift(label);
+    }
+    return [...steps, self].join(' \u203a ').slice(0, 600);
+}
+
+const SCOPE_HTML_MAX = 1500;
+const SCOPE_TEXT_MAX = 80;
+
+/** A trimmed copy of the element's HTML: no scripts, styles or svg innards, short class lists, short text. */
+export function buildScopeHtml(el: Element): string {
+    const clone = el.cloneNode(true) as Element;
+    for (const node of Array.from(clone.querySelectorAll('script, style'))) node.remove();
+    for (const node of [clone, ...Array.from(clone.querySelectorAll('*'))]) {
+        if (node.tagName.toLowerCase() === 'svg') {
+            for (const attr of Array.from(node.attributes)) node.removeAttribute(attr.name);
+            node.replaceChildren();
+            node.setAttribute('data-svg', '');
+            continue;
         }
-        let step = node.tagName.toLowerCase();
-        const classes = Array.from(node.classList).filter((c) => !c.includes(':') && !c.includes('[')).slice(0, 4);
-        if (classes.length) step += classes.map((c) => `.${CSS.escape(c)}`).join('');
-        const parent = node.parentElement;
-        if (parent && parent.children.length > 1) step += `:nth-child(${Array.from(parent.children).indexOf(node) + 1})`;
-        steps.unshift(step);
+        for (const attr of Array.from(node.attributes)) {
+            if (attr.name === 'style' || attr.name.startsWith('data-feedback')) node.removeAttribute(attr.name);
+        }
+        if (node.hasAttribute('class')) {
+            const kept = ownClasses(node, 3);
+            if (kept.length) node.setAttribute('class', kept.join(' '));
+            else node.removeAttribute('class');
+        }
     }
-    return steps.join(' > ').slice(0, 2000);
-}
-
-/** The element's opening tag, e.g. `<span class="gpic">`, capped at 500 characters. */
-function openingTag(el: Element): string {
-    const html = el.outerHTML;
-    const end = html.indexOf('>');
-    return (end === -1 ? html : html.slice(0, end + 1)).slice(0, 500);
+    const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+        const text = (t.textContent ?? '').replace(/\s+/g, ' ');
+        t.textContent = text.length > SCOPE_TEXT_MAX ? `${text.slice(0, SCOPE_TEXT_MAX)}\u2026` : text;
+    }
+    const html = clone.outerHTML.replace(/ data-svg=""><\/svg>/g, '/>').replace(/>\s+</g, '><').trim();
+    return html.length > SCOPE_HTML_MAX ? `${html.slice(0, SCOPE_HTML_MAX - 1)}\u2026` : html;
 }
 
 /** "Section title › nearest heading before the element", e.g. "A group page in the new look › Ko meklējam". */
@@ -116,14 +153,14 @@ function nearestHeading(el: Element): string | null {
     return parts.length ? parts.join(' › ').slice(0, 200) : null;
 }
 
-/** Everything an agent needs to find the exact element again: both paths, its tag, the nearest heading and its box. */
+/** Everything an agent needs to find the exact element again: a breadcrumb, trimmed HTML, the nearest heading, the build and its box. */
 export function locate(el: Element): ElementLocator {
     const rect = el.getBoundingClientRect();
     return {
-        xpath: buildXPath(el),
-        cssPath: buildCssPath(el),
-        outerHtml: openingTag(el),
+        breadcrumb: buildBreadcrumb(el),
+        outerHtml: buildScopeHtml(el),
         heading: nearestHeading(el),
+        commit: (process.env.NEXT_PUBLIC_COMMIT_SHA ?? 'dev').slice(0, 40),
         boxX: Math.round(rect.left + window.scrollX),
         boxY: Math.round(rect.top + window.scrollY),
         boxW: Math.round(rect.width),

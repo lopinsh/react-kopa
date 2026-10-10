@@ -18,9 +18,9 @@ export interface FeedbackItem {
     selector: string;
     elementText: string;
     component: string | null;
-    xpath: string | null;
-    cssPath: string | null;
+    breadcrumb: string | null;
     outerHtml: string | null;
+    commit: string | null;
     heading: string | null;
     /** Element box in page pixels (from the top-left of the document) when the note was made. */
     box: { x: number; y: number; w: number; h: number } | null;
@@ -51,9 +51,9 @@ function toItem(row: Prisma.FeedbackGetPayload<typeof itemArgs>): FeedbackItem {
         selector: row.selector,
         elementText: row.elementText,
         component: row.component,
-        xpath: row.xpath,
-        cssPath: row.cssPath,
+        breadcrumb: row.breadcrumb,
         outerHtml: row.outerHtml,
+        commit: row.commit,
         heading: row.heading,
         box: row.boxX !== null && row.boxY !== null && row.boxW !== null && row.boxH !== null
             ? { x: row.boxX, y: row.boxY, w: row.boxW, h: row.boxH }
