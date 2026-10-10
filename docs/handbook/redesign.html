@@ -412,6 +412,73 @@ html.dark .rd{
 .rd .nt-full .nt-top a{font-size:13px;color:var(--brand);font-weight:600;padding-right:6px}
 .rd .nt-full .nt-i{padding-inline:14px}
 .rd .nt-full .nt-b .q{white-space:normal}
+.rd .cv-list{background:var(--surface);display:grid;min-width:0}
+.rd .cv-top{padding:14px 16px 12px;display:grid;gap:10px;border-bottom:1px solid var(--line)}
+.rd .cv-top b{font:600 18px var(--display)}
+.rd .cv-i{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:12px;padding:12px 16px;border-top:1px solid var(--line);align-items:start;min-width:0}
+.rd .cv-top+.cv-i{border-top:0}
+.rd .cv-i.on{background:var(--tint)}
+.rd .cv-i .t{display:grid;gap:1px;min-width:0}
+.rd .cv-i .t b{font:600 15px/1.3 var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .cv-i .q{font-size:12px;color:var(--muted);display:flex;gap:4px 8px;align-items:center;flex-wrap:wrap}
+.rd .cv-i .q .tag{font-size:12px;gap:5px}
+.rd .cv-i .q .tag.cat::before{width:7px;height:7px}
+.rd .cv-i .l{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .cv-i.u .l{color:var(--fg);font-weight:600}
+.rd .cv-i .tm{font-size:12px;color:var(--muted);display:grid;justify-items:end;gap:6px}
+.rd .cv-old .cv-i{grid-template-columns:40px minmax(0,1fr) auto}
+.rd .cv-old .av2{width:40px;height:40px;border-radius:50%;background:var(--tint);border:1px solid var(--line);display:grid;place-items:center;color:var(--muted);font:600 14px var(--body)}
+.rd .cv-old .t b{font:700 14px var(--body)}
+.rd .cv-old .gl{font-size:10px;font-weight:700;display:flex;align-items:center;gap:5px;color:var(--c)}
+.rd .cv-old .gl::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.rd .cv-pane{background:var(--bg);display:grid;grid-template-rows:auto 1fr;min-width:0}
+.rd .cv-head{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);min-width:0}
+.rd .cv-head .t{display:grid;min-width:0}
+.rd .cv-head .t b{font:600 16px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .cv-head .q{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .cv-msgs{padding:14px 16px 18px;display:grid;gap:10px;align-content:start}
+.rd .cv-sys{display:flex;align-items:center;gap:10px;font:italic 400 12px var(--body);color:var(--muted);text-align:center;margin:6px 0}
+.rd .cv-sys::before,.rd .cv-sys::after{content:"";flex:1;height:1px;background:var(--line)}
+.rd .cv-sys span{max-width:80%}
+.rd .cv-b{max-width:78%;display:grid;gap:3px;justify-items:start}
+.rd .cv-b.me{justify-self:end;justify-items:end}
+.rd .cv-b p{margin:0;padding:8px 13px;border-radius:16px 16px 16px 4px;background:var(--surface);font-size:14px;line-height:1.45;border:1px solid var(--line)}
+.rd .cv-b.me p{border-radius:16px 16px 4px 16px;background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.rd .cv-b small{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.rd .cv-b small::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+.rd .adm-d{background:var(--bg)}
+.rd .adm-hd{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);font-size:14px;color:var(--muted)}
+.rd .adm-hd .sp{flex:1}
+.rd .adm-tabs{display:flex;gap:2px;padding:14px 18px 0;border-bottom:1px solid var(--line);overflow:hidden;font-size:14px;color:var(--muted)}
+.rd .adm-tabs span{padding:8px 12px 10px;border-bottom:2px solid transparent;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.rd .adm-tabs .on{color:var(--fg);font-weight:600;border-color:var(--brand)}
+.rd .adm-body{display:grid;grid-template-columns:200px minmax(0,1fr);gap:26px;padding:20px 18px}
+@media (max-width:620px){.rd .adm-body{grid-template-columns:minmax(0,1fr);gap:14px}}
+.rd .adm-menu{display:grid;align-content:start;gap:1px;font-size:14px;min-width:0}
+.rd .adm-menu b{font:600 13px var(--body);color:var(--muted);padding:0 10px 6px}
+.rd .adm-menu span{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:12px}
+.rd .adm-menu .on{background:var(--tint);font-weight:600}
+.rd .adm-menu em{font:normal 600 11px var(--body);background:var(--tint);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.rd .adm-menu .on em{background:var(--surface)}
+.rd .adm-pg{display:grid;gap:10px;align-content:start;min-width:0}
+.rd .adm-pg h4{font-size:20px}
+.rd .adm-rows{background:var(--surface);border-radius:var(--r-soft);padding:2px 16px;display:grid}
+.rd .adm-rows div{padding:11px 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.rd .adm-rows div:first-child{border-top:0}
+.rd .adm-sel{display:flex;align-items:center;justify-content:space-between;gap:8px;height:42px;padding:0 14px;border-radius:999px;background:var(--tint);font-size:14px;font-weight:600}
+.rd .adm-sel small{font-weight:400;color:var(--muted);font-size:12px}
+.rd .adm-sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-soft);padding:6px;display:grid;font-size:14px}
+.rd .adm-sheet span{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:12px}
+.rd .adm-sheet .on{background:var(--tint);font-weight:600}
+.rd .adm-sheet em{font:normal 600 11px var(--body);background:var(--tint);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.rd .rulebox{background:var(--surface);border-radius:var(--r-soft);padding:18px 20px;display:grid;gap:10px;border-left:3px solid var(--brand)}
+.rd .rulebox ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:15px}
+.rd .rulebox .lbl{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.rd .apply{display:grid;margin:0;padding:0 18px;list-style:none;background:var(--surface);border-radius:var(--r-soft)}
+.rd .apply li{display:grid;grid-template-columns:170px 120px minmax(0,1fr);gap:14px;padding:12px 0;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.rd .apply li:first-child{border-top:0}
+.rd .apply b{font:600 15px var(--display);color:var(--fg)}
+@media (max-width:640px){.rd .apply li{grid-template-columns:minmax(0,1fr);gap:2px}}
 </style>
 <div class="rd">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -888,6 +955,132 @@ html.dark .rd{
   <div class="open">
     <div><b>Collapse notifications from one group?</b><p>Three events in Vēja zirdžiņš could become one line: "3 jauni pasākumi grupā Vēja zirdžiņš". Cleaner, but one tap deeper. Collapse, or keep every line?</p></div>
     <div><b>When does an item count as read?</b><p>Today it is read when you tap it. Should the whole list count as read once the dropdown has been open for a moment?</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-conv">
+  <h2 id="h-conv">Sarunas: kas ir kas</h2>
+  <p class="lead">Your notes: a conversation with a group's team must not look like a chat between two people; when two members who share a group write to each other, the chat should say where it started; and in "Visas" the two kinds look too alike. Below: today's list, a proposed list with the same six conversations, and the chat views.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 280px;max-width:340px"><div class="cap">Today · "Visas", 320 px</div>
+      <div class="desk cv-list cv-old">
+        <div class="cv-top"><b>Ziņas</b><div class="seg"><span class="on">Visas</span><span>Personīgās</span><span>Grupu</span></div></div>
+        <div class="cv-i u"><span class="av2">A</span><div class="t"><b>Anna</b><span class="l">Vai šodien būs mēģinājumā?</span></div><span class="tm">12 min</span></div>
+        <div class="cv-i u"><span class="av2">A</span><div class="t"><b>Anna</b><span class="gl" style="--c:#F43F5E">Vēja zirdžiņš · Dejas</span><span class="l">Sveiki! Dejoju jau četrus gadus…</span></div><span class="tm">2 h</span></div>
+        <div class="cv-i"><span class="av2"><svg class="i"><use href="#i-users"/></svg></span><div class="t"><b>Pārgājieni</b><span class="gl" style="--c:#10B981">Pārgājieni · Ceļošana un daba</span><span class="l">Pieteikums apstiprināts</span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="av2">M</span><div class="t"><b>Marta</b><span class="l">Paldies par sarunu!</span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="av2">K</span><div class="t"><b>Kārlis</b><span class="gl" style="--c:#6366F1">Jelgavas kori · Mūzika</span><span class="l">Vai var nākt uz mēģinājumu?</span></div><span class="tm">Otrd.</span></div>
+        <div class="cv-i"><span class="av2">P</span><div class="t"><b>Pēteris</b><span class="l">Labi, tiekamies!</span></div><span class="tm">Pirmd.</span></div>
+      </div>
+      <p class="why">Sketch from the code: every row is a round avatar (or a grey group icon), a bold name and the last message. Only a group chat gets a small coloured line. Personal and group rows share one shape, and the same name ("Anna") appears twice with nothing to tell the two chats apart.</p>
+    </div>
+    <div class="shot" style="flex:1 1 300px;max-width:380px"><div class="cap">Proposed · "Visas", 360 px</div>
+      <div class="desk cv-list">
+        <div class="cv-top"><b>Ziņas</b><div class="seg"><span class="on">Visas</span><span>Personīgās</span><span>Grupu</span></div></div>
+        <div class="cv-i u"><span class="nt-av g" style="--c:#F43F5E"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="q"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span>Tu ↔ grupas komanda</span></span><span class="l">Mēs jūs gaidām ceturtdien!</span></div><span class="tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="cv-i u"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="q">kopā: Vēja zirdžiņš, Pārgājieni</span><span class="l">Vai šodien būs mēģinājumā?</span></div><span class="tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="cv-i"><span class="nt-av g" style="--c:#10B981"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><b>Pārgājieni</b><span class="q"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span>Tu ↔ grupas komanda</span></span><span class="l">Pieteikums apstiprināts</span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="nt-av">M</span><div class="t"><b>Marta</b><span class="q">kopā: Jelgavas kori</span><span class="l">Paldies par sarunu!</span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="nt-av g" style="--c:#6366F1"><svg class="i"><use href="#i-music"/></svg></span><div class="t"><b>Jelgavas kori</b><span class="q"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span>Grupas komanda ↔ Kārlis</span></span><span class="l">Vai var nākt uz mēģinājumu?</span></div><span class="tm">Otrd.</span></div>
+        <div class="cv-i"><span class="nt-av">P</span><div class="t"><b>Pēteris</b><span class="l">Labi, tiekamies!</span></div><span class="tm">Pirmd.</span></div>
+      </div>
+      <p class="why">Group conversations carry the group's mark (category colour, rounded square) and the group's name; the quiet line says whose side you are on. Personal ones keep the round face and the person's name, plus "kopā:" with the groups you share (left out when there are none, like Pēteris).</p>
+    </div>
+  </div>
+
+  <h3>Inside a conversation</h3>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Personal chat that started from a group</div>
+      <div class="desk cv-pane">
+        <div class="cv-head"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="q">kopā: Vēja zirdžiņš, Pārgājieni</span></div></div>
+        <div class="cv-msgs">
+          <div class="cv-sys"><span>Anna rakstīja no grupas Vēja zirdžiņš · 10. okt.</span></div>
+          <div class="cv-b"><p>Sveika! Vai šodien būs mēģinājumā?</p></div>
+          <div class="cv-b me"><p>Būšu, ap 19:00.</p></div>
+          <div class="cv-sys"><span>Tu rakstīji no grupas Pārgājieni · 14. okt.</span></div>
+          <div class="cv-b me"><p>Un svētdien ejam uz Ķemeriem, nāksi līdzi?</p></div>
+        </div>
+      </div>
+      <p class="why">A quiet centred line, never a bubble. It appears when the conversation starts from a group and again each time it is resumed from a different one.</p>
+    </div>
+    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Conversation with a group's team</div>
+      <div class="desk cv-pane">
+        <div class="cv-head"><span class="nt-av g" style="--c:#F43F5E"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="q">Tu ↔ grupas komanda</span></div></div>
+        <div class="cv-msgs" style="--c:#F43F5E">
+          <div class="cv-sys"><span>Pieteikums grupai Vēja zirdžiņš · 10. okt.</span></div>
+          <div class="cv-b me"><p>Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.</p></div>
+          <div class="cv-b"><small>Vēja zirdžiņš · Anna, vadītāja</small><p>Sveika! Gaidām tevi ceturtdien 19:00.</p></div>
+          <div class="cv-b"><small>Vēja zirdžiņš · Juris, palīgs</small><p>Līdzi ērtus apavus!</p></div>
+        </div>
+      </div>
+      <p class="why">The person sees one voice: the group. Each reply says who in the team wrote it, the group first and the person after it. For the team, the same chat reads "Grupas komanda ↔ Kārlis".</p>
+    </div>
+  </div>
+  <div class="idgrid">
+    <div class="box wide"><span class="lbl">Why one conversation per pair of people</span>
+      <p class="spec-i">Two people have one thread, like a phone contact; the system line says where each stretch began.</p>
+      <p class="spec-i">One thread per group would split a single relationship into pieces, and "vai šodien būs mēģinājumā?" would land in a thread nobody opens.</p>
+      <p class="spec-i">Today's direct chats have no group at all, so the line needs one small addition: each message or resume remembers the group it came from.</p></div>
+    <div class="box"><span class="lbl">Group conversations are separate</span><p class="why">A join request or a contact to the team is always its own conversation (person ↔ whole team), never merged with a personal chat with the same person.</p></div>
+  </div>
+  <div class="open">
+    <div><b>One conversation per pair, or one per pair per group?</b><p>Proposed: one per pair, with a system line each time the starting group changes. The alternative gives each group its own thread with the same person, which is clearer about context but multiplies threads. Which one?</p></div>
+    <div><b>Mixed list or two parts?</b><p>"Visas" could stay one list ordered by time (shown), or show "Grupu sarunas" and "Personīgās" under their own small headings. Does the different look suffice, or do you want the headings too?</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="h-nav">
+  <h2 id="h-nav">Admin: kur atrodas izvēlne</h2>
+  <p class="lead">Your notes: the admin tabs stick at the top and you dislike it; the header area holds nothing for admin; and you want one navigation pattern for the whole site, not a new answer per page. Proposal: one rule, then admin, the Handbook and group pages follow from it.</p>
+  <h3>Today</h3>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 440px"><div class="cap">Admin on desktop · one row of eight tabs</div>
+      <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg></div>
+        <div class="adm-tabs"><span class="on">Birkas</span><span>Sūdzības</span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi</span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
+        <div class="pg"><div class="adm-pg"><h4>Atsauksmes</h4><div class="adm-rows"><div>Piezīme 1 · Header</div><div>Piezīme 2 · Group card</div></div></div></div></div>
+      <p class="why">From the code: the global header is the only sticky bar and the admin row sits right under it, so on scrolling the header and the first tab row read as one fixed block. Eight tabs also overflow sideways on a phone, and the Handbook adds a second menu below. The header itself carries nothing admin-specific.</p>
+    </div>
+    <div class="shot" style="flex:0 1 340px"><div class="cap">Admin on a phone</div>
+      <div class="mob"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg></div>
+        <div class="adm-tabs"><span class="on">Birkas</span><span>Sūdzības</span><span>Moderācija</span><span>Takso…</span></div>
+        <div class="pg"><div class="adm-pg"><h4>Atsauksmes</h4><div class="adm-rows"><div>Piezīme 1 · Header</div><div>Piezīme 2 · Group card</div></div></div></div></div>
+      <p class="why">Half of the tabs are off-screen; "Atsauksmes", "Dizains" and "Rokasgrāmata" need a sideways swipe to find.</p>
+    </div>
+  </div>
+  <h3>Proposed</h3>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 440px"><div class="cap">Admin on desktop · menu on the left, scrolls away with the page</div>
+      <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg></div>
+        <div class="adm-body">
+          <div class="adm-menu"><b>Administrēšana</b><span class="on">Birkas <em>3</em></span><span>Sūdzības <em>1</em></span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
+          <div class="adm-pg"><h4>Birkas</h4><div class="adm-rows"><div>Jauna apakštēma: Tautas dejas</div><div>Jauna apakštēma: Nūjošana</div></div></div>
+        </div></div>
+      <p class="why">Eight names always visible with their counts; the header stays as on every page. The menu is part of the page, not of the frame, so it scrolls away like the content.</p>
+    </div>
+    <div class="shot" style="flex:0 1 340px"><div class="cap">Phone · a selector at the top of the page</div>
+      <div class="mob" style="padding-bottom:14px"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg></div>
+        <div class="pg"><div class="adm-sel"><span>Birkas <small>· Administrēšana</small></span><svg class="i"><use href="#i-down"/></svg></div>
+          <div class="adm-sheet"><span class="on">Birkas <em>3</em></span><span>Sūdzības <em>1</em></span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
+          <div class="adm-pg"><h4>Birkas</h4></div></div></div>
+      <p class="why">Shown open. Closed it is the one pill; it works like the Handbook's "Nodaļas" menu does today.</p>
+    </div>
+  </div>
+  <div class="rulebox"><span class="lbl">The rule · for the Handbook (Behaviour patterns)</span>
+    <ol>
+      <li><b>Few sections, up to five:</b> tabs directly under the page title. They scroll away with the page and are never sticky.</li>
+      <li><b>More than five:</b> a menu on the left on desktop; on phones the same list opens from one selector at the top of the page.</li>
+      <li><b>The global header</b> never carries section menus. It holds the site, search, messages, notifications and the person.</li>
+      <li><b>Inside a section</b> a small switch (like "Gaidāmie · Notikušie") separates views of the same thing; it is never a second row of tabs.</li>
+    </ol></div>
+  <ul class="apply">
+    <li><b>Admin</b><span>8 sections</span><span>Left menu on desktop, selector on phones, not sticky.</span></li>
+    <li><b>Handbook</b><span>10 pages</span><span>Chapters as a left list; already works so (a menu on phones). Nothing changes.</span></li>
+    <li><b>Group page</b><span>4 pages</span><span>Tabs under the group header, as agreed above; a small switch inside a page. Today they are sticky: they would scroll away.</span></li>
+    <li><b>Messages</b><span>a list</span><span>Not a menu: a list and a conversation, and the side drawer already agreed.</span></li>
+  </ul>
+  <div class="open">
+    <div><b>Is the rule right, and is five the right line?</b><p>Up to five: tabs. More: a left menu. Confirm, or move the number. Eight in admin makes it a menu either way.</p></div>
+    <div><b>Should group tabs scroll away too?</b><p>A group's tabs stay in reach while scrolling a long page today. The rule makes them scroll away like everything else. Keep that, or make this the one exception?</p></div>
   </div>
 </section>
 
