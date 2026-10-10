@@ -19,6 +19,7 @@ type Props = {
             name: string | null;
             image: string | null;
         };
+        chatId: string | null;
         applicationMessages: Message[];
     }[];
     locale: string;
@@ -42,6 +43,7 @@ export default function MembershipPanel({ groupId, pendingMembers, locale }: Pro
                         groupId={groupId}
                         membershipId={membership.id}
                         targetUser={membership.user}
+                        chatId={membership.chatId}
                         messages={membership.applicationMessages}
                         locale={locale}
                     />

@@ -27,13 +27,15 @@ export interface Member {
 
 type Props = {
     member: Member;
+    /** Decided on the server (shared-group rule, the person's setting, not yourself). */
+    canMessage: boolean;
     groupId: string;
     currentUserRole: string | null;
     locale: string;
     l1Slug: string;
 };
 
-export default function MemberCard({ member, groupId, currentUserRole, locale, l1Slug }: Props) {
+export default function MemberCard({ member, canMessage, groupId, currentUserRole, locale, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -60,7 +62,6 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
         };
     }, [menuOpen]);
 
-    const canMessage = member.user.allowDirectMessages;
     const canViewProfile = member.user.isProfilePublic;
 
     // Management permissions (matches GroupService logic)
@@ -97,7 +98,7 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
     };
 
     const handleMessage = () => {
-        if (!canMessage || isPending) return;
+        if (isPending) return;
 
         startTransition(async () => {
             const result = await getOrCreateDirectChat(member.user.id);
@@ -227,8 +228,8 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                 )}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-2">
-                {canMessage && member.user.username ? (
+            <div className={clsx("grid gap-2 pt-2", canMessage ? "grid-cols-2" : "grid-cols-1")}>
+                {canMessage && (
                     <button
                         onClick={handleMessage}
                         disabled={isPending}
@@ -244,11 +245,6 @@ export default function MemberCard({ member, groupId, currentUserRole, locale, l
                         )}
                         {t('sendMessage')}
                     </button>
-                ) : (
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        {c_common('private')}
-                    </div>
                 )}
 
                 {canViewProfile && member.user.username ? (

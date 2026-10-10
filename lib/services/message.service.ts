@@ -48,7 +48,7 @@ export interface InboxRow {
     /** The person on the other side: the partner (DIRECT) or the outside person (seen by the team). Null for the contact person's own view of a group chat. */
     other: PersonView | null;
     /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
-    group: { name: string; l1Slug: string; accentColor: string; href: string | null } | null;
+    group: { id: string; name: string; l1Slug: string; accentColor: string; href: string | null } | null;
     lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
     origin: { type: string; groupName: string | null; groupHref: string | null } | null;
 }
@@ -213,8 +213,8 @@ export const MessageService = {
                     other: isGroup
                         ? (viewerIsContact ? null : c.contactUser)
                         : (c.participants.find(p => p.id !== userId) ?? null),
-                    group: c.originGroup && resolved
-                        ? { name: c.originGroup.name, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
+                    group: c.originGroup && resolved && c.originGroupId
+                        ? { id: c.originGroupId, name: c.originGroup.name, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
                         : null,
                     lastMessage: c.messages[0] ?? null,
                     origin: c.originType
@@ -418,6 +418,46 @@ export const MessageService = {
             return { id: created.id, created: true };
         } catch (error) {
             return fail(error, 'getOrCreateDirectChat', 'CREATE_FAILED');
+        }
+    },
+
+    /**
+     * Which of the given people the viewer may message directly: a chat with them already exists
+     * (it stays writable unless blocked), or they accept direct messages and share a group with the
+     * viewer in which both are full members. Never includes the viewer. Computed here so the UI
+     * only shows a button when the server would let the message through.
+     */
+    async messageableUserIds(viewerId: string | null | undefined, userIds: string[]): Promise<Set<string>> {
+        const others = [...new Set(userIds)].filter(id => id && id !== viewerId);
+        if (!viewerId || others.length === 0) return new Set();
+        try {
+            const [existing, shared] = await Promise.all([
+                prisma.conversation.findMany({
+                    where: { kind: 'DIRECT', isBlocked: false, participants: { some: { id: viewerId } } },
+                    select: { participants: { select: { id: true } } }
+                }),
+                prisma.user.findMany({
+                    where: {
+                        id: { in: others },
+                        allowDirectMessages: true,
+                        memberships: {
+                            some: {
+                                role: { not: 'PENDING' },
+                                group: { members: { some: { userId: viewerId, role: { not: 'PENDING' } } } }
+                            }
+                        }
+                    },
+                    select: { id: true }
+                })
+            ]);
+            const allowed = new Set(shared.map(u => u.id));
+            for (const c of existing) {
+                for (const p of c.participants) if (p.id !== viewerId) allowed.add(p.id);
+            }
+            return new Set(others.filter(id => allowed.has(id)));
+        } catch (error) {
+            console.error('[MessageService.messageableUserIds] Error:', error);
+            return new Set();
         }
     },
 

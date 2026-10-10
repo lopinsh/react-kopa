@@ -299,10 +299,10 @@ export const GroupService = {
         const canSeeApplications = isAdmin || isSiteAdmin;
         const visibleMembers = canSeeApplications ? group.members : group.members.filter((m) => m.role !== 'PENDING');
         // The request message lives in the group chat. Only pending applicants' chats are loaded, and only
-        // for admins and for the applicant themselves.
+        // for the group's own owner/admins and for the applicant themselves: site admins are not on the team, so they cannot open the chat either.
         const threads = await MessageService.listGroupThreads(
             g.id,
-            visibleMembers.filter((m) => m.role === 'PENDING' && (canSeeApplications || m.userId === currentUserId)).map((m) => m.userId)
+            visibleMembers.filter((m) => m.role === 'PENDING' && (isAdmin || m.userId === currentUserId)).map((m) => m.userId)
         );
         const formattedMembers = visibleMembers.map((m) => {
             const thread = threads.get(m.userId);
@@ -475,52 +475,6 @@ export const GroupService = {
     },
 
     /**
-     * Sends an inquiry message from an admin to a pending member.
-     */
-    async sendApplicationInquiry(groupId: string, targetUserId: string, adminId: string, message: string): Promise<GroupServiceResult> {
-        // Verify admin permissions
-        const adminMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: adminId, groupId } }
-        });
-
-        if (!adminMembership || !hasAdminRights(adminMembership.role)) {
-            return { success: false, error: 'FORBIDDEN' };
-        }
-
-        // Verify target is pending
-        const targetMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: targetUserId, groupId } }
-        });
-
-        if (!targetMembership || targetMembership.role !== 'PENDING') {
-            return { success: false, error: 'VALIDATION_FAILED' };
-        }
-
-        // The applicant's one group chat: every admin writes into it.
-        const chat = await MessageService.getOrCreateGroupChat(groupId, targetUserId, 'JOIN_REQUEST');
-        await MessageService.sendMessage(chat.id, adminId, message);
-
-        // Notify the target user about the inquiry
-        const group = await prisma.group.findUnique({
-            where: { id: groupId },
-            select: { name: true, category: { include: TaxonomyResolver.getInclude('lv') }, slug: true }
-        });
-
-        if (group) {
-            const { NotificationService } = await import('@/lib/services/notification.service');
-            await NotificationService.createNotification({
-                userId: targetUserId,
-                type: 'APPLICATION_INQUIRY',
-                translationKey: 'applicationInquiry',
-                args: { groupName: group.name, excerpt: message },
-                link: `/messages?c=${chat.id}`
-            });
-        }
-
-        return { success: true };
-    },
-
-    /**
      * Sends a message from someone outside the team to a group: it goes into their group chat, which the
      * owner and all admins can answer. Returns the team to notify.
      */
@@ -542,7 +496,7 @@ export const GroupService = {
         };
     },
 
-    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; slugs: { slug: string; l1Slug: string } | null; groupName: string; adminIds: string[] }>> {
+    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; conversationId: string; slugs: { slug: string; l1Slug: string } | null; groupName: string; adminIds: string[] }>> {
         const existing = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
@@ -571,16 +525,18 @@ export const GroupService = {
         });
 
         // The request message opens (or continues) the applicant's group chat with the team.
+        let conversationId: string;
         try {
             const chat = await MessageService.getOrCreateGroupChat(groupId, userId, 'JOIN_REQUEST');
             await MessageService.sendMessage(chat.id, userId, message);
+            conversationId = chat.id;
         } catch (error) {
             // No request without its message.
             await prisma.membership.delete({ where: { userId_groupId: { userId, groupId } } });
             throw error;
         }
 
-        return { success: true, data: { pending: true, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) } };
+        return { success: true, data: { pending: true, conversationId, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) } };
     },
 
     async leaveGroup(groupId: string, userId: string): Promise<GroupServiceResult> {

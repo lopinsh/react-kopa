@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { User, ChevronRight, MessageSquare } from 'lucide-react';
 import { clsx } from 'clsx';
 import MemberMoreModal from '../modals/MemberMoreModal';
-import SupportMessageModal from '../modals/SupportMessageModal';
+import ContactGroupModal from '../modals/ContactGroupModal';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { avatarUrl } from '@/lib/avatar';
 
@@ -26,6 +26,7 @@ type Props = {
 
 export default function MemberAvatarList({ members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
+    const locale = useLocale();
   const c_common = useTranslations('common');
     const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
@@ -129,11 +130,13 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                 isMember={isMember}
             />
 
-            <SupportMessageModal
+            <ContactGroupModal
                 isOpen={isSupportModalOpen}
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
+                locale={locale}
+                allowJoin={false}
             />
         </>
     );

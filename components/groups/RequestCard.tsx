@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
-import { Check, X, User, Send, MessageSquare, History } from 'lucide-react';
-import { manageMembership, sendApplicationInquiry } from '@/actions/group-actions';
+import { useTransition } from 'react';
+import { useFormatter, useNow, useTranslations } from 'next-intl';
+import { Check, X, MessageSquare, History } from 'lucide-react';
+import { manageMembership } from '@/actions/group-actions';
 import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useToast } from '@/hooks/use-toast';
-import { clsx } from 'clsx';
-import { formatDistanceToNow } from 'date-fns';
-import { lv, enUS } from 'date-fns/locale';
+import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
 
 interface Message {
@@ -28,20 +26,20 @@ type Props = {
         image: string | null;
         avatarSeed?: string | null;
     };
+    chatId: string | null;
     messages: Message[];
     locale: string;
 };
 
-export default function RequestCard({ groupId, membershipId, targetUser, messages, locale }: Props) {
+export default function RequestCard({ membershipId, targetUser, chatId, messages, locale }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
-    const [inquiryMode, setInquiryMode] = useState(false);
-    const [inquiryText, setInquiryText] = useState('');
-    const [showHistory, setShowHistory] = useState(false);
-
-    const dateLocale = locale === 'lv' ? lv : enUS;
+    const format = useFormatter();
+    const now = useNow({ updateInterval: 60_000 });
+    // Messages arrive oldest first: the card shows the newest, with the time of that one.
+    const latest = messages.length > 0 ? messages[messages.length - 1] : null;
 
     const handleAction = (action: 'APPROVE' | 'DECLINE') => {
         startTransition(async () => {
@@ -52,21 +50,6 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                 success(c_common('manageSuccess'));
             } else {
                 toastError(t('ACTION_FAILED'));
-            }
-        });
-    };
-
-    const handleSendInquiry = () => {
-        if (!inquiryText.trim()) return;
-        startTransition(async () => {
-            const result = await sendApplicationInquiry(groupId, targetUser.id, inquiryText, locale);
-            if (result.success) {
-                success(c_common('messageSent'));
-                setInquiryText('');
-                setInquiryMode(false);
-                setShowHistory(true);
-            } else {
-                toastError(t('messageFailed'));
             }
         });
     };
@@ -89,7 +72,7 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                         </span>
                         <span className="text-[10px] font-black uppercase text-foreground-muted tracking-widest flex items-center gap-1.5">
                             <History className="h-3 w-3" />
-                            {messages.length > 0 && formatDistanceToNow(new Date(messages[0].createdAt), { addSuffix: true, locale: dateLocale })}
+                            {latest && format.relativeTime(new Date(latest.createdAt), now)}
                         </span>
                     </div>
                 </div>
@@ -114,86 +97,30 @@ export default function RequestCard({ groupId, membershipId, targetUser, message
                 </div>
             </div>
 
-            {/* Latest message preview or thread */}
-            <div className="mt-4 pt-4 border-t border-border/50">
-                {messages.length > 0 && !inquiryMode && !showHistory && (
-                    <div className="relative p-4 rounded-2xl bg-surface border border-border/50 group/msg cursor-pointer" onClick={() => setShowHistory(true)}>
-                        <p className="text-sm text-foreground/80 leading-relaxed italic line-clamp-2">
-                            &quot;{messages[messages.length - 1].content}&quot;
-                        </p>
-                        <div className="absolute top-2 right-2 opacity-0 group-hover/msg:opacity-100 transition-opacity">
-                            <MessageSquare className="h-3.5 w-3.5 text-foreground-muted" />
+            {/* Latest message in the applicant's group chat */}
+            {chatId && (
+                <div className="mt-4 border-t border-border/50 pt-4">
+                    {latest && (
+                        <div className="rounded-2xl border border-border/50 bg-surface p-4">
+                            <p className="line-clamp-2 text-sm italic leading-relaxed text-foreground/80">
+                                &quot;{latest.content}&quot;
+                            </p>
+                            <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted">
+                                {latest.senderId === targetUser.id ? targetUser.name || c_common('applicant') : c_common('role_admin')}
+                                {' · '}
+                                {format.relativeTime(new Date(latest.createdAt), now)}
+                            </p>
                         </div>
-                    </div>
-                )}
-
-                {showHistory && (
-                    <div className="space-y-3 mb-4 max-h-[200px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-border">
-                        {messages.map((msg) => {
-                            const isAdmin = msg.senderId !== targetUser.id;
-                            return (
-                                <div
-                                    key={msg.id}
-                                    className={clsx(
-                                        "flex flex-col gap-1 max-w-[85%]",
-                                        isAdmin ? "ml-auto items-end" : "items-start"
-                                    )}
-                                >
-                                    <div className={clsx(
-                                        "px-4 py-2.5 rounded-2xl text-sm shadow-card",
-                                        isAdmin
-                                            ? "bg-[var(--accent)] text-white font-medium rounded-tr-none"
-                                            : "bg-surface border border-border/50 text-foreground/90 rounded-tl-none"
-                                    )}>
-                                        {msg.content}
-                                    </div>
-                                    <span className="text-[9px] font-black uppercase tracking-tighter text-foreground-muted px-1">
-                                        {isAdmin ? c_common('role_admin') : targetUser.name || c_common('applicant')} • {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true, locale: dateLocale })}
-                                    </span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-
-                {!inquiryMode ? (
-                    <button
-                        onClick={() => {
-                            setInquiryMode(true);
-                            setShowHistory(true);
-                        }}
-                        className="mt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-[var(--accent)] transition-colors flex items-center gap-1.5"
+                    )}
+                    <Link
+                        href={`/messages?c=${chatId}`}
+                        className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted transition-colors hover:text-[var(--accent)]"
                     >
                         <MessageSquare className="h-3.5 w-3.5" />
-                        {c_common('inquire')}
-                    </button>
-                ) : (
-                    <div className="mt-2 space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <textarea
-                            value={inquiryText}
-                            onChange={(e) => setInquiryText(e.target.value)}
-                            placeholder={c_common('typeMessageHere')}
-                            className="w-full bg-surface border border-border rounded-2xl p-4 text-sm focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] outline-none transition-all placeholder:text-foreground-muted min-h-[100px] resize-none"
-                        />
-                        <div className="flex items-center justify-end gap-2">
-                            <button
-                                onClick={() => setInquiryMode(false)}
-                                className="px-4 py-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors"
-                            >
-                                {c_common('cancel')}
-                            </button>
-                            <button
-                                onClick={handleSendInquiry}
-                                disabled={isPending || !inquiryText.trim()}
-                                className="px-5 py-2 rounded-xl bg-[var(--accent)] text-white text-[10px] font-black uppercase tracking-widest shadow-premium hover:scale-105 active:scale-95 disabled:opacity-50 transition-all flex items-center gap-2"
-                            >
-                                <Send className="h-3 w-3" />
-                                {c_common('sendInquiry')}
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
+                        {t('openChat')}
+                    </Link>
+                </div>
+            )}
         </div>
     );
 }

@@ -15,10 +15,8 @@ import dynamic from 'next/dynamic';
 import { cancelJoinRequest } from '@/actions/group-actions';
 import { Link } from '@/i18n/routing';
 import { clsx } from 'clsx';
-const ApplicationModal = dynamic(() => import('../modals/ApplicationModal'), { ssr: false });
+const ContactGroupModal = dynamic(() => import('../modals/ContactGroupModal'), { ssr: false });
 const ReportModal = dynamic(() => import('../modals/ReportModal'), { ssr: false });
-const InquiryModal = dynamic(() => import('../modals/InquiryModal'), { ssr: false });
-const SupportMessageModal = dynamic(() => import('../modals/SupportMessageModal'), { ssr: false });
 const HideGroupModal = dynamic(() => import('../modals/HideGroupModal'), { ssr: false });
 const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
 
@@ -48,10 +46,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const { user } = useGroupContext();
     const { role: userRole, isMember } = user;
     const [isPending, startTransition] = useTransition();
-    const [isAppModalOpen, setAppModalOpen] = useState(false);
+    const [isContactModalOpen, setContactModalOpen] = useState(false);
     const [isReportModalOpen, setReportModalOpen] = useState(false);
-    const [isInquiryModalOpen, setInquiryModalOpen] = useState(false);
-    const [isSupportModalOpen, setSupportModalOpen] = useState(false);
     const [isHideModalOpen, setHideModalOpen] = useState(false);
     const [isContactsOpen, setContactsOpen] = useState(false);
     const contactsRef = useRef<HTMLDivElement>(null);
@@ -63,13 +59,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const handleMembership = () => {
         gateAction(() => {
             if (isMember) return;
-
-            if (!group.isAcceptingMembers) {
-                setInquiryModalOpen(true);
-                return;
-            }
-
-            setAppModalOpen(true);
+            setContactModalOpen(true);
         }, 'join_group');
     };
 
@@ -313,7 +303,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     ) : !group.isAcceptingMembers ? (
                                         <>
                                             <HelpCircle className="h-4 w-4" />
-                                            {c_common('inquire')}
+                                            {c_common('contact')}
                                         </>
                                     ) : (
                                         <>
@@ -366,13 +356,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                 </div>
             </div>
 
-            {isAppModalOpen && (
-                <ApplicationModal
-                    isOpen={isAppModalOpen}
-                    onClose={() => setAppModalOpen(false)}
+            {isContactModalOpen && (
+                <ContactGroupModal
+                    isOpen={isContactModalOpen}
+                    onClose={() => setContactModalOpen(false)}
                     groupId={group.id}
                     groupName={group.name}
                     locale={locale}
+                    allowJoin={group.isAcceptingMembers}
                 />
             )}
 
@@ -391,25 +382,6 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                     targetGroupId={group.id}
                 />
             )}
-
-            {isInquiryModalOpen && (
-                <InquiryModal
-                    isOpen={isInquiryModalOpen}
-                    onClose={() => setInquiryModalOpen(false)}
-                    groupId={group.id}
-                    groupName={group.name}
-                />
-            )}
-
-            {isSupportModalOpen && (
-                <SupportMessageModal
-                    isOpen={isSupportModalOpen}
-                    onClose={() => setSupportModalOpen(false)}
-                    groupId={group.id}
-                    groupName={group.name}
-                />
-            )}
-
 
             {isModalOpen && <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />}
         </header >

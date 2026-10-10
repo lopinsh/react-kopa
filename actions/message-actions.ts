@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth';
 import { MessageService, type InboxRow, type MessageView } from '@/lib/services/message.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
+import { messageTextSchema } from '@/lib/validations/message';
 
 export async function getInbox(locale: string): Promise<ActionResponse<InboxRow[]>> {
     const session = await auth();
@@ -45,7 +46,7 @@ export async function getMessages(conversationId: string): Promise<ActionRespons
 export async function sendMessage(conversationId: string, content: string): Promise<ActionResponse<MessageView>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (!content.trim() || content.length > 2000) return { success: false, error: 'VALIDATION_FAILED' };
+    if (!messageTextSchema.safeParse(content).success) return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
         const message = await MessageService.sendMessage(conversationId, session.user.id, content);

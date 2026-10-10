@@ -7,6 +7,7 @@ import MembershipPanel from '@/components/groups/MembershipPanel';
 import MemberCard from '@/components/groups/MemberCard';
 import type { Metadata } from 'next';
 import { MembershipRole } from '@prisma/client';
+import { MessageService } from '@/lib/services/message.service';
 
 interface Member {
     id: string;
@@ -20,6 +21,7 @@ interface Member {
         allowDirectMessages: boolean;
         isProfilePublic: boolean;
     };
+    chatId: string | null;
     applicationMessages: {
         id: string;
         content: string;
@@ -78,6 +80,9 @@ export default async function GroupMembersPage({
             return roles[a.role as keyof typeof roles] - roles[b.role as keyof typeof roles];
         }) as Member[];
 
+    // Who this viewer may start a chat with is decided here, not in the card.
+    const messageable = await MessageService.messageableUserIds(session?.user?.id, acceptedMembers.map((m) => m.user.id));
+
     // Ensure users can't see requests if not admin
     const currentTab = isOwnerOrAdmin ? tab : 'members';
 
@@ -109,6 +114,7 @@ export default async function GroupMembersPage({
                         <MemberCard
                             key={member.id}
                             member={member}
+                            canMessage={messageable.has(member.user.id)}
                             groupId={group.id}
                             currentUserRole={group.user.role as string}
                             locale={locale}

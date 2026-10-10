@@ -1,10 +1,10 @@
 'use client';
 
 import { X, User, MessageSquare } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { clsx } from 'clsx';
-import SupportMessageModal from './SupportMessageModal';
+import ContactGroupModal from './ContactGroupModal';
 import { avatarUrl } from '@/lib/avatar';
 
 type Props = {
@@ -26,6 +26,7 @@ type Props = {
 
 export default function MemberMoreModal({ isOpen, onClose, members, groupId, groupName, isMember }: Props) {
     const t = useTranslations('group');
+    const locale = useLocale();
   const c_common = useTranslations('common');
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     const [selectedAdmin, setSelectedAdmin] = useState<{ id: string; name: string | null } | null>(null);
@@ -98,11 +99,13 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                 </div>
             </div>
 
-            <SupportMessageModal
+            <ContactGroupModal
                 isOpen={isSupportModalOpen}
                 onClose={() => setIsSupportModalOpen(false)}
                 groupId={groupId}
                 groupName={groupName}
+                locale={locale}
+                allowJoin={false}
             />
         </div>
     );

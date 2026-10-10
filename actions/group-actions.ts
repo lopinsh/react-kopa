@@ -9,6 +9,7 @@ import { createNotification } from './notification-actions';
 import { ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 import type { MembershipRole } from '@prisma/client';
+import { messageTextSchema } from '@/lib/validations/message';
 
 type GroupDetailsResult = Record<string, unknown> & {
     members: Array<Record<string, unknown> & { applicationMessage?: string | null }>;
@@ -46,15 +47,16 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
 /**
  * Join a group.
  */
-export async function joinGroup(groupId: string, locale: string, message?: string): Promise<ActionResponse<{ pending: boolean }>> {
+export async function joinGroup(groupId: string, locale: string, message?: string): Promise<ActionResponse<{ pending: boolean; conversationId: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!messageTextSchema.safeParse(message).success) return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
         const result = await GroupService.joinGroup(groupId, session.user.id, message);
-        if (!result.success) return result as ActionResponse<{ pending: boolean }>;
+        if (!result.success) return result as ActionResponse<{ pending: boolean; conversationId: string }>;
 
-        const { slugs, groupName, adminIds } = result.data!;
+        const { slugs, groupName, adminIds, conversationId } = result.data!;
         if (slugs) {
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
@@ -67,7 +69,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
             link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members?tab=requests` : undefined
         })));
 
-        return { success: true, data: { pending: true } };
+        return { success: true, data: { pending: true, conversationId } };
     } catch (error) {
         return handleActionError(error, 'JOIN_FAILED');
     }
@@ -98,13 +100,14 @@ export async function cancelJoinRequest(groupId: string, locale: string): Promis
 /**
  * Send an inquiry message to a group.
  */
-export async function sendInquiry(groupId: string, message: string): Promise<ActionResponse> {
+export async function sendInquiry(groupId: string, message: string): Promise<ActionResponse<{ conversationId: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!messageTextSchema.safeParse(message).success) return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
         const result = await GroupService.sendInquiry(groupId, session.user.id, message);
-        if (!result.success) return result as ActionResponse;
+        if (!result.success) return result as ActionResponse<{ conversationId: string }>;
 
         const { conversationId, teamIds, groupName } = result.data!;
 
@@ -117,7 +120,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
             link: `/messages?c=${conversationId}`
         })));
 
-        return { success: true };
+        return { success: true, data: { conversationId } };
     } catch (error) {
         return handleActionError(error, 'INQUIRY_FAILED');
     }
@@ -173,33 +176,6 @@ export async function manageMembership(
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
-    }
-}
-
-/**
- * Sends an inquiry message to a pending member.
- */
-export async function sendApplicationInquiry(
-    groupId: string,
-    targetUserId: string,
-    message: string,
-    locale: string
-): Promise<ActionResponse> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-
-    try {
-        const result = await GroupService.sendApplicationInquiry(groupId, targetUserId, session.user.id, message);
-        if (!result.success) return result as ActionResponse;
-
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
-        }
-
-        return { success: true };
-    } catch (error) {
-        return handleActionError(error, 'INQUIRY_FAILED');
     }
 }
 
