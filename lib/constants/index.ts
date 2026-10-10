@@ -144,3 +144,5 @@ export const UI = {
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 export const UI_NAMES = Object.values(UI) as [UiName, ...UiName[]];
+
+export * from './theme';

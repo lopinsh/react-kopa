@@ -532,7 +532,8 @@
       "taxonomy": "Taxonomy",
       "translations": "Translations",
       "feedback": "Feedback",
-      "handbook": "Handbook"
+      "handbook": "Handbook",
+      "design": "Design"
     },
     "handbook": {
       "chapters": "Chapters",
@@ -653,6 +654,63 @@
       "text": "Text",
       "by": "Edited by",
       "when": "Updated"
+    },
+    "design": {
+      "title": "Design",
+      "subtitle": "Try and pick the site's look: colour, background and fonts.",
+      "previewActive": "You have a saved preview. Only you see it until you publish or discard it.",
+      "presetsTitle": "Ready-made themes",
+      "presets": {
+        "current": "Current",
+        "moss": "Moss",
+        "sea": "Sea",
+        "rye": "Rye bread"
+      },
+      "fontSampleHeading": "Let's go together",
+      "fontSampleBody": "Looking for a drummer in Jelgava",
+      "customTitle": "Make your own",
+      "customHint": "Change colours and fonts and the sample below updates at once. Light and dark mode have their own colours.",
+      "customActive": "Now: custom look",
+      "mode": {
+        "light": "Light mode",
+        "dark": "Dark mode"
+      },
+      "token": {
+        "primary": "Site colour",
+        "background": "Background",
+        "surface": "Surface (cards)",
+        "foreground": "Text"
+      },
+      "headingFont": "Heading font",
+      "bodyFont": "Body font",
+      "sampleTitle": "Sample",
+      "sampleMode": "Sample mode",
+      "sample": {
+        "heading": "Let's go together",
+        "body": "Find people to do things with.",
+        "latvian": "Meklē bundzinieku Jelgavā: ā ē ī ū č š ž ģ ķ ļ ņ",
+        "primaryButton": "Join",
+        "secondaryButton": "Learn more",
+        "badge": "New",
+        "link": "See all groups"
+      },
+      "savePreview": "Save preview",
+      "publish": "Publish",
+      "reset": "Reset",
+      "previewHint": "Only you see the preview, on every page. Publishing changes the look for everyone.",
+      "previewSaved": "Preview saved. You see it across the whole site.",
+      "published": "Look published for everyone.",
+      "resetDone": "Back to the current look.",
+      "resetConfirmTitle": "Reset the look?",
+      "resetConfirmMessage": "The \"Current\" theme is restored for everyone.",
+      "bar": {
+        "label": "Design preview",
+        "preview": "Preview",
+        "publish": "Publish",
+        "discard": "Discard",
+        "published": "Look published for everyone.",
+        "discarded": "Preview discarded."
+      }
     }
   },
   "messages": {

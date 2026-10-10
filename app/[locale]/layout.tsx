@@ -13,6 +13,8 @@ import { isTranslateModeActive } from '@/lib/translate-mode/server';
 import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
 import { isFeedbackModeActive } from '@/lib/feedback/server';
 import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
+import { getActiveTheme } from '@/lib/theme/server';
+import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -42,6 +44,9 @@ export default async function LocaleLayout({ children, params }: Props) {
     // Same for feedback mode: only a site admin who switched it on gets the code.
     const feedbackMode = await isFeedbackModeActive();
 
+    // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
+    const themePreview = (await getActiveTheme()).isPreview;
+
     return (
         <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
             {/* App Shell */}
@@ -70,6 +75,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             <CookieConsent />
 
             {translateMode && <TranslateModeLoader />}
+            {themePreview && <ThemePreviewBar />}
             {feedbackMode && <FeedbackModeLoader />}
         </Providers>
     );

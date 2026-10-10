@@ -532,7 +532,8 @@
       "taxonomy": "Taksonomija",
       "translations": "Tulkojumi",
       "feedback": "Atsauksmes",
-      "handbook": "Rokasgrāmata"
+      "handbook": "Rokasgrāmata",
+      "design": "Dizains"
     },
     "handbook": {
       "chapters": "Nodaļas",
@@ -653,6 +654,63 @@
       "text": "Teksts",
       "by": "Labojis",
       "when": "Atjaunināts"
+    },
+    "design": {
+      "title": "Dizains",
+      "subtitle": "Izmēģini un izvēlies vietnes izskatu: krāsu, fonu un burtus.",
+      "previewActive": "Tev ir saglabāts priekšskatījums. To redzi tikai tu, līdz to publicē vai atmet.",
+      "presetsTitle": "Gatavie noskaņojumi",
+      "presets": {
+        "current": "Pašreizējais",
+        "moss": "Sūna",
+        "sea": "Jūra",
+        "rye": "Rudzu maize"
+      },
+      "fontSampleHeading": "Ejam kopā",
+      "fontSampleBody": "Meklē bundzinieku Jelgavā",
+      "customTitle": "Pielāgot pats",
+      "customHint": "Maini krāsas un burtus, un paraugs zemāk uzreiz atjaunojas. Katram režīmam (gaišajam un tumšajam) krāsas ir atsevišķas.",
+      "customActive": "Pašlaik: pielāgots izskats",
+      "mode": {
+        "light": "Gaišais režīms",
+        "dark": "Tumšais režīms"
+      },
+      "token": {
+        "primary": "Vietnes krāsa",
+        "background": "Fons",
+        "surface": "Virsma (kartītes)",
+        "foreground": "Teksts"
+      },
+      "headingFont": "Virsrakstu burti",
+      "bodyFont": "Pamatteksta burti",
+      "sampleTitle": "Paraugs",
+      "sampleMode": "Parauga režīms",
+      "sample": {
+        "heading": "Ejam kopā",
+        "body": "Atrodi cilvēkus, ar kuriem kopā darīt lietas.",
+        "latvian": "Meklē bundzinieku Jelgavā: ā ē ī ū č š ž ģ ķ ļ ņ",
+        "primaryButton": "Pievienoties",
+        "secondaryButton": "Uzzināt vairāk",
+        "badge": "Jauns",
+        "link": "Skatīt visas grupas"
+      },
+      "savePreview": "Saglabāt priekšskatījumu",
+      "publish": "Publicēt",
+      "reset": "Atiestatīt",
+      "previewHint": "Priekšskatījumu redzi tikai tu, visās lapās. Publicējot izskats mainās visiem.",
+      "previewSaved": "Priekšskatījums saglabāts. Tu to redzi visā vietnē.",
+      "published": "Izskats publicēts visiem.",
+      "resetDone": "Atgriezts pašreizējais izskats.",
+      "resetConfirmTitle": "Atiestatīt izskatu?",
+      "resetConfirmMessage": "Visiem tiks atjaunots noskaņojums \"Pašreizējais\".",
+      "bar": {
+        "label": "Dizaina priekšskatījums",
+        "preview": "Priekšskatījums",
+        "publish": "Publicēt",
+        "discard": "Atmest",
+        "published": "Izskats publicēts visiem.",
+        "discarded": "Priekšskatījums atmests."
+      }
     }
   },
   "messages": {
