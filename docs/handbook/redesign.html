@@ -71,6 +71,11 @@ html.dark .rd:has(#pal-rye:checked){--bg:#181614;--surface:#211e1b;--tint:#2b272
 .rd .screens{display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start}
 .rd .shot{display:grid;gap:8px;min-width:0}
 .rd .shot>.cap{font-size:13px;color:var(--muted);font-weight:600}
+.rd .cap:has(.status),.rd .lbl:has(.status){display:flex;align-items:center;justify-content:space-between;gap:10px}
+.rd .status:is(.liked,.changes){display:inline-flex;align-items:center;flex:none;font-size:11px;font-weight:600;line-height:1;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;padding:4px 9px;border-radius:999px;border:1px solid transparent}
+.rd :is(.cap,.lbl)>.status{margin-inline-start:auto}
+.rd .status.liked{color:var(--brand);background:var(--tint);border-color:var(--brand)}
+.rd .status.changes{color:var(--fg);background:var(--surface);border-color:var(--muted);border-style:dashed}
 .rd .desk{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg)}
 .rd .mob{width:340px;max-width:100%;border:7px solid var(--fg);border-radius:30px;overflow:hidden;background:var(--bg);flex:none}
 .rd .hdr{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
@@ -521,6 +526,7 @@ html.dark .rd{
   <span class="status">Discussion only · nothing is being built from this page</span>
   <h1>Ejam kopā: the new look</h1>
   <p>Round three. Your notes from the last pass are applied: natural colours (three to compare, switch below), one text font with its own small italic, a dot only on the category, quieter subcategories, category icons in a drawer that folds to an icon rail, the group title fully inside the header, and the header for a signed-in person.</p>
+  <p class="sub"><span class="status liked">Liked</span> = approved in review; untagged = not decided yet.</p>
   <div class="palbar" role="radiogroup" aria-label="Colour to preview"><span>Preview the page in:</span>
 <label><input type="radio" name="rd-pal" id="pal-moss" checked><i style="--p:#4B5E3B"></i>Sūna</label>
 <label><input type="radio" name="rd-pal" id="pal-sea"><i style="--p:#34586A"></i>Jūra</label>
@@ -808,7 +814,7 @@ html.dark .rd{
 
   <div class="screens">
     <div class="shot" style="flex:1 1 520px">
-      <div class="cap">Events · one row opened in place (the others stay collapsed)</div>
+      <div class="cap">Events · one row opened in place (the others stay collapsed)<span class="status liked">Liked</span></div>
       <div class="evlist">
         <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
           <div class="evx-b"><p>Tautas deju kolektīvu koncerts. Ieeja bez maksas.</p><span class="btn p sm">Iešu</span></div></details>
@@ -895,7 +901,7 @@ html.dark .rd{
       </div>
     </div>
     <div class="shot" style="flex:1 1 440px">
-      <div class="cap">B · A menu on the left</div>
+      <div class="cap">B · A menu on the left<span class="status liked">Liked</span></div>
       <div class="desk" style="--c:#10B981">
         <div class="ghead">
           <div class="gban" style="padding:14px 22px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 20px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
@@ -943,7 +949,7 @@ html.dark .rd{
     </div>
   </div>
   <div class="idgrid">
-    <div class="box"><span class="lbl">Empty state</span>
+    <div class="box"><span class="lbl">Empty state<span class="status liked">Liked</span></span>
       <div class="nt-empty"><span class="mk" aria-hidden="true"></span><b style="font:600 17px var(--display)">Pagaidām kluss</b><p class="spec-i">Kad kāds pieteiksies tavā grupā vai parādīsies jauns pasākums, tas būs šeit.</p></div>
       <p class="why">English: "Quiet for now. When someone joins your group or a new event appears, it will show here." The two circles replace the grey bell.</p></div>
     <div class="box wide"><span class="lbl">Why this order</span>
@@ -990,7 +996,7 @@ html.dark .rd{
 
   <h3>Inside a conversation</h3>
   <div class="screens">
-    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Personal chat that started from a group</div>
+    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Personal chat that started from a group<span class="status liked">Liked</span></div>
       <div class="desk cv-pane">
         <div class="cv-head"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="q">kopā: Vēja zirdžiņš, Pārgājieni</span></div></div>
         <div class="cv-msgs">
@@ -1003,7 +1009,7 @@ html.dark .rd{
       </div>
       <p class="why">A quiet centred line, never a bubble. It appears when the conversation starts from a group and again each time it is resumed from a different one.</p>
     </div>
-    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Conversation with a group's team</div>
+    <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Conversation with a group's team<span class="status liked">Liked</span></div>
       <div class="desk cv-pane">
         <div class="cv-head"><span class="nt-av g" style="--c:#F43F5E"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="q">Tu ↔ grupas komanda</span></div></div>
         <div class="cv-msgs" style="--c:#F43F5E">
