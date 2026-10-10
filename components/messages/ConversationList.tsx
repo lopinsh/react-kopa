@@ -18,7 +18,16 @@ type Props = {
 
 type CssVars = React.CSSProperties & Record<`--${string}`, string>;
 
-/** The group's name in its category colour. The colour is resolved on the server (Taxonomy Law); here it only becomes a CSS variable. */
+type Filter = 'ALL' | InboxRow['kind'];
+
+/** Chats by kind: personal (two people) or group chats. One chip per group would fill up fast. */
+const FILTERS: Array<{ value: Filter; labelKey: 'filterAll' | 'filterPersonal' | 'filterGroups' }> = [
+    { value: 'ALL', labelKey: 'filterAll' },
+    { value: 'DIRECT', labelKey: 'filterPersonal' },
+    { value: 'GROUP', labelKey: 'filterGroups' }
+];
+
+/** The group's name and category in the category colour. Both are resolved on the server (Taxonomy Law); here the colour only becomes a CSS variable. */
 export function GroupLabel({ group, className }: { group: NonNullable<InboxRow['group']>; className?: string }) {
     const vars: CssVars = { '--group-color': group.accentColor };
     return (
@@ -27,7 +36,7 @@ export function GroupLabel({ group, className }: { group: NonNullable<InboxRow['
             className={clsx('flex items-center gap-1.5 truncate font-bold text-[color:color-mix(in_srgb,var(--group-color)_65%,var(--foreground))]', className)}
         >
             <span className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--group-color)]" aria-hidden="true" />
-            <span className="truncate">{group.name}</span>
+            <span className="truncate">{group.categoryTitle ? `${group.name} · ${group.categoryTitle}` : group.name}</span>
         </span>
     );
 }
@@ -35,27 +44,21 @@ export function GroupLabel({ group, className }: { group: NonNullable<InboxRow['
 export default function ConversationList({ conversations, activeId, onOpen, titleOf, className }: Props) {
     const t = useTranslations('messages');
     const messageTime = useMessageTime();
-    const [filter, setFilter] = useState<string | null>(null);
+    const [filter, setFilter] = useState<Filter>('ALL');
 
-    const groups = useMemo(() => {
-        const seen = new Map<string, NonNullable<InboxRow['group']>>();
-        for (const c of conversations) if (c.group && !seen.has(c.group.id)) seen.set(c.group.id, c.group);
-        return [...seen.values()];
-    }, [conversations]);
-
-    // A chip whose group no longer has chats falls back to "All".
-    const activeFilter = filter && groups.some(g => g.id === filter) ? filter : null;
-    const visible = activeFilter ? conversations.filter(c => c.group?.id === activeFilter) : conversations;
+    const visible = useMemo(
+        () => filter === 'ALL' ? conversations : conversations.filter(c => c.kind === filter),
+        [conversations, filter]
+    );
 
     return (
         <div className={clsx('w-full flex-col border-r border-border bg-surface-elevated/30 sm:w-80', className)}>
             <div className="border-b border-border bg-surface p-4">
                 <h1 className="text-lg font-bold">{t('title')}</h1>
-                {groups.length > 0 && (
-                    <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label={t('filterLabel')}>
-                        <FilterChip active={!activeFilter} onClick={() => setFilter(null)}>{t('filterAll')}</FilterChip>
-                        {groups.map(g => (
-                            <FilterChip key={g.id} active={activeFilter === g.id} onClick={() => setFilter(g.id)}>{g.name}</FilterChip>
+                {conversations.length > 0 && (
+                    <div className="mt-3 flex gap-2" role="group" aria-label={t('filterLabel')}>
+                        {FILTERS.map(({ value, labelKey }) => (
+                            <FilterChip key={value} active={filter === value} onClick={() => setFilter(value)}>{t(labelKey)}</FilterChip>
                         ))}
                     </div>
                 )}
@@ -96,7 +99,9 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                         {conv.unread && <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary" role="img" aria-label={t('unread')} />}
                     </button>
                 )) : (
-                    <div className="p-8 text-center text-sm italic text-foreground-muted">{t('emptyInbox')}</div>
+                    <div className="p-8 text-center text-sm italic text-foreground-muted">
+                        {conversations.length > 0 ? t('filterEmpty') : t('emptyInbox')}
+                    </div>
                 )}
             </div>
         </div>
@@ -110,7 +115,7 @@ function FilterChip({ active, onClick, children }: { active: boolean; onClick: (
             onClick={onClick}
             aria-pressed={active}
             className={clsx(
-                'max-w-[10rem] shrink-0 truncate rounded-full border px-3 py-1 text-xs font-bold transition-colors',
+                'shrink-0 rounded-full border px-3 py-1 text-xs font-bold transition-colors',
                 active ? 'border-primary bg-primary text-white' : 'border-border bg-surface text-foreground-muted hover:text-foreground'
             )}
         >

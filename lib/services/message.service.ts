@@ -48,7 +48,7 @@ export interface InboxRow {
     /** The person on the other side: the partner (DIRECT) or the outside person (seen by the team). Null for the contact person's own view of a group chat. */
     other: PersonView | null;
     /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
-    group: { id: string; name: string; l1Slug: string; accentColor: string; href: string | null } | null;
+    group: { id: string; name: string; categoryTitle: string; l1Slug: string; accentColor: string; href: string | null } | null;
     lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
     origin: { type: string; groupName: string | null; groupHref: string | null } | null;
 }
@@ -179,7 +179,13 @@ export const MessageService = {
                             name: true,
                             slug: true,
                             hiddenAt: true,
-                            category: { include: TaxonomyResolver.getInclude(locale) }
+                            category: { include: TaxonomyResolver.getInclude(locale) },
+                            // A level-1 category says little ("Sports"); a level-2 tag is more specific, as on the group page.
+                            tags: {
+                                where: { level: 2 },
+                                take: 1,
+                                select: { slug: true, titles: { where: { lang: locale }, select: { title: true } } }
+                            }
                         }
                     },
                     messages: {
@@ -198,6 +204,8 @@ export const MessageService = {
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
                 const href = c.originGroup ? groupHref(c.originGroup) : null;
+                const l2Tag = resolved?.level === 1 ? c.originGroup?.tags[0] : undefined;
+                const categoryTitle = l2Tag ? (l2Tag.titles[0]?.title ?? l2Tag.slug) : (resolved?.categoryTitle ?? '');
                 const lastFromOthers = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;
 
@@ -214,7 +222,7 @@ export const MessageService = {
                         ? (viewerIsContact ? null : c.contactUser)
                         : (c.participants.find(p => p.id !== userId) ?? null),
                     group: c.originGroup && resolved && c.originGroupId
-                        ? { id: c.originGroupId, name: c.originGroup.name, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
+                        ? { id: c.originGroupId, name: c.originGroup.name, categoryTitle, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
                         : null,
                     lastMessage: c.messages[0] ?? null,
                     origin: c.originType
