@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 
 type Props = {
@@ -18,6 +18,15 @@ type Props = {
 /** In-app replacement for window.confirm (which blocks the page and can't be styled). */
 export default function ConfirmDialog({ isOpen, title, message, confirmLabel, destructive = false, isPending = false, onConfirm, onCancel }: Props) {
     const tCommon = useTranslations('common');
+    const cancelRef = useRef<HTMLButtonElement>(null);
+
+    // Focus the safe choice on open and give focus back to whatever opened the dialog on close.
+    useEffect(() => {
+        if (!isOpen) return;
+        const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        cancelRef.current?.focus();
+        return () => previous?.focus();
+    }, [isOpen]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -30,11 +39,12 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-md animate-in fade-in duration-200">
-            <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-dialog-title" className="w-full max-w-sm rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl">
+            <div role="alertdialog" aria-modal="true" aria-labelledby="confirm-dialog-title" aria-describedby="confirm-dialog-message" className="w-full max-w-sm rounded-[2rem] border border-border/50 bg-surface p-6 shadow-2xl">
                 <h2 id="confirm-dialog-title" className="text-lg font-black tracking-tight text-foreground">{title}</h2>
-                <p className="mt-2 text-sm font-medium leading-relaxed text-foreground-muted">{message}</p>
+                <p id="confirm-dialog-message" className="mt-2 text-sm font-medium leading-relaxed text-foreground-muted">{message}</p>
                 <div className="mt-6 flex items-center justify-end gap-3">
                     <button
+                        ref={cancelRef}
                         type="button"
                         onClick={onCancel}
                         disabled={isPending}

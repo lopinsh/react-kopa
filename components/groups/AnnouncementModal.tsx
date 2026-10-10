@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, Send } from 'lucide-react';
 import { createPost } from '@/actions/post-actions';
@@ -24,6 +24,13 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
     const [content, setContent] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+
+    // Escape closes the pop-up, except while publishing.
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape' && !isPending) onClose(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [isPending, onClose]);
 
     const canSubmit = announcementSchema.safeParse({ title, content }).success && !isPending;
 
@@ -50,6 +57,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                     <button
                         type="button"
                         onClick={onClose}
+                        disabled={isPending}
                         aria-label={tCommon('close')}
                         className="rounded-xl p-2 text-foreground-muted transition-all hover:bg-surface-elevated hover:text-foreground"
                     >
@@ -62,6 +70,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                         <label htmlFor="announcement-title" className="mb-1.5 block text-xs font-bold text-foreground">{t('announcementTitleLabel')}</label>
                         <input
                             id="announcement-title"
+                            autoFocus
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             maxLength={ANNOUNCEMENT_TITLE_MAX}
