@@ -71,10 +71,10 @@ async function call(path: string, init?: RequestInit): Promise<Response> {
 function printNote(note: Note): void {
     const date = note.createdAt.slice(0, 16).replace('T', ' ');
     console.log(`## ${note.id} · ${note.kind} · ${note.status}`);
-    console.log(`- Page: ${note.locale ? `/${note.locale}` : ''}${note.path}`);
+    console.log(`- Page: /${note.locale}${note.path === '/' ? '' : note.path}`);
     console.log(`- Element: \`${note.selector}\`${note.elementText ? ` ("${note.elementText}")` : ''}`);
     console.log(`- Viewport: ${note.viewportW}x${note.viewportH}, ${note.theme} theme`);
-    console.log(`- By: ${note.authorName ?? 'unknown'}, ${date}`);
+    console.log(`- By: ${note.authorName ?? 'unknown'}, ${date} UTC`);
     if (note.reply) console.log(`- Reply: ${note.reply}`);
     console.log(`\n${note.text}\n`);
 }
@@ -94,7 +94,11 @@ async function update(command: string, id: string | undefined, reply: string | u
         method: 'PATCH',
         body: JSON.stringify({ status: STATUS_FOR_COMMAND[command], ...(reply ? { reply } : {}) }),
     });
-    if (res.status === 404) fail(`No note with id ${id}.`);
+    if (res.status === 404) {
+        // The route answers 404 with an empty body when the API is disabled, and { error: 'NOT_FOUND' } for an unknown id.
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        fail(body?.error === 'NOT_FOUND' ? `No note with id ${id}.` : 'The feedback API answered 404: not enabled there (FEEDBACK_API_TOKEN unset on the server) or not deployed yet.');
+    }
     if (!res.ok) fail(`Update failed: HTTP ${res.status}`);
     console.log(`${id} -> ${STATUS_FOR_COMMAND[command]}`);
 }
@@ -103,8 +107,8 @@ async function main(): Promise<void> {
     loadEnv();
     const [command = 'list', id, reply] = process.argv.slice(2);
     if (command === 'list') await list();
-    else if (command in STATUS_FOR_COMMAND) await update(command, id, reply);
+    else if (Object.hasOwn(STATUS_FOR_COMMAND, command)) await update(command, id, reply);
     else fail(`Unknown command "${command}". Use: list, done <id> "reply", doing <id>, wontdo <id> "reply".`);
 }
 
-void main();
+main().catch((error: unknown) => fail(`Feedback script failed: ${error instanceof Error ? error.message : String(error)}`));
