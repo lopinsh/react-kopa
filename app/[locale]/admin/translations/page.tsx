@@ -58,7 +58,8 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                     <ul className="space-y-3">
                         {suggestions.map((s) => (
                             <SuggestionRow
-                                key={s.id}
+                                // A replaced suggestion keeps its id; keying on the text too resets the row's error state.
+                                key={`${s.id}:${s.value}`}
                                 id={s.id}
                                 messageKey={s.key}
                                 lang={s.lang}
