@@ -336,12 +336,11 @@ export const GroupService = {
         }
 
         // 4. Final Context Construction
-        // Only the text resolved for this viewer leaves the server. Members-only content is never read
-        // (from any language) for people who may not see it; the page shows a lock instead.
+        // Only the text resolved for this viewer leaves the server. Members-only sections are left out
+        // entirely (not even a title or a placeholder) for people who may not see them.
         const sections: SectionView[] = g.sections.length > 0
-            ? g.sections.map((s) => {
-                const withhold = s.visibility === 'MEMBERS_ONLY' && !isMember && !isSiteAdmin;
-                const text = resolveSectionText(s.translations, lang, s.originalLang, withhold);
+            ? g.sections.filter((s) => s.visibility !== 'MEMBERS_ONLY' || isMember || isSiteAdmin).map((s) => {
+                const text = resolveSectionText(s.translations, lang, s.originalLang);
                 return {
                     id: s.id,
                     title: text.title,

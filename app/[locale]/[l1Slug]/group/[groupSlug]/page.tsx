@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getTranslations } from 'next-intl/server';
 import MemberAvatarList from '@/components/groups/MemberAvatarList';
-import { Info, Calendar, MessageSquare, Users as UsersIcon, HelpCircle, Lock } from 'lucide-react';
+import { Info, Calendar, MessageSquare, Users as UsersIcon, HelpCircle } from 'lucide-react';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import GroupHeader from '@/components/groups/GroupHeader';
 import { ensureContrast } from '@/lib/color-utils';
@@ -59,12 +59,10 @@ export default async function GroupPage({
                     <div className="lg:col-span-2 space-y-10 pb-24">
                         <div className="space-y-10">
                             {group.sections.map((section, index) => {
-                                const isPublic = section.visibility === 'PUBLIC';
-                                const isVisible = isPublic || group.user.isMember;
                                 // One label per language shown: next to the title (not shown for the first section),
                                 // and above the content only when the content is in a different language than that.
                                 const titleLabel = index !== 0 ? langAttr(section.titleLang, locale) : undefined;
-                                const contentLabel = section.content && isVisible ? langAttr(section.contentLang, locale) : undefined;
+                                const contentLabel = section.content ? langAttr(section.contentLang, locale) : undefined;
 
                                 return (
                                     <section
@@ -85,34 +83,16 @@ export default async function GroupPage({
                                             </div>
                                         )}
 
-                                        {/* Primary Section Content / Guard */}
+                                        {/* Primary Section Content */}
                                         <div className={clsx("p-8 pb-10", index === 0 ? "pt-8" : "pt-0")}>
-
-
-                                            {!isVisible ? (
-                                                <div className="py-6 text-center space-y-4">
-                                                    <div className="mx-auto w-12 h-12 rounded-2xl bg-[var(--accent)]/10 flex items-center justify-center">
-                                                        <Lock className="h-6 w-6 text-[var(--accent)]" />
-                                                    </div>
-                                                    <div className="space-y-1">
-                                                        <h3 className="font-bold">{c_common_get('membersOnlySection')}</h3>
-                                                        <p className="text-sm text-foreground-muted">{c_common_get('membersOnlySectionDescription')}</p>
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    {contentLabel && contentLabel !== titleLabel && (
-                                                        <FallbackLangLabel lang={contentLabel} className="mb-4" />
-                                                    )}
-                                                    <div
-                                                        lang={langAttr(section.contentLang, locale)}
-                                                        className="prose prose-sm prose-invert max-w-none text-foreground/90 leading-relaxed font-medium"
-                                                        dangerouslySetInnerHTML={{ __html: sanitizeRichText(section.content) }}
-                                                    />
-
-
-                                                </div>
+                                            {contentLabel && contentLabel !== titleLabel && (
+                                                <FallbackLangLabel lang={contentLabel} className="mb-4" />
                                             )}
+                                            <div
+                                                lang={langAttr(section.contentLang, locale)}
+                                                className="prose prose-sm prose-invert max-w-none text-foreground/90 leading-relaxed font-medium"
+                                                dangerouslySetInnerHTML={{ __html: sanitizeRichText(section.content) }}
+                                            />
                                         </div>
                                     </section>
                                 );
