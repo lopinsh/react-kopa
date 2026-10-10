@@ -2,10 +2,11 @@
 
 import { useState, useTransition } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import { updateFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_STATUSES, FEEDBACK_TEXT_MAX, type FeedbackStatusValue } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
+import FeedbackDeleteButton from '@/components/feedback/FeedbackDeleteButton';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 /** One note on the admin feedback page: what was said and where, plus status and reply. */
@@ -18,6 +19,8 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
     const [status, setStatus] = useState<FeedbackStatusValue>(note.status);
     const [reply, setReply] = useState(note.reply ?? '');
     const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+    const [deleted, setDeleted] = useState(false);
 
     const dirty = status !== note.status || reply !== (note.reply ?? '');
 
@@ -29,6 +32,9 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
             else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
+
+    // The action also revalidates the page; hiding at once avoids a flash of the stale row.
+    if (deleted) return null;
 
     return (
         <li className="rounded-2xl border border-border bg-surface p-4">
@@ -65,14 +71,21 @@ export default function FeedbackAdminRow({ note }: { note: FeedbackItem }) {
                     aria-label={t('reply')}
                     className="resize-none rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm text-foreground"
                 />
-                <button
-                    type="button"
-                    onClick={handleSave}
-                    disabled={isPending || !dirty}
-                    className="rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                >
-                    {tAdmin('save')}
-                </button>
+                <div className="flex gap-2 sm:flex-col">
+                    <button
+                        type="button"
+                        onClick={handleSave}
+                        disabled={isPending || !dirty}
+                        className="flex-1 rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                    >
+                        {tAdmin('save')}
+                    </button>
+                    <FeedbackDeleteButton
+                        id={note.id}
+                        onDeleted={() => { setDeleted(true); router.refresh(); }}
+                        className="flex items-center justify-center gap-1 rounded-xl border border-red-500/40 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-500/10 disabled:opacity-50"
+                    />
+                </div>
             </div>
         </li>
     );

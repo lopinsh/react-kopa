@@ -1194,6 +1194,10 @@
     "noteTitle": "Note",
     "reply": "Reply",
     "openList": "All notes",
+    "delete": "Delete",
+    "deleteTitle": "Delete this note?",
+    "deleteMessage": "This cannot be undone.",
+    "deleted": "Note deleted",
     "pinLabel": "Note {n}",
     "kind": {
       "BUG": "Bug",

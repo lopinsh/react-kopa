@@ -1194,6 +1194,10 @@
     "noteTitle": "Piezīme",
     "reply": "Atbilde",
     "openList": "Visas piezīmes",
+    "delete": "Dzēst",
+    "deleteTitle": "Dzēst šo piezīmi?",
+    "deleteMessage": "Šo nevarēs atsaukt.",
+    "deleted": "Piezīme dzēsta",
     "pinLabel": "Piezīme {n}",
     "kind": {
       "BUG": "Kļūda",

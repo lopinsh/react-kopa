@@ -90,6 +90,12 @@ async function updateNote(id: string, input: unknown): Promise<FeedbackResult<Fe
     return { success: true, data: toItem(row) };
 }
 
+/** Hard delete. `deleteMany` so a note that is already gone is NOT_FOUND instead of a thrown error. */
+async function deleteNote(id: string): Promise<FeedbackResult> {
+    const { count } = await prisma.feedback.deleteMany({ where: { id } });
+    return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
+}
+
 export const FeedbackService = {
     async create(adminId: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
@@ -131,6 +137,11 @@ export const FeedbackService = {
         return updateNote(id, input);
     },
 
+    async remove(adminId: string, id: string): Promise<FeedbackResult> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        return deleteNote(id);
+    },
+
     /** Agent access (API token): there is no user, so the caller must already have checked the token. */
     async listForAgent(status?: FeedbackStatusValue): Promise<FeedbackItem[]> {
         const rows = await prisma.feedback.findMany({ where: { status }, orderBy: { createdAt: 'asc' }, take: 200, ...itemArgs });
@@ -138,4 +149,5 @@ export const FeedbackService = {
     },
 
     updateForAgent: updateNote,
+    removeForAgent: deleteNote,
 };

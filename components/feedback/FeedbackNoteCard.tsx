@@ -1,30 +1,34 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
+import FeedbackDeleteButton from './FeedbackDeleteButton';
 
 type Props = {
     note: FeedbackItem;
     onClose: () => void;
+    onDeleted: (id: string) => void;
 };
 
 /** One saved note with its status and the agent's reply. Opened from a pin or from the notes list. */
-export default function FeedbackNoteCard({ note, onClose }: Props) {
+export default function FeedbackNoteCard({ note, onClose, onDeleted }: Props) {
     const t = useTranslations('feedbackMode');
     const format = useFormatter();
+    const [confirming, setConfirming] = useState(false);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key !== 'Escape') return;
+            // While the delete confirmation is open, Escape belongs to it.
+            if (e.key !== 'Escape' || confirming) return;
             e.stopPropagation();
             onClose();
         };
         window.addEventListener('keydown', onKey, true);
         return () => window.removeEventListener('keydown', onKey, true);
-    }, [onClose]);
+    }, [onClose, confirming]);
 
     return (
         <div
@@ -57,7 +61,10 @@ export default function FeedbackNoteCard({ note, onClose }: Props) {
                 )}
                 <div className="mt-4 flex items-center justify-between gap-3 text-xs text-foreground-muted">
                     <span>{format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}</span>
-                    <Link href="/admin/feedback" className="font-semibold text-primary hover:underline">{t('openList')}</Link>
+                    <div className="flex items-center gap-3">
+                        <FeedbackDeleteButton id={note.id} onDeleted={onDeleted} onConfirmChange={setConfirming} className="flex items-center gap-1 font-semibold text-red-500 hover:underline disabled:opacity-50" />
+                        <Link href="/admin/feedback" className="font-semibold text-primary hover:underline">{t('openList')}</Link>
+                    </div>
                 </div>
             </div>
         </div>

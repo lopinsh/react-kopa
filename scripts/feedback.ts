@@ -5,6 +5,7 @@
  *   npm run feedback -- done <id> "reply"  mark done (reply optional)
  *   npm run feedback -- doing <id>
  *   npm run feedback -- wontdo <id> "reply"
+ *   npm run feedback -- delete <id>        delete a note for good
  *
  * Needs FEEDBACK_API_TOKEN (and optionally FEEDBACK_API_URL, default https://ejam.lumm.eu) in .env or the environment.
  */
@@ -118,12 +119,24 @@ async function update(command: string, id: string | undefined, reply: string | u
     console.log(`${id} -> ${STATUS_FOR_COMMAND[command]}`);
 }
 
+async function remove(id: string | undefined): Promise<void> {
+    if (!id) fail('Usage: npm run feedback -- delete <id>');
+    const res = await call(`/api/feedback/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    if (res.status === 404) {
+        const body = (await res.json().catch(() => null)) as { error?: string } | null;
+        fail(body?.error === 'NOT_FOUND' ? `No note with id ${id}.` : 'The feedback API answered 404: not enabled there (FEEDBACK_API_TOKEN unset on the server) or not deployed yet.');
+    }
+    if (!res.ok) fail(`Delete failed: HTTP ${res.status}`);
+    console.log(`${id} deleted`);
+}
+
 async function main(): Promise<void> {
     loadEnv();
     const [command = 'list', id, reply] = process.argv.slice(2);
     if (command === 'list') await list();
+    else if (command === 'delete') await remove(id);
     else if (Object.hasOwn(STATUS_FOR_COMMAND, command)) await update(command, id, reply);
-    else fail(`Unknown command "${command}". Use: list, done <id> "reply", doing <id>, wontdo <id> "reply".`);
+    else fail(`Unknown command "${command}". Use: list, done <id> "reply", doing <id>, wontdo <id> "reply", delete <id>.`);
 }
 
 main().catch((error: unknown) => fail(`Feedback script failed: ${error instanceof Error ? error.message : String(error)}`));

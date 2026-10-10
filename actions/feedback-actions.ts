@@ -76,3 +76,16 @@ export async function updateFeedback(id: string, input: UpdateFeedbackInput): Pr
         return handleActionError(error, 'UPDATE_FAILED');
     }
 }
+
+export async function deleteFeedback(id: string): Promise<ActionResponse> {
+    const check = await requireAdmin();
+    if (!check.ok) return { success: false, error: check.error };
+    try {
+        const result = await FeedbackService.remove(check.adminId, id);
+        if (!result.success) return result;
+        revalidatePath('/admin/feedback');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
+    }
+}
