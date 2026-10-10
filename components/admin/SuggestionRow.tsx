@@ -26,15 +26,17 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
 
-    const run = (action: (id: string) => ReturnType<typeof approveSuggestion>, doneKey: 'approved' | 'rejected') => {
+    const run = (action: (id: string, value: string) => ReturnType<typeof approveSuggestion>, doneKey: 'approved' | 'rejected') => {
         if (isPending) return;
         setError(null);
         startTransition(async () => {
-            const res = await action(id);
+            const res = await action(id, value);
             if (res.success) {
                 toastSuccess(t(doneKey));
                 router.refresh();
             } else {
+                // Gone or changed since the page loaded (approved, rejected or replaced elsewhere): show the list as it is now.
+                if (res.error === 'NOT_FOUND') router.refresh();
                 const text = tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED');
                 setError(text);
                 toastError(text);

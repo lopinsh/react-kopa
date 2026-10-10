@@ -228,11 +228,15 @@ export const MessageOverrideService = {
         return { success: true, data };
     },
 
-    /** Makes a suggestion the live text (equal to the shipped text removes the override, like a direct save used to). */
-    async approveSuggestion(adminId: string, id: string): Promise<OverrideResult> {
+    /**
+     * Makes a suggestion the live text (equal to the shipped text removes the override, like a direct save used to).
+     * `expectedValue` is the text the admin saw: a suggestion replaced since then (same id, new text) or already
+     * approved/rejected by someone else is NOT_FOUND, so nobody approves a text they never read.
+     */
+    async approveSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
         const row = await prisma.messageSuggestion.findUnique({ where: { id } });
-        if (!row) return { success: false, error: 'NOT_FOUND' };
+        if (!row || row.value !== expectedValue) return { success: false, error: 'NOT_FOUND' };
         if (row.lang !== 'lv' && row.lang !== 'en') return { success: false, error: 'MESSAGE_INVALID' };
         const lang: MessageLang = row.lang;
 
@@ -241,22 +245,29 @@ export const MessageOverrideService = {
         if (validateMessage(row.value, base[row.key])) return { success: false, error: 'MESSAGE_INVALID' };
 
         const { key, value } = row;
-        await prisma.$transaction([
-            value === base[key]
-                ? prisma.messageOverride.deleteMany({ where: { key, lang } })
-                : prisma.messageOverride.upsert({
+        // Claim the suggestion first: only the request that deletes it writes the override (no double approve,
+        // no approve after a concurrent reject or replacement).
+        const claimed = await prisma.$transaction(async (tx) => {
+            const { count } = await tx.messageSuggestion.deleteMany({ where: { id, value } });
+            if (count === 0) return false;
+            if (value === base[key]) {
+                await tx.messageOverride.deleteMany({ where: { key, lang } });
+            } else {
+                await tx.messageOverride.upsert({
                     where: { key_lang: { key, lang } },
                     create: { key, lang, value, updatedById: adminId },
                     update: { value, updatedById: adminId },
-                }),
-            prisma.messageSuggestion.deleteMany({ where: { id } }),
-        ]);
-        return { success: true };
+                });
+            }
+            return true;
+        });
+        return claimed ? { success: true } : { success: false, error: 'NOT_FOUND' };
     },
 
-    async rejectSuggestion(adminId: string, id: string): Promise<OverrideResult> {
+    /** Like approve, `expectedValue` keeps a replaced suggestion (same id, new text) from being rejected unseen. */
+    async rejectSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-        const { count } = await prisma.messageSuggestion.deleteMany({ where: { id } });
+        const { count } = await prisma.messageSuggestion.deleteMany({ where: { id, value: expectedValue } });
         return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
     },
 

@@ -80,11 +80,12 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
     }
 }
 
-export async function approveSuggestion(id: string): Promise<ActionResponse> {
+/** `value` is the suggested text the admin approved; a suggestion changed since then is NOT_FOUND. */
+export async function approveSuggestion(id: string, value: string): Promise<ActionResponse> {
     const check = await requireAdmin();
     if (!check.ok) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.approveSuggestion(check.adminId, id);
+        const result = await MessageOverrideService.approveSuggestion(check.adminId, id, value);
         if (!result.success) return result;
 
         updateTag(MESSAGE_OVERRIDES_TAG);
@@ -95,11 +96,11 @@ export async function approveSuggestion(id: string): Promise<ActionResponse> {
     }
 }
 
-export async function rejectSuggestion(id: string): Promise<ActionResponse> {
+export async function rejectSuggestion(id: string, value: string): Promise<ActionResponse> {
     const check = await requireAdmin();
     if (!check.ok) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.rejectSuggestion(check.adminId, id);
+        const result = await MessageOverrideService.rejectSuggestion(check.adminId, id, value);
         if (!result.success) return result;
 
         revalidatePath('/', 'layout');
