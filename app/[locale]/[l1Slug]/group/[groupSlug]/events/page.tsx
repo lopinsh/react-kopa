@@ -62,18 +62,6 @@ export default async function GroupEventsPage({
 
     return (
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-3xl mx-auto px-4 md:px-8 py-6">
-            {isOwnerOrAdmin && (
-                <div className="flex flex-col sm:flex-row sm:items-center justify-end gap-4 mb-4">
-                    <Link
-                        href={`/${l1Slug}/group/${groupSlug}/create-event`}
-                        className="group/cta flex items-center justify-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-all bg-[var(--accent)] text-white hover:opacity-90 shadow-sm shrink-0"
-                    >
-                        <Plus className="h-4 w-4" />
-                        {t('createEvent')}
-                    </Link>
-                </div>
-            )}
-
             {filteredEvents.length > 0 ? (
                 <div className="flex flex-col gap-3">
                     {filteredEvents.map((event) => (

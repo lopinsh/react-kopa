@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon, UserPlus } from 'lucide-react';
+import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon, UserPlus, Plus } from 'lucide-react';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';
@@ -90,6 +90,9 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     } else {
         tabs = [];
     }
+
+    // The events list ends its tab row with the page's one action
+    const showCreateEvent = isOwnerOrAdmin && tabs === eventsTabs;
 
     // Scroll-Spy Implementation
     useEffect(() => {
@@ -274,6 +277,15 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                             );
                         })}
                     </nav>
+                    {showCreateEvent && (
+                        <Link
+                            href={`${baseUrl}/create-event`}
+                            className="my-2 flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                        >
+                            <Plus className="h-4 w-4" />
+                            {t('createEvent')}
+                        </Link>
+                    )}
                 </div>
             </div>
 
