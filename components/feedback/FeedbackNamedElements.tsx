@@ -30,9 +30,9 @@ function namedAround(target: EventTarget | null): Element | null {
 /**
  * Feedback mode's main layer: every element carrying a `data-ui` name gets a dotted outline (like the dotted
  * underline of translation mode) and, for the active one, a small comment button at its top-right corner.
- * Mouse: the element under the pointer is active. Touch: the tapped element is. Keyboard: the buttons are
- * all focusable and appear on focus. Everything sits in one fixed layer that follows each element's
- * bounding box, so the page layout never moves; elements under an open pop-up are left out.
+ * Mouse: the element under the pointer is active and clicks work as usual. Touch: the first tap on an element
+ * selects it (no action), a second tap uses it. Keyboard: the buttons are all focusable and appear on focus.
+ * Everything sits in one fixed layer that follows each element's bounding box, so the page layout never moves; elements under an open pop-up are left out.
  */
 export default function FeedbackNamedElements({ enabled, onPick }: Props) {
     const t = useTranslations('feedbackMode');
@@ -82,36 +82,61 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
         };
     }, [enabled, measure]);
 
+    // Mirrors `active` for the document listeners below, which are set up once per enable.
+    const activeRef = useRef<Element | null>(null);
+    useEffect(() => { activeRef.current = active; }, [active]);
+
     useEffect(() => {
         if (!enabled) return;
 
-        // Mouse only: touch has no hover, and its pointermove fires while scrolling.
+        // Touch or pen tap on a named element that isn't active yet: the tap only selects it (shows its
+        // comment button) and must not act. Decided on pointerdown, applied to the mousedown and click after it.
+        let selectOnTap: Element | null = null;
+        let lastPointer = 'mouse';
+
+        // Mouse: hover makes an element active and clicks work as usual. Touch has no hover, and its
+        // pointermove fires while scrolling, so it is left out here.
         const onMove = (e: PointerEvent) => {
             if (e.pointerType !== 'mouse') return;
             if (e.target instanceof Element && e.target.closest('[data-feedback-comment]')) return;
             setActive(namedAround(e.target));
         };
+        const onDown = (e: PointerEvent) => {
+            selectOnTap = null;
+            lastPointer = e.pointerType;
+            if (e.pointerType === 'mouse') return;
+            const named = namedAround(e.target);
+            if (named && named !== activeRef.current) selectOnTap = named;
+        };
+        const onCancel = () => { selectOnTap = null; };
         const swallow = (e: Event) => {
-            if (!namedAround(e.target)) return;
+            if (!selectOnTap || !(e.target instanceof Node) || !selectOnTap.contains(e.target)) return;
             e.preventDefault();
             e.stopPropagation();
         };
-        // A click (or tap) on a named element selects it instead of doing its normal action; the pause
-        // button in the bar is for using the page. Clicks outside any named element work as usual.
+        // First tap selects; a second tap on the same element uses the page as normal. A tap outside any
+        // named element clears the selection.
         const onClick = (e: MouseEvent) => {
-            if (ignored(e.target)) return;
-            const named = namedAround(e.target);
-            setActive(named);
-            if (!named) return;
-            e.preventDefault();
-            e.stopPropagation();
+            const picked = selectOnTap;
+            selectOnTap = null;
+            if (picked && e.target instanceof Node && picked.contains(e.target)) {
+                e.preventDefault();
+                e.stopPropagation();
+                setActive(picked);
+                return;
+            }
+            if (!ignored(e.target) && !namedAround(e.target) && lastPointer !== 'mouse') setActive(null);
         };
 
         document.addEventListener('pointermove', onMove, true);
+        document.addEventListener('pointerdown', onDown, true);
+        document.addEventListener('pointercancel', onCancel, true);
         document.addEventListener('mousedown', swallow, true);
         document.addEventListener('click', onClick, true);
         return () => {
             document.removeEventListener('pointermove', onMove, true);
+            document.removeEventListener('pointerdown', onDown, true);
+            document.removeEventListener('pointercancel', onCancel, true);
             document.removeEventListener('mousedown', swallow, true);
             document.removeEventListener('click', onClick, true);
         };

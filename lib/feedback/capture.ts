@@ -63,14 +63,21 @@ export function visibleText(el: Element): string {
 
 /**
  * True when something else (e.g. an open pop-up and its backdrop) lies over the element's centre,
- * so its pin would float on top of that pop-up. Feedback mode's own layers don't count.
+ * so its pin would float on top of that pop-up. Feedback mode's own layers don't count. A pop-up rendered
+ * inside the element (e.g. the join pop-up inside the group header) still covers it: anything `fixed`
+ * between the element and the point counts as a layer on top.
  */
 export function isCovered(el: Element, rect: DOMRect): boolean {
     const x = Math.min(Math.max(rect.left + rect.width / 2, 0), window.innerWidth - 1);
     const y = Math.min(Math.max(rect.top + rect.height / 2, 0), window.innerHeight - 1);
     const top = document.elementFromPoint(x, y);
     if (!top || top.closest('[data-feedback-ignore]')) return false;
-    return !el.contains(top) && !top.contains(el);
+    if (top.contains(el)) return false;
+    if (!el.contains(top)) return true;
+    for (let node: Element | null = top; node && node !== el; node = node.parentElement) {
+        if (getComputedStyle(node).position === 'fixed') return true;
+    }
+    return false;
 }
 
 /** The `data-ui` name of the closest named component around (or at) an element, if it is a known one. */
