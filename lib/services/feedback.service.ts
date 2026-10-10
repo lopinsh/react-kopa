@@ -189,6 +189,5 @@ export const FeedbackService = {
     },
 
     updateForAgent: (id: string, input: unknown) => updateNote(id, null, input),
-    replyForAgent: (id: string, input: unknown) => addReply(id, null, input),
     removeForAgent: deleteNote,
 };
