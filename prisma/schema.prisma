@@ -279,17 +279,21 @@ model Membership {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  content   String
-  authorId  String
-  groupId   String
-  parentId  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  parent    Post?    @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies   Post[]   @relation("PostReplies")
+  id         String    @id @default(cuid())
+  /// Announcement headline. Null on posts written before announcements had titles.
+  title      String?
+  content    String
+  authorId   String
+  groupId    String
+  parentId   String?
+  /// Set when the team moved the announcement to the archive.
+  archivedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group      Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  parent     Post?     @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies    Post[]    @relation("PostReplies")
 }
 
 enum ConversationKind {
