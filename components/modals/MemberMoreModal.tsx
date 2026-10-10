@@ -1,6 +1,6 @@
 'use client';
 
-import { X, User, MessageSquare } from 'lucide-react';
+import { X, MessageSquare } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { clsx } from 'clsx';

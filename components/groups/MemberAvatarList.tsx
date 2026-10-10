@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { User, ChevronRight, MessageSquare } from 'lucide-react';
+import { ChevronRight, MessageSquare } from 'lucide-react';
 import { clsx } from 'clsx';
 import MemberMoreModal from '../modals/MemberMoreModal';
 import ContactGroupModal from '../modals/ContactGroupModal';
