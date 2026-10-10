@@ -12,6 +12,7 @@ import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
+import { triggerRealtime } from '@/lib/pusher';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -1160,6 +1161,8 @@ export const GroupService = {
         const slugs = { slug: post.group.slug, l1Slug: resolved.l1Slug };
 
         await prisma.post.delete({ where: { id: postId } });
+        // Only the id goes over the (public) group channel; open boards drop the post.
+        await triggerRealtime(`group-${post.groupId}`, 'delete-post', { postId });
         return { success: true, data: slugs };
     }
 };
