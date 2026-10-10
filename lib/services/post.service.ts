@@ -67,11 +67,15 @@ export const PostService = {
         return post;
     },
 
-    /** Everyone in the group except the author and pending applicants. */
+    /**
+     * Everyone in the group except the author and pending applicants. Nobody while the group is
+     * hidden by moderation: members could not open the announcement anyway.
+     */
     async getAnnouncementRecipients(groupId: string, authorId: string) {
         return prisma.membership.findMany({
             where: {
                 groupId,
+                group: { hiddenAt: null },
                 userId: { not: authorId },
                 role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
             },

@@ -1156,6 +1156,10 @@ export const GroupService = {
         if (!actorMembership || !hasAdminRights(actorMembership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
+        // Same rule as PostService: in a group hidden by moderation only the owner still has access.
+        if (post.group.hiddenAt && actorMembership.role !== 'OWNER') {
+            return { success: false, error: 'FORBIDDEN' };
+        }
 
         const resolved = TaxonomyResolver.resolve(post.group.category);
         const slugs = { slug: post.group.slug, l1Slug: resolved.l1Slug };
