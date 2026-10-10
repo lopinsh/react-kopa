@@ -4,9 +4,43 @@
 > **How to use:** when starting a session, take the first unchecked item in the current stage. Keep items small (30–60 min), finish them fully, tick them off here in the same commit.
 > Previous chunk-based backlog (Chunks 14–21) is retired; history lives in git.
 
-**Last updated:** 2026-10-10 afternoon (Handbook + auth fix pushed. Now: 2.23 feedback mode (Sonnet); redesign decisions pending with the user, see https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq; the personal "tree" idea is parked until everything else works)
+**Last updated:** 2026-10-10 evening (2.4 messaging, Handbook wiki, auth fix, 2.23 feedback mode all pushed. **Start with "Next session — start here" below.**)
 
 ---
+
+## Next session — start here (written 2026-10-10 evening)
+
+**User rules from 2026-10-10:**
+- **Pushing:** ready changes that passed the Sonnet → fresh-Opus-review flow may be pushed without asking first. Report them afterwards.
+- **Design:** discussion only until the user finalizes it in the redesign artifact. **No redesign work** (2.22 layout/header parts, Stage 3 screens) until then.
+- **The "tree" idea** (https://claude.ai/artifact/KxCiZs1x2Cz31jdJApsmLi) is parked until everything else works.
+
+**Do in this order:**
+1. **2.23b Feedback mode, translation-mode style.**
+   - Mark real components with stable names: a `data-ui="group-card"` attribute on the component's root (e.g. `group-card`, `event-row`, `group-header`, `slim-bar`, `join-button`, `member-card`, `announcement-card`, `chat-list-item`, `modal`, `empty-state`, `button-primary`…). Use one shared list of names in `lib/constants`.
+   - In feedback mode, every named element gets a dotted outline, like translation mode's dotted underline, plus a small comment button at its top-right corner (on desktop shown on hover/focus; on touch shown after a tap on the element). The button opens the existing note pop-up.
+   - Notes store the component name (new nullable column `Feedback.component`, migration `add_feedback_component`) besides the selector. The list, admin page and `npm run feedback` show it.
+   - Keep the current free-click mode as a fallback ("Comment anywhere" toggle in the bar), and keep the pause button and the Escape order.
+2. **3.0b Handbook "UI elements" page** (`/admin/handbook/ui-elements`, linked from `docs/handbook/design.md` and the chapter list).
+   - It renders every real component **as it looks on the site today**, with realistic sample data (no DB writes): buttons, chips/badges, form fields (incl. errors), group card, event row, group header + slim bar, member card, request card, announcement card, chat list item + bubbles, pop-ups (`ContactGroupModal`, `ConfirmDialog`), empty states, toasts, tabs.
+   - Each sample keeps its `data-ui` name and a caption with the component's file path, so feedback-mode notes on it lead an agent straight to the code. Show light and dark side by side or with a theme switch.
+   - Same admin gate as the Handbook (`requireHandbookAccess`).
+3. **Update the redesign artifact** https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq. Read it with the Artifact tool first; it has a "Your comments, answered" section from 2026-10-10. Then add the **identity exploration**: 3 small directions, each with a wordmark, a site colour that is none of the 15 category colours, a type pair and a shape language (corners, borders), all shown on real Latvian text.
+   - Fonts must have full Latvian letters and must **not look AI-typical**: no Inter, Geist, Space Grotesk, DM Sans, Manrope, Bricolage, Figtree. Candidates: Atkinson Hyperlegible, Alegreya Sans, Commissioner, Literata / Source Serif for headings.
+   - Also check the artifact for new comments (read them with ArtifactComments; they may not be "sent to Claude", so answer in the page itself).
+4. Then **2.24 Site owner**, then **2.25 Translation suggestions** (specs below).
+
+**User steps still open (production):**
+- Add `FEEDBACK_API_TOKEN=<32+ random chars>` to `/root/ejam-kopa/.env` and to the local `.env`. Until then `/api/feedback` returns 404.
+- Change `AUTH_SECRET` (server `.env` + GitHub secret), because the role-escalation hole was live until 2026-10-10.
+- Switch `ALLOW_DEV_PASSWORDS` off when not testing.
+- After 2.24: run the `set-owner` command once.
+
+**Artifacts:**
+- Handbook draft (superseded by `docs/handbook/`): https://claude.ai/artifact/SFyAH7GD15LLoUNXeoafgJ
+- Look directions (Poster rejected): https://claude.ai/artifact/P2eEUx5B1NMBXvztz9VS8i
+- Redesign discussion: https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq
+- Screen review (9 Oct screenshots): https://claude.ai/artifact/FDMvHXWVVQKayoP7o1UEbD
 
 ## North star
 
