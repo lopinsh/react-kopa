@@ -199,7 +199,7 @@ async function main() {
   await prisma.attendance.deleteMany();
   await prisma.event.deleteMany();
   await prisma.membership.deleteMany();
-  await prisma.applicationMessage.deleteMany();
+  await prisma.conversation.deleteMany({ where: { kind: 'GROUP' } });
   await prisma.group.deleteMany();
 
   // ─── Groups ───────────────────────────────────────────────────────────────────

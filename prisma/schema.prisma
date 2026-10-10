@@ -8,38 +8,38 @@ datasource db {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  name                String?
-  email               String?              @unique
-  emailVerified       DateTime?
-  image               String?
-  password            String?
-  role                AppRole              @default(USER)
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  allowDirectMessages Boolean              @default(true)
-  isProfilePublic     Boolean              @default(true)
-  showGroupsOnProfile Boolean              @default(false)
-  avatarSeed          String?
-  bio                 String?
-  cities              String[]
-  username            String?              @unique
-  accounts            Account[]
-  appUsers            ApplicationMessage[] @relation("ReceivedApplicationMessages")
-  sentMessages        ApplicationMessage[] @relation("SentApplicationMessages")
-  attendances         Attendance[]
-  createdEvents       Event[]              @relation("CreatedEvents")
-  memberships         Membership[]
-  notifications       Notification[]
-  posts               Post[]
-  reports             Report[]             @relation("FiledReports")
-  sessions            Session[]
-  submittedCategories Category[]           @relation("SubmittedCategories")
-  conversations       Conversation[]       @relation("ConversationParticipants")
-  directMessages      Message[]            @relation("SentMessages")
-  hiddenGroups        Group[]              @relation("HiddenGroups")
-  adminActions        AdminAction[]
-  messageOverrides    MessageOverride[]
+  id                   String             @id @default(cuid())
+  name                 String?
+  email                String?            @unique
+  emailVerified        DateTime?
+  image                String?
+  password             String?
+  role                 AppRole            @default(USER)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  allowDirectMessages  Boolean            @default(true)
+  isProfilePublic      Boolean            @default(true)
+  showGroupsOnProfile  Boolean            @default(false)
+  avatarSeed           String?
+  bio                  String?
+  cities               String[]
+  username             String?            @unique
+  accounts             Account[]
+  contactConversations Conversation[]     @relation("ConversationContact")
+  conversationReads    ConversationRead[] @relation("ConversationReads")
+  attendances          Attendance[]
+  createdEvents        Event[]            @relation("CreatedEvents")
+  memberships          Membership[]
+  notifications        Notification[]
+  posts                Post[]
+  reports              Report[]           @relation("FiledReports")
+  sessions             Session[]
+  submittedCategories  Category[]         @relation("SubmittedCategories")
+  conversations        Conversation[]     @relation("ConversationParticipants")
+  directMessages       Message[]          @relation("SentMessages")
+  hiddenGroups         Group[]            @relation("HiddenGroups")
+  adminActions         AdminAction[]
+  messageOverrides     MessageOverride[]
 }
 
 model Account {
@@ -121,34 +121,33 @@ model CategoryTranslation {
 }
 
 model Group {
-  id                 String               @id @default(cuid())
+  id                 String         @id @default(cuid())
   name               String
   slug               String
   description        String?
   city               String
-  type               GroupType            @default(PUBLIC)
+  type               GroupType      @default(PUBLIC)
   categoryId         String
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
   discordLink        String?
   instagramLink      String?
-  isAcceptingMembers Boolean              @default(true)
+  isAcceptingMembers Boolean        @default(true)
   websiteLink        String?
   accentColor        String?
   bannerImage        String?
   hiddenAt           DateTime?
   hiddenReason       String?
   hiddenById         String?
-  hiddenBy           User?                @relation("HiddenGroups", fields: [hiddenById], references: [id], onDelete: SetNull)
-  appMessages        ApplicationMessage[]
+  hiddenBy           User?          @relation("HiddenGroups", fields: [hiddenById], references: [id], onDelete: SetNull)
   conversations      Conversation[]
   events             Event[]
-  category           Category             @relation(fields: [categoryId], references: [id])
+  category           Category       @relation(fields: [categoryId], references: [id])
   sections           GroupSection[]
   members            Membership[]
   posts              Post[]
   reports            Report[]
-  tags               Category[]           @relation("GroupTags")
+  tags               Category[]     @relation("GroupTags")
 
   @@unique([categoryId, slug])
   @@index([slug])
@@ -293,18 +292,44 @@ model Post {
   replies   Post[]   @relation("PostReplies")
 }
 
+enum ConversationKind {
+  DIRECT
+  GROUP
+}
+
+// DIRECT: a chat between two people (participants). GROUP: one chat per person x group; the person is
+// `contactUserId` (also the only participant) and the group's current OWNER/ADMIN members are the team
+// (live, never stored). Access rules live in MessageService.
 model Conversation {
-  id            String    @id @default(cuid())
-  isBlocked     Boolean   @default(false)
+  id            String             @id @default(cuid())
+  kind          ConversationKind   @default(DIRECT)
+  isBlocked     Boolean            @default(false)
   originType    String?
   originGroupId String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  participants  User[]    @relation("ConversationParticipants")
+  contactUserId String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  participants  User[]             @relation("ConversationParticipants")
   messages      Message[]
-  originGroup   Group?    @relation(fields: [originGroupId], references: [id], onDelete: SetNull)
+  reads         ConversationRead[]
+  originGroup   Group?             @relation(fields: [originGroupId], references: [id], onDelete: SetNull)
+  contactUser   User?              @relation("ConversationContact", fields: [contactUserId], references: [id], onDelete: Cascade)
 
+  @@unique([originGroupId, contactUserId])
   @@index([originGroupId])
+  @@index([contactUserId])
+}
+
+model ConversationRead {
+  id             String       @id @default(cuid())
+  conversationId String
+  userId         String
+  lastReadAt     DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user           User         @relation("ConversationReads", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+  @@index([userId])
 }
 
 model Message {
@@ -331,18 +356,6 @@ model Notification {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model ApplicationMessage {
-  id                String   @id @default(cuid())
-  content           String
-  senderId          String
-  applicationUserId String
-  groupId           String
-  createdAt         DateTime @default(now())
-  applicationUser   User     @relation("ReceivedApplicationMessages", fields: [applicationUserId], references: [id], onDelete: Cascade)
-  group             Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  sender            User     @relation("SentApplicationMessages", fields: [senderId], references: [id], onDelete: Cascade)
 }
 
 model Report {
