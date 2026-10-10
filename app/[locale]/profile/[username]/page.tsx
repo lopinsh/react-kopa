@@ -4,9 +4,11 @@ import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getFormatter } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
-import { MapPin, Calendar, MessageSquare, Info, Users, ShieldAlert } from 'lucide-react';
+import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
+import { MessageService } from '@/lib/services/message.service';
+import MessageUserButton from '@/components/messages/MessageUserButton';
 
 export default async function PublicProfilePage({
     params
@@ -44,6 +46,9 @@ export default async function PublicProfilePage({
         );
     }
 
+    // Whether the viewer may message this person (shared group, their setting, not yourself) is decided by the service.
+    const canMessage = (await MessageService.messageableUserIds(session?.user?.id, [dbUser.id])).has(dbUser.id);
+
     const memberSince = format.dateTime(dbUser.createdAt, { year: 'numeric', month: 'long', day: 'numeric' });
     const avatarSrc = avatarUrl(dbUser);
 
@@ -80,20 +85,7 @@ export default async function PublicProfilePage({
                             </p>
                         </div>
 
-                        {!isOwnProfile && (
-                            <button
-                                disabled
-                                className="group relative flex h-11 items-center justify-center gap-2 rounded-xl bg-surface-elevated px-6 text-sm font-bold text-foreground-muted border border-border transition-all w-full md:w-auto overflow-visible cursor-not-allowed"
-                            >
-                                <MessageSquare className="h-4 w-4" />
-                                {t('message')}
-
-                                {/* Tooltip */}
-                                <div className="absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap bg-foreground text-background text-xs font-bold px-3 py-2 rounded-lg pointer-events-none">
-                                    {dbUser.allowDirectMessages ? t('messagingComingSoon') : t('messagingDisabled')}
-                                </div>
-                            </button>
-                        )}
+                        {canMessage && <MessageUserButton userId={dbUser.id} />}
                     </div>
 
                     <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 text-sm text-foreground-muted font-medium">
