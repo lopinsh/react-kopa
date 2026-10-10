@@ -405,7 +405,7 @@ export async function deletePostAction(postId: string, locale: string): Promise<
 
         const { slug, l1Slug } = result.data!;
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/discussion`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/discussions`, 'page');
 
         return { success: true };
     } catch (error) {

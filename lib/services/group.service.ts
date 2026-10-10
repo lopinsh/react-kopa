@@ -1129,9 +1129,7 @@ export const GroupService = {
     },
 
     /**
-     * Deletes a post from a group.
-     * Owners and Admins can delete any post.
-     * Regular members can only delete their own posts.
+     * Deletes an announcement. Only the group's current owner and admins can.
      */
     async deletePost(postId: string, actorId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
         const post = await prisma.post.findUnique({
@@ -1153,10 +1151,8 @@ export const GroupService = {
         if (!post) return { success: false, error: 'NOT_FOUND' };
 
         const actorMembership = post.group.members[0];
-        const isAuthor = post.authorId === actorId;
-        const isAdminOrOwner = actorMembership && hasAdminRights(actorMembership.role);
-
-        if (!isAuthor && !isAdminOrOwner) {
+        // Announcements: only the group's current owner/admins can remove them.
+        if (!actorMembership || !hasAdminRights(actorMembership.role)) {
             return { success: false, error: 'FORBIDDEN' };
         }
 

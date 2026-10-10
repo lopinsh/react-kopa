@@ -3,97 +3,61 @@
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { createNotification } from './notification-actions';
-import { PostService } from '@/lib/services/post.service';
+import { PostService, type AnnouncementRow } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
-import type { Prisma } from '@prisma/client';
-
-type PostWithAuthorAndGroup = Prisma.PostGetPayload<{
-    include: {
-        author: { select: { id: true; name: true; image: true; avatarSeed: true } };
-        group: {
-            include: {
-                category: {
-                    select: {
-                        slug: true; level: true;
-                        parent: { select: { slug: true; parent: { select: { slug: true } } } };
-                    };
-                };
-            };
-        };
-    };
-}>;
+import { announcementTextSchema } from '@/lib/validations/announcement';
 
 /**
- * Create a new post or reply in a group discussion board.
+ * Publish an announcement. Only the group's owner and admins may (enforced by the service);
+ * every other member is notified.
  */
-export async function createPost(groupId: string, content: string, locale: string, parentId?: string): Promise<ActionResponse<{ post: PostWithAuthorAndGroup }>> {
+export async function createPost(groupId: string, content: string, locale: string): Promise<ActionResponse<{ postId: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
-    if (!content.trim() || content.length > 2000) {
-        return { success: false, error: 'VALIDATION_FAILED' };
-    }
+    const parsed = announcementTextSchema.safeParse(content);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
         const authorId = session.user.id;
+        const post = await PostService.createAnnouncement({ groupId, authorId, content: parsed.data });
 
-        const post = await PostService.createPost({
-            groupId,
-            authorId,
-            content,
-            parentId
-        });
-
-        // Notify group members
-        const members = await PostService.getPostGroupMembers(groupId, authorId);
-
-        if (members.length > 0) {
-            let l1Slug = post.group.category.slug;
-            if (post.group.category.level === 3 && post.group.category.parent?.parent) {
-                l1Slug = post.group.category.parent.parent.slug;
-            } else if (post.group.category.level === 2 && post.group.category.parent) {
-                l1Slug = post.group.category.parent.slug;
-            }
-
-            await Promise.all(members.map(m =>
-                createNotification({
-                    userId: m.userId,
-                    type: 'NEW_POST',
-                    translationKey: 'newPost',
-                    args: { authorName: post.author.name || '', groupName: post.group.name, excerpt: content },
-                    link: `/${l1Slug}/group/${post.group.slug}?tab=discussion`
-                })
-            ));
+        let l1Slug = post.group.category.slug;
+        if (post.group.category.level === 3 && post.group.category.parent?.parent) {
+            l1Slug = post.group.category.parent.parent.slug;
+        } else if (post.group.category.level === 2 && post.group.category.parent) {
+            l1Slug = post.group.category.parent.slug;
         }
 
-        revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
-        return { success: true, data: { post: post as unknown as PostWithAuthorAndGroup } }; // Prisma payload shape matching 
-    } catch (error: any) {
-        return handleActionError(error, 'POST_FAILED');
+        const members = await PostService.getAnnouncementRecipients(groupId, authorId);
+        await Promise.all(members.map(m =>
+            createNotification({
+                userId: m.userId,
+                type: 'NEW_POST',
+                translationKey: 'newPost',
+                args: { authorName: post.author.name || '', groupName: post.group.name, excerpt: parsed.data },
+                link: `/${l1Slug}/group/${post.group.slug}/discussions`
+            })
+        ));
+
+        revalidatePath(`/${locale}/${l1Slug}/group/${post.group.slug}/discussions`, 'page');
+        return { success: true, data: { postId: post.id } };
+    } catch (error) {
+        return handleActionError(error, 'CREATE_FAILED');
     }
 }
 
 /**
- * Get group discussion posts.
+ * Announcements of a group. Members only.
  */
-export async function getGroupPosts(groupId: string) {
-    return PostService.getPostsByGroupId(groupId);
-}
-
-/**
- * Delete a post (Author or Admin/Owner only).
- */
-export async function deletePost(postId: string, locale: string): Promise<ActionResponse<void>> {
+export async function getGroupPosts(groupId: string): Promise<ActionResponse<AnnouncementRow[]>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        await PostService.deletePost(postId, session.user.id);
-
-        revalidatePath(`/[locale]/[l1Slug]/group/[groupSlug]`, 'page');
-        return { success: true };
-    } catch (error: any) {
-        return handleActionError(error, 'DELETE_FAILED');
+        return { success: true, data: await PostService.getAnnouncements(groupId, session.user.id) };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
     }
 }
