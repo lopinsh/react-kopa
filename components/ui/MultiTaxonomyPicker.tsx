@@ -5,6 +5,7 @@ import { Search, X, Check, ChevronRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import type { TaxonomyTree, L1Category, L2Category } from '@/lib/services/taxonomy.service';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +90,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange }: Props
     // Close on outside click
     useEffect(() => {
         function handler(e: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) {
                 setIsOpen(false);
             }
         }

@@ -147,6 +147,9 @@ export const UI = {
     sidebar: 'sidebar',
     mobileNav: 'mobile-nav',
     footer: 'footer',
+    dropdownMenu: 'dropdown-menu',
+    menuItem: 'menu-item',
+    notificationItem: 'notification-item',
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 export const UI_NAMES = Object.values(UI) as [UiName, ...UiName[]];

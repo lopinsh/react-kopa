@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { LayoutGrid, ChevronLeft } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Category = {
     id: string;
@@ -45,7 +46,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (isMobileOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+            if (isMobileOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
                 setIsMobileOpen(false);
             }
         }

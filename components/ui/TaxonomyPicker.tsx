@@ -5,6 +5,7 @@ import { Check, ChevronRight, Search, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import type { L1Category, L2Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type FlatTag = {
     id: string;
@@ -85,7 +86,7 @@ export default function TaxonomyPicker({ taxonomy, value, onChange }: Props) {
 
     useEffect(() => {
         function onMouseDown(event: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            if (containerRef.current && !containerRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
                 setIsOpen(false);
             }
         }

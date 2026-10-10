@@ -9,6 +9,7 @@ import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
 import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Props = {
     user: {
@@ -36,7 +37,7 @@ export default function UserMenu({ user }: Props) {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
                 setIsOpen(false);
             }
         }
@@ -83,7 +84,7 @@ export default function UserMenu({ user }: Props) {
 
             {mounted && isOpen && (
                 <>
-                    <div className="absolute right-0 mt-3 z-50 w-56 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
+                    <div data-ui="dropdown-menu" className="absolute right-0 mt-3 z-50 w-56 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
                         <Link
                             href="/profile"
                             onClick={() => setIsOpen(false)}
@@ -102,6 +103,7 @@ export default function UserMenu({ user }: Props) {
                                 <>
                                     <Link
                                         href="/admin"
+                                        data-ui="menu-item"
                                         className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-primary hover:bg-primary/10 transition-colors"
                                         onClick={() => setIsOpen(false)}
                                     >
@@ -122,6 +124,7 @@ export default function UserMenu({ user }: Props) {
 
                             <Link
                                 href="/profile/my-groups"
+                                data-ui="menu-item"
                                 className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
                                 onClick={() => setIsOpen(false)}
                             >
@@ -143,6 +146,7 @@ export default function UserMenu({ user }: Props) {
                             )}
                             <Link
                                 href="/profile/edit"
+                                data-ui="menu-item"
                                 className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
                                 onClick={() => setIsOpen(false)}
                             >
@@ -153,6 +157,7 @@ export default function UserMenu({ user }: Props) {
 
                         <div className="border-t border-border p-2">
                             <button
+                                data-ui="menu-item"
                                 onClick={() => signOut()}
                                 className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-500/5 transition-colors"
                             >

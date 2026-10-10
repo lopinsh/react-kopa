@@ -14,6 +14,7 @@ import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { ScopedResult } from '@/lib/types/discovery';
 import { searchContextual } from '@/actions/discovery-actions';
 import { Link } from '@/i18n/routing';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -163,10 +164,10 @@ export default function DiscoveryFilterBar({
     // ── Close dropdowns on outside click ────────────────────────────────────
     useEffect(() => {
         function onMousedown(e: MouseEvent) {
-            if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node)) {
+            if (searchContainerRef.current && !searchContainerRef.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) {
                 setIsDropdownOpen(false);
             }
-            if (l3DropdownRef.current && !l3DropdownRef.current.contains(e.target as Node)) {
+            if (l3DropdownRef.current && !l3DropdownRef.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) {
                 setOpenL3Dropdown(null);
             }
         }

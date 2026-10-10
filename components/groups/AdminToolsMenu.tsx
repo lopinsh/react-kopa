@@ -8,6 +8,7 @@ import { Link, useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { GroupContext } from '@/lib/services/group.service';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Props = {
     group: GroupContext;
@@ -38,7 +39,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
     useEffect(() => {
         if (!isOpen) return;
         function handleClick(e: MouseEvent) {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+            if (ref.current && !ref.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) setOpen(false);
         }
         document.addEventListener('mousedown', handleClick);
         return () => document.removeEventListener('mousedown', handleClick);
@@ -80,6 +81,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
 
             {isOpen && (
                 <div
+                    data-ui="dropdown-menu"
                     className={clsx(
                         'absolute right-0 z-[45] min-w-[240px] max-w-[calc(100vw-32px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-2xl shadow-black/20',
                         variant === 'overlay' ? 'top-9' : 'top-12'

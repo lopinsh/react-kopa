@@ -10,6 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import type { GroupContext } from '@/lib/services/group.service';
 import { useGroupContext } from '@/components/providers/GroupProvider';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Props = {
     group: GroupContext;
@@ -39,7 +40,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     useEffect(() => {
         if (!isOpen) return;
         function handleClick(e: MouseEvent) {
-            if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+            if (ref.current && !ref.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) setOpen(false);
         }
         document.addEventListener('mousedown', handleClick);
         return () => document.removeEventListener('mousedown', handleClick);
@@ -90,6 +91,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
 
             {isOpen && (
                 <div
+                    data-ui="dropdown-menu"
                     className={clsx(
                         'absolute right-0 z-[45] min-w-[220px] max-w-[calc(100vw-32px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-2xl shadow-black/20',
                         variant === 'overlay' ? 'top-9' : 'top-12'

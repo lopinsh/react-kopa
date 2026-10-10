@@ -9,6 +9,7 @@ import { searchL2Tags, submitPendingTag } from '@/actions/taxonomy-actions';
 import { useFormContext } from 'react-hook-form';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { GroupFormValues } from '@/lib/validations/group';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type FlatTag = {
     id: string;
@@ -138,7 +139,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
 
     useEffect(() => {
         function handler(e: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) {
                 setIsOpen(false);
                 setWildcardMode(false);
             }

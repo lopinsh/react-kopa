@@ -2,6 +2,14 @@ import { UI_NAMES, type UiName } from '@/lib/constants';
 
 /** Browser-side helpers for feedback mode: describe a clicked element, and find it again later. */
 
+/**
+ * True when the event target belongs to feedback mode's own layer or bar. Pop-ups and dropdown menus that close
+ * on an outside click must ignore these, otherwise pressing a comment button on an item of an open menu closes it.
+ */
+export function inFeedbackLayer(target: EventTarget | null): boolean {
+    return target instanceof Element && target.closest('[data-feedback-ignore]') !== null;
+}
+
 const MAX_SEGMENTS = 6;
 const TEXT_LENGTH = 120;
 
