@@ -1,4 +1,6 @@
 import { prisma } from '@/lib/prisma';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { groupCategoryTitle } from './message.service';
 
 export type NotificationPayload = {
     userId: string;
@@ -21,11 +23,61 @@ export const NotificationService = {
     /**
      * Fetches the most recent notifications for a user.
      */
-    async getUserNotifications(userId: string, limit: number = 10) {
-        return await prisma.notification.findMany({
+    async getUserNotifications(userId: string, limit: number = 10, locale: string = 'lv') {
+        const notifications = await prisma.notification.findMany({
             where: { userId },
             orderBy: { createdAt: 'desc' },
             take: limit,
+        });
+
+        // The group a notification is about is named by its link: the group page itself, or a conversation
+        // that started from a group. Resolved here so the list can show "Group · Category" like the inbox.
+        const groupLink = /^\/([^/?#]+)\/group\/([^/?#]+)/;
+        const conversationLink = /^\/messages\?c=([^&#]+)/;
+        const slugs = new Set<string>();
+        const conversationIds = new Set<string>();
+        for (const n of notifications) {
+            const g = n.link ? groupLink.exec(n.link) : null;
+            if (g) slugs.add(g[2]);
+            const c = n.link ? conversationLink.exec(n.link) : null;
+            if (c) conversationIds.add(c[1]);
+        }
+
+        const groupSelect = {
+            id: true,
+            name: true,
+            slug: true,
+            category: { include: TaxonomyResolver.getInclude(locale) },
+            tags: {
+                where: { level: 2 },
+                take: 1,
+                select: { slug: true, titles: { where: { lang: locale }, select: { title: true } } },
+            },
+        } as const;
+        const [groups, conversations] = await Promise.all([
+            slugs.size > 0 ? prisma.group.findMany({ where: { slug: { in: [...slugs] }, hiddenAt: null }, select: groupSelect }) : [],
+            conversationIds.size > 0
+                ? prisma.conversation.findMany({
+                    where: { id: { in: [...conversationIds] }, originGroupId: { not: null } },
+                    select: { id: true, originGroup: { select: groupSelect } },
+                })
+                : [],
+        ]);
+
+        const describe = (g: (typeof groups)[number]) => {
+            const resolved = TaxonomyResolver.resolve(g.category);
+            return { name: g.name, categoryTitle: groupCategoryTitle(resolved, g.tags), l1Slug: resolved.l1Slug, slug: g.slug };
+        };
+        const byConversation = new Map(
+            conversations.flatMap((c) => (c.originGroup ? [[c.id, describe(c.originGroup)] as const] : []))
+        );
+        const byPath = new Map(groups.map((g) => { const d = describe(g); return [`${d.l1Slug}/${d.slug}`, d] as const; }));
+
+        return notifications.map((n) => {
+            const g = n.link ? groupLink.exec(n.link) : null;
+            const c = n.link ? conversationLink.exec(n.link) : null;
+            const found = g ? byPath.get(`${g[1]}/${g[2]}`) : c ? byConversation.get(c[1]) : undefined;
+            return { ...n, group: found ? { name: found.name, categoryTitle: found.categoryTitle } : null };
         });
     },
 

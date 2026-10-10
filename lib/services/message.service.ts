@@ -140,6 +140,18 @@ function groupHref(group: { slug: string; hiddenAt: Date | null; category: Param
     return group.hiddenAt ? null : `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}`;
 }
 
+/**
+ * The category line shown next to a group name: its level-2 tag when the main category is level 1
+ * (a level-1 category says little, e.g. "Sports"), otherwise the resolved category title.
+ */
+export function groupCategoryTitle(
+    resolved: ReturnType<typeof TaxonomyResolver.resolve>,
+    tags: ReadonlyArray<{ slug: string; titles: ReadonlyArray<{ title: string }> }>
+): string {
+    const l2Tag = resolved.level === 1 ? tags[0] : undefined;
+    return l2Tag ? (l2Tag.titles[0]?.title ?? l2Tag.slug) : resolved.categoryTitle;
+}
+
 export const MessageService = {
     /**
      * The one access check. Returns how the user relates to the conversation, or null when they may not see it.
@@ -204,8 +216,7 @@ export const MessageService = {
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
                 const href = c.originGroup ? groupHref(c.originGroup) : null;
-                const l2Tag = resolved?.level === 1 ? c.originGroup?.tags[0] : undefined;
-                const categoryTitle = l2Tag ? (l2Tag.titles[0]?.title ?? l2Tag.slug) : (resolved?.categoryTitle ?? '');
+                const categoryTitle = resolved && c.originGroup ? groupCategoryTitle(resolved, c.originGroup.tags) : '';
                 const lastFromOthers = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;
 

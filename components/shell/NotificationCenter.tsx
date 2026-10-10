@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useTransition, useRef } from 'react';
-import { useTranslations, useFormatter, useNow } from 'next-intl';
+import { useTranslations, useFormatter, useNow, useLocale } from 'next-intl';
 import { Bell, Check } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
@@ -9,6 +9,7 @@ import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notificat
 import { clsx } from 'clsx';
 import { usePusher } from '@/hooks/usePusher';
 import { relativeTo } from '@/lib/utils/relative-time';
+import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Notification = {
     id: string;
@@ -18,6 +19,8 @@ type Notification = {
     link: string | null;
     read: boolean;
     createdAt: Date;
+    /** The group the notification is about, with its category line; null when it is not about a group. */
+    group: { name: string; categoryTitle: string } | null;
 };
 
 type NotificationArgs = Record<string, string | number | undefined>;
@@ -52,7 +55,7 @@ function NotificationContent({ n }: { n: Notification }) {
     return (
         <div className="flex flex-col gap-1 pr-6">
             <div className="flex items-baseline justify-between gap-2 text-[11px] text-foreground-muted">
-                <span className="truncate font-semibold">{args.groupName}</span>
+                <span className="truncate font-semibold">{n.group ? (n.group.categoryTitle ? `${n.group.name} · ${n.group.categoryTitle}` : n.group.name) : args.groupName}</span>
                 <span className="shrink-0">{relativeTo(format, new Date(n.createdAt), now)}</span>
             </div>
             <p className="text-sm font-bold text-foreground leading-snug">{headline}</p>
@@ -68,6 +71,7 @@ function NotificationContent({ n }: { n: Notification }) {
 export default function NotificationCenter() {
     const t = useTranslations('notifications');
     const { data: session } = useSession();
+    const locale = useLocale();
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
@@ -77,7 +81,7 @@ export default function NotificationCenter() {
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
                 setIsOpen(false);
             }
         }
@@ -89,20 +93,24 @@ export default function NotificationCenter() {
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            const result = await getNotifications();
+            const result = await getNotifications(locale);
             if (result.success && result.data) {
                 setNotifications(result.data as Notification[]);
             }
         };
         fetchNotifications();
 
-    }, [session?.user?.id]);
+    }, [session?.user?.id, locale]);
 
     usePusher<Notification>(
         session?.user?.id ? `private-user-${session.user.id}` : '',
         'new-notification',
         (notification) => {
-            setNotifications((current) => current.some(n => n.id === notification.id) ? current : [notification, ...current]);
+            // The pushed row has no group line yet; show it at once, then fill the line in from the server.
+            setNotifications((current) => current.some(n => n.id === notification.id) ? current : [{ ...notification, group: null }, ...current]);
+            getNotifications(locale).then((result) => {
+                if (result.success && result.data) setNotifications(result.data as Notification[]);
+            });
         }
     );
 
@@ -141,7 +149,7 @@ export default function NotificationCenter() {
 
             {isOpen && (
                 <>
-                    <div className="fixed inset-x-4 top-16 z-50 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-80 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
+                    <div data-ui="dropdown-menu" className="fixed inset-x-4 top-16 z-50 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-3 sm:w-80 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
                         <div className="flex items-center justify-between border-b border-border bg-surface-elevated/50 p-4">
                             <h3 className="text-sm font-bold text-foreground">{t('title')}</h3>
                             {unreadCount > 0 && (
@@ -161,6 +169,7 @@ export default function NotificationCenter() {
                                     {notifications.map((n) => (
                                         <div
                                             key={n.id}
+                                            data-ui="notification-item"
                                             className={clsx(
                                                 "group relative transition-colors hover:bg-surface-elevated/50",
                                                 !n.read && "bg-primary/5 shadow-inner"

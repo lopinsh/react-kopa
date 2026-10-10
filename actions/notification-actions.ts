@@ -8,12 +8,12 @@ import { NotificationService } from '@/lib/services/notification.service';
 /**
  * Fetch notifications for the current user.
  */
-export async function getNotifications(): Promise<ActionResponse<Awaited<ReturnType<typeof NotificationService.getUserNotifications>>>> {
+export async function getNotifications(locale: string): Promise<ActionResponse<Awaited<ReturnType<typeof NotificationService.getUserNotifications>>>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const notifications = await NotificationService.getUserNotifications(session.user.id, 20);
+        const notifications = await NotificationService.getUserNotifications(session.user.id, 20, locale);
         return { success: true, data: notifications };
     } catch (error) {
         console.error('[getNotifications] Error:', error);
