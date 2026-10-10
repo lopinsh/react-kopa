@@ -8,6 +8,7 @@ import { Link } from '@/i18n/routing';
 import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notification-actions';
 import { clsx } from 'clsx';
 import { usePusher } from '@/hooks/usePusher';
+import { relativeTo } from '@/lib/utils/relative-time';
 
 type Notification = {
     id: string;
@@ -52,7 +53,7 @@ function NotificationContent({ n }: { n: Notification }) {
         <div className="flex flex-col gap-1 pr-6">
             <div className="flex items-baseline justify-between gap-2 text-[11px] text-foreground-muted">
                 <span className="truncate font-semibold">{args.groupName}</span>
-                <span className="shrink-0">{format.relativeTime(new Date(n.createdAt), now)}</span>
+                <span className="shrink-0">{relativeTo(format, new Date(n.createdAt), now)}</span>
             </div>
             <p className="text-sm font-bold text-foreground leading-snug">{headline}</p>
             {detail !== undefined && detail !== '' && (

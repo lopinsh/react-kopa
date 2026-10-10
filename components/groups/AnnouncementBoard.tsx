@@ -10,6 +10,7 @@ import { useGroupContext } from '@/components/providers/GroupProvider';
 import { avatarUrl } from '@/lib/avatar';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
+import { relativeTo } from '@/lib/utils/relative-time';
 import type { AnnouncementRow } from '@/lib/services/post.service';
 import type { ErrorCode } from '@/types/actions';
 
@@ -151,7 +152,7 @@ export default function AnnouncementBoard({ groupId, locale }: Props) {
                                             {post.author.name || ''}
                                         </span>
                                         <span className="shrink-0 text-[10px] font-bold uppercase tracking-tighter text-foreground-muted">
-                                            {format.relativeTime(new Date(post.createdAt), now)}
+                                            {relativeTo(format, new Date(post.createdAt), now)}
                                         </span>
                                     </div>
 
