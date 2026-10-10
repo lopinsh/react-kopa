@@ -34,6 +34,7 @@ function mapTaxonomyError(error: unknown, fallback: ErrorCode = 'ACTION_FAILED')
             'NOT_FOUND',
             'TAG_NOT_FOUND',
             'TAG_ALREADY_EXISTS',
+            'TAG_LIMIT_REACHED',
             'ALIAS_CONFLICT',
             'VALIDATION_FAILED',
             'INTERNAL_SERVER_ERROR',

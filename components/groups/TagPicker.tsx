@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { L1Category, L2SearchResult } from '@/lib/services/taxonomy.service';
 import { searchL2Tags, submitPendingTag } from '@/actions/taxonomy-actions';
 import { useFormContext } from 'react-hook-form';
+import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { GroupFormValues } from '@/lib/validations/group';
 
 type FlatTag = {
@@ -232,6 +233,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
         .filter((id) => !selectedKnownIds.has(id))
         .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
 
+    const limitReached = tagIds.length >= MAX_GROUP_TAGS;
     const hasResults = mergedResults.length > 0;
     const showWildcardPrompt = query.trim().length >= 2;
 
@@ -297,6 +299,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                         type="text"
                         className="flex-1 bg-transparent text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
                         placeholder={t('searchTopicsPlaceholder', { category: l1.title })}
+                        disabled={limitReached}
                         value={query}
                         onChange={(e) => {
                             const val = e.target.value;
@@ -339,9 +342,10 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                 </div>
             </div>
 
+            {limitReached && !errors.tagIds && <p className="text-xs text-foreground-muted">{t('tagLimitHint')}</p>}
             {errors.tagIds && <p className="text-xs text-red-500 font-medium">{t(errors.tagIds.message as any)}</p>}
 
-            {isOpen && (
+            {isOpen && !limitReached && (
                 <div 
                     id="tag-picker-results"
                     className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium max-h-[300px] overflow-y-auto"

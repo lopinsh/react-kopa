@@ -5,7 +5,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
-import { DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
+import { MAX_GROUP_TAGS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
@@ -420,6 +420,9 @@ export const GroupService = {
             slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
         }
 
+        if ((data.tagIds?.length ?? 0) > MAX_GROUP_TAGS) {
+            return { success: false, error: 'TAG_LIMIT_REACHED' };
+        }
         const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
 
         // Pre-fetch category to get l1Slug
@@ -645,6 +648,11 @@ export const GroupService = {
         };
 
         if (canEditOwnerFields) {
+            // Groups saved before the limit may keep their tags but not gain any.
+            const nextTagCount = new Set(data.tagIds ?? []).size;
+            if (nextTagCount > MAX_GROUP_TAGS && nextTagCount > current.tags.length) {
+                return { success: false, error: 'TAG_LIMIT_REACHED' };
+            }
             updateData.name = data.name;
             updateData.type = data.type;
             updateData.category = { connect: { id: data.categoryId } };

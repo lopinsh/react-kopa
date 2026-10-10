@@ -8,7 +8,7 @@ import { useRouter } from '@/i18n/routing';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { adminUpdateGroupTags } from '@/actions/taxonomy-actions';
 import TagPicker from '@/components/groups/TagPicker';
-import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
+import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { useToast } from '@/hooks/use-toast';
 
 type Props = {
@@ -38,7 +38,7 @@ export default function AdminGroupCategorizationForm({
     const [isPending, startTransition] = useTransition();
 
     const methods = useForm<GroupFormValues>({
-        resolver: zodResolver(groupFormSchema),
+        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
         defaultValues: {
             categoryId: selectedL1.id,
             tagIds: initialTagIds,

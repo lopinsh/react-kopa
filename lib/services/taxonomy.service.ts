@@ -2,6 +2,7 @@ import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { MAX_GROUP_TAGS } from '@/lib/constants';
 
 export type L3Tag = {
     id: string;
@@ -499,6 +500,14 @@ export const TaxonomyService = {
 
     async adminUpdateGroupTags(groupId: string, tagIds: string[]): Promise<void> {
         const uniqueTagIds = Array.from(new Set(tagIds));
+
+        if (uniqueTagIds.length > MAX_GROUP_TAGS) {
+            // Groups saved before the limit may keep their tags but not gain any.
+            const current = await prisma.group.findUnique({ where: { id: groupId }, select: { tags: { select: { id: true } } } });
+            if (!current || uniqueTagIds.length > current.tags.length) {
+                throw new Error('TAG_LIMIT_REACHED');
+            }
+        }
 
         if (uniqueTagIds.length > 0) {
             const activeTags = await prisma.category.findMany({

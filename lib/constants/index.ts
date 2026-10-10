@@ -23,6 +23,12 @@ export const CITIES = [
 export type City = (typeof CITIES)[number];
 
 /**
+ * Most sub-categories (tags) one group can have, pending ones included. A limit "for now" while
+ * the category structure settles; groups saved with more keep working (they can only shrink).
+ */
+export const MAX_GROUP_TAGS = 2;
+
+/**
  * Group visibility and lifecycle types.
  */
 export const GROUP_TYPES = ['PUBLIC', 'PRIVATE'] as const;

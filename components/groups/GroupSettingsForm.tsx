@@ -3,7 +3,7 @@
 import { useTransition, useMemo, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
+import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { updateGroup, deleteGroup } from '@/actions/group-actions';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
@@ -77,7 +77,7 @@ export default function GroupSettingsForm({
     const [serverError, setServerError] = useState<string | null>(null);
 
     const methods = useForm<GroupFormValues>({
-        resolver: zodResolver(groupFormSchema),
+        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
         defaultValues: {
             name: group.name,
             city: group.city as GroupFormValues['city'],

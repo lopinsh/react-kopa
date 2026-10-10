@@ -1,7 +1,7 @@
 ﻿'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
-import { GroupFormValues, groupFormSchema } from '@/lib/validations/group';
+import { GroupFormValues, groupFormSchema, buildGroupFormSchema } from '@/lib/validations/group';
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
@@ -211,7 +211,7 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const validation = await validateActionData(groupFormSchema, data);
+        const validation = await validateActionData(buildGroupFormSchema(Number.MAX_SAFE_INTEGER), data);
         if (!validation.success) return validation;
 
         const result = await GroupService.updateGroup(groupId, validation.data, session.user.id);
