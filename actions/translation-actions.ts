@@ -12,6 +12,7 @@ import {
     type TranslationSearchHit,
 } from '@/lib/services/message-override.service';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
+import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' };
 
@@ -34,6 +35,8 @@ export async function setTranslateMode(enabled: boolean): Promise<ActionResponse
             secure: process.env.NODE_ENV === 'production',
             path: '/',
         });
+        // Both modes capture clicks on the page, so only one runs at a time.
+        cookieStore.delete(FEEDBACK_COOKIE);
     } else {
         cookieStore.delete(TRANSLATE_COOKIE);
     }
