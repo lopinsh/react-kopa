@@ -208,9 +208,12 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
             flatTags.find((tag) => tag.title.toLowerCase() === key) ??
             searchResults.find((tag) => tag.title.toLowerCase() === key);
 
+        // Search text the user already used to pick a result ("fot" → "Fotogrāfija") is a search, not a new name.
+        const pickedFromSearch = inlineWildcardParentId !== l1.id && mergedResults.some((tag) => tagIds.includes(tag.id));
+
         if (!pendingMatch && known && !tagIds.includes(known.id)) {
             setValue('tagIds', [...tagIds, known.id], { shouldValidate: true });
-        } else if (!pendingMatch && !known) {
+        } else if (!pendingMatch && !known && !pickedFromSearch) {
             await createPending(l1.id, typed);
             return;
         }
