@@ -42,6 +42,8 @@ services:
       # Test server: seed accounts (DEV_PASSWORDS in lib/auth.ts, except admin@local)
       # can sign in so others can try the site. Remove before real users arrive.
       ALLOW_DEV_PASSWORDS: "true"
+      # Feedback API token (unset = /api/feedback answers 404). Set it in /root/ejam-kopa/.env on the server.
+      FEEDBACK_API_TOKEN: ${FEEDBACK_API_TOKEN:-}
       # Server → Soketi over the Docker network. The browser's settings (public host,
       # port 443, TLS) are baked into the image at build time, see deploy.yml.
       PUSHER_APP_ID: ${SOKETI_APP_ID}

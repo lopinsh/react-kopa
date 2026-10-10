@@ -2,7 +2,7 @@
 
 Source of truth for AI agents and human contributors working on **Ejam Kopā** ("Let's Go Together"): a non-profit Latvian platform for finding people to do things with — create a group, be found, join, talk. Read this file in full before starting a task. `CLAUDE.md` and `.agents/rules/project-rules.md` only point here.
 
-**Before any task:** read `docs/execution_handoff.md` (current stage and next item). For product/UI decisions read `docs/handbook/` (start with its `README.md`): values, principles, voice, behaviour and design. Every layer answers to the one above it.
+**Before any task:** read `docs/execution_handoff.md` (current stage and next item), and when `FEEDBACK_API_TOKEN` is set in `.env` run `npm run feedback` to see open notes from the site admins. Take them into account; when you fix one, mark it with `npm run feedback -- done <id> "reply naming the commit or item"`. For product/UI decisions read `docs/handbook/` (start with its `README.md`): values, principles, voice, behaviour and design. Every layer answers to the one above it.
 
 **Pushing to `main` deploys to production (ejam.lumm.eu)** via `.github/workflows/deploy.yml`. Never push without the user's explicit OK, and only after the Definition of done passes.
 
