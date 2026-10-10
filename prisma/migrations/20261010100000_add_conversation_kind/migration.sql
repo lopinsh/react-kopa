@@ -42,15 +42,24 @@ DECLARE
   target TEXT;
   cid TEXT;
 BEGIN
-  -- Contact person of each join-request chat: the participant who is not an owner/admin of the group
-  -- (then the one who wrote an application message themselves, then the lowest id).
+  -- Contact person of each join-request chat = the applicant. 2.21 always stored the moderator's question
+  -- as an ApplicationMessage *to* the applicant (a withdrawn request deletes only the applicant's own
+  -- rows), and copied the applicant's join message in as the chat's first message. So: prefer a
+  -- participant who is not an owner/admin now, then the one the application messages were addressed to,
+  -- then the sender of the first message, then the lowest id. A participant that matches neither sign
+  -- (e.g. the applicant's account is gone) is not a contact, and the chat stays as it is.
   CREATE TEMP TABLE _conv_contact AS
   SELECT c.id AS conversation_id, c."originGroupId" AS group_id, c."createdAt" AS created_at,
     (SELECT p."B" FROM "_ConversationParticipants" p
       WHERE p."A" = c.id
+        AND (
+          EXISTS (SELECT 1 FROM "ApplicationMessage" a WHERE a."groupId" = c."originGroupId" AND a."applicationUserId" = p."B")
+          OR p."B" = (SELECT m."senderId" FROM "Message" m WHERE m."conversationId" = c.id ORDER BY m."createdAt", m.id LIMIT 1)
+        )
       ORDER BY
         EXISTS (SELECT 1 FROM "Membership" m WHERE m."groupId" = c."originGroupId" AND m."userId" = p."B" AND m.role IN ('OWNER', 'ADMIN')) ASC,
-        EXISTS (SELECT 1 FROM "ApplicationMessage" a WHERE a."groupId" = c."originGroupId" AND a."applicationUserId" = p."B" AND a."senderId" = p."B") DESC,
+        EXISTS (SELECT 1 FROM "ApplicationMessage" a WHERE a."groupId" = c."originGroupId" AND a."applicationUserId" = p."B") DESC,
+        COALESCE(p."B" = (SELECT m."senderId" FROM "Message" m WHERE m."conversationId" = c.id ORDER BY m."createdAt", m.id LIMIT 1), false) DESC,
         p."B"
       LIMIT 1) AS contact_id
   FROM "Conversation" c
@@ -79,6 +88,30 @@ BEGIN
   END LOOP;
 
   DROP TABLE _conv_contact;
+
+  -- Each 2.21 moderator chat got its own copy of the applicant's join message (same sender, text and
+  -- time). Merged, those copies sit side by side: keep one.
+  DELETE FROM "Message" m
+    USING "Message" d, "Conversation" c
+    WHERE c.id = m."conversationId" AND c.kind = 'GROUP'
+      AND d."conversationId" = m."conversationId" AND d."senderId" = m."senderId"
+      AND d.content = m.content AND d."createdAt" = m."createdAt" AND d.id < m.id;
+
+  -- Join-request chats whose group was deleted: the applicant's read-only group chat (the team went with
+  -- the group). The applicant is the sender of the first message, their copied join message.
+  UPDATE "Conversation" c
+    SET kind = 'GROUP', "contactUserId" = f.sender_id
+    FROM (
+      SELECT c2.id,
+        (SELECT m."senderId" FROM "Message" m WHERE m."conversationId" = c2.id ORDER BY m."createdAt", m.id LIMIT 1) AS sender_id
+      FROM "Conversation" c2
+      WHERE c2."originType" = 'JOIN_REQUEST' AND c2."originGroupId" IS NULL
+    ) f
+    WHERE c.id = f.id
+      AND EXISTS (SELECT 1 FROM "_ConversationParticipants" p WHERE p."A" = f.id AND p."B" = f.sender_id);
+  DELETE FROM "_ConversationParticipants" p
+    USING "Conversation" c
+    WHERE p."A" = c.id AND c.kind = 'GROUP' AND c."originGroupId" IS NULL AND p."B" <> c."contactUserId";
 
   -- ApplicationMessages: add each one to its group chat (creating the chat when there is none yet),
   -- unless the same text from the same sender (within 10 s) is already there from the 2.21 copy.
