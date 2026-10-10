@@ -57,9 +57,10 @@ jobs:
           scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} \
             docker-compose.server.yml \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/docker-compose.server.yml
+          # Target the parent dir: scp -r into the existing prisma/ dir nested it (prisma/prisma) and left migrations stale
           scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} -r \
             prisma \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/prisma
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/
 
       - name: Run migrations
         run: |
@@ -71,7 +72,7 @@ jobs:
               -e DATABASE_URL=\"postgresql://\${POSTGRES_USER}:\${POSTGRES_PASSWORD}@ejam-kopa-db:5432/\${POSTGRES_DB}?schema=public\" \
               -v /root/ejam-kopa/prisma:/app/prisma \
               node:20-alpine \
-              sh -c 'cd /app && npm install prisma@6 --legacy-peer-deps 2>/dev/null && npx prisma migrate deploy'"
+              sh -c 'cd /app && npm install prisma@6.19.2 --legacy-peer-deps 2>/dev/null && npx prisma migrate deploy'"
 
       - name: Deploy on server
         run: |
