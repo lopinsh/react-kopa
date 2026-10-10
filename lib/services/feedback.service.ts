@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
-import type { FeedbackKindValue, FeedbackStatusValue } from '@/lib/constants';
+import { FEEDBACK_TAB_STATUSES, type FeedbackKindValue, type FeedbackStatusValue, type FeedbackTab } from '@/lib/constants';
 import { createFeedbackSchema, updateFeedbackSchema, replyFeedbackSchema, type FeedbackFilter } from '@/lib/validations/feedback';
 import { isSiteAdmin } from './moderation.service';
 
@@ -157,7 +157,7 @@ export const FeedbackService = {
         const rows = await prisma.feedback.findMany({
             where: {
                 kind: filter.kind,
-                status: filter.status,
+                status: { in: [...FEEDBACK_TAB_STATUSES[filter.tab ?? 'open']] },
                 path: filter.page ? { contains: filter.page, mode: 'insensitive' } : undefined,
             },
             orderBy: { createdAt: 'desc' },
@@ -165,6 +165,23 @@ export const FeedbackService = {
             ...itemArgs,
         });
         return { success: true, data: rows.map(toItem) };
+    },
+
+    /** Note counts per tab (ignores the kind/page filters, so the tab labels stay stable). */
+    async counts(adminId: string): Promise<FeedbackResult<Record<FeedbackTab, number>>> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        const [open, completed] = await Promise.all([
+            prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.open] } } }),
+            prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } }),
+        ]);
+        return { success: true, data: { open, completed } };
+    },
+
+    /** Deletes every DONE / WONT_DO note (replies cascade) and returns how many went. Open notes are untouched. */
+    async purgeClosed(adminId: string): Promise<FeedbackResult<{ count: number }>> {
+        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        const { count } = await prisma.feedback.deleteMany({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } });
+        return { success: true, data: { count } };
     },
 
     async update(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {

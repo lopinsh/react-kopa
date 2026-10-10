@@ -107,6 +107,13 @@ export type FeedbackKindValue = (typeof FEEDBACK_KINDS)[number];
 
 export const FEEDBACK_STATUSES = ['OPEN', 'DOING', 'DONE', 'WONT_DO'] as const;
 export type FeedbackStatusValue = (typeof FEEDBACK_STATUSES)[number];
+/** Admin feedback tabs and the statuses each one holds. */
+export const FEEDBACK_TABS = ['open', 'completed'] as const;
+export type FeedbackTab = (typeof FEEDBACK_TABS)[number];
+export const FEEDBACK_TAB_STATUSES: Record<FeedbackTab, readonly FeedbackStatusValue[]> = {
+    open: ['OPEN', 'DOING'],
+    completed: ['DONE', 'WONT_DO'],
+};
 
 export const FEEDBACK_TEXT_MAX = 2000;
 

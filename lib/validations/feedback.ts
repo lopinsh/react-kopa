@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FEEDBACK_KINDS, FEEDBACK_STATUSES, FEEDBACK_TEXT_MAX, UI_NAMES } from '@/lib/constants';
+import { FEEDBACK_KINDS, FEEDBACK_STATUSES, FEEDBACK_TABS, FEEDBACK_TEXT_MAX, UI_NAMES } from '@/lib/constants';
 
 /** A new note, as captured by feedback mode. Everything except kind and text is filled in automatically. */
 export const createFeedbackSchema = z.object({
@@ -46,6 +46,8 @@ export type UpdateFeedbackInput = z.infer<typeof updateFeedbackSchema>;
 export const feedbackFilterSchema = z.object({
     kind: z.enum(FEEDBACK_KINDS).optional().catch(undefined),
     status: z.enum(FEEDBACK_STATUSES).optional().catch(undefined),
+    /** `open` (OPEN + DOING, the default) or `completed` (DONE + WONT_DO). */
+    tab: z.enum(FEEDBACK_TABS).optional().catch(undefined),
     page: z.string().trim().max(200).optional().catch(undefined),
 });
 export type FeedbackFilter = z.infer<typeof feedbackFilterSchema>;

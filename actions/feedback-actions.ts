@@ -103,3 +103,17 @@ export async function deleteFeedback(id: string): Promise<ActionResponse> {
         return handleActionError(error, 'ACTION_FAILED');
     }
 }
+
+/** Empties the Completed tab: deletes every DONE / WONT_DO note with its replies. */
+export async function purgeCompletedFeedback(): Promise<ActionResponse<{ count: number }>> {
+    const check = await requireAdmin();
+    if (!check.ok) return { success: false, error: check.error };
+    try {
+        const result = await FeedbackService.purgeClosed(check.adminId);
+        if (!result.success) return result;
+        revalidatePath('/admin/feedback');
+        return { success: true, data: result.data };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
+    }
+}
