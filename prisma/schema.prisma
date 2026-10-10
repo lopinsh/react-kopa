@@ -40,6 +40,7 @@ model User {
   hiddenGroups         Group[]            @relation("HiddenGroups")
   adminActions         AdminAction[]
   messageOverrides     MessageOverride[]
+  feedback             Feedback[]
 }
 
 model Account {
@@ -412,4 +413,43 @@ enum EventJoinMode {
 enum AppRole {
   USER
   ADMIN
+}
+
+enum FeedbackKind {
+  BUG
+  IDEA
+  IMPROVEMENT
+  QUESTION
+}
+
+enum FeedbackStatus {
+  OPEN
+  DOING
+  DONE
+  WONT_DO
+}
+
+/// A note a site admin left on a page while testing (feedback mode). Agents read and answer them through /api/feedback.
+model Feedback {
+  id          String         @id @default(cuid())
+  authorId    String
+  kind        FeedbackKind
+  text        String
+  status      FeedbackStatus @default(OPEN)
+  path        String
+  locale      String
+  viewportW   Int
+  viewportH   Int
+  theme       String
+  selector    String
+  elementText String
+  userAgent   String
+  reply       String?
+  resolvedAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  author      User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+  @@index([path])
 }

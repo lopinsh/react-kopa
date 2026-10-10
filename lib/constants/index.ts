@@ -92,3 +92,14 @@ export function isDefaultSectionTitle(title: string): boolean {
     const trimmed = title.trim();
     return Object.values(DEFAULT_SECTION_TITLES).some((d) => d.lv === trimmed || d.en === trimmed);
 }
+
+/**
+ * Feedback mode (site admins leaving notes on pages). Mirrors the FeedbackKind / FeedbackStatus enums in the schema.
+ */
+export const FEEDBACK_KINDS = ['BUG', 'IDEA', 'IMPROVEMENT', 'QUESTION'] as const;
+export type FeedbackKindValue = (typeof FEEDBACK_KINDS)[number];
+
+export const FEEDBACK_STATUSES = ['OPEN', 'DOING', 'DONE', 'WONT_DO'] as const;
+export type FeedbackStatusValue = (typeof FEEDBACK_STATUSES)[number];
+
+export const FEEDBACK_TEXT_MAX = 2000;
