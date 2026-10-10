@@ -284,6 +284,96 @@ html.dark .rd{
 .rd .disc:has(#rd-fold:checked) .cl-h b,.rd .disc:has(#rd-fold:checked) .catlist .nm{display:none}
 .rd .disc:has(#rd-fold:checked) .catlist .ci{justify-content:center;padding:3px 0}
 .rd{border-radius:16px}
+.rd .why{margin:0;font-size:14px;color:var(--muted);max-width:68ch}
+.rd section>h3{font-size:22px;margin-top:14px}
+.rd .gpic{display:grid;place-items:center;color:#fff}
+.rd .gpic svg{width:30px;height:30px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rd .slimbar .gpic svg{width:20px;height:20px}
+.rd .cityrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rd .cityline{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;background:var(--tint);color:var(--fg);font:500 14px var(--body);white-space:nowrap}
+.rd .cityline b{font-weight:600}
+.rd .seg{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--tint);justify-self:start;align-items:center}
+.rd .seg>span{display:inline-flex;align-items:center;gap:6px;padding:5px 18px;border-radius:999px;font-size:14px;color:var(--muted);font-weight:500}
+.rd .seg>.on{background:var(--surface);color:var(--fg);font-weight:600}
+.rd .seg>.off{opacity:.6}
+.rd .seg small{font-size:11px;background:var(--surface);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.rd .strip-h{display:flex;align-items:baseline;gap:10px}
+.rd .strip-h h4{font-size:17px}
+.rd .strip-h .hide{margin-left:auto;font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.rd .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.rd .chipev{flex:none;display:flex;align-items:center;gap:8px;max-width:250px;padding:6px 14px 6px 8px;border-radius:999px;background:var(--surface);font-size:13px;color:var(--muted);white-space:nowrap}
+.rd .chipev .d{display:grid;justify-items:center;line-height:1;min-width:30px;font:600 17px var(--display);color:var(--fg)}
+.rd .chipev .d small{font:400 11px var(--body);color:var(--muted)}
+.rd .chipev .nm{overflow:hidden;text-overflow:ellipsis;color:var(--fg);font-weight:500;font-size:14px}
+.rd .clamp2{display:-webkit-box!important;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rd .search.open{background:var(--surface);color:var(--fg);outline:2px solid var(--brand);outline-offset:-2px}
+.rd .search .caret{width:1.5px;height:18px;background:var(--fg);margin-left:-6px;flex:none}
+.rd .backdrop{background:color-mix(in srgb,var(--fg) 9%,var(--bg));padding:10px 18px 22px;display:grid;justify-items:center}
+.rd .spanel{width:min(100%,580px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r-soft);padding:2px 16px 12px;display:grid}
+.rd .sp-h{font:600 12px var(--body);color:var(--muted);letter-spacing:.02em;padding:14px 0 4px}
+.rd .sp-i{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:15px;min-width:0}
+.rd .sp-i>svg.i{color:var(--muted)}
+.rd .sp-i .dotc{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;margin:0 5px}
+.rd .sp-i .sub{margin-left:auto;white-space:nowrap}
+.rd .sp-pic{width:36px;height:36px;border-radius:10px;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:var(--c);display:grid;place-items:center;flex:none}
+.rd .sp-pic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rd .sp-t{display:grid;min-width:0;line-height:1.3}
+.rd .sp-t b{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .sp-t small{font-size:13px;color:var(--muted)}
+.rd .hl{font-style:normal;color:var(--brand)}
+.rd .sp-all{margin-top:8px;padding-top:12px;border-top:1px solid var(--line);color:var(--brand);font-weight:600;font-size:15px;display:flex;gap:6px;align-items:center}
+.rd .pop{width:290px;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-soft);padding:10px;display:grid;gap:2px}
+.rd .pop .find{height:36px;border-radius:999px;background:var(--tint);display:flex;align-items:center;gap:8px;padding-inline:12px;color:var(--muted);font-size:14px;margin-bottom:6px}
+.rd .pop .opt{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px;font-size:15px}
+.rd .pop .opt.on{background:var(--tint);font-weight:600}
+.rd .pop .opt .ck{margin-left:auto;color:var(--brand)}
+.rd .pop .sep{height:1px;background:var(--line);margin:4px 8px}
+.rd .vlabel{font:600 13px var(--body);color:var(--muted)}
+.rd .lmenu{display:grid;grid-template-columns:170px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:560px){.rd .lmenu{grid-template-columns:minmax(0,1fr)}}
+.rd .subsw{overflow-x:auto}
+.rd .subsw span{white-space:nowrap}
+.rd .cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.rd .cmp{grid-template-columns:minmax(0,1fr)}}
+.rd .cmp .box b{font:600 17px var(--display)}
+.rd .cmp .box p{margin:0;font-size:14px;color:var(--muted)}
+.rd .urlbar{padding:6px 18px;background:var(--tint);font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .split{display:grid;grid-template-columns:minmax(0,1fr) 330px}
+@media (max-width:820px){.rd .split{grid-template-columns:minmax(0,1fr)}}
+.rd .gcards.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:1000px){.rd .gcards.two{grid-template-columns:minmax(0,1fr)}}
+.rd .gc.sel{outline:2px solid var(--brand);outline-offset:-2px}
+.rd .sdp{background:var(--surface);border-left:1px solid var(--line);display:grid;align-content:start;min-width:0}
+.rd .sdp .pic{height:110px;background:color-mix(in srgb,var(--c) 22%,var(--surface));display:grid;place-items:center;color:var(--c);position:relative}
+.rd .sdp .pic>svg.i{width:40px;height:40px;stroke-width:1.6}
+.rd .xbtn{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:var(--surface);color:var(--fg);display:grid;place-items:center}
+.rd .sdp .bd{padding:16px 18px 20px;display:grid;gap:10px}
+.rd .sdp h3{font-size:21px}
+.rd .sdp p{margin:0;font-size:15px}
+.rd .sdp .btn{width:100%}
+.rd .lnk{display:inline-flex;align-items:center;gap:6px;justify-self:center;color:var(--brand);font-weight:600;font-size:15px}
+.rd .mstage{position:relative;height:620px;overflow:hidden}
+.rd .mstage .dim{opacity:.45;pointer-events:none}
+.rd .scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--fg) 30%,transparent)}
+.rd .sheet{position:absolute;inset:44px 0 0;background:var(--surface);border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden}
+.rd .sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:8px auto 0;flex:none}
+.rd .sheet .pic{height:84px;margin-top:8px}
+.rd .sheet .bd{padding:14px 16px 16px;display:grid;gap:9px;flex:1;align-content:start}
+.rd .sheet h3{font-size:20px}
+.rd .sheet p{margin:0;font-size:14px}
+.rd .sheet .btn{width:100%}
+.rd .sheet .pic{display:grid;place-items:center;position:relative;background:color-mix(in srgb,var(--c) 22%,var(--surface));color:var(--c)}
+.rd .sheet .pic>svg.i{width:34px;height:34px;stroke-width:1.6}
+.rd .evx{border-top:1px solid var(--line)}
+.rd .evx:first-child{border-top:0}
+.rd .evx>summary.ev{list-style:none;cursor:pointer;border-top:0}
+.rd .evx>summary.ev::-webkit-details-marker{display:none}
+.rd .evx>summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:8px}
+.rd .evx .chev{color:var(--muted);transition:transform .2s}
+.rd .evx[open] .chev{transform:rotate(180deg)}
+.rd .evx-b{padding:0 0 14px 58px;display:grid;gap:8px;justify-items:start;font-size:15px}
+.rd .evx-b p{margin:0}
+.rd .going{font-size:14px;color:var(--muted)}
 </style>
 <div class="rd">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -312,6 +402,13 @@ html.dark .rd{
   <symbol id="i-edu" viewBox="0 0 24 24"><path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5c2 .6 3.3 2.6 3.5 5.5"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4.5-6 8-6s7 2 8 6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
 </svg>
 
 <div class="wrap">
@@ -373,7 +470,7 @@ html.dark .rd{
     <div class="shot" style="flex:1 1 680px">
       <div class="cap">Desktop · signed out (try the arrow next to "Kategorijas")</div>
       <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Visa Latvija</span><span class="btn p sm">Ienākt</span></div>
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
         <div class="disc" id="disc">
           <div class="catlist">
             <div class="cl-h"><b>Kategorijas</b><label class="drawer-t" title="Fold or open categories"><input type="checkbox" id="rd-fold" class="sr"><svg class="i"><use href="#i-left"/></svg></label></div>
@@ -396,25 +493,31 @@ html.dark .rd{
           </div>
           <div class="pg">
             <div class="hello"><h3>Ko tu gribētu darīt?</h3><p>Atrodi cilvēkus, ar kuriem darīt to, kas tev patīk.</p></div>
-            <div class="row-h"><h4>Šonedēļ notiek</h4><small>Visi pasākumi →</small></div>
-            <div class="evlist">
-              <div class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span><i>Būsi viens no pirmajiem</i></div></span></div>
-              <div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri · <span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4<div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></span></div>
+            <div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Visa Latvija</b><svg class="i"><use href="#i-down"/></svg></span><span class="sub">Attiecas uz visu zemāk: grupām un pasākumiem</span></div>
+            <div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span role="tab" aria-selected="false">Pasākumi</span></div>
+            <div class="strip-h"><h4>Šonedēļ notiek</h4><span class="sub">Visa Latvija</span><span class="hide">Paslēpt</span></div>
+            <div class="chips">
+              <span class="chipev"><span class="d"><small>okt</small>11</span><span class="nm">Deju koncerts</span>17:00</span>
+              <span class="chipev"><span class="d"><small>okt</small>12</span><span class="nm">Ķemeru purva taka</span>10:00</span>
+              <span class="chipev"><span class="d"><small>okt</small>13</span><span class="nm">Spēļu vakars bibliotēkā</span>18:00</span>
+              <span class="chipev"><span class="d"><small>okt</small>15</span><span class="nm">Rīta nūjošana pie Lielupes</span>07:30</span>
+              <span class="chipev"><span class="d"><small>okt</small>16</span><span class="nm">Šaha vakars</span>18:30</span>
             </div>
             <div class="row-h"><h4>Grupas</h4><small>26</small></div>
             <div class="gcards">
               <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
               <div class="gc" style="--c:#10B981"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
               <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b>Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
+              <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note">Nākamā tikšanās: 16. okt.</div></div>
             </div>
           </div>
         </div>
       </div>
       <div class="cap" style="margin-top:12px">Desktop header · signed in</div>
       <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="btn p sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span><span class="ico" aria-label="Ziņas, 2 nelasītas"><svg class="i"><use href="#i-msg"/></svg><span class="dot"></span></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span><span class="ico" aria-label="Ziņas, 2 nelasītas"><svg class="i"><use href="#i-msg"/></svg><span class="dot"></span></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
       </div>
-      <p class="lead" style="font-size:14px;margin-top:6px">Signed in: the place you chose replaces "Visa Latvija", "Izveidot grupu" is the one filled button, messages and notifications show a dot only when something is unread, and the avatar opens the profile menu (language and theme live there).</p>
+      <p class="lead" style="font-size:14px;margin-top:6px">Signed in: the place is not in the header at all (it sits on the page, under "Ko tu gribētu darīt?", and applies to everything below), "Izveidot grupu" is the one filled button, messages and notifications show a dot only when something is unread, and the avatar opens the profile menu (language and theme live there).</p>
     </div>
     <div class="shot">
       <div class="cap">Phone · signed in</div>
@@ -422,9 +525,16 @@ html.dark .rd{
         <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="pg" style="padding:16px 14px;gap:14px">
           <div class="hello"><h3 style="font-size:23px">Ko tu gribētu darīt?</h3></div>
+          <div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span></div>
           <span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span>
-          <div class="row"><span class="btn s sm"><svg class="i"><use href="#i-grid"/></svg>Kategorijas</span><span class="btn s sm"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span></div>
-          <div class="evlist" style="padding-inline:12px"><div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri<div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="sub">Pārgājieni</span></div></span></div></div>
+          <div class="row"><span class="btn s sm"><svg class="i"><use href="#i-grid"/></svg>Kategorijas</span></div>
+          <div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span role="tab" aria-selected="false">Pasākumi</span></div>
+          <div class="strip-h"><h4>Šonedēļ notiek</h4><span class="hide">Paslēpt</span></div>
+          <div class="chips">
+            <span class="chipev"><span class="d"><small>okt</small>11</span><span class="nm">Deju koncerts</span>17:00</span>
+            <span class="chipev"><span class="d"><small>okt</small>13</span><span class="nm">Spēļu vakars bibliotēkā</span>18:00</span>
+            <span class="chipev"><span class="d"><small>okt</small>15</span><span class="nm">Rīta nūjošana pie Lielupes</span>07:30</span>
+          </div>
           <div class="gc" style="--c:#F43F5E"><div class="pic" style="height:70px"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
         </div>
         <div class="navb"><span class="on"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-plus"/></svg>Izveidot</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
@@ -433,9 +543,191 @@ html.dark .rd{
   </div>
 </section>
 
+<section aria-labelledby="h-find">
+  <h2 id="h-find">Finding things: groups, events, search, place</h2>
+  <p class="lead">Five things from your notes, each shown in its own state. The header now holds only the logo, search and your account. Everything about <em>what you are looking at</em> sits on the page.</p>
+
+  <h3>Groups or events</h3>
+  <p class="lead">A two-part switch near the top: "Grupas" (the default) and "Pasākumi". The "Šonedēļ notiek" strip stays on the groups view, but as one quiet row of small chips that scrolls sideways, only for the chosen place, with a "Paslēpt" control. The events tab is the full list, with a calendar planned for later.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 420px">
+      <div class="cap">Desktop · "Pasākumi" tab · Jelgava</div>
+      <div class="desk"><div class="pg">
+        <div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span></div>
+        <div class="seg" role="tablist" aria-label="Rādīt"><span role="tab" aria-selected="false">Grupas</span><span class="on" role="tab" aria-selected="true">Pasākumi</span></div>
+        <div class="seg" aria-label="Skats"><span class="on"><svg class="i"><use href="#i-list"/></svg>Saraksts</span><span class="off" aria-disabled="true"><svg class="i"><use href="#i-cal"/></svg>Kalendārs <small>vēlāk</small></span></div>
+        <div class="evlist">
+          <div class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span><i>Būsi viens no pirmajiem</i></div></span></div>
+          <div class="ev"><span class="date"><small>okt</small><b>13</b></span><span class="t"><b>Spēļu vakars bibliotēkā</b>Pirm. 18:00 · Jelgavas bibliotēka<div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div></span></div>
+          <div class="ev"><span class="date"><small>okt</small><b>15</b></span><span class="t"><b>Rīta nūjošana pie Lielupes</b>Trešd. 07:30 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="shot" style="flex:1 1 300px;max-width:420px">
+      <p class="why"><b>Why a switch, not two pages.</b> People come with one of two questions: "which group is for me?" or "what is on this week?". A switch next to the place answers both without a second menu. Groups stay the first view because joining a group is what the platform is for.</p>
+      <p class="why"><b>The strip is optional.</b> It shows only events from the chosen place, in one row, so it never pushes the groups far down. "Paslēpt" collapses it and leaves a small "Rādīt šonedēļ notiekošo" link in its place.</p>
+      <p class="why"><b>List now, calendar later.</b> The list/calendar toggle is already in place so the calendar can arrive without changing the page. Until then it is greyed and marked "vēlāk".</p>
+    </div>
+  </div>
+
+  <h3>Search, opened</h3>
+  <p class="lead">Clicking the search bar opens a panel straight below it. With the field empty it offers recent searches and the categories; as you type, live results appear in two groups, and "Rādīt visus rezultātus" opens the full list. Here the person has typed "sp".</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · search focused</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search open"><svg class="i"><use href="#i-search"/></svg>sp<span class="caret"></span></span><span class="btn p sm">Ienākt</span></div>
+        <div class="backdrop">
+          <div class="spanel">
+            <span class="sp-h">Nesenie meklējumi</span>
+            <span class="sp-i"><svg class="i"><use href="#i-clock"/></svg>spēļu vakars Jelgavā</span>
+            <span class="sp-i"><svg class="i"><use href="#i-clock"/></svg>sporta zāle</span>
+            <span class="sp-h">Kategorijas</span>
+            <span class="sp-i" style="--c:#8B5CF6"><span class="dotc"></span><em class="hl">Sp</em>ēles</span>
+            <span class="sp-i" style="--c:#3B82F6"><span class="dotc"></span><em class="hl">Sp</em>orts un fitness</span>
+            <span class="sp-h">Grupas</span>
+            <span class="sp-i" style="--c:#8B5CF6"><span class="sp-pic"><svg><use href="#i-games"/></svg></span><span class="sp-t"><b>Galda <em class="hl">sp</em>ēļu vakari</b><small>Spēles · Jelgava · 8 biedri</small></span></span>
+            <span class="sp-i" style="--c:#3B82F6"><span class="sp-pic"><svg><use href="#i-sport"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>orta nūjošana pensionāriem</b><small>Sports un fitness · Jelgava · 48 biedri</small></span></span>
+            <span class="sp-h">Pasākumi</span>
+            <span class="sp-i" style="--c:#8B5CF6"><span class="sp-pic"><svg><use href="#i-cal"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>ēļu vakars bibliotēkā</b><small>13. okt. 18:00 · Jelgavas bibliotēka</small></span></span>
+            <span class="sp-i" style="--c:#3B82F6"><span class="sp-pic"><svg><use href="#i-cal"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>orta diena parkā</b><small>20. okt. 11:00 · Jelgava</small></span></span>
+            <span class="sp-all">Rādīt visus rezultātus<svg class="i"><use href="#i-arrow"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <p class="why" style="margin-top:6px">Results respect the chosen place. The rest of the page dims behind the panel; Esc or a click outside closes it.</p>
+    </div>
+  </div>
+
+  <h3>The place, moved out of the header</h3>
+  <p class="lead">"Visa Latvija" beside the search bar looked like a search-only filter. It now sits on the page itself, under "Ko tu gribētu darīt?", as a line that reads "Rāda: Jelgava". It applies to everything below it: groups, events and the weekly strip. Tapping it opens a short list.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 360px">
+      <div class="cap">Closed, then opened</div>
+      <div class="desk"><div class="pg">
+        <div class="hello"><h3>Ko tu gribētu darīt?</h3></div>
+        <div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><span class="sub">Attiecas uz visu zemāk</span></div>
+        <div class="pop" role="listbox" aria-label="Izvēlies pilsētu">
+          <span class="find"><svg class="i"><use href="#i-search"/></svg>Meklēt pilsētu…</span>
+          <span class="opt"><svg class="i"><use href="#i-pin"/></svg>Visa Latvija</span>
+          <span class="sep"></span>
+          <span class="opt on" role="option" aria-selected="true">Jelgava<svg class="i ck"><use href="#i-check"/></svg></span>
+          <span class="opt">Rīga</span>
+          <span class="opt">Liepāja</span>
+          <span class="opt">Daugavpils</span>
+          <span class="opt">Ventspils</span>
+          <span class="opt">Valmiera</span>
+        </div>
+      </div></div>
+    </div>
+    <div class="shot" style="flex:1 1 300px;max-width:420px">
+      <p class="why"><b>Who gets which place.</b> Signed-in people start with the city from their profile. A visitor's choice is remembered on their device, so the page opens the same way next time. Anyone can switch to "Visa Latvija" at the top of the list.</p>
+      <p class="why"><b>Why on the page.</b> Next to the search bar it read as "search only in Jelgava". Under the greeting it reads as what it is: the place for this whole page.</p>
+    </div>
+  </div>
+
+  <h3>Long titles</h3>
+  <p class="lead">Titles are cut after two lines with "…". The text size is never reduced to make a long title fit; the full title appears as soon as the item is opened (next part).</p>
+  <div class="screens">
+    <div class="shot" style="flex:0 1 300px">
+      <div class="cap">Group card</div>
+      <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note">Nākamā tikšanās: 16. okt.</div></div>
+    </div>
+    <div class="shot" style="flex:1 1 420px">
+      <div class="cap">Event row · desktop and phone width</div>
+      <div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>19</b></span><span class="t"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrības «Zaļais solis» gadskārtējā rudens noslēguma pastaiga ar tējas pauzi un kopīgu fotografēšanos</b>Sv. 11:00 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div></div>
+      <div class="evlist" style="max-width:340px"><div class="ev"><span class="date"><small>okt</small><b>19</b></span><span class="t"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrības «Zaļais solis» gadskārtējā rudens noslēguma pastaiga ar tējas pauzi un kopīgu fotografēšanos</b>Sv. 11:00 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div></div>
+    </div>
+  </div>
+
+  <h3>Browse without leaving the page</h3>
+  <p class="lead">On desktop, clicking a group card opens a panel on the right, over the discovery page. The list stays visible and stays where it was scrolled, so looking at five groups does not mean five page loads. The full title is shown here. "Atvērt grupas lapu" goes to the real group page.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · side panel open</div>
+      <div class="desk">
+        <div class="urlbar">ejam.lumm.eu/lv/sports-un-fitness/group/zalais-solis</div>
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
+        <div class="split">
+          <div class="pg">
+            <div class="row-h"><h4>Grupas</h4><small>26</small></div>
+            <div class="gcards two">
+              <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
+              <div class="gc sel" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note">Nākamā tikšanās: 16. okt.</div></div>
+              <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b>Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
+              <div class="gc" style="--c:#8B5CF6"><div class="pic"><svg><use href="#i-games"/></svg></div><div class="in"><b>Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div><span class="meta">Jelgava · 8 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+            </div>
+          </div>
+          <aside class="sdp" style="--c:#3B82F6" aria-label="Grupas ātrais skats">
+            <div class="pic"><svg class="i"><use href="#i-sport"/></svg><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
+            <div class="bd">
+              <h3>Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</h3>
+              <div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
+              <div class="tags"><span class="tag"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="tag"><svg class="i"><use href="#i-users"/></svg>48 biedri</span></div>
+              <p class="spec-i">Nākamā tikšanās: 16. okt., 10:00 pie Lielupes promenādes</p>
+              <p>Katru ceturtdienu dodamies nūjot pa Jelgavas promenādēm un parkiem. Piedalīties var ikviens, nūjas var aizņemties.</p>
+              <span class="btn p">Pieteikties</span>
+              <span class="lnk">Atvērt grupas lapu<svg class="i"><use href="#i-arrow"/></svg></span>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="cap">Phone · full-height sheet</div>
+      <div class="mob">
+        <div class="mstage">
+          <div class="dim">
+            <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="av" style="background:#c9b8a6"></span></div>
+            <div class="pg" style="padding:14px"><div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b></span></div></div>
+          </div>
+          <div class="scrim"></div>
+          <div class="sheet" style="--c:#3B82F6">
+            <span class="grab"></span>
+            <div class="pic"><svg class="i"><use href="#i-sport"/></svg><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
+            <div class="bd">
+              <h3>Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</h3>
+              <div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
+              <div class="tags"><span class="tag"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="tag"><svg class="i"><use href="#i-users"/></svg>48 biedri</span></div>
+              <p class="spec-i">Nākamā tikšanās: 16. okt., 10:00</p>
+              <p>Katru ceturtdienu nūjojam pa Jelgavas promenādēm un parkiem. Piedalīties var ikviens.</p>
+              <span class="btn p">Pieteikties</span>
+              <span class="lnk">Atvērt grupas lapu<svg class="i"><use href="#i-arrow"/></svg></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="why"><b>The address follows the panel.</b> While the panel is open the address bar shows the group's own address, so Back closes the panel, and the link can be copied and shared. Opening that link, or refreshing, shows the full group page, not the panel.</p>
+
+  <div class="screens">
+    <div class="shot" style="flex:1 1 520px">
+      <div class="cap">Events · one row opened in place (the others stay collapsed)</div>
+      <div class="evlist">
+        <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+          <div class="evx-b"><p>Tautas deju kolektīvu koncerts. Ieeja bez maksas.</p><span class="btn p sm">Iešu</span></div></details>
+        <details class="evx" open><summary class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00 · Ķemeri<div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+          <div class="evx-b">
+            <p>Apmēram 3 stundas pa koka laipām, 6 km. Līdzi ērti apavi un ūdens.</p>
+            <span class="tag"><svg class="i"><use href="#i-pin"/></svg>Ķemeru nacionālā parka apmeklētāju centrs</span>
+            <span class="going"><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4 iet</span>
+            <span class="btn p sm">Iešu</span>
+          </div></details>
+        <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>13</b></span><span class="t"><b>Spēļu vakars bibliotēkā</b>Pirm. 18:00 · Jelgavas bibliotēka<div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+          <div class="evx-b"><p>Galda spēles sākuma līmenī. Spēles nodrošinām mēs.</p><span class="btn p sm">Iešu</span></div></details>
+      </div>
+    </div>
+    <div class="shot" style="flex:1 1 300px;max-width:420px">
+      <p class="why"><b>Events open in the row.</b> An event has little to say, so it opens like an accordion instead of a panel: description, place, who is going and the "Iešu" button, without losing your place in the list. Click a row to try it.</p>
+    </div>
+  </div>
+</section>
+
 <section aria-labelledby="h-group">
   <h2 id="h-group">A group page in the new look</h2>
-  <p class="lead">The title now sits fully inside the coloured header zone instead of on its edge. Below it, tabs for the group's pages; inside a page, a small switch or a list of contents.</p>
+  <p class="lead">The title now sits fully inside the coloured header zone instead of on its edge. Below it, tabs for the group's pages; inside a page, a small switch or a menu (two options for "Šajā lapā" are compared further down).</p>
+  <p class="why">The group's picture (logo or photo from the organiser). Without one: the category icon on its colour.</p>
   <div class="screens">
     <div class="shot" style="flex:1 1 680px">
       <div class="cap">Desktop · Information · signed in</div>
@@ -443,7 +735,7 @@ html.dark .rd{
         <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="ghead">
           <div class="gban">
-            <div class="gid"><span class="gpic"></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
+            <div class="gid"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
           </div>
           <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
         </div>
@@ -454,7 +746,6 @@ html.dark .rd{
             <div><h4>Ko meklējam</h4><p>Gaidām iesācējus, arī tos, kas staigā lēni.</p></div>
           </div>
           <div class="side">
-            <div class="toc"><b>Šajā lapā</b><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Ko meklējam</span></div>
             <div class="evlist" style="padding-inline:14px"><div class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Ķemeru purva taka</b>Sest. 10:00</span></div><div class="ev"><span class="faces"><i style="background:#c9b8a6;width:26px;height:26px"></i><i style="background:#a8bfa0;width:26px;height:26px"></i><i style="background:#d6a99a;width:26px;height:26px"></i></span><span class="t">Līga, Oskars un Anna</span></div></div>
           </div>
         </div>
@@ -465,7 +756,7 @@ html.dark .rd{
       <div class="mob" style="--c:#10B981">
         <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="ghead">
-          <div class="gban" style="padding:14px"><div class="slimbar" style="padding:0"><span class="gpic"></span><div style="flex:1;min-width:0"><b style="font:600 17px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="tag">Rīga · 3</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
+          <div class="gban" style="padding:14px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 17px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="tag">Rīga · 3</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
           <div class="gtabs" style="padding:12px 14px 0;gap:16px"><span>Info</span><span class="on">Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
         </div>
         <div class="pg" style="padding:14px;gap:12px">
@@ -479,6 +770,50 @@ html.dark .rd{
       </div>
     </div>
   </div>
+</section>
+
+<section aria-labelledby="h-menu">
+  <h2 id="h-menu">"Šajā lapā": tabs or a menu on the left</h2>
+  <p class="lead">The Information page of a group has several sections. Two ways to move between them, shown on the same content. The old right-hand list is gone: the left is where people look first.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 440px">
+      <div class="cap">A · Tabs under the group header</div>
+      <div class="desk" style="--c:#10B981">
+        <div class="ghead">
+          <div class="gban" style="padding:14px 22px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 20px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
+          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
+        </div>
+        <div class="pg">
+          <div class="subsw"><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Ko meklējam</span><span>Pasākumi</span></div>
+          <div class="art"><div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="shot" style="flex:1 1 440px">
+      <div class="cap">B · A menu on the left</div>
+      <div class="desk" style="--c:#10B981">
+        <div class="ghead">
+          <div class="gban" style="padding:14px 22px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 20px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
+          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
+        </div>
+        <div class="pg">
+          <div class="lmenu">
+            <div class="toc"><b>Šajā lapā</b><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Ko meklējam</span><span>Pasākumi</span></div>
+            <div class="art">
+              <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
+              <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cmp">
+    <div class="box"><span class="lbl">A · Tabs</span><b>Few, parallel sections</b><p>Suit a handful of sections of equal weight, with one visible at a time. They look and work the same on a phone, where they scroll sideways. They cost no width.</p></div>
+    <div class="box"><span class="lbl">B · Menu on the left</span><b>Many sections or deeper levels</b><p>Suits many sections, or sections that contain more sections, and keeps all names visible. It costs width on desktop and has to fold into a tab row or a list on phones.</p></div>
+    <div class="box"><span class="lbl">Right-hand list</span><b>A long-document pattern</b><p>"On this page" on the right is for long reading pages such as documentation. It is unusual in Latvia and easy to miss, so it is not offered here.</p></div>
+  </div>
+  <p class="why">Neutral note: a group page today has about four sections, which fits either. Nothing is decided; see "Still open".</p>
 </section>
 
 <section aria-labelledby="h-agreed">
@@ -500,7 +835,9 @@ html.dark .rd{
   <div class="open">
     <div><b>Which natural colour?</b><p>Sūna, Jūra or Rudzu maize. Switch at the top and comment.</p></div>
     <div><b>Group tabs replace the group sidebar</b><p>The layouts above assume it. Confirm, or say what the sidebar should keep.</p></div>
-    <div><b>Then</b><p>Once both are settled, the agreed parts become Handbook rules and real components, screen by screen, starting with discovery.</p></div>
+    <div><b>"Šajā lapā": tabs or a menu on the left</b><p>A (tabs under the header) or B (menu on the left), compared above. Pick one, or say which sections a group page might grow to.</p></div>
+    <div><b>Side panel or a centred window</b><p>Clicking a group opens a panel on the right (shown above). Decide after seeing it whether that is right, or whether a centred window (modal) would suit better.</p></div>
+    <div><b>Then</b><p>Once these are settled, the agreed parts become Handbook rules and real components, screen by screen, starting with discovery.</p></div>
   </div>
 </section>
 
