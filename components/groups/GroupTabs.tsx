@@ -85,7 +85,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
     } else if (normalizedPath.startsWith(`${baseUrl}/members`)) {
         tabs = membersTabs;
     } else if (normalizedPath.startsWith(`${baseUrl}/discussions`)) {
-        tabs = []; // Currently no sub-tabs for discussions defined
+        tabs = []; // Announcements have no sub-tabs
     } else {
         tabs = [];
     }

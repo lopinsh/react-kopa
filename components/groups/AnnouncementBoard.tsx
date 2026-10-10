@@ -1,207 +1,87 @@
 'use client';
 
-import { useState, useTransition, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { Send, Trash2, User as UserIcon, LogIn } from 'lucide-react';
+import { useState, useTransition, useEffect, useCallback } from 'react';
+import { useTranslations, useFormatter, useNow } from 'next-intl';
+import { Send, Trash2 } from 'lucide-react';
 import { createPost, getGroupPosts } from '@/actions/post-actions';
-import { deletePostAction as deletePost } from '@/actions/group-actions';
-import { clsx } from 'clsx';
-import Image from 'next/image';
-import { formatDistanceToNow } from 'date-fns';
-import { lv, enUS } from 'date-fns/locale';
-import { useAuthGate } from '@/lib/useAuthGate';
-import AuthGateModal from '@/components/modals/AuthGateModal';
+import { deletePostAction } from '@/actions/group-actions';
+import { usePusher } from '@/hooks/usePusher';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { avatarUrl } from '@/lib/avatar';
-
-type NestedReply = {
-    id: string;
-    content: string;
-    createdAt: Date;
-    author: {
-        id: string;
-        name: string | null;
-        image: string | null;
-        avatarSeed?: string | null;
-    };
-};
-
-type Reply = {
-    id: string;
-    content: string;
-    createdAt: Date;
-    author: {
-        id: string;
-        name: string | null;
-        image: string | null;
-        avatarSeed?: string | null;
-    };
-    replies: NestedReply[];
-};
-
-type Post = {
-    id: string;
-    content: string;
-    createdAt: Date;
-    author: {
-        id: string;
-        name: string | null;
-        image: string | null;
-        avatarSeed?: string | null;
-    };
-    replies: Reply[];
-};
+import { hasAdminRights } from '@/lib/utils/permissions';
+import { ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
+import type { AnnouncementRow } from '@/lib/services/post.service';
+import type { ErrorCode } from '@/types/actions';
 
 type Props = {
     groupId: string;
     locale: string;
-    currentUserId?: string;
 };
 
-export default function DiscussionBoard({ groupId, locale, currentUserId }: Props) {
+export default function AnnouncementBoard({ groupId, locale }: Props) {
     const { user } = useGroupContext();
-    const { isMember, role: userRole } = user;
+    const canPost = hasAdminRights(user.role);
     const t = useTranslations('group');
-  const c_common = useTranslations('common');
-    const tAuth = useTranslations('auth');
-    const [posts, setPosts] = useState<Post[]>([]);
+    const tCommon = useTranslations('common');
+    const tErrors = useTranslations('errors');
+    const format = useFormatter();
+    const now = useNow({ updateInterval: 60_000 });
+    const [posts, setPosts] = useState<AnnouncementRow[]>([]);
     const [content, setContent] = useState('');
-    const [replyContent, setReplyContent] = useState<Record<string, string>>({});
-    const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
+    const [error, setError] = useState<ErrorCode | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const { gateAction, isModalOpen, closeModal, isAuthenticated } = useAuthGate();
 
-    const dateLocale = locale === 'lv' ? lv : enUS;
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            const data = await getGroupPosts(groupId);
-            if (data && Array.isArray(data)) {
-                setPosts(data as Post[]);
-            } else {
-                setPosts([]);
-            }
-            setIsLoading(false);
-        };
-        fetchPosts();
-
-        const { pusherClient } = require('@/lib/pusher');
-        const channelName = `group-${groupId}`;
-        const channel = pusherClient.subscribe(channelName);
-
-        channel.bind('new-post', (post: Post) => {
-            setPosts((currentPosts) => {
-                // Prevent duplicate posts if this client created it (relies on ID check)
-                if (currentPosts.some(p => p.id === post.id)) return currentPosts;
-                return [{ ...post, replies: [] }, ...currentPosts];
-            });
-        });
-
-        channel.bind('new-reply', (reply: Reply & { parentId: string } | NestedReply & { parentId: string }) => {
-            setPosts((currentPosts) => {
-                return currentPosts.map(post => {
-                    // Is it a reply to the main post?
-                    if (post.id === reply.parentId) {
-                        if (post.replies.some(r => r.id === reply.id)) return post;
-                        return { ...post, replies: [...post.replies, { ...reply, replies: [] } as Reply] };
-                    }
-
-                    // Is it a reply to a reply? (Level 2)
-                    const updatedReplies = post.replies.map(r => {
-                        if (r.id === reply.parentId) {
-                            if (r.replies.some(nr => nr.id === reply.id)) return r;
-                            return { ...r, replies: [...r.replies, reply as NestedReply] };
-                        }
-                        return r;
-                    });
-
-                    return { ...post, replies: updatedReplies };
-                });
-            });
-        });
-
-        channel.bind('delete-post', ({ postId }: { postId: string }) => {
-            setPosts((current) => {
-                // Remove if it's a top-level post
-                const filteredPosts = current.filter(p => p.id !== postId);
-                if (filteredPosts.length !== current.length) return filteredPosts;
-
-                // Remove if it's a reply
-                return current.map(post => ({
-                    ...post,
-                    replies: post.replies.filter(r => r.id !== postId).map(r => ({
-                        ...r,
-                        replies: r.replies.filter(nr => nr.id !== postId)
-                    }))
-                }));
-            });
-        });
-
-        return () => {
-            pusherClient.unsubscribe(channelName);
-            channel.unbind_all();
-        };
+    const load = useCallback(async () => {
+        const result = await getGroupPosts(groupId);
+        if (result.success && result.data) setPosts(result.data);
+        setIsLoading(false);
     }, [groupId]);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    useEffect(() => {
+        let active = true;
+        getGroupPosts(groupId).then(result => {
+            if (!active) return;
+            if (result.success && result.data) setPosts(result.data);
+            setIsLoading(false);
+        });
+        return () => { active = false; };
+    }, [groupId]);
+
+    // The channel only carries the id; the list itself comes through the members-only action.
+    usePusher<{ id: string }>(`group-${groupId}`, 'new-post', () => { void load(); });
+    usePusher<{ postId: string }>(`group-${groupId}`, 'delete-post', ({ postId }) => {
+        setPosts(current => current.filter(p => p.id !== postId));
+    });
+
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!content.trim() || isPending) return;
+        setError(null);
 
         startTransition(async () => {
             const result = await createPost(groupId, content, locale);
-            if (result.success && result.data?.post) {
-                const postWithId = {
-                    ...result.data.post,
-                    author: { ...result.data.post.author, id: currentUserId! }
-                };
-                setPosts([postWithId as unknown as Post, ...posts]);
+            if (result.success) {
                 setContent('');
-            }
-        });
-    };
-
-    const handleReply = async (e: React.FormEvent, parentId: string) => {
-        e.preventDefault();
-        const rContent = replyContent[parentId];
-        if (!rContent?.trim() || isPending) return;
-
-        startTransition(async () => {
-            const result = await createPost(groupId, rContent, locale, parentId);
-            if (result.success && result.data?.post) {
-                const newReply = {
-                    ...result.data.post,
-                    author: { ...result.data.post.author, id: currentUserId! }
-                };
-
-                setPosts(posts.map(p => {
-                    if (p.id === parentId) {
-                        return { ...p, replies: [...p.replies, { ...newReply, replies: [] } as Reply] };
-                    }
-
-                    const updatedReplies = p.replies.map(r => {
-                        if (r.id === parentId) {
-                            return { ...r, replies: [...r.replies, newReply as NestedReply] };
-                        }
-                        return r;
-                    });
-
-                    return { ...p, replies: updatedReplies };
-                }));
-
-                setReplyContent(prev => ({ ...prev, [parentId]: '' }));
-                setActiveReplyId(null);
+                await load();
+            } else {
+                setError(result.error);
             }
         });
     };
 
     const handleDelete = async (postId: string) => {
-        if (!confirm(t('confirmDeletePost'))) return;
-
-        const result = await deletePost(postId, locale);
+        if (deletingId || !confirm(t('confirmDeletePost'))) return;
+        setDeletingId(postId);
+        setError(null);
+        const result = await deletePostAction(postId, locale);
         if (result.success) {
-            setPosts(posts.filter(p => p.id !== postId));
+            setPosts(current => current.filter(p => p.id !== postId));
+        } else {
+            setError(result.error);
         }
+        setDeletingId(null);
     };
 
     if (isLoading) {
@@ -214,19 +94,19 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
 
     return (
         <div className="mx-auto max-w-2xl px-4 py-8">
-            {/* Post Input */}
-            {isMember ? (
-                <form onSubmit={handleSubmit} className="mb-10 overflow-hidden rounded-2xl border border-border bg-surface shadow-premium focus-within:border-primary transition-colors">
+            {canPost && (
+                <form onSubmit={handleSubmit} className="mb-10 overflow-hidden rounded-2xl border border-border bg-surface shadow-premium transition-colors focus-within:border-primary">
                     <textarea
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        placeholder={t('postPlaceholder')}
+                        placeholder={t('announcementPlaceholder')}
+                        maxLength={ANNOUNCEMENT_MAX_LENGTH}
                         className="w-full resize-none border-none bg-transparent p-4 text-sm text-foreground focus:ring-0"
                         rows={3}
                     />
-                    <div className="flex items-center justify-between border-t border-border bg-surface-elevated/50 px-4 py-2">
-                        <span className="text-[10px] text-foreground-muted uppercase tracking-wider font-bold">
-                            {content.length} / 2000
+                    <div className="flex items-center justify-between gap-3 border-t border-border bg-surface-elevated/50 px-4 py-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted">
+                            {content.length} / {ANNOUNCEMENT_MAX_LENGTH}
                         </span>
                         <button
                             type="submit"
@@ -238,35 +118,24 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                             ) : (
                                 <>
                                     <Send className="h-4 w-4" />
-                                    {t('postButton')}
+                                    {t('announcementPublish')}
                                 </>
                             )}
                         </button>
                     </div>
                 </form>
-            ) : !isAuthenticated ? (
-                <div className="mb-10 rounded-2xl border border-dashed border-border bg-surface-elevated/30 p-8 text-center">
-                    <button
-                        onClick={() => gateAction(() => { })}
-                        className="flex items-center justify-center gap-2 mx-auto text-sm font-bold text-primary hover:underline transition-colors"
-                    >
-                        <LogIn className="h-4 w-4" />
-                        {tAuth('signInToParticipate')}
-                    </button>
-                </div>
-            ) : (
-                <div className="mb-10 rounded-2xl border border-dashed border-border bg-surface-elevated/30 p-8 text-center">
-                    <p className="text-sm text-foreground-muted">{t('joinToDiscuss')}</p>
-                </div>
             )}
 
-            {/* Posts List */}
+            {error && (
+                <p role="alert" className="mb-6 text-sm font-semibold text-red-500">{tErrors(error)}</p>
+            )}
+
             <div className="space-y-6">
                 {posts.length > 0 ? (
                     posts.map((post) => (
                         <div key={post.id} className="group relative flex gap-4">
-                            {/* Avatar */}
                             <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                     src={avatarUrl(post.author)}
                                     alt={post.author.name || ''}
@@ -275,181 +144,43 @@ export default function DiscussionBoard({ groupId, locale, currentUserId }: Prop
                                 />
                             </div>
 
-                            {/* Content Bubble */}
-                            <div className="flex flex-1 flex-col gap-1">
+                            <div className="flex min-w-0 flex-1 flex-col gap-1">
                                 <div className="flex items-center justify-between gap-2">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm font-bold text-foreground">
-                                            {post.author.name || 'User'}
+                                    <div className="flex min-w-0 items-center gap-2">
+                                        <span className="truncate text-sm font-bold text-foreground">
+                                            {post.author.name || ''}
                                         </span>
-                                        <span className="text-[10px] text-foreground-muted uppercase font-bold tracking-tighter">
-                                            {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true, locale: dateLocale })}
+                                        <span className="shrink-0 text-[10px] font-bold uppercase tracking-tighter text-foreground-muted">
+                                            {format.relativeTime(new Date(post.createdAt), now)}
                                         </span>
                                     </div>
 
-                                    {(currentUserId === post.author.id || userRole === 'OWNER' || userRole === 'ADMIN') && (
+                                    {canPost && (
                                         <button
+                                            type="button"
                                             onClick={() => handleDelete(post.id)}
-                                            className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-foreground-muted hover:text-red-500"
-                                            title={c_common('deletePost')}
+                                            disabled={deletingId !== null}
+                                            className="p-1 text-foreground-muted transition-opacity hover:text-red-500 disabled:opacity-50 sm:opacity-0 sm:group-hover:opacity-100"
+                                            title={tCommon('deletePost')}
+                                            aria-label={tCommon('deletePost')}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
                                         </button>
                                     )}
                                 </div>
-                                <div className="rounded-2xl rounded-tl-none bg-surface-elevated p-4 text-sm leading-relaxed text-foreground shadow-card">
+                                <div className="whitespace-pre-wrap break-words rounded-2xl rounded-tl-none bg-surface-elevated p-4 text-sm leading-relaxed text-foreground shadow-card">
                                     {post.content}
                                 </div>
-
-                                <div className="mt-2 flex items-center gap-4">
-                                    <button
-                                        onClick={() => gateAction(() => setActiveReplyId(activeReplyId === post.id ? null : post.id))}
-                                        className="text-xs font-bold text-foreground-muted hover:text-primary transition-colors"
-                                    >
-                                        {t('reply')}
-                                    </button>
-                                </div>
-
-                                {activeReplyId === post.id && isMember && (
-                                    <form onSubmit={(e) => handleReply(e, post.id)} className="mt-3 flex gap-2">
-                                        <input
-                                            type="text"
-                                            value={replyContent[post.id] || ''}
-                                            onChange={(e) => setReplyContent({ ...replyContent, [post.id]: e.target.value })}
-                                            placeholder={t('replyPlaceholder')}
-                                            className="flex-1 rounded-xl border border-border bg-surface px-4 py-2 text-sm focus:border-primary focus:outline-none"
-                                        />
-                                        <button
-                                            type="submit"
-                                            disabled={!replyContent[post.id]?.trim() || isPending}
-                                            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                                        >
-                                            <Send className="h-4 w-4" />
-                                        </button>
-                                    </form>
-                                )}
-
-                                {/* Replies list */}
-                                {post.replies && post.replies.length > 0 && (
-                                    <div className="mt-4 flex flex-col gap-4 border-l-2 border-border pl-4">
-                                        {post.replies.map((reply) => (
-                                            <div key={reply.id} className="group/reply relative flex gap-3">
-                                                <div className="h-8 w-8 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
-                                                    <img
-                                                        src={avatarUrl(reply.author)}
-                                                        alt={reply.author.name || ''}
-                                                        className="h-full w-full object-cover"
-                                                        referrerPolicy="no-referrer"
-                                                    />
-                                                </div>
-                                                <div className="flex flex-1 flex-col gap-1">
-                                                    <div className="flex items-center justify-between gap-2">
-                                                        <div className="flex items-center gap-2">
-                                                            <span className="text-xs font-bold text-foreground">
-                                                                {reply.author.name || 'User'}
-                                                            </span>
-                                                            <span className="text-[10px] text-foreground-muted uppercase font-bold tracking-tighter">
-                                                                {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true, locale: dateLocale })}
-                                                            </span>
-                                                        </div>
-                                                        {(currentUserId === reply.author.id || userRole === 'OWNER' || userRole === 'ADMIN') && (
-                                                            <button
-                                                                onClick={() => handleDelete(reply.id)}
-                                                                className="opacity-0 group-hover/reply:opacity-100 transition-opacity p-1 text-foreground-muted hover:text-red-500"
-                                                                title={c_common('deletePost')}
-                                                            >
-                                                                <Trash2 className="h-3 w-3" />
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                    <div className="rounded-2xl rounded-tl-none bg-surface-elevated/50 p-3 text-sm leading-relaxed text-foreground">
-                                                        {reply.content}
-                                                    </div>
-
-                                                    <div className="mt-1 flex items-center gap-4">
-                                                        <button
-                                                            onClick={() => gateAction(() => setActiveReplyId(activeReplyId === reply.id ? null : reply.id))}
-                                                            className="text-[10px] font-bold text-foreground-muted hover:text-primary transition-colors"
-                                                        >
-                                                            {t('reply')}
-                                                        </button>
-                                                    </div>
-
-                                                    {activeReplyId === reply.id && isMember && (
-                                                        <form onSubmit={(e) => handleReply(e, reply.id)} className="mt-2 flex gap-2">
-                                                            <input
-                                                                type="text"
-                                                                value={replyContent[reply.id] || ''}
-                                                                onChange={(e) => setReplyContent({ ...replyContent, [reply.id]: e.target.value })}
-                                                                placeholder={t('replyPlaceholder')}
-                                                                className="flex-1 rounded-xl border border-border bg-surface px-3 py-1.5 text-xs focus:border-primary focus:outline-none"
-                                                            />
-                                                            <button
-                                                                type="submit"
-                                                                disabled={!replyContent[reply.id]?.trim() || isPending}
-                                                                className="rounded-xl bg-primary px-3 py-1.5 text-xs font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                                                            >
-                                                                <Send className="h-3 w-3" />
-                                                            </button>
-                                                        </form>
-                                                    )}
-
-                                                    {/* Nested Replies (Level 2) */}
-                                                    {reply.replies && reply.replies.length > 0 && (
-                                                        <div className="mt-3 flex flex-col gap-3 border-l-2 border-border/50 pl-3">
-                                                            {reply.replies.map((nestedReply) => (
-                                                                <div key={nestedReply.id} className="group/nested-reply relative flex gap-2">
-                                                                    <div className="h-6 w-6 shrink-0 overflow-hidden rounded-full border border-border bg-surface-elevated">
-                                                                        <img
-                                                                            src={avatarUrl(nestedReply.author)}
-                                                                            alt={nestedReply.author.name || ''}
-                                                                            className="h-full w-full object-cover"
-                                                                            referrerPolicy="no-referrer"
-                                                                        />
-                                                                    </div>
-                                                                    <div className="flex flex-1 flex-col gap-0.5">
-                                                                        <div className="flex items-center justify-between gap-2">
-                                                                            <div className="flex items-center gap-1.5">
-                                                                                <span className="text-[11px] font-bold text-foreground">
-                                                                                    {nestedReply.author.name || 'User'}
-                                                                                </span>
-                                                                                <span className="text-[9px] text-foreground-muted uppercase font-bold tracking-tighter">
-                                                                                    {formatDistanceToNow(new Date(nestedReply.createdAt), { addSuffix: true, locale: dateLocale })}
-                                                                                </span>
-                                                                            </div>
-                                                                            {(currentUserId === nestedReply.author.id || userRole === 'OWNER' || userRole === 'ADMIN') && (
-                                                                                <button
-                                                                                    onClick={() => handleDelete(nestedReply.id)}
-                                                                                    className="opacity-0 group-hover/nested-reply:opacity-100 transition-opacity p-0.5 text-foreground-muted hover:text-red-500"
-                                                                                    title={c_common('deletePost')}
-                                                                                >
-                                                                                    <Trash2 className="h-2.5 w-2.5" />
-                                                                                </button>
-                                                                            )}
-                                                                        </div>
-                                                                        <div className="rounded-2xl rounded-tl-none bg-surface-elevated/30 p-2 text-xs leading-relaxed text-foreground">
-                                                                            {nestedReply.content}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
                             </div>
                         </div>
                     ))
                 ) : (
-                    <div className="py-12 text-center text-foreground-muted italic text-sm">
-                        {t('noPostsYet')}
+                    <div className="py-12 text-center text-sm italic text-foreground-muted">
+                        <p>{t('noAnnouncementsYet')}</p>
+                        {canPost && <p className="mt-2">{t('announcementsTeamHint')}</p>}
                     </div>
                 )}
             </div>
-            <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />
         </div>
     );
 }

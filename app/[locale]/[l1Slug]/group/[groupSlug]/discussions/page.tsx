@@ -1,6 +1,6 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
-import DiscussionBoard from '@/components/groups/DiscussionBoard';
+import AnnouncementBoard from '@/components/groups/AnnouncementBoard';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -18,11 +18,11 @@ export async function generateMetadata({
     if (!group) return {};
 
     return {
-        title: `${group.name} | ${tCommon('discussionTitle')}`,
+        title: `${group.name} | ${tCommon('announcementsTitle')}`,
     };
 }
 
-export default async function GroupDiscussionsPage({
+export default async function GroupAnnouncementsPage({
     params,
 }: {
     params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
@@ -42,10 +42,9 @@ export default async function GroupDiscussionsPage({
 
     return (
         <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <DiscussionBoard
+            <AnnouncementBoard
                 groupId={group.id}
                 locale={locale}
-                currentUserId={session?.user?.id}
             />
         </section>
     );
