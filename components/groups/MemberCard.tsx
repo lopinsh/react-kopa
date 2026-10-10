@@ -9,6 +9,7 @@ import { promoteMember, demoteMember, kickMember } from '@/actions/group-actions
 import { getOrCreateDirectChat } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
 import { avatarUrl } from '@/lib/avatar';
+import { UI } from '@/lib/constants';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 export interface Member {
@@ -112,6 +113,7 @@ export default function MemberCard({ member, canMessage, groupId, currentUserRol
 
     return (
         <div
+            data-ui={UI.memberCard}
             className={clsx(
                 "flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-[var(--accent)]/30 transition-all group relative",
                 menuOpen && "z-20"

@@ -14,4 +14,6 @@ The Handbook is the single source of truth for what Ejam Kopā believes, how the
 6. [Who sees what](roles.md): what each kind of viewer sees.
 7. [Design](design.md): layouts, screens, foundations, components. A draft for now.
 
+The live site also has a page that shows the real UI components with sample data: `/admin/handbook/ui-elements` (admins only).
+
 Other documents: the plan lives in `docs/execution_handoff.md`, the code rules in `AGENTS.md`.

@@ -10,11 +10,15 @@ interface Props {
     current: ChapterSlug | null;
     headings: HandbookHeading[];
     children: ReactNode;
+    /** Set on the UI-elements page, which is not a chapter. */
+    active?: 'ui-elements';
+    /** The UI-elements page needs more than a reading column. */
+    wide?: boolean;
 }
 
 const itemClass = 'block rounded-lg px-3 py-1.5 text-sm transition-colors';
 
-async function ChapterList({ chapters, current, headings }: Omit<Props, 'children'>) {
+async function ChapterList({ chapters, current, headings, active }: Pick<Props, 'chapters' | 'current' | 'headings' | 'active'>) {
     const t = await getTranslations('admin.handbook');
     return (
         <ul className="space-y-0.5">
@@ -49,12 +53,21 @@ async function ChapterList({ chapters, current, headings }: Omit<Props, 'childre
                     )}
                 </li>
             ))}
+            <li>
+                <Link
+                    href="/admin/handbook/ui-elements"
+                    aria-current={active === 'ui-elements' ? 'page' : undefined}
+                    className={`${itemClass} font-semibold ${active === 'ui-elements' ? 'bg-primary/10 text-primary' : 'text-foreground-muted hover:text-foreground'}`}
+                >
+                    {t('uiElements')}
+                </Link>
+            </li>
         </ul>
     );
 }
 
 /** Wiki frame: chapter list (sticky sidebar on desktop, collapsible menu on phones) and one reading column. */
-export default async function HandbookShell({ chapters, current, headings, children }: Props) {
+export default async function HandbookShell({ chapters, current, headings, children, active, wide = false }: Props) {
     const t = await getTranslations('admin.handbook');
     return (
         <div className="container mx-auto max-w-6xl px-4 py-8">
@@ -65,15 +78,15 @@ export default async function HandbookShell({ chapters, current, headings, child
                         <ChevronDown className="h-4 w-4 text-foreground-muted transition-transform group-open:rotate-180" />
                     </summary>
                     <nav aria-label={t('chapters')} className="border-t border-border p-2">
-                        <ChapterList chapters={chapters} current={current} headings={headings} />
+                        <ChapterList chapters={chapters} current={current} headings={headings} active={active} />
                     </nav>
                 </details>
                 <nav aria-label={t('chapters')} className="sticky top-24 hidden max-h-[calc(100vh-7rem)] self-start overflow-y-auto lg:block">
-                    <ChapterList chapters={chapters} current={current} headings={headings} />
+                    <ChapterList chapters={chapters} current={current} headings={headings} active={active} />
                 </nav>
-                <article className="min-w-0 max-w-[70ch]">
+                <article className={wide ? 'min-w-0' : 'min-w-0 max-w-[70ch]'}>
                     {children}
-                    <p className="mt-12 border-t border-border pt-4 text-xs text-foreground-muted">{t('note')}</p>
+                    {!wide && <p className="mt-12 border-t border-border pt-4 text-xs text-foreground-muted">{t('note')}</p>}
                 </article>
             </div>
         </div>

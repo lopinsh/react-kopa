@@ -105,6 +105,8 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Announcement card.** Meta line (when, who), bold title, short text.
 - **Empty state.** Outline icon, one sentence, at most one action. Example: "Vēl nav ziņu".
 
+The real components, as they look today, with their `data-ui` names and file paths, are shown on the admin page `/admin/handbook/ui-elements` (the last entry in the Handbook's chapter list).
+
 Also one each: sub-tabs (underline), the "…" menu, toast, skeleton, avatar, the slim bar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
 
 ## Undecided
