@@ -15,7 +15,6 @@ type GroupDetailsResult = Record<string, unknown> & {
     isMember: boolean;
     userRole: MembershipRole | null;
     tags: Array<{ id: string; slug: string; title: string; isWildcard: boolean; parentId: string | null }>;
-    inquiries: Array<{ id: string; content: string; createdAt: Date; senderId: string }>;
 };
 
 /**
@@ -107,17 +106,16 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
         const result = await GroupService.sendInquiry(groupId, session.user.id, message);
         if (!result.success) return result as ActionResponse;
 
-        const { ownerId, groupName, l1Slug, groupSlug } = result.data!;
+        const { conversationId, teamIds, groupName } = result.data!;
 
-        if (ownerId) {
-            await createNotification({
-                userId: ownerId,
-                type: 'INQUIRY_RECEIVED',
-                translationKey: 'inquiryReceived',
-                args: { authorName: session.user.name || session.user.username || '', groupName, excerpt: message },
-                link: `/${l1Slug}/group/${groupSlug}`
-            });
-        }
+        // Owner and admins can all answer the group chat, so all of them hear about it.
+        await Promise.all(teamIds.map(teamUserId => createNotification({
+            userId: teamUserId,
+            type: 'INQUIRY_RECEIVED',
+            translationKey: 'inquiryReceived',
+            args: { authorName: session.user.name || session.user.username || '', groupName, excerpt: message },
+            link: `/messages?c=${conversationId}`
+        })));
 
         return { success: true };
     } catch (error) {

@@ -11,6 +11,7 @@ import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
+import { MessageService } from './message.service';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -77,6 +78,8 @@ export interface GroupContext {
         role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
         joinedAt: Date;
         user: { id: string; name: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
+        /** The group chat with this person (their join request and everything said since); only loaded for pending applicants, and only for admins and the applicant. */
+        chatId: string | null;
         applicationMessages: Array<{
             id: string;
             content: string;
@@ -99,12 +102,6 @@ export interface GroupContext {
         title: string;
         slug: string;
         level: number;
-    }>;
-    inquiries: Array<{
-        id: string;
-        content: string;
-        createdAt: Date;
-        senderId: string;
     }>;
     moderation: {
         isSiteAdmin: boolean;
@@ -255,14 +252,6 @@ export const GroupService = {
                     }
                 }
             },
-            appMessages: {
-                include: {
-                    sender: {
-                        select: { id: true, name: true, username: true, avatarSeed: true, image: true }
-                    }
-                },
-                orderBy: { createdAt: 'asc' } as const
-            },
             sections: {
                 orderBy: { order: 'asc' } as const,
                 select: {
@@ -309,23 +298,22 @@ export const GroupService = {
         // Pending applicants and their messages are only visible to group admins, site admins and the applicant themselves.
         const canSeeApplications = isAdmin || isSiteAdmin;
         const visibleMembers = canSeeApplications ? group.members : group.members.filter((m) => m.role !== 'PENDING');
+        // The request message lives in the group chat. Only pending applicants' chats are loaded, and only
+        // for admins and for the applicant themselves.
+        const threads = await MessageService.listGroupThreads(
+            g.id,
+            visibleMembers.filter((m) => m.role === 'PENDING' && (canSeeApplications || m.userId === currentUserId)).map((m) => m.userId)
+        );
         const formattedMembers = visibleMembers.map((m) => {
-            const thread = group.appMessages
-                .filter((msg) => msg.applicationUserId === m.userId && (canSeeApplications || m.userId === currentUserId))
-                .map((msg) => ({
-                    id: msg.id,
-                    content: msg.content,
-                    createdAt: msg.createdAt,
-                    senderId: msg.senderId,
-                    sender: msg.sender
-                }));
+            const thread = threads.get(m.userId);
 
             return {
                 id: m.id,
                 role: m.role,
                 joinedAt: m.joinedAt,
                 user: m.user,
-                applicationMessages: thread
+                chatId: thread?.conversationId ?? null,
+                applicationMessages: thread?.messages ?? []
             };
         });
 
@@ -410,12 +398,6 @@ export const GroupService = {
                 slug: t.slug,
                 level: t.level
             })),
-            inquiries: isAdmin ? g.appMessages.map((msg: { id: string; content: string; createdAt: Date; senderId: string }) => ({
-                id: msg.id,
-                content: msg.content,
-                createdAt: msg.createdAt,
-                senderId: msg.senderId
-            })) : [],
             moderation: {
                 isSiteAdmin,
                 hidden: g.hiddenAt ? { reason: g.hiddenReason, at: g.hiddenAt } : null
@@ -514,77 +496,9 @@ export const GroupService = {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
-        // One conversation per applicant and group, started from the join request.
-        const { MessageService } = await import('@/lib/services/message.service');
-
-        const existingConversations = await prisma.conversation.findMany({
-            where: {
-                originType: 'JOIN_REQUEST',
-                originGroupId: groupId,
-                AND: [
-                    { participants: { some: { id: adminId } } },
-                    { participants: { some: { id: targetUserId } } }
-                ]
-            },
-            include: { participants: { select: { id: true } } }
-        });
-        const existing = existingConversations.find(conv => conv.participants.length === 2);
-
-        // Seed with the applicant's own join message(s) only: earlier ApplicationMessages may come from
-        // other moderators, who are not in this conversation.
-        const joinMessages = await prisma.applicationMessage.findMany({
-            where: { applicationUserId: targetUserId, senderId: targetUserId, groupId },
-            orderBy: { createdAt: 'asc' }
-        });
-        // A reused conversation already holds the earlier ones (copied with the same time); a new
-        // request after a withdraw or decline adds its message.
-        const alreadyCopied = existing && joinMessages.length > 0
-            ? await prisma.message.findMany({
-                where: {
-                    conversationId: existing.id,
-                    senderId: targetUserId,
-                    createdAt: { in: joinMessages.map(m => m.createdAt) }
-                },
-                select: { createdAt: true }
-            })
-            : [];
-        const applicantMessages = joinMessages.filter(m =>
-            !alreadyCopied.some(c => c.createdAt.getTime() === m.createdAt.getTime())
-        );
-
-        const conversation = existing ?? await prisma.conversation.create({
-            data: {
-                originType: 'JOIN_REQUEST',
-                originGroupId: groupId,
-                participants: {
-                    connect: [{ id: adminId }, { id: targetUserId }]
-                }
-            }
-        });
-
-        if (applicantMessages.length > 0) {
-            await prisma.message.createMany({
-                data: applicantMessages.map(msg => ({
-                    content: msg.content,
-                    senderId: msg.senderId,
-                    conversationId: conversation.id,
-                    createdAt: msg.createdAt,
-                }))
-            });
-        }
-
-        // Create the application message record
-        await prisma.applicationMessage.create({
-            data: {
-                content: message,
-                senderId: adminId,
-                applicationUserId: targetUserId,
-                groupId: groupId
-            }
-        });
-
-        // Send the message via MessageService to ensure Pusher trigger and database sync
-        await MessageService.sendMessage(conversation.id, adminId, message);
+        // The applicant's one group chat: every admin writes into it.
+        const chat = await MessageService.getOrCreateGroupChat(groupId, targetUserId, 'JOIN_REQUEST');
+        await MessageService.sendMessage(chat.id, adminId, message);
 
         // Notify the target user about the inquiry
         const group = await prisma.group.findUnique({
@@ -599,7 +513,7 @@ export const GroupService = {
                 type: 'APPLICATION_INQUIRY',
                 translationKey: 'applicationInquiry',
                 args: { groupName: group.name, excerpt: message },
-                link: `/messages?c=${conversation.id}`
+                link: `/messages?c=${chat.id}`
             });
         }
 
@@ -607,38 +521,24 @@ export const GroupService = {
     },
 
     /**
-     * Sends a general inquiry message to a group.
+     * Sends a message from someone outside the team to a group: it goes into their group chat, which the
+     * owner and all admins can answer. Returns the team to notify.
      */
-    async sendInquiry(groupId: string, userId: string, message: string): Promise<GroupServiceResult<{ ownerId: string | null; groupName: string; l1Slug: string; groupSlug: string }>> {
-        const group = await prisma.group.findUnique({
-            where: { id: groupId },
-            select: { name: true, slug: true, category: { include: TaxonomyResolver.getInclude('lv') } }
+    async sendInquiry(groupId: string, userId: string, message: string): Promise<GroupServiceResult<{ conversationId: string; teamIds: string[]; groupName: string }>> {
+        const group = await prisma.group.findFirst({
+            where: { id: groupId, hiddenAt: null },
+            select: { name: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
         });
 
         if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (group.members.some((m) => m.userId === userId)) return { success: false, error: 'FORBIDDEN' };
 
-        await prisma.applicationMessage.create({
-            data: {
-                content: message,
-                senderId: userId,
-                applicationUserId: userId,
-                groupId: groupId
-            }
-        });
-
-        const owner = await prisma.membership.findFirst({
-            where: { groupId, role: 'OWNER' },
-            select: { userId: true }
-        });
+        const chat = await MessageService.getOrCreateGroupChat(groupId, userId, 'GROUP_CONTACT');
+        await MessageService.sendMessage(chat.id, userId, message);
 
         return {
             success: true,
-            data: {
-                ownerId: owner?.userId || null,
-                groupName: group.name,
-                l1Slug: TaxonomyResolver.resolve(group.category).l1Slug,
-                groupSlug: group.slug
-            }
+            data: { conversationId: chat.id, teamIds: group.members.map((m) => m.userId), groupName: group.name }
         };
     },
 
@@ -670,15 +570,14 @@ export const GroupService = {
             },
         });
 
-        if (message) {
-            await prisma.applicationMessage.create({
-                data: {
-                    content: message,
-                    senderId: userId,
-                    applicationUserId: userId,
-                    groupId
-                }
-            });
+        // The request message opens (or continues) the applicant's group chat with the team.
+        try {
+            const chat = await MessageService.getOrCreateGroupChat(groupId, userId, 'JOIN_REQUEST');
+            await MessageService.sendMessage(chat.id, userId, message);
+        } catch (error) {
+            // No request without its message.
+            await prisma.membership.delete({ where: { userId_groupId: { userId, groupId } } });
+            throw error;
         }
 
         return { success: true, data: { pending: true, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) } };
@@ -711,10 +610,7 @@ export const GroupService = {
             where: { id: membership.id },
         });
 
-        // Also cleanup application messages associated with this request
-        await prisma.applicationMessage.deleteMany({
-            where: { senderId: userId, groupId }
-        });
+        // The group chat stays: it is a conversation, not part of the request.
 
         return { success: true, data: { slugs } };
     },
