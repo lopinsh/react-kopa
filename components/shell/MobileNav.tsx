@@ -6,6 +6,7 @@ import { NAV_LINKS } from '@/lib/navigation';
 import { Plus } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
+import UnreadBadge from './UnreadBadge';
 import AuthGateModal from '@/components/modals/AuthGateModal';
 
 export default function MobileNav() {
@@ -37,10 +38,13 @@ export default function MobileNav() {
                             label={t(labelKey)}
                             isActive={isActive}
                         >
-                            <Icon
-                                className={clsx('h-5 w-5', isActive ? 'text-primary' : 'text-foreground-muted')}
-                                strokeWidth={isActive ? 2.25 : 1.75}
-                            />
+                            <span className="relative">
+                                <Icon
+                                    className={clsx('h-5 w-5', isActive ? 'text-primary' : 'text-foreground-muted')}
+                                    strokeWidth={isActive ? 2.25 : 1.75}
+                                />
+                                {href === '/messages' && <UnreadBadge />}
+                            </span>
                         </MobileNavLink>
                     );
                 })}
@@ -66,10 +70,13 @@ export default function MobileNav() {
                             label={t(labelKey)}
                             isActive={isActive}
                         >
-                            <Icon
-                                className={clsx('h-5 w-5', isActive ? 'text-primary' : 'text-foreground-muted')}
-                                strokeWidth={isActive ? 2.25 : 1.75}
-                            />
+                            <span className="relative">
+                                <Icon
+                                    className={clsx('h-5 w-5', isActive ? 'text-primary' : 'text-foreground-muted')}
+                                    strokeWidth={isActive ? 2.25 : 1.75}
+                                />
+                                {href === '/messages' && <UnreadBadge />}
+                            </span>
                         </MobileNavLink>
                     );
                 })}

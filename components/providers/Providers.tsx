@@ -5,6 +5,7 @@ import { NextIntlClientProvider, type AbstractIntlMessages } from 'next-intl';
 import { SessionProvider } from 'next-auth/react';
 
 import RealtimeProvider from './RealtimeProvider';
+import { UnreadMessagesProvider } from './UnreadMessagesProvider';
 import { ToastProvider } from '@/hooks/use-toast';
 import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
@@ -27,6 +28,7 @@ export default function Providers({ locale, messages, oauthProviders, translateM
                   <AuthProvidersProvider value={oauthProviders}>
                    <TranslateModeProvider value={translateMode}>
                     <RealtimeProvider>
+                      <UnreadMessagesProvider>
                         <ThemeProvider
                             attribute="class"
                             defaultTheme="system"
@@ -35,6 +37,7 @@ export default function Providers({ locale, messages, oauthProviders, translateM
                         >
                             {children}
                         </ThemeProvider>
+                      </UnreadMessagesProvider>
                     </RealtimeProvider>
                     <ToastContainer />
                    </TranslateModeProvider>

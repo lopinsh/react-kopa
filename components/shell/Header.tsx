@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
+import UnreadBadge from './UnreadBadge';
 
 export default async function Header() {
     const t = await getTranslations('shell.header');
@@ -66,6 +67,7 @@ export default async function Header() {
                             title={t('messages')}
                         >
                             <MessageSquare className="h-[22px] w-[22px]" />
+                            <UnreadBadge />
                         </Link>
                         <NotificationCenter />
                     </div>

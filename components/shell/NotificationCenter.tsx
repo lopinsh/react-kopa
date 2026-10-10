@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
 import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notification-actions';
 import { clsx } from 'clsx';
-import { pusherClient } from '@/lib/pusher';
+import { usePusher } from '@/hooks/usePusher';
 
 type Notification = {
     id: string;
@@ -95,23 +95,15 @@ export default function NotificationCenter() {
         };
         fetchNotifications();
 
-        if (session?.user?.id) {
-            const channelName = `private-user-${session.user.id}`;
-            const channel = pusherClient.subscribe(channelName);
-
-            channel.bind('new-notification', (notification: Notification) => {
-                setNotifications((current) => {
-                    if (current.some(n => n.id === notification.id)) return current;
-                    return [notification, ...current];
-                });
-            });
-
-            return () => {
-                pusherClient.unsubscribe(channelName);
-                channel.unbind_all();
-            };
-        }
     }, [session?.user?.id]);
+
+    usePusher<Notification>(
+        session?.user?.id ? `private-user-${session.user.id}` : '',
+        'new-notification',
+        (notification) => {
+            setNotifications((current) => current.some(n => n.id === notification.id) ? current : [notification, ...current]);
+        }
+    );
 
     const handleMarkAsRead = async (id: string) => {
         startTransition(async () => {

@@ -245,7 +245,8 @@
     "originalLangLabel": "Oriģinālvaloda",
     "originalLangHint": "Valoda, kurā raksti. Ja tulkojuma nav, apmeklētāji redz šo tekstu.",
     "originalLangNeedsText": "Vispirms uzraksti tekstu šajā valodā",
-    "sectionSaved": "Saglabāts"
+    "sectionSaved": "Saglabāts",
+    "contact": "Sazināties"
   },
   "discovery": {
     "active": "Aktīva",
@@ -417,7 +418,8 @@
     "attendButton": "Pieteikties",
     "attending": "pieteikušies",
     "createEvent": "Izveidot pasākumu",
-    "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai"
+    "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai",
+    "openChat": "Atvērt sarunu"
   },
   "admin": {
     "dashboard": {
@@ -543,7 +545,7 @@
     "blocked": "Bloķēts",
     "confirmBlock": "Vai tiešām vēlies bloķēt/atbloķēt šo lietotāju?",
     "conversationBlocked": "Šī saruna ir bloķēta.",
-    "emptyInbox": "Tev vēl nav ziņojumu. Pievienojies grupām, lai sazinātos.",
+    "emptyInbox": "Vēl nav ziņu. Uzraksti grupai vai kādam dalībniekam — sarunas parādīsies šeit.",
     "noMessages": "Pagaidām nav ziņojumu",
     "originJoinRequest": "Saruna sākta no pieteikuma grupai <group>{name}</group>",
     "originJoinRequestGone": "Saruna sākta no pieteikuma grupai",
@@ -554,7 +556,14 @@
     "selectConversation": "Izvēlies sarunu, lai sāktu tērzēšanu",
     "title": "Ziņojumi",
     "typeMessage": "Raksti ziņu...",
-    "unblock": "Atbloķēt"
+    "unblock": "Atbloķēt",
+    "unknownUser": "Lietotājs",
+    "filterAll": "Visas",
+    "filterLabel": "Filtrēt pēc grupas",
+    "unread": "Nelasīta",
+    "unreadBadge": "{count, plural, zero {# nelasītu sarunu} one {# nelasīta saruna} other {# nelasītas sarunas}}",
+    "back": "Atpakaļ uz ziņām",
+    "send": "Sūtīt"
   },
   "nav": {
     "adminPanel": "Admina panelis",
@@ -655,8 +664,6 @@
     "handle": "@{username}",
     "memberSince": "Biedrs kopš {date}",
     "message": "Ziņa",
-    "messagingComingSoon": "Ziņapmaiņa drīz būs pieejama",
-    "messagingDisabled": "Ziņapmaiņa atspējota",
     "noActivity": "Pagaidām nav aktivitāšu.",
     "noBio": "Pievieno aprakstu, lai citi uzzinātu par tevi.",
     "noJoinedGroups": "Tu vēl neesi nevienā grupā.",
@@ -1007,5 +1014,19 @@
     "issueSyntax": "Nederīga ziņojuma sintakse. Pārbaudi figūriekavas un birkas.",
     "issuePlaceholder": "Jāsakrīt ar oriģinālu: {detail}",
     "issueArm": "Trūkst varianta: {detail}"
+  },
+  "contactForm": {
+    "title": "Sazināties ar {name}",
+    "titleJoin": "Pieprasīt pievienoties {name}",
+    "description": "Uzraksti grupas organizatoriem. Atbildes būs sadaļā Ziņas.",
+    "descriptionJoin": "Pastāsti organizatoriem, kāpēc vēlies pievienoties un ko meklē. Atbildes būs sadaļā Ziņas.",
+    "messageLabel": "Tava ziņa",
+    "placeholder": "Uzraksti savu ziņu šeit...",
+    "joinSwitch": "Es vēlos pievienoties",
+    "send": "Sūtīt ziņu",
+    "sendJoin": "Sūtīt pieprasījumu",
+    "sentTitle": "Nosūtīts",
+    "sentBody": "Atbildes būs sadaļā Ziņas.",
+    "openChat": "Atvērt sarunu"
   }
 }

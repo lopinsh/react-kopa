@@ -245,7 +245,8 @@
     "originalLangLabel": "Original language",
     "originalLangHint": "The language you write this in. Visitors see it when there is no translation.",
     "originalLangNeedsText": "Write the text in this language first",
-    "sectionSaved": "Saved"
+    "sectionSaved": "Saved",
+    "contact": "Contact"
   },
   "discovery": {
     "active": "Active",
@@ -417,7 +418,8 @@
     "attendButton": "Sign up",
     "attending": "going",
     "createEvent": "Create event",
-    "visibilityPublicDesc": "Anyone can find it and ask to join"
+    "visibilityPublicDesc": "Anyone can find it and ask to join",
+    "openChat": "Open chat"
   },
   "admin": {
     "dashboard": {
@@ -543,7 +545,7 @@
     "blocked": "Blocked",
     "confirmBlock": "Are you sure you want to block/unblock this conversation?",
     "conversationBlocked": "This conversation is blocked.",
-    "emptyInbox": "You have no messages yet. Join groups and participate to connect with others.",
+    "emptyInbox": "No messages yet. Write to a group or a fellow member — chats appear here.",
     "noMessages": "No messages yet",
     "originJoinRequest": "Started from a request to join <group>{name}</group>",
     "originJoinRequestGone": "Started from a request to join a group",
@@ -554,7 +556,14 @@
     "selectConversation": "Select a conversation to start chatting",
     "title": "Messages",
     "typeMessage": "Type a message...",
-    "unblock": "Unblock User"
+    "unblock": "Unblock User",
+    "unknownUser": "User",
+    "filterAll": "All",
+    "filterLabel": "Filter by group",
+    "unread": "Unread",
+    "unreadBadge": "{count, plural, one {# unread chat} other {# unread chats}}",
+    "back": "Back to messages",
+    "send": "Send"
   },
   "nav": {
     "adminPanel": "Admin Panel",
@@ -655,8 +664,6 @@
     "handle": "@{username}",
     "memberSince": "Member since {date}",
     "message": "Message",
-    "messagingComingSoon": "Messaging coming soon",
-    "messagingDisabled": "Messaging disabled",
     "noActivity": "No activity yet.",
     "noBio": "Add a bio to tell others about yourself.",
     "noJoinedGroups": "You haven't joined any groups yet.",
@@ -1007,5 +1014,19 @@
     "issueSyntax": "This is not valid message syntax. Check the curly braces and tags.",
     "issuePlaceholder": "Must match the original: {detail}",
     "issueArm": "An option is missing: {detail}"
+  },
+  "contactForm": {
+    "title": "Contact {name}",
+    "titleJoin": "Ask to join {name}",
+    "description": "Write to the group's organizers. Their replies arrive in Messages.",
+    "descriptionJoin": "Tell the organizers why you'd like to join and what you're looking for. Their replies arrive in Messages.",
+    "messageLabel": "Your message",
+    "placeholder": "Write your message here...",
+    "joinSwitch": "I'd like to join",
+    "send": "Send message",
+    "sendJoin": "Send request",
+    "sentTitle": "Sent",
+    "sentBody": "Replies arrive in Messages.",
+    "openChat": "Open chat"
   }
 }
