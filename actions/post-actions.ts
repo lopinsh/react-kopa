@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
-import { createNotification } from './notification-actions';
+import { NotificationService } from '@/lib/services/notification.service';
 import { PostService, type AnnouncementRow } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
@@ -30,16 +30,18 @@ export async function createPost(groupId: string, content: string, locale: strin
             l1Slug = post.group.category.parent.slug;
         }
 
-        const members = await PostService.getAnnouncementRecipients(groupId, authorId);
-        await Promise.all(members.map(m =>
-            createNotification({
-                userId: m.userId,
+        // The post is saved; a failed notification must not report the publish as failed.
+        try {
+            const members = await PostService.getAnnouncementRecipients(groupId, authorId);
+            await NotificationService.createForUsers(members.map(m => m.userId), {
                 type: 'NEW_POST',
                 translationKey: 'newPost',
                 args: { authorName: post.author.name || '', groupName: post.group.name, excerpt: parsed.data },
                 link: `/${l1Slug}/group/${post.group.slug}/discussions`
-            })
-        ));
+            });
+        } catch (notifyError) {
+            console.error('[createPost] notify failed:', notifyError);
+        }
 
         revalidatePath(`/${locale}/${l1Slug}/group/${post.group.slug}/discussions`, 'page');
         return { success: true, data: { postId: post.id } };

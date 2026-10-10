@@ -50,6 +50,28 @@ export const NotificationService = {
     },
 
     /**
+     * The same notification for many people: one insert, then one realtime event per person.
+     */
+    async createForUsers(userIds: string[], payload: Omit<NotificationPayload, 'userId'>) {
+        if (userIds.length === 0) return [];
+        const message = JSON.stringify({ key: payload.translationKey, args: withShortExcerpt(payload.args) });
+        const notifications = await prisma.notification.createManyAndReturn({
+            data: userIds.map(userId => ({
+                userId,
+                type: payload.type,
+                title: payload.type,
+                message,
+                link: payload.link,
+            })),
+        });
+
+        const { triggerRealtime } = await import('@/lib/pusher');
+        await Promise.all(notifications.map(n => triggerRealtime(`private-user-${n.userId}`, 'new-notification', n)));
+
+        return notifications;
+    },
+
+    /**
      * Marks a single notification as read, verifying userId ownership.
      */
     async markAsReadForUser(notificationId: string, userId: string) {
