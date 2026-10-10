@@ -43,17 +43,20 @@ export default function FeedbackMode() {
 
     const handlePick = useCallback((el: Element) => {
         setPanelOpen(false);
-        setDraftPath(`${pathname}${window.location.search}`);
+        // The schema caps the path at 500 characters; a very long query would otherwise fail to save.
+        setDraftPath(`${pathname}${window.location.search}`.slice(0, 500));
         setDraft({ selector: buildSelector(el), elementText: visibleText(el) });
     }, [pathname]);
 
     const hover = useElementPicker(!paused && !busy, handlePick);
 
-    // Escape closes what is open first; with nothing open it leaves the mode.
+    // Escape closes what is open first; with nothing open it leaves the mode. While paused the page is
+    // used normally, so Escape belongs to the page (closing its menus and pop-ups), not to feedback mode.
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             if (e.key !== 'Escape' || busy) return;
             if (panelOpen) { setPanelOpen(false); return; }
+            if (paused) return;
             startTransition(async () => {
                 const res = await setFeedbackMode(false);
                 if (res.success) router.refresh();
@@ -61,7 +64,7 @@ export default function FeedbackMode() {
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-    }, [busy, panelOpen, router]);
+    }, [busy, panelOpen, paused, router]);
 
     const handleSaved = (note: FeedbackItem) => {
         setNotes((prev) => [...prev, note]);
