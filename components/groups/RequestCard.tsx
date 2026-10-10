@@ -7,7 +7,7 @@ import { manageMembership } from '@/actions/group-actions';
 import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from '@/i18n/routing';
-import { avatarUrl } from '@/lib/avatar';
+import { avatarUrl } from '@/lib/avatar';
 import { UI } from '@/lib/constants';
 
 interface Message {

@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { EyeOff } from 'lucide-react';
-import { restoreGroup } from '@/actions/moderation-actions';
+import { restoreGroup } from '@/actions/moderation-actions';
 import { UI } from '@/lib/constants';
 
 type Props = {

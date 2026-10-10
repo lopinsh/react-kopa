@@ -9,7 +9,7 @@ import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, Lucid
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';
-import { hasAdminRights } from '@/lib/utils/permissions';
+import { hasAdminRights } from '@/lib/utils/permissions';
 import { UI } from '@/lib/constants';
 
 type Props = {

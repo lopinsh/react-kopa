@@ -4,7 +4,7 @@ import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, Send } from 'lucide-react';
 import { createPost } from '@/actions/post-actions';
-import { announcementSchema, ANNOUNCEMENT_TITLE_MAX, ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
+import { announcementSchema, ANNOUNCEMENT_TITLE_MAX, ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
 import { UI } from '@/lib/constants';
 
 type Props = {

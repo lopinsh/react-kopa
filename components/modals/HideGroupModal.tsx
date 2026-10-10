@@ -6,7 +6,7 @@ import { useRouter } from '@/i18n/routing';
 import { X, EyeOff } from 'lucide-react';
 import { hideGroup } from '@/actions/moderation-actions';
 import { suspendReportedGroup } from '@/actions/admin-actions';
-import { hideGroupSchema } from '@/lib/validations/moderation';
+import { hideGroupSchema } from '@/lib/validations/moderation';
 import { UI } from '@/lib/constants';
 
 type Props = {

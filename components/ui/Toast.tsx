@@ -4,7 +4,7 @@ import React from 'react';
 import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react';
 import { ToastMessage, ToastType } from '@/hooks/use-toast';
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from 'tailwind-merge';
 import { UI } from '@/lib/constants';
 
 function cn(...inputs: ClassValue[]) {

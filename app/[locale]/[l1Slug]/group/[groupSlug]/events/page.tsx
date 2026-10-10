@@ -7,7 +7,7 @@ import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
-import { isEventPast } from '@/lib/event-dates';
+import { isEventPast } from '@/lib/event-dates';
 import { UI } from '@/lib/constants';
 
 export async function generateMetadata({

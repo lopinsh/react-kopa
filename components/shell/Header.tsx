@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
-import UnreadBadge from './UnreadBadge';
+import UnreadBadge from './UnreadBadge';
 import { UI } from '@/lib/constants';
 
 export default async function Header() {

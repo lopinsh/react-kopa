@@ -5,7 +5,7 @@ import { usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft } from 'lucide-react';
 import { clsx } from 'clsx';
-import GroupSidebarContent from './GroupSidebarContent';
+import GroupSidebarContent from './GroupSidebarContent';
 import { UI } from '@/lib/constants';
 
 type SidebarProps = {

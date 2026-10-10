@@ -6,7 +6,7 @@ import { getSmartImageUrl } from '@/lib/image-utils';
 import { clsx } from 'clsx';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import { cityLabel } from '@/lib/city-label';
 import { UI } from '@/lib/constants';
 
 interface GroupMemberPreview {

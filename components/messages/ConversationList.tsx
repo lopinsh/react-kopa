@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import type { InboxRow } from '@/lib/services/message.service';
 import FilterChip from '@/components/ui/FilterChip';
-import { useMessageTime } from './useMessageTime';
+import { useMessageTime } from './useMessageTime';
 import { UI } from '@/lib/constants';
 
 type Props = {

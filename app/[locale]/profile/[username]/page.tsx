@@ -8,7 +8,7 @@ import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
 import { MessageService } from '@/lib/services/message.service';
-import MessageUserButton from '@/components/messages/MessageUserButton';
+import MessageUserButton from '@/components/messages/MessageUserButton';
 import { UI } from '@/lib/constants';
 
 export default async function PublicProfilePage({

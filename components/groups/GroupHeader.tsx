@@ -31,7 +31,7 @@ import type { GroupContext } from '@/lib/services/group.service';
 import CompactGroupBar from './CompactGroupBar';
 import GroupMoreMenu from './GroupMoreMenu';
 import AdminToolsMenu from './AdminToolsMenu';
-import { getContrastForeground } from '@/lib/color-utils';
+import { getContrastForeground } from '@/lib/color-utils';
 import { UI } from '@/lib/constants';
 
 type Props = {

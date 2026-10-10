@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Users, MapPin, Globe, Lock, Zap } from 'lucide-react';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import { cityLabel } from '@/lib/city-label';
 import { UI } from '@/lib/constants';
 
 type Props = {

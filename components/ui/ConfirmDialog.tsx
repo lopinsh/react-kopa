@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { UI } from '@/lib/constants';
 
 type Props = {

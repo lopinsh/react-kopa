@@ -7,7 +7,7 @@ import { Plus } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
 import UnreadBadge from './UnreadBadge';
-import AuthGateModal from '@/components/modals/AuthGateModal';
+import AuthGateModal from '@/components/modals/AuthGateModal';
 import { UI } from '@/lib/constants';
 
 export default function MobileNav() {

@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import { Heart } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { UI } from '@/lib/constants';
 
 export function Footer({ locale }: { locale: string }) {
