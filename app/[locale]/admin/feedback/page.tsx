@@ -60,7 +60,7 @@ export default async function AdminFeedbackPage({
                     <option value="">{t('allStatuses')}</option>
                     {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{tMode(`status.${s}`)}</option>)}
                 </select>
-                <input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className={`${FIELD} min-w-0 flex-1 sm:flex-none sm:w-56`} />
+                <input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className={`${FIELD} w-full sm:w-56`} />
                 <button type="submit" className="rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white hover:opacity-90">{t('filter')}</button>
             </form>
 
