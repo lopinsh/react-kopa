@@ -24,17 +24,28 @@ export function joinLocal(date: string, time: string): string {
     return date ? `${date}T${time || '00:00'}` : '';
 }
 
-/** The local value `minutes` after `value`. */
-export function addMinutesLocal(value: string, minutes: number): string {
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return '';
-    return toLocalValue(new Date(d.getTime() + minutes * 60_000));
+/** Wall-clock milliseconds of a local "YYYY-MM-DDTHH:mm" value, read as if it were UTC (no DST jumps); NaN when it is not one. */
+function wallClock(value: string): number {
+    const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(value);
+    return m ? Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), Number(m[4]), Number(m[5])) : NaN;
 }
 
-/** Minutes between two local values (end minus start); null when either is not a date. */
+/**
+ * The local value `minutes` after `value`, on the wall clock: 02:00 + 2 h reads 04:00 also on a DST night
+ * (25 Oct in Riga), as the organiser expects. Real-time arithmetic gave 03:00 there, an hour that happens twice,
+ * which the browser then read as the first one: the event was saved one hour long.
+ */
+export function addMinutesLocal(value: string, minutes: number): string {
+    const ms = wallClock(value);
+    if (Number.isNaN(ms)) return '';
+    const d = new Date(ms + minutes * 60_000);
+    return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}T${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}`;
+}
+
+/** Wall-clock minutes between two local values (end minus start); null when either is not a date. */
 export function minutesBetween(start: string, end: string): number | null {
-    const a = new Date(start).getTime();
-    const b = new Date(end).getTime();
+    const a = wallClock(start);
+    const b = wallClock(end);
     return Number.isNaN(a) || Number.isNaN(b) ? null : Math.round((b - a) / 60_000);
 }
 
