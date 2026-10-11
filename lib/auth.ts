@@ -5,6 +5,7 @@ import github from "next-auth/providers/github";
 import google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { isSiteAdmin } from "@/lib/site-role";
 
 // Simple per-user password map for local development.
 // Key: email, Value: password
@@ -68,7 +69,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     // and never for the seed site admin — its password is public.
                     if (process.env.NODE_ENV === "production") {
                         if (process.env.ALLOW_DEV_PASSWORDS !== "true") return null;
-                        if (SEED_SITE_ADMINS.has(email.trim().toLowerCase())) return null;
+                        // By name, and by role: owner@local is a seed site ADMIN too, and any
+                        // passwordless account promoted later must not sign in with a dev password.
+                        if (SEED_SITE_ADMINS.has(email.trim().toLowerCase()) || isSiteAdmin(user.role)) return null;
                     }
                     const expectedPassword = DEV_PASSWORDS[email];
                     if (!expectedPassword || password !== expectedPassword) return null;
@@ -99,7 +102,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 // The owner can make or remove admins, so a long-lived token must not keep a stale role:
                 // re-read just the role from the DB at most once a minute.
                 const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { role: true } });
-                if (dbUser) token.role = dbUser.role;
+                // A deleted user keeps no site powers.
+                token.role = dbUser?.role ?? 'USER';
                 token.roleCheckedAt = Date.now();
             }
             if (trigger === "update" && token.id) {
