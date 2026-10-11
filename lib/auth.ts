@@ -5,7 +5,6 @@ import github from "next-auth/providers/github";
 import google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { isSiteAdmin } from "@/lib/site-role";
 
 // Simple per-user password map for local development.
 // Key: email, Value: password
@@ -69,9 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     // and never for the seed site admin — its password is public.
                     if (process.env.NODE_ENV === "production") {
                         if (process.env.ALLOW_DEV_PASSWORDS !== "true") return null;
-                        // By name, and by role: owner@local is a seed site ADMIN too, and any
-                        // passwordless account promoted later must not sign in with a dev password.
-                        if (SEED_SITE_ADMINS.has(email.trim().toLowerCase()) || isSiteAdmin(user.role)) return null;
+                        if (SEED_SITE_ADMINS.has(email.trim().toLowerCase())) return null;
                     }
                     const expectedPassword = DEV_PASSWORDS[email];
                     if (!expectedPassword || password !== expectedPassword) return null;
