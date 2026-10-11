@@ -17,9 +17,11 @@ type Props = {
     onTaxChange: (sel: TaxonomySelection | null) => void;
     accentColor: string;
     selectedL1: L1Category | null;
+    /** Tags the group had when the form opened (a legacy group may keep more than the usual limit). */
+    maxTags?: number;
 };
 
-export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1 }: Props) {
+export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1, maxTags }: Props) {
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const { formState: { errors } } = useFormContext<GroupFormValues>();
@@ -49,6 +51,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                             l1={selectedL1}
                             accentColor={selectedL1.color || NEUTRAL_ACCENT}
                             allowL3={false}
+                            maxTags={maxTags}
                         />
                     </div>
                 )}

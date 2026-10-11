@@ -249,6 +249,7 @@ export default function GroupSettingsForm({
                                 onTaxChange={handleTaxChange}
                                 accentColor={pickerColor}
                                 selectedL1={selectedL1}
+                                maxTags={initialTagIds.length}
                             />
                         </div>
                     )}

@@ -29,9 +29,11 @@ type Props = {
     l1: L1Category;
     accentColor: string;
     allowL3?: boolean;
+    /** A legacy group that already has more tags than the limit may keep (and swap within) that many; never above the limit otherwise. */
+    maxTags?: number;
 };
 
-export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
+export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = MAX_GROUP_TAGS }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const locale = useLocale();
@@ -234,7 +236,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
         .filter((id) => !selectedKnownIds.has(id))
         .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
 
-    const limitReached = tagIds.length >= MAX_GROUP_TAGS;
+    const tagLimit = Math.max(MAX_GROUP_TAGS, maxTags);
+    const limitReached = tagIds.length >= tagLimit;
     const hasResults = mergedResults.length > 0;
     const showWildcardPrompt = query.trim().length >= 2;
 
@@ -343,8 +346,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false }: Props) {
                 </div>
             </div>
 
-            {limitReached && !errors.tagIds && <p className="text-xs text-foreground-muted">{t('tagLimitHint')}</p>}
-            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{t(errors.tagIds.message as any)}</p>}
+            {limitReached && !errors.tagIds && <p className="text-xs text-foreground-muted">{t('tagLimitHint', { max: tagLimit })}</p>}
+            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
 
             {isOpen && !limitReached && (
                 <div 

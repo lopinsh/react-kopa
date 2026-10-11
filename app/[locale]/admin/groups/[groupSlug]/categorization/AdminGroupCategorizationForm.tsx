@@ -75,7 +75,7 @@ export default function AdminGroupCategorizationForm({
                     <h1 className="mt-1 text-2xl font-bold text-foreground">{groupName}</h1>
                     <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
 
-                    <TagPicker l1={selectedL1} accentColor={selectedL1.color} allowL3={false} />
+                    <TagPicker l1={selectedL1} accentColor={selectedL1.color} allowL3={false} maxTags={initialTagIds.length} />
                 </div>
 
                 <button

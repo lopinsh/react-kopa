@@ -255,6 +255,19 @@ export const TaxonomyService = {
             throw new Error('TAG_NOT_FOUND');
         }
 
+        // Someone (maybe in another session) may have suggested the same name already: reuse it instead of a second pending tag.
+        const existing = await prisma.category.findFirst({
+            where: {
+                parentId: params.parentId,
+                level: 2,
+                isWildcard: true,
+                status: 'PENDING_REVIEW',
+                titles: { some: { title: { equals: trimmed, mode: 'insensitive' } } },
+            },
+            orderBy: { createdAt: 'asc' },
+        });
+        if (existing) return existing;
+
         const slug = await createUniqueCategorySlug(trimmed);
 
         return prisma.category.create({

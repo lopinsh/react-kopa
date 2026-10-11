@@ -54,7 +54,7 @@ export default function FeedbackThread({ note, onChanged, collapsible = false }:
                         <li key={r.id} className="rounded-xl border border-primary/30 bg-primary/5 px-3 py-2">
                             <p className="flex items-center gap-1 text-xs font-bold text-primary">
                                 {r.byAgent && <Bot className="h-3.5 w-3.5" aria-hidden />}
-                                {r.byAgent ? t('threadAgent') : r.authorName ?? t('threadAdmin')}
+                                {r.byAgent ? t('threadAgent') : r.authorName ?? t('threadEarlier')}
                                 <span className="font-medium text-foreground-muted">
                                     · {format.dateTime(r.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
