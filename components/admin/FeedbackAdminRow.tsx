@@ -19,15 +19,13 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
     const format = useDateFormatter();
     const { success: toastSuccess, error: toastError } = useToast();
     const [note, setNote] = useState(initial);
-    const [status, setStatus] = useState<FeedbackStatusValue>(initial.status);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const [deleted, setDeleted] = useState(false);
 
-    const dirty = status !== note.status;
-
-    const handleSave = () => {
-        if (isPending || !dirty) return;
+    // The status saves as soon as it is picked, so there is no Save button to take room.
+    const handleStatus = (status: FeedbackStatusValue) => {
+        if (isPending || status === note.status) return;
         startTransition(async () => {
             const res = await updateFeedback(note.id, { status });
             if (res.success && res.data) {
@@ -41,48 +39,40 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
     if (deleted) return null;
 
     return (
-        <li className="rounded-2xl border border-border bg-surface p-4">
+        <li className="rounded-2xl border border-border bg-surface px-4 py-3">
             <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
                 <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
                 {note.component && <span title={tAdmin('component')} className="rounded-full bg-surface-elevated px-2.5 py-1 font-mono font-semibold text-foreground-muted">{note.component}</span>}
                 <Link href={note.path} locale={note.locale === 'en' ? 'en' : 'lv'} className="break-all font-mono font-semibold text-foreground-muted hover:text-primary hover:underline">
                     {note.path}
                 </Link>
+                <div className="ml-auto flex items-center gap-1.5">
+                    <select
+                        value={note.status}
+                        disabled={isPending}
+                        onChange={(e) => handleStatus(e.target.value as FeedbackStatusValue)}
+                        aria-label={tAdmin('status')}
+                        className="rounded-lg border border-border bg-surface-elevated px-2 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                    >
+                        {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
+                    </select>
+                    <FeedbackDeleteButton
+                        id={note.id}
+                        iconOnly
+                        onDeleted={() => { setDeleted(true); router.refresh(); }}
+                        className="rounded-lg border border-red-500/40 p-1.5 text-red-500 hover:bg-red-500/10 disabled:opacity-50"
+                    />
+                </div>
             </div>
-            <p className="mt-3 whitespace-pre-wrap break-words text-sm text-foreground">{note.text}</p>
+            <p className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">{note.text}</p>
             {note.elementText && <p className="mt-2 truncate text-xs text-foreground-muted">{tAdmin('element')}: {note.elementText}</p>}
-            <p className="mt-1 text-xs text-foreground-muted">
+            <p className="mt-0.5 text-xs text-foreground-muted">
                 {note.authorName ? `${note.authorName} · ` : ''}
                 {format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                 {` · ${note.locale.toUpperCase()} · ${note.viewportW}×${note.viewportH} · ${note.theme}`}
             </p>
 
-            <div className="mt-4 grid gap-3 sm:grid-cols-[10rem_auto] sm:items-start">
-                <select
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value as FeedbackStatusValue)}
-                    aria-label={tAdmin('status')}
-                    className="rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm text-foreground"
-                >
-                    {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
-                </select>
-                <div className="flex gap-2 sm:flex-col">
-                    <button
-                        type="button"
-                        onClick={handleSave}
-                        disabled={isPending || !dirty}
-                        className="flex-1 rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                    >
-                        {tAdmin('save')}
-                    </button>
-                    <FeedbackDeleteButton
-                        id={note.id}
-                        onDeleted={() => { setDeleted(true); router.refresh(); }}
-                        className="flex items-center justify-center gap-1 rounded-xl border border-red-500/40 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-500/10 disabled:opacity-50"
-                    />
-                </div>
-            </div>
-            <FeedbackThread note={note} onChanged={setNote} />
+            <FeedbackThread note={note} onChanged={setNote} collapsible />
         </li>
     );
 }

@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Bot, Send } from 'lucide-react';
+import { Bot, MessageCircle, Send } from 'lucide-react';
 import { replyToFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_TEXT_MAX } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
@@ -10,13 +10,14 @@ import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
 
 /** The replies under a note (oldest first) and an input to add another. The original text lives outside, untouched. */
-export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void }) {
+export default function FeedbackThread({ note, onChanged, collapsible = false }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void; collapsible?: boolean }) {
     const t = useTranslations('feedbackMode');
     const tErrors = useTranslations('errors');
     const format = useDateFormatter();
     const { error: toastError } = useToast();
     const [text, setText] = useState('');
     const [isPending, startTransition] = useTransition();
+    const [open, setOpen] = useState(!collapsible);
 
     const handleSend = () => {
         if (isPending || !text.trim()) return;
@@ -31,8 +32,22 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
         });
     };
 
+    if (!open) {
+        return (
+            <button
+                type="button"
+                data-ui="feedback-thread"
+                onClick={() => setOpen(true)}
+                className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground-muted hover:text-primary"
+            >
+                <MessageCircle className="h-3.5 w-3.5" aria-hidden />
+                {note.replies.length > 0 ? t('threadShow', { count: note.replies.length }) : t('reply')}
+            </button>
+        );
+    }
+
     return (
-        <div data-ui="feedback-thread" className="mt-3 space-y-2">
+        <div data-ui="feedback-thread" className="mt-2 space-y-2">
             {note.replies.length > 0 && (
                 <ol className="space-y-2">
                     {note.replies.map((r) => (

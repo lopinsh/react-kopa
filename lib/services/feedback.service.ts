@@ -115,11 +115,16 @@ async function updateNote(id: string, authorId: string | null, input: unknown): 
 async function addReply(id: string, authorId: string | null, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
     const parsed = replyFeedbackSchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
-    const existing = await prisma.feedback.findUnique({ where: { id }, select: { id: true } });
+    const existing = await prisma.feedback.findUnique({ where: { id }, select: { status: true } });
     if (!existing) return { success: false, error: 'NOT_FOUND' };
+    // An admin answering a closed note means it needs action again; the agent's own reply never reopens.
+    const reopen = authorId !== null && (existing.status === 'DONE' || existing.status === 'WONT_DO');
     const row = await prisma.feedback.update({
         where: { id },
-        data: { replies: { create: { text: parsed.data.text, authorId, byAgent: authorId === null } } },
+        data: {
+            ...(reopen ? { status: 'OPEN' as const, resolvedAt: null } : {}),
+            replies: { create: { text: parsed.data.text, authorId, byAgent: authorId === null } },
+        },
         ...itemArgs,
     });
     return { success: true, data: toItem(row) };

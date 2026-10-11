@@ -1263,6 +1263,7 @@
     "reply": "Reply",
     "threadAgent": "Agent",
     "threadAdmin": "Admin",
+    "threadShow": "{count, plural, one {# reply} other {# replies}}",
     "threadPlaceholder": "Add a reply…",
     "threadSend": "Send reply",
     "openList": "All notes",

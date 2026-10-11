@@ -1263,6 +1263,7 @@
     "reply": "Atbilde",
     "threadAgent": "Aģents",
     "threadAdmin": "Administrators",
+    "threadShow": "{count, plural, zero {# atbilžu} one {# atbilde} other {# atbildes}}",
     "threadPlaceholder": "Pievienot atbildi…",
     "threadSend": "Nosūtīt atbildi",
     "openList": "Visas piezīmes",

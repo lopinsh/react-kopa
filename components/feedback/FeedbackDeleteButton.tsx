@@ -13,10 +13,12 @@ type Props = {
     /** Reports whether the confirm dialog is open, so a parent pop-up can leave Escape to it. */
     onConfirmChange?: (open: boolean) => void;
     className?: string;
+    /** Trash icon only (label kept for screen readers) for crowded rows. */
+    iconOnly?: boolean;
 };
 
 /** Delete button for a feedback note: asks first, then removes the note for good. */
-export default function FeedbackDeleteButton({ id, onDeleted, onConfirmChange, className }: Props) {
+export default function FeedbackDeleteButton({ id, onDeleted, onConfirmChange, className, iconOnly }: Props) {
     const t = useTranslations('feedbackMode');
     const tErrors = useTranslations('errors');
     const { success: toastSuccess, error: toastError } = useToast();
@@ -46,9 +48,9 @@ export default function FeedbackDeleteButton({ id, onDeleted, onConfirmChange, c
 
     return (
         <>
-            <button type="button" onClick={() => setOpen(true)} disabled={isPending} className={className}>
+            <button type="button" onClick={() => setOpen(true)} disabled={isPending} className={className} aria-label={iconOnly ? t('delete') : undefined} title={iconOnly ? t('delete') : undefined}>
                 <Trash2 className="h-4 w-4" />
-                {t('delete')}
+                {!iconOnly && t('delete')}
             </button>
             {/* Own stacking context so the dialog sits above the note pop-up (z-70). */}
             <div data-feedback-ignore className="absolute z-[80]">
