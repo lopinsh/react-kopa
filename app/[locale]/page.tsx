@@ -118,6 +118,22 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const accentColor = activeL1?.color || NEUTRAL_ACCENT;
     const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
+    const createGroupCard = effectiveCategoryId ? (
+        <Link
+            href={`/create?category=${activeL1?.slug || ''}`}
+            className="group relative flex flex-col items-center justify-center h-full min-h-[200px] sm:min-h-[280px] rounded-[20px] bg-surface-elevated text-foreground border-2 border-dashed border-border/60 transition-transform duration-200 ease-out hover:border-[var(--accent)] hover:bg-surface hover:scale-[1.02] soft-press"
+            style={{ ['--accent' as string]: accentColor }}
+        >
+            <div className="flex flex-col items-center justify-center p-6 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-background mb-4 text-foreground-muted group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-colors shadow-sm">
+                    <Plus className="h-7 w-7" />
+                </div>
+                <h3 className="text-lg font-bold text-foreground">{t('createNewGroup')}</h3>
+                <p className="mt-1 text-sm text-foreground-muted">{t('inThisCategory')}</p>
+            </div>
+        </Link>
+    ) : null;
+
     return (
         <div style={accentStyle} className="flex min-h-full">
             {/* Discovery Sidebar */}
@@ -166,21 +182,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                             locale={locale}
                                         />
                                     ))}
-                                    {effectiveCategoryId && (
-                                        <Link
-                                            href={`/create?category=${activeL1?.slug || ''}`}
-                                            className="group relative flex flex-col items-center justify-center h-full min-h-[200px] sm:min-h-[280px] rounded-[20px] bg-surface-elevated text-foreground border-2 border-dashed border-border/60 transition-transform duration-200 ease-out hover:border-[var(--accent)] hover:bg-surface hover:scale-[1.02] soft-press"
-                                            style={{ ['--accent' as string]: accentColor }}
-                                        >
-                                            <div className="flex flex-col items-center justify-center p-6 text-center">
-                                                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-background mb-4 text-foreground-muted group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-colors shadow-sm">
-                                                    <Plus className="h-7 w-7" />
-                                                </div>
-                                                <h3 className="text-lg font-bold text-foreground">{t('createNewGroup')}</h3>
-                                                <p className="mt-1 text-sm text-foreground-muted">{t('inThisCategory')}</p>
-                                            </div>
-                                        </Link>
-                                    )}
+                                    {createGroupCard}
                                 </div>
                             ) : (
                                 <div className="flex flex-col gap-3">
@@ -254,6 +256,11 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             title={currentTab === 'groups' ? t('noGroupsFound') : t('noEventsFound')}
                             description={t('adjustFilters')}
                         />
+                    )}
+
+                    {/* A category with no groups yet still offers the way to start the first one. */}
+                    {currentTab === 'groups' && groups.length === 0 && createGroupCard && (
+                        <div className="mt-6 grid grid-cols-1 gap-4 sm:max-w-xs">{createGroupCard}</div>
                     )}
 
                     {/* Lazy Load Action */}
