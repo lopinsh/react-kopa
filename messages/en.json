@@ -554,7 +554,25 @@
       "feedback": "Feedback",
       "handbook": "Handbook",
       "design": "Design",
-      "team": "Team"
+      "team": "Team",
+      "menu": "Admin",
+      "groups": {
+        "content": "Content",
+        "structure": "Structure",
+        "site": "Site",
+        "people": "People"
+      },
+      "desc": {
+        "moderation": "Hidden groups and content taken down",
+        "reports": "Reports from members to review",
+        "taxonomy": "Categories and subcategories",
+        "tags": "Review new custom tags",
+        "translations": "Edit and approve site texts",
+        "design": "Colors and look of the site",
+        "handbook": "Values, voice and design rules",
+        "team": "Site admins and owner",
+        "feedback": "Notes left by the site admins"
+      }
     },
     "handbook": {
       "chapters": "Chapters",
@@ -651,7 +669,10 @@
       "subtitle": "Notes left on the live site in feedback mode. Agents read them and answer here.",
       "filterKind": "Kind",
       "tabs": "Note status",
-      "tab": { "open": "Open", "completed": "Completed" },
+      "tab": {
+        "open": "Open",
+        "completed": "Completed"
+      },
       "emptyAction": "Empty",
       "emptyTitle": "Empty completed notes?",
       "emptyMessage": "Delete {count, plural, one {# completed note} other {# completed notes}} and their replies for good? This can't be undone.",

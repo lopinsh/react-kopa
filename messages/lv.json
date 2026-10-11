@@ -554,7 +554,25 @@
       "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata",
       "design": "Dizains",
-      "team": "Komanda"
+      "team": "Komanda",
+      "menu": "Admins",
+      "groups": {
+        "content": "Saturs",
+        "structure": "Struktūra",
+        "site": "Vietne",
+        "people": "Cilvēki"
+      },
+      "desc": {
+        "moderation": "Paslēptās grupas un noņemtais saturs",
+        "reports": "Dalībnieku sūdzības izskatīšanai",
+        "taxonomy": "Kategorijas un apakškategorijas",
+        "tags": "Jauno savu birku pārskatīšana",
+        "translations": "Vietnes tekstu labošana un apstiprināšana",
+        "design": "Vietnes krāsas un izskats",
+        "handbook": "Vērtības, balss un dizaina noteikumi",
+        "team": "Vietnes administratori un īpašnieks",
+        "feedback": "Administratoru atstātās piezīmes"
+      }
     },
     "handbook": {
       "chapters": "Nodaļas",
@@ -651,7 +669,10 @@
       "subtitle": "Piezīmes, kas atstātas dzīvajā vietnē atsauksmju režīmā. Aģenti tās lasa un atbild šeit.",
       "filterKind": "Veids",
       "tabs": "Piezīmju statuss",
-      "tab": { "open": "Atvērtās", "completed": "Pabeigtās" },
+      "tab": {
+        "open": "Atvērtās",
+        "completed": "Pabeigtās"
+      },
       "emptyAction": "Iztukšot",
       "emptyTitle": "Iztukšot pabeigtās piezīmes?",
       "emptyMessage": "Vai neatgriezeniski dzēst {count, plural, one {# pabeigto piezīmi} other {# pabeigtās piezīmes}} un atbildes uz tām? To nevar atsaukt.",
