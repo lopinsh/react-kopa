@@ -189,7 +189,7 @@ function MonthGrid({ id, selected, format, prevLabel, nextLabel, onPick, onClose
                 <button type="button" aria-label={prevLabel} onClick={() => { movedByKeyboard.current = false; shift(0, -1); }} className="rounded-lg p-2 text-foreground-muted hover:bg-surface-elevated">
                     <ChevronLeft className="h-4 w-4" />
                 </button>
-                <p aria-live="polite" className="text-sm font-semibold capitalize text-foreground">{monthTitle}</p>
+                <p aria-live="polite" className="text-sm font-semibold text-foreground first-letter:uppercase">{monthTitle}</p>
                 <button type="button" aria-label={nextLabel} onClick={() => { movedByKeyboard.current = false; shift(0, 1); }} className="rounded-lg p-2 text-foreground-muted hover:bg-surface-elevated">
                     <ChevronRight className="h-4 w-4" />
                 </button>
