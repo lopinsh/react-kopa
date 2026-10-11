@@ -112,18 +112,21 @@ export async function submitPendingTag(label: string, parentId: string): Promise
     }
 
     try {
-        const category = await TaxonomyService.createPendingL2({
+        const { category, created } = await TaxonomyService.createPendingL2({
             label,
             parentId,
             submittedById: session.user.id,
         });
 
-        await NotificationService.notifyAdmins({
-            type: 'ADMIN_TAG_PENDING',
-            args: { title: label.trim() },
-            link: '/admin/taxonomy',
-            exceptUserId: session.user.id,
-        });
+        // A reused pending tag was already announced when it was first suggested.
+        if (created) {
+            await NotificationService.notifyAdmins({
+                type: 'ADMIN_TAG_PENDING',
+                args: { title: label.trim() },
+                link: '/admin/taxonomy',
+                exceptUserId: session.user.id,
+            });
+        }
 
         return {
             success: true,

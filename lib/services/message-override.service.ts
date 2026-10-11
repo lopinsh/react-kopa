@@ -165,7 +165,8 @@ export const MessageOverrideService = {
      * Proposes new texts for one key. The live text is not touched: each changed language becomes a pending
      * suggestion (replacing an older one for the same key and language). A language left as it is clears its pending one.
      */
-    async suggestEntry(adminId: string, input: unknown): Promise<OverrideResult> {
+    /** `data.suggested` is false when every language equals the live text (the suggestion was only withdrawn). */
+    async suggestEntry(adminId: string, input: unknown): Promise<OverrideResult<{ suggested: boolean }>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
         const raw = typeof input === 'object' && input !== null ? (input as Record<string, unknown>) : {};
@@ -197,7 +198,8 @@ export const MessageOverrideService = {
                 });
             })
         );
-        return { success: true };
+        const suggested = MESSAGE_LANGS.some((lang) => parsed.data[lang] !== (overrides[lang][key] ?? bases[lang][key]));
+        return { success: true, data: { suggested } };
     },
 
     async listSuggestions(adminId: string): Promise<OverrideResult<SuggestionRow[]>> {

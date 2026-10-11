@@ -240,7 +240,8 @@ export const TaxonomyService = {
         }));
     },
 
-    async createPendingL2(params: { label: string; parentId: string; submittedById: string }): Promise<Category> {
+    /** `created` is false when an existing pending tag with the same name was reused. */
+    async createPendingL2(params: { label: string; parentId: string; submittedById: string }): Promise<{ category: Category; created: boolean }> {
         const trimmed = params.label.trim();
         if (trimmed.length < 2) {
             throw new Error('VALIDATION_FAILED');
@@ -266,11 +267,11 @@ export const TaxonomyService = {
             },
             orderBy: { createdAt: 'asc' },
         });
-        if (existing) return existing;
+        if (existing) return { category: existing, created: false };
 
         const slug = await createUniqueCategorySlug(trimmed);
 
-        return prisma.category.create({
+        const category = await prisma.category.create({
             data: {
                 slug,
                 level: 2,
@@ -287,6 +288,7 @@ export const TaxonomyService = {
                 },
             },
         });
+        return { category, created: true };
     },
 
     async createActiveL2(params: { parentId: string; nameEn: string; nameLv: string }): Promise<Category> {

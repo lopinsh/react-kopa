@@ -75,12 +75,15 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
         const result = await MessageOverrideService.suggestEntry(check.adminId, input);
         if (!result.success) return result;
 
-        await NotificationService.notifyAdmins({
-            type: 'ADMIN_SUGGESTION',
-            args: { title: input.key },
-            link: '/admin/translations',
-            exceptUserId: check.adminId,
-        });
+        // Saving the live text only withdraws a suggestion: nothing new for the other admins.
+        if (result.data?.suggested) {
+            await NotificationService.notifyAdmins({
+                type: 'ADMIN_SUGGESTION',
+                args: { title: input.key },
+                link: '/admin/translations',
+                exceptUserId: check.adminId,
+            });
+        }
 
         revalidatePath('/', 'layout');
         return { success: true };
