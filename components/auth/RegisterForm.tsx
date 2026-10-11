@@ -84,7 +84,7 @@ export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+        <form method="post" onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
             <AuthTextField
                 id="name"
                 label={t('name')}

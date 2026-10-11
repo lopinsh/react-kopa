@@ -45,7 +45,7 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
 
     return (
         <div className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form method="post" onSubmit={handleSubmit} className="space-y-5">
                 <AuthTextField
                     id="email"
                     type="email"

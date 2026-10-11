@@ -5,6 +5,8 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Lets `next dev` be opened as 127.0.0.1 too (a second cookie jar for signed-out / sign-up checks next to localhost).
+  allowedDevOrigins: ['127.0.0.1'],
   // The Handbook pages read markdown from disk at request time; the standalone trace can't see that.
   outputFileTracingIncludes: {
     '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
