@@ -10,12 +10,14 @@ import DeleteHiddenGroupModal from '@/components/modals/DeleteHiddenGroupModal';
 type Props = {
     groupId: string;
     groupName: string;
+    /** The reason the group was hidden with (pre-fills the delete reason). */
+    hiddenReason?: string | null;
     /** Permanent delete is for the site owner only; admins can restore. */
     canDelete: boolean;
 };
 
 /** Restore / delete-permanently buttons for one row of the hidden-groups list. */
-export default function HiddenGroupActions({ groupId, groupName, canDelete }: Props) {
+export default function HiddenGroupActions({ groupId, groupName, hiddenReason, canDelete }: Props) {
     const t = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
@@ -63,6 +65,7 @@ export default function HiddenGroupActions({ groupId, groupName, canDelete }: Pr
                     onClose={() => setDeleteOpen(false)}
                     groupId={groupId}
                     groupName={groupName}
+                    initialReason={hiddenReason ?? ''}
                 />
             )}
         </div>

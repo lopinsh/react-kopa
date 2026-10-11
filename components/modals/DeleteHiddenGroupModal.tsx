@@ -13,14 +13,16 @@ type Props = {
     onClose: () => void;
     groupId: string;
     groupName: string;
+    /** The reason the group was hidden with; the form starts with it so the owner only edits when something else applies. */
+    initialReason?: string;
 };
 
-export default function DeleteHiddenGroupModal({ isOpen, onClose, groupId, groupName }: Props) {
+export default function DeleteHiddenGroupModal({ isOpen, onClose, groupId, groupName, initialReason = '' }: Props) {
     const t = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
     const router = useRouter();
-    const [reason, setReason] = useState('');
+    const [reason, setReason] = useState(initialReason);
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
 

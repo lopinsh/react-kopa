@@ -154,7 +154,7 @@ export default async function AdminDashboardPage({
                                                 {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
                                             </p>
                                         </div>
-                                        <HiddenGroupActions groupId={g.id} groupName={g.name} canDelete={isSiteOwner(session.user.role)} />
+                                        <HiddenGroupActions groupId={g.id} groupName={g.name} hiddenReason={g.reason} canDelete={isSiteOwner(session.user.role)} />
                                     </li>
                                 ))}
                             </ul>
