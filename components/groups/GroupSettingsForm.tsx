@@ -22,7 +22,7 @@ import AcceptingMembersSection from './settings/AcceptingMembersSection';
 import DangerZoneSection from './settings/DangerZoneSection';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
-import { NEUTRAL_ACCENT } from '@/lib/constants';
+import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
 
 type Props = {
     group: {
@@ -128,7 +128,7 @@ export default function GroupSettingsForm({
 
                 router.refresh();
             } else {
-                setServerError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+                setServerError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED', { max: MAX_GROUP_TAGS }) : tErrors('ACTION_FAILED'));
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });

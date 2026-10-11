@@ -10,6 +10,7 @@ import { adminUpdateGroupTags } from '@/actions/taxonomy-actions';
 import TagPicker from '@/components/groups/TagPicker';
 import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { useToast } from '@/hooks/use-toast';
+import { MAX_GROUP_TAGS } from '@/lib/constants';
 
 type Props = {
     locale: string;
@@ -58,7 +59,7 @@ export default function AdminGroupCategorizationForm({
         startTransition(async () => {
             const result = await adminUpdateGroupTags(groupId, data.tagIds, locale);
             if (!result.success) {
-                error(te(result.error as never));
+                error(te(result.error as 'ACTION_FAILED', { max: MAX_GROUP_TAGS }));
                 return;
             }
 

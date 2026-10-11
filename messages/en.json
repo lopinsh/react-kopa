@@ -333,7 +333,7 @@
     "JOIN_FAILED": "Failed to join group.",
     "NOT_FOUND": "The requested resource was not found.",
     "TAG_NOT_FOUND": "Tag was not found.",
-    "TAG_LIMIT_REACHED": "A group can have at most 2 sub-topics.",
+    "TAG_LIMIT_REACHED": "A group can have at most {max, plural, one {# sub-topic} other {# sub-topics}}.",
     "UNAUTHORIZED": "Unauthorized access. Please log in.",
     "UPDATE_FAILED": "Failed to update resource.",
     "USERNAME_TAKEN": "This username is already taken. Please choose another.",

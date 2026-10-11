@@ -16,7 +16,7 @@ import TaxonomyStep from '@/components/groups/create-wizard/TaxonomyStep';
 import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';
 import AccessStep from '@/components/groups/create-wizard/AccessStep';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
-import { NEUTRAL_ACCENT } from '@/lib/constants';
+import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
 import { tint } from '@/lib/color-utils';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -214,7 +214,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 role="alert"
                                 className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950 dark:text-red-400 border border-red-200"
                             >
-                                {tErrors(serverError as 'ACTION_FAILED')}
+                                {tErrors(serverError as 'ACTION_FAILED', { max: MAX_GROUP_TAGS })}
                             </p>
                         )}
                     </div>

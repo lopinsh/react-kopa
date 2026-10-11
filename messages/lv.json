@@ -333,7 +333,7 @@
     "JOIN_FAILED": "Neizdevās pievienoties grupai.",
     "NOT_FOUND": "Pieprasītais resurss netika atrasts.",
     "TAG_NOT_FOUND": "Birka netika atrasta.",
-    "TAG_LIMIT_REACHED": "Grupai var būt ne vairāk kā 2 apakštēmas.",
+    "TAG_LIMIT_REACHED": "Grupai var būt ne vairāk kā {max, plural, one {# apakštēma} other {# apakštēmas}}.",
     "UNAUTHORIZED": "Lai turpinātu, ienāc savā kontā.",
     "UPDATE_FAILED": "Neizdevās atjaunināt resursu.",
     "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts. Izvēlies citu.",

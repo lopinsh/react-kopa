@@ -22,13 +22,13 @@ export const CITIES = [
 
 export type City = (typeof CITIES)[number];
 
+/** Accent when no category is chosen: the site colour (the theme's `--primary`), so a theme change shows everywhere. */
+export const NEUTRAL_ACCENT = 'var(--primary)';
+
 /**
  * Most sub-categories (tags) one group can have, pending ones included. A limit "for now" while
  * the category structure settles; groups saved with more keep working (they can only shrink).
  */
-/** Accent when no category is chosen: the site colour (the theme's `--primary`), so a theme change shows everywhere. */
-export const NEUTRAL_ACCENT = 'var(--primary)';
-
 export const MAX_GROUP_TAGS = 2;
 
 /**
