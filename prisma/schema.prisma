@@ -374,8 +374,12 @@ model Notification {
   message   String
   link      String?
   read      Boolean  @default(false)
+  /// USER = about the person's own groups and events; ADMIN = needs a site admin's attention (admin tab of the bell).
+  audience  String   @default("USER")
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, audience, read])
 }
 
 model Report {
