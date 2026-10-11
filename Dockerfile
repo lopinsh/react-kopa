@@ -21,6 +21,9 @@ RUN npx prisma generate
 # Compile seed script for production
 RUN npx tsc prisma/seed.ts --esModuleInterop --target ES2022 --module CommonJS
 
+# Compile the set-owner script (run once by hand after deploy, see docs/execution_handoff.md)
+RUN npx tsc scripts/set-owner.ts --esModuleInterop --target ES2022 --module CommonJS --outDir /app/dist-scripts
+
 # Build Next.js
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -61,6 +64,7 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/dist-scripts/set-owner.js ./scripts/set-owner.js
 
 USER nextjs
 

@@ -10,10 +10,12 @@ import DeleteHiddenGroupModal from '@/components/modals/DeleteHiddenGroupModal';
 type Props = {
     groupId: string;
     groupName: string;
+    /** Permanent delete is for the site owner only; admins can restore. */
+    canDelete: boolean;
 };
 
 /** Restore / delete-permanently buttons for one row of the hidden-groups list. */
-export default function HiddenGroupActions({ groupId, groupName }: Props) {
+export default function HiddenGroupActions({ groupId, groupName, canDelete }: Props) {
     const t = useTranslations('moderation');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
@@ -43,6 +45,7 @@ export default function HiddenGroupActions({ groupId, groupName }: Props) {
                     <Undo2 className="h-4 w-4" />
                     {t('restoreShort')}
                 </button>
+                {canDelete && (
                 <button
                     onClick={() => setDeleteOpen(true)}
                     disabled={isPending}
@@ -51,14 +54,17 @@ export default function HiddenGroupActions({ groupId, groupName }: Props) {
                     <Trash2 className="h-4 w-4" />
                     {t('deleteShort')}
                 </button>
+                )}
             </div>
             {error && <p role="alert" className="text-xs font-medium text-red-500">{error}</p>}
-            <DeleteHiddenGroupModal
-                isOpen={deleteOpen}
-                onClose={() => setDeleteOpen(false)}
-                groupId={groupId}
-                groupName={groupName}
-            />
+            {canDelete && (
+                <DeleteHiddenGroupModal
+                    isOpen={deleteOpen}
+                    onClose={() => setDeleteOpen(false)}
+                    groupId={groupId}
+                    groupName={groupName}
+                />
+            )}
         </div>
     );
 }

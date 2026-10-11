@@ -3,17 +3,19 @@
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Tags, AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, type LucideIcon } from 'lucide-react';
+import { Tags, AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 
 type Props = {
     pendingTags: number;
     pendingReports: number;
     pendingSuggestions: number;
+    /** The Team tab is for the site owner only. */
+    isOwner: boolean;
 };
 
 type NavItem = {
-    id: 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook';
+    id: 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
     href: string;
     label: string;
     icon: LucideIcon;
@@ -23,7 +25,7 @@ type NavItem = {
 };
 
 /** The one navigation shared by every admin page. */
-export default function AdminNav({ pendingTags, pendingReports, pendingSuggestions }: Props) {
+export default function AdminNav({ pendingTags, pendingReports, pendingSuggestions, isOwner }: Props) {
     const t = useTranslations('admin.nav');
     const pathname = usePathname();
     const tab = useSearchParams().get('tab');
@@ -39,6 +41,7 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
         { id: 'feedback', href: '/admin/feedback', label: t('feedback'), icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
         { id: 'design', href: '/admin/design', label: t('design'), icon: Palette, active: pathname.startsWith('/admin/design'), badge: 0 },
         { id: 'handbook', href: '/admin/handbook', label: t('handbook'), icon: BookOpen, active: pathname.startsWith('/admin/handbook'), badge: 0 },
+        ...(isOwner ? [{ id: 'team' as const, href: '/admin/team', label: t('team'), icon: UserCog, active: pathname.startsWith('/admin/team'), badge: 0 }] : []),
     ];
 
     return (

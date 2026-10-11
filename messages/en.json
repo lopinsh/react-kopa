@@ -305,6 +305,8 @@
     "logFiltered": "Showing only the actions on this group.",
     "logShowAll": "Show all",
     "action_GROUP_DELETE": "Deleted group",
+    "action_ADMIN_GRANT": "Made admin",
+    "action_ADMIN_REVOKE": "Removed admin",
     "hiddenGroupsTitle": "Hidden groups",
     "hiddenGroupsEmpty": "No hidden groups.",
     "hiddenOwner": "Owner: {name}",
@@ -523,6 +525,25 @@
       "allClear": "All Clear!",
       "allClearDesc": "No active reports require attention."
     },
+    "team": {
+      "title": "Team",
+      "subtitle": "Choose who helps run the site as an admin. Only you, the owner, can see this page.",
+      "adminsTitle": "Admins",
+      "ownerBadge": "Owner",
+      "addTitle": "Make someone an admin",
+      "searchPlaceholder": "Name, username or email",
+      "search": "Search",
+      "searchHint": "Type at least 2 characters. People who are already admins are not listed.",
+      "noResults": "No one found.",
+      "makeAdmin": "Make admin",
+      "removeAdmin": "Remove admin",
+      "makeTitle": "Make this person an admin?",
+      "makeMessage": "{name} will be able to moderate groups, review reports and tags, and edit translations. They will be notified.",
+      "removeTitle": "Remove this admin?",
+      "removeMessage": "{name} will lose all admin access. They will be notified.",
+      "madeAdmin": "Admin added",
+      "removedAdmin": "Admin removed"
+    },
     "nav": {
       "label": "Admin sections",
       "tags": "Tags",
@@ -532,7 +553,8 @@
       "translations": "Translations",
       "feedback": "Feedback",
       "handbook": "Handbook",
-      "design": "Design"
+      "design": "Design",
+      "team": "Team"
     },
     "handbook": {
       "chapters": "Chapters",
@@ -796,7 +818,9 @@
       "EVENT_ROOM_AGAIN": "There is room again — you can ask to join",
       "EVENT_CANCELLED": "The event was cancelled",
       "EVENT_NOW_OPEN": "The event is now open to everyone — you're in",
-      "OWNERSHIP_TRANSFERRED": "{authorName} made you the owner of this group"
+      "OWNERSHIP_TRANSFERRED": "{authorName} made you the owner of this group",
+      "ADMIN_GRANTED": "The site owner made you an admin",
+      "ADMIN_REVOKED": "You are no longer a site admin"
     }
   },
   "onboarding": {

@@ -11,6 +11,7 @@ import { ModerationService } from '@/lib/services/moderation.service';
 import type { ActionResponse } from '@/types/actions';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
 import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
 
 /** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
 function backToTab(locale: string, tabName: string, res: ActionResponse): never {
@@ -55,7 +56,7 @@ export default async function AdminDashboardPage({
         redirect(signInUrl(locale, '/admin'));
     }
 
-    if (session.user.role !== 'ADMIN') {
+    if (!isSiteAdmin(session.user.role)) {
         notFound();
     }
 
@@ -154,7 +155,7 @@ export default async function AdminDashboardPage({
                                                 {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: EVENT_TIME_ZONE }) })}
                                             </p>
                                         </div>
-                                        <HiddenGroupActions groupId={g.id} groupName={g.name} />
+                                        <HiddenGroupActions groupId={g.id} groupName={g.name} canDelete={isSiteOwner(session.user.role)} />
                                     </li>
                                 ))}
                             </ul>
@@ -193,7 +194,7 @@ export default async function AdminDashboardPage({
                                                         <Link href={`/${locale}${entry.target.href}`} className="text-primary hover:underline">{entry.target.name}</Link>
                                                     ) : (
                                                         <span className="text-foreground-muted [overflow-wrap:anywhere]">
-                                                            {entry.targetName ? `${entry.targetName} ${tMod('deletedTarget')}` : tMod('deletedTarget')}
+                                                            {entry.targetType === 'USER' ? (entry.targetName ?? '—') : entry.targetName ? `${entry.targetName} ${tMod('deletedTarget')}` : tMod('deletedTarget')}
                                                         </span>
                                                     )}
                                                 </td>

@@ -305,6 +305,8 @@
     "logFiltered": "Rādītas tikai darbības ar šo grupu.",
     "logShowAll": "Rādīt visas",
     "action_GROUP_DELETE": "Izdzēsa grupu",
+    "action_ADMIN_GRANT": "Iecēla par administratoru",
+    "action_ADMIN_REVOKE": "Noņēma administratoru",
     "hiddenGroupsTitle": "Paslēptās grupas",
     "hiddenGroupsEmpty": "Paslēptu grupu nav.",
     "hiddenOwner": "Īpašnieks: {name}",
@@ -523,6 +525,25 @@
       "allClear": "Viss tīrs!",
       "allClearDesc": "Nav neatrisinātu sūdzību, kam vajadzīga uzmanība."
     },
+    "team": {
+      "title": "Komanda",
+      "subtitle": "Izvēlies, kas palīdz vadīt vietni kā administrators. Šo lapu redzi tikai tu, īpašnieks.",
+      "adminsTitle": "Administratori",
+      "ownerBadge": "Īpašnieks",
+      "addTitle": "Iecelt kādu par administratoru",
+      "searchPlaceholder": "Vārds, lietotājvārds vai e-pasts",
+      "search": "Meklēt",
+      "searchHint": "Ievadi vismaz 2 rakstzīmes. Cilvēki, kas jau ir administratori, netiek rādīti.",
+      "noResults": "Neviens netika atrasts.",
+      "makeAdmin": "Iecelt par administratoru",
+      "removeAdmin": "Noņemt administratoru",
+      "makeTitle": "Iecelt šo cilvēku par administratoru?",
+      "makeMessage": "{name} varēs moderēt grupas, skatīt ziņojumus un birkas un labot tulkojumus. Viņš tiks informēts.",
+      "removeTitle": "Noņemt šo administratoru?",
+      "removeMessage": "{name} zaudēs visas administratora tiesības. Viņš tiks informēts.",
+      "madeAdmin": "Administrators iecelts",
+      "removedAdmin": "Administrators noņemts"
+    },
     "nav": {
       "label": "Administrēšanas sadaļas",
       "tags": "Birkas",
@@ -532,7 +553,8 @@
       "translations": "Tulkojumi",
       "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata",
-      "design": "Dizains"
+      "design": "Dizains",
+      "team": "Komanda"
     },
     "handbook": {
       "chapters": "Nodaļas",
@@ -796,7 +818,9 @@
       "EVENT_ROOM_AGAIN": "Atkal ir vieta — vari pieteikties",
       "EVENT_CANCELLED": "Pasākums atcelts",
       "EVENT_NOW_OPEN": "Pasākums tagad atvērts visiem — tava dalība apstiprināta",
-      "OWNERSHIP_TRANSFERRED": "{authorName} tevi iecēla par šīs grupas īpašnieku"
+      "OWNERSHIP_TRANSFERRED": "{authorName} tevi iecēla par šīs grupas īpašnieku",
+      "ADMIN_GRANTED": "Vietnes īpašnieks tevi iecēla par administratoru",
+      "ADMIN_REVOKED": "Tu vairs neesi vietnes administrators"
     }
   },
   "onboarding": {

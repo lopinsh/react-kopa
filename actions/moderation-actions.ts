@@ -3,13 +3,15 @@
 import { auth } from '@/lib/auth';
 import { revalidatePath, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
+import { isSiteOwner } from '@/lib/site-role';
 import { handleActionError } from '@/lib/action-utils';
 import { ModerationService } from '@/lib/services/moderation.service';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function hideGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (session.user.role !== 'ADMIN') return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         const result = await ModerationService.hideGroup(groupId, session.user.id, reason);
@@ -30,7 +32,7 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
 export async function restoreGroup(groupId: string, locale: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (session.user.role !== 'ADMIN') return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
     try {
         const result = await ModerationService.restoreGroup(groupId, session.user.id);
@@ -51,7 +53,8 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
 export async function deleteHiddenGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (session.user.role !== 'ADMIN') return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    if (!isSiteOwner(session.user.role)) return { success: false, error: 'FORBIDDEN' };
 
     try {
         const result = await ModerationService.deleteHiddenGroup(groupId, session.user.id, reason);

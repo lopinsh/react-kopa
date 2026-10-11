@@ -5,8 +5,9 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { NotificationService } from './notification.service';
 import { GroupService } from './group.service';
 import type { ErrorCode } from '@/types/actions';
+import { isSiteAdmin as isSiteAdminRole, isSiteOwner } from '@/lib/site-role';
 
-export type AdminActionType = 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE';
+export type AdminActionType = 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
 
 export type ModerationResult<T = void> =
     | { success: true; data?: T }
@@ -37,7 +38,12 @@ export interface HiddenGroupEntry {
 
 export async function isSiteAdmin(userId: string): Promise<boolean> {
     const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-    return user?.role === 'ADMIN';
+    return isSiteAdminRole(user?.role);
+}
+
+async function isSiteOwnerUser(userId: string): Promise<boolean> {
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
+    return isSiteOwner(user?.role);
 }
 
 export const ModerationService = {
@@ -118,12 +124,13 @@ export const ModerationService = {
     },
 
     /**
-     * Permanently deletes a group that is already hidden (hide first = the safeguard).
+     * Permanently deletes a group that is already hidden (hide first = the safeguard). Site owner only.
      * Uses the same deletion as the owner's delete. The log row and the owner's notification
      * have no relation to the group, so they outlive it; the name is kept on the log row.
      */
     async deleteHiddenGroup(groupId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+        if (!(await isSiteOwnerUser(adminId))) return { success: false, error: 'FORBIDDEN' };
 
         const parsed = deleteGroupSchema.safeParse({ reason });
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
