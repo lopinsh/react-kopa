@@ -6,6 +6,7 @@ import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -24,7 +25,7 @@ export default async function AdminReportsPage({
     if (!session?.user?.id) {
         redirect(signInUrl(locale, '/admin/reports'));
     }
-    if (session.user.role !== 'ADMIN') {
+    if (!isSiteAdmin(session.user.role)) {
         notFound();
     }
 

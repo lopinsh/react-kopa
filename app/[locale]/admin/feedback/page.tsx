@@ -10,6 +10,7 @@ import { feedbackFilterSchema } from '@/lib/validations/feedback';
 import { Link } from '@/i18n/routing';
 import FeedbackAdminRow from '@/components/admin/FeedbackAdminRow';
 import FeedbackPurgeButton from '@/components/admin/FeedbackPurgeButton';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -33,7 +34,7 @@ export default async function AdminFeedbackPage({
 
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, '/admin/feedback'));
-    if (session.user.role !== 'ADMIN') notFound();
+    if (!isSiteAdmin(session.user.role)) notFound();
 
     const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
     const filter = feedbackFilterSchema.parse({ kind: first(raw.kind), tab: first(raw.tab), page: first(raw.page) });

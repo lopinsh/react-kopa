@@ -1,6 +1,7 @@
 import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { auth } from '@/lib/auth';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export const FEEDBACK_COOKIE = 'feedback_mode';
 
@@ -12,5 +13,5 @@ export const isFeedbackModeActive = cache(async (): Promise<boolean> => {
     const cookieStore = await cookies();
     if (cookieStore.get(FEEDBACK_COOKIE)?.value !== '1') return false;
     const session = await auth();
-    return session?.user?.role === 'ADMIN';
+    return isSiteAdmin(session?.user?.role);
 });

@@ -6,6 +6,7 @@ import { getTaxonomy } from '@/actions/taxonomy-actions';
 import { GroupService } from '@/lib/services/group.service';
 import AdminGroupCategorizationForm from './AdminGroupCategorizationForm';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -25,7 +26,7 @@ export default async function AdminGroupCategorizationPage({
         redirect(signInUrl(locale, `/admin/groups/${groupSlug}/categorization`));
     }
 
-    if (session.user.role !== 'ADMIN') {
+    if (!isSiteAdmin(session.user.role)) {
         notFound();
     }
 

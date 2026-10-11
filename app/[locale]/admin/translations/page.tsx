@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -20,7 +21,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, '/admin/translations'));
-    if (session.user.role !== 'ADMIN') notFound();
+    if (!isSiteAdmin(session.user.role)) notFound();
 
     const result = await MessageOverrideService.listOverrides(session.user.id);
     const rows = result.success ? result.data ?? [] : [];

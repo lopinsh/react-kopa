@@ -13,6 +13,7 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
 import { triggerRealtime } from '@/lib/pusher';
+import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -279,7 +280,7 @@ export const GroupService = {
         const actor = currentUserId
             ? await prisma.user.findUnique({ where: { id: currentUserId }, select: { role: true } })
             : null;
-        const isSiteAdmin = actor?.role === 'ADMIN';
+        const isSiteAdmin = isSiteAdminRole(actor?.role);
         const g = group;
         const isOwner = !!currentUserId && g.members.some((m: { userId: string; role: string }) => m.userId === currentUserId && m.role === 'OWNER');
         if (g.hiddenAt && !isSiteAdmin && !isOwner) return null;
@@ -615,7 +616,7 @@ export const GroupService = {
         ]);
 
         const role = membership?.role;
-        const isAppAdmin = actor?.role === 'ADMIN';
+        const isAppAdmin = isSiteAdminRole(actor?.role);
         if (!hasAdminRights(role) && !isAppAdmin) {
             return { success: false, error: 'FORBIDDEN' };
         }
@@ -763,7 +764,7 @@ export const GroupService = {
         // Hidden groups exist only for their owner and site admins (same rule as getGroupWithContext).
         if (group.hiddenAt && role !== 'OWNER') {
             const actor = userId ? await prisma.user.findUnique({ where: { id: userId }, select: { role: true } }) : null;
-            if (actor?.role !== 'ADMIN') {
+            if (!isSiteAdminRole(actor?.role)) {
                 return { exists: false, role: null, pendingCount: 0, sections: [] };
             }
         }
@@ -839,7 +840,7 @@ export const GroupService = {
             prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
         ]);
         const isManager = hasAdminRights(membership?.role);
-        const isSiteAdmin = actor?.role === 'ADMIN';
+        const isSiteAdmin = isSiteAdminRole(actor?.role);
         return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
     },
 

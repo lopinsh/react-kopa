@@ -187,6 +187,7 @@ async function main() {
     prisma.user.upsert({ where: { email: 'user@local' }, update: {}, create: { email: 'user@local', name: 'Regular User' } }),
     prisma.user.upsert({ where: { email: 'owner@local' }, update: { role: 'ADMIN' }, create: { email: 'owner@local', name: 'Group Owner', role: 'ADMIN' } }),
     prisma.user.upsert({ where: { email: 'admin@local' }, update: { role: 'ADMIN' }, create: { email: 'admin@local', name: 'Site Admin', role: 'ADMIN' } }),
+    prisma.user.upsert({ where: { email: 'siteowner@local' }, update: { role: 'OWNER' }, create: { email: 'siteowner@local', name: 'Site Owner', role: 'OWNER' } }),
     prisma.user.upsert({ where: { email: 'member@local' }, update: {}, create: { email: 'member@local', name: 'Group Member' } }),
     prisma.user.upsert({ where: { email: 'test@example.com' }, update: {}, create: { email: 'test@example.com', name: 'Oskars Test' } }),
   ]);

@@ -4,11 +4,12 @@ import { auth } from '@/lib/auth';
 import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService, type WildcardWithDetails, type ReportWithDetails } from '@/lib/services/admin.service';
+import { isSiteAdmin } from '@/lib/site-role';
 
 const isAdmin = async () => {
     const session = await auth();
     if (!session?.user?.id) return false;
-    return session.user.role === 'ADMIN';
+    return isSiteAdmin(session.user.role);
 };
 
 export async function getPendingWildcards(): Promise<ActionResponse<{ wildcards: WildcardWithDetails[] }>> {

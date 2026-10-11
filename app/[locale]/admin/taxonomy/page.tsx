@@ -5,6 +5,7 @@ import { getAllTags, getPendingTags, getTaxonomy } from '@/actions/taxonomy-acti
 import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -25,7 +26,7 @@ export default async function AdminTaxonomyPage({
         redirect(signInUrl(locale, '/admin/taxonomy'));
     }
 
-    if (session.user.role !== 'ADMIN') {
+    if (!isSiteAdmin(session.user.role)) {
         notFound();
     }
 

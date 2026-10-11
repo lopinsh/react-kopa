@@ -13,13 +13,14 @@ import {
 } from '@/lib/services/message-override.service';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
 import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
+import { isSiteAdmin } from '@/lib/site-role';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' };
 
 async function requireAdmin(): Promise<AdminCheck> {
     const session = await auth();
     if (!session?.user?.id) return { ok: false, error: 'UNAUTHORIZED' };
-    if (session.user.role !== 'ADMIN') return { ok: false, error: 'UNAUTHORIZED_ADMIN' };
+    if (!isSiteAdmin(session.user.role)) return { ok: false, error: 'UNAUTHORIZED_ADMIN' };
     return { ok: true, adminId: session.user.id };
 }
 

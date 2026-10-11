@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { getActiveTheme } from '@/lib/theme/server';
 import DesignEditor from '@/components/admin/design/DesignEditor';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -19,7 +20,7 @@ export default async function AdminDesignPage({ params }: { params: Promise<{ lo
 
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, '/admin/design'));
-    if (session.user.role !== 'ADMIN') notFound();
+    if (!isSiteAdmin(session.user.role)) notFound();
 
     // Start from what this admin currently sees: their preview if they have one, otherwise the published theme.
     const theme = await getActiveTheme();

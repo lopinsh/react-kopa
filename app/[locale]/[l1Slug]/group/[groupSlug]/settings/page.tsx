@@ -9,6 +9,7 @@ import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
 
@@ -52,7 +53,7 @@ export default async function GroupSettingsPage(props: {
         notFound();
     }
 
-    const isAppAdmin = session.user.role === 'ADMIN';
+    const isAppAdmin = isSiteAdmin(session.user.role);
 
     // Owner and moderators manage the group; site admins can override without membership.
     if (!group.user.isAdmin && !isAppAdmin) {

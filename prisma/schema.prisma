@@ -425,9 +425,11 @@ enum EventJoinMode {
   REQUEST
 }
 
+/// OWNER is the single site owner: an admin who also manages admins and may permanently delete groups.
 enum AppRole {
   USER
   ADMIN
+  OWNER
 }
 
 enum FeedbackKind {

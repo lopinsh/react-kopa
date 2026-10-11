@@ -8,13 +8,14 @@ import { handleActionError } from '@/lib/action-utils';
 import { THEME_CACHE_TAG, THEME_PREVIEW_COOKIE } from '@/lib/constants';
 import { ThemeService } from '@/lib/services/theme.service';
 import { themeInputSchema, type ThemeInput } from '@/lib/validations/theme';
+import { isSiteAdmin } from '@/lib/site-role';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'FORBIDDEN' };
 
 async function requireAdmin(): Promise<AdminCheck> {
     const session = await auth();
     if (!session?.user?.id) return { ok: false, error: 'UNAUTHORIZED' };
-    if (session.user.role !== 'ADMIN') return { ok: false, error: 'FORBIDDEN' };
+    if (!isSiteAdmin(session.user.role)) return { ok: false, error: 'FORBIDDEN' };
     return { ok: true, adminId: session.user.id };
 }
 

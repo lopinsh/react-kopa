@@ -5,11 +5,12 @@ import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { isReportReason } from '@/lib/constants';
 import { revalidatePath } from 'next/cache';
+import { isSiteAdmin } from '@/lib/site-role';
 
 /** Resolves the signed-in site admin, or null. Reading and closing reports is for site admins only. */
 async function getAdminId(): Promise<string | null> {
     const session = await auth();
-    return session?.user?.id && session.user.role === 'ADMIN' ? session.user.id : null;
+    return session?.user?.id && isSiteAdmin(session.user.role) ? session.user.id : null;
 }
 
 export async function createReport(data: {

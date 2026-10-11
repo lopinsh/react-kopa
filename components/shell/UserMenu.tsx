@@ -10,6 +10,7 @@ import { avatarUrl } from '@/lib/avatar';
 import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
 import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { isSiteAdmin } from '@/lib/site-role';
 
 type Props = {
     user: {
@@ -99,7 +100,7 @@ export default function UserMenu({ user }: Props) {
                         </Link>
 
                         <div className="p-2">
-                            {user.role === 'ADMIN' && (
+                            {isSiteAdmin(user.role) && (
                                 <>
                                     <Link
                                         href="/admin"

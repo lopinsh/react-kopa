@@ -16,6 +16,7 @@ import type {
     TaxonomyTree,
 } from '@/lib/services/taxonomy.service';
 import { NotificationService } from '@/lib/services/notification.service';
+import { isSiteAdmin } from '@/lib/site-role';
 
 type ApproveTagParams = {
     nameEn: string;
@@ -79,7 +80,7 @@ async function requireAdmin(): Promise<{ success: true; userId: string } | { suc
     if (!session?.user?.id) {
         return { success: false, error: 'UNAUTHORIZED' };
     }
-    if (session.user.role !== 'ADMIN') {
+    if (!isSiteAdmin(session.user.role)) {
         return { success: false, error: 'UNAUTHORIZED_ADMIN' };
     }
 

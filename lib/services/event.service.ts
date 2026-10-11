@@ -9,6 +9,7 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
 import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
+import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -96,7 +97,7 @@ export class EventService {
         return {
             isMember: !!membership && membership.role !== 'PENDING',
             isGroupAdmin: hasAdminRights(membership?.role),
-            isSiteAdmin: user?.role === 'ADMIN'
+            isSiteAdmin: isSiteAdminRole(user?.role)
         };
     }
 

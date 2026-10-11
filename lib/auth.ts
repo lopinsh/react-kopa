@@ -12,6 +12,7 @@ const DEV_PASSWORDS: Record<string, string> = {
     "user@local": "user",
     "admin@local": "admin",
     "owner@local": "owner",
+    "siteowner@local": "siteowner",
     "member@local": "member",
     "oskars@local": "oskars",
     "liga@local": "liga",
@@ -23,6 +24,11 @@ const DEV_PASSWORDS: Record<string, string> = {
     "santa@local": "santa",
     "test@example.com": "kopa2026",
 };
+
+const ROLE_RECHECK_MS = 60_000;
+
+// Seed accounts with site powers have public passwords: never allowed in production.
+const SEED_SITE_ADMINS = new Set(["admin@local", "siteowner@local"]);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -62,7 +68,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     // and never for the seed site admin — its password is public.
                     if (process.env.NODE_ENV === "production") {
                         if (process.env.ALLOW_DEV_PASSWORDS !== "true") return null;
-                        if (email === "admin@local") return null;
+                        if (SEED_SITE_ADMINS.has(email.trim().toLowerCase())) return null;
                     }
                     const expectedPassword = DEV_PASSWORDS[email];
                     if (!expectedPassword || password !== expectedPassword) return null;
@@ -88,6 +94,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.username = dbUser?.username ?? null;
                 token.role = dbUser?.role ?? 'USER';
                 token.avatarSeed = dbUser?.avatarSeed ?? null;
+                token.roleCheckedAt = Date.now();
+            } else if (token.id && Date.now() - Number(token.roleCheckedAt ?? 0) > ROLE_RECHECK_MS) {
+                // The owner can make or remove admins, so a long-lived token must not keep a stale role:
+                // re-read just the role from the DB at most once a minute.
+                const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { role: true } });
+                if (dbUser) token.role = dbUser.role;
+                token.roleCheckedAt = Date.now();
             }
             if (trigger === "update" && token.id) {
                 // Anyone signed in can POST any payload to /api/auth/session, so the
@@ -110,7 +123,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (session.user) {
                 session.user.id = token.id as string;
                 session.user.username = (token.username as string | null) ?? null;
-                session.user.role = (token.role as 'USER' | 'ADMIN') ?? 'USER';
+                session.user.role = (token.role as 'USER' | 'ADMIN' | 'OWNER') ?? 'USER';
                 session.user.avatarSeed = (token.avatarSeed as string | null | undefined) ?? null;
                 if (token.picture) {
                     session.user.image = token.picture as string;

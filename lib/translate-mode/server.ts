@@ -2,6 +2,7 @@ import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { auth } from '@/lib/auth';
 import { TRANSLATE_COOKIE } from './marker';
+import { isSiteAdmin } from '@/lib/site-role';
 
 /**
  * Translation mode is on only when the cookie is set AND the signed-in user is a site admin.
@@ -11,5 +12,5 @@ export const isTranslateModeActive = cache(async (): Promise<boolean> => {
     const cookieStore = await cookies();
     if (cookieStore.get(TRANSLATE_COOKIE)?.value !== '1') return false;
     const session = await auth();
-    return session?.user?.role === 'ADMIN';
+    return isSiteAdmin(session?.user?.role);
 });

@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
 
 /**
  * The one place that decides who may read the Handbook: site admins only.
@@ -9,5 +10,5 @@ import { signInUrl } from '@/lib/auth-redirect';
 export async function requireHandbookAccess(locale: string, returnPath: string): Promise<void> {
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, returnPath));
-    if (session.user.role !== 'ADMIN') notFound();
+    if (!isSiteAdmin(session.user.role)) notFound();
 }
