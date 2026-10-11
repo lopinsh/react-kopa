@@ -430,9 +430,8 @@
   },
   "admin": {
     "dashboard": {
-      "pendingCustomTags": "Gaidošās jaunās birkas",
       "title": "Administrēšana",
-      "subtitle": "Sūdzības, jaunās birkas un moderācijas žurnāls."
+      "subtitle": "Paslēptās grupas un moderācijas žurnāls."
     },
     "taxonomy": {
       "title": "Taksonomija",
@@ -444,7 +443,7 @@
       "inbox": {
         "approve": "Apstiprināts",
         "merge": "Apvienots",
-        "title": "Gaidāmās birkas",
+        "title": "Jāpārskata: jaunās birkas",
         "noPendingTags": "Gaidāmo birku nav.",
         "proposedUnder": "Ierosināts zem: {parent}",
         "unknown": "Nezināms",
@@ -546,7 +545,6 @@
     },
     "nav": {
       "label": "Administrēšanas sadaļas",
-      "tags": "Birkas",
       "reports": "Sūdzības",
       "moderation": "Moderācija",
       "taxonomy": "Taksonomija",
@@ -565,8 +563,7 @@
       "desc": {
         "moderation": "Paslēptās grupas un noņemtais saturs",
         "reports": "Dalībnieku sūdzības izskatīšanai",
-        "taxonomy": "Kategorijas un apakškategorijas",
-        "tags": "Jauno savu birku pārskatīšana",
+        "taxonomy": "Kategorijas, apakškategorijas un jaunās birkas pārskatīšanai",
         "translations": "Vietnes tekstu labošana un apstiprināšana",
         "design": "Vietnes krāsas un izskats",
         "handbook": "Vērtības, balss un dizaina noteikumi",

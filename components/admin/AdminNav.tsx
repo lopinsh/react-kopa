@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useId, type KeyboardEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Tags, AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 import { UI } from '@/lib/constants';
@@ -17,7 +17,7 @@ type Props = {
     isOwner: boolean;
 };
 
-type ItemId = 'tags' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
+type ItemId = 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
 type GroupId = 'content' | 'structure' | 'site' | 'people';
 
 type NavItem = {
@@ -73,15 +73,14 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
         {
             id: 'content',
             items: [
-                { id: 'moderation', href: '/admin?tab=moderation', icon: EyeOff, active: onDashboard && tab === 'moderation', badge: 0 },
+                { id: 'moderation', href: '/admin', icon: EyeOff, active: onDashboard, badge: 0 },
                 { id: 'reports', href: '/admin/reports', icon: AlertTriangle, active: pathname.startsWith('/admin/reports'), badge: pendingReports, danger: true },
             ],
         },
         {
             id: 'structure',
             items: [
-                { id: 'taxonomy', href: '/admin/taxonomy', icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: 0 },
-                { id: 'tags', href: '/admin', icon: Tags, active: onDashboard && tab !== 'moderation', badge: pendingTags },
+                { id: 'taxonomy', href: '/admin/taxonomy', icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: pendingTags },
             ],
         },
         {

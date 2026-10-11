@@ -430,9 +430,8 @@
   },
   "admin": {
     "dashboard": {
-      "pendingCustomTags": "Pending custom tags",
       "title": "Administration",
-      "subtitle": "Review reports and new tags, and see what has been moderated."
+      "subtitle": "See what has been hidden and moderated."
     },
     "taxonomy": {
       "title": "Taxonomy Management",
@@ -444,7 +443,7 @@
       "inbox": {
         "approve": "Approved",
         "merge": "Merged",
-        "title": "Pending Tags",
+        "title": "Needs review: new tags",
         "noPendingTags": "No pending tags.",
         "proposedUnder": "Proposed under: {parent}",
         "unknown": "Unknown",
@@ -546,7 +545,6 @@
     },
     "nav": {
       "label": "Admin sections",
-      "tags": "Tags",
       "reports": "Reports",
       "moderation": "Moderation",
       "taxonomy": "Taxonomy",
@@ -565,8 +563,7 @@
       "desc": {
         "moderation": "Hidden groups and content taken down",
         "reports": "Reports from members to review",
-        "taxonomy": "Categories and subcategories",
-        "tags": "Review new custom tags",
+        "taxonomy": "Categories, subcategories and new tags to review",
         "translations": "Edit and approve site texts",
         "design": "Colors and look of the site",
         "handbook": "Values, voice and design rules",

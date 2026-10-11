@@ -1,34 +1,23 @@
 import type { Metadata } from 'next';
-import { getPendingWildcards, approveWildcard, rejectWildcard } from '@/actions/admin-actions';
 import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import { ShieldAlert, Check, X } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
 import { ModerationService } from '@/lib/services/moderation.service';
-import type { ActionResponse } from '@/types/actions';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
 import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
 import { createDateFormatter } from '@/lib/date-format';
 
-/** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
-function backToTab(locale: string, tabName: string, res: ActionResponse): never {
-    redirect(`/${locale}/admin?tab=${tabName}${res.success ? '' : `&error=${res.error}`}`);
-}
-
 export async function generateMetadata({
     params,
-    searchParams,
 }: {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ tab?: string }>;
 }): Promise<Metadata> {
     const { locale } = await params;
-    const { tab } = await searchParams;
-    const t = await getTranslations({ locale, namespace: 'admin.nav' });
     const tDash = await getTranslations({ locale, namespace: 'admin.dashboard' });
-    return { title: tab === 'moderation' ? t('moderation') : tDash('title') };
+    return { title: tDash('title') };
 }
 
 export default async function AdminDashboardPage({
@@ -40,9 +29,9 @@ export default async function AdminDashboardPage({
 }) {
     const { locale } = await params;
     const { tab, error, group } = await searchParams;
-    // Reports have their own page (the "Reports" tab of the admin navigation).
+    // Old links: reports have their own page, new tags are reviewed on top of Taxonomy.
     if (tab === 'reports') redirect(`/${locale}/admin/reports`);
-    const activeTab = tab === 'moderation' ? 'moderation' : 'tags';
+    if (tab === 'tags') redirect(`/${locale}/admin/taxonomy`);
     const t = await getTranslations('admin.dashboard');
     const tInbox = await getTranslations('admin.taxonomy.inbox');
     const c = await getTranslations('common');
@@ -59,25 +48,7 @@ export default async function AdminDashboardPage({
         notFound();
     }
 
-    const wildcardsRes = await getPendingWildcards();
-    const wildcards = wildcardsRes.success ? wildcardsRes.data?.wildcards : [];
-
-    const [moderationLog, hiddenGroups] = activeTab === 'moderation'
-        ? await Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()])
-        : [[], []];
-
-    // Inline server actions for the forms
-    async function handleApproveWildcard(formData: FormData) {
-        'use server';
-        const id = formData.get('id') as string;
-        backToTab(locale, 'tags', await approveWildcard(id));
-    }
-
-    async function handleRejectWildcard(formData: FormData) {
-        'use server';
-        const id = formData.get('id') as string;
-        backToTab(locale, 'tags', await rejectWildcard(id));
-    }
+    const [moderationLog, hiddenGroups] = await Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()]);
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -98,46 +69,7 @@ export default async function AdminDashboardPage({
             {/* Content */}
             <div className="bg-surface border border-border rounded-xl shadow-sm p-6">
 
-                {activeTab === 'tags' && (
-                    <div>
-                        <h2 className="text-xl font-semibold mb-4 text-foreground">{t('pendingCustomTags')}</h2>
-                        {!wildcards || wildcards.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-12">{tInbox('noPendingTags')}</p>
-                        ) : (
-                            <div className="space-y-4">
-                                {wildcards.map(tag => (
-                                    <div key={tag.id} className="flex justify-between items-center bg-surface-elevated p-4 rounded-lg border border-border">
-                                        <div>
-                                            {/* We use [0] because we included titles. In a real app we'd filter by locale. */}
-                                            <h3 className="font-bold text-foreground text-lg">{tag.titles[0]?.title || tag.slug}</h3>
-                                            <p className="text-sm text-foreground-muted">
-                                                {tInbox('proposedUnder', { parent: tag.parent?.titles?.[0]?.title || tag.parent?.slug || tInbox('unknown') })}
-                                            </p>
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <form action={handleRejectWildcard}>
-                                                <input type="hidden" name="id" value={tag.id} />
-                                                <button type="submit" className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-foreground bg-surface hover:bg-surface-elevated border border-border rounded-lg transition-colors">
-                                                    <X className="h-4 w-4" />
-                                                    {c('reject')}
-                                                </button>
-                                            </form>
-                                            <form action={handleApproveWildcard}>
-                                                <input type="hidden" name="id" value={tag.id} />
-                                                <button type="submit" className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-white bg-primary hover:bg-primary/90 rounded-lg transition-colors">
-                                                    <Check className="h-4 w-4" />
-                                                    {c('approve')}
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {activeTab === 'moderation' && (
+                {(
                     <div>
                         <h2 className="text-xl font-semibold mb-4 text-foreground">{tMod('hiddenGroupsTitle')}</h2>
                         {hiddenGroups.length === 0 ? (
