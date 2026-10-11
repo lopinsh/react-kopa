@@ -9,6 +9,7 @@ import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notificat
 import { clsx } from 'clsx';
 import { usePusher } from '@/hooks/usePusher';
 import { relativeTo } from '@/lib/utils/relative-time';
+import { formatNotificationText } from '@/lib/utils/notification-text';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Notification = {
@@ -27,45 +28,24 @@ type Notification = {
 
 type Audience = Notification['audience'];
 
-type NotificationArgs = Record<string, string | number | undefined>;
-
-// Types whose detail line is something a person wrote, shown in quotes.
-const QUOTED_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY', 'NEW_POST', 'ADMIN_FEEDBACK']);
-const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'GROUP_DELETED', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN', 'EVENT_NOW_OPEN', 'EVENT_CANCELLED', 'OWNERSHIP_TRANSFERRED', 'ADMIN_GRANTED', 'ADMIN_REVOKED', 'ADMIN_REPORT', 'ADMIN_TAG_PENDING', 'ADMIN_SUGGESTION', 'ADMIN_FEEDBACK', 'ADMIN_GROUP_HIDDEN']);
-
 /** Context line (group · time), one headline (who did what), then the content itself. */
 function NotificationContent({ n }: { n: Notification }) {
     const t = useTranslations('notifications');
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
 
-    let args: NotificationArgs = {};
-    try {
-        args = (JSON.parse(n.message) as { args?: NotificationArgs }).args ?? {};
-    } catch {
-        // Malformed legacy payload: render the headline without arguments.
-    }
-    const authorName = args.authorName ? String(args.authorName) : t('someone');
-    const type = KNOWN_TYPES.has(n.type) ? n.type : 'GENERIC';
-    const headline = t(`headline.${type}` as 'headline.GENERIC', {
-        authorName,
-        originalTag: String(args.originalTag ?? ''),
-        canonicalTag: String(args.canonicalTag ?? ''),
-        waitlistCount: Number(args.waitlistCount ?? 0)
-    });
-    // Older notifications stored the event title as `title`.
-    const detail = args.excerpt ?? args.reason ?? args.eventTitle ?? args.title;
+    const { headline, detail, groupName } = formatNotificationText(t, n.type, n.message);
 
     return (
         <div className="flex flex-col gap-0.5 pr-6">
             <div className="flex items-baseline justify-between gap-2 text-[10px] text-foreground-muted">
-                <span className="truncate font-semibold">{n.group ? (n.group.categoryTitle ? `${n.group.name} · ${n.group.categoryTitle}` : n.group.name) : args.groupName}</span>
+                <span className="truncate font-semibold">{n.group ? (n.group.categoryTitle ? `${n.group.name} · ${n.group.categoryTitle}` : n.group.name) : groupName}</span>
                 <span className="shrink-0">{relativeTo(format, new Date(n.createdAt), now)}</span>
             </div>
             <p className="text-[13px] font-bold text-foreground leading-snug">{headline}</p>
-            {detail !== undefined && detail !== '' && (
+            {detail !== undefined && (
                 <p className="text-[11px] text-foreground-muted leading-snug line-clamp-2 break-words">
-                    {QUOTED_TYPES.has(n.type) ? `“${detail}”` : detail}
+                    {detail}
                 </p>
             )}
         </div>

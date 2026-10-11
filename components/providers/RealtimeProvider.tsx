@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { usePusher } from '@/hooks/usePusher';
 import { Link, useRouter } from '@/i18n/routing';
 import { X, Bell } from 'lucide-react';
 import { clsx } from 'clsx';
+import { formatNotificationText } from '@/lib/utils/notification-text';
 
 type NotificationEvent = {
     id: string;
@@ -31,7 +32,9 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     const [toast, setToast] = useState<NotificationEvent | null>(null);
 
     const handleNotification = useCallback((data: NotificationEvent) => {
-        setToast(data);
+        // Same headline and detail as the bell. Admin notices skip the viewer's own actions on the server.
+        const text = formatNotificationText(t, data.type, data.message);
+        setToast({ ...data, title: text.headline, message: text.detail ?? '' });
         // Revalidate layout to update notification badge
         router.refresh();
 
@@ -39,7 +42,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         setTimeout(() => {
             setToast((current) => (current?.id === data.id ? null : current));
         }, 5000);
-    }, [router]);
+    }, [router, t]);
 
     const handleNewMessage = useCallback((data: MessageEvent) => {
         // Don't show toast if we are already on the messages page
@@ -91,12 +94,14 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
                                 <Bell className="h-5 w-5" />
                             </div>
                             <div className="flex-1 pt-0.5 min-w-0">
-                                <p className="text-sm font-semibold text-foreground truncate">
+                                <p className="text-sm font-semibold text-foreground line-clamp-2">
                                     {toast.title}
                                 </p>
-                                <p className="mt-1 text-sm text-foreground-muted line-clamp-2">
-                                    {toast.message}
-                                </p>
+                                {toast.message !== '' && (
+                                    <p className="mt-1 text-sm text-foreground-muted line-clamp-2">
+                                        {toast.message}
+                                    </p>
+                                )}
                                 {toast.link && (
                                     <Link
                                         href={toast.link}
