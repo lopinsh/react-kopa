@@ -600,8 +600,8 @@ export const GroupService = {
 
     /**
      * Updates a group's settings.
-     * Owner (and site admins): everything. Moderators: only city, banner, accepting members and social links.
-     * A moderator who sends a different name, access type, category or topics is refused.
+     * Owner (and site admins): everything. Moderators: only city, banner and social links.
+     * A moderator who sends a different name, access type, accepting-members flag, category or topics is refused.
      * The link name (slug) and accent colour are never changed here: the slug would break shared links
      * and the colour comes from the category.
      */
@@ -611,7 +611,7 @@ export const GroupService = {
             prisma.user.findUnique({ where: { id: userId }, select: { role: true } }),
             prisma.group.findUnique({
                 where: { id: groupId },
-                select: { name: true, type: true, categoryId: true, tags: { select: { id: true } } }
+                select: { name: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
             })
         ]);
 
@@ -630,6 +630,7 @@ export const GroupService = {
             if (
                 data.name !== current.name ||
                 data.type !== current.type ||
+                data.isAcceptingMembers !== current.isAcceptingMembers ||
                 data.categoryId !== current.categoryId ||
                 sentTags !== currentTags
             ) {
@@ -644,10 +645,10 @@ export const GroupService = {
             discordLink: data.discordLink,
             websiteLink: data.websiteLink,
             instagramLink: data.instagramLink,
-            isAcceptingMembers: data.isAcceptingMembers,
         };
 
         if (canEditOwnerFields) {
+            updateData.isAcceptingMembers = data.isAcceptingMembers;
             // Groups saved before the limit may keep their tags but not gain any.
             const nextTagCount = new Set(data.tagIds ?? []).size;
             if (nextTagCount > MAX_GROUP_TAGS && nextTagCount > current.tags.length) {

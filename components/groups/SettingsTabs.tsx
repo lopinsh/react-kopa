@@ -3,23 +3,26 @@
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
-import { Settings, Layout, type LucideIcon } from 'lucide-react';
+import { Settings, Layout, Crown, type LucideIcon } from 'lucide-react';
 import { UI } from '@/lib/constants';
 
-export type SettingsTab = 'group' | 'sections';
+export type SettingsTab = 'group' | 'sections' | 'owner';
 
 type Props = {
     active: SettingsTab;
+    /** The Owner tab exists for the group owner only. */
+    showOwner: boolean;
 };
 
-/** Two tabs: the group's own fields, and its page sections. */
-export default function SettingsTabs({ active }: Props) {
+/** Tabs: the group's own fields, its page sections, and (owner only) the owner's decisions. */
+export default function SettingsTabs({ active, showOwner }: Props) {
     const t = useTranslations('groupSettings');
     const pathname = usePathname();
 
     const tabs: Array<{ id: SettingsTab; label: string; icon: LucideIcon }> = [
         { id: 'group', label: t('tabGroup'), icon: Settings },
         { id: 'sections', label: t('tabSections'), icon: Layout },
+        ...(showOwner ? [{ id: 'owner' as const, label: t('tabOwner'), icon: Crown }] : []),
     ];
 
     return (

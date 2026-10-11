@@ -3,7 +3,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
-import { ImageIcon, UserPlus, Settings } from 'lucide-react';
+import { ImageIcon, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
 import { CITIES } from '@/lib/constants';
 import { type GroupFormValues } from '@/lib/validations/group';
@@ -17,13 +17,13 @@ type Props = {
 const INPUT = 'w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5';
 const LABEL = 'ml-1 text-xs font-black uppercase tracking-wider text-foreground-muted';
 
-/** Name, city, banner and whether new members are accepted. */
+/** Name, city and banner. */
 export default function BasicsSection({ canEditName }: Props) {
     const t = useTranslations('wizard');
     const tCities = useTranslations('cities');
     const gt = useTranslations('group');
     const gs = useTranslations('groupSettings');
-    const { register, formState: { errors }, watch } = useFormContext<GroupFormValues>();
+    const { register, formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
@@ -75,27 +75,6 @@ export default function BasicsSection({ canEditName }: Props) {
                 {errors.bannerImage?.message && (
                     <p className="ml-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>
                 )}
-            </div>
-
-            <div className="flex items-center gap-4 rounded-3xl border border-border bg-surface-elevated/10 p-5 transition-all hover:bg-surface-elevated/20 sm:p-6">
-                <div className="relative flex shrink-0 items-center">
-                    <input
-                        type="checkbox"
-                        {...register('isAcceptingMembers')}
-                        id="isAcceptingMembers"
-                        className="peer sr-only"
-                    />
-                    <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-full bg-border transition-colors peer-checked:bg-[var(--accent)]" />
-                    <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
-                </div>
-                <label htmlFor="isAcceptingMembers" className="min-w-0 flex-1 cursor-pointer">
-                    <span className="text-sm font-black text-foreground">{gt('acceptingMembersLabel')}</span>
-                    <p className="text-xs text-foreground-muted">{gt('acceptingMembersDesc')}</p>
-                </label>
-                <UserPlus className={clsx(
-                    'hidden h-6 w-6 shrink-0 transition-colors sm:block',
-                    watch('isAcceptingMembers') ? 'text-[var(--accent)]' : 'text-foreground-muted'
-                )} />
             </div>
         </SettingsSection>
     );

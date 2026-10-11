@@ -184,7 +184,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="tabs" names={[UI.tabs]} files={['components/groups/SettingsTabs.tsx']}>
                     <AccentScope color={samples.accent}>
-                        <SettingsTabs active="group" />
+                        <SettingsTabs active="group" showOwner />
                     </AccentScope>
                 </UiSpecimen>
 

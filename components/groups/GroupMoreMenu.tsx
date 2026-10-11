@@ -126,7 +126,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                     {/* The owner cannot just leave: the group has to go to someone else first. */}
                     {isOwner && (
                         <Link
-                            href={`/${l1Slug}/group/${group.slug}/settings?tab=group#transfer`}
+                            href={`/${l1Slug}/group/${group.slug}/settings?tab=owner#transfer`}
                             className={ITEM}
                             onClick={() => setOpen(false)}
                         >

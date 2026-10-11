@@ -18,6 +18,7 @@ import BasicsSection from './settings/BasicsSection';
 import SocialSection from './settings/SocialSection';
 import CategorizationSection from './settings/CategorizationSection';
 import PrivacySection from './settings/PrivacySection';
+import AcceptingMembersSection from './settings/AcceptingMembersSection';
 import DangerZoneSection from './settings/DangerZoneSection';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
@@ -171,6 +172,61 @@ export default function GroupSettingsForm({
         );
     }
 
+    const saveBar = (
+        <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-border pt-8">
+            <button
+                type="submit"
+                disabled={isPending}
+                className="flex h-14 items-center gap-3 rounded-2xl bg-[var(--accent)] px-10 font-black text-[var(--accent-foreground)] shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+            >
+                {isPending ? (
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                ) : (
+                    <Save className="h-5 w-5" />
+                )}
+                {c_common('saveChanges')}
+            </button>
+
+            {serverError ? (
+                <div role="alert" className="flex items-center gap-2 rounded-2xl border border-red-500/10 bg-red-500/5 p-4 text-red-500">
+                    <AlertCircle className="h-4 w-4" />
+                    <p className="text-sm font-bold">{serverError}</p>
+                </div>
+            ) : (
+                <p className="ml-2 text-xs font-medium text-foreground-muted">
+                    {gt('saveChangesDesc')}
+                </p>
+            )}
+        </div>
+    );
+
+    // Owner tab: who can find and join the group, handing it over, deleting it. The page only offers this tab to the owner.
+    if (activeTab === 'owner') {
+        return (
+            <div className="space-y-12">
+                <FormProvider {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
+                        <AcceptingMembersSection />
+                        <div id="access" className="scroll-mt-24">
+                            <PrivacySection />
+                        </div>
+                        {saveBar}
+                    </form>
+                </FormProvider>
+
+                {isOwner && (
+                    <>
+                        <TransferOwnershipSection groupId={group.id} locale={locale} candidates={transferCandidates} />
+                        <div id="danger-zone" className="scroll-mt-24">
+                            <DangerZoneSection onDelete={handleDelete} isPending={isPending} />
+                        </div>
+                    </>
+                )}
+            </div>
+        );
+    }
+
+    // Group tab: name, city, images, category and topics, links.
     return (
         <div className="space-y-12">
             <FormProvider {...methods}>
@@ -196,52 +252,13 @@ export default function GroupSettingsForm({
                         </div>
                     )}
 
-                    {canEditOwnerFields && (
-                        <div id="access" className="scroll-mt-24">
-                            <PrivacySection />
-                        </div>
-                    )}
-
                     <div id="links" className="scroll-mt-24">
                         <SocialSection />
                     </div>
 
-                    <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-border pt-8">
-                        <button
-                            type="submit"
-                            disabled={isPending}
-                            className="flex h-14 items-center gap-3 rounded-2xl bg-[var(--accent)] px-10 font-black text-[var(--accent-foreground)] shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
-                        >
-                            {isPending ? (
-                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-                            ) : (
-                                <Save className="h-5 w-5" />
-                            )}
-                            {c_common('saveChanges')}
-                        </button>
-
-                        {serverError ? (
-                            <div role="alert" className="flex items-center gap-2 rounded-2xl border border-red-500/10 bg-red-500/5 p-4 text-red-500">
-                                <AlertCircle className="h-4 w-4" />
-                                <p className="text-sm font-bold">{serverError}</p>
-                            </div>
-                        ) : (
-                            <p className="ml-2 text-xs font-medium text-foreground-muted">
-                                {gt('saveChangesDesc')}
-                            </p>
-                        )}
-                    </div>
+                    {saveBar}
                 </form>
             </FormProvider>
-
-            {isOwner && (
-                <>
-                    <TransferOwnershipSection groupId={group.id} locale={locale} candidates={transferCandidates} />
-                    <div id="danger-zone" className="scroll-mt-24">
-                        <DangerZoneSection onDelete={handleDelete} isPending={isPending} />
-                    </div>
-                </>
-            )}
         </div>
     );
 }

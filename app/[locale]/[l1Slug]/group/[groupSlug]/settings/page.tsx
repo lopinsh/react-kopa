@@ -13,13 +13,13 @@ import { isSiteAdmin } from '@/lib/site-role';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
 
-/** The six old tabs became two; old links land on the right tab (and block). */
+/** The six old tabs became three; old links land on the right tab (and block). */
 const LEGACY_TABS: Record<string, string> = {
     profile: 'group',
     social: 'group#links',
     categorization: 'group#category',
-    privacy: 'group#access',
-    danger: 'group#danger-zone',
+    privacy: 'owner#access',
+    danger: 'owner#danger-zone',
 };
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
@@ -79,7 +79,9 @@ export default async function GroupSettingsPage(props: {
             .map((m) => ({ userId: m.user.id, name: m.user.name || t('anonymousUser'), role: m.role }))
         : [];
 
-    const activeTab: SettingsTab = tab === 'sections' ? 'sections' : 'group';
+    // The Owner tab is for the group owner (and site admins, who may override); group admins never see it.
+    const showOwnerTab = canEditOwnerFields;
+    const activeTab: SettingsTab = tab === 'sections' ? 'sections' : tab === 'owner' && showOwnerTab ? 'owner' : 'group';
     // The editor gets the text of every language (managers only).
     const editableSections = activeTab === 'sections' ? await GroupService.getEditableSections(group.id, session.user.id) : [];
 
@@ -93,7 +95,7 @@ export default async function GroupSettingsPage(props: {
                 />
             )}
 
-            <SettingsTabs active={activeTab} />
+            <SettingsTabs active={activeTab} showOwner={showOwnerTab} />
 
             <div className="min-h-[400px] rounded-3xl border border-border bg-surface p-5 shadow-sm sm:p-8 md:p-10">
                 <GroupSettingsForm
