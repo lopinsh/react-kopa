@@ -1,5 +1,6 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import { useDateFormatter } from '@/lib/date-format';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
 import { slugify } from '@/lib/slug';
@@ -16,6 +17,7 @@ type Props = {
 
 export default function PendingInboxCard({ item, canonicalOptions, onSelect }: Props) {
     const t = useTranslations('admin.taxonomy.inbox');
+    const format = useDateFormatter();
     const tFields = useTranslations('admin.taxonomy.fields');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -89,7 +91,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <p className="text-sm text-foreground-muted mt-1">
                         {t('submittedBy', { 
                             name: item.submitter?.username || t('unknown'), 
-                            date: item.submittedAt || new Date() 
+                            date: item.submittedAt ? format.dateTime(new Date(item.submittedAt), { dateStyle: 'medium' }) : '–' 
                         })}
                     </p>
                     {item.parent && (

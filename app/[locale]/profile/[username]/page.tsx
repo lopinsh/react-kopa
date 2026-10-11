@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth';
 import { notFound, redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
-import { getTranslations, getFormatter } from 'next-intl/server';
+import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
 import { Link } from '@/i18n/routing';
@@ -10,6 +10,7 @@ import { avatarUrl } from '@/lib/avatar';
 import { MessageService } from '@/lib/services/message.service';
 import MessageUserButton from '@/components/messages/MessageUserButton';
 import { UI } from '@/lib/constants';
+import { createDateFormatter } from '@/lib/date-format';
 
 export default async function PublicProfilePage({
     params
@@ -20,7 +21,7 @@ export default async function PublicProfilePage({
     const session = await auth();
     const t = await getTranslations('profile');
     const tCities = await getTranslations('cities');
-    const format = await getFormatter();
+    const format = createDateFormatter(await getLocale(), await getTimeZone());
 
     const dbUser = await UserService.getUserByUsername(username, session?.user?.id);
 

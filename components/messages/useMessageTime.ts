@@ -1,4 +1,4 @@
-import { useFormatter } from 'next-intl';
+import { useDateFormatter } from '@/lib/date-format';
 
 type Style = 'bubble' | 'list';
 
@@ -7,7 +7,7 @@ type Style = 'bubble' | 'list';
  * Today: just the time. Older days: the date (in a chat bubble, with the time as well).
  */
 export function useMessageTime() {
-    const format = useFormatter();
+    const format = useDateFormatter();
 
     const dayKey = (date: Date) => format.dateTime(date, { year: 'numeric', month: 'numeric', day: 'numeric' });
     const year = (date: Date) => format.dateTime(date, { year: 'numeric' });

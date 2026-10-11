@@ -4,13 +4,13 @@ import { notFound, redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { ShieldAlert, Check, X } from 'lucide-react';
 import Link from 'next/link';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { signInUrl } from '@/lib/auth-redirect';
-import { getFormatter } from 'next-intl/server';
 import { ModerationService } from '@/lib/services/moderation.service';
 import type { ActionResponse } from '@/types/actions';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
 import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
+import { createDateFormatter } from '@/lib/date-format';
 
 /** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
 function backToTab(locale: string, tabName: string, res: ActionResponse): never {
@@ -48,7 +48,7 @@ export default async function AdminDashboardPage({
     const c = await getTranslations('common');
     const tMod = await getTranslations('moderation');
     const tErrors = await getTranslations('errors');
-    const format = await getFormatter();
+    const format = createDateFormatter(await getLocale(), await getTimeZone());
 
     const session = await auth();
     if (!session?.user?.id) {

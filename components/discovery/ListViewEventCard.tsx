@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
 import { UI } from '@/lib/constants';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import { langAttr } from '@/lib/translations';
+import { useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     event: DiscoverableEvent;
@@ -20,7 +21,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
     const t = useTranslations('event');
     const isRequest = event.joinMode === 'REQUEST';
     const startDate = new Date(event.startDate);
-    const formatter = useFormatter();
+    const formatter = useDateFormatter();
 
     return (
         <Link

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import { Download, Languages } from 'lucide-react';
-import { getFormatter, getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
 import { isSiteAdmin } from '@/lib/site-role';
+import { createDateFormatter } from '@/lib/date-format';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -17,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function AdminTranslationsPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations('admin.translations');
-    const format = await getFormatter();
+    const format = createDateFormatter(await getLocale(), await getTimeZone());
 
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, '/admin/translations'));

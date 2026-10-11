@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import FeedbackDeleteButton from './FeedbackDeleteButton';
 import FeedbackThread from './FeedbackThread';
+import { useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     note: FeedbackItem;
@@ -18,7 +19,7 @@ type Props = {
 /** One saved note with its status and the thread of replies. Opened from a pin or from the notes list. */
 export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }: Props) {
     const t = useTranslations('feedbackMode');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const [confirming, setConfirming] = useState(false);
 
     useEffect(() => {

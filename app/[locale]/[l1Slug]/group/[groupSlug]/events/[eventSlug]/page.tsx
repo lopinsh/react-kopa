@@ -2,7 +2,7 @@ import { EventService } from '@/lib/services/event.service';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getFormatter, getTimeZone, getTranslations } from 'next-intl/server';
+import { getTimeZone, getTranslations, getLocale } from 'next-intl/server';
 import {
     Calendar,
     MapPin,
@@ -27,6 +27,7 @@ import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import { langAttr } from '@/lib/translations';
+import { createDateFormatter } from '@/lib/date-format';
 
 export async function generateMetadata({
     params,
@@ -66,7 +67,7 @@ export default async function EventPage({
     }
 
     const t = await getTranslations('event');
-    const formatter = await getFormatter();
+    const formatter = createDateFormatter(await getLocale(), await getTimeZone());
     const group = event.group;
 
     const startDate = new Date(event.startDate);

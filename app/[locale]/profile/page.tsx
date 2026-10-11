@@ -2,12 +2,13 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
-import { getTranslations, getFormatter } from 'next-intl/server';
+import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { Settings, MapPin, Calendar, Users, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import { avatarUrl } from '@/lib/avatar';
+import { createDateFormatter } from '@/lib/date-format';
 
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
@@ -20,7 +21,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     const t = await getTranslations('profile');
     const tCities = await getTranslations('cities');
   const c_common_get = await getTranslations('common');
-    const format = await getFormatter();
+    const format = createDateFormatter(await getLocale(), await getTimeZone());
 
     const dbUser = await UserService.getOwnProfile(session.user.id);
 

@@ -1,10 +1,11 @@
 'use client';
 
-import { useTranslations, useFormatter, useNow } from 'next-intl';
+import { useTranslations, useNow } from 'next-intl';
 import { Archive, ArchiveRestore, Trash2 } from 'lucide-react';
 import { relativeTo } from '@/lib/utils/relative-time';
 import type { AnnouncementRow } from '@/lib/services/post.service';
 import { UI } from '@/lib/constants';
+import { useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     post: AnnouncementRow;
@@ -20,7 +21,7 @@ const BUTTON = 'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-
 export default function AnnouncementCard({ post, canManage, busy, onArchive, onDelete }: Props) {
     const t = useTranslations('group');
     const tCommon = useTranslations('common');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const now = useNow({ updateInterval: 60_000 });
     const archived = post.archivedAt !== null;
     const created = new Date(post.createdAt);

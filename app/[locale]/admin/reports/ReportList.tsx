@@ -6,8 +6,9 @@ import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
 import { isReportReason, UI } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { avatarUrl } from '@/lib/avatar';
+import { useDateFormatter } from '@/lib/date-format';
 
 const HideGroupModal = dynamic(() => import('@/components/modals/HideGroupModal'), { ssr: false });
 
@@ -26,7 +27,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
     const tReason = useTranslations('report');
     const tMod = useTranslations('moderation');
     const tErrors = useTranslations('errors');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);

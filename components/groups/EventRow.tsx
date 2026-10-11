@@ -1,4 +1,4 @@
-import { getFormatter, getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { Clock, Lock, MapPin, UserCheck, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import type { AttendanceStatus } from '@prisma/client';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr, type TextLang } from '@/lib/translations';
+import { createDateFormatter } from '@/lib/date-format';
 
 type Props = {
     event: {
@@ -38,7 +39,7 @@ type Props = {
 /** One compact line per event: date · what/when/where · people · one action. */
 export default async function EventRow({ event, locale, href, requireSignIn, isPast }: Props) {
     const t = await getTranslations('event');
-    const formatter = await getFormatter();
+    const formatter = createDateFormatter(await getLocale(), await getTimeZone());
     const start = new Date(event.startDate);
     const end = event.endDate ? new Date(event.endDate) : null;
     const time = { hour: '2-digit', minute: '2-digit', hour12: false } as const;

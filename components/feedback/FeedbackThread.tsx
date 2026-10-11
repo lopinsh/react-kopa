@@ -1,18 +1,19 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Bot, Send } from 'lucide-react';
 import { replyToFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_TEXT_MAX } from '@/lib/constants';
 import { useToast } from '@/hooks/use-toast';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
+import { useDateFormatter } from '@/lib/date-format';
 
 /** The replies under a note (oldest first) and an input to add another. The original text lives outside, untouched. */
 export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void }) {
     const t = useTranslations('feedbackMode');
     const tErrors = useTranslations('errors');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const { error: toastError } = useToast();
     const [text, setText] = useState('');
     const [isPending, startTransition] = useTransition();

@@ -2,12 +2,13 @@ import { Calendar, MapPin, Users, ArrowRight, Lock, UserCheck } from 'lucide-rea
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import { UI } from '@/lib/constants';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
+import { useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     event: DiscoverableEvent;
@@ -22,7 +23,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
     const t = useTranslations('event');
     const isRequest = event.joinMode === 'REQUEST';
     const startDate = new Date(event.startDate);
-    const formatter = useFormatter();
+    const formatter = useDateFormatter();
 
     return (
         <Link

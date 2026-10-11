@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Link, useRouter } from '@/i18n/routing';
 import { updateFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_STATUSES, type FeedbackStatusValue } from '@/lib/constants';
@@ -9,13 +9,14 @@ import { useToast } from '@/hooks/use-toast';
 import FeedbackDeleteButton from '@/components/feedback/FeedbackDeleteButton';
 import FeedbackThread from '@/components/feedback/FeedbackThread';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
+import { useDateFormatter } from '@/lib/date-format';
 
 /** One note on the admin feedback page: what was said and where, plus status and reply. */
 export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem }) {
     const t = useTranslations('feedbackMode');
     const tAdmin = useTranslations('admin.feedback');
     const tErrors = useTranslations('errors');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const { success: toastSuccess, error: toastError } = useToast();
     const [note, setNote] = useState(initial);
     const [status, setStatus] = useState<FeedbackStatusValue>(initial.status);

@@ -2,9 +2,10 @@
 
 import { useEffect, useId, useRef, useState } from 'react';
 import { clsx } from 'clsx';
-import { useFormatter, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDateText, parseDateText } from '@/lib/local-datetime';
+import { useDateFormatter, type DateFormatter } from '@/lib/date-format';
 
 type Props = {
     id?: string;
@@ -24,7 +25,7 @@ const dayKey = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)
  */
 export default function DateField({ id, value, onChange, invalid, disabled }: Props) {
     const t = useTranslations('eventWizard');
-    const format = useFormatter();
+    const format = useDateFormatter();
     const calendarId = useId();
     const rootRef = useRef<HTMLDivElement>(null);
     const [text, setText] = useState(formatDateText(value));
@@ -115,7 +116,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
 type GridProps = {
     id: string;
     selected: string;
-    format: ReturnType<typeof useFormatter>;
+    format: DateFormatter;
     prevLabel: string;
     nextLabel: string;
     onPick: (date: string) => void;
