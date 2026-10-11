@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { UserService } from '@/lib/services/user.service';
 import { getTranslations } from 'next-intl/server';
@@ -6,6 +7,12 @@ import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import MyGroupsListRow from '@/components/profile/MyGroupsListRow';
 import { UI } from '@/lib/constants';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'nav' });
+    return { title: t('myGroups') };
+}
 
 export default async function MyGroupsPage({
     params

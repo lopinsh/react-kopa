@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -6,6 +7,12 @@ import { signInUrl } from '@/lib/auth-redirect';
 import { usernameFromName } from '@/lib/username';
 import { usernameSchema } from '@/lib/validations/onboarding';
 import { UserService } from '@/lib/services/user.service';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'onboarding.username' });
+    return { title: t('heading') };
+}
 
 /**
  * Onboarding — username selection page.

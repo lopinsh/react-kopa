@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
@@ -9,6 +10,12 @@ import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import { avatarUrl } from '@/lib/avatar';
 import { createDateFormatter } from '@/lib/date-format';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'nav' });
+    return { title: t('profile') };
+}
 
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;

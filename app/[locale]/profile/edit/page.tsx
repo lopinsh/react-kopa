@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -6,6 +7,13 @@ import { Link } from '@/i18n/routing';
 import { ChevronLeft } from 'lucide-react';
 import { UserService } from '@/lib/services/user.service';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'profile' });
+    return { title: t('editTitle') };
+}
+
 
 export default async function ProfileEditPage({
     params,

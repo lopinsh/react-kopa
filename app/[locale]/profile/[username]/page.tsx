@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { notFound, redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
@@ -11,6 +12,12 @@ import { MessageService } from '@/lib/services/message.service';
 import MessageUserButton from '@/components/messages/MessageUserButton';
 import { UI } from '@/lib/constants';
 import { createDateFormatter } from '@/lib/date-format';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string; username: string }> }): Promise<Metadata> {
+    const { locale, username } = await params;
+    const t = await getTranslations({ locale, namespace: 'profile' });
+    return { title: t('handle', { username }) };
+}
 
 export default async function PublicProfilePage({
     params
