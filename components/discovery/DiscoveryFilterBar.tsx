@@ -9,12 +9,13 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
-import { CITIES, DISCOVERY_TABS, DISCOVERY_VIEWS, type DiscoveryView, type DiscoveryTab } from '@/lib/constants';
+import { CITIES, NEUTRAL_ACCENT, DISCOVERY_TABS, DISCOVERY_VIEWS, type DiscoveryView, type DiscoveryTab } from '@/lib/constants';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { ScopedResult } from '@/lib/types/discovery';
 import { searchContextual } from '@/actions/discovery-actions';
 import { Link } from '@/i18n/routing';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { tint } from '@/lib/color-utils';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -108,7 +109,7 @@ export default function DiscoveryFilterBar({
         () => taxonomy.find((c) => c.slug === activeCat),
         [taxonomy, activeCat]
     );
-    const accentColor = activeL1?.color || '#6366f1';
+    const accentColor = activeL1?.color || NEUTRAL_ACCENT;
 
     // Tags that are selected AND belong to active L1 (for left-section chips)
     const activeL1TagSlugs = useMemo(() => {
@@ -462,7 +463,7 @@ export default function DiscoveryFilterBar({
                                 key={tag.slug}
                                 className="flex items-center gap-1 rounded-full border px-3 py-1.5 text-sm font-semibold animate-in slide-in-from-left-2 fade-in duration-150 shrink-0"
                                 style={{
-                                    backgroundColor: `${accentColor}1A`,
+                                    backgroundColor: tint(accentColor, 10),
                                     color: accentColor,
                                     borderColor: accentColor,
                                 }}
@@ -509,7 +510,7 @@ export default function DiscoveryFilterBar({
                                                 }
                                             }}
                                             style={isSelected ? {
-                                                backgroundColor: `${accentColor}1A`,
+                                                backgroundColor: tint(accentColor, 10),
                                                 color: accentColor,
                                                 borderColor: accentColor,
                                             } : undefined}

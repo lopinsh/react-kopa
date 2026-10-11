@@ -9,6 +9,7 @@ import TagPicker from '@/components/groups/TagPicker';
 import type { L1Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
 import SettingsSection from './SettingsSection';
+import { NEUTRAL_ACCENT } from '@/lib/constants';
 
 type Props = {
     taxonomy: TaxonomyTree;
@@ -46,7 +47,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                     <div className="pt-8 border-t border-border animate-in fade-in slide-in-from-top-4 duration-500">
                         <TagPicker
                             l1={selectedL1}
-                            accentColor={selectedL1.color || '#6366f1'}
+                            accentColor={selectedL1.color || NEUTRAL_ACCENT}
                             allowL3={false}
                         />
                     </div>

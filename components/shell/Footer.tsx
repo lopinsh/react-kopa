@@ -35,10 +35,10 @@ export function Footer({ locale }: { locale: string }) {
                     {/* Brand */}
                     <div className="col-span-1">
                         <Link href={`/`} className="flex items-center gap-2 group">
-                            <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
+                            <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
                                 <span className="text-white font-bold text-sm">{c_common('brandShort')}</span>
                             </div>
-                            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-rose-500">
+                            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary to-rose-500">
                                 {t('logoSubtitle')}
                             </span>
                         </Link>
@@ -56,7 +56,7 @@ export function Footer({ locale }: { locale: string }) {
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-sm text-foreground-muted hover:text-indigo-400 transition-colors"
+                                            className="text-sm text-foreground-muted hover:text-primary transition-colors"
                                         >
                                             {link.label}
                                         </Link>

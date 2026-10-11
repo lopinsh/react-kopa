@@ -63,7 +63,8 @@ export const ThemeService = {
     async getPublished(): Promise<ThemeContext> {
         try {
             return await loadPublished();
-        } catch {
+        } catch (error) {
+            console.error('[theme] could not read the published theme, using the default look', error);
             return defaultTheme();
         }
     },
@@ -73,7 +74,8 @@ export const ThemeService = {
         try {
             const row = await prisma.siteTheme.findFirst({ where: { id, isPublished: false } });
             return row ? toContext(row, true) : null;
-        } catch {
+        } catch (error) {
+            console.error('[theme] could not read the preview draft', error);
             return null;
         }
     },

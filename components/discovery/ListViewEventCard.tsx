@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
-import { UI } from '@/lib/constants';
+import { UI, NEUTRAL_ACCENT } from '@/lib/constants';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
@@ -16,7 +16,7 @@ type Props = {
     accentColor?: string;
 };
 
-export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, accentColor = '#6366f1' }: Props) {
+export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, accentColor = NEUTRAL_ACCENT }: Props) {
     const tCities = useTranslations('cities');
     const t = useTranslations('event');
     const isRequest = event.joinMode === 'REQUEST';

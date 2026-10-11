@@ -70,3 +70,8 @@ export function ensureContrast(hex: string, targetBackground: 'white' | 'black' 
     const toHex = (c: number) => c.toString(16).padStart(2, '0');
     return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+
+/** A see-through version of any CSS colour (hex or `var(--x)`): `percent` of the colour, the rest transparent. */
+export function tint(color: string, percent: number): string {
+    return `color-mix(in srgb, ${color} ${percent}%, transparent)`;
+}

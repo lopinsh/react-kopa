@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import type { TaxonomyTree, L1Category, L2Category } from '@/lib/services/taxonomy.service';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { NEUTRAL_ACCENT } from '@/lib/constants';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -112,7 +113,7 @@ export default function MultiTaxonomyPicker({ taxonomy, value, onChange }: Props
         onChange(value.filter(id => id !== tagId));
     }
 
-    const accent = '#6366f1';
+    const accent = NEUTRAL_ACCENT;
 
     // Get selected tag objects to display them as pills
     const selectedTags = useMemo(() => {

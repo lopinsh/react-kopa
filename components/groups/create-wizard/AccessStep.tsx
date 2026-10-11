@@ -8,6 +8,7 @@ import type { GroupFormValues } from '@/lib/validations/group';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { GROUP_TYPES as GLOBAL_GROUP_TYPES } from '@/lib/constants';
+import { tint } from '@/lib/color-utils';
 
 const GROUP_TYPE_OPTIONS = [
     {
@@ -45,7 +46,7 @@ export default function AccessStep({ accentColor }: Props) {
                             'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
                             isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
                         )}
-                        style={isSelected ? { borderColor: accentColor, backgroundColor: `${accentColor}10` } : undefined}
+                        style={isSelected ? { borderColor: accentColor, backgroundColor: tint(accentColor, 6) } : undefined}
                         aria-pressed={isSelected}
                     >
                         <div

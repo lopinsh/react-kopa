@@ -22,6 +22,7 @@ import AcceptingMembersSection from './settings/AcceptingMembersSection';
 import DangerZoneSection from './settings/DangerZoneSection';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
+import { NEUTRAL_ACCENT } from '@/lib/constants';
 
 type Props = {
     group: {
@@ -99,7 +100,7 @@ export default function GroupSettingsForm({
     const { handleSubmit, setValue } = methods;
 
     // Colour of the category picker itself; the page colour always comes from the category (set in the layout).
-    const pickerColor = taxSelection?.kind === 'existing' ? taxSelection.l1Color : '#6366f1';
+    const pickerColor = taxSelection?.kind === 'existing' ? taxSelection.l1Color : NEUTRAL_ACCENT;
 
     function handleTaxChange(sel: TaxonomySelection | null) {
         setTaxSelection(sel);

@@ -16,6 +16,8 @@ import TaxonomyStep from '@/components/groups/create-wizard/TaxonomyStep';
 import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';
 import AccessStep from '@/components/groups/create-wizard/AccessStep';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { NEUTRAL_ACCENT } from '@/lib/constants';
+import { tint } from '@/lib/color-utils';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -40,7 +42,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
     const [canSubmit, setCanSubmit] = useState(false);
-    const [accentColor, setAccentColor] = useState('#6366f1');
+    const [accentColor, setAccentColor] = useState<string>(NEUTRAL_ACCENT);
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -106,7 +108,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             setAccentColor(sel.l1Color);
         } else {
             setValue('categoryId', '');
-            setAccentColor('#6366f1');
+            setAccentColor(NEUTRAL_ACCENT);
         }
         // Reset sub-tags whenever L1 changes to ensure data consistency
         setValue('tagIds', []);
@@ -235,7 +237,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 type="button"
                                 onClick={nextStep}
                                 className="flex h-12 items-center gap-2 rounded-xl px-8 font-bold text-white shadow-lg transition-all soft-press"
-                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${accentColor}40` }}
+                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${tint(accentColor, 25)}` }}
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -245,7 +247,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 type="submit"
                                 disabled={isPending}
                                 className="flex h-12 items-center gap-2 rounded-xl px-8 font-bold text-white shadow-lg transition-all soft-press disabled:opacity-70 disabled:scale-100"
-                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${accentColor}40` }}
+                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${tint(accentColor, 25)}` }}
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {t('submit')}

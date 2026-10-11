@@ -44,7 +44,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     };
 }
 
-import { CITIES } from '@/lib/constants';
+import { CITIES, NEUTRAL_ACCENT } from '@/lib/constants';
 
 type Props = {
     params: Promise<{ locale: string }>;
@@ -115,7 +115,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
 
     // Dynamic accent color based on selected or snapped hierarchy
     const activeL1 = taxonomy ? taxonomy.l1 : categories.find(c => c.id === l1HighlightId);
-    const accentColor = activeL1?.color || '#6366f1';
+    const accentColor = activeL1?.color || NEUTRAL_ACCENT;
     const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     return (
