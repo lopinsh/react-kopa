@@ -95,6 +95,13 @@ export const ModerationService = {
             })
         ));
 
+        await NotificationService.notifyAdmins({
+            type: 'ADMIN_GROUP_HIDDEN',
+            args: { groupName: group.name, reason: parsed.data.reason },
+            link: '/admin',
+            exceptUserId: adminId,
+        });
+
         const resolved = TaxonomyResolver.resolve(group.category);
         return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
     },

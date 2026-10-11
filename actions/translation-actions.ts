@@ -14,6 +14,7 @@ import {
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
 import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
 import { isSiteAdmin } from '@/lib/site-role';
+import { NotificationService } from '@/lib/services/notification.service';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' };
 
@@ -73,6 +74,13 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
     try {
         const result = await MessageOverrideService.suggestEntry(check.adminId, input);
         if (!result.success) return result;
+
+        await NotificationService.notifyAdmins({
+            type: 'ADMIN_SUGGESTION',
+            args: { title: input.key },
+            link: '/admin/translations',
+            exceptUserId: check.adminId,
+        });
 
         revalidatePath('/', 'layout');
         return { success: true };

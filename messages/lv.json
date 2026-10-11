@@ -816,7 +816,8 @@
     "viewPublicProfile": "Skatīt publisko profilu",
     "discover": "Atklāt",
     "myGroups": "Manas grupas",
-    "profile": "Profils"
+    "profile": "Profils",
+    "adminMenu": "Administrēšana"
   },
   "notifications": {
     "title": "Paziņojumi",
@@ -849,8 +850,15 @@
       "EVENT_NOW_OPEN": "Pasākums tagad atvērts visiem — tava dalība apstiprināta",
       "OWNERSHIP_TRANSFERRED": "{authorName} tevi iecēla par šīs grupas īpašnieku",
       "ADMIN_GRANTED": "Vietnes īpašnieks tevi iecēla par administratoru",
-      "ADMIN_REVOKED": "Tu vairs neesi vietnes administrators"
-    }
+      "ADMIN_REVOKED": "Tu vairs neesi vietnes administrators",
+      "ADMIN_REPORT": "Jauns ziņojums",
+      "ADMIN_TAG_PENDING": "Piedāvāta jauna apakškategorija",
+      "ADMIN_SUGGESTION": "Jauns tulkojuma ieteikums",
+      "ADMIN_FEEDBACK": "Jauna atsauksmju piezīme",
+      "ADMIN_GROUP_HIDDEN": "Grupa tika paslēpta"
+    },
+    "tabPersonal": "Personīgie",
+    "tabAdmin": "Administrācija"
   },
   "onboarding": {
     "username": {

@@ -1,6 +1,7 @@
 'use server';
 import { auth } from '@/lib/auth';
 import { ReportService } from '@/lib/services/report.service';
+import { NotificationService } from '@/lib/services/notification.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { isReportReason } from '@/lib/constants';
@@ -34,6 +35,8 @@ export async function createReport(data: {
             targetEventId: data.targetEventId,
             reason: data.reason,
         });
+
+        await NotificationService.notifyAdmins({ type: 'ADMIN_REPORT', link: '/admin/reports', exceptUserId: session.user.id });
 
         // Ensure path revalidation as per Action Consistency Law
         revalidatePath('/[locale]/admin/reports', 'page');

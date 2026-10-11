@@ -1,6 +1,18 @@
 import { prisma } from '@/lib/prisma';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { groupCategoryTitle } from './message.service';
+import { isSiteAdmin } from '@/lib/site-role';
+
+export type NotificationAudience = 'USER' | 'ADMIN';
+
+/** Things that need a site admin's attention. They go to every site admin, in the bell's admin tab. */
+export type AdminNotificationPayload = {
+    type: 'ADMIN_REPORT' | 'ADMIN_TAG_PENDING' | 'ADMIN_SUGGESTION' | 'ADMIN_FEEDBACK' | 'ADMIN_GROUP_HIDDEN';
+    args?: Record<string, string | number>;
+    link: string;
+    /** The admin who caused it already knows; they are left out. */
+    exceptUserId?: string;
+};
 
 export type NotificationPayload = {
     userId: string;
@@ -24,11 +36,17 @@ export const NotificationService = {
      * Fetches the most recent notifications for a user.
      */
     async getUserNotifications(userId: string, limit: number = 10, locale: string = 'lv') {
-        const notifications = await prisma.notification.findMany({
-            where: { userId },
-            orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        // Admin notifications are only ever listed for someone who is a site admin right now.
+        const owner = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
+        const audiences: NotificationAudience[] = isSiteAdmin(owner?.role) ? ['USER', 'ADMIN'] : ['USER'];
+        const perAudience = await Promise.all(audiences.map((audience) =>
+            prisma.notification.findMany({
+                where: { userId, audience },
+                orderBy: { createdAt: 'desc' },
+                take: limit,
+            })
+        ));
+        const notifications = perAudience.flat().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
         // The group a notification is about is named by its link: the group page itself, or a conversation
         // that started from a group. Resolved here so the list can show "Group · Category" like the inbox.
@@ -102,6 +120,37 @@ export const NotificationService = {
     },
 
     /**
+     * One admin notification for every site admin (except `exceptUserId`). A failure is only logged:
+     * the change that caused it must not be reported as failed.
+     */
+    async notifyAdmins(payload: AdminNotificationPayload) {
+        try {
+            const admins = await prisma.user.findMany({
+                where: { role: { in: ['ADMIN', 'OWNER'] }, ...(payload.exceptUserId ? { id: { not: payload.exceptUserId } } : {}) },
+                select: { id: true },
+            });
+            if (admins.length === 0) return [];
+            const message = JSON.stringify({ args: withShortExcerpt(payload.args) });
+            const notifications = await prisma.notification.createManyAndReturn({
+                data: admins.map((admin) => ({
+                    userId: admin.id,
+                    type: payload.type,
+                    title: payload.type,
+                    message,
+                    link: payload.link,
+                    audience: 'ADMIN',
+                })),
+            });
+            const { triggerRealtime } = await import('@/lib/pusher');
+            await Promise.all(notifications.map((n) => triggerRealtime(`private-user-${n.userId}`, 'new-notification', n)));
+            return notifications;
+        } catch (error) {
+            console.error('[NotificationService.notifyAdmins] Error:', error);
+            return [];
+        }
+    },
+
+    /**
      * Like createNotification, but a failure is only logged: a saved change must not be reported
      * as failed because its notification could not be sent. Not a Server Action on purpose.
      */
@@ -147,11 +196,11 @@ export const NotificationService = {
     },
 
     /**
-     * Marks all unread notifications as read for the given user.
+     * Marks all unread notifications of one tab (personal or admin) as read for the given user.
      */
-    async markAllAsReadForUser(userId: string) {
+    async markAllAsReadForUser(userId: string, audience: NotificationAudience = 'USER') {
         return await prisma.notification.updateMany({
-            where: { userId, read: false },
+            where: { userId, read: false, audience },
             data: { read: true },
         });
     },

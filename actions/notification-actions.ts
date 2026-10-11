@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
-import { NotificationService } from '@/lib/services/notification.service';
+import { NotificationService, type NotificationAudience } from '@/lib/services/notification.service';
 
 /**
  * Fetch notifications for the current user.
@@ -39,14 +39,15 @@ export async function markAsRead(id: string): Promise<ActionResponse> {
 }
 
 /**
- * Mark all notifications as read for the current user.
+ * Mark all notifications of one tab (personal or admin) as read for the current user.
  */
-export async function markAllAsRead(): Promise<ActionResponse> {
+export async function markAllAsRead(audience: NotificationAudience = 'USER'): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (audience !== 'USER' && audience !== 'ADMIN') return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
-        await NotificationService.markAllAsReadForUser(session.user.id);
+        await NotificationService.markAllAsReadForUser(session.user.id, audience);
         revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {

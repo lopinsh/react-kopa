@@ -10,6 +10,7 @@ import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
 import type { CreateFeedbackInput, ReplyFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
 import { isSiteAdmin } from '@/lib/site-role';
+import { NotificationService } from '@/lib/services/notification.service';
 
 type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'FORBIDDEN' };
 
@@ -46,6 +47,12 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Action
     try {
         const result = await FeedbackService.create(check.adminId, input);
         if (!result.success) return result;
+        await NotificationService.notifyAdmins({
+            type: 'ADMIN_FEEDBACK',
+            args: { excerpt: input.text },
+            link: '/admin/feedback',
+            exceptUserId: check.adminId,
+        });
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };
     } catch (error) {

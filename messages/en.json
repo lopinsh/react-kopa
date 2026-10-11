@@ -816,7 +816,8 @@
     "viewPublicProfile": "View Public Profile",
     "discover": "Discover",
     "myGroups": "My Groups",
-    "profile": "Profile"
+    "profile": "Profile",
+    "adminMenu": "Admin tools"
   },
   "notifications": {
     "title": "Notifications",
@@ -849,8 +850,15 @@
       "EVENT_NOW_OPEN": "The event is now open to everyone — you're in",
       "OWNERSHIP_TRANSFERRED": "{authorName} made you the owner of this group",
       "ADMIN_GRANTED": "The site owner made you an admin",
-      "ADMIN_REVOKED": "You are no longer a site admin"
-    }
+      "ADMIN_REVOKED": "You are no longer a site admin",
+      "ADMIN_REPORT": "New report",
+      "ADMIN_TAG_PENDING": "New sub-category suggested",
+      "ADMIN_SUGGESTION": "New translation suggestion",
+      "ADMIN_FEEDBACK": "New feedback note",
+      "ADMIN_GROUP_HIDDEN": "A group was hidden"
+    },
+    "tabPersonal": "Personal",
+    "tabAdmin": "Admin"
   },
   "onboarding": {
     "username": {

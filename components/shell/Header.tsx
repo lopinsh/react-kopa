@@ -4,10 +4,12 @@ import LanguageSwitcher from './LanguageSwitcher';
 import { Link } from '@/i18n/routing';
 import { auth } from '@/lib/auth';
 import UserMenu from './UserMenu';
+import AdminMenu from './AdminMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
 import UnreadBadge from './UnreadBadge';
 import { UI } from '@/lib/constants';
+import { isSiteAdmin } from '@/lib/site-role';
 
 export default async function Header() {
     const t = await getTranslations('shell.header');
@@ -71,7 +73,8 @@ export default async function Header() {
                             <MessageSquare className="h-[22px] w-[22px]" />
                             <UnreadBadge />
                         </Link>
-                        <NotificationCenter />
+                        {isSiteAdmin(session.user.role) && <AdminMenu />}
+                        <NotificationCenter isAdmin={isSiteAdmin(session.user.role)} />
                     </div>
                 )}
 

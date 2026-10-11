@@ -118,6 +118,13 @@ export async function submitPendingTag(label: string, parentId: string): Promise
             submittedById: session.user.id,
         });
 
+        await NotificationService.notifyAdmins({
+            type: 'ADMIN_TAG_PENDING',
+            args: { title: label.trim() },
+            link: '/admin/taxonomy',
+            exceptUserId: session.user.id,
+        });
+
         return {
             success: true,
             data: {
