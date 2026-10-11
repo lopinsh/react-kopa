@@ -83,9 +83,9 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 en: { title: '', description: '', instructions: '' }
             },
             location: event?.location ?? '',
-            // Times are read in the viewer's browser zone. A new event's start is filled in after mount (see below).
-            startDate: toLocalValue(event?.startDate),
-            endDate: toLocalValue(event?.endDate),
+            // Times are in the viewer's browser zone, which the server does not know: filled in after mount (see below).
+            startDate: '',
+            endDate: '',
             maxParticipants: event?.maxParticipants ?? undefined,
             visibility: event?.visibility ?? EVENT_VISIBILITY[0],
             joinMode: event?.joinMode ?? EVENT_JOIN_MODES[0],
@@ -103,9 +103,16 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const startValue = String(watch('startDate') ?? '');
     const endValue = String(watch('endDate') ?? '');
 
-    // New event: start at the next full hour. Done after mount because the server does not know the viewer's clock or zone.
+    // Done after mount because the server renders in its own zone (UTC in production), not the viewer's:
+    // computing these during render would show server-zone times and mismatch on hydration.
+    // Editing: the stored times in the browser zone. New event: start at the next full hour.
     useEffect(() => {
-        if (event || getValues('startDate')) return;
+        if (getValues('startDate')) return;
+        if (event) {
+            setValue('startDate', toLocalValue(event.startDate));
+            setValue('endDate', toLocalValue(event.endDate));
+            return;
+        }
         const start = nextFullHourLocal();
         setValue('startDate', start);
         setValue('endDate', addMinutesLocal(start, 120));
