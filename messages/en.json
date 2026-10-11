@@ -551,6 +551,7 @@
       "translations": "Translations",
       "feedback": "Feedback",
       "handbook": "Handbook",
+      "redesign": "Redesign",
       "design": "Design",
       "team": "Team",
       "menu": "Admin",
@@ -558,7 +559,8 @@
         "content": "Content",
         "structure": "Structure",
         "site": "Site",
-        "people": "People"
+        "people": "People",
+        "development": "Development"
       },
       "desc": {
         "moderation": "Hidden groups and content taken down",
@@ -568,8 +570,18 @@
         "design": "Colors and look of the site",
         "handbook": "Values, voice and design rules",
         "team": "Site admins and owner",
-        "feedback": "Notes left by the site admins"
+        "feedback": "Notes left by the site admins",
+        "redesign": "Looks under discussion; nothing is built from it"
       }
+    },
+    "development": {
+      "version": "Version {version}",
+      "updated": "updated {date}",
+      "changesTitle": "What changed",
+      "markAll": "Mark all as reviewed",
+      "badgeNew": "New",
+      "badgeUpdated": "Updated",
+      "badgeHint": "Click to mark as reviewed"
     },
     "handbook": {
       "chapters": "Chapters",
@@ -577,7 +589,6 @@
       "onThisPage": "On this page",
       "note": "Internal document, English only. Source: docs/handbook in the repository.",
       "uiElements": "UI elements",
-      "redesign": "Redesign (discussion)",
       "ui": {
         "title": "UI elements",
         "intro": "Every shared component as it looks on the site today, built from the real code with sample data. Each caption gives the component's data-ui name (the one feedback mode shows) and its file, so a note on a sample leads straight to the code.",

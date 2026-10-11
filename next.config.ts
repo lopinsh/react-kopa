@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
     '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*'],
-    '/[locale]/admin/handbook/redesign': ['./docs/handbook/**/*'],
+    '/[locale]/admin/development/redesign': ['./docs/development/**/*'],
   },
   images: {
     remotePatterns: [
@@ -51,6 +51,17 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // The redesign page moved out of the Handbook into Admin > Development.
+      {
+        source: '/:locale(lv|en)/admin/handbook/redesign',
+        destination: '/:locale/admin/development/redesign',
+        permanent: false,
+      },
+      {
+        source: '/admin/handbook/redesign',
+        destination: '/admin/development/redesign',
+        permanent: false,
+      },
       // Announcements used to be the Discussions tab; the query string is kept by Next.
       {
         source: '/:locale(lv|en)/:l1Slug/group/:groupSlug/discussions',

@@ -551,6 +551,7 @@
       "translations": "Tulkojumi",
       "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata",
+      "redesign": "Pārveide",
       "design": "Dizains",
       "team": "Komanda",
       "menu": "Admins",
@@ -558,7 +559,8 @@
         "content": "Saturs",
         "structure": "Struktūra",
         "site": "Vietne",
-        "people": "Cilvēki"
+        "people": "Cilvēki",
+        "development": "Izstrāde"
       },
       "desc": {
         "moderation": "Paslēptās grupas un noņemtais saturs",
@@ -568,8 +570,18 @@
         "design": "Vietnes krāsas un izskats",
         "handbook": "Vērtības, balss un dizaina noteikumi",
         "team": "Vietnes administratori un īpašnieks",
-        "feedback": "Administratoru atstātās piezīmes"
+        "feedback": "Administratoru atstātās piezīmes",
+        "redesign": "Izskati apspriešanai; no tiem nekas netiek būvēts"
       }
+    },
+    "development": {
+      "version": "Versija {version}",
+      "updated": "atjaunināta {date}",
+      "changesTitle": "Kas mainījies",
+      "markAll": "Atzīmēt visu kā pārskatītu",
+      "badgeNew": "Jauns",
+      "badgeUpdated": "Atjaunināts",
+      "badgeHint": "Klikšķini, lai atzīmētu kā pārskatītu"
     },
     "handbook": {
       "chapters": "Nodaļas",
@@ -577,7 +589,6 @@
       "onThisPage": "Šajā lapā",
       "note": "Iekšējs dokuments, tikai angliski. Avots: docs/handbook repozitorijā.",
       "uiElements": "Saskarnes elementi",
-      "redesign": "Pārveide (diskusija)",
       "ui": {
         "title": "Saskarnes elementi",
         "intro": "Visi kopīgie komponenti tādi, kādi tie šobrīd ir vietnē, uzbūvēti no īstā koda ar parauga datiem. Parakstā ir komponenta data-ui nosaukums (to rāda atsauksmju režīms) un fails, tāpēc piezīme pie parauga ved tieši uz kodu.",

@@ -1,4 +1,4 @@
-<!-- Redesign discussion (from the artifact https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq). Discussion only. Rendered at /admin/handbook/redesign. -->
+<!-- Redesign discussion (from the artifact https://claude.ai/artifact/GTxnjafUTtD9AgmKbAGyoq). Discussion only. Rendered at /admin/development/redesign. Version, update time and the sections marked New/Updated live in docs/development/redesign.meta.json: bump them whenever this file changes. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,500;0,7..72,600;1,7..72,500&family=Commissioner:wght@400;500;600&family=Atkinson+Hyperlegible+Next:wght@400;700;800&family=Alegreya:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
 <style>
 .rd{
@@ -26,7 +26,18 @@ html.dark .rd:has(#pal-rye:checked){--bg:#181614;--surface:#211e1b;--tint:#2b272
 .rd .intro .status{justify-self:start;font-size:13px;font-weight:600;color:var(--brand);background:var(--tint);border-radius:999px;padding:3px 12px}
 .rd .intro h1{font-size:clamp(32px,5vw,48px)}
 .rd .intro p{color:var(--muted);max-width:64ch;margin:0;font-size:17px}
-.rd section{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;min-width:0}
+.rd section{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;min-width:0;position:relative}
+.rd .rd-version{display:grid;gap:6px;justify-items:start;font-size:14px;color:var(--muted)}
+.rd .rd-version b{color:var(--fg);font-weight:600}
+.rd .rd-version details{font-size:14px}
+.rd .rd-version summary{cursor:pointer;color:var(--brand);font-weight:600}
+.rd .rd-version ul{margin:6px 0 0;padding-left:18px}
+.rd .rd-version button{font:600 13px var(--body);height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.rd .rd-badge{position:absolute;top:-14px;right:0;z-index:2;display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;font:700 12px var(--body);letter-spacing:.02em;cursor:pointer;border:1.5px solid var(--brand);background:var(--brand);color:var(--on-brand)}
+.rd .rd-badge[hidden]{display:none}
+.rd .rd-badge[data-rd-kind="updated"]{background:var(--surface);color:var(--brand)}
+.rd .rd-badge::after{content:"\00d7";font-size:15px;line-height:1;opacity:.8}
+.rd .rd-badge:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .rd section>*{min-width:0}
 .rd section>h2{font-size:30px}
 .rd .lead{color:var(--muted);max-width:68ch;margin:0}
@@ -590,6 +601,7 @@ html.dark .rd{
 <div class="wrap">
 <header class="intro">
   <span class="status">Discussion only · nothing is being built from this page</span>
+  <!--rd-meta-->
   <h1>Ejam kopā: the new look</h1>
   <p>Round three. Your notes from the last pass are applied: natural colours (three to compare, switch below), one text font with its own small italic, a dot only on the category, quieter subcategories, category icons in a drawer that folds to an icon rail, the group title fully inside the header, and the header for a signed-in person.</p>
   <p class="sub"><span class="status liked">Liked</span> = approved in review; untagged = not decided yet.</p>

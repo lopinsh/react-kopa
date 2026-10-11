@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useId, type KeyboardEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { AlertTriangle, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, Brush, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 import { UI } from '@/lib/constants';
@@ -17,8 +17,8 @@ type Props = {
     isOwner: boolean;
 };
 
-type ItemId = 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
-type GroupId = 'content' | 'structure' | 'site' | 'people';
+type ItemId = 'redesign' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
+type GroupId = 'content' | 'structure' | 'site' | 'people' | 'development';
 
 type NavItem = {
     id: ItemId;
@@ -96,6 +96,12 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
             items: [
                 ...(isOwner ? [{ id: 'team' as const, href: '/admin/team', icon: UserCog, active: pathname.startsWith('/admin/team'), badge: 0 }] : []),
                 { id: 'feedback', href: '/admin/feedback', icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
+            ],
+        },
+        {
+            id: 'development',
+            items: [
+                { id: 'redesign', href: '/admin/development/redesign', icon: Brush, active: pathname.startsWith('/admin/development/redesign'), badge: 0 },
             ],
         },
     ];
