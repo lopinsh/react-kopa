@@ -34,7 +34,6 @@ export default async function AdminDashboardPage({
     if (tab === 'tags') redirect(`/${locale}/admin/taxonomy`);
     const t = await getTranslations('admin.dashboard');
     const tInbox = await getTranslations('admin.taxonomy.inbox');
-    const c = await getTranslations('common');
     const tMod = await getTranslations('moderation');
     const tErrors = await getTranslations('errors');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
