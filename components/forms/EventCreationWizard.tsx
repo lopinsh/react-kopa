@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useForm, FormProvider, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslations, useLocale } from 'next-intl';
+import { useTranslations, useLocale, useTimeZone } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import {
@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import EventLangBar from '@/components/forms/EventLangBar';
+import DateTimeField from '@/components/forms/DateTimeField';
+import { addMinutesLocal, minutesBetween, nextFullHourLocal, splitLocal, toLocalValue } from '@/lib/local-datetime';
 import { toTextLang, type TextLang } from '@/lib/translations';
 
 import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
@@ -56,14 +58,6 @@ type Props = {
     waitingCount?: number;
 };
 
-/** Value for a datetime-local input: the browser's local time, which is how the form reads it back. */
-function toLocalInput(iso: string | null): string {
-    if (!iso) return '';
-    const d = new Date(iso);
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
-
 export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event, waitingCount = 0 }: Props) {
     const t = useTranslations('eventWizard');
     const tErrors = useTranslations('errors');
@@ -89,8 +83,9 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 en: { title: '', description: '', instructions: '' }
             },
             location: event?.location ?? '',
-            startDate: toLocalInput(event?.startDate ?? null),
-            endDate: toLocalInput(event?.endDate ?? null),
+            // Times are read in the viewer's browser zone. A new event's start is filled in after mount (see below).
+            startDate: toLocalValue(event?.startDate),
+            endDate: toLocalValue(event?.endDate),
             maxParticipants: event?.maxParticipants ?? undefined,
             visibility: event?.visibility ?? EVENT_VISIBILITY[0],
             joinMode: event?.joinMode ?? EVENT_JOIN_MODES[0],
@@ -101,7 +96,40 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         mode: 'onChange',
     });
 
-    const { register, handleSubmit, formState: { errors }, setValue, watch, trigger } = form;
+    const { register, handleSubmit, formState: { errors }, setValue, getValues, watch, trigger } = form;
+    const timeZone = useTimeZone();
+    // Once the organiser empties the end, start changes stop filling it in again.
+    const endLeftEmpty = useRef(!!event && !event.endDate);
+    const startValue = String(watch('startDate') ?? '');
+    const endValue = String(watch('endDate') ?? '');
+
+    // New event: start at the next full hour. Done after mount because the server does not know the viewer's clock or zone.
+    useEffect(() => {
+        if (event || getValues('startDate')) return;
+        const start = nextFullHourLocal();
+        setValue('startDate', start);
+        setValue('endDate', addMinutesLocal(start, 120));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    /** The end moves with the start: same length as before, or 2 hours when there was none. */
+    function changeStart(next: string) {
+        const previousStart = String(getValues('startDate') ?? '');
+        const previousEnd = String(getValues('endDate') ?? '');
+        setValue('startDate', next, { shouldDirty: true, shouldValidate: true });
+        if (!next) return;
+        if (previousEnd) {
+            const length = previousStart ? minutesBetween(previousStart, previousEnd) : null;
+            setValue('endDate', addMinutesLocal(next, length && length > 0 ? length : 120), { shouldDirty: true, shouldValidate: true });
+        } else if (!endLeftEmpty.current) {
+            setValue('endDate', addMinutesLocal(next, 120), { shouldDirty: true, shouldValidate: true });
+        }
+    }
+
+    function changeEnd(next: string) {
+        endLeftEmpty.current = next === '';
+        setValue('endDate', next, { shouldDirty: true, shouldValidate: true });
+    }
     const titleError = errors.texts?.[lang]?.title;
 
     async function validateStep(s: StepIndex): Promise<boolean> {
@@ -261,38 +289,37 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                            <div className="space-y-4">
+                                <div role="group" aria-labelledby="event-start-label">
+                                    <p id="event-start-label" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                         <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
                                         {t('fieldDate')}
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        {...register('startDate')}
-                                        className={clsx(
-                                            'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                            errors.startDate ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
-                                        )}
+                                    </p>
+                                    <DateTimeField
+                                        idPrefix="event-start"
+                                        value={startValue}
+                                        onChange={changeStart}
+                                        defaultTime={splitLocal(nextFullHourLocal()).time}
+                                        invalid={!!errors.startDate}
                                     />
                                     {errors.startDate && <p className="mt-1 text-xs text-red-500">{t(errors.startDate.message as 'INVALID_URL')}</p>}
                                 </div>
 
-                                <div>
-                                    <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                                <div role="group" aria-labelledby="event-end-label">
+                                    <p id="event-end-label" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                                         <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
                                         {t('fieldEndDate')}
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        {...register('endDate')}
-                                        className={clsx(
-                                            'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                            errors.endDate ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
-                                        )}
+                                    </p>
+                                    <DateTimeField
+                                        idPrefix="event-end"
+                                        value={endValue}
+                                        onChange={changeEnd}
+                                        defaultTime={splitLocal(addMinutesLocal(startValue, 120)).time || '12:00'}
+                                        invalid={!!errors.endDate}
                                     />
                                     {errors.endDate && <p className="mt-1 text-xs text-red-500">{t(errors.endDate.message as 'INVALID_URL')}</p>}
                                 </div>
+                                <p className="text-xs text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
                             </div>
 
                             <div>
