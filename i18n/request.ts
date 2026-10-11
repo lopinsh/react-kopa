@@ -3,6 +3,8 @@ import { routing } from './routing';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
 import { isTranslateModeActive } from '@/lib/translate-mode/server';
 import { markMessages } from '@/lib/translate-mode/marker';
+import { cookies } from 'next/headers';
+import { DEFAULT_TIME_ZONE, TIME_ZONE_COOKIE, isValidTimeZone } from '@/lib/time-zone';
 
 export default getRequestConfig(async ({ requestLocale }) => {
     // Validate the incoming locale
@@ -19,9 +21,13 @@ export default getRequestConfig(async ({ requestLocale }) => {
     const merged = await MessageOverrideService.getMergedMessages(locale as 'lv' | 'en');
     const messages = translateMode ? markMessages(merged) : merged;
 
+    // The viewer's browser zone, sent back by the client in a cookie; Riga until the first visit has set it.
+    const zoneCookie = (await cookies()).get(TIME_ZONE_COOKIE)?.value;
+    const timeZone = isValidTimeZone(zoneCookie) ? zoneCookie : DEFAULT_TIME_ZONE;
+
     return {
         locale,
         messages,
-        timeZone: 'UTC', // Required to avoid ENVIRONMENT_FALLBACK errors
+        timeZone,
     };
 });

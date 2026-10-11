@@ -15,7 +15,6 @@ type Props = {
     onDelete: (post: AnnouncementRow) => void;
 };
 
-const TIME_ZONE = 'Europe/Riga';
 const BUTTON = 'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50';
 
 export default function AnnouncementCard({ post, canManage, busy, onArchive, onDelete }: Props) {
@@ -27,10 +26,10 @@ export default function AnnouncementCard({ post, canManage, busy, onArchive, onD
     const created = new Date(post.createdAt);
 
     // Relative time for today (Riga calendar day), the full date after that.
-    const day = (d: Date) => format.dateTime(d, { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: TIME_ZONE });
+    const day = (d: Date) => format.dateTime(d, { year: 'numeric', month: '2-digit', day: '2-digit' });
     const when = day(created) === day(now)
         ? relativeTo(format, created, now)
-        : format.dateTime(created, { dateStyle: 'long', timeZone: TIME_ZONE });
+        : format.dateTime(created, { dateStyle: 'long' });
 
     return (
         <article data-ui={UI.announcementCard} className="rounded-2xl border border-border bg-surface p-5 shadow-premium sm:p-6">
@@ -39,7 +38,7 @@ export default function AnnouncementCard({ post, canManage, busy, onArchive, onD
                 <time dateTime={created.toISOString()}>{when}</time>
                 {post.author.name && <> · {post.author.name}</>}
                 {post.archivedAt && (
-                    <> · {t('announcementArchivedOn', { date: format.dateTime(new Date(post.archivedAt), { dateStyle: 'medium', timeZone: TIME_ZONE }) })}</>
+                    <> · {t('announcementArchivedOn', { date: format.dateTime(new Date(post.archivedAt), { dateStyle: 'medium' }) })}</>
                 )}
             </p>
             {post.content && (

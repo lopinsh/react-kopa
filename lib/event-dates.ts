@@ -1,4 +1,6 @@
-import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { DEFAULT_TIME_ZONE as EVENT_TIME_ZONE } from '@/lib/time-zone';
+
+// "Past" is one fact for everyone, so it is decided at the Latvian day boundary, not per viewer zone.
 
 /** The instant today began (midnight) in Latvian time. */
 export function startOfTodayInRiga(now: Date = new Date()): Date {

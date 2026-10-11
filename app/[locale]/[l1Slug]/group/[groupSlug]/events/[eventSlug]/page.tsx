@@ -2,7 +2,7 @@ import { EventService } from '@/lib/services/event.service';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getFormatter, getTranslations } from 'next-intl/server';
+import { getFormatter, getTimeZone, getTranslations } from 'next-intl/server';
 import {
     Calendar,
     MapPin,
@@ -22,7 +22,7 @@ import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import EventManageActions from '@/components/events/EventManageActions';
-import { EVENT_TIME_ZONE } from '@/lib/constants';
+import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
@@ -72,8 +72,9 @@ export default async function EventPage({
     const startDate = new Date(event.startDate);
     const endDate = event.endDate ? new Date(event.endDate) : null;
     const ended = isEventPast(event);
-    const timeZone = EVENT_TIME_ZONE;
-    const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone } as const;
+    // Times are in the viewer's zone; name the zone when it is not Latvian time, so travellers and online guests are not misled.
+    const showZone = (await getTimeZone()) !== DEFAULT_TIME_ZONE;
+    const timeFormat = { hour: '2-digit', minute: '2-digit', hour12: false } as const;
 
     const { goingCount, canManage, instructionsLocked, myStatus } = event.viewer;
     // One "Latviski / In English" label per language shown: under the title, and again on the description or
@@ -150,7 +151,7 @@ export default async function EventPage({
                     <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-wide">
                         <span className={clsx('inline-flex items-center gap-1.5 rounded-lg px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)] text-white')}>
                             <Clock className="h-3.5 w-3.5" />
-                            {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric', timeZone })}
+                            {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric' })}
                         </span>
                         {event.visibility === 'MEMBERS_ONLY' && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
@@ -242,9 +243,9 @@ export default async function EventPage({
                                 <div className="min-w-0">
                                     <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('dateAndTime')}</p>
                                     <p className="text-sm font-bold leading-snug text-foreground">
-                                        {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone })}
+                                        {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                         <br />
-                                        {formatter.dateTime(startDate, timeFormat)}{endDate && ` – ${formatter.dateTime(endDate, timeFormat)}`}
+                                        {formatter.dateTime(startDate, timeFormat)}{endDate && ` – ${formatter.dateTime(endDate, timeFormat)}`}{showZone && ` (${formatter.dateTime(startDate, { timeZoneName: 'short' }).split(' ').pop()})`}
                                     </p>
                                 </div>
                             </div>

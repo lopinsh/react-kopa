@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getMessages } from 'next-intl/server';
+import { getMessages, getTimeZone } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Providers from '@/components/providers/Providers';
@@ -15,6 +15,7 @@ import { isFeedbackModeActive } from '@/lib/feedback/server';
 import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 import { getActiveTheme } from '@/lib/theme/server';
 import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
+import TimeZoneSync from '@/components/shell/TimeZoneSync';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     }
 
     const messages = await getMessages();
+    const timeZone = await getTimeZone();
     // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
     const translateMode = await isTranslateModeActive();
     // Same for feedback mode: only a site admin who switched it on gets the code.
@@ -48,7 +50,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     const themePreview = (await getActiveTheme()).isPreview;
 
     return (
-        <Providers locale={locale} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
+        <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />
@@ -73,6 +75,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
             {/* GDPR Consent */}
             <CookieConsent />
+            <TimeZoneSync />
 
             {translateMode && <TranslateModeLoader />}
             {themePreview && <ThemePreviewBar />}

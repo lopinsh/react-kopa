@@ -67,7 +67,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                                 current={s.current}
                                 value={s.value}
                                 by={s.createdBy ?? '—'}
-                                when={format.dateTime(s.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}
+                                when={format.dateTime(s.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                             />
                         ))}
                     </ul>
@@ -98,7 +98,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                                         <td className="px-4 py-3 uppercase">{row.lang}</td>
                                         <td className="px-4 py-3">{row.value}</td>
                                         <td className="px-4 py-3 text-foreground-muted">{row.updatedBy ?? ''}</td>
-                                        <td className="whitespace-nowrap px-4 py-3 text-foreground-muted">{format.dateTime(row.updatedAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}</td>
+                                        <td className="whitespace-nowrap px-4 py-3 text-foreground-muted">{format.dateTime(row.updatedAt, { dateStyle: 'medium', timeStyle: 'short' })}</td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -10,7 +10,6 @@ import { getFormatter } from 'next-intl/server';
 import { ModerationService } from '@/lib/services/moderation.service';
 import type { ActionResponse } from '@/types/actions';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
-import { EVENT_TIME_ZONE } from '@/lib/constants';
 import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
 
 /** Returns an inline admin form action to its tab; a failure is shown via ?error=CODE. */
@@ -152,7 +151,7 @@ export default async function AdminDashboardPage({
                                             <p className="text-sm text-foreground-muted">{g.ownerName ? tMod('hiddenOwner', { name: g.ownerName }) : tInbox('unknown')}</p>
                                             <p className="text-sm text-foreground [overflow-wrap:anywhere]">{g.reason || '—'}</p>
                                             <p className="text-xs text-foreground-muted">
-                                                {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: EVENT_TIME_ZONE }) })}
+                                                {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
                                             </p>
                                         </div>
                                         <HiddenGroupActions groupId={g.id} groupName={g.name} canDelete={isSiteOwner(session.user.role)} />
@@ -185,7 +184,7 @@ export default async function AdminDashboardPage({
                                         {moderationLog.map(entry => (
                                             <tr key={entry.id} className="align-top">
                                                 <td className="py-3 pr-4 whitespace-nowrap text-foreground-muted">
-                                                    {format.dateTime(entry.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: EVENT_TIME_ZONE })}
+                                                    {format.dateTime(entry.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                                                 </td>
                                                 <td className="py-3 pr-4">{entry.adminName || tInbox('unknown')}</td>
                                                 <td className="py-3 pr-4 font-medium">{tMod(`action_${entry.action}`)}</td>

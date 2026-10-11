@@ -52,7 +52,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
             {note.elementText && <p className="mt-2 truncate text-xs text-foreground-muted">{tAdmin('element')}: {note.elementText}</p>}
             <p className="mt-1 text-xs text-foreground-muted">
                 {note.authorName ? `${note.authorName} · ` : ''}
-                {format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}
+                {format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                 {` · ${note.locale.toUpperCase()} · ${note.viewportW}×${note.viewportH} · ${note.theme}`}
             </p>
 

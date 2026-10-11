@@ -40,7 +40,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                                 {r.byAgent && <Bot className="h-3.5 w-3.5" aria-hidden />}
                                 {r.byAgent ? t('threadAgent') : r.authorName ?? t('threadAdmin')}
                                 <span className="font-medium text-foreground-muted">
-                                    · {format.dateTime(r.createdAt, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Riga' })}
+                                    · {format.dateTime(r.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
                             </p>
                             <p className="mt-1 whitespace-pre-wrap break-words text-sm text-foreground">{r.text}</p>

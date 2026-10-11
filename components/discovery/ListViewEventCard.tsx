@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
-import { EVENT_TIME_ZONE, UI } from '@/lib/constants';
+import { UI } from '@/lib/constants';
 import { useFormatter, useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
@@ -31,8 +31,8 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
         >
             {/* Date Box */}
             <div className="mr-4 flex flex-col items-center justify-center shrink-0 w-10">
-                <span className="text-[9px] font-black uppercase tracking-widest text-foreground-muted">{formatter.dateTime(startDate, { month: 'short', timeZone: EVENT_TIME_ZONE })}</span>
-                <span className="text-lg font-black leading-none text-foreground">{formatter.dateTime(startDate, { day: 'numeric', timeZone: EVENT_TIME_ZONE })}</span>
+                <span className="text-[9px] font-black uppercase tracking-widest text-foreground-muted">{formatter.dateTime(startDate, { month: 'short' })}</span>
+                <span className="text-lg font-black leading-none text-foreground">{formatter.dateTime(startDate, { day: 'numeric' })}</span>
             </div>
 
             {/* Title & Group Line */}
@@ -62,7 +62,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
             <div className="ml-4 flex shrink-0 items-center justify-end gap-4 text-xs font-semibold text-foreground-muted">
                 <div className="hidden items-center gap-1.5 sm:flex">
                     <Calendar className="h-3.5 w-3.5" />
-                    {formatter.dateTime(startDate, { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: EVENT_TIME_ZONE })}
+                    {formatter.dateTime(startDate, { hour: '2-digit', minute: '2-digit', hour12: false })}
                 </div>
                 <div className="hidden items-center gap-1 md:flex max-w-[120px] truncate">
                     <MapPin className="h-3.5 w-3.5" />

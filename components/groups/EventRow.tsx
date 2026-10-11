@@ -3,7 +3,7 @@ import { Clock, Lock, MapPin, UserCheck, Users } from 'lucide-react';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 import EventParticipation from '@/components/events/EventParticipation';
-import { EVENT_TIME_ZONE, type EventJoinModeValue, UI } from '@/lib/constants';
+import { type EventJoinModeValue, UI } from '@/lib/constants';
 import type { AttendanceStatus } from '@prisma/client';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
@@ -41,7 +41,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
     const formatter = await getFormatter();
     const start = new Date(event.startDate);
     const end = event.endDate ? new Date(event.endDate) : null;
-    const time = { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: EVENT_TIME_ZONE } as const;
+    const time = { hour: '2-digit', minute: '2-digit', hour12: false } as const;
     const isRequest = event.joinMode === 'REQUEST';
 
     const people = [
@@ -59,8 +59,8 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                     'flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl',
                     isPast ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)]/10 text-[var(--accent)]'
                 )}>
-                    <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric', timeZone: EVENT_TIME_ZONE })}</span>
-                    <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short', timeZone: EVENT_TIME_ZONE })}</span>
+                    <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric' })}</span>
+                    <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short' })}</span>
                 </div>
 
                 <div className="min-w-0 flex-1 space-y-1">

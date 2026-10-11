@@ -15,6 +15,8 @@ import type { OAuthProviderId } from '@/lib/auth-providers';
 
 type ProvidersProps = {
     locale: string;
+    /** The viewer's time zone as the server rendered with; the client formats with the same one. */
+    timeZone: string;
     messages: AbstractIntlMessages;
     oauthProviders: OAuthProviderId[];
     translateMode: boolean;
@@ -22,10 +24,10 @@ type ProvidersProps = {
     children: React.ReactNode;
 };
 
-export default function Providers({ locale, messages, oauthProviders, translateMode, feedbackMode, children }: ProvidersProps) {
+export default function Providers({ locale, timeZone, messages, oauthProviders, translateMode, feedbackMode, children }: ProvidersProps) {
     return (
         <SessionProvider>
-            <NextIntlClientProvider locale={locale} messages={messages}>
+            <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
                 <ToastProvider>
                   <AuthProvidersProvider value={oauthProviders}>
                    <TranslateModeProvider value={translateMode}>
