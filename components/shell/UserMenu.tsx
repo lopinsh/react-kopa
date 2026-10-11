@@ -1,16 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { User, LogOut, Settings, LayoutDashboard, Users } from 'lucide-react';
+import { User, LogOut, Settings, Users } from 'lucide-react';
 import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { signOut, signIn } from 'next-auth/react';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
-import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
-import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
-import { isSiteAdmin } from '@/lib/site-role';
 
 type Props = {
     user: {
@@ -100,29 +97,6 @@ export default function UserMenu({ user }: Props) {
                         </Link>
 
                         <div className="p-2">
-                            {isSiteAdmin(user.role) && (
-                                <>
-                                    <Link
-                                        href="/admin"
-                                        data-ui="menu-item"
-                                        className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-primary hover:bg-primary/10 transition-colors"
-                                        onClick={() => setIsOpen(false)}
-                                    >
-                                        <LayoutDashboard className="h-4 w-4" />
-                                        {t('adminPanel')}
-                                    </Link>
-                                    <TranslateModeToggle
-                                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors"
-                                        onToggle={() => setIsOpen(false)}
-                                    />
-                                    <FeedbackModeToggle
-                                        className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors"
-                                        onToggle={() => setIsOpen(false)}
-                                    />
-                                    <div className="my-1 h-px bg-border/40 mx-2" />
-                                </>
-                            )}
-
                             <Link
                                 href="/profile/my-groups"
                                 data-ui="menu-item"
