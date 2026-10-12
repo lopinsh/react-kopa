@@ -17,14 +17,12 @@ function getLocale(pathname: string): string {
         : DEFAULT_LOCALE;
 }
 
-/** Paths that are exempt from the username onboarding intercept. */
+/** Paths that are exempt from the username onboarding intercept (the matcher already skips /api and /_next). */
 function isExempt(pathname: string): boolean {
-    return (
-        pathname.includes('/onboarding/username') ||
-        pathname.startsWith('/api/') ||
-        pathname.startsWith('/_next/') ||
-        pathname.startsWith('/auth/')
-    );
+    // Real paths carry the locale prefix (/lv/auth/signin), so compare without it.
+    const first = pathname.split('/')[1];
+    const path = (LOCALES as readonly string[]).includes(first) ? pathname.slice(first.length + 1) || '/' : pathname;
+    return path.startsWith('/onboarding/username') || path.startsWith('/auth/');
 }
 
 export default auth(async function proxy(req: NextRequest) {
