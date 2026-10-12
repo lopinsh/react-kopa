@@ -20,6 +20,7 @@ import CategorizationSection from './settings/CategorizationSection';
 import PrivacySection from './settings/PrivacySection';
 import AcceptingMembersSection from './settings/AcceptingMembersSection';
 import DangerZoneSection from './settings/DangerZoneSection';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
 import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
@@ -79,6 +80,7 @@ export default function GroupSettingsForm({
     const [serverError, setServerError] = useState<string | null>(null);
     // Set when changing the main category removed sub-topics (the category section tells the owner).
     const [tagsCleared, setTagsCleared] = useState(false);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
     const methods = useForm<GroupFormValues>({
         resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
@@ -141,14 +143,15 @@ export default function GroupSettingsForm({
     };
 
     const handleDelete = () => {
-        if (window.confirm(gt('deleteConfirm'))) {
-            startTransition(async () => {
-                const result = await deleteGroup(group.id, locale);
-                if (result.success) {
-                    router.push('/');
-                }
-            });
-        }
+        if (isPending) return;
+        startTransition(async () => {
+            const result = await deleteGroup(group.id, locale);
+            if (result.success) {
+                router.push('/');
+            } else {
+                setDeleteConfirmOpen(false);
+            }
+        });
     };
 
     const selectedL1 = useMemo(() => {
@@ -225,7 +228,17 @@ export default function GroupSettingsForm({
                     <>
                         <TransferOwnershipSection groupId={group.id} locale={locale} candidates={transferCandidates} />
                         <div id="danger-zone" className="scroll-mt-24">
-                            <DangerZoneSection onDelete={handleDelete} isPending={isPending} />
+                            <DangerZoneSection onDelete={() => setDeleteConfirmOpen(true)} isPending={isPending} />
+                            <ConfirmDialog
+                                isOpen={deleteConfirmOpen}
+                                title={c_common('deleteGroupTitle')}
+                                message={gt('deleteConfirm')}
+                                confirmLabel={c_common('deleteGroupTitle')}
+                                destructive
+                                isPending={isPending}
+                                onConfirm={handleDelete}
+                                onCancel={() => setDeleteConfirmOpen(false)}
+                            />
                         </div>
                     </>
                 )}

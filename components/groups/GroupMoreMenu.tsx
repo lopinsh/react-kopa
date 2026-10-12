@@ -11,6 +11,7 @@ import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions
 import type { GroupContext } from '@/lib/services/group.service';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 type Props = {
     group: GroupContext;
@@ -31,6 +32,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     const { success, error: toastError } = useToast();
     const { user: { role, isMember } } = useGroupContext();
     const [isOpen, setOpen] = useState(false);
+    const [leaveConfirmOpen, setLeaveConfirmOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const ref = useRef<HTMLDivElement>(null);
 
@@ -64,10 +66,10 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     };
 
     const handleLeave = () => {
-        if (isPending || !confirm(c('confirmLeave'))) return;
-        setOpen(false);
+        if (isPending) return;
         startTransition(async () => {
             const res = await leaveGroup(group.id, locale);
+            setLeaveConfirmOpen(false);
             if (!res.success) toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
@@ -117,7 +119,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                     </button>
 
                     {isMember && !isOwner && (
-                        <button type="button" onClick={handleLeave} disabled={isPending} className={clsx(ITEM, 'text-red-500')}>
+                        <button type="button" onClick={() => { setOpen(false); setLeaveConfirmOpen(true); }} disabled={isPending} className={clsx(ITEM, 'text-red-500')}>
                             <LogOut className="h-4 w-4" />
                             {c('leaveGroup')}
                         </button>
@@ -145,6 +147,17 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                     </button>
                 </div>
             )}
+
+            <ConfirmDialog
+                isOpen={leaveConfirmOpen}
+                title={c('leaveGroup')}
+                message={c('confirmLeave')}
+                confirmLabel={c('leaveGroup')}
+                destructive
+                isPending={isPending}
+                onConfirm={handleLeave}
+                onCancel={() => setLeaveConfirmOpen(false)}
+            />
         </div>
     );
 }

@@ -12,6 +12,8 @@ import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import { GroupLabel } from './ConversationList';
 import { useMessageTime } from './useMessageTime';
 import { UI } from '@/lib/constants';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { useToast } from '@/hooks/use-toast';
 
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
 
@@ -33,6 +35,8 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
     const [draft, setDraft] = useState('');
     const [sendError, setSendError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
+    const [blockConfirmOpen, setBlockConfirmOpen] = useState(false);
+    const { error: toastError } = useToast();
     const listRef = useRef<HTMLDivElement>(null);
 
     // Always show the newest message: when a chat opens and whenever one arrives.
@@ -57,12 +61,15 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
         });
     };
 
-    const handleBlock = async () => {
-        if (!confirm(t('confirmBlock'))) return;
+    const handleBlock = () => {
+        if (isPending) return;
         const next = !conversation.isBlocked;
-        const result = await blockConversation(conversation.id, next);
-        if (result.success) onBlockedChange(next);
-        else alert(t('blockFailed'));
+        startTransition(async () => {
+            const result = await blockConversation(conversation.id, next);
+            setBlockConfirmOpen(false);
+            if (result.success) onBlockedChange(next);
+            else toastError(t('blockFailed'));
+        });
     };
 
     const origin = conversation.origin;
@@ -88,7 +95,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
 
                 {conversation.canBlock && (
                     <button
-                        onClick={handleBlock}
+                        onClick={() => setBlockConfirmOpen(true)}
                         className="flex items-center gap-2 rounded-full bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
                     >
                         <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-red-500')} />
@@ -172,6 +179,17 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     </>
                 )}
             </div>
+
+            <ConfirmDialog
+                isOpen={blockConfirmOpen}
+                title={conversation.isBlocked ? t('unblock') : t('block')}
+                message={t('confirmBlock')}
+                confirmLabel={conversation.isBlocked ? t('unblock') : t('block')}
+                destructive={!conversation.isBlocked}
+                isPending={isPending}
+                onConfirm={handleBlock}
+                onCancel={() => setBlockConfirmOpen(false)}
+            />
         </>
     );
 }

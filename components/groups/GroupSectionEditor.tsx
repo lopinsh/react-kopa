@@ -9,6 +9,7 @@ import { useRouter } from '@/i18n/routing';
 import { isDefaultSectionTitle, MAX_SECTIONS } from '@/lib/constants';
 import { toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import SectionEditForm, { isTextChanged, type SectionDraft } from '@/components/groups/SectionEditForm';
 
 const stripHtml = (html: string) => {
@@ -29,6 +30,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const [deleteTarget, setDeleteTarget] = useState<SectionDraft | null>(null);
     const [sections, setSections] = useState<SectionDraft[]>(() =>
         [...initialSections].sort((a, b) => a.order - b.order).map((s) => ({ ...s, savedTexts: s.texts }))
     );
@@ -114,11 +116,16 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
             setEditingId(null);
             return;
         }
-        if (!window.confirm(t('deleteConfirm'))) return;
+        setDeleteTarget(section);
+    };
 
+    const confirmDelete = () => {
+        const section = deleteTarget;
+        if (!section || isPending) return;
         setError(null);
         startTransition(async () => {
             const result = await deleteSectionAction(section.id, locale);
+            setDeleteTarget(null);
             if (result.success) {
                 setSections((prev) => prev.filter((s) => s.id !== section.id));
                 router.refresh();
@@ -277,6 +284,17 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                     </button>
                 )}
             </div>
+
+            <ConfirmDialog
+                isOpen={deleteTarget !== null}
+                title={c_common('deleteSection')}
+                message={t('deleteConfirm')}
+                confirmLabel={c_common('deleteSection')}
+                destructive
+                isPending={isPending}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteTarget(null)}
+            />
         </div>
     );
 }
