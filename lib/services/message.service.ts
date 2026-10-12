@@ -4,6 +4,7 @@ import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
 import { CHAT_HISTORY_LIMIT, INBOX_LIMIT } from '@/lib/constants';
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
+import { isSiteAdmin } from '@/lib/site-role';
 import { pickTitle } from '@/lib/utils/localized-title';
 
 /**
@@ -415,7 +416,7 @@ export const MessageService = {
     /**
      * The chat between two people. A new one can only start between two full members (not PENDING)
      * of at least one shared group, and only if the other person accepts direct messages. An existing
-     * pair chat is reused and stays writable unless it is blocked.
+     * pair chat is reused and stays writable unless it is blocked. Two site admins may always start one.
      */
     async getOrCreateDirectChat(userId: string, otherUserId: string): Promise<{ id: string; created: boolean }> {
         try {
@@ -437,11 +438,16 @@ export const MessageService = {
             const existing = await findPairChat(prisma);
             if (existing) return { id: existing.id, created: false };
 
-            const target = await prisma.user.findUnique({ where: { id: otherUserId }, select: { allowDirectMessages: true } });
-            if (!target) throw new ActionError('NOT_FOUND');
-            if (!target.allowDirectMessages) throw new ActionError('DM_NOT_ALLOWED');
+            const [target, viewer] = await Promise.all([
+                prisma.user.findUnique({ where: { id: otherUserId }, select: { allowDirectMessages: true, role: true } }),
+                prisma.user.findUnique({ where: { id: userId }, select: { role: true } }),
+            ]);
+            if (!target || !viewer) throw new ActionError('NOT_FOUND');
+            // Site admins (and the owner) can always reach each other: they run the site together.
+            const bothAdmins = isSiteAdmin(viewer.role) && isSiteAdmin(target.role);
+            if (!bothAdmins && !target.allowDirectMessages) throw new ActionError('DM_NOT_ALLOWED');
 
-            const shared = await prisma.membership.findFirst({
+            const shared = bothAdmins ? { id: 'site-admins' } : await prisma.membership.findFirst({
                 where: {
                     userId,
                     role: { not: 'PENDING' },

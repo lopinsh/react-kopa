@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { UserCog } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { requireOwnerPage } from '@/lib/admin-access';
+import { requireAdminPage } from '@/lib/admin-access';
 import { TeamService } from '@/lib/services/team.service';
 import TeamManager from '@/components/admin/TeamManager';
 
@@ -12,12 +12,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('team') };
 }
 
-/** Owner-only: who the site admins are. Everyone else gets a 404. */
+/** Who the site admins are. Every admin can see it and message them; only the owner can change roles. Everyone else gets a 404. */
 export default async function AdminTeamPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const t = await getTranslations('admin.team');
 
-    const { userId } = await requireOwnerPage(locale, '/admin/team');
+    const { userId, isOwner } = await requireAdminPage(locale, '/admin/team');
 
     const result = await TeamService.listTeam(userId);
     if (!result.success) notFound();
@@ -30,10 +30,10 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
                 </div>
                 <div>
                     <h1 className="text-3xl font-black tracking-tight text-foreground">{t('title')}</h1>
-                    <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
+                    <p className="mt-1 text-foreground-muted">{t(isOwner ? 'subtitle' : 'subtitleReadOnly')}</p>
                 </div>
             </div>
-            <TeamManager team={result.data ?? []} />
+            <TeamManager team={result.data ?? []} canManage={isOwner} viewerId={userId} />
         </div>
     );
 }

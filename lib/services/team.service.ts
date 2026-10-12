@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { isSiteOwner } from '@/lib/site-role';
-import { isSiteOwnerUser } from './site-role.service';
+import { isSiteAdminUser, isSiteOwnerUser } from './site-role.service';
 import { teamSearchSchema, teamTargetSchema } from '@/lib/validations/team';
 import { ModerationService } from './moderation.service';
 import { NotificationService } from './notification.service';
@@ -55,10 +55,11 @@ async function changeRole(ownerId: string, targetUserId: string, from: 'USER' | 
     return { success: true };
 }
 
-/** Owner-only: who the site admins are, and who is made or removed. The owner themself is never changed here. */
+/** Who the site admins are (any admin may look), and who is made or removed (owner only). The owner themself is never changed here. */
 export const TeamService = {
-    async listTeam(ownerId: string): Promise<TeamResult<TeamMember[]>> {
-        if (!(await isSiteOwnerUser(ownerId))) return { success: false, error: 'FORBIDDEN' };
+    /** Read-only list for any site admin; role changes stay owner-only. */
+    async listTeam(viewerId: string): Promise<TeamResult<TeamMember[]>> {
+        if (!(await isSiteAdminUser(viewerId))) return { success: false, error: 'FORBIDDEN' };
         const users = await prisma.user.findMany({
             where: { role: { in: ['ADMIN', 'OWNER'] } },
             select: { id: true, name: true, username: true, email: true, role: true },
