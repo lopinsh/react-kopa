@@ -1,31 +1,65 @@
 {
-  "version": "8.0",
+  "version": "9.0",
   "updated": "2026-10-13T12:00:00+03:00",
   "changes": [
-    "Round eight: every round-seven note applied; \"Still open\" is empty and the section now opens with \"Ready for sign-off\", a short list of what will be built. The note index lists the round-seven notes.",
-    "Filters: A, B and C merged into one design. Grupas / Pasākumi are two tabs above the filters (a content switch, not a filter); one filter line with the place, sub-categories and \"Kad\"; the \"Izvēlēts\" line only when something is chosen. The place drop-down takes several cities.",
-    "Events: \"Kad\" quick choices and the date picker sit on the filter line as one small group (one drop-down on phones); new day strip over the event list on phones and desktop.",
-    "Search: a city tag at the start of the field, pre-filled from the place filter, \"Visur\" when nothing is chosen, opening a multi-select city list with search.",
-    "Your own area: decided (a), one space like a group; on phones pages in a drawer and parts as tabs, the same rule as group pages.",
-    "Pop-ups: decided, blur (now 1.5 px) and dim for dialogs in the middle, dim only for side panels.",
-    "Manas grupas: \"Eju\" under the date; tags start with a capital (Eju, Īpašnieks, Mod, Gaida); pending requests in a quiet list apart from your groups.",
-    "Discovery: the \"create\" card's two lines sit together. Admin: sticky section row, no label repeating the chosen item.",
-    "Agreed so far: the liked items from round seven recorded (sub-category drop-down, category search, \"Izvēlēts\" line, \"Citur Latvijā\", event rows and panel, search direction)."
+    "Round nine: the page is rebuilt. It opens with \"Agreed rules\" (one line per element, its status and where it is drawn) and \"Still open\" (eight questions, each with a default), then follows the product from the identity to admin.",
+    "Each element is drawn in full in one section; every other copy uses the same markup. Every shot carries its own status: Agreed, Liked, Open or Proposal.",
+    "Your answers of 12 October applied everywhere: one \"Sazināties\" button whose form can also ask to join; one filter row with the Grupas | Pasākumi switch at its right end; no \"Kad\" and no \"Izvēlēts\"; one place list with a plain \"Visur\".",
+    "Phones: groups as two-line rows with the category colour and icon; one header everywhere (logo, search, +, shield for admins, bell, picture); \"Grupas\" opens Manas grupas, \"Es\" opens Mans profils.",
+    "Profile menu: Mans profils, Manas grupas, Iestatījumi, Iziet. Light and dark only in Iestatījumi. Manas grupas drawn once, in your own area, with its left menu and the full content.",
+    "Events filter by category and sub-category like groups, on every screen. Filter drop-downs drawn open, smaller. \"Nekas nav atrasts.\" in every list.",
+    "Restored: the pending state, the clickable group name in notifications, sub-categories on phone rows, the \"Ko meklējam?\" field, the signals in the phone group bar.",
+    "Removed: the greyed calendar-view icon, the light/dark quick switch, the \"Jaunākais · Visas grupas\" tabs, the \"Ready for sign-off\" claims, the three starting directions and old round notes.",
+    "New: three ways to make the filter area more compact, from Meetup, Airbnb, Material/SAP and Baymard (Discovery → More compact)."
   ],
   "sections": {
-    "h-open": { "kind": "updated", "version": "8.0" },
-    "h-notes": { "kind": "updated", "version": "8.0" },
-    "h-colors": { "kind": "updated", "version": "8.0" },
-    "h-disc": { "kind": "updated", "version": "8.0" },
-    "h-context": { "kind": "updated", "version": "8.0" },
-    "h-me": { "kind": "updated", "version": "8.0" },
-    "h-pop": { "kind": "updated", "version": "8.0" },
-    "h-scale": { "kind": "updated", "version": "8.0" },
-    "h-events": { "kind": "updated", "version": "8.0" },
-    "h-find": { "kind": "updated", "version": "8.0" },
-    "h-group": { "kind": "updated", "version": "8.0" },
-    "h-notif": { "kind": "updated", "version": "7.0" },
-    "h-nav": { "kind": "updated", "version": "8.0" },
-    "h-agreed": { "kind": "updated", "version": "8.0" }
+    "h-rules": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-open": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-id": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-shell": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-disc": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-search": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-group": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-event": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-me": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-pop": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-admin": {
+      "kind": "new",
+      "version": "9.0"
+    },
+    "h-notes": {
+      "kind": "new",
+      "version": "9.0"
+    }
   }
 }
