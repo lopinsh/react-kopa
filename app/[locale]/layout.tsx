@@ -50,9 +50,11 @@ export default async function LocaleLayout({ children, params }: Props) {
     ]);
     // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
     const themePreview = theme.isPreview;
-    // Admin-only texts are sent by the admin layout, not to every visitor.
-    const messages = { ...allMessages };
-    delete messages.admin;
+    // Admin-only texts are sent by the admin layout, not to every visitor. The one exception is the
+    // design preview bar, which a site admin sees on every page while a preview is saved.
+    const { admin, ...messages } = allMessages;
+    const design = typeof admin === 'object' ? admin.design : undefined;
+    if (themePreview && typeof design === 'object') messages.admin = { design: { bar: design.bar } };
 
     return (
         <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
