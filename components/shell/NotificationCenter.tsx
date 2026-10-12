@@ -5,7 +5,7 @@ import { useTranslations, useFormatter, useNow, useLocale } from 'next-intl';
 import { Bell, Check } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
-import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notification-actions';
+import { getNotifications, markManyAsRead, markAllAsRead } from '@/actions/notification-actions';
 import { clsx } from 'clsx';
 import { useRealtimeEvent } from '@/components/providers/RealtimeProvider';
 import { relativeTo } from '@/lib/utils/relative-time';
@@ -23,6 +23,10 @@ type Notification = {
     createdAt: Date;
     /** The group the notification is about, with its category line; null when it is not about a group. */
     group: { name: string; categoryTitle: string } | null;
+    /** Ids this row stands for (grouped unread notifications of one type and target). */
+    ids?: string[];
+    /** How many more unread ones are folded into this row. */
+    moreCount?: number;
 };
 
 type Audience = Notification['audience'];
@@ -43,6 +47,7 @@ function NotificationContent({ n }: { n: Notification }) {
                 <span className="shrink-0">{relativeTo(format, new Date(n.createdAt), now)}</span>
             </div>
             <p className="text-[13px] font-bold text-foreground leading-snug">{headline}</p>
+            {(n.moreCount ?? 0) > 0 && <p className="text-[11px] font-semibold text-primary">{t('more', { count: n.moreCount ?? 0 })}</p>}
             {detail !== undefined && (
                 <p className="text-[11px] text-foreground-muted leading-snug line-clamp-2 break-words">
                     {detail}
@@ -64,7 +69,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
     const [tab, setTab] = useState<Audience>('USER');
     // Admin notifications are only ever shown to site admins, whatever the list holds.
     const activeTab: Audience = isAdmin ? tab : 'USER';
-    const countUnread = (audience: Audience) => notifications.filter(n => n.audience === audience && !n.read).length;
+    const countUnread = (audience: Audience) => notifications.filter(n => n.audience === audience && !n.read).reduce((sum, n) => sum + (n.ids?.length ?? 1), 0);
     const unreadUser = countUnread('USER');
     const unreadAdmin = isAdmin ? countUnread('ADMIN') : 0;
     const unreadCount = unreadUser + unreadAdmin;
@@ -92,11 +97,12 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
         });
     });
 
-    const handleMarkAsRead = async (id: string) => {
+    const handleMarkAsRead = async (row: Notification) => {
+        const ids = row.ids ?? [row.id];
         startTransition(async () => {
-            const result = await markAsRead(id);
+            const result = await markManyAsRead(ids);
             if (result.success) {
-                setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+                setNotifications(prev => prev.map(n => n.id === row.id ? { ...n, read: true, ids: [n.id], moreCount: 0 } : n));
             }
         });
     };
@@ -186,7 +192,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
                                                     href={n.link}
                                                     className="block px-4 py-2.5"
                                                     onClick={() => {
-                                                        handleMarkAsRead(n.id);
+                                                        handleMarkAsRead(n);
                                                         setIsOpen(false);
                                                     }}
                                                 >
@@ -203,7 +209,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         e.preventDefault();
-                                                        handleMarkAsRead(n.id);
+                                                        handleMarkAsRead(n);
                                                     }}
                                                     className="absolute bottom-2.5 right-4 flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-primary opacity-0 transition-opacity group-hover:opacity-100"
                                                     title={t('markRead')}

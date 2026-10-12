@@ -25,6 +25,42 @@ export type NotificationPayload = {
 
 const EXCERPT_MAX = 160;
 
+/** One bell row: the newest notification of its kind, and how many other unread ones of that kind it stands for. */
+export type NotificationRow<T extends { id: string }> = T & {
+    /** Ids this row stands for: just its own, or every unread notification of the same type and target. */
+    ids: string[];
+    /** How many unread ones are folded in besides the one shown. */
+    moreCount: number;
+};
+
+/**
+ * Unread notifications with the same audience, type and target (the link) become one row: the newest one,
+ * placed where it was. Read ones are never folded, and neither is a lone unread one. Input is newest first.
+ */
+function groupUnread<T extends { id: string; read: boolean; audience: string; type: string; link: string | null }>(items: T[]): NotificationRow<T>[] {
+    const keyOf = (n: T) => `${n.audience}|${n.type}|${n.link ?? ''}`;
+    const unreadIds = new Map<string, string[]>();
+    for (const n of items) {
+        if (n.read) continue;
+        const key = keyOf(n);
+        unreadIds.set(key, [...(unreadIds.get(key) ?? []), n.id]);
+    }
+    const seen = new Set<string>();
+    const rows: NotificationRow<T>[] = [];
+    for (const n of items) {
+        if (n.read) {
+            rows.push({ ...n, ids: [n.id], moreCount: 0 });
+            continue;
+        }
+        const key = keyOf(n);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const ids = unreadIds.get(key) ?? [n.id];
+        rows.push({ ...n, ids, moreCount: ids.length - 1 });
+    }
+    return rows;
+}
+
 /** Notifications show a preview of what someone wrote, not the whole text. */
 function withShortExcerpt(args: NotificationPayload['args']): NotificationPayload['args'] {
     if (!args || typeof args.excerpt !== 'string') return args;
@@ -91,12 +127,13 @@ export const NotificationService = {
         );
         const byPath = new Map(groups.map((g) => { const d = describe(g); return [`${d.l1Slug}/${d.slug}`, d] as const; }));
 
-        return notifications.map((n) => {
+        const withGroup = notifications.map((n) => {
             const g = n.link ? groupLink.exec(n.link) : null;
             const c = n.link ? conversationLink.exec(n.link) : null;
             const found = g ? byPath.get(`${g[1]}/${g[2]}`) : c ? byConversation.get(c[1]) : undefined;
             return { ...n, group: found ? { name: found.name, categoryTitle: found.categoryTitle } : null };
         });
+        return groupUnread(withGroup);
     },
 
     /**
@@ -188,6 +225,16 @@ export const NotificationService = {
     async markAsReadForUser(notificationId: string, userId: string) {
         return await prisma.notification.update({
             where: { id: notificationId, userId },
+            data: { read: true },
+        });
+    },
+
+    /**
+     * Marks several notifications (one grouped bell row) as read, verifying userId ownership.
+     */
+    async markManyAsReadForUser(notificationIds: string[], userId: string) {
+        return await prisma.notification.updateMany({
+            where: { id: { in: notificationIds }, userId },
             data: { read: true },
         });
     },

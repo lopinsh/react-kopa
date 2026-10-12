@@ -2,6 +2,8 @@
 
 import { auth } from '@/lib/auth';
 import type { ActionResponse } from '@/types/actions';
+import { validateActionData } from '@/lib/action-utils';
+import { notificationIdsSchema } from '@/lib/validations/notification';
 import { NotificationService, type NotificationAudience } from '@/lib/services/notification.service';
 
 /**
@@ -32,6 +34,24 @@ export async function markAsRead(id: string): Promise<ActionResponse> {
         return { success: true };
     } catch (error) {
         console.error('[markAsRead] Error:', error);
+        return { success: false, error: 'UPDATE_FAILED' };
+    }
+}
+
+/**
+ * Mark every notification of one grouped bell row as read.
+ */
+export async function markManyAsRead(ids: string[]): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    const valid = await validateActionData(notificationIdsSchema, { ids });
+    if (!valid.success) return valid;
+
+    try {
+        await NotificationService.markManyAsReadForUser(valid.data.ids, session.user.id);
+        return { success: true };
+    } catch (error) {
+        console.error('[markManyAsRead] Error:', error);
         return { success: false, error: 'UPDATE_FAILED' };
     }
 }
