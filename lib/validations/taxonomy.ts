@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { hexColorSchema } from './theme';
+import { LOCALES } from '@/lib/constants';
 
 /** A category/tag name as people see it: trimmed, 2-60 characters. */
 export const categoryNameSchema = z.string().trim().min(2).max(60);
@@ -26,7 +27,7 @@ export const updateL1Schema = z.object({ id: idSchema, color: hexColorSchema });
 export const addAliasSchema = z.object({
     value: categoryNameSchema,
     categoryId: idSchema,
-    locale: z.enum(['en', 'lv']).optional(),
+    locale: z.enum(LOCALES).optional(),
 });
 
 export const idListSchema = z.array(idSchema).max(200);

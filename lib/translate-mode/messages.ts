@@ -1,10 +1,11 @@
 import type { MessageTree } from './marker';
+import { LOCALES, type Locale } from '@/lib/constants';
 
-export type MessageLang = 'lv' | 'en';
-export const MESSAGE_LANGS: readonly MessageLang[] = ['lv', 'en'];
+export type MessageLang = Locale;
+export const MESSAGE_LANGS: readonly MessageLang[] = LOCALES;
 
 export function isMessageLang(value: string): value is MessageLang {
-    return value === 'lv' || value === 'en';
+    return (LOCALES as readonly string[]).includes(value);
 }
 
 /** Dotted keys → text for every string in a messages tree. */

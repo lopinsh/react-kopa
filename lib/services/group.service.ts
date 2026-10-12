@@ -7,7 +7,7 @@ import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
-import { resolveSectionText, toTextLang, hasText, type TextLang } from '@/lib/translations';
+import { resolveSectionText, TEXT_LANGS, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
@@ -133,7 +133,7 @@ export type GroupServiceResult<T = void> = GroupServiceResponse<T> | GroupServic
  */
 /** Translation rows of a default section: title in both languages, text only in the creator's language. */
 function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, creatorLang: TextLang, content: string) {
-    return (['lv', 'en'] as const).map((lang) => ({
+    return TEXT_LANGS.map((lang) => ({
         lang,
         title: DEFAULT_SECTION_TITLES[key][lang],
         content: lang === creatorLang ? content : ''

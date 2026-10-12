@@ -130,3 +130,8 @@ export type UiName = (typeof UI)[keyof typeof UI];
 export const UI_NAMES = Object.values(UI) as [UiName, ...UiName[]];
 
 export * from './theme';
+
+/** The site's languages: the single list routing, owner-written text, message overrides and the proxy share. */
+export const LOCALES = ['lv', 'en'] as const;
+export type Locale = (typeof LOCALES)[number];
+export const DEFAULT_LOCALE: Locale = 'lv';

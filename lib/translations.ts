@@ -3,9 +3,10 @@
  * language a visitor sees: their own if the owner wrote it, else the original, else anything.
  * Owner text is never machine-translated.
  */
+import { LOCALES, type Locale } from '@/lib/constants';
 
-export const TEXT_LANGS = ['lv', 'en'] as const;
-export type TextLang = (typeof TEXT_LANGS)[number];
+export const TEXT_LANGS = LOCALES;
+export type TextLang = Locale;
 
 export function toTextLang(value: string | null | undefined): TextLang {
     return value === 'en' ? 'en' : 'lv';

@@ -1,13 +1,12 @@
 import { auth } from '@/lib/auth';
 import createIntlMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { LOCALES, DEFAULT_LOCALE } from '@/lib/constants';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const LOCALES = ['lv', 'en'] as const;
-const DEFAULT_LOCALE = 'lv';
 
 /** Extract locale prefix from a pathname, falling back to default locale. */
 function getLocale(pathname: string): string {
