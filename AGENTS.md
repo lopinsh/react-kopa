@@ -47,7 +47,7 @@ npm run dev                   # http://localhost:3000
 | Seed | `npm run db:seed` |
 | E2E (live site) | `npx playwright test test-live-site.spec.ts` |
 
-There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck; lint and i18n parity are report-only until existing debt is cleared.
+There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck, lint and i18n parity.
 
 ## Definition of done
 
