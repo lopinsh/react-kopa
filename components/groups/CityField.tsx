@@ -51,6 +51,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
     // A group's own city that is still waiting for approval (or was suggested earlier) is not in the approved list.
     if (value && !options.some((o) => o.slug === value)) options.push({ slug: value, name: cityLabel(tCities, value) });
     const isWaiting = !!value && !approved.has(value);
+    const valueName = options.find((o) => o.slug === value)?.name ?? value;
 
     const submitSuggestion = () => {
         if (isPending) return;
@@ -86,7 +87,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
             {isWaiting && (
                 <p className="mt-1.5 flex items-start gap-1.5 text-xs text-foreground-muted">
                     <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-                    <span>{t('citySuggestedHint', { name: cityLabel(tCities, value) })}</span>
+                    <span>{t('citySuggestedHint', { name: valueName })}</span>
                 </p>
             )}
 

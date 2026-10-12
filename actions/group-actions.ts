@@ -6,6 +6,7 @@ import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/sec
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
 import { NotificationService } from '@/lib/services/notification.service';
+import { CITIES_TAG } from '@/lib/services/city.service';
 import { ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 import type { MembershipRole } from '@prisma/client';
@@ -37,6 +38,8 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
         revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
+        // A pending city becomes public with the first group that uses it (CityService names).
+        updateTag(CITIES_TAG);
 
         return { success: true, data: { slug, l1Slug } };
     } catch (error) {
@@ -221,6 +224,7 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        updateTag(CITIES_TAG);
 
         return { success: true, data: { slug, l1Slug } };
     } catch (error) {

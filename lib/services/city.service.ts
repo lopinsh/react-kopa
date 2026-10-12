@@ -59,10 +59,18 @@ function isUniqueViolation(error: unknown): boolean {
     return error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002';
 }
 
-/** Cached: every request needs the names (they are merged into the `cities` messages). */
+/**
+ * Cached: every request needs the names (they are merged into the `cities` messages, which reach every page).
+ * A pending city is included only once a group uses it, so a suggestion that was never saved with a group stays private.
+ */
 const loadAllNames = unstable_cache(
     async (): Promise<Record<CityLang, Record<string, string>>> => {
-        const rows = await prisma.city.findMany({ select: { slug: true, nameLv: true, nameEn: true } });
+        const all = await prisma.city.findMany({ select: { slug: true, nameLv: true, nameEn: true, status: true } });
+        const pendingSlugs = all.filter((row) => row.status === 'PENDING_REVIEW').map((row) => row.slug);
+        const used = pendingSlugs.length
+            ? new Set((await prisma.group.findMany({ where: { city: { in: pendingSlugs } }, distinct: ['city'], select: { city: true } })).map((g) => g.city))
+            : new Set<string>();
+        const rows = all.filter((row) => row.status === 'ACTIVE' || used.has(row.slug));
         const map: Record<CityLang, Record<string, string>> = { lv: {}, en: {} };
         for (const row of rows) {
             map.lv[row.slug] = row.nameLv;
@@ -110,7 +118,7 @@ async function nameTakenByOther(names: { nameLv: string; nameEn: string }, excep
 }
 
 export const CityService = {
-    /** Names of every city (pending ones too, so a group's own pending city reads right), by language. */
+    /** Names of approved cities and of pending ones a group uses (so that group's city reads right), by language. */
     async getNames(locale: string): Promise<Record<string, string>> {
         try {
             return (await loadAllNames())[lang(locale)];
