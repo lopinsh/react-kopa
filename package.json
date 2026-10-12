@@ -10,6 +10,7 @@
     "docker:start": "npx prisma@6.19.2 migrate deploy && node server.js",
     "typecheck": "tsc --noEmit",
     "i18n:check": "node scripts/check-i18n.mjs",
+    "redesign:build": "node scripts/redesign/gen.mjs",
     "db:up": "docker compose up -d db soketi",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
