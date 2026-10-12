@@ -7,6 +7,7 @@ import type {
     ContextualTaxonomy
 } from '@/lib/types/discovery';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
 import { getTranslations } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { toTextLang, resolveText } from '@/lib/translations';
@@ -326,20 +327,7 @@ export const DiscoveryService = {
                         category: {
                             include: TaxonomyResolver.getInclude(reqLang)
                         },
-                        _count: {
-                            // Pending applicants are not members.
-                            select: { members: { where: { role: { not: 'PENDING' as const } } } }
-                        },
-                        members: {
-                            where: { role: { not: 'PENDING' as const } },
-                            take: 5,
-                            orderBy: { joinedAt: 'desc' as const },
-                            select: {
-                                user: {
-                                    select: { id: true, name: true, avatarSeed: true, image: true }
-                                }
-                            }
-                        }
+                        ...GROUP_CARD_RELATIONS
                     },
                     orderBy: { createdAt: 'desc' },
                 });
@@ -365,30 +353,7 @@ export const DiscoveryService = {
             // 5. Get total count for display (uncached for accuracy or cached with shorter TTL)
             const totalCount = await prisma.group.count({ where });
 
-            const mappedGroups = groups.map((g) => {
-                const resolved = TaxonomyResolver.resolve(g.category);
-
-                return {
-                    id: g.id,
-                    name: g.name,
-                    slug: g.slug,
-                    description: g.description,
-                    city: g.city,
-                    type: g.type,
-                    bannerImage: g.bannerImage,
-                    memberCount: g._count.members,
-                    members: g.members.map(m => m.user),
-                    accentColor: resolved.accentColor,
-                    category: {
-                        id: resolved.categoryId,
-                        slug: resolved.categorySlug,
-                        l1Slug: resolved.l1Slug,
-                        title: resolved.categoryTitle,
-                        parentTitle: resolved.parentTitle,
-                        color: resolved.accentColor
-                    },
-                };
-            });
+            const mappedGroups = groups.map(toGroupCard);
 
             return { groups: mappedGroups, hasMore, totalCount };
         } catch (error) {

@@ -2,32 +2,10 @@ import { prisma } from '@/lib/prisma';
 import type { Prisma } from '@prisma/client';
 import type { ActionResponse } from '@/types/actions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
 import bcrypt from 'bcryptjs';
 import type { RegisterValues } from '@/lib/validations/auth';
 import { USERNAME_MAX_LENGTH } from '@/lib/username';
-
-/** Minimal user shape used in group member avatar stacks */
-export interface GroupMemberPreview {
-    id: string;
-    name: string | null;
-    avatarSeed: string | null;
-    image: string | null;
-}
-
-/** Shared query fragment for fetching up to 5 recent member previews per group */
-const MEMBER_PREVIEW_SELECT = {
-    members: {
-        // Pending applicants are not members.
-        where: { role: { not: 'PENDING' as const } },
-        take: 5,
-        orderBy: { joinedAt: 'desc' as const },
-        select: {
-            user: {
-                select: { id: true, name: true, avatarSeed: true, image: true }
-            }
-        }
-    }
-} as const;
 
 /** The fields a profile page shows. Never the email, password hash or role. */
 const PROFILE_USER_SELECT = {
@@ -37,34 +15,14 @@ const PROFILE_USER_SELECT = {
 
 const PROFILE_GROUP_INCLUDE = {
     category: { include: { parent: { include: { parent: true, titles: true } }, titles: true } },
-    _count: { select: { members: { where: { role: { not: 'PENDING' as const } } } } },
-    ...MEMBER_PREVIEW_SELECT,
+    ...GROUP_CARD_RELATIONS,
 } as const;
 
 type ProfileMembership = Prisma.MembershipGetPayload<{ include: { group: { include: typeof PROFILE_GROUP_INCLUDE } } }>;
 type ProfileFields = Prisma.UserGetPayload<{ select: typeof PROFILE_USER_SELECT }>;
 
 function toProfileGroup(m: ProfileMembership) {
-    const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
-    const accentColor = m.group.accentColor || resolved.accentColor;
-    return {
-        id: m.group.id,
-        name: m.group.name,
-        slug: m.group.slug,
-        description: m.group.description,
-        city: m.group.city,
-        type: m.group.type,
-        bannerImage: m.group.bannerImage,
-        memberCount: m.group._count.members,
-        members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
-        category: {
-            title: resolved.categoryTitle,
-            parentTitle: resolved.parentTitle,
-            l1Slug: resolved.l1Slug,
-            color: resolved.accentColor
-        },
-        accentColor
-    };
+    return toGroupCard(m.group);
 }
 
 type ProfileGroup = ReturnType<typeof toProfileGroup>;
@@ -249,12 +207,7 @@ export const UserService = {
                         category: {
                             include: TaxonomyResolver.getInclude(lang)
                         },
-                        _count: {
-                            select: {
-                                members: { where: { role: { not: 'PENDING' } } }
-                            }
-                        },
-                        ...MEMBER_PREVIEW_SELECT
+                        ...GROUP_CARD_RELATIONS
                     }
                 }
             },
@@ -276,30 +229,10 @@ export const UserService = {
 
         const pendingCountMap = new Map(pendingCounts.map(pc => [pc.groupId, pc._count]));
 
-        return memberships.map(m => {
-            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
-            const accentColor = m.group.accentColor || resolved.accentColor;
-
-            return {
-                id: m.group.id,
-                name: m.group.name,
-                slug: m.group.slug,
-                description: m.group.description,
-                city: m.group.city,
-                type: m.group.type,
-                bannerImage: m.group.bannerImage,
-                memberCount: m.group._count.members,
-                pendingCount: pendingCountMap.get(m.group.id) || 0,
-                members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
-                category: {
-                    title: resolved.categoryTitle,
-                    parentTitle: resolved.parentTitle,
-                    l1Slug: resolved.l1Slug,
-                    color: resolved.accentColor
-                },
-                accentColor,
-                role: m.role
-            };
-        });
+        return memberships.map(m => ({
+            ...toGroupCard(m.group),
+            pendingCount: pendingCountMap.get(m.group.id) || 0,
+            role: m.role
+        }));
     }
 };
