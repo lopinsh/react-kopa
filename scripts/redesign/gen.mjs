@@ -3,6 +3,7 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { CSS, CSS_FIX } from './css.mjs';
 import * as P from './parts.mjs';
+import { liveSection } from './live.mjs';
 const { I, G, st, cat, catLine, catName, catIco, cv, pill, biedri } = P;
 
 const OUT = process.argv[2] ?? fileURLToPath(new URL('../../docs/development/redesign.html', import.meta.url));
@@ -27,6 +28,12 @@ const E = {
   gauja: { time: '09:30', cat: 'trav', name: 'Gaujas krasts līdz Velnalai', city: 'Sigulda', group: 'Pārgājieni', sub: 'Pārgājieni' },
   terv: { time: '10:00', cat: 'trav', name: 'Tērvetes meža takas', city: 'Tērvete', group: 'Pārgājieni', sub: 'Pārgājieni' },
 };
+// ── Sample announcements (Jaunumi)
+const ANN = {
+  kem: { k: 'trav', group: 'Pārgājieni', by: 'Marta', when: 'vakar', title: 'Ķemeru takai jauna tikšanās vieta', text: 'Satiekamies pie Ķemeru stacijas, nevis apmeklētāju centrā. Vilciens no Rīgas 8:52.' },
+  vz: { k: 'dance', group: 'Vēja zirdžiņš', by: 'Anna', when: 'pirmd.', title: 'Koncerts Liepājā svētdien', text: 'Brauksim ar autobusu no Jelgavas 13:00.' },
+  plan: { k: 'trav', group: 'Pārgājieni', by: 'Ilze', when: '28. sept.', title: 'Rudens maršruti', text: 'Oktobrī ejam Ķemeros, Siguldā un Tērvetē. Ja zini vēl kādu labu taku, raksti.' },
+};
 const kemNoEju = { ...E.kem, eju: 0 };
 const jelgSportDays = [[dh(10, 11, 'Šodien'), [E.fb, E.vb]], [dh(10, 12, 'Rīt'), [E.rn1, E.sk]], [dh(10, 13), [E.gt]], [dh(10, 15), [E.rn2]], [dh(10, 16), [E.zs]]];
 const jelgSportFromTue = [[dh(10, 13), [E.gt]], [dh(10, 15), [E.rn2]], [dh(10, 16), [E.zs]]];
@@ -49,8 +56,9 @@ const intro = `<header class="intro">
   <!--rd-meta-->
   <h1>Ejam kopā: the new look</h1>
   <p>Round nine. The page is rebuilt around what you have agreed. It opens with the <b>agreed rules</b>, one line per element, then follows the way a person meets the site: the identity, the header and navigation, discovery, search, a group, an event, your own area, pop-ups, admin. Each element is drawn in full in one place; everywhere else it appears exactly the same, or the text points to it. Your answers of 12 October are applied everywhere: one "Sazināties" button, one filter row with the Grupas / Pasākumi switch at its right end, two-line group rows on phones, one place list with "Visur", a shorter profile menu and one phone header.</p>
+  <p><b>New in 9.2:</b> your answers of 13 October (the redesign ships in parts; the language switch stays in the header; screens not drawn follow the rules; the event's place, faces, withdrawing a request, no "Mani pasākumi", social links), four screens drawn from the rules (the event page, Biedri, a group's Jaunumi, Mans profils), questions 4 and 8 redone as pictures, and near the end, everything from comparing this page with the live site.</p>
   <p class="legend"><span>${st('ag')} you agreed or approved it</span><span>${st('lk')} you liked it; small details may still move</span><span>${st('op')} not decided yet</span><span>${st('pr')} my suggestion, not asked for</span></p>
-  <ul class="toc"><li><a href="#h-rules">Agreed rules</a></li><li><a href="#h-open">Still open</a></li><li><a href="#h-id">Identity</a></li><li><a href="#h-shell">Header and navigation</a></li><li><a href="#h-disc">Discovery</a></li><li><a href="#h-search">Search</a></li><li><a href="#h-group">A group</a></li><li><a href="#h-event">An event</a></li><li><a href="#h-me">Your own area</a></li><li><a href="#h-pop">Pop-ups and panels</a></li><li><a href="#h-admin">Admin</a></li><li><a href="#h-notes">Note index</a></li></ul>
+  <ul class="toc"><li><a href="#h-rules">Agreed rules</a></li><li><a href="#h-open">Still open</a></li><li><a href="#h-id">Identity</a></li><li><a href="#h-shell">Header and navigation</a></li><li><a href="#h-disc">Discovery</a></li><li><a href="#h-search">Search</a></li><li><a href="#h-group">A group</a></li><li><a href="#h-event">An event</a></li><li><a href="#h-me">Your own area</a></li><li><a href="#h-pop">Pop-ups and panels</a></li><li><a href="#h-admin">Admin</a></li><li><a href="#h-live">Compared with the live app</a></li><li><a href="#h-notes">Note index</a></li></ul>
 </header>`;
 
 // ── Ledger
@@ -61,22 +69,25 @@ const ledger = `<section aria-labelledby="h-rules">
   <p class="lead">One line per element: the rule as it stands now, its status, and the section where it is drawn in full. If a drawing anywhere on the page disagrees with a line here, the line wins and the drawing is a mistake.</p>
   <div class="rd-ledger">
   ${gh('Identity')}
-  ${L('Identity first, one release', 'No screen is redesigned before the identity is settled. Everything on this page, including the category colours and Admin → Dizains, ships together as one release.', st('ag'), 'h-id', 'Identity')}
+  ${L('Identity first, released in parts', 'No screen is redesigned before the identity is settled. The redesign doesn\'t ship as one release: it ships in twelve logical parts (R1–R12), one by one, each finished and releasable on its own.', st('ag', 'Agreed 13 Oct'), 'live-order', 'Build order')}
+  ${L('Screens not drawn here', 'A screen this page doesn\'t draw is built from the decisions on it: the same parts, words and frames. The most important ones are drawn: the event page, Biedri, a group\'s Jaunumi, Mans profils.', st('ag', 'Agreed 13 Oct'), 'live-screens', 'Every live screen')}
   ${L('Logo', 'Wordmark "Ejam&nbsp;<em>kopā</em>" in Literata, "kopā" in italic, two overlapping round circles (two people). The circles alone are the small icon.', st('ag'), 'h-id', 'Identity')}
   ${L('Site colour', 'Sūna #4B5E3B with a neutral background tuned to it. More themes later, in Admin → Dizains.', st('ag'), 'h-id', 'Identity')}
   ${L('Category colours', 'Fifteen named earth tones (Paparde … Medus); brighter dark-mode tones, at least 7:1. Editable in Admin → Dizains → Kategoriju krāsas.', st('ag'), 'h-id', 'Identity')}
   ${L('Colour means category', 'Category colour only on dots, icons, tints, the group banner and the picture fallback; never on site buttons. The site colour only on site buttons and links.', st('ag'), 'h-id', 'Identity')}
   ${L('Fonts', 'Literata for headings and the logo; Commissioner for all text; human notes in small italic Commissioner, in the site colour.', st('ag'), 'h-id', 'Identity')}
   ${L('Shapes and labels', 'Soft corners, pill buttons, no borders, thin dividing lines. The dot belongs to the category only; city and size are plain quiet text.', st('ag'), 'h-id', 'Identity')}
-  ${L('Small tags', '"Eju" (with a tick), "Īpašnieks", "Mod", and an outlined "Gaida". Capital first letter, never clickable; a plain member gets none.', st('ag'), 'h-id', 'Identity')}
-  ${L('Words and numbers', 'Sentence case everywhere, never all capitals. Faces of who is coming instead of "0 apstiprināti".', st('ag'), 'h-id', 'Identity')}
+  ${L('Small tags', '"Eju" (with a tick), "Īpašnieks", "Mod", and an outlined "Gaida" (a request to a group or an event, or a waiting list). Capital first letter, never clickable; a plain member gets none.', st('ag'), 'h-id', 'Identity')}
+  ${L('Words and numbers', 'Sentence case everywhere, never all capitals. Faces of who is coming instead of "0 apstiprināti" (signed-in viewers only; visitors see "12 iet").', st('ag'), 'h-id', 'Identity')}
   ${L('Dates', 'Event dates carry the weekday, in the Latvian short form ("Svētd., 11. okt. 17:00"), 24-hour time, the viewer\'s time zone.', st('ag'), 'h-event', 'An event')}
   ${gh('Header and navigation')}
-  ${L('Desktop header', 'Logo (to discovery), search with the place tag, a quiet outlined +, the shield (admins only), messages (opens the drawer), bell (opens the list), your picture (opens the profile menu). The same in admin.', st('ag'), 'h-shell', 'Header and navigation')}
-  ${L('Phone header', 'The same on every page: logo, search icon, +, shield (admins only), bell, your picture. Messages are "Ziņas" in the bottom bar.', st('ag'), 'h-shell', 'Header and navigation')}
+  ${L('Desktop header', 'Logo (to discovery), search with the place tag, the language switch, a quiet outlined +, the shield (admins only), messages (opens the drawer), bell (opens the list), your picture (opens the profile menu). The same in admin.', st('ag'), 'h-shell', 'Header and navigation')}
+  ${L('Phone header', 'The same on every page: logo, the language switch, search icon, +, shield (admins only), bell, your picture. Messages are "Ziņas" in the bottom bar.', st('ag'), 'h-shell', 'Header and navigation')}
   ${L('Profile menu', 'Mans profils, Manas grupas (with the count of what is new), Iestatījumi, Iziet. No Ziņas, no Paziņojumi, no light/dark switch.', st('ag'), 'h-shell', 'Header and navigation')}
+  ${L('Language switch', 'Visible in the header on every page, desktop and phones, signed in or not; never hidden in Iestatījumi. "LV ▾" opens a short list (Latviešu, English), built so more languages fit later.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
+  ${L('Footer', 'A slim footer (logo, one line, Par mums, Privātums) on discovery and reading pages only; none on group, own-area or admin pages.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
   ${L('Light and dark', 'Only in Iestatījumi (Gaišs, Tumšs, Kā ierīcē).', st('ag'), 'h-me', 'Your own area')}
-  ${L('Admin shield menu', 'Atsauksmju režīms, Tulkošanas režīms, Administrēšanas panelis. Built.', st('ag'), 'h-admin', 'Admin')}
+  ${L('Admin shield menu', 'Atsauksmju režīms, Tulkošanas režīms, Administrēšanas panelis. Built; the live link still reads "Admina panelis" and becomes "Administrēšanas panelis".', st('ag'), 'h-admin', 'Admin')}
   ${L('Bottom bar (phones)', 'Atklāt, Grupas, Ziņas, Es. No +: groups are created from the header. Admin pages keep it.', st('ag'), 'h-shell', 'Header and navigation')}
   ${L('Where Grupas and Es lead', 'My default: "Grupas" opens Manas grupas, "Es" opens Mans profils; on a group page the tab you came from stays marked.', st('op'), 'h-open', 'Still open, 2')}
   ${L('Navigation rule', 'Two levels: an area\'s pages and a page\'s parts; one runs across, the other down, never two look-alike rows. Groups and your own area: pages down the left (a ☰ drawer on phones), parts across. Admin: sections across (sticky), pages down the left. No label repeats the chosen item.', st('ag'), 'h-shell', 'Header and navigation')}
@@ -103,17 +114,25 @@ const ledger = `<section aria-labelledby="h-rules">
   ${gh('A group')}
   ${L('Opened card', 'A click keeps you on discovery: a panel from the right over the dimmed list (a sheet on phones); the address is the group\'s page. Inside: photo, name, category and sub-categories, city · members, next meeting, short text, "Sazināties", "Atvērt grupas lapu".', st('ag'), 'h-group', 'A group')}
   ${L('Sazināties', 'One button, "Sazināties", wherever a group can be contacted. Its form has a switch "Vēlos pievienoties grupai" (on while the group takes members), so the same message can also ask to join. No separate join button.', st('ag'), 'h-group', 'A group')}
-  ${L('Pending', 'After asking to join: "Pieteikums nosūtīts" and "Atvērt sarunu" in place of the button.', st('ag'), 'h-group', 'A group')}
+  ${L('Pending', 'After asking to join: "Pieteikums nosūtīts" and "Atvērt sarunu" in place of the button. "Atsaukt pieteikumu" in the group\'s "…" menu and on the Tavi pieteikumi row (13 Oct).', st('ag'), 'h-group', 'A group')}
   ${L('Group page, desktop', 'The coloured header with the group\'s photo, name, category and sub-categories, city · members, "…"; lower on the other pages. Pages down the left (Informācija, Jaunumi, Pasākumi, Biedri, and Iestatījumi for the team), a page\'s parts as tabs.', st('lk'), 'h-group', 'A group')}
   ${L('Group page, phones', 'The bar keeps the signals (photo, name, category · city · members, "…") and "Sazināties"; pages in the ☰ drawer, parts stay tabs.', st('ag'), 'h-group', 'A group')}
   ${L('Visitors', 'Members-only things are hidden, not greyed: Jaunumi, Biedri, members-only parts and events.', st('ag'), 'h-group', 'A group')}
+  ${L('Informācija extras', 'Social links as quiet text links at the end of Informācija, not in the header. Member faces only on Biedri.', st('ag', 'Agreed 13 Oct'), 'h-group', 'A group')}
+  ${L('The "…" menu', 'Your role as a line, then: Rakstīt komandai, Dalīties, Ziņot par grupu, Pamest grupu (members); Atsaukt pieteikumu (while waiting). Team tools stay in Iestatījumi.', st('pr'), 'h-group', 'A group')}
+  ${L('Biedri, Jaunumi', 'Biedri: member rows with face, name, since when, role tag; the team gets "…" per row. Jaunumi: items with who wrote them; the team\'s "Jauns ieraksts" at the right end of the tabs; Aktuālie and Arhīvs.', st('pr'), 'h-group', 'A group')}
   ${gh('An event')}
   ${L('Event row', 'Line one: time, category dot, name, city (left out when one city is chosen). Line two, smaller: the group (a link), category, sub-category; left out on the group\'s own page. Day headings; two columns on wide screens; a week, then "Rādīt nākamo nedēļu".', st('lk'), 'h-event', 'An event')}
-  ${L('Event panel', 'Like the group panel: dot, category and sub-category on one line, when, where, text, who is going, "Eju" and "Visa informācija" on one line, who organises it.', st('lk'), 'h-event', 'An event')}
-  ${L('Events away from home', 'An event has its own place, and lists filter by the event\'s place.', st('ag'), 'h-event', 'An event')}
+  ${L('Event panel', 'Like the group panel: dot, category and sub-category on one line, when, where, text, who is going, "Eju" and "Visa informācija" on one line, who organises it. Faces and names only for signed-in viewers; visitors see "12 iet" (13 Oct).', st('lk'), 'h-event', 'An event')}
+  ${L('Events you can\'t simply join', 'Approval, full with a waiting list, sign-ups closed: drawn with the default (a quiet word on the row, the panel\'s button names the step, "Gaida" after you ask).', st('op'), 'q-states', 'Still open, 8')}
+  ${L('Events away from home', 'An event has its own place, and lists filter by the event\'s place: a required city from the list, filled in with the group\'s city, plus a free address. Online events get "Tiešsaistē", shown under "Visur".', st('ag', 'Agreed 13 Oct'), 'h-event', 'An event')}
+  ${L('A group\'s Pasākumi', 'Gaidāmie and Pagājušie only; no "Mani pasākumi" tab (your events are in Manas grupas and marked "Eju" in every list). The team\'s "Izveidot pasākumu" at the right end of the tabs.', st('ag', 'Agreed 13 Oct'), 'h-group', 'A group')}
+  ${L('Event page', 'The panel\'s content in full, inside the group\'s frame; calendar, map, share, "Svarīga informācija"; the team\'s "Rīkotājiem" box.', st('pr'), 'h-event', 'An event')}
   ${gh('Your own area')}
   ${L('Own area', 'One space for one person, like a group: your picture and name on top; Mans profils, Manas grupas, Ziņas, Paziņojumi down the left (a ☰ drawer on phones). You will still review it.', st('ag'), 'h-me', 'Your own area')}
-  ${L('Manas grupas', 'Drawn once. Sections as a horizontal menu: Tuvākie pasākumi (rows with the group/category line), Jaunumi (with the category), Tavas grupas (with role tags), Tavi pieteikumi (quieter, apart). It ends; nothing is suggested.', st('ag'), 'h-me', 'Your own area')}
+  ${L('Manas grupas', 'Drawn once. Sections as a horizontal menu: Tuvākie pasākumi (rows with the group/category line), Jaunumi (with the category), Tavas grupas (with role tags), Tavi pieteikumi (quieter, apart, with "Atsaukt pieteikumu"). It ends; nothing is suggested.', st('ag'), 'h-me', 'Your own area')}
+  ${L('The team\'s waiting requests', 'Drawn with the default: no "Jārīkojas" section; "2 pieteikumi" on that group\'s row in Tavas grupas.', st('op'), 'q-team', 'Still open, 9')}
+  ${L('Mans profils', 'What others see: about you, places, since when, your groups with your role; "Labot profilu" opens the form.', st('pr'), 'h-me', 'Your own area')}
   ${L('Ziņas', 'The messages icon opens a drawer from the right on any page; the full page is Ziņas in your own area. Group rows show the category and sub-categories; personal rows the groups you share.', st('ag'), 'h-me', 'Your own area')}
   ${L('Paziņojumi', 'The bell opens a compact list (admins also get an Administrācija tab); "Skatīt visus" opens Paziņojumi in your own area. On phones the bell opens that page full-screen, as agreed for phones before. The group name is a link.', st('ag'), 'h-me', 'Your own area')}
   ${L('Empty states', 'An outline icon, one sentence, at most one action ("Pagaidām kluss").', st('lk'), 'h-me', 'Your own area')}
@@ -128,7 +147,7 @@ const ledger = `<section aria-labelledby="h-rules">
 // ── Still open
 const open = `<section aria-labelledby="h-open">
   <h2 id="h-open">Still open</h2>
-  <p class="lead">Only real questions. Each has the default I would build if you say nothing.</p>
+  <p class="lead">Only real questions. Each has the default I would build if you say nothing. Questions 1–7 are from round nine; 8–25 came from comparing this page with the live site (<a href="#h-live">Compared with the live app</a>). Your answers of 13 October are in the Agreed rules.</p>
   <ol class="rd-qs">
     <li><b>The compact filter area: stay with A?</b><p>On 12 October you chose one row (A). Your earlier note asked what other sites do, so B and C are drawn too (Discovery → "More compact"). <i>Default: A</i>, as you decided.</p></li>
     <li><b>The bottom bar: where "Grupas" and "Es" lead, and which tab a group page marks</b><p><i>Default: "Grupas" opens Manas grupas, "Es" opens Mans profils; on a group page the tab you came from stays marked</i> (Atklāt from discovery, Grupas from Manas grupas), as phone apps do.</p></li>
@@ -137,6 +156,24 @@ const open = `<section aria-labelledby="h-open">
     <li><b>The place for someone we don't know</b><p>Signed out, we know nothing. <i>Default: start on "Visur" and ask "Kur tu esi?" once, above the results; keep the answer on the device; never guess from the internet address.</i> Signed in: the profile city.</p></li>
     <li><b>When is a notification read?</b><p>You said you would decide later. <i>Default: when you tap it</i>, as today.</p></li>
     <li><b>Reported people in admin</b><p>Not designed yet. <i>Default: later, as a second tab in Moderācija → Sūdzības.</i></p></li>
+    <li><b>Events you can't simply join: how do they look?</b><p>Drawn as pictures in <a href="#q-states">An event</a>: open, approval, full with a waiting list, sign-ups closed. <i>Default: one quiet word on the row ("Pieteikšanās", "Pilns", "Slēgts"), the panel's button names the step, the outlined "Gaida" tag after you ask; and "Slēgt pieteikšanos" stays the same as "Pilns", with the waiting list open, as today.</i></p></li>
+    <li><b>Waiting join requests for the group team</b><p>Drawn as pictures in <a href="#q-team">Your own area</a>. "Jārīkojas" is today's list of the groups you help run where someone waits for an answer. <i>Default: no such section; "2 pieteikumi" on that group's row in Tavas grupas, and a tap opens Biedri → Pieteikumi.</i></p></li>
+    <li><b>Where do you change your profile?</b><p>Today "Labot profilu" is a page of its own; Mans profils is new. <i>Default: "Labot profilu" on Mans profils opens the form in place (name, picture, about you, places, the three privacy switches); Iestatījumi keeps Izskats, and later your account.</i></p></li>
+    <li><b>Private groups</b><p>Today a group can be "Tikai biedriem": it isn't listed in discovery or search, and people join by invitation or approval. The page never shows one. <i>Default: keep that; someone with the link sees Informācija and "Sazināties" like any visitor, and the quiet line under the name ends with "Tikai biedriem".</i></p></li>
+    <li><b>The full word behind "Mod"</b><p>Today the role reads "Grupas moderators". <i>Default: the tag stays "Mod"; lists and menus say "Moderators"; "grupas komanda" means the owner and the moderators together, as in the Handbook.</i></p></li>
+    <li><b>Members-only events, seen by members</b><p>Visitors don't see them (agreed). <i>Default: members see them like any event; "Tikai biedriem" is a quiet line in the panel and on the event page, not on the row. Someone who follows a link without being a member gets one sentence and "Sazināties".</i></p></li>
+    <li><b>How a member writes to the group's team</b><p>Today from the "all members" pop-up on Informācija, which goes. <i>Default: "Rakstīt komandai" in the group's "…" menu (drawn in <a href="#h-group">A group</a>); it opens the same conversation as "Sazināties".</i></p></li>
+    <li><b>Asking "are you sure?"</b><p>Today some steps use a dialog, some the browser's own box, Atsauksmes a small pop-over. <i>Default: the small pop-over at the button for small steps (leaving a group, removing a member, deleting a news item); a dialog in the middle only when others lose something for good (deleting an event or a group).</i></p></li>
+    <li><b>Loading and error pages</b><p>Today there are none: a page just waits, and an error shows the framework's page. <i>Default: while loading, the real shapes in grey (cards, rows, the panel); an error or a missing page follows the empty-state rule: an outline icon, one sentence, one action ("Mēģināt vēlreiz" or "Uz sākumu").</i></p></li>
+    <li><b>Short messages after an action</b><p>The small notes that appear after saving ("toasts") are not drawn. <i>Default: one line at the bottom (above the bottom bar on phones) that fades after a few seconds, used only when the page itself doesn't show the change.</i></p></li>
+    <li><b>Text written in another language</b><p>With the switch in the header, more people read a group that wrote in another language. <i>Default: show the text as written, with the small "Latviski" / "In English" label, as today; no automatic translation.</i></p></li>
+    <li><b>Deleting your account</b><p>It doesn't exist today, and the page doesn't mention it. <i>Default: "Dzēst kontu" at the end of Iestatījumi, with a dialog; built before real people use the site.</i></p></li>
+    <li><b>Repeating events</b><p>The database can mark an event as repeating, but nothing uses it. <i>Default: it stays out; each event is created on its own, as today.</i></p></li>
+    <li><b>Reporting an event</b><p>Today only groups can be reported. <i>Default: later, together with reporting people (question 7); for now "Ziņot par grupu" in the "…" menu.</i></p></li>
+    <li><b>Discovery's cards / list switch</b><p>Today desktop can switch between cards and a list. <i>Default: it goes; desktop shows cards, phones show rows.</i></p></li>
+    <li><b>"Ko meklējam?" in one language or two</b><p><i>Default: one short text, as the team writes it, not one per language</i> (a group's longer texts keep their LV | EN versions, as today).</p></li>
+    <li><b>The admin page for moving a group to another category</b><p>It exists but isn't in the admin map. <i>Default: it opens from the site-admin tools on a group, not from the admin menu.</i></p></li>
+    <li><b>The four new drawings</b><p>The event page, Biedri, a group's Jaunumi and Mans profils were drawn on 13 October from the rules (marked Proposal). <i>Default: build them as drawn; small details are reviewed on the test site.</i></p></li>
   </ol>
 </section>`;
 
@@ -166,7 +203,7 @@ const identity = `<section aria-labelledby="h-id">
 // ── Shell
 const shell = `<section aria-labelledby="h-shell">
   <h2 id="h-shell">Header and navigation</h2>
-  <p class="lead">The header and the bottom bar are the same on every page, admin included. The person in these drawings, Ilze, is not a site admin, so her header has no shield; the admin drawings in <a href="#h-admin">Admin</a> show it. Messages and the bell open quick views from anywhere; their full pages are in your own area.</p>
+  <p class="lead">The header and the bottom bar are the same on every page, admin included. The person in these drawings, Ilze, is not a site admin, so her header has no shield; the admin drawings in <a href="#h-admin">Admin</a> show it. Messages and the bell open quick views from anywhere; their full pages are in your own area. The language switch, "LV ▾", is in the header on every page, signed in or not (your answer of 13 October: several languages are used in Latvia).</p>
   ${shots(
     shot('Desktop · signed in', st('ag'), P.desk(P.hdr(), 760), '1 1 760px'),
     shot('Desktop · site admin: the shield, left of messages', st('ag'), P.desk(P.hdr({ admin: true }), 760), '1 1 760px'),
@@ -178,6 +215,20 @@ const shell = `<section aria-labelledby="h-shell">
     shot('Phone · bottom bar', st('ag'), P.mob(P.navb('atklat'))),
   )}
   <p class="why"><b>Phones.</b> The search icon opens the search with the same place tag as on desktop. The + opens "Izveidot grupu". The bell opens Paziņojumi of your own area full-screen (you agreed a full-screen list on phones earlier). Messages are "Ziņas" in the bottom bar, with the unread count on it. In the bottom bar, "Grupas" opens Manas grupas and "Es" opens Mans profils (my default, <a href="#h-open">Still open</a>, question 2); on the pages of your own area the bar marks the matching tab (Manas grupas → Grupas, Ziņas → Ziņas, the rest → Es).</p>
+  <h3>The language switch ${st('ag', 'Agreed 13 Oct')}</h3>
+  <p class="lead">Always visible, never hidden in Iestatījumi. It shows the language you read in, short ("LV"), and opens a short list with each language written in its own words. Today the list has Latviešu and English; it is built so more languages can be added later without changing the header. On phones it sits right after the logo, before the search icon.</p>
+  ${shots(
+    shot('"LV ▾" opens a short list', st('ag'), `<div style="display:grid;gap:6px;justify-items:end;width:240px;max-width:100%">${P.desk(`<div class="rd-hdr" style="justify-content:flex-end">${P.langSw(true)}</div>`, 120)}${P.langList()}</div>`, '0 1 240px'),
+    `<div class="rd-shot" style="flex:1 1 300px;max-width:460px"><p class="why"><b>What changes with the language:</b> the site's own words, dates and numbers. What people wrote (group texts, events, messages) stays as written; where a text exists only in another language, the small "Latviski" / "In English" label stays, as today (<a href="#h-open">Still open</a>, question 18). Signed in, the choice is kept on your account; signed out, on the device.</p></div>`,
+  )}
+
+  <h3>The footer ${st('ag', 'Agreed 13 Oct')}</h3>
+  <p class="lead">A slim footer only on discovery and on reading pages (Par mums, Privātums): the logo, one line about the site, and the two links. Group pages, your own area and admin have none; they end with their content. On phones it sits above the bottom bar, at the very end of the page.</p>
+  ${shots(
+    shot('Desktop · end of discovery', st('ag'), P.desk(P.foot(), 760), '1 1 760px'),
+    shot('Phone · end of discovery', st('ag'), P.mob(P.foot() + P.navb('atklat'))),
+  )}
+
   ${shots(
     shot('Your picture opens the profile menu', st('ag'), P.profileMenu(), '0 1 260px'),
     shot('The shield opens the admin menu (admins only)', st('ag'), P.shieldMenu(), '0 1 260px'),
@@ -309,6 +360,9 @@ const search = `<section aria-labelledby="h-search">
 const gStageDesk = () => P.desk(`<div class="rd-url">ejam.lumm.eu/lv/sports-un-fitness/group/zalais-solis</div>${P.hdr()}<div class="rd-stage" style="height:640px"><div class="rd-disc">${P.cats(sportCounts, { on: 'sport' })}<div class="rd-pg">${P.frow({ cat: 'sport', sub: 2, view: 'grupas' })}${P.sel(chosenSport)}${P.cards([P.groupCard(G.zs, { sel: 1 }), G.rn], P.createCard())}</div></div><div class="rd-scrim"></div>${P.groupPanel(G.zs)}</div>`, 1040);
 const gStagePh = () => P.mob(`<div class="rd-stage" style="height:700px">${P.phdr()}<div class="rd-pg">${P.frowPh({ cat: 'sport', view: 'grupas' })}${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]], { ph: 1 })}${P.rows(P.groupRow(G.zs) + P.groupRow(G.rn) + P.groupRow(G.sk))}</div><div class="rd-scrim"></div>${P.groupPanel(G.zs, { sheet: 1 })}</div>`);
 const memberPages = [P.GPAGES.info, P.GPAGES.jaun, P.GPAGES.pas, P.GPAGES.bied];
+const teamPages = [P.GPAGES.info, P.GPAGES.jaun, P.GPAGES.pas, ['bied', 'users', 'Biedri', 2], P.GPAGES.iest];
+const pgSoc = () => P.socLinks(['Facebook', 'Instagram']);
+const MEMBERS = [{ name: 'Ilze Kalniņa', since: 'kopš 2025. gada marta', role: 'Īpašnieks' }, { name: 'Marta Ozola', since: 'kopš 2025. gada aprīļa', role: 'Mod' }, { name: 'Anna Bērziņa', since: 'kopš 2026. gada jūnija' }];
 const group = `<section aria-labelledby="h-group">
   <h2 id="h-group">A group</h2>
   <p class="lead">From a card to the group: the opened card, the one "Sazināties" button and its form, then the group's pages. The sample group for the pages is Pārgājieni.</p>
@@ -330,20 +384,33 @@ const group = `<section aria-labelledby="h-group">
   <div class="rd-roles">
     <div><b>Signed out</b><span>${P.btn('Sazināties', 'p', true)} → the sign-in pop-up; afterwards the form opens where you were.</span></div>
     <div><b>Signed in</b><span>${P.btn('Sazināties', 'p', true)}</span></div>
-    <div><b>Asked to join</b><span><span class="rd-btn s sm">${I('check')}Pieteikums nosūtīts</span> ${P.btn('Atvērt sarunu', 'q', true)}</span></div>
-    <div><b>Member</b><span>No button; your role is in the "…" menu.</span></div>
+    <div><b>Asked to join</b><span><span class="rd-btn s sm">${I('check')}Pieteikums nosūtīts</span> ${P.btn('Atvērt sarunu', 'q', true)} · "Atsaukt pieteikumu" in the "…" menu.</span></div>
+    <div><b>Member</b><span>No button; your role and "Rakstīt komandai" are in the "…" menu.</span></div>
     <div><b>Group team</b><span>No button; Iestatījumi in the group's menu, Pieteikumi as a tab on Biedri.</span></div>
   </div>
   <p class="why">As the Handbook's "Who sees what" says (updated to this one-button flow). The answer comes to Ziņas, in one conversation with the group's team.</p>
 
+  <h3>The "…" menu ${st('pr', 'Proposal, 13 Oct')}</h3>
+  <p class="lead">Next to the group's name, in the header and the phone bar. Your role comes first, as a line rather than a button; then what you can do. These are today's actions, gathered in one place; "Atsaukt pieteikumu" is your answer of 13 October. The team's tools (Iestatījumi, handing over the group) stay in Iestatījumi.</p>
+  ${shots(
+    shot('Member', st('pr'), P.groupMore('member'), '0 1 260px'),
+    shot('Asked to join, still waiting', st('ag', 'Agreed 13 Oct'), P.groupMore('pending'), '0 1 260px'),
+    shot('Not a member', st('pr'), P.groupMore('visitor'), '0 1 260px'),
+  )}
+  <p class="why"><b>"Rakstīt komandai"</b> opens the same conversation with the team as "Sazināties" (today members do this from the "all members" pop-up, which goes; <a href="#h-open">Still open</a>, question 14). "Pamest grupu" asks once more before it acts.</p>
+
   <h3>The group's pages</h3>
   <p class="lead">The coloured header, as you liked it: the group's photo as its mark, the name, category and sub-categories, then city · members as plain quiet text. On the other pages the header is lower, so the content starts higher. The pages run down the left, a page's parts are tabs. Visitors see only Informācija and the public events; Jaunumi, Biedri and members-only parts are hidden, not greyed.</p>
-  ${shots(shot('Desktop · Informācija · signed in, not a member', st('lk', 'Liked header'), P.desk(`${P.hdr()}${P.gban(G.pg, { role: 'visitor' })}<div class="rd-frame side">${P.gnav([P.GPAGES.info, P.GPAGES.pas], 'info')}<div class="rd-main">${P.tabs(['Par mums', 'Kā notiek pirmā tikšanās', 'Praktiski'], 'Par mums', 'Informācijas daļas')}<div class="rd-art"><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus. Parasti tiekamies sestdienās, reizi divās nedēļās; maršrutus izvēlamies kopā.</p></div></div><div class="rd-box2"><div class="bh">Nākamais pasākums<span>Visi${I('arrow')}</span></div>${P.evList([[dh(10, 17), [kemNoEju]]], { flat: true, noSecond: true })}</div></div>`, 1000), '1 1 100%'))}
-  ${shots(shot('Desktop · Pasākumi · group team', st('ag'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav([P.GPAGES.info, P.GPAGES.jaun, P.GPAGES.pas, ['bied', 'users', 'Biedri', 2], P.GPAGES.iest], 'pas')}<div class="rd-main">${P.tabs(['Gaidāmie', 'Pagājušie'], 'Gaidāmie', 'Pasākumi')}${P.evList(pgDays, { noSecond: true })}</div></div>`, 1000), '1 1 100%'))}
-  ${shots(shot('Desktop · Biedri → Pieteikumi · group team: where the asks arrive', st('ag'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav([P.GPAGES.info, P.GPAGES.jaun, P.GPAGES.pas, ['bied', 'users', 'Biedri', 2], P.GPAGES.iest], 'bied')}<div class="rd-main">${P.tabs(['Biedri', 'Pieteikumi 2'], 'Pieteikumi 2', 'Biedri')}<div class="rd-rows"><div class="rd-req"><span><b>Līga</b> · pirms 12 min<br>“Sveiki! Gribētu iet līdzi uz Ķemeru purvu.”</span>${P.btn('Noraidīt', 's', true)}${P.btn('Apstiprināt', 'p', true)}</div><div class="rd-req"><span><b>Kārlis</b> · vakar<br>“Esmu jauns Rīgā, meklēju kompāniju.”</span>${P.btn('Noraidīt', 's', true)}${P.btn('Apstiprināt', 'p', true)}</div></div></div></div>`, 1000), '1 1 100%'))}
+  ${shots(shot('Desktop · Informācija · signed in, not a member', st('lk', 'Liked header'), P.desk(`${P.hdr()}${P.gban(G.pg, { role: 'visitor' })}<div class="rd-frame side">${P.gnav([P.GPAGES.info, P.GPAGES.pas], 'info')}<div class="rd-main">${P.tabs(['Par mums', 'Kā notiek pirmā tikšanās', 'Praktiski'], 'Par mums', 'Informācijas daļas')}<div class="rd-art"><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus. Parasti tiekamies sestdienās, reizi divās nedēļās; maršrutus izvēlamies kopā.</p></div>${pgSoc()}</div><div class="rd-box2"><div class="bh">Nākamais pasākums<span>Visi${I('arrow')}</span></div>${P.evList([[dh(10, 17), [kemNoEju]]], { flat: true, noSecond: true })}</div></div>`, 1000), '1 1 100%'))}
+  ${shots(shot('Desktop · Pasākumi · group team', st('ag'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav(teamPages, 'pas')}<div class="rd-main">${P.tabs(['Gaidāmie', 'Pagājušie'], 'Gaidāmie', 'Pasākumi', P.btn('Izveidot pasākumu', 's', true))}${P.evList(pgDays, { noSecond: true })}</div></div>`, 1000), '1 1 100%'))}
+  ${shots(shot('Desktop · Biedri → Pieteikumi · group team: where the asks arrive', st('ag'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav(teamPages, 'bied')}<div class="rd-main">${P.tabs(['Biedri', 'Pieteikumi 2'], 'Pieteikumi 2', 'Biedri')}<div class="rd-rows"><div class="rd-req"><span><b>Līga</b> · pirms 12 min<br>“Sveiki! Gribētu iet līdzi uz Ķemeru purvu.”</span>${P.btn('Noraidīt', 's', true)}${P.btn('Apstiprināt', 'p', true)}</div><div class="rd-req"><span><b>Kārlis</b> · vakar<br>“Esmu jauns Rīgā, meklēju kompāniju.”</span>${P.btn('Noraidīt', 's', true)}${P.btn('Apstiprināt', 'p', true)}</div></div></div></div>`, 1000), '1 1 100%'))}
   <p class="why">Every ask arrives here with its message, and in Ziņas as a conversation with the team, so the team can answer before deciding.</p>
+  ${shots(shot('Desktop · Biedri · group team, one member\'s "…" open', st('pr', 'Proposal, 13 Oct'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav(teamPages, 'bied')}<div class="rd-main">${P.tabs(['Biedri', 'Pieteikumi 2'], 'Biedri', 'Biedri')}<div class="rd-pop-at"><div class="rd-rows rd-mrl">${MEMBERS.map((m) => P.memberRow(m, { team: 1 })).join('')}</div>${P.memberMenu()}</div></div></div>`, 1000), '1 1 100%'))}
+  <p class="why"><b>Biedri</b> (drawn now, from the rules): one row per member with the face, the name, since when, and the role tag; a plain member has none. Members see the list; the team also gets "…" on each row (Sūtīt ziņu, Skatīt profilu, Iecelt par moderatoru, Izslēgt no grupas). Member faces appear only here, not on Informācija (13 October).</p>
+  ${shots(shot('Desktop · Jaunumi · group team', st('pr', 'Proposal, 13 Oct'), P.desk(`${P.hdr()}${P.gban(G.pg, { low: 1, role: 'team' })}<div class="rd-frame">${P.gnav(teamPages, 'jaun')}<div class="rd-main">${P.tabs(['Aktuālie', 'Arhīvs'], 'Aktuālie', 'Jaunumi', P.btn('Jauns ieraksts', 's', true))}${P.annItem(ANN.kem, { own: 1, team: 1 })}${P.annItem(ANN.plan, { own: 1, team: 1 })}</div></div>`, 1000), '1 1 100%'))}
+  <p class="why"><b>Jaunumi</b> (drawn now): the same item as in Manas grupas, but on the group's own page the line names who wrote it and when instead of the group. The team writes with "Jauns ieraksts" (at the right end of the tabs, like "Izveidot pasākumu" on Pasākumi) and moves old items to Arhīvs or deletes them from each item's "…". Visitors don't see Jaunumi.</p>
   ${shots(
-    shot('Phone · Informācija · signed in, not a member', st('ag'), P.mob(`${P.phdr()}${P.gbar(G.pg, { role: 'visitor' })}<div class="rd-pg"><h4 class="rd-pt">Informācija</h4>${P.tabs(['Par mums', 'Kā notiek pirmā tikšanās', 'Praktiski'], 'Par mums', 'Informācijas daļas')}<div class="rd-art"><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div></div>${P.navb('atklat')}`)),
+    shot('Phone · Informācija · signed in, not a member', st('ag'), P.mob(`${P.phdr()}${P.gbar(G.pg, { role: 'visitor' })}<div class="rd-pg"><h4 class="rd-pt">Informācija</h4>${P.tabs(['Par mums', 'Kā notiek pirmā tikšanās', 'Praktiski'], 'Par mums', 'Informācijas daļas')}<div class="rd-art"><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>${pgSoc()}</div>${P.navb('atklat')}`)),
     shot('Phone · Pasākumi · member', st('ag'), P.mob(`${P.phdr()}${P.gbar(G.pg, { role: 'member' })}<div class="rd-pg"><h4 class="rd-pt">Pasākumi</h4>${P.tabs(['Gaidāmie', 'Pagājušie'], 'Gaidāmie', 'Pasākumi')}${P.evList(pgDays, { noSecond: true })}</div>${P.navb('grupas')}`)),
     shot('Phone · the pages drawer, opened', st('ag'), P.mob(`<div class="rd-stage" style="height:520px">${P.phdr()}${P.gbar(G.pg, { role: 'member' })}<div class="rd-scrim"></div><nav class="rd-drw" aria-label="Grupas lapas"><div class="h">${P.gpic(G.pg, 'sm')}<span><b>Pārgājieni</b>${catLine('trav', 'Pārgājieni, Kempings')}</span></div>${P.gnav(memberPages, 'pas')}</nav></div>`)),
   )}
@@ -351,6 +418,8 @@ const group = `<section aria-labelledby="h-group">
 </section>`;
 
 // ── Event
+/** One case of "Events you can't simply join": the rows (before and after you act), the panel, one plain line. */
+const evCase = (rowsList, panel, line) => `<div class="rd-case">${P.evList([[dh(10, 11, 'Šodien'), rowsList]])}${P.eventPanel(panel)}<p class="why">${line}</p></div>`;
 const event = `<section aria-labelledby="h-event">
   <h2 id="h-event">An event</h2>
   <p class="lead">Events are dense rows grouped by day, and a click opens the panel. The same rows appear on Discovery → Pasākumi, a group's Pasākumi, Manas grupas and in search; the same panel opens from all of them. The event's own page stays, for sharing and the full details.</p>
@@ -364,23 +433,51 @@ const event = `<section aria-labelledby="h-event">
   ${shots(
     shot('Desktop · the panel', st('lk'), P.eventPanel(), '0 1 360px'),
     shot('Phone · the same panel as a sheet', st('lk'), P.mob(`<div class="rd-stage" style="height:700px">${P.phdr()}<div class="rd-pg">${P.evList([[dh(10, 11, 'Šodien'), [E.koncert]]])}</div><div class="rd-scrim"></div>${P.eventPanel({ sheet: 1 })}</div>`)),
-    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>Like the group panel:</b> from the right on desktop over the dimmed list, a sheet on phones. Inside: the dot, category and sub-category on one line, when, where, the text, who is going (faces, not numbers), then "Eju" and "Visa informācija" on one line, and who organises it. "Eju" is a small step and easy to undo, so it sits right in the panel.</p></div>`,
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>Like the group panel:</b> from the right on desktop over the dimmed list, a sheet on phones. Inside: the dot, category and sub-category on one line, when, where, the text, who is going (faces, not numbers), then "Eju" and "Visa informācija" on one line, and who organises it. "Eju" is a small step and easy to undo, so it sits right in the panel.</p><p class="why"><b>Faces only for people who are signed in</b> (13 October): a visitor sees just the number, "12 iet", because the Handbook shows no private data to logged-out visitors.</p></div>`,
+  )}
+  ${shots(shot('Signed out · the number, no faces', st('ag', 'Agreed 13 Oct'), P.eventPanel({ out: 1 }), '0 1 360px'))}
+
+  <h3 id="q-states">Events you can't simply join ${st('op')}</h3>
+  <p class="lead">Most events are open: you press "Eju" and you are going. Some organisers want more say, and the live site already has these cases. Each is drawn below as it would look in a list (before and after you act) and in the panel. <b>Recommended:</b> the row gets one quiet word on its right ("Pieteikšanās", "Pilns", "Slēgts"); the panel says in one line what happens, and its button names the step. After you ask, or join a waiting list, the row shows the outlined "Gaida" tag under the time, the same tag as on a group request. This is <a href="#h-open">Still open</a>, question 8.</p>
+  ${shots(
+    shot('1 · Open: anyone can come', st('lk'), evCase([{ ...E.koncert }, { ...E.koncert, eju: 1 }], {}, 'Press "Eju" and you are going; "Eju" then sits under the time in every list. Most events are like this.'), '0 1 360px'),
+    shot('2 · The organiser approves who comes', st('op'), evCase([{ ...E.koncert, state: 'req' }, { ...E.koncert, state: 'req', eju: 'gaida' }], { state: 'req' }, '"Pieteikties" sends your request; until the organiser answers, the row shows "Gaida". The practical details appear once you are approved.'), '0 1 360px'),
+    shot('3 · Full, with a waiting list', st('op'), evCase([{ ...E.koncert, state: 'full' }, { ...E.koncert, state: 'full', eju: 'gaida' }], { state: 'full' }, 'You can join the waiting list; the row then shows "Gaida". If a place frees up, the organiser lets you in and the bell tells you.'), '0 1 360px'),
+    shot('4 · Sign-ups closed', st('op'), evCase([{ ...E.koncert, state: 'closed' }], { state: 'closed' }, 'No button. Whoever is already going keeps their "Eju".'), '0 1 360px'),
+  )}
+  <p class="why"><b>Cases 3 and 4 are one switch today.</b> On the live site the organiser's "Slēgt pieteikšanos" marks the event "Pilns" and the waiting list stays open. <b>Recommended:</b> keep it so, one state (case 3). Case 4, a full stop with no waiting list, is drawn only so you can choose it if you want it.</p>
+
+  <h3>The event's own page ${st('pr', 'Proposal, 13 Oct')}</h3>
+  <p class="lead">Not drawn before; drawn now from the rules (your answer of 13 October). Reached from "Visa informācija" in the panel and from shared links. It sits in the group's frame, so a visitor who arrives from a link sees whose event it is and can still write ("Sazināties"). The content is the panel's, in full.</p>
+  ${shots(shot('Desktop · the event page · signed in, not a member', st('pr'), P.desk(`${P.hdr()}${P.gban(G.vz, { low: 1, role: 'visitor' })}<div class="rd-frame">${P.gnav([P.GPAGES.info, P.GPAGES.pas], 'pas')}<div class="rd-main">${P.eventPage()}</div></div>`, 1000), '1 1 100%'))}
+  ${shots(
+    shot('Phone · the event page · group team', st('pr'), P.mob(`${P.phdr()}${P.gbar(G.vz, { role: 'team' })}<div class="rd-pg">${P.eventPage({ team: 1 })}</div>${P.navb('grupas')}`)),
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:420px"><p class="why"><b>Kept from today:</b> add to calendar, open in the map (or the online link), share, "Svarīga informācija" (for events with approval, shown once you are approved), the time zone when it isn't Latvian time, and "Šis pasākums jau ir noticis" after the date.</p><p class="why"><b>The team</b> also sees "Rīkotājiem": how many are going, waiting for approval and on the waiting list (a tap opens that list with "Apstiprināt" or "Ielaist"), and Labot, Slēgt pieteikšanos, Dzēst. Deleting asks once more and tells everyone who signed up.</p></div>`,
   )}
   <h3>Events away from home ${st('ag')}</h3>
-  <p class="lead">A group lives in one city, but a dance group performs in Liepāja and a hiking group walks in Sigulda. So an event has its own place, and every list filters by the event's place, not the group's. The Jelgava dancers' concert shows up under Liepāja; the row names Liepāja, and the panel says who organises it and where they are from.</p>
+  <p class="lead">A group lives in one city, but a dance group performs in Liepāja and a hiking group walks in Sigulda. So an event has its own place, and every list filters by the event's place, not the group's. The place is a city from the list (required, filled in with the group's city to start) plus a free address; an online event gets "Tiešsaistē" and shows under "Visur" (13 October). The Jelgava dancers' concert shows up under Liepāja; the row names Liepāja, and the panel says who organises it and where they are from.</p>
   <div style="max-width:520px">${P.evList([[dh(10, 11, 'Šodien'), [E.koncert]]])}</div>
 </section>`;
 
 // ── Own area
-const fi = (k, group, when, title, text) => `${P.el('announcement-item')}<div class="rd-fi"><span class="w">${I('list')}<a>${group}</a>${cat(k)}<span>· ${when}</span></span><b>${title}</b>${text ? `<p>${text}</p>` : ''}</div>`;
-const rq = () => `<div class="rd-rql"><div class="rd-rq"><span>Galda spēļu vakari · kopš otrd.</span>${pill('Gaida', 'out')}</div></div>`;
-const myGroups = () => P.rows(P.groupRow(G.pg, { pill: pill('Īpašnieks') }) + P.groupRow(G.rn, { pill: pill('Mod') }) + P.groupRow(G.vz));
-const myNews = () => fi('trav', 'Pārgājieni', 'vakar', 'Ķemeru takai jauna tikšanās vieta', 'Satiekamies pie Ķemeru stacijas, nevis apmeklētāju centrā. Vilciens no Rīgas 8:52.') + fi('dance', 'Vēja zirdžiņš', 'pirmd.', 'Koncerts Liepājā svētdien', 'Brauksim ar autobusu no Jelgavas 13:00.');
-const secMenu = () => P.tabs(['Tuvākie pasākumi', 'Jaunumi', 'Tavas grupas', 'Tavi pieteikumi'], 'Tuvākie pasākumi', 'Manas grupas');
+const rq = () => `${P.el('request-row')}<div class="rd-rql"><div class="rd-rq"><span>Galda spēļu vakari · kopš otrd.</span>${pill('Gaida', 'out')}<a>Atsaukt pieteikumu</a></div></div>`;
+/** Tavas grupas. `count`: the team's waiting join requests on the group's own row (Still open 9, default). */
+const myGroups = (o = { count: true }) => P.rows(P.groupRow(G.pg, { pill: pill('Īpašnieks'), count: o.count ? '2 pieteikumi' : '' }) + P.groupRow(G.rn, { pill: pill('Mod') }) + P.groupRow(G.vz));
+const myNews = () => P.annItem(ANN.kem) + P.annItem(ANN.vz);
+const myProfile = () => `<div class="rd-art rd-prof"><div class="hd"><span class="facts">Jelgava, Rīga · Ejam kopā kopš 2025. gada marta</span>${P.btn('Labot profilu', 's', true)}</div><p>Staigāju, dejoju un mācos spēlēt šahu. Labprāt pievienojos pārgājieniem nedēļas nogalēs.</p></div>${myGroups({ count: false })}`;
+const secMenu = (o = {}) => P.tabs([...(o.act ? ['Jārīkojas'] : []), 'Tuvākie pasākumi', 'Jaunumi', 'Tavas grupas', 'Tavi pieteikumi'], o.act ? 'Jārīkojas' : 'Tuvākie pasākumi', 'Manas grupas');
 const ntList = () => `<div class="rd-nsec">Šodien</div>${P.ntItem(P.NT.anna)}${P.ntItem(P.NT.ok)}${P.ntItem(P.NT.ev3)}<div class="rd-nsec">Agrāk</div>${P.ntItem(P.NT.marta)}${P.ntItem(P.NT.kem)}`;
 const me = `<section aria-labelledby="h-me">
   <h2 id="h-me">Your own area</h2>
   <p class="lead">${st('ag')} One space for one person, like a group (you chose (a), and will still review it). Your picture and name on top; the pages down the left: Mans profils, Manas grupas, Ziņas, Paziņojumi, Iestatījumi. On phones the pages go into the ☰ drawer and a page's parts stay across, as on a group page. It opens from the profile menu, from "Grupas" and "Es" in the bottom bar, and from "Atvērt visas ziņas" in the messages drawer and "Skatīt visus" in the bell's list.</p>
+
+  <h3>Mans profils ${st('pr', 'Proposal, 13 Oct')}</h3>
+  <p class="lead">Not drawn before; drawn now from the rules on this page (your answer of 13 October). Your profile as other people see it: a few words about you, your places, since when you are here, and your groups with your role. "Labot profilu" opens the same page as a form (name, picture, about you, places, and the three privacy switches); where it lives is <a href="#h-open">Still open</a>, question 10. Someone else's profile looks the same, with only the groups you share and a "Sūtīt ziņu" button.</p>
+  ${shots(shot('Desktop · Mans profils', st('pr'), P.desk(`${P.hdr({ on: 'av' })}${P.phd()}<div class="rd-frame">${P.ownMenu('profils')}<div class="rd-main">${myProfile()}</div></div>`, 1000), '1 1 100%'))}
+  ${shots(
+    shot('Phone · Mans profils ("Es" in the bottom bar)', st('pr'), P.mob(`${P.phdr({ on: 'av' })}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Mans profils</h4>${myProfile()}</div>${P.navb('es')}`)),
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>The groups</b> are group rows with your role, as in Tavas grupas, because this is how others see where you belong. What others see follows your privacy switches, as today.</p></div>`,
+  )}
 
   <h3>Manas grupas ${st('ag')}</h3>
   <p class="lead">Drawn once, here. Its sections run across as a horizontal menu that stays on top while you scroll and marks the section in view; a tap jumps to it. The menu is their only label, so the sections carry no titles of their own, only a thin line between them: Tuvākie pasākumi as event rows with the group and category line, Jaunumi with the group and category, Tavas grupas as group rows with your role, and Tavi pieteikumi, quieter and apart. A section with nothing new is left out. The page ends; nothing is suggested.</p>
@@ -388,7 +485,15 @@ const me = `<section aria-labelledby="h-me">
   ${shots(
     shot('Phone · Manas grupas ("Grupas" in the bottom bar)', st('ag'), P.mob(`${P.phdr()}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Manas grupas</h4>${secMenu()}${P.evList(myDays)}<hr class="rd-fsep">${myNews()}<hr class="rd-fsep">${myGroups()}<hr class="rd-fsep">${rq()}<p class="rd-fend">Tas ir viss jaunais.</p></div>${P.navb('grupas')}`)),
     shot('Phone · the drawer, opened', st('ag'), P.mob(`<div class="rd-stage" style="height:520px">${P.phdr()}${P.ownBar()}<div class="rd-scrim"></div><nav class="rd-drw" aria-label="Tava vieta"><div class="h"><span class="rd-bigav sm" role="img" aria-label="Ilzes attēls"></span><span><b>Ilze Kalniņa</b><small>Jelgava · 3 grupas</small></span></div>${P.ownMenu('grupas')}</nav></div>`)),
-    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>Tavi pieteikumi.</b> A request still waiting is not news, and you are not a member yet, so it isn't in the feed or under Tavas grupas: a quiet outlined list with the group's name, since when, and "Gaida". When the team answers, the answer shows once in Jaunumi; accepted, the group moves into Tavas grupas.</p><p class="why"><b>Nothing looks like a button that isn't one.</b> The group's name is the only link in a Jaunumi item; the small list icon says what kind of item it is.</p></div>`,
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>Tavi pieteikumi.</b> A request still waiting is not news, and you are not a member yet, so it isn't in the feed or under Tavas grupas: a quiet outlined list with the group's name, since when, "Gaida" and "Atsaukt pieteikumu" (your answer of 13 October; the same is in the group's "…" menu). When the team answers, the answer shows once in Jaunumi; accepted, the group moves into Tavas grupas.</p><p class="why"><b>Nothing looks like a button that isn't one.</b> The group's name is the only link in a Jaunumi item; the small list icon says what kind of item it is.</p><p class="why"><b>"2 pieteikumi"</b> on Pārgājieni: Ilze runs it and two people are waiting for an answer. Drawn with the default of <a href="#q-team">Still open, 9</a>; the other way is drawn below.</p></div>`,
+  )}
+
+  <h3 id="q-team">Waiting join requests for the group team ${st('op')}</h3>
+  <p class="lead"><b>What "Jārīkojas" is:</b> on the live site, Manas grupas starts with a list called "Jārīkojas" ("needs your action"): the groups you help run where someone has asked to join and is waiting for an answer. The redesign has no such section. Two ways, recommended first. Both are Ilze's Manas grupas on a phone; she owns Pārgājieni, where Līga and Kārlis are waiting.</p>
+  ${shots(
+    shot('Recommended · no section: "2 pieteikumi" on the group\'s row in Tavas grupas', st('op', 'Open · recommended'), P.mob(`${P.phdr()}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Manas grupas</h4>${secMenu()}${P.evList(myDays.slice(0, 1))}<hr class="rd-fsep">${myGroups()}</div>${P.navb('grupas')}`)),
+    shot('The other way · a separate "Jārīkojas" section first', st('op'), P.mob(`${P.phdr()}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Manas grupas</h4>${secMenu({ act: 1 })}${P.rows(P.groupRow(G.pg, { count: '2 pieteikumi', pill: pill('Īpašnieks') }))}<hr class="rd-fsep">${P.evList(myDays.slice(0, 1))}<hr class="rd-fsep">${myGroups({ count: false })}</div>${P.navb('grupas')}`)),
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:400px"><p class="why"><b>Recommended:</b> the count sits on the group itself, so there is nothing new to learn, and a tap on "2 pieteikumi" opens Biedri → Pieteikumi. The bell already says when someone asks.</p><p class="why"><b>The other way</b> keeps today's habit: a list of "things to do" on top. It is easier to spot when you run several groups, but it repeats the group a second time on the same page.</p></div>`,
   )}
 
   <h3>Ziņas ${st('ag')}</h3>
@@ -510,6 +615,8 @@ const SYM = {
   settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 6.2l2.1 2.1M17.7 15.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 17.8l2.1-2.1M17.7 8.3l2.1-2.1"/>',
   logout: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
   dots: '<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',
+  share: '<circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/>',
+  flag: '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
   sliders: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
 };
 const sprite = `<svg width="0" height="0" style="position:absolute" aria-hidden="true">\n${Object.entries(SYM).map(([k, v]) => `  <symbol id="i-${k}" viewBox="0 0 24 24">${v}</symbol>`).join('\n')}\n</svg>`;
@@ -542,6 +649,93 @@ const EXTRA_CSS = `
 .rd .rd-spm{color:var(--muted);font-size:13px;padding-top:8px}
 .rd .rd-spa{margin-top:8px;padding-top:10px;border-top:1px solid var(--line);color:var(--brand);font-weight:600;font-size:14px;display:flex;gap:6px;align-items:center}
 .rd .rd-spa svg.i{width:16px;height:16px}
+/* v9.2: language switch and footer */
+.rd .rd-lang{display:inline-flex;align-items:center;gap:1px;height:32px;padding:0 6px 0 9px;border-radius:999px;font:600 13px var(--body);color:var(--fg);flex:none;white-space:nowrap}
+.rd .rd-lang svg.i{width:14px;height:14px;color:var(--muted)}
+.rd .rd-lang.open{background:var(--tint)}
+.rd .rd-hdr.ph .rd-lang{padding:0 1px 0 3px;font-size:12px}
+.rd .rd-hdr.ph .rd-ico{width:30px}
+.rd .rd-hdr.ph .rd-av{margin-left:2px}
+.rd .rd-hdr.ph .rd-lang svg.i{width:12px;height:12px}
+.rd .rd-langl{width:200px}
+.rd .rd-langl .rd-mi svg.i{color:var(--brand)}
+.rd .rd-langl .rd-mi .sp{width:17px;flex:none}
+.rd .rd-langl .rd-mi.on{font-weight:600}
+.rd .rd-foot{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;padding:14px 20px;background:var(--surface);border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.rd .rd-foot .rd-logo{font-size:16px;margin-right:0}
+.rd .rd-foot .rd-logo::after{width:9px;height:9px;box-shadow:6px 0 0 0 color-mix(in srgb,var(--brand) 45%,transparent);margin:0 6px 0 5px}
+.rd .rd-foot .m{flex:1 1 200px;min-width:0}
+.rd .rd-foot .ln{display:flex;gap:16px}
+.rd .rd-foot a,.rd .rd-soc a{color:var(--brand);font-weight:600;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.rd .rd-mob .rd-foot{padding:12px}
+/* v9.2: events you can't simply join, the event page */
+.rd .rd-er .ct .es{color:var(--fg);font-weight:500}
+.rd .rd-pnl p.es,.rd .rd-evp p.es{font-size:13px;color:var(--muted)}
+.rd .rd-case{display:grid;gap:10px;width:360px;max-width:100%}
+.rd .rd-evp{background:var(--surface);border-radius:16px;overflow:hidden;display:grid;min-width:0}
+.rd .rd-evp .pic{height:150px;background-color:color-mix(in srgb,var(--c) 20%,var(--surface))}
+.rd .rd-mob .rd-evp .pic{height:110px}
+.rd .rd-evp .bd{padding:14px 18px 18px;display:grid;gap:9px;min-width:0}
+.rd .rd-evp h3{font-size:24px}
+.rd .rd-mob .rd-evp h3{font-size:20px}
+.rd .rd-evp p{margin:0;font-size:14px}
+.rd .rd-evp .facts{display:flex;align-items:flex-start;gap:6px;font-size:14px;color:var(--muted)}
+.rd .rd-evp .facts svg.i{width:16px;height:16px;margin-top:3px;flex:none}
+.rd .rd-evp .facts a{color:var(--brand);font-weight:600;white-space:nowrap;margin-left:4px}
+.rd .rd-evp .imp{background:var(--tint);border-radius:12px;padding:9px 12px;display:grid;gap:2px}
+.rd .rd-evp .imp b{font:600 13px var(--body)}
+.rd .rd-evp .going{font-size:14px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.rd .rd-evp .act{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.rd .rd-evp .rd-box2.org{margin:0 14px 14px;padding-bottom:12px;gap:8px;background:var(--bg)}
+.rd .rd-evp .org .ln{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:14px;color:var(--muted)}
+.rd .rd-evp .org .ln b{color:var(--fg)}
+.rd .rd-evp .org .row{display:flex;gap:8px;flex-wrap:wrap}
+/* v9.2: a group's tabs with the team's action, the "…" menu, members, news, social links */
+.rd .rd-tabr{display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid var(--line);min-width:0}
+.rd .rd-tabr .rd-tabs{flex:1;border-bottom:0;min-width:0}
+.rd .rd-tabr>.rd-btn{margin-bottom:6px}
+.rd .rd-mhd{display:block;padding:6px 10px 4px;font-size:12px;color:var(--muted)}
+.rd .rd-pop-at{position:relative;min-width:0;min-height:230px}
+.rd .rd-pop-at>.rd-menu{position:absolute;right:6px;top:52px;z-index:2}
+.rd .rd-mr{display:flex;align-items:center;gap:10px;min-width:0}
+.rd .rd-mr .av{width:36px;height:36px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font:600 15px var(--display);color:var(--fg);flex:none}
+.rd .rd-mr .t{display:grid;flex:1;min-width:0;line-height:1.3}
+.rd .rd-mr .t b{font:600 15px var(--display);color:var(--fg)}
+.rd .rd-mr .t small{font-size:12px;color:var(--muted)}
+.rd .rd-fi .w .mbtn{margin-left:auto;width:28px;height:28px}
+.rd .rd-soc{margin:0;display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px}
+.rd .rd-gr .rd-cnt{font:600 12px var(--body);color:var(--brand);white-space:nowrap;flex:none}
+.rd .rd-rq a{color:var(--brand);font-weight:600;font-size:12px;white-space:nowrap;flex:none}
+.rd .rd-prof{display:grid;gap:8px}
+.rd .rd-prof .hd{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap}
+.rd .rd-prof .facts{font-size:13px;color:var(--muted)}
+/* v9.2: Compared with the live app */
+.rd .rd-cmp{display:grid;background:var(--surface);border-radius:16px;padding:2px 16px;font-size:13px;min-width:0}
+.rd .rd-cmp .r{display:grid;gap:4px 14px;padding:8px 0;border-top:1px solid var(--line);align-items:start;color:var(--muted);min-width:0}
+.rd .rd-cmp .r:first-child{border-top:0}
+.rd .rd-cmp .r>span{min-width:0;overflow-wrap:anywhere}
+.rd .rd-cmp .r>span:nth-child(2){color:var(--fg)}
+.rd .rd-cmp .hd>span{font:600 12px var(--body);color:var(--muted)!important}
+.rd .rd-cmp b{color:var(--fg)}
+.rd .rd-cmp a{color:var(--brand);font-weight:600}
+.rd .rd-cmp .rd-st{font-size:11px;padding:3px 7px;vertical-align:1px}
+.rd .rd-cmp .nt{display:block;margin-top:3px}
+.rd .rd-cmp .path,.rd .rd-build .path{display:block;font:11px/1.35 ui-monospace,monospace;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.rd .rd-cmp.a .r{grid-template-columns:26px minmax(0,1.2fr) 120px 112px minmax(0,1.6fr)}
+.rd .rd-cmp.b .r{grid-template-columns:34px minmax(0,1.2fr) minmax(0,1fr)}
+.rd .rd-cmp.c .r{grid-template-columns:34px minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)}
+.rd .rd-cmp.d .r{grid-template-columns:34px minmax(0,.8fr) minmax(0,.8fr) minmax(0,1.6fr)}
+.rd .rd-mig{display:inline-block;font:600 11px/1.5 var(--body);padding:0 7px;border-radius:999px;background:color-mix(in srgb,var(--brand) 16%,var(--surface));color:var(--fg);white-space:nowrap}
+@media (max-width:760px){
+.rd .rd-cmp .hd{display:none}
+.rd .rd-cmp.a .r,.rd .rd-cmp.b .r,.rd .rd-cmp.c .r,.rd .rd-cmp.d .r{grid-template-columns:30px minmax(0,1fr)}
+.rd .rd-cmp .r>span:nth-child(n+3){grid-column:2}
+.rd .rd-cmp .r>span[data-h]::before{content:attr(data-h) ": ";font-weight:600;color:var(--fg)}
+}
+.rd .rd-build{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.rd .rd-build li{background:var(--surface);border-radius:14px;padding:10px 16px}
+.rd .rd-build b{font:600 15px var(--display)}
+.rd .rd-build p{margin:2px 0 0;font-size:14px;color:var(--muted)}
 `;
 
 const html = `<!-- Redesign discussion. Discussion only. Rendered at /admin/development/redesign. Version, update time and the sections marked New/Updated live in docs/development/redesign.meta.json: bump them whenever this file changes.
@@ -563,6 +757,7 @@ ${event}
 ${me}
 ${pop}
 ${admin}
+${liveSection()}
 ${notes}
 </div>
 </div>

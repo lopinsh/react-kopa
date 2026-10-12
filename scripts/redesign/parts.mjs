@@ -57,14 +57,18 @@ export const createCard = () => `${el('create-card')}<div class="rd-gc add"><spa
 export const cards = (list, extra = '') => `<div class="rd-gcards">${list.map((g) => typeof g === 'string' ? g : groupCard(g)).join('')}${extra}</div>`;
 
 // ── Group row: phones and every compact list (source: Discovery → Group card and group row)
-export const groupRow = (g, o = {}) => `${el('group-row')}<div class="rd-gr" style="${cv(g.cat)}"><span class="t"><b class="clamp2">${o.hl ?? g.name}</b><small><span class="a">${catName(g.cat)} · ${g.subs}</span><span class="b">&nbsp;· ${g.city} · ${biedri(g.n)}${o.extra ? ` · ${o.extra}` : ''}</span></small></span>${o.pill ?? ''}<span class="mk">${catIco(g.cat)}</span></div>`;
+export const groupRow = (g, o = {}) => `${el('group-row')}<div class="rd-gr" style="${cv(g.cat)}"><span class="t"><b class="clamp2">${o.hl ?? g.name}</b><small><span class="a">${catName(g.cat)} · ${g.subs}</span><span class="b">&nbsp;· ${g.city} · ${biedri(g.n)}${o.extra ? ` · ${o.extra}` : ''}</span></small>${o.count ? `<span class="rd-cnt">${o.count}</span>` : ''}</span>${o.pill ?? ''}<span class="mk">${catIco(g.cat)}</span></div>`;
 export const createRow = () => `${el('create-row')}<div class="rd-gr add"><span class="t"><b>Izveidot jaunu grupu</b><small>šajā kategorijā</small></span><span class="mk">${I('plus')}</span></div>`;
 export const rows = (html) => `<div class="rd-grl">${html}</div>`;
 
 // ── Event row (source: Event → Event row)
+/** The quiet word on the right of an event row when you can't simply say "Eju" (Still open 8). */
+export const EV_STATE = { req: 'Pieteikšanās', full: 'Pilns', closed: 'Slēgts' };
 export const ev = (e, o = {}) => {
+  const ct = [o.noCity ? '' : e.city, EV_STATE[e.state] ? `<span class="es">${EV_STATE[e.state]}</span>` : ''].filter(Boolean).join(' · ');
+  const tag = e.eju === 'gaida' ? pill('Gaida', 'out') : pill('', 'eju');
   const second = o.noSecond ? '' : `<span class="sl"><a>${e.group}</a><span>· ${catName(e.cat)}</span><span class="rd-sub">· ${e.sub}</span></span>`;
-  return `${el('event-row')}<div class="rd-er${e.sel ? ' sel' : ''}${o.noSecond ? ' one' : ''}" style="${cv(e.cat)}"><span class="tm">${e.time}</span><span class="dt"></span><b>${e.name}</b><span class="ct">${o.noCity ? '' : e.city}</span>${e.eju ? `<span class="tmb">${pill('', 'eju')}</span>` : ''}${second}</div>`;
+  return `${el('event-row')}<div class="rd-er${e.sel ? ' sel' : ''}${o.noSecond ? ' one' : ''}" style="${cv(e.cat)}"><span class="tm">${e.time}</span><span class="dt"></span><b>${e.name}</b><span class="ct">${ct}</span>${e.eju ? `<span class="tmb">${tag}</span>` : ''}${second}</div>`;
 };
 export const dayh = (t) => `<div class="rd-dayh">${t}</div>`;
 /** days: [[heading, [events]]]. */
@@ -73,20 +77,25 @@ export const evList = (days, o = {}) => `<div class="rd-evl${o.flat ? ' flat' : 
 // ── Headers (source: Header and navigation)
 export const ctag = (place = 'Jelgava', open = false) => `<span class="rd-ctag${open ? ' open' : ''}" role="button" aria-haspopup="listbox" aria-label="Vieta: ${place}">${I('pin')}${place}${I('down')}</span>`;
 export const searchIdle = (place = 'Jelgava') => `<span class="rd-search">${I('search')}${ctag(place)}<span class="ph">Meklē grupu vai nodarbi…</span></span>`;
+/** The language switch: visible in the header on every page; the list is short and takes more languages later. */
+export const langSw = (open = false) => `${el('language-switch')}<span class="rd-lang${open ? ' open' : ''}" role="button" aria-haspopup="listbox" aria-label="Valoda: latviešu">LV${I('down')}</span>`;
+export const langList = () => `${el('language-list')}<div class="rd-menu rd-langl" role="listbox" aria-label="Valoda"><span class="rd-mi on" role="option" aria-selected="true">${I('check')}Latviešu<small>LV</small></span><span class="rd-mi" role="option" aria-selected="false"><i class="sp"></i>English<small>EN</small></span></div>`;
 export const hdr = (o = {}) => {
   const search = o.search ?? searchIdle(o.place);
-  if (o.signedOut) return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}<span class="rd-btn p sm">Ienākt</span></div>`;
+  if (o.signedOut) return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}${langSw(o.lang)}<span class="rd-btn p sm">Ienākt</span></div>`;
   const on = (k) => (o.on === k ? ' on' : '');
-  return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}<span class="rd-ico plus" title="Izveidot grupu" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('msg')}" aria-label="Ziņas, 2 nelasītas">${I('msg')}<span class="dot"></span></span><span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
+  return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}${langSw(o.lang)}<span class="rd-ico plus" title="Izveidot grupu" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('msg')}" aria-label="Ziņas, 2 nelasītas">${I('msg')}<span class="dot"></span></span><span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
 };
 export const phdr = (o = {}) => {
   const on = (k) => (o.on === k ? ' on' : '');
-  return `${el('header-phone')}<div class="rd-hdr ph"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="sp"></span><span class="rd-ico${on('search')}" aria-label="Meklēt">${I('search')}</span><span class="rd-ico plus" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
+  return `${el('header-phone')}<div class="rd-hdr ph"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="sp"></span>${langSw(o.lang)}<span class="rd-ico${on('search')}" aria-label="Meklēt">${I('search')}</span><span class="rd-ico plus" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
 };
 export const navb = (on) => {
   const it = (k, icon, label, badge) => `<span${on === k ? ' class="on" aria-current="page"' : ''}>${I(icon)}${label}${badge ? `<em>${badge}</em>` : ''}</span>`;
   return `${el('bottom-bar')}<div class="rd-navb">${it('atklat', 'search', 'Atklāt')}${it('grupas', 'users', 'Grupas')}${it('zinas', 'msg', 'Ziņas', 2)}${it('es', 'user', 'Es')}</div>`;
 };
+/** Slim footer: discovery and reading pages only (About, Privacy); none on group, own-area or admin pages. */
+export const foot = () => `${el('footer')}<footer class="rd-foot"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="m">Atrodi savējos, augam kopā.</span><span class="ln"><a>Par mums</a><a>Privātums</a></span></footer>`;
 export const profileMenu = () => `${el('profile-menu')}<div class="rd-menu" role="menu" aria-label="Profila izvēlne"><span class="rd-mi">${I('user')}Mans profils</span><span class="rd-mi">${I('users')}Manas grupas<em>3</em></span><span class="sep"></span><span class="rd-mi">${I('settings')}Iestatījumi</span><span class="rd-mi">${I('logout')}Iziet</span></div>`;
 export const shieldMenu = () => `${el('shield-menu')}<div class="rd-menu" role="menu" aria-label="Administrēšana"><span class="rd-mi">${I('note')}Atsauksmju režīms<small>Izslēgts</small></span><span class="rd-mi">${I('globe')}Tulkošanas režīms<small>Izslēgts</small></span><span class="sep"></span><span class="rd-mi">${I('shield')}Administrēšanas panelis${I('arrow')}</span></div>`;
 
@@ -178,7 +187,22 @@ export const dayStrip = (selDay = 11, o = {}) => {
 
 // ── Panels (source: Group → The opened card; Event → The event panel)
 export const groupPanel = (g, o = {}) => `${el('group-panel')}<aside class="rd-pnl${o.sheet ? ' sheet' : ''}" style="${cv(g.cat)}" aria-label="Grupas ātrais skats">${o.sheet ? '<span class="grab"></span>' : ''}<div class="pic ph ph-${g.ph}" role="img" aria-label="Grupas attēls"><span class="x" aria-label="Aizvērt">${I('x')}</span></div><div class="bd"><h3>${g.name}</h3>${catLine(g.cat, g.subs)}<span class="facts">${g.city} · ${biedri(g.n)}</span><p class="note">${I('cal')}Nākamā tikšanās: ${g.nextFull}</p><p>${g.text}</p>${btn('Sazināties')}${lnk('Atvērt grupas lapu')}</div></aside>`;
-export const eventPanel = (o = {}) => `${el('event-panel')}<aside class="rd-pnl${o.sheet ? ' sheet' : ''}" style="${cv('dance')}" aria-label="Pasākuma ātrais skats">${o.sheet ? '<span class="grab"></span>' : ''}<div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"><span class="x" aria-label="Aizvērt">${I('x')}</span></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}Svētd., 11. okt. 17:00–19:00</span><span class="facts">${I('pin')}Liepāja, Latviešu biedrības nams, Rožu iela 5</span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p><span class="going"><span class="faces"><i></i><i></i><i></i></span>Ilze un vēl 11 iet</span><div class="act">${btn('Eju', 'p', true)}${lnk('Visa informācija')}</div><span class="org">Rīko <a>Vēja zirdžiņš</a> · Jelgava</span></div></aside>`;
+/** What the event panel and page say when you can't simply say "Eju" (Still open 8). */
+export const EV_NOTE = {
+  req: 'Organizators apstiprina, kas piedalīsies.',
+  full: 'Pasākums ir pilns. Vari pieteikties gaidīšanas sarakstā.',
+  closed: 'Pieteikšanās ir slēgta.',
+};
+/** The join line of an event: the note (if any), then the button and "Visa informācija" on one line. */
+const evAct = (o, more) => {
+  const b = { req: btn('Pieteikties', 'p', true), full: btn('Pieteikties gaidīšanas sarakstā', 'p', true), closed: '' }[o.state] ?? btn('Eju', 'p', true);
+  return `${EV_NOTE[o.state] ? `<p class="es">${EV_NOTE[o.state]}</p>` : ''}<div class="act">${b}${more}</div>`;
+};
+/** Who is going: faces and a name for signed-in viewers, only the number for visitors (13 Oct). */
+const going = (o) => o.out ? '<span class="going">12 iet</span>' : '<span class="going"><span class="faces"><i></i><i></i><i></i></span>Ilze un vēl 11 iet</span>';
+export const eventPanel = (o = {}) => `${el('event-panel')}<aside class="rd-pnl${o.sheet ? ' sheet' : ''}" style="${cv('dance')}" aria-label="Pasākuma ātrais skats">${o.sheet ? '<span class="grab"></span>' : ''}<div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"><span class="x" aria-label="Aizvērt">${I('x')}</span></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}Svētd., 11. okt. 17:00–19:00</span><span class="facts">${I('pin')}Liepāja, Latviešu biedrības nams, Rožu iela 5</span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p>${going(o)}${evAct(o, lnk('Visa informācija'))}<span class="org">Rīko <a>Vēja zirdžiņš</a> · Jelgava</span></div></aside>`;
+/** The event's own page (proposal, 13 Oct): the panel's content in full, inside the group's frame. */
+export const eventPage = (o = {}) => `${el('event-page')}<article class="rd-evp" style="${cv('dance')}"><div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}<span>Svētd., 11. okt. 17:00–19:00 <a>Pievienot kalendāram</a></span></span><span class="facts">${I('pin')}<span>Liepāja, Latviešu biedrības nams, Rožu iela 5 <a>Atvērt kartē</a></span></span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p><div class="imp"><b>Svarīga informācija</b><p>Ieeja no Rožu ielas puses. Dejotājiem līdzi ērtus apavus.</p></div>${going(o)}${evAct(o, `<span class="rd-lnk q">${I('share')}Dalīties</span>`)}</div>${o.team ? `<div class="rd-box2 org">${el('event-organiser')}<div class="bh">Rīkotājiem</div><div class="ln"><span>Iet <b>12</b></span><span>Pieteikumi <b>0</b></span><span>Gaidīšanas sarakstā <b>0</b></span></div><div class="row">${btn('Labot', 's', true)}${btn('Slēgt pieteikšanos', 's', true)}${btn('Dzēst', 's', true)}</div></div>` : ''}</article>`;
 
 // ── The contact form (source: Group → One button: Sazināties)
 export const contactDialog = (o = {}) => o.sent
@@ -193,7 +217,29 @@ export const gban = (g, o = {}) => `${el('group-banner')}<div class="rd-gban${o.
 export const gbar = (g, o = {}) => `${el('group-bar-phone')}<div class="rd-gbar" style="${cv(g.cat)}"><span class="mbtn" aria-label="Grupas lapas">${I('menu')}</span>${gpic(g, 'sm')}<span class="t"><b>${g.name}</b><small><span class="a"><i class="kd"></i>${catName(g.cat)}</span><span class="b">&nbsp;· ${g.city} · ${biedri(g.n)}</span></small></span><span class="mbtn q" aria-label="Vairāk">${I('dots')}</span>${o.role === 'visitor' ? `<span class="act">${btn('Sazināties', 'p', true)}</span>` : ''}</div>`;
 export const gnav = (items, on) => `${el('group-menu')}<nav class="rd-gnav" aria-label="Grupas lapas">${items.map(([k, icon, label, badge]) => `<span${k === on ? ' class="on"' : ''}>${I(icon)}${label}${badge ? `<em>${badge}</em>` : ''}</span>`).join('')}</nav>`;
 export const GPAGES = { info: ['info', 'note', 'Informācija'], jaun: ['jaun', 'list', 'Jaunumi'], pas: ['pas', 'cal', 'Pasākumi'], bied: ['bied', 'users', 'Biedri'], iest: ['iest', 'settings', 'Iestatījumi'] };
-export const tabs = (list, on, label) => `<div class="rd-tabs" role="tablist" aria-label="${label}">${list.map((t) => `<span${t === on ? ' class="on"' : ''} role="tab" aria-selected="${t === on}">${t}</span>`).join('')}</div>`;
+/** A page's parts as tabs; `act` (the team's one action, e.g. "Jauns ieraksts") sits at the right end. */
+export const tabs = (list, on, label, act = '') => {
+  const t = `<div class="rd-tabs" role="tablist" aria-label="${label}">${list.map((x) => `<span${x === on ? ' class="on"' : ''} role="tab" aria-selected="${x === on}">${x}</span>`).join('')}</div>`;
+  return act ? `<div class="rd-tabr">${t}${act}</div>` : t;
+};
+/** The group's "…" menu: your role first (a line, not a button), then what you can do. */
+export const groupMore = (role = 'member') => {
+  const mi = (icon, t) => `<span class="rd-mi" role="menuitem">${I(icon)}${t}</span>`;
+  const head = { member: 'Tu esi šīs grupas biedrs', pending: 'Tavs pieteikums gaida atbildi', visitor: '' }[role];
+  const items = role === 'pending'
+    ? [mi('x', 'Atsaukt pieteikumu'), '<span class="sep"></span>', mi('share', 'Dalīties'), mi('flag', 'Ziņot par grupu')]
+    : role === 'member'
+      ? [mi('msg', 'Rakstīt komandai'), mi('share', 'Dalīties'), mi('flag', 'Ziņot par grupu'), '<span class="sep"></span>', mi('logout', 'Pamest grupu')]
+      : [mi('share', 'Dalīties'), mi('flag', 'Ziņot par grupu')];
+  return `${el('group-more-menu')}<div class="rd-menu" role="menu" aria-label="Vairāk">${head ? `<span class="rd-mhd">${head}</span>` : ''}${items.join('')}</div>`;
+};
+/** Social links: quiet text links at the end of Informācija (13 Oct). */
+export const socLinks = (list) => `${el('social-links')}<p class="rd-soc">${list.map((t) => `<a>${t}</a>`).join('')}</p>`;
+/** A member on Biedri: face, name, since when, the role tag; the team gets "…" on each row. */
+export const memberRow = (m, o = {}) => `${el('member-row')}<div class="rd-mr"><span class="av">${m.name[0]}</span><span class="t"><b>${m.name}</b><small>${m.since}</small></span>${m.role ? pill(m.role) : ''}${o.team ? `<span class="mbtn q" aria-label="Darbības ar biedru">${I('dots')}</span>` : ''}</div>`;
+export const memberMenu = () => `${el('member-menu')}<div class="rd-menu" role="menu" aria-label="Darbības ar biedru"><span class="rd-mi">${I('msg')}Sūtīt ziņu</span><span class="rd-mi">${I('user')}Skatīt profilu</span><span class="sep"></span><span class="rd-mi">${I('shield')}Iecelt par moderatoru</span><span class="rd-mi">${I('x')}Izslēgt no grupas</span></div>`;
+/** A Jaunumi item. In a feed: the group (a link) and its category; on the group's own page: who wrote it and when. */
+export const annItem = (a, o = {}) => `${el('announcement-item')}<div class="rd-fi"><span class="w">${I('list')}${o.own ? `<span>${a.by} · ${a.when}</span>${o.team ? `<span class="mbtn q" aria-label="Vairāk">${I('dots')}</span>` : ''}` : `<a>${a.group}</a>${cat(a.k)}<span>· ${a.when}</span>`}</span><b>${a.title}</b>${a.text ? `<p>${a.text}</p>` : ''}</div>`;
 
 // ── Own area (source: Your own area)
 export const phd = () => `${el('person-header')}<div class="rd-phd"><span class="rd-bigav" role="img" aria-label="Ilzes attēls"></span><span class="t"><b>Ilze Kalniņa</b><small>Jelgava · 3 grupas</small></span></div>`;
