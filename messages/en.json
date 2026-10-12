@@ -1292,7 +1292,7 @@
     "threadSend": "Send reply",
     "openList": "All notes",
     "delete": "Delete",
-    "deleteTitle": "Delete this note?",
+    "deleteTitle": "Delete this note?",
     "deleted": "Note deleted",
     "pinLabel": "Note {n}",
     "kind": {
