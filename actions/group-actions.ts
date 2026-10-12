@@ -30,6 +30,7 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
         revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
+        updateTag('groups');
         // A pending city becomes public with the first group that uses it (CityService names).
         updateTag(CITIES_TAG);
 
@@ -133,6 +134,7 @@ export async function leaveGroup(groupId: string, locale: string): Promise<Actio
         if (!result.success) return result as ActionResponse;
 
         revalidatePath(`/${locale}/discover`, 'page');
+        updateTag('groups');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'LEAVE_FAILED');
@@ -168,6 +170,8 @@ export async function manageMembership(
 
         revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/members`, 'page');
+        // Approving changes the member count and avatars on discovery cards.
+        updateTag('groups');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
@@ -206,6 +210,7 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        updateTag('groups');
         updateTag(CITIES_TAG);
 
         return { success: true, data: { slug, l1Slug } };
@@ -230,6 +235,7 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
         updateTag('events');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}`, 'page');
+        updateTag('groups');
 
         return { success: true };
     } catch (error) {
@@ -257,6 +263,7 @@ export async function upsertSectionAction(
 
         const { slug, l1Slug, sectionId } = result.data!;
 
+        updateTag('groups');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
@@ -366,6 +373,7 @@ export async function kickMember(groupId: string, targetUserId: string, locale: 
     try {
         const result = await GroupService.removeMember(groupId, targetUserId, session.user.id);
         if (!result.success) return result as ActionResponse;
+        updateTag('groups');
 
         const slugs = await GroupService.getGroupSlugs(groupId);
         if (slugs) {

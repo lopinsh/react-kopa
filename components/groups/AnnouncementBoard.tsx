@@ -59,7 +59,7 @@ export default function AnnouncementBoard({ groupId, locale }: Props) {
         if (busyId) return;
         setBusyId(post.id);
         setError(null);
-        const result = await setPostArchived(post.id, post.archivedAt === null);
+        const result = await setPostArchived(post.id, post.archivedAt === null, locale);
         if (result.success) await load();
         else setError(result.error);
         setBusyId(null);

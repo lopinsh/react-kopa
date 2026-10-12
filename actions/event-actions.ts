@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { NotificationService } from '@/lib/services/notification.service';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
@@ -40,6 +40,8 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
 
         revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/events`, 'page');
+        // Discovery lists upcoming events from a cache tagged 'events'.
+        updateTag('events');
         return { success: true, data: { event } };
     } catch (error) {
         if ((error as { code?: string })?.code === 'P2002') return { success: false, error: 'EVENT_SLUG_TAKEN' };
@@ -233,6 +235,7 @@ export async function updateEvent(
         // Everyone who was waiting got in when the event opened up: tell them once.
         await Promise.all(ctx.convertedUserIds.map(id => notifyEvent(id, 'EVENT_NOW_OPEN', ctx)));
         revalidateEventPaths(locale, ctx);
+        updateTag('events');
         return { success: true, data: { eventSlug: ctx.eventSlug } };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
@@ -258,6 +261,7 @@ export async function deleteEvent(eventId: string, locale: string): Promise<Acti
             link: `/${ctx.l1Slug}/group/${ctx.groupSlug}/events`
         })));
         revalidateEventPaths(locale, ctx);
+        updateTag('events');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');

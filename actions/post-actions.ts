@@ -6,6 +6,7 @@ import { NotificationService } from '@/lib/services/notification.service';
 import { PostService, type AnnouncementRow } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
+import { GroupService } from '@/lib/services/group.service';
 import { announcementSchema, type AnnouncementInput } from '@/lib/validations/announcement';
 
 /**
@@ -67,12 +68,16 @@ export async function getGroupPosts(groupId: string): Promise<ActionResponse<Ann
 /**
  * Move an announcement to the archive, or back. Owner and admins only (enforced by the service).
  */
-export async function setPostArchived(postId: string, archived: boolean): Promise<ActionResponse> {
+export async function setPostArchived(postId: string, archived: boolean, locale: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        await PostService.setArchived(postId, session.user.id, archived);
+        const { groupId } = await PostService.setArchived(postId, session.user.id, archived);
+        const slugs = await GroupService.getGroupSlugs(groupId);
+        if (slugs) {
+            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/announcements`, 'page');
+        }
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
