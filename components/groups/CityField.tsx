@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
@@ -37,6 +37,11 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
     // Cities this person suggested in this form (not in the approved list yet).
     const [suggested, setSuggested] = useState<{ slug: string; name: string }[]>([]);
     const [isPending, startTransition] = useTransition();
+    // The new option must be in the select before it can be chosen, so the choice is made after the render that adds it.
+    const [toSelect, setToSelect] = useState<{ slug: string } | null>(null);
+    useEffect(() => {
+        if (toSelect) setValue('city', toSelect.slug, { shouldValidate: true, shouldDirty: true });
+    }, [toSelect, suggested, setValue]);
 
     const approved = new Set(cities.map((c) => c.slug));
     const options = [...cities];
@@ -58,7 +63,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
             }
             const city = result.data!;
             setSuggested((prev) => (prev.some((p) => p.slug === city.slug) ? prev : [...prev, { slug: city.slug, name: city.name }]));
-            setValue('city', city.slug, { shouldValidate: true, shouldDirty: true });
+            setToSelect({ slug: city.slug });
             setDraft('');
             setOpen(false);
         });

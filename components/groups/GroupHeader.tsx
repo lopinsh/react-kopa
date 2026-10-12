@@ -229,10 +229,12 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
                         {/* High-contrast metadata row */}
                         <div className="mt-6 flex flex-wrap items-center gap-y-3 gap-x-6 text-[13px] text-white/90">
-                            <span className="flex items-center gap-2 group/meta drop-shadow-sm">
-                                <MapPin className="h-4 w-4 text-white" />
-                                <span className="font-semibold">{cityLabel(tCities, group.city)}</span>
-                            </span>
+                            {group.city && (
+                                <span className="flex items-center gap-2 group/meta drop-shadow-sm">
+                                    <MapPin className="h-4 w-4 text-white" />
+                                    <span className="font-semibold">{cityLabel(tCities, group.city)}</span>
+                                </span>
+                            )}
 
                             <Link
                                 href={`/${l1Slug}/group/${group.slug}/members`}

@@ -34,8 +34,7 @@ export default function CompactGroupBar({ group, l1Slug }: Props) {
                         {group.name}
                     </Link>
                     <p className="truncate text-xs text-foreground-muted">
-                        {cityLabel(tCities, group.city)}
-                        {' · '}
+                        {group.city && <>{cityLabel(tCities, group.city)}{' · '}</>}
                         {t.rich('membersCount', { count: group.stats.memberCount, b: (chunks) => <span>{chunks}</span> })}
                     </p>
                 </div>

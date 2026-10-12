@@ -93,10 +93,12 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
 
                 {/* Overlay Tags */}
                 <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
-                    <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
-                        <MapPin className="h-3 w-3 text-white/90" />
-                        <span className="drop-shadow-sm">{cityLabel(tCities, group.city)}</span>
-                    </span>
+                    {group.city && (
+                        <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
+                            <MapPin className="h-3 w-3 text-white/90" />
+                            <span className="drop-shadow-sm">{cityLabel(tCities, group.city)}</span>
+                        </span>
+                    )}
                 </div>
             </div>
 

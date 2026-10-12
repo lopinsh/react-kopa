@@ -69,10 +69,12 @@ export default function ListViewCard({ group, accentColor: globalAccentColor, lo
 
             {/* Metadata (Right aligned) */}
             <div className="ml-4 flex shrink-0 items-center justify-end gap-4 text-xs font-semibold text-foreground-muted">
-                <div className="hidden items-center gap-1 sm:flex uppercase tracking-wide">
-                    <MapPin className="h-3.5 w-3.5" />
-                    {cityLabel(tCities, group.city)}
-                </div>
+                {group.city && (
+                    <div className="hidden items-center gap-1 sm:flex uppercase tracking-wide">
+                        <MapPin className="h-3.5 w-3.5" />
+                        {cityLabel(tCities, group.city)}
+                    </div>
+                )}
                 <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />
                     {group.memberCount}

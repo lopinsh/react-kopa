@@ -60,10 +60,12 @@ export default function MyGroupsListRow({ group, locale, actionRequired }: Props
                         <span className="shrink-0 rounded-md bg-surface-elevated px-2 py-0.5">
                             {group.category.title}
                         </span>
-                        <span className="flex items-center gap-0.5 shrink-0">
-                            <MapPin className="h-3 w-3" />
-                            {cityLabel(tCities, group.city)}
-                        </span>
+                        {group.city && (
+                            <span className="flex items-center gap-0.5 shrink-0">
+                                <MapPin className="h-3 w-3" />
+                                {cityLabel(tCities, group.city)}
+                            </span>
+                        )}
                     </div>
                 </div>
             </div>
