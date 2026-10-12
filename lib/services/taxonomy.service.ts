@@ -3,6 +3,7 @@ import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 
 export type L3Tag = {
@@ -93,6 +94,61 @@ async function createUniqueCategorySlug(baseLabel: string): Promise<string> {
         }
         suffix += 1;
     }
+}
+
+/** One owner to tell that a pending sub-category on their group was merged into an existing one. */
+export type TagMergeNotice = {
+    userId: string;
+    args: { originalTag: string; canonicalTag: string; canonicalTagEn: string; canonicalTagLv: string; groupName: string };
+    link: string;
+};
+
+/**
+ * Who has to be told about merging pending sub-categories: the owner of each group that carries one.
+ * Two queries for any number of tags (pending tags with their groups, then all owners); call it
+ * before the merge, which moves the groups to the canonical tag.
+ */
+async function collectMergeNotices(
+    pendingIds: string[],
+    canonical: { name: string; en: string; lv: string }
+): Promise<{ foundIds: string[]; groupCount: number; notices: TagMergeNotice[] }> {
+    const pendingTags = await prisma.category.findMany({
+        where: { id: { in: pendingIds }, level: 2, status: 'PENDING_REVIEW' },
+        select: {
+            id: true,
+            slug: true,
+            titles: { select: { lang: true, title: true } },
+            groupsWithTags: {
+                select: {
+                    id: true,
+                    name: true,
+                    slug: true,
+                    category: { include: { parent: { include: { parent: true } } } },
+                },
+            },
+        },
+    });
+
+    const groupIds = pendingTags.flatMap((tag) => tag.groupsWithTags.map((group) => group.id));
+    const owners = groupIds.length
+        ? await prisma.membership.findMany({ where: { groupId: { in: groupIds }, role: 'OWNER' }, select: { groupId: true, userId: true } })
+        : [];
+    const ownerByGroup = new Map(owners.map((owner) => [owner.groupId, owner.userId]));
+
+    const notices: TagMergeNotice[] = [];
+    for (const tag of pendingTags) {
+        const originalTag = tag.titles.find((title) => title.lang === 'en')?.title ?? tag.titles[0]?.title ?? tag.slug;
+        for (const group of tag.groupsWithTags) {
+            const userId = ownerByGroup.get(group.id);
+            if (!userId) continue;
+            notices.push({
+                userId,
+                args: { originalTag, canonicalTag: canonical.name, canonicalTagEn: canonical.en, canonicalTagLv: canonical.lv, groupName: group.name },
+                link: `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}/settings?tab=categorization`,
+            });
+        }
+    }
+    return { foundIds: pendingTags.map((tag) => tag.id), groupCount: groupIds.length, notices };
 }
 
 export const TaxonomyService = {
@@ -391,6 +447,27 @@ export const TaxonomyService = {
         });
     },
 
+    /**
+     * Merges a pending sub-category into an existing one and returns the owners to notify.
+     * Both language names are stored in the notice so each owner sees the tag in the language they read.
+     */
+    async mergePendingTag(pendingId: string, canonicalId: string, locale: string): Promise<{ affectedGroups: number; notices: TagMergeNotice[] }> {
+        const canonical = await prisma.category.findUnique({
+            where: { id: canonicalId },
+            select: { slug: true, titles: { select: { lang: true, title: true } } },
+        });
+        if (!canonical) throw new ActionError('TAG_NOT_FOUND');
+        const titleOf = (lang: 'en' | 'lv') => canonical.titles.find((title) => title.lang === lang)?.title ?? canonical.slug;
+        const en = titleOf('en');
+        const lv = titleOf('lv');
+
+        const { foundIds, groupCount, notices } = await collectMergeNotices([pendingId], { name: locale === 'en' ? en : lv, en, lv });
+        if (!foundIds.includes(pendingId)) throw new ActionError('TAG_NOT_FOUND');
+
+        await TaxonomyService.mergeL2(pendingId, canonicalId);
+        return { affectedGroups: groupCount, notices };
+    },
+
     async mergeL2(pendingId: string, canonicalId: string): Promise<void> {
         if (pendingId === canonicalId) {
             throw new ActionError('VALIDATION_FAILED');
@@ -658,53 +735,7 @@ export const TaxonomyService = {
         }));
     },
 
-    async getOwnerUserIdsForGroups(groupIds: string[]): Promise<Record<string, string | null>> {
-        if (groupIds.length === 0) {
-            return {};
-        }
 
-        const owners = await prisma.membership.findMany({
-            where: {
-                groupId: { in: groupIds },
-                role: 'OWNER',
-            },
-            select: {
-                groupId: true,
-                userId: true,
-            },
-        });
-
-        const byGroupId: Record<string, string | null> = {};
-        for (const groupId of groupIds) {
-            byGroupId[groupId] = null;
-        }
-        for (const owner of owners) {
-            byGroupId[owner.groupId] = owner.userId;
-        }
-
-        return byGroupId;
-    },
-
-    async getL2DisplayName(categoryId: string, locale: string): Promise<string | null> {
-        const lang = locale === 'en' ? 'en' : 'lv';
-        const category = await prisma.category.findUnique({
-            where: { id: categoryId },
-            select: {
-                slug: true,
-                titles: {
-                    where: { lang },
-                    select: { title: true },
-                    take: 1,
-                },
-            },
-        });
-
-        if (!category) {
-            return null;
-        }
-
-        return category.titles[0]?.title ?? category.slug;
-    },
 
     async updateL1Category(id: string, color: string): Promise<void> {
         const category = await prisma.category.findUnique({
@@ -808,6 +839,18 @@ export const TaxonomyService = {
                 level: 2,
             },
         });
+    },
+
+    /** Bulk merge plus the owners to notify (see mergePendingTag). Notices cover only the ids that were pending. */
+    async bulkMergeWithNotices(
+        canonicalId: string,
+        mergedIds: string[],
+        canonicalUpdates: { nameEn: string; nameLv: string; slugEn: string; slugLv: string }
+    ): Promise<TagMergeNotice[]> {
+        // The canonical names after the update are the ones owners should see; the English one is the fallback.
+        const { notices } = await collectMergeNotices(mergedIds, { name: canonicalUpdates.nameEn, en: canonicalUpdates.nameEn, lv: canonicalUpdates.nameLv });
+        await TaxonomyService.bulkMerge(canonicalId, mergedIds, canonicalUpdates);
+        return notices;
     },
 
     async bulkMerge(canonicalId: string, mergedIds: string[], canonicalUpdates: { nameEn: string; nameLv: string; slugEn: string; slugLv: string }): Promise<void> {

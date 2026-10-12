@@ -5,7 +5,7 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { ActionResponse, ErrorCode } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { GroupService } from '@/lib/services/group.service';
-import { TaxonomyService } from '@/lib/services/taxonomy.service';
+import { TaxonomyService, type TagMergeNotice } from '@/lib/services/taxonomy.service';
 import type {
     ActiveL2WithAliases,
     L1Category,
@@ -32,10 +32,6 @@ const INVALID = { success: false, error: 'VALIDATION_FAILED' } as const;
 function mapTaxonomyError(error: unknown, fallback: ErrorCode = 'ACTION_FAILED'): ActionResponse<never> {
     // Services throw `new ActionError('TAG_NOT_FOUND')` etc.; handleActionError turns them into codes.
     return handleActionError(error, fallback);
-}
-
-function getLang(locale: string): 'en' | 'lv' {
-    return locale === 'en' ? 'en' : 'lv';
 }
 
 function revalidateTaxonomyAdminPages(): void {
@@ -161,6 +157,18 @@ export async function updateL1(id: string, color: string): Promise<ActionRespons
     }
 }
 
+async function sendMergeNotices(notices: TagMergeNotice[]): Promise<void> {
+    for (const notice of notices) {
+        await NotificationService.createNotification({
+            userId: notice.userId,
+            type: 'TAG_MERGED',
+            translationKey: 'tagMerged.message',
+            args: notice.args,
+            link: notice.link,
+        });
+    }
+}
+
 export async function mergeTag(pendingId: string, canonicalId: string, locale: string): Promise<ActionResponse<{ affectedGroups: number }>> {
     const admin = await requireSiteAdmin();
     if (!admin.success) {
@@ -168,51 +176,13 @@ export async function mergeTag(pendingId: string, canonicalId: string, locale: s
     }
 
     try {
-        const pendingCategories = await TaxonomyService.getPendingCategories();
-        const pending = pendingCategories.find((category) => category.id === pendingId);
-        if (!pending) {
-            return { success: false, error: 'TAG_NOT_FOUND' };
-        }
-
-        const canonicalName = await TaxonomyService.getL2DisplayName(canonicalId, getLang(locale));
-        if (!canonicalName) {
-            return { success: false, error: 'TAG_NOT_FOUND' };
-        }
-        // Both names are stored so each owner sees the tag in the language they read the site in.
-        const [canonicalTagEn, canonicalTagLv] = await Promise.all([
-            TaxonomyService.getL2DisplayName(canonicalId, 'en'),
-            TaxonomyService.getL2DisplayName(canonicalId, 'lv'),
-        ]);
-
-        const ownerByGroup = await TaxonomyService.getOwnerUserIdsForGroups(pending.groups.map((group) => group.id));
-
-        await TaxonomyService.mergeL2(pendingId, canonicalId);
-
-        for (const group of pending.groups) {
-            const ownerUserId = ownerByGroup[group.id];
-            if (!ownerUserId) {
-                continue;
-            }
-
-            await NotificationService.createNotification({
-                userId: ownerUserId,
-                type: 'TAG_MERGED',
-                translationKey: 'tagMerged.message',
-                args: {
-                    originalTag: pending.submittedLabel,
-                    canonicalTag: canonicalName,
-                    canonicalTagEn: canonicalTagEn ?? canonicalName,
-                    canonicalTagLv: canonicalTagLv ?? canonicalName,
-                    groupName: group.name,
-                },
-                link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,
-            });
-        }
+        const { affectedGroups, notices } = await TaxonomyService.mergePendingTag(pendingId, canonicalId, locale);
+        await sendMergeNotices(notices);
 
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
 
-        return { success: true, data: { affectedGroups: pending.groups.length } };
+        return { success: true, data: { affectedGroups } };
     } catch (error) {
         return mapTaxonomyError(error, 'ACTION_FAILED');
     }
@@ -353,37 +323,8 @@ export async function bulkMergeAction(
     canonicalUpdates = parsed.data.canonicalUpdates;
 
     try {
-        // Find affected groups to send notifications
-        const pendingCategories = await TaxonomyService.getPendingCategories();
-        const pendingMerged = pendingCategories.filter(p => mergedIds.includes(p.id));
-
-        const canonicalName = canonicalUpdates.nameEn; // fallback; the Lv/En names are stored too
-
-        await TaxonomyService.bulkMerge(canonicalId, mergedIds, canonicalUpdates);
-
-        // Send notifications to owners of groups that had pending tags merged
-        for (const pending of pendingMerged) {
-            const ownerByGroup = await TaxonomyService.getOwnerUserIdsForGroups(pending.groups.map(g => g.id));
-
-            for (const group of pending.groups) {
-                const ownerUserId = ownerByGroup[group.id];
-                if (!ownerUserId) continue;
-
-                await NotificationService.createNotification({
-                    userId: ownerUserId,
-                    type: 'TAG_MERGED',
-                    translationKey: 'tagMerged.message',
-                    args: {
-                        originalTag: pending.submittedLabel,
-                        canonicalTag: canonicalName,
-                        canonicalTagEn: canonicalUpdates.nameEn,
-                        canonicalTagLv: canonicalUpdates.nameLv,
-                        groupName: group.name,
-                    },
-                    link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,
-                });
-            }
-        }
+        const notices = await TaxonomyService.bulkMergeWithNotices(canonicalId, mergedIds, canonicalUpdates);
+        await sendMergeNotices(notices);
 
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
