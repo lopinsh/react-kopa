@@ -16,7 +16,7 @@ type Props = {
     /** `overlay` sits on the banner (mobile breadcrumb row); `bar` sits in the action row. */
     variant: 'overlay' | 'bar';
     className?: string;
-    onHide: () => void;
+    onHide: (trigger: HTMLElement | null) => void;
 };
 
 const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated';
@@ -35,6 +35,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
     const [isOpen, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const ref = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
 
     useClickOutside(ref, () => setOpen(false), isOpen);
 
@@ -57,6 +58,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
     return (
         <div className={clsx('relative', className)} ref={ref}>
             <button
+                ref={triggerRef}
                 type="button"
                 onClick={() => setOpen((o) => !o)}
                 aria-label={t('label')}
@@ -85,7 +87,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                     {canHide && (
                         <button
                             type="button"
-                            onClick={() => { setOpen(false); onHide(); }}
+                            onClick={() => { setOpen(false); onHide(triggerRef.current); }}
                             className={clsx(ITEM, 'text-red-500')}
                         >
                             <EyeOff className="h-4 w-4" />

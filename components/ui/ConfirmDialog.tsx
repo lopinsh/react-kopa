@@ -1,6 +1,6 @@
 'use client';
 
-import { useId } from 'react';
+import { useId, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import Modal from '@/components/ui/Modal';
 
@@ -14,10 +14,12 @@ type Props = {
     isPending?: boolean;
     onConfirm: () => void;
     onCancel: () => void;
+    /** Menu trigger to refocus on close when the opener (a menu item) no longer exists. */
+    returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
 /** In-app replacement for window.confirm (which blocks the page and can't be styled). */
-export default function ConfirmDialog({ isOpen, title, message, confirmLabel, destructive = false, isPending = false, onConfirm, onCancel }: Props) {
+export default function ConfirmDialog({ isOpen, title, message, confirmLabel, destructive = false, isPending = false, onConfirm, onCancel, returnFocusRef }: Props) {
     const tCommon = useTranslations('common');
     const messageId = useId();
 
@@ -35,6 +37,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
             hideClose
             locked={isPending}
             onClose={onCancel}
+            returnFocusRef={returnFocusRef}
         >
             <p id={messageId} className="text-sm font-medium leading-relaxed text-foreground-muted">{message}</p>
             <div className="mt-6 flex items-center justify-end gap-3">

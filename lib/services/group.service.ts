@@ -6,6 +6,7 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
+import { pickTitle } from '@/lib/utils/localized-title';
 import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, TEXT_LANGS, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
@@ -184,7 +185,7 @@ export const GroupService = {
                     id: true,
                     slug: true,
                     level: true,
-                    titles: { where: { lang }, select: { title: true } }
+                    titles: { select: { lang: true, title: true } }
                 }
             },
             // Only the viewer's own membership: the layout needs their role, never the whole member list.
@@ -247,7 +248,7 @@ export const GroupService = {
             const l2Tag = g.tags.find((t) => t.level === 2);
             if (l2Tag) {
                 parentTitle = categoryTitle;
-                categoryTitle = l2Tag.titles?.[0]?.title || l2Tag.slug;
+                categoryTitle = pickTitle(l2Tag.titles ?? [], lang, l2Tag.slug);
                 categorySlug = l2Tag.slug;
             }
         }
@@ -311,7 +312,7 @@ export const GroupService = {
             },
             tags: g.tags.map((t) => ({
                 id: t.id,
-                title: t.titles?.[0]?.title || t.slug,
+                title: pickTitle(t.titles ?? [], lang, t.slug),
                 slug: t.slug,
                 level: t.level
             })),

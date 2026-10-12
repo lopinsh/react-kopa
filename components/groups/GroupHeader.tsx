@@ -52,6 +52,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const [isHideModalOpen, setHideModalOpen] = useState(false);
     const [isContactsOpen, setContactsOpen] = useState(false);
     const contactsRef = useRef<HTMLDivElement>(null);
+    // The "..." menu button that opened the report or hide pop-up; the menu closes on click, so focus returns here.
+    const menuReturnRef = useRef<HTMLElement | null>(null);
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
     const pathname = usePathname();
 
@@ -82,7 +84,8 @@ export default function GroupHeader({ group, l1Slug }: Props) {
         }
     };
 
-    const handleReport = () => {
+    const handleReport = (trigger: HTMLElement | null) => {
+        menuReturnRef.current = trigger;
         gateAction(() => setReportModalOpen(true));
     };
 
@@ -208,7 +211,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             group={group}
                             l1Slug={l1Slug}
                             variant="overlay"
-                            onHide={() => setHideModalOpen(true)}
+                            onHide={(trigger) => { menuReturnRef.current = trigger; setHideModalOpen(true); }}
                         />
                         <GroupMoreMenu
                             group={group}
@@ -349,7 +352,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                             l1Slug={l1Slug}
                             variant="bar"
                             className="hidden md:block"
-                            onHide={() => setHideModalOpen(true)}
+                            onHide={(trigger) => { menuReturnRef.current = trigger; setHideModalOpen(true); }}
                         />
                         <GroupMoreMenu
                             group={group}
@@ -378,6 +381,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                     isOpen={isHideModalOpen}
                     onClose={() => setHideModalOpen(false)}
                     groupId={group.id}
+                    returnFocusRef={menuReturnRef}
                 />
             )}
 
@@ -386,6 +390,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                     isOpen={isReportModalOpen}
                     onClose={() => setReportModalOpen(false)}
                     targetGroupId={group.id}
+                    returnFocusRef={menuReturnRef}
                 />
             )}
 

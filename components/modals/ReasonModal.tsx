@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState, useTransition, type ReactNode } from 'react';
+import { useId, useState, useTransition, type ReactNode, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ZodType } from 'zod';
 import Modal from '@/components/ui/Modal';
@@ -24,12 +24,13 @@ type Props = {
     /** Runs the server action; on success the modal closes. */
     onSubmit: (reason: string) => Promise<ActionResponse<unknown>>;
     onDone: () => void;
+    returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
 /** A red pop-up that asks a moderator or owner for a written reason, then runs one action with it. */
 export default function ReasonModal({
     onClose, icon, title, subject, description, reasonLabel, placeholder, hint, confirmLabel, cancelLabel,
-    initialReason = '', schema, onSubmit, onDone,
+    initialReason = '', schema, onSubmit, onDone, returnFocusRef,
 }: Props) {
     const tErrors = useTranslations('errors');
     const fieldId = useId();
@@ -58,6 +59,7 @@ export default function ReasonModal({
     return (
         <Modal
             onClose={onClose}
+            returnFocusRef={returnFocusRef}
             locked={isPending}
             title={<>{icon}{title}</>}
             titleClassName="flex items-center gap-2 text-xl font-bold text-red-500"

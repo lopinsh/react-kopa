@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { useEffect, useId, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
@@ -37,6 +37,12 @@ type Props = {
     translateIgnore?: boolean;
     zIndexClassName?: string;
     panelClassName?: string;
+    /**
+     * Where focus goes on close when the element that opened the pop-up is gone (e.g. a menu item of a
+     * menu that closed on click): pass the menu's trigger button. Without it, focus goes to the opener,
+     * else to the page's main region.
+     */
+    returnFocusRef?: RefObject<HTMLElement | null>;
     children: ReactNode;
 };
 
@@ -45,6 +51,20 @@ const SIZE = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', '2xl': 'max-w-2xl
 // Open modals, topmost last: Escape only closes the top one; scroll stays locked until the last one closes.
 const openModals: string[] = [];
 
+/** Focus goes back to the given trigger, else the opener, else the main region, never to <body>. */
+function restoreFocus(trigger: HTMLElement | null | undefined, opener: HTMLElement | null) {
+    const target = [trigger, opener].find((el): el is HTMLElement => !!el && el.isConnected);
+    if (target) {
+        target.focus();
+        return;
+    }
+    const main = document.querySelector<HTMLElement>('main');
+    if (main) {
+        if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
+        main.focus({ preventScroll: true });
+    }
+}
+
 /**
  * The one pop-up shell: backdrop, close button, Escape, scroll lock, focus trap and focus return.
  * Render it only while it should be open (mount = open); content goes in `children`.
@@ -52,7 +72,7 @@ const openModals: string[] = [];
 export default function Modal({
     onClose, title, titleClassName, icon, subtitle, variant = 'plain', size = 'md', flush = false, accentLine = false, headerClassName,
     role = 'dialog', describedBy, locked = false, hideClose = false, closeOnBackdrop = false,
-    translateIgnore = false, zIndexClassName = 'z-50', panelClassName, children,
+    translateIgnore = false, zIndexClassName = 'z-50', panelClassName, returnFocusRef, children,
 }: Props) {
     const tCommon = useTranslations('common');
     const titleId = useId();
@@ -70,9 +90,10 @@ export default function Modal({
         return () => {
             openModals.splice(openModals.indexOf(id), 1);
             if (openModals.length === 0) document.body.style.overflow = '';
-            if (opener && opener.isConnected) opener.focus();
+            // eslint-disable-next-line react-hooks/exhaustive-deps -- the ref is wanted as it is at close time
+            restoreFocus(returnFocusRef?.current, opener);
         };
-    }, [id, opener]);
+    }, [id, opener, returnFocusRef]);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {

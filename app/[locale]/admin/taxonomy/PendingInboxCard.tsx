@@ -28,10 +28,12 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     const [activeAction, setActiveAction] = useState<'approve' | 'merge' | null>(null);
 
     // Approve form state
-    const [nameEn, setNameEn] = useState(item.submittedLabel);
-    const [nameLv, setNameLv] = useState(item.submittedLabel);
-    const [slugEn, setSlugEn] = useState(slugify(item.submittedLabel));
-    const [slugLv, setSlugLv] = useState(slugify(item.submittedLabel));
+    // The suggestion exists in one language only; the admin fills in the other one.
+    const isLv = item.submittedLang === 'lv';
+    const [nameEn, setNameEn] = useState(isLv ? '' : item.submittedLabel);
+    const [nameLv, setNameLv] = useState(isLv ? item.submittedLabel : '');
+    const [slugEn, setSlugEn] = useState(isLv ? '' : slugify(item.submittedLabel));
+    const [slugLv, setSlugLv] = useState(isLv ? slugify(item.submittedLabel) : '');
 
     // Merge form state
     const [mergeIntoId, setMergeIntoId] = useState('');
@@ -88,6 +90,9 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <h3 className="text-xl font-bold cursor-pointer hover:underline break-words" onClick={onSelect}>
                         {item.submittedLabel}
                     </h3>
+                    <p className="text-xs font-semibold text-foreground-muted mt-1">
+                        {t('writtenIn', { lang: item.submittedLang.toUpperCase() })}
+                    </p>
                     <p className="text-sm text-foreground-muted mt-1">
                         {t('submittedBy', { 
                             name: item.submitter?.username || t('unknown'), 

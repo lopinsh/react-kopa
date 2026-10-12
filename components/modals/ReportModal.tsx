@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import { createReport } from '@/actions/report-actions';
 import { ShieldAlert } from 'lucide-react';
@@ -13,9 +13,10 @@ type Props = {
     onClose: () => void;
     targetGroupId?: string;
     targetEventId?: string;
+    returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
-export default function ReportModal({ isOpen, onClose, targetGroupId, targetEventId }: Props) {
+export default function ReportModal({ isOpen, onClose, targetGroupId, targetEventId, returnFocusRef }: Props) {
     const t = useTranslations('report');
     const [reason, setReason] = useState<string>(REPORT_REASONS[0]);
     const [isPending, startTransition] = useTransition();
@@ -40,6 +41,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
     return (
         <Modal
             onClose={onClose}
+            returnFocusRef={returnFocusRef}
             locked={isPending}
             title={<><ShieldAlert className="h-5 w-5" />{t('title')}</>}
             titleClassName="flex items-center gap-2 text-xl font-bold text-red-500"

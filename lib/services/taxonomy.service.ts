@@ -3,6 +3,7 @@ import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { pickTitle } from '@/lib/utils/localized-title';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { MAX_GROUP_TAGS, MIN_PENDING_TAG_SUPPORTERS } from '@/lib/constants';
 
@@ -55,6 +56,8 @@ export type PendingCategoryWithContext = {
     slug: string;
     submittedAt: Date | null;
     submittedLabel: string;
+    /** Language the suggestion was typed in (the one title it has). */
+    submittedLang: 'en' | 'lv';
     parent: {
         id: string;
         slug: string;
@@ -146,7 +149,7 @@ async function collectMergeNotices(
 
     const notices: TagMergeNotice[] = [];
     for (const tag of pendingTags) {
-        const originalTag = tag.titles.find((title) => title.lang === 'en')?.title ?? tag.titles[0]?.title ?? tag.slug;
+        const originalTag = tag.titles[0]?.title ?? tag.slug;
         for (const group of tag.groupsWithTags) {
             const userId = ownerByGroup.get(group.id);
             if (!userId) continue;
@@ -307,7 +310,7 @@ export const TaxonomyService = {
     },
 
     /** `created` is false when an existing pending tag with the same name was reused. */
-    async createPendingL2(params: { label: string; parentId: string; submittedById: string }): Promise<{ category: Category; created: boolean }> {
+    async createPendingL2(params: { label: string; parentId: string; submittedById: string; locale: string }): Promise<{ category: Category; created: boolean }> {
         const trimmed = params.label.trim();
         if (trimmed.length < 2) {
             throw new ActionError('VALIDATION_FAILED');
@@ -347,8 +350,9 @@ export const TaxonomyService = {
                 submittedById: params.submittedById,
                 submittedAt: new Date(),
                 titles: {
+                    // Stored in the language the person typed it in; the other language is filled in on approval.
                     create: {
-                        lang: 'en',
+                        lang: params.locale === 'en' ? 'en' : 'lv',
                         title: trimmed,
                     },
                 },
@@ -488,8 +492,7 @@ export const TaxonomyService = {
                     where: { id: pendingId },
                     include: {
                         titles: {
-                            where: { lang: 'en' },
-                            select: { title: true },
+                            select: { lang: true, title: true },
                             take: 1,
                         },
                     },
@@ -559,7 +562,7 @@ export const TaxonomyService = {
                     await tx.categoryAlias.create({
                         data: {
                             value: pendingLabel,
-                            locale: 'en',
+                            locale: pending.titles[0]?.lang === 'lv' ? 'lv' : 'en',
                             categoryId: canonicalId,
                         },
                     });
@@ -680,7 +683,7 @@ export const TaxonomyService = {
             const supporters = new Set(tag.groupsWithTags.flatMap((group) => group.members.map((member) => member.userId)));
             const isPublic = supporters.size >= MIN_PENDING_TAG_SUPPORTERS;
             if (!isPublic && !selectedIds.includes(tag.id)) return [];
-            const title = tag.titles.find((t) => t.lang === lang)?.title ?? tag.titles[0]?.title ?? tag.slug;
+            const title = pickTitle(tag.titles, lang, tag.slug);
             return [{ id: tag.id, slug: tag.slug, title, isPublic }];
         });
     },
@@ -776,7 +779,8 @@ export const TaxonomyService = {
             id: category.id,
             slug: category.slug,
             submittedAt: category.submittedAt,
-            submittedLabel: category.titles.find((title) => title.lang === 'en')?.title ?? category.titles[0]?.title ?? category.slug,
+            submittedLabel: category.titles[0]?.title ?? category.slug,
+            submittedLang: category.titles[0]?.lang === 'lv' ? 'lv' : 'en',
             parent: category.parent
                 ? {
                     id: category.parent.id,
@@ -875,7 +879,8 @@ export const TaxonomyService = {
 
         let approvedCount = 0;
         for (const cat of pending) {
-            const titleEn = cat.titles.find(t => t.lang === 'en')?.title || cat.slug;
+            const submitted = cat.titles[0];
+            const titleEn = cat.titles.find(t => t.lang === 'en')?.title || submitted?.title || cat.slug;
             const slugEn = await createUniqueCategorySlug(titleEn);
             const slugLv = slugify(titleEn) || `tag-lv-${Date.now()}`;
 
@@ -890,11 +895,11 @@ export const TaxonomyService = {
                     }
                 });
 
-                await tx.categoryTranslation.upsert({
-                    where: { categoryId_lang: { categoryId: cat.id, lang: 'lv' } },
-                    update: { title: titleEn },
-                    create: { categoryId: cat.id, lang: 'lv', title: titleEn }
-                });
+                // The suggestion keeps its own language; the other one starts as a copy until an admin edits it.
+                for (const lang of ['en', 'lv']) {
+                    if (cat.titles.some((t) => t.lang === lang)) continue;
+                    await tx.categoryTranslation.create({ data: { categoryId: cat.id, lang, title: submitted?.title ?? titleEn } });
+                }
             });
             approvedCount++;
         }
@@ -931,7 +936,7 @@ export const TaxonomyService = {
             const allIds = [canonicalId, ...mergedIds];
             const tags = await tx.category.findMany({
                 where: { id: { in: allIds }, level: 2 },
-                include: { titles: { where: { lang: 'en' }, take: 1 } }
+                include: { titles: { take: 1 } }
             });
 
             if (tags.length !== allIds.length) {
@@ -1001,7 +1006,7 @@ export const TaxonomyService = {
                         await tx.categoryAlias.create({
                             data: {
                                 value: titleEn,
-                                locale: 'en',
+                                locale: tag.titles[0]?.lang === 'lv' ? 'lv' : 'en',
                                 categoryId: canonicalId,
                             }
                         });

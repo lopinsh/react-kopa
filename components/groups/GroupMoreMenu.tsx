@@ -19,7 +19,8 @@ type Props = {
     /** `overlay` sits on the banner (mobile breadcrumb row); `bar` sits in the action row. */
     variant: 'overlay' | 'bar';
     className?: string;
-    onReport: () => void;
+    /** Gets the menu's trigger button so the report pop-up can hand focus back to it. */
+    onReport: (trigger: HTMLElement | null) => void;
 };
 
 const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated';
@@ -35,6 +36,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     const [leaveConfirmOpen, setLeaveConfirmOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const ref = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
 
     const isOwner = checkIsOwner(role);
     const canManage = hasAdminRights(role);
@@ -70,6 +72,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     return (
         <div className={clsx('relative', className)} ref={ref}>
             <button
+                ref={triggerRef}
                 type="button"
                 onClick={() => setOpen((o) => !o)}
                 aria-label={c('moreOptions')}
@@ -132,7 +135,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
 
                     <button
                         type="button"
-                        onClick={() => { setOpen(false); onReport(); }}
+                        onClick={() => { setOpen(false); onReport(triggerRef.current); }}
                         className={clsx(ITEM, 'text-foreground-muted hover:text-red-500')}
                     >
                         <Flag className="h-4 w-4" />
@@ -150,6 +153,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                 isPending={isPending}
                 onConfirm={handleLeave}
                 onCancel={() => setLeaveConfirmOpen(false)}
+                returnFocusRef={triggerRef}
             />
         </div>
     );

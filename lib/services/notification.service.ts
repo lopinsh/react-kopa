@@ -69,7 +69,7 @@ export const NotificationService = {
             tags: {
                 where: { level: 2 },
                 take: 1,
-                select: { slug: true, titles: { where: { lang: locale }, select: { title: true } } },
+                select: { slug: true, titles: { select: { lang: true, title: true } } },
             },
         } as const;
         const [groups, conversations] = await Promise.all([
@@ -84,7 +84,7 @@ export const NotificationService = {
 
         const describe = (g: (typeof groups)[number]) => {
             const resolved = TaxonomyResolver.resolve(g.category);
-            return { name: g.name, categoryTitle: groupCategoryTitle(resolved, g.tags), l1Slug: resolved.l1Slug, slug: g.slug };
+            return { name: g.name, categoryTitle: groupCategoryTitle(resolved, g.tags, locale), l1Slug: resolved.l1Slug, slug: g.slug };
         };
         const byConversation = new Map(
             conversations.flatMap((c) => (c.originGroup ? [[c.id, describe(c.originGroup)] as const] : []))

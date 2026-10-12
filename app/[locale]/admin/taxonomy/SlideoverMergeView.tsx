@@ -43,8 +43,8 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
         } else {
             const pending = pendingTags.find(p => p.id === id);
             if (pending) {
-                setNameEn(pending.submittedLabel);
-                setNameLv(pending.submittedLabel);
+                setNameEn(pending.submittedLang === 'en' ? pending.submittedLabel : '');
+                setNameLv(pending.submittedLang === 'lv' ? pending.submittedLabel : '');
                 setSlugEn('');
                 setSlugLv('');
             }

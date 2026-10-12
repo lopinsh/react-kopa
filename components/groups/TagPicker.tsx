@@ -181,7 +181,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
         }
 
         setIsSubmittingPending(true);
-        const result = await submitPendingTag(trimmed, parentId);
+        const result = await submitPendingTag(trimmed, parentId, locale);
         setIsSubmittingPending(false);
 
         if (!result.success || !result.data) {

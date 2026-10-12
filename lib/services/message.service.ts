@@ -4,6 +4,7 @@ import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
 import { CHAT_HISTORY_LIMIT, INBOX_LIMIT } from '@/lib/constants';
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
+import { pickTitle } from '@/lib/utils/localized-title';
 
 /**
  * Two kinds of chat (see `Conversation.kind`):
@@ -147,10 +148,11 @@ function groupHref(group: { slug: string; hiddenAt: Date | null; category: Param
  */
 export function groupCategoryTitle(
     resolved: ReturnType<typeof TaxonomyResolver.resolve>,
-    tags: ReadonlyArray<{ slug: string; titles: ReadonlyArray<{ title: string }> }>
+    tags: ReadonlyArray<{ slug: string; titles: ReadonlyArray<{ lang: string; title: string }> }>,
+    lang: string
 ): string {
     const l2Tag = resolved.level === 1 ? tags[0] : undefined;
-    return l2Tag ? (l2Tag.titles[0]?.title ?? l2Tag.slug) : resolved.categoryTitle;
+    return l2Tag ? pickTitle(l2Tag.titles, lang, l2Tag.slug) : resolved.categoryTitle;
 }
 
 export const MessageService = {
@@ -198,7 +200,7 @@ export const MessageService = {
                             tags: {
                                 where: { level: 2 },
                                 take: 1,
-                                select: { slug: true, titles: { where: { lang: locale }, select: { title: true } } }
+                                select: { slug: true, titles: { select: { lang: true, title: true } } }
                             }
                         }
                     },
@@ -218,7 +220,7 @@ export const MessageService = {
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
                 const href = c.originGroup ? groupHref(c.originGroup) : null;
-                const categoryTitle = resolved && c.originGroup ? groupCategoryTitle(resolved, c.originGroup.tags) : '';
+                const categoryTitle = resolved && c.originGroup ? groupCategoryTitle(resolved, c.originGroup.tags, locale) : '';
                 const lastFromOthers = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;
 

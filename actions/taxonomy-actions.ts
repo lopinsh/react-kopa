@@ -72,7 +72,7 @@ export async function getPendingTagOptions(l1Id: string, selectedIds: string[], 
     }
 }
 
-export async function submitPendingTag(label: string, parentId: string): Promise<ActionResponse<{ id: string; slug: string; title: string; status: 'PENDING_REVIEW' }>> {
+export async function submitPendingTag(label: string, parentId: string, locale: string): Promise<ActionResponse<{ id: string; slug: string; title: string; status: 'PENDING_REVIEW' }>> {
     const session = await auth();
     if (!session?.user?.id) {
         return { success: false, error: 'UNAUTHORIZED' };
@@ -87,6 +87,7 @@ export async function submitPendingTag(label: string, parentId: string): Promise
             label,
             parentId,
             submittedById: session.user.id,
+            locale,
         });
 
         // A reused pending tag was already announced when it was first suggested.
