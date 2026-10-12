@@ -74,9 +74,10 @@ export default async function GroupSettingsPage(props: {
     // Name, category, topics and access: the owner (and site admins). Moderators manage the rest.
     const canEditOwnerFields = isOwner || isAppAdmin;
     const t = await getTranslations('group');
-    const pendingMembers = group.members.filter((m) => m.role === 'PENDING');
+    const members = await GroupService.getMembers(group, session.user.id);
+    const pendingMembers = members.filter((m) => m.role === 'PENDING');
     const transferCandidates = isOwner
-        ? group.members
+        ? members
             .filter((m): m is typeof m & { role: 'ADMIN' | 'MEMBER' } => m.role === 'ADMIN' || m.role === 'MEMBER')
             .map((m) => ({ userId: m.user.id, name: m.user.name || t('anonymousUser'), role: m.role }))
         : [];

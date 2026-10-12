@@ -31,8 +31,7 @@ export default async function GroupLayout({
         '--group-accent': accentColor
     } as React.CSSProperties;
 
-    const pendingMembers = group.members.filter((m) => m.role === 'PENDING');
-    const pendingCount = pendingMembers.length;
+    const pendingCount = group.stats.pendingCount;
 
     return (
         <GroupProvider value={{

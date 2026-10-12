@@ -42,6 +42,9 @@ export default async function GroupPage({
         notFound();
     }
 
+    // The group home shows the member avatars (and the full list in "more"); the layout does not load members.
+    const members = await GroupService.getMembers(group, session?.user?.id);
+
     return (
         <div className="relative overflow-x-clip animate-in fade-in slide-in-from-bottom-2 duration-500">
             {/* Decorative background glows */}
@@ -129,7 +132,7 @@ export default async function GroupPage({
                                 </span>
                             </div>
                             <MemberAvatarList
-                                members={group.members.filter(m => m.role !== 'PENDING')}
+                                members={members.filter(m => m.role !== 'PENDING')}
                                 groupId={group.id}
                                 groupName={group.name}
                                 isMember={group.user.isMember}

@@ -58,11 +58,10 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         bannerImage: null,
         isAcceptingMembers: true,
         socialLinks: { discord: null, website: 'https://example.org', instagram: null },
-        stats: { memberCount: 23, eventCount: 4 },
+        stats: { memberCount: 23, eventCount: 4, pendingCount: 0 },
         user: { isMember: false, role: null, isAdmin: false },
         theme: { accentColor: SAMPLE_ACCENT },
         sections: [],
-        members: [],
         category: {
             id: 'sample-category',
             title: s('category'),

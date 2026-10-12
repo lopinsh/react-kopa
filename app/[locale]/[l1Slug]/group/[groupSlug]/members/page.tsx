@@ -73,8 +73,9 @@ export default async function GroupMembersPage({
     const t = await getTranslations('group');
     const c_common_get = await getTranslations('common');
     const isOwnerOrAdmin = group.user.isAdmin;
-    const pendingMembers = group.members.filter((m) => m.role === 'PENDING') as Member[];
-    const acceptedMembers = group.members.filter((m) => m.role !== 'PENDING')
+    const members = await GroupService.getMembers(group, session?.user?.id);
+    const pendingMembers = members.filter((m) => m.role === 'PENDING') as Member[];
+    const acceptedMembers = members.filter((m) => m.role !== 'PENDING')
         .sort((a, b) => {
             const roles: Record<string, number> = { OWNER: 0, ADMIN: 1, MEMBER: 2, PENDING: 3 };
             return roles[a.role as keyof typeof roles] - roles[b.role as keyof typeof roles];

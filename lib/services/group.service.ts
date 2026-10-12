@@ -50,6 +50,23 @@ function toEditableSection(s: { id: string; order: number; visibility: 'PUBLIC' 
     return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: { lv: text('lv'), en: text('en') } };
 }
 
+/** One row of a group's member list (see `GroupService.getMembers`). */
+export interface GroupMember {
+    id: string;
+    role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
+    joinedAt: Date;
+    user: { id: string; name: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
+    /** The group chat with this person (their join request and everything said since); only loaded for pending applicants, and only for admins and the applicant. */
+    chatId: string | null;
+    applicationMessages: Array<{
+        id: string;
+        content: string;
+        createdAt: Date;
+        senderId: string;
+        sender: { name: string | null; image: string | null };
+    }>;
+}
+
 export interface GroupContext {
     id: string;
     name: string;
@@ -68,6 +85,8 @@ export interface GroupContext {
     stats: {
         memberCount: number;
         eventCount: number;
+        /** Open join requests; 0 for anyone who may not see them. */
+        pendingCount: number;
     };
     user: {
         isMember: boolean;
@@ -78,21 +97,6 @@ export interface GroupContext {
         accentColor: string;
     };
     sections: SectionView[];
-    members: Array<{
-        id: string;
-        role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
-        joinedAt: Date;
-        user: { id: string; name: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
-        /** The group chat with this person (their join request and everything said since); only loaded for pending applicants, and only for admins and the applicant. */
-        chatId: string | null;
-        applicationMessages: Array<{
-            id: string;
-            content: string;
-            createdAt: Date;
-            senderId: string;
-            sender: { name: string | null; image: string | null };
-        }>;
-    }>;
     category: {
         id: string;
         title: string;
@@ -183,16 +187,10 @@ export const GroupService = {
                     titles: { where: { lang }, select: { title: true } }
                 }
             },
+            // Only the viewer's own membership: the layout needs their role, never the whole member list.
             members: {
-                select: {
-                    id: true,
-                    role: true,
-                    userId: true,
-                    joinedAt: true,
-                    user: {
-                        select: { id: true, name: true, username: true, avatarSeed: true, image: true, allowDirectMessages: true, isProfilePublic: true }
-                    }
-                }
+                where: { userId: currentUserId ?? '' },
+                select: { role: true, userId: true }
             },
             sections: {
                 orderBy: { order: 'asc' } as const,
@@ -233,28 +231,9 @@ export const GroupService = {
             ? await prisma.event.count({ where: { groupId: g.id } })
             : g._count.events;
 
-        // 2. Format Members (with application messages for admins)
-        // Pending applicants and their messages are only visible to group admins, site admins and the applicant themselves.
+        // 2. Open join requests are only counted for people who may see them (group admins, site admins).
         const canSeeApplications = isAdmin || isSiteAdmin;
-        const visibleMembers = canSeeApplications ? group.members : group.members.filter((m) => m.role !== 'PENDING');
-        // The request message lives in the group chat. Only pending applicants' chats are loaded, and only
-        // for the group's own owner/admins and for the applicant themselves: site admins are not on the team, so they cannot open the chat either.
-        const threads = await MessageService.listGroupThreads(
-            g.id,
-            visibleMembers.filter((m) => m.role === 'PENDING' && (isAdmin || m.userId === currentUserId)).map((m) => m.userId)
-        );
-        const formattedMembers = visibleMembers.map((m) => {
-            const thread = threads.get(m.userId);
-
-            return {
-                id: m.id,
-                role: m.role,
-                joinedAt: m.joinedAt,
-                user: m.user,
-                chatId: thread?.conversationId ?? null,
-                applicationMessages: thread?.messages ?? []
-            };
-        });
+        const pendingCount = canSeeApplications ? await prisma.membership.count({ where: { groupId: g.id, role: 'PENDING' } }) : 0;
 
         // 3. Resolve Taxonomy & Breadcrumbs
         const resolved = TaxonomyResolver.resolve(g.category);
@@ -310,6 +289,7 @@ export const GroupService = {
             stats: {
                 memberCount: g._count.members,
                 eventCount,
+                pendingCount,
             },
             user: {
                 isMember,
@@ -320,7 +300,6 @@ export const GroupService = {
                 accentColor,
             },
             sections,
-            members: formattedMembers as GroupContext['members'],
             category: {
                 id: resolved.categoryId,
                 title: categoryTitle,
@@ -342,6 +321,47 @@ export const GroupService = {
             }
         };
     }),
+
+    /**
+     * The member list of a group, for the pages that show it (members, group home, settings); the
+     * group context itself carries only counts and the viewer's own role.
+     * Pending applicants (with their request chat) are included only for group admins, site admins
+     * and, for their own row, the applicant. Pass the context of the same group.
+     */
+    async getMembers(group: Pick<GroupContext, 'id' | 'user' | 'moderation'>, currentUserId?: string): Promise<GroupMember[]> {
+        const canSeeApplications = group.user.isAdmin || group.moderation.isSiteAdmin;
+        const members = await prisma.membership.findMany({
+            where: { groupId: group.id, ...(canSeeApplications ? {} : { role: { not: 'PENDING' as const } }) },
+            orderBy: { joinedAt: 'asc' },
+            select: {
+                id: true,
+                role: true,
+                userId: true,
+                joinedAt: true,
+                user: {
+                    select: { id: true, name: true, username: true, avatarSeed: true, image: true, allowDirectMessages: true, isProfilePublic: true }
+                }
+            }
+        });
+
+        // The request message lives in the group chat. Only pending applicants' chats are loaded, and only
+        // for the group's own owner/admins and for the applicant themselves: site admins are not on the team, so they cannot open the chat either.
+        const threads = await MessageService.listGroupThreads(
+            group.id,
+            members.filter((m) => m.role === 'PENDING' && (group.user.isAdmin || m.userId === currentUserId)).map((m) => m.userId)
+        );
+        return members.map((m) => {
+            const thread = threads.get(m.userId);
+            return {
+                id: m.id,
+                role: m.role,
+                joinedAt: m.joinedAt,
+                user: m.user,
+                chatId: thread?.conversationId ?? null,
+                applicationMessages: thread?.messages ?? []
+            };
+        });
+    },
 
     async createGroup(data: GroupFormValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
         const lang = toTextLang(locale);
@@ -757,9 +777,14 @@ export const GroupService = {
     async getGroupSlugs(groupId: string): Promise<{ slug: string; l1Slug: string } | null> {
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            include: {
+            // Only the slug chain (category, parent, grandparent): no titles, no group fields.
+            select: {
+                slug: true,
                 category: {
-                    include: TaxonomyResolver.getInclude('lv')
+                    select: {
+                        id: true, slug: true, level: true,
+                        parent: { select: { id: true, slug: true, parent: { select: { id: true, slug: true } } } }
+                    }
                 }
             }
         });
