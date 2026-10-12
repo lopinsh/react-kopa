@@ -26,6 +26,8 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
         const onKey = (e: KeyboardEvent) => {
             // While the delete confirmation is open, Escape belongs to it.
             if (e.key !== 'Escape' || confirming) return;
+            // An empty reply field closes itself first (FeedbackThread); the card stays.
+            if (e.target instanceof HTMLTextAreaElement && e.target.closest('[data-ui="feedback-thread"]') && !e.target.value.trim()) return;
             e.stopPropagation();
             onClose();
         };
