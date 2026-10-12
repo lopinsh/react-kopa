@@ -120,6 +120,7 @@ type ActionResponse<T> =
 - After creating or significantly updating an entity, redirect to its public page.
 - Never derive display titles from slugs in UI; use the service-provided `title`.
 - Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.
+- Migrations must work with the version still running (expand → contract). The deploy applies `prisma migrate deploy` while the old app is still serving, then swaps to the new one (blue/green, `deploy/server-deploy.sh`, health check `/api/health`). So additive changes (new table, nullable or defaulted column) ship with the code that uses them; drops and renames ship in a later deploy, once no running code reads the column (a rename = add new, copy, switch code, then drop old).
 - Reuse before creating: search `lib/services`, `lib/validations`, `components/ui`, and `messages/` for existing pieces first.
 - Don't create new docs (plans, audits, walkthroughs, reports). The living docs are `docs/execution_handoff.md` and the chapters in `docs/handbook/` (edit those, don't add parallel ones). Progress goes into `docs/execution_handoff.md` as ticked items; anything else belongs in the commit message. Screenshots and tool output are git-ignored — don't commit them.
 - Never commit secrets. `.env*` is ignored (except `.env.example`); MCP API keys are supplied via `${input:…}` prompts in `.vscode/mcp.json`.

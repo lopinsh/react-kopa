@@ -1,0 +1,27 @@
+# Front proxy owned by the stack (docker-compose.server.yml, service "proxy").
+# The host's reverse proxy keeps pointing at :3000; Caddy forwards to the app
+# colour (blue/green) that deploy/server-deploy.sh just made primary, so a deploy
+# swaps containers without a 502. The script fills __PRIMARY__/__STANDBY__ and
+# reloads Caddy gracefully (in-flight requests finish on the old colour).
+{
+	auto_https off
+	admin localhost:2019
+	servers {
+		# The host proxy terminates TLS; keep its X-Forwarded-* headers.
+		trusted_proxies static private_ranges
+	}
+}
+
+:3000 {
+	reverse_proxy __PRIMARY__:3000 __STANDBY__:3000 {
+		lb_policy first
+		# A stopped colour fails to dial (its name stops resolving); retry the other one.
+		lb_try_duration 15s
+		lb_try_interval 250ms
+		fail_duration 5s
+		health_uri /api/health
+		health_interval 2s
+		health_timeout 2s
+		flush_interval -1
+	}
+}

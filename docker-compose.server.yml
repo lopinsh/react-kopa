@@ -29,10 +29,20 @@ services:
     ports:
       - "6001:6001"
 
-  app:
+  # Blue/green app: deploy/server-deploy.sh starts the idle colour, waits for its
+  # health check, points the proxy at it and stops the other. Neither colour
+  # publishes a port; the host's reverse proxy reaches them through "proxy" on :3000.
+  # unless-stopped: a colour stopped by a deploy (old code) stays down after a reboot.
+  app-blue: &app
     image: ghcr.io/lopinsh/react-kopa:latest
-    container_name: ejam-kopa-app
-    restart: always
+    container_name: ejam-kopa-app-blue
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 3
+      start_period: 20s
     environment:
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public"
       NEXTAUTH_URL: "https://ejam.lumm.eu"
@@ -52,13 +62,32 @@ services:
       PUSHER_HOST: "soketi"
       PUSHER_PORT: "6001"
       PUSHER_TLS: "false"
-    ports:
-      - "3000:3000"
     depends_on:
       db:
         condition: service_healthy
       soketi:
         condition: service_started
+
+  app-green:
+    <<: *app
+    container_name: ejam-kopa-app-green
+
+  # Stable front door on host :3000 (where the host's reverse proxy points).
+  # Config: deploy/Caddyfile.template, rendered into ./caddy/Caddyfile by the deploy script.
+  proxy:
+    image: caddy:2.8.4-alpine
+    container_name: ejam-kopa-proxy
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    # Also answer to the old container name, in case anything reached the app by name.
+    networks:
+      default:
+        aliases:
+          - ejam-kopa-app
+    volumes:
+      - ./caddy:/etc/caddy
+      - caddy_data:/data
 
 volumes:
   db_data:
@@ -67,3 +96,5 @@ volumes:
       type: none
       o: bind
       device: /srv/dev-disk-by-uuid-61316c2e-d3f3-489a-aa11-0f361612db56/Config/EJAM-APP/db_data
+  caddy_data:
+
