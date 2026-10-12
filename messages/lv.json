@@ -3,7 +3,6 @@
     "invalidCredentials": "Nepareizs e-pasts vai parole.",
     "modalDesc": "Ienāc, lai sazinātos.",
     "modalTitle": "Pievienojies kopienai",
-    "or": "vai",
     "password": "Parole",
     "signInButton": "Ienākt",
     "signInTitle": "Ienākt",
@@ -64,7 +63,6 @@
     "brandName": "Ejam Kopā",
     "brandShort": "EK",
     "cancel": "Atcelt",
-    "categoriesTitle": "Kategorijas",
     "checking": "Pārbauda pieejamību...",
     "clearSelection": "Notīrīt izvēli",
     "close": "Aizvērt",
@@ -109,7 +107,6 @@
     "fieldTitle": "Sadaļas nosaukums",
     "fieldTitlePlaceholder": "piem. BUJ, Noteikumi, Grafiks...",
     "fieldVisibility": "Redzamība",
-    "filtersTitle": "Filtri",
     "groupMenu": "GRUPAS IZVĒLNE",
     "groupSettings": "Grupas iestatījumi",
     "groups": "Grupas, kas izmanto šo birku",
@@ -247,20 +244,12 @@
   "discovery": {
     "active": "Aktīva",
     "adjustFilters": "Mēģini pielāgot filtrus vai meklēšanas vaicājumu, lai atrastu meklēto.",
-    "allCities": "Visas pilsētas",
-    "allSubcategories": "Visas apakštēmas",
-    "allTypes": "Visi grupu veidi",
     "anyCategory": "Jebkura {category}",
-    "applyFilters": "Apstiprināt",
-    "categoryLabel": "Kategorija",
-    "cityLabel": "Pilsēta",
     "clearAll": "Notīrīt visu",
     "clearCategory": "Noņemt kategoriju",
-    "clearFilters": "Notīrīt filtrus",
     "clearTag": "Noņemt birku",
     "createNewGroup": "Izveidot jaunu grupu",
     "eventsFound": "Pasākumi atrasti",
-    "filters": "Filtri",
     "gridView": "Režģa skats",
     "groupsEventsSection": "GRUPAS UN PASĀKUMI",
     "groupsFound": "Grupas atrastas",
@@ -274,7 +263,6 @@
     "noGroupsFound": "Grupas netika atrastas",
     "searchInputPlaceholder": "Meklēt grupas, pasākumus, tēmas...",
     "searchPlaceholder": "Meklēt grupas, pasākumus, biedrus...",
-    "specificOptions": "Īpašās opcijas",
     "topicsSection": "TĒMAS",
     "typePrivate": "Privāta",
     "typePublic": "Publiska"
@@ -447,8 +435,6 @@
         "approve": "Apstiprināts",
         "merge": "Apvienots",
         "title": "Jāizskata",
-        "noPendingTags": "Gaidāmo birku nav.",
-        "proposedUnder": "Ierosināts zem: {parent}",
         "unknown": "Nezināms",
         "submittedBy": "Iesniedzis {name} ({date})",
         "parentLabel": "Ieteiktā kategorija: {title}",
@@ -972,12 +958,9 @@
     "header": {
       "logoSubtitle": "Atrodi Savējos",
       "logoText": "Ejam Kopā",
-      "messages": "Ziņas",
-      "searchPlaceholder": "Meklēt pasākumus..."
+      "messages": "Ziņas"
     },
     "search": {
-      "placeholderDesc": "Šis ir globālās meklēšanas funkcionalitātes vietturis. Galīgajā versijā šeit būs tūlītēji rezultāti grupām, pasākumiem un citam.",
-      "pressEsc": "Nospied ESC, lai aizvērtu",
       "title": "Globālā meklēšana"
     },
     "sidebar": {
@@ -1120,10 +1103,8 @@
     "joinLink": "Pievienošanās saite",
     "location": "Vieta",
     "openInMaps": "Atvērt kartē",
-    "organizer": "Organizators",
     "shareEvent": "Dalīties ar pasākumu",
     "tba": "Tiks precizēta",
-    "visitCommunity": "Apmeklēt grupu",
     "createSubtitle": "Izveido jaunu pasākumu savai grupai",
     "membersOnly": "Tikai biedriem",
     "gate": {
@@ -1134,7 +1115,6 @@
       "goToGroup": "Uz grupu “{group}”"
     },
     "signInToRsvp": "Ieej, lai pieteiktos",
-    "joinToRsvp": "Pievienojies grupai, lai pieteiktos šim pasākumam.",
     "shareCopied": "Saite nokopēta",
     "shareFailed": "Neizdevās kopīgot saiti.",
     "goingDone": "Piedalīšos",

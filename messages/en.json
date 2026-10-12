@@ -3,7 +3,6 @@
     "invalidCredentials": "Wrong email or password.",
     "modalDesc": "Sign in to connect.",
     "modalTitle": "Join the Community",
-    "or": "or",
     "password": "Password",
     "signInButton": "Sign In",
     "signInTitle": "Sign in",
@@ -64,7 +63,6 @@
     "brandName": "Ejam Kopā",
     "brandShort": "EK",
     "cancel": "Cancel",
-    "categoriesTitle": "Categories",
     "checking": "Checking availability...",
     "clearSelection": "Clear selection",
     "close": "Close",
@@ -109,7 +107,6 @@
     "fieldTitle": "Section Title",
     "fieldTitlePlaceholder": "e.g. FAQ, Rules, Schedule...",
     "fieldVisibility": "Visibility",
-    "filtersTitle": "Filters",
     "groupMenu": "GROUP MENU",
     "groupSettings": "Group Settings",
     "groups": "Groups using this tag",
@@ -247,20 +244,12 @@
   "discovery": {
     "active": "Active",
     "adjustFilters": "Try adjusting your filters or search query to find what you're looking for.",
-    "allCities": "All Cities",
-    "allSubcategories": "All Subcategories",
-    "allTypes": "All Group Types",
     "anyCategory": "Any {category}",
-    "applyFilters": "Apply Filters",
-    "categoryLabel": "Category",
-    "cityLabel": "City",
     "clearAll": "Clear All",
     "clearCategory": "Clear category",
-    "clearFilters": "Clear filters",
     "clearTag": "Clear tag",
     "createNewGroup": "Create New Group",
     "eventsFound": "Events Found",
-    "filters": "Filters",
     "gridView": "Grid view",
     "groupsEventsSection": "GROUPS & EVENTS",
     "groupsFound": "Groups Found",
@@ -274,7 +263,6 @@
     "noGroupsFound": "No groups found",
     "searchInputPlaceholder": "Search groups, events, topics...",
     "searchPlaceholder": "Search groups, events, members...",
-    "specificOptions": "Specific Options",
     "topicsSection": "TOPICS",
     "typePrivate": "Private",
     "typePublic": "Public"
@@ -447,8 +435,6 @@
         "approve": "Approved",
         "merge": "Merged",
         "title": "Needs review",
-        "noPendingTags": "No pending tags.",
-        "proposedUnder": "Proposed under: {parent}",
         "unknown": "Unknown",
         "submittedBy": "Submitted by {name} on {date}",
         "parentLabel": "Suggested Category: {title}",
@@ -972,12 +958,9 @@
     "header": {
       "logoSubtitle": "Find Your People",
       "logoText": "Ejam Kopā",
-      "messages": "Messages",
-      "searchPlaceholder": "Search events..."
+      "messages": "Messages"
     },
     "search": {
-      "placeholderDesc": "This is a placeholder for the global search functionality. In the final version, you'll see instant results for groups, events, and more.",
-      "pressEsc": "Press ESC to close",
       "title": "Global Search"
     },
     "sidebar": {
@@ -1120,10 +1103,8 @@
     "joinLink": "Join Link",
     "location": "Location",
     "openInMaps": "Open in Maps",
-    "organizer": "Organizer",
     "shareEvent": "Share event",
     "tba": "TBA",
-    "visitCommunity": "Visit group",
     "createSubtitle": "Create a new event for your group",
     "membersOnly": "Members only",
     "gate": {
@@ -1134,7 +1115,6 @@
       "goToGroup": "Go to {group}"
     },
     "signInToRsvp": "Sign in to sign up",
-    "joinToRsvp": "Join the group to sign up for this event.",
     "shareCopied": "Link copied",
     "shareFailed": "Could not share the link.",
     "goingDone": "Going",
