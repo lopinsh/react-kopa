@@ -1,25 +1,29 @@
 {
-  "version": "9.0",
-  "updated": "2026-10-13T12:00:00+03:00",
+  "version": "9.1",
+  "updated": "2026-10-13T15:00:00+03:00",
   "changes": [
-    "Round nine: the page is rebuilt. It opens with \"Agreed rules\" (one line per element, its status and where it is drawn) and \"Still open\" (eight questions, each with a default), then follows the product from the identity to admin.",
+    "Round nine: the page is rebuilt. It opens with \"Agreed rules\" (one line per element, its status and where it is drawn) and \"Still open\" (seven questions, each with a default), then follows the product from the identity to admin.",
     "Each element is drawn in full in one section; every other copy uses the same markup. Every shot carries its own status: Agreed, Liked, Open or Proposal.",
     "Your answers of 12 October applied everywhere: one \"Sazināties\" button whose form can also ask to join; one filter row with the Grupas | Pasākumi switch at its right end; no \"Kad\" and no \"Izvēlēts\"; one place list with a plain \"Visur\".",
-    "Phones: groups as two-line rows with the category colour and icon; one header everywhere (logo, search, +, shield for admins, bell, picture); \"Grupas\" opens Manas grupas, \"Es\" opens Mans profils.",
+    "Phones: groups as two-line rows with the category colour and icon; one header everywhere (logo, search, +, shield for admins, bell, picture). Where \"Grupas\" and \"Es\" lead is my default, now asked in Still open.",
     "Profile menu: Mans profils, Manas grupas, Iestatījumi, Iziet. Light and dark only in Iestatījumi. Manas grupas drawn once, in your own area, with its left menu and the full content.",
     "Events filter by category and sub-category like groups, on every screen. Filter drop-downs drawn open, smaller. \"Nekas nav atrasts.\" in every list.",
     "Restored: the pending state, the clickable group name in notifications, sub-categories on phone rows, the \"Ko meklējam?\" field, the signals in the phone group bar.",
     "Removed: the greyed calendar-view icon, the light/dark quick switch, the \"Jaunākais · Visas grupas\" tabs, the \"Ready for sign-off\" claims, the three starting directions and old round notes.",
-    "New: three ways to make the filter area more compact, from Meetup, Airbnb, Material/SAP and Baymard (Discovery → More compact)."
+    "New: three ways to make the filter area more compact, from Meetup, Airbnb, Material/SAP and Baymard (Discovery → More compact).",
+    "Review (9.1): the sample data agrees everywhere: the same people, groups, counts and dates in notifications, messages, Manas grupas, search and the lists; the list behind the pop-up obeys its own filters.",
+    "Review (9.1): Manas grupas has no section titles under its section menu (the menu is the label); group rows and the phone group bar keep one quiet line, the sub-categories give way first.",
+    "Review (9.1): the Sazināties form drawn as it works on the live site (the title follows the switch), with the three live differences named; restored from round eight: Biedri → Pieteikumi and the personal chat that started in a group.",
+    "Review (9.1): \"The bell on phones\" left Still open (you agreed a full-screen list earlier); \"Where Grupas and Es lead\" joined it, since you hadn't answered it."
   ],
   "sections": {
     "h-rules": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-open": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-id": {
       "kind": "new",
@@ -27,19 +31,19 @@
     },
     "h-shell": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-disc": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-search": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-group": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-event": {
       "kind": "new",
@@ -47,11 +51,11 @@
     },
     "h-me": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-pop": {
       "kind": "new",
-      "version": "9.0"
+      "version": "9.1"
     },
     "h-admin": {
       "kind": "new",
