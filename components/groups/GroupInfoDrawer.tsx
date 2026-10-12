@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import GroupSidebarContent from '../shell/GroupSidebarContent';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface GroupInfoDrawerProps {
     isOpen: boolean;
@@ -44,6 +45,21 @@ export default function GroupInfoDrawer({
         };
     }, [isOpen, mounted]);
 
+    // Escape closes the drawer; focus goes back to whatever opened it.
+    useEffect(() => {
+        if (!isOpen) return;
+        const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', onKey);
+        return () => {
+            window.removeEventListener('keydown', onKey);
+            if (opener && opener.isConnected) opener.focus();
+        };
+    }, [isOpen, onClose]);
+
+    // Declared after the effect above so the opener is read before focus moves into the drawer.
+    const drawerRef = useFocusTrap<HTMLDivElement>(isOpen && mounted);
+
     if (!mounted) return null;
 
     return createPortal(
@@ -59,6 +75,12 @@ export default function GroupInfoDrawer({
 
             {/* Navigation Drawer */}
             <div
+                ref={drawerRef}
+                role="dialog"
+                aria-modal={isOpen}
+                aria-label={c_common('groupMenu')}
+                tabIndex={-1}
+                inert={!isOpen}
                 className={clsx(
                     "fixed inset-y-0 left-0 z-[45] w-full max-w-[280px] bg-surface shadow-premium transition-transform duration-300 ease-out md:hidden border-r border-border/50",
                     isOpen ? "translate-x-0" : "-translate-x-full"

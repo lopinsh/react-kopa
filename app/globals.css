@@ -40,6 +40,9 @@
   /* Primary accent */
   --primary: #6366f1;
   --primary-foreground: #ffffff;
+
+  /* Group owner marker (avatar ring, role label) */
+  --owner: #f59e0b;
 }
 
 /* ─── Dark Mode ─────────────────────────────────── */
@@ -66,6 +69,7 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-owner: var(--owner);
 
   /* Category colors available as Tailwind tokens */
   --color-cat-skill: var(--color-cat-skill);

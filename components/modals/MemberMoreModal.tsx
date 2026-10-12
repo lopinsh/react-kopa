@@ -1,12 +1,12 @@
 'use client';
 
-import { X, MessageSquare } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { clsx } from 'clsx';
 import ContactGroupModal from './ContactGroupModal';
 import { avatarUrl } from '@/lib/avatar';
-import { UI } from '@/lib/constants';
+import Modal from '@/components/ui/Modal';
 
 type Props = {
     isOpen: boolean;
@@ -35,21 +35,14 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-            <div data-ui={UI.modal} className="w-full max-w-2xl rounded-3xl bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[80vh]">
-                {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-border">
-                    <h2 className="text-xl font-bold text-foreground">
-                        {c_common('membersTitle')} ({members.length})
-                    </h2>
-                    <button
-                        onClick={onClose}
-                        className="rounded-full p-2 text-foreground-muted hover:bg-surface-elevated transition-colors"
-                    >
-                        <X className="h-5 w-5" />
-                    </button>
-                </div>
-
+        <>
+            <Modal
+                onClose={onClose}
+                size="2xl"
+                flush
+                title={`${c_common('membersTitle')} (${members.length})`}
+                panelClassName="flex max-h-[80vh] flex-col"
+            >
                 {/* List */}
                 <div className="overflow-y-auto p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {members.map(({ user, role }) => (
@@ -81,7 +74,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                                 <span
                                     className={clsx(
                                         "text-[10px] font-bold uppercase tracking-wider",
-                                        role === 'OWNER' ? 'text-[#f59e0b]' : 'text-[var(--accent)]'
+                                        role === 'OWNER' ? 'text-owner' : 'text-[var(--accent)]'
                                     )}
                                 >
                                     {t(`role_${role.toLowerCase()}`)}
@@ -97,16 +90,16 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                         </div>
                     ))}
                 </div>
-            </div>
+            </Modal>
 
-            {isSupportModalOpen && <ContactGroupModal
-                isOpen={isSupportModalOpen}
-                onClose={() => setIsSupportModalOpen(false)}
-                groupId={groupId}
-                groupName={groupName}
-                locale={locale}
-                allowJoin={false}
-            />}
-        </div>
+                {isSupportModalOpen && <ContactGroupModal
+                    isOpen={isSupportModalOpen}
+                    onClose={() => setIsSupportModalOpen(false)}
+                    groupId={groupId}
+                    groupName={groupName}
+                    locale={locale}
+                    allowJoin={false}
+                />}
+        </>
     );
 }

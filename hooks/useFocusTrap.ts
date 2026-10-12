@@ -2,9 +2,14 @@
 
 import { useEffect, useRef, RefObject } from 'react';
 
+const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /**
  * Hook to trap focus within a container.
  * Useful for modals, wizards, and drawers.
+ * On activation focus moves to the element marked `data-autofocus`, else the first focusable one
+ * (unless focus is already inside, e.g. an `autoFocus` field). The focusable list is read on every Tab,
+ * so content that changes while the container is open stays reachable.
  */
 export function useFocusTrap<T extends HTMLElement>(isActive: boolean): RefObject<T | null> {
     const containerRef = useRef<T>(null);
@@ -15,35 +20,38 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean): RefObjec
         const container = containerRef.current;
         if (!container) return;
 
-        const focusableElements = container.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        const firstElement = focusableElements[0] as HTMLElement;
-        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        const getFocusable = () => Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE));
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key !== 'Tab') return;
-
+            const elements = getFocusable();
+            if (elements.length === 0) {
+                e.preventDefault();
+                container.focus();
+                return;
+            }
+            const first = elements[0];
+            const last = elements[elements.length - 1];
+            const active = document.activeElement;
             if (e.shiftKey) {
-                if (document.activeElement === firstElement) {
+                if (active === first || active === container) {
                     e.preventDefault();
-                    lastElement?.focus();
+                    last.focus();
                 }
-            } else {
-                if (document.activeElement === lastElement) {
-                    e.preventDefault();
-                    firstElement?.focus();
-                }
+            } else if (active === last) {
+                e.preventDefault();
+                first.focus();
             }
         };
 
         container.addEventListener('keydown', handleKeyDown);
 
-        // Initial focus - focus the first element or the container itself if no focusable elements
-        if (focusableElements.length > 0) {
-            (focusableElements[0] as HTMLElement).focus();
-        } else {
-            container.focus();
+        if (!container.contains(document.activeElement)) {
+            const preferred = container.querySelector<HTMLElement>('[data-autofocus]');
+            const elements = getFocusable();
+            if (preferred) preferred.focus();
+            else if (elements.length > 0) elements[0].focus();
+            else container.focus();
         }
 
         return () => {
@@ -53,4 +61,3 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean): RefObjec
 
     return containerRef;
 }
-

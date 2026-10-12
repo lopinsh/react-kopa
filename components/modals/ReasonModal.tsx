@@ -1,0 +1,101 @@
+'use client';
+
+import { useId, useState, useTransition, type ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
+import type { ZodType } from 'zod';
+import Modal from '@/components/ui/Modal';
+import type { ActionResponse } from '@/types/actions';
+
+type Props = {
+    onClose: () => void;
+    icon: ReactNode;
+    title: string;
+    /** Shown above the description, e.g. the name of the group. */
+    subject?: string;
+    description: string;
+    reasonLabel: string;
+    placeholder: string;
+    hint: string;
+    confirmLabel: string;
+    cancelLabel: string;
+    initialReason?: string;
+    /** Same Zod schema the server action checks. */
+    schema: ZodType<{ reason: string }>;
+    /** Runs the server action; on success the modal closes. */
+    onSubmit: (reason: string) => Promise<ActionResponse<unknown>>;
+    onDone: () => void;
+};
+
+/** A red pop-up that asks a moderator or owner for a written reason, then runs one action with it. */
+export default function ReasonModal({
+    onClose, icon, title, subject, description, reasonLabel, placeholder, hint, confirmLabel, cancelLabel,
+    initialReason = '', schema, onSubmit, onDone,
+}: Props) {
+    const tErrors = useTranslations('errors');
+    const fieldId = useId();
+    const [reason, setReason] = useState(initialReason);
+    const [error, setError] = useState<string | null>(null);
+    const [isPending, startTransition] = useTransition();
+
+    const handleSubmit = () => {
+        if (isPending) return;
+        if (!schema.safeParse({ reason }).success) {
+            setError(tErrors('VALIDATION_FAILED'));
+            return;
+        }
+        setError(null);
+        startTransition(async () => {
+            const res = await onSubmit(reason);
+            if (res.success) {
+                onDone();
+                onClose();
+            } else {
+                setError(tErrors(res.error));
+            }
+        });
+    };
+
+    return (
+        <Modal
+            onClose={onClose}
+            locked={isPending}
+            title={<>{icon}{title}</>}
+            titleClassName="flex items-center gap-2 text-xl font-bold text-red-500"
+        >
+            {subject && <p className="mb-2 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">{subject}</p>}
+            <p className="mb-4 text-sm leading-relaxed text-foreground-muted">{description}</p>
+
+            <label className="mb-1 block text-sm font-semibold text-foreground" htmlFor={fieldId}>{reasonLabel}</label>
+            <textarea
+                id={fieldId}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                maxLength={500}
+                rows={4}
+                placeholder={placeholder}
+                className="w-full resize-none rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-red-500/50"
+            />
+            <p className="mt-1 text-xs text-foreground-muted">{hint}</p>
+            {error && <p role="alert" className="mt-2 text-sm font-medium text-red-500">{error}</p>}
+
+            <div className="mt-6 flex justify-end gap-3">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    disabled={isPending}
+                    className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
+                >
+                    {cancelLabel}
+                </button>
+                <button
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={isPending}
+                    className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-red-700 disabled:opacity-50"
+                >
+                    {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}
+                </button>
+            </div>
+        </Modal>
+    );
+}
