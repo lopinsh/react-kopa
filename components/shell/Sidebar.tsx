@@ -41,7 +41,7 @@ export default function Sidebar({ locale }: SidebarProps) {
                 'hidden md:flex flex-col border-r border-border bg-surface transition-all duration-300 ease-in-out shrink-0 relative',
                 isCollapsed ? 'w-16' : 'w-[260px]'
             )}
-            aria-label="Sidebar"
+            aria-label={t('label')}
         >
             {/* Desktop Toggle Button */}
             <button

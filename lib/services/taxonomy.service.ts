@@ -174,9 +174,8 @@ export const TaxonomyService = {
                         status: 'ACTIVE',
                     },
                     include: {
-                        titles: {
-                            where: { lang },
-                        },
+                        // All languages: a sub-category may have a title in one language only.
+                        titles: { select: { lang: true, title: true } },
                         aliases: {
                             select: {
                                 id: true,
@@ -194,8 +193,8 @@ export const TaxonomyService = {
                     return [];
                 }
 
-                const getTitle = (cat: { titles: { title: string }[]; slug: string }) =>
-                    cat.titles[0]?.title ?? cat.slug;
+                const getTitle = (cat: { titles: { lang: string; title: string }[]; slug: string }) =>
+                    pickTitle(cat.titles, lang, cat.slug);
 
                 const l1s = allCategories.filter((c) => c.level === 1);
                 const l2s = allCategories.filter((c) => c.level === 2);
@@ -254,9 +253,9 @@ export const TaxonomyService = {
                 status: 'ACTIVE',
                 OR: [
                     {
+                        // Any language, so a sub-category named in one language only is still found.
                         titles: {
                             some: {
-                                lang,
                                 title: {
                                     contains: normalized,
                                     mode: 'insensitive',
@@ -280,11 +279,7 @@ export const TaxonomyService = {
             select: {
                 id: true,
                 slug: true,
-                titles: {
-                    where: { lang },
-                    select: { title: true },
-                    take: 1,
-                },
+                titles: { select: { lang: true, title: true } },
                 aliases: {
                     where: {
                         value: {
@@ -304,7 +299,7 @@ export const TaxonomyService = {
         return categories.map((category) => ({
             id: category.id,
             slug: category.slug,
-            title: category.titles[0]?.title ?? category.slug,
+            title: pickTitle(category.titles, lang, category.slug),
             isAlias: category.aliases.length > 0,
         }));
     },
@@ -350,7 +345,7 @@ export const TaxonomyService = {
                 submittedById: params.submittedById,
                 submittedAt: new Date(),
                 titles: {
-                    // Stored in the language the person typed it in; the other language is filled in on approval.
+                    // Stored in the language the person typed it in; an admin adds the other language later.
                     create: {
                         lang: params.locale === 'en' ? 'en' : 'lv',
                         title: trimmed,
@@ -879,26 +874,19 @@ export const TaxonomyService = {
 
         let approvedCount = 0;
         for (const cat of pending) {
-            const submitted = cat.titles[0];
-            const titleEn = cat.titles.find(t => t.lang === 'en')?.title || submitted?.title || cat.slug;
+            const titleEn = cat.titles.find(t => t.lang === 'en')?.title || cat.titles[0]?.title || cat.slug;
             const slugEn = await createUniqueCategorySlug(titleEn);
             const slugLv = slugify(titleEn) || `tag-lv-${Date.now()}`;
 
-            await prisma.$transaction(async (tx) => {
-                await tx.category.update({
-                    where: { id: cat.id },
-                    data: {
-                        status: 'ACTIVE',
-                        isWildcard: false,
-                        slug: slugEn,
-                        slugLv,
-                    }
-                });
-
-                // The suggestion keeps its own language; the other one starts as a copy until an admin edits it.
-                for (const lang of ['en', 'lv']) {
-                    if (cat.titles.some((t) => t.lang === lang)) continue;
-                    await tx.categoryTranslation.create({ data: { categoryId: cat.id, lang, title: submitted?.title ?? titleEn } });
+            // The suggestion keeps the one language it was written in; the other stays missing until an
+            // admin adds it (viewers of that language see the original through pickTitle meanwhile).
+            await prisma.category.update({
+                where: { id: cat.id },
+                data: {
+                    status: 'ACTIVE',
+                    isWildcard: false,
+                    slug: slugEn,
+                    slugLv,
                 }
             });
             approvedCount++;

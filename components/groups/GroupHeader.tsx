@@ -168,7 +168,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
             <div className="relative z-10 px-4 md:px-8 py-8 max-w-screen-2xl">
                 {/* ── Breadcrumb & Mobile Actions ─────────────────────────────── */}
                 <div className="mb-4 flex items-start justify-between gap-4">
-                    <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5 text-sm" aria-label="breadcrumb">
+                    <nav className="flex flex-wrap items-center gap-1 sm:gap-1.5 text-sm" aria-label={c_common('breadcrumb')}>
                         {breadcrumbSegments.map((seg, i) => {
                             const L1Color = group.category.color;
                             const Icon = seg.isL1 && seg.slug ? getCategoryIcon(seg.slug) : null;

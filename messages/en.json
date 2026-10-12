@@ -45,6 +45,7 @@
     }
   },
   "common": {
+    "breadcrumb": "Breadcrumb",
     "about": "About",
     "accept": "Understood",
     "actionRequired": "Action Required",
@@ -827,7 +828,9 @@
     "discover": "Discover",
     "myGroups": "My Groups",
     "profile": "Profile",
-    "adminMenu": "Admin tools"
+    "adminMenu": "Admin tools",
+    "mobileLabel": "Main navigation",
+    "languageLabel": "Language"
   },
   "notifications": {
     "title": "Notifications",
@@ -977,7 +980,8 @@
       "events": "EVENTS",
       "everything": "Show all",
       "groups": "GROUPS",
-      "expand": "Expand sidebar"
+      "expand": "Expand sidebar",
+      "label": "Sidebar"
     }
   },
   "theme": {

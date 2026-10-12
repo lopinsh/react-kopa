@@ -11,6 +11,10 @@ import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
 import { getTranslations } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { toTextLang, resolveText } from '@/lib/translations';
+import { pickTitle } from '@/lib/utils/localized-title';
+
+/** All titles: a sub-category may exist in one language only (see pickTitle). */
+const ALL_TITLES = { select: { lang: true, title: true } } as const;
 
 /**
  * A group matches when one of its PUBLIC sections has the text in any language. Members-only sections
@@ -58,7 +62,8 @@ export const DiscoveryService = {
         const categoryWhere: Prisma.CategoryWhereInput = {
             status: 'ACTIVE',
             isWildcard: false,
-            titles: { some: { lang, title: q } }
+            // Any language: a sub-category may have a title in one language only.
+            titles: { some: { title: q } }
         };
 
         if (contextId) {
@@ -77,11 +82,11 @@ export const DiscoveryService = {
             where: categoryWhere,
             take: 5,
             include: {
-                titles: { where: { lang } },
+                titles: ALL_TITLES,
                 parent: {
                     include: {
-                        titles: { where: { lang } },
-                        parent: { include: { titles: { where: { lang } } } }
+                        titles: ALL_TITLES,
+                        parent: { include: { titles: ALL_TITLES } }
                     }
                 }
             }
@@ -180,7 +185,7 @@ export const DiscoveryService = {
                 type: 'category',
                 id: resolved.categoryId,
                 slug: resolved.categorySlug,
-                title: resolved.categoryTitle,
+                title: pickTitle(c.titles, lang, c.slug),
                 l1Slug: resolved.l1Slug || activeCat || 'sigulda',
                 l2Slug: l2?.slug,
                 color: resolved.accentColor,
@@ -394,16 +399,14 @@ export const DiscoveryService = {
         )();
     },
 
-    async snapInterest(query: string, locale: string) {
-        const lang = locale === 'en' ? 'en' : 'lv';
-
+    /** Matches a title in either language: a sub-category may be named in one language only. */
+    async snapInterest(query: string) {
         const snapped = await prisma.category.findFirst({
             where: {
                 level: { in: [1, 2] },
                 status: 'ACTIVE',
                 titles: {
                     some: {
-                        lang,
                         title: { equals: query, mode: 'insensitive' }
                     }
                 }
@@ -430,12 +433,12 @@ export const DiscoveryService = {
                 const target = await prisma.category.findUnique({
                     where: { id: categoryId },
                     include: {
-                        titles: { where: { lang } },
+                        titles: ALL_TITLES,
                         parent: {
                             include: {
-                                titles: { where: { lang } },
+                                titles: ALL_TITLES,
                                 parent: {
-                                    include: { titles: { where: { lang } } }
+                                    include: { titles: ALL_TITLES }
                                 }
                             }
                         }
@@ -444,28 +447,28 @@ export const DiscoveryService = {
                 if (!target) return null;
 
                 let l1Id = target.id;
-                const activeHierarchy = [{ id: target.id, title: target.titles[0]?.title ?? target.slug, level: target.level }];
+                const activeHierarchy = [{ id: target.id, title: pickTitle(target.titles, lang, target.slug), level: target.level }];
 
                 if (target.level === 3 && target.parent?.parent) {
                     l1Id = target.parent.parentId!;
-                    activeHierarchy.unshift({ id: target.parent.id, title: target.parent.titles[0]?.title ?? target.parent.slug, level: 2 });
-                    activeHierarchy.unshift({ id: target.parent.parent.id, title: target.parent.parent.titles[0]?.title ?? target.parent.parent.slug, level: 1 });
+                    activeHierarchy.unshift({ id: target.parent.id, title: pickTitle(target.parent.titles, lang, target.parent.slug), level: 2 });
+                    activeHierarchy.unshift({ id: target.parent.parent.id, title: pickTitle(target.parent.parent.titles, lang, target.parent.parent.slug), level: 1 });
                 } else if (target.level === 2 && target.parent) {
                     l1Id = target.parentId!;
-                    activeHierarchy.unshift({ id: target.parent.id, title: target.parent.titles[0]?.title ?? target.parent.slug, level: 1 });
+                    activeHierarchy.unshift({ id: target.parent.id, title: pickTitle(target.parent.titles, lang, target.parent.slug), level: 1 });
                 }
 
                 const l1Tree = await prisma.category.findUnique({
                     where: { id: l1Id },
                     include: {
-                        titles: { where: { lang } },
+                        titles: ALL_TITLES,
                         children: {
                             where: { status: 'ACTIVE' },
                             include: {
-                                titles: { where: { lang } },
+                                titles: ALL_TITLES,
                                 children: {
                                     where: { status: 'ACTIVE' },
-                                    include: { titles: { where: { lang } } },
+                                    include: { titles: ALL_TITLES },
                                     orderBy: { slug: 'asc' }
                                 }
                             },
@@ -480,17 +483,17 @@ export const DiscoveryService = {
                     l1: {
                         id: l1Tree.id,
                         slug: l1Tree.slug,
-                        title: l1Tree.titles[0]?.title ?? l1Tree.slug,
+                        title: pickTitle(l1Tree.titles, lang, l1Tree.slug),
                         color: l1Tree.color ?? '#6366f1'
                     },
                     l2s: l1Tree.children.map(c2 => ({
                         id: c2.id,
                         slug: c2.slug,
-                        title: c2.titles[0]?.title ?? c2.slug,
+                        title: pickTitle(c2.titles, lang, c2.slug),
                         children: c2.children.map(c3 => ({
                             id: c3.id,
                             slug: c3.slug,
-                            title: c3.titles[0]?.title ?? c3.slug
+                            title: pickTitle(c3.titles, lang, c3.slug)
                         }))
                     })),
                     activeHierarchy
@@ -510,11 +513,11 @@ export const DiscoveryService = {
         const category = await prisma.category.findUnique({
             where: { slug },
             include: {
-                titles: { where: { lang } }
+                titles: ALL_TITLES
             }
         });
 
         if (!category) return null;
-        return category.titles[0]?.title || category.slug;
+        return pickTitle(category.titles, lang, category.slug);
     }
 };

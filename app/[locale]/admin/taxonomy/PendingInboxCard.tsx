@@ -1,5 +1,6 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import { pickTitle } from '@/lib/utils/localized-title';
 import { useDateFormatter } from '@/lib/date-format';
 import { useRouter } from '@/i18n/routing';
 import { Link } from '@/i18n/routing';
@@ -37,6 +38,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
     // Merge form state
     const [mergeIntoId, setMergeIntoId] = useState('');
+    const mergeTarget = canonicalOptions.find((c) => c.id === mergeIntoId);
 
     const handleApprove = async () => {
         startTransition(async () => {
@@ -217,7 +219,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (
                             <option key={opt.id} value={opt.id}>
-                                {opt.translations.find(t => t.lang === 'en')?.title || opt.slug}
+                                {pickTitle(opt.translations, 'en', opt.slug)}
                             </option>
                         ))}
                     </select>
@@ -226,7 +228,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         <div className="mb-4">
                             <p className="text-xs text-foreground-muted mb-1">{t('selectedCanonicalLabel')}</p>
                             <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
-                                {canonicalOptions.find(o => o.id === mergeIntoId)?.translations.find(t => t.lang === 'en')?.title || canonicalOptions.find(o => o.id === mergeIntoId)?.slug}
+                                {mergeTarget && pickTitle(mergeTarget.translations, 'en', mergeTarget.slug)}
                             </span>
                         </div>
                     )}

@@ -69,7 +69,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         DiscoveryService.getDiscoveryCategories(locale),
         getTaxonomy(locale),
         category ? GroupService.findCategoryBySlug(category) : Promise.resolve(null),
-        (q && !category) ? DiscoveryService.snapInterest(q, locale) : Promise.resolve(null)
+        (q && !category) ? DiscoveryService.snapInterest(q) : Promise.resolve(null)
     ]);
 
     if (!taxonomyRes.success) {

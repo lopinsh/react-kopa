@@ -28,7 +28,7 @@ export default function MobileNav() {
             <nav
                 data-ui={UI.mobileNav}
                 className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-stretch border-t border-border bg-surface md:hidden"
-                aria-label="Mobile navigation"
+                aria-label={t('mobileLabel')}
             >
                 {/* Left links */}
                 {leftLinks.map(({ href, labelKey, icon: Icon }) => {

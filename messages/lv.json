@@ -45,6 +45,7 @@
     }
   },
   "common": {
+    "breadcrumb": "Ceļš",
     "about": "Par mums",
     "accept": "Skaidrs",
     "actionRequired": "Nepieciešama rīcība",
@@ -827,7 +828,9 @@
     "discover": "Atklāt",
     "myGroups": "Manas grupas",
     "profile": "Profils",
-    "adminMenu": "Administrēšana"
+    "adminMenu": "Administrēšana",
+    "mobileLabel": "Galvenā navigācija",
+    "languageLabel": "Valoda"
   },
   "notifications": {
     "title": "Paziņojumi",
@@ -973,11 +976,12 @@
     },
     "sidebar": {
       "anyCity": "Jebkura pilsēta",
-      "collapse": "Izvērst sānu joslu",
+      "collapse": "Sakļaut sānu joslu",
       "events": "PASĀKUMI",
       "everything": "Rādīt visus",
       "groups": "GRUPAS",
-      "expand": "Izvērst sānu joslu"
+      "expand": "Izvērst sānu joslu",
+      "label": "Sānu josla"
     }
   },
   "theme": {

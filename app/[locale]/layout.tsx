@@ -66,7 +66,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <Sidebar locale={locale} />
                     {/* Main Content */}
                     <main
-                        className="flex-1 overflow-y-auto pb-20 md:pb-4"
+                        className="flex-1 overflow-y-auto pb-20 md:pb-4 focus:outline-none"
                         id="main-content"
                     >
                         <div className="flex-1">

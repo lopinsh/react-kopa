@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import { pickTitle } from '@/lib/utils/localized-title';
 import { bulkMergeAction } from '@/actions/taxonomy-actions';
 import type { ActiveL2WithAliases, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
 import { Merge } from 'lucide-react';
@@ -26,7 +27,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
 
     const selectedItems = selectedIds.map(id => {
         const active = categories.find(c => c.id === id);
-        if (active) return { id: active.id, type: 'active' as const, title: active.translations.find(t => t.lang === 'en')?.title || active.slug };
+        if (active) return { id: active.id, type: 'active' as const, title: pickTitle(active.translations, 'en', active.slug) };
         const pending = pendingTags.find(p => p.id === id);
         if (pending) return { id: pending.id, type: 'pending' as const, title: pending.submittedLabel };
         return null;

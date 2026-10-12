@@ -53,7 +53,7 @@ const openModals: string[] = [];
 
 /** Focus goes back to the given trigger, else the opener, else the main region, never to <body>. */
 function restoreFocus(trigger: HTMLElement | null | undefined, opener: HTMLElement | null) {
-    const target = [trigger, opener].find((el): el is HTMLElement => !!el && el.isConnected);
+    const target = [trigger, opener].find((el): el is HTMLElement => !!el && el.isConnected && el !== document.body);
     if (target) {
         target.focus();
         return;

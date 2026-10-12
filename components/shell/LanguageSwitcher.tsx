@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
@@ -13,6 +13,7 @@ const LOCALES = [
 
 export default function LanguageSwitcher() {
     const locale = useLocale();
+    const t = useTranslations('nav');
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -29,7 +30,8 @@ export default function LanguageSwitcher() {
     return (
         <div
             className="flex items-center gap-0.5 p-0.5"
-            aria-label="Language switcher"
+            role="group"
+            aria-label={t('languageLabel')}
         >
             {LOCALES.map(({ code, label }) => (
                 <button
