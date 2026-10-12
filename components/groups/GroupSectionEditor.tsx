@@ -288,7 +288,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
             <ConfirmDialog
                 isOpen={deleteTarget !== null}
                 title={c_common('deleteSection')}
-                message={t('deleteConfirm')}
+                message={t('deleteSectionConfirm')}
                 confirmLabel={c_common('deleteSection')}
                 destructive
                 isPending={isPending}

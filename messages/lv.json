@@ -423,7 +423,8 @@
     "attending": "pieteikušies",
     "createEvent": "Izveidot pasākumu",
     "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai",
-    "openChat": "Atvērt sarunu"
+    "openChat": "Atvērt sarunu",
+    "deleteSectionConfirm": "Dzēst šo sadaļu? To nevarēs atjaunot."
   },
   "admin": {
     "dashboard": {

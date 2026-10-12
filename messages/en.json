@@ -423,7 +423,8 @@
     "attending": "going",
     "createEvent": "Create event",
     "visibilityPublicDesc": "Anyone can find it and ask to join",
-    "openChat": "Open chat"
+    "openChat": "Open chat",
+    "deleteSectionConfirm": "Delete this section? It can't be restored."
   },
   "admin": {
     "dashboard": {

@@ -49,7 +49,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                     <label htmlFor="announcement-title" className="mb-1.5 block text-xs font-bold text-foreground">{t('announcementTitleLabel')}</label>
                     <input
                         id="announcement-title"
-                        autoFocus
+                        data-autofocus
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         maxLength={ANNOUNCEMENT_TITLE_MAX}
