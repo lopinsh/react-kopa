@@ -4,21 +4,20 @@ import { useRef, useState, useId, useEffect, type KeyboardEvent, type PointerEve
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { AlertTriangle, Brush, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, Brush, EyeOff, Network, MapPin, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { UI } from '@/lib/constants';
 
 type Props = {
     pendingTags: number;
+    pendingCities: number;
     pendingReports: number;
     pendingSuggestions: number;
-    /** The Team page is for the site owner only. */
-    isOwner: boolean;
 };
 
-type ItemId = 'redesign' | 'reports' | 'moderation' | 'taxonomy' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
-type GroupId = 'content' | 'structure' | 'site' | 'people' | 'development';
+type ItemId = 'redesign' | 'reports' | 'decisions' | 'categories' | 'locations' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
+type GroupId = 'moderation' | 'structure' | 'site' | 'team' | 'development';
 
 type NavItem = {
     id: ItemId;
@@ -43,7 +42,7 @@ function Badge({ count, danger }: { count: number; danger?: boolean }) {
 }
 
 /** The one navigation shared by every admin page: four grouped menus (one phone menu below 640 px). */
-export default function AdminNav({ pendingTags, pendingReports, pendingSuggestions, isOwner }: Props) {
+export default function AdminNav({ pendingTags, pendingCities, pendingReports, pendingSuggestions }: Props) {
     const t = useTranslations('admin.nav');
     const pathname = usePathname();
     const tab = useSearchParams().get('tab');
@@ -78,16 +77,17 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
 
     const groups: NavGroup[] = [
         {
-            id: 'content',
+            id: 'moderation',
             items: [
-                { id: 'moderation', href: '/admin', icon: EyeOff, active: onDashboard, badge: 0 },
                 { id: 'reports', href: '/admin/reports', icon: AlertTriangle, active: pathname.startsWith('/admin/reports'), badge: pendingReports, danger: true },
+                { id: 'decisions', href: '/admin', icon: EyeOff, active: onDashboard, badge: 0 },
             ],
         },
         {
             id: 'structure',
             items: [
-                { id: 'taxonomy', href: '/admin/taxonomy', icon: Network, active: pathname.startsWith('/admin/taxonomy'), badge: pendingTags },
+                { id: 'categories', href: '/admin/categories', icon: Network, active: pathname.startsWith('/admin/categories'), badge: pendingTags },
+                { id: 'locations', href: '/admin/locations', icon: MapPin, active: pathname.startsWith('/admin/locations'), badge: pendingCities },
             ],
         },
         {
@@ -99,9 +99,9 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
             ],
         },
         {
-            id: 'people',
+            id: 'team',
             items: [
-                ...(isOwner ? [{ id: 'team' as const, href: '/admin/team', icon: UserCog, active: pathname.startsWith('/admin/team'), badge: 0 }] : []),
+                { id: 'team', href: '/admin/team', icon: UserCog, active: pathname.startsWith('/admin/team'), badge: 0 },
             ],
         },
         {

@@ -42,7 +42,7 @@ export async function suggestCity(name: string): Promise<ActionResponse<{ slug: 
             await NotificationService.notifyAdmins({
                 type: 'ADMIN_CITY_PENDING',
                 args: { title: city.name },
-                link: '/admin/taxonomy',
+                link: '/admin/locations',
                 exceptUserId: session.user.id,
             });
             refreshCities();

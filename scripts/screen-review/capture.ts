@@ -128,7 +128,7 @@ const SHOTS: Shot[] = [
     { name: 'admin-dashboard-reports-tab', roles: ['admin'], url: '/lv/admin?tab=reports' },
     { name: 'admin-dashboard-moderation-tab', roles: ['admin'], url: '/lv/admin?tab=moderation' },
     { name: 'admin-reports', roles: ['admin'], url: '/lv/admin/reports' },
-    { name: 'admin-taxonomy', roles: ['admin'], url: '/lv/admin/taxonomy' },
+    { name: 'admin-taxonomy', roles: ['admin'], url: '/lv/admin/categories' },
     { name: 'admin-categorization', roles: ['admin'], url: `/lv/admin/groups/jelgavas-lugsanu-loks/categorization` },
     { name: 'admin-as-member', roles: ['member'], url: '/lv/admin' },
 ];

@@ -64,6 +64,17 @@ const nextConfig: NextConfig = {
         destination: '/admin/development/redesign',
         permanent: false,
       },
+      // The Taxonomy page was split into Categories and Locations.
+      {
+        source: '/:locale(lv|en)/admin/taxonomy',
+        destination: '/:locale/admin/categories',
+        permanent: false,
+      },
+      {
+        source: '/admin/taxonomy',
+        destination: '/admin/categories',
+        permanent: false,
+      },
       // Announcements used to be the Discussions tab; the query string is kept by Next.
       {
         source: '/:locale(lv|en)/:l1Slug/group/:groupSlug/discussions',

@@ -29,7 +29,7 @@ export default async function AdminDashboardPage({
     const { tab, error, group } = await searchParams;
     // Old links: reports have their own page, new tags are reviewed on top of Taxonomy.
     if (tab === 'reports') redirect(`/${locale}/admin/reports`);
-    if (tab === 'tags') redirect(`/${locale}/admin/taxonomy`);
+    if (tab === 'tags') redirect(`/${locale}/admin/categories`);
     const { isOwner } = await requireAdminPage(locale, '/admin');
 
     const [t, tInbox, tMod, tErrors, timeZone, [moderationLog, hiddenGroups]] = await Promise.all([

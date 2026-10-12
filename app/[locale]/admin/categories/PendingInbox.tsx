@@ -3,22 +3,19 @@ import { useTranslations } from 'next-intl';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { PendingCategoryWithContext, ActiveL2WithAliases } from '@/lib/services/taxonomy.service';
 import PendingInboxCard from './PendingInboxCard';
-import PendingCityCard from './PendingCityCard';
-import type { CityRow } from '@/lib/services/city.service';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
 type Props = {
     pendingTags: PendingCategoryWithContext[];
-    pendingCities: CityRow[];
     categories: ActiveL2WithAliases[];
     onNodeSelect: (node: SelectedTaxonomyNode | null) => void;
 };
 
-export default function PendingInbox({ pendingTags, pendingCities, categories, onNodeSelect }: Props) {
+export default function PendingInbox({ pendingTags, categories, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.inbox');
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const total = pendingTags.length + pendingCities.length;
+    const total = pendingTags.length;
     if (total === 0) {
         return null; // Hidden when empty
     }
@@ -43,9 +40,6 @@ export default function PendingInbox({ pendingTags, pendingCities, categories, o
 
             {isExpanded && (
                 <div className="p-4 pt-0 grid gap-4">
-                    {pendingCities.map(city => (
-                        <PendingCityCard key={city.id} city={city} />
-                    ))}
                     {pendingTags.map(tag => (
                         <PendingInboxCard
                             key={tag.id}

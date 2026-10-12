@@ -32,8 +32,8 @@ function mapTaxonomyError(error: unknown, fallback: ErrorCode = 'ACTION_FAILED')
 }
 
 function revalidateTaxonomyAdminPages(): void {
-    revalidatePath('/en/admin/taxonomy', 'page');
-    revalidatePath('/lv/admin/taxonomy', 'page');
+    revalidatePath('/en/admin/categories', 'page');
+    revalidatePath('/lv/admin/categories', 'page');
 }
 
 export async function getTaxonomy(locale: string): Promise<ActionResponse<TaxonomyTree>> {
@@ -92,7 +92,7 @@ export async function submitPendingTag(label: string, parentId: string, locale: 
             await NotificationService.notifyAdmins({
                 type: 'ADMIN_TAG_PENDING',
                 args: { title: label.trim() },
-                link: '/admin/taxonomy',
+                link: '/admin/categories',
                 exceptUserId: session.user.id,
             });
         }

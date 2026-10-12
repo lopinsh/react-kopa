@@ -5,15 +5,15 @@ import { GroupService } from './group.service';
 
 export class AdminService {
     /** What waits for an admin: shown as badges in the admin navigation. */
-    static async getPendingCounts(): Promise<{ tags: number; reports: number; suggestions: number }> {
+    static async getPendingCounts(): Promise<{ tags: number; cities: number; reports: number; suggestions: number }> {
         const [tagCount, cityCount, reports, suggestions] = await Promise.all([
             prisma.category.count({ where: { isWildcard: true, status: 'PENDING_REVIEW' } }),
             prisma.city.count({ where: { status: 'PENDING_REVIEW' } }),
             prisma.report.count({ where: { status: 'PENDING' } }),
             prisma.messageSuggestion.count()
         ]);
-        // New sub-categories and new cities both wait in the Taxonomy page's "needs review" card.
-        return { tags: tagCount + cityCount, reports, suggestions };
+        // New sub-categories wait on the Categories page, new cities on the Locations page.
+        return { tags: tagCount, cities: cityCount, reports, suggestions };
     }
 
     /**

@@ -4,12 +4,11 @@ import { notFound } from 'next/navigation';
 import { getAllTags, getPendingTags, getTaxonomy } from '@/actions/taxonomy-actions';
 import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
-import { CityService } from '@/lib/services/city.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'admin.nav' });
-    return { title: t('taxonomy') };
+    return { title: t('categories') };
 }
 
 export default async function AdminTaxonomyPage({
@@ -20,9 +19,9 @@ export default async function AdminTaxonomyPage({
     const { locale } = await params;
     const t = await getTranslations('admin.taxonomy');
 
-    await requireAdminPage(locale, '/admin/taxonomy');
+    await requireAdminPage(locale, '/admin/categories');
 
-    const [pendingRes, allRes, treeRes, cities] = await Promise.all([getPendingTags(), getAllTags(), getTaxonomy(locale), CityService.listAll()]);
+    const [pendingRes, allRes, treeRes] = await Promise.all([getPendingTags(), getAllTags(), getTaxonomy(locale)]);
 
     if (!pendingRes.success || !allRes.success || !treeRes.success) {
         notFound();
@@ -38,7 +37,6 @@ export default async function AdminTaxonomyPage({
                 pending={pendingRes.data ?? []}
                 categories={allRes.data ?? []}
                 tree={treeRes.data ?? []}
-                cities={cities}
             />
         </div>
     );
