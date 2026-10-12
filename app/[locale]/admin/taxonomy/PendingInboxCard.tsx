@@ -134,7 +134,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         {item.groups.map(g => (
                             <Link
                                 key={g.id}
-                                href={`/admin/groups/${g.slug}/categorization`}
+                                href={`/admin/groups/${g.l1Slug}/${g.slug}/categorization`}
                                 className="text-sm bg-surface-elevated hover:bg-border px-2 py-1 rounded transition-colors"
                             >
                                 {g.name}

@@ -15,15 +15,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function AdminGroupCategorizationPage({
     params,
 }: {
-    params: Promise<{ locale: string; groupSlug: string }>;
+    params: Promise<{ locale: string; l1Slug: string; groupSlug: string }>;
 }) {
-    const { locale, groupSlug } = await params;
+    const { locale, l1Slug, groupSlug } = await params;
 
-    const { userId } = await requireAdminPage(locale, `/admin/groups/${groupSlug}/categorization`);
+    const { userId } = await requireAdminPage(locale, `/admin/groups/${l1Slug}/${groupSlug}/categorization`);
 
     const [taxonomyRes, group] = await Promise.all([
         getTaxonomy(locale),
-        GroupService.getGroupWithContext(groupSlug, locale, undefined, userId),
+        GroupService.getGroupWithContext(groupSlug, locale, l1Slug, userId),
     ]);
 
     if (!taxonomyRes.success || !group) {

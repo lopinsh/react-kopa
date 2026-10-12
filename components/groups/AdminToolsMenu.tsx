@@ -106,7 +106,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                         </button>
                     )}
 
-                    <Link href={`/admin/groups/${group.slug}/categorization`} className={ITEM} onClick={() => setOpen(false)}>
+                    <Link href={`/admin/groups/${group.category.l1Slug}/${group.slug}/categorization`} className={ITEM} onClick={() => setOpen(false)}>
                         <Tags className="h-4 w-4 text-foreground-muted" />
                         {t('fixCategorization')}
                     </Link>
