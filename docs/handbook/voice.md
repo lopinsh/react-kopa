@@ -21,7 +21,7 @@ One word per thing, everywhere.
 | Group's news | Jaunumi | Announcements |
 | Private chats | Ziņas | Messages |
 | Asking to join | Pieteikties | Join (request) |
-| Writing without joining | Sazināties | Contact |
+| Writing to a group (the one button; its form can also ask to join) | Sazināties | Contact |
 | Owner + admins | Grupas komanda | Group team |
 
 ## Say, not
