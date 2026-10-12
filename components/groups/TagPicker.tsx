@@ -9,7 +9,7 @@ import { getPendingTagOptions, searchL2Tags, submitPendingTag } from '@/actions/
 import { useFormContext } from 'react-hook-form';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { GroupFormValues } from '@/lib/validations/group';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type FlatTag = {
     id: string;
@@ -155,16 +155,10 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
         };
     }, [l1.id, locale]);
 
-    useEffect(() => {
-        function handler(e: MouseEvent) {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) {
-                setIsOpen(false);
-                setWildcardMode(false);
-            }
-        }
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
+    useClickOutside(containerRef, () => {
+        setIsOpen(false);
+        setWildcardMode(false);
+    });
 
     function toggleTag(tagId: string) {
         const hasTag = tagIds.includes(tagId);

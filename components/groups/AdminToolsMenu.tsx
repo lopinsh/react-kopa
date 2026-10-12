@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { EyeOff, Eye, History, Pencil, Tags, UserCog } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -8,7 +8,7 @@ import { Link, useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { GroupContext } from '@/lib/services/group.service';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type Props = {
     group: GroupContext;
@@ -36,14 +36,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
     const [isPending, startTransition] = useTransition();
     const ref = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (!isOpen) return;
-        function handleClick(e: MouseEvent) {
-            if (ref.current && !ref.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) setOpen(false);
-        }
-        document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
-    }, [isOpen]);
+    useClickOutside(ref, () => setOpen(false), isOpen);
 
     if (!group.moderation.isSiteAdmin) return null;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowRightLeft, Flag, LogOut, MoreHorizontal, Settings, Share2 } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import type { GroupContext } from '@/lib/services/group.service';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 
 type Props = {
@@ -39,14 +39,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     const isOwner = checkIsOwner(role);
     const canManage = hasAdminRights(role);
 
-    useEffect(() => {
-        if (!isOpen) return;
-        function handleClick(e: MouseEvent) {
-            if (ref.current && !ref.current.contains(e.target as Node) && !inFeedbackLayer(e.target)) setOpen(false);
-        }
-        document.addEventListener('mousedown', handleClick);
-        return () => document.removeEventListener('mousedown', handleClick);
-    }, [isOpen]);
+    useClickOutside(ref, () => setOpen(false), isOpen);
 
     const handleShare = async () => {
         setOpen(false);

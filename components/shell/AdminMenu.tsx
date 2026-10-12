@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { ShieldCheck, LayoutDashboard } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
 import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 const ITEM = 'flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 transition-colors';
 
@@ -16,16 +16,7 @@ export default function AdminMenu() {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (!isOpen) return;
-        function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
-                setIsOpen(false);
-            }
-        }
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+    useClickOutside(menuRef, () => setIsOpen(false), isOpen);
 
     return (
         <div className="relative" ref={menuRef}>

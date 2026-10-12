@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatDateText, parseDateText } from '@/lib/local-datetime';
 import { useDateFormatter, type DateFormatter } from '@/lib/date-format';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type Props = {
     id?: string;
@@ -40,14 +41,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
         setBadText(false);
     }
 
-    useEffect(() => {
-        if (!open) return;
-        const onDown = (e: MouseEvent) => {
-            if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
-        };
-        document.addEventListener('mousedown', onDown);
-        return () => document.removeEventListener('mousedown', onDown);
-    }, [open]);
+    useClickOutside(rootRef, () => setOpen(false), open);
 
     function commit(next: string) {
         setText(next);

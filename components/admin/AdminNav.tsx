@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect, useId, type KeyboardEvent } from 'react';
+import { useRef, useState, useId, type KeyboardEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
 import { AlertTriangle, Brush, EyeOff, Network, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 import { UI } from '@/lib/constants';
 
 type Props = {
@@ -56,16 +56,7 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
     const open = openState && openState.key === navKey ? openState.id : null;
     const setOpen = (id: string | null) => setOpenState(id ? { id, key: navKey } : null);
 
-    useEffect(() => {
-        if (!open) return;
-        function onMouseDown(event: MouseEvent) {
-            if (rootRef.current && !rootRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
-                setOpenState(null);
-            }
-        }
-        document.addEventListener('mousedown', onMouseDown);
-        return () => document.removeEventListener('mousedown', onMouseDown);
-    }, [open]);
+    useClickOutside(rootRef, () => setOpenState(null), !!open);
 
     const onDashboard = pathname === '/admin';
 

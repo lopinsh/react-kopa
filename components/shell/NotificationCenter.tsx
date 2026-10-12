@@ -10,7 +10,7 @@ import { clsx } from 'clsx';
 import { useRealtimeEvent } from '@/components/providers/RealtimeProvider';
 import { relativeTo } from '@/lib/utils/relative-time';
 import { formatNotificationText } from '@/lib/utils/notification-text';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type Notification = {
     id: string;
@@ -71,17 +71,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
     const visible = notifications.filter(n => n.audience === activeTab);
     const visibleUnread = activeTab === 'ADMIN' ? unreadAdmin : unreadUser;
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
-                setIsOpen(false);
-            }
-        }
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+    useClickOutside(menuRef, () => setIsOpen(false), isOpen);
 
     useEffect(() => {
         const fetchNotifications = async () => {

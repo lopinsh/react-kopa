@@ -2,12 +2,12 @@
 
 import { useTranslations } from 'next-intl';
 import { User, LogOut, Settings, Users } from 'lucide-react';
-import { useState, useRef, useEffect, useSyncExternalStore } from 'react';
+import { useState, useRef, useSyncExternalStore } from 'react';
 import { signOut, signIn } from 'next-auth/react';
 import { Link, usePathname } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
-import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useClickOutside } from '@/hooks/useClickOutside';
 
 type Props = {
     user: {
@@ -33,17 +33,7 @@ export default function UserMenu({ user }: Props) {
         () => false
     );
 
-    useEffect(() => {
-        function handleClickOutside(event: MouseEvent) {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node) && !inFeedbackLayer(event.target)) {
-                setIsOpen(false);
-            }
-        }
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+    useClickOutside(menuRef, () => setIsOpen(false), isOpen);
 
     const [imageError, setImageError] = useState(false);
 
