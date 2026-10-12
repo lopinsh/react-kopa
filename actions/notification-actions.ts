@@ -23,22 +23,6 @@ export async function getNotifications(locale: string): Promise<ActionResponse<A
 }
 
 /**
- * Mark a notification as read.
- */
-export async function markAsRead(id: string): Promise<ActionResponse> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-
-    try {
-        await NotificationService.markAsReadForUser(id, session.user.id);
-        return { success: true };
-    } catch (error) {
-        console.error('[markAsRead] Error:', error);
-        return { success: false, error: 'UPDATE_FAILED' };
-    }
-}
-
-/**
  * Mark every notification of one grouped bell row as read.
  */
 export async function markManyAsRead(ids: string[]): Promise<ActionResponse> {

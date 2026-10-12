@@ -220,16 +220,6 @@ export const NotificationService = {
     },
 
     /**
-     * Marks a single notification as read, verifying userId ownership.
-     */
-    async markAsReadForUser(notificationId: string, userId: string) {
-        return await prisma.notification.update({
-            where: { id: notificationId, userId },
-            data: { read: true },
-        });
-    },
-
-    /**
      * Marks several notifications (one grouped bell row) as read, verifying userId ownership.
      */
     async markManyAsReadForUser(notificationIds: string[], userId: string) {
