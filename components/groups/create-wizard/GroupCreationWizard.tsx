@@ -41,8 +41,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     const locale = useLocale();
     const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
-    const [canSubmit, setCanSubmit] = useState(false);
-    const [accentColor, setAccentColor] = useState<string>(NEUTRAL_ACCENT);
+    const [readyStep, setReadyStep] = useState<StepIndex | null>(null);
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -61,24 +60,22 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         };
     }, [initialL1Slug, taxonomy]);
 
+    const [accentColor, setAccentColor] = useState<string>(
+        defaultTaxSelection?.kind === 'existing' ? defaultTaxSelection.l1Color : NEUTRAL_ACCENT
+    );
     const [taxSelection, setTaxSelection] = useState<TaxonomySelection | null>(defaultTaxSelection);
     // Set when changing the main category removed sub-topics the person had chosen (the step tells them).
     const [tagsCleared, setTagsCleared] = useState(false);
 
-    useEffect(() => {
-        if (defaultTaxSelection?.kind === 'existing') {
-            setAccentColor(defaultTaxSelection.l1Color);
-        }
-    }, [defaultTaxSelection]);
-
     // Only allow submission after being on the last step for a moment to prevent auto-subs
+    const canSubmit = step === LAST_STEP && readyStep === step;
     useEffect(() => {
-        if (step === LAST_STEP) {
-            const timer = setTimeout(() => setCanSubmit(true), 500);
-            return () => clearTimeout(timer);
-        } else {
-            setCanSubmit(false);
-        }
+        if (step !== LAST_STEP) return;
+        const timer = setTimeout(() => setReadyStep(step), 500);
+        return () => {
+            clearTimeout(timer);
+            setReadyStep(null);
+        };
     }, [step]);
 
     // Accessibility: Focus title on step change

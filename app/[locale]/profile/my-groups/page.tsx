@@ -72,7 +72,7 @@ export default async function MyGroupsPage({
     return (
         <div className="container mx-auto px-4 py-12 min-h-full max-w-5xl">
             <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
-                <Users className="h-8 w-8 text-[var(--accent)]" style={{ '--accent': 'var(--color-primary)' } as any} />
+                <Users className="h-8 w-8 text-[var(--accent)]" style={{ '--accent': 'var(--color-primary)' } as React.CSSProperties} />
                 {c_common_get('myGroups')}
             </h1>
 

@@ -25,7 +25,6 @@ export function safeCallbackPath(raw: string | null | undefined, fallback: strin
     const isRelative = candidate.startsWith('/') && !candidate.startsWith('//');
     // Backslashes and control characters are normalised by browsers into other
     // separators (`/\evil.com` -> `//evil.com`), so reject them outright.
-    // eslint-disable-next-line no-control-regex
     if (!isRelative || /[\u0000-\u001f\\]/.test(candidate)) return fallback;
 
     return candidate;

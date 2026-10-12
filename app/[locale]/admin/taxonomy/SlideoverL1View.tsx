@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import type { L1Category } from '@/lib/services/taxonomy.service';
-import { getCategoryIcon } from '@/lib/icons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { updateL1, addAlias, deleteAlias, createL2 } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
@@ -23,8 +23,6 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const { success, error } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
-
-    const Icon = getCategoryIcon(l1.slug);
 
     const [color, setColor] = useState(l1.color || '#6366f1');
 
@@ -97,7 +95,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 <h3 className="text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: `${color}20`, color: color }}>
-                        <Icon className="w-6 h-6" />
+                        <CategoryIcon slug={l1.slug} className="w-6 h-6" />
                     </div>
                     <div>
                         <h2 className="text-2xl font-bold">{l1.title}</h2>

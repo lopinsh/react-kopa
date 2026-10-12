@@ -3,7 +3,7 @@
 import { X, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import GroupSidebarContent from '../shell/GroupSidebarContent';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
@@ -11,7 +11,6 @@ import { useFocusTrap } from '@/hooks/useFocusTrap';
 interface GroupInfoDrawerProps {
     isOpen: boolean;
     onClose: () => void;
-    group: any;
     l1Slug: string;
     groupSlug: string;
 }
@@ -19,11 +18,9 @@ interface GroupInfoDrawerProps {
 export default function GroupInfoDrawer({
     isOpen,
     onClose,
-    group,
     l1Slug,
     groupSlug,
 }: GroupInfoDrawerProps) {
-    const t = useTranslations('group');
   const c_common = useTranslations('common');
 
     const mounted = useSyncExternalStore(

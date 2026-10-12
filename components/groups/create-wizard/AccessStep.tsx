@@ -3,9 +3,8 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Globe, Lock, Zap, HelpCircle, UserPlus, MessageSquare, Instagram as InstagramIcon } from 'lucide-react';
+import { Globe, Lock, UserPlus } from 'lucide-react';
 import type { GroupFormValues } from '@/lib/validations/group';
-import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { GROUP_TYPES as GLOBAL_GROUP_TYPES } from '@/lib/constants';
 
@@ -13,14 +12,14 @@ const GROUP_TYPE_OPTIONS = [
     {
         value: GLOBAL_GROUP_TYPES[0], // PUBLIC
         icon: Globe,
-        labelKey: 'typePublic',
-        descKey: 'typePublicDesc',
+        labelKey: 'typePublic' as const,
+        descKey: 'typePublicDesc' as const,
     },
     {
         value: GLOBAL_GROUP_TYPES[1], // PRIVATE
         icon: Lock,
-        labelKey: 'typePrivate',
-        descKey: 'typePrivateDesc',
+        labelKey: 'typePrivate' as const,
+        descKey: 'typePrivateDesc' as const,
     }
 ];
 
@@ -36,7 +35,7 @@ export default function AccessStep() {
                     <button
                         key={value}
                         type="button"
-                        onClick={() => setValue('type', value as any, { shouldValidate: true })}
+                        onClick={() => setValue('type', value, { shouldValidate: true })}
                         className={clsx(
                             'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
                             isSelected ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] shadow-sm' : 'border-border hover:border-foreground-muted/40'
@@ -53,8 +52,8 @@ export default function AccessStep() {
                             />
                         </div>
                         <div>
-                            <p className="font-semibold text-foreground text-sm">{t(labelKey as any)}</p>
-                            <p className="mt-0.5 text-[10px] leading-tight text-foreground-muted">{t(descKey as any)}</p>
+                            <p className="font-semibold text-foreground text-sm">{t(labelKey)}</p>
+                            <p className="mt-0.5 text-[10px] leading-tight text-foreground-muted">{t(descKey)}</p>
                         </div>
                     </button>
                 );

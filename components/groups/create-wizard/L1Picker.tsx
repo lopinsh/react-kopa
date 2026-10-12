@@ -6,7 +6,7 @@ import { clsx } from 'clsx';
 import { Check, ChevronDown } from 'lucide-react';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
-import { getCategoryIcon } from '@/lib/icons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 type Props = {
     taxonomy: TaxonomyTree;
@@ -38,14 +38,9 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                     style={{ borderColor: selectedL1.color }}
                 >
                     <div className="flex items-center gap-4">
-                        {(() => {
-                            const IconC = getCategoryIcon(selectedL1.slug);
-                            return (
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
-                                    <IconC className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
-                                </div>
-                            );
-                        })()}
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+                            <CategoryIcon slug={selectedL1.slug} className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
+                        </div>
                         <div>
                             <span className="block text-base font-bold text-foreground">
                                 {selectedL1.title}
@@ -111,10 +106,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                 </div>
                             )}
-                            {(() => {
-                                const IconC = getCategoryIcon(l1.slug);
-                                return <IconC className="h-6 w-6 stroke-2" style={{ color: l1.color }} />;
-                            })()}
+                            <CategoryIcon slug={l1.slug} className="h-6 w-6 stroke-2" style={{ color: l1.color }} />
                             <span className={clsx("text-sm font-semibold", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
                                 {l1.title}
                             </span>

@@ -6,7 +6,7 @@ import { approveTag, addAlias, deleteAlias } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
 import { ChevronLeft } from 'lucide-react';
 import type { ActiveL2WithAliases, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
-import { getCategoryIcon } from '@/lib/icons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
 type Props = {
@@ -82,7 +82,6 @@ export default function SlideoverL2View({ l2, categories, tree, onNodeSelect }: 
     };
 
     const parentL1 = tree.find(l1 => l1.id === l2.parentId);
-    const ParentIcon = parentL1 ? getCategoryIcon(parentL1.slug) : null;
 
     return (
         <div className="space-y-8 pb-12">
@@ -97,7 +96,7 @@ export default function SlideoverL2View({ l2, categories, tree, onNodeSelect }: 
                     >
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: `${parentL1.color}20`, color: parentL1.color }}>
-                                {ParentIcon && <ParentIcon className="w-4 h-4" />}
+                                <CategoryIcon slug={parentL1.slug} className="w-4 h-4" />
                             </div>
                             <div>
                                 <h4 className="font-semibold text-sm">{parentL1.title}</h4>

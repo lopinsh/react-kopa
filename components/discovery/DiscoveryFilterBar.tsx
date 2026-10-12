@@ -136,13 +136,7 @@ export default function DiscoveryFilterBar({
 
     // ── Search dropdown: live search ─────────────────────────────────────────
     useEffect(() => {
-        if (searchQuery.length < 2) {
-            setIsDropdownOpen(false);
-            setDropdownResults([]);
-            return;
-        }
-
-        setIsDropdownOpen(true);
+        if (searchQuery.length < 2) return;
 
         if (debounceRef.current) clearTimeout(debounceRef.current);
         debounceRef.current = setTimeout(async () => {
@@ -206,6 +200,12 @@ export default function DiscoveryFilterBar({
         router.push(`${pathname}?${build({ tab, tags: null, cat: null })}`);
     };
 
+    const handleSearchChange = (value: string) => {
+        setSearchQuery(value);
+        setIsDropdownOpen(value.length >= 2);
+        if (value.length < 2) setDropdownResults([]);
+    };
+
     const handleSearchSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsDropdownOpen(false);
@@ -242,7 +242,7 @@ export default function DiscoveryFilterBar({
                             ref={searchInputRef}
                             type="text"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onChange={(e) => handleSearchChange(e.target.value)}
                             onFocus={() => searchQuery.length >= 2 && setIsDropdownOpen(true)}
                             placeholder={tDiscover('searchInputPlaceholder')}
                             className="h-9 w-full rounded-full border border-border bg-surface pl-9 pr-9 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 placeholder:text-foreground-muted transition-colors"
@@ -251,8 +251,7 @@ export default function DiscoveryFilterBar({
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setSearchQuery('');
-                                    setIsDropdownOpen(false);
+                                    handleSearchChange('');
                                     push(build({ q: null }));
                                 }}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-foreground-muted hover:text-foreground transition-colors"

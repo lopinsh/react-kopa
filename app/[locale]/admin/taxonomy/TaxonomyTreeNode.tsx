@@ -1,7 +1,7 @@
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import type { L1Category, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
-import { getCategoryIcon } from '@/lib/icons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 import { useTranslations } from 'next-intl';
 
@@ -21,7 +21,6 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
     const c = useTranslations('common');
 
     const isSelected = selectedNode?.type === 'l1' && selectedNode.id === l1.id;
-    const Icon = getCategoryIcon(l1.slug);
 
     return (
         <div className="flex flex-col border-b border-border last:border-b-0">
@@ -36,7 +35,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                 </div>
 
                 <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: `${l1.color}20`, color: l1.color }}>
-                    <Icon className="w-4 h-4" />
+                    <CategoryIcon slug={l1.slug} className="w-4 h-4" />
                 </div>
 
                 <span className="font-semibold">{l1.title}</span>

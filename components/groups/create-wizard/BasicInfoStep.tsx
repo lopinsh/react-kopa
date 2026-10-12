@@ -3,7 +3,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Type, AlignLeft, Image as ImageIcon, HelpCircle } from 'lucide-react';
+import { Type, AlignLeft, Image as ImageIcon } from 'lucide-react';
 import type { GroupFormValues } from '@/lib/validations/group';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
@@ -31,7 +31,7 @@ export default function BasicInfoStep() {
                         errors.name ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as any)}</p>}
+                {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
             </div>
 
             {/* Description */}

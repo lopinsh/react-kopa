@@ -293,7 +293,6 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
             <GroupInfoDrawer
                 isOpen={isDrawerOpen}
                 onClose={() => setIsDrawerOpen(false)}
-                group={group}
                 l1Slug={l1Slug}
                 groupSlug={group.slug}
             />

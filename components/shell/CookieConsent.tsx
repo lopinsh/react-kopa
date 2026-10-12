@@ -1,32 +1,24 @@
 'use client';
 
-import { useState, useEffect, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, ShieldCheck } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 
 export default function CookieConsent() {
     const t = useTranslations('common');
-    const isMounted = useSyncExternalStore(
+    // Server/hydration snapshot says "already answered" so nothing flashes; the client reads storage.
+    const hasConsent = useSyncExternalStore(
         () => () => { },
-        () => true,
-        () => false
+        () => localStorage.getItem('cookie-consent') !== null,
+        () => true
     );
-
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        if (isMounted) {
-            const consent = localStorage.getItem('cookie-consent');
-            if (!consent) {
-                setIsVisible(true);
-            }
-        }
-    }, [isMounted]);
+    const [accepted, setAccepted] = useState(false);
+    const isVisible = !hasConsent && !accepted;
 
     const handleAccept = () => {
         localStorage.setItem('cookie-consent', 'accepted');
-        setIsVisible(false);
+        setAccepted(true);
     };
 
     if (!isVisible) return null;
@@ -64,7 +56,7 @@ export default function CookieConsent() {
                     </div>
 
                     <button
-                        onClick={() => setIsVisible(false)}
+                        onClick={() => setAccepted(true)}
                         className="rounded-lg p-1 text-foreground-muted hover:bg-surface hover:text-foreground transition-all"
                     >
                         <X className="h-4 w-4" />

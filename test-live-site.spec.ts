@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 import { randomBytes } from 'crypto';
 
 function generateRandomUser() {
@@ -18,15 +18,15 @@ const groupName = `Test Group ${randomBytes(4).toString('hex')}`;
 test.describe('Ejam Kopā Live Verification', () => {
   test.describe.configure({ mode: 'serial' });
 
-  let pageA: any;
-  let pageB: any;
+  let pageA: Page;
+  let pageB: Page;
   let consoleErrors: string[] = [];
 
   test.beforeAll(async ({ browser }) => {
     const contextA = await browser.newContext();
     pageA = await contextA.newPage();
 
-    pageA.on('pageerror', (exception: any) => {
+    pageA.on('pageerror', (exception: Error) => {
         console.error(`Uncaught exception: "${exception}"`);
         consoleErrors.push(exception.toString());
     });
@@ -61,7 +61,7 @@ test.describe('Ejam Kopā Live Verification', () => {
     // Try clicking submit or pressing enter
     const usernameSubmit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
     await pageA.waitForTimeout(1000);
-    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+    await usernameSubmit.evaluate((node: Element) => node.removeAttribute('disabled')).catch(() => {});
 
     if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
@@ -92,7 +92,7 @@ test.describe('Ejam Kopā Live Verification', () => {
 
             const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
             // Must wait for it to be enabled properly from the server response before click
-            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.evaluate((node: Element) => node.removeAttribute('disabled')).catch(() => {});
             await submit.dispatchEvent('click').catch(() => {});
             await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
         } else {
@@ -133,7 +133,7 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     const usernameSubmit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit/i }).first();
     await pageB.waitForTimeout(1000);
-    await usernameSubmit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+    await usernameSubmit.evaluate((node: Element) => node.removeAttribute('disabled')).catch(() => {});
 
     if (await usernameSubmit.isVisible()) {
         await usernameSubmit.click();
@@ -163,7 +163,7 @@ test.describe('Ejam Kopā Live Verification', () => {
 
             const submit = pageB.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
             // Must wait for it to be enabled properly from the server response before click
-            await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+            await submit.evaluate((node: Element) => node.removeAttribute('disabled')).catch(() => {});
             await submit.dispatchEvent('click').catch(() => {});
             await pageB.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
         } else {
@@ -195,7 +195,7 @@ test.describe('Ejam Kopā Live Verification', () => {
         await input.fill(userA.username + safeSuffix);
         await pageA.waitForSelector('text=/Pieejams|available/i', { state: 'visible', timeout: 5000 }).catch(() => {});
         const submit = pageA.getByRole('button').filter({ hasText: /Saglabāt|Turpināt|Apstiprināt|submit|continue/i }).first();
-        await submit.evaluate((node: any) => node.removeAttribute('disabled')).catch(() => {});
+        await submit.evaluate((node: Element) => node.removeAttribute('disabled')).catch(() => {});
         await submit.click();
         await pageA.waitForURL('**/profile', { timeout: 10000 }).catch(() => {});
         await pageA.goto('https://ejam.lumm.eu/lv/create');
@@ -243,7 +243,7 @@ test.describe('Ejam Kopā Live Verification', () => {
 
     const cityInput = pageA.getByLabel(/Pilsēta|City|Location/i).first();
     if (await cityInput.isVisible()) {
-        const tagName = await cityInput.evaluate((el: any) => el.tagName.toLowerCase());
+        const tagName = await cityInput.evaluate((el: Element) => el.tagName.toLowerCase());
         if (tagName === 'select') {
             await cityInput.selectOption({ index: 1 });
         } else {

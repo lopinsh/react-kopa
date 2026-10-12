@@ -7,11 +7,11 @@ import { Toast } from './Toast';
 
 export function ToastContainer() {
     const { toasts, removeToast } = useToast();
-    const [mounted, setMounted] = React.useState(false);
-
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
+    const mounted = React.useSyncExternalStore(
+        () => () => { },
+        () => true,
+        () => false
+    );
 
     if (!mounted) return null;
 
