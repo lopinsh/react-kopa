@@ -6,7 +6,6 @@ import { NotificationService } from '@/lib/services/notification.service';
 import { PostService, type AnnouncementRow } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
-import { GroupService } from '@/lib/services/group.service';
 import { announcementSchema, type AnnouncementInput } from '@/lib/validations/announcement';
 
 /**
@@ -24,28 +23,21 @@ export async function createPost(groupId: string, input: AnnouncementInput, loca
         const authorId = session.user.id;
         const post = await PostService.createAnnouncement({ groupId, authorId, ...parsed.data });
 
-        let l1Slug = post.group.category.slug;
-        if (post.group.category.level === 3 && post.group.category.parent?.parent) {
-            l1Slug = post.group.category.parent.parent.slug;
-        } else if (post.group.category.level === 2 && post.group.category.parent) {
-            l1Slug = post.group.category.parent.slug;
-        }
-
         // The post is saved; a failed notification must not report the publish as failed.
         try {
             const members = await PostService.getAnnouncementRecipients(groupId, authorId);
             await NotificationService.createForUsers(members.map(m => m.userId), {
                 type: 'NEW_POST',
                 translationKey: 'newPost',
-                args: { authorName: post.author.name || '', groupName: post.group.name, excerpt: parsed.data.title },
-                link: `/${l1Slug}/group/${post.group.slug}/announcements`
+                args: { authorName: post.authorName, groupName: post.groupName, excerpt: parsed.data.title },
+                link: `/${post.l1Slug}/group/${post.slug}/announcements`
             });
         } catch (notifyError) {
             console.error('[createPost] notify failed:', notifyError);
         }
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${post.group.slug}/announcements`, 'page');
-        return { success: true, data: { postId: post.id } };
+        revalidatePath(`/${locale}/${post.l1Slug}/group/${post.slug}/announcements`, 'page');
+        return { success: true, data: { postId: post.postId } };
     } catch (error) {
         return handleActionError(error, 'CREATE_FAILED');
     }
@@ -73,11 +65,8 @@ export async function setPostArchived(postId: string, archived: boolean, locale:
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const { groupId } = await PostService.setArchived(postId, session.user.id, archived);
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/announcements`, 'page');
-        }
+        const { slug, l1Slug } = await PostService.setArchived(postId, session.user.id, archived);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');

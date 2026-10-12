@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import { originalEventTitle } from '@/lib/translations';
+import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 export const ReportService = {
     async createReport(data: {
@@ -41,12 +42,7 @@ export const ReportService = {
         });
 
         return rawReports.map((report) => {
-            let l1Slug = '';
-            if (report.group?.category) {
-                l1Slug = report.group.category.parent?.parent?.slug
-                    || report.group.category.parent?.slug
-                    || report.group.category.slug;
-            }
+            const l1Slug = report.group ? TaxonomyResolver.resolve(report.group.category).l1Slug : '';
 
             return {
                 ...report,

@@ -5,6 +5,7 @@ import { GroupFormValues, groupFormSchema, buildGroupFormSchema } from '@/lib/va
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
+import { PostService } from '@/lib/services/post.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { CITIES_TAG } from '@/lib/services/city.service';
 import { ActionResponse } from '@/types/actions';
@@ -394,10 +395,7 @@ export async function deletePostAction(postId: string, locale: string): Promise<
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.deletePost(postId, session.user.id);
-        if (!result.success) return result as ActionResponse;
-
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = await PostService.deleteAnnouncement(postId, session.user.id);
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
 

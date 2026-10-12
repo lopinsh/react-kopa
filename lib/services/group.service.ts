@@ -15,7 +15,6 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { TaxonomyService } from './taxonomy.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
-import { triggerRealtime } from '@/lib/pusher';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 
@@ -1074,47 +1073,5 @@ export const GroupService = {
         });
 
         return { success: true };
-    },
-
-    /**
-     * Deletes an announcement. Only the group's current owner and admins can.
-     */
-    async deletePost(postId: string, actorId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
-        const post = await prisma.post.findUnique({
-            where: { id: postId },
-            include: {
-                group: {
-                    include: {
-                        category: {
-                            include: TaxonomyResolver.getInclude('lv')
-                        },
-                        members: {
-                            where: { userId: actorId }
-                        }
-                    }
-                }
-            }
-        });
-
-        if (!post) return { success: false, error: 'NOT_FOUND' };
-
-        const actorMembership = post.group.members[0];
-        // Announcements: only the group's current owner/admins can remove them.
-        if (!actorMembership || !hasAdminRights(actorMembership.role)) {
-            return { success: false, error: 'FORBIDDEN' };
-        }
-        // Same rule as PostService: in a group hidden by moderation only the owner still has access.
-        if (post.group.hiddenAt && actorMembership.role !== 'OWNER') {
-            return { success: false, error: 'FORBIDDEN' };
-        }
-
-        const resolved = TaxonomyResolver.resolve(post.group.category);
-        const slugs = { slug: post.group.slug, l1Slug: resolved.l1Slug };
-
-        await prisma.post.delete({ where: { id: postId } });
-        // Only the id goes over the (public) group channel; open boards drop the post.
-        await triggerRealtime(`group-${post.groupId}`, 'delete-post', { postId });
-        return { success: true, data: slugs };
     }
 };
-
