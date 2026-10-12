@@ -191,6 +191,11 @@ export async function mergeTag(pendingId: string, canonicalId: string, locale: s
         if (!canonicalName) {
             return { success: false, error: 'TAG_NOT_FOUND' };
         }
+        // Both names are stored so each owner sees the tag in the language they read the site in.
+        const [canonicalTagEn, canonicalTagLv] = await Promise.all([
+            TaxonomyService.getL2DisplayName(canonicalId, 'en'),
+            TaxonomyService.getL2DisplayName(canonicalId, 'lv'),
+        ]);
 
         const ownerByGroup = await TaxonomyService.getOwnerUserIdsForGroups(pending.groups.map((group) => group.id));
 
@@ -209,6 +214,8 @@ export async function mergeTag(pendingId: string, canonicalId: string, locale: s
                 args: {
                     originalTag: pending.submittedLabel,
                     canonicalTag: canonicalName,
+                    canonicalTagEn: canonicalTagEn ?? canonicalName,
+                    canonicalTagLv: canonicalTagLv ?? canonicalName,
                     groupName: group.name,
                 },
                 link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,
@@ -363,7 +370,7 @@ export async function bulkMergeAction(
         const pendingCategories = await TaxonomyService.getPendingCategories();
         const pendingMerged = pendingCategories.filter(p => mergedIds.includes(p.id));
 
-        const canonicalName = canonicalUpdates.nameEn; // Simplified for notification
+        const canonicalName = canonicalUpdates.nameEn; // fallback; the Lv/En names are stored too
 
         await TaxonomyService.bulkMerge(canonicalId, mergedIds, canonicalUpdates);
 
@@ -382,6 +389,8 @@ export async function bulkMergeAction(
                     args: {
                         originalTag: pending.submittedLabel,
                         canonicalTag: canonicalName,
+                        canonicalTagEn: canonicalUpdates.nameEn,
+                        canonicalTagLv: canonicalUpdates.nameLv,
                         groupName: group.name,
                     },
                     link: `/${group.l1Slug}/group/${group.slug}/settings?tab=categorization`,

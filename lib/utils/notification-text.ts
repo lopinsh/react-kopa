@@ -16,7 +16,7 @@ export interface NotificationText {
 }
 
 /** The one place a stored notification (type + JSON message) becomes localized text; used by the bell and the toast. */
-export function formatNotificationText(t: NotificationTranslator, type: string, message: string): NotificationText {
+export function formatNotificationText(t: NotificationTranslator, type: string, message: string, locale?: string): NotificationText {
     let args: NotificationArgs = {};
     try {
         args = (JSON.parse(message) as { args?: NotificationArgs }).args ?? {};
@@ -27,7 +27,8 @@ export function formatNotificationText(t: NotificationTranslator, type: string, 
     const headline = t(`headline.${known}` as 'headline.GENERIC', {
         authorName: args.authorName ? String(args.authorName) : t('someone'),
         originalTag: String(args.originalTag ?? ''),
-        canonicalTag: String(args.canonicalTag ?? ''),
+        // Tag merges store both names; the viewer gets the one in their language.
+        canonicalTag: String((locale === 'en' ? args.canonicalTagEn : locale === 'lv' ? args.canonicalTagLv : undefined) ?? args.canonicalTag ?? ''),
         cityName: String(args.cityName ?? ''),
         waitlistCount: Number(args.waitlistCount ?? 0)
     });

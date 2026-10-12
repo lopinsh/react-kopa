@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { usePusher } from '@/hooks/usePusher';
 import { Link, useRouter } from '@/i18n/routing';
 import { X, Bell } from 'lucide-react';
@@ -28,12 +28,13 @@ type MessageEvent = {
 export default function RealtimeProvider({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
     const t = useTranslations('notifications');
+    const locale = useLocale();
     const router = useRouter();
     const [toast, setToast] = useState<NotificationEvent | null>(null);
 
     const handleNotification = useCallback((data: NotificationEvent) => {
         // Same headline and detail as the bell. Admin notices skip the viewer's own actions on the server.
-        const text = formatNotificationText(t, data.type, data.message);
+        const text = formatNotificationText(t, data.type, data.message, locale);
         setToast({ ...data, title: text.headline, message: text.detail ?? '' });
         // Revalidate layout to update notification badge
         router.refresh();

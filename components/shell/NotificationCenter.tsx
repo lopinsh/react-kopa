@@ -31,10 +31,11 @@ type Audience = Notification['audience'];
 /** Context line (group · time), one headline (who did what), then the content itself. */
 function NotificationContent({ n }: { n: Notification }) {
     const t = useTranslations('notifications');
+    const locale = useLocale();
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
 
-    const { headline, detail, groupName } = formatNotificationText(t, n.type, n.message);
+    const { headline, detail, groupName } = formatNotificationText(t, n.type, n.message, locale);
 
     return (
         <div className="flex flex-col gap-0.5 pr-6">
