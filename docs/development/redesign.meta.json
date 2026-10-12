@@ -1,28 +1,30 @@
 {
-  "version": "6.0",
-  "updated": "2026-10-12T23:30:00+03:00",
+  "version": "7.0",
+  "updated": "2026-10-13T01:30:00+03:00",
   "changes": [
-    "Round six: every round-five note applied; \"Still open: you decide\" is down to the two sketches you asked to see, and the note index lists the round-five notes.",
-    "Approved and moved to \"Agreed so far\": Sūna as the site colour (Jūra, Rudzu maize and the preview switch removed), the fifteen category colours, fonts and shapes.",
-    "Also agreed: joining from the opened panel, the bottom bar and drawer on admin pages, the header without \"Atklāt\", Manas grupas as a profile-menu link with a count.",
-    "Identity: the logo circles are now true round shapes (they were hard-edged gradients with jagged edges); \"On a card\" now shows the agreed card with the photo on the right.",
-    "Discovery: Grupas / Pasākumi as two raised buttons in a tray, the chosen one filled; the place on the same line, sub-category chips on the line under it.",
-    "Events: each row gets a small second line with the group (link), category and sub-category, left out on the group's own page; dot, category and sub-category on one line in the panel.",
-    "Cards in context: Manas grupas with group and category on every item; announcements labelled \"Jaunums\", your requests as outlined status cards.",
-    "Filters: new sketch of the sub-category chips (desktop before and after, phone on Pasākumi), for sign-off.",
-    "Navigation: new sketch of group pages and admin side by side, desktop and phone, with the two levels marked, for sign-off."
+    "Round seven: every round-six note applied; \"Still open: you decide\" holds three choices (the filter line, your own area, pop-ups), and the note index lists the round-six notes.",
+    "Discovery: Grupas / Pasākumi are plain filter-line items on every screen; sub-categories from a drop-down with search; a search field on the category list that can suggest a new category.",
+    "Cards: the photo takes about a fifth of the width, so long names get more room; the \"create\" card is short again: +, \"Izveidot jaunu grupu\", \"šajā kategorijā\".",
+    "Filters: two ways to lay out the filter line for your choice, A (chips under the line) and B (one line plus an \"Izvēlēts\" line); \"Citur Latvijā\" now shown inside the Discovery list, with where it appears.",
+    "Events: \"Kad\" gets a date picker for one day or a range.",
+    "Manas grupas: short section titles, \"Eju\" and role tags (īpašnieks, mod, gaida), the \"Jaunums\" label that looked like a button removed.",
+    "New: Your own area, one space vs separate pages, phone and desktop. New: Pop-ups, three options for dim and blur on the join dialog and the opened card.",
+    "Header and admin: light/dark leaves the header, the shield takes its place left of messages; the avatar is a picture; admin uses Moderācija, Struktūra, Vietne, Komanda, Izstrāde.",
+    "Agreed so far: category colours approved again, the header, admin menu names, the group/admin pair."
   ],
   "sections": {
-    "h-open": { "kind": "updated", "version": "6.0" },
-    "h-notes": { "kind": "updated", "version": "6.0" },
-    "h-id": { "kind": "updated", "version": "6.0" },
-    "h-colors": { "kind": "updated", "version": "6.0" },
-    "h-disc": { "kind": "updated", "version": "6.0" },
-    "h-context": { "kind": "updated", "version": "6.0" },
-    "h-scale": { "kind": "updated", "version": "6.0" },
-    "h-events": { "kind": "updated", "version": "6.0" },
-    "h-group": { "kind": "updated", "version": "6.0" },
-    "h-nav": { "kind": "updated", "version": "6.0" },
-    "h-agreed": { "kind": "updated", "version": "6.0" }
+    "h-open": { "kind": "updated", "version": "7.0" },
+    "h-notes": { "kind": "updated", "version": "7.0" },
+    "h-colors": { "kind": "updated", "version": "7.0" },
+    "h-disc": { "kind": "updated", "version": "7.0" },
+    "h-context": { "kind": "updated", "version": "7.0" },
+    "h-me": { "kind": "new", "version": "7.0" },
+    "h-pop": { "kind": "new", "version": "7.0" },
+    "h-scale": { "kind": "updated", "version": "7.0" },
+    "h-events": { "kind": "updated", "version": "7.0" },
+    "h-group": { "kind": "updated", "version": "7.0" },
+    "h-notif": { "kind": "updated", "version": "7.0" },
+    "h-nav": { "kind": "updated", "version": "7.0" },
+    "h-agreed": { "kind": "updated", "version": "7.0" }
   }
 }
