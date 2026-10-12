@@ -21,10 +21,10 @@ import type { Metadata } from 'next';
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const { locale } = await params;
-    const { city, category, q } = await searchParams;
+    const { city, category, q, tab } = await searchParams;
 
     const t = await getTranslations({ locale, namespace: 'discovery' });
-    let title = t('groupsFound');
+    let title = tab === 'events' ? t('eventsPageTitle') : t('groupsPageTitle');
 
     if (q) {
         title = `"${q}"`;
