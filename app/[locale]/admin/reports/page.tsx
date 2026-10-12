@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { requireAdminPage } from '@/lib/admin-access';
-import { getReports } from '@/actions/report-actions';
+import { ReportService } from '@/lib/services/report.service';
 import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
@@ -20,7 +20,7 @@ export default async function AdminReportsPage({
     const t = await getTranslations('admin.reports');
     await requireAdminPage(locale, '/admin/reports');
 
-    const reports = await getReports();
+    const reports = await ReportService.getPendingReports();
 
     return (
         <div className="container mx-auto max-w-6xl px-4 py-8 min-h-full">

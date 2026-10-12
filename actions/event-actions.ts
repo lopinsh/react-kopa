@@ -49,16 +49,6 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
     }
 }
 
-/**
- * Get all events for a group with attendee status for current user.
- */
-export async function getGroupEvents(groupId: string, locale: string) {
-    const session = await auth();
-    const userId = session?.user?.id;
-
-    return await EventService.getGroupEvents(groupId, locale, userId);
-}
-
 type EventPaths = { l1Slug: string; groupSlug: string; eventSlug: string };
 
 function revalidateEventPaths(locale: string, ctx: EventPaths) {

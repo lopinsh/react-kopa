@@ -39,12 +39,6 @@ export async function createReport(data: {
     }
 }
 
-export async function getReports() {
-    if (!(await requireSiteAdmin()).success) return [];
-
-    return ReportService.getPendingReports();
-}
-
 export async function resolveReport(reportId: string): Promise<ActionResponse<void>> {
     const admin = await requireSiteAdmin();
     if (!admin.success) return admin;

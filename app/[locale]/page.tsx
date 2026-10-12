@@ -1,7 +1,6 @@
 import { GroupService } from '@/lib/services/group.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import { EventService } from '@/lib/services/event.service';
-import { getGroups, getDiscoveryCategories, snapInterest, getContextualTaxonomy } from '@/actions/discovery-actions';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import DiscoveryFilterBarWrapper from '@/components/discovery/DiscoveryFilterBarWrapper';
 import ListViewCard from '@/components/discovery/ListViewCard';
@@ -65,10 +64,10 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const skip = 0; // Always start from 0 to simulate lazy load with server component
 
     const [categories, taxonomyRes, catRecord, snap] = await Promise.all([
-        getDiscoveryCategories(locale),
+        DiscoveryService.getDiscoveryCategories(locale),
         getTaxonomy(locale),
         category ? GroupService.findCategoryBySlug(category) : Promise.resolve(null),
-        (q && !category) ? snapInterest(q, locale) : Promise.resolve(null)
+        (q && !category) ? DiscoveryService.snapInterest(q, locale) : Promise.resolve(null)
     ]);
 
     if (!taxonomyRes.success) {
@@ -91,7 +90,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     }
 
     const [groupsRes, discoverableEvents, taxonomy] = await Promise.all([
-        getGroups({
+        DiscoveryService.getGroups({
             query: q,
             city,
             categoryId: effectiveCategoryId,
@@ -108,7 +107,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                 status: 'upcoming'
             }, locale, session?.user?.id)
             : Promise.resolve([]),
-        getContextualTaxonomy(effectiveCategoryId || null, locale)
+        DiscoveryService.getContextualTaxonomy(effectiveCategoryId || null, locale)
     ]);
 
     const { groups, hasMore, totalCount } = groupsRes;

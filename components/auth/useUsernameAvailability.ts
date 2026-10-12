@@ -29,8 +29,12 @@ export function useUsernameAvailability() {
             const result = await checkUsernameAvailability(username);
             // Ignore answers for a value the user has already typed past.
             if (latest.current !== username) return;
-            setStatus(result.available ? 'available' : 'taken');
-            setSuggestion(result.suggestion ?? null);
+            if (!result.success || !result.data) {
+                setStatus('idle');
+                return;
+            }
+            setStatus(result.data.available ? 'available' : 'taken');
+            setSuggestion(result.data.suggestion ?? null);
         }, 300);
     }, []);
 

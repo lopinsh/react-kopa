@@ -1,47 +1,24 @@
 'use server';
 
 import { DiscoveryService } from '@/lib/services/discovery.service';
-import type {
-    DiscoveryFilters
-} from '@/lib/types/discovery';
+import type { ActionResponse } from '@/types/actions';
+import { handleActionError } from '@/lib/action-utils';
+
+export type ContextualSearchResults = Awaited<ReturnType<typeof DiscoveryService.searchContextual>>;
 
 /**
- * Fetches groups based on discovery filters.
- * Thin wrapper around DiscoveryService.getGroups.
- */
-export async function getGroups(filters: DiscoveryFilters, locale: string) {
-    return DiscoveryService.getGroups(filters, locale);
-}
-
-/**
- * Fetches root categories for the discovery page.
- */
-export async function getDiscoveryCategories(locale: string) {
-    return DiscoveryService.getDiscoveryCategories(locale);
-}
-
-/**
- * Attempts to "snap" a search query to an existing category.
- */
-export async function snapInterest(query: string, locale: string) {
-    return DiscoveryService.snapInterest(query, locale);
-}
-
-/**
- * Fetches the taxonomy hierarchy for a specific category context.
- */
-export async function getContextualTaxonomy(categoryId: string | null, locale: string) {
-    return DiscoveryService.getContextualTaxonomy(categoryId, locale);
-}
-
-/**
- * Performs a contextual search for categories and groups.
+ * Performs a contextual search for categories and groups. Called by the discovery search box
+ * (a client component), so it is the one discovery read that stays an action.
  */
 export async function searchContextual(
     query: string,
     locale: string,
     activeCat?: string,
     activeTag?: string
-) {
-    return DiscoveryService.searchContextual(query, locale, activeCat, activeTag);
+): Promise<ActionResponse<ContextualSearchResults>> {
+    try {
+        return { success: true, data: await DiscoveryService.searchContextual(query, locale, activeCat, activeTag) };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
+    }
 }

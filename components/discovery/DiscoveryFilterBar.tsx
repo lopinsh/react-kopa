@@ -149,7 +149,7 @@ export default function DiscoveryFilterBar({
             setIsSearching(true);
             try {
                 const results = await searchContextual(searchQuery, locale, activeCat);
-                setDropdownResults(results);
+                setDropdownResults(results.success ? results.data ?? [] : []);
             } catch {
                 setDropdownResults([]);
             } finally {

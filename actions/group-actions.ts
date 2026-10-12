@@ -183,14 +183,13 @@ export async function manageMembership(
  * Lightweight action to get current user's role for a specific group.
  * Delegates all DB logic to GroupService.getGroupRole.
  */
-export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
-    exists: boolean;
-    role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
-    pendingCount: number;
-    sections: Array<{ id: string; visibility: string }>;
-}> {
-    const session = await auth();
-    return GroupService.getGroupRole(l1Slug, groupSlug, session?.user?.id);
+export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<ActionResponse<Awaited<ReturnType<typeof GroupService.getGroupRole>>>> {
+    try {
+        const session = await auth();
+        return { success: true, data: await GroupService.getGroupRole(l1Slug, groupSlug, session?.user?.id) };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
+    }
 }
 
 /**

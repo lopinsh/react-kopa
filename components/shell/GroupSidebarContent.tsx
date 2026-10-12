@@ -41,7 +41,9 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
 
     useEffect(() => {
         const load = () => {
-            getGroupRole(l1Slug, groupSlug).then((next) => {
+            getGroupRole(l1Slug, groupSlug).then((res) => {
+                if (!res.success || !res.data) return;
+                const next = res.data;
                 setState(next);
                 if (!next.exists) onMissing?.();
             });

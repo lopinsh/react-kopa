@@ -1,5 +1,5 @@
 import { GroupService } from '@/lib/services/group.service';
-import { getGroupEvents } from '@/actions/event-actions';
+import { EventService } from '@/lib/services/event.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import EventRow from '@/components/groups/EventRow';
@@ -43,7 +43,7 @@ export default async function GroupEventsPage({
         notFound();
     }
 
-    const eventsData = await getGroupEvents(group.id, locale);
+    const eventsData = await EventService.getGroupEvents(group.id, locale, session?.user?.id);
     const t = await getTranslations('group');
     const isOwnerOrAdmin = group.user.isAdmin;
 
