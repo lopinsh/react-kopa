@@ -70,8 +70,9 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     }, [router, t, locale]);
 
     const handleNewMessage = useCallback((data: MessageEvent) => {
-        // Don't show toast if we are already on the messages page
+        // Don't show toast on the messages page or while the messages drawer is open
         if (typeof window !== 'undefined' && window.location.pathname.includes('/messages')) return;
+        if (typeof document !== 'undefined' && document.querySelector('[data-messages-drawer]')) return;
         // Don't show toast if it's our own message
         if (data.senderId === session?.user?.id) return;
 

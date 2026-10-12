@@ -137,9 +137,11 @@ export default function Modal({
                 tabIndex={-1}
                 data-ui={role === 'alertdialog' ? UI.confirmDialog : UI.modal}
                 className={clsx(
-                    'relative w-full bg-surface shadow-2xl outline-none animate-in zoom-in-95 duration-200',
+                    'relative w-full bg-surface shadow-2xl outline-none animate-in duration-200',
                     SIZE[size],
-                    card ? 'overflow-hidden rounded-[2rem] border border-border/50' : 'rounded-3xl',
+                    drawer
+                        ? 'flex h-full flex-col overflow-hidden border-l border-border'
+                        : card ? 'zoom-in-95 overflow-hidden rounded-[2rem] border border-border/50' : 'zoom-in-95 rounded-3xl',
                     !flush && (card ? 'p-6 sm:p-8' : 'p-6'),
                     panelClassName
                 )}
