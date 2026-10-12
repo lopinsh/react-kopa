@@ -89,6 +89,7 @@ Decisions in those notes: admin notifications = **option 1, one bell with Person
   - [x] 7 `--owner` CSS variable (+ `text-owner`/`bg-owner`) replaces `#f59e0b`; plain CSS var, not part of the editable theme tokens (0bbc95e) (awaiting Sonnet review)
   - [x] 8 MemberCard, GroupSettingsForm, AnnouncementCard, MemberAvatarList read the role from `useGroupContext`; handbook samples wrapped in `GroupProvider`; EventRow skipped (async server component, `canManage` is per event: creator or admin) (db3ddc6, 0bbc95e) (awaiting Sonnet review)
   - [x] 9 Wizard sets `--accent` once; steps, L1Picker, TagPicker, settings CategorizationSection and the admin categorization form use `var(--accent)` (81492d8) (awaiting Sonnet review)
+  - Sonnet review (2026-10-12): typecheck, i18n, build pass; no new eslint errors; Modal/Escape/scroll lock/focus return, report menu, wizard Tab trap checked in browser (LV, 375px); ContactGroupModal success state now focuses the chat link.
 - Left for the redesign or later: GroupHeader, discovery cards, event page, large client components, de-export pass, duplicate English values.
 - [ ] **Session 5+ — after the owner signs off the redesign:** 2.22 shared group page frame + header rule, then Stage 3 (3.1 discovery cards, 3.2 group page, 3.3 event page, 3.4 header/nav/footer, 3.5 search modal, 3.6 banner picker).
 - Parked: event series, private groups, accent-insensitive search, the "tree" idea.
@@ -639,6 +640,7 @@ Goal: content first. One screen at a time; agree direction with the user before 
 
 ## Known code debt (fix when touching nearby code, not as a project)
 
+- Remaining `confirm()` in admin: ReportList, CitiesSection, PendingCityCard, PendingInboxCard, TaxonomyAdminClient → ConfirmDialog when touched.
 - ESLint (2026-10-08): 88 errors / 138 warnings — mostly `no-explicit-any` (59) and `no-html-link-for-pages` (18 raw `<a>` causing full reloads).
 - From the 2026-03 audit (unverified, file removed — see git history): Service Law violations in some actions, orphaned `app/[locale]/groups/` route, accent colour prop-drilling/inline styles, five modals mounted in `GroupHeader`.
 - `package.json` `overrides` pins `@swc/core` to 1.15.47 (pulled in by next-intl's plugin). 1.16.x refuses to start on the user's Windows machine because of a cache-folder permission check (`ERR_SWC_NATIVE_CACHE`), breaking `npm run dev` and `npm run build`. next-intl is held at 4.13.x for the same reason (4.14 requires SWC ~1.16). Revisit when SWC relaxes the check.

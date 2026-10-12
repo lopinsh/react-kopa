@@ -68,6 +68,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                     </div>
                     <p className="text-sm font-medium text-foreground-muted">{t('sentBody')}</p>
                     <Link
+                        ref={(el) => el?.focus()}
                         href={`/messages?c=${chatId}`}
                         className="inline-flex h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-8 text-sm font-bold text-white transition-all hover:opacity-90 active:scale-95"
                     >
