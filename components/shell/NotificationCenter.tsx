@@ -47,7 +47,7 @@ function NotificationContent({ n }: { n: Notification }) {
                 <span className="shrink-0">{relativeTo(format, new Date(n.createdAt), now)}</span>
             </div>
             <p className="text-[13px] font-bold text-foreground leading-snug">{headline}</p>
-            {(n.moreCount ?? 0) > 0 && <p className="text-[11px] font-semibold text-primary">{t('more', { count: n.moreCount ?? 0 })}</p>}
+            {!n.read && (n.moreCount ?? 0) > 0 && <p className="text-[11px] font-semibold text-primary">{t('more', { count: n.moreCount ?? 0 })}</p>}
             {detail !== undefined && (
                 <p className="text-[11px] text-foreground-muted leading-snug line-clamp-2 break-words">
                     {detail}
