@@ -461,13 +461,21 @@ export const GroupService = {
 
         const slugs = await this.getGroupSlugs(groupId);
 
-        await prisma.membership.create({
-            data: {
-                userId,
-                groupId,
-                role: 'PENDING',
-            },
-        });
+        try {
+            await prisma.membership.create({
+                data: {
+                    userId,
+                    groupId,
+                    role: 'PENDING',
+                },
+            });
+        } catch (error) {
+            // A second request from the same person landed first (double click, two tabs).
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                return { success: false, error: 'JOIN_FAILED' };
+            }
+            throw error;
+        }
 
         // The request message opens (or continues) the applicant's group chat with the team.
         let conversationId: string;

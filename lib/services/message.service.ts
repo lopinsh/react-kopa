@@ -400,17 +400,20 @@ export const MessageService = {
         try {
             if (!userId || !otherUserId || userId === otherUserId) throw new ActionError('FORBIDDEN');
 
-            const candidates = await prisma.conversation.findMany({
-                where: {
-                    kind: 'DIRECT',
-                    AND: [
-                        { participants: { some: { id: userId } } },
-                        { participants: { some: { id: otherUserId } } }
-                    ]
-                },
-                select: { id: true, _count: { select: { participants: true } } }
-            });
-            const existing = candidates.find(c => c._count.participants === 2);
+            const findPairChat = async (db: Prisma.TransactionClient | typeof prisma) => {
+                const candidates = await db.conversation.findMany({
+                    where: {
+                        kind: 'DIRECT',
+                        AND: [
+                            { participants: { some: { id: userId } } },
+                            { participants: { some: { id: otherUserId } } }
+                        ]
+                    },
+                    select: { id: true, _count: { select: { participants: true } } }
+                });
+                return candidates.find(c => c._count.participants === 2);
+            };
+            const existing = await findPairChat(prisma);
             if (existing) return { id: existing.id, created: false };
 
             const target = await prisma.user.findUnique({ where: { id: otherUserId }, select: { allowDirectMessages: true } });
@@ -427,14 +430,22 @@ export const MessageService = {
             });
             if (!shared) throw new ActionError('DM_NOT_ALLOWED');
 
-            const created = await prisma.conversation.create({
-                data: {
-                    kind: 'DIRECT',
-                    participants: { connect: [{ id: userId }, { id: otherUserId }] }
-                },
-                select: { id: true }
+            // Two people opening a chat at the same moment must end up with one: serialize per pair
+            // (lock released at commit) and look again before creating.
+            const pairKey = [userId, otherUserId].sort().join(':');
+            return await prisma.$transaction(async (tx) => {
+                await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${pairKey}))`;
+                const raced = await findPairChat(tx);
+                if (raced) return { id: raced.id, created: false };
+                const created = await tx.conversation.create({
+                    data: {
+                        kind: 'DIRECT',
+                        participants: { connect: [{ id: userId }, { id: otherUserId }] }
+                    },
+                    select: { id: true }
+                });
+                return { id: created.id, created: true };
             });
-            return { id: created.id, created: true };
         } catch (error) {
             return fail(error, 'getOrCreateDirectChat', 'CREATE_FAILED');
         }
