@@ -14,6 +14,18 @@ export const MAX_GROUP_TAGS = 2;
 /** A pending sub-category is offered to everyone once this many different people have chosen it. */
 export const MIN_PENDING_TAG_SUPPORTERS = 2;
 
+/** Caps on lists that grow with use. They sit far above today's volumes; when one is reached the oldest rows drop out of view (no "load more" yet). */
+/** Messages one chat loads (the newest; shown oldest first). */
+export const CHAT_HISTORY_LIMIT = 200;
+/** Chats listed in the inbox (most recently active first); the unread badge looks at the same chats. */
+export const INBOX_LIMIT = 100;
+/** Events one group page lists (the newest by start date). */
+export const GROUP_EVENTS_LIMIT = 200;
+/** Events the discovery list loads per source (public, members-only). */
+export const DISCOVERY_EVENTS_LIMIT = 100;
+/** Announcements one group loads (newest first). */
+export const ANNOUNCEMENTS_LIMIT = 100;
+
 /** Most sections (About, Practical info, …) one group can have. */
 export const MAX_SECTIONS = 6;
 

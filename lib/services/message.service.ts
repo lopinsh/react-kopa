@@ -2,6 +2,7 @@ import { Prisma, type ConversationKind, type MembershipRole } from '@prisma/clie
 import { prisma } from '@/lib/prisma';
 import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
+import { CHAT_HISTORY_LIMIT, INBOX_LIMIT } from '@/lib/constants';
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 
 /**
@@ -176,6 +177,7 @@ export const MessageService = {
             const conversations = await prisma.conversation.findMany({
                 where: accessWhere(userId),
                 orderBy: { updatedAt: 'desc' },
+                take: INBOX_LIMIT,
                 select: {
                     id: true,
                     kind: true,
@@ -252,13 +254,15 @@ export const MessageService = {
             if (!(await MessageService.canAccess(conversationId, userId))) throw new ActionError('NOT_FOUND');
             const messages = await prisma.message.findMany({
                 where: { conversationId },
-                orderBy: { createdAt: 'asc' },
+                // The newest messages, turned back to oldest first for display.
+                orderBy: { createdAt: 'desc' },
+                take: CHAT_HISTORY_LIMIT,
                 select: {
                     id: true, content: true, createdAt: true, senderId: true, conversationId: true,
                     sender: { select: PERSON_SELECT }
                 }
             });
-            return messages.map(toMessageView);
+            return messages.reverse().map(toMessageView);
         } catch (error) {
             return fail(error, 'getMessages', 'INTERNAL_SERVER_ERROR');
         }
@@ -332,6 +336,8 @@ export const MessageService = {
         try {
             const conversations = await prisma.conversation.findMany({
                 where: accessWhere(userId),
+                orderBy: { updatedAt: 'desc' },
+                take: INBOX_LIMIT,
                 select: { id: true, reads: { where: { userId }, select: { lastReadAt: true } } }
             });
             const newest = await newestFromOthers(conversations.map(c => c.id), userId);
@@ -503,7 +509,8 @@ export const MessageService = {
                 id: true,
                 contactUserId: true,
                 messages: {
-                    orderBy: { createdAt: 'asc' },
+                    orderBy: { createdAt: 'desc' },
+                    take: CHAT_HISTORY_LIMIT,
                     select: {
                         id: true, content: true, createdAt: true, senderId: true,
                         sender: { select: { name: true, username: true, avatarSeed: true, image: true } }
@@ -513,7 +520,7 @@ export const MessageService = {
         });
         const threads = new Map<string, RequestThread>();
         for (const c of conversations) {
-            if (c.contactUserId) threads.set(c.contactUserId, { conversationId: c.id, messages: c.messages });
+            if (c.contactUserId) threads.set(c.contactUserId, { conversationId: c.id, messages: [...c.messages].reverse() });
         }
         return threads;
     },

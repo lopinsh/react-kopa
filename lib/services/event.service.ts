@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { DISCOVERY_EVENTS_LIMIT, GROUP_EVENTS_LIMIT } from '@/lib/constants';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
@@ -525,7 +526,9 @@ export class EventService {
             const canSeeAll = access.isMember || access.isSiteAdmin;
             const events = await prisma.event.findMany({
                 where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
-                orderBy: { startDate: 'asc' },
+                // The newest events by start date, turned back to oldest first below.
+                orderBy: { startDate: 'desc' },
+                take: GROUP_EVENTS_LIMIT,
                 include: {
                     translations: true,
                     _count: {
@@ -561,7 +564,7 @@ export class EventService {
             const waiting = (eventId: string, status: AttendanceStatus) =>
                 waitlistCounts.find(w => w.eventId === eventId && w.status === status)?._count._all ?? 0;
 
-            return events.map(e => {
+            return events.reverse().map(e => {
                 const status = myStatus.get(e.id) ?? null;
                 const canManage = !!userId && (e.creatorId === userId || access.isGroupAdmin);
                 const canSeeInstructions = EventService.instructionsVisible(e.joinMode, canManage, status);
@@ -870,7 +873,8 @@ export class EventService {
                 return await prisma.event.findMany({
                     where: { AND: [buildWhere(fCity, fCategory, fSearch, fStatus), { visibility: 'PUBLIC' }] },
                     include,
-                    orderBy
+                    orderBy,
+                    take: DISCOVERY_EVENTS_LIMIT
                 });
             },
             [`events-discovery-v2-${locale}-${city}-${category}-${search}-${status}`],
@@ -894,7 +898,8 @@ export class EventService {
                         ]
                     },
                     include,
-                    orderBy
+                    orderBy,
+                    take: DISCOVERY_EVENTS_LIMIT
                 })
                 : Promise.resolve([])
         ]);
@@ -921,6 +926,7 @@ export class EventService {
                 goingCount: e._count.attendees,
                 group: e.group
             }))
-            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()));
+            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()))
+            .slice(0, DISCOVERY_EVENTS_LIMIT);
     }
 }

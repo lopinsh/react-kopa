@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { ANNOUNCEMENTS_LIMIT } from '@/lib/constants';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
 import { ActionError } from '@/types/actions';
@@ -95,6 +96,7 @@ export const PostService = {
         return prisma.post.findMany({
             where: { groupId },
             orderBy: { createdAt: 'desc' },
+            take: ANNOUNCEMENTS_LIMIT,
             include: { author: { select: AUTHOR_SELECT } }
         }).then(posts => posts.map(toRow));
     },
