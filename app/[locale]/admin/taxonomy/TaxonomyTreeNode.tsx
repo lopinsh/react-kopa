@@ -17,7 +17,6 @@ type Props = {
 };
 
 export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeSelect, isExpanded, onToggle, selectedActionIds, onToggleActionId }: Props) {
-    const t = useTranslations('admin.taxonomy.tree');
     const tNode = useTranslations('admin.taxonomy.node');
     const c = useTranslations('common');
 
@@ -64,11 +63,10 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                     {l1.subcategories.map(l2 => (
                         <L2Node
                             key={l2.id}
-                            id={l2.id}
-                            l1Id={l1.id}
                             title={l2.title}
                             groupCount={0}
                             tagsCount={l2.tags.length}
+                            langs={l2.langs}
                             isPending={false}
                             isSelected={selectedNode?.type === 'l2' && selectedNode.id === l2.id}
                             onSelect={() => onNodeSelect({ type: 'l2', id: l2.id, l1Id: l1.id })}
@@ -79,11 +77,10 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                     {pendingL2s.map(pending => (
                         <L2Node
                             key={pending.id}
-                            id={pending.id}
-                            l1Id={l1.id}
                             title={pending.submittedLabel}
                             groupCount={pending.groups.length}
                             tagsCount={0}
+                            langs={[pending.submittedLang]}
                             isPending={true}
                             isSelected={selectedNode?.type === 'pending' && selectedNode.id === pending.id}
                             onSelect={() => onNodeSelect({ type: 'pending', id: pending.id })}
@@ -98,22 +95,20 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
 }
 
 function L2Node({
-    id,
-    l1Id,
     title,
     groupCount,
     tagsCount,
+    langs,
     isPending,
     isSelected,
     onSelect,
     isChecked,
     onCheck
 }: {
-    id: string;
-    l1Id: string;
     title: string;
     groupCount: number;
     tagsCount: number;
+    langs: Array<'en' | 'lv'>;
     isPending: boolean;
     isSelected: boolean;
     onSelect: () => void;
@@ -121,6 +116,7 @@ function L2Node({
     onCheck: () => void;
 }) {
     const tNode = useTranslations('admin.taxonomy.node');
+    const missingLangs = (['lv', 'en'] as const).filter((code) => !langs.includes(code));
     return (
         <div
             className={`group flex items-center gap-3 pl-6 pr-4 py-2 cursor-pointer hover:bg-surface-elevated transition-colors border-l-2 ml-[-1px] ${isPending
@@ -159,6 +155,11 @@ function L2Node({
             )}
 
             <div className="ml-auto flex gap-2">
+                {missingLangs.map((code) => (
+                    <span key={code} className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-dashed border-border">
+                        {tNode('missingLang', { lang: code.toUpperCase() })}
+                    </span>
+                ))}
                 {tagsCount > 0 && !isPending && (
                     <span className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-border">
                         {tNode('wildcard', { count: tagsCount })}

@@ -488,6 +488,7 @@
       "node": {
         "children": "{count} {count, plural, one {child} other {children}}",
         "pending": "pending",
+        "missingLang": "missing {lang} name",
         "wildcard": "{count} {count, plural, one {wildcard} other {wildcards}}",
         "group": "{count} {count, plural, one {group} other {groups}}"
       },

@@ -488,6 +488,7 @@
       "node": {
         "children": "{count} {count, plural, zero {apakštēmu} one {apakštēma} other {apakštēmas}}",
         "pending": "gaida",
+        "missingLang": "nav {lang} nosaukuma",
         "wildcard": "{count} {count, plural, zero {brīvo birku} one {brīvā birka} other {brīvās birkas}}",
         "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}"
       },

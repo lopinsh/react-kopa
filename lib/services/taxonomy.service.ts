@@ -20,6 +20,8 @@ export type L2Category = {
     slug: string;
     slugLv: string | null;
     title: string;
+    /** Languages this sub-category has a name in (the admin tree flags a missing one). */
+    langs: Array<'en' | 'lv'>;
     status: 'ACTIVE' | 'PENDING_REVIEW';
     tags: L3Tag[];
 };
@@ -208,6 +210,7 @@ export const TaxonomyService = {
                             slug: l2.slug,
                             slugLv: l2.slugLv,
                             title: getTitle(l2),
+                            langs: (['lv', 'en'] as const).filter((code) => l2.titles.some((t) => t.lang === code && t.title.trim())),
                             status: l2.status,
                             tags: l3s
                                 .filter((l3) => l3.parentId === l2.id)
