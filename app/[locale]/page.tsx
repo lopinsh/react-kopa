@@ -44,7 +44,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     };
 }
 
-import { CITIES, NEUTRAL_ACCENT } from '@/lib/constants';
+import { NEUTRAL_ACCENT } from '@/lib/constants';
 
 type Props = {
     params: Promise<{ locale: string }>;

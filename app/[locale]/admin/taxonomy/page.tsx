@@ -6,6 +6,7 @@ import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
 import { signInUrl } from '@/lib/auth-redirect';
 import { isSiteAdmin } from '@/lib/site-role';
+import { CityService } from '@/lib/services/city.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -30,7 +31,7 @@ export default async function AdminTaxonomyPage({
         notFound();
     }
 
-    const [pendingRes, allRes, treeRes] = await Promise.all([getPendingTags(), getAllTags(), getTaxonomy(locale)]);
+    const [pendingRes, allRes, treeRes, cities] = await Promise.all([getPendingTags(), getAllTags(), getTaxonomy(locale), CityService.listAll()]);
 
     if (!pendingRes.success || !allRes.success || !treeRes.success) {
         notFound();
@@ -46,6 +47,7 @@ export default async function AdminTaxonomyPage({
                 pending={pendingRes.data ?? []}
                 categories={allRes.data ?? []}
                 tree={treeRes.data ?? []}
+                cities={cities}
             />
         </div>
     );

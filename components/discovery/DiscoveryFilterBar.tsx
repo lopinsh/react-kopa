@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import { useCities } from '@/components/providers/CitiesContext';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useCallback, useState, useRef, useEffect, useMemo, useTransition } from 'react';
 import {
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
-import { CITIES, NEUTRAL_ACCENT, DISCOVERY_TABS, DISCOVERY_VIEWS, type DiscoveryView, type DiscoveryTab } from '@/lib/constants';
+import { NEUTRAL_ACCENT, DISCOVERY_TABS, DISCOVERY_VIEWS, type DiscoveryView, type DiscoveryTab } from '@/lib/constants';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { ScopedResult } from '@/lib/types/discovery';
 import { searchContextual } from '@/actions/discovery-actions';
@@ -85,7 +85,7 @@ export default function DiscoveryFilterBar({
     const { build, addTag, removeTag } = useQueryString();
     const tDiscover = useTranslations('discovery');
     const tSidebar = useTranslations('shell.sidebar');
-    const tCities = useTranslations('cities');
+    const cities = useCities();
     const [, startTransition] = useTransition();
 
     const currentTab = searchParams.get('tab') || DISCOVERY_TABS[0];
@@ -378,8 +378,8 @@ export default function DiscoveryFilterBar({
                         className="h-full appearance-none rounded-lg border border-border bg-surface pl-7 pr-6 text-xs font-semibold text-foreground transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/15 cursor-pointer hover:bg-surface-elevated"
                     >
                         <option value="all">{tSidebar('anyCity')}</option>
-                        {CITIES.map((c) => (
-                            <option key={c} value={c}>{cityLabel(tCities, c)}</option>
+                        {cities.map((c) => (
+                            <option key={c.slug} value={c.slug}>{c.name}</option>
                         ))}
                     </select>
                     <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-foreground-muted pointer-events-none" />

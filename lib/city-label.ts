@@ -1,6 +1,6 @@
 /**
  * Display name for a stored city value (e.g. `Jurmala` -> `Jūrmala`).
- * Stored values in `CITIES` stay ASCII; only the label is localized.
+ * The stored value is the city's `slug` (ASCII); the names come from the `City` table through the `cities` messages.
  * Pass the translator for the `cities` namespace. Unknown values (legacy or
  * free-text) are shown as stored.
  */

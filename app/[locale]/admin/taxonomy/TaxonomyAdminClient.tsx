@@ -4,6 +4,8 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
 import PendingInbox from './PendingInbox';
+import CitiesSection from './CitiesSection';
+import type { CityRow } from '@/lib/services/city.service';
 import TaxonomyTree, { SelectedTaxonomyNode } from './TaxonomyTree';
 import TaxonomySlideover from './TaxonomySlideover';
 import FloatingActionBar from './FloatingActionBar';
@@ -14,9 +16,10 @@ type Props = {
     pending: PendingCategoryWithContext[];
     categories: ActiveL2WithAliases[];
     tree: TaxonomyTreeData;
+    cities: CityRow[];
 };
 
-export default function TaxonomyAdminClient({ pending, categories, tree }: Props) {
+export default function TaxonomyAdminClient({ pending, categories, tree, cities }: Props) {
     const t = useTranslations('admin.taxonomy.bulk');
     const [selectedNode, setSelectedNode] = useState<SelectedTaxonomyNode | null>(null);
     const [selectedActionIds, setSelectedActionIds] = useState<string[]>([]);
@@ -59,6 +62,7 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
         <div className="space-y-6">
             <PendingInbox
                 pendingTags={pending}
+                pendingCities={cities.filter((city) => city.status === 'PENDING_REVIEW')}
                 categories={categories}
                 onNodeSelect={setSelectedNode}
             />
@@ -71,6 +75,8 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
                 selectedActionIds={selectedActionIds}
                 onToggleActionId={toggleActionId}
             />
+
+            <CitiesSection cities={cities} />
 
             <TaxonomySlideover
                 selectedNode={selectedNode}

@@ -3,25 +3,6 @@
  * Used across components, schemas, and services to ensure consistency.
  */
 
-/**
- * Cities/Locations currently supported by the platform.
- * Mirrors the set used in database seeding.
- */
-export const CITIES = [
-    'Riga',
-    'Jurmala',
-    'Liepaja',
-    'Daugavpils',
-    'Ventspils',
-    'Jelgava',
-    'Jekabpils',
-    'Sigulda',
-    'Cesis',
-    'Valmiera',
-] as const;
-
-export type City = (typeof CITIES)[number];
-
 /** Accent when no category is chosen: the site colour (the theme's `--primary`), so a theme change shows everywhere. */
 export const NEUTRAL_ACCENT = 'var(--primary)';
 

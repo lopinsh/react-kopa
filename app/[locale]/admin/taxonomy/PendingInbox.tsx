@@ -3,19 +3,23 @@ import { useTranslations } from 'next-intl';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { PendingCategoryWithContext, ActiveL2WithAliases } from '@/lib/services/taxonomy.service';
 import PendingInboxCard from './PendingInboxCard';
+import PendingCityCard from './PendingCityCard';
+import type { CityRow } from '@/lib/services/city.service';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
 type Props = {
     pendingTags: PendingCategoryWithContext[];
+    pendingCities: CityRow[];
     categories: ActiveL2WithAliases[];
     onNodeSelect: (node: SelectedTaxonomyNode | null) => void;
 };
 
-export default function PendingInbox({ pendingTags, categories, onNodeSelect }: Props) {
+export default function PendingInbox({ pendingTags, pendingCities, categories, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.inbox');
     const [isExpanded, setIsExpanded] = useState(false);
 
-    if (pendingTags.length === 0) {
+    const total = pendingTags.length + pendingCities.length;
+    if (total === 0) {
         return null; // Hidden when empty
     }
 
@@ -32,13 +36,16 @@ export default function PendingInbox({ pendingTags, categories, onNodeSelect }: 
                     </div>
                     <span className="font-bold text-amber-900 dark:text-amber-100">{t('title')}</span>
                     <span className="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-                        {pendingTags.length}
+                        {total}
                     </span>
                 </div>
             </button>
 
             {isExpanded && (
                 <div className="p-4 pt-0 grid gap-4">
+                    {pendingCities.map(city => (
+                        <PendingCityCard key={city.id} city={city} />
+                    ))}
                     {pendingTags.map(tag => (
                         <PendingInboxCard
                             key={tag.id}

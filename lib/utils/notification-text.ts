@@ -5,7 +5,7 @@ type NotificationTranslator = ReturnType<typeof useTranslations<'notifications'>
 
 // Types whose detail line is something a person wrote, shown in quotes.
 const QUOTED_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY', 'NEW_POST', 'ADMIN_FEEDBACK']);
-const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'GROUP_DELETED', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN', 'EVENT_NOW_OPEN', 'EVENT_CANCELLED', 'OWNERSHIP_TRANSFERRED', 'ADMIN_GRANTED', 'ADMIN_REVOKED', 'ADMIN_REPORT', 'ADMIN_TAG_PENDING', 'ADMIN_SUGGESTION', 'ADMIN_FEEDBACK', 'ADMIN_GROUP_HIDDEN']);
+const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'GROUP_DELETED', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN', 'EVENT_NOW_OPEN', 'EVENT_CANCELLED', 'OWNERSHIP_TRANSFERRED', 'ADMIN_GRANTED', 'ADMIN_REVOKED', 'ADMIN_REPORT', 'ADMIN_TAG_PENDING', 'ADMIN_SUGGESTION', 'ADMIN_FEEDBACK', 'ADMIN_GROUP_HIDDEN', 'ADMIN_CITY_PENDING', 'CITY_APPROVED', 'CITY_REJECTED']);
 
 export interface NotificationText {
     headline: string;
@@ -28,6 +28,7 @@ export function formatNotificationText(t: NotificationTranslator, type: string, 
         authorName: args.authorName ? String(args.authorName) : t('someone'),
         originalTag: String(args.originalTag ?? ''),
         canonicalTag: String(args.canonicalTag ?? ''),
+        cityName: String(args.cityName ?? ''),
         waitlistCount: Number(args.waitlistCount ?? 0)
     });
     // Older notifications stored the event title as `title`.

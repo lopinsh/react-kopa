@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { CityService } from './city.service';
 import { cache } from 'react';
 import { MembershipRole } from '@prisma/client';
 import { GroupFormValues } from '@/lib/validations/group';
@@ -423,6 +424,9 @@ export const GroupService = {
         if ((data.tagIds?.length ?? 0) > MAX_GROUP_TAGS) {
             return { success: false, error: 'TAG_LIMIT_REACHED' };
         }
+        if (!(await CityService.isUsableBy(data.city, userId))) {
+            return { success: false, error: 'VALIDATION_FAILED' };
+        }
         const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
 
         // Pre-fetch category to get l1Slug
@@ -440,7 +444,7 @@ export const GroupService = {
                 name: data.name,
                 slug,
                 description: data.description,
-                city: data.city || 'Riga',
+                city: data.city,
                 type: data.type,
                 categoryId: targetCategoryId,
                 bannerImage: data.bannerImage,
@@ -611,7 +615,7 @@ export const GroupService = {
             prisma.user.findUnique({ where: { id: userId }, select: { role: true } }),
             prisma.group.findUnique({
                 where: { id: groupId },
-                select: { name: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
+                select: { name: true, city: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
             })
         ]);
 
@@ -621,6 +625,11 @@ export const GroupService = {
             return { success: false, error: 'FORBIDDEN' };
         }
         if (!current) return { success: false, error: 'NOT_FOUND' };
+
+        // A new city must exist and be approved (or be this person's own pending suggestion); the group's current one always stays valid.
+        if (!(await CityService.isUsableBy(data.city, userId, current.city))) {
+            return { success: false, error: 'VALIDATION_FAILED' };
+        }
 
         const canEditOwnerFields = role === 'OWNER' || isAppAdmin;
 

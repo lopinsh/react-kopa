@@ -357,7 +357,10 @@
     "MESSAGE_INVALID": "Šis teksts nav derīgs. Pārbaudi vietturus un sintaksi.",
     "MESSAGE_KEY_UNKNOWN": "Šādas teksta atslēgas nav.",
     "UNAUTHORIZED_ADMIN": "Šo var darīt tikai vietnes administratori.",
-    "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to."
+    "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to.",
+    "CITY_NAME_INVALID": "Ievadi pilsētas nosaukumu (no 2 līdz 60 simboliem).",
+    "CITY_EXISTS": "Pilsēta ar šādu nosaukumu jau ir.",
+    "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas, tāpēc to nevar dzēst."
   },
   "group": {
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
@@ -443,7 +446,7 @@
       "inbox": {
         "approve": "Apstiprināts",
         "merge": "Apvienots",
-        "title": "Jāpārskata: jaunās birkas",
+        "title": "Jāizskata",
         "noPendingTags": "Gaidāmo birku nav.",
         "proposedUnder": "Ierosināts zem: {parent}",
         "unknown": "Nezināms",
@@ -454,7 +457,9 @@
         "selectedCanonicalLabel": "Izvēlētā kanoniskā birka:",
         "mergeAndNotify": "Apvienot un paziņot grupas īpašniekiem",
         "usedByGroups": "Izmanto grupas:",
-        "confirmReject": "Vai tiešām vēlies noraidīt šo birku? Tā tiks neatgriezeniski dzēsta."
+        "confirmReject": "Vai tiešām vēlies noraidīt šo birku? Tā tiks neatgriezeniski dzēsta.",
+        "cityGroups": "{count, plural, =0 {Neviena grupa to vēl neizmanto} one {# grupa to izmanto} other {# grupas to izmanto}}",
+        "confirmRejectCity": "Noraidīt šo pilsētu? Grupām, kas to izmanto, pilsēta tiks noņemta, un īpašniekiem lūgs izvēlēties citu."
       },
       "fields": {
         "color": "Krāsa",
@@ -509,6 +514,17 @@
         "editDetails": "Labo paturamās birkas datus",
         "selectCanonical": "Izvēlies birku, ko paturēt",
         "title": "Apvienot birkas"
+      },
+      "cities": {
+        "title": "Pilsētas",
+        "add": "Pievienot pilsētu",
+        "added": "Pilsēta pievienota.",
+        "rename": "Pārdēvēt",
+        "renamed": "Pilsēta saglabāta.",
+        "deleted": "Pilsēta dzēsta.",
+        "groups": "{count, plural, =0 {Nav grupu} one {# grupa} other {# grupas}}",
+        "inUse": "Šo pilsētu vēl izmanto grupas.",
+        "confirmDelete": "Dzēst pilsētu „{name}”?"
       }
     },
     "reports": {
@@ -855,7 +871,10 @@
       "ADMIN_TAG_PENDING": "Piedāvāta jauna apakškategorija",
       "ADMIN_SUGGESTION": "Jauns tulkojuma ieteikums",
       "ADMIN_FEEDBACK": "Jauna atsauksmju piezīme",
-      "ADMIN_GROUP_HIDDEN": "Grupa tika paslēpta"
+      "ADMIN_GROUP_HIDDEN": "Grupa tika paslēpta",
+      "ADMIN_CITY_PENDING": "Piedāvāta jauna pilsēta",
+      "CITY_APPROVED": "Tava pilsēta „{cityName}” ir apstiprināta",
+      "CITY_REJECTED": "Pilsēta „{cityName}” netika pieņemta. Izvēlies citu savai grupai"
     },
     "tabPersonal": "Personīgie",
     "tabAdmin": "Administrācija"
@@ -1025,7 +1044,12 @@
     "typePrivate": "Privāta",
     "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
     "typePublic": "Publiska Grupa",
-    "typePublicDesc": "Ikviens to var atrast un pieteikties dalībai."
+    "typePublicDesc": "Ikviens to var atrast un pieteikties dalībai.",
+    "citySuggestOpen": "Mana pilsēta nav sarakstā",
+    "citySuggestPlaceholder": "Pilsētas nosaukums",
+    "citySuggestAdd": "Ieteikt",
+    "citySuggestCancel": "Atcelt",
+    "citySuggestedHint": "„{name}” gaida vietnes administratora apstiprinājumu. Grupa to līdz tam saglabā."
   },
   "pages": {
     "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",
@@ -1158,18 +1182,6 @@
     "editEvent": "Labot",
     "deleteEvent": "Dzēst",
     "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot."
-  },
-  "cities": {
-    "Cesis": "Cēsis",
-    "Daugavpils": "Daugavpils",
-    "Jekabpils": "Jēkabpils",
-    "Jelgava": "Jelgava",
-    "Jurmala": "Jūrmala",
-    "Liepaja": "Liepāja",
-    "Riga": "Rīga",
-    "Sigulda": "Sigulda",
-    "Valmiera": "Valmiera",
-    "Ventspils": "Ventspils"
   },
   "eventWizard": {
     "stepOf": "{current}. solis no {total}",

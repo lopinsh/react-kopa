@@ -2,10 +2,9 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
+import CityField from '@/components/groups/CityField';
 import { ImageIcon, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
-import { CITIES } from '@/lib/constants';
 import { type GroupFormValues } from '@/lib/validations/group';
 import SettingsSection from './SettingsSection';
 
@@ -20,7 +19,6 @@ const LABEL = 'ml-1 text-xs font-black uppercase tracking-wider text-foreground-
 /** Name, city and banner. */
 export default function BasicsSection({ canEditName }: Props) {
     const t = useTranslations('wizard');
-    const tCities = useTranslations('cities');
     const gt = useTranslations('group');
     const gs = useTranslations('groupSettings');
     const { register, formState: { errors } } = useFormContext<GroupFormValues>();
@@ -44,19 +42,7 @@ export default function BasicsSection({ canEditName }: Props) {
 
                 <div className="space-y-2">
                     <label htmlFor="group-city" className={LABEL}>{t('fieldCity')}</label>
-                    <select
-                        id="group-city"
-                        {...register('city')}
-                        className={clsx(INPUT, errors.city && 'border-red-400')}
-                    >
-                        <option value="">{t('fieldCityPlaceholder')}</option>
-                        {CITIES.map((city) => (
-                            <option key={city} value={city}>{cityLabel(tCities, city)}</option>
-                        ))}
-                    </select>
-                    {errors.city?.message && (
-                        <p className="ml-1 mt-1 text-xs text-red-500">{t(errors.city.message as 'CITY_REQUIRED')}</p>
-                    )}
+                    <CityField id="group-city" selectClassName={INPUT} inputClassName={INPUT} />
                 </div>
             </div>
 

@@ -7,7 +7,7 @@ export type NotificationAudience = 'USER' | 'ADMIN';
 
 /** Things that need a site admin's attention. They go to every site admin, in the bell's admin tab. */
 export type AdminNotificationPayload = {
-    type: 'ADMIN_REPORT' | 'ADMIN_TAG_PENDING' | 'ADMIN_SUGGESTION' | 'ADMIN_FEEDBACK' | 'ADMIN_GROUP_HIDDEN';
+    type: 'ADMIN_REPORT' | 'ADMIN_TAG_PENDING' | 'ADMIN_SUGGESTION' | 'ADMIN_FEEDBACK' | 'ADMIN_GROUP_HIDDEN' | 'ADMIN_CITY_PENDING';
     args?: Record<string, string | number>;
     link: string;
     /** The admin who caused it already knows; they are left out. */
@@ -16,7 +16,7 @@ export type AdminNotificationPayload = {
 
 export type NotificationPayload = {
     userId: string;
-    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'APPLICATION_INQUIRY' | 'TAG_MERGED' | 'GROUP_HIDDEN' | 'GROUP_DELETED' | 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN' | 'EVENT_CANCELLED' | 'OWNERSHIP_TRANSFERRED' | 'ADMIN_GRANTED' | 'ADMIN_REVOKED';
+    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'APPLICATION_INQUIRY' | 'TAG_MERGED' | 'GROUP_HIDDEN' | 'GROUP_DELETED' | 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN' | 'EVENT_CANCELLED' | 'OWNERSHIP_TRANSFERRED' | 'ADMIN_GRANTED' | 'ADMIN_REVOKED' | 'CITY_APPROVED' | 'CITY_REJECTED';
     translationKey: string;
     args?: Record<string, string | number>;
     link?: string;

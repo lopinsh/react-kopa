@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-import { CITIES, GROUP_TYPES, MAX_GROUP_TAGS } from '@/lib/constants';
+import { GROUP_TYPES, MAX_GROUP_TAGS } from '@/lib/constants';
 
-export type City = (typeof CITIES)[number];
 
 // Step 1: Categorization
 /**
@@ -33,7 +32,8 @@ export const step2Schema = z.object({
         .nullable()
         .or(z.literal('')),
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
-    city: z.enum(CITIES, { error: 'CITY_REQUIRED' }),
+    /** The city's stored value (`City.slug`). The server checks that it exists and may be used. */
+    city: z.string().min(1, 'CITY_REQUIRED').max(80, 'CITY_REQUIRED'),
     discordLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
     websiteLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
     instagramLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),

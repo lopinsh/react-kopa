@@ -82,7 +82,7 @@ export default function GroupSettingsForm({
         resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
         defaultValues: {
             name: group.name,
-            city: group.city as GroupFormValues['city'],
+            city: group.city,
             type: group.type,
             // Moderators never see the category picker: their form carries the stored values, which the service compares.
             categoryId: canEditOwnerFields

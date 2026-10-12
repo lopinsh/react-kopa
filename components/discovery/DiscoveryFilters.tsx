@@ -1,10 +1,9 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { cityLabel } from '@/lib/city-label';
 import { Search, MapPin, Layers, FilterX } from 'lucide-react';
 import { clsx } from 'clsx';
-import { CITIES } from '@/lib/constants';
+import { useCities } from '@/components/providers/CitiesContext';
 import type { GroupType } from '@prisma/client';
 
 type Filters = {
@@ -28,7 +27,8 @@ export default function DiscoveryFilters({
     accentColor,
 }: Props) {
     const t = useTranslations('discovery');
-    const tCities = useTranslations('cities');
+    const cities = useCities();
+
   const c_common = useTranslations('common');
 
     function update<K extends keyof Filters>(key: K, value: Filters[K]) {
@@ -75,9 +75,9 @@ export default function DiscoveryFilters({
                         style={{ ['--accent' as string]: accentColor }}
                     >
                         <option value="">{t('allCities')}</option>
-                        {CITIES.map((city) => (
-                            <option key={city} value={city}>
-                                {cityLabel(tCities, city)}
+                        {cities.map((city) => (
+                            <option key={city.slug} value={city.slug}>
+                                {city.name}
                             </option>
                         ))}
                     </select>

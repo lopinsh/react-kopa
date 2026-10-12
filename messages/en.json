@@ -357,7 +357,10 @@
     "MESSAGE_INVALID": "This text isn't valid. Check the placeholders and syntax.",
     "MESSAGE_KEY_UNKNOWN": "This text key does not exist.",
     "UNAUTHORIZED_ADMIN": "Only site admins can do this.",
-    "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first."
+    "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first.",
+    "CITY_NAME_INVALID": "Enter a city name (2 to 60 letters).",
+    "CITY_EXISTS": "A city with this name already exists.",
+    "CITY_IN_USE": "Groups still use this city, so it cannot be removed."
   },
   "group": {
     "acceptingMembersDesc": "When off, new people can't ask to join.",
@@ -443,7 +446,7 @@
       "inbox": {
         "approve": "Approved",
         "merge": "Merged",
-        "title": "Needs review: new tags",
+        "title": "Needs review",
         "noPendingTags": "No pending tags.",
         "proposedUnder": "Proposed under: {parent}",
         "unknown": "Unknown",
@@ -454,7 +457,9 @@
         "selectedCanonicalLabel": "Selected canonical:",
         "mergeAndNotify": "Merge and notify group owners",
         "usedByGroups": "Used by groups:",
-        "confirmReject": "Are you sure you want to reject this request? This will permanently delete the suggestion."
+        "confirmReject": "Are you sure you want to reject this request? This will permanently delete the suggestion.",
+        "cityGroups": "{count, plural, =0 {No groups use it yet} one {# group uses it} other {# groups use it}}",
+        "confirmRejectCity": "Reject this city? Groups using it are left without a city and their owners are asked to choose another."
       },
       "fields": {
         "color": "Color",
@@ -509,6 +514,17 @@
         "editDetails": "Edit details of the kept tag",
         "selectCanonical": "Choose the tag to keep",
         "title": "Merge tags"
+      },
+      "cities": {
+        "title": "Cities",
+        "add": "Add city",
+        "added": "City added.",
+        "rename": "Rename",
+        "renamed": "City saved.",
+        "deleted": "City removed.",
+        "groups": "{count, plural, =0 {No groups} one {# group} other {# groups}}",
+        "inUse": "Groups still use this city.",
+        "confirmDelete": "Remove the city “{name}”?"
       }
     },
     "reports": {
@@ -855,7 +871,10 @@
       "ADMIN_TAG_PENDING": "New sub-category suggested",
       "ADMIN_SUGGESTION": "New translation suggestion",
       "ADMIN_FEEDBACK": "New feedback note",
-      "ADMIN_GROUP_HIDDEN": "A group was hidden"
+      "ADMIN_GROUP_HIDDEN": "A group was hidden",
+      "ADMIN_CITY_PENDING": "New city suggested",
+      "CITY_APPROVED": "Your city “{cityName}” was approved",
+      "CITY_REJECTED": "The city “{cityName}” was not accepted. Choose another one for your group"
     },
     "tabPersonal": "Personal",
     "tabAdmin": "Admin"
@@ -1025,7 +1044,12 @@
     "typePrivate": "Private",
     "typePrivateDesc": "Approval or invite only.",
     "typePublic": "Public Group",
-    "typePublicDesc": "Anyone can find it and ask to join."
+    "typePublicDesc": "Anyone can find it and ask to join.",
+    "citySuggestOpen": "My city is not listed",
+    "citySuggestPlaceholder": "City name",
+    "citySuggestAdd": "Suggest",
+    "citySuggestCancel": "Cancel",
+    "citySuggestedHint": "“{name}” is waiting for a site admin to approve it. Your group keeps it meanwhile."
   },
   "pages": {
     "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",
@@ -1158,18 +1182,6 @@
     "editEvent": "Edit",
     "deleteEvent": "Delete",
     "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone."
-  },
-  "cities": {
-    "Cesis": "Cēsis",
-    "Daugavpils": "Daugavpils",
-    "Jekabpils": "Jēkabpils",
-    "Jelgava": "Jelgava",
-    "Jurmala": "Jūrmala",
-    "Liepaja": "Liepāja",
-    "Riga": "Riga",
-    "Sigulda": "Sigulda",
-    "Valmiera": "Valmiera",
-    "Ventspils": "Ventspils"
   },
   "eventWizard": {
     "stepOf": "Step {current} of {total}",

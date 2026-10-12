@@ -47,6 +47,9 @@ export type ErrorCode =
     | 'GROUP_GONE'
     | 'MESSAGE_KEY_UNKNOWN'
     | 'GROUP_NOT_HIDDEN'
+    | 'CITY_NAME_INVALID'
+    | 'CITY_EXISTS'
+    | 'CITY_IN_USE'
     | 'DB_MIGRATION_REQUIRED';
 
 /**
