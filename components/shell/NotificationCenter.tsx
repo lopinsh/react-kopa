@@ -15,7 +15,6 @@ import { inFeedbackLayer } from '@/lib/feedback/capture';
 type Notification = {
     id: string;
     type: string;
-    title: string;
     message: string;
     link: string | null;
     read: boolean;

@@ -138,7 +138,6 @@ model Group {
   instagramLink      String?
   isAcceptingMembers Boolean        @default(true)
   websiteLink        String?
-  accentColor        String?
   bannerImage        String?
   hiddenAt           DateTime?
   hiddenReason       String?
@@ -229,8 +228,7 @@ model GroupSection {
   group        Group                     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   translations GroupSectionTranslation[]
 
-  @@index([groupId])
-  @@index([order])
+  @@index([groupId, order])
 }
 
 model GroupSectionTranslation {
@@ -252,7 +250,7 @@ model Event {
   groupId           String
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  creatorId         String
+  creatorId         String?
   maxParticipants   Int?
   startDate         DateTime
   isRecurring       Boolean            @default(false)
@@ -266,12 +264,13 @@ model Event {
   isFull            Boolean            @default(false)
   attendees         Attendance[]
   translations      EventTranslation[]
-  creator           User               @relation("CreatedEvents", fields: [creatorId], references: [id])
+  creator           User?              @relation("CreatedEvents", fields: [creatorId], references: [id], onDelete: SetNull)
   group             Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
   reports           Report[]
 
   @@unique([groupId, slug])
   @@index([slug])
+  @@index([startDate])
 }
 
 model EventTranslation {
@@ -297,8 +296,12 @@ model Attendance {
   user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, eventId])
+  @@index([eventId, status])
 }
 
+/// A group has exactly one OWNER: the partial unique index `Membership_one_owner_per_group`
+/// (UNIQUE ("groupId") WHERE role = 'OWNER') exists only in the migration SQL (Prisma cannot express it).
+/// Never drop it; if `migrate dev` offers to, remove that DROP INDEX from the generated SQL.
 model Membership {
   id       String         @id @default(cuid())
   role     MembershipRole @default(MEMBER)
@@ -309,6 +312,7 @@ model Membership {
   user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, groupId])
+  @@index([groupId, role])
 }
 
 model Post {
@@ -318,15 +322,14 @@ model Post {
   content    String
   authorId   String
   groupId    String
-  parentId   String?
   /// Set when the team moved the announcement to the archive.
   archivedAt DateTime?
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   group      Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  parent     Post?     @relation("PostReplies", fields: [parentId], references: [id], onDelete: Cascade)
-  replies    Post[]    @relation("PostReplies")
+
+  @@index([groupId, createdAt])
 }
 
 enum ConversationKind {
@@ -372,14 +375,13 @@ model ConversationRead {
 model Message {
   id             String       @id @default(cuid())
   content        String
-  isRead         Boolean      @default(false)
   createdAt      DateTime     @default(now())
   conversationId String
   senderId       String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
 
-  @@index([conversationId])
+  @@index([conversationId, createdAt])
   @@index([senderId])
 }
 
@@ -387,7 +389,6 @@ model Notification {
   id        String   @id @default(cuid())
   userId    String
   type      String
-  title     String
   message   String
   link      String?
   read      Boolean  @default(false)
@@ -397,6 +398,7 @@ model Notification {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, audience, read])
+  @@index([userId, audience, createdAt])
 }
 
 model Report {

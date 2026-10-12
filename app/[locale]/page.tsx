@@ -216,7 +216,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                                 locale={locale}
                                                 l1Slug={eventL1Slug}
                                                 groupSlug={group.slug}
-                                                accentColor={group.accentColor || accentColor}
+                                                accentColor={accentColor}
                                             />
                                         );
                                     })}
@@ -239,7 +239,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                                 locale={locale}
                                                 l1Slug={eventL1Slug}
                                                 groupSlug={group.slug}
-                                                accentColor={group.accentColor || accentColor}
+                                                accentColor={accentColor}
                                             />
                                         );
                                     })}

@@ -261,7 +261,7 @@ export const GroupService = {
         let categoryTitle = resolved.categoryTitle;
         let categorySlug = resolved.categorySlug;
         let parentTitle = resolved.parentTitle;
-        const accentColor = g.accentColor || resolved.accentColor;
+        const accentColor = resolved.accentColor;
 
         // If the main category is L1, check if there's an L2 tag we can feature in breadcrumbs
         if (resolved.level === 1 && g.tags.length > 0) {

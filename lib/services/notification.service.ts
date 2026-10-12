@@ -107,7 +107,6 @@ export const NotificationService = {
             data: {
                 userId: payload.userId,
                 type: payload.type,
-                title: payload.type,
                 message: JSON.stringify({ key: payload.translationKey, args: withShortExcerpt(payload.args) }),
                 link: payload.link,
             },
@@ -135,7 +134,6 @@ export const NotificationService = {
                 data: admins.map((admin) => ({
                     userId: admin.id,
                     type: payload.type,
-                    title: payload.type,
                     message,
                     link: payload.link,
                     audience: 'ADMIN',
@@ -173,7 +171,6 @@ export const NotificationService = {
             data: userIds.map(userId => ({
                 userId,
                 type: payload.type,
-                title: payload.type,
                 message,
                 link: payload.link,
             })),

@@ -87,13 +87,13 @@ export const PostService = {
         });
     },
 
-    /** Members only. Replies written before announcements existed are not shown. */
+    /** Members only. */
     async getAnnouncements(groupId: string, viewerId: string): Promise<AnnouncementRow[]> {
         const role = await getRole(groupId, viewerId);
         if (!isAtLeastMember(role)) throw new ActionError('FORBIDDEN');
 
         return prisma.post.findMany({
-            where: { groupId, parentId: null },
+            where: { groupId },
             orderBy: { createdAt: 'desc' },
             include: { author: { select: AUTHOR_SELECT } }
         }).then(posts => posts.map(toRow));
@@ -103,9 +103,9 @@ export const PostService = {
     async setArchived(postId: string, actorId: string, archived: boolean): Promise<{ slug: string; l1Slug: string }> {
         const post = await prisma.post.findUnique({
             where: { id: postId },
-            select: { groupId: true, parentId: true, group: { select: GROUP_SLUG_SELECT } }
+            select: { groupId: true, group: { select: GROUP_SLUG_SELECT } }
         });
-        if (!post || post.parentId) throw new ActionError('NOT_FOUND');
+        if (!post) throw new ActionError('NOT_FOUND');
         const role = await getRole(post.groupId, actorId);
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
 

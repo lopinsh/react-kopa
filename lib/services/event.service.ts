@@ -76,7 +76,6 @@ export interface DiscoverableEvent {
         slug: string;
         city: string | null;
         bannerImage: string | null;
-        accentColor: string | null;
         category: {
             slug: string;
             level: number;
@@ -162,7 +161,7 @@ export class EventService {
             groupName: event.group.name,
             eventSlug: event.slug,
             eventTitle: title ?? originalEventTitle(event.translations, event.originalLang),
-            organiserIds: Array.from(new Set([event.creatorId, ...admins.map(a => a.userId)]))
+            organiserIds: Array.from(new Set([...(event.creatorId ? [event.creatorId] : []), ...admins.map(a => a.userId)]))
         };
     }
 
@@ -843,7 +842,6 @@ export class EventService {
                     slug: true,
                     city: true,
                     bannerImage: true,
-                    accentColor: true,
                     category: {
                         select: {
                             slug: true,

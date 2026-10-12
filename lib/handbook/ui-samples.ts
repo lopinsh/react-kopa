@@ -126,7 +126,6 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         content: s('announcementBody'),
         authorId: anna.id,
         groupId: 'sample-group',
-        parentId: null,
         archivedAt: null,
         createdAt: ago(3 * DAY),
         updatedAt: ago(3 * DAY),
