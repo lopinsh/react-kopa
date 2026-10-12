@@ -12,10 +12,9 @@ type Props = {
     taxonomy: TaxonomyTree;
     value: TaxonomySelection | null;
     onChange: (value: TaxonomySelection | null) => void;
-    accentColor: string;
 };
 
-export default function L1Picker({ taxonomy, value, onChange, accentColor }: Props) {
+export default function L1Picker({ taxonomy, value, onChange }: Props) {
     const t = useTranslations('wizard');
     const [isExpanded, setIsExpanded] = useState(!value);
 

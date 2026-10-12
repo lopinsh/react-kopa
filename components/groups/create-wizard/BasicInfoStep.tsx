@@ -7,11 +7,7 @@ import { Type, AlignLeft, Image as ImageIcon, HelpCircle } from 'lucide-react';
 import type { GroupFormValues } from '@/lib/validations/group';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
-type Props = {
-    accentColor: string;
-};
-
-export default function BasicInfoStep({ accentColor }: Props) {
+export default function BasicInfoStep() {
     const t = useTranslations('wizard');
     const { register, watch, setValue, formState: { errors } } = useFormContext<GroupFormValues>();
 
@@ -34,7 +30,6 @@ export default function BasicInfoStep({ accentColor }: Props) {
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.name ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
-                    style={{ ['--tw-ring-color' as string]: accentColor }}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as any)}</p>}
             </div>
@@ -70,7 +65,6 @@ export default function BasicInfoStep({ accentColor }: Props) {
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.bannerImage ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
                     )}
-                    style={{ ['--tw-ring-color' as string]: accentColor }}
                 />
                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                 <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldBannerImageHint')}</p>

@@ -13,12 +13,11 @@ type Props = {
     taxonomy: TaxonomyTree;
     taxSelection: TaxonomySelection | null;
     handleTaxChange: (sel: TaxonomySelection | null) => void;
-    accentColor: string;
     /** Changing the main category just removed the sub-topics that were chosen. */
     tagsCleared?: boolean;
 };
 
-export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, accentColor, tagsCleared = false }: Props) {
+export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, tagsCleared = false }: Props) {
     const t = useTranslations('wizard');
     const { watch, formState: { errors } } = useFormContext<GroupFormValues>();
     const noTagsYet = (watch('tagIds') ?? []).length === 0;
@@ -34,7 +33,6 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
                 taxonomy={taxonomy}
                 value={taxSelection}
                 onChange={handleTaxChange}
-                accentColor={accentColor}
             />
 
             {errors.categoryId && !taxSelection && (
@@ -51,7 +49,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
                             {t('tagsClearedOnCategoryChange')}
                         </p>
                     )}
-                    <TagPicker l1={selectedL1} accentColor={accentColor} allowL3={false} />
+                    <TagPicker l1={selectedL1} allowL3={false} />
                     <div className="pt-2 border-t border-border/50">
                         <LocationStep />
                     </div>

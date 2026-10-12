@@ -17,7 +17,7 @@ import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';
 import AccessStep from '@/components/groups/create-wizard/AccessStep';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
-import { tint } from '@/lib/color-utils';
+import { clsx } from 'clsx';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -153,6 +153,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         });
     });
 
+    // The one place the accent is set: every step below reads var(--accent).
     const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     return (
@@ -166,8 +167,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 {Array.from({ length: STEP_COUNT }, (_, i) => (
                     <div
                         key={i}
-                        className="h-1 flex-1 transition-all duration-500"
-                        style={{ backgroundColor: i <= step ? accentColor : undefined }}
+                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-[var(--accent)]')}
                         aria-hidden="true"
                     />
                 ))}
@@ -187,7 +187,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 >
                     {/* Step Header */}
                     <div className="mb-8">
-                        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: accentColor }}>
+                        <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
                             {t('stepOf', { current: step + 1, total: STEP_COUNT })}
                         </p>
                         <h2
@@ -208,12 +208,11 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 taxonomy={taxonomy}
                                 taxSelection={taxSelection}
                                 handleTaxChange={handleTaxChange}
-                                accentColor={accentColor}
                                 tagsCleared={tagsCleared}
                             />
                         )}
-                        {step === 1 && <BasicInfoStep accentColor={accentColor} />}
-                        {step === 2 && <AccessStep accentColor={accentColor} />}
+                        {step === 1 && <BasicInfoStep />}
+                        {step === 2 && <AccessStep />}
 
                         {serverError && (
                             <p
@@ -242,8 +241,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="flex h-12 items-center gap-2 rounded-xl px-8 font-bold text-white shadow-lg transition-all soft-press"
-                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${tint(accentColor, 25)}` }}
+                                className="flex h-12 items-center gap-2 rounded-xl bg-[var(--accent)] px-8 font-bold text-white shadow-[0_4px_14px_0_color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all soft-press"
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -252,8 +250,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="submit"
                                 disabled={isPending}
-                                className="flex h-12 items-center gap-2 rounded-xl px-8 font-bold text-white shadow-lg transition-all soft-press disabled:opacity-70 disabled:scale-100"
-                                style={{ backgroundColor: accentColor, boxShadow: `0 4px 14px 0 ${tint(accentColor, 25)}` }}
+                                className="flex h-12 items-center gap-2 rounded-xl bg-[var(--accent)] px-8 font-bold text-white shadow-[0_4px_14px_0_color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {t('submit')}

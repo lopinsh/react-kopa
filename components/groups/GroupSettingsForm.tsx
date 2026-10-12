@@ -25,7 +25,7 @@ import { useGroupContext } from '@/components/providers/GroupProvider';
 import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
-import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
+import { MAX_GROUP_TAGS } from '@/lib/constants';
 
 type Props = {
     group: {
@@ -105,7 +105,6 @@ export default function GroupSettingsForm({
     const { handleSubmit, setValue } = methods;
 
     // Colour of the category picker itself; the page colour always comes from the category (set in the layout).
-    const pickerColor = taxSelection?.kind === 'existing' ? taxSelection.l1Color : NEUTRAL_ACCENT;
 
     function handleTaxChange(sel: TaxonomySelection | null) {
         const previousCategoryId = methods.getValues('categoryId');
@@ -267,7 +266,6 @@ export default function GroupSettingsForm({
                                 taxonomy={taxonomy}
                                 taxSelection={taxSelection}
                                 onTaxChange={handleTaxChange}
-                                accentColor={pickerColor}
                                 selectedL1={selectedL1}
                                 maxTags={initialTagIds.length}
                                 tagsCleared={tagsCleared}

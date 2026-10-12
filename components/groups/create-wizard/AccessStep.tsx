@@ -8,7 +8,6 @@ import type { GroupFormValues } from '@/lib/validations/group';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
 import { GROUP_TYPES as GLOBAL_GROUP_TYPES } from '@/lib/constants';
-import { tint } from '@/lib/color-utils';
 
 const GROUP_TYPE_OPTIONS = [
     {
@@ -25,11 +24,7 @@ const GROUP_TYPE_OPTIONS = [
     }
 ];
 
-type Props = {
-    accentColor: string;
-};
-
-export default function AccessStep({ accentColor }: Props) {
+export default function AccessStep() {
     const t = useTranslations('wizard');
     const { register, watch, setValue, formState: { errors } } = useFormContext<GroupFormValues>();
 
@@ -44,14 +39,12 @@ export default function AccessStep({ accentColor }: Props) {
                         onClick={() => setValue('type', value as any, { shouldValidate: true })}
                         className={clsx(
                             'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
-                            isSelected ? 'shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                            isSelected ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] shadow-sm' : 'border-border hover:border-foreground-muted/40'
                         )}
-                        style={isSelected ? { borderColor: accentColor, backgroundColor: tint(accentColor, 6) } : undefined}
                         aria-pressed={isSelected}
                     >
                         <div
-                            className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
-                            style={{ backgroundColor: isSelected ? accentColor : undefined }}
+                            className={clsx('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', isSelected && 'bg-[var(--accent)]')}
                             aria-hidden="true"
                         >
                             <Icon

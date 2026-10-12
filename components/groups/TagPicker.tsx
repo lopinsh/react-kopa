@@ -27,13 +27,12 @@ type PendingTag = {
 
 type Props = {
     l1: L1Category;
-    accentColor: string;
     allowL3?: boolean;
     /** A legacy group that already has more tags than the limit may keep (and swap within) that many; never above the limit otherwise. */
     maxTags?: number;
 };
 
-export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = MAX_GROUP_TAGS }: Props) {
+export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAGS }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const locale = useLocale();
@@ -275,9 +274,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                 <div
                     className={clsx(
                         'flex h-5 w-5 items-center justify-center rounded border',
-                        selected ? 'border-transparent text-white' : 'border-foreground-muted text-transparent group-hover:border-foreground'
+                        selected ? 'border-transparent bg-[var(--accent)] text-white' : 'border-foreground-muted text-transparent group-hover:border-foreground'
                     )}
-                    style={{ backgroundColor: selected ? accentColor : 'transparent' }}
                 >
                     <Check className="h-3.5 w-3.5" strokeWidth={3} />
                 </div>
@@ -294,16 +292,17 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
             </div>
 
             <div
-                className="flex flex-col gap-2 rounded-xl border-2 bg-surface px-3 py-2 transition-shadow"
-                style={{ borderColor: isOpen ? accentColor : errors.tagIds ? 'rgb(248 113 113)' : 'var(--border)' }}
+                className={clsx(
+                    'flex flex-col gap-2 rounded-xl border-2 bg-surface px-3 py-2 transition-shadow',
+                    isOpen ? 'border-[var(--accent)]' : errors.tagIds ? 'border-red-400' : 'border-border'
+                )}
             >
                 {(selectedTags.length > 0 || selectedPending.length > 0) && (
                     <div className="flex flex-wrap gap-1.5">
                         {selectedTags.map((tag) => (
                             <span
                                 key={tag.id}
-                                className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-white shadow-card"
-                                style={{ backgroundColor: accentColor }}
+                                className="flex items-center gap-1 rounded-md bg-[var(--accent)] px-2 py-1 text-xs font-semibold text-white shadow-card"
                             >
                                 {tag.title}
                                 <button
@@ -321,8 +320,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                         {selectedPending.map((pending) => (
                             <span
                                 key={pending.id}
-                                className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold shadow-card border-2 border-dashed"
-                                style={{ borderColor: accentColor, color: accentColor }}
+                                className="flex items-center gap-1 rounded-md border-2 border-dashed border-[var(--accent)] px-2 py-1 text-xs font-semibold text-[var(--accent)] shadow-card"
                             >
                                 {pending.title} ({t('awaitingApproval')})
                                 <button
@@ -405,8 +403,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                 type="button"
                                 onClick={() => createPending(l1.id, query)}
                                 disabled={isSubmittingPending}
-                                className="w-full flex items-center justify-between rounded-lg p-2 text-left text-sm transition-colors text-white font-bold disabled:opacity-60"
-                                style={{ backgroundColor: accentColor }}
+                                className="w-full flex items-center justify-between rounded-lg p-2 text-left text-sm transition-colors text-white font-bold bg-[var(--accent)] disabled:opacity-60"
                             >
                                 <span>{t('createSubtopic')}</span>
                                 <Check className="h-4 w-4" />
@@ -431,10 +428,9 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                                         className={clsx(
                                                             'flex h-5 w-5 items-center justify-center rounded border',
                                                             tagIds.includes(l2.id)
-                                                                ? 'border-transparent text-white'
+                                                                ? 'border-transparent bg-[var(--accent)] text-white'
                                                                 : 'border-foreground-muted text-transparent group-hover:border-foreground'
                                                         )}
-                                                        style={{ backgroundColor: tagIds.includes(l2.id) ? accentColor : 'transparent' }}
                                                     >
                                                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                                     </div>
@@ -456,10 +452,9 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                                                     className={clsx(
                                                                         'flex h-4 w-4 items-center justify-center rounded border',
                                                                         tagIds.includes(tag.id)
-                                                                            ? 'border-transparent text-white'
+                                                                            ? 'border-transparent bg-[var(--accent)] text-white'
                                                                             : 'border-foreground-muted/50 text-transparent group-hover:border-foreground'
                                                                     )}
-                                                                    style={{ backgroundColor: tagIds.includes(tag.id) ? accentColor : 'transparent' }}
                                                                 >
                                                                     <Check className="h-3 w-3" strokeWidth={3} />
                                                                 </div>
@@ -550,10 +545,9 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                                         className={clsx(
                                                             'flex h-5 w-5 items-center justify-center rounded border transition-colors',
                                                             tagIds.includes(tag.id)
-                                                                ? 'border-transparent text-white'
+                                                                ? 'border-transparent bg-[var(--accent)] text-white'
                                                                 : 'border-foreground-muted text-transparent group-hover:border-foreground'
                                                         )}
-                                                        style={{ backgroundColor: tagIds.includes(tag.id) ? accentColor : 'transparent' }}
                                                     >
                                                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                                     </div>
@@ -577,12 +571,12 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                         className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-secondary"
                                     >
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-semibold" style={{ color: accentColor }}>
+                                            <span className="text-sm font-semibold text-[var(--accent)]">
                                                 {t('createSubtopic')} &quot;{query}&quot;
                                             </span>
                                             <span className="text-xs text-foreground-muted">{t('proposeAsNewSubtopic')}</span>
                                         </div>
-                                        <Plus className="h-4 w-4" style={{ color: accentColor }} />
+                                        <Plus className="h-4 w-4 text-[var(--accent)]" />
                                     </button>
                                 </div>
                             )}
@@ -595,8 +589,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                         void commitTypedText();
                                     }}
                                     disabled={isSubmittingPending}
-                                    className="w-full rounded-lg py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
-                                    style={{ backgroundColor: accentColor }}
+                                    className="w-full rounded-lg bg-[var(--accent)] py-2 text-sm font-bold text-white shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                                 >
                                     {c('done')}
                                 </button>

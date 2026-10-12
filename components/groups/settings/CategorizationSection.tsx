@@ -15,7 +15,6 @@ type Props = {
     taxonomy: TaxonomyTree;
     taxSelection: TaxonomySelection | null;
     onTaxChange: (sel: TaxonomySelection | null) => void;
-    accentColor: string;
     selectedL1: L1Category | null;
     /** Tags the group had when the form opened (a legacy group may keep more than the usual limit). */
     maxTags?: number;
@@ -23,7 +22,7 @@ type Props = {
     tagsCleared?: boolean;
 };
 
-export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1, maxTags, tagsCleared = false }: Props) {
+export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, selectedL1, maxTags, tagsCleared = false }: Props) {
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const t = useTranslations('wizard');
@@ -42,7 +41,6 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                         taxonomy={taxonomy}
                         value={taxSelection}
                         onChange={onTaxChange}
-                        accentColor={accentColor}
                     />
                     {errors.categoryId && (
                         <p className="mt-2 text-xs text-red-500">{errors.categoryId.message}</p>
@@ -56,12 +54,10 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                                 {t('tagsClearedOnCategoryChange')}
                             </p>
                         )}
-                        <TagPicker
-                            l1={selectedL1}
-                            accentColor={selectedL1.color || NEUTRAL_ACCENT}
-                            allowL3={false}
-                            maxTags={maxTags}
-                        />
+                        {/* The picker colours itself from the category's accent. */}
+                        <div style={{ '--accent': selectedL1.color || NEUTRAL_ACCENT } as React.CSSProperties}>
+                            <TagPicker l1={selectedL1} allowL3={false} maxTags={maxTags} />
+                        </div>
                     </div>
                 )}
             </div>

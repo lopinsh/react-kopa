@@ -76,7 +76,9 @@ export default function AdminGroupCategorizationForm({
                     <h1 className="mt-1 text-2xl font-bold text-foreground">{groupName}</h1>
                     <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
 
-                    <TagPicker l1={selectedL1} accentColor={selectedL1.color} allowL3={false} maxTags={initialTagIds.length} />
+                    <div style={{ '--accent': selectedL1.color } as React.CSSProperties}>
+                        <TagPicker l1={selectedL1} allowL3={false} maxTags={initialTagIds.length} />
+                    </div>
                 </div>
 
                 <button
