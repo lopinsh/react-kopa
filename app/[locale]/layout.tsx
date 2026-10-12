@@ -16,7 +16,6 @@ import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 import { getActiveTheme } from '@/lib/theme/server';
 import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
 import TimeZoneSync from '@/components/shell/TimeZoneSync';
-import { CityService } from '@/lib/services/city.service';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -40,19 +39,23 @@ export default async function LocaleLayout({ children, params }: Props) {
         notFound();
     }
 
-    const messages = await getMessages();
-    const timeZone = await getTimeZone();
-    // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
-    const translateMode = await isTranslateModeActive();
-    // Same for feedback mode: only a site admin who switched it on gets the code.
-    const feedbackMode = await isFeedbackModeActive();
-
+    const [allMessages, timeZone, translateMode, feedbackMode, theme] = await Promise.all([
+        getMessages(),
+        getTimeZone(),
+        // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
+        isTranslateModeActive(),
+        // Same for feedback mode: only a site admin who switched it on gets the code.
+        isFeedbackModeActive(),
+        getActiveTheme(),
+    ]);
     // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
-    const themePreview = (await getActiveTheme()).isPreview;
-    const cities = await CityService.listActive(locale);
+    const themePreview = theme.isPreview;
+    // Admin-only texts are sent by the admin layout, not to every visitor.
+    const messages = { ...allMessages };
+    delete messages.admin;
 
     return (
-        <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode} cities={cities}>
+        <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />

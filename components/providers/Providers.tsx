@@ -11,9 +11,7 @@ import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
 import { TranslateModeProvider } from './TranslateModeContext';
 import { FeedbackModeProvider } from './FeedbackModeContext';
-import { CitiesProvider } from './CitiesContext';
 import type { OAuthProviderId } from '@/lib/auth-providers';
-import type { CityOption } from '@/lib/services/city.service';
 
 type ProvidersProps = {
     locale: string;
@@ -23,11 +21,10 @@ type ProvidersProps = {
     oauthProviders: OAuthProviderId[];
     translateMode: boolean;
     feedbackMode: boolean;
-    cities: CityOption[];
     children: React.ReactNode;
 };
 
-export default function Providers({ locale, timeZone, messages, oauthProviders, translateMode, feedbackMode, cities, children }: ProvidersProps) {
+export default function Providers({ locale, timeZone, messages, oauthProviders, translateMode, feedbackMode, children }: ProvidersProps) {
     return (
         <SessionProvider>
             <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
@@ -35,7 +32,6 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                   <AuthProvidersProvider value={oauthProviders}>
                    <TranslateModeProvider value={translateMode}>
                    <FeedbackModeProvider value={feedbackMode}>
-                   <CitiesProvider value={cities}>
                     <RealtimeProvider>
                       <UnreadMessagesProvider>
                         <ThemeProvider
@@ -49,7 +45,6 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                       </UnreadMessagesProvider>
                     </RealtimeProvider>
                     <ToastContainer />
-                   </CitiesProvider>
                    </FeedbackModeProvider>
                    </TranslateModeProvider>
                   </AuthProvidersProvider>

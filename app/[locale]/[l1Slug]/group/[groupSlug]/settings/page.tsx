@@ -4,6 +4,8 @@ import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
+import { CityService } from '@/lib/services/city.service';
+import { CitiesProvider } from '@/components/providers/CitiesContext';
 import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
 import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
@@ -60,7 +62,7 @@ export default async function GroupSettingsPage(props: {
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
-    const taxonomyRes = await getTaxonomy(locale);
+    const [taxonomyRes, cities] = await Promise.all([getTaxonomy(locale), CityService.listActive(locale)]);
     if (!taxonomyRes.success) {
         notFound();
     }
@@ -98,31 +100,33 @@ export default async function GroupSettingsPage(props: {
             <SettingsTabs active={activeTab} showOwner={showOwnerTab} />
 
             <div className="min-h-[400px] rounded-3xl border border-border bg-surface p-5 shadow-sm sm:p-8 md:p-10">
-                <GroupSettingsForm
-                    group={{
-                        id: group.id,
-                        name: group.name,
-                        city: group.city,
-                        type: group.type,
-                        categoryId: group.categoryId,
-                        isAcceptingMembers: group.isAcceptingMembers,
-                        discordLink: group.socialLinks.discord,
-                        websiteLink: group.socialLinks.website,
-                        instagramLink: group.socialLinks.instagram,
-                        bannerImage: group.bannerImage,
-                        sections: editableSections,
-                        tags: group.tags || [],
-                        slug: group.slug,
-                        l1Slug: group.category.l1Slug,
-                    }}
-                    taxonomy={taxonomy}
-                    locale={locale}
-                    activeTab={activeTab}
-                    canEditOwnerFields={canEditOwnerFields}
-                    isOwner={isOwner}
-                    transferCandidates={transferCandidates}
-                    initialTaxonomy={initialTaxonomy}
-                />
+                <CitiesProvider cities={cities}>
+                    <GroupSettingsForm
+                        group={{
+                            id: group.id,
+                            name: group.name,
+                            city: group.city,
+                            type: group.type,
+                            categoryId: group.categoryId,
+                            isAcceptingMembers: group.isAcceptingMembers,
+                            discordLink: group.socialLinks.discord,
+                            websiteLink: group.socialLinks.website,
+                            instagramLink: group.socialLinks.instagram,
+                            bannerImage: group.bannerImage,
+                            sections: editableSections,
+                            tags: group.tags || [],
+                            slug: group.slug,
+                            l1Slug: group.category.l1Slug,
+                        }}
+                        taxonomy={taxonomy}
+                        locale={locale}
+                        activeTab={activeTab}
+                        canEditOwnerFields={canEditOwnerFields}
+                        isOwner={isOwner}
+                        transferCandidates={transferCandidates}
+                        initialTaxonomy={initialTaxonomy}
+                    />
+                </CitiesProvider>
             </div>
         </div>
     );

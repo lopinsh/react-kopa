@@ -1,6 +1,8 @@
 import { GroupService } from '@/lib/services/group.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import { EventService } from '@/lib/services/event.service';
+import { CityService } from '@/lib/services/city.service';
+import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import DiscoveryFilterBarWrapper from '@/components/discovery/DiscoveryFilterBarWrapper';
 import ListViewCard from '@/components/discovery/ListViewCard';
@@ -89,7 +91,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         l1HighlightId = snap.l1Id ?? snap.id;
     }
 
-    const [groupsRes, discoverableEvents, taxonomy] = await Promise.all([
+    const [groupsRes, discoverableEvents, taxonomy, cities] = await Promise.all([
         DiscoveryService.getGroups({
             query: q,
             city,
@@ -107,7 +109,8 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                 status: 'upcoming'
             }, locale, session?.user?.id)
             : Promise.resolve([]),
-        DiscoveryService.getContextualTaxonomy(effectiveCategoryId || null, locale)
+        DiscoveryService.getContextualTaxonomy(effectiveCategoryId || null, locale),
+        CityService.listActive(locale)
     ]);
 
     const { groups, hasMore, totalCount } = groupsRes;
@@ -145,14 +148,16 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             {/* Main Content Area */}
             <main className="flex-1 min-w-0 pb-20 pt-4">
                 <div className="px-4 max-w-6xl mx-auto w-full">
-                    <DiscoveryFilterBarWrapper
-                        taxonomy={fullTaxonomy}
-                        activeCat={category}
-                        activeTags={activeTags}
-                        initialQuery={q}
-                        locale={locale}
-                        currentView={currentView}
-                    />
+                    <CitiesProvider cities={cities}>
+                        <DiscoveryFilterBarWrapper
+                            taxonomy={fullTaxonomy}
+                            activeCat={category}
+                            activeTags={activeTags}
+                            initialQuery={q}
+                            locale={locale}
+                            currentView={currentView}
+                        />
+                    </CitiesProvider>
 
                     <div className="mb-4 mt-6 flex items-center gap-4 flex-wrap">
                         <h2 className="text-lg sm:text-xl font-bold text-foreground">

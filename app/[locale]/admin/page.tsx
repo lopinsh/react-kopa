@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { requireAdminPage } from '@/lib/admin-access';
 import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
-import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
+import { getTranslations, getTimeZone } from 'next-intl/server';
 import { ModerationService } from '@/lib/services/moderation.service';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
 import { createDateFormatter } from '@/lib/date-format';
@@ -30,15 +30,17 @@ export default async function AdminDashboardPage({
     // Old links: reports have their own page, new tags are reviewed on top of Taxonomy.
     if (tab === 'reports') redirect(`/${locale}/admin/reports`);
     if (tab === 'tags') redirect(`/${locale}/admin/taxonomy`);
-    const t = await getTranslations('admin.dashboard');
-    const tInbox = await getTranslations('admin.taxonomy.inbox');
-    const tMod = await getTranslations('moderation');
-    const tErrors = await getTranslations('errors');
-    const format = createDateFormatter(await getLocale(), await getTimeZone());
-
     const { isOwner } = await requireAdminPage(locale, '/admin');
 
-    const [moderationLog, hiddenGroups] = await Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()]);
+    const [t, tInbox, tMod, tErrors, timeZone, [moderationLog, hiddenGroups]] = await Promise.all([
+        getTranslations('admin.dashboard'),
+        getTranslations('admin.taxonomy.inbox'),
+        getTranslations('moderation'),
+        getTranslations('errors'),
+        getTimeZone(),
+        Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()]),
+    ]);
+    const format = createDateFormatter(locale, timeZone);
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-6xl">
