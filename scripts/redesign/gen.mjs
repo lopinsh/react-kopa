@@ -56,7 +56,7 @@ const intro = `<header class="intro">
   <!--rd-meta-->
   <h1>Ejam kopā: the new look</h1>
   <p>Round nine. The page is rebuilt around what you have agreed. It opens with the <b>agreed rules</b>, one line per element, then follows the way a person meets the site: the identity, the header and navigation, discovery, search, a group, an event, your own area, pop-ups, admin. Each element is drawn in full in one place; everywhere else it appears exactly the same, or the text points to it. Your answers of 12 October are applied everywhere: one "Sazināties" button, one filter row with the Grupas / Pasākumi switch at its right end, two-line group rows on phones, one place list with "Visur", a shorter profile menu and one phone header.</p>
-  <p><b>New in 9.2:</b> your answers of 13 October (the redesign ships in parts; the language switch stays in the header; screens not drawn follow the rules; the event's place, faces, withdrawing a request, no "Mani pasākumi", social links), four screens drawn from the rules (the event page, Biedri, a group's Jaunumi, Mans profils), questions 4 and 8 redone as pictures, and near the end, everything from comparing this page with the live site.</p>
+  <p><b>New in 9.2:</b> your answers of 13 October (the redesign ships in parts; the language switch stays in the header; screens not drawn follow the rules; the event's place, faces, withdrawing a request, no "Mani pasākumi", social links), four screens drawn from the rules (the event page, Biedri, a group's Jaunumi, Mans profils), questions 4 and 8 redone as pictures, and near the end, everything from comparing this page with the live site. <b>9.3</b> (after a review): Still open is down to 18 real questions; what the Handbook or this page already decides is answered in the comparison instead.</p>
   <p class="legend"><span>${st('ag')} you agreed or approved it</span><span>${st('lk')} you liked it; small details may still move</span><span>${st('op')} not decided yet</span><span>${st('pr')} my suggestion, not asked for</span></p>
   <ul class="toc"><li><a href="#h-rules">Agreed rules</a></li><li><a href="#h-open">Still open</a></li><li><a href="#h-id">Identity</a></li><li><a href="#h-shell">Header and navigation</a></li><li><a href="#h-disc">Discovery</a></li><li><a href="#h-search">Search</a></li><li><a href="#h-group">A group</a></li><li><a href="#h-event">An event</a></li><li><a href="#h-me">Your own area</a></li><li><a href="#h-pop">Pop-ups and panels</a></li><li><a href="#h-admin">Admin</a></li><li><a href="#h-live">Compared with the live app</a></li><li><a href="#h-notes">Note index</a></li></ul>
 </header>`;
@@ -147,7 +147,7 @@ const ledger = `<section aria-labelledby="h-rules">
 // ── Still open
 const open = `<section aria-labelledby="h-open">
   <h2 id="h-open">Still open</h2>
-  <p class="lead">Only real questions. Each has the default I would build if you say nothing. Questions 1–7 are from round nine; 8–25 came from comparing this page with the live site (<a href="#h-live">Compared with the live app</a>). Your answers of 13 October are in the Agreed rules.</p>
+  <p class="lead">Only real questions. Each has the default I would build if you say nothing. Questions 1–7 are from round nine (7 now also covers reporting an event); 8–18 came from comparing this page with the live site (<a href="#h-live">Compared with the live app</a>). Your answers of 13 October are in the Agreed rules.</p>
   <ol class="rd-qs">
     <li><b>The compact filter area: stay with A?</b><p>On 12 October you chose one row (A). Your earlier note asked what other sites do, so B and C are drawn too (Discovery → "More compact"). <i>Default: A</i>, as you decided.</p></li>
     <li><b>The bottom bar: where "Grupas" and "Es" lead, and which tab a group page marks</b><p><i>Default: "Grupas" opens Manas grupas, "Es" opens Mans profils; on a group page the tab you came from stays marked</i> (Atklāt from discovery, Grupas from Manas grupas), as phone apps do.</p></li>
@@ -155,24 +155,17 @@ const open = `<section aria-labelledby="h-open">
     <li><b>The end of the group list</b><p>Events end with "Rādīt nākamo nedēļu"; groups have no rule. <i>Default: 24 cards, then "Rādīt vēl"</i>, no endless scrolling (Handbook: calm, not sticky).</p></li>
     <li><b>The place for someone we don't know</b><p>Signed out, we know nothing. <i>Default: start on "Visur" and ask "Kur tu esi?" once, above the results; keep the answer on the device; never guess from the internet address.</i> Signed in: the profile city.</p></li>
     <li><b>When is a notification read?</b><p>You said you would decide later. <i>Default: when you tap it</i>, as today.</p></li>
-    <li><b>Reported people in admin</b><p>Not designed yet. <i>Default: later, as a second tab in Moderācija → Sūdzības.</i></p></li>
-    <li><b>Events you can't simply join: how do they look?</b><p>Drawn as pictures in <a href="#q-states">An event</a>: open, approval, full with a waiting list, sign-ups closed. <i>Default: one quiet word on the row ("Pieteikšanās", "Pilns", "Slēgts"), the panel's button names the step, the outlined "Gaida" tag after you ask; and "Slēgt pieteikšanos" stays the same as "Pilns", with the waiting list open, as today.</i></p></li>
-    <li><b>Waiting join requests for the group team</b><p>Drawn as pictures in <a href="#q-team">Your own area</a>. "Jārīkojas" is today's list of the groups you help run where someone waits for an answer. <i>Default: no such section; "2 pieteikumi" on that group's row in Tavas grupas, and a tap opens Biedri → Pieteikumi.</i></p></li>
+    <li><b>Reporting people and events</b><p>Today only groups can be reported. <i>Default: later, both together, as a second tab in Moderācija → Sūdzības; until then "Ziņot par grupu" in the group's "…" menu.</i></p></li>
+    <li><b>Events you can't simply join: how do they look?</b><p><i>Default: one quiet word on the row ("Pieteikšanās" or "Pilns"), a button that names the step, and the outlined "Gaida" tag after you ask.</i> Some events need the organiser's approval, some are full and have a waiting list. Pictures: <a href="#q-states">An event → Events you can't simply join</a>.</p></li>
+    <li><b>Waiting join requests for the group team</b><p><i>Default: no separate section; "2 pieteikumi" on that group's row in Tavas grupas, and a tap opens Biedri → Pieteikumi.</i> Today Manas grupas starts with a "Jārīkojas" list: the groups you help run where someone waits for an answer. Pictures: <a href="#q-team">Your own area → Waiting join requests</a>.</p></li>
     <li><b>Where do you change your profile?</b><p>Today "Labot profilu" is a page of its own; Mans profils is new. <i>Default: "Labot profilu" on Mans profils opens the form in place (name, picture, about you, places, the three privacy switches); Iestatījumi keeps Izskats, and later your account.</i></p></li>
-    <li><b>Private groups</b><p>Today a group can be "Tikai biedriem": it isn't listed in discovery or search, and people join by invitation or approval. The page never shows one. <i>Default: keep that; someone with the link sees Informācija and "Sazināties" like any visitor, and the quiet line under the name ends with "Tikai biedriem".</i></p></li>
+    <li><b>Private groups</b><p>Today a group can be private (the create form says "Privāta", settings say "Tikai biedriem"): it is left out of discovery and search, and people join by invitation or approval. The page never shows one. <i>Default: keep that, with one word everywhere, "Tikai biedriem"; someone with the link sees Informācija and "Sazināties" like any visitor, and the quiet line under the name ends with "Tikai biedriem".</i></p></li>
     <li><b>The full word behind "Mod"</b><p>Today the role reads "Grupas moderators". <i>Default: the tag stays "Mod"; lists and menus say "Moderators"; "grupas komanda" means the owner and the moderators together, as in the Handbook.</i></p></li>
     <li><b>Members-only events, seen by members</b><p>Visitors don't see them (agreed). <i>Default: members see them like any event; "Tikai biedriem" is a quiet line in the panel and on the event page, not on the row. Someone who follows a link without being a member gets one sentence and "Sazināties".</i></p></li>
     <li><b>How a member writes to the group's team</b><p>Today from the "all members" pop-up on Informācija, which goes. <i>Default: "Rakstīt komandai" in the group's "…" menu (drawn in <a href="#h-group">A group</a>); it opens the same conversation as "Sazināties".</i></p></li>
-    <li><b>Asking "are you sure?"</b><p>Today some steps use a dialog, some the browser's own box, Atsauksmes a small pop-over. <i>Default: the small pop-over at the button for small steps (leaving a group, removing a member, deleting a news item); a dialog in the middle only when others lose something for good (deleting an event or a group).</i></p></li>
-    <li><b>Loading and error pages</b><p>Today there are none: a page just waits, and an error shows the framework's page. <i>Default: while loading, the real shapes in grey (cards, rows, the panel); an error or a missing page follows the empty-state rule: an outline icon, one sentence, one action ("Mēģināt vēlreiz" or "Uz sākumu").</i></p></li>
-    <li><b>Short messages after an action</b><p>The small notes that appear after saving ("toasts") are not drawn. <i>Default: one line at the bottom (above the bottom bar on phones) that fades after a few seconds, used only when the page itself doesn't show the change.</i></p></li>
-    <li><b>Text written in another language</b><p>With the switch in the header, more people read a group that wrote in another language. <i>Default: show the text as written, with the small "Latviski" / "In English" label, as today; no automatic translation.</i></p></li>
+    <li><b>Asking "are you sure?" for steps that can be undone</b><p>Deleting for good already has its rule (the Handbook: our own dialog in the middle, naming the thing; never the browser's box). Open are the smaller steps that can be undone, which today use the browser's box or a dialog. <i>Default: a small pop-over at the button for leaving a group and removing a member.</i></p></li>
     <li><b>Deleting your account</b><p>It doesn't exist today, and the page doesn't mention it. <i>Default: "Dzēst kontu" at the end of Iestatījumi, with a dialog; built before real people use the site.</i></p></li>
-    <li><b>Repeating events</b><p>The database can mark an event as repeating, but nothing uses it. <i>Default: it stays out; each event is created on its own, as today.</i></p></li>
-    <li><b>Reporting an event</b><p>Today only groups can be reported. <i>Default: later, together with reporting people (question 7); for now "Ziņot par grupu" in the "…" menu.</i></p></li>
-    <li><b>Discovery's cards / list switch</b><p>Today desktop can switch between cards and a list. <i>Default: it goes; desktop shows cards, phones show rows.</i></p></li>
     <li><b>"Ko meklējam?" in one language or two</b><p><i>Default: one short text, as the team writes it, not one per language</i> (a group's longer texts keep their LV | EN versions, as today).</p></li>
-    <li><b>The admin page for moving a group to another category</b><p>It exists but isn't in the admin map. <i>Default: it opens from the site-admin tools on a group, not from the admin menu.</i></p></li>
     <li><b>The four new drawings</b><p>The event page, Biedri, a group's Jaunumi and Mans profils were drawn on 13 October from the rules (marked Proposal). <i>Default: build them as drawn; small details are reviewed on the test site.</i></p></li>
   </ol>
 </section>`;
@@ -219,7 +212,7 @@ const shell = `<section aria-labelledby="h-shell">
   <p class="lead">Always visible, never hidden in Iestatījumi. It shows the language you read in, short ("LV"), and opens a short list with each language written in its own words. Today the list has Latviešu and English; it is built so more languages can be added later without changing the header. On phones it sits right after the logo, before the search icon.</p>
   ${shots(
     shot('"LV ▾" opens a short list', st('ag'), `<div style="display:grid;gap:6px;justify-items:end;width:240px;max-width:100%">${P.desk(`<div class="rd-hdr" style="justify-content:flex-end">${P.langSw(true)}</div>`, 120)}${P.langList()}</div>`, '0 1 240px'),
-    `<div class="rd-shot" style="flex:1 1 300px;max-width:460px"><p class="why"><b>What changes with the language:</b> the site's own words, dates and numbers. What people wrote (group texts, events, messages) stays as written; where a text exists only in another language, the small "Latviski" / "In English" label stays, as today (<a href="#h-open">Still open</a>, question 18). Signed in, the choice is kept on your account; signed out, on the device.</p></div>`,
+    `<div class="rd-shot" style="flex:1 1 300px;max-width:460px"><p class="why"><b>What changes with the language:</b> the site's own words, dates and numbers. What people wrote (group texts, events, messages) stays as written; where a text exists only in another language, the small "Latviski" / "In English" label stays, as today, with no automatic translation. Signed in, the choice is kept on your account; signed out, on the device.</p></div>`,
   )}
 
   <h3>The footer ${st('ag', 'Agreed 13 Oct')}</h3>
@@ -438,7 +431,8 @@ const event = `<section aria-labelledby="h-event">
   ${shots(shot('Signed out · the number, no faces', st('ag', 'Agreed 13 Oct'), P.eventPanel({ out: 1 }), '0 1 360px'))}
 
   <h3 id="q-states">Events you can't simply join ${st('op')}</h3>
-  <p class="lead">Most events are open: you press "Eju" and you are going. Some organisers want more say, and the live site already has these cases. Each is drawn below as it would look in a list (before and after you act) and in the panel. <b>Recommended:</b> the row gets one quiet word on its right ("Pieteikšanās", "Pilns", "Slēgts"); the panel says in one line what happens, and its button names the step. After you ask, or join a waiting list, the row shows the outlined "Gaida" tag under the time, the same tag as on a group request. This is <a href="#h-open">Still open</a>, question 8.</p>
+  <p class="lead"><b>Recommended:</b> the row gets one quiet word on its right ("Pieteikšanās" or "Pilns"); the panel says in one line what happens, and its button names the step; after you ask, the row shows the outlined "Gaida" tag, the same as on a group request.</p>
+  <p class="why">Most events are open: you press "Eju" and you are going. On the live site an organiser can also approve who comes, or the event can be full with a waiting list. Each case below shows the list (before and after you act) and the panel. This is <a href="#h-open">Still open</a>, question 8.</p>
   ${shots(
     shot('1 · Open: anyone can come', st('lk'), evCase([{ ...E.koncert }, { ...E.koncert, eju: 1 }], {}, 'Press "Eju" and you are going; "Eju" then sits under the time in every list. Most events are like this.'), '0 1 360px'),
     shot('2 · The organiser approves who comes', st('op'), evCase([{ ...E.koncert, state: 'req' }, { ...E.koncert, state: 'req', eju: 'gaida' }], { state: 'req' }, '"Pieteikties" sends your request; until the organiser answers, the row shows "Gaida". The practical details appear once you are approved.'), '0 1 360px'),
@@ -451,7 +445,7 @@ const event = `<section aria-labelledby="h-event">
   <p class="lead">Not drawn before; drawn now from the rules (your answer of 13 October). Reached from "Visa informācija" in the panel and from shared links. It sits in the group's frame, so a visitor who arrives from a link sees whose event it is and can still write ("Sazināties"). The content is the panel's, in full.</p>
   ${shots(shot('Desktop · the event page · signed in, not a member', st('pr'), P.desk(`${P.hdr()}${P.gban(G.vz, { low: 1, role: 'visitor' })}<div class="rd-frame">${P.gnav([P.GPAGES.info, P.GPAGES.pas], 'pas')}<div class="rd-main">${P.eventPage()}</div></div>`, 1000), '1 1 100%'))}
   ${shots(
-    shot('Phone · the event page · group team', st('pr'), P.mob(`${P.phdr()}${P.gbar(G.vz, { role: 'team' })}<div class="rd-pg">${P.eventPage({ team: 1 })}</div>${P.navb('grupas')}`)),
+    shot('Phone · the event page · group team (Anna, who runs Vēja zirdžiņš)', st('pr'), P.mob(`${P.phdr()}${P.gbar(G.vz, { role: 'team' })}<div class="rd-pg">${P.eventPage({ team: 1 })}</div>${P.navb('grupas')}`)),
     `<div class="rd-shot" style="flex:1 1 260px;max-width:420px"><p class="why"><b>Kept from today:</b> add to calendar, open in the map (or the online link), share, "Svarīga informācija" (for events with approval, shown once you are approved), the time zone when it isn't Latvian time, and "Šis pasākums jau ir noticis" after the date.</p><p class="why"><b>The team</b> also sees "Rīkotājiem": how many are going, waiting for approval and on the waiting list (a tap opens that list with "Apstiprināt" or "Ielaist"), and Labot, Slēgt pieteikšanos, Dzēst. Deleting asks once more and tells everyone who signed up.</p></div>`,
   )}
   <h3>Events away from home ${st('ag')}</h3>
@@ -489,7 +483,8 @@ const me = `<section aria-labelledby="h-me">
   )}
 
   <h3 id="q-team">Waiting join requests for the group team ${st('op')}</h3>
-  <p class="lead"><b>What "Jārīkojas" is:</b> on the live site, Manas grupas starts with a list called "Jārīkojas" ("needs your action"): the groups you help run where someone has asked to join and is waiting for an answer. The redesign has no such section. Two ways, recommended first. Both are Ilze's Manas grupas on a phone; she owns Pārgājieni, where Līga and Kārlis are waiting.</p>
+  <p class="lead"><b>Recommended:</b> no separate section; the group's own row in Tavas grupas says "2 pieteikumi", and a tap opens Biedri → Pieteikumi.</p>
+  <p class="why"><b>What "Jārīkojas" is:</b> on the live site, Manas grupas starts with a list called "Jārīkojas" ("needs your action"): the groups you help run where someone has asked to join and is waiting for an answer. Two ways, recommended first. Both are Ilze's Manas grupas on a phone; she owns Pārgājieni, where Līga and Kārlis are waiting.</p>
   ${shots(
     shot('Recommended · no section: "2 pieteikumi" on the group\'s row in Tavas grupas', st('op', 'Open · recommended'), P.mob(`${P.phdr()}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Manas grupas</h4>${secMenu()}${P.evList(myDays.slice(0, 1))}<hr class="rd-fsep">${myGroups()}</div>${P.navb('grupas')}`)),
     shot('The other way · a separate "Jārīkojas" section first', st('op'), P.mob(`${P.phdr()}${P.ownBar()}<div class="rd-pg"><h4 class="rd-pt">Manas grupas</h4>${secMenu({ act: 1 })}${P.rows(P.groupRow(G.pg, { count: '2 pieteikumi', pill: pill('Īpašnieks') }))}<hr class="rd-fsep">${P.evList(myDays.slice(0, 1))}<hr class="rd-fsep">${myGroups({ count: false })}</div>${P.navb('grupas')}`)),
@@ -671,7 +666,7 @@ const EXTRA_CSS = `
 /* v9.2: events you can't simply join, the event page */
 .rd .rd-er .ct .es{color:var(--fg);font-weight:500}
 .rd .rd-pnl p.es,.rd .rd-evp p.es{font-size:13px;color:var(--muted)}
-.rd .rd-case{display:grid;gap:10px;width:360px;max-width:100%}
+.rd .rd-case{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;width:360px;max-width:100%;min-width:0}
 .rd .rd-evp{background:var(--surface);border-radius:16px;overflow:hidden;display:grid;min-width:0}
 .rd .rd-evp .pic{height:150px;background-color:color-mix(in srgb,var(--c) 20%,var(--surface))}
 .rd .rd-mob .rd-evp .pic{height:110px}
@@ -738,7 +733,8 @@ const EXTRA_CSS = `
 .rd .rd-build p{margin:2px 0 0;font-size:14px;color:var(--muted)}
 `;
 
-const html = `<!-- Redesign discussion. Discussion only. Rendered at /admin/development/redesign. Version, update time and the sections marked New/Updated live in docs/development/redesign.meta.json: bump them whenever this file changes.
+const html = `<!-- GENERATED by scripts/redesign/gen.mjs (npm run redesign:build). Do not edit this file by hand: change the generator and rebuild.
+     Redesign discussion. Discussion only. Rendered at /admin/development/redesign. Version, update time and the sections marked New/Updated live in docs/development/redesign.meta.json: bump them whenever this file changes.
      v9.0 structure: every element of the design is drawn in full in one section (see the "Agreed rules" table for where); every other copy of it uses the same markup and classes and is marked with an "el:name" comment, so a change to an element means changing every copy with that name. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,500;0,7..72,600;1,7..72,500&family=Commissioner:wght@400;500;600;700&display=swap">
 <style>${CSS}${EXTRA_CSS}${CSS_FIX}</style>

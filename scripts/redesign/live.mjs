@@ -8,7 +8,7 @@ const path = (p) => (p ? `<small class="path">${p}</small>` : '');
 // ── A. Every live screen. [#, screen, live files, section id, section name, status, what happens]
 // Status: cov drawn · part partly drawn · nav named only · no not drawn · new no live counterpart. "*" = changed in 9.2.
 const A = [
-  [1, 'Discovery, groups', 'app/[locale]/page.tsx, components/discovery/GroupCard.tsx', 'h-disc', 'Discovery', 'part', `The cards / list switch and the public/private filter are not in the redesign (${q(22)}, ${q(11)}); endless scrolling becomes "Rādīt vēl" (${q(4)}); the "N grupas" heading goes on purpose.`],
+  [1, 'Discovery, groups', 'app/[locale]/page.tsx, components/discovery/GroupCard.tsx', 'h-disc', 'Discovery', 'part', `The cards / list switch goes (B31) and the public/private filter is not in the redesign (${q(11)}); endless scrolling becomes "Rādīt vēl" (${q(4)}); the "N grupas" heading goes on purpose.`],
   [2, 'Discovery, events', 'EventCard.tsx, ListViewEventCard.tsx', 'h-event', 'An event', 'part*', `Approval, "Pilns" and closed sign-ups now drawn as a question (${q(8)}); "Tikai biedriem" (${q(13)}); "N apstiprināti" becomes faces; the size ("Apmēram N cilvēki") stays on the event page.`],
   [3, 'Category sidebar', 'DiscoverySidebar.tsx', 'h-disc', 'Discovery', 'cov', 'Gains counts, search and "Ieteikt jaunu kategoriju".'],
   [4, 'Search in the filter bar', 'DiscoveryFilterBar.tsx', 'h-search', 'Search', 'cov', 'Moves into the header.'],
@@ -21,10 +21,10 @@ const A = [
   [11, 'Phone bottom bar', 'components/shell/MobileNav.tsx, lib/navigation.ts', 'h-shell', 'Header and navigation', 'cov', 'The + leaves the bar (C11).'],
   [12, 'Footer', 'components/shell/Footer.tsx', 'h-shell', 'Header and navigation', 'cov*', 'Slim, only on discovery and reading pages (13 Oct, drawn).'],
   [13, 'Cookie banner', 'components/shell/CookieConsent.tsx', '', '—', 'no', 'Stays as today, in the new look.'],
-  [14, 'Short messages after an action (toasts)', 'components/ui/Toast.tsx', '', '—', 'no', q(17)],
-  [15, 'Group Informācija', '[l1Slug]/group/[groupSlug]/layout.tsx, page.tsx, GroupHeader.tsx', 'h-group', 'A group', 'cov*', `Social links at the end, faces only on Biedri (13 Oct, drawn). The language label stays (${q(18)}); the side banner and the events-count link go: the header carries the photo, the side box "Nākamais pasākums".`],
+  [14, 'Short messages after an action (toasts)', 'components/ui/Toast.tsx', '', '—', 'no', 'The Handbook (Behaviour) already decides when: a short toast only for what happens outside the current screen. One line at the bottom, above the bottom bar on phones, in the new look (part R2).'],
+  [15, 'Group Informācija', '[l1Slug]/group/[groupSlug]/layout.tsx, page.tsx, GroupHeader.tsx', 'h-group', 'A group', 'cov*', `Social links at the end, faces only on Biedri (13 Oct, drawn). The small "Latviski" / "In English" label on a text written in another language stays, as today (no automatic translation); the side banner and the events-count link go: the header carries the photo, the side box "Nākamais pasākums".`],
   [16, 'Group "…" menu', 'components/groups/GroupMoreMenu.tsx', 'h-group', 'A group', 'cov*', 'Drawn: your role, Rakstīt komandai, Dalīties, Ziņot, Pamest grupu or Atsaukt pieteikumu. Team tools stay in Iestatījumi.'],
-  [17, 'Site-admin tools on a group', 'components/groups/AdminToolsMenu.tsx', '', '—', 'no', 'Stay as today, in the new look.'],
+  [17, 'Site-admin tools on a group', 'components/groups/AdminToolsMenu.tsx', '', '—', 'no', 'Stay as today, in the new look: fixing the category, editing, the moderation log, hiding and restoring.'],
   [18, 'Hidden-group banner', 'components/groups/HiddenGroupBanner.tsx', '', '—', 'no', 'Stays as today, in the new look.'],
   [19, 'Group pages drawer (phones)', 'components/groups/GroupInfoDrawer.tsx', 'h-group', 'A group', 'cov', ''],
   [20, 'Contact / join form', 'components/modals/ContactGroupModal.tsx', 'h-group', 'A group', 'cov', 'Button words change (C1, C3).'],
@@ -56,8 +56,8 @@ const A = [
   [46, 'Event panel', '', 'h-event', 'An event', 'new', ''],
   [47, 'Par mums', 'app/[locale]/about/page.tsx', '', '—', 'no', 'A reading page in the new look, with the slim footer.'],
   [48, 'Privātums', 'app/[locale]/privacy/page.tsx', '', '—', 'no', 'The same.'],
-  [49, 'Page not found, with the sign-in hint', 'app/[locale]/not-found.tsx, SignInHint.tsx', '', '—', 'no', q(16)],
-  [50, 'Loading and error states', 'none exist (no loading.tsx / error.tsx)', '', '—', 'no', q(16)],
+  [49, 'Page not found, with the sign-in hint', 'app/[locale]/not-found.tsx, SignInHint.tsx', '', '—', 'no', 'Follows the empty-state rule: an outline icon, one sentence, one action ("Uz sākumu"); the sign-in hint stays.'],
+  [50, 'Loading and error states', 'none exist (no loading.tsx / error.tsx)', '', '—', 'no', 'Missing on the live site too. The Handbook (Behaviour) already decides: grey shapes of the real content while loading (card, row, panel), never a spinner, nothing jumps; an error in plain words with one action ("Mēģināt vēlreiz"). Built in part R2.'],
   [51, 'Admin frame', 'app/[locale]/admin/layout.tsx, components/admin/AdminNav.tsx', 'h-admin', 'Admin', 'cov', 'Its structure changes (C30).'],
   [52, 'Admin: Sūdzības', 'admin/reports/page.tsx', 'h-admin', 'Admin', 'nav', 'Today\'s page in the new frame.'],
   [53, 'Admin: Lēmumi', 'admin/page.tsx', 'h-admin', 'Admin', 'nav', 'The same.'],
@@ -67,7 +67,7 @@ const A = [
   [57, 'Admin: Dizains and its preview bar', 'admin/design/page.tsx, components/admin/design/*', 'h-admin', 'Admin', 'part', 'Krāsas and Fonti follow the drawn Kategoriju krāsas; the preview bar stays.'],
   [58, 'Admin: Rokasgrāmata and UI elementi', 'admin/handbook/*', 'h-admin', 'Admin', 'cov', ''],
   [59, 'Admin: Komanda, Pārveide, Atsauksmes', 'admin/team, admin/development/redesign, admin/feedback', 'h-admin', 'Admin', 'nav', 'Today\'s pages in the new frame.'],
-  [60, 'Admin: moving a group to another category', 'admin/groups/[l1Slug]/[groupSlug]/categorization/*', '', '—', 'no', q(24)],
+  [60, 'Admin: moving a group to another category', 'admin/groups/[l1Slug]/[groupSlug]/categorization/*', '', '—', 'no', 'Not in the admin menu today either. Stays reached from the site-admin tools on a group, as today, in the new look.'],
   [61, 'Feedback and translation modes', 'components/feedback/*, components/translate/*', 'h-shell', 'Header and navigation', 'part', 'Their switches are drawn; the overlays stay as today.'],
 ];
 const AS = { cov: 'Drawn', part: 'Partly', nav: 'Named only', no: 'Not drawn', new: 'New screen' };
@@ -75,38 +75,38 @@ const AS = { cov: 'Drawn', part: 'Partly', nav: 'Named only', no: 'Not drawn', n
 // ── B. Live features the redesign didn't mention. [id, feature, files, what happens, kind]
 // kind: done = decided or drawn now · keep = stays as today in the new look · ask = a question (see Still open)
 const B = [
-  ['B1', 'Ways to join an event: open ("Es nāku"), with the organiser\'s approval, a waiting list, a size, "Slēgt pieteikšanos"; practical details hidden until approved', 'EventParticipation.tsx, EventOrganiserPanel.tsx', `Drawn as pictures: ${q(8)}.`, 'ask'],
+  ['B1', 'Ways to join an event: open ("Es nāku" / "Piedalīšos"), with the organiser\'s approval ("Pieteikties", then "Pieteikums nosūtīts"; the organiser approves or declines), a waiting list ("Pieteikties gaidīšanas sarakstā"), a size ("Apmēram N cilvēki"), "Slēgt pieteikšanos" (marks the event full); practical details hidden until approved', 'EventParticipation.tsx, EventOrganiserPanel.tsx', `Drawn as pictures: ${q(8)}.`, 'ask'],
   ['B2', 'Members-only events: "Tikai biedriem" on rows; a page that stops outsiders', 'EventRow.tsx, MembersOnlyNotice.tsx', `Visitors don't see them (agreed); for members: ${q(13)}.`, 'ask'],
   ['B3', 'Event page details: add to calendar, share, map or online link, picture, time zone when not Latvian time, "Šis pasākums jau ir noticis", "Svarīga informācija", data for search engines', 'events/[eventSlug]/page.tsx, AddToCalendar.tsx, ShareEventButton.tsx', 'All kept; drawn on the event page (13 Oct).', 'done'],
   ['B4', 'Organiser tools: edit, delete with a check, the lists of who is going, asking and waiting, with "Ielaist"', 'EventManageActions.tsx, EventOrganiserPanel.tsx', 'Kept, in the event page\'s "Rīkotājiem" box (drawn).', 'done'],
-  ['B5', 'The event form: name, start and end, place (free text), text, practical details, way to join, who sees it, size, picture link, LV | EN', 'EventCreationWizard.tsx, EventLangBar.tsx, DateTimeField.tsx', 'Kept, plus the event\'s place from the city list (13 Oct).', 'keep'],
-  ['B6', 'Repeating events: stored in the database, never used by the form', 'prisma/schema.prisma, EventCreationWizard.tsx', q(20), 'ask'],
+  ['B5', 'The event form: name, start and end (time in 15-minute steps; the end starts two hours after the start), place (free text), text, practical details, way to join, who sees it, size, picture link, LV | EN', 'EventCreationWizard.tsx, EventLangBar.tsx, DateTimeField.tsx', 'Kept, plus the event\'s place from the city list (13 Oct).', 'keep'],
+  ['B6', 'Repeating events: stored in the database, never used by the form', 'prisma/schema.prisma, EventCreationWizard.tsx', 'Stays unused, as today; each event is created on its own. A note only, nothing to draw.', 'keep'],
   ['B7', '"Mani pasākumi" tab on a group\'s Pasākumi', 'GroupTabs.tsx', 'Goes (13 Oct).', 'done'],
-  ['B8', 'Managing members: make or remove a moderator, remove a member, write to a member, see a profile, private profiles', 'MemberCard.tsx, members/page.tsx', 'Drawn on Biedri: the team\'s "…" on each row (13 Oct).', 'done'],
-  ['B9', 'Group settings, Grupa: name, city (and suggesting one), picture link, category and sub-categories, website / Discord / Instagram', 'components/groups/settings/*', 'Kept, plus "Ko meklējam?".', 'keep'],
+  ['B8', 'Managing members: make or remove a moderator, remove a member (today with the browser\'s own question), write to a member, see a profile, private profiles, the list sorted by role', 'MemberCard.tsx, members/page.tsx', 'Drawn on Biedri: the team\'s "…" on each row, the team first (13 Oct). The browser\'s own question goes (Handbook: never the browser\'s box).', 'done'],
+  ['B9', 'Group settings, Grupa: name, city (and suggesting one), picture link, category and sub-categories (and suggesting a new sub-category), website / Discord / Instagram', 'components/groups/settings/*', 'Kept, plus "Ko meklējam?".', 'keep'],
   ['B10', 'Group settings, Sadaļas: the team\'s own sections, their order, members-only sections, LV | EN', 'GroupSectionEditor.tsx, SectionEditForm.tsx', 'Kept.', 'keep'],
   ['B11', 'Group settings, Īpašnieks: taking members, public or private, handing over the group, deleting it', 'AcceptingMembersSection, PrivacySection, TransferOwnershipSection, DangerZoneSection', 'Kept.', 'keep'],
-  ['B12', 'Private groups ("Tikai biedriem"): not listed in discovery', 'Group.type; discovery.service.ts', q(11), 'ask'],
+  ['B12', 'Private groups: left out of discovery unless the public/private filter (<code>?type=</code>) asks for them, never in search. The live words differ: "Privāta" in the create-group form, "Tikai biedriem" in settings', 'Group.type; discovery.service.ts, AccessStep, PrivacySection', q(11), 'ask'],
   ['B13', 'Group news: new item, archive and restore, archived list, delete, a hint for the team when empty', 'AnnouncementBoard.tsx, AnnouncementCard.tsx, AnnouncementModal.tsx', 'Drawn on the group\'s Jaunumi (13 Oct).', 'done'],
   ['B14', 'Social links on the group (header icons and side column)', 'GroupHeader.tsx, GroupSocialLinks', 'Quiet text links at the end of Informācija (13 Oct, drawn).', 'done'],
   ['B15', 'Member faces on Informācija and the "all members" pop-up, from which a member can write to the team', 'MemberAvatarList, MemberMoreModal.tsx', `Faces only on Biedri (13 Oct); writing to the team: ${q(14)}.`, 'ask'],
   ['B16', 'Pictures as a pasted link (group form, settings, event form)', 'BasicInfoStep, BasicsSection, EventCreationWizard', 'Kept until the picture picker (plan item 3.6).', 'keep'],
   ['B17', 'The hidden-group banner with "restore"; site-admin tools on a group', 'HiddenGroupBanner.tsx, AdminToolsMenu.tsx', 'Kept.', 'keep'],
-  ['B18', 'Reporting (groups only; the database could hold reported events)', 'ReportModal.tsx', `"Ziņot par grupu" in the "…" menu (drawn); events: ${q(21)}; people: ${q(7)}.`, 'ask'],
+  ['B18', 'Reporting (groups only; the database could hold reported events)', 'ReportModal.tsx', `"Ziņot par grupu" in the "…" menu (drawn); events and people: ${q(7)}.`, 'ask'],
   ['B19', 'Blocking and unblocking a person in a conversation', 'ChatPanel.tsx', 'Kept, in the conversation\'s menu.', 'keep'],
   ['B20', 'Leaving a group, handing it over, sharing it', 'GroupMoreMenu.tsx', 'In the "…" menu (drawn); handing over stays in Iestatījumi → Īpašnieks.', 'done'],
   ['B21', 'Withdrawing a join request (the × today)', 'GroupHeader.tsx', '"Atsaukt pieteikumu" in the "…" menu and on Tavi pieteikumi (13 Oct, drawn).', 'done'],
-  ['B22', 'Signing in (email and password, Google), registering (with a live username check), choosing a username, the sign-in pop-up that returns you where you were', 'components/auth/*, AuthGateModal.tsx', 'Kept, in the new look.', 'keep'],
+  ['B22', 'Signing in (email and password, Google and GitHub when set up), registering (with a live username check), choosing a username, the sign-in pop-up that returns you where you were', 'components/auth/*, AuthGateModal.tsx', 'Kept, in the new look.', 'keep'],
   ['B23', 'The LV / EN switch', 'components/shell/LanguageSwitcher.tsx', 'In the header on every page (13 Oct, drawn).', 'done'],
   ['B24', 'Footer: links, Par mums, Privātums, one line about the site', 'components/shell/Footer.tsx', 'Slim footer on discovery and reading pages (13 Oct, drawn).', 'done'],
   ['B25', 'Cookie banner', 'CookieConsent.tsx', 'Kept.', 'keep'],
   ['B26', 'Profiles: your own (about, places, since when, groups), someone else\'s (shared groups, private state, a message button), editing (name, picture, "Jauns avatars", about, places, three privacy switches)', 'app/[locale]/profile/*, ProfileEditForm.tsx', `Mans profils drawn (13 Oct); where editing lives: ${q(10)}.`, 'ask'],
-  ['B27', 'Deleting your account: doesn\'t exist today', '—', q(19), 'ask'],
+  ['B27', 'Deleting your account: doesn\'t exist today', '—', q(16), 'ask'],
   ['B28', 'Feedback mode, translation mode, the design preview bar', 'components/feedback/*, components/translate/*, ThemePreviewBar', 'Kept.', 'keep'],
-  ['B29', 'Admin inside: the category tree and merging, cities, translation suggestions and export, the team, feedback filters, report actions, the decisions log', 'app/[locale]/admin/*', 'Kept, in the new admin frame.', 'keep'],
-  ['B30', 'Admin page for moving a group to another category', 'admin/groups/…/categorization', q(24), 'ask'],
-  ['B31', 'Discovery\'s cards / list switch', 'DiscoveryFilterBarWrapper, ListViewCard', q(22), 'ask'],
-  ['B32', 'Loading and error states: none exist', 'app/', q(16), 'ask'],
+  ['B29', 'Admin inside: the category tree and merging, cities, translation suggestions and export, the team, feedback filters, report actions (resolve, delete the content, hide the group), the decisions log and its filter', 'app/[locale]/admin/*', 'Kept, in the new admin frame.', 'keep'],
+  ['B30', 'Admin page for moving a group to another category', 'admin/groups/…/categorization', 'Kept, reached from the site-admin tools on a group, as today.', 'keep'],
+  ['B31', 'Discovery\'s cards / list switch', 'DiscoveryFilterBarWrapper, ListViewCard', 'Goes: the agreed rules show cards on desktop and rows on phones. Say if you want it back.', 'done'],
+  ['B32', 'Loading and error states: none exist', 'app/', 'The Handbook (Behaviour) already decides: grey shapes of the content (card, row, panel), an error in plain words with one action. Built in part R2.', 'done'],
 ];
 const BK = { done: ['ag', 'Decided'], keep: ['lk', 'Kept'], ask: ['op', 'Question'] };
 
@@ -122,8 +122,8 @@ const C = [
   ['C7', 'Your role as a pill in the header', 'No button for members; the role in the "…" menu', 'chg', 'The menu now drawn with the role line.'],
   ['C8', 'A group admin is "Grupas moderators"', 'The tag "Mod"; the Handbook says "grupas komanda" for owner and moderators', 'unc', q(12)],
   ['C9', 'Group pages: Informācija, Pasākumi, Jaunumi, Biedri, then "Labot grupu"', 'Informācija, Jaunumi, Pasākumi, Biedri, Iestatījumi', 'chg', ''],
-  ['C10', 'Header: logo with a subtitle, language, light/dark, messages, shield, bell, picture; no search, no +', 'Logo, search with the place tag, language, +, shield, messages, bell, picture', 'chg', 'The language switch stays: answered 13 Oct.'],
-  ['C11', 'Bottom bar: Atklāt, Manas grupas, +, Ziņas, Profils', 'Atklāt, Grupas, Ziņas, Es; no +', 'chg', ''],
+  ['C10', 'Header: logo with a subtitle, language, light/dark, messages, shield, bell, picture; no search, no + on computers (phones have it in the bottom bar)','Logo, search with the place tag, language, +, shield, messages, bell, picture', 'chg', 'The language switch stays: answered 13 Oct.'],
+  ['C11', 'Bottom bar: Atklāt, Manas grupas, +, Ziņas, Profils', 'Atklāt, Grupas, Ziņas, Es; no +', 'chg', `Where "Grupas" and "Es" lead (${q(2)}) matches today's Manas grupas and Profils.`],
   ['C12', 'Profile menu: name and email, Manas grupas, public profile, "Labot profilu", Iziet', 'Mans profils, Manas grupas (with a count), Iestatījumi, Iziet', 'chg', ''],
   ['C13', 'The shield menu\'s link reads "Admina panelis"', 'The page said "Administrēšanas panelis, built"', 'wrong', 'Fixed: the rule now says the live words change.'],
   ['C14', 'One city at a time', 'Several cities, "Visur", "Jelgava +2"', 'chg', ''],
@@ -152,10 +152,10 @@ const CK = { chg: ['lk', 'Intended change'], wrong: ['pr', 'Page wrong, fixed'],
 
 // ── D. What needs the database or the server. [id, item, why, what it needs, migration name or '']
 const D = [
-  ['D1', '"Ko meklējam?"', 'The group card\'s note', `A new optional group field (up to 60 characters), its check, the settings field. One text or two: ${q(23)}.`, 'add_group_looking_for'],
+  ['D1', '"Ko meklējam?"', 'The group card\'s note', `A new optional group field (up to 60 characters), its check, the settings field. One text or two: ${q(17)}.`, 'add_group_looking_for'],
   ['D2', 'The event\'s own place', 'Events away from home', 'A required city on each event, filled from the group\'s city for existing events; an online mark for "Tiešsaistē" (13 Oct); the form field; every event filter switches to it. The address stays free text.', 'add_event_city'],
-  ['D3', 'A dark tone per category, with preview and publish', 'Admin → Dizains → Kategoriju krāsas', 'Either a new category field or the colours inside the site theme, which already has preview and publish (the builder\'s default: the theme). The colour is still set on the server.', 'add_category_color_dark (only if not in the theme)'],
-  ['D4', '"What\'s new since you last looked" on Manas grupas', 'The profile menu\'s count', 'When you last opened Manas grupas, one time per person.', 'add_user_my_groups_seen_at'],
+  ['D3', 'A dark tone per category, with preview and publish', 'Admin → Dizains → Kategoriju krāsas', 'Either a new category field or the colours inside the site theme, which already has preview and publish (the builder\'s default: the theme). The colour is still set on the server, which must now pick the light or the dark tone.', 'add_category_color_dark (only if not in the theme)'],
+  ['D4', '"What\'s new since you last looked" on Manas grupas', 'The profile menu\'s count', 'When you last opened Manas grupas: one time per person (or one per group you are in).', 'add_user_my_groups_seen_at'],
   ['D5', 'Distances for "Citur Latvijā"', 'Discovery', 'Coordinates for every city, and the data to fill them.', 'add_city_coordinates'],
   ['D6', 'Reporting people', `${q(7)}, later`, 'A report about a person.', 'add_report_target_user (later)'],
   ['D7', 'Several cities at once', 'The place list', 'The group and event lists take several cities; the address format.', ''],
@@ -166,7 +166,7 @@ const D = [
   ['D12', 'Faces of who is going', 'Event row and panel', 'The people going, with pictures, for signed-in viewers only (13 Oct).', ''],
   ['D13', 'The Paziņojumi page', 'Your own area', 'Paging; the group\'s name as its own link needs the group\'s address in each notification.', ''],
   ['D14', 'The Manas grupas page', 'Your own area', 'Upcoming events of your groups, news, your requests, an answer shown once (from notifications, because a declined request leaves no trace), and the count of waiting requests on the team\'s groups.', ''],
-  ['D15', 'Panels with their own address', 'The opened group and the event panel', 'Next.js routes that open over the list (to be checked against the installed Next.js 16 docs first).', ''],
+  ['D15', 'Panels with their own address', 'The opened group and the event panel', `Next.js routes that open over the list (to be checked against the installed Next.js 16 docs first).${path('intercepting + parallel routes (@modal)')}`, ''],
   ['D16', 'The place of a signed-out visitor, recent searches', `${q(5)}, Search`, 'Kept on the device only; signed in, the first city on the profile.', ''],
   ['D17', 'Literata and Commissioner, the Sūna theme', 'Identity', 'Loading the fonts; the theme already stores fonts; a new default theme.', ''],
   ['D18', 'Gaišs, Tumšs, Kā ierīcē', 'Iestatījumi', 'Today\'s switch has two states; a third, kept in a cookie.', ''],
@@ -175,17 +175,17 @@ const D = [
 
 // ── F. Build order: twelve parts, each released on its own (13 Oct)
 const R = [
-  ['R1', 'Identity', 'The fonts, Sūna and its neutrals, the fifteen category tones (light and dark), shapes and words; Admin → Dizains with Krāsas, Kategoriju krāsas, Fonti, preview and publish (the deferred Session 15); the Handbook\'s Design chapter rewritten to the agreed rules. Released: today\'s screens in the new look.', 'Maybe one (D3)'],
-  ['R2', 'Header, menus, footer', 'The header with the language switch "LV ▾" and room for search, the profile and shield menus, the bottom bar without +, the slim footer, your own area\'s frame with Iestatījumi (Izskats, Kā ierīcē), the short messages and the grey loading shapes (questions 16, 17). Plan item 3.4.', ''],
+  ['R1', 'Identity', 'The fonts, Sūna and its neutrals, the fifteen category tones (light and dark), shapes and words; Admin → Dizains with Krāsas, Kategoriju krāsas, Fonti, preview and publish (the deferred Session 15); the Handbook\'s Design chapter rewritten to the agreed rules. Released: today\'s screens in the new look, after an independent review.', 'Maybe one (D3)'],
+  ['R2', 'Header, menus, footer', 'The header with the language switch "LV ▾" and room for search, the profile and shield menus, the bottom bar without +, the slim footer, your own area\'s frame with Iestatījumi (Izskats, Kā ierīcē), the short messages and the grey loading shapes (the Handbook\'s Behaviour rules). Plan item 3.4.', ''],
   ['R3', 'A group\'s frame', 'The lower header, pages down the left (☰ on phones), tabs, one "Sazināties", the waiting state, the new words (C3–C5, C8), the "…" menu with your role, "Atsaukt pieteikumu", reporting, leaving, sharing. Plan items 2.22 and 3.2.', ''],
-  ['R4', 'Discovery data', '"Ko meklējam?" and the event\'s place (with the form fields), several cities, counts, dates, sub-categories for events, each group\'s next meeting (D1, D2, D7–D11). Released: the new fields in the forms; the lists keep working as today.', 'add_group_looking_for, add_event_city'],
+  ['R4', 'Discovery data', '"Ko meklējam?" and the event\'s place (with the form fields), several cities, counts, dates, sub-categories for events, each group\'s next meeting (D1, D2, D7–D11). Released: the new fields in the forms; the lists keep working as today. An independent review before release: it changes the database.', 'add_group_looking_for, add_event_city'],
   ['R5', 'Discovery', 'The filter row, the place and sub-category lists, the drawer with counts and search, the group card and row, the create card, the chosen line, "Rādīt vēl", event rows by day a week at a time. The day strip and the calendar only after your review. Plan item 3.1.', ''],
   ['R6', 'Panels', 'The opened group and event panels with their own addresses, "Sazināties" and "Eju" from them, and the event cases (question 8) (D15).', ''],
   ['R7', 'Search', 'The header field with the place tag, category tags, recent searches; "Rādīt visus rezultātus" opens discovery, filtered. Plan item 3.5.', ''],
   ['R8', 'Your own area', 'Manas grupas (with question 9 answered), the Ziņas page in the frame, the Paziņojumi page, the "new" count (D4, D13, D14).', 'add_user_my_groups_seen_at'],
   ['R9', 'A group\'s life', 'The event page, the event form with its place, Biedri, Jaunumi, settings with "Ko meklējam?", Mans profils and someone else\'s profile. Plan items 3.3 (and 3.6 later).', ''],
   ['R10', 'Citur Latvijā and the unknown place', 'Distances between cities, the visitor\'s place kept on the device (D5, D16).', 'add_city_coordinates'],
-  ['R11', 'Admin frame', 'Sections across, pages down the left, the phone drawer; the admin pages in the new look; the category-moving page placed (question 24).', ''],
+  ['R11', 'Admin frame', 'Sections across, pages down the left, the phone drawer; the admin pages in the new look; the category-moving page stays reached from a group\'s site-admin tools.', ''],
   ['R12', 'Everything else', 'Sign in, register, choosing a username, the create-group wizard, Par mums, Privātums, page not found, the cookie banner.', ''],
 ];
 
@@ -205,7 +205,7 @@ export const liveSection = () => {
   const migs = D.filter((r) => r[4]).length;
   return `<section aria-labelledby="h-live">
   <h2 id="h-live">Salīdzinājums ar dzīvo lapu · Compared with the live app</h2>
-  <p class="lead">On 13 October every screen of the live site was compared with this page, by reading the code on <code>main</code>. Below is everything that came out of it, not a summary: each live screen and where it is on this page; what the live site does that this page didn't mention, and what happens to it; where the two disagree, and whether that is an intended change, a mistake on this page, or still unclear; and what needs new data. Unclear points became questions in <a href="#h-open">Still open</a> (8–25), each with a default. File names are in small print, for the builders.</p>
+  <p class="lead">On 13 October every screen of the live site was compared with this page, by reading the code on <code>main</code>. Below is everything that came out of it, not a summary: each live screen and where it is on this page; what the live site does that this page didn't mention, and what happens to it; where the two disagree, and whether that is an intended change, a mistake on this page, or still unclear; and what needs new data. Unclear points became questions in <a href="#h-open">Still open</a> (8–18), each with a default. File names are in small print, for the builders.</p>
 
   <h3>Your answers of 13 October</h3>
   <div class="rd-rows">
@@ -242,6 +242,6 @@ export const liveSection = () => {
   <ol class="rd-build">${R.map(([id, t, what, mig]) => `<li><b>${id} · ${t}</b><p>${what}${mig ? ` <span class="rd-mig">Migration</span>${path(mig)}` : ''}</p></li>`).join('')}</ol>
 
   <h3>Questions this raised</h3>
-  <p class="lead">All in <a href="#h-open">Still open</a>, each with the default I would build: 8 events you can't simply join (pictures), 9 the team's waiting requests (pictures), 10 where you change your profile, 11 private groups, 12 the word behind "Mod", 13 members-only events, 14 how a member writes to the team, 15 "are you sure?", 16 loading and error pages, 17 short messages after an action, 18 text in another language, 19 deleting your account, 20 repeating events, 21 reporting an event, 22 the cards / list switch, 23 "Ko meklējam?" in one language or two, 24 the admin page for moving a group, 25 the four new drawings.</p>
+  <p class="lead">All in <a href="#h-open">Still open</a>, each with the default I would build: 8 events you can't simply join (pictures), 9 the team's waiting requests (pictures), 10 where you change your profile, 11 private groups, 12 the word behind "Mod", 13 members-only events, 14 how a member writes to the team, 15 "are you sure?" for steps that can be undone, 16 deleting your account, 17 "Ko meklējam?" in one language or two, 18 the four new drawings; reporting an event joined question 7. Where the Handbook or this page already decides (short messages, loading and error pages, text in another language, the cards / list switch, repeating events, the category-moving page), the answer is written in the tables above instead of asked.</p>
 </section>`;
 };
