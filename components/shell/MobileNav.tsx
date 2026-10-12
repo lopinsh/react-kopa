@@ -7,6 +7,7 @@ import { Plus } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
 import UnreadBadge from './UnreadBadge';
+import MessagesDrawerButton from '@/components/messages/MessagesDrawerButton';
 import AuthGateModal from '@/components/modals/AuthGateModal';
 import { UI } from '@/lib/constants';
 
@@ -100,6 +101,19 @@ function MobileNavLink({
     isActive: boolean;
     children: React.ReactNode;
 }) {
+    const className = clsx(
+        'flex flex-1 flex-col items-center justify-center gap-1 py-2 text-[10px] font-medium transition-colors',
+        isActive ? 'text-primary' : 'text-foreground-muted'
+    );
+    // Messages open the drawer for quick replies; /messages itself stays the full view.
+    if (href === '/messages') {
+        return (
+            <MessagesDrawerButton className={className} label={label}>
+                {children}
+                <span>{label}</span>
+            </MessagesDrawerButton>
+        );
+    }
     return (
         <Link
             href={href}

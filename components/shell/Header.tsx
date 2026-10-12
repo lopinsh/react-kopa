@@ -8,6 +8,7 @@ import AdminMenu from './AdminMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
 import UnreadBadge from './UnreadBadge';
+import MessagesDrawerButton from '@/components/messages/MessagesDrawerButton';
 import { UI } from '@/lib/constants';
 import { isSiteAdmin } from '@/lib/site-role';
 
@@ -63,15 +64,14 @@ export default async function Header() {
                 {session?.user && (
                     <div className="flex items-center gap-1.5">
                         <div className="hidden sm:block h-5 w-px bg-border/20 mx-0.5" />
-                        <Link
-                            href="/messages"
+                        <MessagesDrawerButton
                             className="relative flex h-10 w-10 items-center justify-center rounded-xl text-foreground-muted transition-all active:scale-95 hover:bg-surface-elevated hover:text-foreground"
-                            aria-label={t('messages')}
+                            label={t('messages')}
                             title={t('messages')}
                         >
                             <MessageSquare className="h-[22px] w-[22px]" />
                             <UnreadBadge />
-                        </Link>
+                        </MessagesDrawerButton>
                         {isSiteAdmin(session.user.role) && <AdminMenu />}
                         <NotificationCenter isAdmin={isSiteAdmin(session.user.role)} />
                     </div>

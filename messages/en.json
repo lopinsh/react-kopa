@@ -815,7 +815,10 @@
     "unread": "Unread",
     "unreadBadge": "{count, plural, one {# unread chat} other {# unread chats}}",
     "back": "Back to messages",
-    "send": "Send"
+    "send": "Send",
+    "drawerLoadFailed": "Could not load messages.",
+    "drawerLoading": "Loading messages…",
+    "openFullView": "Open full view"
   },
   "nav": {
     "adminPanel": "Admin Panel",

@@ -26,9 +26,11 @@ type Props = {
     onBack: () => void;
     onSent: (message: ChatMessage) => void;
     onBlockedChange: (isBlocked: boolean) => void;
+    /** The back button also on wide screens (the drawer has no side list). */
+    alwaysShowBack?: boolean;
 };
 
-export default function ChatPanel({ conversation, messages, currentUserId, title, unknownName, onBack, onSent, onBlockedChange }: Props) {
+export default function ChatPanel({ conversation, messages, currentUserId, title, unknownName, onBack, onSent, onBlockedChange, alwaysShowBack = false }: Props) {
     const t = useTranslations('messages');
     const tErrors = useTranslations('errors');
     const messageTime = useMessageTime();
@@ -79,7 +81,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
         <>
             <div className="z-10 flex items-center justify-between border-b border-border bg-surface p-4">
                 <div className="flex min-w-0 items-center gap-3">
-                    <button className="-ml-2 p-2 text-foreground-muted sm:hidden" onClick={onBack} aria-label={t('back')}>
+                    <button type="button" className={clsx('-ml-2 p-2 text-foreground-muted', !alwaysShowBack && 'sm:hidden')} onClick={onBack} aria-label={t('back')}>
                         <ArrowLeft className="h-5 w-5" />
                     </button>
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface">

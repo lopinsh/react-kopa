@@ -16,6 +16,8 @@ type Props = {
     onOpen: (id: string) => void;
     titleOf: (conv: InboxRow) => string;
     className?: string;
+    /** The drawer: one column at full width, its own heading above. */
+    compact?: boolean;
 };
 
 type CssVars = React.CSSProperties & Record<`--${string}`, string>;
@@ -47,7 +49,7 @@ export function GroupLabel({ group, showName = true, className }: { group: NonNu
     );
 }
 
-export default function ConversationList({ conversations, activeId, onOpen, titleOf, className }: Props) {
+export default function ConversationList({ conversations, activeId, onOpen, titleOf, className, compact = false }: Props) {
     const t = useTranslations('messages');
     const messageTime = useMessageTime();
     const [filter, setFilter] = useState<Filter>('ALL');
@@ -58,11 +60,11 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
     );
 
     return (
-        <div data-ui={UI.conversationList} className={clsx('w-full flex-col border-r border-border bg-surface-elevated/30 sm:w-80', className)}>
-            <div className="border-b border-border bg-surface p-4">
-                <h1 className="text-lg font-bold">{t('title')}</h1>
+        <div data-ui={UI.conversationList} className={clsx('w-full flex-col bg-surface-elevated/30', !compact && 'border-r border-border sm:w-80', className)}>
+            <div className={clsx('border-b border-border bg-surface', compact ? 'px-4 py-3' : 'p-4', compact && conversations.length === 0 && 'hidden')}>
+                {!compact && <h1 className="text-lg font-bold">{t('title')}</h1>}
                 {conversations.length > 0 && (
-                    <div className="mt-3 flex gap-2" role="group" aria-label={t('filterLabel')}>
+                    <div className={clsx('flex gap-2', !compact && 'mt-3')} role="group" aria-label={t('filterLabel')}>
                         {FILTERS.map(({ value, labelKey }) => (
                             <FilterChip key={value} active={filter === value} onClick={() => setFilter(value)}>{t(labelKey)}</FilterChip>
                         ))}

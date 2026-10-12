@@ -19,6 +19,8 @@ type Props = {
     subtitle?: ReactNode;
     /** `card`: rounded, bordered, accent line on top. `plain`: the simple flat pop-up. */
     variant?: 'plain' | 'card';
+    /** `right`: a drawer from the right edge, full height (full width on phones). */
+    placement?: 'center' | 'right';
     size?: 'sm' | 'md' | 'lg' | '2xl' | '4xl';
     /** Thin accent-coloured line along the top edge (card variant). */
     accentLine?: boolean;
@@ -70,7 +72,7 @@ function restoreFocus(trigger: HTMLElement | null | undefined, opener: HTMLEleme
  * Render it only while it should be open (mount = open); content goes in `children`.
  */
 export default function Modal({
-    onClose, title, titleClassName, icon, subtitle, variant = 'plain', size = 'md', flush = false, accentLine = false, headerClassName,
+    onClose, title, titleClassName, icon, subtitle, variant = 'plain', placement = 'center', size = 'md', flush = false, accentLine = false, headerClassName,
     role = 'dialog', describedBy, locked = false, hideClose = false, closeOnBackdrop = false,
     translateIgnore = false, zIndexClassName = 'z-50', panelClassName, returnFocusRef, children,
 }: Props) {
@@ -107,6 +109,7 @@ export default function Modal({
     if (!mounted) return null;
 
     const card = variant === 'card';
+    const drawer = placement === 'right';
     const heading = (
         <div className="min-w-0">
             <h2 id={titleId} className={clsx(titleClassName ?? (card ? 'text-xl font-black tracking-tight text-foreground sm:text-2xl' : 'text-xl font-bold text-foreground'))}>{title}</h2>
@@ -118,7 +121,8 @@ export default function Modal({
         <div
             {...(translateIgnore ? { 'data-translate-ignore': true } : {})}
             className={clsx(
-                'fixed inset-0 flex items-center justify-center overflow-y-auto p-4 animate-in fade-in duration-200',
+                'fixed inset-0 flex animate-in fade-in duration-200',
+                drawer ? 'items-stretch justify-end' : 'items-center justify-center overflow-y-auto p-4',
                 card ? 'bg-black/60 backdrop-blur-md' : 'bg-black/50 backdrop-blur-sm',
                 zIndexClassName
             )}
@@ -141,7 +145,7 @@ export default function Modal({
                 )}
             >
                 {accentLine && <div className="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-50" />}
-                <div className={clsx('flex items-center justify-between gap-4', headerClassName ?? (flush ? 'border-b border-border p-6' : card ? 'mb-6' : 'mb-4'))}>
+                <div className={clsx('flex shrink-0 items-center justify-between gap-4', headerClassName ?? (flush ? 'border-b border-border p-6' : card ? 'mb-6' : 'mb-4'))}>
                     <div className="flex min-w-0 items-center gap-3">
                         {icon}
                         {heading}

@@ -815,7 +815,10 @@
     "unread": "Nelasīta",
     "unreadBadge": "{count, plural, zero {# nelasītu sarunu} one {# nelasīta saruna} other {# nelasītas sarunas}}",
     "back": "Atpakaļ uz ziņām",
-    "send": "Sūtīt"
+    "send": "Sūtīt",
+    "drawerLoadFailed": "Neizdevās ielādēt ziņas.",
+    "drawerLoading": "Ielādē ziņas…",
+    "openFullView": "Atvērt pilnu skatu"
   },
   "nav": {
     "adminPanel": "Admina panelis",
