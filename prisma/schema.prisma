@@ -35,6 +35,7 @@ model User {
   reports              Report[]            @relation("FiledReports")
   sessions             Session[]
   submittedCategories  Category[]          @relation("SubmittedCategories")
+  submittedCities      City[]              @relation("SubmittedCities")
   conversations        Conversation[]      @relation("ConversationParticipants")
   directMessages       Message[]           @relation("SentMessages")
   hiddenGroups         Group[]             @relation("HiddenGroups")
@@ -157,6 +158,22 @@ model Group {
   @@index([city])
   @@index([createdAt])
   @@index([hiddenAt])
+}
+
+/// A place a group can be in. `slug` is what `Group.city` stores (no foreign key: old values stay valid).
+/// A suggestion waits as PENDING_REVIEW until a site admin approves or rejects it.
+model City {
+  id            String     @id @default(cuid())
+  slug          String     @unique
+  nameLv        String
+  nameEn        String
+  status        CityStatus @default(ACTIVE)
+  submittedById String?
+  submittedBy   User?      @relation("SubmittedCities", fields: [submittedById], references: [id], onDelete: SetNull)
+  submittedAt   DateTime?
+  createdAt     DateTime   @default(now())
+
+  @@index([status])
 }
 
 model AdminAction {
@@ -398,6 +415,11 @@ model Report {
 enum GroupType {
   PUBLIC
   PRIVATE
+}
+
+enum CityStatus {
+  ACTIVE
+  PENDING_REVIEW
 }
 
 enum CategoryStatus {
