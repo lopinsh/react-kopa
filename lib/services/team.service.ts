@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { isSiteOwner } from '@/lib/site-role';
+import { isSiteOwnerUser } from './site-role.service';
 import { teamSearchSchema, teamTargetSchema } from '@/lib/validations/team';
 import { ModerationService } from './moderation.service';
 import { NotificationService } from './notification.service';
@@ -26,13 +27,8 @@ export type TeamResult<T = void> =
 
 const SEARCH_LIMIT = 8;
 
-async function actorIsOwner(userId: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-    return isSiteOwner(user?.role);
-}
-
 async function changeRole(ownerId: string, targetUserId: string, from: 'USER' | 'ADMIN', to: 'USER' | 'ADMIN'): Promise<TeamResult> {
-    if (!(await actorIsOwner(ownerId))) return { success: false, error: 'FORBIDDEN' };
+    if (!(await isSiteOwnerUser(ownerId))) return { success: false, error: 'FORBIDDEN' };
     const parsed = teamTargetSchema.safeParse({ userId: targetUserId });
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
@@ -62,7 +58,7 @@ async function changeRole(ownerId: string, targetUserId: string, from: 'USER' | 
 /** Owner-only: who the site admins are, and who is made or removed. The owner themself is never changed here. */
 export const TeamService = {
     async listTeam(ownerId: string): Promise<TeamResult<TeamMember[]>> {
-        if (!(await actorIsOwner(ownerId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteOwnerUser(ownerId))) return { success: false, error: 'FORBIDDEN' };
         const users = await prisma.user.findMany({
             where: { role: { in: ['ADMIN', 'OWNER'] } },
             select: { id: true, name: true, username: true, email: true, role: true },
@@ -75,7 +71,7 @@ export const TeamService = {
 
     /** Ordinary users matching name, username or email. People who are already admins are not offered. */
     async searchUsers(ownerId: string, query: string): Promise<TeamResult<TeamCandidate[]>> {
-        if (!(await actorIsOwner(ownerId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteOwnerUser(ownerId))) return { success: false, error: 'FORBIDDEN' };
         const parsed = teamSearchSchema.safeParse({ query });
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
         const q = parsed.data.query;

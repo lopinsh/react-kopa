@@ -17,6 +17,7 @@ import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
 import { triggerRealtime } from '@/lib/pusher';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
+import { getSiteRole } from './site-role.service';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -213,10 +214,7 @@ export const GroupService = {
         if (!group) return null;
 
         // Hidden groups exist only for site admins (banner + restore) and the group's owner (banner only).
-        const actor = currentUserId
-            ? await prisma.user.findUnique({ where: { id: currentUserId }, select: { role: true } })
-            : null;
-        const isSiteAdmin = isSiteAdminRole(actor?.role);
+        const isSiteAdmin = isSiteAdminRole(currentUserId ? await getSiteRole(currentUserId) : null);
         const g = group;
         const isOwner = !!currentUserId && g.members.some((m: { userId: string; role: string }) => m.userId === currentUserId && m.role === 'OWNER');
         if (g.hiddenAt && !isSiteAdmin && !isOwner) return null;
@@ -557,7 +555,7 @@ export const GroupService = {
     async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
         const [membership, actor, current] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId } }),
-            prisma.user.findUnique({ where: { id: userId }, select: { role: true } }),
+            getSiteRole(userId),
             prisma.group.findUnique({
                 where: { id: groupId },
                 select: { name: true, city: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
@@ -565,7 +563,7 @@ export const GroupService = {
         ]);
 
         const role = membership?.role;
-        const isAppAdmin = isSiteAdminRole(actor?.role);
+        const isAppAdmin = isSiteAdminRole(actor);
         if (!hasAdminRights(role) && !isAppAdmin) {
             return { success: false, error: 'FORBIDDEN' };
         }
@@ -719,8 +717,7 @@ export const GroupService = {
 
         // Hidden groups exist only for their owner and site admins (same rule as getGroupWithContext).
         if (group.hiddenAt && role !== 'OWNER') {
-            const actor = userId ? await prisma.user.findUnique({ where: { id: userId }, select: { role: true } }) : null;
-            if (!isSiteAdminRole(actor?.role)) {
+            if (!isSiteAdminRole(userId ? await getSiteRole(userId) : null)) {
                 return { exists: false, role: null, pendingCount: 0, sections: [] };
             }
         }
@@ -774,10 +771,10 @@ export const GroupService = {
     async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
         const [membership, actor] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId }, select: { role: true } }),
-            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+            getSiteRole(userId)
         ]);
         const isManager = hasAdminRights(membership?.role);
-        const isSiteAdmin = isSiteAdminRole(actor?.role);
+        const isSiteAdmin = isSiteAdminRole(actor);
         return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
     },
 

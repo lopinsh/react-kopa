@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
-import { isSiteAdmin } from './moderation.service';
+import { isSiteAdminUser } from './site-role.service';
 import { saveMessageOverrideSchema, validateMessage } from '@/lib/validations/message-override';
 import { stripMarkers, type MessageTree } from '@/lib/translate-mode/marker';
 import {
@@ -120,7 +120,7 @@ export const MessageOverrideService = {
     },
 
     async getEntry(adminId: string, key: string): Promise<OverrideResult<TranslationEntry>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
         if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
         const pendingRows = await prisma.messageSuggestion.findMany({ where: { key }, select: { lang: true, value: true } });
@@ -143,7 +143,7 @@ export const MessageOverrideService = {
 
     /** Finds texts by key or content in either language (also the ones that can't be clicked on the page). */
     async search(adminId: string, query: string): Promise<OverrideResult<TranslationSearchHit[]>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const needle = query.trim().toLowerCase();
         if (needle.length < 2) return { success: true, data: [] };
 
@@ -167,7 +167,7 @@ export const MessageOverrideService = {
      */
     /** `data.suggested` is false when every language equals the live text (the suggestion was only withdrawn). */
     async suggestEntry(adminId: string, input: unknown): Promise<OverrideResult<{ suggested: boolean }>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
 
         const raw = typeof input === 'object' && input !== null ? (input as Record<string, unknown>) : {};
         const parsed = saveMessageOverrideSchema.safeParse({
@@ -203,7 +203,7 @@ export const MessageOverrideService = {
     },
 
     async listSuggestions(adminId: string): Promise<OverrideResult<SuggestionRow[]>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const [lvBase, enBase, overrides, rows] = await Promise.all([
             loadFlatBase('lv'),
             loadFlatBase('en'),
@@ -236,7 +236,7 @@ export const MessageOverrideService = {
      * approved/rejected by someone else is NOT_FOUND, so nobody approves a text they never read.
      */
     async approveSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const row = await prisma.messageSuggestion.findUnique({ where: { id } });
         if (!row || row.value !== expectedValue) return { success: false, error: 'NOT_FOUND' };
         if (row.lang !== 'lv' && row.lang !== 'en') return { success: false, error: 'MESSAGE_INVALID' };
@@ -268,13 +268,13 @@ export const MessageOverrideService = {
 
     /** Like approve, `expectedValue` keeps a replaced suggestion (same id, new text) from being rejected unseen. */
     async rejectSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const { count } = await prisma.messageSuggestion.deleteMany({ where: { id, value: expectedValue } });
         return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
     },
 
     async listOverrides(adminId: string): Promise<OverrideResult<{ key: string; lang: string; value: string; updatedAt: Date; updatedBy: string | null }[]>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const rows = await prisma.messageOverride.findMany({
             orderBy: [{ key: 'asc' }, { lang: 'asc' }],
             include: { updatedBy: { select: { name: true } } },
@@ -287,7 +287,7 @@ export const MessageOverrideService = {
 
     /** All overrides in the nested messages structure: `{ lv: {...}, en: {...} }`, ready to merge into messages/*.json. */
     async exportNested(adminId: string): Promise<OverrideResult<Record<MessageLang, MessageTree>>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const overrides = await loadOverrides();
         return { success: true, data: { lv: nestMessages(overrides.lv), en: nestMessages(overrides.en) } };
     },

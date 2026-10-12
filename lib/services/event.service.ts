@@ -11,6 +11,7 @@ import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
+import { getSiteRole } from './site-role.service';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -88,17 +89,17 @@ export class EventService {
     /** Role of the user in the group plus site-admin flag. */
     private static async getAccess(groupId: string, userId?: string) {
         if (!userId) return { isMember: false, isGroupAdmin: false, isSiteAdmin: false };
-        const [membership, user] = await Promise.all([
+        const [membership, siteRole] = await Promise.all([
             prisma.membership.findUnique({
                 where: { userId_groupId: { userId, groupId } },
                 select: { role: true }
             }),
-            prisma.user.findUnique({ where: { id: userId }, select: { role: true } })
+            getSiteRole(userId)
         ]);
         return {
             isMember: !!membership && membership.role !== 'PENDING',
             isGroupAdmin: hasAdminRights(membership?.role),
-            isSiteAdmin: isSiteAdminRole(user?.role)
+            isSiteAdmin: isSiteAdminRole(siteRole)
         };
     }
 
@@ -226,12 +227,13 @@ export class EventService {
 
         if (!event) return null;
 
+        const access = await EventService.getAccess(groupRecord.id, userId);
+
         // Members-only events do not exist for everyone else (404).
-        if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(groupRecord.id, userId))) {
+        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) {
             return null;
         }
 
-        const access = await EventService.getAccess(groupRecord.id, userId);
         const canManage = !!userId && (event.creatorId === userId || access.isGroupAdmin);
         const myStatus = event.attendees.find(a => a.userId === userId)?.status ?? null;
         const canSeeInstructions = EventService.instructionsVisible(event.joinMode, canManage, myStatus);

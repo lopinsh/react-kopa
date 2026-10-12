@@ -5,7 +5,7 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { NotificationService } from './notification.service';
 import { GroupService } from './group.service';
 import type { ErrorCode } from '@/types/actions';
-import { isSiteAdmin as isSiteAdminRole, isSiteOwner } from '@/lib/site-role';
+import { isSiteAdminUser, isSiteOwnerUser } from './site-role.service';
 
 export type AdminActionType = 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
 
@@ -36,16 +36,6 @@ export interface HiddenGroupEntry {
     hiddenByName: string | null;
 }
 
-export async function isSiteAdmin(userId: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-    return isSiteAdminRole(user?.role);
-}
-
-async function isSiteOwnerUser(userId: string): Promise<boolean> {
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-    return isSiteOwner(user?.role);
-}
-
 export const ModerationService = {
     /**
      * Records an admin action. Called by services that perform admin-only overrides.
@@ -60,7 +50,7 @@ export const ModerationService = {
      * Hides a group from everyone but site admins. Restorable; never deletes data.
      */
     async hideGroup(groupId: string, adminId: string, reason: string, reportId?: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
 
         const parsed = hideGroupSchema.safeParse({ reason });
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
@@ -109,7 +99,7 @@ export const ModerationService = {
     },
 
     async restoreGroup(groupId: string, adminId: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
@@ -138,7 +128,7 @@ export const ModerationService = {
      * have no relation to the group, so they outlive it; the name is kept on the log row.
      */
     async deleteHiddenGroup(groupId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         if (!(await isSiteOwnerUser(adminId))) return { success: false, error: 'FORBIDDEN' };
 
         const parsed = deleteGroupSchema.safeParse({ reason });

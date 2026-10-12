@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { groupCategoryTitle } from './message.service';
 import { isSiteAdmin } from '@/lib/site-role';
+import { getSiteRole } from './site-role.service';
 
 export type NotificationAudience = 'USER' | 'ADMIN';
 
@@ -37,8 +38,7 @@ export const NotificationService = {
      */
     async getUserNotifications(userId: string, limit: number = 10, locale: string = 'lv') {
         // Admin notifications are only ever listed for someone who is a site admin right now.
-        const owner = await prisma.user.findUnique({ where: { id: userId }, select: { role: true } });
-        const audiences: NotificationAudience[] = isSiteAdmin(owner?.role) ? ['USER', 'ADMIN'] : ['USER'];
+        const audiences: NotificationAudience[] = isSiteAdmin(await getSiteRole(userId)) ? ['USER', 'ADMIN'] : ['USER'];
         const perAudience = await Promise.all(audiences.map((audience) =>
             prisma.notification.findMany({
                 where: { userId, audience },

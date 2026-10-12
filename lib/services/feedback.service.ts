@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
 import { FEEDBACK_TAB_STATUSES, type FeedbackKindValue, type FeedbackStatusValue, type FeedbackTab } from '@/lib/constants';
 import { createFeedbackSchema, updateFeedbackSchema, replyFeedbackSchema, type FeedbackFilter } from '@/lib/validations/feedback';
-import { isSiteAdmin } from './moderation.service';
+import { isSiteAdminUser } from './site-role.service';
 
 export interface FeedbackReplyItem {
     id: string;
@@ -138,7 +138,7 @@ async function deleteNote(id: string): Promise<FeedbackResult> {
 
 export const FeedbackService = {
     async create(adminId: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const parsed = createFeedbackSchema.safeParse(input);
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
@@ -148,7 +148,7 @@ export const FeedbackService = {
 
     /** Notes for one page. A path without a query also matches the same page with any query. */
     async listForPath(adminId: string, path: string): Promise<FeedbackResult<FeedbackItem[]>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const rows = await prisma.feedback.findMany({
             where: { OR: [{ path }, { path: { startsWith: `${path}?` } }] },
             orderBy: { createdAt: 'asc' },
@@ -158,7 +158,7 @@ export const FeedbackService = {
     },
 
     async list(adminId: string, filter: FeedbackFilter): Promise<FeedbackResult<FeedbackItem[]>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const rows = await prisma.feedback.findMany({
             where: {
                 kind: filter.kind,
@@ -174,7 +174,7 @@ export const FeedbackService = {
 
     /** Note counts per tab (ignores the kind/page filters, so the tab labels stay stable). */
     async counts(adminId: string): Promise<FeedbackResult<Record<FeedbackTab, number>>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const [open, completed] = await Promise.all([
             prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.open] } } }),
             prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } }),
@@ -184,18 +184,18 @@ export const FeedbackService = {
 
     /** Deletes every DONE / WONT_DO note (replies cascade) and returns how many went. Open notes are untouched. */
     async purgeClosed(adminId: string): Promise<FeedbackResult<{ count: number }>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         const { count } = await prisma.feedback.deleteMany({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } });
         return { success: true, data: { count } };
     },
 
     async update(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         return updateNote(id, adminId, input);
     },
 
     async remove(adminId: string, id: string): Promise<FeedbackResult> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         return deleteNote(id);
     },
 
@@ -206,7 +206,7 @@ export const FeedbackService = {
     },
 
     async reply(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdmin(adminId))) return { success: false, error: 'FORBIDDEN' };
+        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
         return addReply(id, adminId, input);
     },
 
