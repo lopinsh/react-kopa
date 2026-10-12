@@ -10,7 +10,7 @@ import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { createGroup } from '@/actions/group-actions';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
-import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
+import { type TaxonomySelection } from '@/lib/types/taxonomy';
 
 import TaxonomyStep from '@/components/groups/create-wizard/TaxonomyStep';
 import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';

@@ -49,7 +49,6 @@ export default async function Header() {
                 </Link>
             </div>
 
-            {/* Spacer. The global search (components/shell/GlobalSearch.tsx) stays hidden until it is built. */}
             <div className="flex-1" />
 
             {/* Right side controls */}

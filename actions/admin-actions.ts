@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
-import { AdminService, type WildcardWithDetails, type ReportWithDetails } from '@/lib/services/admin.service';
+import { AdminService } from '@/lib/services/admin.service';
 import { isSiteAdmin } from '@/lib/site-role';
 
 const isAdmin = async () => {
@@ -11,32 +11,6 @@ const isAdmin = async () => {
     if (!session?.user?.id) return false;
     return isSiteAdmin(session.user.role);
 };
-
-export async function getPendingWildcards(): Promise<ActionResponse<{ wildcards: WildcardWithDetails[] }>> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-
-    try {
-        const wildcards = await AdminService.getPendingWildcards();
-        return { success: true, data: { wildcards: wildcards as WildcardWithDetails[] } };
-    } catch (error) {
-        console.error('[getPendingWildcards] Error:', error);
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
-    }
-}
-
-export async function approveWildcard(categoryId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-
-    try {
-        await AdminService.approveWildcard(categoryId);
-        revalidatePath('/admin', 'page');
-        revalidateTag('categories', 'max');
-        return { success: true };
-    } catch (error) {
-        console.error('[approveWildcard] Error:', error);
-        return { success: false, error: 'ACTION_FAILED' };
-    }
-}
 
 export async function rejectWildcard(categoryId: string): Promise<ActionResponse> {
     if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
@@ -51,31 +25,6 @@ export async function rejectWildcard(categoryId: string): Promise<ActionResponse
         console.error('[rejectWildcard] Error:', error);
         if (error instanceof Error && error.message === 'CATEGORY_IN_USE') return { success: false, error: 'CATEGORY_IN_USE' };
         if (error instanceof Error && error.message === 'NOT_FOUND') return { success: false, error: 'NOT_FOUND' };
-        return { success: false, error: 'ACTION_FAILED' };
-    }
-}
-
-export async function getPendingReports(): Promise<ActionResponse<{ reports: ReportWithDetails[] }>> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-
-    try {
-        const reports = await AdminService.getPendingReports();
-        return { success: true, data: { reports: reports as ReportWithDetails[] } };
-    } catch (error) {
-        console.error('[getPendingReports] Error:', error);
-        return { success: false, error: 'INTERNAL_SERVER_ERROR' };
-    }
-}
-
-export async function dismissReport(reportId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-
-    try {
-        await AdminService.dismissReport(reportId);
-        revalidatePath('/admin');
-        return { success: true };
-    } catch (error) {
-        console.error('[dismissReport] Error:', error);
         return { success: false, error: 'ACTION_FAILED' };
     }
 }

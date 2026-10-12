@@ -9,7 +9,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Save, AlertCircle, Info } from 'lucide-react';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
-import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
+import { type TaxonomySelection } from '@/lib/types/taxonomy';
 import GroupSectionEditor from '@/components/groups/GroupSectionEditor';
 import type { EditableSection } from '@/lib/services/group.service';
 import { useToast } from '@/hooks/use-toast';

@@ -7,7 +7,7 @@ import { type GroupFormValues } from '@/lib/validations/group';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
 import TagPicker from '@/components/groups/TagPicker';
 import type { L1Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
-import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
+import { type TaxonomySelection } from '@/lib/types/taxonomy';
 import SettingsSection from './SettingsSection';
 import { NEUTRAL_ACCENT } from '@/lib/constants';
 

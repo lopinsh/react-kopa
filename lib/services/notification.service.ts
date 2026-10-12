@@ -205,24 +205,5 @@ export const NotificationService = {
         });
     },
 
-    /**
-     * Marks a notification as read.
-     * @deprecated Use markAsReadForUser for ownership-checked mutations.
-     */
-    async markAsRead(notificationId: string) {
-        return await prisma.notification.update({
-            where: { id: notificationId },
-            data: { read: true },
-        });
-    },
-
-    /**
-     * Deletes a notification.
-     */
-    async deleteNotification(notificationId: string) {
-        return await prisma.notification.delete({
-            where: { id: notificationId },
-        });
-    },
 };
 

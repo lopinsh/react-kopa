@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { Check, ChevronDown } from 'lucide-react';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
-import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
+import { type TaxonomySelection } from '@/lib/types/taxonomy';
 import { getCategoryIcon } from '@/lib/icons';
 
 type Props = {

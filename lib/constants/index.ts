@@ -35,22 +35,6 @@ export const EVENT_JOIN_MODES = ['OPEN', 'REQUEST'] as const;
 export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 
 /**
- * Common Category Metadata (Static identifiers)
- */
-export const CATEGORY_SLUGS = [
-    'sports',
-    'tech',
-    'art',
-    'movement',
-    'gathering',
-    'performance',
-    'civic',
-    'practical'
-] as const;
-
-export type CategorySlug = (typeof CATEGORY_SLUGS)[number];
-
-/**
  * Discovery Page Constants
  */
 export const DISCOVERY_TABS = ['groups', 'events'] as const;

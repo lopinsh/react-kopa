@@ -1,5 +1,5 @@
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
-import { type TaxonomySelection } from '@/components/ui/TaxonomyPicker';
+import { type TaxonomySelection } from '@/lib/types/taxonomy';
 
 type GroupTaxonomySource = {
     categoryId: string;

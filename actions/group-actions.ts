@@ -9,15 +9,7 @@ import { NotificationService } from '@/lib/services/notification.service';
 import { CITIES_TAG } from '@/lib/services/city.service';
 import { ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
-import type { MembershipRole } from '@prisma/client';
 import { messageTextSchema } from '@/lib/validations/message';
-
-type GroupDetailsResult = Record<string, unknown> & {
-    members: Array<Record<string, unknown> & { applicationMessage?: string | null }>;
-    isMember: boolean;
-    userRole: MembershipRole | null;
-    tags: Array<{ id: string; slug: string; title: string; isWildcard: boolean; parentId: string | null }>;
-};
 
 /**
  * Creates a new group and handles optional wildcard category creation.
@@ -194,16 +186,6 @@ export async function getGroupRole(l1Slug: string, groupSlug: string): Promise<{
 }> {
     const session = await auth();
     return GroupService.getGroupRole(l1Slug, groupSlug, session?.user?.id);
-}
-
-/**
- * Fetches group details by slug for the landing page.
- * Delegates all DB work to GroupService.getGroupWithContext.
- */
-export async function getGroupDetails(l1Slug: string, groupSlug: string, locale: string): Promise<GroupDetailsResult | null> {
-    const session = await auth();
-    const context = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
-    return context as GroupDetailsResult | null;
 }
 
 /**

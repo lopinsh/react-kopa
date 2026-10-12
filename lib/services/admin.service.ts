@@ -1,21 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { Prisma } from '@prisma/client';
 import { ModerationService, type ModerationResult } from './moderation.service';
-
-export type WildcardWithDetails = Prisma.CategoryGetPayload<{
-    include: {
-        parent: { include: { titles: true } },
-        titles: true,
-    }
-}>;
-
-export type ReportWithDetails = Prisma.ReportGetPayload<{
-    include: {
-        reporter: { select: { name: true, email: true } },
-        group: { select: { name: true, slug: true } },
-        event: { select: { id: true, originalLang: true, translations: { select: { lang: true, title: true } } } }
-    }
-}>;
 
 export class AdminService {
     /** What waits for an admin: shown as badges in the admin navigation. */
@@ -28,38 +12,6 @@ export class AdminService {
         ]);
         // New sub-categories and new cities both wait in the Taxonomy page's "needs review" card.
         return { tags: tagCount + cityCount, reports, suggestions };
-    }
-
-    /**
-     * Get pending wildcard categories
-     */
-    static async getPendingWildcards() {
-        return prisma.category.findMany({
-            where: {
-                isWildcard: true,
-                status: 'PENDING_REVIEW',
-            },
-            include: {
-                parent: {
-                    include: { titles: true }
-                },
-                titles: true,
-            },
-            orderBy: { createdAt: 'desc' }
-        });
-    }
-
-    /**
-     * Approve a wildcard category
-     */
-    static async approveWildcard(categoryId: string) {
-        return prisma.category.update({
-            where: { id: categoryId },
-            data: {
-                isWildcard: false,
-                status: 'ACTIVE',
-            }
-        });
     }
 
     /**
@@ -91,31 +43,6 @@ export class AdminService {
             return tx.category.delete({
                 where: { id: categoryId }
             });
-        });
-    }
-
-    /**
-     * Get pending reports
-     */
-    static async getPendingReports() {
-        return prisma.report.findMany({
-            where: { status: 'PENDING' },
-            include: {
-                reporter: { select: { name: true, email: true } },
-                group: { select: { name: true, slug: true } },
-                event: { select: { id: true, originalLang: true, translations: { select: { lang: true, title: true } } } }
-            },
-            orderBy: { createdAt: 'asc' }
-        });
-    }
-
-    /**
-     * Dismiss a report
-     */
-    static async dismissReport(reportId: string) {
-        return prisma.report.update({
-            where: { id: reportId },
-            data: { status: 'RESOLVED' }
         });
     }
 

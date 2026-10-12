@@ -152,64 +152,6 @@ export const GroupService = {
     },
 
     /**
-     * Fetches memberships for a user and resolves group contexts.
-     * Cached per-request to prevent redundant queries in layouts and pages.
-     */
-    getUserMemberships: cache(async (userId: string, locale: string) => {
-        const lang = locale === 'en' ? 'en' : 'lv';
-
-        const memberships = await prisma.membership.findMany({
-            where: { userId, group: { hiddenAt: null } },
-            include: {
-                group: {
-                    include: {
-                        category: {
-                            include: TaxonomyResolver.getInclude(lang)
-                        },
-                        _count: { select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } } } },
-                        members: {
-                            take: 5,
-                            orderBy: { joinedAt: 'desc' as const },
-                            select: {
-                                user: {
-                                    select: { id: true, name: true, username: true, avatarSeed: true, image: true }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        return memberships.map(m => {
-            const g = m.group;
-            const resolved = TaxonomyResolver.resolve(g.category);
-
-            return {
-                id: g.id,
-                name: g.name,
-                slug: g.slug,
-                description: g.description,
-                city: g.city,
-                type: g.type,
-                bannerImage: g.bannerImage,
-                role: m.role,
-                memberCount: g._count?.members ?? 0,
-                members: g.members.map(mb => mb.user),
-                accentColor: g.accentColor || resolved.accentColor,
-                category: {
-                    id: resolved.categoryId,
-                    slug: resolved.categorySlug,
-                    l1Slug: resolved.l1Slug,
-                    title: resolved.categoryTitle,
-                    parentTitle: resolved.parentTitle,
-                    color: resolved.accentColor
-                }
-            };
-        });
-    }),
-
-    /**
      * Fetches a group and resolves its full context (roles, membership, taxonomy).
      * Cached per-request to prevent redundant queries in layouts and pages.
      */
@@ -808,25 +750,6 @@ export const GroupService = {
     async getGroupSlugs(groupId: string): Promise<{ slug: string; l1Slug: string } | null> {
         const group = await prisma.group.findUnique({
             where: { id: groupId },
-            include: {
-                category: {
-                    include: TaxonomyResolver.getInclude('lv')
-                }
-            }
-        });
-
-        if (!group) return null;
-
-        const resolved = TaxonomyResolver.resolve(group.category);
-        return { slug: group.slug, l1Slug: resolved.l1Slug };
-    },
-
-    /**
-     * Internal helper to resolve group slugs by slug string.
-     */
-    async getGroupSlugsBySlug(slug: string): Promise<{ slug: string; l1Slug: string } | null> {
-        const group = await prisma.group.findFirst({
-            where: { slug },
             include: {
                 category: {
                     include: TaxonomyResolver.getInclude('lv')

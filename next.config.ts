@@ -75,26 +75,6 @@ const nextConfig: NextConfig = {
         destination: '/:l1Slug/group/:groupSlug/announcements',
         permanent: true,
       },
-      {
-        source: '/groups/:slug',
-        destination: '/api/resolve-group/:slug?locale=lv',
-        permanent: true,
-      },
-      {
-        source: '/:locale/groups/:slug',
-        destination: '/api/resolve-group/:slug?locale=:locale',
-        permanent: true,
-      },
-      {
-        source: '/groups/:slug/:path*',
-        destination: '/api/resolve-group/:slug?locale=lv&path=:path*',
-        permanent: true,
-      },
-      {
-        source: '/:locale/groups/:slug/:path*',
-        destination: '/api/resolve-group/:slug?locale=:locale&path=:path*',
-        permanent: true,
-      }
     ];
   },
 };
