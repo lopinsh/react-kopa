@@ -17,6 +17,8 @@ export interface GroupMemberPreview {
 /** Shared query fragment for fetching up to 5 recent member previews per group */
 const MEMBER_PREVIEW_SELECT = {
     members: {
+        // Pending applicants are not members.
+        where: { role: { not: 'PENDING' as const } },
         take: 5,
         orderBy: { joinedAt: 'desc' as const },
         select: {
@@ -26,6 +28,48 @@ const MEMBER_PREVIEW_SELECT = {
         }
     }
 } as const;
+
+/** The fields a profile page shows. Never the email, password hash or role. */
+const PROFILE_USER_SELECT = {
+    id: true, name: true, image: true, avatarSeed: true, username: true, bio: true,
+    cities: true, createdAt: true, isProfilePublic: true,
+} as const;
+
+const PROFILE_GROUP_INCLUDE = {
+    category: { include: { parent: { include: { parent: true, titles: true } }, titles: true } },
+    _count: { select: { members: { where: { role: { not: 'PENDING' as const } } } } },
+    ...MEMBER_PREVIEW_SELECT,
+} as const;
+
+type ProfileMembership = Prisma.MembershipGetPayload<{ include: { group: { include: typeof PROFILE_GROUP_INCLUDE } } }>;
+type ProfileFields = Prisma.UserGetPayload<{ select: typeof PROFILE_USER_SELECT }>;
+
+function toProfileGroup(m: ProfileMembership) {
+    const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
+    const accentColor = m.group.accentColor || resolved.accentColor;
+    return {
+        id: m.group.id,
+        name: m.group.name,
+        slug: m.group.slug,
+        description: m.group.description,
+        city: m.group.city,
+        type: m.group.type,
+        bannerImage: m.group.bannerImage,
+        memberCount: m.group._count.members,
+        members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
+        category: {
+            title: resolved.categoryTitle,
+            parentTitle: resolved.parentTitle,
+            l1Slug: resolved.l1Slug,
+            color: resolved.accentColor
+        },
+        accentColor
+    };
+}
+
+type ProfileGroup = ReturnType<typeof toProfileGroup>;
+export type PublicProfile = ProfileFields & { publicGroups: ProfileGroup[]; showsAllGroups: boolean };
+export type OwnProfile = ProfileFields & { recentGroups: ProfileGroup[] };
 
 export const UserService = {
     async getUserProfile(userId: string) {
@@ -133,11 +177,12 @@ export const UserService = {
      * person's public groups only if the person opted in (`showGroupsOnProfile`); the person
      * themselves sees all of theirs. Pending applications never count, private groups only
      * show to fellow members, and moderation-hidden groups never show.
+     * Returns only what the profile page shows (never the email or password hash).
      */
-    async getUserByUsername(username: string, viewerId?: string) {
+    async getUserByUsername(username: string, viewerId?: string): Promise<PublicProfile | null> {
         const profile = await prisma.user.findUnique({
             where: { username },
-            select: { id: true, showGroupsOnProfile: true },
+            select: { ...PROFILE_USER_SELECT, showGroupsOnProfile: true },
         });
         if (!profile) return null;
 
@@ -156,107 +201,42 @@ export const UserService = {
             groupFilter = sharedWithViewer ?? { id: { in: [] } };
         }
 
-        const user = await prisma.user.findUnique({
-            where: { username },
-            include: {
-                memberships: {
-                    where: {
-                        role: { not: 'PENDING' },
-                        group: { hiddenAt: null, ...groupFilter },
-                    },
-                    include: {
-                        group: {
-                            include: {
-                                category: {
-                                    include: { parent: { include: { parent: true, titles: true } }, titles: true }
-                                },
-                                _count: { select: { members: true } },
-                                ...MEMBER_PREVIEW_SELECT
-                            }
-                        }
-                    }
-                }
-            }
+        const memberships = await prisma.membership.findMany({
+            where: {
+                userId: profile.id,
+                role: { not: 'PENDING' },
+                group: { hiddenAt: null, ...groupFilter },
+            },
+            orderBy: { joinedAt: 'desc' },
+            include: { group: { include: PROFILE_GROUP_INCLUDE } },
         });
 
-        if (!user) return null;
-
-        const formattedGroups = user.memberships.map(m => {
-            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
-            const accentColor = m.group.accentColor || resolved.accentColor;
-            return {
-                id: m.group.id,
-                name: m.group.name,
-                slug: m.group.slug,
-                description: m.group.description,
-                city: m.group.city,
-                type: m.group.type,
-                bannerImage: m.group.bannerImage,
-                memberCount: m.group._count.members,
-                members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
-                category: {
-                    title: resolved.categoryTitle,
-                    parentTitle: resolved.parentTitle,
-                    l1Slug: resolved.l1Slug,
-                    color: resolved.accentColor
-                },
-                accentColor
-            };
-        });
-
-        return { ...user, publicGroups: formattedGroups, showsAllGroups: isOwnProfile || profile.showGroupsOnProfile };
+        const { showGroupsOnProfile, ...fields } = profile;
+        return {
+            ...fields,
+            publicGroups: memberships.map(toProfileGroup),
+            showsAllGroups: isOwnProfile || showGroupsOnProfile,
+        };
     },
 
-    async getOwnProfile(userId: string) {
+    async getOwnProfile(userId: string): Promise<OwnProfile | null> {
         const user = await prisma.user.findUnique({
             where: { id: userId },
-            include: {
-                _count: {
-                    select: { memberships: true, attendances: true }
-                },
+            select: {
+                ...PROFILE_USER_SELECT,
                 memberships: {
                     take: 6,
-                    where: { group: { hiddenAt: null } },
+                    where: { role: { not: 'PENDING' }, group: { hiddenAt: null } },
                     orderBy: { joinedAt: 'desc' },
-                    include: {
-                        group: {
-                            include: {
-                                category: { include: { parent: { include: { parent: true, titles: true } }, titles: true } },
-                                _count: { select: { members: true } },
-                                ...MEMBER_PREVIEW_SELECT
-                            }
-                        }
-                    }
-                }
-            }
+                    include: { group: { include: PROFILE_GROUP_INCLUDE } },
+                },
+            },
         });
 
         if (!user) return null;
 
-        const formattedGroups = user.memberships.map(m => {
-            const resolved = TaxonomyResolver.resolve(m.group.category, '#F97316');
-            const accentColor = m.group.accentColor || resolved.accentColor;
-            return {
-                id: m.group.id,
-                name: m.group.name,
-                slug: m.group.slug,
-                description: m.group.description,
-                city: m.group.city,
-                type: m.group.type,
-                bannerImage: m.group.bannerImage,
-                memberCount: m.group._count.members,
-                members: m.group.members.map(mb => mb.user) satisfies GroupMemberPreview[],
-                category: {
-                    title: resolved.categoryTitle,
-                    parentTitle: resolved.parentTitle,
-                    l1Slug: resolved.l1Slug,
-                    color: resolved.accentColor
-                },
-                accentColor
-            };
-        });
-
-        return { ...user, recentGroups: formattedGroups };
+        const { memberships, ...fields } = user;
+        return { ...fields, recentGroups: memberships.map(toProfileGroup) };
     },
 
     async getMyGroups(userId: string, locale: string) {

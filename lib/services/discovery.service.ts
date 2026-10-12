@@ -327,9 +327,11 @@ export const DiscoveryService = {
                             include: TaxonomyResolver.getInclude(reqLang)
                         },
                         _count: {
-                            select: { members: true }
+                            // Pending applicants are not members.
+                            select: { members: { where: { role: { not: 'PENDING' as const } } } }
                         },
                         members: {
+                            where: { role: { not: 'PENDING' as const } },
                             take: 5,
                             orderBy: { joinedAt: 'desc' as const },
                             select: {
