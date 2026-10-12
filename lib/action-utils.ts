@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ActionResponse, ErrorCode } from '@/types/actions';
+import { ActionResponse, ErrorCode, isErrorCode } from '@/types/actions';
 
 /**
  * Validates data against a Zod schema and returns a standardized ActionResponse.
@@ -20,21 +20,28 @@ export async function validateActionData<T>(
 
 /**
  * Simple wrapper for catching errors in actions and returning a standardized fallback.
+ * Only codes from the ErrorCode registry reach the client: an ActionError's code, or a service's
+ * `throw new Error('NOT_FOUND')` whose message is a registry code. Anything else (Prisma codes,
+ * connection errors, plain messages) becomes the fallback.
  */
 export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {
     console.error('[Action Error]:', error);
 
     const info = (typeof error === 'object' && error !== null ? error : {}) as {
-        name?: unknown; __isActionError?: unknown; code?: unknown;
+        name?: unknown; __isActionError?: unknown; code?: unknown; message?: unknown;
     };
-    const code = typeof info.code === 'string' ? info.code : null;
 
     // Unmigrated database (Prisma "table does not exist")
-    if (code === 'P2021') return { success: false, error: 'DB_MIGRATION_REQUIRED' };
+    if (info.code === 'P2021') return { success: false, error: 'DB_MIGRATION_REQUIRED' };
 
     // Our custom ActionError, recognised in a way that survives serialization
-    if (info.name === 'ActionError' || info.__isActionError || code) {
-        return { success: false, error: (code ?? fallback) as ErrorCode };
+    if ((info.name === 'ActionError' || info.__isActionError) && isErrorCode(info.code)) {
+        return { success: false, error: info.code };
+    }
+
+    // Services that throw a plain Error carrying a registry code as the message
+    if (error instanceof Error && isErrorCode(error.message)) {
+        return { success: false, error: error.message };
     }
 
     return { success: false, error: fallback };

@@ -17,6 +17,9 @@ import type {
 } from '@/lib/services/taxonomy.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { isSiteAdmin } from '@/lib/site-role';
+import {
+    submitPendingTagSchema, createL2Schema, approveTagSchema, updateL1Schema, addAliasSchema, idListSchema, bulkMergeSchema,
+} from '@/lib/validations/taxonomy';
 
 type ApproveTagParams = {
     nameEn: string;
@@ -25,44 +28,10 @@ type ApproveTagParams = {
     slugLv: string;
 };
 
+const INVALID = { success: false, error: 'VALIDATION_FAILED' } as const;
+
 function mapTaxonomyError(error: unknown, fallback: ErrorCode = 'ACTION_FAILED'): ActionResponse<never> {
-    if (error instanceof Error) {
-        const code = error.message as ErrorCode;
-        const known: ErrorCode[] = [
-            'UNAUTHORIZED',
-            'UNAUTHORIZED_ADMIN',
-            'FORBIDDEN',
-            'NOT_FOUND',
-            'TAG_NOT_FOUND',
-            'TAG_ALREADY_EXISTS',
-            'TAG_LIMIT_REACHED',
-            'ALIAS_CONFLICT',
-            'VALIDATION_FAILED',
-            'INTERNAL_SERVER_ERROR',
-            'DELETE_FAILED',
-            'SAVE_FAILED',
-            'CREATE_FAILED',
-            'UPDATE_FAILED',
-            'JOIN_FAILED',
-            'LEAVE_FAILED',
-            'CANCEL_FAILED',
-            'INQUIRY_FAILED',
-            'ACTION_FAILED',
-            'CATEGORY_IN_USE',
-            'MANAGE_FAILED',
-            'CREATE_EVENT_FAILED',
-            'EVENT_NOT_FOUND',
-            'EVENT_FULL',
-            'TOGGLE_FAILED',
-            'USERNAME_TAKEN',
-            'UNKNOWN_ERROR',
-        ];
-
-        if (known.includes(code)) {
-            return { success: false, error: code };
-        }
-    }
-
+    // Services throw `new Error('TAG_NOT_FOUND')` etc.; handleActionError recognises registry codes in the message.
     return handleActionError(error, fallback);
 }
 
@@ -111,6 +80,10 @@ export async function submitPendingTag(label: string, parentId: string): Promise
         return { success: false, error: 'UNAUTHORIZED' };
     }
 
+    const parsed = submitPendingTagSchema.safeParse({ label, parentId });
+    if (!parsed.success) return INVALID;
+    label = parsed.data.label;
+
     try {
         const { category, created } = await TaxonomyService.createPendingL2({
             label,
@@ -148,8 +121,13 @@ export async function approveTag(id: string, params: ApproveTagParams): Promise<
         return admin;
     }
 
+    const parsed = approveTagSchema.safeParse({ id, ...params });
+    if (!parsed.success) return INVALID;
+
     try {
-        const category = await TaxonomyService.approveL2(id, params);
+        const category = await TaxonomyService.approveL2(parsed.data.id, {
+            nameEn: parsed.data.nameEn, nameLv: parsed.data.nameLv, slugEn: parsed.data.slugEn, slugLv: parsed.data.slugLv,
+        });
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true, data: { id: category.id } };
@@ -164,12 +142,11 @@ export async function createL2(parentId: string, params: { nameEn: string; nameL
         return admin;
     }
 
+    const parsed = createL2Schema.safeParse({ parentId, ...params });
+    if (!parsed.success) return INVALID;
+
     try {
-        const category = await TaxonomyService.createActiveL2({
-            parentId,
-            nameEn: params.nameEn,
-            nameLv: params.nameLv,
-        });
+        const category = await TaxonomyService.createActiveL2(parsed.data);
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true, data: { id: category.id } };
@@ -184,8 +161,11 @@ export async function updateL1(id: string, color: string): Promise<ActionRespons
         return admin;
     }
 
+    const parsed = updateL1Schema.safeParse({ id, color });
+    if (!parsed.success) return INVALID;
+
     try {
-        await TaxonomyService.updateL1Category(id, color);
+        await TaxonomyService.updateL1Category(parsed.data.id, parsed.data.color);
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true };
@@ -250,8 +230,11 @@ export async function addAlias(value: string, categoryId: string, locale?: strin
         return admin;
     }
 
+    const parsed = addAliasSchema.safeParse({ value, categoryId, locale });
+    if (!parsed.success) return INVALID;
+
     try {
-        const alias = await TaxonomyService.createAlias({ value, categoryId, locale });
+        const alias = await TaxonomyService.createAlias(parsed.data);
         revalidateTaxonomyAdminPages();
         return { success: true, data: { id: alias.id } };
     } catch (error) {
@@ -329,8 +312,11 @@ export async function bulkApprovePendingAction(ids: string[]): Promise<ActionRes
         return admin;
     }
 
+    const parsed = idListSchema.safeParse(ids);
+    if (!parsed.success) return INVALID;
+
     try {
-        const count = await TaxonomyService.bulkApprovePending(ids);
+        const count = await TaxonomyService.bulkApprovePending(parsed.data);
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true, data: { count } };
@@ -345,8 +331,11 @@ export async function bulkDeleteAction(ids: string[]): Promise<ActionResponse> {
         return admin;
     }
 
+    const parsed = idListSchema.safeParse(ids);
+    if (!parsed.success) return INVALID;
+
     try {
-        await TaxonomyService.bulkDelete(ids);
+        await TaxonomyService.bulkDelete(parsed.data);
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true };
@@ -364,6 +353,10 @@ export async function bulkMergeAction(
     if (!admin.success) {
         return admin;
     }
+
+    const parsed = bulkMergeSchema.safeParse({ canonicalId, mergedIds, canonicalUpdates });
+    if (!parsed.success) return INVALID;
+    canonicalUpdates = parsed.data.canonicalUpdates;
 
     try {
         // Find affected groups to send notifications

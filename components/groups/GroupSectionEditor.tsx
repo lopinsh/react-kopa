@@ -6,12 +6,10 @@ import { Plus, ChevronUp, ChevronDown, GripVertical, Lock, Settings2 } from 'luc
 import { clsx } from 'clsx';
 import { upsertSectionAction, reorderSectionsAction, deleteSectionAction } from '@/actions/group-actions';
 import { useRouter } from '@/i18n/routing';
-import { isDefaultSectionTitle } from '@/lib/constants';
+import { isDefaultSectionTitle, MAX_SECTIONS } from '@/lib/constants';
 import { toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
 import SectionEditForm, { isTextChanged, type SectionDraft } from '@/components/groups/SectionEditForm';
-
-const MAX_SECTIONS = 6;
 
 const stripHtml = (html: string) => {
     if (typeof window === 'undefined') return html.replace(/<[^>]*>/g, '');

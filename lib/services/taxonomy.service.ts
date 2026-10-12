@@ -513,30 +513,57 @@ export const TaxonomyService = {
         await prisma.categoryAlias.delete({ where: { id } });
     },
 
+    /**
+     * The one check for the tags a group may carry (create, owner edit, admin edit): at most
+     * MAX_GROUP_TAGS (groups saved before the limit may keep theirs but not gain any), and every tag
+     * ACTIVE or a pending suggestion (wildcard, PENDING_REVIEW). Tags the group already has stay valid.
+     * Returns an error code, or null when the tags are fine.
+     */
+    async validateGroupTags(tagIds: string[], opts: { currentTagIds?: string[] } = {}): Promise<'TAG_LIMIT_REACHED' | 'TAG_NOT_FOUND' | null> {
+        const unique = Array.from(new Set(tagIds));
+        const current = opts.currentTagIds ?? [];
+
+        if (unique.length > MAX_GROUP_TAGS && unique.length > current.length) {
+            return 'TAG_LIMIT_REACHED';
+        }
+        if (unique.length === 0) return null;
+
+        const found = await prisma.category.findMany({
+            where: {
+                id: { in: unique },
+                OR: [
+                    { status: 'ACTIVE' },
+                    { id: { in: current } },
+                    // Suggestions waiting for review. A reused suggestion (same name already pending) belongs to its
+                    // first submitter, so the submitter cannot be required to be the group's creator.
+                    { status: 'PENDING_REVIEW' as const, isWildcard: true },
+                ],
+            },
+            select: { id: true },
+        });
+        return found.length === unique.length ? null : 'TAG_NOT_FOUND';
+    },
+
+    /**
+     * A group's primary category must be an active top-level (L1) category, which is all the wizard offers.
+     * A group keeps a category it already has (older groups may sit under an L2).
+     */
+    async isValidPrimaryCategory(categoryId: string, currentCategoryId?: string): Promise<boolean> {
+        if (currentCategoryId && categoryId === currentCategoryId) return true;
+        const category = await prisma.category.findFirst({
+            where: { id: categoryId, level: 1, status: 'ACTIVE' },
+            select: { id: true },
+        });
+        return !!category;
+    },
+
     async adminUpdateGroupTags(groupId: string, tagIds: string[]): Promise<void> {
         const uniqueTagIds = Array.from(new Set(tagIds));
 
-        if (uniqueTagIds.length > MAX_GROUP_TAGS) {
-            // Groups saved before the limit may keep their tags but not gain any.
-            const current = await prisma.group.findUnique({ where: { id: groupId }, select: { tags: { select: { id: true } } } });
-            if (!current || uniqueTagIds.length > current.tags.length) {
-                throw new Error('TAG_LIMIT_REACHED');
-            }
-        }
-
-        if (uniqueTagIds.length > 0) {
-            const activeTags = await prisma.category.findMany({
-                where: {
-                    id: { in: uniqueTagIds },
-                    status: 'ACTIVE',
-                },
-                select: { id: true },
-            });
-
-            if (activeTags.length !== uniqueTagIds.length) {
-                throw new Error('TAG_NOT_FOUND');
-            }
-        }
+        const current = await prisma.group.findUnique({ where: { id: groupId }, select: { tags: { select: { id: true } } } });
+        if (!current) throw new Error('NOT_FOUND');
+        const error = await TaxonomyService.validateGroupTags(uniqueTagIds, { currentTagIds: current.tags.map((t) => t.id) });
+        if (error) throw new Error(error);
 
         await prisma.group.update({
             where: { id: groupId },

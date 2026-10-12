@@ -12,6 +12,9 @@ export const NEUTRAL_ACCENT = 'var(--primary)';
  */
 export const MAX_GROUP_TAGS = 2;
 
+/** Most sections (About, Practical info, …) one group can have. */
+export const MAX_SECTIONS = 6;
+
 /**
  * Group visibility and lifecycle types.
  */

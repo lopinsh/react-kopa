@@ -6,12 +6,13 @@ import { GroupFormValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
-import { MAX_GROUP_TAGS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
+import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { TaxonomyService } from './taxonomy.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
 import { triggerRealtime } from '@/lib/pusher';
@@ -355,8 +356,10 @@ export const GroupService = {
             slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
         }
 
-        if ((data.tagIds?.length ?? 0) > MAX_GROUP_TAGS) {
-            return { success: false, error: 'TAG_LIMIT_REACHED' };
+        const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? []);
+        if (tagError) return { success: false, error: tagError };
+        if (!(await TaxonomyService.isValidPrimaryCategory(targetCategoryId))) {
+            return { success: false, error: 'VALIDATION_FAILED' };
         }
         if (!(await CityService.isUsableBy(data.city, userId))) {
             return { success: false, error: 'VALIDATION_FAILED' };
@@ -593,9 +596,10 @@ export const GroupService = {
         if (canEditOwnerFields) {
             updateData.isAcceptingMembers = data.isAcceptingMembers;
             // Groups saved before the limit may keep their tags but not gain any.
-            const nextTagCount = new Set(data.tagIds ?? []).size;
-            if (nextTagCount > MAX_GROUP_TAGS && nextTagCount > current.tags.length) {
-                return { success: false, error: 'TAG_LIMIT_REACHED' };
+            const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], { currentTagIds: current.tags.map((t) => t.id) });
+            if (tagError) return { success: false, error: tagError };
+            if (!(await TaxonomyService.isValidPrimaryCategory(data.categoryId, current.categoryId))) {
+                return { success: false, error: 'VALIDATION_FAILED' };
             }
             updateData.name = data.name;
             updateData.type = data.type;
@@ -843,6 +847,9 @@ export const GroupService = {
             }
         } else {
             if (!title) return { success: false, error: 'TITLE_REQUIRED' };
+            if ((await prisma.groupSection.count({ where: { groupId } })) >= MAX_SECTIONS) {
+                return { success: false, error: 'VALIDATION_FAILED' };
+            }
             // New sections go last (orders may have gaps after a delete); the first section is always public.
             const last = await prisma.groupSection.aggregate({ where: { groupId }, _max: { order: true } });
             const order = last._max.order === null ? 0 : last._max.order + 1;
