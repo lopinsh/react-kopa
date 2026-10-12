@@ -878,6 +878,21 @@ html.dark .rd .seg.big>span{box-shadow:inset 0 0 0 1px var(--line)}
 .rd .xchip.cat::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
 .rd .clr{color:var(--brand);font-weight:600;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
 .rd .fchip em{font-style:normal;font-size:12px;color:var(--muted)}
+/* v7.1: filter option C, from the live page */
+.rd .fc-sw{display:inline-flex;gap:18px;align-items:center;height:38px}
+.rd .fc-sw>span{display:inline-flex;align-items:center;gap:6px;font:500 15px var(--body);color:var(--muted);height:38px;border-bottom:2px solid transparent}
+.rd .fc-sw>.on{color:var(--fg);font-weight:600;border-bottom-color:var(--brand)}
+.rd .fc-sw small{font-size:12px;color:var(--muted)}
+.rd .fc-view{display:inline-flex;gap:2px;padding:3px;border-radius:999px;background:var(--tint);margin-left:auto}
+.rd .fc-view>span{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;color:var(--muted)}
+.rd .fc-view>.on{background:var(--surface);color:var(--fg)}
+.rd .fc-view svg.i{width:16px;height:16px}
+.rd .fc-q{flex:1 1 180px;max-width:280px;height:38px}
+.rd .selrow .avl{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);font-size:13px;color:var(--fg);white-space:nowrap}
+.rd .selrow .avl em{font-style:normal;color:var(--muted)}
+.rd .selrow .fsep{height:20px}
+.rd .selrow .more{box-shadow:inset 0 0 0 1px var(--fg);font-weight:500}
+.rd .fc-h{font:600 18px var(--display);margin:0}
 .rd .opt2{display:grid;gap:12px;align-content:start;min-width:0}
 /* v7.0: the date picker inside "Kad" */
 .rd .calp{width:310px;max-width:100%;padding:12px}
@@ -993,7 +1008,7 @@ html.dark .rd .seg.big>span{box-shadow:inset 0 0 0 1px var(--line)}
   <h2 id="h-open">Still open: you decide</h2>
   <p class="lead">Three choices, each with the options side by side. Everything else is applied, with one default per small detail.</p>
   <div class="open">
-    <div><b>The filter line: A or B?</b><p>A: the chosen sub-categories as chips under the line, the category drawer open. B: every filter on one line, and a second "Izvēlēts" line with everything chosen. If you don't pick, we build A. (Filters → "The filter line: two ways")</p></div>
+    <div><b>The filter line: A, B or C?</b><p>A: the chosen sub-categories as chips under the line, the category drawer open. B: every filter on one line, and a second "Izvēlēts" line with everything chosen. C: the live page tidied, with the chosen and the available sub-categories on one line and counts on each. If you don't pick, we build A. (Filters → "The filter line: two ways")</p></div>
     <div><b>Your own area: one space, or separate pages?</b><p>(a) Mans profils, Manas grupas, Ziņas and Paziņojumi as one space for one person, like a group. (b) Separate pages, reached from the profile menu. (Your own area)</p></div>
     <div><b>Pop-ups: dim, blur, or both?</b><p>1 dim only, 2 dim and a light blur everywhere, 3 blur for dialogs in the middle and dim only for side panels. We recommend 3. (Pop-ups)</p></div>
   </div>
@@ -1538,8 +1553,8 @@ html.dark .rd .seg.big>span{box-shadow:inset 0 0 0 1px var(--line)}
     </div>
   </div>
 
-  <h3>The filter line: two ways</h3>
-  <p class="lead"><span class="status changes">For your choice</span> Both use the same items and the same drop-downs; they differ in where the category lives and how your choices show. If you don't pick, we build A.</p>
+  <h3>The filter line: three ways</h3>
+  <p class="lead"><span class="status changes">For your choice</span> All use the same items and the same drop-downs; they differ in where the category lives and how your choices show. If you don't pick, we build A.</p>
   <div class="screens">
     <div class="shot opt2" style="flex:1 1 860px">
       <div class="optlbl">A · Chips under the line</div>
@@ -1586,8 +1601,35 @@ html.dark .rd .seg.big>span{box-shadow:inset 0 0 0 1px var(--line)}
       </div></div>
       <p class="why">Every filter is one item on one line: the switch, then Vieta, Kategorija and Apakškategorija (plus "Kad" on Pasākumi), each a drop-down with search. The second line repeats everything chosen, each with its ×, and "Notīrīt visu". The category drawer starts folded to its icon rail, so the results get the width; the rail and "Kategorija" are the same filter. Below about 900 px the line wraps.</p>
     </div>
+    <div class="shot opt2" style="flex:1 1 860px">
+      <div class="optlbl">C · From the live page</div>
+      <div class="desk"><div class="pg">
+        <div class="fline"><span class="search fc-q"><svg class="i"><use href="#i-search"/></svg>Meklēt…</span><span class="fchip"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="fc-sw" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas<small>3</small></span><span role="tab" aria-selected="false">Pasākumi<small>4</small></span></div><div class="fc-view" role="group" aria-label="Skats"><span class="on" aria-label="Režģis"><svg class="i"><use href="#i-grid"/></svg></span><span aria-label="Saraksts"><svg class="i"><use href="#i-list"/></svg></span></div></div>
+        <div class="selrow"><span class="xchip cat" style="--c:var(--k-sport)">Sports un fitness<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="xchip" style="--c:var(--k-sport)">Nūjošana<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="fsep"></span><span class="avl">Pastaigas <em>2</em></span><span class="avl">Skriešana <em>1</em></span><span class="avl">Peldēšana <em>1</em></span><span class="clr">Notīrīt visu</span></div>
+        <h4 class="fc-h">2 grupas atrastas</h4>
+        <div class="gcards hz">
+          <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-nordic" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div></div>
+          <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-river" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Rīta nūjošana pie Lielupes</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana</span></div><span class="meta">Jelgava · 12 biedri</span></div></div>
+        </div>
+        <div class="selrow"><span>Vairāk par sešām apakštēmām:</span><span class="xchip cat" style="--c:var(--k-sport)">Sports un fitness<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="xchip" style="--c:var(--k-sport)">Nūjošana<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="fsep"></span><span class="avl more"><svg class="i"><use href="#i-plus"/></svg>Apakštēma<svg class="i"><use href="#i-down"/></svg></span><span class="clr">Notīrīt visu</span></div>
+      </div></div>
+      <p class="why">Today's page, tidied. Line 1: search, place, a quiet Grupas / Pasākumi switch (an underline marks the chosen one, no capitals) and the view toggle. Line 2 appears once a category is picked: the category pill and the chosen sub-categories, each with its ×; a thin divider; then the sub-categories still available, with counts ("Pastaigas 2"). Past about six, they become one "+ Apakštēma" drop-down with a search field (second sketch line). "Notīrīt visu" ends line 2, next to the filters. The heading counts with the right plural: "1 grupa atrasta", "3 grupas atrastas". Keeps what works today: one short line, pills you can remove, chosen on one side and available on the other, count and clear. Fixes: no counts, chips that don't scale, a weak switch, and "Notīrīt visu" far from the filters.</p>
+    </div>
     <div class="shot">
-      <div class="cap">Phone · Pasākumi · the same for A and B</div>
+      <div class="cap">Phone · option C</div>
+      <div class="mob">
+        <div class="hdr" style="padding:10px 14px;gap:6px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico plus" aria-label="Izveidot grupu"><svg class="i"><use href="#i-plus"/></svg></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="pg" style="padding:14px;gap:10px">
+          <div class="fline"><span class="search fc-q"><svg class="i"><use href="#i-search"/></svg>Meklēt…</span><span class="fchip"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="fc-sw" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas<small>3</small></span><span role="tab" aria-selected="false">Pasākumi<small>4</small></span></div><div class="fc-view" role="group" aria-label="Skats"><span class="on" aria-label="Režģis"><svg class="i"><use href="#i-grid"/></svg></span><span aria-label="Saraksts"><svg class="i"><use href="#i-list"/></svg></span></div></div>
+          <div class="selrow"><span class="xchip cat" style="--c:var(--k-sport)">Sports un fitness<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="xchip" style="--c:var(--k-sport)">Nūjošana<svg class="i" aria-label="Noņemt"><use href="#i-x"/></svg></span><span class="clr">Notīrīt visu</span></div>
+          <div class="selrow"><span class="avl">Pastaigas <em>2</em></span><span class="avl">Skriešana <em>1</em></span><span class="avl">Peldēšana <em>1</em></span></div>
+          <h4 class="fc-h">2 grupas atrastas</h4>
+        </div>
+        <div class="navb"><span class="on" aria-current="page"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
+      </div>
+    </div>
+    <div class="shot">
+      <div class="cap">Phone · Pasākumi · the same for A and B (C has its own phone sketch)</div>
       <div class="mob">
         <div class="hdr" style="padding:10px 14px;gap:6px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico plus" aria-label="Izveidot grupu"><svg class="i"><use href="#i-plus"/></svg></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="pg" style="padding:14px;gap:10px">

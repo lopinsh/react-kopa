@@ -1,7 +1,8 @@
 {
-  "version": "7.0",
-  "updated": "2026-10-13T01:30:00+03:00",
+  "version": "7.1",
+  "updated": "2026-10-13T09:00:00+03:00",
   "changes": [
+    "Filters: option C added next to A and B, drawn from the live page: search, place, quiet Grupas / Pasākumi switch and view toggle; chosen and available sub-categories with counts on line 2; right plural in the count.",
     "Round seven: every round-six note applied; \"Still open: you decide\" holds three choices (the filter line, your own area, pop-ups), and the note index lists the round-six notes.",
     "Discovery: Grupas / Pasākumi are plain filter-line items on every screen; sub-categories from a drop-down with search; a search field on the category list that can suggest a new category.",
     "Cards: the photo takes about a fifth of the width, so long names get more room; the \"create\" card is short again: +, \"Izveidot jaunu grupu\", \"šajā kategorijā\".",
@@ -13,14 +14,14 @@
     "Agreed so far: category colours approved again, the header, admin menu names, the group/admin pair."
   ],
   "sections": {
-    "h-open": { "kind": "updated", "version": "7.0" },
+    "h-open": { "kind": "updated", "version": "7.1" },
     "h-notes": { "kind": "updated", "version": "7.0" },
     "h-colors": { "kind": "updated", "version": "7.0" },
     "h-disc": { "kind": "updated", "version": "7.0" },
     "h-context": { "kind": "updated", "version": "7.0" },
     "h-me": { "kind": "new", "version": "7.0" },
     "h-pop": { "kind": "new", "version": "7.0" },
-    "h-scale": { "kind": "updated", "version": "7.0" },
+    "h-scale": { "kind": "updated", "version": "7.1" },
     "h-events": { "kind": "updated", "version": "7.0" },
     "h-group": { "kind": "updated", "version": "7.0" },
     "h-notif": { "kind": "updated", "version": "7.0" },
