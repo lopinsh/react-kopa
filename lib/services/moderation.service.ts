@@ -59,7 +59,7 @@ export const ModerationService = {
     /**
      * Hides a group from everyone but site admins. Restorable; never deletes data.
      */
-    async hideGroup(groupId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
+    async hideGroup(groupId: string, adminId: string, reason: string, reportId?: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
         if (!(await isSiteAdmin(adminId))) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
 
         const parsed = hideGroupSchema.safeParse({ reason });
@@ -82,6 +82,8 @@ export const ModerationService = {
             });
             if (count === 0) return false;
             await this.logAction(adminId, 'GROUP_HIDE', 'GROUP', groupId, parsed.data.reason, tx);
+            // Closing the report that led here happens in the same transaction.
+            if (reportId) await tx.report.update({ where: { id: reportId }, data: { status: 'ACTION_TAKEN' } });
             return true;
         });
         if (!updated) return { success: false, error: 'NOT_FOUND' };

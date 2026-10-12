@@ -50,13 +50,7 @@ export class AdminService {
      * Take action on a report: hide the reported group (restorable) with the reason the admin wrote.
      */
     static async suspendReportedGroup(groupId: string, reportId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        const result = await ModerationService.hideGroup(groupId, adminId, reason);
-        if (!result.success) return result;
-
-        await prisma.report.update({
-            where: { id: reportId },
-            data: { status: 'ACTION_TAKEN' }
-        });
-        return result;
+        // Hiding and closing the report are one transaction inside hideGroup.
+        return ModerationService.hideGroup(groupId, adminId, reason, reportId);
     }
 }

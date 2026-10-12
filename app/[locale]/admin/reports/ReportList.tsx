@@ -164,6 +164,8 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {tMod('hideGroup')}
                                 </button>
                             )}
+                            {/* Groups are hidden first ("Hide group"); only events are deleted from here. */}
+                            {report.event && (
                             <button
                                 onClick={() => handleDeleteContent(report.id)}
                                 disabled={isPending}
@@ -178,6 +180,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     </>
                                 )}
                             </button>
+                            )}
                         </div>
                     </div>
                 </div>

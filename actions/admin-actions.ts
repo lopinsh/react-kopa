@@ -34,13 +34,15 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
 
     try {
         const session = await auth();
-        const result = await AdminService.suspendReportedGroup(groupId, reportId, session!.user.id, reason);
+        if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+        const result = await AdminService.suspendReportedGroup(groupId, reportId, session.user.id, reason);
         if (!result.success) return result;
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
+        revalidatePath('/[locale]/admin/reports', 'page');
         revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
         return { success: true };
     } catch (error) {

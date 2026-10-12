@@ -81,18 +81,21 @@ export const ReportService = {
         try {
             const report = await prisma.report.findUnique({
                 where: { id: reportId },
-                include: { group: true, event: true }
+                select: { targetGroupId: true, targetEventId: true }
             });
 
             if (!report) {
                 throw new ActionError('NOT_FOUND');
             }
 
+            // Groups are never deleted from a report: hide first (AdminService.suspendReportedGroup), delete from the hidden list.
+            if (report.targetGroupId) {
+                throw new ActionError('VALIDATION_FAILED');
+            }
+
             // We use a transaction to ensure both the entity deletion and report resolution succeed
             await prisma.$transaction(async (tx) => {
-                if (report.targetGroupId) {
-                    await tx.group.delete({ where: { id: report.targetGroupId } });
-                } else if (report.targetEventId) {
+                if (report.targetEventId) {
                     await tx.event.delete({ where: { id: report.targetEventId } });
                 }
 
