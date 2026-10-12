@@ -115,7 +115,7 @@ export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
                 id="email"
                 type="email"
                 label={t('email')}
-                placeholder="you@example.com"
+                placeholder={t('emailPlaceholder')}
                 autoComplete="email"
                 error={fieldError(errors.email?.message)}
                 {...register('email')}

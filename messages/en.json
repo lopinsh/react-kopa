@@ -28,7 +28,8 @@
       "submit": "Sign up",
       "submitting": "Creating account…",
       "haveAccount": "Already have an account? Sign in",
-      "autoSignInFailed": "Your account was created, but signing in failed. Please sign in."
+      "autoSignInFailed": "Your account was created, but signing in failed. Please sign in.",
+      "emailPlaceholder": "you@example.com"
     },
     "validation": {
       "NAME_TOO_SHORT": "Name must be at least 2 characters.",
@@ -1342,5 +1343,18 @@
     "sentTitle": "Sent",
     "sentBody": "Replies arrive in Messages.",
     "openChat": "Open chat"
+  },
+  "richText": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "heading": "Heading",
+    "bulletList": "Bullet list",
+    "orderedList": "Numbered list",
+    "addLink": "Add link",
+    "linkPrompt": "Link address",
+    "undo": "Undo",
+    "redo": "Redo",
+    "placeholder": "Write something..."
   }
 }

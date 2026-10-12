@@ -9,6 +9,7 @@ import {
     Bold, Italic, List, ListOrdered, Link as LinkIcon,
     Type, Underline as UnderlineIcon, Undo, Redo
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 
 type Props = {
@@ -18,11 +19,12 @@ type Props = {
 };
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
+    const t = useTranslations('richText');
     if (!editor) return null;
 
     const setLink = () => {
         const previousUrl = editor.getAttributes('link').href;
-        const url = window.prompt('URL', previousUrl);
+        const url = window.prompt(t('linkPrompt'), previousUrl);
 
         if (url === null) return;
         if (url === '') {
@@ -42,7 +44,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('bold') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Bold"
+                title={t('bold')}
             >
                 <Bold className="h-4 w-4" />
             </button>
@@ -53,7 +55,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('italic') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Italic"
+                title={t('italic')}
             >
                 <Italic className="h-4 w-4" />
             </button>
@@ -64,7 +66,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('underline') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Underline"
+                title={t('underline')}
             >
                 <UnderlineIcon className="h-4 w-4" />
             </button>
@@ -76,7 +78,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('heading', { level: 3 }) ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Heading"
+                title={t('heading')}
             >
                 <Type className="h-4 w-4" />
             </button>
@@ -87,7 +89,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('bulletList') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Bullet List"
+                title={t('bulletList')}
             >
                 <List className="h-4 w-4" />
             </button>
@@ -98,7 +100,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('orderedList') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Ordered List"
+                title={t('orderedList')}
             >
                 <ListOrdered className="h-4 w-4" />
             </button>
@@ -110,7 +112,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
                     editor.isActive('link') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
                 )}
-                title="Add Link"
+                title={t('addLink')}
             >
                 <LinkIcon className="h-4 w-4" />
             </button>
@@ -119,7 +121,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 type="button"
                 onClick={() => editor.chain().focus().undo().run()}
                 className="rounded-md p-1.5 text-foreground-muted transition-colors hover:bg-surface"
-                title="Undo"
+                title={t('undo')}
             >
                 <Undo className="h-4 w-4" />
             </button>
@@ -127,7 +129,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 type="button"
                 onClick={() => editor.chain().focus().redo().run()}
                 className="rounded-md p-1.5 text-foreground-muted transition-colors hover:bg-surface"
-                title="Redo"
+                title={t('redo')}
             >
                 <Redo className="h-4 w-4" />
             </button>
@@ -136,6 +138,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 };
 
 export default function RichTextEditor({ value, onChange, placeholder }: Props) {
+    const t = useTranslations('richText');
     const editor = useEditor({
         immediatelyRender: false,
         extensions: [
@@ -152,7 +155,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
                 },
             }),
             Placeholder.configure({
-                placeholder: placeholder || 'Write something...',
+                placeholder: placeholder || t('placeholder'),
             }),
         ],
         content: value,

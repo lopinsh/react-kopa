@@ -28,7 +28,8 @@
       "submit": "Reģistrēties",
       "submitting": "Izveido kontu…",
       "haveAccount": "Jau ir konts? Ienāc",
-      "autoSignInFailed": "Konts ir izveidots, bet ienākt neizdevās. Mēģini ienākt vēlreiz."
+      "autoSignInFailed": "Konts ir izveidots, bet ienākt neizdevās. Mēģini ienākt vēlreiz.",
+      "emailPlaceholder": "tu@piemers.lv"
     },
     "validation": {
       "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmes garam.",
@@ -1342,5 +1343,18 @@
     "sentTitle": "Nosūtīts",
     "sentBody": "Atbildes būs sadaļā Ziņas.",
     "openChat": "Atvērt sarunu"
+  },
+  "richText": {
+    "bold": "Treknraksts",
+    "italic": "Slīpraksts",
+    "underline": "Pasvītrojums",
+    "heading": "Virsraksts",
+    "bulletList": "Saraksts ar aizzīmēm",
+    "orderedList": "Numurēts saraksts",
+    "addLink": "Pievienot saiti",
+    "linkPrompt": "Saites adrese",
+    "undo": "Atsaukt",
+    "redo": "Atkārtot",
+    "placeholder": "Uzraksti kaut ko..."
   }
 }
