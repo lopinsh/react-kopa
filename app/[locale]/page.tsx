@@ -160,7 +160,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
 
                     <div className="mb-4 mt-6 flex items-center gap-4 flex-wrap">
                         <h2 className="text-lg sm:text-xl font-bold text-foreground">
-                            {currentTab === 'groups' ? totalCount : discoverableEvents.length} {currentTab === 'groups' ? t('groupsFound') : t('eventsFound')}
+                            {currentTab === 'groups' ? t('groupsFoundCount', { count: totalCount }) : t('eventsFoundCount', { count: discoverableEvents.length })}
                         </h2>
                         {(q || (city && city !== 'all') || category || activeTags.length > 0) && (
                             <Link
