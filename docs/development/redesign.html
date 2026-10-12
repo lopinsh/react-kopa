@@ -557,6 +557,146 @@ html.dark .rd{
 .rd .hdr .ico.open-m{background:var(--tint)}
 .rd .pop .opt svg.i{color:var(--muted)}
 .rd .pop .opt small{margin-left:auto;font-size:12px;color:var(--muted)}
+/* v4.0: proposed earth-tone category colours (light: white text AA on them; dark: lighter tone, dark text AA) */
+.rd{--k-trav:#4F7330;--k-dance:#A9452C;--k-hobby:#A55A12;--k-comm:#2F6A45;--k-pol:#57493D;--k-pets:#7A5E40;--k-art:#7A4790;--k-music:#57479A;--k-rel:#586474;--k-social:#A53A50;--k-games:#8C3F72;--k-sport:#3B55A0;--k-family:#2B6489;--k-well:#2E6B6F;--k-sci:#86650E}
+html.dark .rd{--k-trav:#7D9766;--k-dance:#C37D6B;--k-hobby:#BC8550;--k-comm:#729A81;--k-pol:#978E87;--k-pets:#A28E79;--k-art:#A786B6;--k-music:#9389BE;--k-rel:#8A939E;--k-social:#C47D8C;--k-games:#B380A2;--k-sport:#7E8FC0;--k-family:#6F96AF;--k-well:#6D979A;--k-sci:#A58D4D}
+html.dark .rd .gpic{color:#161814}
+/* real photos (Wikimedia Commons, free licences, credited in "Cards in context") */
+.rd .ph-dance{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/Latvia%2C_Riga%2C_Dzintarins_Folk_Dance_Ensemble_150502-1.jpg/500px-Latvia%2C_Riga%2C_Dzintarins_Folk_Dance_Ensemble_150502-1.jpg")}
+.rd .ph-bog{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/%C4%B6emeru_purva_laipa.jpg/500px-%C4%B6emeru_purva_laipa.jpg")}
+.rd .ph-nordic{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/8/82/Nordic_Walking_Group.jpg/500px-Nordic_Walking_Group.jpg")}
+.rd .ph-band{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Music_practice_room_1%2C_Air_raid_shelter%2C_Stuttgart%2C_2013_%28photo_by_Gerold_Schneider%29.jpg/500px-Music_practice_room_1%2C_Air_raid_shelter%2C_Stuttgart%2C_2013_%28photo_by_Gerold_Schneider%29.jpg")}
+.rd .ph-games{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5b/People_playing_board_game_during_session_%27Play_Wikeys%2C_the_board_game_to_discover_Wikipedia%27_at_Wikimania_2026%2C_day_3.jpg/500px-People_playing_board_game_during_session_%27Play_Wikeys%2C_the_board_game_to_discover_Wikipedia%27_at_Wikimania_2026%2C_day_3.jpg")}
+.rd .ph-river{--img:url("https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Lielupe_promenade_-_Igors_Jefimovs_-_Panoramio.jpg/500px-Lielupe_promenade_-_Igors_Jefimovs_-_Panoramio.jpg")}
+.rd .gc .pic.ph,.rd .gpic.ph,.rd .sdp .pic.ph,.rd .sheet .pic.ph,.rd .sp-pic.ph{background-image:var(--img);background-size:cover;background-position:center}
+.rd .gpic{overflow:hidden}
+.rd .credits{font-size:12px;color:var(--muted);margin:0;max-width:none}
+/* "you are here" in navigation */
+.rd .navb .on svg.i{background:color-mix(in srgb,var(--brand) 16%,var(--surface));border-radius:999px;padding:4px 16px;box-sizing:content-box}
+.rd .navb .on{color:var(--fg)}
+.rd .hnav{display:flex;gap:2px;font-size:14px;flex:none}
+.rd .hnav span{padding:6px 12px;border-radius:999px;color:var(--muted);white-space:nowrap}
+.rd .hnav .on{background:color-mix(in srgb,var(--brand) 14%,var(--surface));color:var(--fg);font-weight:600}
+.rd .btn.q{background:transparent;color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
+/* place + counts inside the categories drawer */
+.rd .placebtn{display:flex;align-items:center;gap:6px;height:36px;padding:0 10px;border-radius:999px;background:var(--tint);font:600 14px var(--body);margin:0 0 12px;min-width:0;white-space:nowrap}
+.rd .placebtn span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.rd .catlist .ci .n{margin-left:auto;font-size:12px;color:var(--muted);padding-right:4px}
+.rd .catlist .ci.zero{opacity:.45}
+.rd .catlist .subl{display:grid;margin:1px 0 6px 40px;gap:1px;font-size:13px}
+.rd .catlist .subl span{display:flex;justify-content:space-between;gap:8px;padding:3px 8px;border-radius:10px;color:var(--muted);white-space:nowrap}
+.rd .catlist .subl .on{background:var(--tint);color:var(--fg);font-weight:600}
+.rd .disc.shut .placebtn span,.rd .disc.shut .placebtn svg+svg,.rd .disc:has(#rd-fold:checked) .placebtn span,.rd .disc:has(#rd-fold:checked) .placebtn svg+svg,.rd .disc.shut .catlist .n,.rd .disc:has(#rd-fold:checked) .catlist .n,.rd .disc.shut .subl,.rd .disc:has(#rd-fold:checked) .subl{display:none}
+.rd .disc.shut .placebtn,.rd .disc:has(#rd-fold:checked) .placebtn{justify-content:center;padding:0}
+/* the Grupas / Pasākumi switch is the page title */
+.rd .ttl{display:flex;align-items:flex-end;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.rd .tsw{display:flex;gap:20px;align-items:baseline}
+.rd .tsw span{font:600 21px var(--display);color:var(--muted);padding-bottom:8px;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.rd .tsw .on{color:var(--fg);border-color:var(--brand)}
+.rd .tsw small{font:500 13px var(--body);color:var(--muted);margin-left:5px}
+.rd .ttl .crumb{font-size:13px;color:var(--muted);padding-bottom:10px}
+.rd .vtog{display:inline-flex;gap:2px;padding-bottom:6px;margin-left:auto}
+.rd .vtog span{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:var(--muted)}
+.rd .vtog .on{background:var(--tint);color:var(--fg)}
+.rd .vtog .off{opacity:.45}
+.rd .mob .tsw span{font-size:17px}
+.rd .mob .tsw{gap:16px}
+/* the quiet "create a group here" card at the end of a category */
+.rd .gc.add{background:transparent;border:1.5px dashed var(--line);display:grid;place-items:center;text-align:center;padding:16px;gap:6px;align-content:center;min-height:96px}
+.rd .gc.add p{margin:0;font-size:14px;color:var(--muted)}
+.rd .gcards.vt{grid-template-columns:minmax(0,1fr)}
+.rd .gcards.vt .gc .pic{height:120px}
+.rd .gcards.hz .gc.add{grid-template-columns:minmax(0,1fr)}
+/* an opened card sits over the list */
+.rd .ovl{position:relative;overflow:hidden}
+.rd .ovl .sdp{position:absolute;top:0;right:0;bottom:0;width:min(360px,92%);border-left:0;box-shadow:-14px 0 34px rgba(0,0,0,.18);overflow:hidden}
+.rd .ovl .scrim{background:color-mix(in srgb,var(--fg) 22%,transparent)}
+/* events */
+.rd .dayh{font:600 13px var(--body);color:var(--muted);padding:14px 0 2px;border-top:1px solid var(--line)}
+.rd .evlist>.dayh:first-child{border-top:0;padding-top:10px}
+.rd .ev .t .sd{display:block;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rd .ev .t .ct{color:var(--fg)}
+.rd .evx-b .full{max-width:62ch}
+.rd .morebtn{justify-self:center;margin:6px 0 14px}
+/* narrowing with counts */
+.rd .fun{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.rd .fun{grid-template-columns:minmax(0,1fr)}}
+.rd .frow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;font-size:14px}
+.rd .frow.on{background:var(--tint);font-weight:600}
+.rd .frow.zero{opacity:.45}
+.rd .frow em{font-style:normal;color:var(--muted);font-size:12px;font-weight:500}
+.rd .frow .tag{font-size:14px}
+.rd .research{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:900px){.rd .research{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.rd .research{grid-template-columns:minmax(0,1fr)}}
+.rd .research .box b{font:600 16px var(--display)}
+.rd .research .box p{margin:0;font-size:14px;color:var(--muted)}
+.rd .research .box .take{color:var(--fg)}
+/* group frame with the page sidebar */
+.rd .gframe{display:grid;grid-template-columns:190px minmax(0,1fr) 230px;gap:22px;padding:20px 22px}
+.rd .gframe.two{grid-template-columns:190px minmax(0,1fr)}
+@media (max-width:900px){.rd .gframe{grid-template-columns:170px minmax(0,1fr)}.rd .gframe>.side{grid-column:2}}
+@media (max-width:600px){.rd .gframe,.rd .gframe.two{grid-template-columns:minmax(0,1fr)}.rd .gframe>.side{grid-column:auto}}
+.rd .gnav{display:grid;gap:1px;font-size:14px;align-content:start;min-width:0}
+.rd .gnav>span{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px;white-space:nowrap}
+.rd .gnav>span.on{background:var(--tint);font-weight:600}
+.rd .gnav svg.i{width:16px;height:16px;color:var(--muted)}
+.rd .gnav .subs{display:grid;margin:2px 0 6px 18px;padding-left:8px;border-left:1px solid var(--line);font-size:13px}
+.rd .gnav .subs span{padding:5px 8px;color:var(--muted);border-radius:10px}
+.rd .gnav .subs .on{color:var(--fg);font-weight:600;background:var(--tint)}
+.rd .gnav em{margin-left:auto;font:normal 600 11px var(--body);background:var(--tint);border-radius:999px;padding:1px 8px;color:var(--muted)}
+.rd .gnav .lock{margin-top:12px;padding:10px 10px 0;border-top:1px solid var(--line);font-size:12px;color:var(--muted);line-height:1.45;white-space:normal;display:block}
+.rd .pt{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rd .pt h4{font-size:22px}
+.rd .gmain{display:grid;gap:14px;align-content:start;min-width:0}
+/* compact notifications (as built in Session 2) */
+.rd .nt-c .nt-h{padding:10px 14px}
+.rd .nt-c .nt-h b{font-size:15px}
+.rd .nt-c .nt-h a{font-size:12px}
+.rd .nt-c .nt-tabs{padding:8px 14px}
+.rd .nt-c .nt-sec{padding:8px 14px 2px;font-size:11px}
+.rd .nt-c .nt-i{grid-template-columns:16px minmax(0,1fr) auto;gap:8px;padding:8px 14px}
+.rd .nt-c .nt-ic{width:16px;height:16px;margin-top:1px}
+.rd .nt-c .nt-ic svg.i{width:14px;height:14px}
+.rd .nt-c .nt-b{gap:1px}
+.rd .nt-c .nt-b .w{font-size:13px;line-height:1.35}
+.rd .nt-c .nt-b .q,.rd .nt-c .nt-b .m,.rd .nt-c .nt-b .m .tag,.rd .nt-c .nt-b .m .sub,.rd .nt-c .nt-tm{font-size:11px}
+.rd .nt-c .nt-tm{gap:4px}
+.rd .nt-c .nt-dot{width:7px;height:7px}
+/* conversations: shared groups without "kopā:" */
+.rd .cv-i .q svg.i,.rd .cv-head .q svg.i{width:13px;height:13px;vertical-align:-2px;margin-right:4px}
+.rd .cv-head .q{display:flex;align-items:center;gap:4px 8px;flex-wrap:wrap}
+.rd .cv-head .q .tag{font-size:12px;gap:5px}
+.rd .cv-head .q .tag.cat::before{width:7px;height:7px}
+/* category colours table and Admin → Dizains mock */
+.rd .ktab{display:grid;background:var(--surface);border-radius:var(--r-soft);padding:2px 16px}
+.rd .ktab>div{display:grid;grid-template-columns:28px minmax(0,1.5fr) minmax(0,1fr) 112px 112px;gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+.rd .ktab>div:first-child{border-top:0}
+.rd .ktab .kh{font:600 12px var(--body);color:var(--muted)}
+.rd .ktab small{color:var(--muted);font-size:12px}
+@media (max-width:640px){.rd .ktab>div{grid-template-columns:28px minmax(0,1fr) 92px 92px}.rd .ktab .hx{display:none}}
+.rd .ki{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,var(--surface));color:var(--c)}
+.rd .ki svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.rd .kch{display:inline-flex;align-items:center;justify-content:center;height:28px;padding:0 10px;border-radius:999px;font:600 12px var(--body);white-space:nowrap}
+.rd .kch.l{color:#fff}
+.rd .kch.d{color:#161814}
+.rd .kprev{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:640px){.rd .kprev{grid-template-columns:minmax(0,1fr)}}
+.rd .kp{border-radius:var(--r-soft);padding:14px 16px;display:flex;flex-wrap:wrap;gap:8px 16px;border:1px solid var(--line)}
+.rd .kp.l{background:#fdfdfb;color:#1f221c}
+.rd .kp.d{background:#1e211c;color:#eceee7}
+.rd .kp .kd{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500}
+.rd .kp .kd::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--x)}
+.rd .kp .lbl{flex-basis:100%;font-size:12px;font-weight:600;opacity:.7}
+.rd .krow{display:grid;grid-template-columns:28px minmax(0,1fr) auto auto auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:14px;color:var(--fg)}
+.rd .krow:first-child{border-top:0}
+.rd .kbox{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.rd .kbox i{width:22px;height:22px;border-radius:6px;background:var(--x);box-shadow:inset 0 0 0 1px var(--line)}
+.rd .aa{font:600 11px var(--body);color:var(--brand);background:var(--tint);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.rd .adm-pg .row{gap:8px}
+.rd .adm-rows .krow{color:var(--fg)}
+.rd .catlist .ci .nm{min-width:0;flex:0 1 auto}
+.rd .pop .find.in{background:transparent;border-radius:0;margin:-4px -10px 6px;height:44px;padding-inline:14px;box-shadow:inset 0 -1px var(--line)}
 </style>
 <div class="rd">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -598,12 +738,17 @@ html.dark .rd{
   <symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21c1-4 4-6 7-6s6 2 7 6M19 8v6M16 11h6"/></symbol>
 </svg>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+</svg>
+
 <div class="wrap">
 <header class="intro">
   <span class="status">Discussion only · nothing is being built from this page</span>
   <!--rd-meta-->
   <h1>Ejam kopā: the new look</h1>
-  <p>Round three. Your notes from the last pass are applied: natural colours (three to compare, switch below), one text font with its own small italic, a dot only on the category, quieter subcategories, category icons in a drawer that folds to an icon rail, the group title fully inside the header, and the header for a signed-in person.</p>
+  <p>Round four. Every part is now shown inside a whole screen, with real photos and the proposed earth-tone category colours. Each part ends with one recommendation; the few real questions are collected at the end.</p>
   <p class="sub"><span class="status liked">Liked</span> = approved in review; untagged = not decided yet.</p>
   <div class="palbar" role="radiogroup" aria-label="Colour to preview"><span>Preview the page in:</span>
 <label><input type="radio" name="rd-pal" id="pal-moss" checked><i style="--p:#4B5E3B"></i>Sūna</label>
@@ -612,7 +757,7 @@ html.dark .rd{
 </header>
 
 <section aria-labelledby="h-id">
-  <h2 id="h-id">The identity, from your notes</h2>
+  <h2 id="h-id">The identity</h2>
   <p class="lead">Literata for headings and the logo only. Commissioner for everything else, including the small italic notes. Soft corners, thin dividing lines, quiet labels. Colour from nature, on a neutral background with no red in it.</p>
   <div class="idgrid">
     <div class="box"><span class="lbl">Wordmark</span>
@@ -620,17 +765,17 @@ html.dark .rd{
       <div class="row"><span class="wm sm">Ejam <em>kopā</em></span><span class="mk" aria-label="Small icon"></span></div>
       <p class="why">Literata, with "kopā" in italic, and two overlapping circles for two people. The circles alone are the small icon.</p>
     </div>
-    <div class="box"><span class="lbl">Colour, three natural options</span>
+    <div class="box"><span class="lbl">Site colour, three natural options</span>
       <div class="swl">
-        <div><span class="sw" style="--s:#4B5E3B"></span><span><b>Sūna (moss)</b><small>#4B5E3B · muted olive, far from the bright green categories</small></span></div>
-        <div><span class="sw" style="--s:#34586A"></span><span><b>Jūra (Baltic sea)</b><small>#34586A · grey-blue, darker than Sports and Religion</small></span></div>
-        <div><span class="sw" style="--s:#5E4A38"></span><span><b>Rudzu maize (rye bread)</b><small>#5E4A38 · warm brown, no category is brown</small></span></div>
+        <div><span class="sw" style="--s:#4B5E3B"></span><span><b>Sūna (moss)</b><small>#4B5E3B · muted olive</small></span></div>
+        <div><span class="sw" style="--s:#34586A"></span><span><b>Jūra (Baltic sea)</b><small>#34586A · grey-blue</small></span></div>
+        <div><span class="sw" style="--s:#5E4A38"></span><span><b>Rudzu maize (rye bread)</b><small>#5E4A38 · warm brown</small></span></div>
       </div>
-      <p class="why">Each comes with a neutral background tuned to it (no pink). Use the switch at the top to see the whole page in each.</p>
+      <p class="why">Each comes with a neutral background tuned to it. Use the switch at the top to see the whole page in each.</p>
     </div>
     <div class="box"><span class="lbl">Shapes and labels</span>
       <div class="row"><span class="btn p">Pieteikties</span><span class="btn s">Vairāk</span></div>
-      <div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="tag">Jelgava</span><span class="tag">12 biedri</span></div>
+      <div class="tags"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="tag">Jelgava</span><span class="tag">12 biedri</span></div>
       <p class="why">Soft corners, pill buttons, no borders. The dot belongs to the category only; city and size are plain quiet text.</p>
     </div>
     <div class="box wide"><span class="lbl">Type · Literata headings, Commissioner text</span>
@@ -640,255 +785,188 @@ html.dark .rd{
       <p class="why">Two fonts only. The human notes (next meeting, "what we're looking for") are the text font, smaller and in italic, in the site colour.</p>
     </div>
     <div class="box"><span class="lbl">On a card</span>
-      <div class="gc" style="--c:#10B981;background:var(--bg)"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sest., 17. okt.</div></div>
+      <div class="gc" style="--c:var(--k-trav);background:var(--bg)"><div class="pic ph ph-bog" role="img" aria-label="Grupas attēls"></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sest., 17. okt.</div></div>
     </div>
   </div>
-  <ul class="from">
-    <li><b>Fonts</b><span>Literata + Commissioner; notes in the text font, small and italic ("fonts are too diverse")</span></li>
-    <li><b>Corners, softness</b><span>Handwriting direction: "softness and humanness"</span></li>
-    <li><b>Dividing lines</b><span>Booklet direction: horizontal lines cleanly separating content</span></li>
-    <li><b>Labels</b><span>Dot on the category only; subcategories after it, smaller and lighter, as many as the group has</span></li>
-    <li><b>Colour</b><span>Plum and the pinkish background dropped; natural colours instead</span></li>
-  </ul>
+</section>
+
+<section aria-labelledby="h-colors">
+  <h2 id="h-colors">Category colours: fifteen earth tones</h2>
+  <p class="lead">Today's category colours are bright web colours (pink, lime, violet), louder than the natural site colour around them. Proposal: fifteen separate tones from Latvian nature, each one a darker, calmer cousin of today's hue, so a category keeps roughly the colour people already know. Every page on this review now uses them.</p>
+  <div class="ktab" role="table" aria-label="Kategoriju krāsas">
+    <div role="row"><span></span><span class="kh">Category · name of the tone</span><span class="kh hx">Today</span><span class="kh">Light theme</span><span class="kh">Dark theme</span></div>
+    <div role="row" style="--c:var(--k-trav)"><span class="ki"><svg><use href="#i-mount"/></svg></span><span>Ceļošana un daba <small>· Paparde</small></span><small class="hx">#10B981</small><span class="kch l" style="background:#4F7330">#4F7330 · 5.5</span><span class="kch d" style="background:#7D9766">#7D9766 · 5.5</span></div>
+    <div role="row" style="--c:var(--k-dance)"><span class="ki"><svg><use href="#i-dance"/></svg></span><span>Dejas <small>· Pīlādzis</small></span><small class="hx">#F43F5E</small><span class="kch l" style="background:#A9452C">#A9452C · 5.9</span><span class="kch d" style="background:#C37D6B">#C37D6B · 5.5</span></div>
+    <div role="row" style="--c:var(--k-hobby)"><span class="ki"><svg><use href="#i-hobby"/></svg></span><span>Hobiji un aizraušanās <small>· Smiltsērkšķis</small></span><small class="hx">#F97316</small><span class="kch l" style="background:#A55A12">#A55A12 · 5.2</span><span class="kch d" style="background:#BC8550">#BC8550 · 5.6</span></div>
+    <div role="row" style="--c:var(--k-comm)"><span class="ki"><svg><use href="#i-comm"/></svg></span><span>Kopiena un vide <small>· Egle</small></span><small class="hx">#22C55E</small><span class="kch l" style="background:#2F6A45">#2F6A45 · 6.4</span><span class="kch d" style="background:#729A81">#729A81 · 5.7</span></div>
+    <div role="row" style="--c:var(--k-pol)"><span class="ki"><svg><use href="#i-pol"/></svg></span><span>Kustības un politika <small>· Kūdra</small></span><small class="hx">#EF4444</small><span class="kch l" style="background:#57493D">#57493D · 8.7</span><span class="kch d" style="background:#978E87">#978E87 · 5.6</span></div>
+    <div role="row" style="--c:var(--k-pets)"><span class="ki"><svg><use href="#i-pets"/></svg></span><span>Mājdzīvnieki <small>· Lazda</small></span><small class="hx">#84CC16</small><span class="kch l" style="background:#7A5E40">#7A5E40 · 6.0</span><span class="kch d" style="background:#A28E79">#A28E79 · 5.7</span></div>
+    <div role="row" style="--c:var(--k-art)"><span class="ki"><svg><use href="#i-art"/></svg></span><span>Māksla un kultūra <small>· Virsis</small></span><small class="hx">#D946EF</small><span class="kch l" style="background:#7A4790">#7A4790 · 6.7</span><span class="kch d" style="background:#A786B6">#A786B6 · 5.7</span></div>
+    <div role="row" style="--c:var(--k-music)"><span class="ki"><svg><use href="#i-music"/></svg></span><span>Mūzika <small>· Mellene</small></span><small class="hx">#6366F1</small><span class="kch l" style="background:#57479A">#57479A · 7.6</span><span class="kch d" style="background:#9389BE">#9389BE · 5.6</span></div>
+    <div role="row" style="--c:var(--k-rel)"><span class="ki"><svg><use href="#i-rel"/></svg></span><span>Reliģija un garīgums <small>· Akmens</small></span><small class="hx">#64748B</small><span class="kch l" style="background:#586474">#586474 · 6.0</span><span class="kch d" style="background:#8A939E">#8A939E · 5.7</span></div>
+    <div role="row" style="--c:var(--k-social)"><span class="ki"><svg><use href="#i-social"/></svg></span><span>Sociālās aktivitātes <small>· Brūklene</small></span><small class="hx">#EC4899</small><span class="kch l" style="background:#A53A50">#A53A50 · 6.3</span><span class="kch d" style="background:#C47D8C">#C47D8C · 5.7</span></div>
+    <div role="row" style="--c:var(--k-games)"><span class="ki"><svg><use href="#i-games"/></svg></span><span>Spēles <small>· Plūme</small></span><small class="hx">#8B5CF6</small><span class="kch l" style="background:#8C3F72">#8C3F72 · 6.8</span><span class="kch d" style="background:#B380A2">#B380A2 · 5.6</span></div>
+    <div role="row" style="--c:var(--k-sport)"><span class="ki"><svg><use href="#i-sport"/></svg></span><span>Sports un fitness <small>· Rudzupuķe</small></span><small class="hx">#3B82F6</small><span class="kch l" style="background:#3B55A0">#3B55A0 · 7.0</span><span class="kch d" style="background:#7E8FC0">#7E8FC0 · 5.6</span></div>
+    <div role="row" style="--c:var(--k-family)"><span class="ki"><svg><use href="#i-family"/></svg></span><span>Vecāki un ģimene <small>· Ezers</small></span><small class="hx">#0EA5E9</small><span class="kch l" style="background:#2B6489">#2B6489 · 6.4</span><span class="kch d" style="background:#6F96AF">#6F96AF · 5.7</span></div>
+    <div role="row" style="--c:var(--k-well)"><span class="ki"><svg><use href="#i-well"/></svg></span><span>Veselība un labsajūta <small>· Kadiķis</small></span><small class="hx">#14B8A6</small><span class="kch l" style="background:#2E6B6F">#2E6B6F · 6.1</span><span class="kch d" style="background:#6D979A">#6D979A · 5.6</span></div>
+    <div role="row" style="--c:var(--k-sci)"><span class="ki"><svg><use href="#i-edu"/></svg></span><span>Zinātne un izglītība <small>· Medus</small></span><small class="hx">#F59E0B</small><span class="kch l" style="background:#86650E">#86650E · 5.4</span><span class="kch d" style="background:#A58D4D">#A58D4D · 5.6</span></div>
+  </div>
+  <p class="why"><b>Contrast, checked.</b> The number is the WCAG contrast ratio of the text in the chip: white text on the light-theme tone, near-black text on the dark-theme tone. All fifteen pass AA for normal text (4.5:1 or more) in both themes, and every tone is at least 5:1 against the card surface of its theme, so dots and icons stay visible too. The dark-theme tone is the same colour mixed with white, which is why each pair reads as one category.</p>
+  <div class="kprev">
+    <div class="kp l"><span class="lbl">Light page</span><span class="kd" style="--x:#4F7330">Ceļošana un daba</span><span class="kd" style="--x:#A9452C">Dejas</span><span class="kd" style="--x:#A55A12">Hobiji</span><span class="kd" style="--x:#2F6A45">Kopiena un vide</span><span class="kd" style="--x:#57493D">Kustības</span><span class="kd" style="--x:#7A5E40">Mājdzīvnieki</span><span class="kd" style="--x:#7A4790">Māksla</span><span class="kd" style="--x:#57479A">Mūzika</span><span class="kd" style="--x:#586474">Reliģija</span><span class="kd" style="--x:#A53A50">Sociālās</span><span class="kd" style="--x:#8C3F72">Spēles</span><span class="kd" style="--x:#3B55A0">Sports</span><span class="kd" style="--x:#2B6489">Ģimene</span><span class="kd" style="--x:#2E6B6F">Veselība</span><span class="kd" style="--x:#86650E">Zinātne</span></div>
+    <div class="kp d"><span class="lbl">Dark page</span><span class="kd" style="--x:#7D9766">Ceļošana un daba</span><span class="kd" style="--x:#C37D6B">Dejas</span><span class="kd" style="--x:#BC8550">Hobiji</span><span class="kd" style="--x:#729A81">Kopiena un vide</span><span class="kd" style="--x:#978E87">Kustības</span><span class="kd" style="--x:#A28E79">Mājdzīvnieki</span><span class="kd" style="--x:#A786B6">Māksla</span><span class="kd" style="--x:#9389BE">Mūzika</span><span class="kd" style="--x:#8A939E">Reliģija</span><span class="kd" style="--x:#C47D8C">Sociālās</span><span class="kd" style="--x:#B380A2">Spēles</span><span class="kd" style="--x:#7E8FC0">Sports</span><span class="kd" style="--x:#6F96AF">Ģimene</span><span class="kd" style="--x:#6D979A">Veselība</span><span class="kd" style="--x:#A58D4D">Zinātne</span></div>
+  </div>
+
+  <h3>How it would appear in Admin → Dizains</h3>
+  <p class="lead">Proposal only, nothing built. The theme page gets a second part under the site colour: one row per category with its icon, the two tones (light and dark) as colour fields, and an AA check that is worked out as you pick. Saving works like the site colour today: preview for yourself first, then publish for everyone.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 640px"><div class="cap">Desktop · Admin → Dizains</div>
+      <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg><svg class="i"><use href="#i-shield"/></svg></div>
+        <div class="adm-body">
+          <div class="adm-menu"><b>Administrēšana</b><span>Moderācija</span><span>Sūdzības</span><span>Taksonomija <em>2</em></span><span>Tulkojumi</span><span>Atsauksmes</span><span class="on">Dizains</span><span>Rokasgrāmata</span></div>
+          <div class="adm-pg"><h4>Dizains</h4>
+            <span class="sub">Vietnes krāsa</span>
+            <div class="row"><span class="cityline"><i class="sw" style="--s:#4B5E3B;width:18px;height:18px;border-radius:50%;border:0"></i><b>Sūna</b></span><span class="cityline" style="background:transparent;box-shadow:inset 0 0 0 1px var(--line)">Jūra</span><span class="cityline" style="background:transparent;box-shadow:inset 0 0 0 1px var(--line)">Rudzu maize</span></div>
+            <span class="sub" style="margin-top:8px">Kategoriju krāsas</span>
+            <div class="adm-rows" style="padding-block:2px">
+              <div class="krow" style="--c:var(--k-trav)"><span class="ki"><svg><use href="#i-mount"/></svg></span><span>Ceļošana un daba</span><span class="kbox" style="--x:#4F7330"><i></i>Gaišā</span><span class="kbox" style="--x:#7D9766"><i></i>Tumšā</span><span class="aa">AA ✓</span></div>
+              <div class="krow" style="--c:var(--k-dance)"><span class="ki"><svg><use href="#i-dance"/></svg></span><span>Dejas</span><span class="kbox" style="--x:#A9452C"><i></i>Gaišā</span><span class="kbox" style="--x:#C37D6B"><i></i>Tumšā</span><span class="aa">AA ✓</span></div>
+              <div class="krow" style="--c:var(--k-hobby)"><span class="ki"><svg><use href="#i-hobby"/></svg></span><span>Hobiji un aizraušanās</span><span class="kbox" style="--x:#A55A12"><i></i>Gaišā</span><span class="kbox" style="--x:#BC8550"><i></i>Tumšā</span><span class="aa">AA ✓</span></div>
+              <div class="krow" style="color:var(--muted)"><span></span><span>… vēl 12 kategorijas</span><span></span><span></span><span></span></div>
+            </div>
+            <div class="row"><span class="btn s sm">Priekšskatīt man</span><span class="btn p sm">Publicēt visiem</span></div>
+          </div>
+        </div></div>
+    </div>
+    <div class="shot" style="flex:1 1 280px;max-width:400px">
+      <p class="why"><b>Two tones, not one.</b> One colour cannot carry white text on a light page and dark text on a dark page at the same time, so each category stores both. The page shows "AA ✓" or a short warning ("Teksts uz šīs krāsas būs grūti lasāms") next to the row.</p>
+      <p class="why"><b>Where the colour shows.</b> Unchanged from what was agreed: dots, icons, soft tints, the group banner and the picture fallback. Never as a site button.</p>
+      <p class="why"><b>One clash to know about.</b> Paparde (travel and nature) and the Sūna site colour are both green. If Sūna is chosen, Paparde moves towards a fresher fern green so the two do not read as the same.</p>
+    </div>
+  </div>
 </section>
 
 <section aria-labelledby="h-disc">
-  <h2 id="h-disc">Discovery in the new look</h2>
-  <p class="lead">Categories keep their icons and sit in a drawer. Open, it shows all 15 with names; folded (the arrow), it becomes a rail of icons and the groups get the room. Events and cards show the category and its subcategories. Above the list there is one compact row: the place, and the Grupas / Pasākumi switch.</p>
+  <h2 id="h-disc">Discovery</h2>
+  <p class="lead">One whole screen, top to bottom. The header marks "Atklāt" as the place you are in. The categories drawer now starts with the place (no "Rāda:"), and every name carries a count. The Grupas / Pasākumi switch is the page title itself, so there is no filter row between the header and the first group.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · signed out (try the arrow next to "Kategorijas")</div>
+    <div class="shot" style="flex:1 1 760px">
+      <div class="cap">Desktop · signed in · Jelgava · all categories (try the arrow next to "Kategorijas")</div>
       <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span class="on" aria-current="page">Atklāt</span><span>Manas grupas</span></nav><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn q sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span><span class="ico" aria-label="Ziņas, 2 nelasītas"><svg class="i"><use href="#i-msg"/></svg><span class="dot"></span></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="disc" id="disc">
           <div class="catlist">
+            <span class="placebtn"><svg class="i"><use href="#i-pin"/></svg><span>Jelgava</span><svg class="i"><use href="#i-down"/></svg></span>
             <div class="cl-h"><b>Kategorijas</b><label class="drawer-t" title="Fold or open categories"><input type="checkbox" id="rd-fold" class="sr"><svg class="i"><use href="#i-left"/></svg></label></div>
-            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span><span class="nm">Visas</span></span>
-            <span class="ci" style="--c:#10B981"><span class="ic"><svg><use href="#i-mount"/></svg></span><span class="nm">Ceļošana un daba</span></span>
-            <span class="ci" style="--c:#F43F5E"><span class="ic"><svg><use href="#i-dance"/></svg></span><span class="nm">Dejas</span></span>
-            <span class="ci" style="--c:#F97316"><span class="ic"><svg><use href="#i-hobby"/></svg></span><span class="nm">Hobiji un aizraušanās</span></span>
-            <span class="ci" style="--c:#22C55E"><span class="ic"><svg><use href="#i-comm"/></svg></span><span class="nm">Kopiena un vide</span></span>
-            <span class="ci" style="--c:#EF4444"><span class="ic"><svg><use href="#i-pol"/></svg></span><span class="nm">Kustības un politika</span></span>
-            <span class="ci" style="--c:#84CC16"><span class="ic"><svg><use href="#i-pets"/></svg></span><span class="nm">Mājdzīvnieki</span></span>
-            <span class="ci" style="--c:#D946EF"><span class="ic"><svg><use href="#i-art"/></svg></span><span class="nm">Māksla un kultūra</span></span>
-            <span class="ci" style="--c:#6366F1"><span class="ic"><svg><use href="#i-music"/></svg></span><span class="nm">Mūzika</span></span>
-            <span class="ci" style="--c:#64748B"><span class="ic"><svg><use href="#i-rel"/></svg></span><span class="nm">Reliģija un garīgums</span></span>
-            <span class="ci" style="--c:#EC4899"><span class="ic"><svg><use href="#i-social"/></svg></span><span class="nm">Sociālās aktivitātes</span></span>
-            <span class="ci" style="--c:#8B5CF6"><span class="ic"><svg><use href="#i-games"/></svg></span><span class="nm">Spēles</span></span>
-            <span class="ci" style="--c:#3B82F6"><span class="ic"><svg><use href="#i-sport"/></svg></span><span class="nm">Sports un fitness</span></span>
-            <span class="ci" style="--c:#0EA5E9"><span class="ic"><svg><use href="#i-family"/></svg></span><span class="nm">Vecāki un ģimene</span></span>
-            <span class="ci" style="--c:#14B8A6"><span class="ic"><svg><use href="#i-well"/></svg></span><span class="nm">Veselība un labsajūta</span></span>
-            <span class="ci" style="--c:#F59E0B"><span class="ic"><svg><use href="#i-edu"/></svg></span><span class="nm">Zinātne un izglītība</span></span>
+            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span><span class="nm">Visas</span><span class="n">23</span></span>
+            <span class="ci" style="--c:var(--k-trav)"><span class="ic"><svg><use href="#i-mount"/></svg></span><span class="nm">Ceļošana un daba</span><span class="n">3</span></span>
+            <span class="ci" style="--c:var(--k-dance)"><span class="ic"><svg><use href="#i-dance"/></svg></span><span class="nm">Dejas</span><span class="n">2</span></span>
+            <span class="ci" style="--c:var(--k-hobby)"><span class="ic"><svg><use href="#i-hobby"/></svg></span><span class="nm">Hobiji un aizraušanās</span><span class="n">1</span></span>
+            <span class="ci zero" style="--c:var(--k-comm)"><span class="ic"><svg><use href="#i-comm"/></svg></span><span class="nm">Kopiena un vide</span><span class="n">0</span></span>
+            <span class="ci zero" style="--c:var(--k-pol)"><span class="ic"><svg><use href="#i-pol"/></svg></span><span class="nm">Kustības un politika</span><span class="n">0</span></span>
+            <span class="ci" style="--c:var(--k-pets)"><span class="ic"><svg><use href="#i-pets"/></svg></span><span class="nm">Mājdzīvnieki</span><span class="n">1</span></span>
+            <span class="ci" style="--c:var(--k-art)"><span class="ic"><svg><use href="#i-art"/></svg></span><span class="nm">Māksla un kultūra</span><span class="n">2</span></span>
+            <span class="ci" style="--c:var(--k-music)"><span class="ic"><svg><use href="#i-music"/></svg></span><span class="nm">Mūzika</span><span class="n">3</span></span>
+            <span class="ci" style="--c:var(--k-rel)"><span class="ic"><svg><use href="#i-rel"/></svg></span><span class="nm">Reliģija un garīgums</span><span class="n">1</span></span>
+            <span class="ci" style="--c:var(--k-social)"><span class="ic"><svg><use href="#i-social"/></svg></span><span class="nm">Sociālās aktivitātes</span><span class="n">2</span></span>
+            <span class="ci" style="--c:var(--k-games)"><span class="ic"><svg><use href="#i-games"/></svg></span><span class="nm">Spēles</span><span class="n">2</span></span>
+            <span class="ci" style="--c:var(--k-sport)"><span class="ic"><svg><use href="#i-sport"/></svg></span><span class="nm">Sports un fitness</span><span class="n">3</span></span>
+            <span class="ci" style="--c:var(--k-family)"><span class="ic"><svg><use href="#i-family"/></svg></span><span class="nm">Vecāki un ģimene</span><span class="n">1</span></span>
+            <span class="ci" style="--c:var(--k-well)"><span class="ic"><svg><use href="#i-well"/></svg></span><span class="nm">Veselība un labsajūta</span><span class="n">3</span></span>
+            <span class="ci zero" style="--c:var(--k-sci)"><span class="ic"><svg><use href="#i-edu"/></svg></span><span class="nm">Zinātne un izglītība</span><span class="n">0</span></span>
           </div>
           <div class="pg">
-            <div class="fbar"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Visa Latvija</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span class="evt" role="tab" aria-selected="false"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div></div>
-            <div class="row-h"><h4>Grupas</h4><small>26</small></div>
-            <div class="gcards">
-              <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
-              <div class="gc" style="--c:#10B981"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b>Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
-              <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b>Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
-              <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="cap" style="margin-top:12px">Desktop header · signed in as an admin</div>
-      <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span><span class="ico" aria-label="Ziņas, 2 nelasītas"><svg class="i"><use href="#i-msg"/></svg><span class="dot"></span></span><span class="ico" aria-label="Paziņojumi"><svg class="i"><use href="#i-bell"/></svg></span><span class="ico" aria-label="Administrēšana, 3 jauni"><svg class="i"><use href="#i-shield"/></svg><span class="dot"></span></span><span class="av" style="background:#c9b8a6"></span></div>
-      </div>
-      <p class="lead" style="font-size:14px;margin-top:6px">Signed in: the place is not in the header at all (it sits on the page, in the row with the Grupas / Pasākumi switch, and applies to everything below), "Izveidot grupu" is the one filled button, messages and notifications show a dot only when something is unread, and the avatar opens the profile menu (language and theme live there). The shield next to the avatar is the admin icon: it appears for admins only, on every screen size, and opens a small menu of admin options (see Paziņojumi). The profile menu no longer has admin entries.</p>
-    </div>
-    <div class="shot">
-      <div class="cap">Phone · signed in</div>
-      <div class="mob">
-        <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="ico" aria-label="Administrēšana"><svg class="i"><use href="#i-shield"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
-        <div class="pg" style="padding:16px 14px;gap:14px">
-          <span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span>
-          <div class="row" style="gap:8px"><span class="btn s sm"><svg class="i"><use href="#i-grid"/></svg>Kategorijas</span><span class="btn s sm"><svg class="i"><use href="#i-plus"/></svg>Izveidot grupu</span></div>
-          <div class="fbar sm"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span class="evt" role="tab" aria-selected="false"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div></div>
-          <div class="gc" style="--c:#F43F5E"><div class="pic" style="height:70px"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
-        </div>
-        <div class="navb"><span class="on"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section aria-labelledby="h-find">
-  <h2 id="h-find">Finding things: groups, events, search, place</h2>
-  <p class="lead">Five things from your notes, each shown in its own state. The header now holds only the logo, search and your account. Everything about <em>what you are looking at</em> sits on the page.</p>
-
-  <h3>Groups or events</h3>
-  <p class="lead">A two-part switch near the top: "Grupas" (the default) and "Pasākumi". The place and the switch share one row, so the filters take a single line above the content. There is no "Šonedēļ notiek" strip any more: "Pasākumi" carries a calendar icon so it is easy to spot, and it leads to the full list of what is on, with a calendar view planned for later.</p>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 420px">
-      <div class="cap">Desktop · "Pasākumi" tab · Jelgava</div>
-      <div class="desk"><div class="pg">
-        <div class="fbar"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span role="tab" aria-selected="false">Grupas</span><span class="on evt" role="tab" aria-selected="true"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div><div class="seg grow" aria-label="Skats"><span class="on"><svg class="i"><use href="#i-list"/></svg>Saraksts</span><span class="off" aria-disabled="true"><svg class="i"><use href="#i-cal"/></svg>Kalendārs <small>vēlāk</small></span></div></div>
-        <div class="evlist">
-          <div class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv., 11. okt. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span><i>Būsi viens no pirmajiem</i></div></span></div>
-          <div class="ev"><span class="date"><small>okt</small><b>13</b></span><span class="t"><b>Spēļu vakars bibliotēkā</b>Otrd., 13. okt. 18:00 · Jelgavas bibliotēka<div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div></span></div>
-          <div class="ev"><span class="date"><small>okt</small><b>15</b></span><span class="t"><b>Rīta nūjošana pie Lielupes</b>Ceturtd., 15. okt. 07:30 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div>
-        </div>
-      </div></div>
-    </div>
-    <div class="shot" style="flex:1 1 300px;max-width:420px">
-      <p class="why"><b>Why a switch, not two pages.</b> People come with one of two questions: "which group is for me?" or "what is on this week?". A switch next to the place answers both without a second menu. Groups stay the first view because joining a group is what the platform is for.</p>
-      <p class="why"><b>One row, no strip.</b> The place, the switch and (on the events view) the list/calendar toggle share a single line, so the first group or event starts high on the page. The "Šonedēļ notiek" strip and the "Ko tu gribētu darīt?" greeting are gone; the calendar icon on "Pasākumi" does the strip's job.</p>
-      <p class="why"><b>List now, calendar later.</b> The list/calendar toggle is already in place so the calendar can arrive without changing the page. Until then it is greyed and marked "vēlāk".</p>
-    </div>
-  </div>
-
-  <h3>Search, opened</h3>
-  <p class="lead">Clicking the search bar opens a panel straight below it. With the field empty it offers recent searches and the categories; as you type, live results appear in two groups, and "Rādīt visus rezultātus" opens the full list. Here the person has typed "sp".</p>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · search focused</div>
-      <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search is-open"><svg class="i"><use href="#i-search"/></svg><span class="q">sp<span class="caret"></span></span></span><span class="btn p sm">Ienākt</span></div>
-        <div class="backdrop">
-          <div class="spanel">
-            <span class="sp-h">Nesenie meklējumi</span>
-            <span class="sp-i"><svg class="i"><use href="#i-clock"/></svg><span class="sp-l">spēļu vakars Jelgavā</span></span>
-            <span class="sp-i"><svg class="i"><use href="#i-clock"/></svg><span class="sp-l">sporta zāle</span></span>
-            <span class="sp-h">Kategorijas</span>
-            <span class="sp-i" style="--c:#8B5CF6"><span class="dotc"></span><span class="sp-l"><em class="hl">Sp</em>ēles</span></span>
-            <span class="sp-i" style="--c:#3B82F6"><span class="dotc"></span><span class="sp-l"><em class="hl">Sp</em>orts un fitness</span></span>
-            <span class="sp-h">Grupas</span>
-            <span class="sp-i" style="--c:#8B5CF6"><span class="sp-pic"><svg><use href="#i-games"/></svg></span><span class="sp-t"><b>Galda <em class="hl">sp</em>ēļu vakari</b><small>Spēles · Jelgava · 8 biedri</small></span></span>
-            <span class="sp-i" style="--c:#3B82F6"><span class="sp-pic"><svg><use href="#i-sport"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>orta nūjošana pensionāriem</b><small>Sports un fitness · Jelgava · 48 biedri</small></span></span>
-            <span class="sp-h">Pasākumi</span>
-            <span class="sp-i" style="--c:#8B5CF6"><span class="sp-pic"><svg><use href="#i-cal"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>ēļu vakars bibliotēkā</b><small>Otrd., 13. okt. 18:00 · Jelgavas bibliotēka</small></span></span>
-            <span class="sp-i" style="--c:#3B82F6"><span class="sp-pic"><svg><use href="#i-cal"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>orta diena parkā</b><small>Otrd., 20. okt. 11:00 · Jelgava</small></span></span>
-            <span class="sp-all">Rādīt visus rezultātus<svg class="i"><use href="#i-arrow"/></svg></span>
-          </div>
-        </div>
-      </div>
-      <p class="why" style="margin-top:6px">Results respect the chosen place. The rest of the page dims behind the panel; Esc or a click outside closes it.</p>
-    </div>
-  </div>
-
-  <h3>The place, moved out of the header</h3>
-  <p class="lead">"Visa Latvija" beside the search bar looked like a search-only filter. It now sits on the page itself, in the same row as the Grupas / Pasākumi switch, as a pill that reads "Rāda: Jelgava". It applies to everything below it: groups and events. Tapping it opens a short list.</p>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 360px">
-      <div class="cap">Closed, then opened</div>
-      <div class="desk"><div class="pg">
-        <div class="fbar"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span class="evt" role="tab" aria-selected="false"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div></div>
-        <div class="pop" role="listbox" aria-label="Izvēlies pilsētu">
-          <span class="find"><svg class="i"><use href="#i-search"/></svg>Meklēt pilsētu…</span>
-          <span class="opt"><svg class="i"><use href="#i-pin"/></svg>Visa Latvija</span>
-          <span class="sep"></span>
-          <span class="opt on" role="option" aria-selected="true">Jelgava<svg class="i ck"><use href="#i-check"/></svg></span>
-          <span class="opt">Rīga</span>
-          <span class="opt">Liepāja</span>
-          <span class="opt">Daugavpils</span>
-          <span class="opt">Ventspils</span>
-          <span class="opt">Valmiera</span>
-        </div>
-      </div></div>
-    </div>
-    <div class="shot" style="flex:1 1 300px;max-width:420px">
-      <p class="why"><b>Who gets which place.</b> Signed-in people start with the city from their profile. A visitor's choice is remembered on their device, so the page opens the same way next time. Anyone can switch to "Visa Latvija" at the top of the list.</p>
-      <p class="why"><b>Why on the page.</b> Next to the search bar it read as "search only in Jelgava". In the same row as the switch it reads as what it is: the place for this whole page, groups and events alike.</p>
-    </div>
-  </div>
-
-  <h3>Group cards and long titles</h3>
-  <p class="lead">Your notes: the title was too large (only about three words fit) and the card needed a review. The title is now the handbook's item size (15 px), about twice as many words per line, and is still cut after two lines with "…"; the full title appears as soon as the item is opened (next part). The rest of the card, top to bottom:</p>
-  <ul class="from">
-    <li><b>Picture band</b><span>Lower (64 px instead of 84), so more cards fit on screen.</span></li>
-    <li><b>Title</b><span>15 px / 600, two lines at most. The name is the first thing read.</span></li>
-    <li><b>Category and subcategories</b><span>One quiet line, never wrapping: the category with its dot, the subcategories after it, cut with "…" when long. Cards stay equally tall.</span></li>
-    <li><b>Place and size</b><span>One small line ("Jelgava · 48 biedri").</span></li>
-    <li><b>Last line</b><span>The human note: "Gaidām iesācējus" ("Ko meklējam?"), or, when empty, the next meeting with a small calendar icon, so the two kinds of note are told apart at a glance.</span></li>
-  </ul>
-  <div class="screens">
-    <div class="shot" style="flex:0 1 300px">
-      <div class="cap">Group card</div>
-      <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
-    </div>
-    <div class="shot" style="flex:1 1 420px">
-      <div class="cap">Event row · desktop and phone width</div>
-      <div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>19</b></span><span class="t"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrības «Zaļais solis» gadskārtējā rudens noslēguma pastaiga ar tējas pauzi un kopīgu fotografēšanos</b>Pirm., 19. okt. 11:00 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div></div>
-      <div class="evlist" style="max-width:340px"><div class="ev"><span class="date"><small>okt</small><b>19</b></span><span class="t"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrības «Zaļais solis» gadskārtējā rudens noslēguma pastaiga ar tējas pauzi un kopīgu fotografēšanos</b>Pirm., 19. okt. 11:00 · Pasta sala<div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div></span></div></div>
-    </div>
-  </div>
-
-  <h3>Horizontal cards in the discovery view</h3>
-  <p class="lead">You liked the more horizontal shape because it fits more text. Here it is in the discovery view: the picture becomes a coloured side band with the category icon, the title gets the full width next to it, and the card is lower, so more groups fit on screen. Phone: one column, a list. Desktop: two columns when the categories drawer is folded (or the window is wide); one column when it does not fit.</p>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · groups as horizontal cards, two columns (drawer folded)</div>
-      <div class="desk">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
-        <div class="disc shut">
-          <div class="catlist">
-            <div class="cl-h"><label class="drawer-t" title="Open categories"><svg class="i"><use href="#i-left"/></svg></label></div>
-            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span></span>
-            <span class="ci" style="--c:#10B981"><span class="ic"><svg><use href="#i-mount"/></svg></span></span>
-            <span class="ci" style="--c:#F43F5E"><span class="ic"><svg><use href="#i-dance"/></svg></span></span>
-            <span class="ci" style="--c:#6366F1"><span class="ic"><svg><use href="#i-music"/></svg></span></span>
-            <span class="ci" style="--c:#8B5CF6"><span class="ic"><svg><use href="#i-games"/></svg></span></span>
-            <span class="ci" style="--c:#3B82F6"><span class="ic"><svg><use href="#i-sport"/></svg></span></span>
-          </div>
-          <div class="pg">
-            <div class="fbar"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Visa Latvija</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span class="evt" role="tab" aria-selected="false"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div></div>
-            <div class="row-h"><h4>Grupas</h4><small>26</small></div>
+            <div class="ttl"><div class="tsw" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas<small>23</small></span><span role="tab" aria-selected="false">Pasākumi<small>41</small></span></div></div>
             <div class="gcards hz">
-              <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b class="clamp2">Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
-              <div class="gc" style="--c:#10B981"><div class="pic"><svg><use href="#i-mount"/></svg></div><div class="in"><b class="clamp2">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
-              <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
-              <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b class="clamp2">Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
-              <div class="gc" style="--c:#8B5CF6"><div class="pic"><svg><use href="#i-games"/></svg></div><div class="in"><b class="clamp2">Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div><span class="meta">Jelgava · 8 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
-              <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Rīta nūjošana pie Lielupes</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana</span></div><span class="meta">Jelgava · 12 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: ceturtd., 15. okt.</div></div>
+              <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-nordic" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
+              <div class="gc" style="--c:var(--k-dance)"><div class="pic ph ph-dance" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
+              <div class="gc" style="--c:var(--k-trav)"><div class="pic ph ph-bog" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Zemgales dabas takas</b><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Putnu vērošana</span></div><span class="meta">Jelgava · 14 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+              <div class="gc" style="--c:var(--k-music)"><div class="pic ph ph-band" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:var(--k-music)">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
+              <div class="gc" style="--c:var(--k-games)"><div class="pic ph ph-games" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:var(--k-games)">Spēles</span><span class="sub">Galda spēles, Lomu spēles</span></div><span class="meta">Jelgava · 8 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+              <div class="gc" style="--c:var(--k-well)"><div class="pic"><svg><use href="#i-well"/></svg></div><div class="in"><b class="clamp2">Rīta joga Pasta salā</b><div class="tags"><span class="tag cat" style="--c:var(--k-well)">Veselība un labsajūta</span><span class="sub">Joga</span></div><span class="meta">Jelgava · 12 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: ceturtd., 15. okt.</div></div>
             </div>
+            <span class="btn s sm morebtn">Rādīt vēl 17</span>
           </div>
         </div>
       </div>
     </div>
     <div class="shot">
-      <div class="cap">Phone 375 px · groups as a list</div>
-      <div class="mob" style="width:375px">
+      <div class="cap">Phone · Jelgava · Sports un fitness</div>
+      <div class="mob">
         <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div class="pg" style="padding:14px;gap:12px">
           <span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span>
-          <div class="fbar sm"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><div class="seg" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas</span><span class="evt" role="tab" aria-selected="false"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span></div></div>
-          <div class="gcards hz">
-            <div class="gc" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
-            <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b class="clamp2">Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
-            <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b class="clamp2">Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
+          <div class="row" style="gap:8px"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b><svg class="i"><use href="#i-down"/></svg></span><span class="cityline" style="--c:var(--k-sport)"><span class="tag cat" style="--c:var(--k-sport);color:var(--fg)">Sports un fitness</span><svg class="i"><use href="#i-down"/></svg></span></div>
+          <div class="ttl"><div class="tsw" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas<small>3</small></span><span role="tab" aria-selected="false">Pasākumi<small>4</small></span></div></div>
+          <div class="gcards vt">
+            <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-nordic" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
+            <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-river" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Rīta nūjošana pie Lielupes</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana</span></div><span class="meta">Jelgava · 12 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+            <div class="gc" style="--c:var(--k-sport)"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas skrējēji</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Skriešana</span></div><span class="meta">Jelgava · 21 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sest., 17. okt.</div></div>
+            <div class="gc add"><p>Nav īstās grupas?</p><span class="lnk">Izveidot grupu kategorijā Sports un fitness<svg class="i"><use href="#i-arrow"/></svg></span></div>
           </div>
         </div>
-        <div class="navb"><span class="on"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
+        <div class="navb"><span class="on" aria-current="page"><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
       </div>
     </div>
   </div>
-  <p class="why"><b>To judge.</b> Same content as the tall card, in the same order. On a phone about three groups fit on screen instead of two, and a long title gets two full-width lines. On desktop two columns need roughly 700 px for the list, so with the drawer open the list falls back to one column.</p>
+  <ul class="agreed">
+    <li><b>Atklāt is marked</b><p>Desktop: the header gets two words after the logo, "Atklāt" and "Manas grupas", and the current one sits on a soft pill. Phone: the current tab of the bottom bar gets the same pill behind its icon and full-strength text. One look for "you are here" everywhere.</p></li>
+    <li><b>No "Rāda:"</b><p>The place is just "Jelgava" with a pin. On desktop it heads the categories drawer (place first, then topic); on phones it sits next to the category button.</p></li>
+    <li><b>Cards: horizontal on desktop, vertical on phones</b><p>Desktop lists use the horizontal card in two columns. Phones use the tall card with the photo on top, one per row. Same content, same order.</p></li>
+    <li><b>"Izveidot grupu", quieter</b><p>In the header it is an outlined button, not filled. The card at the end of a category stays (you liked it) but is now a dashed outline with a text link, so it never looks like the main action of the page.</p></li>
+    <li><b>Long lists end with "Rādīt vēl"</b><p>24 cards, then a button. No endless scrolling (the Handbook's "calm, not sticky").</p></li>
+  </ul>
+</section>
 
-  <h3>Browse without leaving the page</h3>
-  <p class="lead">On desktop, clicking a group card opens a panel on the right, over the discovery page. The list stays visible and stays where it was scrolled, so looking at five groups does not mean five page loads. The full title is shown here. "Atvērt grupas lapu" goes to the real group page.</p>
+<section aria-labelledby="h-context">
+  <h2 id="h-context">Cards in context</h2>
+  <p class="lead">The same horizontal card in another screen, and what happens when you open one. Photos are real (credits at the end of this part); the yoga and running groups have no photo, so they show the category colour with its icon.</p>
   <div class="screens">
     <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · side panel open</div>
+      <div class="cap">Desktop · Manas grupas</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span>Atklāt</span><span class="on" aria-current="page">Manas grupas</span></nav><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="pg" style="max-width:900px">
+          <div class="ttl"><div class="tsw"><span class="on">Manas grupas<small>3</small></span></div></div>
+          <div class="nxt"><div class="nxt-h"><b>Tuvākie pasākumi manās grupās</b><span>Visi<svg class="i"><use href="#i-arrow"/></svg></span></div><div class="evlist">
+            <div class="ev"><span class="date"><small>okt</small><b>15</b></span><span class="t"><b>Rīta nūjošana pie Lielupes</b>Ceturtd., 15. okt. 07:30 · Pasta sala<span class="sd">Iesildīšanās pie tilta, tad 5 km gar upi.</span></span></div>
+            <div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<span class="sd">3 stundas pa laipām, līdzi ūdens un ērti apavi.</span></span></div>
+          </div></div>
+          <div class="gcards hz">
+            <div class="gc" style="--c:var(--k-trav)"><div class="pic ph ph-bog" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></div><span class="meta">Rīga · 3 biedri · tu esi komandā</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sest., 17. okt.</div></div>
+            <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-river" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Rīta nūjošana pie Lielupes</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana</span></div><span class="meta">Jelgava · 12 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: ceturtd., 15. okt.</div></div>
+            <div class="gc" style="--c:var(--k-games)"><div class="pic ph ph-games" role="img" aria-label="Grupas attēls"></div><div class="in"><b class="clamp2">Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:var(--k-games)">Spēles</span><span class="sub">Galda spēles, Lomu spēles</span></div><span class="meta">Jelgava · 8 biedri · pieteikums nosūtīts</span></div><div class="note">Gaidām iesācējus</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="why" style="margin-top:6px">Your own groups use the very same card. The quiet line adds your relation to the group ("tu esi komandā", "pieteikums nosūtīts"); a card with two sub-categories ("Galda spēles, Lomu spēles") still stays on one line.</p>
+    </div>
+  </div>
+
+  <h3>An opened card sits on top of the list</h3>
+  <p class="lead">Recommendation: <b>on top</b>, as you also said in your reply. On desktop the card opens as a panel from the right over a dimmed list; on phones as a sheet from the bottom. Beside the list would squeeze the cards into one column on most laptops and make the list jump each time a panel opens and closes.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · panel over the list</div>
       <div class="desk">
         <div class="urlbar">ejam.lumm.eu/lv/sports-un-fitness/group/zalais-solis</div>
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
-        <div class="split">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span class="on" aria-current="page">Atklāt</span><span>Manas grupas</span></nav><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="ovl">
           <div class="pg">
-            <div class="row-h"><h4>Grupas</h4><small>26</small></div>
-            <div class="gcards two">
-              <div class="gc" style="--c:#F43F5E"><div class="pic"><svg><use href="#i-dance"/></svg></div><div class="in"><b>Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: sv., 11. okt.</div></div>
-              <div class="gc sel" style="--c:#3B82F6"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note"><svg class="i"><use href="#i-cal"/></svg>Nākamā tikšanās: pk., 16. okt.</div></div>
-              <div class="gc" style="--c:#6366F1"><div class="pic"><svg><use href="#i-music"/></svg></div><div class="in"><b>Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
-              <div class="gc" style="--c:#8B5CF6"><div class="pic"><svg><use href="#i-games"/></svg></div><div class="in"><b>Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div><span class="meta">Jelgava · 8 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+            <div class="ttl"><div class="tsw"><span class="on">Grupas<small>23</small></span><span>Pasākumi<small>41</small></span></div></div>
+            <div class="gcards hz">
+              <div class="gc sel" style="--c:var(--k-sport)"><div class="pic ph ph-nordic"></div><div class="in"><b class="clamp2">Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note">Nākamā tikšanās: pk., 16. okt.</div></div>
+              <div class="gc" style="--c:var(--k-dance)"><div class="pic ph ph-dance"></div><div class="in"><b class="clamp2">Neteikšu kā sauc!</b><div class="tags"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="sub">Tautas dejas, Salsa</span></div><span class="meta">Jelgava · 1 biedrs</span></div><div class="note">Nākamā tikšanās: sv., 11. okt.</div></div>
+              <div class="gc" style="--c:var(--k-trav)"><div class="pic ph ph-bog"></div><div class="in"><b class="clamp2">Zemgales dabas takas</b><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div><span class="meta">Jelgava · 14 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+              <div class="gc" style="--c:var(--k-music)"><div class="pic ph ph-band"></div><div class="in"><b class="clamp2">Grupa meklē dalībniekus</b><div class="tags"><span class="tag cat" style="--c:var(--k-music)">Mūzika</span><span class="sub">Rokmūzikas skola</span></div><span class="meta">Jelgava · 3 biedri</span></div><div class="note">Meklējam bundzinieku</div></div>
             </div>
           </div>
-          <aside class="sdp" style="--c:#3B82F6" aria-label="Grupas ātrais skats">
-            <div class="pic"><svg class="i"><use href="#i-sport"/></svg><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
+          <div class="scrim"></div>
+          <aside class="sdp" style="--c:var(--k-sport)" aria-label="Grupas ātrais skats">
+            <div class="pic ph ph-nordic" role="img" aria-label="Grupas attēls"><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
             <div class="bd">
               <h3>Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</h3>
-              <div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
+              <div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
               <div class="tags"><span class="tag"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="tag"><svg class="i"><use href="#i-users"/></svg>48 biedri</span></div>
               <p class="spec-i">Nākamā tikšanās: pk., 16. okt., 10:00 pie Lielupes promenādes</p>
               <p>Katru ceturtdienu dodamies nūjot pa Jelgavas promenādēm un parkiem. Piedalīties var ikviens, nūjas var aizņemties.</p>
@@ -898,25 +976,25 @@ html.dark .rd{
           </aside>
         </div>
       </div>
+      <p class="why" style="margin-top:6px">Esc, the cross, a click on the dimmed list or Back closes it, and the list is still scrolled where it was. The address shows the group's own page, so the link can be shared; opening that link shows the full group page.</p>
     </div>
     <div class="shot">
-      <div class="cap">Phone · full-height sheet</div>
+      <div class="cap">Phone · sheet from the bottom</div>
       <div class="mob">
         <div class="mstage">
           <div class="dim">
             <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="av" style="background:#c9b8a6"></span></div>
-            <div class="pg" style="padding:14px"><div class="cityrow"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg>Rāda: <b>Jelgava</b></span></div></div>
+            <div class="pg" style="padding:14px"><div class="row"><span class="cityline"><svg class="i"><use href="#i-pin"/></svg><b>Jelgava</b></span></div></div>
           </div>
           <div class="scrim"></div>
-          <div class="sheet" style="--c:#3B82F6">
+          <div class="sheet" style="--c:var(--k-sport)">
             <span class="grab"></span>
-            <div class="pic"><svg class="i"><use href="#i-sport"/></svg><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
+            <div class="pic ph ph-nordic" role="img" aria-label="Grupas attēls" style="height:120px"><span class="xbtn" aria-label="Aizvērt"><svg class="i"><use href="#i-x"/></svg></span></div>
             <div class="bd">
               <h3>Jelgavas pensionāru nūjošanas un pastaigu biedrība «Zaļais solis»</h3>
-              <div class="tags"><span class="tag cat" style="--c:#3B82F6">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
+              <div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana, Pastaigas</span></div>
               <div class="tags"><span class="tag"><svg class="i"><use href="#i-pin"/></svg>Jelgava</span><span class="tag"><svg class="i"><use href="#i-users"/></svg>48 biedri</span></div>
               <p class="spec-i">Nākamā tikšanās: pk., 16. okt., 10:00</p>
-              <p>Katru ceturtdienu nūjojam pa Jelgavas promenādēm un parkiem. Piedalīties var ikviens.</p>
               <span class="btn p">Pieteikties</span>
               <span class="lnk">Atvērt grupas lapu<svg class="i"><use href="#i-arrow"/></svg></span>
             </div>
@@ -925,208 +1003,382 @@ html.dark .rd{
       </div>
     </div>
   </div>
-  <p class="why"><b>The address follows the panel.</b> While the panel is open the address bar shows the group's own address, so Back closes the panel, and the link can be copied and shared. Opening that link, or refreshing, shows the full group page, not the panel.</p>
+  <p class="credits">Photos from Wikimedia Commons, free licences: folk dance ensemble "Dzintariņš", Rīga, by Richardmaackphotography (CC BY 4.0); Ķemeru purva laipa by Jolanta Liva (CC BY-SA 4.0); Nordic walking group by Vijay.shivu (CC BY-SA 4.0); music practice room, Stuttgart, by Gerold Schneider (CC BY 2.0); people playing a board game, Wikimania 2026, by Tohaomg (CC0); Lielupe promenade by Igors Jefimovs (CC BY 3.0).</p>
+</section>
 
+<section aria-labelledby="h-scale">
+  <h2 id="h-scale">Hundreds of groups and events</h2>
+  <p class="lead">Your worry: one day there may be hundreds of groups with hundreds of events, and the page must make sense before anything is filtered. Below: what comparable sites do, the narrowing you suggested (place → category → sub-category, with counts), and the events view on desktop.</p>
+  <h3>What others do (short)</h3>
+  <div class="research">
+    <div class="box"><b>Meetup</b><p>Results start from your location. One line of small dropdown filters sits above the results (day, type, distance, category); they look like plain words until opened, so they don't compete with the events.</p></div>
+    <div class="box"><b>Eventbrite</b><p>The city is part of the address and of the page title ("events in …"); you change it from the title. Category and date are quick choices; the list itself is grouped by date.</p></div>
+    <div class="box"><b>Airbnb</b><p>Place comes first, in the search pill. Everything else hides behind a single "Filters" button that opens a window, and a row of category icons scrolls sideways above the results.</p></div>
+    <div class="box"><b>Facebook Events</b><p>Filters live in a column on the left (location, date, category); the content column carries no filter bar at all.</p></div>
+    <div class="box"><b>Latvian city portals</b><p>Sites like Visit Daugavpils are already one city: a list of categories, each opening a date-ordered list. No search across places.</p></div>
+    <div class="box"><b>What we take</b><p class="take">Place first and always visible; filters at the side, not on top; counts so people see where things are; date grouping for events; switching views is a small control at the edge of the title, never a row of its own.</p></div>
+  </div>
+
+  <h3>Narrowing with counts</h3>
+  <p class="lead">Your idea, recommended as is: every step shows how many groups (or events, on the Pasākumi view) are behind each choice, and empty choices stay in the list, greyed, so the 15 categories never jump around.</p>
+  <div class="fun">
+    <div class="box"><span class="lbl">1 · Vieta</span>
+      <span class="frow"><span><svg class="i" style="width:14px;height:14px;vertical-align:-2px"><use href="#i-pin"/></svg> Visa Latvija</span><em>412</em></span>
+      <span class="frow on"><span>Jelgava</span><em>23</em></span>
+      <span class="frow"><span>Rīga</span><em>196</em></span>
+      <span class="frow"><span>Liepāja</span><em>31</em></span>
+      <span class="frow"><span>Valmiera</span><em>18</em></span>
+    </div>
+    <div class="box"><span class="lbl">2 · Kategorija (Jelgavā)</span>
+      <span class="frow"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><em>3</em></span>
+      <span class="frow"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><em>2</em></span>
+      <span class="frow zero"><span class="tag cat" style="--c:var(--k-comm)">Kopiena un vide</span><em>0</em></span>
+      <span class="frow on"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><em>3</em></span>
+      <span class="frow"><span class="tag cat" style="--c:var(--k-well)">Veselība un labsajūta</span><em>3</em></span>
+    </div>
+    <div class="box"><span class="lbl">3 · Apakškategorija (Jelgavā, sportā)</span>
+      <span class="frow"><span>Visas</span><em>3</em></span>
+      <span class="frow on"><span>Nūjošana</span><em>2</em></span>
+      <span class="frow"><span>Pastaigas</span><em>1</em></span>
+      <span class="frow"><span>Skriešana</span><em>1</em></span>
+      <span class="frow zero"><span>Peldēšana</span><em>0</em></span>
+    </div>
+  </div>
+  <p class="why">On desktop all three steps live in the drawer: the place at its top, the categories below, and the chosen category opens its sub-categories underneath it. On phones the place and the category are two buttons above the list; the category sheet shows its sub-categories the same way. A group with two sub-categories counts in both, so sub-category numbers can add up to more than the category's.</p>
+
+  <h3>The events view on desktop, before anything is filtered</h3>
+  <p class="lead">"Visa Latvija", all categories, Pasākumi. Events are grouped by day. Each day shows at most five; "vēl …" opens the rest of that day in place. The list covers one week, then "Rādīt nākamo nedēļu". With the place chosen (the usual case: your profile city), most days need no "vēl" at all.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 520px">
-      <div class="cap">Events · one row opened in place (the others stay collapsed)<span class="status liked">Liked</span></div>
+    <div class="shot" style="flex:1 1 760px">
+      <div class="cap">Desktop · Pasākumi · Visa Latvija</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span class="on" aria-current="page">Atklāt</span><span>Manas grupas</span></nav><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="btn p sm">Ienākt</span></div>
+        <div class="disc">
+          <div class="catlist">
+            <span class="placebtn"><svg class="i"><use href="#i-pin"/></svg><span>Visa Latvija</span><svg class="i"><use href="#i-down"/></svg></span>
+            <div class="cl-h"><b>Kategorijas</b></div>
+            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span><span class="nm">Visas</span><span class="n">214</span></span>
+            <span class="ci" style="--c:var(--k-trav)"><span class="ic"><svg><use href="#i-mount"/></svg></span><span class="nm">Ceļošana un daba</span><span class="n">22</span></span>
+            <span class="ci" style="--c:var(--k-dance)"><span class="ic"><svg><use href="#i-dance"/></svg></span><span class="nm">Dejas</span><span class="n">17</span></span>
+            <span class="ci" style="--c:var(--k-hobby)"><span class="ic"><svg><use href="#i-hobby"/></svg></span><span class="nm">Hobiji un aizraušanās</span><span class="n">12</span></span>
+            <span class="ci" style="--c:var(--k-comm)"><span class="ic"><svg><use href="#i-comm"/></svg></span><span class="nm">Kopiena un vide</span><span class="n">9</span></span>
+            <span class="ci" style="--c:var(--k-music)"><span class="ic"><svg><use href="#i-music"/></svg></span><span class="nm">Mūzika</span><span class="n">31</span></span>
+            <span class="ci" style="--c:var(--k-games)"><span class="ic"><svg><use href="#i-games"/></svg></span><span class="nm">Spēles</span><span class="n">26</span></span>
+            <span class="ci" style="--c:var(--k-sport)"><span class="ic"><svg><use href="#i-sport"/></svg></span><span class="nm">Sports un fitness</span><span class="n">48</span></span>
+            <span class="ci" style="--c:var(--muted)"><span class="ic"><svg><use href="#i-down"/></svg></span><span class="nm">… vēl 7</span></span>
+          </div>
+          <div class="pg">
+            <div class="ttl"><div class="tsw" role="tablist" aria-label="Rādīt"><span role="tab" aria-selected="false">Grupas<small>412</small></span><span class="on" role="tab" aria-selected="true">Pasākumi<small>214 šonedēļ</small></span></div><div class="vtog" aria-label="Skats"><span class="on" title="Saraksts"><svg class="i"><use href="#i-list"/></svg></span><span class="off" title="Kalendārs (vēlāk)"><svg class="i"><use href="#i-cal"/></svg></span></div></div>
+            <div class="evlist">
+              <div class="dayh">Šodien · svētdiena, 11. okt.</div>
+              <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>17:00 · <span class="ct">Jelgava</span>, Kultūras nams<span class="sd">Tautas deju kolektīvu rudens koncerts, ieeja bez maksas.</span><div class="tags"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="sub">Tautas dejas</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+                <div class="evx-b"><p class="full">Tautas deju kolektīvu rudens koncerts. Uzstājas četri Jelgavas kolektīvi, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas, vietas nav jārezervē.</p><span class="lnk" style="justify-self:start">Visa informācija<svg class="i"><use href="#i-arrow"/></svg></span><span class="btn p sm">Iešu</span></div></details>
+              <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Rudens talka Mežaparkā</b>11:00 · <span class="ct">Rīga</span>, Mežaparka estrāde<span class="sd">Grābjam lapas un vācam atkritumus, cimdus iedosim.</span><div class="tags"><span class="tag cat" style="--c:var(--k-comm)">Kopiena un vide</span><span class="sub">Talkas</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+                <div class="evx-b"><p class="full">Grābjam lapas un vācam atkritumus gar ezera krastu. Cimdus un maisus iedosim, līdzi siltas drēbes. Pēc talkas tēja pie estrādes.</p><span class="btn p sm">Iešu</span></div></details>
+              <span class="lnk" style="justify-self:start;padding:6px 0 10px 58px;font-size:14px">vēl 9 šodien<svg class="i"><use href="#i-down"/></svg></span>
+              <div class="dayh">Rīt · pirmdiena, 12. okt.</div>
+              <details class="evx" open><summary class="ev"><span class="date"><small>okt</small><b>12</b></span><span class="t"><b>Šaha vakars iesācējiem</b>18:30 · <span class="ct">Liepāja</span>, Centrālā bibliotēka<span class="sd">Mācāmies spēlēt kopā, galdi un figūras būs.</span><div class="tags"><span class="tag cat" style="--c:var(--k-games)">Spēles</span><span class="sub">Šahs, Galda spēles</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+                <div class="evx-b">
+                  <p class="full">Mācāmies spēlēt kopā: pirmajā stundā noteikumi un vienkāršas kombinācijas, otrajā spēlējam pa pāriem. Galdi un figūras būs, līdzi nekas nav jāņem. Vari nākt arī viens; pāri saliksim uz vietas.</p>
+                  <span class="tag"><svg class="i"><use href="#i-pin"/></svg>Liepājas Centrālā zinātniskā bibliotēka, Zivju iela 7</span>
+                  <span class="going"><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i></span>Ilze un vēl 3 iet</span>
+                  <span class="lnk" style="justify-self:start">Visa informācija<svg class="i"><use href="#i-arrow"/></svg></span>
+                  <span class="btn p sm">Iešu</span>
+                </div></details>
+            </div>
+            <span class="btn s sm morebtn">Rādīt nākamo nedēļu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="agreed">
+    <li><b>List / calendar moved</b><p>You liked the function, not the place. It is now two small icons at the right end of the title line, the way Meetup and Eventbrite put the view switch at the edge of the results. The calendar icon stays greyed until the calendar exists.</p></li>
+    <li><b>The city in every row</b><p>When the place is "Visa Latvija", each event row names its city first ("17:00 · Jelgava, Kultūras nams"); with one city chosen the city is left out.</p></li>
+    <li><b>Groups at scale</b><p>Same rule as above: counts in the drawer, 24 cards, then "Rādīt vēl". Order: groups with an upcoming meeting first, then the newest.</p></li>
+  </ul>
+</section>
+
+<section aria-labelledby="h-events">
+  <h2 id="h-events">Events: rows that open in place</h2>
+  <p class="lead">Your question was where the opening rows are used. Answer: in every list of events. A row opens like an accordion (the others stay closed), so you can look at five events without leaving the list. The event's own page still exists for sharing and for everything else; "Visa informācija" leads there.</p>
+  <ul class="apply">
+    <li><b>Discovery · Pasākumi</b><span>all events</span><span>Shown above, grouped by day.</span></li>
+    <li><b>Group · Pasākumi</b><span>one group's events</span><span>Same rows, without the category (the whole page is that group). See the group page below.</span></li>
+    <li><b>Manas grupas</b><span>your next events</span><span>The short list at the top (see Cards in context).</span></li>
+    <li><b>Search results</b><span>"Pasākumi" tab</span><span>The full results page in Search and place.</span></li>
+    <li><b>Group Information</b><span>"Nākamais pasākums"</span><span>The one exception: a single row that links to the group's Pasākumi page, because there is no list to stay in.</span></li>
+  </ul>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 420px">
+      <div class="cap">Closed and opened · what each shows</div>
       <div class="evlist">
-        <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>11</b></span><span class="t"><b>Deju koncerts</b>Sv., 11. okt. 17:00 · Jelgavas Kultūras nams<div class="tags"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
-          <div class="evx-b"><p>Tautas deju kolektīvu koncerts. Ieeja bez maksas.</p><span class="btn p sm">Iešu</span></div></details>
-        <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>13</b></span><span class="t"><b>Spēļu vakars bibliotēkā</b>Otrd., 13. okt. 18:00 · Jelgavas bibliotēka<div class="tags"><span class="tag cat" style="--c:#8B5CF6">Spēles</span><span class="sub">Galda spēles</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
-          <div class="evx-b"><p>Galda spēles sākuma līmenī. Spēles nodrošinām mēs.</p><span class="btn p sm">Iešu</span></div></details>
-        <details class="evx" open><summary class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+        <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>13</b></span><span class="t"><b>Spēļu vakars bibliotēkā</b>Otrd., 13. okt. 18:00 · Jelgavas bibliotēka<span class="sd">Galda spēles sākuma līmenī, spēles nodrošinām mēs.</span><div class="tags"><span class="tag cat" style="--c:var(--k-games)">Spēles</span><span class="sub">Galda spēles</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+          <div class="evx-b"><p class="full">Galda spēles sākuma līmenī: Carcassonne, Dixit un Ticket to Ride. Spēles nodrošinām mēs, noteikumus izskaidrosim. Nāc viens vai ar draugu.</p><span class="btn p sm">Iešu</span></div></details>
+        <details class="evx" open><summary class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<span class="sd">3 stundas pa laipām, līdzi ūdens un ērti apavi.</span><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></span><svg class="i chev"><use href="#i-down"/></svg></summary>
           <div class="evx-b">
-            <p>Apmēram 3 stundas pa koka laipām, 6 km. Līdzi ērti apavi un ūdens.</p>
+            <p class="full">Apmēram 3 stundas pa koka laipām cauri Lielajam Ķemeru tīrelim, kopā 6 km. Ejam mierīgā tempā ar pauzi skatu tornī, kur var paēst līdzpaņemtās uzkodas. Līdzi ērti apavi, ūdens un lietusjaka. No Rīgas var braukt ar vilcienu līdz Ķemeriem, no stacijas ejam kopā.</p>
             <span class="tag"><svg class="i"><use href="#i-pin"/></svg>Ķemeru nacionālā parka apmeklētāju centrs</span>
             <span class="going"><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4 iet</span>
+            <span class="lnk" style="justify-self:start">Visa informācija<svg class="i"><use href="#i-arrow"/></svg></span>
             <span class="btn p sm">Iešu</span>
           </div></details>
       </div>
     </div>
     <div class="shot" style="flex:1 1 300px;max-width:420px">
-      <p class="why"><b>Events open in the row.</b> An event has little to say, so it opens like an accordion instead of a panel: description, place, who is going and the "Iešu" button, without losing your place in the list. Click a row to try it.</p>
+      <p class="why"><b>Closed: one short line.</b> Under the time and place, the first sentence of the description, cut after one line with "…". It answers "what is it?" before anyone clicks.</p>
+      <p class="why"><b>Opened: the longer text.</b> The description up to about five lines, then the full address, who is going, "Visa informācija" and "Iešu". A longer description continues on the event's own page.</p>
+      <p class="why"><b>Click a row to try it.</b> Only one row is open at a time in the real list.</p>
     </div>
   </div>
 </section>
 
-<section aria-labelledby="h-group">
-  <h2 id="h-group">A group page in the new look</h2>
-  <p class="lead">The title now sits fully inside the coloured header zone instead of on its edge. Below it, tabs for the group's pages; inside a page, a small switch or a menu ("Šajā lapā" is a menu on the left, see below). The box on the right is the group's <b>next event</b>, labelled as such, with a "Visi pasākumi" link: it is a shortcut to the events page, not the only event. The bottom navigation on phones has no "create" entry: groups are created from discovery, events and news from inside their group.</p>
-  <p class="rulebox"><span class="lbl">Decided · Liked</span><b>This header is the frame for every internal group page</b> (Informācija, Pasākumi, Jaunumi, Biedri, Iestatījumi). The banner and the tabs stay exactly the same; only the content under the tabs changes. The first mockup below is the Information page; Pasākumi in the same frame follows the cover-picture one.</p>
-  <p class="why">The group's picture is the organiser's photo, shown as a cover across the top of the header (second mockup below). Without one, the header is the category colour with the category icon (first mockup). On the other group pages the slim bar uses a small square crop of the same photo, or the icon on the colour.</p>
+<section aria-labelledby="h-find">
+  <h2 id="h-find">Search and place</h2>
+  <p class="lead">Three of your questions: should search be limited to a city, what "Rādīt visus rezultātus" opens, and the city list with its search field inside.</p>
+
+  <h3>Search starts in your place</h3>
+  <p class="lead">How others do it: Airbnb asks for the place before anything else; Meetup searches around your location and lets you change it on the results; Eventbrite keeps a second "where" field next to the search words. Recommendation: no second field. The search uses the page's place (your city), and the first line of the open panel says so, with "Visā Latvijā" one tap away. Results from other cities are not mixed in; a quiet line counts them.</p>
   <div class="screens">
     <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · Information · signed in · no picture: category colour and icon<span class="status liked">Liked</span></div>
-      <div class="desk" style="--c:#10B981">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
-        <div class="ghead">
-          <div class="gban">
-            <div class="gid"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
-          </div>
-          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
-        </div>
-        <div class="gbody">
-          <div class="art">
-            <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
-            <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas. Apmēram 3 stundas, 10–12 km.</p></div>
-            <div><h4>Ko meklējam</h4><p>Gaidām iesācējus, arī tos, kas staigā lēni.</p></div>
-          </div>
-          <div class="side">
-            <div class="nxt"><div class="nxt-h"><b>Nākamais pasākums</b><span>Visi pasākumi<svg class="i"><use href="#i-arrow"/></svg></span></div><div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00</span></div><div class="ev"><span class="faces"><i style="background:#c9b8a6;width:26px;height:26px"></i><i style="background:#a8bfa0;width:26px;height:26px"></i><i style="background:#d6a99a;width:26px;height:26px"></i></span><span class="t">Līga, Oskars un Anna</span></div></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · Information · with the group's own picture (cover)</div>
-      <div class="desk" style="--c:#10B981">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
-        <div class="ghead">
-          <div class="cover-img" role="img" aria-label="Grupas attēls"><svg class="i"><use href="#i-mount"/></svg>Grupas attēls</div>
-          <div class="cover-wrap">
-            <div class="gid"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
-          </div>
-          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
-        </div>
-        <div class="gbody">
-          <div class="art">
-            <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
-            <div><h4>Ko meklējam</h4><p>Gaidām iesācējus, arī tos, kas staigā lēni.</p></div>
-          </div>
-          <div class="side">
-            <div class="nxt"><div class="nxt-h"><b>Nākamais pasākums</b><span>Visi pasākumi<svg class="i"><use href="#i-arrow"/></svg></span></div><div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00</span></div></div></div>
+      <div class="cap">Desktop · search open, "sp" typed</div>
+      <div class="desk">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span class="on">Atklāt</span><span>Manas grupas</span></nav><span class="search is-open"><svg class="i"><use href="#i-search"/></svg><span class="q">sp<span class="caret"></span></span></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="backdrop">
+          <div class="spanel">
+            <div class="row" style="gap:8px;padding:12px 0 2px"><span class="sp-h" style="padding:0">Meklēt</span><div class="seg" role="radiogroup" aria-label="Kur meklēt"><span class="on" role="radio" aria-checked="true"><svg class="i"><use href="#i-pin"/></svg>Jelgavā</span><span role="radio" aria-checked="false">Visā Latvijā</span></div></div>
+            <span class="sp-h">Kategorijas</span>
+            <span class="sp-i" style="--c:var(--k-games)"><span class="dotc"></span><span class="sp-l"><em class="hl">Sp</em>ēles</span><span class="sub">2 grupas</span></span>
+            <span class="sp-i" style="--c:var(--k-sport)"><span class="dotc"></span><span class="sp-l"><em class="hl">Sp</em>orts un fitness</span><span class="sub">3 grupas</span></span>
+            <span class="sp-h">Grupas</span>
+            <span class="sp-i" style="--c:var(--k-games)"><span class="sp-pic ph ph-games"></span><span class="sp-t"><b>Galda <em class="hl">sp</em>ēļu vakari</b><small>Spēles · Jelgava · 8 biedri</small></span></span>
+            <span class="sp-i" style="--c:var(--k-sport)"><span class="sp-pic"><svg><use href="#i-sport"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>orta nūjošana pensionāriem</b><small>Sports un fitness · Jelgava · 48 biedri</small></span></span>
+            <span class="sp-h">Pasākumi</span>
+            <span class="sp-i" style="--c:var(--k-games)"><span class="sp-pic"><svg><use href="#i-cal"/></svg></span><span class="sp-t"><b><em class="hl">Sp</em>ēļu vakars bibliotēkā</b><small>Otrd., 13. okt. 18:00 · Jelgavas bibliotēka</small></span></span>
+            <span class="sp-i" style="color:var(--muted);font-size:14px;padding-top:10px">Vēl 14 rezultāti citās pilsētās</span>
+            <span class="sp-all">Rādīt visus rezultātus<svg class="i"><use href="#i-arrow"/></svg></span>
           </div>
         </div>
       </div>
-      <p class="why" style="margin-top:6px"><b>With a picture.</b> The photo runs across the top of the header (about 4:1, cropped from the centre on narrow screens). The title block sits below it on the page surface, not on the photo, so it stays readable whatever the photo is, in light and dark. The group's small mark overlaps the photo's lower edge. <b>Without a picture</b> the header is the category-colour banner shown above, so every group still has a coloured top and the same layout.</p>
-    </div>
-    <div class="shot" style="flex:1 1 680px">
-      <div class="cap">Desktop · Pasākumi page in the same header<span class="status liked">Liked</span></div>
-      <div class="desk" style="--c:#10B981">
-        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
-        <div class="ghead">
-          <div class="gban">
-            <div class="gid"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s" aria-label="Vairāk">…</span></div>
-          </div>
-          <div class="gtabs"><span>Informācija</span><span class="on">Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
-        </div>
-        <div class="pg">
-          <div class="subsw"><span class="on">Gaidāmie</span><span>Pagājušie</span></div>
-          <div class="evlist">
-            <div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<br><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4 iet</span></div>
-            <div class="ev"><span class="date"><small>okt</small><b>25</b></span><span class="t"><b>Gaujas krasts</b>Sv., 25. okt. 09:30 · Sigulda<br><i>Būsi viens no pirmajiem</i></span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="shot">
-      <div class="cap">Phone · Events tab (compact header)</div>
-      <div class="mob" style="--c:#10B981">
-        <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
-        <div class="ghead">
-          <div class="gban" style="padding:14px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 17px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Daba</span><span class="tag">Rīga · 3</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
-          <div class="gtabs" style="padding:12px 14px 0;gap:16px"><span>Info</span><span class="on">Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
-        </div>
-        <div class="pg" style="padding:14px;gap:12px">
-          <div class="subsw"><span class="on">Gaidāmie</span><span>Pagājušie</span></div>
-          <div class="evlist" style="padding-inline:12px">
-            <div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<br><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i></span>Anna un vēl 5</span></div>
-            <div class="ev"><span class="date"><small>okt</small><b>25</b></span><span class="t"><b>Gaujas krasts</b>Sv., 25. okt. 09:30 · Sigulda<br><i>Būsi viens no pirmajiem</i></span></div>
-          </div>
-        </div>
-        <div class="navb"><span><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span class="on"><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
-      </div>
+      <p class="why" style="margin-top:6px">The panel shows at most two items per kind. With an empty field it shows recent searches and the categories, as before.</p>
     </div>
   </div>
-</section>
 
-<section aria-labelledby="h-menu">
-  <h2 id="h-menu">A menu on the left for a long page</h2>
-  <p class="lead">Chosen: the left-hand menu. The Information page of a group has several sections, and the menu keeps all their names visible.</p>
+  <h3>"Rādīt visus rezultātus" opens discovery, filtered</h3>
+  <p class="lead">Not a separate page. It is the discovery page you know, with the search words as one more filter: the same drawer (its counts now count only matches), the same Grupas / Pasākumi title with result counts, the same cards and event rows. The words stay in the search field; the cross clears them and you are back to plain discovery. Back returns to where you were.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 440px">
-      <div class="cap">Menu on the left<span class="status liked">Liked</span></div>
-      <div class="desk" style="--c:#10B981">
-        <div class="ghead">
-          <div class="gban" style="padding:14px 22px"><div class="slimbar" style="padding:0"><span class="gpic"><svg class="i"><use href="#i-mount"/></svg></span><div style="flex:1;min-width:0"><b style="font:600 20px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p sm">Pieteikties</span></div></div>
-          <div class="gtabs"><span class="on">Informācija</span><span>Pasākumi</span><span>Jaunumi</span><span>Biedri</span></div>
-        </div>
-        <div class="pg">
-          <div class="lmenu">
-            <div class="toc"><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Ko meklējam</span></div>
-            <div class="art">
-              <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
-              <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas.</p></div>
+    <div class="shot" style="flex:1 1 760px">
+      <div class="cap">Desktop · all results for "sp" in Jelgava</div>
+      <div class="desk">
+        <div class="urlbar">ejam.lumm.eu/lv?q=sp&amp;vieta=jelgava</div>
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span class="on">Atklāt</span><span>Manas grupas</span></nav><span class="search" style="color:var(--fg)"><svg class="i"><use href="#i-search"/></svg><span style="flex:1">sp</span><svg class="i" aria-label="Notīrīt"><use href="#i-x"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="disc">
+          <div class="catlist">
+            <span class="placebtn"><svg class="i"><use href="#i-pin"/></svg><span>Jelgava</span><svg class="i"><use href="#i-down"/></svg></span>
+            <div class="cl-h"><b>Kategorijas</b></div>
+            <span class="ci on" style="--c:var(--fg)"><span class="ic"><svg><use href="#i-all"/></svg></span><span class="nm">Visas</span><span class="n">5</span></span>
+            <span class="ci" style="--c:var(--k-games)"><span class="ic"><svg><use href="#i-games"/></svg></span><span class="nm">Spēles</span><span class="n">2</span></span>
+            <span class="ci" style="--c:var(--k-sport)"><span class="ic"><svg><use href="#i-sport"/></svg></span><span class="nm">Sports un fitness</span><span class="n">3</span></span>
+            <span class="ci zero" style="--c:var(--k-trav)"><span class="ic"><svg><use href="#i-mount"/></svg></span><span class="nm">Ceļošana un daba</span><span class="n">0</span></span>
+            <span class="ci zero" style="--c:var(--k-dance)"><span class="ic"><svg><use href="#i-dance"/></svg></span><span class="nm">Dejas</span><span class="n">0</span></span>
+            <span class="ci" style="--c:var(--muted)"><span class="ic"><svg><use href="#i-down"/></svg></span><span class="nm">… vēl 11 (0)</span></span>
+          </div>
+          <div class="pg">
+            <div class="ttl"><div class="tsw" role="tablist" aria-label="Rādīt"><span class="on" role="tab" aria-selected="true">Grupas<small>5</small></span><span role="tab" aria-selected="false">Pasākumi<small>3</small></span></div><span class="crumb">„sp” · Jelgavā · <u>meklēt visā Latvijā (19)</u></span></div>
+            <div class="gcards hz">
+              <div class="gc" style="--c:var(--k-games)"><div class="pic ph ph-games"></div><div class="in"><b class="clamp2">Galda spēļu vakari</b><div class="tags"><span class="tag cat" style="--c:var(--k-games)">Spēles</span><span class="sub">Galda spēles, Lomu spēles</span></div><span class="meta">Jelgava · 8 biedri</span></div><div class="note">Gaidām iesācējus</div></div>
+              <div class="gc" style="--c:var(--k-sport)"><div class="pic ph ph-nordic"></div><div class="in"><b class="clamp2">Sporta nūjošana pensionāriem</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Nūjošana</span></div><span class="meta">Jelgava · 48 biedri</span></div><div class="note">Nākamā tikšanās: pk., 16. okt.</div></div>
+              <div class="gc" style="--c:var(--k-sport)"><div class="pic"><svg><use href="#i-sport"/></svg></div><div class="in"><b class="clamp2">Jelgavas sporta deju klubs</b><div class="tags"><span class="tag cat" style="--c:var(--k-sport)">Sports un fitness</span><span class="sub">Sporta dejas</span></div><span class="meta">Jelgava · 16 biedri</span></div><div class="note">Meklējam partneri</div></div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <p class="why">Decided: the menu on the left, with no heading of its own (the names speak for themselves). It lists only the sections of the Information page; Pasākumi is a page of the group, in the tabs above, not a section of Information. The tabs and a right-hand list were dropped earlier.</p>
+
+  <h3>The place list, with its search inside</h3>
+  <p class="lead">The search field is the first line of the list itself, not a separate box above it: typing narrows the cities underneath. Each city shows how many groups it has, so an empty town is not a surprise. When nothing matches, the list says how a missing city gets added.</p>
+  <div class="screens">
+    <div class="shot" style="flex:0 1 320px">
+      <div class="cap">Opened · nothing typed</div>
+      <div class="pop" role="listbox" aria-label="Izvēlies vietu">
+        <span class="find in"><svg class="i"><use href="#i-search"/></svg>Meklēt pilsētu</span>
+        <span class="opt"><svg class="i"><use href="#i-pin"/></svg>Visa Latvija<small>412</small></span>
+        <span class="sep"></span>
+        <span class="opt on" role="option" aria-selected="true">Jelgava<small>23</small><svg class="i ck" style="margin-left:6px"><use href="#i-check"/></svg></span>
+        <span class="opt">Rīga<small>196</small></span>
+        <span class="opt">Liepāja<small>31</small></span>
+        <span class="opt">Daugavpils<small>27</small></span>
+        <span class="opt">Valmiera<small>18</small></span>
+      </div>
+    </div>
+    <div class="shot" style="flex:0 1 320px">
+      <div class="cap">"je" typed</div>
+      <div class="pop" role="listbox" aria-label="Izvēlies vietu">
+        <span class="find in" style="color:var(--fg)"><svg class="i"><use href="#i-search"/></svg><span class="q"><em class="hl">je</em><span class="caret"></span></span></span>
+        <span class="opt on" role="option" aria-selected="true"><span><em class="hl">Je</em>lgava</span><small>23</small></span>
+        <span class="opt"><span><em class="hl">Je</em>lgavas novads</span><small>4</small></span>
+        <span class="opt"><span><em class="hl">Jē</em>kabpils</span><small>6</small></span>
+      </div>
+    </div>
+    <div class="shot" style="flex:0 1 320px">
+      <div class="cap">No match</div>
+      <div class="pop" role="listbox" aria-label="Izvēlies vietu">
+        <span class="find in" style="color:var(--fg)"><svg class="i"><use href="#i-search"/></svg><span class="q">Ērgļi<span class="caret"></span></span></span>
+        <p class="spec-i" style="padding:8px 10px;margin:0">Ērgļos vēl nav grupu. Izveido pirmo: veidojot grupu, jaunu vietu var ieteikt.</p>
+      </div>
+    </div>
+  </div>
+  <p class="why"><b>Who gets which place</b> stays as agreed: signed-in people start with their profile city, a visitor's choice is remembered on their device, and "Visa Latvija" is always the first line. Suggesting a new city while creating a group is being built now (Session 4); the list then shows approved cities only.</p>
+</section>
+
+<section aria-labelledby="h-group">
+  <h2 id="h-group">A group page in the new look</h2>
+  <p class="lead">The page sidebar is back, as you asked, and it is the only group menu on desktop: the pages in the new order (Informācija, Jaunumi, Pasākumi, Biedri), each page's own parts nested under it. That also answers your note about two identical menus: "Gaidāmie · Pagājušie" and the Information sections are no longer a second row on top of the content, they sit in the sidebar under their page. The coloured header stays (liked); the cover-photo version is dropped, and the group's photo now fills the square mark.</p>
+  <div class="screens">
+    <div class="shot" style="flex:1 1 860px">
+      <div class="cap">Desktop · Informācija · member<span class="status liked">Liked header</span></div>
+      <div class="desk" style="--c:var(--k-trav)">
+        <div class="hdr"><span class="wm sm">Ejam <em>kopā</em></span><nav class="hnav" aria-label="Galvenā"><span>Atklāt</span><span class="on">Manas grupas</span></nav><span class="search"><svg class="i"><use href="#i-search"/></svg>Meklē grupu vai nodarbi…</span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="ghead">
+          <div class="gban">
+            <div class="gid"><span class="gpic ph ph-bog" role="img" aria-label="Grupas attēls"></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn s" aria-label="Vairāk">…</span></div>
+          </div>
+        </div>
+        <div class="gframe">
+          <nav class="gnav" aria-label="Grupas lapas">
+            <span class="on"><svg class="i"><use href="#i-note"/></svg>Informācija</span>
+            <div class="subs"><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span><span>Praktiski</span></div>
+            <span><svg class="i"><use href="#i-list"/></svg>Jaunumi<em>1</em></span>
+            <span><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span>
+            <span><svg class="i"><use href="#i-users"/></svg>Biedri</span>
+          </nav>
+          <div class="art">
+            <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
+            <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas. Apmēram 3 stundas, 10–12 km.</p></div>
+            <div><h4>Praktiski <small class="sub">· tikai biedriem</small></h4><p>Tikšanās vieta un Līgas tālrunis ir grupas sarakstē; braucam ar vilcienu no Centrālās stacijas.</p></div>
+          </div>
+          <div class="side">
+            <div class="nxt"><div class="nxt-h"><b>Nākamais pasākums</b><span>Visi<svg class="i"><use href="#i-arrow"/></svg></span></div><div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="shot" style="flex:1 1 860px">
+      <div class="cap">Desktop · Pasākumi · member · rows open in place</div>
+      <div class="desk" style="--c:var(--k-trav)">
+        <div class="ghead">
+          <div class="gban" style="padding:16px 22px">
+            <div class="gid"><span class="gpic ph ph-bog" style="width:48px;height:48px;border-radius:14px" role="img" aria-label="Grupas attēls"></span><div class="t"><h3 style="font-size:21px">Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn s" aria-label="Vairāk">…</span></div>
+          </div>
+        </div>
+        <div class="gframe two">
+          <nav class="gnav" aria-label="Grupas lapas">
+            <span><svg class="i"><use href="#i-note"/></svg>Informācija</span>
+            <span><svg class="i"><use href="#i-list"/></svg>Jaunumi</span>
+            <span class="on"><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span>
+            <div class="subs"><span class="on">Gaidāmie</span><span>Pagājušie</span></div>
+            <span><svg class="i"><use href="#i-users"/></svg>Biedri</span>
+          </nav>
+          <div class="gmain">
+            <div class="pt"><h4>Gaidāmie pasākumi</h4></div>
+            <div class="evlist">
+              <details class="evx" open><summary class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00 · Ķemeri<span class="sd">3 stundas pa laipām, līdzi ūdens un ērti apavi.</span></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+                <div class="evx-b"><p class="full">Apmēram 3 stundas pa koka laipām cauri Lielajam Ķemeru tīrelim, kopā 6 km. Ejam mierīgā tempā ar pauzi skatu tornī. Līdzi ērti apavi, ūdens un lietusjaka.</p><span class="going"><span class="faces"><i style="background:#c9b8a6"></i><i style="background:#a8bfa0"></i><i style="background:#d6a99a"></i></span>Anna, Toms un vēl 4 iet</span><span class="btn p sm">Iešu</span></div></details>
+              <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>25</b></span><span class="t"><b>Gaujas krasts</b>Sv., 25. okt. 09:30 · Sigulda<span class="sd">Gar smilšakmens atsegumiem līdz Velnalai, 14 km.</span><i>Būsi viens no pirmajiem</i></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+                <div class="evx-b"><p class="full">Gar Gaujas smilšakmens atsegumiem līdz Velnalai un atpakaļ pa augšējo taku, kopā 14 km. Pusdienas līdzi.</p><span class="btn p sm">Iešu</span></div></details>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="why" style="margin-top:6px">On the group's other pages the header is lower (the slim version), so the content starts higher; the sidebar stays in the same place on every group page. The team sees one more item, "Iestatījumi", at the bottom of the sidebar, and "Pieteikumi" nested under Biedri.</p>
+    </div>
+    <div class="shot" style="flex:1 1 680px">
+      <div class="cap">Desktop · Informācija · not a member (signed out)</div>
+      <div class="desk" style="--c:var(--k-trav)">
+        <div class="ghead">
+          <div class="gban">
+            <div class="gid"><span class="gpic ph ph-bog" role="img" aria-label="Grupas attēls"></span><div class="t"><h3>Pārgājieni</h3><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span><span class="tag">Rīga · 3 biedri</span></div></div><span class="btn p">Pieteikties</span><span class="btn s">Sazināties</span></div>
+          </div>
+        </div>
+        <div class="gframe">
+          <nav class="gnav" aria-label="Grupas lapas">
+            <span class="on"><svg class="i"><use href="#i-note"/></svg>Informācija</span>
+            <div class="subs"><span class="on">Par mums</span><span>Kā notiek pirmā tikšanās</span></div>
+            <span><svg class="i"><use href="#i-cal"/></svg>Pasākumi</span>
+            <span class="lock"><svg class="i" style="vertical-align:-3px;margin-right:4px"><use href="#i-lock"/></svg>Biedri redz arī jaunumus, biedru sarakstu un pasākumus tikai biedriem.</span>
+          </nav>
+          <div class="art">
+            <div><h4>Par mums</h4><p>Pārgājieni pa Latvijas takām un dabas vietām. Ejam lēnā tempā, ar pauzēm, un vienmēr sagaidām jaunus cilvēkus.</p></div>
+            <div><h4>Kā notiek pirmā tikšanās</h4><p>Pie starta tevi sagaidīs Līga. Līdzi ērti apavi, ūdens un uzkodas. Apmēram 3 stundas, 10–12 km.</p></div>
+          </div>
+          <div class="side">
+            <div class="nxt"><div class="nxt-h"><b>Nākamais pasākums</b></div><div class="evlist"><div class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00</span></div></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="why" style="margin-top:6px"><b>What a visitor sees.</b> Information (public sections only), public events, the member count, and the Pieteikties and Sazināties buttons. Jaunumi, Biedri, members-only sections and members-only events are not shown at all, not greyed (the Handbook: hidden, not disabled). One quiet line under the sidebar says what joining adds, so the page does not look emptier than the group is.</p>
+    </div>
+    <div class="shot">
+      <div class="cap">Phone · Pasākumi · member</div>
+      <div class="mob" style="--c:var(--k-trav)">
+        <div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="ghead">
+          <div class="gban" style="padding:14px"><div class="slimbar" style="padding:0"><span class="gpic ph ph-bog" role="img" aria-label="Grupas attēls"></span><div style="flex:1;min-width:0"><b style="font:600 17px var(--display)">Pārgājieni</b><div class="tags"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="tag">Rīga · 3</span></div></div><span class="btn s sm" aria-label="Vairāk">…</span></div></div>
+          <div class="gtabs" style="padding:12px 14px 0;gap:16px"><span>Info</span><span>Jaunumi</span><span class="on">Pasākumi</span><span>Biedri</span></div>
+        </div>
+        <div class="pg" style="padding:14px;gap:12px">
+          <div class="subsw"><span class="on">Gaidāmie</span><span>Pagājušie</span></div>
+          <div class="evlist" style="padding-inline:12px">
+            <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>17</b></span><span class="t"><b>Ķemeru purva taka</b>Sest., 17. okt. 10:00<span class="sd">3 stundas pa laipām, līdzi ūdens.</span></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+              <div class="evx-b" style="padding-left:0"><p class="full">Apmēram 3 stundas pa koka laipām cauri Lielajam Ķemeru tīrelim, kopā 6 km. Līdzi ērti apavi, ūdens un lietusjaka.</p><span class="btn p sm">Iešu</span></div></details>
+            <details class="evx"><summary class="ev"><span class="date"><small>okt</small><b>25</b></span><span class="t"><b>Gaujas krasts</b>Sv., 25. okt. 09:30<span class="sd">Līdz Velnalai, 14 km.</span></span><svg class="i chev"><use href="#i-down"/></svg></summary>
+              <div class="evx-b" style="padding-left:0"><p class="full">Gar Gaujas smilšakmens atsegumiem līdz Velnalai un atpakaļ, kopā 14 km.</p><span class="btn p sm">Iešu</span></div></details>
+          </div>
+        </div>
+        <div class="navb"><span><svg class="i"><use href="#i-search"/></svg>Atklāt</span><span class="on" aria-current="page"><svg class="i"><use href="#i-users"/></svg>Grupas</span><span><svg class="i"><use href="#i-msg"/></svg>Ziņas</span><span><svg class="i"><use href="#i-user"/></svg>Es</span></div>
+      </div>
+      <p class="why" style="margin-top:6px;max-width:340px">A phone has no room for a sidebar, so here the pages are a row of tabs under the slim bar, and a page's own parts are a small switch. Same order as on desktop.</p>
+    </div>
+  </div>
 </section>
 
 <section aria-labelledby="h-notif">
-  <h2 id="h-notif">Paziņojumi: kas ir svarīgākais</h2>
-  <p class="lead">Your note: today the notification <i>type</i> gets the heading treatment, but the type is the least useful part. Proposal: lead with <b>who or which group</b>, then <b>what happened</b> in one plain sentence, then the quiet line (category, sub-category), then the time. The type shrinks to a small icon at the left; there are no large avatars, so the sentence gets the width. Unread is a small dot and slightly stronger text, not a coloured block. Several items from one group collapse into one line. Personal messages are not here (the messages icon shows them); admin work is covered in its own part below.</p>
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol></svg>
+  <h2 id="h-notif">Paziņojumi</h2>
+  <p class="lead"><b>Option 1 is chosen and built</b> (Session 2): one bell, with "Personīgie" and "Administrācija" tabs that only site admins see, each with its own count; the shield icon holds the admin options. This round makes the items compact, as you asked: 13 px sentence, 11 px quiet line, tighter rows, at most two lines per item.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 280px;max-width:320px"><div class="cap">Today · dropdown, 320 px</div>
-      <div class="nt-pop old"><div class="nt-h"><b style="font:700 14px var(--body)">Paziņojumi</b><a style="font-size:11px;font-weight:700">Atzīmēt visus kā izlasītus</a></div><div class="nt-o u"><div class="a"><b>Vēja zirdžiņš · Dejas</b><span>12 min</span></div><p class="h">Anna vēlas pievienoties</p><p class="d">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p></div>
-<div class="nt-o u"><div class="a"><b>Pārgājieni · Ceļošana un daba</b><span>2 h</span></div><p class="h">Tavs pieteikums apstiprināts</p></div>
-<div class="nt-o u"><div class="a"><b>Vēja zirdžiņš · Dejas</b><span>3 h</span></div><p class="h">Jauns pasākums</p><p class="d">Mēģinājums</p></div>
-<div class="nt-o"><div class="a"><b>Jelgavas kori · Mūzika</b><span>Vakar</span></div><p class="h">Marta publicēja jaunumu</p><p class="d">“Mēģinājums pārcelts uz Kultūras namu.”</p></div>
-<div class="nt-o"><div class="a"><b>Bezmaksas velo</b><span>Otrd.</span></div><p class="h">Jauns paziņojums</p></div></div>
-      <p class="why">Sketch of the current component: group and category (small, bold) with the time on the first line, the type as a bold headline, the person's words under it. Unread rows are a tinted block. "Anna vēlas pievienoties" does not say which group without reading the small line above it.</p>
-    </div>
-    <div class="shot" style="flex:1 1 340px;max-width:400px"><div class="cap">Proposed · dropdown, 400 px</div>
-      <div class="nt-pop new"><div class="nt-h"><b>Paziņojumi</b><a>Atzīmēt visus kā izlasītus</a></div><div class="nt-sec">Šodien</div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-userplus"/></svg></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#10B981"><span class="nt-ic"><svg class="i"><use href="#i-check"/></svg></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w"><b>3 jauni pasākumi</b> grupā Vēja zirdžiņš</p><p class="q">Mēģinājums, Koncerts Sv., 18. okt. un vēl viens</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-sec">Agrāk</div><div class="nt-i" style="--c:#6366F1"><span class="nt-ic"><svg class="i"><use href="#i-list"/></svg></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p><div class="m"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Kori</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#10B981"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w">Jauns pasākums grupā <b>Pārgājieni</b>: Ķemeru purva taka, sest., 17. okt. 10:00</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">Vakar</span></div></div>
-      <p class="why">A small icon, then the sentence, which names the person and the group; the quiet line carries category and sub-category. Every event line names its group. Three new events in one group became one line; tapping it opens that group's events.</p>
-    </div>
-    <div class="shot" style="flex:0 1 340px"><div class="cap">Proposed · phone, full-screen list (with the site header)</div>
-      <div class="mob"><div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico open-m"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div><div class="nt-full"><div class="nt-top"><svg class="i"><use href="#i-left"/></svg><b>Paziņojumi</b><a>Visi izlasīti</a></div><div class="nt-sec">Šodien</div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-userplus"/></svg></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#10B981"><span class="nt-ic"><svg class="i"><use href="#i-check"/></svg></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w"><b>3 jauni pasākumi</b> grupā Vēja zirdžiņš</p><p class="q">Mēģinājums, Koncerts Sv., 18. okt. un vēl viens</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-sec">Agrāk</div><div class="nt-i" style="--c:#6366F1"><span class="nt-ic"><svg class="i"><use href="#i-list"/></svg></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p><div class="m"><span class="tag cat" style="--c:#6366F1">Mūzika</span><span class="sub">Kori</span></div></div><span class="nt-tm">Vakar</span></div><div class="nt-i" style="--c:#10B981"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w">Jauns pasākums grupā <b>Pārgājieni</b>: Ķemeru purva taka, sest., 17. okt. 10:00</p><div class="m"><span class="tag cat" style="--c:#10B981">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">Vakar</span></div></div></div>
-    </div>
-  </div>
-  <div class="idgrid">
-    <div class="box"><span class="lbl">Empty state<span class="status liked">Liked</span></span>
-      <div class="nt-empty"><span class="mk" aria-hidden="true"></span><b style="font:600 17px var(--display)">Pagaidām kluss</b><p class="spec-i">Kad kāds pieteiksies tavā grupā vai parādīsies jauns pasākums, tas būs šeit.</p></div>
-      <p class="why">English: "Quiet for now. When someone joins your group or a new event appears, it will show here." The two circles replace the grey bell.</p></div>
-    <div class="box wide"><span class="lbl">Why this order</span>
-      <p class="spec-i">One plain sentence ("Anna pieteicās grupā Vēja zirdžiņš") replaces a type label plus a detail; the type only helps as a small icon, so the content gets the space.</p>
-      <p class="spec-i">The quiet line repeats the group's category and sub-category, so a glance tells the topic without opening anything.</p>
-      <p class="spec-i">Unread as a dot and heavier text still works in the dark theme and without colour, and the list stays calm.</p></div>
-    <div class="box"><span class="lbl">Several from one group</span>
-      <p class="spec-i">"3 jauni pasākumi grupā Vēja zirdžiņš": notifications of the same kind from the same group collapse into one line, with the titles in the quiet text under it. One tap opens the group's events (or news).</p>
-      <p class="why">A single one reads in full: "Jauns pasākums grupā Pārgājieni: Ķemeru purva taka, sest., 17. okt. 10:00".</p></div>
-    <div class="box wide"><span class="lbl">Not in this list</span>
-      <p class="spec-i"><b>Personal messages.</b> The messages icon already shows new ones, so they are not repeated here.</p>
-      <p class="why">Admins are people too: they join groups and get personal notifications like anyone. Where their admin work (reports, new tags to approve, feedback) shows up is the question below.</p></div>
-  </div>
-
-  <h3>Notifications for admins: two options</h3>
-  <p class="lead">Admins have two kinds of items: their own (a request to their group) and admin work (a report, a tag to approve). The usual pattern keeps both easy to reach but never mixed in one list. Two ways to do it are shown. A third, switching your identity (as with Facebook Pages), is heavy and easy to forget which mode you are in, so it is not recommended.</p>
-  <div class="cmp two">
-    <div class="box opt-n"><span class="lbl">Option 1<span class="rec">Recommended</span></span>
-      <b>One bell, with tabs</b>
-      <div class="nt-pop new"><div class="nt-h"><b>Paziņojumi</b><a>Atzīmēt visus kā izlasītus</a></div>
-        <div class="nt-tabs"><div class="seg" role="tablist"><span class="on" role="tab" aria-selected="true">Personīgie <small>2</small></span><span role="tab" aria-selected="false">Administrācija <small>3</small></span></div></div>
+    <div class="shot" style="flex:1 1 340px;max-width:380px"><div class="cap">Dropdown, 380 px · admin<span class="status liked">Chosen · built</span></div>
+      <div class="nt-pop new nt-c"><div class="nt-h"><b>Paziņojumi</b><a>Atzīmēt visus kā izlasītus</a></div>
+        <div class="nt-tabs"><div class="seg" role="tablist"><span class="on" role="tab" aria-selected="true">Personīgie <small>3</small></span><span role="tab" aria-selected="false">Administrācija <small>2</small></span></div></div>
         <div class="nt-sec">Šodien</div>
-        <div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-userplus"/></svg></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><div class="m"><span class="tag cat" style="--c:#F43F5E">Dejas</span><span class="sub">Tautas dejas</span></div></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
-        <div class="nt-i u" style="--c:#10B981"><span class="nt-ic"><svg class="i"><use href="#i-check"/></svg></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div></div>
-      <p class="why">The bell is one place for everything. The two tabs appear only for admins; other people see the plain list. Each tab has its own count, so a glance shows which one needs you. This is how GitHub, Linear and LinkedIn handle personal and work items.</p></div>
-    <div class="box opt-n"><span class="lbl">Option 3</span>
-      <b>Separate places</b>
-      <div class="hdr" style="justify-content:flex-end;border:1px solid var(--line);border-radius:var(--r-in)" aria-label="Header, admin"><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg><span class="dot"></span></span><span class="ico" aria-label="Administrēšana, 3 jauni"><svg class="i"><use href="#i-shield"/></svg><span class="dot"></span></span><span class="av" style="background:#c9b8a6"></span></div>
-      <div class="nt-pop new"><div class="nt-h"><b>Administrēšana</b><a>Atvērt</a></div><div class="nt-sec">Jauns</div><div class="nt-i u" style="--c:#64748B"><span class="nt-ic"><svg class="i"><use href="#i-flag"/></svg></span><div class="nt-b"><p class="w">Ziņojums par grupu <b>Bezmaksas velo</b>: reklāma</p><div class="m"><span class="tag cat" style="--c:#64748B">Moderēšana</span></div></div><span class="nt-tm">Otrd.<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div><div class="nt-i u" style="--c:#F43F5E"><span class="nt-ic"><svg class="i"><use href="#i-list"/></svg></span><div class="nt-b"><p class="w">Jauna apakštēma gaida apstiprinājumu: <b>Tautas dejas</b></p><div class="m"><span class="tag cat" style="--c:#F43F5E">Taksonomija</span></div></div><span class="nt-tm">Pirmd.<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div></div>
-      <p class="why">The bell stays personal. Admin items are counted on the shield icon in the header and open from there. This is how Discord and Slack keep server work apart from personal mentions: two icons with two dots, nothing ever mixed.</p></div>
+        <div class="nt-i u" style="--c:var(--k-dance)"><span class="nt-ic"><svg class="i"><use href="#i-userplus"/></svg></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="nt-i u" style="--c:var(--k-trav)"><span class="nt-ic"><svg class="i"><use href="#i-check"/></svg></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p><div class="m"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="nt-i u" style="--c:var(--k-dance)"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w"><b>3 jauni pasākumi</b> grupā Vēja zirdžiņš</p><p class="q">Mēģinājums, Koncerts sv., 18. okt. un vēl viens</p></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="nt-sec">Agrāk</div>
+        <div class="nt-i" style="--c:var(--k-music)"><span class="nt-ic"><svg class="i"><use href="#i-list"/></svg></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p></div><span class="nt-tm">Vakar</span></div>
+        <div class="nt-i" style="--c:var(--k-trav)"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w">Jauns pasākums grupā <b>Pārgājieni</b>: Ķemeru purva taka, sest., 17. okt.</p><div class="m"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni</span></div></div><span class="nt-tm">Vakar</span></div>
+      </div>
+    </div>
+    <div class="shot" style="flex:0 1 340px"><div class="cap">Phone · full-screen list</div>
+      <div class="mob"><div class="hdr" style="padding:10px 14px;gap:8px"><span class="wm sm" style="font-size:19px">Ejam <em>kopā</em></span><span style="flex:1"></span><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico open-m"><svg class="i"><use href="#i-bell"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
+        <div class="nt-full nt-c"><div class="nt-top"><svg class="i"><use href="#i-left"/></svg><b>Paziņojumi</b><a>Visi izlasīti</a></div>
+          <div class="nt-sec">Šodien</div>
+          <div class="nt-i u" style="--c:var(--k-dance)"><span class="nt-ic"><svg class="i"><use href="#i-userplus"/></svg></span><div class="nt-b"><p class="w"><b>Anna</b> pieteicās grupā Vēja zirdžiņš</p><p class="q">“Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.”</p></div><span class="nt-tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+          <div class="nt-i u" style="--c:var(--k-trav)"><span class="nt-ic"><svg class="i"><use href="#i-check"/></svg></span><div class="nt-b"><p class="w">Tavs pieteikums grupā <b>Pārgājieni</b> ir apstiprināts</p></div><span class="nt-tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+          <div class="nt-i u" style="--c:var(--k-dance)"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w"><b>3 jauni pasākumi</b> grupā Vēja zirdžiņš</p><p class="q">Mēģinājums, Koncerts sv., 18. okt. un vēl viens</p></div><span class="nt-tm">3 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+          <div class="nt-sec">Agrāk</div>
+          <div class="nt-i" style="--c:var(--k-music)"><span class="nt-ic"><svg class="i"><use href="#i-list"/></svg></span><div class="nt-b"><p class="w"><b>Marta</b> publicēja jaunumu grupā Jelgavas kori</p><p class="q">“Mēģinājums pārcelts uz Kultūras namu.”</p></div><span class="nt-tm">Vakar</span></div>
+          <div class="nt-i" style="--c:var(--k-trav)"><span class="nt-ic"><svg class="i"><use href="#i-cal"/></svg></span><div class="nt-b"><p class="w">Jauns pasākums grupā <b>Pārgājieni</b>: Ķemeru purva taka</p></div><span class="nt-tm">Vakar</span></div>
+        </div></div>
+    </div>
+    <div class="shot" style="flex:1 1 260px;max-width:340px">
+      <p class="why"><b>Two lines, never more.</b> The sentence, then one quiet line: the person's own words when there are any, otherwise the category and sub-category.</p>
+      <p class="why"><b>Unchanged and liked:</b> who and which group first, the type as a small icon, unread as a dot, several items from one group in one line.</p>
+      <div class="nt-empty" style="padding:18px 10px"><span class="mk" aria-hidden="true"></span><b style="font:600 16px var(--display)">Pagaidām kluss</b><p class="spec-i">Kad kāds pieteiksies tavā grupā vai parādīsies jauns pasākums, tas būs šeit.</p><span class="status liked">Liked</span></div>
+    </div>
   </div>
-  <p class="why"><b>Option 2, not recommended:</b> switch identity (as with Facebook Pages), so the whole site shows either you or the admin role. It is heavy, and it is easy to forget which mode you are in.</p>
-
-  <h3>The admin icon: a small menu of admin options</h3>
-  <p class="lead">Either way, the shield next to the avatar (admins only, on every screen size) can hold the admin options, so they are one tap away from any page. With option 3 it also carries the admin count. Admin entries stay out of the profile menu.</p>
   <div class="screens">
-    <div class="shot" style="flex:0 1 330px"><div class="cap">Admin icon opened</div>
+    <div class="shot" style="flex:0 1 330px"><div class="cap">Admin icon menu<span class="status liked">Built</span></div>
       <div class="desk"><div class="hdr" style="justify-content:flex-end"><span class="ico"><svg class="i"><use href="#i-msg"/></svg></span><span class="ico"><svg class="i"><use href="#i-bell"/></svg></span><span class="ico open-m" aria-label="Administrēšana"><svg class="i"><use href="#i-shield"/></svg></span><span class="av" style="background:#c9b8a6"></span></div>
         <div style="padding:10px 14px;display:flex;justify-content:flex-end"><div class="pop" role="menu" aria-label="Administrēšana">
           <span class="opt" role="menuitem"><svg class="i"><use href="#i-note"/></svg>Atsauksmju režīms<small>Izslēgts</small></span>
@@ -1134,151 +1386,85 @@ html.dark .rd{
           <span class="sep"></span>
           <span class="opt" role="menuitem"><svg class="i"><use href="#i-shield"/></svg>Administrēšanas panelis<svg class="i ck"><use href="#i-arrow"/></svg></span></div></div></div></div>
     <div class="shot" style="flex:1 1 300px;max-width:420px">
-      <p class="why"><b>Switches and a door.</b> The two modes are switches (on or off, shown on the right); the panel is a link. Other admin options can be added to this list later without touching the header.</p></div>
-  </div>
-  <div class="open">
-    <div><b>When does an item count as read?</b><p>Today it is read when you tap it. Should the whole list count as read once the dropdown has been open for a moment?</p></div>
+      <div class="open"><div><b>When does an item count as read?</b><p>Today: when you tap it. Recommendation: keep it that way. Marking the whole list read just because it was opened hides things you only glanced past.</p></div></div>
+    </div>
   </div>
 </section>
 
 <section aria-labelledby="h-conv">
   <h2 id="h-conv">Sarunas: kas ir kas</h2>
-  <p class="lead">Your notes: a conversation with a group's team must not look like a chat between two people; when two members who share a group write to each other, the chat should say where it started; and in "Visas" the two kinds look too alike. Below: today's list, a proposed list with the same conversations and one more with a long message, and the chat views.</p>
+  <p class="lead">Two changes: a group conversation now shows the group's category and sub-category, and the "kopā:" word is gone; shared groups are shown after a small people icon. The rest is as liked.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 280px;max-width:340px"><div class="cap">Today · "Visas", 320 px</div>
-      <div class="desk cv-list cv-old">
-        <div class="cv-top"><b>Ziņas</b><div class="seg"><span class="on">Visas</span><span>Personīgās</span><span>Grupu</span></div></div>
-        <div class="cv-i u"><span class="av2">A</span><div class="t"><b>Anna</b><span class="l">Vai šodien būs mēģinājumā?</span></div><span class="tm">12 min</span></div>
-        <div class="cv-i u"><span class="av2">A</span><div class="t"><b>Anna</b><span class="gl" style="--c:#F43F5E">Vēja zirdžiņš · Dejas</span><span class="l">Sveiki! Dejoju jau četrus gadus…</span></div><span class="tm">2 h</span></div>
-        <div class="cv-i"><span class="av2"><svg class="i"><use href="#i-users"/></svg></span><div class="t"><b>Pārgājieni</b><span class="gl" style="--c:#10B981">Pārgājieni · Ceļošana un daba</span><span class="l">Pieteikums apstiprināts</span></div><span class="tm">Vakar</span></div>
-        <div class="cv-i"><span class="av2">M</span><div class="t"><b>Marta</b><span class="l">Paldies par sarunu!</span></div><span class="tm">Vakar</span></div>
-        <div class="cv-i"><span class="av2">K</span><div class="t"><b>Kārlis</b><span class="gl" style="--c:#6366F1">Jelgavas kori · Mūzika</span><span class="l">Vai var nākt uz mēģinājumu?</span></div><span class="tm">Otrd.</span></div>
-        <div class="cv-i"><span class="av2">P</span><div class="t"><b>Pēteris</b><span class="l">Labi, tiekamies!</span></div><span class="tm">Pirmd.</span></div>
-      </div>
-      <p class="why">Sketch from the code: every row is a round avatar (or a grey group icon), a bold name and the last message. Only a group chat gets a small coloured line. Personal and group rows share one shape, and the same name ("Anna") appears twice with nothing to tell the two chats apart.</p>
-    </div>
-    <div class="shot" style="flex:1 1 300px;max-width:380px"><div class="cap">Proposed · "Visas", 360 px</div>
+    <div class="shot" style="flex:1 1 300px;max-width:380px"><div class="cap">"Visas", 360 px</div>
       <div class="desk cv-list">
         <div class="cv-top"><b>Ziņas</b><div class="seg"><span class="on">Visas</span><span>Personīgās</span><span>Grupu</span></div></div>
-        <div class="cv-i u"><span class="nt-av g" style="--c:#F43F5E"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="l">Mēs jūs gaidām ceturtdien!</span></div><span class="tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
-        <div class="cv-i u"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="l">Vai šodien būs mēģinājumā?</span><span class="q">kopā: Vēja zirdžiņš, Pārgājieni</span></div><span class="tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
-        <div class="cv-i"><span class="nt-av g" style="--c:#10B981"><svg class="i"><use href="#i-mount"/></svg></span><div class="t"><b>Pārgājieni</b><span class="l">Pieteikums apstiprināts</span></div><span class="tm">Vakar</span></div>
-        <div class="cv-i"><span class="nt-av">M</span><div class="t"><b>Marta</b><span class="l">Paldies par sarunu!</span><span class="q">kopā: Jelgavas kori</span></div><span class="tm">Vakar</span></div>
-        <div class="cv-i"><span class="nt-av g" style="--c:#6366F1"><svg class="i"><use href="#i-music"/></svg></span><div class="t"><b>Jelgavas kori</b><span class="l">Kārlis: Vai var nākt uz mēģinājumu?</span></div><span class="tm">Otrd.</span></div>
-        <div class="cv-i"><span class="nt-av g" style="--c:#14B8A6"><svg class="i"><use href="#i-users"/></svg></span><div class="t"><b>Bezmaksas velo</b><span class="l two">Kārlis: Sveiki visiem! Atgādinu, ka nākamajā otrdienā tikšanās notiks jau pulksten 18:30, nevis 19:00, jo zāli pārcēla uz mazo zāli otrajā stāvā. Lūdzu paņemiet līdzi ūdeni.</span></div><span class="tm">Pirmd.</span></div>
+        <div class="cv-i u"><span class="nt-av g" style="--c:var(--k-dance)"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="l">Mēs jūs gaidām ceturtdien!</span><span class="q"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="sub">Tautas dejas</span></span></div><span class="tm">12 min<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="cv-i u"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="l">Vai šodien būs mēģinājumā?</span><span class="q"><span><svg class="i"><use href="#i-users"/></svg>Vēja zirdžiņš, Pārgājieni</span></span></div><span class="tm">2 h<i class="nt-dot" role="img" aria-label="Nelasīts"></i></span></div>
+        <div class="cv-i"><span class="nt-av g ph ph-bog" style="--c:var(--k-trav);background-image:var(--img);background-size:cover"></span><div class="t"><b>Pārgājieni</b><span class="l">Pieteikums apstiprināts</span><span class="q"><span class="tag cat" style="--c:var(--k-trav)">Ceļošana un daba</span><span class="sub">Pārgājieni, Kempings</span></span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="nt-av">M</span><div class="t"><b>Marta</b><span class="l">Paldies par sarunu!</span><span class="q"><span><svg class="i"><use href="#i-users"/></svg>Jelgavas kori</span></span></div><span class="tm">Vakar</span></div>
+        <div class="cv-i"><span class="nt-av g" style="--c:var(--k-music)"><svg class="i"><use href="#i-music"/></svg></span><div class="t"><b>Jelgavas kori</b><span class="l">Kārlis: Vai var nākt uz mēģinājumu?</span><span class="q"><span class="tag cat" style="--c:var(--k-music)">Mūzika</span><span class="sub">Kori</span></span></div><span class="tm">Otrd.</span></div>
         <div class="cv-i"><span class="nt-av">P</span><div class="t"><b>Pēteris</b><span class="l">Labi, tiekamies!</span></div><span class="tm">Pirmd.</span></div>
       </div>
-      <p class="why">The row is about the content: the name, then the last message in full-strength text. The category tag and the "Tu ↔ grupas komanda" line are gone from the list; a group conversation is told apart by the group's mark (category colour, rounded square) and name, and the chat header still says whose side you are on. Personal ones keep the round face, with a small "kopā:" line for shared groups (left out when there are none, like Pēteris). <b>A long message</b> ("Bezmaksas velo") is cut after two lines with "…"; shorter ones stay on one line, so a row is never taller than two lines of text.</p>
+      <p class="why">A group row: the group's mark (its photo, or the category icon on the category tint), name, last message, then category and sub-category. A personal row: round face, name, last message, then the groups you share. Pēteris shares none, so his row has no third line.</p>
     </div>
-  </div>
-
-  <h3>Inside a conversation</h3>
-  <div class="screens">
     <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Personal chat that started from a group<span class="status liked">Liked</span></div>
       <div class="desk cv-pane">
-        <div class="cv-head"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="q">kopā: Vēja zirdžiņš, Pārgājieni</span></div></div>
+        <div class="cv-head"><span class="nt-av">A</span><div class="t"><b>Anna</b><span class="q"><span><svg class="i"><use href="#i-users"/></svg>Vēja zirdžiņš, Pārgājieni</span></span></div></div>
         <div class="cv-msgs">
           <div class="cv-sys"><span>Anna rakstīja no grupas Vēja zirdžiņš · 10. okt.</span></div>
           <div class="cv-b"><p>Sveika! Vai šodien būs mēģinājumā?</p></div>
           <div class="cv-b me"><p>Būšu, ap 19:00.</p></div>
-          <div class="cv-sys"><span>Tu rakstīji no grupas Pārgājieni · 14. okt.</span></div>
-          <div class="cv-b me"><p>Un svētdien ejam uz Ķemeriem, nāksi līdzi?</p></div>
         </div>
       </div>
-      <p class="why">A quiet centred line, never a bubble. It appears when the conversation starts from a group and again each time it is resumed from a different one.</p>
     </div>
     <div class="shot" style="flex:1 1 300px;max-width:400px"><div class="cap">Conversation with a group's team<span class="status liked">Liked</span></div>
       <div class="desk cv-pane">
-        <div class="cv-head"><span class="nt-av g" style="--c:#F43F5E"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="q">Tu ↔ grupas komanda</span></div></div>
-        <div class="cv-msgs" style="--c:#F43F5E">
+        <div class="cv-head"><span class="nt-av g" style="--c:var(--k-dance)"><svg class="i"><use href="#i-dance"/></svg></span><div class="t"><b>Vēja zirdžiņš</b><span class="q"><span class="tag cat" style="--c:var(--k-dance)">Dejas</span><span class="sub">Tautas dejas</span><span>· Tu ↔ grupas komanda</span></span></div></div>
+        <div class="cv-msgs" style="--c:var(--k-dance)">
           <div class="cv-sys"><span>Pieteikums grupai Vēja zirdžiņš · 10. okt.</span></div>
           <div class="cv-b me"><p>Sveiki! Dejoju jau četrus gadus, gribētu pievienoties.</p></div>
           <div class="cv-b"><small>Vēja zirdžiņš · Anna, vadītāja</small><p>Sveika! Gaidām tevi ceturtdien 19:00.</p></div>
           <div class="cv-b"><small>Vēja zirdžiņš · Juris, palīgs</small><p>Līdzi ērtus apavus!</p></div>
-          <div class="cv-b long"><small>Vēja zirdžiņš · Anna, vadītāja</small><p>Mēģinājumi notiek ceturtdienās 19:00 Kultūras namā, Skolas ielā 3. Pirmajā reizē ieteicams atnākt 15 minūtes agrāk, lai iepazītos ar pārējiem un izvēlētos vietu zālē. Līdzi ērtus apavus un ūdeni, pārējo nodrošinām mēs.</p></div>
         </div>
       </div>
-      <p class="why">The person sees one voice: the group. Each reply says who in the team wrote it, the group first and the person after it. For the team, the same chat reads "Grupas komanda ↔ Kārlis". A long message wraps inside its bubble, which never grows past about four fifths of the width.</p>
     </div>
-  </div>
-  <div class="idgrid">
-    <div class="box wide"><span class="lbl">Why one conversation per pair of people</span>
-      <p class="spec-i">Two people have one thread, like a phone contact; the system line says where each stretch began.</p>
-      <p class="spec-i">One thread per group would split a single relationship into pieces, and "vai šodien būs mēģinājumā?" would land in a thread nobody opens.</p>
-      <p class="spec-i">Today's direct chats have no group at all, so the line needs one small addition: each message or resume remembers the group it came from.</p></div>
-    <div class="box"><span class="lbl">Group conversations are separate</span><p class="why">A join request or a contact to the team is always its own conversation (person ↔ whole team), never merged with a personal chat with the same person.</p></div>
-  </div>
-  <div class="open">
-    <div><b>One conversation per pair, or one per pair per group?</b><p>Proposed: one per pair, with a system line each time the starting group changes. The alternative gives each group its own thread with the same person, which is clearer about context but multiplies threads. Which one?</p></div>
-    <div><b>Mixed list or two parts?</b><p>"Visas" could stay one list ordered by time (shown), or show "Grupu sarunas" and "Personīgās" under their own small headings. Does the different look suffice, or do you want the headings too?</p></div>
   </div>
 </section>
 
 <section aria-labelledby="h-nav">
   <h2 id="h-nav">Admin: kur atrodas izvēlne</h2>
-  <p class="lead">Your notes: the admin tabs stick at the top and you dislike it; the header area holds nothing for admin; and you want one navigation pattern for the whole site, not a new answer per page. Proposal: one rule, then admin, the Handbook and group pages follow from it.</p>
-  <h3>Today</h3>
+  <p class="lead">One navigation rule for the whole site, so admin, the Handbook and group pages behave the same way. The group page now follows the "menu on the left" half of it, like admin.</p>
   <div class="screens">
-    <div class="shot" style="flex:1 1 440px"><div class="cap">Admin on desktop · one row of eight tabs</div>
-      <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg></div>
-        <div class="adm-tabs"><span class="on">Birkas</span><span>Sūdzības</span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi</span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
-        <div class="pg"><div class="adm-pg"><h4>Atsauksmes</h4><div class="adm-rows"><div>Piezīme 1 · Header</div><div>Piezīme 2 · Group card</div></div></div></div></div>
-      <p class="why">From the code: the global header is the only sticky bar and the admin row sits right under it, so on scrolling the header and the first tab row read as one fixed block. Eight tabs also overflow sideways on a phone, and the Handbook adds a second menu below. The header itself carries nothing admin-specific.</p>
-    </div>
-    <div class="shot" style="flex:0 1 340px"><div class="cap">Admin on a phone</div>
-      <div class="mob"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg></div>
-        <div class="adm-tabs"><span class="on">Birkas</span><span>Sūdzības</span><span>Moderācija</span><span>Takso…</span></div>
-        <div class="pg"><div class="adm-pg"><h4>Atsauksmes</h4><div class="adm-rows"><div>Piezīme 1 · Header</div><div>Piezīme 2 · Group card</div></div></div></div></div>
-      <p class="why">Half of the tabs are off-screen; "Atsauksmes", "Dizains" and "Rokasgrāmata" need a sideways swipe to find.</p>
-    </div>
-  </div>
-  <h3>Proposed</h3>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 440px"><div class="cap">Admin on desktop · menu on the left, scrolls away with the page</div>
+    <div class="shot" style="flex:1 1 520px"><div class="cap">Admin on desktop · a section with its own sub-sections (Rokasgrāmata)</div>
       <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg><svg class="i"><use href="#i-shield"/></svg></div>
         <div class="adm-body">
-          <div class="adm-menu"><b>Administrēšana</b><span class="on">Birkas <em>3</em></span><span>Sūdzības <em>1</em></span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
-          <div class="adm-pg"><h4>Birkas</h4><div class="adm-rows"><div>Jauna apakštēma: Tautas dejas</div><div>Jauna apakštēma: Nūjošana</div></div></div>
-        </div></div>
-      <p class="why">Eight names always visible with their counts; the header stays as on every page. The menu is part of the page, not of the frame, so it scrolls away like the content.</p>
-    </div>
-    <div class="shot" style="flex:0 1 340px"><div class="cap">Phone · a selector at the top of the page</div>
-      <div class="mob" style="padding-bottom:14px"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg></div>
-        <div class="pg"><div class="adm-sel"><span>Birkas <small>· Administrēšana</small></span><svg class="i"><use href="#i-down"/></svg></div>
-          <div class="adm-sheet"><span class="on">Birkas <em>3</em></span><span>Sūdzības <em>1</em></span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
-          <div class="adm-pg"><h4>Birkas</h4></div></div></div>
-      <p class="why">Shown open. Closed it is the one pill; it works like the Handbook's "Nodaļas" menu does today.</p>
-    </div>
-  </div>
-  <div class="screens">
-    <div class="shot" style="flex:1 1 520px"><div class="cap">Admin on desktop · inside a section that has its own sub-sections (Rokasgrāmata)</div>
-      <div class="desk adm-d"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg><svg class="i"><use href="#i-bell"/></svg><svg class="i"><use href="#i-shield"/></svg></div>
-        <div class="adm-body">
-          <div class="adm-menu"><b>Administrēšana</b><span>Birkas <em>3</em></span><span>Sūdzības <em>1</em></span><span>Moderācija</span><span>Taksonomija</span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span class="par">Rokasgrāmata<svg class="i"><use href="#i-down"/></svg></span>
+          <div class="adm-menu"><b>Administrēšana</b><span>Moderācija</span><span>Sūdzības <em>1</em></span><span>Taksonomija <em>3</em></span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span class="par">Rokasgrāmata<svg class="i"><use href="#i-down"/></svg></span>
             <div class="subs"><span>Ievads</span><span>Vērtības</span><span>Principi</span><span>Balss</span><span class="on">Uzvedība</span><span>Dizains</span><span>Lomas</span><span>UI elementi</span></div>
           </div>
           <div class="adm-pg"><span class="sub">Rokasgrāmata</span><h4>Uzvedība</h4><div class="adm-rows"><div>Navigācija: kad cilnes, kad izvēlne</div><div>Pogas un veidlapas</div><div>Paziņojumi un sarunas</div></div></div>
         </div></div>
-      <p class="why">The section you are in opens in the same menu, its chapters indented under it with a thin line; the chapter you are reading is highlighted. Only the current section is open, so the menu stays short. The page itself starts with a small breadcrumb ("Rokasgrāmata") above the chapter title. On phones the same two levels appear in the selector sheet: the section, with its chapters listed under it when it is open.</p>
+      <p class="why">The section you are in opens in the same menu, its chapters indented under it. On phones the same two levels appear in one selector at the top of the page.</p>
+    </div>
+    <div class="shot" style="flex:0 1 340px"><div class="cap">Phone · a selector at the top of the page</div>
+      <div class="mob" style="padding-bottom:14px"><div class="adm-hd"><span class="wm sm">Ejam <em>kopā</em></span><span class="sp"></span><svg class="i"><use href="#i-search"/></svg></div>
+        <div class="pg"><div class="adm-sel"><span>Taksonomija <small>· Administrēšana</small></span><svg class="i"><use href="#i-down"/></svg></div>
+          <div class="adm-sheet"><span>Moderācija</span><span>Sūdzības <em>1</em></span><span class="on">Taksonomija <em>3</em></span><span>Tulkojumi <em>2</em></span><span>Atsauksmes</span><span>Dizains</span><span>Rokasgrāmata</span></div>
+          <div class="adm-pg"><h4>Taksonomija</h4></div></div></div>
     </div>
   </div>
   <div class="rulebox"><span class="lbl">The rule · for the Handbook (Behaviour patterns)</span>
     <ol>
-      <li><b>Few sections, up to five:</b> tabs directly under the page title. They scroll away with the page and are never sticky.</li>
-      <li><b>More than five:</b> a menu on the left on desktop; on phones the same list opens from one selector at the top of the page.</li>
-      <li><b>The global header</b> never carries section menus. It holds the site, search, messages, notifications, the admin icon (admins only, it opens a menu of admin options) and the person.</li>
-      <li><b>Inside a section</b> a small switch (like "Gaidāmie · Notikušie") separates views of the same thing; it is never a second row of tabs.</li>
+      <li><b>Desktop:</b> a page's sections are a menu on the left, with each section's own parts nested under it. It scrolls with the page and is never sticky.</li>
+      <li><b>Phones:</b> up to five sections are tabs under the title (group pages); more than five open from one selector at the top of the page (admin, Handbook).</li>
+      <li><b>The global header</b> never carries section menus. It holds the site, Atklāt and Manas grupas, search, messages, notifications, the admin icon (admins only) and the person.</li>
+      <li><b>Never two menus stacked.</b> Views of the same thing (Gaidāmie · Pagājušie) are nested in the left menu on desktop, a small switch on phones.</li>
     </ol></div>
   <ul class="apply">
-    <li><b>Admin</b><span>8 sections</span><span>Left menu on desktop, selector on phones, not sticky.</span></li>
-    <li><b>Handbook</b><span>10 pages</span><span>Its chapters become sub-items of "Rokasgrāmata" in the same left menu (shown above), so there is one menu instead of two. On phones they sit in the same selector.</span></li>
-    <li><b>Group page</b><span>4 pages</span><span>Tabs under the group header, as agreed above; a small switch inside a page. Today they are sticky: they would scroll away.</span></li>
+    <li><b>Admin</b><span>7 sections</span><span>Left menu on desktop, selector on phones.</span></li>
+    <li><b>Handbook</b><span>10 chapters</span><span>Sub-items of "Rokasgrāmata" in the admin menu.</span></li>
+    <li><b>Group page</b><span>4 pages</span><span>Sidebar on desktop (shown above), tabs on phones.</span></li>
     <li><b>Messages</b><span>a list</span><span>Not a menu: a list and a conversation, and the side drawer already agreed.</span></li>
   </ul>
-  <div class="open">
-    <div><b>Is the rule right, and is five the right line?</b><p>Up to five: tabs. More: a left menu. Confirm, or move the number. Eight in admin makes it a menu either way.</p></div>
-    <div><b>Should group tabs scroll away too?</b><p>A group's tabs stay in reach while scrolling a long page today. The rule makes them scroll away like everything else. Keep that, or make this the one exception?</p></div>
-  </div>
 </section>
 
 <section aria-labelledby="h-agreed">
@@ -1286,15 +1472,16 @@ html.dark .rd{
   <ul class="agreed">
     <li><b>Identity first</b><p>No screen is redesigned before the identity is settled. This page stays discussion only.</p></li>
     <li><b>Fonts and shapes</b><p>Literata headings, Commissioner text with small italic notes; soft corners, pill buttons, thin dividing lines, quiet labels.</p></li>
-    <li><b>Colour means category</b><p>The 15 category colours appear only as dots, icons, soft tints and pictures, never as buttons. The site's own colour is natural and none of them.</p></li>
+    <li><b>Colour means category</b><p>Category colours appear only as dots, icons, soft tints, banners and the picture fallback, never as site buttons. The site's own colour is natural and none of them.</p></li>
     <li><b>Categories with icons, in a drawer</b><p>All 15 always listed, alphabetical, each with its icon. The drawer folds to an icon rail on desktop; on phones a "Kategorijas" sheet.</p></li>
-    <li><b>Subcategories matter</b><p>Shown after the category on cards, events and the group header: all of them, smaller and lighter than the category.</p></li>
-    <li><b>"Ko meklējam?"</b><p>A new optional group field (up to 60 characters) shown as the card's note; when empty, the card shows the next meeting.</p></li>
-    <li><b>Two levels of group navigation</b><p>Tabs for the group's pages; a small switch inside a page (Events: upcoming · past; Members: members · requests; Settings: group · sections · owner).</p></li>
-    <li><b>"Šajā lapā" is a menu on the left</b><p>Tabs under the group header were dropped (they looked like a second copy of the group menu).</p></li>
-    <li><b>Messages</b><p>Ziņas: a side drawer from the right for quick replies from any page; /messages stays the full view (user agreed 2026-10-10).</p></li>
-    <li><b>Group header</b><p>The coloured header with the group's mark, title, category and tabs is the frame of every internal group page (owner liked it, 2026-10-11).</p></li>
-    <li><b>Dates show the weekday</b><p>Event rows read "Sv., 11. okt. 17:00" (weekday, day, month, time).</p></li>
+    <li><b>Sub-categories matter</b><p>Shown after the category on cards, events, the group header and group conversations: all of them, smaller and lighter.</p></li>
+    <li><b>Group cards</b><p>Horizontal on desktop, vertical on phones (2026-10-11). "Ko meklējam?" note, or the next meeting.</p></li>
+    <li><b>Group header</b><p>The coloured header with the group's mark, title and category is the frame of every group page; the cover-photo version is dropped.</p></li>
+    <li><b>Group page order</b><p>Informācija, Jaunumi, Pasākumi, Biedri (2026-10-11).</p></li>
+    <li><b>An opened card sits on top</b><p>Panel from the right on desktop, sheet on phones (owner, 2026-10-11).</p></li>
+    <li><b>Admin notifications</b><p>One bell with Personīgie / Administrācija tabs, and the admin icon menu. Built in Session 2.</p></li>
+    <li><b>Messages</b><p>A side drawer from the right for quick replies from any page; /messages stays the full view. Group conversation = person and the whole team; the team speaks as the group.</p></li>
+    <li><b>Dates show the weekday</b><p>Event rows read "Sv., 11. okt. 17:00".</p></li>
     <li><b>Encourage, don't count</b><p>Faces of who is coming instead of "0 apstiprināti"; sentence case, no capitals.</p></li>
   </ul>
 </section>
@@ -1302,10 +1489,10 @@ html.dark .rd{
 <section aria-labelledby="h-open">
   <h2 id="h-open">Still open</h2>
   <div class="open">
-    <div><b>Admin notifications: one bell with tabs, or separate places?</b><p>Recommended: one bell with "Personīgie / Administrācija" tabs (admins only). Alternative: the bell stays personal and admin items are counted on the shield icon. Waiting for the owner's choice.</p></div>
-    <div><b>Which natural colour?</b><p>Sūna, Jūra or Rudzu maize. Switch at the top and comment.</p></div>
-    <div><b>Group tabs replace the group sidebar</b><p>The layouts above assume it. Confirm, or say what the sidebar should keep.</p></div>
-    <div><b>Side panel or a centred window</b><p>Clicking a group opens a panel on the right (shown above). Decide after seeing it whether that is right, or whether a centred window (modal) would suit better.</p></div>
+    <div><b>The fifteen category colours</b><p>Approve the earth tones in "Category colours", or name the ones to change. If yes, they go into Admin → Dizains as shown.</p></div>
+    <div><b>Which site colour?</b><p>Sūna, Jūra or Rudzu maize. Switch at the top and comment. (Sūna means the travel colour shifts slightly.)</p></div>
+    <div><b>"Atklāt" and "Manas grupas" in the desktop header</b><p>Proposed so that "you are here" is visible on desktop too. Yes, or keep the desktop header without them?</p></div>
+    <div><b>The group sidebar with nested parts</b><p>One menu on the left on desktop (pages, and each page's parts under it), tabs on phones. Confirm, and the Handbook rule above becomes the navigation rule.</p></div>
     <div><b>Then</b><p>Once these are settled, the agreed parts become Handbook rules and real components, screen by screen, starting with discovery.</p></div>
   </div>
 </section>

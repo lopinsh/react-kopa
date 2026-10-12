@@ -1,8 +1,30 @@
 {
-  "version": "3.1",
-  "updated": "2026-10-11T12:00:00+03:00",
+  "version": "4.0",
+  "updated": "2026-10-12T15:00:00+03:00",
   "changes": [
-    "The page moved from the Handbook to Admin > Development and no longer follows the site theme."
+    "Round four: every part shown inside a whole screen, with real photos (Wikimedia Commons, credited) and the proposed category colours.",
+    "New: Category colours, fifteen earth tones with light/dark contrast checks and how they would appear in Admin → Dizains.",
+    "Discovery: Atklāt marked as current place, no \"Rāda:\", place and counts in the categories drawer, switch as the page title, quieter \"Izveidot grupu\", vertical cards on phones.",
+    "New: Cards in context (Manas grupas, an opened card on top of the list) and Hundreds of groups and events (research, narrowing with counts, desktop events view).",
+    "New: Events, rows that open in place (where they are used, short and long text).",
+    "Search and place: search starts in your city, the all-results view, the city list with its search inside.",
+    "Group page: sidebar back with nested parts, new page order, visitor view, cover-photo header dropped.",
+    "Notifications: option 1 marked chosen and built, compact items. Conversations: category on group rows, no \"kopā:\".",
+    "Stale texts, the old intro and the \"menu on the left\" section removed (now part of the group sidebar)."
   ],
-  "sections": {}
+  "sections": {
+    "h-id": { "kind": "updated", "version": "4.0" },
+    "h-colors": { "kind": "new", "version": "4.0" },
+    "h-disc": { "kind": "updated", "version": "4.0" },
+    "h-context": { "kind": "new", "version": "4.0" },
+    "h-scale": { "kind": "new", "version": "4.0" },
+    "h-events": { "kind": "new", "version": "4.0" },
+    "h-find": { "kind": "updated", "version": "4.0" },
+    "h-group": { "kind": "updated", "version": "4.0" },
+    "h-notif": { "kind": "updated", "version": "4.0" },
+    "h-conv": { "kind": "updated", "version": "4.0" },
+    "h-nav": { "kind": "updated", "version": "4.0" },
+    "h-agreed": { "kind": "updated", "version": "4.0" },
+    "h-open": { "kind": "updated", "version": "4.0" }
+  }
 }
