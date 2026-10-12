@@ -19,12 +19,16 @@ type Props = {
     selectedL1: L1Category | null;
     /** Tags the group had when the form opened (a legacy group may keep more than the usual limit). */
     maxTags?: number;
+    /** Changing the main category just removed the sub-topics that were chosen. */
+    tagsCleared?: boolean;
 };
 
-export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1, maxTags }: Props) {
+export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, accentColor, selectedL1, maxTags, tagsCleared = false }: Props) {
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
-    const { formState: { errors } } = useFormContext<GroupFormValues>();
+    const t = useTranslations('wizard');
+    const { watch, formState: { errors } } = useFormContext<GroupFormValues>();
+    const noTagsYet = (watch('tagIds') ?? []).length === 0;
 
     return (
         <SettingsSection
@@ -47,6 +51,11 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
 
                 {selectedL1 && (
                     <div className="pt-8 border-t border-border animate-in fade-in slide-in-from-top-4 duration-500">
+                        {tagsCleared && noTagsYet && (
+                            <p role="status" className="mb-4 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground-muted">
+                                {t('tagsClearedOnCategoryChange')}
+                            </p>
+                        )}
                         <TagPicker
                             l1={selectedL1}
                             accentColor={selectedL1.color || NEUTRAL_ACCENT}

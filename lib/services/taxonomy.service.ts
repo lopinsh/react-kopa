@@ -4,7 +4,7 @@ import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
-import { MAX_GROUP_TAGS } from '@/lib/constants';
+import { MAX_GROUP_TAGS, MIN_PENDING_TAG_SUPPORTERS } from '@/lib/constants';
 
 export type L3Tag = {
     id: string;
@@ -39,6 +39,15 @@ export type L2SearchResult = {
     slug: string;
     title: string;
     isAlias: boolean;
+};
+
+/** A pending sub-category the tag picker may offer. */
+export type PendingTagOption = {
+    id: string;
+    slug: string;
+    title: string;
+    /** Chosen by enough different people to be offered to everyone. */
+    isPublic: boolean;
 };
 
 export type PendingCategoryWithContext = {
@@ -593,11 +602,16 @@ export const TaxonomyService = {
 
     /**
      * The one check for the tags a group may carry (create, owner edit, admin edit): at most
-     * MAX_GROUP_TAGS (groups saved before the limit may keep theirs but not gain any), and every tag
-     * ACTIVE or a pending suggestion (wildcard, PENDING_REVIEW). Tags the group already has stay valid.
-     * Returns an error code, or null when the tags are fine.
+     * MAX_GROUP_TAGS (groups saved before the limit may keep theirs but not gain any), every tag
+     * ACTIVE or a pending suggestion (wildcard, PENDING_REVIEW), and every tag under the group's main (L1)
+     * category. Tags the group already has stay valid, but a foreign one only while the main category is
+     * unchanged (`currentCategoryId`). Returns an error code, or null when the tags are fine.
      */
-    async validateGroupTags(tagIds: string[], opts: { currentTagIds?: string[] } = {}): Promise<'TAG_LIMIT_REACHED' | 'TAG_NOT_FOUND' | null> {
+    async validateGroupTags(
+        tagIds: string[],
+        categoryId: string,
+        opts: { currentTagIds?: string[]; currentCategoryId?: string } = {}
+    ): Promise<'TAG_LIMIT_REACHED' | 'TAG_NOT_FOUND' | 'TAG_CATEGORY_MISMATCH' | null> {
         const unique = Array.from(new Set(tagIds));
         const current = opts.currentTagIds ?? [];
 
@@ -617,9 +631,58 @@ export const TaxonomyService = {
                     { status: 'PENDING_REVIEW' as const, isWildcard: true },
                 ],
             },
-            select: { id: true },
+            select: { id: true, level: true, parentId: true, parent: { select: { parentId: true } } },
         });
-        return found.length === unique.length ? null : 'TAG_NOT_FOUND';
+        if (found.length !== unique.length) return 'TAG_NOT_FOUND';
+
+        const l1Id = await TaxonomyService.getL1Id(categoryId);
+        if (!l1Id) return 'TAG_NOT_FOUND';
+        const keepsForeign = opts.currentCategoryId === categoryId;
+        const mismatch = found.some((tag) => {
+            const tagL1Id = tag.level === 3 ? tag.parent?.parentId : tag.parentId;
+            if (tagL1Id === l1Id) return false;
+            return !(keepsForeign && current.includes(tag.id));
+        });
+        return mismatch ? 'TAG_CATEGORY_MISMATCH' : null;
+    },
+
+    /** The top-level (L1) category a category sits under (older groups may have an L2 as their category). */
+    async getL1Id(categoryId: string): Promise<string | null> {
+        const category = await prisma.category.findUnique({
+            where: { id: categoryId },
+            select: { id: true, level: true, parentId: true, parent: { select: { parentId: true } } },
+        });
+        if (!category) return null;
+        if (category.level === 1) return category.id;
+        return category.level === 2 ? category.parentId : category.parent?.parentId ?? null;
+    },
+
+    /**
+     * Pending sub-categories the picker may show under an L1: those chosen by two or more different
+     * people (owners of groups carrying the tag, counted once per person however many groups they have),
+     * plus the ones in `selectedIds` (a person always sees what they picked themselves).
+     * `isPublic` tells the two apart, so a shared suggestion can still be styled as unconfirmed.
+     */
+    async getPendingTagOptions(l1Id: string, selectedIds: string[], locale: string): Promise<PendingTagOption[]> {
+        const lang = locale === 'en' ? 'en' : 'lv';
+        const pending = await prisma.category.findMany({
+            where: { parentId: l1Id, level: 2, status: 'PENDING_REVIEW', isWildcard: true },
+            select: {
+                id: true,
+                slug: true,
+                titles: { select: { lang: true, title: true } },
+                groupsWithTags: { select: { members: { where: { role: 'OWNER' }, select: { userId: true } } } },
+            },
+            orderBy: { createdAt: 'asc' },
+        });
+
+        return pending.flatMap((tag) => {
+            const supporters = new Set(tag.groupsWithTags.flatMap((group) => group.members.map((member) => member.userId)));
+            const isPublic = supporters.size >= MIN_PENDING_TAG_SUPPORTERS;
+            if (!isPublic && !selectedIds.includes(tag.id)) return [];
+            const title = tag.titles.find((t) => t.lang === lang)?.title ?? tag.titles[0]?.title ?? tag.slug;
+            return [{ id: tag.id, slug: tag.slug, title, isPublic }];
+        });
     },
 
     /**
@@ -640,10 +703,13 @@ export const TaxonomyService = {
 
         const current = await prisma.group.findUnique({
             where: { id: groupId },
-            select: { slug: true, category: { include: { parent: { include: { parent: true } } } }, tags: { select: { id: true } } }
+            select: { slug: true, categoryId: true, category: { include: { parent: { include: { parent: true } } } }, tags: { select: { id: true } } }
         });
         if (!current) throw new ActionError('NOT_FOUND');
-        const error = await TaxonomyService.validateGroupTags(uniqueTagIds, { currentTagIds: current.tags.map((t) => t.id) });
+        const error = await TaxonomyService.validateGroupTags(uniqueTagIds, current.categoryId, {
+            currentTagIds: current.tags.map((t) => t.id),
+            currentCategoryId: current.categoryId,
+        });
         if (error) throw new ActionError(error);
 
         await prisma.group.update({

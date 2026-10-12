@@ -77,6 +77,8 @@ export default function GroupSettingsForm({
 
     const [taxSelection, setTaxSelection] = useState<TaxonomySelection | null>(initialTaxSelection);
     const [serverError, setServerError] = useState<string | null>(null);
+    // Set when changing the main category removed sub-topics (the category section tells the owner).
+    const [tagsCleared, setTagsCleared] = useState(false);
 
     const methods = useForm<GroupFormValues>({
         resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
@@ -103,12 +105,16 @@ export default function GroupSettingsForm({
     const pickerColor = taxSelection?.kind === 'existing' ? taxSelection.l1Color : NEUTRAL_ACCENT;
 
     function handleTaxChange(sel: TaxonomySelection | null) {
+        const previousCategoryId = methods.getValues('categoryId');
         setTaxSelection(sel);
         if (sel?.kind === 'existing') {
             setValue('categoryId', sel.categoryId, { shouldValidate: true });
         } else {
             setValue('categoryId', '');
         }
+        // Sub-topics belong to one main category: a different one starts with none chosen.
+        const changed = (sel?.kind === 'existing' ? sel.categoryId : '') !== previousCategoryId;
+        setTagsCleared(changed && methods.getValues('tagIds').length > 0);
         setValue('tagIds', []);
     }
 
@@ -250,6 +256,7 @@ export default function GroupSettingsForm({
                                 accentColor={pickerColor}
                                 selectedL1={selectedL1}
                                 maxTags={initialTagIds.length}
+                                tagsCleared={tagsCleared}
                             />
                         </div>
                     )}

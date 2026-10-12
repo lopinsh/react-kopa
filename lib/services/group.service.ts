@@ -357,7 +357,7 @@ export const GroupService = {
             slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
         }
 
-        const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? []);
+        const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], targetCategoryId);
         if (tagError) return { success: false, error: tagError };
         if (!(await TaxonomyService.isValidPrimaryCategory(targetCategoryId))) {
             return { success: false, error: 'VALIDATION_FAILED' };
@@ -605,7 +605,10 @@ export const GroupService = {
         if (canEditOwnerFields) {
             updateData.isAcceptingMembers = data.isAcceptingMembers;
             // Groups saved before the limit may keep their tags but not gain any.
-            const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], { currentTagIds: current.tags.map((t) => t.id) });
+            const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], data.categoryId, {
+                currentTagIds: current.tags.map((t) => t.id),
+                currentCategoryId: current.categoryId,
+            });
             if (tagError) return { success: false, error: tagError };
             if (!(await TaxonomyService.isValidPrimaryCategory(data.categoryId, current.categoryId))) {
                 return { success: false, error: 'VALIDATION_FAILED' };

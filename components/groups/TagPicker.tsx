@@ -4,8 +4,8 @@ import { useState, useMemo, useRef, useEffect } from 'react';
 import { Search, X, Check, Plus } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useLocale, useTranslations } from 'next-intl';
-import type { L1Category, L2SearchResult } from '@/lib/services/taxonomy.service';
-import { searchL2Tags, submitPendingTag } from '@/actions/taxonomy-actions';
+import type { L1Category, L2SearchResult, PendingTagOption } from '@/lib/services/taxonomy.service';
+import { getPendingTagOptions, searchL2Tags, submitPendingTag } from '@/actions/taxonomy-actions';
 import { useFormContext } from 'react-hook-form';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { GroupFormValues } from '@/lib/validations/group';
@@ -53,9 +53,15 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
     const [searchResults, setSearchResults] = useState<L2SearchResult[]>([]);
     const [isSearching, setIsSearching] = useState(false);
     const [isSubmittingPending, setIsSubmittingPending] = useState(false);
+    // Pending sub-categories other people share with everyone (and the ones already on this group), per L1.
+    const [pendingOptions, setPendingOptions] = useState<{ l1Id: string; items: PendingTagOption[] }>({ l1Id: '', items: [] });
 
     const inputRef = useRef<HTMLInputElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const tagIdsRef = useRef(tagIds);
+    useEffect(() => {
+        tagIdsRef.current = tagIds;
+    });
 
     const flatTags = useMemo<FlatTag[]>(() => {
         const result: FlatTag[] = [];
@@ -138,6 +144,16 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
             clearTimeout(timer);
         };
     }, [query, l1.id, locale]);
+
+    useEffect(() => {
+        let cancelled = false;
+        void getPendingTagOptions(l1.id, tagIdsRef.current, locale).then((result) => {
+            if (!cancelled && result.success) setPendingOptions({ l1Id: l1.id, items: result.data ?? [] });
+        });
+        return () => {
+            cancelled = true;
+        };
+    }, [l1.id, locale]);
 
     useEffect(() => {
         function handler(e: MouseEvent) {
@@ -227,6 +243,11 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
         setIsOpen(false);
     }
 
+    const sharedPending = useMemo(() => (pendingOptions.l1Id === l1.id ? pendingOptions.items : []), [pendingOptions, l1.id]);
+    // Only suggestions shared by several people are offered as choices; the rest show only as the chip of whoever picked them.
+    const offeredPending = sharedPending.filter((option) => option.isPublic);
+    const pendingMatches = query.trim() ? offeredPending.filter((option) => option.title.toLowerCase().includes(query.trim().toLowerCase())) : [];
+
     const selectedTags = tagIds
         .map((id) => flatTags.find((tag) => tag.id === id))
         .filter((tag): tag is FlatTag => tag !== undefined);
@@ -234,12 +255,41 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
     const selectedKnownIds = new Set(selectedTags.map((tag) => tag.id));
     const selectedPending = tagIds
         .filter((id) => !selectedKnownIds.has(id))
-        .map((id) => pendingById[id] ?? { id, title: t('pendingReview') });
+        .map((id) => pendingById[id] ?? { id, title: sharedPending.find((option) => option.id === id)?.title ?? t('pendingReview') });
 
     const tagLimit = Math.max(MAX_GROUP_TAGS, maxTags);
     const limitReached = tagIds.length >= tagLimit;
-    const hasResults = mergedResults.length > 0;
+    const hasResults = mergedResults.length > 0 || pendingMatches.length > 0;
     const showWildcardPrompt = query.trim().length >= 2;
+
+    function renderPendingOption(option: PendingTagOption) {
+        const selected = tagIds.includes(option.id);
+        return (
+            <button
+                key={option.id}
+                type="button"
+                onClick={(e) => {
+                    e.preventDefault();
+                    toggleTag(option.id);
+                }}
+                className="group flex w-full items-center justify-between rounded-lg border border-dashed border-border px-3 py-1.5 text-left transition-colors hover:bg-secondary/50"
+            >
+                <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-foreground">{option.title}</span>
+                    <span className="text-xs italic text-foreground-muted">{t('awaitingApproval')}</span>
+                </div>
+                <div
+                    className={clsx(
+                        'flex h-5 w-5 items-center justify-center rounded border',
+                        selected ? 'border-transparent text-white' : 'border-foreground-muted text-transparent group-hover:border-foreground'
+                    )}
+                    style={{ backgroundColor: selected ? accentColor : 'transparent' }}
+                >
+                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                </div>
+            </button>
+        );
+    }
 
     return (
         <div ref={containerRef} className="relative w-full mt-6 space-y-3">
@@ -280,7 +330,7 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                 className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold shadow-card border-2 border-dashed"
                                 style={{ borderColor: accentColor, color: accentColor }}
                             >
-                                {pending.title} ({t('pendingReview')})
+                                {pending.title} ({t('awaitingApproval')})
                                 <button
                                     type="button"
                                     onClick={(e) => {
@@ -426,6 +476,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                             </div>
                                         ))}
 
+                                        {offeredPending.length > 0 && <div className="space-y-1 pt-1">{offeredPending.map(renderPendingOption)}</div>}
+
                                         <div className="mt-1 pt-1 border-t border-border/50">
                                             {inlineWildcardParentId === l1.id ? (
                                                 <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 border border-border mt-1">
@@ -483,7 +535,9 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                         )}
 
                                         {hasResults ? (
-                                            mergedResults.map((tag) => (
+                                            <>
+                                            {pendingMatches.map(renderPendingOption)}
+                                            {mergedResults.map((tag) => (
                                                 <button
                                                     key={tag.id}
                                                     onClick={(e) => {
@@ -510,7 +564,8 @@ export default function TagPicker({ l1, accentColor, allowL3 = false, maxTags = 
                                                         <Check className="h-3.5 w-3.5" strokeWidth={3} />
                                                     </div>
                                                 </button>
-                                            ))
+                                            ))}
+                                            </>
                                         ) : (
                                             <div className="p-4 text-center">
                                                 <p className="text-sm text-foreground-muted">{t('noTopicsFound', { category: l1.title })}</p>

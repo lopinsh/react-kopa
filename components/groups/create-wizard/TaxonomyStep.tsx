@@ -14,11 +14,14 @@ type Props = {
     taxSelection: TaxonomySelection | null;
     handleTaxChange: (sel: TaxonomySelection | null) => void;
     accentColor: string;
+    /** Changing the main category just removed the sub-topics that were chosen. */
+    tagsCleared?: boolean;
 };
 
-export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, accentColor }: Props) {
+export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, accentColor, tagsCleared = false }: Props) {
     const t = useTranslations('wizard');
-    const { formState: { errors } } = useFormContext<GroupFormValues>();
+    const { watch, formState: { errors } } = useFormContext<GroupFormValues>();
+    const noTagsYet = (watch('tagIds') ?? []).length === 0;
 
     // Derive the currently selected L1 object to pass to the L2L3 picker
     const selectedL1 = taxSelection?.kind === 'existing'
@@ -43,6 +46,11 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
             {/* Only show Additional Tags if an L1 is chosen */}
             {selectedL1 && (
                 <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-8">
+                    {tagsCleared && noTagsYet && (
+                        <p role="status" className="rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground-muted">
+                            {t('tagsClearedOnCategoryChange')}
+                        </p>
+                    )}
                     <TagPicker l1={selectedL1} accentColor={accentColor} allowL3={false} />
                     <div className="pt-2 border-t border-border/50">
                         <LocationStep />

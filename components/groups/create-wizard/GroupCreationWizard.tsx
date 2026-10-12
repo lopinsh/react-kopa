@@ -62,6 +62,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     }, [initialL1Slug, taxonomy]);
 
     const [taxSelection, setTaxSelection] = useState<TaxonomySelection | null>(defaultTaxSelection);
+    // Set when changing the main category removed sub-topics the person had chosen (the step tells them).
+    const [tagsCleared, setTagsCleared] = useState(false);
 
     useEffect(() => {
         if (defaultTaxSelection?.kind === 'existing') {
@@ -102,6 +104,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
     // Sync taxonomy selection → form values
     function handleTaxChange(sel: TaxonomySelection | null) {
+        const previousCategoryId = form.getValues('categoryId');
         setTaxSelection(sel);
         if (sel?.kind === 'existing') {
             setValue('categoryId', sel.categoryId, { shouldValidate: true });
@@ -110,7 +113,9 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             setValue('categoryId', '');
             setAccentColor(NEUTRAL_ACCENT);
         }
-        // Reset sub-tags whenever L1 changes to ensure data consistency
+        // Sub-topics belong to one main category: a different one starts with none chosen.
+        const changed = (sel?.kind === 'existing' ? sel.categoryId : '') !== previousCategoryId;
+        setTagsCleared(changed && form.getValues('tagIds').length > 0);
         setValue('tagIds', []);
     }
 
@@ -204,6 +209,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 taxSelection={taxSelection}
                                 handleTaxChange={handleTaxChange}
                                 accentColor={accentColor}
+                                tagsCleared={tagsCleared}
                             />
                         )}
                         {step === 1 && <BasicInfoStep accentColor={accentColor} />}

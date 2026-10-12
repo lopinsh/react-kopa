@@ -11,6 +11,8 @@ export const NEUTRAL_ACCENT = 'var(--primary)';
  * the category structure settles; groups saved with more keep working (they can only shrink).
  */
 export const MAX_GROUP_TAGS = 2;
+/** A pending sub-category is offered to everyone once this many different people have chosen it. */
+export const MIN_PENDING_TAG_SUPPORTERS = 2;
 
 /** Most sections (About, Practical info, …) one group can have. */
 export const MAX_SECTIONS = 6;

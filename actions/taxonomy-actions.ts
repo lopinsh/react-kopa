@@ -10,6 +10,7 @@ import type {
     L1Category,
     L2Category,
     L2SearchResult,
+    PendingTagOption,
     L3Tag,
     PendingCategoryWithContext,
     TaxonomyTree,
@@ -51,6 +52,21 @@ export async function searchL2Tags(query: string, l1Id: string, locale: string):
     try {
         const results = await TaxonomyService.searchL2(query, l1Id, locale);
         return { success: true, data: results };
+    } catch (error) {
+        return mapTaxonomyError(error, 'ACTION_FAILED');
+    }
+}
+
+/** Pending sub-categories the picker may offer under an L1 (shared ones, plus the caller's own selected ones). */
+export async function getPendingTagOptions(l1Id: string, selectedIds: string[], locale: string): Promise<ActionResponse<PendingTagOption[]>> {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return { success: false, error: 'UNAUTHORIZED' };
+    }
+
+    try {
+        const options = await TaxonomyService.getPendingTagOptions(l1Id, selectedIds, locale);
+        return { success: true, data: options };
     } catch (error) {
         return mapTaxonomyError(error, 'ACTION_FAILED');
     }
