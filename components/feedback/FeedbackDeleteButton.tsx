@@ -4,13 +4,13 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Trash2 } from 'lucide-react';
 import { deleteFeedback } from '@/actions/feedback-actions';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { useToast } from '@/hooks/use-toast';
 
 type Props = {
     id: string;
     onDeleted: (id: string) => void;
-    /** Reports whether the confirm dialog is open, so a parent pop-up can leave Escape to it. */
+    /** Reports whether the confirm pop-over is open, so a parent pop-up can leave Escape to it. */
     onConfirmChange?: (open: boolean) => void;
     className?: string;
     /** Trash icon only (label kept for screen readers) for crowded rows. */
@@ -47,24 +47,20 @@ export default function FeedbackDeleteButton({ id, onDeleted, onConfirmChange, c
     };
 
     return (
-        <>
-            <button type="button" onClick={() => setOpen(true)} disabled={isPending} className={className} aria-label={iconOnly ? t('delete') : undefined} title={iconOnly ? t('delete') : undefined}>
-                <Trash2 className="h-4 w-4" />
-                {!iconOnly && t('delete')}
-            </button>
-            {/* Own stacking context so the dialog sits above the note pop-up (z-70). */}
-            <div data-feedback-ignore className="absolute z-[80]">
-                <ConfirmDialog
-                    isOpen={confirming}
-                    title={t('deleteTitle')}
-                    message={t('deleteMessage')}
-                    confirmLabel={t('delete')}
-                    destructive
-                    isPending={isPending}
-                    onConfirm={handleConfirm}
-                    onCancel={() => setOpen(false)}
-                />
-            </div>
-        </>
+        <ConfirmPopover
+            isOpen={confirming}
+            onOpenChange={setOpen}
+            message={t('deleteTitle')}
+            confirmLabel={t('delete')}
+            destructive
+            isPending={isPending}
+            onConfirm={handleConfirm}
+            renderTrigger={(triggerProps) => (
+                <button type="button" {...triggerProps} disabled={isPending} className={className} aria-label={iconOnly ? t('delete') : undefined} title={iconOnly ? t('delete') : undefined}>
+                    <Trash2 className="h-4 w-4" />
+                    {!iconOnly && t('delete')}
+                </button>
+            )}
+        />
     );
 }

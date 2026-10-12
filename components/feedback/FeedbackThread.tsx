@@ -10,14 +10,14 @@ import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
 
 /** The replies under a note (oldest first) and an input to add another. The original text lives outside, untouched. */
-export default function FeedbackThread({ note, onChanged, collapsible = false }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void; collapsible?: boolean }) {
+export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void }) {
     const t = useTranslations('feedbackMode');
     const tErrors = useTranslations('errors');
     const format = useDateFormatter();
     const { error: toastError } = useToast();
     const [text, setText] = useState('');
     const [isPending, startTransition] = useTransition();
-    const [open, setOpen] = useState(!collapsible);
+    const [open, setOpen] = useState(false);
 
     const handleSend = () => {
         if (isPending || !text.trim()) return;
@@ -25,26 +25,13 @@ export default function FeedbackThread({ note, onChanged, collapsible = false }:
             const res = await replyToFeedback(note.id, { text });
             if (res.success && res.data) {
                 setText('');
+                setOpen(false);
                 onChanged(res.data);
             } else if (!res.success) {
                 toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
             }
         });
     };
-
-    if (!open) {
-        return (
-            <button
-                type="button"
-                data-ui="feedback-thread"
-                onClick={() => setOpen(true)}
-                className="mt-2 flex items-center gap-1.5 text-xs font-semibold text-foreground-muted hover:text-primary"
-            >
-                <MessageCircle className="h-3.5 w-3.5" aria-hidden />
-                {note.replies.length > 0 ? t('threadShow', { count: note.replies.length }) : t('reply')}
-            </button>
-        );
-    }
 
     return (
         <div data-ui="feedback-thread" className="mt-2 space-y-2">
@@ -64,27 +51,40 @@ export default function FeedbackThread({ note, onChanged, collapsible = false }:
                     ))}
                 </ol>
             )}
-            <div className="flex items-end gap-2">
-                <textarea
-                    value={text}
-                    onChange={(e) => setText(e.target.value)}
-                    maxLength={FEEDBACK_TEXT_MAX}
-                    rows={2}
-                    placeholder={t('threadPlaceholder')}
-                    aria-label={t('reply')}
-                    className="min-w-0 flex-1 resize-none rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm text-foreground"
-                />
+            {!open ? (
                 <button
                     type="button"
-                    onClick={handleSend}
-                    disabled={isPending || !text.trim()}
-                    aria-label={t('threadSend')}
-                    title={t('threadSend')}
-                    className="rounded-xl bg-primary p-2.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                    onClick={() => setOpen(true)}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-foreground-muted hover:text-primary"
                 >
-                    <Send className="h-4 w-4" />
+                    <MessageCircle className="h-3.5 w-3.5" aria-hidden />
+                    {t('reply')}
                 </button>
-            </div>
+            ) : (
+                <div className="flex items-end gap-2">
+                    <textarea
+                        autoFocus
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === 'Escape' && !text.trim()) { e.stopPropagation(); setOpen(false); } }}
+                        maxLength={FEEDBACK_TEXT_MAX}
+                        rows={2}
+                        placeholder={t('threadPlaceholder')}
+                        aria-label={t('reply')}
+                        className="min-w-0 flex-1 resize-none rounded-xl border border-border bg-surface-elevated px-3 py-2 text-sm text-foreground"
+                    />
+                    <button
+                        type="button"
+                        onClick={handleSend}
+                        disabled={isPending || !text.trim()}
+                        aria-label={t('threadSend')}
+                        title={t('threadSend')}
+                        className="rounded-xl bg-primary p-2.5 text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                    >
+                        <Send className="h-4 w-4" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

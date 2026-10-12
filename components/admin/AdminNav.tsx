@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useId, type KeyboardEvent } from 'react';
+import { useRef, useState, useId, useEffect, type KeyboardEvent, type PointerEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
@@ -56,6 +56,22 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
     const open = openState && openState.key === navKey ? openState.id : null;
     const setOpen = (id: string | null) => setOpenState(id ? { id, key: navKey } : null);
 
+    // On a mouse (hover-capable) desktop a group opens on hover and closes shortly after the pointer leaves.
+    const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const cancelClose = () => { if (closeTimer.current) { clearTimeout(closeTimer.current); closeTimer.current = null; } };
+    useEffect(() => cancelClose, []);
+    const hoverCapable = () => typeof window !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    const onGroupEnter = (e: PointerEvent, id: string) => {
+        if (e.pointerType !== 'mouse' || !hoverCapable()) return;
+        cancelClose();
+        setOpen(id);
+    };
+    const onGroupLeave = (e: PointerEvent, id: string) => {
+        if (e.pointerType !== 'mouse' || !hoverCapable()) return;
+        cancelClose();
+        closeTimer.current = setTimeout(() => setOpenState((cur) => (cur && cur.id === id ? null : cur)), 200);
+    };
+
     useClickOutside(rootRef, () => setOpenState(null), !!open);
 
     const onDashboard = pathname === '/admin';
@@ -86,13 +102,13 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
             id: 'people',
             items: [
                 ...(isOwner ? [{ id: 'team' as const, href: '/admin/team', icon: UserCog, active: pathname.startsWith('/admin/team'), badge: 0 }] : []),
-                { id: 'feedback', href: '/admin/feedback', icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
             ],
         },
         {
             id: 'development',
             items: [
                 { id: 'redesign', href: '/admin/development/redesign', icon: Brush, active: pathname.startsWith('/admin/development/redesign'), badge: 0 },
+                { id: 'feedback', href: '/admin/feedback', icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
             ],
         },
     ];
@@ -218,14 +234,15 @@ export default function AdminNav({ pendingTags, pendingReports, pendingSuggestio
                             const groupBadge = group.items.reduce((s, i) => s + i.badge, 0);
                             const dangerBadge = group.items.some((i) => i.danger && i.badge > 0);
                             return (
-                                <div key={group.id} className="relative">
+                                <div key={group.id} className="relative" onPointerEnter={(e) => onGroupEnter(e, group.id)} onPointerLeave={(e) => onGroupLeave(e, group.id)}>
                                     <button
                                         id={buttonId}
                                         type="button"
                                         aria-expanded={isOpen}
                                         aria-haspopup="menu"
                                         aria-controls={isOpen ? panelId : undefined}
-                                        onClick={() => setOpen(isOpen ? null : group.id)}
+                                        // A mouse click while hover already opened the menu keeps it open; taps and keys toggle.
+                                        onClick={(e) => setOpen(isOpen && !(e.detail > 0 && hoverCapable()) ? null : group.id)}
                                         onKeyDown={(e) => onButtonKeyDown(e, group.id, panelId)}
                                         className={clsx(
                                             'flex shrink-0 items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition-colors lg:px-6',

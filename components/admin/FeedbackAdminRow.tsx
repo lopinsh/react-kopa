@@ -72,7 +72,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                 {` · ${note.locale.toUpperCase()} · ${note.viewportW}×${note.viewportH} · ${note.theme}`}
             </p>
 
-            <FeedbackThread note={note} onChanged={setNote} collapsible />
+            <FeedbackThread note={note} onChanged={setNote} />
         </li>
     );
 }
