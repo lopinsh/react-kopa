@@ -17,7 +17,7 @@ export default function CookieConsent() {
     const isVisible = !hasConsent && !accepted;
     const bannerRef = useRef<HTMLDivElement>(null);
 
-    // The banner floats over the page: publish its height so the page keeps room for it (see `body` in globals.css)
+    // The banner floats over the page: publish its height so the page keeps room for it (see `<main>` in the locale layout)
     // and the bottom of long forms, like the create wizard, stays reachable until it is answered.
     useEffect(() => {
         const el = bannerRef.current;
