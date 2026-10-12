@@ -323,40 +323,47 @@ export const TaxonomyService = {
             throw new ActionError('TAG_NOT_FOUND');
         }
 
-        // Someone (maybe in another session) may have suggested the same name already: reuse it instead of a second pending tag.
-        const existing = await prisma.category.findFirst({
-            where: {
-                parentId: params.parentId,
-                level: 2,
-                isWildcard: true,
-                status: 'PENDING_REVIEW',
-                titles: { some: { title: { equals: trimmed, mode: 'insensitive' } } },
-            },
-            orderBy: { createdAt: 'asc' },
-        });
-        if (existing) return { category: existing, created: false };
+        // Two people suggesting the same name at once must end with one pending tag: a transaction-scoped
+        // advisory lock keyed on parent + lower-cased name makes the second one wait, then find the first.
+        return prisma.$transaction(async (tx) => {
+            const lockKey = `pending-l2:${params.parentId}:${trimmed.toLowerCase()}`;
+            await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtextextended(${lockKey}, 0))`;
 
-        const slug = await createUniqueCategorySlug(trimmed);
+            // Someone (maybe in another session) may have suggested the same name already: reuse it instead of a second pending tag.
+            const existing = await tx.category.findFirst({
+                where: {
+                    parentId: params.parentId,
+                    level: 2,
+                    isWildcard: true,
+                    status: 'PENDING_REVIEW',
+                    titles: { some: { title: { equals: trimmed, mode: 'insensitive' } } },
+                },
+                orderBy: { createdAt: 'asc' },
+            });
+            if (existing) return { category: existing, created: false };
 
-        const category = await prisma.category.create({
-            data: {
-                slug,
-                level: 2,
-                parentId: params.parentId,
-                isWildcard: true,
-                status: 'PENDING_REVIEW',
-                submittedById: params.submittedById,
-                submittedAt: new Date(),
-                titles: {
-                    // Stored in the language the person typed it in; an admin adds the other language later.
-                    create: {
-                        lang: params.locale === 'en' ? 'en' : 'lv',
-                        title: trimmed,
+            const slug = await createUniqueCategorySlug(trimmed);
+
+            const category = await tx.category.create({
+                data: {
+                    slug,
+                    level: 2,
+                    parentId: params.parentId,
+                    isWildcard: true,
+                    status: 'PENDING_REVIEW',
+                    submittedById: params.submittedById,
+                    submittedAt: new Date(),
+                    titles: {
+                        // Stored in the language the person typed it in; an admin adds the other language later.
+                        create: {
+                            lang: params.locale === 'en' ? 'en' : 'lv',
+                            title: trimmed,
+                        },
                     },
                 },
-            },
+            });
+            return { category, created: true };
         });
-        return { category, created: true };
     },
 
     async createActiveL2(params: { parentId: string; nameEn: string; nameLv: string }): Promise<Category> {

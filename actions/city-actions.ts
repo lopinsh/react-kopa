@@ -63,12 +63,15 @@ export async function approveCity(id: string, names: CityNamesInput): Promise<Ac
     try {
         const result = await CityService.approve(id, valid.data);
         if (result.submittedById && result.submittedById !== admin.userId) {
+            const submitterId = result.submittedById;
+            const ownGroup = result.groups.find((g) => g.ownerIds.includes(submitterId));
             await NotificationService.notify({
-                userId: result.submittedById,
+                userId: submitterId,
                 type: 'CITY_APPROVED',
                 translationKey: 'CITY_APPROVED',
-                args: { cityName: result.nameLv },
-                link: result.groups[0] ? `/${result.groups[0].l1Slug}/group/${result.groups[0].slug}` : undefined,
+                args: { cityNameLv: result.nameLv, cityNameEn: result.nameEn },
+                // The submitter's own group with this city, else discovery filtered by the city.
+                link: ownGroup ? `/${ownGroup.l1Slug}/group/${ownGroup.slug}` : `/?city=${encodeURIComponent(result.slug)}`,
             });
         }
         refreshCities();
@@ -93,7 +96,7 @@ export async function rejectCity(id: string): Promise<ActionResponse> {
                     userId: ownerId,
                     type: 'CITY_REJECTED',
                     translationKey: 'CITY_REJECTED',
-                    args: { cityName: result.nameLv, groupName: group.name },
+                    args: { cityNameLv: result.nameLv, cityNameEn: result.nameEn, groupName: group.name },
                     link: `/${group.l1Slug}/group/${group.slug}/settings`,
                 });
             }
@@ -106,7 +109,7 @@ export async function rejectCity(id: string): Promise<ActionResponse> {
                 userId: result.submittedById,
                 type: 'CITY_REJECTED',
                 translationKey: 'CITY_REJECTED',
-                args: { cityName: result.nameLv },
+                args: { cityNameLv: result.nameLv, cityNameEn: result.nameEn },
             });
         }
         refreshCities();

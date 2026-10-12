@@ -234,12 +234,12 @@ export const CityService = {
     },
 
     /** Approves a pending suggestion (names may be corrected). Returns who suggested it and the groups using it. */
-    async approve(id: string, names: { nameLv: string; nameEn: string }): Promise<{ submittedById: string | null; nameLv: string; nameEn: string; groups: CityGroup[] }> {
+    async approve(id: string, names: { nameLv: string; nameEn: string }): Promise<{ slug: string; submittedById: string | null; nameLv: string; nameEn: string; groups: CityGroup[] }> {
         if (await nameTakenByOther(names, id)) throw new ActionError('CITY_EXISTS');
         const { count } = await prisma.city.updateMany({ where: { id, status: 'PENDING_REVIEW' }, data: { ...names, status: 'ACTIVE' } });
         if (count === 0) throw new ActionError('NOT_FOUND');
         const row = await prisma.city.findUniqueOrThrow({ where: { id }, select: { slug: true, submittedById: true, nameLv: true, nameEn: true } });
-        return { submittedById: row.submittedById, nameLv: row.nameLv, nameEn: row.nameEn, groups: await groupsUsing(row.slug) };
+        return { slug: row.slug, submittedById: row.submittedById, nameLv: row.nameLv, nameEn: row.nameEn, groups: await groupsUsing(row.slug) };
     },
 
     /**

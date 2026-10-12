@@ -66,7 +66,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                     <Sidebar />
                     {/* Main Content */}
                     <main
-                        className="flex-1 overflow-y-auto pb-20 md:pb-4 focus:outline-none"
+                        className="flex-1 overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] md:pb-4 focus:outline-none"
                         id="main-content"
                     >
                         <div className="flex-1">

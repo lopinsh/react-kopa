@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
 import { X, ShieldCheck } from 'lucide-react';
 import { Link } from '@/i18n/routing';
@@ -15,6 +15,23 @@ export default function CookieConsent() {
     );
     const [accepted, setAccepted] = useState(false);
     const isVisible = !hasConsent && !accepted;
+    const bannerRef = useRef<HTMLDivElement>(null);
+
+    // The banner floats over the page: publish its height so the page keeps room for it (see `body` in globals.css)
+    // and the bottom of long forms, like the create wizard, stays reachable until it is answered.
+    useEffect(() => {
+        const el = bannerRef.current;
+        if (!isVisible || !el) return;
+        const root = document.documentElement;
+        const publish = () => root.style.setProperty('--cookie-banner-h', `${el.offsetHeight + 32}px`);
+        publish();
+        const observer = new ResizeObserver(publish);
+        observer.observe(el);
+        return () => {
+            observer.disconnect();
+            root.style.removeProperty('--cookie-banner-h');
+        };
+    }, [isVisible]);
 
     const handleAccept = () => {
         localStorage.setItem('cookie-consent', 'accepted');
@@ -24,7 +41,7 @@ export default function CookieConsent() {
     if (!isVisible) return null;
 
     return (
-        <div className="fixed bottom-4 left-4 right-4 z-[9999] md:left-auto md:max-w-md">
+        <div ref={bannerRef} className="fixed bottom-4 left-4 right-4 z-[9999] md:left-auto md:max-w-md">
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated p-5 shadow-2xl shadow-black/20 animate-in fade-in slide-in-from-bottom-5 duration-500">
                 <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
