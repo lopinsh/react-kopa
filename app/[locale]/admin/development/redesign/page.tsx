@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
 import { getLocale, getTimeZone, getTranslations } from 'next-intl/server';
-import { auth } from '@/lib/auth';
-import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteAdmin } from '@/lib/site-role';
+import { requireAdminPage } from '@/lib/admin-access';
 import { createDateFormatter } from '@/lib/date-format';
 import { decorateRedesign } from '@/lib/development/redesign-html';
 import { DevelopmentService } from '@/lib/services/development.service';
@@ -21,9 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
  */
 export default async function RedesignPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
-    const session = await auth();
-    if (!session?.user?.id) redirect(signInUrl(locale, '/admin/development/redesign'));
-    if (!isSiteAdmin(session.user.role)) notFound();
+    await requireAdminPage(locale, '/admin/development/redesign');
 
     const t = await getTranslations('admin.development');
     const format = createDateFormatter(await getLocale(), await getTimeZone());

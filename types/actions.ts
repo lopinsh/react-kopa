@@ -5,7 +5,6 @@
 /** Runtime registry of every error code; `ErrorCode` is derived from it. */
 export const ERROR_CODES = [
     'UNAUTHORIZED',
-    'UNAUTHORIZED_ADMIN',
     'FORBIDDEN',
     'NOT_FOUND',
     'TAG_NOT_FOUND',

@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
-import { auth } from '@/lib/auth';
-import { redirect, notFound } from 'next/navigation';
+import { requireAdminPage } from '@/lib/admin-access';
 import { getReports } from '@/actions/report-actions';
 import ReportList from './ReportList';
 import { ShieldAlert } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -21,13 +18,7 @@ export default async function AdminReportsPage({
 }) {
     const { locale } = await params;
     const t = await getTranslations('admin.reports');
-    const session = await auth();
-    if (!session?.user?.id) {
-        redirect(signInUrl(locale, '/admin/reports'));
-    }
-    if (!isSiteAdmin(session.user.role)) {
-        notFound();
-    }
+    await requireAdminPage(locale, '/admin/reports');
 
     const reports = await getReports();
 

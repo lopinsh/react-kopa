@@ -3,16 +3,9 @@ import { auth } from '@/lib/auth';
 import { ReportService } from '@/lib/services/report.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { type ActionResponse } from '@/types/actions';
-import { handleActionError } from '@/lib/action-utils';
+import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { isReportReason } from '@/lib/constants';
 import { revalidatePath } from 'next/cache';
-import { isSiteAdmin } from '@/lib/site-role';
-
-/** Resolves the signed-in site admin, or null. Reading and closing reports is for site admins only. */
-async function getAdminId(): Promise<string | null> {
-    const session = await auth();
-    return session?.user?.id && isSiteAdmin(session.user.role) ? session.user.id : null;
-}
 
 export async function createReport(data: {
     targetGroupId?: string;
@@ -47,13 +40,14 @@ export async function createReport(data: {
 }
 
 export async function getReports() {
-    if (!(await getAdminId())) return [];
+    if (!(await requireSiteAdmin()).success) return [];
 
     return ReportService.getPendingReports();
 }
 
 export async function resolveReport(reportId: string): Promise<ActionResponse<void>> {
-    if (!(await getAdminId())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
         await ReportService.resolveReport(reportId);
@@ -65,7 +59,8 @@ export async function resolveReport(reportId: string): Promise<ActionResponse<vo
 }
 
 export async function deleteReportedContent(reportId: string): Promise<ActionResponse<void>> {
-    if (!(await getAdminId())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
         await ReportService.deleteReportedContent(reportId);

@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
-import { auth } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { requireAdminPage } from '@/lib/admin-access';
 import { ShieldAlert } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
-import { signInUrl } from '@/lib/auth-redirect';
 import { ModerationService } from '@/lib/services/moderation.service';
 import HiddenGroupActions from '@/components/admin/HiddenGroupActions';
-import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
 import { createDateFormatter } from '@/lib/date-format';
 
 export async function generateMetadata({
@@ -38,14 +36,7 @@ export default async function AdminDashboardPage({
     const tErrors = await getTranslations('errors');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
 
-    const session = await auth();
-    if (!session?.user?.id) {
-        redirect(signInUrl(locale, '/admin'));
-    }
-
-    if (!isSiteAdmin(session.user.role)) {
-        notFound();
-    }
+    const { isOwner } = await requireAdminPage(locale, '/admin');
 
     const [moderationLog, hiddenGroups] = await Promise.all([ModerationService.listActions(50, group), ModerationService.listHiddenGroups()]);
 
@@ -85,7 +76,7 @@ export default async function AdminDashboardPage({
                                                 {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
                                             </p>
                                         </div>
-                                        <HiddenGroupActions groupId={g.id} groupName={g.name} hiddenReason={g.reason} canDelete={isSiteOwner(session.user.role)} />
+                                        <HiddenGroupActions groupId={g.id} groupName={g.name} hiddenReason={g.reason} canDelete={isOwner} />
                                     </li>
                                 ))}
                             </ul>

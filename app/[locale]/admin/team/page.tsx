@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { UserCog } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { auth } from '@/lib/auth';
-import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteOwner } from '@/lib/site-role';
+import { requireOwnerPage } from '@/lib/admin-access';
 import { TeamService } from '@/lib/services/team.service';
 import TeamManager from '@/components/admin/TeamManager';
 
@@ -19,11 +17,9 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
     const { locale } = await params;
     const t = await getTranslations('admin.team');
 
-    const session = await auth();
-    if (!session?.user?.id) redirect(signInUrl(locale, '/admin/team'));
-    if (!isSiteOwner(session.user.role)) notFound();
+    const { userId } = await requireOwnerPage(locale, '/admin/team');
 
-    const result = await TeamService.listTeam(session.user.id);
+    const result = await TeamService.listTeam(userId);
     if (!result.success) notFound();
 
     return (

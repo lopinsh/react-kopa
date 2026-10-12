@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { ActionResponse, ErrorCode } from '@/types/actions';
-import { handleActionError } from '@/lib/action-utils';
+import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { GroupService } from '@/lib/services/group.service';
 import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import type {
@@ -16,7 +16,6 @@ import type {
     TaxonomyTree,
 } from '@/lib/services/taxonomy.service';
 import { NotificationService } from '@/lib/services/notification.service';
-import { isSiteAdmin } from '@/lib/site-role';
 import {
     submitPendingTagSchema, createL2Schema, approveTagSchema, updateL1Schema, addAliasSchema, idListSchema, bulkMergeSchema,
 } from '@/lib/validations/taxonomy';
@@ -42,18 +41,6 @@ function getLang(locale: string): 'en' | 'lv' {
 function revalidateTaxonomyAdminPages(): void {
     revalidatePath('/en/admin/taxonomy', 'page');
     revalidatePath('/lv/admin/taxonomy', 'page');
-}
-
-async function requireAdmin(): Promise<{ success: true; userId: string } | { success: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' }> {
-    const session = await auth();
-    if (!session?.user?.id) {
-        return { success: false, error: 'UNAUTHORIZED' };
-    }
-    if (!isSiteAdmin(session.user.role)) {
-        return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-    }
-
-    return { success: true, userId: session.user.id };
 }
 
 export async function getTaxonomy(locale: string): Promise<ActionResponse<TaxonomyTree>> {
@@ -116,7 +103,7 @@ export async function submitPendingTag(label: string, parentId: string): Promise
 }
 
 export async function approveTag(id: string, params: ApproveTagParams): Promise<ActionResponse<{ id: string }>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -137,7 +124,7 @@ export async function approveTag(id: string, params: ApproveTagParams): Promise<
 }
 
 export async function createL2(parentId: string, params: { nameEn: string; nameLv: string }): Promise<ActionResponse<{ id: string }>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -156,7 +143,7 @@ export async function createL2(parentId: string, params: { nameEn: string; nameL
 }
 
 export async function updateL1(id: string, color: string): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -175,7 +162,7 @@ export async function updateL1(id: string, color: string): Promise<ActionRespons
 }
 
 export async function mergeTag(pendingId: string, canonicalId: string, locale: string): Promise<ActionResponse<{ affectedGroups: number }>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -232,7 +219,7 @@ export async function mergeTag(pendingId: string, canonicalId: string, locale: s
 }
 
 export async function addAlias(value: string, categoryId: string, locale?: string): Promise<ActionResponse<{ id: string }>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -250,7 +237,7 @@ export async function addAlias(value: string, categoryId: string, locale?: strin
 }
 
 export async function deleteAlias(id: string): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -265,7 +252,7 @@ export async function deleteAlias(id: string): Promise<ActionResponse> {
 }
 
 export async function adminUpdateGroupTags(groupId: string, tagIds: string[], locale: string): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -286,7 +273,7 @@ export async function adminUpdateGroupTags(groupId: string, tagIds: string[], lo
 }
 
 export async function getPendingTags(): Promise<ActionResponse<PendingCategoryWithContext[]>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -300,7 +287,7 @@ export async function getPendingTags(): Promise<ActionResponse<PendingCategoryWi
 }
 
 export async function getAllTags(): Promise<ActionResponse<ActiveL2WithAliases[]>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -314,7 +301,7 @@ export async function getAllTags(): Promise<ActionResponse<ActiveL2WithAliases[]
 }
 
 export async function bulkApprovePendingAction(ids: string[]): Promise<ActionResponse<{ count: number }>> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -333,7 +320,7 @@ export async function bulkApprovePendingAction(ids: string[]): Promise<ActionRes
 }
 
 export async function bulkDeleteAction(ids: string[]): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
@@ -356,7 +343,7 @@ export async function bulkMergeAction(
     mergedIds: string[],
     canonicalUpdates: { nameEn: string; nameLv: string; slugEn: string; slugLv: string }
 ): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }

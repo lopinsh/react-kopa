@@ -1,12 +1,10 @@
 import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
-import { auth } from '@/lib/auth';
-import { redirect, notFound } from 'next/navigation';
+import { requireAdminPage } from '@/lib/admin-access';
+import { notFound } from 'next/navigation';
 import { getTaxonomy } from '@/actions/taxonomy-actions';
 import { GroupService } from '@/lib/services/group.service';
 import AdminGroupCategorizationForm from './AdminGroupCategorizationForm';
-import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -21,18 +19,11 @@ export default async function AdminGroupCategorizationPage({
 }) {
     const { locale, groupSlug } = await params;
 
-    const session = await auth();
-    if (!session?.user?.id) {
-        redirect(signInUrl(locale, `/admin/groups/${groupSlug}/categorization`));
-    }
-
-    if (!isSiteAdmin(session.user.role)) {
-        notFound();
-    }
+    const { userId } = await requireAdminPage(locale, `/admin/groups/${groupSlug}/categorization`);
 
     const [taxonomyRes, group] = await Promise.all([
         getTaxonomy(locale),
-        GroupService.getGroupWithContext(groupSlug, locale, undefined, session.user.id),
+        GroupService.getGroupWithContext(groupSlug, locale, undefined, userId),
     ]);
 
     if (!taxonomyRes.success || !group) {

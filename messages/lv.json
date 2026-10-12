@@ -349,7 +349,6 @@
     "SAVE_FAILED": "Neizdevās saglabāt. Pamēģini vēlreiz.",
     "MESSAGE_INVALID": "Šis teksts nav derīgs. Pārbaudi vietturus un sintaksi.",
     "MESSAGE_KEY_UNKNOWN": "Šādas teksta atslēgas nav.",
-    "UNAUTHORIZED_ADMIN": "Šo var darīt tikai vietnes administratori.",
     "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to.",
     "CITY_NAME_INVALID": "Ievadi pilsētas nosaukumu (no 2 līdz 60 simboliem).",
     "CITY_EXISTS": "Pilsēta ar šādu nosaukumu jau ir.",

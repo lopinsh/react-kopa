@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
 import { Palette } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { auth } from '@/lib/auth';
-import { signInUrl } from '@/lib/auth-redirect';
+import { requireAdminPage } from '@/lib/admin-access';
 import { getActiveTheme } from '@/lib/theme/server';
 import DesignEditor from '@/components/admin/design/DesignEditor';
-import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -18,9 +15,7 @@ export default async function AdminDesignPage({ params }: { params: Promise<{ lo
     const { locale } = await params;
     const t = await getTranslations('admin.design');
 
-    const session = await auth();
-    if (!session?.user?.id) redirect(signInUrl(locale, '/admin/design'));
-    if (!isSiteAdmin(session.user.role)) notFound();
+    await requireAdminPage(locale, '/admin/design');
 
     // Start from what this admin currently sees: their preview if they have one, otherwise the published theme.
     const theme = await getActiveTheme();

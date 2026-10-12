@@ -1,16 +1,13 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
 import { MessageSquareText } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
-import { auth } from '@/lib/auth';
-import { signInUrl } from '@/lib/auth-redirect';
+import { requireAdminPage } from '@/lib/admin-access';
 import { FEEDBACK_KINDS, FEEDBACK_TABS } from '@/lib/constants';
 import { FeedbackService } from '@/lib/services/feedback.service';
 import { feedbackFilterSchema } from '@/lib/validations/feedback';
 import { Link } from '@/i18n/routing';
 import FeedbackAdminRow from '@/components/admin/FeedbackAdminRow';
 import FeedbackPurgeButton from '@/components/admin/FeedbackPurgeButton';
-import { isSiteAdmin } from '@/lib/site-role';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -32,15 +29,13 @@ export default async function AdminFeedbackPage({
     const t = await getTranslations('admin.feedback');
     const tMode = await getTranslations('feedbackMode');
 
-    const session = await auth();
-    if (!session?.user?.id) redirect(signInUrl(locale, '/admin/feedback'));
-    if (!isSiteAdmin(session.user.role)) notFound();
+    const { userId } = await requireAdminPage(locale, '/admin/feedback');
 
     const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
     const filter = feedbackFilterSchema.parse({ kind: first(raw.kind), tab: first(raw.tab), page: first(raw.page) });
-    const result = await FeedbackService.list(session.user.id, filter);
+    const result = await FeedbackService.list(userId, filter);
     const notes = result.success ? result.data ?? [] : [];
-    const countsResult = await FeedbackService.counts(session.user.id);
+    const countsResult = await FeedbackService.counts(userId);
     const counts = countsResult.success && countsResult.data ? countsResult.data : { open: 0, completed: 0 };
     const tab = filter.tab ?? 'open';
 

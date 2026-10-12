@@ -3,11 +3,10 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { ActionResponse, ErrorCode } from '@/types/actions';
-import { handleActionError, validateActionData } from '@/lib/action-utils';
+import { handleActionError, validateActionData, requireSiteAdmin } from '@/lib/action-utils';
 import { CITIES_TAG, CityService } from '@/lib/services/city.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { cityNameSchema, cityNamesSchema, type CityNamesInput } from '@/lib/validations/city';
-import { isSiteAdmin } from '@/lib/site-role';
 
 const KNOWN_CITY_ERRORS: ErrorCode[] = ['NOT_FOUND', 'CITY_EXISTS', 'CITY_IN_USE', 'CREATE_FAILED'];
 
@@ -22,13 +21,6 @@ function mapCityError(error: unknown, fallback: ErrorCode): ActionResponse<never
 function refreshCities(): void {
     updateTag(CITIES_TAG);
     revalidatePath('/', 'layout');
-}
-
-async function requireAdmin(): Promise<{ success: true; userId: string } | { success: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' }> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-    return { success: true, userId: session.user.id };
 }
 
 /**
@@ -63,7 +55,7 @@ export async function suggestCity(name: string): Promise<ActionResponse<{ slug: 
 }
 
 export async function approveCity(id: string, names: CityNamesInput): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) return admin;
     const valid = await validateActionData(cityNamesSchema, names);
     if (!valid.success) return { success: false, error: 'CITY_NAME_INVALID' };
@@ -88,7 +80,7 @@ export async function approveCity(id: string, names: CityNamesInput): Promise<Ac
 
 /** The city is removed; each group that used it has no city until its owner picks one, and the owner is told. */
 export async function rejectCity(id: string): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) return admin;
 
     try {
@@ -125,7 +117,7 @@ export async function rejectCity(id: string): Promise<ActionResponse> {
 }
 
 export async function createCity(names: CityNamesInput): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) return admin;
     const valid = await validateActionData(cityNamesSchema, names);
     if (!valid.success) return { success: false, error: 'CITY_NAME_INVALID' };
@@ -140,7 +132,7 @@ export async function createCity(names: CityNamesInput): Promise<ActionResponse>
 }
 
 export async function renameCity(id: string, names: CityNamesInput): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) return admin;
     const valid = await validateActionData(cityNamesSchema, names);
     if (!valid.success) return { success: false, error: 'CITY_NAME_INVALID' };
@@ -155,7 +147,7 @@ export async function renameCity(id: string, names: CityNamesInput): Promise<Act
 }
 
 export async function deleteCity(id: string): Promise<ActionResponse> {
-    const admin = await requireAdmin();
+    const admin = await requireSiteAdmin();
     if (!admin.success) return admin;
 
     try {

@@ -2,9 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath, updateTag } from 'next/cache';
-import { auth } from '@/lib/auth';
 import type { ActionResponse } from '@/types/actions';
-import { handleActionError } from '@/lib/action-utils';
+import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import {
     MessageOverrideService,
     MESSAGE_OVERRIDES_TAG,
@@ -13,21 +12,11 @@ import {
 } from '@/lib/services/message-override.service';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
 import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
-import { isSiteAdmin } from '@/lib/site-role';
 import { NotificationService } from '@/lib/services/notification.service';
 
-type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'UNAUTHORIZED_ADMIN' };
-
-async function requireAdmin(): Promise<AdminCheck> {
-    const session = await auth();
-    if (!session?.user?.id) return { ok: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { ok: false, error: 'UNAUTHORIZED_ADMIN' };
-    return { ok: true, adminId: session.user.id };
-}
-
 export async function setTranslateMode(enabled: boolean): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
 
     const cookieStore = await cookies();
     if (enabled) {
@@ -46,10 +35,10 @@ export async function setTranslateMode(enabled: boolean): Promise<ActionResponse
 }
 
 export async function getTranslationEntry(key: string): Promise<ActionResponse<TranslationEntry>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.getEntry(check.adminId, key);
+        const result = await MessageOverrideService.getEntry(check.userId, key);
         return result.success ? { success: true, data: result.data } : result;
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -57,10 +46,10 @@ export async function getTranslationEntry(key: string): Promise<ActionResponse<T
 }
 
 export async function searchTranslations(query: string): Promise<ActionResponse<TranslationSearchHit[]>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.search(check.adminId, query);
+        const result = await MessageOverrideService.search(check.userId, query);
         return result.success ? { success: true, data: result.data } : result;
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -69,10 +58,10 @@ export async function searchTranslations(query: string): Promise<ActionResponse<
 
 /** Proposes a text. The live site only changes when an admin approves it. */
 export async function suggestTranslation(input: { key: string; lv: string; en: string }): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.suggestEntry(check.adminId, input);
+        const result = await MessageOverrideService.suggestEntry(check.userId, input);
         if (!result.success) return result;
 
         // Saving the live text only withdraws a suggestion: nothing new for the other admins.
@@ -81,7 +70,7 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
                 type: 'ADMIN_SUGGESTION',
                 args: { title: input.key },
                 link: '/admin/translations',
-                exceptUserId: check.adminId,
+                exceptUserId: check.userId,
             });
         }
 
@@ -94,10 +83,10 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
 
 /** `value` is the suggested text the admin approved; a suggestion changed since then is NOT_FOUND. */
 export async function approveSuggestion(id: string, value: string): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.approveSuggestion(check.adminId, id, value);
+        const result = await MessageOverrideService.approveSuggestion(check.userId, id, value);
         if (!result.success) return result;
 
         updateTag(MESSAGE_OVERRIDES_TAG);
@@ -109,10 +98,10 @@ export async function approveSuggestion(id: string, value: string): Promise<Acti
 }
 
 export async function rejectSuggestion(id: string, value: string): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.rejectSuggestion(check.adminId, id, value);
+        const result = await MessageOverrideService.rejectSuggestion(check.userId, id, value);
         if (!result.success) return result;
 
         revalidatePath('/', 'layout');

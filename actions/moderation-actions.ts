@@ -1,20 +1,16 @@
 'use server';
 
-import { auth } from '@/lib/auth';
 import { revalidatePath, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
-import { isSiteOwner } from '@/lib/site-role';
-import { handleActionError } from '@/lib/action-utils';
+import { handleActionError, requireSiteAdmin, requireSiteOwner } from '@/lib/action-utils';
 import { ModerationService } from '@/lib/services/moderation.service';
-import { isSiteAdmin } from '@/lib/site-role';
 
 export async function hideGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
-        const result = await ModerationService.hideGroup(groupId, session.user.id, reason);
+        const result = await ModerationService.hideGroup(groupId, admin.userId, reason);
         if (!result.success) return result;
 
         updateTag('groups');
@@ -30,12 +26,11 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
 }
 
 export async function restoreGroup(groupId: string, locale: string): Promise<ActionResponse> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
-        const result = await ModerationService.restoreGroup(groupId, session.user.id);
+        const result = await ModerationService.restoreGroup(groupId, admin.userId);
         if (!result.success) return result;
 
         updateTag('groups');
@@ -51,13 +46,11 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
 }
 
 export async function deleteHiddenGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-    if (!isSiteOwner(session.user.role)) return { success: false, error: 'FORBIDDEN' };
+    const admin = await requireSiteOwner();
+    if (!admin.success) return admin;
 
     try {
-        const result = await ModerationService.deleteHiddenGroup(groupId, session.user.id, reason);
+        const result = await ModerationService.deleteHiddenGroup(groupId, admin.userId, reason);
         if (!result.success) return result;
 
         updateTag('groups');

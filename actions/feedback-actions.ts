@@ -2,29 +2,18 @@
 
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
-import { auth } from '@/lib/auth';
 import type { ActionResponse } from '@/types/actions';
-import { handleActionError } from '@/lib/action-utils';
+import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { FeedbackService, type FeedbackItem } from '@/lib/services/feedback.service';
 import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
 import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
 import type { CreateFeedbackInput, ReplyFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
-import { isSiteAdmin } from '@/lib/site-role';
 import { NotificationService } from '@/lib/services/notification.service';
-
-type AdminCheck = { ok: true; adminId: string } | { ok: false; error: 'UNAUTHORIZED' | 'FORBIDDEN' };
-
-async function requireAdmin(): Promise<AdminCheck> {
-    const session = await auth();
-    if (!session?.user?.id) return { ok: false, error: 'UNAUTHORIZED' };
-    if (!isSiteAdmin(session.user.role)) return { ok: false, error: 'FORBIDDEN' };
-    return { ok: true, adminId: session.user.id };
-}
 
 /** Switches feedback mode on or off. Turning it on turns translation mode off: both capture clicks on the page. */
 export async function setFeedbackMode(enabled: boolean): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
 
     const cookieStore = await cookies();
     if (enabled) {
@@ -42,16 +31,16 @@ export async function setFeedbackMode(enabled: boolean): Promise<ActionResponse>
 }
 
 export async function createFeedback(input: CreateFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.create(check.adminId, input);
+        const result = await FeedbackService.create(check.userId, input);
         if (!result.success) return result;
         await NotificationService.notifyAdmins({
             type: 'ADMIN_FEEDBACK',
             args: { excerpt: input.text },
             link: '/admin/feedback',
-            exceptUserId: check.adminId,
+            exceptUserId: check.userId,
         });
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };
@@ -62,10 +51,10 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Action
 
 /** Notes on the page being viewed (path without locale, with or without query). */
 export async function getPageFeedback(path: string): Promise<ActionResponse<FeedbackItem[]>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.listForPath(check.adminId, path);
+        const result = await FeedbackService.listForPath(check.userId, path);
         return result.success ? { success: true, data: result.data } : result;
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -73,10 +62,10 @@ export async function getPageFeedback(path: string): Promise<ActionResponse<Feed
 }
 
 export async function updateFeedback(id: string, input: UpdateFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.update(check.adminId, id, input);
+        const result = await FeedbackService.update(check.userId, id, input);
         if (!result.success) return result;
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };
@@ -87,10 +76,10 @@ export async function updateFeedback(id: string, input: UpdateFeedbackInput): Pr
 
 /** Adds a message to the note's thread; the original text and earlier replies stay as they are. */
 export async function replyToFeedback(id: string, input: ReplyFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.reply(check.adminId, id, input);
+        const result = await FeedbackService.reply(check.userId, id, input);
         if (!result.success) return result;
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };
@@ -100,10 +89,10 @@ export async function replyToFeedback(id: string, input: ReplyFeedbackInput): Pr
 }
 
 export async function deleteFeedback(id: string): Promise<ActionResponse> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.remove(check.adminId, id);
+        const result = await FeedbackService.remove(check.userId, id);
         if (!result.success) return result;
         revalidatePath('/admin/feedback');
         return { success: true };
@@ -114,10 +103,10 @@ export async function deleteFeedback(id: string): Promise<ActionResponse> {
 
 /** Empties the Completed tab: deletes every DONE / WONT_DO note with its replies. */
 export async function purgeCompletedFeedback(): Promise<ActionResponse<{ count: number }>> {
-    const check = await requireAdmin();
-    if (!check.ok) return { success: false, error: check.error };
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.purgeClosed(check.adminId);
+        const result = await FeedbackService.purgeClosed(check.userId);
         if (!result.success) return result;
         revalidatePath('/admin/feedback');
         return { success: true, data: result.data };

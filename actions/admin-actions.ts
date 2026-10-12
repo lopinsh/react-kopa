@@ -1,19 +1,13 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { requireSiteAdmin } from '@/lib/action-utils';
 import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService } from '@/lib/services/admin.service';
-import { isSiteAdmin } from '@/lib/site-role';
-
-const isAdmin = async () => {
-    const session = await auth();
-    if (!session?.user?.id) return false;
-    return isSiteAdmin(session.user.role);
-};
 
 export async function rejectWildcard(categoryId: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
         await AdminService.rejectWildcard(categoryId);
@@ -30,12 +24,11 @@ export async function rejectWildcard(categoryId: string): Promise<ActionResponse
 }
 
 export async function suspendReportedGroup(reportId: string, groupId: string, reason: string, locale: string): Promise<ActionResponse> {
-    if (!(await isAdmin())) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
+    const admin = await requireSiteAdmin();
+    if (!admin.success) return admin;
 
     try {
-        const session = await auth();
-        if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED_ADMIN' };
-        const result = await AdminService.suspendReportedGroup(groupId, reportId, session.user.id, reason);
+        const result = await AdminService.suspendReportedGroup(groupId, reportId, admin.userId, reason);
         if (!result.success) return result;
         updateTag('groups');
         updateTag('events');

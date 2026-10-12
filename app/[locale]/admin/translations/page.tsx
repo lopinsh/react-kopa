@@ -1,12 +1,9 @@
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
 import { Download, Languages } from 'lucide-react';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
-import { auth } from '@/lib/auth';
-import { signInUrl } from '@/lib/auth-redirect';
+import { requireAdminPage } from '@/lib/admin-access';
 import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
-import { isSiteAdmin } from '@/lib/site-role';
 import { createDateFormatter } from '@/lib/date-format';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -20,13 +17,11 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
     const t = await getTranslations('admin.translations');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
 
-    const session = await auth();
-    if (!session?.user?.id) redirect(signInUrl(locale, '/admin/translations'));
-    if (!isSiteAdmin(session.user.role)) notFound();
+    const { userId } = await requireAdminPage(locale, '/admin/translations');
 
-    const result = await MessageOverrideService.listOverrides(session.user.id);
+    const result = await MessageOverrideService.listOverrides(userId);
     const rows = result.success ? result.data ?? [] : [];
-    const suggestionsResult = await MessageOverrideService.listSuggestions(session.user.id);
+    const suggestionsResult = await MessageOverrideService.listSuggestions(userId);
     const suggestions = suggestionsResult.success ? suggestionsResult.data ?? [] : [];
 
     return (

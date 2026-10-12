@@ -349,7 +349,6 @@
     "SAVE_FAILED": "Could not save. Try again.",
     "MESSAGE_INVALID": "This text isn't valid. Check the placeholders and syntax.",
     "MESSAGE_KEY_UNKNOWN": "This text key does not exist.",
-    "UNAUTHORIZED_ADMIN": "Only site admins can do this.",
     "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first.",
     "CITY_NAME_INVALID": "Enter a city name (2 to 60 letters).",
     "CITY_EXISTS": "A city with this name already exists.",

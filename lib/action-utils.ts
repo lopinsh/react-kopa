@@ -1,5 +1,7 @@
 import { z } from 'zod';
 import { ActionResponse, ErrorCode, isErrorCode } from '@/types/actions';
+import { auth } from '@/lib/auth';
+import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
 
 /**
  * Validates data against a Zod schema and returns a standardized ActionResponse.
@@ -45,4 +47,27 @@ export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNA
     }
 
     return { success: false, error: fallback };
+}
+
+export type SiteRoleCheck =
+    | { success: true; userId: string }
+    | { success: false; error: 'UNAUTHORIZED' | 'FORBIDDEN' };
+
+/**
+ * The one admin guard for Server Actions. Signed out gives UNAUTHORIZED; signed in without the
+ * role gives FORBIDDEN. Use: `const admin = await requireSiteAdmin(); if (!admin.success) return admin;`
+ */
+export async function requireSiteAdmin(): Promise<SiteRoleCheck> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!isSiteAdmin(session.user.role)) return { success: false, error: 'FORBIDDEN' };
+    return { success: true, userId: session.user.id };
+}
+
+/** Same as requireSiteAdmin, for owner-only actions. */
+export async function requireSiteOwner(): Promise<SiteRoleCheck> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!isSiteOwner(session.user.role)) return { success: false, error: 'FORBIDDEN' };
+    return { success: true, userId: session.user.id };
 }

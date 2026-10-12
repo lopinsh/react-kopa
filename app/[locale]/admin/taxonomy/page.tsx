@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
-import { auth } from '@/lib/auth';
-import { redirect, notFound } from 'next/navigation';
+import { requireAdminPage } from '@/lib/admin-access';
+import { notFound } from 'next/navigation';
 import { getAllTags, getPendingTags, getTaxonomy } from '@/actions/taxonomy-actions';
 import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
-import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteAdmin } from '@/lib/site-role';
 import { CityService } from '@/lib/services/city.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -22,14 +20,7 @@ export default async function AdminTaxonomyPage({
     const { locale } = await params;
     const t = await getTranslations('admin.taxonomy');
 
-    const session = await auth();
-    if (!session?.user?.id) {
-        redirect(signInUrl(locale, '/admin/taxonomy'));
-    }
-
-    if (!isSiteAdmin(session.user.role)) {
-        notFound();
-    }
+    await requireAdminPage(locale, '/admin/taxonomy');
 
     const [pendingRes, allRes, treeRes, cities] = await Promise.all([getPendingTags(), getAllTags(), getTaxonomy(locale), CityService.listAll()]);
 
