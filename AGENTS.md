@@ -115,6 +115,8 @@ type ActionResponse<T> =
 
 ## Conventions
 
+- Service errors: services that can fail with a known cause `throw new ActionError('CODE')` (from `@/types/actions`, code in the registry); actions catch with `handleActionError`. Never `throw new Error('CODE')`. Services that return `{ success, error }` result objects (Group, Event, Moderation) keep doing so; do not mix both in one method.
+- Admin guards: actions start with `requireSiteAdmin()` / `requireSiteOwner()` (`@/lib/action-utils`); pages with `requireAdminPage()` / `requireOwnerPage()` (`@/lib/admin-access`). Signed out is `UNAUTHORIZED`, signed in without the role is `FORBIDDEN`.
 - After creating or significantly updating an entity, redirect to its public page.
 - Never derive display titles from slugs in UI; use the service-provided `title`.
 - Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.

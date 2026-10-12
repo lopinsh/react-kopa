@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import { unstable_cache } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
@@ -196,7 +197,7 @@ export const CityService = {
                 if (raced) return reuse(raced);
             }
         }
-        throw new Error('CREATE_FAILED');
+        throw new ActionError('CREATE_FAILED');
     },
 
     /**
@@ -212,7 +213,7 @@ export const CityService = {
     },
 
     async createActive(names: { nameLv: string; nameEn: string }): Promise<void> {
-        if (await nameTakenByOther(names)) throw new Error('CITY_EXISTS');
+        if (await nameTakenByOther(names)) throw new ActionError('CITY_EXISTS');
         const base = citySlugBase(names.nameEn);
         for (let attempt = 0; attempt < 20; attempt++) {
             try {
@@ -222,21 +223,21 @@ export const CityService = {
                 if (!isUniqueViolation(error)) throw error;
             }
         }
-        throw new Error('CREATE_FAILED');
+        throw new ActionError('CREATE_FAILED');
     },
 
     /** Renames a city (either state). The stored `slug` never changes, so groups keep pointing at it. */
     async updateNames(id: string, names: { nameLv: string; nameEn: string }): Promise<void> {
-        if (await nameTakenByOther(names, id)) throw new Error('CITY_EXISTS');
+        if (await nameTakenByOther(names, id)) throw new ActionError('CITY_EXISTS');
         const { count } = await prisma.city.updateMany({ where: { id }, data: names });
-        if (count === 0) throw new Error('NOT_FOUND');
+        if (count === 0) throw new ActionError('NOT_FOUND');
     },
 
     /** Approves a pending suggestion (names may be corrected). Returns who suggested it and the groups using it. */
     async approve(id: string, names: { nameLv: string; nameEn: string }): Promise<{ submittedById: string | null; nameLv: string; nameEn: string; groups: CityGroup[] }> {
-        if (await nameTakenByOther(names, id)) throw new Error('CITY_EXISTS');
+        if (await nameTakenByOther(names, id)) throw new ActionError('CITY_EXISTS');
         const { count } = await prisma.city.updateMany({ where: { id, status: 'PENDING_REVIEW' }, data: { ...names, status: 'ACTIVE' } });
-        if (count === 0) throw new Error('NOT_FOUND');
+        if (count === 0) throw new ActionError('NOT_FOUND');
         const row = await prisma.city.findUniqueOrThrow({ where: { id }, select: { slug: true, submittedById: true, nameLv: true, nameEn: true } });
         return { submittedById: row.submittedById, nameLv: row.nameLv, nameEn: row.nameEn, groups: await groupsUsing(row.slug) };
     },
@@ -247,7 +248,7 @@ export const CityService = {
      */
     async reject(id: string): Promise<{ nameLv: string; nameEn: string; submittedById: string | null; groups: CityGroup[] }> {
         const city = await prisma.city.findFirst({ where: { id, status: 'PENDING_REVIEW' }, select: { slug: true, nameLv: true, nameEn: true, submittedById: true } });
-        if (!city) throw new Error('NOT_FOUND');
+        if (!city) throw new ActionError('NOT_FOUND');
         const groups = await groupsUsing(city.slug);
         await prisma.$transaction([
             prisma.group.updateMany({ where: { city: city.slug }, data: { city: '' } }),
@@ -259,8 +260,8 @@ export const CityService = {
     /** An approved city nobody uses can be removed. */
     async deleteUnused(id: string): Promise<void> {
         const city = await prisma.city.findFirst({ where: { id, status: 'ACTIVE' }, select: { slug: true } });
-        if (!city) throw new Error('NOT_FOUND');
-        if ((await prisma.group.count({ where: { city: city.slug } })) > 0) throw new Error('CITY_IN_USE');
+        if (!city) throw new ActionError('NOT_FOUND');
+        if ((await prisma.group.count({ where: { city: city.slug } })) > 0) throw new ActionError('CITY_IN_USE');
         await prisma.city.deleteMany({ where: { id, status: 'ACTIVE' } });
     },
 };

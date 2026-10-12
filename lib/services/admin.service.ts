@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
 import { ModerationService, type ModerationResult } from './moderation.service';
 
@@ -25,13 +26,13 @@ export class AdminService {
                 select: { id: true, _count: { select: { groups: true, children: true } } }
             });
             if (!category) {
-                throw new Error('NOT_FOUND');
+                throw new ActionError('NOT_FOUND');
             }
 
             // A group's primary category or a parent of other categories cannot be removed;
             // a rejected suggestion used only as a tag is detached from its groups.
             if (category._count.groups > 0 || category._count.children > 0) {
-                throw new Error('CATEGORY_IN_USE');
+                throw new ActionError('CATEGORY_IN_USE');
             }
 
             await tx.category.update({

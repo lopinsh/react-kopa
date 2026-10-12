@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
@@ -244,7 +245,7 @@ export const TaxonomyService = {
     async createPendingL2(params: { label: string; parentId: string; submittedById: string }): Promise<{ category: Category; created: boolean }> {
         const trimmed = params.label.trim();
         if (trimmed.length < 2) {
-            throw new Error('VALIDATION_FAILED');
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         const parent = await prisma.category.findUnique({
@@ -253,7 +254,7 @@ export const TaxonomyService = {
         });
 
         if (!parent || parent.level !== 1 || parent.status !== 'ACTIVE') {
-            throw new Error('TAG_NOT_FOUND');
+            throw new ActionError('TAG_NOT_FOUND');
         }
 
         // Someone (maybe in another session) may have suggested the same name already: reuse it instead of a second pending tag.
@@ -296,7 +297,7 @@ export const TaxonomyService = {
         const nameLv = params.nameLv.trim();
 
         if (nameEn.length < 2 || nameLv.length < 2) {
-            throw new Error('VALIDATION_FAILED');
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         const parent = await prisma.category.findUnique({
@@ -305,7 +306,7 @@ export const TaxonomyService = {
         });
 
         if (!parent || parent.level !== 1 || parent.status !== 'ACTIVE') {
-            throw new Error('TAG_NOT_FOUND');
+            throw new ActionError('TAG_NOT_FOUND');
         }
 
         const slugEn = await createUniqueCategorySlug(nameEn);
@@ -338,7 +339,7 @@ export const TaxonomyService = {
         });
 
         if (!category || category.level !== 2) {
-            throw new Error('TAG_NOT_FOUND');
+            throw new ActionError('TAG_NOT_FOUND');
         }
 
         return prisma.$transaction(async (tx) => {
@@ -392,7 +393,7 @@ export const TaxonomyService = {
 
     async mergeL2(pendingId: string, canonicalId: string): Promise<void> {
         if (pendingId === canonicalId) {
-            throw new Error('VALIDATION_FAILED');
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         await prisma.$transaction(async (tx) => {
@@ -414,13 +415,13 @@ export const TaxonomyService = {
             ]);
 
             if (!pending || pending.level !== 2) {
-                throw new Error('TAG_NOT_FOUND');
+                throw new ActionError('TAG_NOT_FOUND');
             }
             if (!canonical || canonical.level !== 2 || canonical.status !== 'ACTIVE') {
-                throw new Error('TAG_NOT_FOUND');
+                throw new ActionError('TAG_NOT_FOUND');
             }
             if (pending.parentId !== canonical.parentId) {
-                throw new Error('VALIDATION_FAILED');
+                throw new ActionError('VALIDATION_FAILED');
             }
 
             const groups = await tx.group.findMany({
@@ -490,7 +491,7 @@ export const TaxonomyService = {
     async createAlias(params: { value: string; categoryId: string; locale?: string }): Promise<CategoryAlias> {
         const value = params.value.trim();
         if (value.length < 2) {
-            throw new Error('VALIDATION_FAILED');
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         try {
@@ -503,7 +504,7 @@ export const TaxonomyService = {
             });
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new Error('ALIAS_CONFLICT');
+                throw new ActionError('ALIAS_CONFLICT');
             }
             throw error;
         }
@@ -561,9 +562,9 @@ export const TaxonomyService = {
         const uniqueTagIds = Array.from(new Set(tagIds));
 
         const current = await prisma.group.findUnique({ where: { id: groupId }, select: { tags: { select: { id: true } } } });
-        if (!current) throw new Error('NOT_FOUND');
+        if (!current) throw new ActionError('NOT_FOUND');
         const error = await TaxonomyService.validateGroupTags(uniqueTagIds, { currentTagIds: current.tags.map((t) => t.id) });
-        if (error) throw new Error(error);
+        if (error) throw new ActionError(error);
 
         await prisma.group.update({
             where: { id: groupId },
@@ -712,7 +713,7 @@ export const TaxonomyService = {
         });
 
         if (!category || category.level !== 1) {
-            throw new Error('TAG_NOT_FOUND');
+            throw new ActionError('TAG_NOT_FOUND');
         }
 
         await prisma.category.update({
@@ -810,8 +811,8 @@ export const TaxonomyService = {
     },
 
     async bulkMerge(canonicalId: string, mergedIds: string[], canonicalUpdates: { nameEn: string; nameLv: string; slugEn: string; slugLv: string }): Promise<void> {
-        if (!mergedIds.length) throw new Error('VALIDATION_FAILED');
-        if (mergedIds.includes(canonicalId)) throw new Error('VALIDATION_FAILED');
+        if (!mergedIds.length) throw new ActionError('VALIDATION_FAILED');
+        if (mergedIds.includes(canonicalId)) throw new ActionError('VALIDATION_FAILED');
 
         return prisma.$transaction(async (tx) => {
             const allIds = [canonicalId, ...mergedIds];
@@ -821,7 +822,7 @@ export const TaxonomyService = {
             });
 
             if (tags.length !== allIds.length) {
-                throw new Error('TAG_NOT_FOUND');
+                throw new ActionError('TAG_NOT_FOUND');
             }
 
             // 1. Update Canonical

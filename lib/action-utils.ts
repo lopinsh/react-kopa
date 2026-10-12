@@ -23,7 +23,7 @@ export async function validateActionData<T>(
 /**
  * Simple wrapper for catching errors in actions and returning a standardized fallback.
  * Only codes from the ErrorCode registry reach the client: an ActionError's code, or a service's
- * `throw new Error('NOT_FOUND')` whose message is a registry code. Anything else (Prisma codes,
+ * `throw new ActionError('NOT_FOUND')`. Anything else (Prisma codes,
  * connection errors, plain messages) becomes the fallback.
  */
 export function handleActionError(error: unknown, fallback: ErrorCode = 'INTERNAL_SERVER_ERROR'): ActionResponse<never> {

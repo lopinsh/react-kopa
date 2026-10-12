@@ -30,7 +30,7 @@ type ApproveTagParams = {
 const INVALID = { success: false, error: 'VALIDATION_FAILED' } as const;
 
 function mapTaxonomyError(error: unknown, fallback: ErrorCode = 'ACTION_FAILED'): ActionResponse<never> {
-    // Services throw `new Error('TAG_NOT_FOUND')` etc.; handleActionError recognises registry codes in the message.
+    // Services throw `new ActionError('TAG_NOT_FOUND')` etc.; handleActionError turns them into codes.
     return handleActionError(error, fallback);
 }
 
