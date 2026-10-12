@@ -29,16 +29,20 @@ const FILTERS: Array<{ value: Filter; labelKey: 'filterAll' | 'filterPersonal' |
     { value: 'GROUP', labelKey: 'filterGroups' }
 ];
 
-/** The group's name and category in the category colour. Both are resolved on the server (Taxonomy Law); here the colour only becomes a CSS variable. */
-export function GroupLabel({ group, className }: { group: NonNullable<InboxRow['group']>; className?: string }) {
+/**
+ * A group conversation's category line: the group's category in its colour, its sub-categories smaller and lighter after it.
+ * The name is left out where the row's title already is the group. Titles and colour are resolved on the server (Taxonomy Law).
+ */
+export function GroupLabel({ group, showName = true, className }: { group: NonNullable<InboxRow['group']>; showName?: boolean; className?: string }) {
     const vars: CssVars = { '--group-color': group.accentColor };
     return (
-        <span
-            style={vars}
-            className={clsx('flex items-center gap-1.5 truncate font-bold text-[color:color-mix(in_srgb,var(--group-color)_65%,var(--foreground))]', className)}
-        >
+        <span style={vars} className={clsx('flex items-center gap-1.5 truncate', className)}>
             <span className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--group-color)]" aria-hidden="true" />
-            <span className="truncate">{group.categoryTitle ? `${group.name} · ${group.categoryTitle}` : group.name}</span>
+            <span className="truncate">
+                {showName && <span className="font-bold text-foreground-muted">{group.name} · </span>}
+                <span className="font-bold text-[color:color-mix(in_srgb,var(--group-color)_65%,var(--foreground))]">{group.categoryTitle}</span>
+                {group.subCategories.length > 0 && <span className="font-normal text-foreground-muted"> {group.subCategories.join(', ')}</span>}
+            </span>
         </span>
     );
 }
@@ -90,7 +94,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                                     </span>
                                 )}
                             </div>
-                            {conv.group && <GroupLabel group={conv.group} className="text-[10px]" />}
+                            {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[10px]" />}
                             <p className={clsx('truncate text-xs', conv.unread ? 'font-semibold text-foreground' : 'text-foreground-muted')}>
                                 {conv.isBlocked ? (
                                     <span className="flex items-center gap-1 italic text-red-500"><Ban className="h-3 w-3" /> {t('blocked')}</span>

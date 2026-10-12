@@ -50,7 +50,7 @@ export interface InboxRow {
     /** The person on the other side: the partner (DIRECT) or the outside person (seen by the team). Null for the contact person's own view of a group chat. */
     other: PersonView | null;
     /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
-    group: { id: string; name: string; categoryTitle: string; l1Slug: string; accentColor: string; href: string | null } | null;
+    group: { id: string; name: string; categoryTitle: string; subCategories: string[]; l1Slug: string; accentColor: string; href: string | null } | null;
     lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
     origin: { type: string; groupName: string | null; groupHref: string | null } | null;
 }
@@ -155,6 +155,20 @@ export function groupCategoryTitle(
     return l2Tag ? pickTitle(l2Tag.titles, lang, l2Tag.slug) : resolved.categoryTitle;
 }
 
+/**
+ * The two-part category of a group conversation: its level-1 category, then its sub-categories
+ * (level-2 tags, or the category itself when that is level 2), as on the group header.
+ */
+export function groupCategoryParts(
+    resolved: ReturnType<typeof TaxonomyResolver.resolve>,
+    tags: ReadonlyArray<{ slug: string; titles: ReadonlyArray<{ lang: string; title: string }> }>,
+    lang: string
+): { categoryTitle: string; subCategories: string[] } {
+    const subs = tags.map(t => pickTitle(t.titles, lang, t.slug));
+    if (resolved.level > 1) subs.unshift(resolved.categoryTitle);
+    return { categoryTitle: resolved.l1Title, subCategories: [...new Set(subs)] };
+}
+
 export const MessageService = {
     /**
      * The one access check. Returns how the user relates to the conversation, or null when they may not see it.
@@ -199,7 +213,6 @@ export const MessageService = {
                             // A level-1 category says little ("Sports"); a level-2 tag is more specific, as on the group page.
                             tags: {
                                 where: { level: 2 },
-                                take: 1,
                                 select: { slug: true, titles: { select: { lang: true, title: true } } }
                             }
                         }
@@ -220,7 +233,7 @@ export const MessageService = {
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
                 const href = c.originGroup ? groupHref(c.originGroup) : null;
-                const categoryTitle = resolved && c.originGroup ? groupCategoryTitle(resolved, c.originGroup.tags, locale) : '';
+                const category = resolved && c.originGroup ? groupCategoryParts(resolved, c.originGroup.tags, locale) : null;
                 const lastFromOthers = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;
 
@@ -237,7 +250,7 @@ export const MessageService = {
                         ? (viewerIsContact ? null : c.contactUser)
                         : (c.participants.find(p => p.id !== userId) ?? null),
                     group: c.originGroup && resolved && c.originGroupId
-                        ? { id: c.originGroupId, name: c.originGroup.name, categoryTitle, l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
+                        ? { id: c.originGroupId, name: c.originGroup.name, categoryTitle: category?.categoryTitle ?? '', subCategories: category?.subCategories ?? [], l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
                         : null,
                     lastMessage: c.messages[0] ?? null,
                     origin: c.originType

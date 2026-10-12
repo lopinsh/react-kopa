@@ -89,7 +89,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     </div>
                     <div className="min-w-0">
                         <span className="block truncate font-bold">{title}</span>
-                        {conversation.group && <GroupLabel group={conversation.group} className="text-[11px]" />}
+                        {conversation.group && <GroupLabel group={conversation.group} showName={!conversation.viewerIsContact} className="text-[11px]" />}
                     </div>
                 </div>
 

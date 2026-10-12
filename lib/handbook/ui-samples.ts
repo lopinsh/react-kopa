@@ -135,7 +135,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         {
             id: 'c-1', kind: 'GROUP', isBlocked: false, readOnly: false, canBlock: true, viewerIsContact: false, unread: true, updatedAt: ago(HOUR),
             other: marta,
-            group: { id: 'sample-group', name: s('groupName'), categoryTitle: s('category'), l1Slug: SAMPLE_L1_SLUG, accentColor: SAMPLE_ACCENT, href: null },
+            group: { id: 'sample-group', name: s('groupName'), categoryTitle: s('category'), subCategories: [s('parentCategory')], l1Slug: SAMPLE_L1_SLUG, accentColor: SAMPLE_ACCENT, href: null },
             lastMessage: { id: 'lm-1', content: s('chatIn2'), createdAt: ago(HOUR), senderId: marta.id },
             origin: { type: 'JOIN_REQUEST', groupName: s('groupName'), groupHref: null },
         },

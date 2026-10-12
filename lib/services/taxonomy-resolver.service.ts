@@ -4,6 +4,8 @@ export interface ResolvedTaxonomy {
     categoryTitle: string;
     level: number;
     parentTitle: string | null;
+    /** Title of the level-1 category this one belongs to (its own title when it is level 1). */
+    l1Title: string;
     l1Slug: string;
     accentColor: string;
 }
@@ -61,6 +63,7 @@ export const TaxonomyResolver = {
             categoryTitle,
             level: category.level,
             parentTitle,
+            l1Title: l1?.titles?.[0]?.title || l1Slug,
             l1Slug,
             accentColor
         };
