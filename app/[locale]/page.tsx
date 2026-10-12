@@ -176,7 +176,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                     {groups.map((group) => (
                                         <GroupCard
                                             key={group.id}
-                                            group={group as any}
+                                            group={group}
                                             accentColor={accentColor}
                                             locale={locale}
                                         />
@@ -188,7 +188,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                                     {groups.map((group) => (
                                         <ListViewCard
                                             key={group.id}
-                                            group={group as any}
+                                            group={group}
                                             accentColor={accentColor}
                                             locale={locale}
                                         />

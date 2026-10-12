@@ -16,7 +16,7 @@ type Props = {
         category: {
             title: string;
             l1Slug: string;
-            parentTitle?: string;
+            parentTitle?: string | null;
             color: string;
         };
     };
