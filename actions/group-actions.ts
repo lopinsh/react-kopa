@@ -30,7 +30,6 @@ export async function createGroup(data: GroupFormValues, locale: string): Promis
 
         revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}`, 'page');
-        revalidatePath(`/${locale}/discover`, 'page');
         updateTag('groups');
         // A pending city becomes public with the first group that uses it (CityService names).
         updateTag(CITIES_TAG);
@@ -87,7 +86,6 @@ export async function cancelJoinRequest(groupId: string, locale: string): Promis
         if (slugs) {
             revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
         }
-        revalidatePath(`/${locale}/discover`, 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'CANCEL_FAILED');
@@ -134,7 +132,6 @@ export async function leaveGroup(groupId: string, locale: string): Promise<Actio
         const result = await GroupService.leaveGroup(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        revalidatePath(`/${locale}/discover`, 'page');
         updateTag('groups');
         return { success: true };
     } catch (error) {
@@ -233,7 +230,6 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
         // Discovery caches groups and events by tag; without this the deleted group stays listed (and 404s) until the cache expires.
         updateTag('groups');
         updateTag('events');
-        revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}`, 'page');
         updateTag('groups');
 

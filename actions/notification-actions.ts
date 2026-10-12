@@ -1,7 +1,6 @@
 'use server';
 
 import { auth } from '@/lib/auth';
-import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { NotificationService, type NotificationAudience } from '@/lib/services/notification.service';
 
@@ -30,7 +29,6 @@ export async function markAsRead(id: string): Promise<ActionResponse> {
 
     try {
         await NotificationService.markAsReadForUser(id, session.user.id);
-        revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {
         console.error('[markAsRead] Error:', error);
@@ -48,7 +46,6 @@ export async function markAllAsRead(audience: NotificationAudience = 'USER'): Pr
 
     try {
         await NotificationService.markAllAsReadForUser(session.user.id, audience);
-        revalidatePath('/', 'layout');
         return { success: true };
     } catch (error) {
         console.error('[markAllAsRead] Error:', error);

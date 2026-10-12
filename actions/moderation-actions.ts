@@ -16,7 +16,6 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
-        revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
         return { success: true };
@@ -36,7 +35,6 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
-        revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
         return { success: true };
@@ -56,7 +54,6 @@ export async function deleteHiddenGroup(groupId: string, reason: string, locale:
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
-        revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
         return { success: true };

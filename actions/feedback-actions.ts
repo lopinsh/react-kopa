@@ -42,7 +42,7 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Action
             link: '/admin/feedback',
             exceptUserId: check.userId,
         });
-        revalidatePath('/admin/feedback');
+        revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true, data: result.data };
     } catch (error) {
         return handleActionError(error, 'CREATE_FAILED');
@@ -67,7 +67,7 @@ export async function updateFeedback(id: string, input: UpdateFeedbackInput): Pr
     try {
         const result = await FeedbackService.update(check.userId, id, input);
         if (!result.success) return result;
-        revalidatePath('/admin/feedback');
+        revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true, data: result.data };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
@@ -81,7 +81,7 @@ export async function replyToFeedback(id: string, input: ReplyFeedbackInput): Pr
     try {
         const result = await FeedbackService.reply(check.userId, id, input);
         if (!result.success) return result;
-        revalidatePath('/admin/feedback');
+        revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true, data: result.data };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
@@ -94,7 +94,7 @@ export async function deleteFeedback(id: string): Promise<ActionResponse> {
     try {
         const result = await FeedbackService.remove(check.userId, id);
         if (!result.success) return result;
-        revalidatePath('/admin/feedback');
+        revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -108,7 +108,7 @@ export async function purgeCompletedFeedback(): Promise<ActionResponse<{ count: 
     try {
         const result = await FeedbackService.purgeClosed(check.userId);
         if (!result.success) return result;
-        revalidatePath('/admin/feedback');
+        revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true, data: result.data };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');

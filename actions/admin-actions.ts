@@ -11,7 +11,7 @@ export async function rejectWildcard(categoryId: string): Promise<ActionResponse
 
     try {
         await AdminService.rejectWildcard(categoryId);
-        revalidatePath('/admin', 'page');
+        revalidatePath('/[locale]/admin', 'page');
         revalidateTag('categories', 'max');
         revalidateTag('groups', 'max');
         return { success: true };
@@ -33,7 +33,6 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
-        revalidatePath(`/${locale}/discover`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath('/[locale]/admin/reports', 'page');
         revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
