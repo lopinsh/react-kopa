@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { getUnreadCount } from '@/actions/message-actions';
-import { usePusher } from '@/hooks/usePusher';
+import { useRealtimeEvent } from './RealtimeProvider';
 import { MESSAGES_READ } from '@/lib/constants/events';
 
 const UnreadMessagesContext = createContext(0);
@@ -35,7 +35,7 @@ export function UnreadMessagesProvider({ children }: { children: React.ReactNode
         };
     }, [refresh]);
 
-    usePusher(userId ? `private-user-${userId}` : '', 'new-message', refresh);
+    useRealtimeEvent('new-message', refresh);
 
     return <UnreadMessagesContext.Provider value={userId ? count : 0}>{children}</UnreadMessagesContext.Provider>;
 }

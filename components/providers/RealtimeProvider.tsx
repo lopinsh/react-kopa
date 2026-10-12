@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useTranslations, useLocale } from 'next-intl';
 import { usePusher } from '@/hooks/usePusher';
@@ -12,7 +12,6 @@ import { formatNotificationText } from '@/lib/utils/notification-text';
 type NotificationEvent = {
     id: string;
     type: string;
-    title: string;
     message: string;
     link?: string;
 };
@@ -25,17 +24,42 @@ type MessageEvent = {
     sender: { name: string | null; image: string | null };
 };
 
+/** Events on the signed-in person's private channel. This provider is their only owner: it binds each once and passes it on. */
+type RealtimeEvents = {
+    'new-message': unknown;
+    'new-notification': unknown;
+};
+type Subscribe = <E extends keyof RealtimeEvents>(event: E, handler: (data: unknown) => void) => () => void;
+
+const RealtimeContext = createContext<Subscribe | null>(null);
+
+/**
+ * Listen to a live event of the signed-in person ('new-message', 'new-notification') from any component
+ * below `RealtimeProvider`. The handler may change on every render; it is called once per event.
+ */
+export function useRealtimeEvent<T>(event: keyof RealtimeEvents, handler: (data: T) => void) {
+    const subscribe = useContext(RealtimeContext);
+    const handlerRef = useRef(handler);
+    useEffect(() => {
+        handlerRef.current = handler;
+    }, [handler]);
+    useEffect(() => {
+        if (!subscribe) return;
+        return subscribe(event, (data) => handlerRef.current(data as T));
+    }, [subscribe, event]);
+}
+
 export default function RealtimeProvider({ children }: { children: React.ReactNode }) {
     const { data: session } = useSession();
     const t = useTranslations('notifications');
     const locale = useLocale();
     const router = useRouter();
-    const [toast, setToast] = useState<NotificationEvent | null>(null);
+    const [toast, setToast] = useState<{ id: string; type: string; title: string; message: string; link?: string } | null>(null);
 
     const handleNotification = useCallback((data: NotificationEvent) => {
         // Same headline and detail as the bell. Admin notices skip the viewer's own actions on the server.
         const text = formatNotificationText(t, data.type, data.message, locale);
-        setToast({ ...data, title: text.headline, message: text.detail ?? '' });
+        setToast({ id: data.id, type: data.type, link: data.link, title: text.headline, message: text.detail ?? '' });
         // Revalidate layout to update notification badge
         router.refresh();
 
@@ -65,20 +89,29 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         }, 5000);
     }, [session?.user?.id, t]);
 
-    usePusher(
-        session?.user?.id ? `private-user-${session.user.id}` : '',
-        'new-notification',
-        handleNotification
-    );
+    // One listener list per event; the provider binds each event once and calls everyone below.
+    const listeners = useRef<{ [E in keyof RealtimeEvents]: Set<(data: unknown) => void> }>({
+        'new-message': new Set(),
+        'new-notification': new Set(),
+    });
+    const subscribe = useMemo<Subscribe>(() => (event, handler) => {
+        const set = listeners.current[event];
+        set.add(handler);
+        return () => { set.delete(handler); };
+    }, []);
 
-    usePusher(
-        session?.user?.id ? `private-user-${session.user.id}` : '',
-        'new-message',
-        handleNewMessage
-    );
+    const channel = session?.user?.id ? `private-user-${session.user.id}` : '';
+    usePusher<NotificationEvent>(channel, 'new-notification', (data) => {
+        handleNotification(data);
+        listeners.current['new-notification'].forEach((listener) => listener(data));
+    });
+    usePusher<MessageEvent>(channel, 'new-message', (data) => {
+        handleNewMessage(data);
+        listeners.current['new-message'].forEach((listener) => listener(data));
+    });
 
     return (
-        <>
+        <RealtimeContext.Provider value={subscribe}>
             {children}
 
             {/* Global Toast Container */}
@@ -123,6 +156,6 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
                     )}
                 </div>
             </div>
-        </>
+        </RealtimeContext.Provider>
     );
 }

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { User as UserIcon } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getInbox, getMessages, markConversationRead } from '@/actions/message-actions';
-import { usePusher } from '@/hooks/usePusher';
+import { useRealtimeEvent } from '@/components/providers/RealtimeProvider';
 import { MESSAGES_READ } from '@/lib/constants/events';
 import type { InboxRow } from '@/lib/services/message.service';
 import ConversationList from './ConversationList';
@@ -57,7 +57,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
         }
     }, [locale]);
 
-    usePusher<ChatMessage>(`private-user-${currentUserId}`, 'new-message', (message) => {
+    useRealtimeEvent<ChatMessage>('new-message', (message) => {
         const incoming = { ...message, createdAt: new Date(message.createdAt) };
         const isActive = activeIdRef.current === incoming.conversationId;
         const fromOthers = incoming.senderId !== currentUserId;

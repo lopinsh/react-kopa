@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/routing';
 import { getNotifications, markAsRead, markAllAsRead } from '@/actions/notification-actions';
 import { clsx } from 'clsx';
-import { usePusher } from '@/hooks/usePusher';
+import { useRealtimeEvent } from '@/components/providers/RealtimeProvider';
 import { relativeTo } from '@/lib/utils/relative-time';
 import { formatNotificationText } from '@/lib/utils/notification-text';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
@@ -94,17 +94,13 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
 
     }, [session?.user?.id, locale]);
 
-    usePusher<Notification>(
-        session?.user?.id ? `private-user-${session.user.id}` : '',
-        'new-notification',
-        (notification) => {
-            // The pushed row has no group line yet; show it at once, then fill the line in from the server.
-            setNotifications((current) => current.some(n => n.id === notification.id) ? current : [{ ...notification, audience: notification.audience ?? 'USER', group: null }, ...current]);
-            getNotifications(locale).then((result) => {
-                if (result.success && result.data) setNotifications(result.data as Notification[]);
-            });
-        }
-    );
+    useRealtimeEvent<Notification>('new-notification', (notification) => {
+        // The pushed row has no group line yet; show it at once, then fill the line in from the server.
+        setNotifications((current) => current.some(n => n.id === notification.id) ? current : [{ ...notification, audience: notification.audience ?? 'USER', group: null }, ...current]);
+        getNotifications(locale).then((result) => {
+            if (result.success && result.data) setNotifications(result.data as Notification[]);
+        });
+    });
 
     const handleMarkAsRead = async (id: string) => {
         startTransition(async () => {
