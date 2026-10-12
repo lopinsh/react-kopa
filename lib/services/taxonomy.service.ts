@@ -635,10 +635,13 @@ export const TaxonomyService = {
         return !!category;
     },
 
-    async adminUpdateGroupTags(groupId: string, tagIds: string[]): Promise<void> {
+    async adminUpdateGroupTags(groupId: string, tagIds: string[]): Promise<{ slug: string; l1Slug: string }> {
         const uniqueTagIds = Array.from(new Set(tagIds));
 
-        const current = await prisma.group.findUnique({ where: { id: groupId }, select: { tags: { select: { id: true } } } });
+        const current = await prisma.group.findUnique({
+            where: { id: groupId },
+            select: { slug: true, category: { include: { parent: { include: { parent: true } } } }, tags: { select: { id: true } } }
+        });
         if (!current) throw new ActionError('NOT_FOUND');
         const error = await TaxonomyService.validateGroupTags(uniqueTagIds, { currentTagIds: current.tags.map((t) => t.id) });
         if (error) throw new ActionError(error);
@@ -651,6 +654,7 @@ export const TaxonomyService = {
                 },
             },
         });
+        return { slug: current.slug, l1Slug: TaxonomyResolver.resolve(current.category).l1Slug };
     },
 
     async getPendingCategories(): Promise<PendingCategoryWithContext[]> {

@@ -4,7 +4,6 @@ import { auth } from '@/lib/auth';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { ActionResponse, ErrorCode } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
-import { GroupService } from '@/lib/services/group.service';
 import { TaxonomyService, type TagMergeNotice } from '@/lib/services/taxonomy.service';
 import type {
     ActiveL2WithAliases,
@@ -228,13 +227,9 @@ export async function adminUpdateGroupTags(groupId: string, tagIds: string[], lo
     }
 
     try {
-        await TaxonomyService.adminUpdateGroupTags(groupId, tagIds);
-
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/settings`, 'page');
-        }
+        const { slug, l1Slug } = await TaxonomyService.adminUpdateGroupTags(groupId, tagIds);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 
         return { success: true };
     } catch (error) {

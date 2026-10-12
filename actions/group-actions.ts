@@ -331,10 +331,8 @@ export async function promoteMember(groupId: string, targetUserId: string, local
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'ADMIN', session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
-        }
+        const { slug, l1Slug } = result.data!;
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -353,10 +351,8 @@ export async function demoteMember(groupId: string, targetUserId: string, locale
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'MEMBER', session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
-        }
+        const { slug, l1Slug } = result.data!;
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -376,10 +372,8 @@ export async function kickMember(groupId: string, targetUserId: string, locale: 
         if (!result.success) return result as ActionResponse;
         updateTag('groups');
 
-        const slugs = await GroupService.getGroupSlugs(groupId);
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}/members`, 'page');
-        }
+        const { slug, l1Slug } = result.data!;
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
     } catch (error) {

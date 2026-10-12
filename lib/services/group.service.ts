@@ -142,6 +142,10 @@ function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, creatorLan
 /** Thrown inside the transfer transaction to roll it back. */
 class TransferRejected extends Error {}
 
+/** What a group needs to name its own page: slug, name and the category chain that gives the L1 slug. */
+const GROUP_SLUG_SELECT = { slug: true, category: { include: TaxonomyResolver.getInclude('lv') } } as const;
+type GroupSlugs = { slug: string; l1Slug: string };
+
 export const GroupService = {
     /**
      * Finds a category by its slug.
@@ -920,9 +924,10 @@ export const GroupService = {
      * Makes a member a moderator (ADMIN) or takes the moderator role away (back to MEMBER).
      * Owner only. OWNER is never set here: ownership only moves through `transferOwnership`.
      */
-    async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupServiceResult> {
+    async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupServiceResult<GroupSlugs>> {
         const actorMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: actorId, groupId } }
+            where: { userId_groupId: { userId: actorId, groupId } },
+            include: { group: { select: GROUP_SLUG_SELECT } }
         });
 
         if (!actorMembership || actorMembership.role !== 'OWNER') {
@@ -942,7 +947,7 @@ export const GroupService = {
         });
         if (updated.count !== 1) return { success: false, error: 'VALIDATION_FAILED' };
 
-        return { success: true };
+        return { success: true, data: { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug } };
     },
 
     /**
@@ -1042,9 +1047,10 @@ export const GroupService = {
      * The owner can remove moderators, members and requests. Moderators can remove members and requests,
      * but never the owner or another moderator. Nobody removes the owner.
      */
-    async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult> {
+    async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult<GroupSlugs>> {
         const actorMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: actorId, groupId } }
+            where: { userId_groupId: { userId: actorId, groupId } },
+            include: { group: { select: GROUP_SLUG_SELECT } }
         });
 
         if (!actorMembership || !hasAdminRights(actorMembership.role)) {
@@ -1072,6 +1078,6 @@ export const GroupService = {
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        return { success: true };
+        return { success: true, data: { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug } };
     }
 };
