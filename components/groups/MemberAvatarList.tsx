@@ -22,10 +22,9 @@ type Props = {
     }[];
     groupId: string;
     groupName: string;
-    isMember?: boolean;
 };
 
-export default function MemberAvatarList({ members, groupId, groupName, isMember }: Props) {
+export default function MemberAvatarList({ members, groupId, groupName }: Props) {
     const t = useTranslations('group');
     const locale = useLocale();
   const c_common = useTranslations('common');
@@ -33,7 +32,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
     const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
     // Members write to the owner and admins through the group chat; the team itself has no chat with itself.
     const { user: viewer } = useGroupContext();
-    const canWriteTeam = !!isMember && !hasAdminRights(viewer.role);
+    const canWriteTeam = viewer.isMember && !hasAdminRights(viewer.role);
 
     // Sorting Logic: OWNER > ADMIN > MEMBER
     const sortedMembers = [...members].sort((a, b) => {
@@ -76,7 +75,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                                 <div
                                     className={clsx(
                                         "absolute -top-1.5 -right-1.5 p-0.5 rounded-full border border-background shadow-xs scale-90",
-                                        role === 'OWNER' ? 'bg-[#f59e0b]' : 'bg-[var(--accent)]'
+                                        role === 'OWNER' ? 'bg-owner' : 'bg-[var(--accent)]'
                                     )}
                                 >
                                     <div className="bg-white/20 rounded-full p-0.5">
@@ -94,7 +93,7 @@ export default function MemberAvatarList({ members, groupId, groupName, isMember
                             <span
                                 className={clsx(
                                     "text-[9px] font-black uppercase tracking-[0.05em] opacity-50",
-                                    role === 'OWNER' ? 'text-[#f59e0b]' : 'text-[var(--accent)]'
+                                    role === 'OWNER' ? 'text-owner' : 'text-[var(--accent)]'
                                 )}
                             >
                                 {t(`role_${role.toLowerCase()}`)}

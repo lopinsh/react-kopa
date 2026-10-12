@@ -135,7 +135,6 @@ export default async function GroupPage({
                                 members={members.filter(m => m.role !== 'PENDING')}
                                 groupId={group.id}
                                 groupName={group.name}
-                                isMember={group.user.isMember}
                             />
 
                             {/* Social Links */}
