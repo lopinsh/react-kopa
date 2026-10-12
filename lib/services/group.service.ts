@@ -10,6 +10,7 @@ import { MAX_GROUP_TAGS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaul
 import { resolveSectionText, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
+import { findGroupByPath } from './group-path';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
@@ -163,16 +164,7 @@ export const GroupService = {
     ): Promise<GroupContext | null> => {
         const lang = locale === 'en' ? 'en' : 'lv';
 
-        const where: Prisma.GroupFindFirstArgs['where'] = { slug: groupSlug };
-        if (l1Slug) {
-            where.category = {
-                OR: [
-                    { slug: l1Slug, level: 1 },
-                    { parent: { slug: l1Slug, level: 1 } },
-                    { parent: { parent: { slug: l1Slug, level: 1 } } }
-                ]
-            };
-        }
+        const where = findGroupByPath(groupSlug, l1Slug);
 
         const groupInclude = {
             category: {
@@ -695,7 +687,7 @@ export const GroupService = {
         sections: Array<{ id: string; visibility: string }>;
     }> {
         const group = await prisma.group.findFirst({
-            where: { slug: groupSlug, category: { slug: l1Slug } },
+            where: findGroupByPath(groupSlug, l1Slug),
             select: {
                 hiddenAt: true,
                 sections: {
@@ -725,7 +717,7 @@ export const GroupService = {
         if (hasAdminRights(role)) {
             pendingCount = await prisma.membership.count({
                 where: {
-                    group: { slug: groupSlug, category: { slug: l1Slug } },
+                    group: findGroupByPath(groupSlug, l1Slug),
                     role: 'PENDING'
                 }
             });

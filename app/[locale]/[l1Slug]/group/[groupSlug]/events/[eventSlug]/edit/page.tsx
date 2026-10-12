@@ -21,7 +21,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
 
     if (!session?.user?.id) redirect(signInUrl(locale, `${eventPath}/edit`));
 
-    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session.user.id);
+    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session.user.id, l1Slug);
     if (!event) notFound();
     // Only organisers edit; everyone else goes back to the event itself.
     if (!event.viewer.canManage) redirect(`/${locale}${eventPath}`);

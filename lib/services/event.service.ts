@@ -8,6 +8,7 @@ import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
+import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 
@@ -181,12 +182,13 @@ export class EventService {
         eventSlug: string,
         groupSlug: string,
         locale: string,
-        userId?: string
+        userId?: string,
+        l1Slug?: string
     ) => {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         const groupRecord = await prisma.group.findFirst({
-            where: { slug: groupSlug, hiddenAt: null },
+            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
             select: { id: true }
         });
 
@@ -278,10 +280,11 @@ export class EventService {
     static getMembersOnlyGate = cache(async (
         eventSlug: string,
         groupSlug: string,
-        userId?: string
+        userId?: string,
+        l1Slug?: string
     ): Promise<{ groupName: string; groupSlug: string; l1Slug: string } | null> => {
         const group = await prisma.group.findFirst({
-            where: { slug: groupSlug, hiddenAt: null },
+            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
             select: {
                 id: true,
                 name: true,

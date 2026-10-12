@@ -34,9 +34,9 @@ export async function generateMetadata({
 }: {
     params: Promise<{ locale: string; l1Slug: string; groupSlug: string; eventSlug: string }>;
 }): Promise<Metadata> {
-    const { locale, groupSlug, eventSlug } = await params;
+    const { locale, l1Slug, groupSlug, eventSlug } = await params;
     const session = await auth();
-    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session?.user?.id);
+    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, session?.user?.id, l1Slug);
 
     // No event means missing or members-only for this viewer: say nothing about it, and keep it out of search engines.
     return event ? { title: `${event.title} | ${event.group.name}` } : { robots: { index: false } };
@@ -51,11 +51,11 @@ export default async function EventPage({
     const session = await auth();
     const userId = session?.user?.id;
 
-    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, userId);
+    const event = await EventService.getEventWithContext(eventSlug, groupSlug, locale, userId, l1Slug);
 
     if (!event) {
         // A members-only event gets a notice instead of a 404; anything else does not exist for this viewer.
-        const gate = await EventService.getMembersOnlyGate(eventSlug, groupSlug, userId);
+        const gate = await EventService.getMembersOnlyGate(eventSlug, groupSlug, userId, l1Slug);
         if (!gate) notFound();
         return (
             <MembersOnlyNotice
