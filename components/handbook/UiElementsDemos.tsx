@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import AnnouncementCard from '@/components/groups/AnnouncementCard';
+import { GroupProvider } from '@/components/providers/GroupProvider';
 import ChatPanel from '@/components/messages/ChatPanel';
 import ConversationList from '@/components/messages/ConversationList';
 import ContactGroupModal from '@/components/modals/ContactGroupModal';
@@ -50,8 +51,11 @@ export function InboxDemo({ samples }: { samples: UiSamples }) {
 export function AnnouncementDemo({ samples }: { samples: UiSamples }) {
     return (
         <div className="grid gap-4 lg:grid-cols-2">
-            <AnnouncementCard post={samples.announcement} canManage={false} busy={false} onArchive={noop} onDelete={noop} />
-            <AnnouncementCard post={samples.announcement} canManage busy={false} onArchive={noop} onDelete={noop} />
+            {([null, 'ADMIN'] as const).map((role) => (
+                <GroupProvider key={role ?? 'member'} value={{ id: 'sample', slug: 'sample', user: { role, isMember: true, isAdmin: role !== null }, sections: [] }}>
+                    <AnnouncementCard post={samples.announcement} busy={false} onArchive={noop} onDelete={noop} />
+                </GroupProvider>
+            ))}
         </div>
     );
 }

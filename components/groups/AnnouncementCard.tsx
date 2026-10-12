@@ -5,12 +5,12 @@ import { Archive, ArchiveRestore, Trash2 } from 'lucide-react';
 import { relativeTo } from '@/lib/utils/relative-time';
 import type { AnnouncementRow } from '@/lib/services/post.service';
 import { UI } from '@/lib/constants';
+import { hasAdminRights } from '@/lib/utils/permissions';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 import { useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     post: AnnouncementRow;
-    /** Owner/admin: shows Archive (or Restore) and Delete. */
-    canManage: boolean;
     busy: boolean;
     onArchive: (post: AnnouncementRow) => void;
     onDelete: (post: AnnouncementRow) => void;
@@ -18,8 +18,10 @@ type Props = {
 
 const BUTTON = 'flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50';
 
-export default function AnnouncementCard({ post, canManage, busy, onArchive, onDelete }: Props) {
+export default function AnnouncementCard({ post, busy, onArchive, onDelete }: Props) {
     const t = useTranslations('group');
+    // Owner and admins get Archive (or Restore) and Delete.
+    const canManage = hasAdminRights(useGroupContext().user.role);
     const tCommon = useTranslations('common');
     const format = useDateFormatter();
     const now = useNow({ updateInterval: 60_000 });

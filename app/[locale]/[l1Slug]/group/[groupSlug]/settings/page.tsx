@@ -123,7 +123,6 @@ export default async function GroupSettingsPage(props: {
                         locale={locale}
                         activeTab={activeTab}
                         canEditOwnerFields={canEditOwnerFields}
-                        isOwner={isOwner}
                         transferCandidates={transferCandidates}
                         initialTaxonomy={initialTaxonomy}
                     />

@@ -21,6 +21,8 @@ import PrivacySection from './settings/PrivacySection';
 import AcceptingMembersSection from './settings/AcceptingMembersSection';
 import DangerZoneSection from './settings/DangerZoneSection';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import { useGroupContext } from '@/components/providers/GroupProvider';
+import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import TransferOwnershipSection from './settings/TransferOwnershipSection';
 import type { SettingsTab } from './SettingsTabs';
 import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
@@ -47,8 +49,6 @@ type Props = {
     activeTab: SettingsTab;
     /** Owner (and site admins): name, category, topics and access. Moderators get the rest. */
     canEditOwnerFields: boolean;
-    /** Only the owner hands the group over or deletes it. */
-    isOwner: boolean;
     /** Members and moderators the owner could hand the group to. */
     transferCandidates: Array<{ userId: string; name: string; role: 'ADMIN' | 'MEMBER' }>;
     initialTaxonomy: {
@@ -63,11 +63,12 @@ export default function GroupSettingsForm({
     locale,
     activeTab,
     canEditOwnerFields,
-    isOwner,
     transferCandidates,
     initialTaxonomy
 }: Props) {
     const gt = useTranslations('group');
+    // Only the owner hands the group over or deletes it.
+    const isOwner = checkIsOwner(useGroupContext().user.role);
     const gs = useTranslations('groupSettings');
     const c_common = useTranslations('common');
     const tErrors = useTranslations('errors');

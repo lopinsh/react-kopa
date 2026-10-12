@@ -10,6 +10,7 @@ import { getOrCreateDirectChat } from '@/actions/message-actions';
 import { useToast } from '@/hooks/use-toast';
 import { avatarUrl } from '@/lib/avatar';
 import { UI } from '@/lib/constants';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 export interface Member {
@@ -31,18 +32,18 @@ type Props = {
     /** Decided on the server (shared-group rule, the person's setting, not yourself). */
     canMessage: boolean;
     groupId: string;
-    currentUserRole: string | null;
     locale: string;
     l1Slug: string;
 };
 
-export default function MemberCard({ member, canMessage, groupId, currentUserRole, locale, l1Slug }: Props) {
+export default function MemberCard({ member, canMessage, groupId, locale, l1Slug }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
+    const { user: viewer } = useGroupContext();
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -66,8 +67,8 @@ export default function MemberCard({ member, canMessage, groupId, currentUserRol
     const canViewProfile = member.user.isProfilePublic;
 
     // Management permissions (matches GroupService logic)
-    const isOwner = checkIsOwner(currentUserRole);
-    const isAdmin = hasAdminRights(currentUserRole); // Note: hasAdminRights includes Owner, but here we likely want "is at least admin"
+    const isOwner = checkIsOwner(viewer.role);
+    const isAdmin = hasAdminRights(viewer.role); // Note: hasAdminRights includes Owner, but here we likely want "is at least admin"
     const isTargetOwner = checkIsOwner(member.role);
     const isTargetAdmin = member.role === 'ADMIN'; // Explicit admin check for target
     const isTargetMember = member.role === 'MEMBER';

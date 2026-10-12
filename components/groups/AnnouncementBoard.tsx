@@ -94,7 +94,6 @@ export default function AnnouncementBoard({ groupId, locale }: Props) {
         <AnnouncementCard
             key={post.id}
             post={post}
-            canManage={canManage}
             busy={busyId !== null}
             onArchive={handleArchive}
             onDelete={setToDelete}

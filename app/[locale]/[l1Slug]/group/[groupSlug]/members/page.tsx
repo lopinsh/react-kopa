@@ -117,7 +117,6 @@ export default async function GroupMembersPage({
                             member={member}
                             canMessage={messageable.has(member.user.id)}
                             groupId={group.id}
-                            currentUserRole={group.user.role as string}
                             locale={locale}
                             l1Slug={l1Slug}
                         />
