@@ -124,7 +124,7 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
 /**
  * Leave a group.
  */
-export async function leaveGroup(groupId: string, locale: string): Promise<ActionResponse> {
+export async function leaveGroup(groupId: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 

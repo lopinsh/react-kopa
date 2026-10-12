@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
-import type { L1Category, ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
+import type { ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
 import SlideoverL1View from './SlideoverL1View';
 import SlideoverL2View from './SlideoverL2View';
 import SlideoverPendingView from './SlideoverPendingView';

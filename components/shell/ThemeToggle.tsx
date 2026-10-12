@@ -3,7 +3,7 @@
 import { useTheme } from 'next-themes';
 import { Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export default function ThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme();

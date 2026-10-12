@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition, useState, useRef, useEffect } from 'react';
+import { useTransition, useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import {
@@ -50,8 +50,6 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const [isContactModalOpen, setContactModalOpen] = useState(false);
     const [isReportModalOpen, setReportModalOpen] = useState(false);
     const [isHideModalOpen, setHideModalOpen] = useState(false);
-    const [isContactsOpen, setContactsOpen] = useState(false);
-    const contactsRef = useRef<HTMLDivElement>(null);
     // The "..." menu button that opened the report or hide pop-up; the menu closes on click, so focus returns here.
     const menuReturnRef = useRef<HTMLElement | null>(null);
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
@@ -59,13 +57,13 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
     const isOwner = checkIsOwner(userRole);
 
-    const handleMembership = () => {
+    const handleMembership = useCallback(() => {
         gateAction(() => {
             // Members and people with a request already waiting have nothing to send here.
             if (isMember || userRole === 'PENDING') return;
             setContactModalOpen(true);
         }, 'join_group');
-    };
+    }, [gateAction, isMember, userRole]);
 
     // Auto-resume action after login. The stored URL keeps the locale prefix, which next-intl's pathname drops.
     useEffect(() => {
@@ -73,7 +71,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
             clearPendingAction();
             handleMembership();
         }
-    }, [isAuthenticated, pendingAction, pendingUrl, pathname]);
+    }, [isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, handleMembership]);
 
     const handleCancelRequest = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -116,7 +114,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
         isL1: false
     });
 
-    const { socialLinks, stats, user: groupUser, theme } = group;
+    const { socialLinks, stats } = group;
 
     // The Events tab, event pages and settings get a slim bar so the content starts near the top.
     const normalizedPath = pathname.replace(`/${locale}`, '') || '/';

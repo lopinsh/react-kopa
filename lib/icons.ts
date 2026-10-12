@@ -1,7 +1,7 @@
 import {
     Gamepad2, Palette, Activity, Heart, Music, Lightbulb,
     TreePine, GraduationCap, Utensils, Zap, Globe, MessageSquare,
-    Dog, Flame, Handshake, Shield, Sparkles, Shapes, LineSquiggle, PersonStanding
+    Dog, Handshake, Shield, Sparkles, Shapes, LineSquiggle, PersonStanding
 } from 'lucide-react';
 
 export const getCategoryIcon = (slug: string) => {

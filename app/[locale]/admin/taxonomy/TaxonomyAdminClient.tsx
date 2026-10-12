@@ -23,7 +23,7 @@ export default function TaxonomyAdminClient({ pending, categories, tree, cities 
     const t = useTranslations('admin.taxonomy.bulk');
     const [selectedNode, setSelectedNode] = useState<SelectedTaxonomyNode | null>(null);
     const [selectedActionIds, setSelectedActionIds] = useState<string[]>([]);
-    const [isPendingTransitions, startTransition] = useTransition();
+    const [, startTransition] = useTransition();
 
     const toggleActionId = (id: string) => {
         setSelectedActionIds((prev) =>

@@ -1,6 +1,5 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
 import { useRouter } from 'next/navigation';
 import { approveTag, addAlias, deleteAlias } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +15,7 @@ type Props = {
     onNodeSelect: (node: SelectedTaxonomyNode) => void;
 };
 
-export default function SlideoverL2View({ l2, categories, tree, onNodeSelect }: Props) {
+export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
     const tFields = useTranslations('admin.taxonomy.fields');
     const tAliases = useTranslations('admin.taxonomy.aliases');

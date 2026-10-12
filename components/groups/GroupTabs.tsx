@@ -5,7 +5,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Link, usePathname } from '@/i18n/routing';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { Info, Calendar, MessageSquare, Users, HelpCircle, Settings, Menu, LucideIcon, UserPlus, Plus } from 'lucide-react';
+import { Info, Calendar, Users, HelpCircle, Menu, LucideIcon, UserPlus, Plus } from 'lucide-react';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupInfoDrawer from './GroupInfoDrawer';
 import type { GroupContext } from '@/lib/services/group.service';

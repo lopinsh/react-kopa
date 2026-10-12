@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { avatarUrl } from '@/lib/avatar';
 import Link from 'next/link';
-import { Users, MapPin, Globe, Lock, Zap, Clock } from 'lucide-react';
+import { MapPin, Clock } from 'lucide-react';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { clsx } from 'clsx';
 import type { GroupType } from '@prisma/client';
@@ -39,16 +39,10 @@ type Props = {
     locale: string;
 };
 
-const TYPE_ICONS = {
-    PUBLIC: Globe,
-    PRIVATE: Lock,
-};
-
-export default function GroupCard({ group, accentColor: globalAccentColor, priority, locale }: Props) {
+export default function GroupCard({ group, accentColor: globalAccentColor, priority }: Props) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const accentColor = group.category.color || globalAccentColor;
-    const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
     // Pattern for image thumbnail fallback
     const patternStyle = {

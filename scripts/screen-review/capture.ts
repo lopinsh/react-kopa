@@ -93,7 +93,7 @@ const SHOTS: Shot[] = [
     { name: 'talk-messages', roles: ['member'], url: '/lv/messages' },
     { name: 'talk-messages-anon', roles: ['anon'], url: '/lv/messages' },
     { name: 'talk-group-messages-orphan', roles: ['member'], url: '/lv/religion/messages' },
-    { name: 'talk-notifications-open', roles: ['owner', 'member'], url: '/lv', act: async (p, s) => { await p.locator('button[aria-label]').filter({ hasText: '' }).first(); await p.getByLabel(/paziņojum/i).first().click(); await sleep(600); } },
+    { name: 'talk-notifications-open', roles: ['owner', 'member'], url: '/lv', act: async (p) => { await p.locator('button[aria-label]').filter({ hasText: '' }).first(); await p.getByLabel(/paziņojum/i).first().click(); await sleep(600); } },
     // Group life
     { name: 'group-members', roles: ['anon', 'member', 'owner'], url: `${G}/members` },
     { name: 'group-events-tab', roles: ['anon', 'member', 'owner'], url: `${G}/events` },

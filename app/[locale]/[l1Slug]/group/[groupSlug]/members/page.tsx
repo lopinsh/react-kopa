@@ -40,7 +40,6 @@ export async function generateMetadata({
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
     const t = await getTranslations('group');
-  const c_common_get = await getTranslations('common');
 
     if (!group) return {};
 

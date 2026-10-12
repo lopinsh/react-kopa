@@ -8,7 +8,7 @@ type Props = {
     onClose: () => void;
 };
 
-export default function SlideoverPendingView({ pending, canonicalOptions, onClose }: Props) {
+export default function SlideoverPendingView({ pending, canonicalOptions }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
 
     return (

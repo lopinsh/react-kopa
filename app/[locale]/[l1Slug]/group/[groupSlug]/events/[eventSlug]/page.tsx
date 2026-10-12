@@ -142,7 +142,6 @@ export default async function EventPage({
 
                 {event.bannerImage && (
                     <div className="mb-6 h-40 w-full overflow-hidden rounded-3xl border border-border md:h-56">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={event.bannerImage} alt="" className={clsx('h-full w-full object-cover', ended && 'opacity-60 grayscale')} />
                     </div>
                 )}

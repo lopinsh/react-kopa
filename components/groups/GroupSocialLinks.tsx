@@ -14,7 +14,6 @@ export default function GroupSocialLinks({
     websiteLink,
     instagramLink
 }: GroupSocialLinksProps) {
-    const t = useTranslations('group');
   const c_common = useTranslations('common');
 
     if (!discordLink && !websiteLink && !instagramLink) return null;

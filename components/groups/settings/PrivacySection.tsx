@@ -8,7 +8,6 @@ import { clsx } from 'clsx';
 import SettingsSection from './SettingsSection';
 
 export default function PrivacySection() {
-    const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const { register, watch } = useFormContext<GroupFormValues>();
 

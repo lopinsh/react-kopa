@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { useForm, type UseFormRegisterReturn } from 'react-hook-form';
+import { useForm, useWatch, type UseFormRegisterReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileSchema, type ProfileFormValues } from '@/lib/validations/user';
 import { updateProfile } from '@/actions/user-actions';
@@ -70,7 +70,7 @@ export default function ProfileEditForm({ user }: Props) {
     const { errors } = form.formState;
 
     // Live preview: a photo URL wins, otherwise the clay figure for the current seed.
-    const [watchedImage, watchedSeed] = form.watch(['image', 'avatarSeed']);
+    const [watchedImage, watchedSeed] = useWatch({ control: form.control, name: ['image', 'avatarSeed'] });
     const previewSrc = avatarUrl({ id: user.id, image: watchedImage, avatarSeed: watchedSeed });
 
     const fieldError = (message?: string) =>

@@ -191,7 +191,6 @@ export default function DiscoveryFilterBar({
 
     const handleAddTag = (slug: string) => push(addTag(slug));
     const handleRemoveTag = (slug: string) => push(removeTag(slug));
-    const handleClearTags = () => push(build({ tags: null }));
 
     const handleCityChange = (val: string) =>
         push(build({ city: val === 'all' ? null : val }));

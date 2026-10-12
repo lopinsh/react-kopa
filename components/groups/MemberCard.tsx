@@ -36,7 +36,7 @@ type Props = {
     l1Slug: string;
 };
 
-export default function MemberCard({ member, canMessage, groupId, locale, l1Slug }: Props) {
+export default function MemberCard({ member, canMessage, groupId, locale }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const tErrors = useTranslations('errors');

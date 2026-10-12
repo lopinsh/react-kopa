@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import type { TaxonomyTree as TaxonomyTreeData, L1Category, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
+import type { TaxonomyTree as TaxonomyTreeData, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
 import TaxonomyTreeNode from './TaxonomyTreeNode';
 
 export type SelectedTaxonomyNode =

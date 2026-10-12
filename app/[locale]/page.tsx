@@ -15,8 +15,7 @@ import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
-import { Users, Search, Plus, Calendar } from 'lucide-react';
-import { clsx } from 'clsx';
+import { Search, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
 

@@ -5,7 +5,6 @@ import { User, LogOut, Settings, Users } from 'lucide-react';
 import { useState, useRef, useSyncExternalStore } from 'react';
 import { signOut, signIn } from 'next-auth/react';
 import { Link, usePathname } from '@/i18n/routing';
-import { clsx } from 'clsx';
 import { avatarUrl } from '@/lib/avatar';
 import { useClickOutside } from '@/hooks/useClickOutside';
 

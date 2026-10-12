@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
-import { useForm, FormProvider, type Resolver } from 'react-hook-form';
+import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale, useTimeZone } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
@@ -30,8 +30,7 @@ import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/val
 import { createEvent, updateEvent } from '@/actions/event-actions';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 
-const STEP_SCHEMAS = [0, 1] as const;
-type StepIndex = (typeof STEP_SCHEMAS)[number];
+type StepIndex = 0 | 1;
 
 /** An existing event, for the edit page. Dates are ISO strings (they cross the server/client border). */
 export type EventToEdit = {
@@ -96,12 +95,13 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         mode: 'onChange',
     });
 
-    const { register, handleSubmit, formState: { errors }, setValue, getValues, watch, trigger } = form;
+    const { register, handleSubmit, formState: { errors }, setValue, getValues, trigger } = form;
+    const watched = useWatch({ control: form.control });
     const timeZone = useTimeZone();
     // Once the organiser empties the end, start changes stop filling it in again.
     const endLeftEmpty = useRef(!!event && !event.endDate);
-    const startValue = String(watch('startDate') ?? '');
-    const endValue = String(watch('endDate') ?? '');
+    const startValue = String(watched.startDate ?? '');
+    const endValue = String(watched.endDate ?? '');
 
     // Done after mount because the server renders in its own zone (UTC in production), not the viewer's:
     // computing these during render would show server-zone times and mismatch on hydration.
@@ -188,7 +188,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         });
     }
 
-    const opensToWaiting = !!event && event.joinMode === 'REQUEST' && watch('joinMode') === 'OPEN' && waitingCount > 0;
+    const opensToWaiting = !!event && event.joinMode === 'REQUEST' && watched.joinMode === 'OPEN' && waitingCount > 0;
 
     const submitForm = handleSubmit((data) => {
         if (opensToWaiting) {
@@ -272,7 +272,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 </label>
                                 <RichTextEditor
                                     key={`description-${lang}-${rev}`}
-                                    value={watch(`texts.${lang}.description`) || ''}
+                                    value={watched.texts?.[lang]?.description || ''}
                                     onChange={(val) => setValue(`texts.${lang}.description`, val)}
                                     placeholder={t('fieldDescriptionPlaceholder')}
                                 />
@@ -360,7 +360,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     { val: EVENT_VISIBILITY[0], key: 'typePublic' as const, desc: 'typePublicDesc' as const },
                                     { val: EVENT_VISIBILITY[1], key: 'typeMembersOnly' as const, desc: 'typeMembersOnlyDesc' as const }
                                 ].map(({ val, key, desc }) => {
-                                    const isSelected = watch('visibility') === val;
+                                    const isSelected = watched.visibility === val;
                                     return (
                                         <button
                                             key={val}
@@ -387,7 +387,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     { val: EVENT_JOIN_MODES[0], key: 'joinOpen' as const, desc: 'joinOpenDesc' as const },
                                     { val: EVENT_JOIN_MODES[1], key: 'joinRequest' as const, desc: 'joinRequestDesc' as const }
                                 ].map(({ val, key, desc }) => {
-                                    const isSelected = watch('joinMode') === val;
+                                    const isSelected = watched.joinMode === val;
                                     return (
                                         <button
                                             key={val}
@@ -431,11 +431,11 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     {t('fieldInstructions')}
                                 </label>
                                 <p className="mb-1.5 text-xs text-foreground-muted">
-                                    {watch('joinMode') === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
+                                    {watched.joinMode === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
                                 </p>
                                 <RichTextEditor
                                     key={`instructions-${lang}-${rev}`}
-                                    value={watch(`texts.${lang}.instructions`) || ''}
+                                    value={watched.texts?.[lang]?.instructions || ''}
                                     onChange={(val) => setValue(`texts.${lang}.instructions`, val)}
                                     placeholder={t('fieldInstructionsPlaceholder')}
                                 />

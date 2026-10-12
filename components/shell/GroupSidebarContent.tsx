@@ -4,11 +4,10 @@ import { useEffect, useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { usePathname } from 'next/navigation';
-import { Megaphone, Calendar, Users, Settings, Lock, Info } from 'lucide-react';
+import { Megaphone, Calendar, Users, Settings, Info } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getGroupRole } from '@/actions/group-actions';
 import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
-import { useSearchParams } from 'next/navigation';
 import { MembershipRole } from '@prisma/client';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
 
@@ -22,10 +21,8 @@ type Props = {
 };
 
 export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false, onMissing }: Props) {
-    const t = useTranslations('group');
   const c_common = useTranslations('common');
     const pathname = usePathname();
-    const searchParams = useSearchParams();
     const locale = useLocale();
     const [state, setState] = useState<{
         exists: boolean,

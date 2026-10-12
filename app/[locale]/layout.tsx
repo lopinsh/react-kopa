@@ -63,7 +63,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <Header />
 
                 <div className="flex flex-1 overflow-hidden">
-                    <Sidebar locale={locale} />
+                    <Sidebar />
                     {/* Main Content */}
                     <main
                         className="flex-1 overflow-y-auto pb-20 md:pb-4 focus:outline-none"
@@ -72,7 +72,7 @@ export default async function LocaleLayout({ children, params }: Props) {
                         <div className="flex-1">
                             {children}
                         </div>
-                        <Footer locale={locale} />
+                        <Footer />
                     </main>
                 </div>
             </div>

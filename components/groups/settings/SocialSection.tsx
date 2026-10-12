@@ -7,7 +7,6 @@ import { type GroupFormValues } from '@/lib/validations/group';
 import SettingsSection from './SettingsSection';
 
 export default function SocialSection() {
-    const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const { register } = useFormContext<GroupFormValues>();
 

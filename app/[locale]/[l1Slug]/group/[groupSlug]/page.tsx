@@ -3,10 +3,8 @@ import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getTranslations } from 'next-intl/server';
 import MemberAvatarList from '@/components/groups/MemberAvatarList';
-import { Info, Calendar, MessageSquare, Users as UsersIcon, HelpCircle } from 'lucide-react';
+import { Users as UsersIcon, HelpCircle } from 'lucide-react';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
-import GroupHeader from '@/components/groups/GroupHeader';
-import { ensureContrast } from '@/lib/color-utils';
 import { clsx } from 'clsx';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import Image from 'next/image';
@@ -35,7 +33,6 @@ export default async function GroupPage({
     const { locale, groupSlug, l1Slug } = await params;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
-    const t = await getTranslations('group');
   const c_common_get = await getTranslations('common');
 
     if (!group) {

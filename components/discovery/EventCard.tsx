@@ -1,5 +1,4 @@
 import { Calendar, MapPin, Users, ArrowRight, Lock, UserCheck } from 'lucide-react';
-import { clsx } from 'clsx';
 import Link from 'next/link';
 import { UI, NEUTRAL_ACCENT } from '@/lib/constants';
 import { useTranslations } from 'next-intl';

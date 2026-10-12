@@ -33,7 +33,7 @@ export function getSmartImageUrl(url: string | null | undefined): string {
 
         // Proxy unrecognized external URLs
         return `https://wsrv.nl/?url=${encodeURIComponent(url)}&default=${encodeURIComponent(url)}`;
-    } catch (e) {
+    } catch {
         return url;
     }
 }

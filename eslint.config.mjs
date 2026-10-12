@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "**/*.js",
   ]),
+  {
+    rules: {
+      // Avatars and banners are user-supplied URLs (own uploads route, external hosts, generated SVG
+      // figures) with no fixed remote-host list, so next/image optimisation cannot be configured for them.
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

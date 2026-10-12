@@ -27,12 +27,8 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      # Report-only until existing lint debt / locale drift is cleared (see "Known code debt" in docs/execution_handoff.md).
-      # Remove `continue-on-error` once each passes on main.
       - name: Lint
         run: npm run lint
-        continue-on-error: true
 
       - name: i18n parity
         run: npm run i18n:check
-        continue-on-error: true

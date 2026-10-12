@@ -5,7 +5,7 @@ import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { UI } from '@/lib/constants';
 
-export function Footer({ locale }: { locale: string }) {
+export function Footer() {
     const t = useTranslations('shell.footer');
   const c_common = useTranslations('common');
     const currentYear = new Date().getFullYear();

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Users, MapPin, Globe, Lock, Zap } from 'lucide-react';
+import { Users, MapPin } from 'lucide-react';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
@@ -24,15 +24,9 @@ type Props = {
     locale: string;
 };
 
-const TYPE_ICONS = {
-    PUBLIC: Globe,
-    PRIVATE: Lock,
-};
-
-export default function ListViewCard({ group, accentColor: globalAccentColor, locale }: Props) {
+export default function ListViewCard({ group, accentColor: globalAccentColor }: Props) {
     const tCities = useTranslations('cities');
     const accentColor = group.category.color || globalAccentColor;
-    const Icon = TYPE_ICONS[group.type as keyof typeof TYPE_ICONS] || Globe;
 
     return (
         <Link

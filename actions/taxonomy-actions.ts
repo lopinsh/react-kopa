@@ -7,11 +7,8 @@ import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { TaxonomyService, type TagMergeNotice } from '@/lib/services/taxonomy.service';
 import type {
     ActiveL2WithAliases,
-    L1Category,
-    L2Category,
     L2SearchResult,
     PendingTagOption,
-    L3Tag,
     PendingCategoryWithContext,
     TaxonomyTree,
 } from '@/lib/services/taxonomy.service';

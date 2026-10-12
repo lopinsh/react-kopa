@@ -8,13 +8,8 @@ import { clsx } from 'clsx';
 import GroupSidebarContent from './GroupSidebarContent';
 import { UI } from '@/lib/constants';
 
-type SidebarProps = {
-    locale: string;
-};
-
-export default function Sidebar({ locale }: SidebarProps) {
+export default function Sidebar() {
     const t = useTranslations('shell.sidebar');
-  const c_common = useTranslations('common');
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [missingGroup, setMissingGroup] = useState<string | null>(null);
     const pathname = usePathname();

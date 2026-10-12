@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupCard from '@/components/discovery/GroupCard';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';

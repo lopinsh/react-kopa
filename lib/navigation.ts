@@ -1,5 +1,4 @@
 import {
-    Home,
     Compass,
     Users,
     User,

@@ -27,7 +27,7 @@ type Props = {
     actionRequired?: boolean;
 };
 
-export default function MyGroupsListRow({ group, locale, actionRequired }: Props) {
+export default function MyGroupsListRow({ group, actionRequired }: Props) {
     const t = useTranslations('group');
     const tCities = useTranslations('cities');
   const c_common = useTranslations('common');
@@ -35,12 +35,12 @@ export default function MyGroupsListRow({ group, locale, actionRequired }: Props
 
     // If action required is true, link directly to the requests tab
     const targetHref = actionRequired
-        ? `/${locale}/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`
-        : `/${locale}/${group.category.l1Slug}/group/${group.slug}`;
+        ? `/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`
+        : `/${group.category.l1Slug}/group/${group.slug}`;
 
     return (
         <Link
-            href={`/${group.category.l1Slug}/group/${group.slug}`}
+            href={targetHref}
             className="group relative flex h-auto min-h-[3.5rem] flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-surface px-4 py-3 sm:py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >

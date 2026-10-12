@@ -21,7 +21,6 @@ export default async function MyGroupsPage({
 }) {
     const { locale } = await params;
     const session = await auth();
-    const tNav = await getTranslations('nav');
   const c_common_get = await getTranslations('common');
     const tAuth = await getTranslations('auth');
     const tProfile = await getTranslations('profile');

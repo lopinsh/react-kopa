@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState, useTransition } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import { ArrowRightLeft, Flag, LogOut, MoreHorizontal, Settings, Share2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { leaveGroup } from '@/actions/group-actions';
@@ -29,7 +29,6 @@ const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium t
 export default function GroupMoreMenu({ group, l1Slug, variant, className, onReport }: Props) {
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
-    const locale = useLocale();
     const { success, error: toastError } = useToast();
     const { user: { role, isMember } } = useGroupContext();
     const [isOpen, setOpen] = useState(false);
@@ -63,7 +62,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
     const handleLeave = () => {
         if (isPending) return;
         startTransition(async () => {
-            const res = await leaveGroup(group.id, locale);
+            const res = await leaveGroup(group.id);
             setLeaveConfirmOpen(false);
             if (!res.success) toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
