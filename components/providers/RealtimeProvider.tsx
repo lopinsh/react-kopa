@@ -43,7 +43,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         setTimeout(() => {
             setToast((current) => (current?.id === data.id ? null : current));
         }, 5000);
-    }, [router, t]);
+    }, [router, t, locale]);
 
     const handleNewMessage = useCallback((data: MessageEvent) => {
         // Don't show toast if we are already on the messages page

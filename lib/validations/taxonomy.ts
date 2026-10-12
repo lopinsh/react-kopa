@@ -4,8 +4,8 @@ import { hexColorSchema } from './theme';
 /** A category/tag name as people see it: trimmed, 2-60 characters. */
 export const categoryNameSchema = z.string().trim().min(2).max(60);
 
-/** URL slug of a category: lowercase letters, digits and single hyphens. */
-export const categorySlugSchema = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+/** URL slug of a category: what slugify() produces (lowercase letters, digits, underscores, single hyphens). */
+export const categorySlugSchema = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9_]+(?:-[a-z0-9_]+)*$/);
 
 const idSchema = z.string().min(1).max(64);
 
