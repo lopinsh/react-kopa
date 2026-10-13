@@ -1,5 +1,5 @@
 import { Calendar, MapPin, Users, ArrowRight, Lock, UserCheck } from 'lucide-react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { UI, NEUTRAL_ACCENT } from '@/lib/constants';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';

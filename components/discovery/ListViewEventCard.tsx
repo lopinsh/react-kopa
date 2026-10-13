@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { Users, MapPin, Calendar, Lock, UserCheck } from 'lucide-react';
 import { UI, NEUTRAL_ACCENT } from '@/lib/constants';
 import { useTranslations } from 'next-intl';

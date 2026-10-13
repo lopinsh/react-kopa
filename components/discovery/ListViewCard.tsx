@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { Users, MapPin } from 'lucide-react';
 import type { GroupType } from '@prisma/client';
 import { useTranslations } from 'next-intl';

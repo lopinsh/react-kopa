@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { avatarUrl } from '@/lib/avatar';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { MapPin, Clock } from 'lucide-react';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { clsx } from 'clsx';
