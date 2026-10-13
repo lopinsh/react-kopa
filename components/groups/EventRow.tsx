@@ -8,7 +8,7 @@ import type { AttendanceStatus } from '@prisma/client';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr, type TextLang } from '@/lib/translations';
-import { createDateFormatter } from '@/lib/date-format';
+import { capitalizeFirst, createDateFormatter, EVENT_WEEKDAY_TIME } from '@/lib/date-format';
 
 type Props = {
     event: {
@@ -90,7 +90,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                     <p className="flex flex-wrap items-center gap-x-4 gap-y-0.5 text-sm text-foreground-muted">
                         <span className="inline-flex items-center gap-1.5">
                             <Clock className="h-3.5 w-3.5 shrink-0" />
-                            {formatter.dateTime(start, time)}{end ? `–${formatter.dateTime(end, time)}` : ''}
+                            {capitalizeFirst(formatter.dateTime(start, EVENT_WEEKDAY_TIME))}{end ? `–${formatter.dateTime(end, time)}` : ''}
                         </span>
                         {event.location && (
                             <span className="inline-flex min-w-0 items-center gap-1.5">

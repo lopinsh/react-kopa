@@ -190,10 +190,11 @@ function MonthGrid({ id, selected, format, prevLabel, nextLabel, onPick, onClose
             </div>
             <div ref={gridRef} role="grid" className="grid grid-cols-7 gap-0.5 text-center">
                 {weekdays.map((w, i) => (
-                    <span key={i} role="columnheader" className="py-1 text-[11px] font-semibold text-foreground-muted">{w}</span>
+                    <span key={i} role="columnheader" className={clsx('py-1 text-[11px] font-semibold', i >= 5 ? 'bg-tint text-foreground' : 'text-foreground-muted')}>{w}</span>
                 ))}
                 {cells.map((day, i) => {
-                    if (!day) return <span key={i} />;
+                    const weekend = i % 7 >= 5; // Saturday and Sunday columns sit on the tint
+                    if (!day) return <span key={i} className={weekend ? 'bg-tint' : undefined} />;
                     const k = dayKey(fy, fm - 1, day);
                     const isSelected = k === selected;
                     return (
@@ -208,7 +209,7 @@ function MonthGrid({ id, selected, format, prevLabel, nextLabel, onPick, onClose
                             onClick={() => onPick(k)}
                             className={clsx(
                                 'aspect-square rounded-lg text-sm tabular-nums',
-                                isSelected ? 'bg-primary font-semibold text-primary-foreground' : 'text-foreground hover:bg-surface-elevated',
+                                isSelected ? 'bg-primary font-semibold text-primary-foreground' : clsx('text-foreground hover:bg-surface-elevated', weekend && 'bg-tint'),
                                 !isSelected && k === todayKey && 'border border-primary'
                             )}
                         >

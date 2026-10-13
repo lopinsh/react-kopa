@@ -7,7 +7,7 @@ import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
-import { useDateFormatter } from '@/lib/date-format';
+import { capitalizeFirst, EVENT_WEEKDAY_TIME, useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     event: DiscoverableEvent;
@@ -93,7 +93,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                     <div className="flex items-center justify-between pt-2 border-t border-border/50">
                         <div className="flex items-center gap-2 text-xs font-bold text-foreground">
                             <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
-                            {formatter.dateTime(startDate, { hour: '2-digit', minute: '2-digit', hour12: false })}
+                            {capitalizeFirst(formatter.dateTime(startDate, EVENT_WEEKDAY_TIME))}
                         </div>
                         <div className="rounded-full bg-surface-elevated p-2 text-foreground transition-all group-hover:bg-primary group-hover:text-primary-foreground" style={{ '--accent': accentColor } as React.CSSProperties}>
                             <ArrowRight className="h-4 w-4" />

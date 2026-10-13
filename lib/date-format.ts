@@ -15,6 +15,18 @@ export function createDateFormatter(locale: string, timeZone: string | undefined
     return createFormatter({ locale: dateLocale(locale), timeZone });
 }
 
+/** "Svētd., 18. okt." / "Sun, 18 Oct": the date of an event, with the weekday (AR-11). */
+export const EVENT_DAY = { weekday: 'short', day: 'numeric', month: 'short' } as const;
+/** "Svētd., 18. okt. 17:00" / "Sun, 18 Oct, 17:00": 24-hour time in the viewer's zone. */
+export const EVENT_DAY_TIME = { ...EVENT_DAY, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const;
+/** "Svētd., 17:00": weekday and time, next to a date tile. */
+export const EVENT_WEEKDAY_TIME = { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const;
+
+/** Sentence case for a formatted date: Latvian writes weekdays in lower case inside a date ("svētd., …"). */
+export function capitalizeFirst(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 export type DateFormatter = ReturnType<typeof createDateFormatter>;
 
 /**

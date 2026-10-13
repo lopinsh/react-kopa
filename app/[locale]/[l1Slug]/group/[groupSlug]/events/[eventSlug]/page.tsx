@@ -28,7 +28,7 @@ import { isEventPast } from '@/lib/event-dates';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
-import { createDateFormatter } from '@/lib/date-format';
+import { capitalizeFirst, createDateFormatter, EVENT_DAY } from '@/lib/date-format';
 
 export async function generateMetadata({
     params,
@@ -152,7 +152,7 @@ export default async function EventPage({
                     <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
                         <span className={clsx('inline-flex items-center gap-1.5 rounded-full px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-primary/15 text-foreground')}>
                             <Clock className="h-3.5 w-3.5" />
-                            {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric' })}
+                            {capitalizeFirst(formatter.dateTime(startDate, EVENT_DAY))}
                         </span>
                         {event.visibility === 'MEMBERS_ONLY' && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
@@ -244,7 +244,7 @@ export default async function EventPage({
                                 <div className="min-w-0">
                                     <p className="mb-0.5 text-[11px] font-semibold text-foreground-muted">{t('dateAndTime')}</p>
                                     <p className="text-sm font-bold leading-snug text-foreground">
-                                        {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                        {capitalizeFirst(formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))}
                                         <br />
                                         {formatter.dateTime(startDate, timeFormat)}{endDate && ` – ${formatter.dateTime(endDate, timeFormat)}`}{showZone && ` (${formatter.dateTime(startDate, { timeZoneName: 'short' }).split(' ').pop()})`}
                                     </p>

@@ -7,7 +7,7 @@ import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
-import { useDateFormatter } from '@/lib/date-format';
+import { capitalizeFirst, EVENT_WEEKDAY_TIME, useDateFormatter } from '@/lib/date-format';
 
 type Props = {
     event: DiscoverableEvent;
@@ -64,7 +64,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
             <div className="ml-4 flex shrink-0 items-center justify-end gap-4 text-xs font-semibold text-foreground-muted">
                 <div className="hidden items-center gap-1.5 sm:flex">
                     <Calendar className="h-3.5 w-3.5" />
-                    {formatter.dateTime(startDate, { hour: '2-digit', minute: '2-digit', hour12: false })}
+                    {capitalizeFirst(formatter.dateTime(startDate, EVENT_WEEKDAY_TIME))}
                 </div>
                 <div className="hidden items-center gap-1 md:flex max-w-[120px] truncate">
                     <MapPin className="h-3.5 w-3.5" />
