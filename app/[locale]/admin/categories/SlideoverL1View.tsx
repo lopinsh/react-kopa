@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import type { L1Category } from '@/lib/services/taxonomy.service';
+import { tint } from '@/lib/color-utils';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { updateL1, addAlias, deleteAlias, createL2 } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -24,7 +25,8 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const [color, setColor] = useState(l1.color || '#586474');
+    const savedColor = l1.storedColor || '#586474';
+    const [color, setColor] = useState(savedColor);
 
     const [aliasValue, setAliasValue] = useState('');
     const [aliasLocale, setAliasLocale] = useState('');
@@ -94,7 +96,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             <div>
                 <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: `${color}20`, color: color }}>
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(color, 12), color: color }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
                     </div>
                     <div>
@@ -111,7 +113,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             <section>
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{tFields('color')}</h3>
-                    {color !== l1.color && (
+                    {color !== savedColor && (
                         <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
@@ -138,8 +140,8 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                         <button
                             type="button"
                             onClick={handleSaveColor}
-                            disabled={isPending || color === l1.color}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            disabled={isPending || color === savedColor}
+                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {t('save')}
                         </button>

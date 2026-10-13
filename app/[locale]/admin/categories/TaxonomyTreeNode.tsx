@@ -1,6 +1,7 @@
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import type { L1Category, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
+import { tint } from '@/lib/color-utils';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 import { useTranslations } from 'next-intl';
@@ -34,7 +35,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                     {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                 </div>
 
-                <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: `${l1.color}20`, color: l1.color }}>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: tint(l1.color, 12), color: l1.color }}>
                     <CategoryIcon slug={l1.slug} className="w-4 h-4" />
                 </div>
 

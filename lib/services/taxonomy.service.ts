@@ -31,7 +31,10 @@ export type L1Category = {
     id: string;
     slug: string;
     title: string;
+    /** The colour to show: the category's theme tone (`var(--cat-<slug>)`), else the stored hex. */
     color: string;
+    /** The stored `Category.color` (hex or null), for the admin colour editor only. */
+    storedColor: string | null;
     subcategories: L2Category[];
     aliases: Array<{ id: string; value: string; locale: string | null; createdAt: Date }>;
 };
@@ -229,6 +232,7 @@ export const TaxonomyService = {
                         slug: l1.slug,
                         title: getTitle(l1),
                         color: categoryColor(l1.slug, l1.color),
+                        storedColor: l1.color,
                         subcategories,
                         aliases: l1.aliases,
                     };
