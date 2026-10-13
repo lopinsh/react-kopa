@@ -170,6 +170,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** moving `/messages` and `/profile` under one layout must not change URLs or break `/profile/[username]`; the header at 375 px for admins overflowed by 11 px on the redesign page once (check the real one); feedback and translate modes keep their switches in the shield menu.
 - **Out of scope:** the search overlay (R7), Paziņojumi page and bell look (R8), Mans profils content (R9b), the "new" count (R8).
 - **Size:** L (one session if the spec is tight; if the spec runs long, the own-area frame and Iestatījumi split off as R2c, released before R2b).
+- **Spec:** [specs/R2a.md](specs/R2a.md). No migration; no R2c split (the own area is the last build step). The bottom bar marks the tab you came from on group pages from a session cookie read by the locale layout (no flash on reload) plus a per-group sessionStorage map for back/forward; Iestatījumi is `/settings` in the `(me)` route group; the own menu has four items until R8 adds Paziņojumi.
 
 ### R2b · Behaviour pieces (M)
 
@@ -441,7 +442,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 |---|---|---|---|
 | R1a Identity | pushed, live; owner checked 13 Oct | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`557b6bc` (Opus review fixes `4232adc`, `9708a63`) |
 | R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
-| R2a Header, menus, own area | not started | | |
+| R2a Header, menus, own area | specced 13 Oct | [specs/R2a.md](specs/R2a.md) | |
 | R2b Behaviour pieces | not started | | |
 | R3a Group frame | not started | | |
 | R3b Sazināties, pending, "…" | not started | | |
