@@ -31,6 +31,12 @@ export function useMenu(initialOpen = false) {
     }, []);
 
     const onTriggerKeyDown = (e: KeyboardEvent<HTMLButtonElement>) => {
+        // Opened with the mouse, focus stays on the trigger: Esc and Tab still close the menu.
+        if (open && e.key === 'Escape') {
+            e.preventDefault();
+            return setOpen(false);
+        }
+        if (open && e.key === 'Tab') return setOpen(false);
         if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter' && e.key !== ' ') return;
         e.preventDefault();
         if (open && (e.key === 'Enter' || e.key === ' ')) return setOpen(false);
