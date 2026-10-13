@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
+import NextLink from 'next/link';
 import { signOut } from 'next-auth/react';
 import { LogOut, Plus, Settings, User, Users } from 'lucide-react';
 import { clsx } from 'clsx';
-import { Link, usePathname } from '@/i18n/routing';
+import { usePathname } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
 import { signInUrl } from '@/lib/auth-redirect';
 import { UI } from '@/lib/constants';
@@ -35,10 +36,11 @@ export default function UserMenu({ user, initialOpen }: Props) {
     if (!user) {
         // The sign-in and register pages are the sign-in button's destination already.
         if (pathname.startsWith('/auth')) return null;
+        // signInUrl already carries the locale prefix, so a plain Next link (the next-intl Link would add it twice).
         return (
-            <Link href={signInUrl(locale, pathname + (search ? `?${search}` : ''))} className={buttonClass('primary', 'shrink-0', 'sm')}>
+            <NextLink href={signInUrl(locale, pathname + (search ? `?${search}` : ''))} className={buttonClass('primary', 'shrink-0', 'sm')}>
                 {t('signIn')}
-            </Link>
+            </NextLink>
         );
     }
 
