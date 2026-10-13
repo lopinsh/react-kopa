@@ -37,7 +37,8 @@ export default function Logo({ size = 'md', iconOnly = false, className }: Props
                 className
             )}
         >
-            {!iconOnly && t.rich('logo.wordmark', { em: (chunks) => <em className="font-medium">{chunks}</em> })}
+            {/* One inline box: as flex items, "Ejam " and <em> would lose the space between them. */}
+            {!iconOnly && <span>{t.rich('logo.wordmark', { em: (chunks) => <em className="font-medium">{chunks}</em> })}</span>}
             <Circles size={size} />
         </span>
     );

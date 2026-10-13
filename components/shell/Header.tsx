@@ -27,10 +27,12 @@ export default async function Header() {
             <div className="flex items-center shrink-0">
                 <Link
                     href="/"
-                    className="flex items-center transition-all active:scale-95"
+                    className="flex min-h-10 min-w-10 items-center transition-all active:scale-95"
                     aria-label={t('logoText')}
                 >
-                    <span className="md:hidden"><Logo size="sm" /></span>
+                    {/* Phones: the circles only, until R2a frees room in the header (the wordmark pushed the icons off a 375 px screen). */}
+                    <span className="sm:hidden"><Logo size="sm" iconOnly /></span>
+                    <span className="hidden sm:inline-flex md:hidden"><Logo size="sm" /></span>
                     <span className="hidden md:inline-flex"><Logo /></span>
                 </Link>
             </div>
