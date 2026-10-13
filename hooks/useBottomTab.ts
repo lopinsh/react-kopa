@@ -47,10 +47,16 @@ export function useBottomTab(initialTab: BottomTab): BottomTab | null {
     const keepRef = useRef<BottomTab>(initialTab);
     const stepTo = useRef<string | null>(null);
     const first = useRef(true);
+    const pathRef = useRef(pathname);
+    useEffect(() => {
+        pathRef.current = pathname;
+    });
 
     useEffect(() => {
         const onPop = () => {
-            stepTo.current = stripLocale(window.location.pathname);
+            // A pop-up's Back (AR-67) changes no path: nothing to record.
+            const to = stripLocale(window.location.pathname);
+            if (to !== pathRef.current) stepTo.current = to;
         };
         window.addEventListener('popstate', onPop);
         return () => window.removeEventListener('popstate', onPop);
