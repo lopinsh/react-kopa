@@ -2,61 +2,59 @@
 
 /* ─── Design Tokens ─────────────────────────────────── */
 :root {
-  /* Backgrounds & Surfaces */
-  --background: #f1f5f9;
-  --surface: #ffffff;
-  --surface-elevated: #ffffff;
+  /* Backgrounds & Surfaces (Sūna, light). The site theme in app/layout.tsx overrides these; this is the no-theme fallback. */
+  --background: #f4f4ef;
+  --surface: #fdfdfb;
+  --surface-elevated: #fdfdfb;
+  --tint: #e8eae1;
 
   /* Foreground */
-  --foreground: #0f172a;
-  --foreground-muted: #64748b;
+  --foreground: #1f221c;
+  --foreground-muted: #5f6558;
 
-  /* Border */
-  --border: #e2e8f0;
+  /* Border (dividing lines, never the only sign of a control) */
+  --border: #dcdfd4;
 
-  /* Premium Shadows (Source of Truth) */
-  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+  /* Site colour: buttons, links, active tabs */
+  --primary: #4B5E3B;
+  --primary-foreground: #ffffff;
+
+  /* Text on a category tone */
+  --on-cat: #ffffff;
+
+  /* Status colours (single variables: one edit changes them everywhere) */
+  --danger: #A63A2E;
+  --danger-foreground: #ffffff;
+  --success: #3D6B34;
+  --warning: #8A5B0B;
+
+  /* Depth: cards are flat; the float shadow is only for layers above the page (AR-08) */
+  --shadow-card: none;
+  --shadow-premium: 0 10px 28px rgba(0, 0, 0, 0.12);
+  --shadow-dialog: 0 14px 34px rgba(0, 0, 0, 0.25);
 
   /* Shell Dimensions */
   --header-height: 72px;
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 68px;
-
-  /* L1 Category Colors (from seed) */
-  --color-cat-skill: #2DD4BF;
-  /* Skill & Craft      – Teal    */
-  --color-cat-movement: #4ADE80;
-  /* Movement & Wellness – Green   */
-  --color-cat-gathering: #FB923C;
-  /* Gathering & Fun    – Peach   */
-  --color-cat-performance: #60A5FA;
-  /* Performance        – Blue    */
-  --color-cat-civic: #F97316;
-  /* Civic & Governance – Orange  */
-  --color-cat-practical: #FACC15;
-  /* Practical & Resource – Yellow */
-
-  /* Primary accent */
-  --primary: #6366f1;
-  --primary-foreground: #ffffff;
-
-  /* Group owner marker (avatar ring, role label) */
-  --owner: #f59e0b;
 }
 
 /* ─── Dark Mode ─────────────────────────────────── */
 .dark {
-  --background: #0d0d12;
-  --surface: #16161f;
-  --surface-elevated: #1e1e2a;
-  --foreground: #f8fafc;
-  --foreground-muted: #94a3b8;
-  --border: #1e293b;
-
-  /* Reset shadows for dark mode to avoid "glow" look */
-  --shadow-card: none;
-  --shadow-premium: none;
+  --background: #161814;
+  --surface: #1e211c;
+  --surface-elevated: #282c25;
+  --tint: #282c25;
+  --foreground: #eceee7;
+  --foreground-muted: #a8ae9f;
+  --border: #353a31;
+  --primary: #b5c79e;
+  --primary-foreground: #111111;
+  --on-cat: #161814;
+  --danger: #EE9A8E;
+  --danger-foreground: #161814;
+  --success: #9CCB8C;
+  --warning: #E2B65A;
 }
 
 /* ─── Tailwind v4 Theme Extension ───────────────── */
@@ -64,29 +62,26 @@
   --color-background: var(--background);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-tint: var(--tint);
   --color-foreground: var(--foreground);
   --color-foreground-muted: var(--foreground-muted);
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-owner: var(--owner);
-
-  /* Category colors available as Tailwind tokens */
-  --color-cat-skill: var(--color-cat-skill);
-  --color-cat-movement: var(--color-cat-movement);
-  --color-cat-gathering: var(--color-cat-gathering);
-  --color-cat-performance: var(--color-cat-performance);
-  --color-cat-civic: var(--color-cat-civic);
-  --color-cat-practical: var(--color-cat-practical);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
 
   --shadow-card: var(--shadow-card);
   --shadow-premium: var(--shadow-premium);
+  --shadow-dialog: var(--shadow-dialog);
 
   --spacing-header: 72px;
 
-  --font-sans: var(--theme-font-body, var(--font-geist-sans));
-  --font-heading: var(--theme-font-heading, var(--font-geist-sans));
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--theme-font-body, var(--font-commissioner));
+  --font-heading: var(--theme-font-heading, var(--font-literata));
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 /* ─── Base Styles ───────────────────────────────── */
@@ -116,7 +111,17 @@ body {
   h3,
   h4 {
     font-family: var(--font-heading), system-ui, sans-serif;
+    font-weight: 600;
+    text-wrap: balance;
+    line-height: 1.15;
   }
+}
+
+/* Human note (AR-07): a line in the site's own voice, in italics and the site colour. */
+@utility human-note {
+  font-style: italic;
+  font-size: 0.875rem;
+  color: var(--primary);
 }
 
 /* Smooth scrollbar */

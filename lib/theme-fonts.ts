@@ -4,12 +4,12 @@ import {
 
 /**
  * Every font an admin can pick (THEME_FONTS in lib/constants/theme.ts), each exposing a CSS variable.
- * next/font needs literal options, so they are repeated. Only Geist (today's look) is preloaded; the others are
+ * next/font needs literal options, so they are repeated. Only Literata and Commissioner (the site's look) are preloaded; the others are
  * fetched by the browser when a page actually uses them (unicode-range), so unused fonts cost nothing.
  */
-const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin', 'latin-ext'], display: 'swap' });
-const literata = Literata({ variable: '--font-literata', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
-const commissioner = Commissioner({ variable: '--font-commissioner', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
+const geist = Geist({ variable: '--font-geist-sans', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
+const literata = Literata({ variable: '--font-literata', subsets: ['latin', 'latin-ext'], style: ['normal', 'italic'], display: 'swap' });
+const commissioner = Commissioner({ variable: '--font-commissioner', subsets: ['latin', 'latin-ext'], display: 'swap' });
 const atkinson = Atkinson_Hyperlegible({ variable: '--font-atkinson', subsets: ['latin', 'latin-ext'], weight: ['400', '700'], display: 'swap', preload: false });
 const alegreya = Alegreya_Sans({ variable: '--font-alegreya-sans', subsets: ['latin', 'latin-ext'], weight: ['400', '500', '700', '800'], display: 'swap', preload: false });
 const sourceSerif = Source_Serif_4({ variable: '--font-source-serif', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });

@@ -746,7 +746,6 @@
       "previewActive": "Tev ir saglabāts priekšskatījums. To redzi tikai tu, līdz to publicē vai atmet.",
       "presetsTitle": "Gatavie noskaņojumi",
       "presets": {
-        "current": "Pašreizējais",
         "moss": "Sūna",
         "sea": "Jūra",
         "rye": "Rudzu maize"
@@ -785,9 +784,9 @@
       "previewHint": "Priekšskatījumu redzi tikai tu, visās lapās. Publicējot izskats mainās visiem.",
       "previewSaved": "Priekšskatījums saglabāts. Tu to redzi visā vietnē.",
       "published": "Izskats publicēts visiem.",
-      "resetDone": "Atgriezts pašreizējais izskats.",
+      "resetDone": "Atgriezts noklusētais izskats (Sūna).",
       "resetConfirmTitle": "Atiestatīt izskatu?",
-      "resetConfirmMessage": "Visiem tiks atjaunots noskaņojums \"Pašreizējais\".",
+      "resetConfirmMessage": "Visiem tiks atjaunots noskaņojums \"Sūna\".",
       "bar": {
         "label": "Dizaina priekšskatījums",
         "preview": "Priekšskatījums",

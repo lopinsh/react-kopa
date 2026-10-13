@@ -1,4 +1,4 @@
-import { THEME_FONTS, type ThemeDefinition, type ThemeFontId, type ThemeModeTokens } from '@/lib/constants';
+import { CATEGORY_TONES, CATEGORY_TONE_SLUGS, THEME_FONTS, type ThemeDefinition, type ThemeFontId, type ThemeModeTokens } from '@/lib/constants';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
 
 /** White text unless the colour is clearly light; today's indigo (#6366f1) keeps white. */
@@ -15,7 +15,9 @@ function fontVar(id: ThemeFontId): string {
 }
 
 /** The design tokens of one mode as CSS variables. Missing optional tokens are mixed from foreground and background. */
-export function themeModeVars(t: ThemeModeTokens): Vars {
+export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars {
+    const tones: Vars = {};
+    for (const slug of CATEGORY_TONE_SLUGS) tones[`--cat-${slug}`] = t.categories?.[slug] ?? CATEGORY_TONES[slug][mode];
     return {
         '--primary': t.primary,
         '--primary-foreground': onPrimary(t.primary),
@@ -25,6 +27,9 @@ export function themeModeVars(t: ThemeModeTokens): Vars {
         '--foreground': t.foreground,
         '--foreground-muted': t.muted ?? `color-mix(in srgb, ${t.foreground} 60%, ${t.background})`,
         '--border': t.border ?? `color-mix(in srgb, ${t.foreground} 12%, ${t.background})`,
+        '--tint': t.tint ?? `color-mix(in srgb, ${t.foreground} 8%, ${t.background})`,
+        '--on-cat': mode === 'light' ? '#ffffff' : t.background,
+        ...tones,
     };
 }
 
@@ -39,11 +44,11 @@ function block(selector: string, vars: Vars): string {
 export function themeCss(def: ThemeDefinition): string {
     return [
         block('html:root', {
-            ...themeModeVars(def.light),
+            ...themeModeVars(def.light, 'light'),
             '--theme-font-heading': fontVar(def.headingFont),
             '--theme-font-body': fontVar(def.bodyFont),
         }),
-        block('html.dark:root', themeModeVars(def.dark)),
+        block('html.dark:root', themeModeVars(def.dark, 'dark')),
     ].join('\n');
 }
 
@@ -51,8 +56,8 @@ export function themeCss(def: ThemeDefinition): string {
  * Variables for the live sample in the editor. Tailwind's `--color-*` tokens are resolved at the root,
  * so they are set again here for the sample area to follow its own colours.
  */
-export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontId, bodyFont: ThemeFontId): Vars {
-    const v = themeModeVars(tokens);
+export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontId, bodyFont: ThemeFontId, mode: 'light' | 'dark'): Vars {
+    const v = themeModeVars(tokens, mode);
     return {
         ...v,
         '--color-primary': v['--primary'],
@@ -63,6 +68,7 @@ export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontI
         '--color-foreground': v['--foreground'],
         '--color-foreground-muted': v['--foreground-muted'],
         '--color-border': v['--border'],
+        '--color-tint': v['--tint'],
         '--font-sans': fontVar(bodyFont),
         '--font-heading': fontVar(headingFont),
     };

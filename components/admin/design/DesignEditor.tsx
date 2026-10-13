@@ -8,7 +8,7 @@ import { publishTheme, resetTheme, savePreviewTheme } from '@/actions/theme-acti
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useToast } from '@/hooks/use-toast';
 import {
-    THEME_EDITABLE_TOKENS, THEME_FONTS, THEME_PRESETS, THEME_PRESET_KEYS,
+    DEFAULT_THEME_KEY, THEME_EDITABLE_TOKENS, THEME_FONTS, THEME_PRESETS, THEME_PRESET_KEYS,
     type ThemeEditableToken, type ThemeFontId, type ThemeKey,
 } from '@/lib/constants';
 import type { ThemeInput } from '@/lib/validations/theme';
@@ -160,7 +160,7 @@ export default function DesignEditor({ initial }: { initial: ThemeInput }) {
                 onCancel={() => setConfirmReset(false)}
                 onConfirm={() => {
                     setConfirmReset(false);
-                    choosePreset('current');
+                    choosePreset(DEFAULT_THEME_KEY);
                     run('reset', resetTheme, 'resetDone');
                 }}
             />

@@ -3,8 +3,8 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
 import {
-    DEFAULT_THEME_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS,
-    type ThemeFontId, type ThemeKey, type ThemeModeTokens,
+    DEFAULT_THEME_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS, THEME_PRESET_KEYS,
+    type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey,
 } from '@/lib/constants';
 import { themeInputSchema, type ThemeInput } from '@/lib/validations/theme';
 
@@ -30,13 +30,19 @@ function defaultTheme(): ThemeContext {
     return { id: null, presetKey: DEFAULT_THEME_KEY, light: p.light, dark: p.dark, headingFont: p.headingFont, bodyFont: p.bodyFont, isPreview: false };
 }
 
-/** Rows come from JSON columns; anything that no longer validates falls back to today's look. */
+/** Rows come from JSON columns; anything that no longer validates falls back to the default look. */
 function toContext(
     row: { id: string; presetKey: string; light: Prisma.JsonValue; dark: Prisma.JsonValue; headingFont: string; bodyFont: string },
     isPreview: boolean
 ): ThemeContext {
     const parsed = themeInputSchema.safeParse({ presetKey: row.presetKey, light: row.light, dark: row.dark, headingFont: row.headingFont, bodyFont: row.bodyFont });
     if (!parsed.success || !THEME_FONT_IDS.includes(parsed.data.headingFont) || !THEME_FONT_IDS.includes(parsed.data.bodyFont)) return defaultTheme();
+    const { presetKey } = parsed.data;
+    // Code is the source for presets, so a stored copy of an older preset follows the current values; `custom` keeps its own.
+    if ((THEME_PRESET_KEYS as readonly string[]).includes(presetKey)) {
+        const preset = THEME_PRESETS[presetKey as ThemePresetKey];
+        return { id: row.id, presetKey, light: preset.light, dark: preset.dark, headingFont: preset.headingFont, bodyFont: preset.bodyFont, isPreview };
+    }
     return { id: row.id, ...parsed.data, isPreview };
 }
 
@@ -59,7 +65,7 @@ function presetInput(key: typeof DEFAULT_THEME_KEY): ThemeInput {
 }
 
 export const ThemeService = {
-    /** The site-wide theme. Never throws: a failed read gives today's look. */
+    /** The site-wide theme. Never throws: a failed read gives the default look. */
     async getPublished(): Promise<ThemeContext> {
         try {
             return await loadPublished();
@@ -109,7 +115,7 @@ export const ThemeService = {
         return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont });
     },
 
-    /** Back to the "Pašreizējais" preset for everyone. */
+    /** Back to the default preset (Sūna) for everyone. */
     async reset(adminId: string): Promise<ThemeResult> {
         return ThemeService.publish(adminId, presetInput(DEFAULT_THEME_KEY));
     },

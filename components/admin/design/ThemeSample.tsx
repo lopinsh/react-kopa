@@ -17,7 +17,7 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, dark }: Pro
     const t = useTranslations('admin.design.sample');
     return (
         <div
-            style={themeSampleVars(tokens, headingFont, bodyFont) as React.CSSProperties}
+            style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light') as React.CSSProperties}
             className={`${dark ? 'dark ' : ''}rounded-2xl border border-border bg-background p-4 font-sans text-foreground sm:p-6`}
         >
             <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">

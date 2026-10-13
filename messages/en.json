@@ -746,7 +746,6 @@
       "previewActive": "You have a saved preview. Only you see it until you publish or discard it.",
       "presetsTitle": "Ready-made themes",
       "presets": {
-        "current": "Current",
         "moss": "Moss",
         "sea": "Sea",
         "rye": "Rye bread"
@@ -785,9 +784,9 @@
       "previewHint": "Only you see the preview, on every page. Publishing changes the look for everyone.",
       "previewSaved": "Preview saved. You see it across the whole site.",
       "published": "Look published for everyone.",
-      "resetDone": "Back to the current look.",
+      "resetDone": "Back to the default look (Sūna).",
       "resetConfirmTitle": "Reset the look?",
-      "resetConfirmMessage": "The \"Current\" theme is restored for everyone.",
+      "resetConfirmMessage": "Everyone gets the \"Sūna\" look again.",
       "bar": {
         "label": "Design preview",
         "preview": "Preview",
