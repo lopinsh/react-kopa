@@ -127,7 +127,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
             </button>
 
             {/* Category List */}
-            <nav className="flex flex-col gap-1 overflow-y-auto py-3 flex-1 scrollbar-none">
+            <nav aria-label={t('categoriesNav')} className="flex flex-col gap-1 overflow-y-auto py-3 flex-1 scrollbar-none">
                 {/* "Everything" / "All" entry */}
                 <button
                     onClick={() => handleCategoryClick(null)}

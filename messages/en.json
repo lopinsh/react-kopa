@@ -1118,7 +1118,8 @@
       "everything": "Show all",
       "groups": "Groups",
       "expand": "Expand sidebar",
-      "label": "Sidebar"
+      "label": "Sidebar",
+      "categoriesNav": "Categories"
     },
     "skipToContent": "Skip to content"
   },
