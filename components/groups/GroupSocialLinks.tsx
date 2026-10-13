@@ -51,9 +51,9 @@ export default function GroupSocialLinks({
                         href={link.href!}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.01] p-2.5 transition-all hover:bg-white/[0.05] hover:border-[var(--accent)]/30"
+                        className="group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.01] p-2.5 transition-all hover:bg-white/[0.05] hover:border-primary/30"
                     >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.03] text-foreground-muted group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-all">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.03] text-foreground-muted group-hover:text-primary group-hover:bg-primary/10 transition-all">
                             {link.icon}
                         </div>
                         <span className="text-xs font-bold text-foreground-muted group-hover:text-foreground transition-colors truncate">

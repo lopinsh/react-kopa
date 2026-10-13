@@ -36,7 +36,7 @@ export default function SettingsTabs({ active, showOwner }: Props) {
                         className={clsx(
                             'flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3.5 text-xs font-bold uppercase tracking-wider transition-colors',
                             active === id
-                                ? 'border-[var(--accent)] text-[var(--accent)]'
+                                ? 'border-primary text-primary'
                                 : 'border-transparent text-foreground-muted hover:border-border hover:text-foreground'
                         )}
                     >

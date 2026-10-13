@@ -56,7 +56,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
     };
 
     return (
-        <div data-ui={UI.requestCard} className="flex flex-col p-5 rounded-3xl bg-surface-elevated/50 border border-border group/card hover:border-[var(--accent)]/30 transition-all shadow-card">
+        <div data-ui={UI.requestCard} className="flex flex-col p-5 rounded-3xl bg-surface-elevated/50 border border-border group/card hover:border-primary/30 transition-all shadow-card">
             <div className="flex items-start justify-between gap-4">
                 <div className="flex items-center gap-4">
                     <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-border bg-surface relative shadow-inner">
@@ -117,7 +117,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                     )}
                     <Link
                         href={`/messages?c=${chatId}`}
-                        className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted transition-colors hover:text-[var(--accent)]"
+                        className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted transition-colors hover:text-primary"
                     >
                         <MessageSquare className="h-3.5 w-3.5" />
                         {t('openChat')}

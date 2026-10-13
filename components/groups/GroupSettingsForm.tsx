@@ -166,7 +166,7 @@ export default function GroupSettingsForm({
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="mb-8">
                     <h3 className="mb-1 flex items-center gap-2 text-xl font-black text-foreground">
-                        <Save className="h-6 w-6 text-[var(--accent)]" />
+                        <Save className="h-6 w-6 text-primary" />
                         {gs('tabSections')}
                     </h3>
                     <p className="text-sm text-foreground-muted">
@@ -187,7 +187,7 @@ export default function GroupSettingsForm({
             <button
                 type="submit"
                 disabled={isPending}
-                className="flex h-14 items-center gap-3 rounded-2xl bg-[var(--accent)] px-10 font-black text-[var(--accent-foreground)] shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                className="flex h-14 items-center gap-3 rounded-full bg-primary px-10 font-black text-primary-foreground shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? (
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />

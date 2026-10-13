@@ -26,6 +26,7 @@ import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import { sanitizeRichText, jsonForScript } from '@/lib/sanitize';
 import { isEventPast } from '@/lib/event-dates';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
 import { createDateFormatter } from '@/lib/date-format';
 
@@ -149,7 +150,7 @@ export default async function EventPage({
                 {/* Title block */}
                 <header className="mb-6 space-y-3">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-wide">
-                        <span className={clsx('inline-flex items-center gap-1.5 rounded-lg px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)] text-white')}>
+                        <span className={clsx('inline-flex items-center gap-1.5 rounded-full px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-primary/15 text-foreground')}>
                             <Clock className="h-3.5 w-3.5" />
                             {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric' })}
                         </span>
@@ -166,7 +167,7 @@ export default async function EventPage({
                             </span>
                         )}
                         {event.isFull && !ended && (
-                            <span className="rounded-full bg-[var(--accent)] px-2.5 py-1 text-white">{t('full')}</span>
+                            <Badge tone="outline">{t('full')}</Badge>
                         )}
                     </div>
                     <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')} lang={langAttr(event.titleLang, locale)}>{event.title}</h1>
@@ -262,7 +263,7 @@ export default async function EventPage({
                                             href={isOnlineLocation ? event.location : `https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 inline-block text-[10px] font-black uppercase tracking-widest text-[var(--accent)] hover:underline"
+                                            className="mt-1 inline-block text-[10px] font-black uppercase tracking-widest text-primary hover:underline"
                                         >
                                             {isOnlineLocation ? t('joinLink') : t('openInMaps')}
                                         </a>
@@ -301,7 +302,7 @@ export default async function EventPage({
                                 </h2>
                                 <div
                                     lang={langAttr(event.instructionsLang, locale)}
-                                    className="prose prose-invert max-w-none leading-relaxed text-foreground-muted prose-a:text-[var(--accent)]"
+                                    className="prose prose-invert max-w-none leading-relaxed text-foreground-muted prose-a:text-primary"
                                     dangerouslySetInnerHTML={{ __html: sanitizeRichText(event.instructions) }}
                                 />
                             </section>

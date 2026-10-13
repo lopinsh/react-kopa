@@ -261,17 +261,17 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     <span className="h-1 w-1 rounded-full bg-white/30" />
                                     <div className="flex items-center gap-3 drop-shadow-sm">
                                         {socialLinks.website && (
-                                            <a href={socialLinks.website} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Website">
+                                            <a href={socialLinks.website} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Website">
                                                 <Globe className="h-4 w-4" />
                                             </a>
                                         )}
                                         {socialLinks.discord && (
-                                            <a href={socialLinks.discord} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Discord">
+                                            <a href={socialLinks.discord} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Discord">
                                                 <MessageSquare className="h-4 w-4" />
                                             </a>
                                         )}
                                         {socialLinks.instagram && (
-                                            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--accent)] transition-colors" title="Instagram">
+                                            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors" title="Instagram">
                                                 <Instagram className="h-4 w-4" />
                                             </a>
                                         )}
@@ -295,14 +295,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                         "flex h-10 items-center gap-2 rounded-xl px-5 text-sm font-bold transition-all disabled:opacity-50",
                                         userRole === 'PENDING'
                                             ? "bg-surface-elevated text-foreground-muted cursor-default"
-                                            : "bg-[var(--accent)] text-white shadow-md hover:opacity-90 active:scale-95"
+                                            : "bg-primary text-primary-foreground shadow-md hover:opacity-90 active:scale-95"
                                     )}
                                 >
                                     {isPending ? (
                                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                                     ) : userRole === 'PENDING' ? (
                                         <>
-                                            <Check className="h-4 w-4 text-[var(--accent)]" />
+                                            <Check className="h-4 w-4 text-primary" />
                                             {c_common('requested')}
                                         </>
                                     ) : !group.isAcceptingMembers ? (

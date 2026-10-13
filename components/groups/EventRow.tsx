@@ -52,7 +52,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
 
     return (
         <article data-ui={UI.eventRow} className={clsx(
-            'flex flex-col gap-3 rounded-2xl border border-border p-4 transition-colors hover:border-[var(--accent)] sm:flex-row sm:items-center sm:gap-5',
+            'flex flex-col gap-3 rounded-2xl border border-border p-4 transition-colors hover:border-primary sm:flex-row sm:items-center sm:gap-5',
             isPast ? 'bg-surface-elevated/50' : 'bg-surface'
         )}>
             <div className="flex min-w-0 flex-1 items-center gap-4">
@@ -67,7 +67,7 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                 <div className="min-w-0 flex-1 space-y-1">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                         <h3 className={clsx('min-w-0 text-base font-bold leading-snug', isPast ? 'text-foreground-muted' : 'text-foreground')}>
-                            <Link href={href} lang={langAttr(event.titleLang, locale)} className="hover:text-[var(--accent)] hover:underline">{event.title}</Link>
+                            <Link href={href} lang={langAttr(event.titleLang, locale)} className="hover:text-primary hover:underline">{event.title}</Link>
                         </h3>
                         {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                         {event.isMembersOnly && (
@@ -114,11 +114,11 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                     {isRequest && event.canManage ? (
                         <Link
                             href={href}
-                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-xs font-black uppercase tracking-wide text-foreground hover:border-[var(--accent)]"
+                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-xs font-black uppercase tracking-wide text-foreground hover:border-primary"
                         >
                             {t('manage')}
                             {event.pendingCount > 0 && (
-                                <span className="rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] text-white">
+                                <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
                                     {t('requestsWaiting', { count: event.pendingCount })}
                                 </span>
                             )}

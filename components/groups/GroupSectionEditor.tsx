@@ -197,8 +197,8 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                             className={clsx(
                                 'group relative overflow-hidden rounded-2xl border transition-all duration-200',
                                 isEditing
-                                    ? 'border-[var(--accent)] bg-surface-elevated ring-4 ring-[var(--accent)]/5'
-                                    : 'border-border bg-surface hover:border-[var(--accent)]/30'
+                                    ? 'border-primary bg-surface-elevated ring-4 ring-primary/5'
+                                    : 'border-border bg-surface hover:border-primary/30'
                             )}
                         >
                             <div className="flex items-center gap-4 p-4 md:p-6">
@@ -275,9 +275,9 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                     <button
                         type="button"
                         onClick={handleAddSection}
-                        className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-foreground-muted transition-all hover:border-[var(--accent)]/50 hover:bg-[var(--accent)]/5"
+                        className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-foreground-muted transition-all hover:border-primary/50 hover:bg-primary/5"
                     >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-[var(--accent)] group-hover:text-white">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                             <Plus className="h-4 w-4" />
                         </div>
                         <span className="text-xs font-black uppercase tracking-widest">{t('sections.add')}</span>

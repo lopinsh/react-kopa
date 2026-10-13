@@ -61,7 +61,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 value={targetId}
                                 onChange={(e) => { setTargetId(e.target.value); setConfirming(false); }}
                                 disabled={isPending}
-                                className="w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-[var(--accent)]"
+                                className="w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary"
                             >
                                 <option value="">{t('transferSelectPlaceholder')}</option>
                                 {candidates.map(c => (
@@ -82,14 +82,14 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 {t('transferButton')}
                             </button>
                         ) : (
-                            <div role="alertdialog" className="space-y-3 rounded-2xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 p-4">
+                            <div role="alertdialog" className="space-y-3 rounded-2xl border border-primary/40 bg-primary/10 p-4">
                                 <p className="text-sm font-semibold text-foreground">{t('transferConfirm', { name: target?.name ?? '' })}</p>
                                 <div className="flex flex-wrap gap-2">
                                     <button
                                         type="button"
                                         onClick={handleTransfer}
                                         disabled={isPending}
-                                        className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--accent-foreground)] disabled:opacity-70"
+                                        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-70"
                                     >
                                         {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                         {t('transferConfirmYes')}

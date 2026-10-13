@@ -26,9 +26,9 @@ export default function SocialSection() {
                         <input
                             {...register('websiteLink')}
                             placeholder="https://..."
-                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5 transition-all font-medium"
+                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
                         />
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-[var(--accent)] transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <Globe className="h-5 w-5" />
                         </div>
                     </div>
@@ -43,9 +43,9 @@ export default function SocialSection() {
                         <input
                             {...register('discordLink')}
                             placeholder="https://discord.gg/..."
-                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5 transition-all font-medium"
+                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
                         />
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-[var(--accent)] transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <MessageSquare className="h-5 w-5" />
                         </div>
                     </div>
@@ -60,9 +60,9 @@ export default function SocialSection() {
                         <input
                             {...register('instagramLink')}
                             placeholder="https://instagram.com/..."
-                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5 transition-all font-medium"
+                            className="w-full rounded-2xl border border-border bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
                         />
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-[var(--accent)] transition-colors">
+                        <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <InstagramIcon className="h-5 w-5" />
                         </div>
                     </div>

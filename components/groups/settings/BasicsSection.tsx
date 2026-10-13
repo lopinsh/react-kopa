@@ -13,7 +13,7 @@ type Props = {
     canEditName: boolean;
 };
 
-const INPUT = 'w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-[var(--accent)] focus:ring-4 focus:ring-[var(--accent)]/5';
+const INPUT = 'w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/5';
 const LABEL = 'ml-1 text-xs font-black uppercase tracking-wider text-foreground-muted';
 
 /** Name, city and banner. */
@@ -55,7 +55,7 @@ export default function BasicsSection({ canEditName }: Props) {
                         placeholder="https://images.unsplash.com/..."
                         className={clsx(INPUT, 'pl-12')}
                     />
-                    <ImageIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted transition-colors group-focus-within:text-[var(--accent)]" />
+                    <ImageIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted transition-colors group-focus-within:text-primary" />
                 </div>
                 <p className="ml-1 text-[11px] text-foreground-muted">{gt('bannerImageUrlDesc')}</p>
                 {errors.bannerImage?.message && (

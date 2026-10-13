@@ -27,8 +27,8 @@ export default function PrivacySection() {
                         className={clsx(
                             "relative flex cursor-pointer flex-col rounded-3xl border-2 p-6 transition-all text-left group",
                             watch('type') === type.id
-                                ? "border-[var(--accent)] bg-[var(--accent)]/5 shadow-lg ring-4 ring-[var(--accent)]/5"
-                                : "border-border bg-surface hover:border-[var(--accent)]/50 hover:bg-surface-elevated/5"
+                                ? "border-primary bg-primary/5 shadow-lg ring-4 ring-primary/5"
+                                : "border-border bg-surface hover:border-primary/50 hover:bg-surface-elevated/5"
                         )}
                     >
                         <input
@@ -41,8 +41,8 @@ export default function PrivacySection() {
                             <div className={clsx(
                                 "flex h-10 w-10 items-center justify-center rounded-xl transition-all border shadow-sm",
                                 watch('type') === type.id
-                                    ? "bg-[var(--accent)] text-white border-transparent scale-110 shadow-[var(--accent)]/20 shadow-md"
-                                    : "bg-surface-elevated text-foreground-muted border-border group-hover:text-foreground group-hover:border-[var(--accent)]/30"
+                                    ? "bg-primary text-primary-foreground border-transparent scale-110 shadow-primary/20 shadow-md"
+                                    : "bg-surface-elevated text-foreground-muted border-border group-hover:text-foreground group-hover:border-primary/30"
                             )}>
                                 <type.icon className="h-5 w-5" />
                             </div>

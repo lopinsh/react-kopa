@@ -33,7 +33,7 @@ export default function MembershipPanel({ groupId, pendingMembers, locale }: Pro
     return (
         <section className="relative overflow-hidden rounded-3xl p-1 mb-8">
             <h3 className="text-[11px] font-black uppercase tracking-[0.2em] mb-6 flex items-center gap-2 opacity-80" aria-live="polite">
-                <User className="h-3.5 w-3.5 text-[var(--accent)]" />
+                <User className="h-3.5 w-3.5 text-primary" />
                 {t('pendingRequests', { count: pendingMembers.length })}
             </h3>
             <div className="space-y-4">

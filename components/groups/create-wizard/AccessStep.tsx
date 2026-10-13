@@ -38,16 +38,16 @@ export default function AccessStep() {
                         onClick={() => setValue('type', value, { shouldValidate: true })}
                         className={clsx(
                             'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
-                            isSelected ? 'border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_6%,transparent)] shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                            isSelected ? 'border-primary bg-[color-mix(in_srgb,var(--primary)_6%,transparent)] shadow-sm' : 'border-border hover:border-foreground-muted/40'
                         )}
                         aria-pressed={isSelected}
                     >
                         <div
-                            className={clsx('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg', isSelected && 'bg-[var(--accent)]')}
+                            className={clsx('mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full', isSelected && 'bg-primary')}
                             aria-hidden="true"
                         >
                             <Icon
-                                className={clsx('h-4 w-4', isSelected ? 'text-white' : 'text-foreground-muted')}
+                                className={clsx('h-4 w-4', isSelected ? 'text-primary-foreground' : 'text-foreground-muted')}
                                 strokeWidth={1.75}
                             />
                         </div>
@@ -68,7 +68,7 @@ export default function AccessStep() {
                             {...register('isAcceptingMembers')}
                             className="peer sr-only"
                         />
-                        <div className="h-5 w-9 rounded-full bg-border transition-colors peer-checked:bg-[var(--accent)]" />
+                        <div className="h-5 w-9 rounded-full bg-border transition-colors peer-checked:bg-primary" />
                         <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4 shadow-sm" />
                     </div>
                     <div className="flex-1">
@@ -76,7 +76,7 @@ export default function AccessStep() {
                     </div>
                     <UserPlus className={clsx(
                         "h-4 w-4 transition-colors",
-                        watch('isAcceptingMembers') ? "text-[var(--accent)]" : "text-foreground-muted"
+                        watch('isAcceptingMembers') ? "text-primary" : "text-foreground-muted"
                     )} />
                 </label>
             </div>

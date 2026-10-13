@@ -151,7 +151,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         });
     });
 
-    // The one place the accent is set: every step below reads var(--accent).
+    // The one place the accent is set: every step below reads var(--primary).
     const accentStyle = { '--accent': accentColor } as React.CSSProperties;
 
     return (
@@ -165,7 +165,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 {Array.from({ length: STEP_COUNT }, (_, i) => (
                     <div
                         key={i}
-                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-[var(--accent)]')}
+                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-primary')}
                         aria-hidden="true"
                     />
                 ))}
@@ -185,7 +185,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 >
                     {/* Step Header */}
                     <div className="mb-8">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
+                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                             {t('stepOf', { current: step + 1, total: STEP_COUNT })}
                         </p>
                         <h2
@@ -239,7 +239,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="flex h-12 items-center gap-2 rounded-xl bg-[var(--accent)] px-8 font-bold text-white shadow-[0_4px_14px_0_color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all soft-press"
+                                className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press"
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -248,7 +248,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="submit"
                                 disabled={isPending}
-                                className="flex h-12 items-center gap-2 rounded-xl bg-[var(--accent)] px-8 font-bold text-white shadow-[0_4px_14px_0_color-mix(in_srgb,var(--accent)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
+                                className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {t('submit')}

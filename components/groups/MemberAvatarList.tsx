@@ -57,7 +57,7 @@ export default function MemberAvatarList({ members, groupId, groupName }: Props)
                         }}
                         className={clsx(
                             "group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-2 transition-all hover:bg-white/[0.05] hover:shadow-sm relative overflow-hidden",
-                            canWriteTeam && hasAdminRights(role) && "cursor-pointer hover:border-[var(--accent)]/30"
+                            canWriteTeam && hasAdminRights(role) && "cursor-pointer hover:border-primary/30"
                         )}
                     >
                         {/* Avatar */}
@@ -75,11 +75,11 @@ export default function MemberAvatarList({ members, groupId, groupName }: Props)
                                 <div
                                     className={clsx(
                                         "absolute -top-1.5 -right-1.5 p-0.5 rounded-full border border-background shadow-xs scale-90",
-                                        role === 'OWNER' ? 'bg-owner' : 'bg-[var(--accent)]'
+                                        role === 'OWNER' ? 'bg-foreground' : 'bg-primary'
                                     )}
                                 >
                                     <div className="bg-white/20 rounded-full p-0.5">
-                                        <MessageSquare className="h-2 w-2 text-white" />
+                                        <MessageSquare className={clsx("h-2 w-2", role === 'OWNER' ? 'text-background' : 'text-primary-foreground')} />
                                     </div>
                                 </div>
                             )}
@@ -93,7 +93,7 @@ export default function MemberAvatarList({ members, groupId, groupName }: Props)
                             <span
                                 className={clsx(
                                     "text-[9px] font-black uppercase tracking-[0.05em] opacity-50",
-                                    role === 'OWNER' ? 'text-owner' : 'text-[var(--accent)]'
+                                    role === 'OWNER' ? 'text-foreground' : 'text-primary'
                                 )}
                             >
                                 {t(`role_${role.toLowerCase()}`)}

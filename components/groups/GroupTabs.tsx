@@ -256,12 +256,12 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                         "relative flex items-center gap-2 px-2.5 md:px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
                                         isScrolled ? "pt-4 pb-5" : "pt-5 pb-6",
                                         finalActive
-                                            ? "border-[var(--accent)] text-[var(--accent)]"
+                                            ? "border-primary text-primary"
                                             : "border-transparent text-foreground-muted hover:text-foreground hover:border-border"
                                     )}
                                     style={finalActive ? {
-                                        boxShadow: `0 1px 0 0 var(--accent)`,
-                                        filter: `drop-shadow(0 0 8px color-mix(in srgb, var(--accent), transparent 60%))`
+                                        boxShadow: `0 1px 0 0 var(--primary)`,
+                                        filter: `drop-shadow(0 0 8px color-mix(in srgb, var(--primary), transparent 60%))`
                                     } : undefined}
                                 >
                                     <div className="relative">
@@ -280,7 +280,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                     {showCreateEvent && (
                         <Link
                             href={`${baseUrl}/create-event`}
-                            className="my-2 flex shrink-0 items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                            className="my-2 flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
                         >
                             <Plus className="h-4 w-4" />
                             {t('createEvent')}

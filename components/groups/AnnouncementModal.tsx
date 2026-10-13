@@ -14,7 +14,7 @@ type Props = {
     onPublished: () => void;
 };
 
-const FIELD = 'w-full rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]';
+const FIELD = 'w-full rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary';
 
 /** Pop-up where the owner or an admin writes a new announcement. Mounted only while open. */
 export default function AnnouncementModal({ groupId, locale, onClose, onPublished }: Props) {

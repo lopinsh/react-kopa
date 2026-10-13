@@ -100,7 +100,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                         >
                             {isSelected && (
                                 <div
-                                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-white shadow-sm"
+                                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--on-cat)] shadow-sm"
                                     style={{ backgroundColor: l1.color }}
                                 >
                                     <Check className="h-3.5 w-3.5" strokeWidth={3} />

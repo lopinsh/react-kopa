@@ -20,7 +20,7 @@ export default function AcceptingMembersSection() {
                     id="isAcceptingMembers"
                     className="peer sr-only"
                 />
-                <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-full bg-border transition-colors peer-checked:bg-[var(--accent)]" />
+                <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-full bg-border transition-colors peer-checked:bg-primary" />
                 <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
             </div>
             <label htmlFor="isAcceptingMembers" className="min-w-0 flex-1 cursor-pointer">
@@ -29,7 +29,7 @@ export default function AcceptingMembersSection() {
             </label>
             <UserPlus className={clsx(
                 'hidden h-6 w-6 shrink-0 transition-colors sm:block',
-                watch('isAcceptingMembers') ? 'text-[var(--accent)]' : 'text-foreground-muted'
+                watch('isAcceptingMembers') ? 'text-primary' : 'text-foreground-muted'
             )} />
         </div>
     );

@@ -28,7 +28,7 @@ export default function BasicInfoStep() {
                     placeholder={t('fieldNamePlaceholder')}
                     className={clsx(
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.name ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                        errors.name ? 'border-red-400' : 'border-border focus:border-primary'
                     )}
                 />
                 {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
@@ -63,7 +63,7 @@ export default function BasicInfoStep() {
                     placeholder={t('fieldBannerImagePlaceholder')}
                     className={clsx(
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-primary'
                     )}
                 />
                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}

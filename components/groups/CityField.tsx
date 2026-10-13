@@ -114,7 +114,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                             type="button"
                             onClick={submitSuggestion}
                             disabled={isPending || draft.trim().length < 2}
-                            className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-[var(--accent)] px-4 text-sm font-bold text-[var(--accent-foreground)] transition-opacity disabled:opacity-50"
+                            className="inline-flex h-11 items-center gap-1.5 rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground transition-opacity disabled:opacity-50"
                         >
                             <Plus className="h-4 w-4" />
                             {t('citySuggestAdd')}
@@ -132,7 +132,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="mt-2 text-xs font-semibold text-[var(--accent)] underline-offset-2 hover:underline"
+                    className="mt-2 text-xs font-semibold text-primary underline-offset-2 hover:underline"
                 >
                     {t('citySuggestOpen')}
                 </button>

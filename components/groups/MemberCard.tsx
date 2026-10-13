@@ -116,7 +116,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
         <div
             data-ui={UI.memberCard}
             className={clsx(
-                "flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-[var(--accent)]/30 transition-all group relative",
+                "flex flex-col gap-4 p-5 rounded-3xl border border-border bg-surface shadow-card hover:border-primary/30 transition-all group relative",
                 menuOpen && "z-20"
             )}
         >
@@ -130,7 +130,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                     {member.user.username ? (
                         <Link
                             href={`/profile/${member.user.username}`}
-                            className="block h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 hover:ring-2 hover:ring-[var(--accent)]/50 transition-all"
+                            className="block h-14 w-14 rounded-2xl bg-surface-elevated flex items-center justify-center border border-border overflow-hidden shadow-inner shrink-0 hover:ring-2 hover:ring-primary/50 transition-all"
                         >
                             <img
                                 src={avatarUrl(member.user)}
@@ -151,10 +151,10 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                     )}
                     {hasAdminRights(member.role) && (
                         <div
-                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium bg-[color:var(--accent)]"
+                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium bg-primary"
                             title={t(`role_${member.role.toLowerCase()}`)}
                         >
-                            <Shield className="h-3 w-3 text-white" />
+                            <Shield className="h-3 w-3 text-primary-foreground" />
                         </div>
                     )}
                 </div>
@@ -162,7 +162,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                     {member.user.username ? (
                         <Link
                             href={`/profile/${member.user.username}`}
-                            className="font-bold text-foreground text-base tracking-tight truncate hover:text-[var(--accent)] transition-colors block"
+                            className="font-bold text-foreground text-base tracking-tight truncate hover:text-primary transition-colors block"
                         >
                             {member.user.name || t('anonymousUser')}
                         </Link>
@@ -173,7 +173,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                     )}
                     <p className={clsx(
                         "text-[10px] font-black uppercase tracking-widest mt-0.5",
-                        checkIsOwner(member.role) ? "text-[var(--accent)]" : "text-foreground-muted"
+                        checkIsOwner(member.role) ? "text-primary" : "text-foreground-muted"
                     )}>
                         {t(`role_${member.role.toLowerCase()}`)}
                     </p>
@@ -238,7 +238,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                         disabled={isPending}
                         className={clsx(
                             "flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-border text-[10px] font-bold uppercase tracking-wider text-foreground transition-all",
-                            isPending ? "opacity-50 cursor-not-allowed" : "hover:border-[var(--accent)] hover:text-[var(--accent)] bg-surface-elevated"
+                            isPending ? "opacity-50 cursor-not-allowed" : "hover:border-primary hover:text-primary bg-surface-elevated"
                         )}
                     >
                         {isPending ? (
@@ -253,7 +253,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                 {canViewProfile && member.user.username ? (
                     <Link
                         href={`/profile/${member.user.username}`}
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all"
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-primary hover:text-primary transition-all"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />
                         {c_common('viewProfile')}
