@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { tint } from '@/lib/color-utils';
+import { Link } from '@/i18n/routing';
+import { isCategoryToneSlug } from '@/lib/theme/category';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { updateL1, addAlias, deleteAlias, createL2 } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -27,6 +29,9 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
 
     const savedColor = l1.storedColor || '#586474';
     const [color, setColor] = useState(savedColor);
+    // The 15 designed categories take their colour from the site theme (Dizains); only added ones keep the stored colour here.
+    const inDesign = isCategoryToneSlug(l1.slug);
+    const shown = inDesign ? l1.color : color;
 
     const [aliasValue, setAliasValue] = useState('');
     const [aliasLocale, setAliasLocale] = useState('');
@@ -96,13 +101,13 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             <div>
                 <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(color, 12), color: color }}>
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(shown, 12), color: shown }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
                     </div>
                     <div>
                         <h2 className="text-2xl font-bold">{l1.title}</h2>
                         <div className="flex items-center gap-2 mt-1">
-                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: color }} />
+                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: shown }} />
                             <span className="text-sm text-foreground-muted">{l1.slug}</span>
                         </div>
                     </div>
@@ -117,36 +122,43 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                         <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
-                <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
-                    <div>
-                        <label className="block text-xs font-semibold text-foreground-muted mb-2">{tFields('color')}</label>
-                        <div className="flex items-center gap-3">
-                            <input
-                                type="color"
-                                value={color}
-                                onChange={e => setColor(e.target.value)}
-                                className="h-10 w-14 cursor-pointer rounded bg-transparent border-0 p-0"
-                            />
-                            <input
-                                type="text"
-                                value={color}
-                                onChange={e => setColor(e.target.value)}
-                                className="flex-1 bg-surface border border-border rounded px-3 py-2 text-sm"
-                                pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
-                            />
+                {inDesign ? (
+                    <p className="text-sm text-foreground-muted">
+                        {tFields('colorInDesign')}{' '}
+                        <Link href="/admin/design?part=categories" className="font-semibold text-primary underline underline-offset-4">{tFields('colorInDesignLink')}</Link>
+                    </p>
+                ) : (
+                    <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
+                        <div>
+                            <label className="block text-xs font-semibold text-foreground-muted mb-2">{tFields('color')}</label>
+                            <div className="flex items-center gap-3">
+                                <input
+                                    type="color"
+                                    value={color}
+                                    onChange={e => setColor(e.target.value)}
+                                    className="h-10 w-14 cursor-pointer rounded bg-transparent border-0 p-0"
+                                />
+                                <input
+                                    type="text"
+                                    value={color}
+                                    onChange={e => setColor(e.target.value)}
+                                    className="flex-1 bg-surface border border-border rounded px-3 py-2 text-sm"
+                                    pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex justify-end pt-2">
+                            <button
+                                type="button"
+                                onClick={handleSaveColor}
+                                disabled={isPending || color === savedColor}
+                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            >
+                                {t('save')}
+                            </button>
                         </div>
                     </div>
-                    <div className="flex justify-end pt-2">
-                        <button
-                            type="button"
-                            onClick={handleSaveColor}
-                            disabled={isPending || color === savedColor}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
-                        >
-                            {t('save')}
-                        </button>
-                    </div>
-                </div>
+                )}
             </section>
 
             {/* Aliases */}
@@ -272,7 +284,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                 type="submit"
                                 disabled={isPending || !newNameEn.trim() || !newNameLv.trim()}
                                 className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-full disabled:opacity-50"
-                                style={{ '--accent': color } as React.CSSProperties}
+                                style={{ '--accent': shown } as React.CSSProperties}
                             >
                                 {t('addSubcategory')}
                             </button>

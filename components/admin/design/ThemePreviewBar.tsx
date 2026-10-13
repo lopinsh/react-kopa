@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Eye } from 'lucide-react';
 import { discardPreviewTheme, publishPreviewTheme } from '@/actions/theme-actions';
+import { buttonClass } from '@/components/ui/Button';
 import { useToast } from '@/hooks/use-toast';
 import { UI } from '@/lib/constants';
 
@@ -34,7 +35,7 @@ export default function ThemePreviewBar() {
             data-ui={UI.banner}
             role="region"
             aria-label={t('label')}
-            className="fixed bottom-24 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-2xl border border-border bg-surface px-3 py-2 text-sm shadow-premium md:bottom-4"
+            className="fixed bottom-24 left-1/2 z-50 flex w-[calc(100%-2rem)] max-w-md -translate-x-1/2 items-center gap-2 rounded-2xl bg-surface px-3 py-2 text-sm shadow-premium md:bottom-4"
         >
             <Eye className="h-4 w-4 shrink-0 text-primary" aria-hidden="true" />
             <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{t('preview')}</span>
@@ -42,7 +43,7 @@ export default function ThemePreviewBar() {
                 type="button"
                 disabled={isPending}
                 onClick={() => run(publishPreviewTheme, 'published')}
-                className="rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                className={buttonClass('primary', '', 'sm')}
             >
                 {t('publish')}
             </button>
@@ -50,7 +51,7 @@ export default function ThemePreviewBar() {
                 type="button"
                 disabled={isPending}
                 onClick={() => run(discardPreviewTheme, 'discarded')}
-                className="rounded-xl border border-border px-3 py-1.5 text-xs font-bold text-foreground hover:bg-surface-elevated disabled:opacity-50"
+                className={buttonClass('quiet', '', 'sm')}
             >
                 {t('discard')}
             </button>
