@@ -23,12 +23,17 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
     const t = useTranslations('feedbackMode');
     const [spots, setSpots] = useState<Spot[]>([]);
     const lastMissing = useRef('');
+    // Resolving a note walks the DOM and reads innerText; scroll frames reuse the element, the 1 s tick re-resolves.
+    const resolved = useRef(new Map<string, Element>());
+    const fresh = useRef(true);
 
     const measure = useCallback(() => {
         const next: Spot[] = [];
         const missing: string[] = [];
         notes.forEach((note, i) => {
-            const el = findNoteElement(note);
+            let el: Element | null | undefined = fresh.current ? null : resolved.current.get(note.id);
+            if (!el?.isConnected) el = findNoteElement(note);
+            if (el) resolved.current.set(note.id, el); else resolved.current.delete(note.id);
             if (!el) { missing.push(note.id); return; }
             const rect = el.getBoundingClientRect();
             const empty = rect.width === 0 && rect.height === 0;
@@ -41,6 +46,7 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
                 y: Math.round(Math.min(Math.max(rect.top - 10, 8), window.innerHeight - 32)),
             });
         });
+        fresh.current = false;
         setSpots((prev) => (JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
         // Runs every second; only report a change, so the parent doesn't re-render for nothing.
         const missingKey = missing.join(',');
@@ -53,10 +59,12 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
     useEffect(() => {
         let frame = 0;
         const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(measure); };
+        const refresh = () => { fresh.current = true; schedule(); };
+        fresh.current = true;
         schedule();
         window.addEventListener('scroll', schedule, true);
         window.addEventListener('resize', schedule);
-        const timer = window.setInterval(schedule, 1000);
+        const timer = window.setInterval(refresh, 1000);
         return () => {
             cancelAnimationFrame(frame);
             window.clearInterval(timer);

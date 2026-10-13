@@ -226,7 +226,8 @@ export function findNoteElement(note: NoteAnchor): Element | null {
     const pool = inContext.length ? inContext : candidates;
     const sameLook = pool.filter((el) => sameText(el, note.elementText));
     const finalists = sameLook.length ? sameLook : pool;
-    if (finalists.length === 0) return bySelector;
+    // A named element that is gone from the page: hide the pin rather than pin the failed selector's hit on something unrelated.
+    if (finalists.length === 0) return null;
     if (finalists.length === 1 || !note.box) return finalists[0];
     const box = note.box;
     const distance = (el: Element) => {
