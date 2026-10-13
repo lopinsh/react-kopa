@@ -62,7 +62,7 @@ export default async function Header() {
                 </div>
 
                 {session?.user && (
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center sm:gap-1.5">
                         <div className="hidden sm:block h-5 w-px bg-border/20 mx-0.5" />
                         <MessagesDrawerButton
                             className="relative flex h-10 w-10 items-center justify-center rounded-xl text-foreground-muted transition-all active:scale-95 hover:bg-surface-elevated hover:text-foreground"
