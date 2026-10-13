@@ -4,7 +4,7 @@
   "changes": [
     "9.8, the design freeze: your notes of 13 October, evening. Every Agreed rule now has a stable id (AR-01 … AR-71) and every approval its own (AP-01 … AP-07), shown on the page and usable as an anchor (#AR-23), so the build plan can name them.",
     "Approved: one theme at a time in the search (AP-06), and \"Rādīt visus rezultātus\" as discovery with the search word as a chip (AP-07); the results page (B) was declined and is removed. Still open 1 is settled; the other numbers stay.",
-    "Agreed, site-wide: every text field with a limit shows a counter under it, \"71 / 2000\" (a message's limit in the live app). Proposal: warning colour in the last tenth, red past the limit, \"Nosūtīt\" waits.",
+    "Agreed, site-wide: every text field with a limit shows a counter under it, \"70 / 2000\" (a message's limit in the live app). Proposal: warning colour in the last tenth, red past the limit, \"Nosūtīt\" waits.",
     "Agreed: a group's chosen image fills its banner (shaded, white text), on every group page and the event page; without an image, the category tint and icon. Drawn with and without. Proposal: the shade, heights, the phone bar the same.",
     "Join requests: \"Sazināties\" with the chat icon instead of \"Atbildēt\". \"Eju\" in event rows now lines up with the time. Released in parts R1–R12, one by one, with no feature switch.",
     "9.7.1, after an independent review: the weekend tint and the phone date sheet (quick choices above the month) are marked as my proposals; the Vēja zirdžiņš announcement names its date.",
