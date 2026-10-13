@@ -28,7 +28,7 @@ export default async function MeLayout({ children, params }: { children: React.R
         <MeProvider value={{ name: ctx.name || t('anonymousUser'), avatarSrc: avatarUrl(ctx), line }}>
             <PersonHeader />
             <MePhoneBar />
-            <div className="[--me-head:64px] md:grid md:grid-cols-[190px_minmax(0,1fr)] md:gap-[22px] md:px-[22px] md:pt-[18px] md:[--me-head:72px]">
+            <div className="[--me-head:64px] md:mx-auto md:grid md:max-w-6xl md:grid-cols-[190px_minmax(0,1fr)] md:gap-[22px] md:px-[22px] md:pt-[18px] md:[--me-head:72px]">
                 <MeMenu variant="side" />
                 <div className="min-w-0">{children}</div>
             </div>

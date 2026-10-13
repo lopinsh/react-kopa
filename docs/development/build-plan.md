@@ -126,7 +126,7 @@ R1a ─► R1b
 
 ## 5. Release cards
 
-Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS.md: typecheck, eslint on changed files, `npm run i18n:check`, migration if schema changed) + checked in a running app in lv and en at 375 px and 1280 px, light and dark, side by side with each named drawing; no horizontal page scroll; Laws respected; `npm run plan:check` passes. **Handbook**: `docs/handbook/design.md` gets its screen entries updated by every release that changes a screen. **UI elements**: every new or changed shared component appears on `/admin/handbook/ui-elements` (`components/handbook/UiElementsDemos.tsx`) with sample data.
+Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS.md: typecheck, eslint on changed files, `npm run i18n:check`, migration if schema changed) + checked in a running app in lv and en at 375 px and 1280 px, light and dark, side by side with each named drawing, and at 768, 1024, 1440 and 1920 px for the fluid layout (see Cross-cutting: Fluid layout); no horizontal page scroll; Laws respected; `npm run plan:check` passes. **Handbook**: `docs/handbook/design.md` gets its screen entries updated by every release that changes a screen. **UI elements**: every new or changed shared component appears on `/admin/handbook/ui-elements` (`components/handbook/UiElementsDemos.tsx`) with sample data.
 
 ### R1a · Identity (M/L)
 
@@ -339,6 +339,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 
 ## 6. Cross-cutting
 
+- **Fluid layout (owner, 13 Oct).** The drawings are at 375 and 1280 px and are not pixel specs for other widths. Implementations are fluid between and beyond: bars span the full width (brand left, tools right, search growing in the middle), page content sits in one centred container (`max-w-6xl`, or the layout's reading width), no fixed widths copied from a drawing except side columns, dialog sizes and small parts. Each spec's acceptance lists 768, 1024, 1440 and 1920 px next to 375 and 1280, and the reviewer measures the header and the page container there.
 - **Tokens and components first.** R1a fixes tokens and atoms; R2b fixes behaviour pieces. Later releases compose them and add to `/admin/handbook/ui-elements`, which is the component library: a builder looks there before making a new piece (Reuse before creating).
 - **Taxonomy Law with images and dark tones.** The accent and the banner background are decided on the server: the group layout's `<style>` sets `--accent` for light (`html:root`) and dark (`html.dark:root`) from the theme's tones; the banner image is an image element rendered on the server (never a URL inside the `<style>` block: a user-supplied URL there is a CSS-injection path); no client resolves a colour. Category colour never on site buttons (AR-06).
 - **Context Law for frames.** Group frame (R3a), own area (R2a) and admin (R11) layouts fetch their context through services; providers hydrate; client parts read hooks. The client-fetched group sidebar (`GroupSidebarContent` via an action) goes in R3a; `userRole`/accent props in `MemberCard`, `EventRow`, `AnnouncementCard`, `GroupSettingsForm` go when those are replaced (R3a, R5b, R9b).

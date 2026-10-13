@@ -26,8 +26,10 @@ export default async function Header() {
                 <span className="hidden md:inline-flex"><Logo /></span>
             </Link>
 
-            <HeaderSearchField className="mx-2 hidden max-w-[560px] flex-1 md:flex" />
-            <span className="flex-1 md:hidden" />
+            {/* Fluid: the field grows in the middle up to the reading width, the tools sit at the right edge. */}
+            <div className="mx-2 flex min-w-0 flex-1 justify-center">
+                <HeaderSearchField className="hidden w-full max-w-2xl md:flex" />
+            </div>
 
             <LanguageMenu />
             <PhoneSearchToggle />

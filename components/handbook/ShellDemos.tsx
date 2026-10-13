@@ -28,7 +28,9 @@ export function HeaderDemo({ signedIn, admin }: { signedIn: boolean; admin?: boo
     return (
         <div className="flex h-14 items-center gap-2 border-b border-border bg-surface px-3 md:px-4">
             <Logo />
-            <HeaderSearchField className="mx-2 flex max-w-[560px] flex-1" />
+            <div className="mx-2 flex min-w-0 flex-1 justify-center">
+                <HeaderSearchField className="flex w-full max-w-2xl" />
+            </div>
             <LanguageMenu />
             {signedIn && admin && <span className={ICON_BUTTON}><ShieldCheck aria-hidden /></span>}
             {signedIn && <span className={ICON_BUTTON}><MessageSquare aria-hidden /><span aria-hidden className={ICON_DOT} /></span>}

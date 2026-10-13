@@ -10,7 +10,7 @@ export default function SegmentError({ error, retry }: { error: Error & { digest
     }, [error]);
 
     return (
-        <div className="mx-auto max-w-[560px] px-4 py-12">
+        <div className="mx-auto max-w-xl px-4 py-12">
             <ErrorState onRetry={retry} />
         </div>
     );
