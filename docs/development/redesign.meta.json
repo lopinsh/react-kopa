@@ -2,7 +2,7 @@
   "version": "9.8.1",
   "updated": "2026-10-13T23:00:00+03:00",
   "changes": [
-    "9.8.1, your notes on the banner height: every group banner, with or without an image, on every page and the event page, now has the one height of the Pasākumi banner (96 px; phone bar 64 px). The tall Informācija banner is gone (AR-70).",
+    "9.8.1, your notes on the banner height: every group banner, with or without an image, on every page, is the one height of the Pasākumi banner (96 px; phone bar 64 px) (AR-70). On phones \"Sazināties\" is a chat icon, so the name is never cut.",
     "9.8, the design freeze: your notes of 13 October, evening. Every Agreed rule now has a stable id (AR-01 … AR-71) and every approval its own (AP-01 … AP-07), shown on the page and usable as an anchor (#AR-23), so the build plan can name them.",
     "Approved: one theme at a time in the search (AP-06), and \"Rādīt visus rezultātus\" as discovery with the search word as a chip (AP-07); the results page (B) was declined and is removed. Still open 1 is settled; the other numbers stay.",
     "Agreed, site-wide: every text field with a limit shows a counter under it, \"70 / 2000\" (a message's limit in the live app). Proposal: warning colour in the last tenth, red past the limit, \"Nosūtīt\" waits.",

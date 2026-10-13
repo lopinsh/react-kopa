@@ -421,6 +421,7 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-gbar .act{flex:none;display:flex;gap:8px}
 .rd .mbtn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--tint);color:var(--fg);flex:none}
 .rd .mbtn.q{background:transparent}
+.rd .mbtn.p{background:var(--brand);color:var(--on-brand)}
 .rd .rd-frame{display:grid;grid-template-columns:190px minmax(0,1fr);gap:22px;padding:18px 22px 22px}
 .rd .rd-frame.side{grid-template-columns:190px minmax(0,1fr) 250px}
 .rd .rd-gnav{display:grid;gap:1px;font-size:14px;align-content:start;min-width:0}
