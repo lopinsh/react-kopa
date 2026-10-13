@@ -444,9 +444,9 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | Release | Status | Spec | Commits |
 |---|---|---|---|
 | R1a Identity | pushed, live; owner checked 13 Oct | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`557b6bc` (Opus review fixes `4232adc`, `9708a63`) |
-| R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
-| R2a Header, menus, own area | built; Opus review done, ready to push | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
-| R2b Behaviour pieces | built; Opus review done, ready to push | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
+| R1b Admin → Dizains | pushed, live | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
+| R2a Header, menus, own area | pushed, live | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
+| R2b Behaviour pieces | pushed, live | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
 | R3b Sazināties, pending, "…" | not started | | |
 | R4 Discovery data | not started | | |
