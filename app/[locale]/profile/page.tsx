@@ -61,7 +61,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                         </div>
                         <Link
                             href="/profile/edit"
-                            className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-6 text-sm font-bold text-white transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-primary/20"
+                            className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-primary/20"
                         >
                             <Settings className="h-4 w-4" />
                             {t('editTitle')}

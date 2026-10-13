@@ -59,7 +59,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                         <span className="h-1 w-1 rounded-full bg-[var(--accent)]" style={{ backgroundColor: accentColor }} />
                         {event.group.name}
                     </div>
-                    <h3 lang={langAttr(event.titleLang, locale)} className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-[var(--accent)] transition-colors line-clamp-2" style={{ '--accent': accentColor } as React.CSSProperties}>
+                    <h3 lang={langAttr(event.titleLang, locale)} className="text-base sm:text-lg font-bold leading-tight text-foreground group-hover:text-primary transition-colors line-clamp-2" style={{ '--accent': accentColor } as React.CSSProperties}>
                         {event.title}
                     </h3>
                     {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
@@ -95,7 +95,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                             <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
                             {formatter.dateTime(startDate, { hour: '2-digit', minute: '2-digit', hour12: false })}
                         </div>
-                        <div className="rounded-full bg-surface-elevated p-2 text-foreground transition-all group-hover:bg-[var(--accent)] group-hover:text-white" style={{ '--accent': accentColor } as React.CSSProperties}>
+                        <div className="rounded-full bg-surface-elevated p-2 text-foreground transition-all group-hover:bg-primary group-hover:text-primary-foreground" style={{ '--accent': accentColor } as React.CSSProperties}>
                             <ArrowRight className="h-4 w-4" />
                         </div>
                     </div>

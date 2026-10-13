@@ -139,7 +139,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             type="button"
                             onClick={handleSaveColor}
                             disabled={isPending || color === l1.color}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {t('save')}
                         </button>
@@ -269,7 +269,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             <button
                                 type="submit"
                                 disabled={isPending || !newNameEn.trim() || !newNameLv.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-[var(--accent)] text-white hover:opacity-90 transition-opacity rounded disabled:opacity-50"
+                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded disabled:opacity-50"
                                 style={{ '--accent': color } as React.CSSProperties}
                             >
                                 {t('addSubcategory')}

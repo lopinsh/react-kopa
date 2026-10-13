@@ -62,7 +62,7 @@ export default function PendingCityCard({ city }: Props) {
                     <button
                         type="button"
                         onClick={() => setEditing(!editing)}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${editing ? 'bg-primary text-white' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>
@@ -97,7 +97,7 @@ export default function PendingCityCard({ city }: Props) {
                             type="button"
                             disabled={isPending || nameLv.trim().length < 2 || nameEn.trim().length < 2}
                             onClick={() => run(() => approveCity(city.id, { nameLv, nameEn }), c('approve') + ' - ' + c('success'))}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {c('confirm')}
                         </button>

@@ -70,7 +70,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                     <Link
                         ref={(el) => el?.focus()}
                         href={`/messages?c=${chatId}`}
-                        className="inline-flex h-11 items-center justify-center rounded-xl bg-[var(--accent)] px-8 text-sm font-bold text-white transition-all hover:opacity-90 active:scale-95"
+                        className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-95"
                     >
                         {t('openChat')}
                     </Link>
@@ -88,7 +88,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                         maxLength={MESSAGE_MAX_LENGTH}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)]"
+                        className="w-full resize-none rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
 
                     {allowJoin && (
@@ -102,7 +102,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                                 onClick={() => setWantsToJoin(v => !v)}
                                 className={clsx(
                                     'relative h-6 w-11 shrink-0 rounded-full transition-colors',
-                                    wantsToJoin ? 'bg-[var(--accent)]' : 'bg-border'
+                                    wantsToJoin ? 'bg-primary' : 'bg-border'
                                 )}
                             >
                                 <span className={clsx(

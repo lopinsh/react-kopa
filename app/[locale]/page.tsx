@@ -122,11 +122,11 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const createGroupCard = effectiveCategoryId ? (
         <Link
             href={`/create?category=${activeL1?.slug || ''}`}
-            className="group relative flex flex-col items-center justify-center h-full min-h-[200px] sm:min-h-[280px] rounded-[20px] bg-surface-elevated text-foreground border-2 border-dashed border-border/60 transition-transform duration-200 ease-out hover:border-[var(--accent)] hover:bg-surface hover:scale-[1.02] soft-press"
+            className="group relative flex flex-col items-center justify-center h-full min-h-[200px] sm:min-h-[280px] rounded-[20px] bg-surface-elevated text-foreground border-2 border-dashed border-border/60 transition-transform duration-200 ease-out hover:border-primary hover:bg-surface hover:scale-[1.02] soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
             <div className="flex flex-col items-center justify-center p-6 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-background mb-4 text-foreground-muted group-hover:text-[var(--accent)] group-hover:bg-[var(--accent)]/10 transition-colors shadow-sm">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-background mb-4 text-foreground-muted group-hover:text-primary group-hover:bg-primary/10 transition-colors shadow-sm">
                     <Plus className="h-7 w-7" />
                 </div>
                 <h3 className="text-lg font-bold text-foreground">{t('createNewGroup')}</h3>
@@ -165,7 +165,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                         {(q || (city && city !== 'all') || category || activeTags.length > 0) && (
                             <Link
                                 href="/"
-                                className="text-xs font-bold text-[var(--accent)] hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"
+                                className="text-xs font-bold text-primary hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"
                             >
                                 {t('clearAll')}
                             </Link>

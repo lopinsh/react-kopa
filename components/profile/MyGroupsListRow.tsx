@@ -40,7 +40,7 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
     return (
         <Link
             href={targetHref}
-            className="group relative flex h-auto min-h-[3.5rem] flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-surface px-4 py-3 sm:py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
+            className="group relative flex h-auto min-h-[3.5rem] flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-hidden rounded-xl border border-border bg-surface px-4 py-3 sm:py-2 transition-all hover:border-primary hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
             <div className="flex items-center gap-3 overflow-hidden flex-1">
@@ -52,7 +52,7 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
 
                 {/* Title & Category Line */}
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 overflow-hidden flex-1">
-                    <h3 className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
+                    <h3 className="truncate text-base font-bold text-foreground group-hover:text-primary">
                         {group.name}
                     </h3>
                     <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-foreground-muted">

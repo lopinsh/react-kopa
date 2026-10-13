@@ -10,7 +10,7 @@ export default function UnreadBadge() {
     if (count <= 0) return null;
     return (
         <span
-            className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-black leading-none text-white"
+            className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-black leading-none text-primary-foreground"
             aria-label={t('unreadBadge', { count })}
         >
             {count > 9 ? '9+' : count}

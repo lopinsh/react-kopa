@@ -177,7 +177,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
                                 title={t('commentOn', { name: entry.name })}
                                 onClick={() => onPick(entry.el)}
                                 className={clsx(
-                                    'flex h-7 w-7 items-center justify-center rounded-full border-2 border-surface bg-primary text-white shadow-premium',
+                                    'flex h-7 w-7 items-center justify-center rounded-full border-2 border-surface bg-primary text-primary-foreground shadow-premium',
                                     isActive ? 'pointer-events-auto' : 'pointer-events-none focus:pointer-events-auto'
                                 )}
                             >

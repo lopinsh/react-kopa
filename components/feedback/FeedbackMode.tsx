@@ -117,7 +117,7 @@ export default function FeedbackMode() {
                     aria-pressed={anywhere}
                     aria-label={t('anywhere')}
                     title={t('anywhereHint')}
-                    className={clsx('flex items-center gap-1 rounded-full p-1.5', anywhere ? 'bg-primary text-white' : 'text-foreground-muted hover:bg-surface-elevated')}
+                    className={clsx('flex items-center gap-1 rounded-full p-1.5', anywhere ? 'bg-primary text-primary-foreground' : 'text-foreground-muted hover:bg-surface-elevated')}
                 >
                     <MousePointerClick className="h-4 w-4" />
                     <span className="hidden sm:inline">{t('anywhere')}</span>

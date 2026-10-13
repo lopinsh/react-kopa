@@ -25,7 +25,7 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, dark }: Pro
                 <p className="mt-2 text-sm text-foreground-muted">{t('body')}</p>
                 <p className="mt-2 text-base">{t('latvian')}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                    <button type="button" tabIndex={-1} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">{t('primaryButton')}</button>
+                    <button type="button" tabIndex={-1} className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">{t('primaryButton')}</button>
                     <button type="button" tabIndex={-1} className="rounded-xl border border-border bg-surface-elevated px-4 py-2 text-sm font-bold text-foreground">{t('secondaryButton')}</button>
                     <span className="rounded-full bg-primary/10 px-3 py-2 text-xs font-bold text-primary">{t('badge')}</span>
                 </div>

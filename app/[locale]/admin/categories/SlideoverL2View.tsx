@@ -162,7 +162,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="button"
                             onClick={handleSave}
                             disabled={isPending}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {t('save')}
                         </button>

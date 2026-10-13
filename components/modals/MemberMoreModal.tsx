@@ -55,7 +55,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                             }}
                             className={clsx(
                                 "flex items-center gap-3 p-3 rounded-2xl border border-border bg-surface-elevated/50 transition-all",
-                                canWriteTeam && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:bg-surface-elevated hover:border-[var(--accent)]/50"
+                                canWriteTeam && (role === 'OWNER' || role === 'ADMIN') && "cursor-pointer hover:bg-surface-elevated hover:border-primary/50"
                             )}
                         >
                             <div className="relative h-12 w-12 overflow-hidden rounded-full bg-surface-elevated shrink-0">
@@ -74,7 +74,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                                 <span
                                     className={clsx(
                                         "text-[10px] font-bold uppercase tracking-wider",
-                                        role === 'OWNER' ? 'text-owner' : 'text-[var(--accent)]'
+                                        role === 'OWNER' ? 'text-foreground' : 'text-primary'
                                     )}
                                 >
                                     {t(`role_${role.toLowerCase()}`)}
@@ -83,7 +83,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
 
                             {/* Hover hint for messaging admins */}
                             {canWriteTeam && (role === 'OWNER' || role === 'ADMIN') && (
-                                <div className="ml-auto flex bg-[var(--accent)]/10 text-[var(--accent)] p-2 rounded-full">
+                                <div className="ml-auto flex bg-primary/10 text-primary p-2 rounded-full">
                                     <MessageSquare className="h-4 w-4" />
                                 </div>
                             )}

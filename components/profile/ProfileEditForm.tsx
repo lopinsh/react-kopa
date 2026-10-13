@@ -181,7 +181,7 @@ export default function ProfileEditForm({ user }: Props) {
             <button
                 type="submit"
                 disabled={isPending}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-8 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {c_common('saveChanges')}

@@ -66,7 +66,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
             data-ui={UI.groupCard}
             className="group relative flex flex-col h-full overflow-hidden rounded-[20px] bg-surface text-foreground 
                 border-slate-200 border shadow-sm transition-transform duration-200 ease-out 
-                hover:shadow-md hover:border-[var(--accent)] hover:scale-[1.02] soft-press"
+                hover:shadow-md hover:border-primary hover:scale-[1.02] soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
             {/* Thumbnail Image Area (Top Strip) */}
@@ -116,7 +116,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                             {group.category.title}
                         </span>
                     </div>
-                    <h3 className="line-clamp-2 text-base sm:text-lg font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-[var(--accent)]">
+                    <h3 className="line-clamp-2 text-base sm:text-lg font-bold leading-tight tracking-tight text-foreground transition-colors group-hover:text-primary">
                         {group.name}
                     </h3>
                 </div>

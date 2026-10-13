@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
 import { useDateFormatter } from '@/lib/date-format';
 
@@ -27,7 +28,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
         <Link
             href={`/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
             data-ui={UI.eventListRow}
-            className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
+            className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-primary hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
             {/* Date Box */}
@@ -38,7 +39,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
 
             {/* Title & Group Line */}
             <div className="flex flex-1 items-center gap-3 overflow-hidden">
-                <h3 lang={langAttr(event.titleLang, locale)} className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
+                <h3 lang={langAttr(event.titleLang, locale)} className="truncate text-base font-bold text-foreground group-hover:text-primary">
                     {event.title}
                 </h3>
                 {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
@@ -50,7 +51,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                     </span>
                 )}
                 {event.isFull && (
-                    <span className="inline-flex shrink-0 items-center rounded-full bg-[var(--accent)] px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white">{t('full')}</span>
+                    <Badge tone="outline">{t('full')}</Badge>
                 )}
                 <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
                     <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm">

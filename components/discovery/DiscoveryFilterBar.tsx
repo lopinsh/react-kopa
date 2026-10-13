@@ -341,7 +341,7 @@ export default function DiscoveryFilterBar({
                                                             />
                                                         ) : (
                                                             <span
-                                                                className="h-8 w-8 shrink-0 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+                                                                className="h-8 w-8 shrink-0 rounded-lg flex items-center justify-center text-[var(--on-cat)] text-xs font-bold"
                                                                 style={{ backgroundColor: result.color }}
                                                             >
                                                                 {result.title.charAt(0)}

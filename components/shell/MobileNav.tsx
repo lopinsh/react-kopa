@@ -56,7 +56,7 @@ export default function MobileNav() {
                 <div className="flex flex-1 items-center justify-center">
                     <button
                         onClick={() => gateAction(() => router.push('/create'))}
-                        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/30 transition-transform active:scale-95"
+                        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg shadow-primary/30 transition-transform active:scale-95"
                         aria-label={t('create')}
                     >
                         <Plus className="h-6 w-6" strokeWidth={2.5} />

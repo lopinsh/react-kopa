@@ -43,7 +43,7 @@ export default function TranslateMode() {
                     onMouseLeave={releaseTarget}
                     onClick={() => { setEditingKey(target.key); releaseTarget(); }}
                     style={{ left: target.x - 6, top: target.y - 14 }}
-                    className="fixed z-[60] flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-premium transition-transform hover:scale-110"
+                    className="fixed z-[60] flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-premium transition-transform hover:scale-110"
                 >
                     <Pencil className="h-3 w-3" />
                 </button>

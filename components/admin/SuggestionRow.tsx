@@ -76,7 +76,7 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
                     type="button"
                     onClick={() => run(approveSuggestion, 'approved')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     <Check className="h-4 w-4" />
                     {t('approve')}

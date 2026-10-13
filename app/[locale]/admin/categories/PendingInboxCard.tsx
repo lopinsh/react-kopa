@@ -112,7 +112,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'approve' ? null : 'approve')}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${activeAction === 'approve' ? 'bg-primary text-white' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>
@@ -200,7 +200,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                             type="button"
                             onClick={handleApprove}
                             disabled={isPending || !nameEn || !nameLv || !slugEn || !slugLv}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {c('confirm')}
                         </button>

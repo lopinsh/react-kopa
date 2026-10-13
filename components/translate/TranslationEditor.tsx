@@ -146,7 +146,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                         <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
                         </button>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty} className="rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white transition-all hover:opacity-90 disabled:opacity-50">
+                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty} className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </button>
                     </div>

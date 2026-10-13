@@ -32,7 +32,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor }: 
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
             data-ui={UI.groupListRow}
-            className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-[var(--accent)] hover:shadow-md soft-press"
+            className="group relative flex h-14 items-center overflow-hidden rounded-xl border border-border bg-surface px-4 py-2 transition-all hover:border-primary hover:shadow-md soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
             {/* Color Indicator */}
@@ -43,7 +43,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor }: 
 
             {/* Title & Category Line */}
             <div className="flex flex-1 items-center gap-3 overflow-hidden">
-                <h3 className="truncate text-base font-bold text-foreground group-hover:text-[var(--accent)]">
+                <h3 className="truncate text-base font-bold text-foreground group-hover:text-primary">
                     {group.name}
                 </h3>
                 <div className="hidden shrink-0 items-center gap-1.5 sm:flex">

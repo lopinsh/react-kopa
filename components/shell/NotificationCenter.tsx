@@ -126,7 +126,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
             >
                 <Bell className={clsx("h-5 w-5", unreadCount > 0 ? "text-primary animate-pulse" : "text-foreground-muted")} />
                 {unreadCount > 0 && (
-                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white ring-2 ring-surface">
+                    <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground ring-2 ring-surface">
                         {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                 )}
@@ -167,7 +167,7 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
                                         >
                                             {t(audience === 'ADMIN' ? 'tabAdmin' : 'tabPersonal')}
                                             {count > 0 && (
-                                                <span className="rounded-full bg-primary px-1.5 text-[10px] leading-4 text-white">{count > 9 ? '9+' : count}</span>
+                                                <span className="rounded-full bg-primary px-1.5 text-[10px] leading-4 text-primary-foreground">{count > 9 ? '9+' : count}</span>
                                             )}
                                         </button>
                                     );

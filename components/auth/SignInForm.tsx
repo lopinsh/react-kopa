@@ -71,7 +71,7 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                    className="w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                 >
                     {loading ? t('signingIn') : t('signInButton')}
                 </button>

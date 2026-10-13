@@ -73,7 +73,7 @@ export default async function AdminFeedbackPage({
                     {FEEDBACK_KINDS.map((k) => <option key={k} value={k}>{tMode(`kind.${k}`)}</option>)}
                 </select>
                 <input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className={`${FIELD} w-full sm:w-56`} />
-                <button type="submit" className="rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white hover:opacity-90">{t('filter')}</button>
+                <button type="submit" className="rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">{t('filter')}</button>
                 {tab === 'completed' && counts.completed > 0 && (
                     <div className="sm:ml-auto"><FeedbackPurgeButton count={counts.completed} /></div>
                 )}

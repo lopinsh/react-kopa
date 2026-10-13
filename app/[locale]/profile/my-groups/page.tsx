@@ -46,7 +46,7 @@ export default async function MyGroupsPage({
                     </p>
                     <a
                         href={signInUrl(locale, '/profile/my-groups')}
-                        className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
+                        className="mt-6 flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <LogIn className="h-4 w-4" />
                         {tAuth('signInButton')}
@@ -71,7 +71,7 @@ export default async function MyGroupsPage({
     return (
         <div className="container mx-auto px-4 py-12 min-h-full max-w-5xl">
             <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
-                <Users className="h-8 w-8 text-[var(--accent)]" style={{ '--accent': 'var(--color-primary)' } as React.CSSProperties} />
+                <Users className="h-8 w-8 text-primary" />
                 {c_common_get('myGroups')}
             </h1>
 
@@ -148,7 +148,7 @@ export default async function MyGroupsPage({
                     </h2>
                     <Link
                         href="/"
-                        className="mt-6 flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
+                        className="mt-6 flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
                     >
                         <Compass className="h-4 w-4" />
                         {tProfile('discover')}

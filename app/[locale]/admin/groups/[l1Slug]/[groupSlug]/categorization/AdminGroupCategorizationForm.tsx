@@ -85,7 +85,7 @@ export default function AdminGroupCategorizationForm({
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="rounded bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                    className="rounded bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
                 >
                     {isPending ? c('loading') : c('save')}
                 </button>

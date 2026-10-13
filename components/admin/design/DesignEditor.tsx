@@ -113,7 +113,7 @@ export default function DesignEditor({ initial }: { initial: ThemeInput }) {
                                 type="button"
                                 aria-pressed={sampleMode === mode}
                                 onClick={() => setSampleMode(mode)}
-                                className={clsx('rounded-lg px-3 py-1 text-xs font-bold', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
+                                className={clsx('rounded-full px-3 py-1 text-xs font-bold', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
                             >
                                 {t(`mode.${mode}`)}
                             </button>
@@ -136,7 +136,7 @@ export default function DesignEditor({ initial }: { initial: ThemeInput }) {
                     type="button"
                     disabled={busy}
                     onClick={() => run('publish', () => publishTheme(theme), 'published')}
-                    className="rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                    className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
                 >
                     {t('publish')}
                 </button>

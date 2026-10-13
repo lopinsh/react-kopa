@@ -134,7 +134,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             <div className={clsx(
                                 'whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-relaxed',
                                 isMe
-                                    ? 'rounded-br-none bg-primary text-white'
+                                    ? 'rounded-br-none bg-primary text-primary-foreground'
                                     : 'rounded-bl-none border border-border bg-surface-elevated text-foreground shadow-sm'
                             )}>
                                 {msg.content}
@@ -173,7 +173,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 type="submit"
                                 disabled={!messageTextSchema.safeParse(draft).success || isPending}
                                 aria-label={t('send')}
-                                className="flex items-center justify-center rounded-xl bg-primary px-5 font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                                className="flex items-center justify-center rounded-full bg-primary px-5 font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
                                 <Send className="h-4 w-4" />
                             </button>

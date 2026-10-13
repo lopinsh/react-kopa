@@ -42,7 +42,7 @@ export default function ThemePreviewBar() {
                 type="button"
                 disabled={isPending}
                 onClick={() => run(publishPreviewTheme, 'published')}
-                className="rounded-xl bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
+                className="rounded-full bg-primary px-3 py-1.5 text-xs font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50"
             >
                 {t('publish')}
             </button>

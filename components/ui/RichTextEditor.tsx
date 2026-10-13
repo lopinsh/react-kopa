@@ -42,7 +42,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleBold().run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('bold') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('bold') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('bold')}
             >
@@ -53,7 +53,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleItalic().run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('italic') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('italic') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('italic')}
             >
@@ -64,7 +64,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleUnderline().run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('underline') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('underline') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('underline')}
             >
@@ -76,7 +76,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('heading', { level: 3 }) ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('heading', { level: 3 }) ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('heading')}
             >
@@ -87,7 +87,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('bulletList') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('bulletList') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('bulletList')}
             >
@@ -98,7 +98,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => editor.chain().focus().toggleOrderedList().run()}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('orderedList') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('orderedList') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('orderedList')}
             >
@@ -110,7 +110,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={setLink}
                 className={clsx(
                     "rounded-md p-1.5 transition-colors hover:bg-surface",
-                    editor.isActive('link') ? "bg-surface text-[var(--accent)]" : "text-foreground-muted"
+                    editor.isActive('link') ? "bg-surface text-primary" : "text-foreground-muted"
                 )}
                 title={t('addLink')}
             >
@@ -151,7 +151,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
             Link.configure({
                 openOnClick: false,
                 HTMLAttributes: {
-                    class: 'text-[var(--accent)] underline underline-offset-4 cursor-pointer',
+                    class: 'text-primary underline underline-offset-4 cursor-pointer',
                 },
             }),
             Placeholder.configure({
@@ -165,7 +165,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
     });
 
     return (
-        <div className="w-full overflow-hidden rounded-xl border border-border bg-surface focus-within:border-[var(--accent)]/50 focus-within:ring-1 focus-within:ring-[var(--accent)]/20 transition-all">
+        <div className="w-full overflow-hidden rounded-xl border border-border bg-surface focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
             <MenuBar editor={editor} />
             <EditorContent
                 editor={editor}

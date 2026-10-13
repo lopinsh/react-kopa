@@ -89,7 +89,7 @@ export default function UsernameForm({ suggestedUsername }: UsernameFormProps) {
             <button
                 type="submit"
                 disabled={!canSubmit}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-8 font-bold text-white shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
             >
                 {isPending ? (
                     <>

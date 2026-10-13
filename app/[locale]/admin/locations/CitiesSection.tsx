@@ -66,7 +66,7 @@ export default function CitiesSection({ cities }: Props) {
                 <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 text-sm font-semibold text-foreground-muted hover:bg-border rounded transition-colors">
                     {c('cancel')}
                 </button>
-                <button type="button" disabled={isPending || !valid} onClick={onSave} className="px-4 py-2 text-sm font-semibold bg-primary text-white rounded hover:bg-primary/90 transition-colors disabled:opacity-50">
+                <button type="button" disabled={isPending || !valid} onClick={onSave} className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50">
                     {c('save')}
                 </button>
             </div>

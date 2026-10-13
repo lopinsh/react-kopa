@@ -85,7 +85,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                             onClick={() => setKind(k)}
                             className={clsx(
                                 'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
-                                kind === k ? 'border-primary bg-primary text-white' : 'border-border text-foreground-muted hover:text-foreground'
+                                kind === k ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground-muted hover:text-foreground'
                             )}
                         >
                             {t(`kind.${k}`)}
@@ -114,7 +114,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                         type="button"
                         onClick={handleSave}
                         disabled={isPending || text.trim() === ''}
-                        className="rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}
                     </button>
