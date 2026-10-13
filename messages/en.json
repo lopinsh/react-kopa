@@ -937,7 +937,6 @@
   },
   "nav": {
     "adminPanel": "Admin panel",
-    "create": "Create",
     "messages": "Messages",
     "settings": "Settings",
     "signIn": "Sign in",
@@ -945,7 +944,6 @@
     "userFallback": "User",
     "discover": "Discover",
     "myGroups": "My groups",
-    "profile": "Profile",
     "adminMenu": "Admin tools",
     "mobileLabel": "Main navigation",
     "languageLabel": "Language",

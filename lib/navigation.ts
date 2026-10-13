@@ -57,11 +57,3 @@ export const ME_PAGES: MePage[] = [
 
 /** Pages that end with the slim footer: discovery and reading pages (AR-16). */
 export const FOOTER_PATHS = ['/', '/about', '/privacy'] as const;
-
-// Temporary until the bottom bar is rebuilt (R2a step 3).
-export const NAV_LINKS = [
-    { href: '/', labelKey: 'discover' as const, icon: Compass },
-    { href: '/profile/my-groups', labelKey: 'myGroups' as const, icon: Users },
-    { href: '/messages', labelKey: 'messages' as const, icon: MessageSquare },
-    { href: '/profile', labelKey: 'profile' as const, icon: User },
-];

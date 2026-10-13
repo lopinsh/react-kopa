@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { getMessages, getTimeZone, getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { NAV_TAB_COOKIE, isBottomTab } from '@/lib/navigation';
 import Providers from '@/components/providers/Providers';
 import Header from '@/components/shell/Header';
 import Sidebar from '@/components/shell/Sidebar';
@@ -39,6 +41,9 @@ export default async function LocaleLayout({ children, params }: Props) {
         notFound();
     }
 
+    // The tab a group page marks on a hard load (the tab you came from); client navigation keeps the cookie up to date.
+    const navCookie = (await cookies()).get(NAV_TAB_COOKIE)?.value;
+    const initialTab = isBottomTab(navCookie) ? navCookie : 'discover';
     const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
 
     const [allMessages, timeZone, translateMode, feedbackMode, theme] = await Promise.all([
@@ -87,7 +92,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             </div>
 
             {/* Mobile Bottom Nav */}
-            <MobileNav />
+            <MobileNav initialTab={initialTab} />
 
             {/* GDPR Consent */}
             <CookieConsent />

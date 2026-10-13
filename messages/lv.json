@@ -937,7 +937,6 @@
   },
   "nav": {
     "adminPanel": "Administrēšanas panelis",
-    "create": "Izveidot",
     "messages": "Ziņas",
     "settings": "Iestatījumi",
     "signIn": "Ienākt",
@@ -945,7 +944,6 @@
     "userFallback": "Lietotājs",
     "discover": "Atklāt",
     "myGroups": "Manas grupas",
-    "profile": "Profils",
     "adminMenu": "Administrēšana",
     "mobileLabel": "Galvenā navigācija",
     "languageLabel": "Valoda",
