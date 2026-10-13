@@ -119,13 +119,13 @@ export default async function EventPage({
     };
 
     return (
-        <div className="bg-background">
+        <div>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: jsonForScript(jsonLd) }}
             />
 
-            <div className="container mx-auto max-w-5xl px-4 py-6 md:py-8">
+            <div className="max-w-5xl">
                 <Link
                     href={`/${l1Slug}/group/${group.slug}/events`}
                     className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-foreground-muted hover:text-foreground"

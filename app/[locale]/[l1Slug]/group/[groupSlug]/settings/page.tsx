@@ -7,6 +7,7 @@ import { auth } from '@/lib/auth';
 import { CityService } from '@/lib/services/city.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
+import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
 import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
@@ -89,7 +90,8 @@ export default async function GroupSettingsPage(props: {
     const editableSections = activeTab === 'sections' ? await GroupService.getEditableSections(group.id, session.user.id) : [];
 
     return (
-        <div className="mx-auto w-full max-w-4xl animate-in space-y-6 px-4 py-6 fade-in slide-in-from-bottom-2 duration-500 md:px-8 md:py-8">
+        <div className="w-full max-w-4xl space-y-6">
+            <GroupPartTabs title={t('pages.settings')} label="" items={[]} active="" />
             {pendingMembers.length > 0 && (
                 <MembershipPanel
                     groupId={group.id}

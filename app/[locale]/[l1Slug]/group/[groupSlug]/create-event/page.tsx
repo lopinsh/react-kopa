@@ -35,8 +35,8 @@ export default async function CreateEventPage({
     const t = await getTranslations('event');
 
     return (
-        <div className="min-h-full bg-surface-elevated/30 py-20">
-            <div className="container mx-auto px-4">
+        <div className="py-2 md:py-6">
+            <div>
                 <div className="mx-auto mb-6 w-full max-w-lg">
                     <Link
                         href={`/${l1Slug}/group/${groupSlug}/events`}

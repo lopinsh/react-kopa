@@ -1,6 +1,7 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
 import AnnouncementBoard from '@/components/groups/AnnouncementBoard';
+import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -40,12 +41,15 @@ export default async function GroupAnnouncementsPage({
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
+    const [t, tFrame] = await Promise.all([getTranslations('group'), getTranslations('group.frame')]);
+
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+        <>
+            <GroupPartTabs title={t('pages.announcements')} label={tFrame('partsLabel')} items={[]} active="" />
             <AnnouncementBoard
                 groupId={group.id}
                 locale={locale}
             />
-        </section>
+        </>
     );
 }

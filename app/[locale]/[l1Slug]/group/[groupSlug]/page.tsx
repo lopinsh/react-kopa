@@ -2,22 +2,17 @@ import { GroupService } from '@/lib/services/group.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { getTranslations } from 'next-intl/server';
-import MemberAvatarList from '@/components/groups/MemberAvatarList';
-import { Users as UsersIcon, HelpCircle } from 'lucide-react';
-import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
-import { clsx } from 'clsx';
-import { getSmartImageUrl } from '@/lib/image-utils';
-import Image from 'next/image';
 import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
+import NextMeetingBox from '@/components/groups/NextMeetingBox';
 import { langAttr } from '@/lib/translations';
 
-export async function generateMetadata({
-    params,
-}: {
-    params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
-}): Promise<Metadata> {
+type Params = { locale: string; groupSlug: string; l1Slug: string };
+
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
     const { locale, groupSlug, l1Slug } = await params;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
@@ -25,127 +20,40 @@ export async function generateMetadata({
     return group ? { title: group.name } : {};
 }
 
-export default async function GroupPage({
-    params
-}: {
-    params: Promise<{ locale: string; groupSlug: string; l1Slug: string }>;
-}) {
+/** Informācija (AR-50): the group's parts as tabs, one shown; then the next meeting and the links. Members-only parts are not in the list for visitors. */
+export default async function GroupPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<{ part?: string }> }) {
     const { locale, groupSlug, l1Slug } = await params;
+    const { part } = await searchParams;
     const session = await auth();
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
-  const c_common_get = await getTranslations('common');
+    if (!group) notFound();
 
-    if (!group) {
-        notFound();
-    }
-
-    // The group home shows the member avatars (and the full list in "more"); the layout does not load members.
-    const members = await GroupService.getMembers(group, session?.user?.id);
+    const [t, tFrame, tCommon] = await Promise.all([
+        getTranslations('group'),
+        getTranslations('group.frame'),
+        getTranslations('common'),
+    ]);
+    const base = `/${l1Slug}/group/${group.slug}`;
+    const open = group.sections.find((s) => s.id === part) ?? group.sections[0];
+    const items = group.sections.map((s, i) => ({
+        key: s.id,
+        label: i === 0 ? tCommon('about') : s.title,
+        lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
+        href: i === 0 ? base : `${base}?part=${s.id}`,
+    }));
+    const contentLang = open ? langAttr(open.contentLang, locale) : undefined;
 
     return (
-        <div className="relative overflow-x-clip animate-in fade-in slide-in-from-bottom-2 duration-500">
-            {/* Decorative background glows */}
-            <div
-                className="absolute -top-40 -right-20 h-[500px] w-[500px] rounded-full opacity-[0.03] blur-[120px] pointer-events-none bg-[var(--accent)]"
-            />
-            <div
-                className="absolute top-[40%] -left-40 h-[400px] w-[400px] rounded-full opacity-[0.02] blur-[100px] pointer-events-none bg-[var(--accent)]"
-            />
-
-            {/* Content Container (Reduced top padding for flush feel) */}
-            <div className="px-4 md:px-8 pt-6 pb-10 max-w-screen-2xl mx-auto">
-                {/* About Section with Sidebar */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div className="lg:col-span-2 space-y-10 pb-24">
-                        <div className="space-y-10">
-                            {group.sections.map((section, index) => {
-                                // One label per language shown: next to the title (not shown for the first section),
-                                // and above the content only when the content is in a different language than that.
-                                const titleLabel = index !== 0 ? langAttr(section.titleLang, locale) : undefined;
-                                const contentLabel = section.content ? langAttr(section.contentLang, locale) : undefined;
-
-                                return (
-                                    <section
-                                        key={section.id}
-                                        id={index === 0 ? 'about' : section.id}
-                                        className="scroll-mt-[5.5rem] relative overflow-hidden rounded-3xl border border-border bg-surface shadow-card transition-all hover:border-border/80"
-                                    >
-                                        {/* Content Header (Hidden for first section since Description tab is active) */}
-                                        {index !== 0 && (
-                                            <div className="p-8 pb-0">
-                                                <div className="flex items-center gap-2.5 mb-6 text-[11px] font-semibold text-[var(--accent)] opacity-90">
-                                                    <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
-                                                        <HelpCircle className="h-3.5 w-3.5" />
-                                                    </span>
-                                                    <span lang={langAttr(section.titleLang, locale)}>{section.title}</span>
-                                                    {titleLabel && <FallbackLangLabel lang={titleLabel} />}
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {/* Primary Section Content */}
-                                        <div className={clsx("p-8 pb-10", index === 0 ? "pt-8" : "pt-0")}>
-                                            {contentLabel && contentLabel !== titleLabel && (
-                                                <FallbackLangLabel lang={contentLabel} className="mb-4" />
-                                            )}
-                                            <div
-                                                lang={langAttr(section.contentLang, locale)}
-                                                className="prose prose-sm prose-invert max-w-none text-foreground/90 leading-relaxed font-medium"
-                                                dangerouslySetInnerHTML={{ __html: sanitizeRichText(section.content) }}
-                                            />
-                                        </div>
-                                    </section>
-                                );
-                            })}
-                        </div>
-                    </div>
-
-                    {/* Sidebar */}
-                    <aside className="lg:sticky lg:top-[5.5rem] self-start space-y-8">
-                        {group.bannerImage && (
-                            <div className="overflow-hidden rounded-3xl border border-border bg-surface shadow-card">
-                                <Image
-                                    src={getSmartImageUrl(group.bannerImage)}
-                                    alt={group.name}
-                                    width={600}
-                                    height={337}
-                                    priority
-                                    unoptimized
-                                    className="w-full aspect-video object-cover"
-                                />
-                            </div>
-                        )}
-                        <div className="rounded-3xl border border-border bg-surface p-6 shadow-card">
-                            {/* 3. Member Information Section */}
-                            <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-2.5 text-[11px] font-semibold text-foreground opacity-90">
-                                    <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
-                                        <UsersIcon className="h-3.5 w-3.5 text-[var(--accent)]" />
-                                    </span>
-                                    {c_common_get('membersTitle')}
-                                </div>
-                                <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent)] border border-[var(--accent)]/20">
-                                    {group.stats.memberCount}
-                                </span>
-                            </div>
-                            <MemberAvatarList
-                                members={members.filter(m => m.role !== 'PENDING')}
-                                groupId={group.id}
-                                groupName={group.name}
-                            />
-
-                            {/* Social Links */}
-                            <div className="mt-8 pt-8 border-t border-border/50">
-                                <GroupSocialLinks
-                                    discordLink={group.socialLinks.discord}
-                                    websiteLink={group.socialLinks.website}
-                                    instagramLink={group.socialLinks.instagram}
-                                />
-                            </div>
-                        </div>
-                    </aside>
-                </div>
-            </div>
-        </div>
+        <>
+            <GroupPartTabs title={t('pages.info')} label={tFrame('partsLabel')} items={items} active={open?.id ?? ''} />
+            {open && (
+                <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px]">
+                    {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
+                    <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(open.content) }} />
+                </article>
+            )}
+            <NextMeetingBox groupId={group.id} groupHref={base} viewerId={session?.user?.id} />
+            <GroupSocialLinks websiteLink={group.socialLinks.website} instagramLink={group.socialLinks.instagram} discordLink={group.socialLinks.discord} />
+        </>
     );
 }

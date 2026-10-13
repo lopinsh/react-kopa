@@ -1,67 +1,25 @@
-'use client';
-
 import { useTranslations } from 'next-intl';
-import { Globe, Instagram, MessageSquare } from 'lucide-react';
+import { UI } from '@/lib/constants';
 
-interface GroupSocialLinksProps {
-    discordLink?: string | null;
-    websiteLink?: string | null;
-    instagramLink?: string | null;
-}
+type Props = { websiteLink?: string | null; instagramLink?: string | null; discordLink?: string | null };
 
-export default function GroupSocialLinks({
-    discordLink,
-    websiteLink,
-    instagramLink
-}: GroupSocialLinksProps) {
-  const c_common = useTranslations('common');
-
-    if (!discordLink && !websiteLink && !instagramLink) return null;
-
+/** The group's links as quiet text links at the end of Informācija (AR-50): no icons, no heading, nothing when there are none. */
+export default function GroupSocialLinks({ websiteLink, instagramLink, discordLink }: Props) {
+    const t = useTranslations('common');
     const links = [
-        {
-            icon: <Globe className="h-4 w-4" />,
-            label: c_common('social_website'),
-            href: websiteLink,
-            active: !!websiteLink
-        },
-        {
-            icon: <Instagram className="h-4 w-4" />,
-            label: c_common('social_instagram'),
-            href: instagramLink,
-            active: !!instagramLink
-        },
-        {
-            icon: <MessageSquare className="h-4 w-4" />,
-            label: c_common('social_discord'),
-            href: discordLink,
-            active: !!discordLink
-        }
-    ].filter(l => l.active);
+        { href: websiteLink, label: t('social_website') },
+        { href: instagramLink, label: t('social_instagram') },
+        { href: discordLink, label: t('social_discord') },
+    ].filter((l): l is { href: string; label: string } => !!l.href);
+    if (links.length === 0) return null;
 
     return (
-        <div className="pt-4 mt-6 border-t border-white/[0.05]">
-            <div className="text-[11px] font-semibold text-foreground-muted mb-3 ml-1">
-                {c_common('tabSocial')}
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2">
-                {links.map((link, idx) => (
-                    <a
-                        key={idx}
-                        href={link.href!}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.01] p-2.5 transition-all hover:bg-white/[0.05] hover:border-primary/30"
-                    >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/[0.03] text-foreground-muted group-hover:text-primary group-hover:bg-primary/10 transition-all">
-                            {link.icon}
-                        </div>
-                        <span className="text-xs font-bold text-foreground-muted group-hover:text-foreground transition-colors truncate">
-                            {link.label}
-                        </span>
-                    </a>
-                ))}
-            </div>
-        </div>
+        <p data-ui={UI.socialLinks} className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
+            {links.map(({ href, label }) => (
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline decoration-border underline-offset-[3px]">
+                    {label}
+                </a>
+            ))}
+        </p>
     );
 }

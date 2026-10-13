@@ -4,6 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { User as UserIcon } from 'lucide-react';
 import MembershipPanel from '@/components/groups/MembershipPanel';
+import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
 import MemberCard from '@/components/groups/MemberCard';
 import type { Metadata } from 'next';
 import { MembershipRole } from '@prisma/client';
@@ -84,12 +85,23 @@ export default async function GroupMembersPage({
     const messageable = await MessageService.messageableUserIds(session?.user?.id, acceptedMembers.map((m) => m.user.id));
 
     // Ensure users can't see requests if not admin
-    const currentTab = isOwnerOrAdmin ? tab : 'members';
+    const currentTab = isOwnerOrAdmin && tab === 'requests' ? 'requests' : 'members';
+    const tFrame = await getTranslations('group.frame');
+    const base = `/${l1Slug}/group/${groupSlug}`;
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 min-h-[400px] max-w-screen-2xl mx-auto px-4 md:px-8 pb-10">
-            {currentTab === 'requests' && isOwnerOrAdmin ? (
-                <div className="space-y-8 mt-8">
+        <>
+            <GroupPartTabs
+                title={t('pages.members')}
+                label={tFrame('partsLabel')}
+                active={currentTab}
+                items={[
+                    { key: 'members', label: c_common_get('membersList'), href: `${base}/members` },
+                    ...(isOwnerOrAdmin ? [{ key: 'requests', label: c_common_get('requestsTab'), href: `${base}/members?tab=requests`, count: group.stats.pendingCount }] : []),
+                ]}
+            />
+            {currentTab === 'requests' ? (
+                <div className="space-y-8">
                     {pendingMembers.length > 0 ? (
                         <MembershipPanel
                             groupId={group.id}
@@ -108,7 +120,7 @@ export default async function GroupMembersPage({
                     )}
                 </div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                     {acceptedMembers.map((member) => (
                         <MemberCard
                             key={member.id}
@@ -121,6 +133,6 @@ export default async function GroupMembersPage({
                     ))}
                 </div>
             )}
-        </section>
+        </>
     );
 }

@@ -6,6 +6,7 @@ import EventRow from '@/components/groups/EventRow';
 import { getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
 import type { Metadata } from 'next';
 import { isEventPast } from '@/lib/event-dates';
 import EmptyState from '@/components/ui/EmptyState';
@@ -45,24 +46,28 @@ export default async function GroupEventsPage({
     }
 
     const eventsData = await EventService.getGroupEvents(group.id, locale, session?.user?.id);
-    const t = await getTranslations('group');
+    const [t, tFrame, tCommon] = await Promise.all([getTranslations('group'), getTranslations('group.frame'), getTranslations('common')]);
     const isOwnerOrAdmin = group.user.isAdmin;
+    const base = `/${l1Slug}/group/${groupSlug}`;
 
-    const currentTab = (tab === 'my-rsvps' && session) ? 'my-rsvps' : (tab === 'past' ? 'past' : 'upcoming');
-    const filteredEvents = eventsData.filter(event => {
-        const past = isEventPast(event);
-        if (currentTab === 'my-rsvps') {
-            // Going, waiting for approval or on the waitlist
-            return !past && !!event.viewer.myStatus && event.viewer.myStatus !== 'DECLINED';
-        } else if (currentTab === 'past') {
-            return past;
-        } else {
-            return !past;
-        }
-    });
+    // Gaidāmie and Pagājušie only; any other value (the old ?tab=my-rsvps) shows Gaidāmie.
+    const currentTab = tab === 'past' ? 'past' : 'upcoming';
+    const filteredEvents = eventsData.filter((event) => isEventPast(event) === (currentTab === 'past'));
 
     return (
-        <section className="animate-in fade-in slide-in-from-bottom-2 duration-500 max-w-3xl mx-auto px-4 md:px-8 py-6">
+        <>
+            <GroupPartTabs
+                title={t('pages.events')}
+                label={tFrame('partsLabel')}
+                active={currentTab}
+                items={[
+                    { key: 'upcoming', label: tCommon('eventsTabUpcoming'), href: `${base}/events` },
+                    { key: 'past', label: tCommon('eventsTabPast'), href: `${base}/events?tab=past` },
+                ]}
+                action={isOwnerOrAdmin ? (
+                    <Link href={`${base}/create-event`} className={buttonClass('secondary', undefined, 'sm')}>{t('createEvent')}</Link>
+                ) : undefined}
+            />
             {filteredEvents.length > 0 ? (
                 <div className="flex flex-col gap-3">
                     {filteredEvents.map((event) => (
@@ -95,7 +100,7 @@ export default async function GroupEventsPage({
                 <EmptyState
                     icon={Calendar}
                     title={t('noEvents')}
-                    description={currentTab === 'upcoming' ? t('noUpcomingEvents') : currentTab === 'past' ? t('noPastEvents') : t('noRsvps')}
+                    description={currentTab === 'upcoming' ? t('noUpcomingEvents') : t('noPastEvents')}
                     action={isOwnerOrAdmin && currentTab === 'upcoming' ? (
                         <Link href={`/${l1Slug}/group/${groupSlug}/create-event`} className={buttonClass('secondary')}>
                             <Plus aria-hidden="true" />
@@ -104,6 +109,6 @@ export default async function GroupEventsPage({
                     ) : undefined}
                 />
             )}
-        </section>
+        </>
     );
 }
