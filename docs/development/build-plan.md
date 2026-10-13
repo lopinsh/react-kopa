@@ -198,6 +198,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** white text on any user image (shade must give ≥ 4.5:1 on the worst case: test a white image); the pages drawer and the bottom bar on phones; hidden-group banner and site-admin tools must stay.
 - **Out of scope:** Sazināties form, pending state, new "…" menu (R3b); Biedri/Jaunumi content (R9b).
 - **Size:** L.
+- **Spec:** [specs/R3a.md](specs/R3a.md). No migration. One responsive header serves the 96 px banner and the 64 px phone bar (one image, one action cluster; no separate GroupPhoneBar file); pages from `GroupService` (`lib/group-pages.ts`) through `GroupProvider`, active page from `useSelectedLayoutSegment`; parts as link tabs (`?part=`, `?tab=`); D11 as a batch `EventService.getNextVisibleEvents` with a single-group wrapper; shade 60→75 % black for 4.5:1 on white; "Rakstīt komandai" bridged into today's "…" menu; stop point after step 3.
 
 ### R3b · Sazināties, pending, "…" (M)
 
@@ -446,7 +447,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
 | R2a Header, menus, own area | built; Opus review done, ready to push | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
 | R2b Behaviour pieces | built; Opus review done, ready to push | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
-| R3a Group frame | not started | | |
+| R3a Group frame | spec written | [specs/R3a.md](specs/R3a.md) | |
 | R3b Sazināties, pending, "…" | not started | | |
 | R4 Discovery data | not started | | |
 | R5a Discovery filters and cards | not started | | |
