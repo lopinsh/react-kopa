@@ -14,6 +14,7 @@ import CategoryColorsEditor, { type ToneRow } from './CategoryColorsEditor';
 import ColoursPart from './ColoursPart';
 import DesignActions from './DesignActions';
 import DesignPartTabs from './DesignPartTabs';
+import FontsPart from './FontsPart';
 
 type Pending = 'preview' | 'publish' | 'reset' | null;
 
@@ -23,7 +24,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
-    const { theme, issues, tonesEdited, choosePreset, setColor, setTone } = useThemeDraft(initial);
+    const { theme, issues, tonesEdited, choosePreset, setColor, setTone, setFont } = useThemeDraft(initial);
     const [part, setPart] = useState<DesignPart>(initialPart);
     const [pending, setPending] = useState<Pending>(null);
     const [confirmReset, setConfirmReset] = useState(false);
@@ -60,6 +61,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
             <DesignPartTabs part={part} blockedParts={blockedParts} onSelect={setPart} />
             {part === 'colours' && <ColoursPart theme={theme} issues={issues} disabled={busy} onPreset={askPreset} onColor={setColor} />}
             {part === 'categories' && <CategoryColorsEditor rows={toneRows} theme={theme} disabled={busy} onTone={setTone} />}
+            {part === 'fonts' && <FontsPart theme={theme} disabled={busy} onFont={setFont} />}
             <DesignActions
                 busy={busy}
                 blockedParts={blockedParts}
