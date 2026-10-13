@@ -590,7 +590,7 @@
         "handbook": "Values, voice and design rules",
         "team": "Site admins and owner",
         "feedback": "Notes left by the site admins",
-        "redesign": "Looks under discussion; nothing is built from it",
+        "redesign": "The signed-off design the build plan builds",
         "buildPlan": "Implementation plan for the redesign releases"
       }
     },
