@@ -727,7 +727,12 @@
           "shellMenus": "Galvenes izvēlnes: profils, administrēšanas vairogs, valoda",
           "bottomBar": "Tālruņa apakšējā josla, katra cilne iezīmēta",
           "footer": "Šaurā kājene",
-          "ownArea": "Tava vieta: personas galvene, tavas vietas izvēlne, izskats"
+          "ownArea": "Tava vieta: personas galvene, tavas vietas izvēlne, izskats",
+          "sheet": "Apakšas panelis",
+          "skeleton": "Ielādes formas",
+          "counter": "Rakstzīmju skaitītājs",
+          "errorState": "Kļūdas stāvoklis",
+          "confirmPopover": "Apstiprinājums pie pogas"
         },
         "sample": {
           "category": "Pārgājieni",
@@ -753,7 +758,12 @@
           "emptyTitle": "Vēl nav pasākumu",
           "emptyDescription": "Kad grupa kaut ko plānos, tas parādīsies šeit.",
           "emptyAction": "Atrast citas grupas",
-          "bannerReason": "Vairākkārt ziņots, tiek pārbaudīts"
+          "bannerReason": "Vairākkārt ziņots, tiek pārbaudīts",
+          "sheetTitle": "Izvēlies pilsētu",
+          "sheetText": "Šis panelis atveras no apakšas.",
+          "counterLabel": "Ziņa",
+          "popoverMessage": "Pamest grupu?",
+          "popoverConfirm": "Pamest"
         }
       }
     },

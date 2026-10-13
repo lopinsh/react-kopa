@@ -5,13 +5,14 @@ The same situation behaves the same way on every screen.
 ## Saving and sending
 
 - The button shows it is working and can't be pressed twice.
-- Success: a short toast, or the result appears in place.
+- Success: a short toast (one line at the bottom, above the bottom bar on phones, one at a time, it goes by itself), or the result appears in place.
 - After creating something, open its page.
 
 ## Destroying
 
 - Archive or hide first, delete only when needed.
 - Permanent delete asks once, in our own dialog, naming the thing: "Dzēst jaunumu "Pārgājiens sestdien"?"
+- "Are you sure" for a step you can undo (leave a group, remove a member) is a small pop-over at the button.
 - Never the browser's `confirm()`.
 
 ## Errors
@@ -19,6 +20,19 @@ The same situation behaves the same way on every screen.
 - Field errors under the field, in red, while typing is allowed to continue.
 - Server errors in plain words near the button.
 - Nothing fails silently.
+- A page that fails to load says so in plain words, with "Mēģināt vēlreiz".
+
+## Pop-ups
+
+- Dialogs in the middle dim the page and blur it lightly; side panels, sheets and drawers only dim.
+- A click outside, Esc, × and Back close them. Back does not leave the page.
+- A form with typed input asks "Atmest izmaiņas?" first; keeping on editing is the default.
+- On phones a dialog opens as a sheet from the bottom.
+
+## Text limits
+
+- A field with a limit shows a count under its right end: quiet, then the warning colour in the last tenth, then red with how many are too many.
+- Past the limit the send button waits; the text is never cut.
 
 ## Empty
 

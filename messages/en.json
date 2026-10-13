@@ -727,7 +727,12 @@
           "shellMenus": "Header menus: profile, admin shield, language",
           "bottomBar": "Phone bottom bar, each tab marked",
           "footer": "Slim footer",
-          "ownArea": "Own area: person header, own menu, appearance"
+          "ownArea": "Own area: person header, own menu, appearance",
+          "sheet": "Sheet",
+          "skeleton": "Loading shapes",
+          "counter": "Character counter",
+          "errorState": "Error state",
+          "confirmPopover": "Confirmation at the button"
         },
         "sample": {
           "category": "Hiking",
@@ -753,7 +758,12 @@
           "emptyTitle": "No events yet",
           "emptyDescription": "When the group plans something, it will show up here.",
           "emptyAction": "Find other groups",
-          "bannerReason": "Reported several times and being checked"
+          "bannerReason": "Reported several times and being checked",
+          "sheetTitle": "Choose a city",
+          "sheetText": "This panel opens from the bottom.",
+          "counterLabel": "Message",
+          "popoverMessage": "Leave the group?",
+          "popoverConfirm": "Leave"
         }
       }
     },

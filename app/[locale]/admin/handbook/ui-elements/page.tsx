@@ -6,6 +6,7 @@ import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/I
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
+import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
@@ -214,7 +215,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <InboxDemo samples={samples} />
                 </UiSpecimen>
 
-                <UiSpecimen id="popups" names={[UI.modal, UI.confirmDialog]} files={['components/modals/ContactGroupModal.tsx', 'components/ui/ConfirmDialog.tsx']}>
+                <UiSpecimen id="popups" names={[UI.modal, UI.confirmDialog]} files={['components/modals/ContactGroupModal.tsx', 'components/ui/ConfirmDialog.tsx', 'components/ui/Modal.tsx', 'components/ui/Overlay.tsx']}>
                     <AccentScope color={samples.accent}>
                         <PopupDemo />
                     </AccentScope>
@@ -229,8 +230,29 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     />
                 </UiSpecimen>
 
-                <UiSpecimen id="toast" names={[UI.toast]} files={['components/ui/Toast.tsx']}>
+                <UiSpecimen id="sheet" names={[UI.sheet]} files={['components/ui/Sheet.tsx', 'components/ui/Overlay.tsx']}>
+                    <SheetDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="confirmPopover" names={[UI.confirmPopover]} files={['components/ui/ConfirmPopover.tsx']}>
+                    <PopoverDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="toast" names={[UI.toast]} files={['components/ui/Toast.tsx', 'components/ui/ToastContainer.tsx', 'hooks/use-toast.tsx']}>
                     <ToastDemo />
+                    <div className="mt-4"><ToastButtons /></div>
+                </UiSpecimen>
+
+                <UiSpecimen id="errorState" names={[UI.errorState]} files={['components/ui/ErrorState.tsx']}>
+                    <ErrorStateDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="skeleton" names={[UI.skeleton]} files={['components/ui/Skeleton.tsx']}>
+                    <SkeletonDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="counter" names={[UI.fieldCounter]} files={['components/ui/TextCounter.tsx', 'lib/text-limit.ts']}>
+                    <CounterDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="tabs" names={[UI.tabs]} files={['components/groups/SettingsTabs.tsx']}>

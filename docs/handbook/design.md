@@ -118,12 +118,13 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.
 - **Logo.** Wordmark in two sizes, or the circles only.
 - **Form field.** Label above, input, optional help text below; an error replaces the help text, in the danger colour, under the field.
-- **Pop-up.** One shell: title + close, body, buttons right. On phones it opens as a sheet from the bottom.
+- **Pop-up.** Overlay is the one shell. Modal (dialog: dim + 1.5 px blur, title + close, body, buttons right; a sheet from the bottom on phones), Sheet, side panels and drawers (dim only). A small confirmation for an undoable step is a pop-over at the button.
 - **Announcement card.** Meta line (when, who), bold title, short text.
-- **Empty state.** Outline icon, one sentence, at most one action.
+- **Empty state.** Outline icon, a short title, one italic sentence in the site colour, at most one action.
+- **Toast.** One line at the bottom (above the bottom bar on phones), inverted (foreground on background), one at a time, goes by itself.
+- **Skeleton.** Neutral tint in the shape of the content it stands for.
+- **Text counter.** Under the field's right end: quiet "71 / 2000", the warning colour in the last tenth, red "2013 / 2000 · 13 par daudz" past the limit.
 
 - **Shell.** The header (AR-12, AR-13) is the logo, a plain search field (R7 makes it the search), "LV ▾" and, signed in, messages, bell and your picture; the shield joins for site admins. The three menus (profile, shield, language) are one `Menu` component: same look, same keys. Light and dark is the Izskats setting in Iestatījumi, not a header control. On phones the bottom bar has Atklāt, Grupas, +, Ziņas, Es; a group page marks the tab you came from (AR-20). The footer is a slim line on discovery and reading pages only (AR-16). Every header and bar control is at least 40 px.
 
-R2b updates form fields, pop-ups and empty states.
-
-Also one each: sub-tabs (underline), the "…" menu, toast, skeleton, avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
+Also one each: sub-tabs (underline), the "…" menu, avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
