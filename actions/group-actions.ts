@@ -144,8 +144,7 @@ export async function leaveGroup(groupId: string): Promise<ActionResponse> {
  */
 export async function manageMembership(
     membershipId: string,
-    action: 'APPROVE' | 'DECLINE',
-    locale: string
+    action: 'APPROVE' | 'DECLINE'
 ): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
@@ -166,8 +165,8 @@ export async function manageMembership(
             });
         }
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/members`, 'page');
+        // The frame (Biedri badge, member count) lives in the group layout: invalidate it with the pages.
+        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
         // Approving changes the member count and avatars on discovery cards.
         updateTag('groups');
         return { success: true };

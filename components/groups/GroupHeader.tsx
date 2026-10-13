@@ -245,16 +245,6 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 </span>
                             </Link>
 
-                            <Link
-                                href={`/${l1Slug}/group/${group.slug}/events`}
-                                className="flex items-center gap-2 hover:text-white transition-colors group/meta drop-shadow-sm"
-                            >
-                                <Calendar className="h-4 w-4 text-white" />
-                                <span className="font-medium">
-                                    {t.rich('eventsCount', { count: stats.eventCount, b: (chunks) => <strong className="font-bold text-sm tracking-tight">{chunks}</strong> })}
-                                </span>
-                            </Link>
-
                             {/* Social Links */}
                             {(socialLinks.discord || socialLinks.website || socialLinks.instagram) && (
                                 <>

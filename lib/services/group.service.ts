@@ -18,6 +18,7 @@ import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import { groupPages, type GroupPageLink } from '@/lib/group-pages';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -85,7 +86,6 @@ export interface GroupContext {
     };
     stats: {
         memberCount: number;
-        eventCount: number;
         /** Open join requests; 0 for anyone who may not see them. */
         pendingCount: number;
     };
@@ -98,6 +98,8 @@ export interface GroupContext {
         accentColor: string;
     };
     sections: SectionView[];
+    /** The pages this viewer sees in the group's frame, in order (hidden ones left out). */
+    pages: GroupPageLink[];
     category: {
         id: string;
         title: string;
@@ -105,6 +107,10 @@ export interface GroupContext {
         level: number;
         parentTitle: string | null;
         l1Slug: string;
+        /** Title of the main (level 1) category. */
+        l1Title: string;
+        /** Titles of the level-2 tags, in the viewer's language. */
+        subCategories: string[];
         color: string | null;
     };
     tags: Array<{
@@ -204,7 +210,7 @@ export const GroupService = {
                 }
             },
             _count: {
-                select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } }, events: { where: { visibility: 'PUBLIC' as const } } }
+                select: { members: { where: { role: { not: 'PENDING' as MembershipRole } } } }
             }
         };
 
@@ -226,11 +232,6 @@ export const GroupService = {
         const isMember = !!userMembership && userMembership.role !== 'PENDING';
         const userRole = userMembership?.role || null;
         const isAdmin = hasAdminRights(userRole);
-
-        // Members-only events count only for people who can see them.
-        const eventCount = isMember || isSiteAdmin
-            ? await prisma.event.count({ where: { groupId: g.id } })
-            : g._count.events;
 
         // 2. Open join requests are only counted for people who may see them (group admins, site admins).
         const canSeeApplications = isAdmin || isSiteAdmin;
@@ -289,7 +290,6 @@ export const GroupService = {
             },
             stats: {
                 memberCount: g._count.members,
-                eventCount,
                 pendingCount,
             },
             user: {
@@ -301,6 +301,7 @@ export const GroupService = {
                 accentColor,
             },
             sections,
+            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isTeam: isAdmin, pendingCount }),
             category: {
                 id: resolved.categoryId,
                 title: categoryTitle,
@@ -308,6 +309,8 @@ export const GroupService = {
                 level: resolved.level,
                 parentTitle,
                 l1Slug: resolved.l1Slug,
+                l1Title: resolved.l1Title,
+                subCategories: g.tags.filter((t) => t.level === 2).map((t) => pickTitle(t.titles ?? [], lang, t.slug)),
                 color: resolved.accentColor
             },
             tags: g.tags.map((t) => ({

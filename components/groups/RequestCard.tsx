@@ -44,7 +44,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
 
     const handleAction = (action: 'APPROVE' | 'DECLINE') => {
         startTransition(async () => {
-            const result = await manageMembership(membershipId, action, locale);
+            const result = await manageMembership(membershipId, action);
             if (result.success) {
                 // The shell sidebar is outside the group layout, so tell it to reload its badge.
                 window.dispatchEvent(new Event(GROUP_MEMBERSHIP_CHANGED));

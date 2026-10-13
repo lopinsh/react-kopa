@@ -13,6 +13,7 @@ import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import { plainExcerpt } from '@/lib/text-excerpt';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -83,6 +84,20 @@ export interface DiscoverableEvent {
             parent: { slug: string; parent: { slug: string } | null } | null;
         };
     };
+}
+
+/** A group's next event as the Informācija box (and later cards and panels) show it: no attendees, no instructions. */
+export interface NextEventView {
+    id: string;
+    slug: string;
+    groupId: string;
+    title: string;
+    titleLang: TextLang;
+    startDate: Date;
+    endDate: Date | null;
+    location: string | null;
+    /** First words of the description as plain text (at most 140 characters, no HTML), or null. */
+    excerpt: string | null;
 }
 
 export class EventService {
@@ -514,6 +529,60 @@ export class EventService {
             data: { ...context, attendeeIds: attendees.map(a => a.userId).filter(id => id !== userId) }
         };
     }
+
+    /**
+     * Each group's next event the viewer may see: not past (the Gaidāmie rule), public, plus members-only
+     * for approved members and site admins (the rule of `canSeeMembersOnly`). Groups with none are absent.
+     */
+    static async getNextVisibleEvents(groupIds: string[], locale: string, viewerId?: string): Promise<Map<string, NextEventView>> {
+        const result = new Map<string, NextEventView>();
+        if (groupIds.length === 0) return result;
+        const lang = toTextLang(locale);
+        let privileged: string[] = [];
+        if (viewerId) {
+            const [memberships, siteRole] = await Promise.all([
+                prisma.membership.findMany({
+                    where: { userId: viewerId, groupId: { in: groupIds }, role: { not: 'PENDING' } },
+                    select: { groupId: true }
+                }),
+                getSiteRole(viewerId)
+            ]);
+            privileged = isSiteAdminRole(siteRole) ? groupIds : memberships.map((m) => m.groupId);
+        }
+        const today = startOfTodayInRiga();
+        const events = await prisma.event.findMany({
+            where: {
+                groupId: { in: groupIds },
+                group: { hiddenAt: null },
+                AND: [
+                    { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
+                    { OR: [{ visibility: 'PUBLIC' }, { visibility: 'MEMBERS_ONLY', groupId: { in: privileged } }] }
+                ]
+            },
+            orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],
+            distinct: ['groupId'],
+            select: {
+                id: true, slug: true, groupId: true, startDate: true, endDate: true, location: true, originalLang: true,
+                translations: { select: { lang: true, title: true, description: true, instructions: true } }
+            }
+        });
+        for (const e of events) {
+            const text = resolveEventText(e.translations, lang, e.originalLang, true);
+            result.set(e.groupId, {
+                id: e.id, slug: e.slug, groupId: e.groupId,
+                title: text.title, titleLang: text.titleLang,
+                startDate: e.startDate, endDate: e.endDate, location: e.location,
+                excerpt: plainExcerpt(text.description, 140)
+            });
+        }
+        return result;
+    }
+
+    /** One group's next visible event (Informācija, later the group panel); cached per request. */
+    static getNextVisibleEvent = cache(async (groupId: string, locale: string, viewerId?: string): Promise<NextEventView | null> => {
+        const map = await EventService.getNextVisibleEvents([groupId], locale, viewerId);
+        return map.get(groupId) ?? null;
+    });
 
     /**
      * Get all events for a group with the current viewer's status.
