@@ -44,14 +44,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
             {/* Header Section */}
             <div className="mb-12 flex flex-col items-center md:flex-row md:items-start gap-8 bg-surface-elevated/30 p-8 rounded-[3rem] border border-border">
                 <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface shadow-xl relative bg-primary/10">
-                    <img src={avatarSrc} alt={dbUser.name || 'Avatar'} className="h-full w-full object-cover" />
+                    <img src={avatarSrc} alt={dbUser.name || t('anonymousUser')} className="h-full w-full object-cover" />
                 </div>
 
                 <div className="flex-1 text-center md:text-left">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-                                {dbUser.name || 'Anonymous User'}
+                                {dbUser.name || t('anonymousUser')}
                             </h1>
                             {dbUser.username && (
                                 <p className="text-primary font-bold mt-1 text-lg">
