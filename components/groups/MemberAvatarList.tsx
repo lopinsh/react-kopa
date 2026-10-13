@@ -92,7 +92,7 @@ export default function MemberAvatarList({ members, groupId, groupName }: Props)
                             </span>
                             <span
                                 className={clsx(
-                                    "text-[9px] font-black uppercase tracking-[0.05em] opacity-50",
+                                    "text-[11px] font-semibold opacity-50",
                                     role === 'OWNER' ? 'text-foreground' : 'text-primary'
                                 )}
                             >

@@ -57,16 +57,16 @@ export default async function UsernameOnboardingPage({
             <div className="w-full max-w-md">
                 {/* App identity */}
                 <div className="mb-10 text-center">
-                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-primary text-2xl font-black text-primary-foreground shadow-xl shadow-primary/30">
+                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem] bg-primary text-2xl font-semibold text-primary-foreground shadow-xl shadow-primary/30">
                         EK
                     </div>
-                    <p className="text-sm font-semibold uppercase tracking-widest text-foreground-muted">
+                    <p className="text-sm font-semibold text-foreground-muted">
                         Ejam Kopā
                     </p>
                 </div>
 
                 {/* Heading & subtext */}
-                <h1 className="mb-3 text-center text-3xl font-black tracking-tight text-foreground">
+                <h1 className="mb-3 text-center text-3xl font-semibold tracking-tight text-foreground">
                     {t('heading')}
                 </h1>
                 <p className="mb-10 text-center text-sm leading-relaxed text-foreground-muted">

@@ -118,7 +118,7 @@
     "fieldTitle": "Sadaļas nosaukums",
     "fieldTitlePlaceholder": "piem. BUJ, Noteikumi, Grafiks...",
     "fieldVisibility": "Redzamība",
-    "groupMenu": "GRUPAS IZVĒLNE",
+    "groupMenu": "Grupas izvēlne",
     "groupSettings": "Grupas iestatījumi",
     "groups": "Grupas, kas izmanto šo birku",
     "heading": "Izvēlies savu lietotājvārdu",
@@ -181,7 +181,7 @@
     "reject": "Noraidīt",
     "reply": "Atbildēt",
     "reportGroup": "Ziņot par grupu",
-    "reportLabel": "ZIŅOJUMS",
+    "reportLabel": "Ziņojums",
     "reportedByLabel": "Ziņoja",
     "reportedEntity": "Ziņotā vienība",
     "requested": "Pieprasīts",
@@ -261,7 +261,7 @@
     "clearTag": "Noņemt birku",
     "createNewGroup": "Izveidot jaunu grupu",
     "gridView": "Režģa skats",
-    "groupsEventsSection": "GRUPAS UN PASĀKUMI",
+    "groupsEventsSection": "Grupas un pasākumi",
     "groupsFoundCount": "{count, plural, =0 {Nav atrastu grupu} zero {# grupas} one {# grupa} other {# grupas}}",
     "eventsFoundCount": "{count, plural, =0 {Nav atrastu pasākumu} zero {# pasākumi} one {# pasākums} other {# pasākumi}}",
     "groupsPageTitle": "Grupas",
@@ -276,7 +276,7 @@
     "noGroupsFound": "Grupas netika atrastas",
     "searchInputPlaceholder": "Meklēt grupas, pasākumus, tēmas...",
     "searchPlaceholder": "Meklēt grupas, pasākumus, biedrus...",
-    "topicsSection": "TĒMAS",
+    "topicsSection": "Tēmas",
     "typePrivate": "Privāta",
     "typePublic": "Publiska"
   },
@@ -999,9 +999,9 @@
     "sidebar": {
       "anyCity": "Jebkura pilsēta",
       "collapse": "Sakļaut sānu joslu",
-      "events": "PASĀKUMI",
+      "events": "Pasākumi",
       "everything": "Rādīt visus",
-      "groups": "GRUPAS",
+      "groups": "Grupas",
       "expand": "Izvērst sānu joslu",
       "label": "Sānu josla"
     }

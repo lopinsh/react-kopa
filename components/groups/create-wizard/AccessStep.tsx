@@ -53,7 +53,7 @@ export default function AccessStep() {
                         </div>
                         <div>
                             <p className="font-semibold text-foreground text-sm">{t(labelKey)}</p>
-                            <p className="mt-0.5 text-[10px] leading-tight text-foreground-muted">{t(descKey)}</p>
+                            <p className="mt-0.5 text-[11px] leading-tight text-foreground-muted">{t(descKey)}</p>
                         </div>
                     </button>
                 );

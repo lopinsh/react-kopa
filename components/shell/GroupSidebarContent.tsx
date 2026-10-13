@@ -66,7 +66,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
     return (
         <div className="mt-6 flex flex-col gap-1 px-1">
             {!collapsed && !hideHeader && (
-                <div className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted px-2 mb-1">
+                <div className="text-[11px] font-bold text-foreground-muted px-2 mb-1">
                     {c_common('groupMenu')}
                 </div>
             )}
@@ -108,7 +108,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                                 style={active ? { color: 'var(--primary)' } : undefined}
                             />
                             {id === 'members' && state.pendingCount > 0 && isOwnerOrAdmin && (
-                                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] font-black text-danger-foreground shadow-sm ring-2 ring-surface animate-in zoom-in duration-300">
+                                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[11px] font-bold text-danger-foreground shadow-sm ring-2 ring-surface animate-in zoom-in duration-300">
                                     {state.pendingCount}
                                 </span>
                             )}

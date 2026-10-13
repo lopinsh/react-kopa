@@ -29,7 +29,7 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
                     <UserCog className="h-6 w-6" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-foreground">{t('title')}</h1>
+                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
                     <p className="mt-1 text-foreground-muted">{t(isOwner ? 'subtitle' : 'subtitleReadOnly')}</p>
                 </div>
             </div>

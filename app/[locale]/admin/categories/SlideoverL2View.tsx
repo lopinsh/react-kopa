@@ -87,7 +87,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
             {/* Parent Navigation */}
             {parentL1 && (
                 <div>
-                    <h3 className="text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-2">{t('l1Title')}</h3>
+                    <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
                     <button
                         type="button"
                         onClick={() => onNodeSelect({ id: parentL1.id, type: 'l1' })}

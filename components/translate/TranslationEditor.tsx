@@ -105,10 +105,10 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                     <label htmlFor={`tm-${lang}`} className="mb-1 flex items-center gap-2 text-sm font-semibold text-foreground">
                                         {t(LANG_LABEL[lang])}
                                         {entry.edited[lang] && (
-                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">{t('edited')}</span>
+                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{t('edited')}</span>
                                         )}
                                         {entry.pending[lang] !== null && (
-                                            <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-warning">{t('waiting')}</span>
+                                            <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-bold text-warning">{t('waiting')}</span>
                                         )}
                                     </label>
                                     <textarea

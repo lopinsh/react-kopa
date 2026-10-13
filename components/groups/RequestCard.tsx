@@ -72,7 +72,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                             {targetUser.name || t('anonymousUser')}
                         </span>
                         {latest && (
-                            <span className="text-[10px] font-black uppercase text-foreground-muted tracking-widest flex items-center gap-1.5">
+                            <span className="text-[11px] font-semibold text-foreground-muted flex items-center gap-1.5">
                                 <History className="h-3 w-3" />
                                 {format.relativeTime(new Date(latest.createdAt), now)}
                             </span>
@@ -108,7 +108,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                             <p className="line-clamp-2 text-sm italic leading-relaxed text-foreground/80">
                                 &quot;{latest.content}&quot;
                             </p>
-                            <p className="mt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted">
+                            <p className="mt-2 text-[11px] font-semibold text-foreground-muted">
                                 {latest.senderId === targetUser.id ? targetUser.name || c_common('applicant') : latest.sender.name || c_common('role_admin')}
                                 {' · '}
                                 {format.relativeTime(new Date(latest.createdAt), now)}
@@ -117,7 +117,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                     )}
                     <Link
                         href={`/messages?c=${chatId}`}
-                        className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted transition-colors hover:text-primary"
+                        className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-foreground-muted transition-colors hover:text-primary"
                     >
                         <MessageSquare className="h-3.5 w-3.5" />
                         {t('openChat')}

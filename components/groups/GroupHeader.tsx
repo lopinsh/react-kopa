@@ -176,7 +176,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     <Link
                                         href={seg.href}
                                         className={clsx(
-                                            "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-bold transition-all shadow-premium border",
+                                            "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold transition-all shadow-premium border",
                                             seg.isL1
                                                 ? "border-white/10"
                                                 : "border-[color:var(--l1-color)] bg-[color:var(--l2-bg)] text-[color:var(--l2-text)]"
@@ -222,7 +222,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                 <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
                     <div className="min-w-0">
 
-                        <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl leading-[1.1] drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] mb-2">
+                        <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl leading-[1.1] drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)] mb-2">
                             {group.name}
                         </h1>
 

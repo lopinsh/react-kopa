@@ -217,7 +217,7 @@ export default function AdminNav({ pendingTags, pendingCities, pendingReports, p
                             >
                                 {groups.map((group) => (
                                     <div key={group.id} role="group" aria-label={t(`groups.${group.id}`)} className="py-1">
-                                        <p className="px-3 pb-1 pt-2 text-xs font-bold uppercase tracking-wide text-foreground-muted">{t(`groups.${group.id}`)}</p>
+                                        <p className="px-3 pb-1 pt-2 text-xs font-bold text-foreground-muted">{t(`groups.${group.id}`)}</p>
                                         {group.items.map(renderItem)}
                                     </div>
                                 ))}

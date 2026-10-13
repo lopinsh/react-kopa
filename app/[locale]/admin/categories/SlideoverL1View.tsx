@@ -92,7 +92,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
         <div className="space-y-8 pb-12">
             {/* Header */}
             <div>
-                <h3 className="text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-2">{t('l1Title')}</h3>
+                <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: `${color}20`, color: color }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
@@ -129,7 +129,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                 type="text"
                                 value={color}
                                 onChange={e => setColor(e.target.value)}
-                                className="flex-1 bg-surface border border-border rounded px-3 py-2 text-sm uppercase"
+                                className="flex-1 bg-surface border border-border rounded px-3 py-2 text-sm"
                                 pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                             />
                         </div>

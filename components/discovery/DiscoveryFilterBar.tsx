@@ -287,7 +287,7 @@ export default function DiscoveryFilterBar({
                                     {tagResults.length > 0 && (
                                         <div>
                                             <div className="px-4 pt-3 pb-1">
-                                                <span className="text-[10px] font-bold tracking-wider text-foreground-muted uppercase">
+                                                <span className="text-[11px] font-bold text-foreground-muted">
                                                     {tDiscover('topicsSection')}
                                                 </span>
                                             </div>
@@ -318,7 +318,7 @@ export default function DiscoveryFilterBar({
                                         <div>
                                             {tagResults.length > 0 && <div className="h-px bg-border mx-4" />}
                                             <div className="px-4 pt-3 pb-1">
-                                                <span className="text-[10px] font-bold tracking-wider text-foreground-muted uppercase">
+                                                <span className="text-[11px] font-bold text-foreground-muted">
                                                     {tDiscover('groupsEventsSection')}
                                                 </span>
                                             </div>

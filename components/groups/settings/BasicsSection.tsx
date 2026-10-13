@@ -14,7 +14,7 @@ type Props = {
 };
 
 const INPUT = 'w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/5';
-const LABEL = 'ml-1 text-xs font-black uppercase tracking-wider text-foreground-muted';
+const LABEL = 'ml-1 text-xs font-semibold text-foreground-muted';
 
 /** Name, city and banner. */
 export default function BasicsSection({ canEditName }: Props) {

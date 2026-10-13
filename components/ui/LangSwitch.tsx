@@ -24,7 +24,7 @@ export default function LangSwitch({ value, onChange, filled, className }: Props
                     onClick={() => onChange(lang)}
                     aria-pressed={value === lang}
                     className={clsx(
-                        'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition-colors',
+                        'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors',
                         value === lang ? 'bg-primary text-primary-foreground' : 'text-foreground-muted hover:bg-surface-elevated'
                     )}
                 >

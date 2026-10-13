@@ -118,7 +118,7 @@
     "fieldTitle": "Section Title",
     "fieldTitlePlaceholder": "e.g. FAQ, Rules, Schedule...",
     "fieldVisibility": "Visibility",
-    "groupMenu": "GROUP MENU",
+    "groupMenu": "Group menu",
     "groupSettings": "Group Settings",
     "groups": "Groups using this tag",
     "heading": "Choose your username",
@@ -181,7 +181,7 @@
     "reject": "Reject",
     "reply": "Reply",
     "reportGroup": "Report Group",
-    "reportLabel": "REPORT",
+    "reportLabel": "Report",
     "reportedByLabel": "Reported by",
     "reportedEntity": "Reported Entity",
     "requested": "Requested",
@@ -261,7 +261,7 @@
     "clearTag": "Clear tag",
     "createNewGroup": "Create New Group",
     "gridView": "Grid view",
-    "groupsEventsSection": "GROUPS & EVENTS",
+    "groupsEventsSection": "Groups and events",
     "groupsFoundCount": "{count, plural, =0 {No groups found} one {# group} other {# groups}}",
     "eventsFoundCount": "{count, plural, =0 {No events found} one {# event} other {# events}}",
     "groupsPageTitle": "Groups",
@@ -276,7 +276,7 @@
     "noGroupsFound": "No groups found",
     "searchInputPlaceholder": "Search groups, events, topics...",
     "searchPlaceholder": "Search groups, events, members...",
-    "topicsSection": "TOPICS",
+    "topicsSection": "Topics",
     "typePrivate": "Private",
     "typePublic": "Public"
   },
@@ -999,9 +999,9 @@
     "sidebar": {
       "anyCity": "Any City",
       "collapse": "Collapse sidebar",
-      "events": "EVENTS",
+      "events": "Events",
       "everything": "Show all",
-      "groups": "GROUPS",
+      "groups": "Groups",
       "expand": "Expand sidebar",
       "label": "Sidebar"
     }
@@ -1141,7 +1141,7 @@
     "location": "Location",
     "openInMaps": "Open in Maps",
     "shareEvent": "Share event",
-    "tba": "TBA",
+    "tba": "To be announced",
     "createSubtitle": "Create a new event for your group",
     "membersOnly": "Members only",
     "gate": {

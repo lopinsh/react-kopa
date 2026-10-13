@@ -152,7 +152,7 @@ export default function ProfileEditForm({ user }: Props) {
             </div>
 
             <fieldset className="rounded-2xl border border-border px-5 py-2">
-                <legend className="px-2 text-sm font-black uppercase tracking-widest text-foreground-muted">
+                <legend className="px-2 text-sm font-semibold text-foreground-muted">
                     {t('edit.privacy.title')}
                 </legend>
                 <div className="divide-y divide-border">

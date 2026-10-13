@@ -47,15 +47,15 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
 
                 {/* Date Badge Overlay */}
                 <div className="absolute top-4 left-4 flex flex-col items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 px-2 py-1.5 sm:px-3 sm:py-2 text-white">
-                    <span className="text-[10px] font-black uppercase tracking-widest opacity-70">{formatter.dateTime(startDate, { month: 'short' })}</span>
-                    <span className="text-xl font-black leading-none">{formatter.dateTime(startDate, { day: 'numeric' })}</span>
+                    <span className="text-[11px] font-semibold opacity-70">{formatter.dateTime(startDate, { month: 'short' })}</span>
+                    <span className="text-xl font-semibold leading-none">{formatter.dateTime(startDate, { day: 'numeric' })}</span>
                 </div>
             </div>
 
             {/* Content */}
             <div className="flex flex-1 flex-col p-4 sm:p-6 space-y-3 sm:space-y-4">
                 <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.15em] text-foreground-muted">
+                    <div className="flex items-center gap-2 text-[11px] font-semibold text-foreground-muted">
                         <span className="h-1 w-1 rounded-full bg-[var(--accent)]" style={{ backgroundColor: accentColor }} />
                         {event.group.name}
                     </div>

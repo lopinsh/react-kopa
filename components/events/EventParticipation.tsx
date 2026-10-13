@@ -24,9 +24,9 @@ type Props = {
     compact?: boolean;
 };
 
-const PRIMARY_BASE = 'flex w-full items-center justify-center gap-2 bg-primary font-black uppercase tracking-wide text-primary-foreground transition-all active:scale-95 disabled:opacity-60';
-const NEUTRAL_BASE = 'flex w-full items-center justify-center gap-2 border border-border bg-surface-elevated font-black uppercase tracking-wide text-foreground-muted';
-const DONE_BASE = 'flex w-full cursor-default items-center justify-center gap-2 border-2 border-primary bg-transparent font-black uppercase tracking-wide text-primary';
+const PRIMARY_BASE = 'flex w-full items-center justify-center gap-2 bg-primary font-semibold text-primary-foreground transition-all active:scale-95 disabled:opacity-60';
+const NEUTRAL_BASE = 'flex w-full items-center justify-center gap-2 border border-border bg-surface-elevated font-semibold text-foreground-muted';
+const DONE_BASE = 'flex w-full cursor-default items-center justify-center gap-2 border-2 border-primary bg-transparent font-semibold text-primary';
 const LINK_BUTTON = 'text-xs font-semibold text-foreground-muted underline-offset-2 hover:text-foreground hover:underline disabled:opacity-60';
 
 export default function EventParticipation({ eventId, joinMode, isFull, myStatus, locale, requireSignIn, compact = false }: Props) {

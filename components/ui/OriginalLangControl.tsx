@@ -16,7 +16,7 @@ export default function OriginalLangControl({ value, onChange, filled }: Props) 
     const t = useTranslations('common');
     return (
         <div className="flex items-center gap-2" title={t('originalLangHint')}>
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-foreground-muted">{t('originalLangLabel')}</span>
+            <span className="text-[11px] font-semibold text-foreground-muted">{t('originalLangLabel')}</span>
             <div role="group" aria-label={t('originalLangLabel')} className="inline-flex rounded-lg border border-border p-0.5">
                 {TEXT_LANGS.map((lang) => {
                     const locked = !filled[lang] && value !== lang;
@@ -29,7 +29,7 @@ export default function OriginalLangControl({ value, onChange, filled }: Props) 
                         aria-pressed={value === lang}
                         onClick={() => onChange(lang)}
                         className={clsx(
-                            'rounded-md px-2.5 py-1 text-[11px] font-bold uppercase transition-colors disabled:opacity-40',
+                            'rounded-md px-2.5 py-1 text-[11px] font-bold transition-colors disabled:opacity-40',
                             value === lang ? 'bg-foreground text-background' : 'text-foreground-muted hover:bg-surface-elevated'
                         )}
                     >

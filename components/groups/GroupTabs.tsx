@@ -253,7 +253,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                     href={tab.href}
                                     onClick={(e) => handleTabClick(e, tab.id)}
                                     className={clsx(
-                                        "relative flex items-center gap-2 px-2.5 md:px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold uppercase tracking-wider text-[10px]",
+                                        "relative flex items-center gap-2 px-2.5 md:px-4 transition-all border-b-2 whitespace-nowrap flex-shrink-0 font-bold text-[11px]",
                                         isScrolled ? "pt-4 pb-5" : "pt-5 pb-6",
                                         finalActive
                                             ? "border-primary text-primary"
@@ -267,7 +267,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                     <div className="relative">
                                         <tab.icon className="hidden h-3.5 w-3.5 sm:block" />
                                         {tab.id === 'requests' && pendingCount > 0 && isOwnerOrAdmin && (
-                                            <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-danger px-0.5 text-[8px] font-black text-danger-foreground shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
+                                            <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-danger px-0.5 text-[11px] font-bold text-danger-foreground shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
                                                 {pendingCount}
                                             </span>
                                         )}

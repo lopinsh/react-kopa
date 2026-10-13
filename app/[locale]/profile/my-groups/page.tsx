@@ -29,7 +29,7 @@ export default async function MyGroupsPage({
     if (!session?.user?.id) {
         return (
             <div className="container mx-auto px-4 py-12 min-h-full">
-                <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
+                <h1 className="text-4xl font-semibold tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                     <Users className="h-8 w-8 text-primary" />
                     {c_common_get('myGroups')}
                 </h1>
@@ -38,7 +38,7 @@ export default async function MyGroupsPage({
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
                         <LogIn className="h-10 w-10" />
                     </div>
-                    <h2 className="mt-8 text-2xl font-black text-foreground">
+                    <h2 className="mt-8 text-2xl font-semibold text-foreground">
                         {tAuth('signInToSeeGroups')}
                     </h2>
                     <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
@@ -70,7 +70,7 @@ export default async function MyGroupsPage({
 
     return (
         <div className="container mx-auto px-4 py-12 min-h-full max-w-5xl">
-            <h1 className="text-4xl font-black tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                 <Users className="h-8 w-8 text-primary" />
                 {c_common_get('myGroups')}
             </h1>
@@ -143,7 +143,7 @@ export default async function MyGroupsPage({
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-20">
                         <Users className="h-10 w-10" />
                     </div>
-                    <h2 className="mt-8 text-2xl font-black text-foreground">
+                    <h2 className="mt-8 text-2xl font-semibold text-foreground">
                         {tProfile('empty')}
                     </h2>
                     <Link

@@ -33,8 +33,8 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
         >
             {/* Date Box */}
             <div className="mr-4 flex flex-col items-center justify-center shrink-0 w-10">
-                <span className="text-[9px] font-black uppercase tracking-widest text-foreground-muted">{formatter.dateTime(startDate, { month: 'short' })}</span>
-                <span className="text-lg font-black leading-none text-foreground">{formatter.dateTime(startDate, { day: 'numeric' })}</span>
+                <span className="text-[11px] font-semibold text-foreground-muted">{formatter.dateTime(startDate, { month: 'short' })}</span>
+                <span className="text-lg font-semibold leading-none text-foreground">{formatter.dateTime(startDate, { day: 'numeric' })}</span>
             </div>
 
             {/* Title & Group Line */}
@@ -45,7 +45,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                 {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                 {event.isMembersOnly && <Lock className="h-3.5 w-3.5 shrink-0 text-foreground-muted" aria-label={t('membersOnly')} />}
                 {isRequest && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-foreground-muted">
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-elevated px-2 py-0.5 text-[11px] font-semibold text-foreground-muted">
                         <UserCheck className="h-3 w-3" />
                         <span className="hidden sm:inline">{t('badgeRequest')}</span>
                     </span>
@@ -54,7 +54,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                     <Badge tone="outline">{t('full')}</Badge>
                 )}
                 <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
-                    <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm">
+                    <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[11px] font-bold text-foreground-muted shadow-sm">
                         {event.group.name}
                     </span>
                 </div>

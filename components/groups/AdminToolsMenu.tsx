@@ -82,7 +82,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                         variant === 'overlay' ? 'top-9' : 'top-12'
                     )}
                 >
-                    <p className="px-4 pb-1 pt-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('label')}</p>
+                    <p className="px-4 pb-1 pt-2 text-[11px] font-semibold text-foreground-muted">{t('label')}</p>
 
                     {canHide && (
                         <button

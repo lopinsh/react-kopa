@@ -47,7 +47,7 @@ export default async function ProfileEditPage({
                 </Link>
 
                 <div className="mb-12">
-                    <h1 className="text-4xl font-black tracking-tight text-foreground md:text-5xl">
+                    <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
                         {t('editTitle')}
                     </h1>
                     <p className="mt-4 text-lg text-foreground-muted">

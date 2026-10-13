@@ -95,7 +95,7 @@ export default async function AdminDashboardPage({
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full text-sm text-left">
-                                    <thead className="text-xs uppercase text-foreground-muted">
+                                    <thead className="text-xs text-foreground-muted">
                                         <tr>
                                             <th className="py-2 pr-4">{tMod('logWhen')}</th>
                                             <th className="py-2 pr-4">{tMod('logAdmin')}</th>

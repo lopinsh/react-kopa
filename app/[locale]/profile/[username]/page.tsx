@@ -46,7 +46,7 @@ export default async function PublicProfilePage({
                     <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-50 mb-6">
                         <ShieldAlert className="h-10 w-10" />
                     </div>
-                    <h1 className="text-3xl font-black text-foreground mb-4">{t('privateProfile')}</h1>
+                    <h1 className="text-3xl font-semibold text-foreground mb-4">{t('privateProfile')}</h1>
                     <p className="text-foreground-muted">
                         {t('privateProfileDesc')}
                     </p>
@@ -86,7 +86,7 @@ export default async function PublicProfilePage({
                 <div className="flex-1 text-center md:text-left relative z-10 w-full">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
-                            <h1 className="text-3xl font-black tracking-tight text-foreground">
+                            <h1 className="text-3xl font-semibold tracking-tight text-foreground">
                                 {dbUser.name || 'Anonymous User'}
                             </h1>
                             <p className="text-primary font-bold mt-1 text-lg">

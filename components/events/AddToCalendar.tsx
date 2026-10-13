@@ -30,7 +30,7 @@ export default function AddToCalendar({ event }: Props) {
             href={generateGoogleLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-3 text-[11px] font-bold uppercase text-foreground transition-all hover:bg-surface-elevated active:scale-[0.98]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-3 text-[11px] font-bold text-foreground transition-all hover:bg-surface-elevated active:scale-[0.98]"
         >
             <Calendar className="h-3.5 w-3.5 text-primary" />
             {t('addToGoogleCalendar')}

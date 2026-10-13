@@ -73,7 +73,7 @@ export default async function GroupPage({
                                         {/* Content Header (Hidden for first section since Description tab is active) */}
                                         {index !== 0 && (
                                             <div className="p-8 pb-0">
-                                                <div className="flex items-center gap-2.5 mb-6 text-[11px] font-black uppercase tracking-[0.2em] text-[var(--accent)] opacity-90">
+                                                <div className="flex items-center gap-2.5 mb-6 text-[11px] font-semibold text-[var(--accent)] opacity-90">
                                                     <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
                                                         <HelpCircle className="h-3.5 w-3.5" />
                                                     </span>
@@ -118,13 +118,13 @@ export default async function GroupPage({
                         <div className="rounded-3xl border border-border bg-surface p-6 shadow-card">
                             {/* 3. Member Information Section */}
                             <div className="flex items-center justify-between mb-6">
-                                <div className="flex items-center gap-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-foreground opacity-90">
+                                <div className="flex items-center gap-2.5 text-[11px] font-semibold text-foreground opacity-90">
                                     <span className="p-1.5 rounded-lg bg-[var(--accent)]/10">
                                         <UsersIcon className="h-3.5 w-3.5 text-[var(--accent)]" />
                                     </span>
                                     {c_common_get('membersTitle')}
                                 </div>
-                                <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-0.5 text-[10px] font-black text-[var(--accent)] border border-[var(--accent)]/20">
+                                <span className="rounded-full bg-[var(--accent)]/10 px-2.5 py-0.5 text-[11px] font-semibold text-[var(--accent)] border border-[var(--accent)]/20">
                                     {group.stats.memberCount}
                                 </span>
                             </div>

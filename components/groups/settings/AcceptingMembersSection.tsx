@@ -24,7 +24,7 @@ export default function AcceptingMembersSection() {
                 <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
             </div>
             <label htmlFor="isAcceptingMembers" className="min-w-0 flex-1 cursor-pointer">
-                <span className="text-sm font-black text-foreground">{gt('acceptingMembersLabel')}</span>
+                <span className="text-sm font-semibold text-foreground">{gt('acceptingMembersLabel')}</span>
                 <p className="text-xs text-foreground-muted">{gt('acceptingMembersDesc')}</p>
             </label>
             <UserPlus className={clsx(

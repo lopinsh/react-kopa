@@ -130,7 +130,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         : null;
                     return (
                         <div key={msg.id} data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start')}>
-                            {speaker && <span className="mb-1 px-1 text-[10px] font-bold text-foreground-muted">{speaker}</span>}
+                            {speaker && <span className="mb-1 px-1 text-[11px] font-bold text-foreground-muted">{speaker}</span>}
                             <div className={clsx(
                                 'whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-relaxed',
                                 isMe
@@ -139,7 +139,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             )}>
                                 {msg.content}
                             </div>
-                            <span className="mt-1 px-1 text-[10px] text-foreground-muted">{messageTime(msg.createdAt)}</span>
+                            <span className="mt-1 px-1 text-[11px] text-foreground-muted">{messageTime(msg.createdAt)}</span>
                         </div>
                     );
                 })}

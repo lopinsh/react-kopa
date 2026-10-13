@@ -24,7 +24,7 @@ export default async function PrivacyPage() {
             <p className="mb-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground-muted">
                 {t('draftNotice')}
             </p>
-            <h1 className="text-4xl font-black tracking-tight text-foreground">{t('privacy.title')}</h1>
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground">{t('privacy.title')}</h1>
             <p className="mt-4 text-foreground-muted">{t('privacy.intro')}</p>
             {SECTIONS.map((section) => (
                 <section key={section.title} className="mt-10">

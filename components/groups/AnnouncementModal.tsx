@@ -77,14 +77,14 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                         type="button"
                         onClick={onClose}
                         disabled={isPending}
-                        className="rounded-xl px-5 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
+                        className="rounded-xl px-5 py-3 text-[11px] font-semibold text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
                     >
                         {tCommon('cancel')}
                     </button>
                     <button
                         type="submit"
                         disabled={!canSubmit}
-                        className="flex items-center gap-2 rounded-xl bg-foreground px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-background shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
+                        className="flex items-center gap-2 rounded-xl bg-foreground px-6 py-3 text-[11px] font-semibold text-background shadow-xl transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100"
                     >
                         {isPending ? (
                             <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

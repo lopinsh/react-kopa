@@ -149,7 +149,7 @@ export default async function EventPage({
 
                 {/* Title block */}
                 <header className="mb-6 space-y-3">
-                    <div className="flex flex-wrap items-center gap-2 text-xs font-black uppercase tracking-wide">
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
                         <span className={clsx('inline-flex items-center gap-1.5 rounded-full px-3 py-1', ended ? 'bg-surface-elevated text-foreground-muted' : 'bg-primary/15 text-foreground')}>
                             <Clock className="h-3.5 w-3.5" />
                             {formatter.dateTime(startDate, { weekday: 'long', month: 'short', day: 'numeric' })}
@@ -170,7 +170,7 @@ export default async function EventPage({
                             <Badge tone="outline">{t('full')}</Badge>
                         )}
                     </div>
-                    <h1 className={clsx('text-3xl font-black leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')} lang={langAttr(event.titleLang, locale)}>{event.title}</h1>
+                    <h1 className={clsx('text-3xl font-semibold leading-tight tracking-tight md:text-4xl', ended ? 'text-foreground-muted' : 'text-foreground')} lang={langAttr(event.titleLang, locale)}>{event.title}</h1>
                     {titleLabel && <FallbackLangLabel lang={titleLabel} />}
                     {peopleLine && (
                         <p className="inline-flex items-center gap-2 text-sm font-semibold text-foreground-muted">
@@ -195,7 +195,7 @@ export default async function EventPage({
                         <div className="space-y-4 lg:sticky lg:top-[calc(var(--header-height)+1rem)]">
                             {!ended && !(isRequest && canManage) && (
                                 <div className="space-y-4 rounded-3xl border border-border bg-surface p-5 shadow-sm">
-                                    <h2 className="text-lg font-black tracking-tight text-foreground">{t('areYouComing')}</h2>
+                                    <h2 className="text-lg font-semibold tracking-tight text-foreground">{t('areYouComing')}</h2>
                                     <EventParticipation
                                         eventId={event.id}
                                         joinMode={event.joinMode}
@@ -242,7 +242,7 @@ export default async function EventPage({
                                     <Calendar className="h-5 w-5" />
                                 </div>
                                 <div className="min-w-0">
-                                    <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('dateAndTime')}</p>
+                                    <p className="mb-0.5 text-[11px] font-semibold text-foreground-muted">{t('dateAndTime')}</p>
                                     <p className="text-sm font-bold leading-snug text-foreground">
                                         {formatter.dateTime(startDate, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                                         <br />
@@ -256,14 +256,14 @@ export default async function EventPage({
                                     <MapPin className="h-5 w-5" />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                    <p className="mb-0.5 text-[10px] font-black uppercase tracking-widest text-foreground-muted">{t('location')}</p>
+                                    <p className="mb-0.5 text-[11px] font-semibold text-foreground-muted">{t('location')}</p>
                                     <p className="truncate text-sm font-bold leading-snug text-foreground">{event.location || t('tba')}</p>
                                     {event.location && (
                                         <a
                                             href={isOnlineLocation ? event.location : `https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="mt-1 inline-block text-[10px] font-black uppercase tracking-widest text-primary hover:underline"
+                                            className="mt-1 inline-block text-[11px] font-semibold text-primary hover:underline"
                                         >
                                             {isOnlineLocation ? t('joinLink') : t('openInMaps')}
                                         </a>
@@ -274,7 +274,7 @@ export default async function EventPage({
 
                         {event.description && (
                             <section className="space-y-3 rounded-2xl border border-border bg-surface p-5 md:p-6">
-                                <h2 className="flex flex-wrap items-center gap-2 text-lg font-black tracking-tight text-foreground">
+                                <h2 className="flex flex-wrap items-center gap-2 text-lg font-semibold tracking-tight text-foreground">
                                     {t('aboutEvent')}
                                     {descriptionLabel && descriptionLabel !== titleLabel && <FallbackLangLabel lang={descriptionLabel} />}
                                 </h2>
@@ -295,7 +295,7 @@ export default async function EventPage({
                         )}
                         {event.instructions && (
                             <section className="space-y-3 rounded-2xl border border-[var(--accent)]/20 bg-[var(--accent)]/5 p-5 md:p-6">
-                                <h2 className="flex items-center gap-2 text-lg font-black tracking-tight text-[var(--accent)]">
+                                <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight text-[var(--accent)]">
                                     <Info className="h-5 w-5" />
                                     {t('importantInfo')}
                                     {instructionsLabel && instructionsLabel !== titleLabel && <FallbackLangLabel lang={instructionsLabel} />}

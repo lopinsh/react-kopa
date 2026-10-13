@@ -24,7 +24,7 @@ export default function FeedbackNotesPanel({ notes, missing, onOpen }: Props) {
                     {notes.map((note, i) => (
                         <li key={note.id}>
                             <button type="button" onClick={() => onOpen(note)} className="flex w-full items-start gap-2 rounded-xl px-2 py-2 text-left hover:bg-surface-elevated">
-                                <span className={clsx('mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-black text-primary-foreground', missing.includes(note.id) ? 'bg-foreground-muted' : 'bg-primary')}>{i + 1}</span>
+                                <span className={clsx('mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-primary-foreground', missing.includes(note.id) ? 'bg-foreground-muted' : 'bg-primary')}>{i + 1}</span>
                                 <span className="min-w-0">
                                     <span className="block truncate text-sm text-foreground">{note.text}</span>
                                     <span className="block text-xs text-foreground-muted">

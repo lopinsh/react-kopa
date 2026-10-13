@@ -27,7 +27,7 @@ export default async function AdminDesignPage({ params }: { params: Promise<{ lo
                     <Palette className="h-6 w-6" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-foreground">{t('title')}</h1>
+                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
                     <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
                 </div>
             </div>

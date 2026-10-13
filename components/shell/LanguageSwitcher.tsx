@@ -39,7 +39,7 @@ export default function LanguageSwitcher() {
                     onClick={() => switchLocale(code)}
                     disabled={isPending}
                     className={clsx(
-                        'rounded-md px-2.5 py-1 text-xs font-semibold tracking-wide transition-colors',
+                        'rounded-md px-2.5 py-1 text-xs font-semibold transition-colors',
                         locale === code
                             ? 'bg-primary text-primary-foreground shadow-sm'
                             : 'text-foreground-muted hover:text-foreground'

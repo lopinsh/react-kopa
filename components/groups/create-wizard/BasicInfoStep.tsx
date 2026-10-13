@@ -67,7 +67,7 @@ export default function BasicInfoStep() {
                     )}
                 />
                 {errors.bannerImage && <p className="mt-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
-                <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
+                <p className="mt-1 text-[11px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
             </div>
         </div>
     );

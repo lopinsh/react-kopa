@@ -72,7 +72,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
             onMouseDown={(e) => { if (e.target === e.currentTarget && !isPending) onClose(); }}
         >
             <div role="dialog" aria-modal="true" aria-label={t('newTitle')} className="w-full max-w-md rounded-3xl bg-surface p-5 shadow-2xl">
-                <h2 className="text-lg font-black tracking-tight text-foreground">{t('newTitle')}</h2>
+                <h2 className="text-lg font-semibold tracking-tight text-foreground">{t('newTitle')}</h2>
                 {target.elementText && <p className="mt-1 truncate text-xs text-foreground-muted">{t('about', { text: target.elementText })}</p>}
 
                 <div role="radiogroup" aria-label={t('kindLabel')} className="mt-4 flex flex-wrap gap-2">

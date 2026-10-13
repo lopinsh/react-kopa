@@ -73,7 +73,7 @@ export default function MemberMoreModal({ isOpen, onClose, members, groupId, gro
                                 </span>
                                 <span
                                     className={clsx(
-                                        "text-[10px] font-bold uppercase tracking-wider",
+                                        "text-[11px] font-bold ",
                                         role === 'OWNER' ? 'text-foreground' : 'text-primary'
                                     )}
                                 >

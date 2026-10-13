@@ -92,7 +92,7 @@ export default function GroupInfoDrawer({
                             >
                                 <Menu className="h-5 w-5" />
                             </div>
-                            <h2 className="text-[11px] font-bold uppercase tracking-wider text-foreground">
+                            <h2 className="text-[11px] font-bold text-foreground">
                                 {c_common('groupMenu')}
                             </h2>
                         </div>
@@ -119,7 +119,7 @@ export default function GroupInfoDrawer({
                     <div className="border-t border-border/50 p-4 bg-background/20">
                         <button
                             onClick={onClose}
-                            className="w-full rounded-xl bg-surface-elevated py-3 text-[10px] font-black uppercase tracking-[0.2em] text-foreground shadow-card hover:bg-white/5 transition-all active:scale-[0.98] border border-border/50"
+                            className="w-full rounded-xl bg-surface-elevated py-3 text-[11px] font-semibold text-foreground shadow-card hover:bg-white/5 transition-all active:scale-[0.98] border border-border/50"
                         >
                             {c_common('closeDrawer')}
                         </button>

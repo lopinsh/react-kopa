@@ -75,7 +75,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
 
             <div className="grid gap-6 md:grid-cols-2">
                 <div>
-                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-foreground-muted">{t('fieldTitle')}</label>
+                    <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
                     <input
                         type="text"
                         lang={lang}
@@ -87,7 +87,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                 </div>
 
                 <div>
-                    <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-foreground-muted">{t('fieldVisibility')}</label>
+                    <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldVisibility')}</label>
                     <div className="flex gap-2">
                         {(['PUBLIC', 'MEMBERS_ONLY'] as const).map((v) => {
                             const Icon = v === 'PUBLIC' ? Globe : Lock;
@@ -109,12 +109,12 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                             );
                         })}
                     </div>
-                    {isFirst && <span className="mt-1 inline-block text-[10px] text-foreground-muted">{t('homeVisibilityWarning')}</span>}
+                    {isFirst && <span className="mt-1 inline-block text-[11px] text-foreground-muted">{t('homeVisibilityWarning')}</span>}
                 </div>
             </div>
 
             <div className="space-y-2" lang={lang}>
-                <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-foreground-muted">{t('fieldContent')}</label>
+                <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldContent')}</label>
                 <RichTextEditor
                     key={`${lang}-${rev}`}
                     value={text.content}

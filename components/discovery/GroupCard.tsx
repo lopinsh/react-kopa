@@ -88,7 +88,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                 {/* Overlay Tags */}
                 <div className="absolute bottom-3 left-3 right-3 flex flex-wrap gap-2">
                     {group.city && (
-                        <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[10px] font-black uppercase tracking-wider text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
+                        <span className="rounded-md bg-black/40 backdrop-blur-md px-2 py-1 text-[11px] font-semibold text-white border border-white/20 shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center gap-1.5 leading-none">
                             <MapPin className="h-3 w-3 text-white/90" />
                             <span className="drop-shadow-sm">{cityLabel(tCities, group.city)}</span>
                         </span>
@@ -104,13 +104,13 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                         <span className="h-2 w-2 rounded-full shrink-0" style={{ backgroundColor: accentColor }} />
                         {group.category.parentTitle && (
                             <span
-                                className="flex items-center rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm"
+                                className="flex items-center rounded-md bg-surface-elevated px-1.5 py-0.5 text-[11px] font-bold text-foreground-muted shadow-sm"
                             >
                                 {group.category.parentTitle}
                             </span>
                         )}
                         <span
-                            className="flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                            className="flex items-center rounded-md px-1.5 py-0.5 text-[11px] font-bold shadow-sm"
                             style={{ color: 'white', backgroundColor: accentColor }}
                         >
                             {group.category.title}
@@ -148,7 +148,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                                 {overflowCount > 0 && (
                                     <span className={clsx(
                                         'inline-flex items-center justify-center h-6 min-w-[24px] px-1 rounded-full ring-2 ring-surface',
-                                        'bg-tint text-[9px] font-bold text-foreground-muted'
+                                        'bg-tint text-[11px] font-bold text-foreground-muted'
                                     )}>
                                         +{overflowCount}
                                     </span>

@@ -14,7 +14,7 @@ export default function SlideoverPendingView({ pending, canonicalOptions }: Prop
     return (
         <div className="space-y-6">
             <div>
-                <h3 className="text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-4">{t('pendingTitle')}</h3>
+                <h3 className="text-xs font-semibold text-foreground-muted mb-4">{t('pendingTitle')}</h3>
                 {/* We can just reuse PendingInboxCard which already has the full triage UI */}
                 <PendingInboxCard
                     item={pending}

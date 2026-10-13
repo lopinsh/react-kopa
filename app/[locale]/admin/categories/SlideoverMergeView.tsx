@@ -95,7 +95,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                             />
                             <div className="flex flex-col">
                                 <span className="font-medium text-sm">{item.title}</span>
-                                <span className="text-xs text-foreground-muted uppercase tracking-wider">{item.type}</span>
+                                <span className="text-xs text-foreground-muted">{item.type}</span>
                             </div>
                         </label>
                     ))}

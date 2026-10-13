@@ -32,7 +32,7 @@ export default function ShareEventButton({ title }: Props) {
         <button
             type="button"
             onClick={handleShare}
-            className="flex w-full items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest text-foreground-muted hover:text-foreground transition-colors group/share"
+            className="flex w-full items-center justify-center gap-2 text-[11px] font-semibold text-foreground-muted hover:text-foreground transition-colors group/share"
         >
             <Share2 className="h-3.5 w-3.5 group-hover/share:text-primary transition-colors" />
             {t('shareEvent')}

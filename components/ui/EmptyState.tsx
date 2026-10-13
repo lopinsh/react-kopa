@@ -21,7 +21,7 @@ export default function EmptyState({ icon, title, description, action, className
             <div className="mb-2 flex h-24 w-24 items-center justify-center rounded-full bg-surface-elevated text-foreground-muted opacity-40">
                 {icon}
             </div>
-            <h2 className="mt-6 text-3xl font-black tracking-tight text-foreground">{title}</h2>
+            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground">{title}</h2>
             {description && <p className="mx-auto mt-3 max-w-sm text-lg text-foreground-muted">{description}</p>}
             {action && <div className="mt-6">{action}</div>}
         </div>

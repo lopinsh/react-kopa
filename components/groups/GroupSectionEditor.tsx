@@ -176,7 +176,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div />
-                <div className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-[10px] font-black uppercase tracking-widest text-foreground-muted">
+                <div className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-[11px] font-semibold text-foreground-muted">
                     {t('sections.count', { count: sections.length })}
                 </div>
             </div>
@@ -203,14 +203,14 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                         >
                             <div className="flex items-center gap-4 p-4 md:p-6">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted">
-                                    {index === 0 ? <span className="text-xs font-black">0</span> : <GripVertical className="h-4 w-4" />}
+                                    {index === 0 ? <span className="text-xs font-semibold">0</span> : <GripVertical className="h-4 w-4" />}
                                 </div>
 
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
                                         <h3 lang={section.originalLang} className="font-semibold text-foreground">{original.title}</h3>
                                         {section.visibility === 'MEMBERS_ONLY' && (
-                                            <span className="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium uppercase text-primary">
+                                            <span className="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
                                                 <Lock className="h-2.5 w-2.5" />
                                                 {c_common('visibilityMembersOnly')}
                                             </span>
@@ -280,7 +280,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                         <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                             <Plus className="h-4 w-4" />
                         </div>
-                        <span className="text-xs font-black uppercase tracking-widest">{t('sections.add')}</span>
+                        <span className="text-xs font-semibold">{t('sections.add')}</span>
                     </button>
                 )}
             </div>

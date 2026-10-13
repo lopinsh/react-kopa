@@ -55,7 +55,7 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
                     <h3 className="truncate text-base font-bold text-foreground group-hover:text-primary">
                         {group.name}
                     </h3>
-                    <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-wider text-foreground-muted">
+                    <div className="flex items-center gap-2 text-[11px] font-semibold text-foreground-muted">
                         <span className="shrink-0 rounded-md bg-surface-elevated px-2 py-0.5">
                             {group.category.title}
                         </span>
@@ -73,10 +73,10 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
             <div className="flex shrink-0 items-center justify-between sm:justify-end gap-4 text-xs font-semibold text-foreground-muted ml-6 sm:ml-4">
                 {actionRequired && group.pendingCount && group.pendingCount > 0 && (
                     <div className="flex items-center gap-1.5 rounded-lg bg-danger/10 px-2.5 py-1 text-danger font-bold animate-in zoom-in">
-                        <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] text-danger-foreground">
+                        <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[11px] text-danger-foreground">
                             {group.pendingCount}
                         </span>
-                        <span className="hidden sm:inline text-[10px] uppercase tracking-wider">{t('pendingRequests', { count: group.pendingCount }).replace(/[0-9]+/, '').trim()}</span>
+                        <span className="hidden sm:inline text-[11px]">{t('pendingRequests', { count: group.pendingCount }).replace(/[0-9]+/, '').trim()}</span>
                     </div>
                 )}
 

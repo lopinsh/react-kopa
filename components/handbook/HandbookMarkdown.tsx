@@ -69,7 +69,7 @@ const components: Components = {
             <table className="w-full text-left text-sm">{children}</table>
         </div>
     ),
-    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-xs font-semibold uppercase tracking-wide text-foreground-muted">{children}</th>,
+    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-xs font-semibold text-foreground-muted">{children}</th>,
     td: ({ children }) => <td className="min-w-28 border-b border-border/60 px-4 py-2.5 align-top [tr:last-child_&]:border-0">{children}</td>,
     a: ({ href, children }) => {
         const target = resolveHref(href);

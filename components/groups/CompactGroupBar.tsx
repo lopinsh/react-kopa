@@ -28,7 +28,7 @@ export default function CompactGroupBar({ group, l1Slug }: Props) {
                 <div className="min-w-0 flex-1">
                     <Link
                         href={`/${l1Slug}/group/${group.slug}`}
-                        className="block truncate text-lg font-black leading-tight tracking-tight text-foreground hover:text-primary"
+                        className="block truncate text-lg font-semibold leading-tight tracking-tight text-foreground hover:text-primary"
                     >
                         {group.name}
                     </Link>

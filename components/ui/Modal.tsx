@@ -112,7 +112,7 @@ export default function Modal({
     const drawer = placement === 'right';
     const heading = (
         <div className="min-w-0">
-            <h2 id={titleId} className={clsx(titleClassName ?? (card ? 'text-xl font-black tracking-tight text-foreground sm:text-2xl' : 'text-xl font-bold text-foreground'))}>{title}</h2>
+            <h2 id={titleId} className={clsx(titleClassName ?? (card ? 'text-xl font-semibold tracking-tight text-foreground sm:text-2xl' : 'text-xl font-bold text-foreground'))}>{title}</h2>
             {subtitle}
         </div>
     );

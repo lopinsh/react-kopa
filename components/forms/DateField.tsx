@@ -183,14 +183,14 @@ function MonthGrid({ id, selected, format, prevLabel, nextLabel, onPick, onClose
                 <button type="button" aria-label={prevLabel} onClick={() => { movedByKeyboard.current = false; shift(0, -1); }} className="rounded-lg p-2 text-foreground-muted hover:bg-surface-elevated">
                     <ChevronLeft className="h-4 w-4" />
                 </button>
-                <p aria-live="polite" className="text-sm font-semibold text-foreground first-letter:uppercase">{monthTitle}</p>
+                <p aria-live="polite" className="text-sm font-semibold text-foreground">{monthTitle}</p>
                 <button type="button" aria-label={nextLabel} onClick={() => { movedByKeyboard.current = false; shift(0, 1); }} className="rounded-lg p-2 text-foreground-muted hover:bg-surface-elevated">
                     <ChevronRight className="h-4 w-4" />
                 </button>
             </div>
             <div ref={gridRef} role="grid" className="grid grid-cols-7 gap-0.5 text-center">
                 {weekdays.map((w, i) => (
-                    <span key={i} role="columnheader" className="py-1 text-[11px] font-semibold uppercase text-foreground-muted">{w}</span>
+                    <span key={i} role="columnheader" className="py-1 text-[11px] font-semibold text-foreground-muted">{w}</span>
                 ))}
                 {cells.map((day, i) => {
                     if (!day) return <span key={i} />;

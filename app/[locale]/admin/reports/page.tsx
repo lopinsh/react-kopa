@@ -29,7 +29,7 @@ export default async function AdminReportsPage({
                     <ShieldAlert className="h-6 w-6" />
                 </div>
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-foreground">
+                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">
                         {t('title')}
                     </h1>
                     <p className="text-foreground-muted mt-1">

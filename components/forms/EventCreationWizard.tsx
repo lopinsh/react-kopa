@@ -230,7 +230,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 <form onSubmit={onSubmit} className="p-6 md:p-8">
                     {/* Step Header */}
                     <div className="mb-6">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                        <p className="text-xs font-semibold text-primary">
                             {t('stepOf', { current: step + 1, total: 2 })}
                         </p>
                         <h2 className="mt-1 text-xl font-bold text-foreground">

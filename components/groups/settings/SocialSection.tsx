@@ -18,7 +18,7 @@ export default function SocialSection() {
         >
             <div className="grid gap-8 md:grid-cols-1 max-w-2xl">
                 <div className="space-y-3">
-                    <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
                         <Globe className="h-3 w-3" />
                         {c_common('social_website')}
                     </label>
@@ -35,7 +35,7 @@ export default function SocialSection() {
                 </div>
 
                 <div className="space-y-3">
-                    <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
                         <MessageSquare className="h-3 w-3" />
                         {c_common('social_discord')}
                     </label>
@@ -52,7 +52,7 @@ export default function SocialSection() {
                 </div>
 
                 <div className="space-y-3">
-                    <label className="text-xs font-black uppercase tracking-wider text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
                         <InstagramIcon className="h-3 w-3" />
                         {c_common('social_instagram')}
                     </label>

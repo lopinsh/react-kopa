@@ -48,7 +48,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
         <HandbookShell chapters={chapters} current={null} headings={[]} active="ui-elements" wide>
             <div className="mb-8 flex items-start justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black tracking-tight text-foreground">{t('title')}</h1>
+                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
                     <p className="mt-2 max-w-[70ch] text-foreground-muted">{t('intro')}</p>
                     <p className="mt-2 max-w-[70ch] text-sm text-foreground-muted">{t('sampleNote')}</p>
                 </div>

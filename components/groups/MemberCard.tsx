@@ -172,7 +172,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                         </p>
                     )}
                     <p className={clsx(
-                        "text-[10px] font-black uppercase tracking-widest mt-0.5",
+                        "text-[11px] font-semibold mt-0.5",
                         checkIsOwner(member.role) ? "text-primary" : "text-foreground-muted"
                     )}>
                         {t(`role_${member.role.toLowerCase()}`)}
@@ -237,7 +237,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                         onClick={handleMessage}
                         disabled={isPending}
                         className={clsx(
-                            "flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-border text-[10px] font-bold uppercase tracking-wider text-foreground transition-all",
+                            "flex items-center justify-center gap-2 px-3 py-2 rounded-xl border border-border text-[11px] font-bold text-foreground transition-all",
                             isPending ? "opacity-50 cursor-not-allowed" : "hover:border-primary hover:text-primary bg-surface-elevated"
                         )}
                     >
@@ -253,13 +253,13 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                 {canViewProfile && member.user.username ? (
                     <Link
                         href={`/profile/${member.user.username}`}
-                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[10px] font-bold uppercase tracking-wider text-foreground hover:border-primary hover:text-primary transition-all"
+                        className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated border border-border text-[11px] font-bold text-foreground hover:border-primary hover:text-primary transition-all"
                     >
                         <ExternalLink className="h-3.5 w-3.5" />
                         {c_common('viewProfile')}
                     </Link>
                 ) : (
-                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[10px] font-bold uppercase tracking-wider text-foreground-muted cursor-not-allowed opacity-60">
+                    <div className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-surface-elevated/50 border border-dashed border-border text-[11px] font-bold text-foreground-muted cursor-not-allowed opacity-60">
                         <UserIcon className="h-3.5 w-3.5" />
                         {c_common('private')}
                     </div>

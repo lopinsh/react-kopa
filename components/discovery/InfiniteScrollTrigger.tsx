@@ -44,7 +44,7 @@ export default function InfiniteScrollTrigger({ hasMore, currentLimit, increment
         <div ref={observerTarget} className="py-12 flex justify-center w-full">
             <div className="flex items-center gap-3 text-foreground-muted animate-pulse">
                 <Loader2 className="h-5 w-5 animate-spin" />
-                <span className="text-sm font-medium tracking-wide font-mono uppercase">{t('loadingMore')}</span>
+                <span className="text-sm font-medium font-mono">{t('loadingMore')}</span>
             </div>
         </div>
     );

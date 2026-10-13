@@ -31,7 +31,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
             variant="card"
             size="sm"
             title={title}
-            titleClassName="text-lg font-black tracking-tight text-foreground"
+            titleClassName="text-lg font-semibold tracking-tight text-foreground"
             headerClassName="mb-2"
             describedBy={messageId}
             hideClose
@@ -47,7 +47,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
                     type="button"
                     onClick={onCancel}
                     disabled={isPending}
-                    className="rounded-xl px-5 py-3 text-[10px] font-black uppercase tracking-[0.15em] text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
+                    className="rounded-xl px-5 py-3 text-[11px] font-semibold text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
                 >
                     {tCommon('cancel')}
                 </button>
@@ -55,7 +55,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
                     type="button"
                     onClick={onConfirm}
                     disabled={isPending}
-                    className={`flex items-center gap-2 rounded-full px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] shadow-xl transition-all active:scale-95 disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
+                    className={`flex items-center gap-2 rounded-full px-6 py-3 text-[11px] font-semibold shadow-xl transition-all active:scale-95 disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
                 >
                     {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
                     {confirmLabel}

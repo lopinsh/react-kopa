@@ -17,7 +17,7 @@ export default async function AboutPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <h1 className="text-4xl font-black tracking-tight text-foreground">{t('about.title')}</h1>
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground">{t('about.title')}</h1>
             <p className="mt-4 text-xl font-medium text-foreground">{t('about.lead')}</p>
             <ul className="mt-8 space-y-5 leading-relaxed">
                 {POINTS.map((key) => (

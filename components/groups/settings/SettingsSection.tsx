@@ -13,7 +13,7 @@ export default function SettingsSection({ title, description, icon: Icon, childr
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div>
-                <h3 className="text-xl font-black text-foreground mb-1 flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-foreground mb-1 flex items-center gap-2">
                     <Icon className="h-6 w-6 text-primary" />
                     {title}
                 </h3>

@@ -51,7 +51,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
 
     const section = (title: string, count: number, empty: string, items: React.ReactNode[]) => (
         <div className="space-y-1">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground-muted">
+            <h4 className="text-[11px] font-semibold text-foreground-muted">
                 {title} · {count}
             </h4>
             {items.length > 0 ? (
@@ -65,7 +65,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
     return (
         <div className="space-y-5 rounded-3xl border border-border bg-surface p-6 shadow-sm">
             <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-black uppercase tracking-widest text-foreground">{t('organiserTitle')}</h3>
+                <h3 className="text-sm font-semibold text-foreground">{t('organiserTitle')}</h3>
                 {isPending && <Loader2 className="h-4 w-4 animate-spin text-foreground-muted" />}
             </div>
 

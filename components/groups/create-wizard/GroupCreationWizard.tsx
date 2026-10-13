@@ -185,13 +185,13 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 >
                     {/* Step Header */}
                     <div className="mb-8">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                        <p className="text-xs font-semibold text-primary">
                             {t('stepOf', { current: step + 1, total: STEP_COUNT })}
                         </p>
                         <h2
                             ref={titleRef}
                             tabIndex={-1}
-                            className="mt-2 text-3xl font-black tracking-tight text-foreground outline-none"
+                            className="mt-2 text-3xl font-semibold tracking-tight text-foreground outline-none"
                         >
                             {t(STEP_TITLE_KEYS[step])}
                         </h2>

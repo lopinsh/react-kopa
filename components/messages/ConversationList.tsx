@@ -89,14 +89,14 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                         </div>
                         <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between">
-                                <span className={clsx('truncate text-sm', conv.unread ? 'font-black' : 'font-bold')}>{titleOf(conv)}</span>
+                                <span className={clsx('truncate text-sm', conv.unread ? 'font-semibold' : 'font-bold')}>{titleOf(conv)}</span>
                                 {conv.lastMessage && (
-                                    <span className="ml-2 whitespace-nowrap text-[10px] text-foreground-muted">
+                                    <span className="ml-2 whitespace-nowrap text-[11px] text-foreground-muted">
                                         {messageTime(conv.lastMessage.createdAt, 'list')}
                                     </span>
                                 )}
                             </div>
-                            {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[10px]" />}
+                            {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[11px]" />}
                             <p className={clsx('truncate text-xs', conv.unread ? 'font-semibold text-foreground' : 'text-foreground-muted')}>
                                 {conv.isBlocked ? (
                                     <span className="flex items-center gap-1 italic text-danger"><Ban className="h-3 w-3" /> {t('blocked')}</span>

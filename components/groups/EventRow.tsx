@@ -60,8 +60,8 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                     'flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl',
                     isPast ? 'bg-surface-elevated text-foreground-muted' : 'bg-[var(--accent)]/10 text-[var(--accent)]'
                 )}>
-                    <span className="text-xl font-black leading-none">{formatter.dateTime(start, { day: 'numeric' })}</span>
-                    <span className="mt-0.5 text-[10px] font-black uppercase">{formatter.dateTime(start, { month: 'short' })}</span>
+                    <span className="text-xl font-semibold leading-none">{formatter.dateTime(start, { day: 'numeric' })}</span>
+                    <span className="mt-0.5 text-[11px] font-semibold">{formatter.dateTime(start, { month: 'short' })}</span>
                 </div>
 
                 <div className="min-w-0 flex-1 space-y-1">
@@ -114,11 +114,11 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                     {isRequest && event.canManage ? (
                         <Link
                             href={href}
-                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-xs font-black uppercase tracking-wide text-foreground hover:border-primary"
+                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface-elevated px-3 py-2 text-xs font-semibold text-foreground hover:border-primary"
                         >
                             {t('manage')}
                             {event.pendingCount > 0 && (
-                                <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] text-primary-foreground">
+                                <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] text-primary-foreground">
                                     {t('requestsWaiting', { count: event.pendingCount })}
                                 </span>
                             )}

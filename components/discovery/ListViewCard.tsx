@@ -48,12 +48,12 @@ export default function ListViewCard({ group, accentColor: globalAccentColor }: 
                 </h3>
                 <div className="hidden shrink-0 items-center gap-1.5 sm:flex">
                     {group.category.parentTitle && (
-                        <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground-muted shadow-sm">
+                        <span className="rounded-md bg-surface-elevated px-1.5 py-0.5 text-[11px] font-bold text-foreground-muted shadow-sm">
                             {group.category.parentTitle}
                         </span>
                     )}
                     <span
-                        className="rounded-md px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                        className="rounded-md px-1.5 py-0.5 text-[11px] font-bold shadow-sm"
                         style={{ color: 'white', backgroundColor: accentColor }}
                     >
                         {group.category.title}
@@ -64,7 +64,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor }: 
             {/* Metadata (Right aligned) */}
             <div className="ml-4 flex shrink-0 items-center justify-end gap-4 text-xs font-semibold text-foreground-muted">
                 {group.city && (
-                    <div className="hidden items-center gap-1 sm:flex uppercase tracking-wide">
+                    <div className="hidden items-center gap-1 sm:flex">
                         <MapPin className="h-3.5 w-3.5" />
                         {cityLabel(tCities, group.city)}
                     </div>

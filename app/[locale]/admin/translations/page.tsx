@@ -32,7 +32,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                         <Languages className="h-6 w-6" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight text-foreground">{t('title')}</h1>
+                        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
                         <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
                     </div>
                 </div>
@@ -78,7 +78,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                     <p className="mb-3 text-sm font-semibold text-foreground-muted">{t('count', { count: rows.length })}</p>
                     <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
                         <table className="w-full min-w-[40rem] text-left text-sm">
-                            <thead className="border-b border-border text-xs uppercase tracking-wide text-foreground-muted">
+                            <thead className="border-b border-border text-xs text-foreground-muted">
                                 <tr>
                                     <th className="px-4 py-3">{t('key')}</th>
                                     <th className="px-4 py-3">{t('language')}</th>
@@ -91,7 +91,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                                 {rows.map((row) => (
                                     <tr key={`${row.key}:${row.lang}`} className="border-b border-border/60 last:border-0">
                                         <td className="break-all px-4 py-3 font-mono text-xs">{row.key}</td>
-                                        <td className="px-4 py-3 uppercase">{row.lang}</td>
+                                        <td className="px-4 py-3">{row.lang}</td>
                                         <td className="px-4 py-3">{row.value}</td>
                                         <td className="px-4 py-3 text-foreground-muted">{row.updatedBy ?? ''}</td>
                                         <td className="whitespace-nowrap px-4 py-3 text-foreground-muted">{format.dateTime(row.updatedAt, { dateStyle: 'medium', timeStyle: 'short' })}</td>

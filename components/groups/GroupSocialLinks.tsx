@@ -41,7 +41,7 @@ export default function GroupSocialLinks({
 
     return (
         <div className="pt-4 mt-6 border-t border-white/[0.05]">
-            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40 mb-3 ml-1">
+            <div className="text-[11px] font-semibold text-foreground/40 mb-3 ml-1">
                 {c_common('tabSocial')}
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-2">

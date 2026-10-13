@@ -136,7 +136,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
             {item.groups.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-border">
-                    <p className="text-xs font-semibold text-foreground-muted uppercase tracking-wider mb-2">{t('usedByGroups')}</p>
+                    <p className="text-xs font-semibold text-foreground-muted mb-2">{t('usedByGroups')}</p>
                     <div className="flex flex-wrap gap-2">
                         {item.groups.map(g => (
                             <Link

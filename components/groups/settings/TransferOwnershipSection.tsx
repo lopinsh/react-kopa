@@ -53,7 +53,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                 ) : (
                     <div className="max-w-xl space-y-4">
                         <div className="space-y-2">
-                            <label htmlFor="transfer-target" className="ml-1 text-xs font-black uppercase tracking-wider text-foreground-muted">
+                            <label htmlFor="transfer-target" className="ml-1 text-xs font-semibold text-foreground-muted">
                                 {t('transferSelectLabel')}
                             </label>
                             <select

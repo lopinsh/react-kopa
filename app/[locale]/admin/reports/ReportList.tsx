@@ -68,7 +68,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                 <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-success/10 text-success">
                     <CheckCircle2 className="h-10 w-10" />
                 </div>
-                <h2 className="mt-8 text-2xl font-black text-foreground">
+                <h2 className="mt-8 text-2xl font-semibold text-foreground">
                     {t('allClear')}
                 </h2>
                 <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
@@ -108,7 +108,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
 
                             <div className="grid sm:grid-cols-2 gap-4 rounded-xl bg-surface-elevated p-4 border border-border">
                                 <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">{t('reportedEntity')}</p>
+                                    <p className="text-xs font-bold text-foreground-muted mb-1">{t('reportedEntity')}</p>
                                     {report.group && (
                                         <div className="flex items-center gap-2">
                                             <Users className="h-4 w-4 text-primary" />
@@ -130,7 +130,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     )}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold uppercase tracking-wider text-foreground-muted mb-1">{t('reportedByLabel')}</p>
+                                    <p className="text-xs font-bold text-foreground-muted mb-1">{t('reportedByLabel')}</p>
                                     <div className="flex items-center gap-2">
                                         <img src={avatarUrl(report.reporter)} alt="" className="h-6 w-6 rounded-full object-cover" referrerPolicy="no-referrer" />
                                         <span className="text-sm font-medium text-foreground">{report.reporter.name || t('anonymousUser')}</span>
