@@ -1,12 +1,13 @@
 {
-  "version": "9.7",
-  "updated": "2026-10-13T18:00:00+03:00",
+  "version": "9.7.1",
+  "updated": "2026-10-13T19:00:00+03:00",
   "changes": [
+    "9.7.1, after an independent review: the weekend tint and the phone date sheet (quick choices above the month) are marked as my proposals; the Vēja zirdžiņš announcement names its date.",
     "9.7, your notes of 13 October, afternoon. Approved and marked so in the Agreed rules: the filter line, \"+3\" opening the Veids list, the search's look and its theme chips, and \"Pieteikums nosūtīts\" + \"Atvērt sarunu\" after asking to join.",
     "Veids: \"+N\" is the way into the Veids list (search, tick boxes, several at once); your later note answered the \"more than 8\" idea, so there is no separate \"Veids\" button and no limit.",
     "Pasākumi opens on \"Šonedēļ\"; \"Šodien\" looks chosen only after it is tapped (the proposal to mark it is dropped).",
     "Weeks start on Monday, Saturday and Sunday are tinted, in every day strip and calendar (the tint is my proposal). The page's \"today\" is Monday 12 October 2026, so every sample date and weekday is real.",
-    "The calendar is a month only: Šodien, Šonedēļ and Nedēļas nogalē are on the filter line, not repeated inside it. On phones the one date button still opens them in its sheet, above the month.",
+    "The calendar is a month only: Šodien, Šonedēļ and Nedēļas nogalē are on the filter line, not repeated inside it. On phones (my proposal) the one date button opens them in its sheet, above the month.",
     "Search: your question \"How would the categories be selected?\" is answered next to the drawings; recommended (Proposal): one theme at a time, like Tēma.",
     "Notes now also name the viewport for the drop-down drawings, and the filter buttons and Veids line carry their own names.",
     "9.6.2, no change to what you see: every drawn element now carries its template name and every drawing its viewport, caption and section, so feedback notes on this page say which \"Šodien\" (or which card) they are about.",
@@ -30,8 +31,7 @@
     "The overlaps are fixed at the root: on phones the filter row scrolls sideways, and a chip that didn't fit was cut off hard at the Grupas | Pasākumi switch. The one scroller (filter row, chosen line, search chips) now fades it out before the edge.",
     "Checked at 375, 1280, 1440, 1600, 1680 and 1920 px, light and dark: no chip or filter overlaps another, no text overflows its chip.",
     "The filter row is \"Liked, awaiting approval\": the sub-category appears only once a category is chosen (the drop-down drawings now show the chosen category too); Šodien, Rīt, Šonedēļ, Nedēļas nogalē and the range always sit on one line, also in the calendar.",
-    "The day strip has no arrows (a day is tapped directly); the calendar's month arrows sit right next to the month's name; \"Rādīt nākamo nedēļu\" is a plain text link.",
-    "\"Citur\" instead of \"Citur Latvijā\" everywhere. The place list, the sub-category list, the calendar, the group cards and the toggle are tagged as liked."
+    "The day strip has no arrows (a day is tapped directly); the calendar's month arrows sit right next to the month's name; \"Rādīt nākamo nedēļu\" is a plain text link."
   ],
   "sections": {
     "h-rules": {
@@ -52,7 +52,7 @@
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.7.1"
     },
     "h-search": {
       "kind": "updated",
