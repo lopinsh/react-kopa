@@ -50,7 +50,7 @@ export default async function GroupEventsPage({
     const isOwnerOrAdmin = group.user.isAdmin;
     const base = `/${l1Slug}/group/${groupSlug}`;
 
-    // Gaidāmie and Pagājušie only; any other value (the old ?tab=my-rsvps) shows Gaidāmie.
+    // Gaidāmie and Pagājušie only; any other value (an old link to "Mani pasākumi") shows Gaidāmie.
     const currentTab = tab === 'past' ? 'past' : 'upcoming';
     const filteredEvents = eventsData.filter((event) => isEventPast(event) === (currentTab === 'past'));
 

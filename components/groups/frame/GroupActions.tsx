@@ -47,13 +47,14 @@ export default function GroupActions() {
 
     const openContact = useCallback(() => gateAction(() => setDialog('join'), 'join_group'), [gateAction]);
 
-    // After signing in, the contact form opens once. The stored URL keeps the locale prefix, which next-intl's pathname drops.
+    // After signing in, the contact form opens once. The sign-in pop-up ends in a full page load, so the form waits for that load
+    // (the pop-up is closed then) instead of opening under the pop-up and being lost. The stored URL keeps the locale prefix, which next-intl's pathname drops.
     useEffect(() => {
-        if (isAuthenticated && pendingAction === 'join_group' && pendingUrl === window.location.pathname) {
+        if (!isModalOpen && isAuthenticated && pendingAction === 'join_group' && pendingUrl === window.location.pathname) {
             clearPendingAction();
             if (isVisitor) openContact();
         }
-    }, [isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, openContact, isVisitor]);
+    }, [isModalOpen, isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, openContact, isVisitor]);
 
     const withdraw = () => {
         setCancelOpen(false);

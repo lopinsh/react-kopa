@@ -447,7 +447,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
 | R2a Header, menus, own area | built; Opus review done, ready to push | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
 | R2b Behaviour pieces | built; Opus review done, ready to push | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
-| R3a Group frame | spec written | [specs/R3a.md](specs/R3a.md) | |
+| R3a Group frame | built; awaiting Opus review | [specs/R3a.md](specs/R3a.md) | `71c397b`..`5413a75` + close-out commit |
 | R3b Sazināties, pending, "…" | not started | | |
 | R4 Discovery data | not started | | |
 | R5a Discovery filters and cards | not started | | |
