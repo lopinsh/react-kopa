@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { Calendar, Search } from 'lucide-react';
+import { Calendar, Check, Search } from 'lucide-react';
 import AccentScope from '@/components/handbook/AccentScope';
+import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/IdentitySpecimens';
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
@@ -22,7 +23,9 @@ import SettingsTabs from '@/components/groups/SettingsTabs';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import Badge from '@/components/ui/Badge';
 import Button, { buttonClass } from '@/components/ui/Button';
+import CategoryLine from '@/components/ui/CategoryLine';
 import EmptyState from '@/components/ui/EmptyState';
+import RoleTag from '@/components/ui/RoleTag';
 import { UI } from '@/lib/constants';
 import { requireHandbookAccess } from '@/lib/handbook-access';
 import { buildUiSamples } from '@/lib/handbook/ui-samples';
@@ -39,6 +42,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
     await requireHandbookAccess(locale, '/admin/handbook/ui-elements');
 
     const t = await getTranslations('admin.handbook.ui');
+    const tTag = await getTranslations('common.tag');
     const chapters = await HandbookService.listChapters();
     const samples = buildUiSamples((key) => t(`sample.${key}`), locale);
     const { group, memberGroupContext } = samples;
@@ -59,22 +63,44 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
             </div>
 
             <div className="space-y-12">
-                <UiSpecimen id="buttons" names={[UI.buttonPrimary, UI.buttonSecondary, UI.buttonDanger]} files={['components/ui/Button.tsx']}>
+                <UiSpecimen id="logo" names={[UI.logo]} files={['components/ui/Logo.tsx', 'app/icon.svg']}>
+                    <LogoSamples />
+                </UiSpecimen>
+
+                <UiSpecimen id="type" names={[]} files={['app/globals.css', 'lib/theme-fonts.ts']}>
+                    <TypeSamples />
+                </UiSpecimen>
+
+                <UiSpecimen id="colours" names={[UI.categoryDisc]} files={['app/globals.css', 'lib/constants/theme.ts', 'components/ui/CategoryIcon.tsx']}>
+                    <ColourSamples />
+                </UiSpecimen>
+
+                <UiSpecimen id="buttons" names={[UI.buttonPrimary, UI.buttonSecondary, UI.buttonQuiet, UI.buttonDanger]} files={['components/ui/Button.tsx']}>
                     <div className="flex flex-wrap items-center gap-3">
                         <Button>{t('buttonPrimary')}</Button>
                         <Button variant="secondary">{t('buttonSecondary')}</Button>
+                        <Button variant="quiet">{t('buttonQuiet')}</Button>
                         <Button variant="danger">{t('buttonDanger')}</Button>
+                        <Button size="sm">{t('buttonSmall')}</Button>
                         <Button disabled>{t('buttonWorking')}</Button>
                         <a href="#buttons" className={buttonClass('primary')}>{t('buttonLink')}</a>
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="badges" names={[UI.badge]} files={['components/ui/Badge.tsx']}>
+                <UiSpecimen id="tags" names={[UI.badge, UI.roleTag]} files={['components/ui/Badge.tsx', 'components/ui/RoleTag.tsx']}>
                     <AccentScope color={samples.accent} className="flex flex-wrap items-center gap-2">
+                        <Badge><Check aria-hidden />{tTag('going')}</Badge>
+                        <RoleTag role="OWNER" />
+                        <RoleTag role="ADMIN" />
+                        <RoleTag role="PENDING" />
                         <Badge tone="muted">{t('sample.badgeMembers')}</Badge>
                         <Badge tone="muted">{t('sample.badgeRequest')}</Badge>
                         <Badge tone="outline">{t('sample.badgeFull')}</Badge>
                     </AccentScope>
+                </UiSpecimen>
+
+                <UiSpecimen id="categoryLine" names={[UI.categoryLine]} files={['components/ui/CategoryLine.tsx']}>
+                    <CategoryLine color={samples.accent} category={t('sample.parentCategory')} subCategories={t('sample.subCategories').split(', ')} />
                 </UiSpecimen>
 
                 <UiSpecimen id="chips" names={[UI.filterChip]} files={['components/ui/FilterChip.tsx']}>

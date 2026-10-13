@@ -1,116 +1,126 @@
 # Design
 
-> **Draft:** the coherent look is being designed with the user (2026-10-10). The structure below (layouts, screen map, foundations, components) is the current proposal; the visual direction may change.
-
-UI work follows this chapter. A new screen picks one of the page layouts and uses the components below; it does not invent its own.
+UI work follows this chapter. A new screen picks one of the page layouts and uses the components below; it does not invent its own. The drawings are on the [redesign page](/admin/development/redesign); a rule id like `AR-06` points to its entry there. The real components are on [UI elements](/admin/handbook/ui-elements).
 
 ## Page layouts
 
-Six layouts cover every screen. A new screen picks one of them; it doesn't invent a seventh.
+Five layouts cover every screen. A new screen picks one of them.
 
 | Layout | Name | Used for |
 |---|---|---|
-| A | Browse | Category rail + filters + grid or list. Discovery, my groups. |
-| B | Group home | Full banner header + group sidebar. Only the Information page. |
-| C | Group page | Slim bar + page title + sub-tabs + content. Every other group page. |
+| A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. A notes the filter line and category drawer (R5a). |
+| B | Group page | Banner (96 px, the group's image or its tone) and the group's pages down the left (a ☰ drawer on phones). Every group page, from R3a (AR-47, AR-48). |
 | D | Focus | One centred column, max 560 px, no sidebar. Sign-in, register, wizards, onboarding. |
 | E | Two panes | List + detail; on mobile one at a time with a back link. Messages. |
 | F | Reading | Text column, max 680 px. About, privacy, profiles. Admin uses F with tables. |
 
-### C · Group page, the frame every group page shares
-
-Slim bar → page title (with the page's one action on the right) → sub-tabs if any → content at one width (max 760 px). Same positions on Events, Members, Announcements and Settings.
-
-On desktop the group sidebar sits to the left (Informācija, Pasākumi, Jaunumi, Biedri). On phones the slim bar is compact (photo, name, category · city · members, the "…" menu) and the bottom navigation (Atklāt, Grupas, +, Ziņas, Es) replaces the sidebar.
-
-Rule: only a group's Information page has the full banner header. Every other group page uses the slim bar, so the group's own content starts near the top. The slim bar always carries the at-a-glance signals (photo, name, category, city, members) and the same Join / Contact button as the full header, so a visitor who lands on an event page still knows whose event it is and can join.
+Rule: the group's own content starts near the top. The banner carries the at-a-glance signals (name, category, city, members) and the same Join / Contact button on every group page.
 
 ## Every screen and its layout
 
-The screen list from the screen review (see the screen map in `docs/execution_handoff.md`), with the layout each screen should use. "Change" marks screens that don't follow it yet.
+"Today" names the release of the build plan (`docs/development/build-plan.md`) that brings the screen to its drawing; until then it keeps its old layout with the new colours, fonts and tags.
 
 | Step | Screen | Layout | Today |
 |---|---|---|---|
-| Find | Discovery: groups and events | A | follows |
-| Find | My groups | A | change: own layout today |
-| Create | Create group wizard | D | follows |
-| Join | Group Information | B | follows |
-| Join | Join / Contact pop-up, sign-in pop-up | pop-up | follows (2.4b) |
-| Join | Sign in, register, onboarding | D | follows |
-| Talk | Announcements | C | change: 2.4d + 2.22 |
-| Talk | Messages | E | follows (2.4b) |
-| Talk | Notifications | panel | follows |
-| Group life | Members, Requests | C | change: full header today |
-| Group life | Events tab | C | change: no page title |
-| Group life | Event page | C | change: own hero (3.3) |
-| Group life | Create / edit event | C | change: picker (2.22) |
-| Group life | Group settings (Group · Sections · Owner) | C | change: 3 tabs (2.22) |
-| Me | Own and public profile | F | change: header seam (2.14i) |
-| Me | Edit profile | D | check |
-| Static | About, privacy, 404 | F | follows |
-| Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | check |
+| Find | Discovery: groups and events | A | R5a, R5b |
+| Find | Manas grupas | A | R8 |
+| Create | Create group wizard | D | R4, R12 |
+| Join | Group Informācija | B | R3a |
+| Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b |
+| Join | Sign in, register, onboarding | D | R12 |
+| Talk | Jaunumi | B | R9b |
+| Talk | Messages | E | R8 |
+| Talk | Notifications | panel | R8 |
+| Group life | Biedri, Requests | B | R9b |
+| Group life | Pasākumi tab | B | R3a, R5b |
+| Group life | Event page | B | R9a |
+| Group life | Create / edit event | B | R4, R9a |
+| Group life | Group settings | B | R4, R9b |
+| Me | Own and public profile | F | R2a, R9b |
+| Me | Edit profile | D | R9b |
+| Static | About, privacy, 404 | F | R12 |
+| Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | R11 |
 
 ## Foundations
 
-Few values, used everywhere. Today the code has 11 corner roundings, 6 heading sizes and 4 font weights; this cuts them to the set below.
+Few values, used everywhere. The tokens live in `app/globals.css`; the site theme (`/admin/design`) sets the same names on the server, so the first paint is already right.
 
 ### Colour
 
-Neutrals carry the page. Colour means something: **category colour** inside a group, **indigo** for the site's own actions, and three status colours. No other colours, no hardcoded `red-500`.
+Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colour** (Sūna, a moss green) is for buttons and links, a **category tone** marks a category, and three status colours say danger, success and warning. No other colours, no hardcoded `red-500`, no hex in components.
 
-| Role | Token |
-|---|---|
-| Background | `--background` |
-| Surface | `--surface` |
-| Text | `--foreground` |
-| Quiet text | `--foreground-muted` |
-| Site action (indigo) | `--primary` |
-| Group (L1 category colour) | `--accent` |
-| Danger | `--danger` (new) |
-| Success | `--success` (new) |
-| Warning | `--warning` (new) |
+| Role | Token | Light | Dark |
+|---|---|---|---|
+| Background | `--background` | `#f4f4ef` | `#161814` |
+| Surface (cards, panels) | `--surface` | `#fdfdfb` | `#1e211c` |
+| Tint (quiet fill, hover, weekends) | `--tint` | `#e8eae1` | `#282c25` |
+| Line | `--border` | `#dcdfd4` | `#353a31` |
+| Text | `--foreground` | `#1f221c` | `#eceee7` |
+| Quiet text | `--foreground-muted` | `#5f6558` | `#a8ae9f` |
+| Site colour | `--primary` | `#4B5E3B` | `#b5c79e` |
+| Text on the site colour | `--primary-foreground` | `#ffffff` | `#111111` |
+| Category tone | `--accent` (set by the group page from `--cat-<slug>`) | tone | tone |
+| Text on a tone | `--on-cat` | `#ffffff` | `#161814` |
+| Danger | `--danger` | `#A63A2E` | `#EE9A8E` |
+| Success | `--success` | `#3D6B34` | `#9CCB8C` |
+| Warning | `--warning` | `#8A5B0B` | `#E2B65A` |
+
+**Colour means category (AR-06).** A category tone appears only on dots, category icons, soft tints (up to 15 %), the group banner and the picture fallback. Every button, link, active tab, toggle, checkbox, focus ring and selected chip uses the site colour. Filled colours carry their own text colour (`text-primary-foreground`, `--on-cat`), never `text-white`, because the dark site colour is light.
+
+**The 15 category tones (AR-05)** each have a light and a dark value; they are listed with names on the [redesign page](/admin/development/redesign#h-id) and shown on UI elements. Category tones are part of the site theme, per mode.
+
+**Contrast floor.** Text is AA (4.5:1) on every surface in both modes. A tone is at least 4.5:1 with white (light) and 7:1 with near-black (dark). The line colour is a divider, never the only sign of a control.
 
 ### Type
 
-Geist, three weights (400, 600, 700). No black weight.
+Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900.
 
-| Role | Size / weight | Example |
-|---|---|---|
-| Page title | 24 / 700 | Pasākumi |
-| Section | 18 / 600 | Par mums |
-| Item title | 15 / 600 | Ķemeru purva taka |
-| Body | 15 / 400 | Satiekamies pie stacijas, ejam apmēram 12 km. |
-| Small | 13 / 400 | Sestdien 10:00 · Ķemeri · 6 piedalās |
-| Label | 11 / 600 caps | Only for table headers |
+| Role | Font | Size / weight | Example |
+|---|---|---|---|
+| Page title | Literata | 28 / 600 | Pasākumi |
+| Section | Literata | 21 / 600 | Par mums |
+| Item title | Literata | 15–17 / 600 | Ķemeru purva taka |
+| Body | Commissioner | 15–16 / 400, line 1.6 | Satiekamies pie stacijas. |
+| Button | Commissioner | 15 / 500 (small 14) | Pievienoties |
+| Small, meta | Commissioner | 13 / 400–500 | Sestdien 10:00 · Ķemeri |
+| Tag | Commissioner | 11 / 600 | Eju |
+| Human note | Commissioner italic | 14 / 400, site colour | Nākamā tikšanās: sestd., 17. okt. |
+
+Nothing is smaller than 11 px.
 
 ### Shape
 
-Three roundings: 8 px for buttons and fields, 16 px for cards and pop-ups, round for chips and avatars.
+Pill buttons, chips, tags, avatars and the search field (AR-08). Cards, panels, pop-ups and boxes 16 px. Inputs, menu items and toasts 12 px; an event row's hover 8 px. Cards have no border: a surface on the background. Thin lines divide rows.
 
 ### Space and depth
 
 - 4 px grid. Page sides 16 px (phone), 24–32 px (desktop).
 - Content widths: 760 group pages, 680 reading, 560 focus, 1200 browse.
 - Gaps: 8 inside a row, 12–16 between items, 24–32 between sections.
-- Shadows: soft card shadow on cards; the stronger float shadow only on things above the page (menus, pop-ups, header). None in dark mode.
+- Cards are flat. The float shadow (`shadow-premium`) is only for things above the page: menus, drop-downs, pop-overs, toasts, drawers. Dialogs use `shadow-dialog`. Shadows are the same in dark mode.
+
+## Identity
+
+- **Logo (AR-03).** "Ejam *kopā*" in Literata, the site colour, with two overlapping circles (the second at 45 %). Phones use the smaller size. The favicon is the two circles. The brand is written "Ejam kopā".
+- **Small tags (AR-09).** 11 px, a pill, sentence case, never clickable, never in a category tone. A tag with a tick says "Eju"; roles say "Īpašnieks", "Mod" and, outlined, "Gaida". A plain member has no tag. Quiet facts ("Tikai biedriem") are grey.
+- **Category line.** The category with a tone dot, then its sub-categories in quiet text, on one wrapping line.
+- **Words and numbers (AR-10).** Sentence case everywhere, table headers included: no capitals, no letter-spacing. Numbers in text are plain digits.
+- **Dates (AR-11).** With the weekday: "Svētd., 18. okt." and "Svētd., 18. okt. 17:00", English "Sun, 18 Oct, 17:00". 24-hour time in the viewer's zone. Latvian weekdays are capitalised at the start of a line.
 
 ## Components
 
 One component per job, in `components/ui/`. Pages use these and don't restyle them.
 
-- **Button.** Primary is filled, one per area. Inside a group it takes the group colour; elsewhere indigo. Variants: primary, site primary, secondary, plain, danger (text), working (disabled, "Sūta…"). A filled red button appears only inside the delete dialog.
-- **Chips and badges.** Chips filter (clickable). Badges label (not clickable). Examples: chips "Visas", "Personīgās", "Grupu"; badges "Pārgājieni" (category), "Tikai biedriem", "Pieteikšanās", "Pilns".
-- **Form field.** Label above, input, optional help text below; an error replaces the help text, in red, under the field.
-- **Pop-up.** One shell: title + close, body, buttons right. On phones it opens as a sheet from the bottom. Example: "Dzēst jaunumu?" with Atcelt and Dzēst.
+- **Button.** Pill. Primary (filled, one per area), secondary (tint), quiet (ring), danger. Sizes md (44 px on phones, 40 from `md`) and sm (32 px). Always the site colour, never the group's.
+- **Badge and RoleTag.** Badge is the small tag: tone `tag`, `outline` or `muted`. RoleTag shows Īpašnieks, Mod or Gaida and nothing for a member.
+- **FilterChip.** Filters (clickable). Off: surface with a ring. On: site colour tint with a stronger ring.
+- **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.
+- **Logo.** Wordmark in two sizes, or the circles only.
+- **Form field.** Label above, input, optional help text below; an error replaces the help text, in the danger colour, under the field.
+- **Pop-up.** One shell: title + close, body, buttons right. On phones it opens as a sheet from the bottom.
 - **Announcement card.** Meta line (when, who), bold title, short text.
-- **Empty state.** Outline icon, one sentence, at most one action. Example: "Vēl nav ziņu".
+- **Empty state.** Outline icon, one sentence, at most one action.
 
-The real components, as they look today, with their `data-ui` names and file paths, are shown on the admin page `/admin/handbook/ui-elements` (the last entry in the Handbook's chapter list).
+R2b updates form fields, pop-ups and empty states.
 
-Also one each: sub-tabs (underline), the "…" menu, toast, skeleton, avatar, the slim bar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
-
-## Undecided
-
-1. **Primary button colour inside a group.** Draft: the group's category colour. Alternative: always indigo, category colour only for signals. Some category colours (yellow, light green) need dark text on them.
-2. **Capital-letter labels.** Draft: almost none (today 97 places). Only table headers and tiny labels. Sub-tabs become normal case ("Gaidāmie", not "GAIDĀMIE").
-3. **Where the components live.** Draft: the rules are here and in `AGENTS.md`; the components become code in `components/ui/` with an admin-only preview page (3.0).
+Also one each: sub-tabs (underline), the "…" menu, toast, skeleton, avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
