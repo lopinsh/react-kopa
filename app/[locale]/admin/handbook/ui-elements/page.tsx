@@ -71,9 +71,9 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="badges" names={[UI.badge]} files={['components/ui/Badge.tsx']}>
                     <AccentScope color={samples.accent} className="flex flex-wrap items-center gap-2">
-                        <Badge>{t('sample.badgeMembers')}</Badge>
-                        <Badge>{t('sample.badgeRequest')}</Badge>
-                        <Badge tone="accent">{t('sample.badgeFull')}</Badge>
+                        <Badge tone="muted">{t('sample.badgeMembers')}</Badge>
+                        <Badge tone="muted">{t('sample.badgeRequest')}</Badge>
+                        <Badge tone="outline">{t('sample.badgeFull')}</Badge>
                     </AccentScope>
                 </UiSpecimen>
 

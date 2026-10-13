@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { Shield, User } from 'lucide-react';
+import RoleTag from '@/components/ui/RoleTag';
 import { cityLabel } from '@/lib/city-label';
 import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
 import { useGroupContext } from '@/components/providers/GroupProvider';
@@ -17,7 +17,6 @@ type Props = {
 /** One slim line instead of the full banner header — used on the Events tab and event pages. */
 export default function CompactGroupBar({ group, l1Slug }: Props) {
     const t = useTranslations('group');
-    const tCommon = useTranslations('common');
     const tCities = useTranslations('cities');
     const { user } = useGroupContext();
     const isOwner = checkIsOwner(user.role);
@@ -39,10 +38,7 @@ export default function CompactGroupBar({ group, l1Slug }: Props) {
                     </p>
                 </div>
                 {user.isMember && (
-                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface-elevated px-3 py-1 text-xs font-semibold text-foreground-muted">
-                        {isOwner || user.role === 'ADMIN' ? <Shield className="h-3.5 w-3.5" /> : <User className="h-3.5 w-3.5" />}
-                        {isOwner ? tCommon('role_owner') : user.role === 'ADMIN' ? tCommon('role_admin') : tCommon('role_member')}
-                    </span>
+                    <RoleTag role={isOwner ? 'OWNER' : user.role === 'ADMIN' ? 'ADMIN' : 'MEMBER'} />
                 )}
             </div>
         </div>

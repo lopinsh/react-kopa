@@ -64,6 +64,15 @@
     "back": "Back",
     "brandName": "Ejam Kopā",
     "brandShort": "EK",
+    "logo": {
+      "wordmark": "Ejam <em>kopā</em>"
+    },
+    "tag": {
+      "going": "Going",
+      "mod": "Mod",
+      "owner": "Owner",
+      "pending": "Pending"
+    },
     "cancel": "Cancel",
     "checking": "Checking availability...",
     "clearSelection": "Clear selection",
@@ -981,8 +990,7 @@
       "privacy": "Privacy"
     },
     "header": {
-      "logoSubtitle": "Find Your People",
-      "logoText": "Ejam Kopā",
+      "logoText": "Ejam kopā",
       "messages": "Messages"
     },
     "search": {

@@ -8,45 +8,30 @@ import AdminMenu from './AdminMenu';
 import NotificationCenter from './NotificationCenter';
 import { MessageSquare } from 'lucide-react';
 import UnreadBadge from './UnreadBadge';
+import Logo from '@/components/ui/Logo';
 import MessagesDrawerButton from '@/components/messages/MessagesDrawerButton';
 import { UI } from '@/lib/constants';
 import { isSiteAdmin } from '@/lib/site-role';
 
 export default async function Header() {
     const t = await getTranslations('shell.header');
-  const c_common_get = await getTranslations('common');
     const session = await auth();
 
     return (
         <header
             data-ui={UI.header}
-            className="sticky top-0 z-50 flex h-header w-full items-center justify-between border-b border-border/40 bg-background/60 px-4 sm:px-6 backdrop-blur-xl transition-all duration-300 shadow-premium"
+            className="sticky top-0 z-50 flex h-header w-full items-center justify-between border-b border-border/40 bg-background/60 px-4 sm:px-6 backdrop-blur-xl transition-all duration-300"
             role="banner"
         >
             {/* Left Identity Area */}
             <div className="flex items-center shrink-0">
                 <Link
                     href="/"
-                    className="group relative flex items-center gap-2 pr-1.5 transition-all active:scale-95"
+                    className="flex items-center transition-all active:scale-95"
                     aria-label={t('logoText')}
                 >
-                    <div className="relative">
-                        <div className="absolute -inset-1 rounded-xl bg-primary/20 blur-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <span
-                            className="relative flex h-8 w-8 items-center justify-center rounded-xl text-[12px] font-black text-white shadow-xl transition-all duration-500 ease-out group-hover:rotate-3 group-hover:scale-105 sm:h-8.5 sm:w-8.5 sm:text-[13px]"
-                            style={{ backgroundColor: 'var(--group-accent, var(--primary))' }}
-                        >
-                            {c_common_get('brandShort')}
-                        </span>
-                    </div>
-                    <div className="flex flex-col leading-tight py-0.5">
-                        <span className="hidden text-[12px] font-black uppercase tracking-[0.1em] text-foreground sm:block md:text-[13px] md:tracking-[0.15em]">
-                            {t('logoText')}
-                        </span>
-                        <span className="hidden text-[8px] font-bold text-foreground-muted sm:block opacity-60 md:text-[9px]">
-                            {t('logoSubtitle')}
-                        </span>
-                    </div>
+                    <span className="md:hidden"><Logo size="sm" /></span>
+                    <span className="hidden md:inline-flex"><Logo /></span>
                 </Link>
             </div>
 

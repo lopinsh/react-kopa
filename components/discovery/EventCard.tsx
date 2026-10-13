@@ -66,13 +66,13 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                     {(event.isMembersOnly || isRequest || event.isFull) && (
                         <div className="flex flex-wrap gap-1.5">
                             {event.isMembersOnly && (
-                                <Badge><Lock className="h-3 w-3" />{t('membersOnly')}</Badge>
+                                <Badge tone="muted"><Lock className="h-3 w-3" />{t('membersOnly')}</Badge>
                             )}
                             {isRequest && (
-                                <Badge><UserCheck className="h-3 w-3" />{t('badgeRequest')}</Badge>
+                                <Badge tone="muted"><UserCheck className="h-3 w-3" />{t('badgeRequest')}</Badge>
                             )}
                             {event.isFull && (
-                                <Badge tone="accent" color={accentColor}>{t('full')}</Badge>
+                                <Badge tone="outline">{t('full')}</Badge>
                             )}
                         </div>
                     )}

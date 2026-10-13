@@ -71,19 +71,19 @@ export default async function EventRow({ event, locale, href, requireSignIn, isP
                         </h3>
                         {langAttr(event.titleLang, locale) && <FallbackLangLabel lang={event.titleLang} />}
                         {event.isMembersOnly && (
-                            <Badge>
+                            <Badge tone="muted">
                                 <Lock className="h-3 w-3" />
                                 {t('membersOnly')}
                             </Badge>
                         )}
                         {isRequest && (
-                            <Badge>
+                            <Badge tone="muted">
                                 <UserCheck className="h-3 w-3" />
                                 {t('badgeRequest')}
                             </Badge>
                         )}
                         {event.isFull && !isPast && (
-                            <Badge tone="accent">{t('full')}</Badge>
+                            <Badge tone="outline">{t('full')}</Badge>
                         )}
                     </div>
 

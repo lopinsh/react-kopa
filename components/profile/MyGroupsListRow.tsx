@@ -1,9 +1,9 @@
 import { Link } from '@/i18n/routing';
-import { Users, MapPin, Shield, User, Clock } from 'lucide-react';
+import { Users, MapPin } from 'lucide-react';
 import type { GroupType, MembershipRole } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
-import { clsx } from 'clsx';
+import RoleTag from '@/components/ui/RoleTag';
 
 type Props = {
     group: {
@@ -30,7 +30,6 @@ type Props = {
 export default function MyGroupsListRow({ group, actionRequired }: Props) {
     const t = useTranslations('group');
     const tCities = useTranslations('cities');
-  const c_common = useTranslations('common');
     const accentColor = group.category.color || group.accentColor;
 
     // If action required is true, link directly to the requests tab
@@ -88,27 +87,7 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
                     </div>
                 )}
 
-                <div
-                    className={clsx(
-                        "flex items-center gap-1.5 rounded-lg px-2.5 py-1",
-                        group.role === 'OWNER' && "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-                        group.role === 'ADMIN' && "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-                        group.role === 'PENDING' && "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-                        group.role === 'MEMBER' && "bg-surface-elevated text-foreground"
-                    )}
-                >
-                    {group.role === 'OWNER' && <Shield className="h-3.5 w-3.5" />}
-                    {group.role === 'ADMIN' && <Shield className="h-3.5 w-3.5" />}
-                    {group.role === 'MEMBER' && <User className="h-3.5 w-3.5 text-foreground-muted" />}
-                    {group.role === 'PENDING' && <Clock className="h-3.5 w-3.5" />}
-
-                    <span>
-                        {group.role === 'OWNER' ? c_common('role_owner') :
-                            group.role === 'ADMIN' ? c_common('role_admin') :
-                                group.role === 'PENDING' ? t('role_pending') :
-                                    c_common('role_member')}
-                    </span>
-                </div>
+                <RoleTag role={group.role} />
             </div>
         </Link>
     );

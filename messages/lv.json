@@ -64,6 +64,15 @@
     "back": "Atpakaļ",
     "brandName": "Ejam Kopā",
     "brandShort": "EK",
+    "logo": {
+      "wordmark": "Ejam <em>kopā</em>"
+    },
+    "tag": {
+      "going": "Eju",
+      "mod": "Mod",
+      "owner": "Īpašnieks",
+      "pending": "Gaida"
+    },
     "cancel": "Atcelt",
     "checking": "Pārbauda pieejamību...",
     "clearSelection": "Notīrīt izvēli",
@@ -981,8 +990,7 @@
       "privacy": "Privātums"
     },
     "header": {
-      "logoSubtitle": "Atrodi Savējos",
-      "logoText": "Ejam Kopā",
+      "logoText": "Ejam kopā",
       "messages": "Ziņas"
     },
     "search": {
