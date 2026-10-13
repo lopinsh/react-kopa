@@ -10,6 +10,7 @@ import { useThemeDraft } from '@/hooks/use-theme-draft';
 import { DEFAULT_THEME_KEY, DESIGN_PARTS, type DesignPart, type ThemePresetKey } from '@/lib/constants';
 import type { ThemeInput } from '@/lib/validations/theme';
 import type { ActionResponse } from '@/types/actions';
+import CategoryColorsEditor, { type ToneRow } from './CategoryColorsEditor';
 import ColoursPart from './ColoursPart';
 import DesignActions from './DesignActions';
 import DesignPartTabs from './DesignPartTabs';
@@ -17,12 +18,12 @@ import DesignPartTabs from './DesignPartTabs';
 type Pending = 'preview' | 'publish' | 'reset' | null;
 
 /** Admin > Dizains: one draft shared by the three parts, previewed for yourself first, then published for everyone. */
-export default function DesignEditor({ initial, initialPart }: { initial: ThemeInput; initialPart: DesignPart }) {
+export default function DesignEditor({ initial, initialPart, toneRows }: { initial: ThemeInput; initialPart: DesignPart; toneRows: ToneRow[] }) {
     const t = useTranslations('admin.design');
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
-    const { theme, issues, tonesEdited, choosePreset, setColor } = useThemeDraft(initial);
+    const { theme, issues, tonesEdited, choosePreset, setColor, setTone } = useThemeDraft(initial);
     const [part, setPart] = useState<DesignPart>(initialPart);
     const [pending, setPending] = useState<Pending>(null);
     const [confirmReset, setConfirmReset] = useState(false);
@@ -58,6 +59,7 @@ export default function DesignEditor({ initial, initialPart }: { initial: ThemeI
         <div>
             <DesignPartTabs part={part} blockedParts={blockedParts} onSelect={setPart} />
             {part === 'colours' && <ColoursPart theme={theme} issues={issues} disabled={busy} onPreset={askPreset} onColor={setColor} />}
+            {part === 'categories' && <CategoryColorsEditor rows={toneRows} theme={theme} disabled={busy} onTone={setTone} />}
             <DesignActions
                 busy={busy}
                 blockedParts={blockedParts}
