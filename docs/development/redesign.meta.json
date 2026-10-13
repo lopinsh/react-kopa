@@ -1,7 +1,14 @@
 {
-  "version": "9.6.2",
-  "updated": "2026-10-13T15:00:00+03:00",
+  "version": "9.7",
+  "updated": "2026-10-13T18:00:00+03:00",
   "changes": [
+    "9.7, your notes of 13 October, afternoon. Approved and marked so in the Agreed rules: the filter line, \"+3\" opening the Veids list, the search's look and its theme chips, and \"Pieteikums nosūtīts\" + \"Atvērt sarunu\" after asking to join.",
+    "Veids: \"+N\" is the way into the Veids list (search, tick boxes, several at once); your later note answered the \"more than 8\" idea, so there is no separate \"Veids\" button and no limit.",
+    "Pasākumi opens on \"Šonedēļ\"; \"Šodien\" looks chosen only after it is tapped (the proposal to mark it is dropped).",
+    "Weeks start on Monday, Saturday and Sunday are tinted, in every day strip and calendar (the tint is my proposal). The page's \"today\" is Monday 12 October 2026, so every sample date and weekday is real.",
+    "The calendar is a month only: Šodien, Šonedēļ and Nedēļas nogalē are on the filter line, not repeated inside it. On phones the one date button still opens them in its sheet, above the month.",
+    "Search: your question \"How would the categories be selected?\" is answered next to the drawings; recommended (Proposal): one theme at a time, like Tēma.",
+    "Notes now also name the viewport for the drop-down drawings, and the filter buttons and Veids line carry their own names.",
     "9.6.2, no change to what you see: every drawn element now carries its template name and every drawing its viewport, caption and section, so feedback notes on this page say which \"Šodien\" (or which card) they are about.",
     "9.6.1, after an independent review: the \"Šodien marked\" idea is its own Proposal line in the Agreed rules; the two \"Rādīt visus rezultātus\" drawings are labelled Proposal A (recommended) and Proposal B; small wording fixes (search chips on phones, the place list, part R7).",
     "9.6, your decisions of 13 October on the filter. Line 1 is always one line: \"Kur\", \"Tēma\", on Pasākumi the date choices, the switch. Each button shows its choice (\"Jelgava\", \"Jelgava +1\", \"Sports un fitness\"), has a maximum width, cuts a long name with \"…\" and clears with a small ×.",
@@ -24,19 +31,12 @@
     "Checked at 375, 1280, 1440, 1600, 1680 and 1920 px, light and dark: no chip or filter overlaps another, no text overflows its chip.",
     "The filter row is \"Liked, awaiting approval\": the sub-category appears only once a category is chosen (the drop-down drawings now show the chosen category too); Šodien, Rīt, Šonedēļ, Nedēļas nogalē and the range always sit on one line, also in the calendar.",
     "The day strip has no arrows (a day is tapped directly); the calendar's month arrows sit right next to the month's name; \"Rādīt nākamo nedēļu\" is a plain text link.",
-    "\"Citur\" instead of \"Citur Latvijā\" everywhere. The place list, the sub-category list, the calendar, the group cards and the toggle are tagged as liked.",
-    "The note index lists your 25 open notes and where each is answered.",
-    "9.3, after an independent review: Still open has 18 questions. Where the Handbook or this page already decides (short messages, loading and error pages, text in another language, the cards / list switch, repeating events), the answer is in the comparison tables.",
-    "Reporting an event joined question 7. Question 15 (\"are you sure?\") now follows the Handbook: deleting for good always gets our own dialog; only steps that can be undone are open.",
-    "Questions 8 and 9 start with the recommended answer in one line. Case 4 (sign-ups closed) is no longer in the recommended words.",
-    "Compared with the live app: details the first version had dropped are back (the live words for joining an event, 15-minute times, sorting members by role, the two live words for a private group, Google and GitHub sign-in, and more).",
-    "The event page drawing for a signed-in non-member is now seen by Pēteris, not Ilze, who is a member of Vēja zirdžiņš elsewhere on the page.",
-    "Your answers of 13 October in the Agreed rules: the redesign ships in twelve parts, one by one; the language switch \"LV ▾\" stays in the header on every page; a slim footer on discovery and reading pages; screens not drawn follow the rules on this page."
+    "\"Citur\" instead of \"Citur Latvijā\" everywhere. The place list, the sub-category list, the calendar, the group cards and the toggle are tagged as liked."
   ],
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.6.1"
+      "version": "9.7"
     },
     "h-open": {
       "kind": "updated",
@@ -52,11 +52,11 @@
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.6.1"
+      "version": "9.7"
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.6.1"
+      "version": "9.7"
     },
     "h-group": {
       "kind": "updated",
@@ -64,11 +64,11 @@
     },
     "h-event": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.7"
     },
     "h-me": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.7"
     },
     "h-pop": {
       "kind": "updated",
@@ -84,7 +84,7 @@
     },
     "h-notes": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.7"
     }
   }
 }

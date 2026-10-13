@@ -231,13 +231,14 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-drop>.rd-flt{justify-self:stretch}
 .rd .rd-pnl.sheet .rd-list{width:100%;box-shadow:none;border:0}
 .rd .rd-cal{width:300px;padding:10px}
-.rd .rd-cal .q{display:flex;flex-wrap:nowrap;gap:4px;margin-bottom:4px}
-.rd .rd-cal .q span{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--tint);white-space:nowrap;flex:none}
 .rd .rd-cal .mh{display:flex;justify-content:center;align-items:center;gap:10px;padding:4px 2px;font:600 14px var(--display)}
 .rd .rd-cal .mh svg.i{color:var(--muted);width:16px;height:16px}
 .rd .rd-cal .g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;font-size:12px}
 .rd .rd-cal .g>span{height:28px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
 .rd .rd-cal .wd{height:22px;font-size:10px;font-weight:600;color:var(--muted)}
+/* Weekends (13 Oct): Saturday and Sunday on a soft tint, their letters in the text colour. */
+.rd .rd-cal .we{background:var(--tint)}
+.rd .rd-cal .wd.we{color:var(--fg)}
 .rd .rd-cal .past{color:var(--muted);opacity:.55}
 .rd .rd-cal .td{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .rd .rd-cal .rg{background:color-mix(in srgb,var(--brand) 15%,var(--surface))}
@@ -337,6 +338,8 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-ds .g i{width:5px;height:5px;border-radius:50%;background:var(--brand)}
 .rd .rd-ds .no b{color:var(--muted);opacity:.6}
 .rd .rd-ds .no i{visibility:hidden}
+.rd .rd-ds .we{background:var(--tint)}
+.rd .rd-ds .we small{color:var(--fg)}
 .rd .rd-ds .td{background:var(--bg);box-shadow:inset 0 0 0 1.5px var(--line)}
 .rd .rd-ds .sel{background:var(--brand)}
 .rd .rd-ds .sel b,.rd .rd-ds .sel small{color:var(--on-brand)}

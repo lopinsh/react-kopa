@@ -35,7 +35,7 @@ export const G = {
   rn: { name: 'Rīta nūjošana pie Lielupes', cat: 'sport', subs: 'Nūjošana', city: 'Jelgava', n: 12, ph: 'river', ask: 'Gaidām iesācējus' },
   sk: { name: 'Jelgavas skrējēji', cat: 'sport', subs: 'Skriešana', city: 'Jelgava', n: 21, next: 'pirmd., 12. okt.' },
   vb: { name: 'Jelgavas volejbola draugi', cat: 'sport', subs: 'Volejbols', city: 'Jelgava', n: 15, ask: 'Meklējam vēl divus spēlētājus' },
-  fb: { name: 'Svētdienas futbols Pārlielupē', cat: 'sport', subs: 'Futbols', city: 'Jelgava', n: 22, next: 'svētd., 11. okt.' },
+  fb: { name: 'Svētdienas futbols Pārlielupē', cat: 'sport', subs: 'Futbols', city: 'Jelgava', n: 22, next: 'svētd., 18. okt.' },
   gt: { name: 'Galda teniss Jelgavā', cat: 'sport', subs: 'Galda teniss', city: 'Jelgava', n: 7 },
   pg: { name: 'Pārgājieni', cat: 'trav', subs: 'Pārgājieni, Kempings', city: 'Rīga', n: 3, ph: 'bog', next: 'sestd., 17. okt.' },
   vz: { name: 'Vēja zirdžiņš', cat: 'dance', subs: 'Tautas dejas', city: 'Jelgava', n: 26, ph: 'dance' },
@@ -164,7 +164,7 @@ export const frow = (o = {}) => {
   if (o.view === 'pasakumi') f.push(dateGroup({ range: o.range, open: o.open === 'date', on: o.date }));
   if (nChosen(o) >= 2) f.push(clr());
   const l2 = o.cat ? vline(o.cat, o.subs, { fit: o.fit ?? 6, open: o.open === 'sub' }) : '';
-  return `${el('filter-row-desktop')}<div class="rd-flt"><div class="rd-frow"><div class="fs">${f.join('')}</div>${sw(o.view)}</div>${l2}</div>`;
+  return `${el('filter-row-desktop')}<div class="rd-flt"><div class="rd-frow">${el('filter-buttons')}<div class="fs">${f.join('')}</div>${sw(o.view)}</div>${l2}</div>`;
 };
 /** Phone: the switch on its own full-width line; under it Kur, Tēma (and the date button on Pasākumi) on one line, long names cut with "…";
  *  then the Veids chips, with "Notīrīt visu" at their end (2+ chosen). */
@@ -174,8 +174,8 @@ export const frowPh = (o = {}) => {
   f.push(kurChip(o.places, o.open === 'place'), temaChip(o.cat, o.open === 'cat'));
   if (o.view === 'pasakumi') f.push(dateChip(o.date ?? 'Šonedēļ', o.open === 'date'));
   const clear = nChosen(o) >= 2;
-  const l2 = o.cat ? vline(o.cat, o.subs, { fit: o.fit ?? 2, clear, open: o.open === 'sub' }) : clear ? `<div class="rd-vl">${clr()}</div>` : '';
-  return `${el('filter-row-phone')}<div class="rd-flt"><div class="rd-frow ph">${sw(o.view)}<div class="fs">${f.join('')}</div></div>${l2}</div>`;
+  const l2 = o.cat ? vline(o.cat, o.subs, { fit: o.fit ?? 2, clear, open: o.open === 'sub' }) : clear ? `${el('veids-line')}<div class="rd-vl">${clr()}</div>` : '';
+  return `${el('filter-row-phone')}<div class="rd-flt"><div class="rd-frow ph">${sw(o.view)}${el('filter-buttons')}<div class="fs">${f.join('')}</div></div>${l2}</div>`;
 };
 /** The chip row at the top of the open search: the Kur button (the place list, set from the page's filter), then the themes that match, as choice chips. */
 export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs">${kurChip(o.places, o.open)}${(o.cats ?? []).map(([k, on]) => optChip(catName(k), { k, dot: 1, on })).join('')}</div></div>`;
@@ -220,17 +220,19 @@ export const catSearch = (typed) => {
   else body = `<p class="rd-nf">${NF}</p><span class="rd-opt add">${I('plus')}Ieteikt jaunu kategoriju: „${typed}”</span>`;
   return `${el('category-search')}<div class="rd-list" role="listbox" aria-label="Kategorijas">${find('Meklēt kategoriju', typed === 'mū' || typed === 'nūj' ? `<em class="hl">${typed}</em>` : typed)}${body}</div>`;
 };
-/** The date picker: quick choices on top, a month below; the button says how many events the choice gives. */
+/** The date picker: a month only; the quick choices (Šodien, Šonedēļ, Nedēļas nogalē) are on the filter line, not in it (13 Oct).
+ *  Weeks start on Monday; Saturday and Sunday have their own look (13 Oct). October 2026: the 1st is a Thursday, today is Monday the 12th. */
+const WEEKEND = (n) => [3, 4].includes(n % 7);
 export const calendar = () => {
-  const d = (n, c = '') => `<span${c ? ` class="${c}"` : ''}>${n}</span>`;
-  const past = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => d(n, 'past')).join('');
-  return `${el('date-picker')}<div class="rd-list rd-cal" role="dialog" aria-label="Datums"><div class="q">${QUICK.map((d) => `<span>${d}</span>`).join('')}</div><div class="mh">${I('left', 'Iepriekšējais mēnesis')}<span>2026. gada oktobris</span>${I('right', 'Nākamais mēnesis')}</div><div class="g" role="grid" aria-label="Oktobris"><span class="wd">P</span><span class="wd">O</span><span class="wd">T</span><span class="wd">C</span><span class="wd">Pk</span><span class="wd">S</span><span class="wd">Sv</span><span></span><span></span><span></span>${past}${d(11, 'td')}${d(12)}${d(13)}${d(14)}${d(15, 's')}${d(16, 'rg')}${d(17, 'rg')}${d(18, 'e')}${[19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].map((n) => d(n)).join('')}</div><div class="f"><span>Ceturtd., 15. – svētd., 18. okt.</span>${btn('Rādīt 23', 'p', true)}</div></div>`;
+  const d = (n, c = '') => { const cls = [c, WEEKEND(n) ? 'we' : ''].filter(Boolean).join(' '); return `<span${cls ? ` class="${cls}"` : ''}>${n}</span>`; };
+  const past = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n) => d(n, 'past')).join('');
+  return `${el('date-picker')}<div class="rd-list rd-cal" role="dialog" aria-label="Datums"><div class="mh">${I('left', 'Iepriekšējais mēnesis')}<span>2026. gada oktobris</span>${I('right', 'Nākamais mēnesis')}</div><div class="g" role="grid" aria-label="Oktobris"><span class="wd">P</span><span class="wd">O</span><span class="wd">T</span><span class="wd">C</span><span class="wd">Pk</span><span class="wd we">S</span><span class="wd we">Sv</span><span></span><span></span><span></span>${past}${d(12, 'td')}${d(13)}${d(14)}${d(15, 's')}${d(16, 'rg')}${d(17, 'rg')}${d(18, 'e')}${[19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].map((n) => d(n)).join('')}</div><div class="f"><span>Ceturtd., 15. – svētd., 18. okt.</span>${btn('Rādīt 23', 'p', true)}</div></div>`;
 };
-/** The day strip over an event list. */
-export const dayStrip = (selDay = 11, o = {}) => {
-  const days = [['Sv', 11], ['P', 12], ['O', 13], ['T', 14], ['C', 15], ['Pk', 16], ['S', 17]];
+/** The day strip over an event list: the week from Monday (13 Oct), Saturday and Sunday in their own look. Today is Monday 12 October 2026. */
+export const dayStrip = (selDay = 12, o = {}) => {
+  const days = [['P', 12], ['O', 13], ['T', 14], ['C', 15], ['Pk', 16], ['S', 17, 1], ['Sv', 18, 1]];
   const none = o.none ?? [];
-  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><span class="nv" role="button">${I('left', 'Iepriekšējā nedēļa')}</span><b>Oktobris 2026</b><span class="nv" role="button">${I('right', 'Nākamā nedēļa')}</span></div><div class="g">${days.map(([w, n]) => `<span class="${[n === selDay ? 'sel' : '', n === 11 && selDay !== 11 ? 'td' : '', none.includes(n) ? 'no' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
+  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><span class="nv" role="button">${I('left', 'Iepriekšējā nedēļa')}</span><b>Oktobris 2026</b><span class="nv" role="button">${I('right', 'Nākamā nedēļa')}</span></div><div class="g">${days.map(([w, n, we]) => `<span class="${[n === selDay ? 'sel' : '', n === 12 && selDay !== 12 ? 'td' : '', none.includes(n) ? 'no' : '', we ? 'we' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
 };
 
 // ── Panels (source: Group → The opened card; Event → The event panel)
@@ -248,9 +250,9 @@ const evAct = (o, more) => {
 };
 /** Who is going: faces and a name for signed-in viewers, only the number for visitors (13 Oct). */
 const going = (o) => o.out ? '<span class="going">12 iet</span>' : '<span class="going"><span class="faces"><i></i><i></i><i></i></span>Ilze un vēl 11 iet</span>';
-export const eventPanel = (o = {}) => `${el('event-panel')}<aside class="rd-pnl${o.sheet ? ' sheet' : ''}" style="${cv('dance')}" aria-label="Pasākuma ātrais skats">${o.sheet ? '<span class="grab"></span>' : ''}<div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"><span class="x" aria-label="Aizvērt">${I('x')}</span></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}Svētd., 11. okt. 17:00–19:00</span><span class="facts">${I('pin')}Liepāja, Latviešu biedrības nams, Rožu iela 5</span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p>${going(o)}${evAct(o, lnk('Visa informācija'))}<span class="org">Rīko <a>Vēja zirdžiņš</a> · Jelgava</span></div></aside>`;
+export const eventPanel = (o = {}) => `${el('event-panel')}<aside class="rd-pnl${o.sheet ? ' sheet' : ''}" style="${cv('dance')}" aria-label="Pasākuma ātrais skats">${o.sheet ? '<span class="grab"></span>' : ''}<div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"><span class="x" aria-label="Aizvērt">${I('x')}</span></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}Svētd., 18. okt. 17:00–19:00</span><span class="facts">${I('pin')}Liepāja, Latviešu biedrības nams, Rožu iela 5</span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p>${going(o)}${evAct(o, lnk('Visa informācija'))}<span class="org">Rīko <a>Vēja zirdžiņš</a> · Jelgava</span></div></aside>`;
 /** The event's own page (proposal, 13 Oct): the panel's content in full, inside the group's frame. */
-export const eventPage = (o = {}) => `${el('event-page')}<article class="rd-evp" style="${cv('dance')}"><div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}<span>Svētd., 11. okt. 17:00–19:00 <a>Pievienot kalendāram</a></span></span><span class="facts">${I('pin')}<span>Liepāja, Latviešu biedrības nams, Rožu iela 5 <a>Atvērt kartē</a></span></span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p><div class="imp"><b>Svarīga informācija</b><p>Ieeja no Rožu ielas puses. Dejotājiem līdzi ērtus apavus.</p></div>${going(o)}${evAct(o, `<span class="rd-lnk q">${I('share')}Dalīties</span>`)}</div>${o.team ? `<div class="rd-box2 org">${el('event-organiser')}<div class="bh">Rīkotājiem</div><div class="ln"><span>Iet <b>12</b></span><span>Pieteikumi <b>0</b></span><span>Gaidīšanas sarakstā <b>0</b></span></div><div class="row">${btn('Labot', 's', true)}${btn('Slēgt pieteikšanos', 's', true)}${btn('Dzēst', 's', true)}</div></div>` : ''}</article>`;
+export const eventPage = (o = {}) => `${el('event-page')}<article class="rd-evp" style="${cv('dance')}"><div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}<span>Svētd., 18. okt. 17:00–19:00 <a>Pievienot kalendāram</a></span></span><span class="facts">${I('pin')}<span>Liepāja, Latviešu biedrības nams, Rožu iela 5 <a>Atvērt kartē</a></span></span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p><div class="imp"><b>Svarīga informācija</b><p>Ieeja no Rožu ielas puses. Dejotājiem līdzi ērtus apavus.</p></div>${going(o)}${evAct(o, `<span class="rd-lnk q">${I('share')}Dalīties</span>`)}</div>${o.team ? `<div class="rd-box2 org">${el('event-organiser')}<div class="bh">Rīkotājiem</div><div class="ln"><span>Iet <b>12</b></span><span>Pieteikumi <b>0</b></span><span>Gaidīšanas sarakstā <b>0</b></span></div><div class="row">${btn('Labot', 's', true)}${btn('Slēgt pieteikšanos', 's', true)}${btn('Dzēst', 's', true)}</div></div>` : ''}</article>`;
 
 // ── The contact form (source: Group → One button: Sazināties)
 /** A short message after an action (Handbook, Behaviour): one line at the bottom, above the bottom bar on phones; it goes by itself. */
@@ -312,10 +314,10 @@ export const NT = {
 export const cvRow = (c) => `${el('conversation-row')}<div class="rd-cvi${c.u ? ' u' : ''}${c.on ? ' on' : ''}">${c.g ? `<span class="av g" style="${cv(c.g)}">${catIco(c.g)}</span>` : `<span class="av">${c.name[0]}</span>`}<span class="t"><b>${c.name}</b><span class="l">${c.last}</span>${c.g ? `<span class="q">${catLine(c.g, c.sub)}</span>` : c.shared ? `<span class="q">${I('users')}${c.shared}</span>` : ''}</span><span class="tm">${c.tm}${c.u ? '<i class="dot" role="img" aria-label="Nelasīts"></i>' : ''}</span></div>`;
 export const CV = [
   { u: 1, g: 'dance', sub: 'Tautas dejas', name: 'Vēja zirdžiņš', last: 'Juris: Līdzi ērtus apavus!', tm: '12 min' },
-  { u: 1, name: 'Anna', last: 'Vai šodien brauksi uz koncertu?', shared: 'Vēja zirdžiņš, Pārgājieni', tm: '2 h' },
+  { u: 1, name: 'Anna', last: 'Vai svētdien brauksi uz koncertu?', shared: 'Vēja zirdžiņš, Pārgājieni', tm: '2 h' },
   { g: 'games', sub: 'Galda spēles, Lomu spēles', name: 'Galda spēļu vakari', last: 'Paldies, drīz atbildēsim!', tm: 'Vakar' },
   { name: 'Marta', last: 'Paldies par sarunu!', shared: 'Pārgājieni', tm: 'Vakar' },
-  { name: 'Pēteris', last: 'Labi, tiekamies!', tm: 'Pirmd.' },
+  { name: 'Pēteris', last: 'Labi, tiekamies!', tm: 'Sestd.' },
 ];
 
 // ── Frames
