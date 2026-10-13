@@ -183,6 +183,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Handbook:** `behaviour.md` gets the counter rule and the pop-up rule wording.
 - **Risks:** Modal is used by ~15 overlays; the reviewer opens each.
 - **Size:** M.
+- **Spec:** [specs/R2b.md](specs/R2b.md). No migration. One `Overlay` shell under Modal, Sheet and the drawers (Back closes via one same-URL history entry, `hooks/useBackClose.ts`); dialogs open as sheets on phones (Handbook); discovery moves to the route group `app/[locale]/(discovery)/` so its `loading.tsx` covers only discovery; page-level `notFound()` under the new loading boundaries streams with `noindex` (status 200); counters on every plain text field with a limit, rich-text and admin fields later (R9a, R9b, R11).
 
 ### R3a · A group's frame (L)
 
@@ -227,7 +228,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Goal:** the filter line (Kur, Tēma, Veids chips, "Notīrīt visu", switch), the place and Veids lists, the drawer with counts and search, group card and row, create card, "Rādīt vēl"; events filtered by their own place, Tēma and Veids.
 - **Rules (owner):** AR-22, AR-23, AP-01, AR-25, AP-02, AR-26, AR-27, AR-28, AR-29, AR-30, AR-31, AR-32, AR-33, AR-34, AR-36, AR-37. Also in: AR-43 (the search-word chip), AR-35 (card note).
 - **Drawings:** Discovery top (2), the filter line (7, the date parts are R5b), the drop-downs (Kur, Veids, place sheet, no match), the category drawer (3), group card and row (6).
-- **Components:** replace `discovery/DiscoveryFilterBar.tsx` (570) + `DiscoveryFilterBarWrapper` with `discovery/filter/{FilterLine,PlaceButton,TopicButton,VeidsChips,ViewSwitch,ClearAll,SearchWordChip}.tsx` and `discovery/lists/{PlaceList,VeidsList}.tsx` (shared by R7); replace `DiscoverySidebar.tsx` (225) with `discovery/CategoryDrawer.tsx` (icon rail, phone sheet, search incl. Veidi, "Ieteikt jaunu kategoriju"); replace `GroupCard.tsx` with `discovery/{GroupCard,GroupRow,CreateCard}.tsx` (also used on profiles); delete `ListViewCard.tsx`, `InfiniteScrollTrigger.tsx`, `DISCOVERY_VIEWS` and the `view` param (B31); `app/[locale]/page.tsx` (no heading, no "Rāda:", 24 + "Rādīt vēl").
+- **Components:** replace `discovery/DiscoveryFilterBar.tsx` (570) + `DiscoveryFilterBarWrapper` with `discovery/filter/{FilterLine,PlaceButton,TopicButton,VeidsChips,ViewSwitch,ClearAll,SearchWordChip}.tsx` and `discovery/lists/{PlaceList,VeidsList}.tsx` (shared by R7); replace `DiscoverySidebar.tsx` (225) with `discovery/CategoryDrawer.tsx` (icon rail, phone sheet, search incl. Veidi, "Ieteikt jaunu kategoriju"); replace `GroupCard.tsx` with `discovery/{GroupCard,GroupRow,CreateCard}.tsx` (also used on profiles); delete `ListViewCard.tsx`, `InfiniteScrollTrigger.tsx`, `DISCOVERY_VIEWS` and the `view` param (B31); `app/[locale]/(discovery)/page.tsx` (moved there by R2b; no heading, no "Rāda:", 24 + "Rādīt vēl").
 - **Data (contract):** `require_event_city`: re-backfill `city` where null, then `SET NOT NULL`. Safe only because the code still serving during this migration is R4's, which always writes `city`: R4 must be deployed and live on its own before R5a is pushed (never push R4 and R5a together, or R3 code would serve during the `NOT NULL` step and its event creates would fail). Name follows the spirit of the conventions; the spec confirms it.
 - **Services/actions:** wire R4's queries; place from the URL, "Visur" when none (OD-14).
 - **i18n:** `discovery`.
@@ -432,7 +433,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-68 | Admin frame | R11 | |
 | AR-69 | Admin → Dizains | R1b | R11 |
 | AR-70 | Group banner: the group's image | R3a | R9a |
-| AR-71 | Text limits | R2b | R3b, R4, R12 |
+| AR-71 | Text limits | R2b | R3b, R4, R9a, R9b, R11, R12 |
 
 ## 8. Process and status
 
@@ -443,7 +444,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R1a Identity | pushed, live; owner checked 13 Oct | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`557b6bc` (Opus review fixes `4232adc`, `9708a63`) |
 | R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
 | R2a Header, menus, own area | built; Opus review done, ready to push | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
-| R2b Behaviour pieces | not started | | |
+| R2b Behaviour pieces | spec written 13 Oct | [specs/R2b.md](specs/R2b.md) | |
 | R3a Group frame | not started | | |
 | R3b Sazināties, pending, "…" | not started | | |
 | R4 Discovery data | not started | | |
