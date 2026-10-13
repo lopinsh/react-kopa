@@ -156,10 +156,10 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 /* ── Filter row, switch, chosen line */
 .rd .rd-frow{display:flex;align-items:center;gap:8px;min-width:0}
 .rd .rd-frow>.fs{display:flex;align-items:center;gap:6px;min-width:0;flex:1;flex-wrap:wrap}
-/* Phones: one sideways scroller (filter row, chosen line, search chips). Whatever doesn't fit fades out over 48 px and is fully gone 12 px before the scroller's edge, so a chip never runs into the switch or the frame. */
-.rd .scx{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;padding-right:60px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent calc(100% - 12px));mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent calc(100% - 12px))}
-.rd .scx::-webkit-scrollbar{display:none}
-.rd .rd-frow.ph{gap:4px}
+/* Phones: the switch gets its own full-width line above the filter buttons; the buttons, the chosen line and the search chips wrap. Nothing scrolls sideways, so nothing is cut or faded. */
+.rd .rd-frow.ph{flex-direction:column;align-items:stretch;gap:8px}
+.rd .rd-frow.ph>.rd-sw{display:flex;margin-left:0}
+.rd .rd-frow.ph>.rd-sw>span{flex:1;justify-content:center}
 .rd .rd-fc{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 13px var(--body);color:var(--fg);white-space:nowrap;flex:none}
 .rd .rd-fc svg.i{width:14px;height:14px;color:var(--muted)}
 .rd .rd-fc b{font-weight:600}

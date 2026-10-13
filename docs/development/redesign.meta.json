@@ -1,7 +1,10 @@
 {
-  "version": "9.4",
-  "updated": "2026-10-13T23:30:00+03:00",
+  "version": "9.5",
+  "updated": "2026-10-13T09:45:00+03:00",
   "changes": [
+    "9.5, after an independent review. Every overlap you marked was in a phone drawing: the filter buttons and the Grupas | Pasākumi switch shared one 300 px line, so the second button was cut at the switch. 9.4 faded it out, which still looked like a half-drawn button.",
+    "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded.",
+    "The phone search drawing is marked as my suggestion; \"Izveidot grupu\" staying in the phone profile menu (next to the bottom bar's +) is marked as my suggestion too.",
     "9.4, your notes of 13 October. The + leaves the header: on phones it sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es); on desktop \"Izveidot grupu\" is a line in the profile menu. Every header, bottom bar and profile menu follows.",
     "Search: the bar is a plain field; a tap or click opens the search at once. At its top, chips: the place (the place list, set from the page's filter) and the matching categories, the same chips as elsewhere. A phone drawing is added.",
     "Option B under \"More compact\" is withdrawn: it relied on the place in the search bar.",
@@ -27,7 +30,7 @@
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.5"
     },
     "h-open": {
       "kind": "updated",
@@ -39,15 +42,15 @@
     },
     "h-shell": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.5"
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.5"
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.5"
     },
     "h-group": {
       "kind": "updated",

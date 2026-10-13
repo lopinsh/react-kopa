@@ -127,19 +127,19 @@ export const frow = (o = {}) => {
   if (o.view === 'pasakumi') f.push(dateGroup({ range: o.range, open: o.open === 'date' }));
   return `${el('filter-row-desktop')}<div class="rd-frow"><div class="fs">${f.join('')}</div>${sw(o.view)}</div>`;
 };
-/** Phone: one row that scrolls sideways; the switch stays pinned at the right. */
+/** Phone: the switch on its own line, full width; the filter buttons below it, wrapping onto a second line when they don't fit (13 Oct: nothing is cut or faded). */
 export const frowPh = (o = {}) => {
   const f = [placeChip(o.place, o.open === 'place'), catChip(o.cat, o.open === 'cat')];
   if (o.cat) f.push(subChip(o.sub, o.open === 'sub'));
   if (o.view === 'pasakumi') f.push(dateChip(o.date ?? 'Šonedēļ', o.open === 'date'));
-  return `${el('filter-row-phone')}<div class="rd-frow ph"><div class="fs scx">${f.join('')}</div>${sw(o.view)}</div>`;
+  return `${el('filter-row-phone')}<div class="rd-frow ph">${sw(o.view)}<div class="fs">${f.join('')}</div></div>`;
 };
 /** A category as a chip in the search (13 Oct): the same chip as the phone's category filter; chosen = dark outline and ×. */
 export const catToggle = (k, on = false) => `<span class="rd-fc${on ? ' set' : ''}" style="${cv(k)}">${cat(k)}${on ? I('x', 'Noņemt') : ''}</span>`;
 /** The chip row at the top of the open search: the place chip (the place list, set from the page's filter), then the categories that match. */
-export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs${o.ph ? ' scx' : ''}">${placeChip(o.place, o.open)}${(o.cats ?? []).map(([k, on]) => catToggle(k, on)).join('')}</div></div>`;
+export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs">${placeChip(o.place, o.open)}${(o.cats ?? []).map(([k, on]) => catToggle(k, on)).join('')}</div></div>`;
 /** The chosen-filters line, only when something is chosen. items: [text, catKey?, isCategory?] */
-export const sel = (items, o = {}) => items.length === 0 ? '' : `${el('chosen-line')}<div class="rd-sel${o.ph ? ' ph scx' : ''}">${items.map(([t, k, isCat]) => `<span class="rd-x${isCat ? ' cat' : ''}"${k ? ` style="${cv(k)}"` : ''}>${t}${I('x', 'Noņemt')}</span>`).join('')}<span class="rd-clr">Notīrīt visu</span></div>`;
+export const sel = (items) => items.length === 0 ? '' : `${el('chosen-line')}<div class="rd-sel">${items.map(([t, k, isCat]) => `<span class="rd-x${isCat ? ' cat' : ''}"${k ? ` style="${cv(k)}"` : ''}>${t}${I('x', 'Noņemt')}</span>`).join('')}<span class="rd-clr">Notīrīt visu</span></div>`;
 
 // ── Category drawer (source: Discovery → The category drawer)
 const ORDER = ['trav', 'dance', 'hobby', 'comm', 'pol', 'pets', 'art', 'music', 'rel', 'social', 'games', 'sport', 'family', 'well', 'sci'];
