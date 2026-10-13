@@ -70,33 +70,37 @@ export const ev = (e, o = {}) => {
   const second = o.noSecond ? '' : `<span class="sl"><a>${e.group}</a><span>· ${catName(e.cat)}</span><span class="rd-sub">· ${e.sub}</span></span>`;
   return `${el('event-row')}<div class="rd-er${e.sel ? ' sel' : ''}${o.noSecond ? ' one' : ''}" style="${cv(e.cat)}"><span class="tm">${e.time}</span><span class="dt"></span><b>${e.name}</b><span class="ct">${ct}</span>${e.eju ? `<span class="tmb">${tag}</span>` : ''}${second}</div>`;
 };
+/** A plain text link for optional steps ("Rādīt nākamo nedēļu"): no pill, no arrow (13 Oct). */
+export const textLink = (t, cls = '') => `${el('text-link')}<span class="rd-tl${cls ? ` ${cls}` : ''}">${t}</span>`;
 export const dayh = (t) => `<div class="rd-dayh">${t}</div>`;
 /** days: [[heading, [events]]]. */
-export const evList = (days, o = {}) => `<div class="rd-evl${o.flat ? ' flat' : ''}">${days.map(([h, list]) => `${dayh(h)}<div class="rd-evg${o.cols ? ' cols' : ''}">${list.map((e) => ev(e, o)).join('')}</div>`).join('')}${o.more ? `<span class="rd-btn s sm nextw">${o.more}</span>` : ''}</div>`;
+export const evList = (days, o = {}) => `<div class="rd-evl${o.flat ? ' flat' : ''}">${days.map(([h, list]) => `${dayh(h)}<div class="rd-evg${o.cols ? ' cols' : ''}">${list.map((e) => ev(e, o)).join('')}</div>`).join('')}${o.more ? textLink(o.more, 'nextw') : ''}</div>`;
 
 // ── Headers (source: Header and navigation)
-export const ctag = (place = 'Jelgava', open = false) => `<span class="rd-ctag${open ? ' open' : ''}" role="button" aria-haspopup="listbox" aria-label="Vieta: ${place}">${I('pin')}${place}${I('down')}</span>`;
-export const searchIdle = (place = 'Jelgava') => `<span class="rd-search">${I('search')}${ctag(place)}<span class="ph">Meklē grupu vai nodarbi…</span></span>`;
+/** The search bar is a plain field (13 Oct): no place, no tags. A tap or click opens the search at once. */
+export const searchIdle = () => `${el('search-bar')}<span class="rd-search">${I('search')}<span class="ph">Meklē grupu vai nodarbi…</span></span>`;
+/** The search bar while typing, in the open search. */
+export const searchOpen = (q = '', o = {}) => `${el('search-bar')}<span class="rd-search open">${I('search')}<span class="q">${q}${o.done ? '' : '<span class="caret"></span>'}</span>${o.x ? `<span class="x">${I('x', 'Notīrīt')}</span>` : ''}</span>`;
 /** The language switch: visible in the header on every page; the list is short and takes more languages later. */
 export const langSw = (open = false) => `${el('language-switch')}<span class="rd-lang${open ? ' open' : ''}" role="button" aria-haspopup="listbox" aria-label="Valoda: latviešu">LV${I('down')}</span>`;
 export const langList = () => `${el('language-list')}<div class="rd-menu rd-langl" role="listbox" aria-label="Valoda"><span class="rd-mi on" role="option" aria-selected="true">${I('check')}Latviešu<small>LV</small></span><span class="rd-mi" role="option" aria-selected="false"><i class="sp"></i>English<small>EN</small></span></div>`;
 export const hdr = (o = {}) => {
-  const search = o.search ?? searchIdle(o.place);
+  const search = o.search ?? searchIdle();
   if (o.signedOut) return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}${langSw(o.lang)}<span class="rd-btn p sm">Ienākt</span></div>`;
   const on = (k) => (o.on === k ? ' on' : '');
-  return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}${langSw(o.lang)}<span class="rd-ico plus" title="Izveidot grupu" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('msg')}" aria-label="Ziņas, 2 nelasītas">${I('msg')}<span class="dot"></span></span><span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
+  return `${el('header-desktop')}<div class="rd-hdr"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span>${search}${langSw(o.lang)}${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('msg')}" aria-label="Ziņas, 2 nelasītas">${I('msg')}<span class="dot"></span></span><span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
 };
 export const phdr = (o = {}) => {
   const on = (k) => (o.on === k ? ' on' : '');
-  return `${el('header-phone')}<div class="rd-hdr ph"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="sp"></span>${langSw(o.lang)}<span class="rd-ico${on('search')}" aria-label="Meklēt">${I('search')}</span><span class="rd-ico plus" aria-label="Izveidot grupu">${I('plus')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
+  return `${el('header-phone')}<div class="rd-hdr ph"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="sp"></span>${langSw(o.lang)}<span class="rd-ico${on('search')}" aria-label="Meklēt">${I('search')}</span>${o.admin ? `<span class="rd-ico${on('shield')}" aria-label="Administrēšana">${I('shield')}</span>` : ''}<span class="rd-ico${on('bell')}" aria-label="Paziņojumi, 3 jauni">${I('bell')}<span class="dot"></span></span><span class="rd-av${on('av')}" role="img" aria-label="Tavs attēls"></span></div>`;
 };
 export const navb = (on) => {
   const it = (k, icon, label, badge) => `<span${on === k ? ' class="on" aria-current="page"' : ''}>${I(icon)}${label}${badge ? `<em>${badge}</em>` : ''}</span>`;
-  return `${el('bottom-bar')}<div class="rd-navb">${it('atklat', 'search', 'Atklāt')}${it('grupas', 'users', 'Grupas')}${it('zinas', 'msg', 'Ziņas', 2)}${it('es', 'user', 'Es')}</div>`;
+  return `${el('bottom-bar')}<div class="rd-navb">${it('atklat', 'search', 'Atklāt')}${it('grupas', 'users', 'Grupas')}<span class="add" role="link" aria-label="Izveidot grupu">${I('plus')}</span>${it('zinas', 'msg', 'Ziņas', 2)}${it('es', 'user', 'Es')}</div>`;
 };
 /** Slim footer: discovery and reading pages only (About, Privacy); none on group, own-area or admin pages. */
 export const foot = () => `${el('footer')}<footer class="rd-foot"><span class="rd-logo">Ejam&nbsp;<em>kopā</em></span><span class="m">Atrodi savējos, augam kopā.</span><span class="ln"><a>Par mums</a><a>Privātums</a></span></footer>`;
-export const profileMenu = () => `${el('profile-menu')}<div class="rd-menu" role="menu" aria-label="Profila izvēlne"><span class="rd-mi">${I('user')}Mans profils</span><span class="rd-mi">${I('users')}Manas grupas<em>3</em></span><span class="sep"></span><span class="rd-mi">${I('settings')}Iestatījumi</span><span class="rd-mi">${I('logout')}Iziet</span></div>`;
+export const profileMenu = () => `${el('profile-menu')}<div class="rd-menu" role="menu" aria-label="Profila izvēlne"><span class="rd-mi">${I('user')}Mans profils</span><span class="rd-mi">${I('users')}Manas grupas<em>3</em></span><span class="rd-mi">${I('plus')}Izveidot grupu</span><span class="sep"></span><span class="rd-mi">${I('settings')}Iestatījumi</span><span class="rd-mi">${I('logout')}Iziet</span></div>`;
 export const shieldMenu = () => `${el('shield-menu')}<div class="rd-menu" role="menu" aria-label="Administrēšana"><span class="rd-mi">${I('note')}Atsauksmju režīms<small>Izslēgts</small></span><span class="rd-mi">${I('globe')}Tulkošanas režīms<small>Izslēgts</small></span><span class="sep"></span><span class="rd-mi">${I('shield')}Administrēšanas panelis${I('arrow')}</span></div>`;
 
 // ── Buttons
@@ -128,10 +132,14 @@ export const frowPh = (o = {}) => {
   const f = [placeChip(o.place, o.open === 'place'), catChip(o.cat, o.open === 'cat')];
   if (o.cat) f.push(subChip(o.sub, o.open === 'sub'));
   if (o.view === 'pasakumi') f.push(dateChip(o.date ?? 'Šonedēļ', o.open === 'date'));
-  return `${el('filter-row-phone')}<div class="rd-frow ph"><div class="fs">${f.join('')}</div>${sw(o.view)}</div>`;
+  return `${el('filter-row-phone')}<div class="rd-frow ph"><div class="fs scx">${f.join('')}</div>${sw(o.view)}</div>`;
 };
+/** A category as a chip in the search (13 Oct): the same chip as the phone's category filter; chosen = dark outline and ×. */
+export const catToggle = (k, on = false) => `<span class="rd-fc${on ? ' set' : ''}" style="${cv(k)}">${cat(k)}${on ? I('x', 'Noņemt') : ''}</span>`;
+/** The chip row at the top of the open search: the place chip (the place list, set from the page's filter), then the categories that match. */
+export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs${o.ph ? ' scx' : ''}">${placeChip(o.place, o.open)}${(o.cats ?? []).map(([k, on]) => catToggle(k, on)).join('')}</div></div>`;
 /** The chosen-filters line, only when something is chosen. items: [text, catKey?, isCategory?] */
-export const sel = (items, o = {}) => items.length === 0 ? '' : `${el('chosen-line')}<div class="rd-sel${o.ph ? ' ph' : ''}">${items.map(([t, k, isCat]) => `<span class="rd-x${isCat ? ' cat' : ''}"${k ? ` style="${cv(k)}"` : ''}>${t}${I('x', 'Noņemt')}</span>`).join('')}<span class="rd-clr">Notīrīt visu</span></div>`;
+export const sel = (items, o = {}) => items.length === 0 ? '' : `${el('chosen-line')}<div class="rd-sel${o.ph ? ' ph scx' : ''}">${items.map(([t, k, isCat]) => `<span class="rd-x${isCat ? ' cat' : ''}"${k ? ` style="${cv(k)}"` : ''}>${t}${I('x', 'Noņemt')}</span>`).join('')}<span class="rd-clr">Notīrīt visu</span></div>`;
 
 // ── Category drawer (source: Discovery → The category drawer)
 const ORDER = ['trav', 'dance', 'hobby', 'comm', 'pol', 'pets', 'art', 'music', 'rel', 'social', 'games', 'sport', 'family', 'well', 'sci'];
@@ -182,7 +190,7 @@ export const calendar = () => {
 export const dayStrip = (selDay = 11, o = {}) => {
   const days = [['Sv', 11], ['P', 12], ['O', 13], ['T', 14], ['C', 15], ['Pk', 16], ['S', 17]];
   const none = o.none ?? [];
-  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><b>Oktobris 2026</b><span>${I('left', 'Iepriekšējā nedēļa')}${I('right', 'Nākamā nedēļa')}Šodien</span></div><div class="g">${days.map(([w, n]) => `<span class="${[n === selDay ? 'sel' : '', n === 11 && selDay !== 11 ? 'td' : '', none.includes(n) ? 'no' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
+  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><b>Oktobris 2026</b><span>Šodien</span></div><div class="g">${days.map(([w, n]) => `<span class="${[n === selDay ? 'sel' : '', n === 11 && selDay !== 11 ? 'td' : '', none.includes(n) ? 'no' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
 };
 
 // ── Panels (source: Group → The opened card; Event → The event panel)

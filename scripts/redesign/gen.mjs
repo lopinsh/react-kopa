@@ -56,7 +56,7 @@ const intro = `<header class="intro">
   <!--rd-meta-->
   <h1>Ejam kopā: the new look</h1>
   <p>Round nine. The page is rebuilt around what you have agreed. It opens with the <b>agreed rules</b>, one line per element, then follows the way a person meets the site: the identity, the header and navigation, discovery, search, a group, an event, your own area, pop-ups, admin. Each element is drawn in full in one place; everywhere else it appears exactly the same, or the text points to it. Your answers of 12 October are applied everywhere: one "Sazināties" button, one filter row with the Grupas / Pasākumi switch at its right end, two-line group rows on phones, one place list with "Visur", a shorter profile menu and one phone header.</p>
-  <p><b>New in 9.2:</b> your answers of 13 October (the redesign ships in parts; the language switch stays in the header; screens not drawn follow the rules; the event's place, faces, withdrawing a request, no "Mani pasākumi", social links), four screens drawn from the rules (the event page, Biedri, a group's Jaunumi, Mans profils), questions 4 and 8 redone as pictures, and near the end, everything from comparing this page with the live site. <b>9.3</b> (after a review): Still open is down to 18 real questions; what the Handbook or this page already decides is answered in the comparison instead.</p>
+  <p><b>New in 9.2:</b> your answers of 13 October (the redesign ships in parts; the language switch stays in the header; screens not drawn follow the rules; the event's place, faces, withdrawing a request, no "Mani pasākumi", social links), four screens drawn from the rules (the event page, Biedri, a group's Jaunumi, Mans profils), questions 4 and 8 redone as pictures, and near the end, everything from comparing this page with the live site. <b>9.3</b> (after a review): Still open is down to 18 real questions; what the Handbook or this page already decides is answered in the comparison instead. <b>9.4:</b> your notes of 13 October: the + leaves the header (the bottom bar on phones, the profile menu on desktop); the search bar is a plain field that opens the search at once, with the place and the categories as chips inside it; the overlaps in the filter row are fixed in its one template; the sub-category only once a category is chosen; the date choices on one line; no arrows on the day strip; "Rādīt nākamo nedēļu" as a text link; "Citur".</p>
   <p class="legend"><span>${st('ag')} you agreed or approved it</span><span>${st('lk')} you liked it; small details may still move</span><span>${st('op')} not decided yet</span><span>${st('pr')} my suggestion, not asked for</span></p>
   <ul class="toc"><li><a href="#h-rules">Agreed rules</a></li><li><a href="#h-open">Still open</a></li><li><a href="#h-id">Identity</a></li><li><a href="#h-shell">Header and navigation</a></li><li><a href="#h-disc">Discovery</a></li><li><a href="#h-search">Search</a></li><li><a href="#h-group">A group</a></li><li><a href="#h-event">An event</a></li><li><a href="#h-me">Your own area</a></li><li><a href="#h-pop">Pop-ups and panels</a></li><li><a href="#h-admin">Admin</a></li><li><a href="#h-live">Compared with the live app</a></li><li><a href="#h-notes">Note index</a></li></ul>
 </header>`;
@@ -81,36 +81,36 @@ const ledger = `<section aria-labelledby="h-rules">
   ${L('Words and numbers', 'Sentence case everywhere, never all capitals. Faces of who is coming instead of "0 apstiprināti" (signed-in viewers only; visitors see "12 iet").', st('ag'), 'h-id', 'Identity')}
   ${L('Dates', 'Event dates carry the weekday, in the Latvian short form ("Svētd., 11. okt. 17:00"), 24-hour time, the viewer\'s time zone.', st('ag'), 'h-event', 'An event')}
   ${gh('Header and navigation')}
-  ${L('Desktop header', 'Logo (to discovery), search with the place tag, the language switch, a quiet outlined +, the shield (admins only), messages (opens the drawer), bell (opens the list), your picture (opens the profile menu). The same in admin.', st('ag'), 'h-shell', 'Header and navigation')}
-  ${L('Phone header', 'The same on every page: logo, the language switch, search icon, +, shield (admins only), bell, your picture. Messages are "Ziņas" in the bottom bar.', st('ag'), 'h-shell', 'Header and navigation')}
-  ${L('Profile menu', 'Mans profils, Manas grupas (with the count of what is new), Iestatījumi, Iziet. No Ziņas, no Paziņojumi, no light/dark switch.', st('ag'), 'h-shell', 'Header and navigation')}
+  ${L('Desktop header', 'Logo (to discovery), the search bar (a plain field; a click opens the search), the language switch, the shield (admins only), messages (opens the drawer), bell (opens the list), your picture (opens the profile menu). No +: "Izveidot grupu" is in the profile menu. The same in admin.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
+  ${L('Phone header', 'The same on every page: logo, the language switch, search icon, shield (admins only), bell, your picture. No +: it is in the bottom bar. Messages are "Ziņas" in the bottom bar.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
+  ${L('Profile menu', 'Mans profils, Manas grupas (with the count of what is new), Izveidot grupu, Iestatījumi, Iziet; the same menu on every screen. No Ziņas, no Paziņojumi, no light/dark switch.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
   ${L('Language switch', 'Visible in the header on every page, desktop and phones, signed in or not; never hidden in Iestatījumi. "LV ▾" opens a short list (Latviešu, English), built so more languages fit later.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
   ${L('Footer', 'A slim footer (logo, one line, Par mums, Privātums) on discovery and reading pages only; none on group, own-area or admin pages.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
   ${L('Light and dark', 'Only in Iestatījumi (Gaišs, Tumšs, Kā ierīcē).', st('ag'), 'h-me', 'Your own area')}
   ${L('Admin shield menu', 'Atsauksmju režīms, Tulkošanas režīms, Administrēšanas panelis. Built; the live link still reads "Admina panelis" and becomes "Administrēšanas panelis".', st('ag'), 'h-admin', 'Admin')}
-  ${L('Bottom bar (phones)', 'Atklāt, Grupas, Ziņas, Es. No +: groups are created from the header. Admin pages keep it.', st('ag'), 'h-shell', 'Header and navigation')}
+  ${L('Bottom bar (phones)', 'Atklāt, Grupas, + (Izveidot grupu), Ziņas, Es. Admin pages keep it.', st('ag', 'Agreed 13 Oct'), 'h-shell', 'Header and navigation')}
   ${L('Where Grupas and Es lead', 'My default: "Grupas" opens Manas grupas, "Es" opens Mans profils; on a group page the tab you came from stays marked.', st('op'), 'h-open', 'Still open, 2')}
   ${L('Navigation rule', 'Two levels: an area\'s pages and a page\'s parts; one runs across, the other down, never two look-alike rows. Groups and your own area: pages down the left (a ☰ drawer on phones), parts across. Admin: sections across (sticky), pages down the left. No label repeats the chosen item.', st('ag'), 'h-shell', 'Header and navigation')}
   ${gh('Discovery')}
   ${L('The page', 'No title or explanation above the list, no "Rāda:", no events strip on Grupas. Vertical space matters.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Filter row, desktop', 'One row: place, then the sub-category (after a category is chosen in the drawer), then on Pasākumi the date choices (Šodien, Rīt, Šonedēļ, Nedēļas nogalē, calendar). No "Kad" label.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Grupas | Pasākumi', 'A small two-part switch at the right end of the filter row: it changes the content, it doesn\'t filter it, so it looks unlike the filters.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Filter row, phones', 'One row that scrolls sideways (place, Kategorija, Apakškategorija, the date), with the same switch pinned at its right end.', st('ag'), 'h-disc', 'Discovery')}
+  ${L('Filter row, desktop', 'One row: place, then the sub-category (only once a category is chosen in the drawer), then on Pasākumi the date choices (Šodien, Rīt, Šonedēļ, Nedēļas nogalē, calendar), always on one line. No "Kad" label.', st('lk', 'Liked, awaiting approval'), 'h-disc', 'Discovery')}
+  ${L('Grupas | Pasākumi', 'A small two-part switch at the right end of the filter row: it changes the content, it doesn\'t filter it, so it looks unlike the filters. You liked it again on 13 October.', st('ag'), 'h-disc', 'Discovery')}
+  ${L('Filter row, phones', 'One row that scrolls sideways (place, Kategorija, Apakškategorija only once a category is chosen, the date), with the same switch pinned at its right end. What doesn\'t fit fades out before the switch.', st('lk', 'Liked, awaiting approval'), 'h-disc', 'Discovery')}
   ${L('Chosen-filters line', 'Only when something is chosen: removable chips and "Notīrīt visu", without the word "Izvēlēts".', st('ag'), 'h-disc', 'Discovery')}
   ${L('Events filter like groups', 'Category and sub-category filter events exactly as they filter groups, on every screen with events.', st('ag'), 'h-disc', 'Discovery')}
   ${L('Category drawer', 'All fifteen, alphabetical, icon and count, empty ones greyed; folds to an icon rail on desktop, a sheet on phones; a search field on top that also finds sub-categories.', st('lk'), 'h-disc', 'Discovery')}
-  ${L('Sub-category list', '"Apakškategorija": search on top, counts, tick boxes, several at once, empty ones greyed, no "Visas" line.', st('lk'), 'h-disc', 'Discovery')}
-  ${L('Place list', 'One list for the place filter and the search tag. First line a plain "Visur" (show all, no tick box), then cities with tick boxes and counts, several at once.', st('ag'), 'h-disc', 'Discovery')}
+  ${L('Sub-category list', '"Apakškategorija": only once a category is chosen; search on top, counts, tick boxes, several at once, empty ones greyed, no "Visas" line.', st('lk', 'Liked 13 Oct'), 'h-disc', 'Discovery')}
+  ${L('Place list', 'One list for the place filter and the place chip in the search. First line a plain "Visur" (show all, no tick box), then cities with tick boxes and counts, several at once. You liked it again on 13 October.', st('ag'), 'h-disc', 'Discovery')}
   ${L('No results in a list', '"Nekas nav atrasts." in the category, sub-category and place lists; a second line only where there is something to do.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Group card (desktop)', 'Name, category and sub-categories first, city · members as quiet text, the "Ko meklējam?" note or the next meeting; the photo on the right, about a fifth of the width (at most 84 px); no photo = category colour and icon.', st('lk'), 'h-disc', 'Discovery')}
+  ${L('Group card (desktop)', 'Name, category and sub-categories first, city · members as quiet text, the "Ko meklējam?" note or the next meeting; the photo on the right, about a fifth of the width (at most 84 px); no photo = category colour and icon.', st('lk', 'Liked 13 Oct'), 'h-disc', 'Discovery')}
   ${L('"Ko meklējam?"', 'An optional group field, up to 60 characters, shown as the card\'s note; when empty, the card shows the next meeting.', st('ag'), 'h-disc', 'Discovery')}
   ${L('Group row (phones)', 'Two lines like an event: the name (up to two lines), then one quiet line "category · sub-categories · city · N biedri". No photo: the category colour and icon sit where the photo is on desktop.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Create card', 'At the end of a chosen category, also when it is empty: the same + as the header, "Izveidot jaunu grupu", "šajā kategorijā", quiet.', st('ag'), 'h-disc', 'Discovery')}
-  ${L('Citur Latvijā', 'On Discovery only, under fewer than five results for a chosen city and topic: the same topic in other cities, nearest first.', st('lk'), 'h-disc', 'Discovery')}
-  ${L('Day strip', 'Your idea: seven days over the event list, the chosen day filled, today outlined, a dot on days with events. The drawing is not reviewed yet.', st('op'), 'h-disc', 'Discovery')}
-  ${L('Date picker', 'The calendar button opens quick choices and a month; one day or a range. Not reviewed yet.', st('op'), 'h-disc', 'Discovery')}
+  ${L('Create card', 'At the end of a chosen category, also when it is empty: the same + as the bottom bar, "Izveidot jaunu grupu", "šajā kategorijā", quiet.', st('ag'), 'h-disc', 'Discovery')}
+  ${L('Citur', 'The label is just "Citur" (13 Oct). On Discovery only, under fewer than five results for a chosen city and topic: the same topic in other cities, nearest first.', st('lk'), 'h-disc', 'Discovery')}
+  ${L('Day strip', 'Your idea: seven days over the event list, the chosen day filled, today outlined, a dot on days with events. No arrows: a day is tapped directly (13 Oct); other weeks come from the calendar and "Rādīt nākamo nedēļu".', st('op'), 'h-disc', 'Discovery')}
+  ${L('Date picker', 'The calendar button opens the quick choices (on one line) and a month, with its arrows right next to the month\'s name; one day or a range.', st('lk', 'Liked 13 Oct'), 'h-disc', 'Discovery')}
   ${gh('Search')}
-  ${L('Search', 'Starts in your place: a place tag at the start of the field, "Visur" when nothing is chosen, opening the place list. Categories in the results become tags. "Rādīt visus rezultātus" = discovery, filtered.', st('lk'), 'h-search', 'Search')}
+  ${L('Search', 'The search bar is a plain field, with no place or tags in it; a tap or click opens the search at once. At its top, a row of chips: the place chip (the place list: "Visur" and tick boxes, set from the page\'s filter), then the matching categories, the same chips as elsewhere; the results below. "Rādīt visus rezultātus" = discovery, filtered.', st('lk', 'Liked, changed 13 Oct'), 'h-search', 'Search')}
   ${gh('A group')}
   ${L('Opened card', 'A click keeps you on discovery: a panel from the right over the dimmed list (a sheet on phones); the address is the group\'s page. Inside: photo, name, category and sub-categories, city · members, next meeting, short text, "Sazināties", "Atvērt grupas lapu".', st('ag'), 'h-group', 'A group')}
   ${L('Sazināties', 'One button, "Sazināties", wherever a group can be contacted. Its form has a switch "Vēlos pievienoties grupai" (on while the group takes members), so the same message can also ask to join. No separate join button.', st('ag'), 'h-group', 'A group')}
@@ -122,7 +122,7 @@ const ledger = `<section aria-labelledby="h-rules">
   ${L('The "…" menu', 'Your role as a line, then: Rakstīt komandai, Dalīties, Ziņot par grupu, Pamest grupu (members); Atsaukt pieteikumu (while waiting). Team tools stay in Iestatījumi.', st('pr'), 'h-group', 'A group')}
   ${L('Biedri, Jaunumi', 'Biedri: member rows with face, name, since when, role tag; the team gets "…" per row. Jaunumi: items with who wrote them; the team\'s "Jauns ieraksts" at the right end of the tabs; Aktuālie and Arhīvs.', st('pr'), 'h-group', 'A group')}
   ${gh('An event')}
-  ${L('Event row', 'Line one: time, category dot, name, city (left out when one city is chosen). Line two, smaller: the group (a link), category, sub-category; left out on the group\'s own page. Day headings; two columns on wide screens; a week, then "Rādīt nākamo nedēļu".', st('lk'), 'h-event', 'An event')}
+  ${L('Event row', 'Line one: time, category dot, name, city (left out when one city is chosen). Line two, smaller: the group (a link), category, sub-category; left out on the group\'s own page. Day headings; two columns on wide screens; a week, then "Rādīt nākamo nedēļu" as a plain text link (13 Oct).', st('lk'), 'h-event', 'An event')}
   ${L('Event panel', 'Like the group panel: dot, category and sub-category on one line, when, where, text, who is going, "Eju" and "Visa informācija" on one line, who organises it. Faces and names only for signed-in viewers; visitors see "12 iet" (13 Oct).', st('lk'), 'h-event', 'An event')}
   ${L('Events you can\'t simply join', 'Approval, full with a waiting list, sign-ups closed: drawn with the default (a quiet word on the row, the panel\'s button names the step, "Gaida" after you ask).', st('op'), 'q-states', 'Still open, 8')}
   ${L('Events away from home', 'An event has its own place, and lists filter by the event\'s place: a required city from the list, filled in with the group\'s city, plus a free address. Online events get "Tiešsaistē", shown under "Visur".', st('ag', 'Agreed 13 Oct'), 'h-event', 'An event')}
@@ -198,16 +198,17 @@ const shell = `<section aria-labelledby="h-shell">
   <h2 id="h-shell">Header and navigation</h2>
   <p class="lead">The header and the bottom bar are the same on every page, admin included. The person in these drawings, Ilze, is not a site admin, so her header has no shield; the admin drawings in <a href="#h-admin">Admin</a> show it. Messages and the bell open quick views from anywhere; their full pages are in your own area. The language switch, "LV ▾", is in the header on every page, signed in or not (your answer of 13 October: several languages are used in Latvia).</p>
   ${shots(
-    shot('Desktop · signed in', st('ag'), P.desk(P.hdr(), 760), '1 1 760px'),
-    shot('Desktop · site admin: the shield, left of messages', st('ag'), P.desk(P.hdr({ admin: true }), 760), '1 1 760px'),
-    shot('Desktop · signed out', st('ag'), P.desk(P.hdr({ signedOut: true, place: 'Visur' }), 760), '1 1 760px'),
+    shot('Desktop · signed in', st('ag', 'Agreed 13 Oct'), P.desk(P.hdr(), 760), '1 1 760px'),
+    shot('Desktop · site admin: the shield, left of messages', st('ag', 'Agreed 13 Oct'), P.desk(P.hdr({ admin: true }), 760), '1 1 760px'),
+    shot('Desktop · signed out', st('ag', 'Agreed 13 Oct'), P.desk(P.hdr({ signedOut: true }), 760), '1 1 760px'),
   )}
   ${shots(
-    shot('Phone · signed in', st('ag'), P.mob(P.phdr())),
-    shot('Phone · site admin', st('ag'), P.mob(P.phdr({ admin: true }))),
-    shot('Phone · bottom bar', st('ag'), P.mob(P.navb('atklat'))),
+    shot('Phone · signed in', st('ag', 'Agreed 13 Oct'), P.mob(P.phdr())),
+    shot('Phone · site admin', st('ag', 'Agreed 13 Oct'), P.mob(P.phdr({ admin: true }))),
+    shot('Phone · bottom bar', st('ag', 'Agreed 13 Oct'), P.mob(P.navb('atklat'))),
   )}
-  <p class="why"><b>Phones.</b> The search icon opens the search with the same place tag as on desktop. The + opens "Izveidot grupu". The bell opens Paziņojumi of your own area full-screen (you agreed a full-screen list on phones earlier). Messages are "Ziņas" in the bottom bar, with the unread count on it. In the bottom bar, "Grupas" opens Manas grupas and "Es" opens Mans profils (my default, <a href="#h-open">Still open</a>, question 2); on the pages of your own area the bar marks the matching tab (Manas grupas → Grupas, Ziņas → Ziņas, the rest → Es).</p>
+  <p class="why"><b>No + in the header</b> (your answer of 13 October: the phone header was too crowded). On phones the + sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es) and opens "Izveidot grupu". Desktop has no bottom bar, so there "Izveidot grupu" is a line in the profile menu. <b>The search bar</b> is a plain field: a click opens the search at once (<a href="#h-search">Search</a>).</p>
+  <p class="why"><b>Phones.</b> The search icon opens the same search full-screen. The bell opens Paziņojumi of your own area full-screen (you agreed a full-screen list on phones earlier). Messages are "Ziņas" in the bottom bar, with the unread count on it. In the bottom bar, "Grupas" opens Manas grupas and "Es" opens Mans profils (my default, <a href="#h-open">Still open</a>, question 2); on the pages of your own area the bar marks the matching tab (Manas grupas → Grupas, Ziņas → Ziņas, the rest → Es).</p>
   <h3>The language switch ${st('ag', 'Agreed 13 Oct')}</h3>
   <p class="lead">Always visible, never hidden in Iestatījumi. It shows the language you read in, short ("LV"), and opens a short list with each language written in its own words. Today the list has Latviešu and English; it is built so more languages can be added later without changing the header. On phones it sits right after the logo, before the search icon.</p>
   ${shots(
@@ -223,10 +224,10 @@ const shell = `<section aria-labelledby="h-shell">
   )}
 
   ${shots(
-    shot('Your picture opens the profile menu', st('ag'), P.profileMenu(), '0 1 260px'),
+    shot('Your picture opens the profile menu', st('ag', 'Agreed 13 Oct'),P.profileMenu(), '0 1 260px'),
     shot('The shield opens the admin menu (admins only)', st('ag'), P.shieldMenu(), '0 1 260px'),
   )}
-  <p class="why"><b>The profile menu</b> has four lines. "Manas grupas" counts what is new in your groups since you last looked. Ziņas and Paziņojumi are not repeated here: they have their own icons in the header, and their full pages are in your own area. Light and dark live only in Iestatījumi.</p>
+  <p class="why"><b>The profile menu</b> has five lines, the same on every screen. "Manas grupas" counts what is new in your groups since you last looked. "Izveidot grupu" is here because desktop has no bottom bar (13 October). Ziņas and Paziņojumi are not repeated here: they have their own icons in the header, and their full pages are in your own area. Light and dark live only in Iestatījumi.</p>
   <h3>The navigation rule ${st('ag')}</h3>
   <div class="rd-rule"><ol>
     <li><b>Two levels:</b> an area's pages (a group's pages, your own area's pages, admin's sections) and a page's parts (Par mums · Kā notiek pirmā tikšanās · Praktiski; Gaidāmie · Pagājušie; admin's pages). A page with parts of its own in admin (Dizains, Rokasgrāmata) opens them indented in the same list, never as a third menu.</li>
@@ -240,7 +241,8 @@ const shell = `<section aria-labelledby="h-shell">
 
 // ── Discovery
 const crop = (inner, w) => `<div class="rd-crop">${w ? `<div style="min-width:${w}px;display:grid;gap:8px">${inner}</div>` : inner}</div>`;
-const dropAt = (row, list, at) => `<div class="rd-drop" style="--at:${at}px">${row}${list}</div>`;
+/** A filter row with one list open under its button; `chosen` is the chosen-filters line, so a sub-category list always shows its category. */
+const dropAt = (row, list, at, chosen = '') => `<div class="rd-drop" style="--at:${at}px">${row}${chosen}${list}</div>`;
 const alt = (letter, title, status, text, src, mock) => `<div class="rd-alt"><div class="ah"><b>${letter} · ${title}</b>${status}</div>${mock}<p>${text}</p><p class="src"><b>Seen at:</b> ${src}</p></div>`;
 const filterCBtn = (n) => `<span class="rd-fc set">${I('sliders')}Filtri<em>${n}</em></span>`;
 
@@ -253,34 +255,34 @@ const discovery = `<section aria-labelledby="h-disc">
     `<div class="rd-shot" style="flex:1 1 300px;max-width:440px"><p class="why"><b>Twice as many groups on a phone.</b> As you asked: two lines per group, like an event. Six groups and the "create" row fit where three cards fitted before. The photo and the note stay on desktop; on the phone the category colour and icon sit where the photo is, so the category still shows at a glance.</p><p class="why"><b>Above the list</b> there is only the filter row. The search is the icon in the header, so the page doesn't spend a line on it.</p></div>`,
   )}
 
-  <h3>The filter row ${st('ag')}</h3>
-  <p class="lead">One row. The place comes first, then the sub-category once a category is chosen (in the drawer on desktop, the "Kategorija" button on phones), then on Pasākumi the date choices. The Grupas | Pasākumi switch is a small two-part toggle at the right end: a tray with the chosen half raised, so it reads as "what am I looking at", not as one more filter. A chosen filter gets a dark outline and its number. There is no "Kad" label: the four choices and the calendar speak for themselves.</p>
+  <h3>The filter row ${st('lk', 'Liked, awaiting approval')}</h3>
+  <p class="lead">One row. The place comes first, then the sub-category once a category is chosen (in the drawer on desktop, the "Kategorija" button on phones), then on Pasākumi the date choices. The Grupas | Pasākumi switch is a small two-part toggle at the right end: a tray with the chosen half raised, so it reads as "what am I looking at", not as one more filter. A chosen filter gets a dark outline and its number. There is no "Kad" label: the four choices and the calendar speak for themselves, always on one line. You liked the bar and the switch on 13 October; this is the fixed version for your approval: the sub-category appears only once a category is chosen, and on phones whatever doesn't fit fades out before the switch instead of running into it.</p>
   ${shots(
-    shot('Desktop · Grupas · only your own city: no second line', st('ag'), crop(P.frow({ view: 'grupas' }), 900), '1 1 100%'),
-    shot('Desktop · Grupas · Sports un fitness → Nūjošana, Pastaigas', st('ag'), crop(P.frow({ cat: 'sport', sub: 2, view: 'grupas' }) + P.sel(chosenSport), 900), '1 1 100%'),
-    shot('Desktop · Pasākumi · Sports un fitness, any sub-category', st('ag'), crop(P.frow({ cat: 'sport', view: 'pasakumi' }) + P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]]), 900), '1 1 100%'),
-    shot('Desktop · Pasākumi · a range from the calendar', st('op'), crop(P.frow({ cat: 'sport', view: 'pasakumi', range: '15.–18. okt.' }) + P.sel([['Jelgava'], ['Sports un fitness', 'sport', true], ['15.–18. okt.']]), 900), '1 1 100%'),
+    shot('Desktop · Grupas · only your own city: no second line', st('lk', 'Liked, awaiting approval'), crop(P.frow({ view: 'grupas' }), 900), '1 1 100%'),
+    shot('Desktop · Grupas · Sports un fitness → Nūjošana, Pastaigas', st('lk', 'Liked, awaiting approval'), crop(P.frow({ cat: 'sport', sub: 2, view: 'grupas' }) + P.sel(chosenSport), 900), '1 1 100%'),
+    shot('Desktop · Pasākumi · Sports un fitness, any sub-category', st('lk', 'Liked, awaiting approval'), crop(P.frow({ cat: 'sport', view: 'pasakumi' }) + P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]]), 900), '1 1 100%'),
+    shot('Desktop · Pasākumi · a range from the calendar', st('lk', 'Liked 13 Oct'), crop(P.frow({ cat: 'sport', view: 'pasakumi', range: '15.–18. okt.' }) + P.sel([['Jelgava'], ['Sports un fitness', 'sport', true], ['15.–18. okt.']]), 900), '1 1 100%'),
   )}
   ${shots(
-    shot('Phone · Grupas · nothing chosen', st('ag'), P.mob(`<div class="rd-pg">${P.frowPh({ view: 'grupas' })}</div>`)),
-    shot('Phone · Pasākumi · Sports un fitness → Nūjošana', st('ag'), P.mob(`<div class="rd-pg">${P.frowPh({ cat: 'sport', sub: 1, view: 'pasakumi' })}${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true], ['Nūjošana', 'sport']], { ph: 1 })}</div>`)),
+    shot('Phone · Grupas · nothing chosen', st('lk', 'Liked, awaiting approval'), P.mob(`<div class="rd-pg">${P.frowPh({ view: 'grupas' })}</div>`)),
+    shot('Phone · Pasākumi · Sports un fitness → Nūjošana', st('lk', 'Liked, awaiting approval'), P.mob(`<div class="rd-pg">${P.frowPh({ cat: 'sport', sub: 1, view: 'pasakumi' })}${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true], ['Nūjošana', 'sport']], { ph: 1 })}</div>`)),
   )}
   <p class="why"><b>The chosen-filters line.</b> It appears once anything besides your own city is chosen, and then lists the place too, so "Notīrīt visu" returns to the start. It has no label in front: the chips with their × say what they are. On phones it scrolls sideways like the row above. Removing the category also removes its sub-categories. "Šonedēļ" is where Pasākumi starts, so it is not counted as chosen.</p>
 
   <h3>The drop-downs, open</h3>
-  <p class="lead">Each filter opens a short list under it, smaller than in round eight (30 px buttons, 13 px rows). The search field is the first line of the list; counts show what a choice gives; empty choices stay in the list, greyed. On phones the same lists open as a sheet from the bottom.</p>
+  <p class="lead">You liked all three on 13 October. Each filter opens a short list under it, smaller than in round eight (30 px buttons, 13 px rows). The search field is the first line of the list; counts show what a choice gives; empty choices stay in the list, greyed. On phones the same lists open as a sheet from the bottom. In the calendar the four quick choices sit on one line and the arrows sit right next to the month's name (13 October).</p>
   ${shots(
-    shot('Place · several cities ticked', st('ag'), crop(dropAt(P.frow({ view: 'grupas', place: 'Jelgava, Ozolnieki', open: 'place' }), P.placeList({ ticked: ['Jelgava', 'Ozolnieki'] }), 0), 560), '0 1 580px'),
-    shot('Apakškategorija · two ticked', st('lk'), crop(dropAt(P.frow({ cat: 'sport', sub: 2, view: 'grupas', open: 'sub' }), P.subList({ ticked: ['Nūjošana', 'Pastaigas'] }), 120), 560), '0 1 580px'),
-    shot('The calendar button · a range', st('op'), crop(dropAt(P.frow({ cat: 'sport', view: 'pasakumi', range: '15.–18. okt.', open: 'date' }), P.calendar(), 540), 900), '1 1 100%'),
+    shot('Place · several cities ticked', st('ag', 'Agreed · liked 13 Oct'), crop(dropAt(P.frow({ view: 'grupas', place: 'Jelgava, Ozolnieki', open: 'place' }), P.placeList({ ticked: ['Jelgava', 'Ozolnieki'] }), 0), 560), '0 1 580px'),
+    shot('Apakškategorija · Sports un fitness chosen · two ticked', st('lk', 'Liked 13 Oct'), crop(dropAt(P.frow({ cat: 'sport', sub: 2, view: 'grupas', open: 'sub' }), P.subList({ ticked: ['Nūjošana', 'Pastaigas'] }), 120, P.sel(chosenSport)), 560), '0 1 580px'),
+    shot('The calendar button · a range', st('lk', 'Liked 13 Oct'), crop(dropAt(P.frow({ cat: 'sport', view: 'pasakumi', range: '15.–18. okt.', open: 'date' }), P.calendar(), 540, P.sel([['Jelgava'], ['Sports un fitness', 'sport', true], ['15.–18. okt.']])), 900), '1 1 100%'),
   )}
   ${shots(
     shot('Place · "je" typed', st('ag'), P.placeList({ ticked: ['Jelgava'], typed: '<em class="hl">je</em>' }), '0 1 260px'),
     shot('Place · no match', st('ag'), P.placeList({ typed: 'Ērgļi' }), '0 1 260px'),
-    shot('Apakškategorija · "pe" typed', st('lk'), P.subList({ typed: 'pe' }), '0 1 260px'),
+    shot('Apakškategorija · "pe" typed', st('lk', 'Liked 13 Oct'), P.subList({ typed: 'pe' }), '0 1 260px'),
     shot('Phone · the place list as a sheet', st('ag'), P.mob(`<div class="rd-stage" style="height:440px"><div class="rd-pg">${P.frowPh({ view: 'grupas', place: 'Jelgava, Ozolnieki', open: 'place' })}</div><div class="rd-scrim"></div><div class="rd-pnl sheet" style="position:absolute;left:0;right:0;bottom:0;z-index:2;padding:0 8px 10px"><span class="grab"></span>${P.placeList({ ticked: ['Jelgava', 'Ozolnieki'] })}</div></div>`)),
   )}
-  <p class="why"><b>The place list</b> is one list for the place filter and the search tag (<a href="#h-search">Search</a>). Its first line, "Visur", is a plain "show all" with no tick box: choosing it clears the ticks. Two cities read "Jelgava, Ozolnieki" on the button; more read "Jelgava +2". <b>No results</b> reads "Nekas nav atrasts." in every list; the place list adds how a missing city gets added, and the category search offers to suggest a new one.</p>
+  <p class="why"><b>The place list</b> is one list for the place filter and the place chip in the search (<a href="#h-search">Search</a>). Its first line, "Visur", is a plain "show all" with no tick box: choosing it clears the ticks. Two cities read "Jelgava, Ozolnieki" on the button; more read "Jelgava +2". <b>No results</b> reads "Nekas nav atrasts." in every list; the place list adds how a missing city gets added, and the category search offers to suggest a new one.</p>
 
   <h3>The category drawer ${st('lk')}</h3>
   <p class="lead">All fifteen, always, alphabetical, with icon and count; empty ones greyed. It folds to an icon rail on desktop (Pasākumi below shows it folded); on phones "Kategorija" opens the same list as a sheet. The search field on top narrows the list and also finds sub-categories. When nothing matches, the list says so and offers to suggest the word as a new category; the suggestion goes to the admins (Struktūra → Kategorijas).</p>
@@ -291,11 +293,11 @@ const discovery = `<section aria-labelledby="h-disc">
   )}
 
   <h3>Group card and group row</h3>
-  <p class="lead">Two shapes for a group, and only two. <b>The card</b> is for desktop discovery. <b>The row</b> is for phones and for every short list of groups (search, "Citur Latvijā", Tavas grupas), so a group looks the same wherever it is listed in brief.</p>
+  <p class="lead">Two shapes for a group, and only two. <b>The card</b> is for desktop discovery. <b>The row</b> is for phones and for every short list of groups (search, "Citur", Tavas grupas), so a group looks the same wherever it is listed in brief.</p>
   ${shots(
-    shot('Card · photo, next meeting', st('lk'), `<div style="width:420px;max-width:100%">${P.groupCard(G.zs)}</div>`, '0 1 420px'),
-    shot('Card · "Ko meklējam?" note', st('lk'), `<div style="width:420px;max-width:100%">${P.groupCard(G.rn)}</div>`, '0 1 420px'),
-    shot('Card · no photo: category colour and icon', st('lk'), `<div style="width:420px;max-width:100%">${P.groupCard(G.sk)}</div>`, '0 1 420px'),
+    shot('Card · photo, next meeting', st('lk', 'Liked 13 Oct'), `<div style="width:420px;max-width:100%">${P.groupCard(G.zs)}</div>`, '0 1 420px'),
+    shot('Card · "Ko meklējam?" note', st('lk', 'Liked 13 Oct'), `<div style="width:420px;max-width:100%">${P.groupCard(G.rn)}</div>`, '0 1 420px'),
+    shot('Card · no photo: category colour and icon', st('lk', 'Liked 13 Oct'), `<div style="width:420px;max-width:100%">${P.groupCard(G.sk)}</div>`, '0 1 420px'),
     shot('Create card, at the end of a chosen category', st('ag'), `<div style="width:420px;max-width:100%">${P.createCard()}</div>`, '0 1 420px'),
   )}
   ${shots(
@@ -312,41 +314,45 @@ const discovery = `<section aria-labelledby="h-disc">
     shot('Phone · Pasākumi · Jelgava · Sports un fitness · Tuesday tapped', st('ag', 'Agreed; day strip open'), P.mob(`${P.phdr()}<div class="rd-pg">${P.frowPh({ cat: 'sport', view: 'pasakumi' })}${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]], { ph: 1 })}${P.dayStrip(13, { none: [14] })}${P.evList(jelgSportFromTue, { noCity: true })}</div>${P.navb('atklat')}`)),
     `<div class="rd-shot" style="flex:1 1 300px;max-width:460px">
       <div class="cap"><span>The day strip</span>${st('op')}</div>
-      <p class="why">Your idea, drawn: the month and "Šodien" on top, seven days below, the chosen day filled in Sūna, today outlined, a small dot on days with events; days without events are greyed. A tap jumps the list to that day; a swipe (the arrows on desktop) moves a week. It sits under the filter row and scrolls away with the list. The dot is the site colour, because a day mixes categories. Not reviewed yet.</p>
-      <div class="cap"><span>The date picker</span>${st('op')}</div>
-      <p class="why">The calendar button opens the quick choices and a month (drawn above under "The drop-downs, open"). One tap picks a day, a second tap a range; the button says how many events that gives ("Rādīt 23"). The range then reads on the row ("15.–18. okt.") and in the chosen line with its ×. On phones the date button opens the same thing as a sheet. Not reviewed yet.</p>
+      <p class="why">Your idea, drawn: the month and "Šodien" on top, seven days below, the chosen day filled in Sūna, today outlined, a small dot on days with events; days without events are greyed. A tap jumps the list to that day; there are no arrows, because the days themselves are tapped (13 October). Another week comes from the calendar button or from "Rādīt nākamo nedēļu" under the list, a plain text link (13 October); on phones a swipe also moves a week. It sits under the filter row and scrolls away with the list. The dot is the site colour, because a day mixes categories. Not reviewed yet.</p>
+      <div class="cap"><span>The date picker</span>${st('lk', 'Liked 13 Oct')}</div>
+      <p class="why">The calendar button opens the quick choices and a month (drawn above under "The drop-downs, open"). One tap picks a day, a second tap a range; the button says how many events that gives ("Rādīt 23"). The range then reads on the row ("15.–18. okt.") and in the chosen line with its ×. On phones the date button opens the same thing as a sheet. You liked it on 13 October.</p>
     </div>`,
   )}
 
-  <h3>Few results: "Citur Latvijā" ${st('lk')}</h3>
-  <p class="lead">On Discovery only. When a city is chosen and it has fewer than five results for the chosen category or sub-category, the list goes on with the same topic in other cities, nearest first, as group rows with the distance.</p>
-  ${shots(shot('Desktop · Grupas · Jelgava · Spēles → Šahs', st('lk'), P.desk(`<div class="rd-pg">${P.frow({ cat: 'games', sub: 1, view: 'grupas' })}${P.sel([['Jelgava'], ['Spēles', 'games', true], ['Šahs', 'games']])}${P.cards([G.sh])}<div class="rd-ctx"><h4>Citur Latvijā</h4><small>Šahs · vēl 3 grupas</small></div><div style="max-width:440px">${P.rows(P.groupRow(G.rs, { extra: '42 km' }) + P.groupRow(G.ts, { extra: '50 km' }) + P.groupRow(G.ls, { extra: '160 km' }))}</div></div>`, 820), '1 1 820px'))}
+  <h3>Few results: "Citur" ${st('lk')}</h3>
+  <p class="lead">On Discovery only. When a city is chosen and it has fewer than five results for the chosen category or sub-category, the list goes on with the same topic in other cities, nearest first, as group rows with the distance. The label is just "Citur" (13 October).</p>
+  ${shots(shot('Desktop · Grupas · Jelgava · Spēles → Šahs', st('lk'), P.desk(`<div class="rd-pg">${P.frow({ cat: 'games', sub: 1, view: 'grupas' })}${P.sel([['Jelgava'], ['Spēles', 'games', true], ['Šahs', 'games']])}${P.cards([G.sh])}<div class="rd-ctx"><h4>Citur</h4><small>Šahs · vēl 3 grupas</small></div><div style="max-width:440px">${P.rows(P.groupRow(G.rs, { extra: '42 km' }) + P.groupRow(G.ts, { extra: '50 km' }) + P.groupRow(G.ls, { extra: '160 km' }))}</div></div>`, 820), '1 1 820px'))}
 
   <h3>More compact: three options from other sites ${st('op')}</h3>
   <p class="lead">Your note: the header and filters still take too much room; look at what other sites do. I looked at Meetup, Airbnb, Booking, Google's Material filter chips, SAP's filter bar and Baymard's filter research. Three ways that fit us, recommended first. All three use the parts above; only the arrangement changes. Before the first card, round eight used about 190 px on desktop (header, tabs, filters, "Izvēlēts").</p>
   <div class="rd-alts">
     ${alt('A', 'One row of small drop-downs, the switch at its end', st('ag', 'Your choice, 12 Oct'), 'What you chose, made smaller: 30 px buttons with plain words until opened, the switch at the right end, the chosen line only when needed. About 120 px before the first card, about 95 px when nothing is chosen.', 'Meetup\'s Find page keeps date, type, distance and category as one row of small drop-downs at the top of the results (help.meetup.com); Baymard\'s testing shows people need the overview of applied filters (baymard.com, "applied filters").', crop(P.hdr() + `<div class="rd-pg">${P.frow({ cat: 'sport', view: 'pasakumi' })}${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]])}</div>`, 900))}
-    ${alt('B', 'The place lives only in the search field', st('pr'), 'The place tag in the search already says where you look, so the row drops its place button. The row gets shorter, not lower; on phones the first thing in the scrolling row is the category. The cost: the place is set in one spot only, in the header.', 'Airbnb keeps one search input pinned at the top, and the place is part of it (goodui.org, Booking vs Airbnb mobile).', crop(P.hdr() + `<div class="rd-pg"><div class="rd-frow"><div class="fs">${P.subChip(0)}${P.dateGroup()}</div>${P.sw('pasakumi')}</div>${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]])}</div>`, 900))}
+    ${alt('B', 'The place lives only in the search field', st('pr', 'Withdrawn 13 Oct'), 'No longer possible: since 13 October the search bar is a plain field and the place is a chip inside the open search, so the row keeps its place button. Kept only as a record. The idea was: the place tag in the search already says where you look, so the row drops its place button. The row gets shorter, not lower; on phones the first thing in the scrolling row is the category. The cost: the place is set in one spot only, in the header.', 'Airbnb keeps one search input pinned at the top, and the place is part of it (goodui.org, Booking vs Airbnb mobile).', crop(P.hdr() + `<div class="rd-pg"><div class="rd-frow"><div class="fs">${P.subChip(0)}${P.dateGroup()}</div>${P.sw('pasakumi')}</div>${P.sel([['Jelgava'], ['Sports un fitness', 'sport', true]])}</div>`, 900))}
     ${alt('C', 'One "Filtri" button, the chosen filters in the same row', st('pr'), 'Everything except the switch goes behind one button with a count; it opens a panel (a sheet on phones). What is chosen sits as removable chips in the same row, so there is no second line at all: about 95 px before the first card. The cost: you can\'t see the choices until you open it, which Baymard found makes the range of a catalogue harder to judge.', 'Google\'s Material filter chips and SAP Fiori\'s filter bar keep filters in one sideways row, with a chip that opens a bottom sheet; shops use a "Filter (2)" button with a count (baymard.com, "horizontal filtering").', crop(P.hdr() + `<div class="rd-pg"><div class="rd-frow"><div class="fs">${filterCBtn(2)}<span class="rd-x">Jelgava${I('x', 'Noņemt')}</span><span class="rd-x cat" style="${cv('sport')}">Sports un fitness${I('x', 'Noņemt')}</span></div>${P.sw('pasakumi')}</div></div>`, 900))}
   </div>
 </section>`;
 
 // ── Search
-const spRowCat = (k, label, n) => `<span class="rd-spc" style="${cv(k)}"><span class="rd-cat" style="${cv(k)}"><span>${label}</span></span><span class="n">${n}</span><span class="add" aria-label="Pievienot filtru">${I('plus')}</span></span>`;
+/** The open search: the chip row at the top, the results below (13 Oct). */
+const spModal = (chips, inner) => `<div class="rd-spw"><div class="rd-spl">${chips}${inner}</div></div>`;
+const spSp = () => `<span class="rd-sph">Grupas</span>${P.groupRow(G.gs, { hl: 'Galda <em class="hl">sp</em>ēļu vakari' })}${P.groupRow(G.sp, { hl: '<em class="hl">Sp</em>ēļu klubs «Kauliņš»' })}<span class="rd-sph">Pasākumi</span>${P.evList([[dh(10, 13), [{ ...E.spv, name: '<em class="hl">Sp</em>ēļu vakars bibliotēkā' }]]], { flat: true, noCity: true })}`;
+const spCats = [['games'], ['sport']];
 const search = `<section aria-labelledby="h-search">
-  <h2 id="h-search">Search ${st('lk')}</h2>
-  <p class="lead">Search starts in your place. The place is a tag at the start of the field, filled in from the place filter ("Jelgava"), or "Visur" when nothing is chosen; it opens the same place list as the filter. A category in the results doesn't navigate away: clicking it turns it into a tag in the field, and the results narrow. Groups are listed as group rows, events as event rows.</p>
+  <h2 id="h-search">Search ${st('lk', 'Liked, changed 13 Oct')}</h2>
+  <p class="lead">Your notes of 13 October. The search bar is a plain field: no place and no tags in it. A tap or click on it opens the search at once. At the top of the open search sits a row of chips: first the place chip, the same as the place filter (it opens the place list, "Visur" and tick boxes, and starts with the page's place, "Visur" when nothing is chosen); then the categories that match what you type, the same chips as the category filter on phones. A click on a category chooses it (dark outline and ×) and the results narrow; it doesn't navigate away. The results are below: groups as group rows, events as event rows.</p>
   ${shots(
-    shot('1 · "sp" typed', st('lk'), P.desk(P.hdr({ search: `<span class="rd-search open">${I('search')}${P.ctag('Jelgava')}<span class="q">sp<span class="caret"></span></span></span>` }) + `<div class="rd-spw"><div class="rd-spl"><span class="rd-sph">Kategorijas · klikšķis pievieno filtru</span>${spRowCat('games', '<em class="hl">Sp</em>ēles', '3 grupas')}${spRowCat('sport', '<em class="hl">Sp</em>orts un fitness', '6 grupas')}<span class="rd-sph">Grupas</span>${P.groupRow(G.gs, { hl: 'Galda <em class="hl">sp</em>ēļu vakari' })}${P.groupRow(G.sp, { hl: '<em class="hl">Sp</em>ēļu klubs «Kauliņš»' })}<span class="rd-sph">Pasākumi</span>${P.evList([[dh(10, 13), [{ ...E.spv, name: '<em class="hl">Sp</em>ēļu vakars bibliotēkā' }]]], { flat: true, noCity: true })}<span class="rd-spm">Vēl 14 rezultāti citās pilsētās · <u>meklēt visur</u></span><span class="rd-spa">Rādīt visus rezultātus${I('arrow')}</span></div></div>`, 760), '1 1 760px'),
-    shot('2 · "Spēles" picked, "vak" typed', st('lk'), P.desk(P.hdr({ search: `<span class="rd-search open">${I('search')}${P.ctag('Jelgava')}<span class="rd-qtag" style="${cv('games')}">Spēles${I('x', 'Noņemt')}</span><span class="q">vak<span class="caret"></span></span></span>` }) + `<div class="rd-spw"><div class="rd-spl"><span class="rd-sph">Grupas · Spēles</span>${P.groupRow(G.gs, { hl: 'Galda spēļu <em class="hl">vak</em>ari' })}<span class="rd-sph">Pasākumi · Spēles</span>${P.evList([[dh(10, 13), [E.spv]]], { flat: true, noCity: true })}<span class="rd-spa">Rādīt visus rezultātus (2)${I('arrow')}</span></div></div>`, 760), '1 1 760px'),
+    shot('1 · "sp" typed', st('lk'), P.desk(P.hdr({ search: P.searchOpen('sp') }) + spModal(P.searchChips({ place: 'Jelgava', cats: spCats }), `${spSp()}<span class="rd-spm">Vēl 14 rezultāti citās pilsētās · <u>meklēt visur</u></span><span class="rd-spa">Rādīt visus rezultātus${I('arrow')}</span>`), 760), '1 1 760px'),
+    shot('2 · "Spēles" chosen, "vak" typed', st('lk'), P.desk(P.hdr({ search: P.searchOpen('vak') }) + spModal(P.searchChips({ place: 'Jelgava', cats: [['games', true]] }), `<span class="rd-sph">Grupas · Spēles</span>${P.groupRow(G.gs, { hl: 'Galda spēļu <em class="hl">vak</em>ari' })}<span class="rd-sph">Pasākumi · Spēles</span>${P.evList([[dh(10, 13), [E.spv]]], { flat: true, noCity: true })}<span class="rd-spa">Rādīt visus rezultātus (2)${I('arrow')}</span>`), 760), '1 1 760px'),
   )}
   ${shots(
-    shot('3 · No place chosen: "Visur", clicked', st('ag'), P.desk(P.hdr({ place: 'Visur', search: `<span class="rd-search open">${I('search')}${P.ctag('Visur', true)}<span class="q"><span class="caret"></span></span></span>` }) + `<div class="rd-spw" style="justify-items:start;padding-left:150px">${P.placeList()}</div>`, 560), '1 1 560px'),
-    `<div class="rd-shot" style="flex:1 1 300px;max-width:460px"><p class="why"><b>The place tag</b> is always first in the field, before category tags, with an outline and a chevron so it looks clickable. Ticking cities narrows the results at once; "Visur" clears them. With an empty field the panel shows your recent searches and the categories. Backspace in an empty field removes the last category tag, never the place.</p><p class="why"><b>On phones</b> the search icon opens the same field full-screen, with the tag in the same place; its list opens as a sheet.</p></div>`,
+    shot('3 · No place chosen: the place chip "Visur", clicked', st('lk'), P.desk(P.hdr({ search: P.searchOpen('') }) + spModal(P.searchChips({ place: 'Visur', open: true }), `<div class="rd-drop">${P.placeList()}</div>`), 560), '1 1 560px'),
+    shot('4 · Phone · the search, full-screen', st('lk'), P.mob(`<div class="rd-sbar"><span class="mbtn q" aria-label="Atpakaļ">${I('left')}</span>${P.searchOpen('sp')}</div><div class="rd-spl ph">${P.searchChips({ ph: 1, place: 'Jelgava', cats: spCats })}${spSp()}<span class="rd-spa">Rādīt visus rezultātus${I('arrow')}</span></div>`)),
+    `<div class="rd-shot" style="flex:1 1 260px;max-width:420px"><p class="why"><b>The place chip</b> is always first in the row, with a pin and a chevron, like the place filter. Ticking cities narrows the results at once; "Visur" clears them. With an empty field the search shows your recent searches and the categories. Removing a category chip never removes the place.</p><p class="why"><b>On phones</b> the search icon in the header opens the same search full-screen; the chip row scrolls sideways like the filter row, and the place list opens as a sheet.</p></div>`,
   )}
   <h3>"Rādīt visus rezultātus" is discovery, filtered</h3>
-  <p class="lead">Not a separate page: discovery with the search words as one more filter. The words and tags stay in the field; × clears them and you are back on plain discovery. The drawer counts only matches (here two groups, both Spēles), all fifteen still listed; the filter row and the chosen line are the ones from Discovery.</p>
-  ${shots(shot('Desktop · all results for "sp" in Jelgava', st('lk'), P.desk(`<div class="rd-url">ejam.lumm.eu/lv?q=sp&amp;vieta=jelgava</div>${P.hdr({ search: `<span class="rd-search open">${I('search')}${P.ctag('Jelgava')}<span class="q">sp</span><span class="x">${I('x', 'Notīrīt')}</span></span>` })}<div class="rd-disc">${P.cats({ games: 2 })}<div class="rd-pg">${P.frow({ view: 'grupas' })}${P.cards([G.gs, G.sp])}</div></div>`, 1040), '1 1 100%'))}
+  <p class="lead">Not a separate page: discovery with the search words as one more filter. The words stay in the field; × clears them and you are back on plain discovery. The place and the chosen categories become the page's filters. The drawer counts only matches (here two groups, both Spēles), all fifteen still listed; the filter row and the chosen line are the ones from Discovery.</p>
+  ${shots(shot('Desktop · all results for "sp" in Jelgava', st('lk'), P.desk(`<div class="rd-url">ejam.lumm.eu/lv?q=sp&amp;vieta=jelgava</div>${P.hdr({ search: P.searchOpen('sp', { done: 1, x: 1 }) })}<div class="rd-disc">${P.cats({ games: 2 })}<div class="rd-pg">${P.frow({ view: 'grupas' })}${P.cards([G.gs, G.sp])}</div></div>`, 1040), '1 1 100%'))}
 </section>`;
 
 // ── Group
@@ -546,6 +552,33 @@ const admin = `<section aria-labelledby="h-admin">
 </section>`;
 
 // ── Note index
+const NOTES_NOW = [
+  ['cmv696kkf', 'The phone header is crowded; move the + to the profile menu', 'h-shell', 'Header and navigation'],
+  ['cmv69b6jd', 'Move the + into the bottom bar', 'h-shell', 'Header and navigation'],
+  ['cmv69dk66', 'The city picker belongs inside the search, as a chip', 'h-search', 'Search'],
+  ['cmv69ehf2', 'Filter bar: the sub-category only once a category is chosen', 'h-disc', 'Discovery → filter row'],
+  ['cmv69f1kq', 'I like the Grupas | Pasākumi toggle', 'h-disc', 'Discovery → filter row'],
+  ['cmv69fjg9', 'I like the group cards', 'h-disc', 'Discovery → group card'],
+  ['cmv69g1co', '"Sports un fitness" overlaps', 'h-disc', 'Discovery → filter row (phones)'],
+  ['cmv69hrqx', 'The filter row: generally good, needs rethinking', 'h-disc', 'Discovery → filter row'],
+  ['cmv69i7fp', 'I like the date choices', 'h-disc', 'Discovery → filter row'],
+  ['cmv69ipj4', 'Overlap: phone row, nothing chosen', 'h-disc', 'Discovery → filter row (phones)'],
+  ['cmv69isks', 'Overlap: phone row, Pasākumi', 'h-disc', 'Discovery → filter row (phones)'],
+  ['cmv69j7g5', 'I like the place list', 'h-disc', 'Discovery → drop-downs'],
+  ['cmv69jixp', 'I like the sub-category list', 'h-disc', 'Discovery → drop-downs'],
+  ['cmv69jtj7', 'I like the calendar', 'h-disc', 'Discovery → drop-downs'],
+  ['cmv69k2fj', 'Šodien … Nedēļas nogalē on one line', 'h-disc', 'Discovery → drop-downs'],
+  ['cmv69kwbj', 'Glitches in the filter line (phone sheet)', 'h-disc', 'Discovery → drop-downs'],
+  ['cmv69n5io', 'The day strip\'s arrows are redundant', 'h-disc', 'Discovery → Pasākumi'],
+  ['cmv69okgv', '"Rādīt nākamo nedēļu" as a link, not a button', 'h-disc', 'Discovery → Pasākumi'],
+  ['cmv69pc8n', 'Month arrows next to the month name', 'h-disc', 'Discovery → drop-downs (calendar)'],
+  ['cmv69pkq3', '"Sports un fitness": glitches (phone, Pasākumi)', 'h-disc', 'Discovery → Pasākumi'],
+  ['cmv69q76k', 'Just "Citur"', 'h-disc', 'Discovery → Citur'],
+  ['cmv69r7hw', 'The city picker: a chip in the search, not in the bar', 'h-search', 'Search'],
+  ['cmv69s78e', 'Category chips at the top of the search, not in the bar', 'h-search', 'Search'],
+  ['cmv69t6on', 'The search opens at once from the bar', 'h-search', 'Search'],
+  ['cmv5on08v', 'Own area: ok, will still review', 'h-me', 'Your own area'],
+];
 const NOTES = [
   ['cmv5litga', 'Sub-category drop-down: mark it as liked on the shot', 'h-disc', 'Discovery → drop-downs'],
   ['cmv5osq4r', 'Show the filter buttons open; they look too big', 'h-disc', 'Discovery → drop-downs'],
@@ -560,14 +593,17 @@ const NOTES = [
   ['cmv5okpgl', 'A generic no-results text', 'h-disc', 'Discovery → drop-downs'],
   ['cmv5olkux', 'Your own area needs its sidebar', 'h-me', 'Your own area'],
   ['cmv5omkpt', 'Manas grupas drawn twice and differently', 'h-me', 'Your own area → Manas grupas'],
-  ['cmv5on08v', 'Own area: ok, will still review', 'h-me', 'Your own area'],
   ['cmv5ooqem', 'Pop-ups: I like this', 'h-pop', 'Pop-ups and panels'],
   ['cmv5oqmfz', 'Every instance of an element must look the same', 'h-pop', 'Whole page; Pop-ups'],
 ];
+const niList = (list) => `<ul class="rd-ni">${list.map(([id, t, h, where]) => `<li><code>${id}</code><span>${t}</span><a href="#${h}">${where}</a></li>`).join('')}</ul>`;
 const notes = `<section aria-labelledby="h-notes">
   <h2 id="h-notes">Note index</h2>
-  <p class="lead">Your sixteen open notes from round eight, and where each is answered. Your answers of 12 October are recorded in the Agreed rules.</p>
-  <ul class="rd-ni">${NOTES.map(([id, t, h, where]) => `<li><code>${id}</code><span>${t}</span><a href="#${h}">${where}</a></li>`).join('')}</ul>
+  <p class="lead">Your ${NOTES_NOW.length} open notes (${NOTES_NOW.length - 1} from 13 October, one from round eight that you will still review), and where each is answered in 9.4.</p>
+  ${niList(NOTES_NOW)}
+  <h3>Answered earlier</h3>
+  <p class="lead">Your notes from round eight, answered in 9.0–9.3. Your answers of 12 October are recorded in the Agreed rules.</p>
+  ${niList(NOTES)}
 </section>`;
 
 // ── Sprite
@@ -635,11 +671,11 @@ const EXTRA_CSS = `
 .rd .rd-spw{background:color-mix(in srgb,var(--fg) 8%,var(--bg));padding:10px 16px 18px;display:grid;justify-items:center}
 .rd .rd-spl{width:min(100%,600px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:2px 14px 12px;display:grid}
 .rd .rd-sph{font:600 12px var(--body);color:var(--muted);padding:12px 0 2px}
-.rd .rd-spc{display:flex;align-items:center;gap:10px;padding:5px 0}
-.rd .rd-spc .rd-cat{font-size:14px}
-.rd .rd-spc .n{margin-left:auto;font-size:12px;color:var(--muted)}
-.rd .rd-spc .add{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:var(--brand);box-shadow:inset 0 0 0 1px var(--line)}
-.rd .rd-spc .add svg.i{width:13px;height:13px}
+.rd .rd-spl>.rd-schips{padding:12px 0 2px}
+.rd .rd-spl .rd-drop{padding-top:6px}
+.rd .rd-sbar{display:flex;align-items:center;gap:6px;padding:9px 10px;background:var(--surface);border-bottom:1px solid var(--line);min-width:0}
+.rd .rd-sbar .rd-search{height:36px}
+.rd .rd-spl.ph{width:100%;border:0;border-radius:0;padding:0 12px 12px}
 .rd .rd-spl .rd-gr{padding:7px 0}
 .rd .rd-spm{color:var(--muted);font-size:13px;padding-top:8px}
 .rd .rd-spa{margin-top:8px;padding-top:10px;border-top:1px solid var(--line);color:var(--brand);font-weight:600;font-size:14px;display:flex;gap:6px;align-items:center}

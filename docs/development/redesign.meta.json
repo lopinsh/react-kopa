@@ -1,7 +1,16 @@
 {
-  "version": "9.3",
-  "updated": "2026-10-13T23:00:00+03:00",
+  "version": "9.4",
+  "updated": "2026-10-13T23:30:00+03:00",
   "changes": [
+    "9.4, your notes of 13 October. The + leaves the header: on phones it sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es); on desktop \"Izveidot grupu\" is a line in the profile menu. Every header, bottom bar and profile menu follows.",
+    "Search: the bar is a plain field; a tap or click opens the search at once. At its top, chips: the place (the place list, set from the page's filter) and the matching categories, the same chips as elsewhere. A phone drawing is added.",
+    "Option B under \"More compact\" is withdrawn: it relied on the place in the search bar.",
+    "The overlaps are fixed at the root: on phones the filter row scrolls sideways, and a chip that didn't fit was cut off hard at the Grupas | Pasākumi switch. The one scroller (filter row, chosen line, search chips) now fades it out before the edge.",
+    "Checked at 375, 1280, 1440, 1600, 1680 and 1920 px, light and dark: no chip or filter overlaps another, no text overflows its chip.",
+    "The filter row is \"Liked, awaiting approval\": the sub-category appears only once a category is chosen (the drop-down drawings now show the chosen category too); Šodien, Rīt, Šonedēļ, Nedēļas nogalē and the range always sit on one line, also in the calendar.",
+    "The day strip has no arrows (a day is tapped directly); the calendar's month arrows sit right next to the month's name; \"Rādīt nākamo nedēļu\" is a plain text link.",
+    "\"Citur\" instead of \"Citur Latvijā\" everywhere. The place list, the sub-category list, the calendar, the group cards and the toggle are tagged as liked.",
+    "The note index lists your 25 open notes and where each is answered.",
     "9.3, after an independent review: Still open has 18 questions. Where the Handbook or this page already decides (short messages, loading and error pages, text in another language, the cards / list switch, repeating events), the answer is in the comparison tables.",
     "Reporting an event joined question 7. Question 15 (\"are you sure?\") now follows the Handbook: deleting for good always gets our own dialog; only steps that can be undone are open.",
     "Questions 8 and 9 start with the recommended answer in one line. Case 4 (sign-ups closed) is no longer in the recommended words.",
@@ -18,7 +27,7 @@
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.2"
+      "version": "9.4"
     },
     "h-open": {
       "kind": "updated",
@@ -30,43 +39,43 @@
     },
     "h-shell": {
       "kind": "updated",
-      "version": "9.3"
+      "version": "9.4"
     },
     "h-disc": {
-      "kind": "new",
-      "version": "9.1"
+      "kind": "updated",
+      "version": "9.4"
     },
     "h-search": {
-      "kind": "new",
-      "version": "9.1"
+      "kind": "updated",
+      "version": "9.4"
     },
     "h-group": {
       "kind": "updated",
-      "version": "9.2"
+      "version": "9.4"
     },
     "h-event": {
       "kind": "updated",
-      "version": "9.3"
+      "version": "9.4"
     },
     "h-me": {
       "kind": "updated",
-      "version": "9.2"
+      "version": "9.4"
     },
     "h-pop": {
-      "kind": "new",
-      "version": "9.1"
+      "kind": "updated",
+      "version": "9.4"
     },
     "h-admin": {
-      "kind": "new",
-      "version": "9.0"
+      "kind": "updated",
+      "version": "9.4"
     },
     "h-live": {
-      "kind": "new",
-      "version": "9.3"
+      "kind": "updated",
+      "version": "9.4"
     },
     "h-notes": {
-      "kind": "new",
-      "version": "9.0"
+      "kind": "updated",
+      "version": "9.4"
     }
   }
 }

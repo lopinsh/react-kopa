@@ -50,8 +50,9 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 /* ── The agreed-rules ledger */
 .rd .rd-ledger{display:grid;background:var(--surface);border-radius:16px;padding:4px 18px 10px}
 .rd .rd-ledger .gh{font:600 13px var(--body);color:var(--muted);padding:16px 0 4px}
-.rd .rd-ledger .r{display:grid;grid-template-columns:170px minmax(0,1fr) 92px 96px;gap:4px 14px;padding:9px 0;border-top:1px solid var(--line);font-size:14px;align-items:start}
+.rd .rd-ledger .r{display:grid;grid-template-columns:170px minmax(0,1fr) 112px 96px;gap:4px 14px;padding:9px 0;border-top:1px solid var(--line);font-size:14px;align-items:start}
 .rd .rd-ledger .gh+.r{border-top:0}
+.rd .rd-ledger .rd-st{white-space:normal;line-height:1.25}
 .rd .rd-ledger .r>b{font:600 15px/1.35 var(--display)}
 .rd .rd-ledger .r>span:nth-child(2){color:var(--muted)}
 .rd .rd-ledger .r>span:nth-child(4){font-size:13px}
@@ -102,12 +103,6 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-search .q{display:inline-flex;align-items:center;gap:1px;line-height:1;min-width:0}
 .rd .rd-search .x{margin-left:auto;color:var(--muted)}
 .rd .caret{width:1.5px;height:17px;background:var(--fg);flex:none;display:inline-block}
-.rd .rd-ctag{display:inline-flex;align-items:center;gap:3px;height:26px;padding:0 6px 0 8px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);color:var(--fg);font:600 13px var(--body);white-space:nowrap;flex:none}
-.rd .rd-ctag svg.i{width:14px;height:14px;color:var(--muted)}
-.rd .rd-ctag.open{box-shadow:inset 0 0 0 1.5px var(--brand);background:var(--tint)}
-.rd .rd-qtag{display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 6px 0 9px;border-radius:999px;background:color-mix(in srgb,var(--c) 16%,var(--surface));color:var(--fg);font:600 13px var(--body);flex:none}
-.rd .rd-qtag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
-.rd .rd-qtag svg.i{width:14px;height:14px;color:var(--muted)}
 .rd .rd-ico{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:var(--fg);position:relative;flex:none}
 .rd .rd-ico.plus{box-shadow:inset 0 0 0 1.5px var(--line)}
 .rd .rd-ico.on{background:var(--tint)}
@@ -127,6 +122,8 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-navb span{display:grid;justify-items:center;gap:2px;position:relative}
 .rd .rd-navb .on{color:var(--fg);font-weight:600}
 .rd .rd-navb .on svg.i{background:color-mix(in srgb,var(--brand) 16%,var(--surface));border-radius:999px;padding:3px 14px;box-sizing:content-box}
+.rd .rd-navb .add{align-self:center;color:var(--fg)}
+.rd .rd-navb .add svg.i{width:20px;height:20px;padding:7px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--line);box-sizing:content-box}
 .rd .rd-navb em{position:absolute;top:-3px;left:calc(50% + 6px);font:normal 700 10px/16px var(--body);min-width:16px;padding:0 4px;border-radius:999px;background:var(--brand);color:var(--on-brand);text-align:center}
 .rd .rd-menu{width:240px;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;display:grid;gap:1px;box-shadow:0 10px 28px rgba(0,0,0,.12)}
 .rd .rd-mi{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;font-size:14px;white-space:nowrap}
@@ -159,8 +156,10 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 /* ── Filter row, switch, chosen line */
 .rd .rd-frow{display:flex;align-items:center;gap:8px;min-width:0}
 .rd .rd-frow>.fs{display:flex;align-items:center;gap:6px;min-width:0;flex:1;flex-wrap:wrap}
-.rd .rd-frow.ph>.fs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:14px}
-.rd .rd-frow.ph>.fs::-webkit-scrollbar{display:none}
+/* Phones: one sideways scroller (filter row, chosen line, search chips). Whatever doesn't fit fades out over 48 px and is fully gone 12 px before the scroller's edge, so a chip never runs into the switch or the frame. */
+.rd .scx{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;padding-right:60px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent calc(100% - 12px));mask-image:linear-gradient(90deg,#000 calc(100% - 60px),transparent calc(100% - 12px))}
+.rd .scx::-webkit-scrollbar{display:none}
+.rd .rd-frow.ph{gap:4px}
 .rd .rd-fc{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 13px var(--body);color:var(--fg);white-space:nowrap;flex:none}
 .rd .rd-fc svg.i{width:14px;height:14px;color:var(--muted)}
 .rd .rd-fc b{font-weight:600}
@@ -175,9 +174,9 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-sw{display:inline-flex;align-items:center;height:30px;padding:2px;gap:2px;border-radius:999px;background:var(--tint);flex:none;margin-left:auto}
 .rd .rd-sw>span{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;font:500 13px var(--body);color:var(--muted);white-space:nowrap}
 .rd .rd-sw>.on{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.14)}
+.rd .rd-schips{display:flex;min-width:0}
+.rd .rd-schips>.fs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;min-width:0}
 .rd .rd-sel{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
-.rd .rd-sel.ph{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
-.rd .rd-sel.ph::-webkit-scrollbar{display:none}
 .rd .rd-x{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 4px 0 9px;border-radius:999px;background:color-mix(in srgb,var(--c,var(--brand)) 13%,var(--surface));font:500 12px var(--body);white-space:nowrap;flex:none}
 .rd .rd-x.cat::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:2px}
 .rd .rd-x svg.i{width:13px;height:13px;color:var(--muted)}
@@ -210,10 +209,10 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-drop>.rd-list{margin-left:var(--at,0)}
 .rd .rd-drop>.rd-frow{justify-self:stretch}
 .rd .rd-pnl.sheet .rd-list{width:100%;box-shadow:none;border:0}
-.rd .rd-cal{width:280px;padding:10px}
-.rd .rd-cal .q{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px}
-.rd .rd-cal .q span{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--tint)}
-.rd .rd-cal .mh{display:flex;justify-content:space-between;align-items:center;padding:4px 2px;font:600 14px var(--display)}
+.rd .rd-cal{width:300px;padding:10px}
+.rd .rd-cal .q{display:flex;flex-wrap:nowrap;gap:4px;margin-bottom:4px}
+.rd .rd-cal .q span{font-size:12px;padding:3px 8px;border-radius:999px;background:var(--tint);white-space:nowrap;flex:none}
+.rd .rd-cal .mh{display:flex;justify-content:center;align-items:center;gap:10px;padding:4px 2px;font:600 14px var(--display)}
 .rd .rd-cal .mh svg.i{color:var(--muted);width:16px;height:16px}
 .rd .rd-cal .g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));text-align:center;font-size:12px}
 .rd .rd-cal .g>span{height:28px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
@@ -302,7 +301,8 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-er .sl>span:last-child{flex-shrink:12}
 .rd .rd-er .sl .rd-sub{font-size:12px}
 .rd .rd-er.sel{background:var(--tint);box-shadow:inset 3px 0 0 var(--c)}
-.rd .rd-evl .nextw{justify-self:center;margin:8px 0 2px}
+.rd .rd-tl{color:var(--brand);font:600 14px var(--body);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;white-space:nowrap}
+.rd .rd-evl .nextw{justify-self:center;margin:10px 0 4px}
 .rd .rd-ds{background:var(--surface);border-radius:16px;padding:8px 8px 6px;display:grid;gap:4px;box-shadow:inset 0 0 0 1px var(--line);min-width:0}
 .rd .rd-ds .h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px}
 .rd .rd-ds .h b{font:600 14px var(--display)}
