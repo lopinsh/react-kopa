@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { findBySelector, isCovered } from '@/lib/feedback/capture';
+import { findNoteElement, isCovered } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 type Props = {
@@ -28,7 +28,7 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
         const next: Spot[] = [];
         const missing: string[] = [];
         notes.forEach((note, i) => {
-            const el = findBySelector(note.selector);
+            const el = findNoteElement(note);
             if (!el) { missing.push(note.id); return; }
             const rect = el.getBoundingClientRect();
             const empty = rect.width === 0 && rect.height === 0;

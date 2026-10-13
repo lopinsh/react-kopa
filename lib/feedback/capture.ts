@@ -186,6 +186,56 @@ export function findBySelector(selector: string): Element | null {
     }
 }
 
+/** The stored fields a note needs to be found again. */
+export interface NoteAnchor {
+    selector: string;
+    elementText: string;
+    component: string | null;
+    box: { x: number; y: number; w: number; h: number } | null;
+}
+
+function sameText(el: Element, text: string): boolean {
+    return text === '' || visibleText(el) === text;
+}
+
+/**
+ * Finds the element a note was left on. Path selectors (`section:nth-of-type(8) > …`) break whenever a section is
+ * added or removed, so the selector is only trusted when the element it finds still looks like the one noted
+ * (same text, same `data-ui` name and drawing). Otherwise the page is searched for elements with the stored
+ * `data-ui` name (the part of `component` before " · ") and the same visible text, preferring the same drawing
+ * (the part after " · ") and then the one closest to the stored box. Old notes without a name are matched by selector only.
+ */
+export function findNoteElement(note: NoteAnchor): Element | null {
+    const [name, ...rest] = (note.component ?? '').split(' · ');
+    const context = rest.join(' · ').trim();
+    const named = name.trim();
+
+    const bySelector = findBySelector(note.selector);
+    if (bySelector) {
+        const own = bySelector.closest('[data-ui]');
+        const nameOk = !named || own?.getAttribute('data-ui')?.trim() === named;
+        const contextOk = !context || bySelector.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim() === context;
+        if (nameOk && contextOk && sameText(bySelector, note.elementText)) return bySelector;
+    }
+    if (!named) return bySelector;
+
+    const candidates = Array.from(document.querySelectorAll('[data-ui]')).filter((el) => el.getAttribute('data-ui')?.trim() === named);
+    const inContext = context
+        ? candidates.filter((el) => el.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim() === context)
+        : candidates;
+    const pool = inContext.length ? inContext : candidates;
+    const sameLook = pool.filter((el) => sameText(el, note.elementText));
+    const finalists = sameLook.length ? sameLook : pool;
+    if (finalists.length === 0) return bySelector;
+    if (finalists.length === 1 || !note.box) return finalists[0];
+    const box = note.box;
+    const distance = (el: Element) => {
+        const r = el.getBoundingClientRect();
+        return Math.abs(r.left + window.scrollX - box.x) + Math.abs(r.top + window.scrollY - box.y);
+    };
+    return finalists.reduce((best, el) => (distance(el) < distance(best) ? el : best));
+}
+
 /** What a person would read on the element: collapsed whitespace, first ~120 characters. */
 export function visibleText(el: Element): string {
     const raw = el instanceof HTMLElement ? el.innerText : el.textContent ?? '';
