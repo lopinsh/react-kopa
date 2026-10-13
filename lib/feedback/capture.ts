@@ -1,4 +1,3 @@
-
 /** Browser-side helpers for feedback mode: describe a clicked element, and find it again later. */
 
 /**

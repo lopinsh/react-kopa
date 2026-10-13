@@ -872,7 +872,7 @@ let section = '';
 html = html.replace(/<h2\b[^>]*>([\s\S]*?)<\/h2>|<div class="rd-shot"([^>]*)><div class="cap"><span>([\s\S]*?)<\/span>([\s\S]*?)(?=<div class="rd-shot"|<h2\b|$)/g, (m, h2, shotAttrs, cap, rest) => {
   if (h2 !== undefined) { section = plain(h2).replace(/\s+(Liked|Agreed|New|Updated|Proposal)\b.*$/, ''); return m; }
   const text = plain(cap);
-  const view = /^(Desktop|Phone)\b/.test(text) ? '' : /class="rd-desk/.test(rest) ? 'Desktop' : /class="rd-mob/.test(rest) ? 'Phone' : '';
+  const view = /\b(Desktop|Phone)\b/.test(text) ? '' : /class="rd-desk/.test(rest) ? 'Desktop' : /class="rd-mob/.test(rest) ? 'Phone' : '';
   const context = `${view ? `${view} · ` : ''}${text}${section ? ` (${section})` : ''}`.slice(0, 150);
   return m.replace('<div class="rd-shot"', `<div class="rd-shot" data-feedback-context="${attr(context)}"`);
 });
