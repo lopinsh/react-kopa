@@ -78,7 +78,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
                         className={clsx(
                             'w-full rounded-2xl px-4 py-3 text-sm font-bold transition-colors disabled:opacity-60',
                             isFull
-                                ? 'bg-[var(--accent)] text-white hover:opacity-90'
+                                ? 'bg-primary text-primary-foreground hover:opacity-90'
                                 : 'border border-border bg-background text-foreground hover:bg-surface-elevated'
                         )}
                     >
@@ -98,7 +98,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
                             type="button"
                             disabled={isPending}
                             onClick={() => run(() => decideAttendance(eventId, p.userId, 'approve', locale))}
-                            className={clsx(SMALL_BUTTON, 'bg-[var(--accent)] text-white hover:opacity-90')}
+                            className={clsx(SMALL_BUTTON, 'bg-primary text-primary-foreground hover:opacity-90')}
                         >
                             <Check className="h-3.5 w-3.5" />
                             {t('approve')}
@@ -125,7 +125,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
                         type="button"
                         disabled={isPending}
                         onClick={() => run(() => letInFromWaitlist(eventId, p.userId, locale))}
-                        className={clsx(SMALL_BUTTON, 'bg-[var(--accent)] text-white hover:opacity-90')}
+                        className={clsx(SMALL_BUTTON, 'bg-primary text-primary-foreground hover:opacity-90')}
                     >
                         <Check className="h-3.5 w-3.5" />
                         {t('letIn')}

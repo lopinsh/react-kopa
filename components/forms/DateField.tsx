@@ -76,7 +76,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
                     className={clsx(
                         'min-w-0 flex-1 rounded-xl border bg-background px-3 py-2.5 text-sm tabular-nums focus:outline-none disabled:opacity-60',
-                        invalid || badText ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                        invalid || badText ? 'border-red-400' : 'border-border focus:border-primary'
                     )}
                 />
                 <button
@@ -208,8 +208,8 @@ function MonthGrid({ id, selected, format, prevLabel, nextLabel, onPick, onClose
                             onClick={() => onPick(k)}
                             className={clsx(
                                 'aspect-square rounded-lg text-sm tabular-nums',
-                                isSelected ? 'bg-[var(--accent)] font-semibold text-[var(--accent-foreground)]' : 'text-foreground hover:bg-surface-elevated',
-                                !isSelected && k === todayKey && 'border border-[var(--accent)]'
+                                isSelected ? 'bg-primary font-semibold text-primary-foreground' : 'text-foreground hover:bg-surface-elevated',
+                                !isSelected && k === todayKey && 'border border-primary'
                             )}
                         >
                             {day}

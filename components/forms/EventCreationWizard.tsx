@@ -220,7 +220,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 {[0, 1].map((i) => (
                     <div
                         key={i}
-                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-[var(--accent)]')}
+                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-primary')}
                         aria-hidden="true"
                     />
                 ))}
@@ -230,7 +230,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 <form onSubmit={onSubmit} className="p-6 md:p-8">
                     {/* Step Header */}
                     <div className="mb-6">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-[var(--accent)]">
+                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
                             {t('stepOf', { current: step + 1, total: 2 })}
                         </p>
                         <h2 className="mt-1 text-xl font-bold text-foreground">
@@ -259,7 +259,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldNamePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        titleError ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                        titleError ? 'border-red-400' : 'border-border focus:border-primary'
                                     )}
                                 />
                                 {titleError && <p className="mt-1 text-xs text-red-500">{t(titleError.message as 'INVALID_URL')}</p>}
@@ -290,7 +290,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldBannerImagePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-primary'
                                     )}
                                 />
                                 {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
@@ -340,7 +340,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldLocationPlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.location ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                        errors.location ? 'border-red-400' : 'border-border focus:border-primary'
                                     )}
                                 />
                                 {errors.location && <p className="mt-1 text-xs text-red-500">{t(errors.location.message as 'INVALID_URL')}</p>}
@@ -368,7 +368,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                             onClick={() => setValue('visibility', val as EventVisibility)}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
-                                                isSelected ? 'border-[var(--accent)] bg-[var(--accent)]/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                                                isSelected ? 'border-primary bg-primary/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
                                             )}
                                         >
                                             <span className="font-semibold">{t(key)}</span>
@@ -396,7 +396,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                             aria-pressed={isSelected}
                                             className={clsx(
                                                 'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
-                                                isSelected ? 'border-[var(--accent)] bg-[var(--accent)]/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                                                isSelected ? 'border-primary bg-primary/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
                                             )}
                                         >
                                             <span className="font-semibold">{t(key)}</span>
@@ -417,7 +417,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldMaxParticipantsPlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-[var(--accent)]'
+                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-primary'
                                     )}
                                 />
                                 <p className="mt-1 text-xs text-foreground-muted">{t('fieldMaxParticipantsHint')}</p>
@@ -444,14 +444,14 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                     )}
 
                     {askingToOpen && opensToWaiting && (
-                        <div role="alertdialog" aria-live="assertive" className="mt-4 space-y-3 rounded-xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 p-4">
+                        <div role="alertdialog" aria-live="assertive" className="mt-4 space-y-3 rounded-xl border border-primary/40 bg-primary/10 p-4">
                             <p className="text-sm font-semibold text-foreground">{t('openConfirm', { count: waitingCount })}</p>
                             <div className="flex flex-wrap gap-2">
                                 <button
                                     type="button"
                                     onClick={() => void onConfirmOpen()}
                                     disabled={isPending}
-                                    className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-2 text-sm font-semibold text-[var(--accent-foreground)] disabled:opacity-70"
+                                    className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-70"
                                 >
                                     {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                     {t('openConfirmYes')}
@@ -493,7 +493,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 key="next"
                                 type="button"
                                 onClick={nextStep}
-                                className="flex items-center gap-1.5 rounded-xl bg-[var(--accent)] px-5 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all"
+                                className="flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all"
                             >
                                 {t('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -503,7 +503,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 key="submit"
                                 type="submit"
                                 disabled={isPending || askingToOpen}
-                                className="flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-2.5 text-sm font-semibold text-[var(--accent-foreground)] shadow-sm transition-all disabled:opacity-70"
+                                className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all disabled:opacity-70"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {event ? t('save') : t('submit')}
