@@ -1,7 +1,17 @@
 {
-  "version": "9.5",
-  "updated": "2026-10-13T09:45:00+03:00",
+  "version": "9.6",
+  "updated": "2026-10-13T11:30:00+03:00",
   "changes": [
+    "9.6, your decisions of 13 October on the filter. Line 1 is always one line: \"Kur\", \"Tēma\", on Pasākumi the date choices (Šodien, Šonedēļ, Nedēļas nogalē, the calendar), the switch. Each button shows its choice (\"Jelgava\", \"Jelgava +1\", \"Sports un fitness\"), has a maximum width, cuts a long name with \"…\" and clears with a small ×.",
+    "The separate chosen line is gone everywhere; \"Notīrīt visu\" appears on the filter line only when two or more things are chosen.",
+    "Line 2, once a Tēma is chosen: the \"Veids\" chips on one line, the chosen first (tinted, with ×), then \"+3\" for the rest, which opens the Veids list (\"Meklēt veidu\"). \"Veids\" replaces \"Apakškategorija\" everywhere.",
+    "No \"Rīt\" on the filter line or in the calendar. My suggestion: \"Šodien\" shows as chosen while the list shows today. Phones: the switch keeps its own line; Kur, Tēma and the date button now fit on one line under it (your note was on the phone drawing).",
+    "The day strip: the month in the middle, ‹ and › at the ends move the shown week; no \"Šodien\" link there.",
+    "\"Rādīt visus rezultātus\": two ways drawn, desktop and phone, recommended first (A, discovery with the search word as a chip and the matching themes and types above the list; B, a results page). It is Still open, question 1; the old question 1 (the compact filter area) is settled.",
+    "After \"Sazināties\": the form closes and a short toast says \"Ziņa nosūtīta\"; no second dialog, no \"Atvērt sarunu\".",
+    "Event rows have their short description again (muted, one line, \"…\"), in every copy. On the group page they are the same rows, only without the group line; the next event on Informācija moved out of the narrow side column.",
+    "A join request gets \"Atbildēt\" next to Noraidīt and Apstiprināt; it opens the conversation.",
+    "Checked at 375, 1280, 1600 and 1920 px, light and dark: nothing overlaps, no line wraps or runs over, only the intended \"…\" cuts.",
     "9.5, after an independent review. Every overlap you marked was in a phone drawing: the filter buttons and the Grupas | Pasākumi switch shared one 300 px line, so the second button was cut at the switch. 9.4 faded it out, which still looked like a half-drawn button.",
     "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded.",
     "The phone search drawing is marked as my suggestion; \"Izveidot grupu\" staying in the phone profile menu (next to the bottom bar's +) is marked as my suggestion too.",
@@ -30,11 +40,11 @@
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.5"
+      "version": "9.6"
     },
     "h-open": {
       "kind": "updated",
-      "version": "9.3"
+      "version": "9.6"
     },
     "h-id": {
       "kind": "new",
@@ -46,19 +56,19 @@
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.5"
+      "version": "9.6"
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.5"
+      "version": "9.6"
     },
     "h-group": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.6"
     },
     "h-event": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.6"
     },
     "h-me": {
       "kind": "updated",
@@ -66,7 +76,7 @@
     },
     "h-pop": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.6"
     },
     "h-admin": {
       "kind": "updated",
@@ -74,11 +84,11 @@
     },
     "h-live": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.6"
     },
     "h-notes": {
       "kind": "updated",
-      "version": "9.4"
+      "version": "9.6"
     }
   }
 }

@@ -154,19 +154,41 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-pill.out{background:transparent;box-shadow:inset 0 0 0 1px var(--muted);color:var(--muted)}
 
 /* ── Filter row, switch, chosen line */
+/* The filter: line 1 (Kur, Tēma, the date choices, the switch) never wraps; a long name is cut with "…" instead. Line 2 is the Veids chips. */
+.rd .rd-flt{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;min-width:0}
 .rd .rd-frow{display:flex;align-items:center;gap:8px;min-width:0}
-.rd .rd-frow>.fs{display:flex;align-items:center;gap:6px;min-width:0;flex:1;flex-wrap:wrap}
-/* Phones: the switch gets its own full-width line above the filter buttons; the buttons, the chosen line and the search chips wrap. Nothing scrolls sideways, so nothing is cut or faded. */
+.rd .rd-frow>.fs{display:flex;align-items:center;gap:6px;min-width:0;flex:1;flex-wrap:nowrap}
+/* Phones: the switch has its own full-width line; the filter buttons sit on one line under it and give way with "…". */
 .rd .rd-frow.ph{flex-direction:column;align-items:stretch;gap:8px}
 .rd .rd-frow.ph>.rd-sw{display:flex;margin-left:0}
 .rd .rd-frow.ph>.rd-sw>span{flex:1;justify-content:center}
-.rd .rd-fc{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 13px var(--body);color:var(--fg);white-space:nowrap;flex:none}
+.rd .rd-fc{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 13px var(--body);color:var(--fg);white-space:nowrap;flex:none;min-width:0}
+/* Each button has a maximum width; when the line is short, Tēma (the longest name) gives way first, then the search word. */
+.rd .rd-frow>.fs>.rd-fc{flex:0 0 auto;max-width:180px}
+.rd .rd-frow>.fs>.rd-fc.kur{max-width:150px}
+.rd .rd-frow>.fs>.rd-fc.tema{flex-shrink:1}
+.rd .rd-frow>.fs>.rd-fc.q{flex-shrink:1;max-width:120px}
+.rd .rd-frow.ph>.fs>.rd-fc{padding:0 9px}
+.rd .rd-fc .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .rd .rd-fc svg.i{width:14px;height:14px;color:var(--muted)}
 .rd .rd-fc b{font-weight:600}
 .rd .rd-fc em{font-style:normal;font-size:11px;font-weight:700;background:var(--fg);color:var(--surface);border-radius:999px;padding:0 6px;line-height:16px}
+.rd .rd-fc em.more{background:none;color:var(--fg);padding:0;font-size:12px;flex:none}
+.rd .rd-fc .kd,.rd .rd-oc .kd{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.rd .rd-fc .xx,.rd .rd-dq .xx{display:inline-grid;place-items:center;width:18px;height:18px;margin-right:-5px;border-radius:50%;flex:none}
+.rd .rd-fc .xx svg.i,.rd .rd-dq .xx svg.i{width:12px;height:12px;stroke-width:2.4}
 .rd .rd-fc.set{box-shadow:inset 0 0 0 1.5px var(--fg)}
-.rd .rd-fc.open,.rd .rd-dq>.open{box-shadow:inset 0 0 0 1.5px var(--brand);background:var(--tint)}
+.rd .rd-fc.open,.rd .rd-dq>.open,.rd .rd-oc.open{box-shadow:inset 0 0 0 1.5px var(--brand);background:var(--tint)}
 .rd .rd-fc .rd-cat{font-size:13px}
+/* Line 2: choice chips (Veids; the matching themes and types in the search) on one line, then "+N" */
+.rd .rd-vl{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;min-width:0}
+.rd .rd-vl>.rd-clr{margin-left:auto}
+.rd .rd-vl>.lbl{font-size:12px;color:var(--muted);white-space:nowrap;flex:none}
+.rd .rd-oc{display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);font:500 12px var(--body);color:var(--fg);white-space:nowrap;flex:none}
+.rd .rd-oc small{font-size:11px;color:var(--muted)}
+.rd .rd-oc.on{background:color-mix(in srgb,var(--c,var(--brand)) 15%,var(--surface));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c,var(--brand)) 45%,transparent);font-weight:600;padding-right:5px}
+.rd .rd-oc svg.i{width:13px;height:13px;color:var(--muted)}
+.rd .rd-oc.more{font-weight:600;color:var(--muted)}
 .rd .rd-dq{display:inline-flex;align-items:center;height:30px;padding:2px;gap:1px;border-radius:999px;background:var(--surface);box-shadow:inset 0 0 0 1px var(--line);flex:none}
 .rd .rd-dq>span{display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 9px;border-radius:999px;font-size:13px;white-space:nowrap}
 .rd .rd-dq>span svg.i{width:14px;height:14px;color:var(--muted)}
@@ -176,7 +198,6 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-sw>.on{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 1px 2px rgba(0,0,0,.14)}
 .rd .rd-schips{display:flex;min-width:0}
 .rd .rd-schips>.fs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1;min-width:0}
-.rd .rd-sel{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
 .rd .rd-x{display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 4px 0 9px;border-radius:999px;background:color-mix(in srgb,var(--c,var(--brand)) 13%,var(--surface));font:500 12px var(--body);white-space:nowrap;flex:none}
 .rd .rd-x.cat::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c);margin-right:2px}
 .rd .rd-x svg.i{width:13px;height:13px;color:var(--muted)}
@@ -207,7 +228,7 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .hl{font-style:normal;color:var(--brand);font-weight:600}
 .rd .rd-drop{display:grid;gap:6px;justify-items:start}
 .rd .rd-drop>.rd-list{margin-left:var(--at,0)}
-.rd .rd-drop>.rd-frow{justify-self:stretch}
+.rd .rd-drop>.rd-flt{justify-self:stretch}
 .rd .rd-pnl.sheet .rd-list{width:100%;box-shadow:none;border:0}
 .rd .rd-cal{width:300px;padding:10px}
 .rd .rd-cal .q{display:flex;flex-wrap:nowrap;gap:4px;margin-bottom:4px}
@@ -300,14 +321,15 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-er .sl>span{flex:0 3 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
 .rd .rd-er .sl>span:last-child{flex-shrink:12}
 .rd .rd-er .sl .rd-sub{font-size:12px}
+.rd .rd-er .ds{grid-column:3/5;font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.45}
 .rd .rd-er.sel{background:var(--tint);box-shadow:inset 3px 0 0 var(--c)}
 .rd .rd-tl{color:var(--brand);font:600 14px var(--body);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px;white-space:nowrap}
 .rd .rd-evl .nextw{justify-self:center;margin:10px 0 4px}
 .rd .rd-ds{background:var(--surface);border-radius:16px;padding:8px 8px 6px;display:grid;gap:4px;box-shadow:inset 0 0 0 1px var(--line);min-width:0}
-.rd .rd-ds .h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px}
+.rd .rd-ds .h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 2px}
 .rd .rd-ds .h b{font:600 14px var(--display)}
-.rd .rd-ds .h>span{display:inline-flex;align-items:center;gap:8px;color:var(--brand);font-weight:600;font-size:13px}
-.rd .rd-ds .h svg.i{width:16px;height:16px;color:var(--muted)}
+.rd .rd-ds .h .nv{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:var(--fg);flex:none}
+.rd .rd-ds .h svg.i{width:16px;height:16px}
 .rd .rd-ds .g{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
 .rd .rd-ds .g>span{display:grid;justify-items:center;gap:2px;padding:4px 0;border-radius:12px}
 .rd .rd-ds small{font:600 10px var(--body);color:var(--muted)}
@@ -360,6 +382,9 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-dlg .h{font:600 18px var(--display)}
 .rd .rd-dlg p{margin:0;font-size:14px;color:var(--muted)}
 .rd .rd-dlg .row{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.rd .rd-toast{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:10px 16px;border-radius:12px;background:var(--fg);color:var(--bg);font:500 14px var(--body);box-shadow:0 10px 28px rgba(0,0,0,.2)}
+.rd .rd-toast svg.i{width:16px;height:16px}
+.rd .rd-stage>.rd-toast{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);z-index:2;white-space:nowrap}
 .rd .rd-ta{display:block;min-height:84px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--line);padding:10px 12px;font-size:14px;background:var(--bg)}
 .rd .rd-tgl{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:12px;background:var(--tint);font-size:14px;font-weight:600}
 .rd .rd-tgl .k{width:40px;height:24px;border-radius:999px;background:var(--line);position:relative;flex:none}

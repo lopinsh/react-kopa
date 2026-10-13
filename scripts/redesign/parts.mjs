@@ -68,7 +68,9 @@ export const ev = (e, o = {}) => {
   const ct = [o.noCity ? '' : e.city, EV_STATE[e.state] ? `<span class="es">${EV_STATE[e.state]}</span>` : ''].filter(Boolean).join(' · ');
   const tag = e.eju === 'gaida' ? pill('Gaida', 'out') : pill('', 'eju');
   const second = o.noSecond ? '' : `<span class="sl"><a>${e.group}</a><span>· ${catName(e.cat)}</span><span class="rd-sub">· ${e.sub}</span></span>`;
-  return `${el('event-row')}<div class="rd-er${e.sel ? ' sel' : ''}${o.noSecond ? ' one' : ''}" style="${cv(e.cat)}"><span class="tm">${e.time}</span><span class="dt"></span><b>${e.name}</b><span class="ct">${ct}</span>${e.eju ? `<span class="tmb">${tag}</span>` : ''}${second}</div>`;
+  // The short description: the last line, muted, one line, cut with "…" (13 Oct, as in round four).
+  const ds = e.ds ? `<span class="ds">${e.ds}</span>` : '';
+  return `${el('event-row')}<div class="rd-er${e.sel ? ' sel' : ''}${o.noSecond ? ' one' : ''}" style="${cv(e.cat)}"><span class="tm">${e.time}</span><span class="dt"></span><b>${e.name}</b><span class="ct">${ct}</span>${e.eju ? `<span class="tmb">${tag}</span>` : ''}${second}${ds}</div>`;
 };
 /** A plain text link for optional steps ("Rādīt nākamo nedēļu"): no pill, no arrow (13 Oct). */
 export const textLink = (t, cls = '') => `${el('text-link')}<span class="rd-tl${cls ? ` ${cls}` : ''}">${t}</span>`;
@@ -107,39 +109,76 @@ export const shieldMenu = () => `${el('shield-menu')}<div class="rd-menu" role="
 export const btn = (t, k = 'p', sm = false) => `<span class="rd-btn ${k}${sm ? ' sm' : ''}">${t}</span>`;
 export const lnk = (t) => `<span class="rd-lnk">${t}${I('arrow')}</span>`;
 
-// ── Filters (source: Discovery → The filter row)
-export const placeChip = (place = 'Jelgava', open = false) => `<span class="rd-fc${open ? ' open' : ''}">${I('pin')}<b>${place}</b>${I('down')}</span>`;
-export const subChip = (n, open = false) => `<span class="rd-fc${n ? ' set' : ''}${open ? ' open' : ''}">Apakškategorija${n ? `<em>${n}</em>` : ''}${I('down')}</span>`;
-export const catChip = (k, open = false) => k
-  ? `<span class="rd-fc set${open ? ' open' : ''}">${cat(k)}${I('down')}</span>`
-  : `<span class="rd-fc${open ? ' open' : ''}">${I('grid')}Kategorija${I('down')}</span>`;
+// ── Filters (source: Discovery → The filter line). 13 Oct: Kur, Tēma, then Veids chips; the buttons show the choices, so there is no separate chosen line.
+/** Veidi (sub-categories) per Tēma, with counts; the Veids chips and the Veids list draw from here. */
+export const SUBS = {
+  sport: [['Nūjošana', 2], ['Pastaigas', 1], ['Skriešana', 1], ['Volejbols', 1], ['Futbols', 1], ['Galda teniss', 1], ['Peldēšana', 0]],
+  games: [['Šahs', 1], ['Galda spēles', 2], ['Lomu spēles', 1], ['Kāršu spēles', 0]],
+};
+/** The small × on a chosen button: it clears that choice. */
+const clearX = (what) => `<span class="xx" role="button" aria-label="Notīrīt: ${what}">${I('x')}</span>`;
+/** Kur: "Kur" until a place is chosen; then the place ("Jelgava"; several: "Jelgava +1") and a small ×. Too long a name is cut with "…". */
+export const kurChip = (places = [], open = false) => {
+  const on = places.length > 0;
+  const lb = on ? `<b class="lb">${places[0]}</b>${places.length > 1 ? `<em class="more">+${places.length - 1}</em>` : ''}` : '<span class="lb">Kur</span>';
+  return `${el('filter-kur')}<span class="rd-fc kur${on ? ' set' : ''}${open ? ' open' : ''}">${I('pin')}${lb}${on ? clearX(places.join(', ')) : I('down')}</span>`;
+};
+/** Tēma: "Tēma" until a category is chosen; then its dot and name ("Sports un fitness"), cut with "…" when long, and a small ×. */
+export const temaChip = (k, open = false) => k
+  ? `${el('filter-tema')}<span class="rd-fc tema set${open ? ' open' : ''}" style="${cv(k)}"><i class="kd"></i><b class="lb">${catName(k)}</b>${clearX(catName(k))}</span>`
+  : `${el('filter-tema')}<span class="rd-fc tema${open ? ' open' : ''}">${I('grid')}<span class="lb">Tēma</span>${I('down')}</span>`;
+/** The search word as a filter (search option A, Still open 1). */
+export const qChip = (q) => `${el('filter-search-word')}<span class="rd-fc q set">${I('search')}<b class="lb">“${q}”</b>${clearX(q)}</span>`;
+/** Desktop date choices on the filter line: Šodien, Šonedēļ, Nedēļas nogalē and the calendar. No "Rīt": the day strip already has every day (13 Oct). */
+export const QUICK = ['Šodien', 'Šonedēļ', 'Nedēļas nogalē'];
 export const dateGroup = (o = {}) => {
-  const q = ['Šodien', 'Rīt', 'Šonedēļ', 'Nedēļas nogalē'].map((d) => `<span role="radio" aria-checked="${!o.range && d === (o.on ?? 'Šonedēļ')}"${!o.range && d === (o.on ?? 'Šonedēļ') ? ' class="on"' : ''}>${d}</span>`).join('');
-  const last = o.range ? `<span class="on${o.open ? ' open' : ''}" role="radio" aria-checked="true">${I('cal')}${o.range}</span>` : `<span class="${o.open ? 'open' : ''}" role="radio" aria-checked="false" aria-label="Izvēlēties datumus">${I('cal')}</span>`;
-  return `<span class="rd-dq" role="radiogroup" aria-label="Datums">${q}${last}</span>`;
+  const q = QUICK.map((d) => `<span role="radio" aria-checked="${!o.range && d === (o.on ?? 'Šonedēļ')}"${!o.range && d === (o.on ?? 'Šonedēļ') ? ' class="on"' : ''}>${d}</span>`).join('');
+  const last = o.range ? `<span class="on${o.open ? ' open' : ''}" role="radio" aria-checked="true">${I('cal')}${o.range}${clearX(o.range)}</span>` : `<span class="${o.open ? 'open' : ''}" role="radio" aria-checked="false" aria-label="Izvēlēties datumus">${I('cal')}</span>`;
+  return `${el('date-choices')}<span class="rd-dq" role="radiogroup" aria-label="Datums">${q}${last}</span>`;
 };
-export const dateChip = (v = 'Šonedēļ', open = false) => `<span class="rd-fc${v !== 'Šonedēļ' ? ' set' : ''}${open ? ' open' : ''}">${I('clock')}<b>${v}</b>${I('down')}</span>`;
+/** Phones: one date button; it opens the quick choices and the calendar as a sheet. */
+export const dateChip = (v = 'Šonedēļ', open = false) => `${el('filter-date-phone')}<span class="rd-fc dt${v !== 'Šonedēļ' ? ' set' : ''}${open ? ' open' : ''}"><b class="lb">${v}</b>${v !== 'Šonedēļ' ? clearX(v) : I('down')}</span>`;
 export const sw = (view = 'grupas') => `<span class="rd-sw" role="tablist" aria-label="Saturs"><span${view === 'grupas' ? ' class="on"' : ''} role="tab" aria-selected="${view === 'grupas'}">Grupas</span><span${view === 'pasakumi' ? ' class="on"' : ''} role="tab" aria-selected="${view === 'pasakumi'}">Pasākumi</span></span>`;
-/** Desktop: place, sub-category (after a category), date choices (Pasākumi), switch at the right end. */
+const clr = () => `${el('clear-all')}<span class="rd-clr">Notīrīt visu</span>`;
+/** How many things are chosen: "Notīrīt visu" shows from two. Šonedēļ is where Pasākumi starts, so it doesn't count. */
+const nChosen = (o) => (o.q ? 1 : 0) + ((o.places ?? []).length ? 1 : 0) + (o.cat ? 1 : 0) + (o.subs ?? []).length + (o.range ? 1 : 0) + (o.date && o.date !== 'Šonedēļ' ? 1 : 0);
+/** A tappable choice chip: Veids on the filter's second line, and the matching themes and types in the search. Chosen = tinted, with ×. */
+export const optChip = (t, o = {}) => `${el('choice-chip')}<span class="rd-oc${o.on ? ' on' : ''}"${o.k ? ` style="${cv(o.k)}"` : ''} role="button" aria-pressed="${!!o.on}">${o.dot ? '<i class="kd"></i>' : ''}${t}${o.n != null ? `<small>${o.n}</small>` : ''}${o.on ? I('x', 'Noņemt') : ''}</span>`;
+/** "+3": the count of the choices that didn't fit; it opens the full list with its search. */
+export const moreChip = (n, open = false, label = 'veidi') => `${el('more-chip')}<span class="rd-oc more${open ? ' open' : ''}" role="button" aria-label="Vēl ${n} ${label}">+${n}</span>`;
+/** Line two: the Veidi of the chosen Tēma, on ONE line. The chosen first, then as many as fit (`fit` chips in all), then "+N" for the rest. */
+export const vline = (k, chosen = [], o = {}) => {
+  const all = SUBS[k];
+  const fit = o.fit ?? 5;
+  const rest = all.filter(([s, n]) => !chosen.includes(s) && n > 0).slice(0, Math.max(0, fit - chosen.length));
+  const shown = chosen.length + rest.length;
+  const more = all.length - shown;
+  return `${el('veids-line')}<div class="rd-vl" role="group" aria-label="Veids">${chosen.map((s) => optChip(s, { on: 1, k })).join('')}${rest.map(([s]) => optChip(s, { k })).join('')}${more ? moreChip(more, o.open) : ''}${o.clear ? clr() : ''}</div>`;
+};
+/** Desktop. Line 1: [Kur] [Tēma] (on Pasākumi the date choices) … "Notīrīt visu" (2+ chosen) and the Grupas | Pasākumi switch, always one line.
+ *  Line 2, only once a Tēma is chosen: the Veids chips. */
 export const frow = (o = {}) => {
-  const f = [placeChip(o.place, o.open === 'place')];
-  if (o.cat) f.push(subChip(o.sub, o.open === 'sub'));
-  if (o.view === 'pasakumi') f.push(dateGroup({ range: o.range, open: o.open === 'date' }));
-  return `${el('filter-row-desktop')}<div class="rd-frow"><div class="fs">${f.join('')}</div>${sw(o.view)}</div>`;
+  const f = [];
+  if (o.q) f.push(qChip(o.q));
+  f.push(kurChip(o.places, o.open === 'place'), temaChip(o.cat, o.open === 'cat'));
+  if (o.view === 'pasakumi') f.push(dateGroup({ range: o.range, open: o.open === 'date', on: o.date }));
+  if (nChosen(o) >= 2) f.push(clr());
+  const l2 = o.cat ? vline(o.cat, o.subs, { fit: o.fit ?? 6, open: o.open === 'sub' }) : '';
+  return `${el('filter-row-desktop')}<div class="rd-flt"><div class="rd-frow"><div class="fs">${f.join('')}</div>${sw(o.view)}</div>${l2}</div>`;
 };
-/** Phone: the switch on its own line, full width; the filter buttons below it, wrapping onto a second line when they don't fit (13 Oct: nothing is cut or faded). */
+/** Phone: the switch on its own full-width line; under it Kur, Tēma (and the date button on Pasākumi) on one line, long names cut with "…";
+ *  then the Veids chips, with "Notīrīt visu" at their end (2+ chosen). */
 export const frowPh = (o = {}) => {
-  const f = [placeChip(o.place, o.open === 'place'), catChip(o.cat, o.open === 'cat')];
-  if (o.cat) f.push(subChip(o.sub, o.open === 'sub'));
+  const f = [];
+  if (o.q) f.push(qChip(o.q));
+  f.push(kurChip(o.places, o.open === 'place'), temaChip(o.cat, o.open === 'cat'));
   if (o.view === 'pasakumi') f.push(dateChip(o.date ?? 'Šonedēļ', o.open === 'date'));
-  return `${el('filter-row-phone')}<div class="rd-frow ph">${sw(o.view)}<div class="fs">${f.join('')}</div></div>`;
+  const clear = nChosen(o) >= 2;
+  const l2 = o.cat ? vline(o.cat, o.subs, { fit: o.fit ?? 2, clear, open: o.open === 'sub' }) : clear ? `<div class="rd-vl">${clr()}</div>` : '';
+  return `${el('filter-row-phone')}<div class="rd-flt"><div class="rd-frow ph">${sw(o.view)}<div class="fs">${f.join('')}</div></div>${l2}</div>`;
 };
-/** A category as a chip in the search (13 Oct): the same chip as the phone's category filter; chosen = dark outline and ×. */
-export const catToggle = (k, on = false) => `<span class="rd-fc${on ? ' set' : ''}" style="${cv(k)}">${cat(k)}${on ? I('x', 'Noņemt') : ''}</span>`;
-/** The chip row at the top of the open search: the place chip (the place list, set from the page's filter), then the categories that match. */
-export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs">${placeChip(o.place, o.open)}${(o.cats ?? []).map(([k, on]) => catToggle(k, on)).join('')}</div></div>`;
-/** The chosen-filters line, only when something is chosen. items: [text, catKey?, isCategory?] */
-export const sel = (items) => items.length === 0 ? '' : `${el('chosen-line')}<div class="rd-sel">${items.map(([t, k, isCat]) => `<span class="rd-x${isCat ? ' cat' : ''}"${k ? ` style="${cv(k)}"` : ''}>${t}${I('x', 'Noņemt')}</span>`).join('')}<span class="rd-clr">Notīrīt visu</span></div>`;
+/** The chip row at the top of the open search: the Kur button (the place list, set from the page's filter), then the themes that match, as choice chips. */
+export const searchChips = (o = {}) => `${el('search-chips')}<div class="rd-schips${o.ph ? ' ph' : ''}"><div class="fs">${kurChip(o.places, o.open)}${(o.cats ?? []).map(([k, on]) => optChip(catName(k), { k, dot: 1, on })).join('')}</div></div>`;
 
 // ── Category drawer (source: Discovery → The category drawer)
 const ORDER = ['trav', 'dance', 'hobby', 'comm', 'pol', 'pets', 'art', 'music', 'rel', 'social', 'games', 'sport', 'family', 'well', 'sci'];
@@ -164,14 +203,15 @@ export const placeList = (o = {}) => {
   else body = `<span class="rd-opt all${ticked.length === 0 ? ' on' : ''}" role="option" aria-selected="${ticked.length === 0}">Visur<span class="n">412</span></span><span class="sep"></span>${PLACES.map(([c, n]) => `<span class="rd-opt${ticked.includes(c) ? ' on' : ''}" role="option" aria-selected="${ticked.includes(c)}">${tick(ticked.includes(c))}${c}<span class="n">${n}</span></span>`).join('')}`;
   return `${el('place-list')}<div class="rd-list" role="listbox" aria-multiselectable="true" aria-label="Vieta">${find('Meklēt pilsētu', o.typed)}${body}</div>`;
 };
+/** The Veids list: opened from "+N" on the Veids line; search on top, counts, tick boxes, several at once. */
 export const subList = (o = {}) => {
-  const all = [['Nūjošana', 2], ['Pastaigas', 1], ['Skriešana', 1], ['Volejbols', 1], ['Futbols', 1], ['Galda teniss', 1], ['Peldēšana', 0]];
+  const all = SUBS.sport;
   const ticked = o.ticked ?? [];
   let body;
   if (o.typed === 'pe') body = `<span class="rd-opt zero" role="option" aria-selected="false">${tick(false)}<span><em class="hl">Pe</em>ldēšana</span><span class="n">0</span></span>`;
   else if (o.typed) body = `<p class="rd-nf">${NF}</p>`;
   else body = all.map(([s, n]) => `<span class="rd-opt${ticked.includes(s) ? ' on' : ''}${n === 0 ? ' zero' : ''}" role="option" aria-selected="${ticked.includes(s)}">${tick(ticked.includes(s))}${s}<span class="n">${n}</span></span>`).join('');
-  return `${el('sub-list')}<div class="rd-list" role="listbox" aria-multiselectable="true" aria-label="Apakškategorija">${find('Meklēt apakškategoriju', o.typed)}${body}</div>`;
+  return `${el('sub-list')}<div class="rd-list" role="listbox" aria-multiselectable="true" aria-label="Veids">${find('Meklēt veidu', o.typed)}${body}</div>`;
 };
 export const catSearch = (typed) => {
   let body;
@@ -184,13 +224,13 @@ export const catSearch = (typed) => {
 export const calendar = () => {
   const d = (n, c = '') => `<span${c ? ` class="${c}"` : ''}>${n}</span>`;
   const past = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => d(n, 'past')).join('');
-  return `${el('date-picker')}<div class="rd-list rd-cal" role="dialog" aria-label="Datums"><div class="q"><span>Šodien</span><span>Rīt</span><span>Šonedēļ</span><span>Nedēļas nogalē</span></div><div class="mh">${I('left', 'Iepriekšējais mēnesis')}<span>2026. gada oktobris</span>${I('right', 'Nākamais mēnesis')}</div><div class="g" role="grid" aria-label="Oktobris"><span class="wd">P</span><span class="wd">O</span><span class="wd">T</span><span class="wd">C</span><span class="wd">Pk</span><span class="wd">S</span><span class="wd">Sv</span><span></span><span></span><span></span>${past}${d(11, 'td')}${d(12)}${d(13)}${d(14)}${d(15, 's')}${d(16, 'rg')}${d(17, 'rg')}${d(18, 'e')}${[19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].map((n) => d(n)).join('')}</div><div class="f"><span>Ceturtd., 15. – svētd., 18. okt.</span>${btn('Rādīt 23', 'p', true)}</div></div>`;
+  return `${el('date-picker')}<div class="rd-list rd-cal" role="dialog" aria-label="Datums"><div class="q">${QUICK.map((d) => `<span>${d}</span>`).join('')}</div><div class="mh">${I('left', 'Iepriekšējais mēnesis')}<span>2026. gada oktobris</span>${I('right', 'Nākamais mēnesis')}</div><div class="g" role="grid" aria-label="Oktobris"><span class="wd">P</span><span class="wd">O</span><span class="wd">T</span><span class="wd">C</span><span class="wd">Pk</span><span class="wd">S</span><span class="wd">Sv</span><span></span><span></span><span></span>${past}${d(11, 'td')}${d(12)}${d(13)}${d(14)}${d(15, 's')}${d(16, 'rg')}${d(17, 'rg')}${d(18, 'e')}${[19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31].map((n) => d(n)).join('')}</div><div class="f"><span>Ceturtd., 15. – svētd., 18. okt.</span>${btn('Rādīt 23', 'p', true)}</div></div>`;
 };
 /** The day strip over an event list. */
 export const dayStrip = (selDay = 11, o = {}) => {
   const days = [['Sv', 11], ['P', 12], ['O', 13], ['T', 14], ['C', 15], ['Pk', 16], ['S', 17]];
   const none = o.none ?? [];
-  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><b>Oktobris 2026</b><span>Šodien</span></div><div class="g">${days.map(([w, n]) => `<span class="${[n === selDay ? 'sel' : '', n === 11 && selDay !== 11 ? 'td' : '', none.includes(n) ? 'no' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
+  return `${el('day-strip')}<div class="rd-ds" aria-label="Dienas"><div class="h"><span class="nv" role="button">${I('left', 'Iepriekšējā nedēļa')}</span><b>Oktobris 2026</b><span class="nv" role="button">${I('right', 'Nākamā nedēļa')}</span></div><div class="g">${days.map(([w, n]) => `<span class="${[n === selDay ? 'sel' : '', n === 11 && selDay !== 11 ? 'td' : '', none.includes(n) ? 'no' : ''].filter(Boolean).join(' ')}"${n === selDay ? ' aria-current="date"' : ''}><small>${w}</small><b>${n}</b><i></i></span>`).join('')}</div></div>`;
 };
 
 // ── Panels (source: Group → The opened card; Event → The event panel)
@@ -213,9 +253,10 @@ export const eventPanel = (o = {}) => `${el('event-panel')}<aside class="rd-pnl$
 export const eventPage = (o = {}) => `${el('event-page')}<article class="rd-evp" style="${cv('dance')}"><div class="pic ph ph-dance" role="img" aria-label="Pasākuma attēls"></div><div class="bd"><h3>Deju koncerts</h3>${catLine('dance', 'Tautas dejas')}<span class="facts">${I('cal')}<span>Svētd., 11. okt. 17:00–19:00 <a>Pievienot kalendāram</a></span></span><span class="facts">${I('pin')}<span>Liepāja, Latviešu biedrības nams, Rožu iela 5 <a>Atvērt kartē</a></span></span><p>Tautas deju kolektīvu rudens koncerts. Uzstājas četri kolektīvi no Zemgales un Kurzemes, pēc koncerta var palikt uz kopīgu danci. Ieeja bez maksas.</p><div class="imp"><b>Svarīga informācija</b><p>Ieeja no Rožu ielas puses. Dejotājiem līdzi ērtus apavus.</p></div>${going(o)}${evAct(o, `<span class="rd-lnk q">${I('share')}Dalīties</span>`)}</div>${o.team ? `<div class="rd-box2 org">${el('event-organiser')}<div class="bh">Rīkotājiem</div><div class="ln"><span>Iet <b>12</b></span><span>Pieteikumi <b>0</b></span><span>Gaidīšanas sarakstā <b>0</b></span></div><div class="row">${btn('Labot', 's', true)}${btn('Slēgt pieteikšanos', 's', true)}${btn('Dzēst', 's', true)}</div></div>` : ''}</article>`;
 
 // ── The contact form (source: Group → One button: Sazināties)
-export const contactDialog = (o = {}) => o.sent
-  ? `${el('contact-dialog')}<div class="rd-dlg" role="dialog" aria-label="Nosūtīts"><b class="h">Nosūtīts</b><p>Atbildes būs sadaļā Ziņas.</p><div class="row">${btn('Atvērt sarunu')}</div></div>`
-  : `${el('contact-dialog')}<div class="rd-dlg" role="dialog" aria-label="${o.closed || o.off ? 'Sazināties ar grupu' : 'Pieteikties grupā'} ${G.zs.short}"><b class="h">${o.closed || o.off ? 'Sazināties ar grupu' : 'Pieteikties grupā'} ${G.zs.short}</b><p>${o.closed || o.off ? 'Uzraksti grupas organizatoriem.' : 'Pastāsti organizatoriem, kāpēc vēlies pievienoties un ko meklē.'} Atbildes būs sadaļā Ziņas.</p><span class="rd-ta">Sveiki! Gribētu nākt nūjot piektdien, vai nūjas tiešām var aizņemties?</span>${o.closed ? '' : `<span class="rd-tgl"><span>Vēlos pievienoties grupai</span><span class="k${o.off ? '' : ' on'}" role="switch" aria-checked="${!o.off}"></span></span>`}<div class="row">${btn('Atcelt', 's', true)}${btn('Nosūtīt', 'p', true)}</div></div>`;
+/** A short message after an action (Handbook, Behaviour): one line at the bottom, above the bottom bar on phones; it goes by itself. */
+export const toast = (t) => `${el('toast')}<div class="rd-toast" role="status">${I('check')}${t}</div>`;
+/** After "Nosūtīt" the form closes and a toast says "Ziņa nosūtīta" (13 Oct): no second dialog, no "Atvērt sarunu". */
+export const contactDialog = (o = {}) => `${el('contact-dialog')}<div class="rd-dlg" role="dialog" aria-label="${o.closed || o.off ? 'Sazināties ar grupu' : 'Pieteikties grupā'} ${G.zs.short}"><b class="h">${o.closed || o.off ? 'Sazināties ar grupu' : 'Pieteikties grupā'} ${G.zs.short}</b><p>${o.closed || o.off ? 'Uzraksti grupas organizatoriem.' : 'Pastāsti organizatoriem, kāpēc vēlies pievienoties un ko meklē.'} Atbildes būs sadaļā Ziņas.</p><span class="rd-ta">Sveiki! Gribētu nākt nūjot piektdien, vai nūjas tiešām var aizņemties?</span>${o.closed ? '' : `<span class="rd-tgl"><span>Vēlos pievienoties grupai</span><span class="k${o.off ? '' : ' on'}" role="switch" aria-checked="${!o.off}"></span></span>`}<div class="row">${btn('Atcelt', 's', true)}${btn('Nosūtīt', 'p', true)}</div></div>`;
 
 // ── Group page parts (source: Group → The group page)
 export const gpic = (g, size) => g.ph
