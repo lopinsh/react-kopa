@@ -1,4 +1,3 @@
-import { UI_NAMES, type UiName } from '@/lib/constants';
 
 /** Browser-side helpers for feedback mode: describe a clicked element, and find it again later. */
 
@@ -10,6 +9,8 @@ export function inFeedbackLayer(target: EventTarget | null): boolean {
     return target instanceof Element && target.closest('[data-feedback-ignore]') !== null;
 }
 
+/** Matches the `component` limit in the feedback schema. */
+const COMPONENT_MAX = 200;
 const MAX_SEGMENTS = 6;
 const TEXT_LENGTH = 120;
 
@@ -211,8 +212,14 @@ export function isCovered(el: Element, rect: DOMRect): boolean {
     return false;
 }
 
-/** The `data-ui` name of the closest named component around (or at) an element, if it is a known one. */
-export function componentOf(el: Element | null): UiName | null {
-    const name = el?.closest('[data-ui]')?.getAttribute('data-ui');
-    return UI_NAMES.find((n) => n === name) ?? null;
+/**
+ * What a note is "on": the `data-ui` name of the closest named element around (or at) the target, followed by the
+ * `data-feedback-context` of the closest enclosing drawing, if any (the redesign page tags each mockup with its
+ * viewport, caption and section, so notes on repeated elements can be told apart). Null when neither exists.
+ */
+export function componentOf(el: Element | null): string | null {
+    const name = el?.closest('[data-ui]')?.getAttribute('data-ui')?.trim();
+    const context = el?.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim();
+    const joined = [name, context].filter(Boolean).join(' · ');
+    return joined ? joined.slice(0, COMPONENT_MAX) : null;
 }

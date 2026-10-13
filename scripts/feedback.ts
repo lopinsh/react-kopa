@@ -80,7 +80,7 @@ function printNote(note: Note): void {
     const date = note.createdAt.slice(0, 16).replace('T', ' ');
     console.log(`## ${note.id} · ${note.kind} · ${note.status}`);
     console.log(`- Page: /${note.locale}${note.path === '/' ? '' : note.path}`);
-    if (note.component) console.log(`- Component: ${note.component}`);
+    if (note.component) console.log(`- Component / drawing: ${note.component}`);
     console.log(`- Element: \`${note.selector}\`${note.elementText ? ` ("${note.elementText}")` : ''}`);
     if (note.breadcrumb) console.log(`- Breadcrumb: ${note.breadcrumb}`);
     if (note.heading) console.log(`- Under heading: "${note.heading}"`);
@@ -113,7 +113,9 @@ function pageOf(note: Note): string {
 function printCompactNote(note: Note, sub: string): void {
     console.log(`- ${note.id} · ${note.kind} · ${note.status}`);
     if (sub) console.log(`  Sub-heading: ${sub}`);
-    if (note.elementText) console.log(`  On: "${truncate(note.elementText, ELEMENT_TEXT_MAX)}"`);
+    // Clicked text · component or template name · (on the redesign page) viewport · drawing and section.
+    const on = [note.elementText ? `"${truncate(note.elementText, ELEMENT_TEXT_MAX)}"` : '', note.component ?? ''].filter(Boolean);
+    if (on.length) console.log(`  On: ${on.join(' · ')}`);
     console.log(`  ${note.text.replace(/\n/g, '\n  ')}`);
 }
 
