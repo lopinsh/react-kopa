@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { getMessages, getTimeZone } from 'next-intl/server';
+import { getMessages, getTimeZone, getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Providers from '@/components/providers/Providers';
@@ -39,6 +39,8 @@ export default async function LocaleLayout({ children, params }: Props) {
         notFound();
     }
 
+    const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
+
     const [allMessages, timeZone, translateMode, feedbackMode, theme] = await Promise.all([
         getMessages(),
         getTimeZone(),
@@ -58,22 +60,29 @@ export default async function LocaleLayout({ children, params }: Props) {
 
     return (
         <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
+            <a
+                href="#content"
+                className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+            >
+                {skipToContent}
+            </a>
+
             {/* App Shell */}
             <div className="flex h-screen flex-col">
                 <Header />
 
                 <div className="flex flex-1 overflow-hidden">
                     <Sidebar />
-                    {/* Main Content */}
-                    <main
-                        className="flex-1 overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] md:pb-4 focus:outline-none"
+                    {/* The scroll container; the page's <main> and the slim footer sit inside it. */}
+                    <div
+                        className="flex-1 overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] md:pb-0"
                         id="main-content"
                     >
-                        <div className="flex-1">
+                        <main id="content" tabIndex={-1} className="focus:outline-none">
                             {children}
-                        </div>
+                        </main>
                         <Footer />
-                    </main>
+                    </div>
                 </div>
             </div>
 

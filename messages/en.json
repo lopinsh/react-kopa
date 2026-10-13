@@ -1101,7 +1101,8 @@
       "groups": "Groups",
       "expand": "Expand sidebar",
       "label": "Sidebar"
-    }
+    },
+    "skipToContent": "Skip to content"
   },
   "theme": {
     "toggleDark": "Switch to dark mode",

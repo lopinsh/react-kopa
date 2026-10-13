@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getLocale } from 'next-intl/server';
 import './globals.css';
 import { THEME_FONT_CLASSES } from '@/lib/theme-fonts';
 import { getActiveTheme } from '@/lib/theme/server';
@@ -18,9 +19,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   // Colours and fonts come from the server (published theme, or an admin's preview) so the first paint is already right.
-  const theme = await getActiveTheme();
+  const [theme, locale] = await Promise.all([getActiveTheme(), getLocale()]);
   return (
-    <html lang="en" suppressHydrationWarning className={THEME_FONT_CLASSES}>
+    <html lang={locale} suppressHydrationWarning className={THEME_FONT_CLASSES}>
       <head>
         <style id="site-theme" dangerouslySetInnerHTML={{ __html: themeCss(theme) }} />
       </head>

@@ -145,7 +145,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             />
 
             {/* Main Content Area */}
-            <main className="flex-1 min-w-0 pb-20 pt-4">
+            <div className="flex-1 min-w-0 pb-20 pt-4">
                 <div className="px-4 max-w-6xl mx-auto w-full">
                     <CitiesProvider cities={cities}>
                         <DiscoveryFilterBarWrapper
@@ -273,7 +273,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                         increment={12}
                     />
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

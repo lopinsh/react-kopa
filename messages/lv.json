@@ -1101,7 +1101,8 @@
       "groups": "Grupas",
       "expand": "Izvērst sānu joslu",
       "label": "Sānu josla"
-    }
+    },
+    "skipToContent": "Pāriet uz saturu"
   },
   "theme": {
     "toggleDark": "Pārslēgt uz tumšo režīmu",

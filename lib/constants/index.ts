@@ -144,6 +144,14 @@ export const UI = {
     dropdownMenu: 'dropdown-menu',
     menuItem: 'menu-item',
     notificationItem: 'notification-item',
+    searchBar: 'search-bar',
+    languageSwitch: 'language-switch',
+    languageList: 'language-list',
+    profileMenu: 'profile-menu',
+    shieldMenu: 'shield-menu',
+    personHeader: 'person-header',
+    ownMenu: 'own-menu',
+    ownBarPhone: 'own-bar-phone',
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 
@@ -153,3 +161,6 @@ export * from './theme';
 export const LOCALES = ['lv', 'en'] as const;
 export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = 'lv';
+
+/** Each language in its own words, the same in every locale (AR-15). */
+export const LOCALE_NAMES: Record<Locale, string> = { lv: 'Latviešu', en: 'English' };

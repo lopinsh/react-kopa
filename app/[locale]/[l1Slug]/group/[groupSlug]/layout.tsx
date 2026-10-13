@@ -51,9 +51,9 @@ export default async function GroupLayout({
                     pendingCount={pendingCount}
                 />
 
-                <main>
+                <div>
                     {children}
-                </main>
+                </div>
             </div>
         </GroupProvider>
     );
