@@ -19,4 +19,15 @@ export const DevelopmentService = {
         ]);
         return { html, meta: redesignMetaSchema.parse(JSON.parse(rawMeta)) };
     },
+
+    /** The living build plan (`docs/development/build-plan.md`); `null` when the file is missing. */
+    async getBuildPlan(): Promise<string | null> {
+        try {
+            const raw = await fs.readFile(path.join(DEVELOPMENT_DIR, 'build-plan.md'), 'utf8');
+            return raw.split(String.fromCharCode(13)).join('');
+        } catch (error) {
+            if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+            throw error;
+        }
+    },
 };

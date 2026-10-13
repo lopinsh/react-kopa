@@ -569,6 +569,7 @@
       "feedback": "Feedback",
       "handbook": "Handbook",
       "redesign": "Redesign",
+      "buildPlan": "Build plan",
       "design": "Design",
       "team": "Team",
       "menu": "Admin",
@@ -589,7 +590,8 @@
         "handbook": "Values, voice and design rules",
         "team": "Site admins and owner",
         "feedback": "Notes left by the site admins",
-        "redesign": "Looks under discussion; nothing is built from it"
+        "redesign": "Looks under discussion; nothing is built from it",
+        "buildPlan": "Implementation plan for the redesign releases"
       }
     },
     "development": {
@@ -599,7 +601,9 @@
       "markAll": "Mark all as reviewed",
       "badgeNew": "New",
       "badgeUpdated": "Updated",
-      "badgeHint": "Click to mark as reviewed"
+      "badgeHint": "Click to mark as reviewed",
+      "buildPlanMissing": "The build plan has not been written yet.",
+      "buildPlanNote": "Internal document, English only. Source: docs/development/build-plan.md in the repository."
     },
     "handbook": {
       "chapters": "Chapters",

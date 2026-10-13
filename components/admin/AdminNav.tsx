@@ -4,7 +4,7 @@ import { useRef, useState, useId, useEffect, type KeyboardEvent, type PointerEve
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { clsx } from 'clsx';
-import { AlertTriangle, Brush, EyeOff, Network, MapPin, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
+import { AlertTriangle, Brush, ListChecks, EyeOff, Network, MapPin, Languages, BookOpen, MessageSquareText, Palette, UserCog, ChevronDown, type LucideIcon } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/routing';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { UI } from '@/lib/constants';
@@ -16,7 +16,7 @@ type Props = {
     pendingSuggestions: number;
 };
 
-type ItemId = 'redesign' | 'reports' | 'decisions' | 'categories' | 'locations' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
+type ItemId = 'redesign' | 'buildPlan' | 'reports' | 'decisions' | 'categories' | 'locations' | 'translations' | 'feedback' | 'design' | 'handbook' | 'team';
 type GroupId = 'moderation' | 'structure' | 'site' | 'team' | 'development';
 
 type NavItem = {
@@ -108,6 +108,7 @@ export default function AdminNav({ pendingTags, pendingCities, pendingReports, p
             id: 'development',
             items: [
                 { id: 'redesign', href: '/admin/development/redesign', icon: Brush, active: pathname.startsWith('/admin/development/redesign'), badge: 0 },
+                { id: 'buildPlan', href: '/admin/development/build-plan', icon: ListChecks, active: pathname.startsWith('/admin/development/build-plan'), badge: 0 },
                 { id: 'feedback', href: '/admin/feedback', icon: MessageSquareText, active: pathname.startsWith('/admin/feedback'), badge: 0 },
             ],
         },

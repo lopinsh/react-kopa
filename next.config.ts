@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
     '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*'],
     '/[locale]/admin/development/redesign': ['./docs/development/**/*'],
+    '/[locale]/admin/development/build-plan': ['./docs/development/**/*'],
   },
   images: {
     remotePatterns: [

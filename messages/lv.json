@@ -569,6 +569,7 @@
       "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata",
       "redesign": "Pārveide",
+      "buildPlan": "Būvplāns",
       "design": "Dizains",
       "team": "Komanda",
       "menu": "Admins",
@@ -589,7 +590,8 @@
         "handbook": "Vērtības, balss un dizaina noteikumi",
         "team": "Vietnes administratori un īpašnieks",
         "feedback": "Administratoru atstātās piezīmes",
-        "redesign": "Izskati apspriešanai; no tiem nekas netiek būvēts"
+        "redesign": "Izskati apspriešanai; no tiem nekas netiek būvēts",
+        "buildPlan": "Pārveides izlaidumu īstenošanas plāns"
       }
     },
     "development": {
@@ -599,7 +601,9 @@
       "markAll": "Atzīmēt visu kā pārskatītu",
       "badgeNew": "Jauns",
       "badgeUpdated": "Atjaunināts",
-      "badgeHint": "Klikšķini, lai atzīmētu kā pārskatītu"
+      "badgeHint": "Klikšķini, lai atzīmētu kā pārskatītu",
+      "buildPlanMissing": "Būvplāns vēl nav uzrakstīts.",
+      "buildPlanNote": "Iekšējs dokuments, tikai angļu valodā. Avots: docs/development/build-plan.md repozitorijā."
     },
     "handbook": {
       "chapters": "Nodaļas",
