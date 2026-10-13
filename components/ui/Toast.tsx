@@ -1,50 +1,20 @@
-'use client';
-
-import React from 'react';
-import { CheckCircle2, AlertCircle, XCircle, Info, X } from 'lucide-react';
-import { ToastMessage, ToastType } from '@/hooks/use-toast';
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import type { LucideIcon } from 'lucide-react';
+import { Check, CircleAlert, Info, TriangleAlert } from 'lucide-react';
+import type { ToastMessage, ToastType } from '@/hooks/use-toast';
 import { UI } from '@/lib/constants';
 
-function cn(...inputs: ClassValue[]) {
-    return twMerge(clsx(inputs));
-}
+const ICONS: Record<ToastType, LucideIcon> = { success: Check, error: CircleAlert, warning: TriangleAlert, info: Info };
 
-const toastIcons: Record<ToastType, React.ReactNode> = {
-    success: <CheckCircle2 className="h-5 w-5 text-success" />,
-    error: <XCircle className="h-5 w-5 text-danger" />,
-    warning: <AlertCircle className="h-5 w-5 text-warning" />,
-    info: <Info className="h-5 w-5 text-primary" />,
-};
-
-interface ToastProps {
-    toast: ToastMessage;
-    onClose: (id: string) => void;
-}
-
-export function Toast({ toast, onClose }: ToastProps) {
+/** One line, inverted (foreground on background in both modes), no close button: it goes by itself. */
+export function Toast({ toast }: { toast: ToastMessage }) {
+    const Icon = ICONS[toast.type];
     return (
         <div
             data-ui={UI.toast}
-            className={cn(
-                "group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-2xl border p-4 pr-8 shadow-premium transition-all animate-in slide-in-from-bottom-full duration-300",
-                "bg-surface/80 backdrop-blur-xl border-border/50",
-                "hover:border-primary/50 hover:shadow-primary/5"
-            )}
+            className="pointer-events-auto inline-flex max-w-full items-center gap-2 rounded-xl bg-foreground px-4 py-2.5 text-sm font-medium text-background shadow-premium motion-safe:animate-rise"
         >
-            <div className="flex items-center gap-3">
-                {toastIcons[toast.type]}
-                <p className="text-sm font-medium text-foreground">
-                    {toast.message}
-                </p>
-            </div>
-            <button
-                onClick={() => onClose(toast.id)}
-                className="absolute right-2 top-2 rounded-lg p-1 text-foreground-muted opacity-0 transition-opacity hover:bg-surface-elevated group-hover:opacity-100"
-            >
-                <X className="h-4 w-4" />
-            </button>
+            <Icon aria-hidden="true" className="size-4 shrink-0" />
+            <span>{toast.message}</span>
         </div>
     );
 }

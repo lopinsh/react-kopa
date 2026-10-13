@@ -74,8 +74,8 @@ export function ChipDemo() {
 export function ToastDemo() {
     const t = useTranslations('admin.handbook.ui');
     return (
-        <div className="mx-auto flex max-w-md flex-col gap-3">
-            {TOAST_TYPES.map((type) => <Toast key={type} toast={{ id: type, type, message: t(`toast.${type}`) }} onClose={noop} />)}
+        <div className="mx-auto flex max-w-md flex-col items-center gap-3">
+            {TOAST_TYPES.map((type, id) => <Toast key={type} toast={{ id, type, message: t(`toast.${type}`) }} />)}
         </div>
     );
 }

@@ -1,52 +1,52 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState, useCallback, useMemo, useRef } from 'react';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 export interface ToastMessage {
-    id: string;
+    id: number;
     message: string;
     type: ToastType;
-    duration?: number;
 }
 
 interface ToastContextType {
-    toasts: ToastMessage[];
+    /** The one toast on screen, if any. */
+    toast: ToastMessage | null;
     addToast: (message: string, type: ToastType, duration?: number) => void;
-    removeToast: (id: string) => void;
+    removeToast: () => void;
     success: (message: string, duration?: number) => void;
     error: (message: string, duration?: number) => void;
 }
 
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
-export function ToastProvider({ children }: { children: React.ReactNode }) {
-    const [toasts, setToasts] = useState<ToastMessage[]>([]);
+/** How long a toast stays: errors and warnings are read slower. */
+const DURATION: Record<ToastType, number> = { success: 4000, info: 4000, warning: 6000, error: 6000 };
 
-    const removeToast = useCallback((id: string) => {
-        setToasts((prev) => prev.filter((toast) => toast.id !== id));
+/** One toast at a time: a new one replaces the old and restarts the clock. It goes by itself, with no close button. */
+export function ToastProvider({ children }: { children: React.ReactNode }) {
+    const [toast, setToast] = useState<ToastMessage | null>(null);
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const counter = useRef(0);
+
+    const removeToast = useCallback(() => {
+        if (timer.current) clearTimeout(timer.current);
+        timer.current = null;
+        setToast(null);
     }, []);
 
-    const addToast = useCallback((message: string, type: ToastType, duration = 3000) => {
-        const id = Math.random().toString(36).substring(2, 9);
-        setToasts((prev) => [...prev, { id, message, type, duration }]);
-
-        if (duration > 0) {
-            setTimeout(() => removeToast(id), duration);
-        }
+    const addToast = useCallback((message: string, type: ToastType, duration = DURATION[type]) => {
+        if (timer.current) clearTimeout(timer.current);
+        counter.current += 1;
+        setToast({ id: counter.current, message, type });
+        timer.current = duration > 0 ? setTimeout(removeToast, duration) : null;
     }, [removeToast]);
 
     const success = useCallback((message: string, duration?: number) => addToast(message, 'success', duration), [addToast]);
     const error = useCallback((message: string, duration?: number) => addToast(message, 'error', duration), [addToast]);
 
-    const value = useMemo(() => ({
-        toasts,
-        addToast,
-        removeToast,
-        success,
-        error
-    }), [toasts, addToast, removeToast, success, error]);
+    const value = useMemo(() => ({ toast, addToast, removeToast, success, error }), [toast, addToast, removeToast, success, error]);
 
     return (
         <ToastContext.Provider value={value}>
