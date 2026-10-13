@@ -936,20 +936,27 @@
     "openFullView": "Atvērt pilnu skatu"
   },
   "nav": {
-    "adminPanel": "Admina panelis",
+    "adminPanel": "Administrēšanas panelis",
     "create": "Izveidot",
     "messages": "Ziņas",
-    "settings": "Labot profilu",
+    "settings": "Iestatījumi",
     "signIn": "Ienākt",
     "signOut": "Iziet",
     "userFallback": "Lietotājs",
-    "viewPublicProfile": "Skatīt publisko profilu",
     "discover": "Atklāt",
     "myGroups": "Manas grupas",
     "profile": "Profils",
     "adminMenu": "Administrēšana",
     "mobileLabel": "Galvenā navigācija",
-    "languageLabel": "Valoda"
+    "languageLabel": "Valoda",
+    "myProfile": "Mans profils",
+    "groups": "Grupas",
+    "me": "Es",
+    "profileMenu": "Profila izvēlne",
+    "languageCurrent": "Valoda: {language}",
+    "messagesUnread": "Ziņas, {count, plural, zero {# nelasītu sarunu} one {# nelasīta saruna} other {# nelasītas sarunas}}",
+    "modeOn": "Ieslēgts",
+    "modeOff": "Izslēgts"
   },
   "notifications": {
     "title": "Paziņojumi",
@@ -1088,7 +1095,10 @@
     },
     "header": {
       "logoText": "Ejam kopā",
-      "messages": "Ziņas"
+      "messages": "Ziņas",
+      "search": "Meklēt",
+      "searchPlaceholder": "Meklē grupu vai nodarbi…",
+      "closeSearch": "Aizvērt meklēšanu"
     },
     "search": {
       "title": "Globālā meklēšana"

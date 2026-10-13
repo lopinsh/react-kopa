@@ -1,136 +1,79 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import { User, LogOut, Settings, Users } from 'lucide-react';
-import { useState, useRef, useSyncExternalStore } from 'react';
-import { signOut, signIn } from 'next-auth/react';
+import { useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import { LogOut, Plus, Settings, User, Users } from 'lucide-react';
+import { clsx } from 'clsx';
 import { Link, usePathname } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
-import { useClickOutside } from '@/hooks/useClickOutside';
+import { signInUrl } from '@/lib/auth-redirect';
+import { UI } from '@/lib/constants';
+import { ME_PAGES } from '@/lib/navigation';
+import { buttonClass } from '@/components/ui/Button';
+import { MenuItemButton, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 
 type Props = {
-    user: {
-        id: string;
-        avatarSeed?: string | null;
-        name?: string | null;
-        email?: string | null;
-        image?: string | null;
-        username?: string | null;
-        role?: string | null;
-    } | null;
+    user: { id: string; avatarSeed?: string | null; name?: string | null; image?: string | null } | null;
 };
 
+const ICON = 'size-[17px] text-foreground-muted';
+
+/** The picture at the end of the header: the profile menu when signed in, the sign-in button when not (AR-14). */
 export default function UserMenu({ user }: Props) {
     const t = useTranslations('nav');
-  const c_common = useTranslations('common');
+    const tCommon = useTranslations('common');
+    const locale = useLocale();
     const pathname = usePathname();
-    const [isOpen, setIsOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement>(null);
-    const mounted = useSyncExternalStore(
-        () => () => { },
-        () => true,
-        () => false
-    );
-
-    useClickOutside(menuRef, () => setIsOpen(false), isOpen);
-
+    const search = useSearchParams().toString();
+    const { open, rootRef, triggerProps, menuProps } = useMenu();
     const [imageError, setImageError] = useState(false);
-
-    if (!mounted) return null;
+    const [signingOut, setSigningOut] = useState(false);
 
     if (!user) {
         // The sign-in and register pages are the sign-in button's destination already.
         if (pathname.startsWith('/auth')) return null;
         return (
-            <button
-                onClick={() => signIn()}
-                className="flex h-9 items-center justify-center rounded-full bg-primary px-4 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-            >
+            <Link href={signInUrl(locale, pathname + (search ? `?${search}` : ''))} className={buttonClass('primary', 'shrink-0', 'sm')}>
                 {t('signIn')}
-            </button>
+            </Link>
         );
     }
 
     // A broken photo URL falls back to the generated avatar.
     const avatarSrc = avatarUrl(imageError ? { id: user.id, avatarSeed: user.avatarSeed } : user);
+    const ownArea = pathname !== '/messages' && ME_PAGES.some((p) => p.match(pathname));
 
     return (
-        <div className="relative" ref={menuRef}>
-            <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-border bg-surface-elevated transition-all active:scale-95 hover:ring-2 ring-primary/20"
-            >
+        <div className="relative shrink-0" ref={rootRef}>
+            <button {...triggerProps} aria-label={t('profileMenu')} className="grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img
                     src={avatarSrc}
-                    alt={user.name || t('userFallback')}
-                    className="h-full w-full object-cover"
+                    alt=""
+                    className={clsx('size-[30px] rounded-full object-cover md:size-8', (open || ownArea) && 'ring-2 ring-primary ring-offset-2 ring-offset-surface')}
                     referrerPolicy="no-referrer"
                     onError={() => setImageError(true)}
                 />
             </button>
-
-            {mounted && isOpen && (
-                <>
-                    <div data-ui="dropdown-menu" className="absolute right-0 mt-3 z-50 w-56 origin-top-right overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in zoom-in-95 duration-100">
-                        <Link
-                            href="/profile"
-                            onClick={() => setIsOpen(false)}
-                            className="block border-b border-border bg-surface-elevated/50 p-4 hover:bg-surface-elevated transition-colors"
-                        >
-                            <p className="truncate text-sm font-bold text-foreground">
-                                {user.name || t('userFallback')}
-                            </p>
-                            <p className="truncate text-xs text-foreground-muted">
-                                {user.email || ''}
-                            </p>
-                        </Link>
-
-                        <div className="p-2">
-                            <Link
-                                href="/profile/my-groups"
-                                data-ui="menu-item"
-                                className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-foreground hover:bg-primary/10 hover:text-primary transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <Users className="h-4 w-4" />
-                                {c_common('myGroups')}
-                            </Link>
-
-                            <div className="my-1 h-px bg-border/40 mx-2" />
-
-                            {user.username && (
-                                <Link
-                                    href={`/profile/${user.username}`}
-                                    className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    <User className="h-4 w-4" />
-                                    {t('viewPublicProfile')}
-                                </Link>
-                            )}
-                            <Link
-                                href="/profile/edit"
-                                data-ui="menu-item"
-                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-elevated transition-colors"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                <Settings className="h-4 w-4" />
-                                {t('settings')}
-                            </Link>
-                        </div>
-
-                        <div className="border-t border-border p-2">
-                            <button
-                                data-ui="menu-item"
-                                onClick={() => signOut()}
-                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-danger hover:bg-danger/10 transition-colors"
-                            >
-                                <LogOut className="h-4 w-4" />
-                                {t('signOut')}
-                            </button>
-                        </div>
-                    </div>
-                </>
+            {open && (
+                <MenuPanel label={t('profileMenu')} dataUi={UI.profileMenu} {...menuProps}>
+                    <MenuItemLink href="/profile" icon={<User aria-hidden className={ICON} />}>{t('myProfile')}</MenuItemLink>
+                    <MenuItemLink href="/profile/my-groups" icon={<Users aria-hidden className={ICON} />}>{t('myGroups')}</MenuItemLink>
+                    <MenuItemLink href="/create" icon={<Plus aria-hidden className={ICON} />}>{tCommon('createGroup')}</MenuItemLink>
+                    <MenuSeparator />
+                    <MenuItemLink href="/settings" icon={<Settings aria-hidden className={ICON} />}>{t('settings')}</MenuItemLink>
+                    <MenuItemButton
+                        disabled={signingOut}
+                        icon={<LogOut aria-hidden className={ICON} />}
+                        onSelect={() => {
+                            setSigningOut(true);
+                            void signOut();
+                        }}
+                    >
+                        {t('signOut')}
+                    </MenuItemButton>
+                </MenuPanel>
             )}
         </div>
     );

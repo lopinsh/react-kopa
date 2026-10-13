@@ -5,7 +5,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSyncExternalStore } from 'react';
 
-export default function ThemeToggle() {
+export default function SampleThemeToggle() {
     const { resolvedTheme, setTheme } = useTheme();
     const t = useTranslations('theme');
     const mounted = useSyncExternalStore(

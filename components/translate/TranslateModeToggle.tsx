@@ -2,7 +2,7 @@
 
 import { useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Check, Languages } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { setTranslateMode } from '@/actions/translation-actions';
@@ -19,6 +19,7 @@ type Props = {
 
 /** Switches translation mode on or off for the signed-in site admin. Render it for site admins only. */
 export default function TranslateModeToggle({ className, compact, onToggle }: Props) {
+    const tNav = useTranslations('nav');
     const t = useTranslations('translateMode');
     const tErrors = useTranslations('errors');
     const active = useTranslateMode();
@@ -49,9 +50,9 @@ export default function TranslateModeToggle({ className, compact, onToggle }: Pr
                 <span>{t('turnOff')}</span>
             ) : (
                 <>
-                    <Languages className="h-4 w-4 text-foreground-muted" />
+                    <Globe aria-hidden className="size-[17px] text-foreground-muted" />
                     <span className="flex-1 text-left">{t('label')}</span>
-                    {active && <Check className="h-4 w-4 text-primary" />}
+                    <span className="text-xs text-foreground-muted">{active ? tNav('modeOn') : tNav('modeOff')}</span>
                 </>
             )}
         </button>

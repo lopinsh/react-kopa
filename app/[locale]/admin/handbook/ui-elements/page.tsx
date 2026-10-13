@@ -6,7 +6,7 @@ import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/I
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
-import ThemeToggle from '@/components/shell/ThemeToggle';
+import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
 import EventCard from '@/components/discovery/EventCard';
 import GroupCard from '@/components/discovery/GroupCard';

@@ -11,6 +11,7 @@ import { useRealtimeEvent } from '@/components/providers/RealtimeProvider';
 import { relativeTo } from '@/lib/utils/relative-time';
 import { formatNotificationText } from '@/lib/utils/notification-text';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { ICON_BUTTON } from './header-styles';
 
 type Notification = {
     id: string;
@@ -121,8 +122,9 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
         <div className="relative" ref={menuRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface-elevated transition-colors hover:bg-surface active:scale-95"
+                className={clsx(ICON_BUTTON, isOpen && 'bg-tint')}
                 aria-label={t('title')}
+                aria-expanded={isOpen}
             >
                 <Bell className={clsx("h-5 w-5", unreadCount > 0 ? "text-primary animate-pulse" : "text-foreground-muted")} />
                 {unreadCount > 0 && (

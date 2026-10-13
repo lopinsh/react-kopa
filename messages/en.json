@@ -84,7 +84,7 @@
     "confirmLeave": "Are you sure you want to leave this group?",
     "confirm_3": "Confirm Merge",
     "copyLink": "Copy Link",
-    "createGroup": "Create Group",
+    "createGroup": "Create group",
     "createSubcategory": "Create Subcategory",
     "decline": "Decline",
     "delete": "Delete",
@@ -160,7 +160,7 @@
     "moderationReports": "Admin: Moderation Reports",
     "moderationReportsDesc": "Review and resolve flagged groups and events.",
     "moreMembers": "more members",
-    "myGroups": "My Groups",
+    "myGroups": "My groups",
     "nameEn": "Name EN",
     "nameLv": "Name LV",
     "navigationMenu": "Navigation Menu",
@@ -936,20 +936,27 @@
     "openFullView": "Open full view"
   },
   "nav": {
-    "adminPanel": "Admin Panel",
+    "adminPanel": "Admin panel",
     "create": "Create",
     "messages": "Messages",
-    "settings": "Edit profile",
-    "signIn": "Sign In",
-    "signOut": "Sign Out",
+    "settings": "Settings",
+    "signIn": "Sign in",
+    "signOut": "Sign out",
     "userFallback": "User",
-    "viewPublicProfile": "View Public Profile",
     "discover": "Discover",
-    "myGroups": "My Groups",
+    "myGroups": "My groups",
     "profile": "Profile",
     "adminMenu": "Admin tools",
     "mobileLabel": "Main navigation",
-    "languageLabel": "Language"
+    "languageLabel": "Language",
+    "myProfile": "My profile",
+    "groups": "Groups",
+    "me": "Me",
+    "profileMenu": "Profile menu",
+    "languageCurrent": "Language: {language}",
+    "messagesUnread": "Messages, {count, plural, one {# unread conversation} other {# unread conversations}}",
+    "modeOn": "On",
+    "modeOff": "Off"
   },
   "notifications": {
     "title": "Notifications",
@@ -1088,7 +1095,10 @@
     },
     "header": {
       "logoText": "Ejam kopā",
-      "messages": "Messages"
+      "messages": "Messages",
+      "search": "Search",
+      "searchPlaceholder": "Search for a group or an activity…",
+      "closeSearch": "Close search"
     },
     "search": {
       "title": "Global Search"
