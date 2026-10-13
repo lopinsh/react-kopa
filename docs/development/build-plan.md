@@ -141,7 +141,8 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** every screen changes at once (visual regressions on 61 screens; the reviewer walks the redesign's [Every live screen](redesign.html#live-screens) list, all 61, at both widths, and the spec lists the routes to open); dark tones must be chosen without client JS (class `.dark` + `html.dark:root` rule, both emitted on the server, Taxonomy Law); L1 slugs in the DB must match the tone keys (check all 15 on the dev DB and prod data).
 - **Out of scope:** layout changes, Dizains editing (R1b), header structure (R2a).
 - **Acceptance (extra):** contrast: white on every light tone ≥ 4.5:1, near-black on every dark tone ≥ 7:1 (script or test page); no flash of wrong colour on a group page with a cold cache in dark mode; category colour never on a site button (grep `bg-[var(--accent)]` on buttons).
-- **Size:** M/L (the token change is small; the sweeps of `uppercase` in ~57 files and of the atoms make it long).
+- **Size:** M/L (the token change is small; the sweeps of `uppercase` in ~57 files and of the atoms make it long). The spec measures it as L.
+- **Spec:** [specs/R1a.md](specs/R1a.md). Tones are stored per mode in the theme's existing `light` / `dark` JSON (no migration).
 
 ### R1b · Admin → Dizains (M)
 
@@ -437,7 +438,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 
 | Release | Status | Spec | Commits |
 |---|---|---|---|
-| R1a Identity | not started | | |
+| R1a Identity | spec written | [specs/R1a.md](specs/R1a.md) | |
 | R1b Admin → Dizains | not started | | |
 | R2a Header, menus, own area | not started | | |
 | R2b Behaviour pieces | not started | | |
