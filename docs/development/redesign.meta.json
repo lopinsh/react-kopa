@@ -1,7 +1,8 @@
 {
-  "version": "9.6",
-  "updated": "2026-10-13T11:30:00+03:00",
+  "version": "9.6.1",
+  "updated": "2026-10-13T13:00:00+03:00",
   "changes": [
+    "9.6.1, after an independent review: the \"Šodien marked\" idea is its own Proposal line in the Agreed rules; the two \"Rādīt visus rezultātus\" drawings are labelled Proposal A (recommended) and Proposal B; small wording fixes (search chips on phones, the place list, part R7).",
     "9.6, your decisions of 13 October on the filter. Line 1 is always one line: \"Kur\", \"Tēma\", on Pasākumi the date choices, the switch. Each button shows its choice (\"Jelgava\", \"Jelgava +1\", \"Sports un fitness\"), has a maximum width, cuts a long name with \"…\" and clears with a small ×.",
     "The separate chosen line is gone everywhere; \"Notīrīt visu\" appears on the filter line only when two or more things are chosen.",
     "Line 2, once a Tēma is chosen: the \"Veids\" chips on one line, the chosen first (tinted, with ×), then \"+3\" for the rest, which opens the Veids list (\"Meklēt veidu\"). \"Veids\" replaces \"Apakškategorija\" everywhere.",
@@ -30,13 +31,12 @@
     "Compared with the live app: details the first version had dropped are back (the live words for joining an event, 15-minute times, sorting members by role, the two live words for a private group, Google and GitHub sign-in, and more).",
     "The event page drawing for a signed-in non-member is now seen by Pēteris, not Ilze, who is a member of Vēja zirdžiņš elsewhere on the page.",
     "Your answers of 13 October in the Agreed rules: the redesign ships in twelve parts, one by one; the language switch \"LV ▾\" stays in the header on every page; a slim footer on discovery and reading pages; screens not drawn follow the rules on this page.",
-    "Also from 13 October: an event's place is a required city plus a free address (\"Tiešsaistē\" for online); faces of who is going only for signed-in viewers; \"Atsaukt pieteikumu\"; no \"Mani pasākumi\" tab; social links at the end of Informācija.",
-    "Drawn from the rules, as proposals: the event's own page, Biedri, a group's Jaunumi, Mans profils, and the group's \"…\" menu."
+    "Also from 13 October: an event's place is a required city plus a free address (\"Tiešsaistē\" for online); faces of who is going only for signed-in viewers; \"Atsaukt pieteikumu\"; no \"Mani pasākumi\" tab; social links at the end of Informācija."
   ],
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.6.1"
     },
     "h-open": {
       "kind": "updated",
@@ -52,11 +52,11 @@
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.6.1"
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.6.1"
     },
     "h-group": {
       "kind": "updated",
@@ -80,7 +80,7 @@
     },
     "h-live": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.6.1"
     },
     "h-notes": {
       "kind": "updated",
