@@ -11,7 +11,7 @@ import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions
 import type { GroupContext } from '@/lib/services/group.service';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { useClickOutside } from '@/hooks/useClickOutside';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 
 type Props = {
     group: GroupContext;
@@ -143,16 +143,15 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                 </div>
             )}
 
-            <ConfirmDialog
+            <ConfirmPopover
+                anchorRef={triggerRef}
                 isOpen={leaveConfirmOpen}
-                title={c('leaveGroup')}
+                onOpenChange={setLeaveConfirmOpen}
                 message={c('confirmLeave')}
                 confirmLabel={c('leaveGroup')}
                 destructive
                 isPending={isPending}
                 onConfirm={handleLeave}
-                onCancel={() => setLeaveConfirmOpen(false)}
-                returnFocusRef={triggerRef}
             />
         </div>
     );

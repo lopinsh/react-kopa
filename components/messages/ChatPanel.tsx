@@ -12,7 +12,7 @@ import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import { GroupLabel } from './ConversationList';
 import { useMessageTime } from './useMessageTime';
 import { UI } from '@/lib/constants';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { useToast } from '@/hooks/use-toast';
 
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
@@ -96,13 +96,25 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                 </div>
 
                 {conversation.canBlock && (
-                    <button
-                        onClick={() => setBlockConfirmOpen(true)}
-                        className="flex items-center gap-2 rounded-full bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
-                    >
-                        <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
-                        {conversation.isBlocked ? t('unblock') : t('block')}
-                    </button>
+                    <ConfirmPopover
+                        isOpen={blockConfirmOpen}
+                        onOpenChange={setBlockConfirmOpen}
+                        message={t('confirmBlock')}
+                        confirmLabel={conversation.isBlocked ? t('unblock') : t('block')}
+                        destructive={!conversation.isBlocked}
+                        isPending={isPending}
+                        onConfirm={handleBlock}
+                        renderTrigger={(trigger) => (
+                            <button
+                                {...trigger}
+                                type="button"
+                                className="flex items-center gap-2 rounded-full bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
+                            >
+                                <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
+                                {conversation.isBlocked ? t('unblock') : t('block')}
+                            </button>
+                        )}
+                    />
                 )}
             </div>
 
@@ -181,17 +193,6 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     </>
                 )}
             </div>
-
-            <ConfirmDialog
-                isOpen={blockConfirmOpen}
-                title={conversation.isBlocked ? t('unblock') : t('block')}
-                message={t('confirmBlock')}
-                confirmLabel={conversation.isBlocked ? t('unblock') : t('block')}
-                destructive={!conversation.isBlocked}
-                isPending={isPending}
-                onConfirm={handleBlock}
-                onCancel={() => setBlockConfirmOpen(false)}
-            />
         </>
     );
 }

@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { avatarUrl } from '@/lib/avatar';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { hasAdminRights, isOwner as checkIsOwner } from '@/lib/utils/permissions';
 
 export interface Member {
@@ -36,6 +37,8 @@ type Props = {
     l1Slug: string;
 };
 
+type MemberAction = 'promote' | 'demote' | 'kick';
+
 export default function MemberCard({ member, canMessage, groupId, locale }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
@@ -46,6 +49,8 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
     const { user: viewer } = useGroupContext();
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const [pendingAction, setPendingAction] = useState<MemberAction | null>(null);
 
     // Close the manage menu on outside click/tap or Escape.
     useEffect(() => {
@@ -79,10 +84,15 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
     const canDemote = isOwner && isTargetAdmin;
     const canKick = (isOwner && !isTargetOwner) || (isAdmin && isTargetMember);
 
-    const handleAction = (action: 'promote' | 'demote' | 'kick') => {
+    // The menu item closes the menu and opens the small confirmation at the "…" button (OD-06).
+    const handleAction = (action: MemberAction) => {
         setMenuOpen(false);
-        if (!window.confirm(t(`confirm${action.charAt(0).toUpperCase() + action.slice(1)}`))) return;
+        setPendingAction(action);
+    };
 
+    const runAction = () => {
+        const action = pendingAction;
+        if (!action || isPending) return;
         startTransition(async () => {
             const result = action === 'promote'
                 ? await promoteMember(groupId, member.user.id, locale)
@@ -96,6 +106,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
             } else {
                 toastError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
             }
+            setPendingAction(null);
         });
     };
 
@@ -183,6 +194,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                 {canKick && (
                     <div ref={menuRef} className="relative">
                         <button
+                            ref={triggerRef}
                             type="button"
                             onClick={() => setMenuOpen((open) => !open)}
                             aria-label={t('memberActions')}
@@ -227,6 +239,16 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                                 {c_common('kick')}
                             </button>
                         </div>
+                        <ConfirmPopover
+                            anchorRef={triggerRef}
+                            isOpen={pendingAction !== null}
+                            onOpenChange={(open) => { if (!open) setPendingAction(null); }}
+                            message={pendingAction ? t(`confirm${pendingAction.charAt(0).toUpperCase() + pendingAction.slice(1)}`) : ''}
+                            confirmLabel={pendingAction ? c_common(pendingAction) : ''}
+                            destructive={pendingAction === 'kick'}
+                            isPending={isPending}
+                            onConfirm={runAction}
+                        />
                     </div>
                 )}
             </div>

@@ -7,7 +7,7 @@ import { Search, ShieldCheck, ShieldOff, Crown, MessageSquare } from 'lucide-rea
 import { makeAdmin, removeAdmin, searchTeamCandidates } from '@/actions/team-actions';
 import { getOrCreateDirectChat } from '@/actions/message-actions';
 import { teamSearchSchema } from '@/lib/validations/team';
-import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { useToast } from '@/hooks/use-toast';
 import type { TeamCandidate, TeamMember } from '@/lib/services/team.service';
 
@@ -75,7 +75,26 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
         });
     };
 
-    const name = confirming ? confirming.person.name || confirming.person.username || confirming.person.email || '' : '';
+    const nameOf = (person: TeamCandidate) => person.name || person.username || person.email || '';
+
+    // Make or remove an admin is undoable: a small confirmation at the row's button (OD-06).
+    const renderConfirm = (kind: Pending['kind'], person: TeamCandidate) => (
+        <ConfirmPopover
+            isOpen={confirming?.kind === kind && confirming.person.id === person.id}
+            onOpenChange={(open) => setConfirming(open ? { kind, person } : null)}
+            message={t(kind === 'make' ? 'makeMessage' : 'removeMessage', { name: nameOf(person) })}
+            confirmLabel={t(kind === 'make' ? 'makeAdmin' : 'removeAdmin')}
+            destructive={kind === 'remove'}
+            isPending={isPending}
+            onConfirm={handleConfirm}
+            renderTrigger={(trigger) => (
+                <button {...trigger} type="button" disabled={isPending} className={`${BUTTON} ${kind === 'remove' ? 'text-danger' : 'text-foreground'}`}>
+                    {kind === 'remove' ? <ShieldOff className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                    {t(kind === 'make' ? 'makeAdmin' : 'removeAdmin')}
+                </button>
+            )}
+        />
+    );
 
     return (
         <div className="space-y-10">
@@ -98,12 +117,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                                         {t('message')}
                                     </button>
                                 )}
-                                {canManage && member.role !== 'OWNER' && (
-                                    <button type="button" disabled={isPending} onClick={() => setConfirming({ kind: 'remove', person: member })} className={`${BUTTON} text-danger`}>
-                                        <ShieldOff className="h-4 w-4" />
-                                        {t('removeAdmin')}
-                                    </button>
-                                )}
+                                {canManage && member.role !== 'OWNER' && renderConfirm('remove', member)}
                             </div>
                         </li>
                     ))}
@@ -137,10 +151,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                             {results.map((person) => (
                                 <li key={person.id} className="flex items-center justify-between gap-3 p-4">
                                     <Person person={person} />
-                                    <button type="button" disabled={isPending} onClick={() => setConfirming({ kind: 'make', person })} className={`${BUTTON} text-foreground`}>
-                                        <ShieldCheck className="h-4 w-4" />
-                                        {t('makeAdmin')}
-                                    </button>
+                                    {renderConfirm('make', person)}
                                 </li>
                             ))}
                         </ul>
@@ -148,17 +159,6 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                 )}
             </section>
             )}
-
-            <ConfirmDialog
-                isOpen={confirming !== null}
-                title={confirming ? t(confirming.kind === 'make' ? 'makeTitle' : 'removeTitle') : ''}
-                message={confirming ? t(confirming.kind === 'make' ? 'makeMessage' : 'removeMessage', { name }) : ''}
-                confirmLabel={confirming ? t(confirming.kind === 'make' ? 'makeAdmin' : 'removeAdmin') : ''}
-                destructive={confirming?.kind === 'remove'}
-                isPending={isPending}
-                onConfirm={handleConfirm}
-                onCancel={() => setConfirming(null)}
-            />
         </div>
     );
 }

@@ -2,18 +2,26 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
+import Button from '@/components/ui/Button';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { UI } from '@/lib/constants';
 
 type TriggerProps = {
-    ref: RefObject<HTMLButtonElement | null>;
+    ref: (el: HTMLButtonElement | null) => void;
     onClick: () => void;
     'aria-haspopup': 'dialog';
     'aria-expanded': boolean;
     'aria-controls': string | undefined;
 };
 
-type Props = {
+type Anchor =
+    /** The pop-over's own button: spread the given props onto it. */
+    | { renderTrigger: (props: TriggerProps) => ReactNode; anchorRef?: never }
+    /** A menu's trigger (the menu item closes with the menu): position from it, focus returns to it. */
+    | { anchorRef: RefObject<HTMLElement | null>; renderTrigger?: never };
+
+type Props = Anchor & {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     message: string;
@@ -22,19 +30,17 @@ type Props = {
     destructive?: boolean;
     isPending?: boolean;
     onConfirm: () => void;
-    /** Renders the button that opens the pop-over; spread the given props onto it. */
-    renderTrigger: (props: TriggerProps) => ReactNode;
 };
 
 const GAP = 6;
 const WIDTH = 256;
 
 /** A small confirmation next to the button that asked for it: no backdrop, the page stays readable. Escape or a click outside cancels. */
-export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmLabel, destructive = false, isPending = false, onConfirm, renderTrigger }: Props) {
+export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmLabel, destructive = false, isPending = false, onConfirm, renderTrigger, anchorRef }: Props) {
     const tCommon = useTranslations('common');
     const panelId = useId();
     const wrapperRef = useRef<HTMLSpanElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    const [triggerEl, setTriggerEl] = useState<HTMLButtonElement | null>(null);
     const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
     const panelRef = useFocusTrap<HTMLDivElement>(isOpen && pos !== null);
     const wasOpen = useRef(false);
@@ -44,12 +50,12 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
     // Fixed position from the button's rectangle, so no scrolling parent can clip it.
     useLayoutEffect(() => {
         if (!isOpen) return;
-        const rect = triggerRef.current?.getBoundingClientRect();
+        const rect = (anchorRef ? anchorRef.current : triggerEl)?.getBoundingClientRect();
         if (!rect) return;
         const left = Math.min(Math.max(8, rect.right - WIDTH), window.innerWidth - WIDTH - 8);
         const below = rect.bottom + GAP + 120 <= window.innerHeight;
         setPos({ left, top: below ? rect.bottom + GAP : Math.max(8, rect.top - GAP - 110) });
-    }, [isOpen]);
+    }, [isOpen, anchorRef, triggerEl]);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -71,14 +77,14 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
 
     // Focus goes back to the button when the pop-over closes.
     useEffect(() => {
-        if (wasOpen.current && !isOpen) triggerRef.current?.focus();
+        if (wasOpen.current && !isOpen) (anchorRef ? anchorRef.current : triggerEl)?.focus();
         wasOpen.current = isOpen;
-    }, [isOpen]);
+    }, [isOpen, anchorRef, triggerEl]);
 
     return (
         <span ref={wrapperRef} className="inline-flex">
-            {renderTrigger({
-                ref: triggerRef,
+            {renderTrigger?.({
+                ref: setTriggerEl,
                 onClick: () => onOpenChange(!isOpen),
                 'aria-haspopup': 'dialog',
                 'aria-expanded': isOpen,
@@ -91,29 +97,17 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
                     role="alertdialog"
                     aria-label={message}
                     tabIndex={-1}
+                    data-ui={UI.confirmPopover}
                     style={{ top: pos.top, left: pos.left, width: WIDTH }}
-                    className="fixed z-[90] rounded-xl border border-border bg-surface p-3 text-left shadow-premium animate-in fade-in zoom-in-95 duration-100"
+                    className="fixed z-[90] rounded-xl border border-border bg-surface p-3 text-left shadow-premium motion-safe:animate-fade"
                 >
                     <p className="text-sm font-semibold text-foreground">{message}</p>
                     <div className="mt-3 flex items-center justify-end gap-2">
-                        <button
-                            data-autofocus
-                            type="button"
-                            onClick={() => onOpenChange(false)}
-                            disabled={isPending}
-                            className="rounded-lg px-3 py-1.5 text-xs font-bold text-foreground-muted hover:text-foreground disabled:opacity-50"
-                        >
-                            {tCommon('cancel')}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={onConfirm}
-                            disabled={isPending}
-                            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
-                        >
-                            {isPending && <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />}
+                        <Button variant="secondary" size="sm" data-autofocus onClick={() => onOpenChange(false)} disabled={isPending}>{tCommon('cancel')}</Button>
+                        <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={onConfirm} disabled={isPending}>
+                            {isPending && <span className="size-3 animate-spin rounded-full border-2 border-current border-t-transparent" />}
                             {confirmLabel}
-                        </button>
+                        </Button>
                     </div>
                 </div>
             )}

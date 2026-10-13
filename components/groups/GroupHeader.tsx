@@ -32,6 +32,7 @@ import CompactGroupBar from './CompactGroupBar';
 import GroupMoreMenu from './GroupMoreMenu';
 import AdminToolsMenu from './AdminToolsMenu';
 import { UI } from '@/lib/constants';
+import ConfirmPopover from '@/components/ui/ConfirmPopover';
 
 type Props = {
     group: GroupContext;
@@ -49,6 +50,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     const [isContactModalOpen, setContactModalOpen] = useState(false);
     const [isReportModalOpen, setReportModalOpen] = useState(false);
     const [isHideModalOpen, setHideModalOpen] = useState(false);
+    const [cancelOpen, setCancelOpen] = useState(false);
     // The "..." menu button that opened the report or hide pop-up; the menu closes on click, so focus returns here.
     const menuReturnRef = useRef<HTMLElement | null>(null);
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
@@ -72,13 +74,11 @@ export default function GroupHeader({ group, l1Slug }: Props) {
         }
     }, [isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, handleMembership]);
 
-    const handleCancelRequest = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (confirm(t('confirmCancelRequest'))) {
-            startTransition(async () => {
-                await cancelJoinRequest(group.id, locale);
-            });
-        }
+    const handleCancelRequest = () => {
+        setCancelOpen(false);
+        startTransition(async () => {
+            await cancelJoinRequest(group.id, locale);
+        });
     };
 
     const handleReport = (trigger: HTMLElement | null) => {
@@ -319,13 +319,25 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 </button>
 
                                 {userRole === 'PENDING' && !isPending && (
-                                    <button
-                                        onClick={handleCancelRequest}
-                                        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface-elevated text-foreground-muted hover:bg-danger hover:text-danger-foreground hover:border-danger/40 transition-all group/cancel"
-                                        title="Cancel join request"
-                                    >
-                                        <X className="h-4 w-4" />
-                                    </button>
+                                    <ConfirmPopover
+                                        isOpen={cancelOpen}
+                                        onOpenChange={setCancelOpen}
+                                        message={t('confirmCancelRequest')}
+                                        confirmLabel={t('withdrawRequest')}
+                                        destructive
+                                        onConfirm={handleCancelRequest}
+                                        renderTrigger={(trigger) => (
+                                            <button
+                                                {...trigger}
+                                                type="button"
+                                                className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface-elevated text-foreground-muted hover:bg-danger hover:text-danger-foreground hover:border-danger/40 transition-all group/cancel"
+                                                aria-label={t('withdrawRequest')}
+                                                title={t('withdrawRequest')}
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        )}
+                                    />
                                 )}
                             </div>
                         )}
