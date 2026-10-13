@@ -532,29 +532,34 @@ export class EventService {
 
     /**
      * Each group's next event the viewer may see: not past (the Gaidāmie rule), public, plus members-only
-     * for approved members and site admins (the rule of `canSeeMembersOnly`). Groups with none are absent.
+     * for approved members and site admins (the rule of `canSeeMembersOnly`). Hidden groups only for their owner and site admins
+     * (the people who may open them). Groups with none are absent.
      */
     static async getNextVisibleEvents(groupIds: string[], locale: string, viewerId?: string): Promise<Map<string, NextEventView>> {
         const result = new Map<string, NextEventView>();
         if (groupIds.length === 0) return result;
         const lang = toTextLang(locale);
         let privileged: string[] = [];
+        // A hidden group's events stay visible to those who may still open the group: its owner and site admins.
+        let seesHidden: string[] = [];
         if (viewerId) {
             const [memberships, siteRole] = await Promise.all([
                 prisma.membership.findMany({
                     where: { userId: viewerId, groupId: { in: groupIds }, role: { not: 'PENDING' } },
-                    select: { groupId: true }
+                    select: { groupId: true, role: true }
                 }),
                 getSiteRole(viewerId)
             ]);
-            privileged = isSiteAdminRole(siteRole) ? groupIds : memberships.map((m) => m.groupId);
+            const admin = isSiteAdminRole(siteRole);
+            privileged = admin ? groupIds : memberships.map((m) => m.groupId);
+            seesHidden = admin ? groupIds : memberships.filter((m) => m.role === 'OWNER').map((m) => m.groupId);
         }
         const today = startOfTodayInRiga();
         const events = await prisma.event.findMany({
             where: {
                 groupId: { in: groupIds },
-                group: { hiddenAt: null },
                 AND: [
+                    { OR: [{ group: { hiddenAt: null } }, { groupId: { in: seesHidden } }] },
                     { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
                     { OR: [{ visibility: 'PUBLIC' }, { visibility: 'MEMBERS_ONLY', groupId: { in: privileged } }] }
                 ]
