@@ -21,12 +21,14 @@ import {
     UserCheck,
 } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import EventLangBar from '@/components/forms/EventLangBar';
 import DateTimeField from '@/components/forms/DateTimeField';
 import { addMinutesLocal, minutesBetween, nextFullHourLocal, splitLocal, toLocalValue } from '@/lib/local-datetime';
 import { toTextLang, type TextLang } from '@/lib/translations';
 
-import { eventSchema, type EventFormValues, type EventFormData } from '@/lib/validations/event';
+import { eventSchema, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent, updateEvent } from '@/actions/event-actions';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 
@@ -138,6 +140,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         setValue('endDate', next, { shouldDirty: true, shouldValidate: true });
     }
     const titleError = errors.texts?.[lang]?.title;
+    // Either language over the limit holds the form back, whichever one is showing.
+    const titleOver = isOverLimit(watched.texts?.lv?.title, EVENT_TITLE_MAX) || isOverLimit(watched.texts?.en?.title, EVENT_TITLE_MAX);
 
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['texts.lv.title', 'texts.en.title', 'startDate', 'endDate', 'location']);
@@ -201,7 +205,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         if (step < 1) {
             e.preventDefault();
-            void nextStep();
+            if (!titleOver) void nextStep();
             return;
         }
         void submitForm(e);
@@ -256,13 +260,17 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     type="text"
                                     lang={lang}
                                     {...register(`texts.${lang}.title`)}
+                                    aria-describedby="event-title-count"
                                     placeholder={t('fieldNamePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
                                         titleError ? 'border-danger/40' : 'border-border focus:border-primary'
                                     )}
                                 />
-                                {titleError && <p className="mt-1 text-xs text-danger">{t(titleError.message as 'INVALID_URL')}</p>}
+                                <div className="mt-1 flex items-start gap-2">
+                                    {titleError && <p className="text-xs text-danger">{t(titleError.message as 'INVALID_URL')}</p>}
+                                    <TextCounter id="event-title-count" length={(watched.texts?.[lang]?.title ?? '').length} max={EVENT_TITLE_MAX} />
+                                </div>
                             </div>
 
                             <div>
@@ -493,7 +501,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 key="next"
                                 type="button"
                                 onClick={nextStep}
-                                className="flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all"
+                                disabled={titleOver}
+                                className="flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all disabled:opacity-50"
                             >
                                 {t('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -502,7 +511,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                             <button
                                 key="submit"
                                 type="submit"
-                                disabled={isPending || askingToOpen}
+                                disabled={isPending || askingToOpen || titleOver}
                                 className="flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all disabled:opacity-70"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}

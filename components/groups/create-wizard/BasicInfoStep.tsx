@@ -4,7 +4,8 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { Type, AlignLeft, Image as ImageIcon } from 'lucide-react';
-import type { GroupFormValues } from '@/lib/validations/group';
+import { GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import TextCounter from '@/components/ui/TextCounter';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
 export default function BasicInfoStep() {
@@ -25,13 +26,17 @@ export default function BasicInfoStep() {
                     type="text"
                     autoFocus
                     {...register('name')}
+                    aria-describedby="group-name-count"
                     placeholder={t('fieldNamePlaceholder')}
                     className={clsx(
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.name ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
-                {errors.name && <p className="mt-1 text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
+                <div className="mt-1 flex items-start gap-2">
+                    {errors.name && <p className="text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
+                    <TextCounter id="group-name-count" length={(watch('name') ?? '').length} max={GROUP_NAME_MAX} />
+                </div>
             </div>
 
             {/* Description */}

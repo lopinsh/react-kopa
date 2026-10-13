@@ -5,6 +5,8 @@ import { useEffect, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { clsx } from 'clsx';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import { createFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_KINDS, FEEDBACK_TEXT_MAX, type FeedbackKindValue } from '@/lib/constants';
 import type { ElementLocator } from '@/lib/feedback/capture';
@@ -46,7 +48,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
     const errorText = (code: string) => (tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
     const handleSave = () => {
-        if (isPending || text.trim() === '') return;
+        if (isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)) return;
         setError(null);
         startTransition(async () => {
             const res = await createFeedback({
@@ -100,13 +102,13 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     autoFocus
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    maxLength={FEEDBACK_TEXT_MAX}
+                    aria-describedby="feedback-note-count"
                     rows={5}
                     placeholder={t('placeholder')}
                     aria-label={t('textLabel')}
                     className="mt-4 w-full resize-none rounded-xl border border-border bg-surface-elevated p-3 text-sm text-foreground outline-none focus:border-primary/50"
                 />
-                <div className="mt-1 text-right text-xs text-foreground-muted">{text.length}/{FEEDBACK_TEXT_MAX}</div>
+                <div className="mt-1 flex items-start gap-2"><TextCounter id="feedback-note-count" length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 {error && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{error}</p>}
 
                 <div className="mt-4 flex items-center justify-end gap-3">
@@ -116,7 +118,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     <button
                         type="button"
                         onClick={handleSave}
-                        disabled={isPending || text.trim() === ''}
+                        disabled={isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)}
                         className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}

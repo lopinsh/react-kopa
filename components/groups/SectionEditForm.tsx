@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Trash2, Save, Lock, Globe, Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
+import { SECTION_TITLE_MAX } from '@/lib/validations/section';
 import LangSwitch from '@/components/ui/LangSwitch';
 import UntranslatedNotice from '@/components/ui/UntranslatedNotice';
 import OriginalLangControl from '@/components/ui/OriginalLangControl';
@@ -48,6 +51,8 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
     const text = section.texts[lang];
     const filled = { lv: isLangFilled(section.texts.lv), en: isLangFilled(section.texts.en) };
     const isFirst = section.order === 0;
+    const counterId = useId();
+    const titleOver = isOverLimit(text.title, SECTION_TITLE_MAX);
 
     const setText = (updates: Partial<SectionText>) =>
         onChange({ texts: { ...section.texts, [lang]: { ...text, ...updates } } });
@@ -82,8 +87,10 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                         value={text.title}
                         onChange={(e) => setText({ title: e.target.value })}
                         placeholder={t('fieldTitlePlaceholder')}
+                        aria-describedby={counterId}
                         className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     />
+                    <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={text.title.length} max={SECTION_TITLE_MAX} /></div>
                 </div>
 
                 <div>
@@ -146,7 +153,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                     <button
                         type="button"
                         onClick={() => onSave(lang)}
-                        disabled={isPending}
+                        disabled={isPending || titleOver}
                         className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-primary-foreground transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                     >
                         <Save className="h-4 w-4" />

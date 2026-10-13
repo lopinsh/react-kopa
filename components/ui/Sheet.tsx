@@ -4,7 +4,8 @@ import { useId, useState, type ReactNode, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import DiscardGuard from '@/components/ui/DiscardGuard';
-import Overlay, { useOverlayClose } from '@/components/ui/Overlay';
+import Overlay from '@/components/ui/Overlay';
+import { useOverlayClose } from '@/components/ui/overlay-support';
 import { UI } from '@/lib/constants';
 
 type Props = {

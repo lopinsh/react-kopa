@@ -19,12 +19,14 @@ export const step1Object = z.object({
 
 export const step1Schema = step1Object;
 
+export const GROUP_NAME_MAX = 80;
+
 // Step 2: The Basics
 export const step2Schema = z.object({
     name: z
         .string()
         .min(3, 'NAME_TOO_SHORT')
-        .max(80, 'NAME_TOO_LONG'),
+        .max(GROUP_NAME_MAX, 'NAME_TOO_LONG'),
     description: z
         .string()
         .max(10000, 'DESCRIPTION_TOO_LONG')

@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Bot, MessageCircle, Send } from 'lucide-react';
 import { replyToFeedback } from '@/actions/feedback-actions';
 import { FEEDBACK_TEXT_MAX } from '@/lib/constants';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import { useToast } from '@/hooks/use-toast';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
@@ -19,8 +21,11 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
     const [isPending, startTransition] = useTransition();
     const [open, setOpen] = useState(false);
 
+    const counterId = useId();
+    const over = isOverLimit(text, FEEDBACK_TEXT_MAX);
+
     const handleSend = () => {
-        if (isPending || !text.trim()) return;
+        if (isPending || !text.trim() || over) return;
         startTransition(async () => {
             const res = await replyToFeedback(note.id, { text });
             if (res.success && res.data) {
@@ -61,13 +66,14 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                     {t('reply')}
                 </button>
             ) : (
+                <div>
                 <div className="flex items-end gap-2">
                     <textarea
                         autoFocus
                         value={text}
                         onChange={(e) => setText(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Escape' && !text.trim()) { e.stopPropagation(); setOpen(false); } }}
-                        maxLength={FEEDBACK_TEXT_MAX}
+                        aria-describedby={counterId}
                         rows={2}
                         placeholder={t('threadPlaceholder')}
                         aria-label={t('reply')}
@@ -76,13 +82,15 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                     <button
                         type="button"
                         onClick={handleSend}
-                        disabled={isPending || !text.trim()}
+                        disabled={isPending || !text.trim() || over}
                         aria-label={t('threadSend')}
                         title={t('threadSend')}
                         className="rounded-full bg-primary p-2.5 text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         <Send className="h-4 w-4" />
                     </button>
+                </div>
+                <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 </div>
             )}
         </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useEffect, useId, useRef, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { Send, Users, Ban, AlertCircle, ArrowLeft } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -13,6 +13,8 @@ import { GroupLabel } from './ConversationList';
 import { useMessageTime } from './useMessageTime';
 import { UI } from '@/lib/constants';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import { useToast } from '@/hooks/use-toast';
 
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
@@ -35,6 +37,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
     const tErrors = useTranslations('errors');
     const messageTime = useMessageTime();
     const [draft, setDraft] = useState('');
+    const counterId = useId();
     const [sendError, setSendError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const [blockConfirmOpen, setBlockConfirmOpen] = useState(false);
@@ -47,9 +50,11 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
         if (el) el.scrollTop = el.scrollHeight;
     }, [messages, conversation.id]);
 
+    const over = isOverLimit(draft, MESSAGE_MAX_LENGTH);
+
     const handleSend = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!messageTextSchema.safeParse(draft).success || isPending) return;
+        if (!messageTextSchema.safeParse(draft).success || isPending || over) return;
 
         startTransition(async () => {
             const result = await sendMessage(conversation.id, draft);
@@ -176,20 +181,21 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 type="text"
                                 value={draft}
                                 onChange={(e) => setDraft(e.target.value)}
-                                maxLength={MESSAGE_MAX_LENGTH}
+                                aria-describedby={counterId}
                                 placeholder={t('typeMessage')}
                                 aria-label={t('typeMessage')}
                                 className="flex-1 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm focus:border-primary focus:outline-none"
                             />
                             <button
                                 type="submit"
-                                disabled={!messageTextSchema.safeParse(draft).success || isPending}
+                                disabled={!messageTextSchema.safeParse(draft).success || isPending || over}
                                 aria-label={t('send')}
                                 className="flex items-center justify-center rounded-full bg-primary px-5 font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
                                 <Send className="h-4 w-4" />
                             </button>
                         </form>
+                        <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={draft.length} max={MESSAGE_MAX_LENGTH} /></div>
                     </>
                 )}
             </div>

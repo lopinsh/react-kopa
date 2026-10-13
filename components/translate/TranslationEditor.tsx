@@ -3,13 +3,16 @@
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import Modal from '@/components/ui/Modal';
+import { OverlayCloseButton } from '@/components/ui/overlay-support';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { getTranslationEntry, suggestTranslation } from '@/actions/translation-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { TranslationEntry } from '@/lib/services/message-override.service';
 import { MESSAGE_LANGS, type MessageLang } from '@/lib/translate-mode/messages';
-import { validateMessage, type MessageIssue } from '@/lib/validations/message-override';
+import { validateMessage, MESSAGE_OVERRIDE_MAX, type MessageIssue } from '@/lib/validations/message-override';
 
 type Props = {
     messageKey: string;
@@ -55,12 +58,13 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
         en: entry ? validateMessage(values.en, entry.source.en || undefined) : null,
     };
     const hasIssue = !!issues.lv || !!issues.en;
+    const over = isOverLimit(values.lv, MESSAGE_OVERRIDE_MAX) || isOverLimit(values.en, MESSAGE_OVERRIDE_MAX);
     const isEmpty = values.lv.trim() === '' || values.en.trim() === '';
 
     const errorText = (code: string) => (tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
     const handleSave = () => {
-        if (isPending || !entry || hasIssue || isEmpty) return;
+        if (isPending || !entry || hasIssue || isEmpty || over) return;
         setSaveError(null);
         startTransition(async () => {
             const res = await suggestTranslation({ key: entry.key, lv: values.lv, en: values.en });
@@ -117,14 +121,17 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                         value={values[lang]}
                                         onChange={(e) => setValues((v) => ({ ...v, [lang]: e.target.value }))}
                                         rows={6}
-                                        maxLength={2000}
+                                        aria-describedby={`tm-count-${lang}`}
                                         aria-invalid={!!issue}
                                         className={clsx(
                                             'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-sm text-foreground outline-none focus:border-primary/50',
                                             issue ? 'border-danger/40' : 'border-border'
                                         )}
                                     />
-                                    {issue && <p role="alert" className="mt-1 text-xs font-medium text-danger">{describe(issue)}</p>}
+                                    <div className="mt-1 flex items-start gap-2">
+                                        {issue && <p role="alert" className="text-xs font-medium text-danger">{describe(issue)}</p>}
+                                        <TextCounter id={`tm-count-${lang}`} length={values[lang].length} max={MESSAGE_OVERRIDE_MAX} />
+                                    </div>
                                     {entry.pending[lang] !== null && (
                                         <p className="mt-1 text-xs text-foreground-muted">
                                             {t('live')}: <span className="font-mono">{entry[lang]}</span>
@@ -143,10 +150,10 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                     <p className="mt-1 text-xs text-foreground-muted">{t('syntaxHint')}</p>
                     {saveError && <p role="alert" className="mt-2 text-sm font-medium text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
-                        <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
+                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
-                        </button>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty} className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
+                        </OverlayCloseButton>
+                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </button>
                     </div>

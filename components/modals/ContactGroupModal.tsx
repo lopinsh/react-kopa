@@ -8,6 +8,9 @@ import { joinGroup, sendInquiry } from '@/actions/group-actions';
 import { Link } from '@/i18n/routing';
 import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message';
 import Modal from '@/components/ui/Modal';
+import { OverlayCloseButton } from '@/components/ui/overlay-support';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 
 type Props = {
     isOpen: boolean;
@@ -33,7 +36,8 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
     if (!isOpen) return null;
 
     const joining = allowJoin && wantsToJoin;
-    const canSubmit = messageTextSchema.safeParse(message).success && !isPending;
+    const over = isOverLimit(message, MESSAGE_MAX_LENGTH);
+    const canSubmit = messageTextSchema.safeParse(message).success && !isPending && !over;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -84,11 +88,12 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                         id="contact-group-message"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
-                        maxLength={MESSAGE_MAX_LENGTH}
+                        aria-describedby="contact-group-message-count"
                         rows={5}
                         placeholder={t('placeholder')}
                         className="w-full resize-none rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
+                    <div className="-mt-2 flex items-start gap-2"><TextCounter id="contact-group-message-count" length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
 
                     {allowJoin && (
                         <div className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-surface-elevated/50 px-4 py-3">
@@ -115,14 +120,12 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                     {error && <p role="alert" className="text-sm font-medium text-danger">{error}</p>}
 
                     <div className="flex items-center justify-end gap-3 pt-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
+                        <OverlayCloseButton
                             disabled={isPending}
                             className="rounded-xl px-5 py-3 text-[11px] font-semibold text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
                         >
                             {tCommon('cancel')}
-                        </button>
+                        </OverlayCloseButton>
                         <button
                             type="submit"
                             disabled={!canSubmit}

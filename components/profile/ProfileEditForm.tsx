@@ -3,7 +3,9 @@
 import { useTransition } from 'react';
 import { useForm, useWatch, type UseFormRegisterReturn } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { profileSchema, type ProfileFormValues } from '@/lib/validations/user';
+import { profileSchema, USER_BIO_MAX, USER_NAME_MAX, type ProfileFormValues } from '@/lib/validations/user';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 import { updateProfile } from '@/actions/user-actions';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
@@ -71,13 +73,15 @@ export default function ProfileEditForm({ user }: Props) {
 
     // Live preview: a photo URL wins, otherwise the clay figure for the current seed.
     const [watchedImage, watchedSeed] = useWatch({ control: form.control, name: ['image', 'avatarSeed'] });
+    const [watchedName, watchedBio] = useWatch({ control: form.control, name: ['name', 'bio'] });
+    const over = isOverLimit(watchedName, USER_NAME_MAX) || isOverLimit(watchedBio, USER_BIO_MAX);
     const previewSrc = avatarUrl({ id: user.id, image: watchedImage, avatarSeed: watchedSeed });
 
     const fieldError = (message?: string) =>
         message ? <p className="text-xs text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
 
     const onSubmit = (data: ProfileFormValues) => {
-        if (isPending) return;
+        if (isPending || over) return;
         startTransition(async () => {
             const result = await updateProfile(data);
             if (result.success) {
@@ -114,8 +118,8 @@ export default function ProfileEditForm({ user }: Props) {
             <div className="space-y-6">
                 <div className="space-y-2">
                     <label htmlFor="name" className="block text-sm font-bold text-foreground">{t('fieldName')}</label>
-                    <input id="name" {...form.register('name')} className={INPUT} />
-                    {fieldError(errors.name?.message)}
+                    <input id="name" {...form.register('name')} aria-describedby="name-count" className={INPUT} />
+                    <div className="flex items-start gap-2">{fieldError(errors.name?.message)}<TextCounter id="name-count" length={(watchedName ?? '').length} max={USER_NAME_MAX} /></div>
                 </div>
 
                 <div className="space-y-2">
@@ -132,11 +136,12 @@ export default function ProfileEditForm({ user }: Props) {
                     <textarea
                         id="bio"
                         {...form.register('bio')}
+                        aria-describedby="bio-count"
                         placeholder={t('edit.bioPlaceholder')}
                         rows={4}
                         className={`${INPUT} resize-none`}
                     />
-                    {fieldError(errors.bio?.message)}
+                    <div className="flex items-start gap-2">{fieldError(errors.bio?.message)}<TextCounter id="bio-count" length={(watchedBio ?? '').length} max={USER_BIO_MAX} /></div>
                 </div>
 
                 <div className="space-y-2">
@@ -180,7 +185,7 @@ export default function ProfileEditForm({ user }: Props) {
 
             <button
                 type="submit"
-                disabled={isPending}
+                disabled={isPending || over}
                 className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}

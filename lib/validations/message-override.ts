@@ -87,10 +87,12 @@ export function validateMessage(value: string, source: string | undefined): Mess
     return null;
 }
 
+export const MESSAGE_OVERRIDE_MAX = 2000;
+
 const messageValueSchema = z
     .string()
     .min(1, 'MESSAGE_INVALID')
-    .max(2000, 'MESSAGE_INVALID')
+    .max(MESSAGE_OVERRIDE_MAX, 'MESSAGE_INVALID')
     .refine((v) => describeMessage(v) !== null, 'MESSAGE_INVALID');
 
 export const saveMessageOverrideSchema = z.object({

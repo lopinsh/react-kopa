@@ -4,6 +4,10 @@ import { useId, useState, useTransition, type ReactNode, type RefObject } from '
 import { useTranslations } from 'next-intl';
 import type { ZodType } from 'zod';
 import Modal from '@/components/ui/Modal';
+import { OverlayCloseButton } from '@/components/ui/overlay-support';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
+import { MODERATION_REASON_MAX } from '@/lib/validations/moderation';
 import type { ActionResponse } from '@/types/actions';
 
 type Props = {
@@ -38,8 +42,10 @@ export default function ReasonModal({
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
 
+    const over = isOverLimit(reason, MODERATION_REASON_MAX);
+
     const handleSubmit = () => {
-        if (isPending) return;
+        if (isPending || over) return;
         if (!schema.safeParse({ reason }).success) {
             setError(tErrors('VALIDATION_FAILED'));
             return;
@@ -72,27 +78,28 @@ export default function ReasonModal({
                 id={fieldId}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                maxLength={500}
+                aria-describedby={`${fieldId}-count`}
                 rows={4}
                 placeholder={placeholder}
                 className="w-full resize-none rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-danger/40"
             />
-            <p className="mt-1 text-xs text-foreground-muted">{hint}</p>
+            <div className="mt-1 flex items-start gap-2">
+                <p className="text-xs text-foreground-muted">{hint}</p>
+                <TextCounter id={`${fieldId}-count`} length={reason.length} max={MODERATION_REASON_MAX} />
+            </div>
             {error && <p role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
 
             <div className="mt-6 flex justify-end gap-3">
-                <button
-                    type="button"
-                    onClick={onClose}
+                <OverlayCloseButton
                     disabled={isPending}
                     className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
                 >
                     {cancelLabel}
-                </button>
+                </OverlayCloseButton>
                 <button
                     type="button"
                     onClick={handleSubmit}
-                    disabled={isPending}
+                    disabled={isPending || over}
                     className="flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}

@@ -3,7 +3,8 @@
 import { useId } from 'react';
 import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
-import Overlay, { useOverlayForceClose } from '@/components/ui/Overlay';
+import Overlay from '@/components/ui/Overlay';
+import { useOverlayForceClose } from '@/components/ui/overlay-support';
 import { UI } from '@/lib/constants';
 
 /** "Discard changes?" over a pop-up that holds typed input. Keep editing is the default; Back and Esc keep editing too. */

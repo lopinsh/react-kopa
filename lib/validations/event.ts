@@ -1,9 +1,11 @@
 import { z } from 'zod';
 import { TEXT_LANGS, type TextLang } from '@/lib/translations';
 
+export const EVENT_TITLE_MAX = 120;
+
 /** The words of an event in one language. */
 const eventTextSchema = z.object({
-    title: z.string().max(120, 'TITLE_TOO_LONG'),
+    title: z.string().max(EVENT_TITLE_MAX, 'TITLE_TOO_LONG'),
     description: z.string().max(10000).nullish(),
     instructions: z.string().max(5000).nullish(),
 });

@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useTransition, useMemo, useEffect, useRef } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, useWatch, FormProvider } from 'react-hook-form';
+import { isOverLimit } from '@/lib/text-limit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
-import { groupFormSchema, type GroupFormValues } from '@/lib/validations/group';
+import { groupFormSchema, GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
 import { createGroup } from '@/actions/group-actions';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
@@ -125,6 +126,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         return true;
     }
 
+    const nameOver = isOverLimit(useWatch({ control: form.control, name: 'name' }), GROUP_NAME_MAX);
+
     async function nextStep() {
         const valid = await validateStep(step);
         if (valid) setStep((s) => Math.min(s + 1, LAST_STEP) as StepIndex);
@@ -239,7 +242,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press"
+                                disabled={nameOver}
+                                className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-50"
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -247,7 +251,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                         ) : (
                             <button
                                 type="submit"
-                                disabled={isPending}
+                                disabled={isPending || nameOver}
                                 className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}

@@ -1,10 +1,11 @@
 'use client';
 
-import { createContext, useContext, useEffect, useId, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
+import { useEffect, useId, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { clsx } from 'clsx';
 import { useBackClose } from '@/hooks/useBackClose';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { CloseContext, restoreFocus } from '@/components/ui/overlay-support';
 import type { UiName } from '@/lib/constants';
 
 export type OverlayLayout = 'dialog' | 'sheet' | 'right' | 'left';
@@ -42,28 +43,8 @@ const SIZE = { sm: 'sm:max-w-sm', md: 'sm:max-w-[420px]', lg: 'sm:max-w-lg', '2x
 const SHEET = 'w-full max-h-[90dvh] overflow-y-auto rounded-t-3xl bg-surface shadow-dialog motion-safe:animate-rise';
 const PANEL_PAD = 'p-[18px] pb-[calc(18px+env(safe-area-inset-bottom))] sm:pb-[18px]';
 
-const CloseContext = createContext<(force?: boolean) => void>(() => { });
-/** `requestClose` of the surrounding pop-up: for × buttons inside. */
-export const useOverlayClose = () => useContext(CloseContext);
-/** Closes without asking, for the "Discard" answer. */
-export const useOverlayForceClose = () => { const close = useContext(CloseContext); return () => close(true); };
-
 // Open overlays, topmost last: Esc only closes the top one; scroll stays locked until the last one closes.
 const stack: string[] = [];
-
-/** Focus goes back to the given trigger, else the opener, else the main region, never to <body>. */
-function restoreFocus(trigger: HTMLElement | null | undefined, opener: HTMLElement | null) {
-    const target = [trigger, opener].find((el): el is HTMLElement => !!el && el.isConnected && el !== document.body);
-    if (target) {
-        target.focus();
-        return;
-    }
-    const main = document.querySelector<HTMLElement>('main');
-    if (main) {
-        if (!main.hasAttribute('tabindex')) main.setAttribute('tabindex', '-1');
-        main.focus({ preventScroll: true });
-    }
-}
 
 function panelClasses(layout: OverlayLayout, size: NonNullable<Props['size']>, flush: boolean) {
     switch (layout) {

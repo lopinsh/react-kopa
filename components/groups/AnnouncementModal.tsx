@@ -6,6 +6,9 @@ import { Send } from 'lucide-react';
 import { createPost } from '@/actions/post-actions';
 import { announcementSchema, ANNOUNCEMENT_TITLE_MAX, ANNOUNCEMENT_MAX_LENGTH } from '@/lib/validations/announcement';
 import Modal from '@/components/ui/Modal';
+import { OverlayCloseButton } from '@/components/ui/overlay-support';
+import TextCounter from '@/components/ui/TextCounter';
+import { isOverLimit } from '@/lib/text-limit';
 
 type Props = {
     groupId: string;
@@ -26,7 +29,8 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
 
-    const canSubmit = announcementSchema.safeParse({ title, content }).success && !isPending;
+    const over = isOverLimit(title, ANNOUNCEMENT_TITLE_MAX) || isOverLimit(content, ANNOUNCEMENT_MAX_LENGTH);
+    const canSubmit = announcementSchema.safeParse({ title, content }).success && !isPending && !over;
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,10 +56,11 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                         data-autofocus
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        maxLength={ANNOUNCEMENT_TITLE_MAX}
+                        aria-describedby="announcement-title-count"
                         className={FIELD}
                         placeholder={t('announcementTitlePlaceholder')}
                     />
+                    <div className="mt-1 flex items-start gap-2"><TextCounter id="announcement-title-count" length={title.length} max={ANNOUNCEMENT_TITLE_MAX} /></div>
                 </div>
                 <div>
                     <label htmlFor="announcement-content" className="mb-1.5 block text-xs font-bold text-foreground">{t('announcementTextLabel')}</label>
@@ -63,24 +68,23 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                         id="announcement-content"
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        maxLength={ANNOUNCEMENT_MAX_LENGTH}
+                        aria-describedby="announcement-content-count"
                         rows={7}
                         className={`${FIELD} resize-none`}
                         placeholder={t('announcementPlaceholder')}
                     />
+                    <div className="mt-1 flex items-start gap-2"><TextCounter id="announcement-content-count" length={content.length} max={ANNOUNCEMENT_MAX_LENGTH} /></div>
                 </div>
 
                 {error && <p role="alert" className="text-sm font-medium text-danger">{error}</p>}
 
                 <div className="flex items-center justify-end gap-3 pt-2">
-                    <button
-                        type="button"
-                        onClick={onClose}
+                    <OverlayCloseButton
                         disabled={isPending}
                         className="rounded-xl px-5 py-3 text-[11px] font-semibold text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
                     >
                         {tCommon('cancel')}
-                    </button>
+                    </OverlayCloseButton>
                     <button
                         type="submit"
                         disabled={!canSubmit}

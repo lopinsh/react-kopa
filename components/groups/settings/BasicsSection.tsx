@@ -5,7 +5,8 @@ import { useTranslations } from 'next-intl';
 import CityField from '@/components/groups/CityField';
 import { ImageIcon, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
-import { type GroupFormValues } from '@/lib/validations/group';
+import { GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import TextCounter from '@/components/ui/TextCounter';
 import SettingsSection from './SettingsSection';
 
 type Props = {
@@ -21,7 +22,7 @@ export default function BasicsSection({ canEditName }: Props) {
     const t = useTranslations('wizard');
     const gt = useTranslations('group');
     const gs = useTranslations('groupSettings');
-    const { register, formState: { errors } } = useFormContext<GroupFormValues>();
+    const { register, watch, formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
@@ -33,10 +34,13 @@ export default function BasicsSection({ canEditName }: Props) {
                 {canEditName && (
                     <div className="space-y-2">
                         <label htmlFor="group-name" className={LABEL}>{t('fieldName')}</label>
-                        <input id="group-name" {...register('name')} className={INPUT} />
-                        {errors.name?.message && (
-                            <p className="ml-1 text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>
-                        )}
+                        <input id="group-name" {...register('name')} aria-describedby="group-name-count" className={INPUT} />
+                        <div className="flex items-start gap-2">
+                            {errors.name?.message && (
+                                <p className="ml-1 text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>
+                            )}
+                            <TextCounter id="group-name-count" length={(watch('name') ?? '').length} max={GROUP_NAME_MAX} />
+                        </div>
                     </div>
                 )}
 
