@@ -41,7 +41,7 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
     const panelId = useId();
     const wrapperRef = useRef<HTMLSpanElement>(null);
     const [triggerEl, setTriggerEl] = useState<HTMLButtonElement | null>(null);
-    const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+    const [pos, setPos] = useState<{ left: number; top?: number; bottom?: number } | null>(null);
     const panelRef = useFocusTrap<HTMLDivElement>(isOpen && pos !== null);
     const wasOpen = useRef(false);
 
@@ -54,7 +54,8 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
         if (!rect) return;
         const left = Math.min(Math.max(8, rect.right - WIDTH), window.innerWidth - WIDTH - 8);
         const below = rect.bottom + GAP + 120 <= window.innerHeight;
-        setPos({ left, top: below ? rect.bottom + GAP : Math.max(8, rect.top - GAP - 110) });
+        // Above the button its bottom edge is pinned, so a longer message grows upwards instead of covering the button.
+        setPos(below ? { left, top: rect.bottom + GAP } : { left, bottom: window.innerHeight - rect.top + GAP });
     }, [isOpen, anchorRef, triggerEl]);
 
     useEffect(() => {
@@ -98,7 +99,7 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
                     aria-label={message}
                     tabIndex={-1}
                     data-ui={UI.confirmPopover}
-                    style={{ top: pos.top, left: pos.left, width: WIDTH }}
+                    style={{ ...pos, width: WIDTH }}
                     className="fixed z-[90] rounded-xl border border-border bg-surface p-3 text-left shadow-premium motion-safe:animate-fade"
                 >
                     <p className="text-sm font-semibold text-foreground">{message}</p>
