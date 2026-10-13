@@ -93,19 +93,19 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all text-left w-full soft-press relative',
                             active
-                                ? 'bg-[var(--group-accent,var(--primary))] text-[var(--group-accent,var(--primary))] font-bold shadow-sm'
+                                ? 'bg-[var(--primary)] text-[var(--primary)] font-bold shadow-sm'
                                 : 'text-foreground hover:bg-surface-elevated'
                         )}
                         style={active ? {
-                            backgroundColor: 'color-mix(in srgb, var(--group-accent, var(--primary)) 12%, transparent)',
-                            color: 'var(--group-accent, var(--primary))'
+                            backgroundColor: 'color-mix(in srgb, var(--primary) 12%, transparent)',
+                            color: 'var(--primary)'
                         } : undefined}
                         title={collapsed ? label : undefined}
                     >
                         <div className="relative">
                             <Icon
                                 className={clsx('h-5 w-5 shrink-0', !active && 'text-foreground-muted group-hover:text-foreground')}
-                                style={active ? { color: 'var(--group-accent, var(--primary))' } : undefined}
+                                style={active ? { color: 'var(--primary)' } : undefined}
                             />
                             {id === 'members' && state.pendingCount > 0 && isOwnerOrAdmin && (
                                 <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white shadow-sm ring-2 ring-surface animate-in zoom-in duration-300">
@@ -129,18 +129,18 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-all text-left w-full soft-press',
                             pathname.includes('/settings')
-                                ? 'bg-[var(--group-accent,var(--primary))] text-[var(--group-accent,var(--primary))]'
+                                ? 'bg-[var(--primary)] text-[var(--primary)]'
                                 : 'text-foreground hover:bg-surface-elevated'
                         )}
                         style={pathname.includes('/settings') ? {
-                            backgroundColor: 'color-mix(in srgb, var(--group-accent, var(--primary)) 12%, transparent)',
-                            color: 'var(--group-accent, var(--primary))'
+                            backgroundColor: 'color-mix(in srgb, var(--primary) 12%, transparent)',
+                            color: 'var(--primary)'
                         } : undefined}
                         title={collapsed ? c_common('editGroup') : undefined}
                     >
                         <Settings
                             className={clsx('h-5 w-5 shrink-0', !pathname.includes('/settings') && 'text-foreground-muted group-hover:text-foreground')}
-                            style={pathname.includes('/settings') ? { color: 'var(--group-accent, var(--primary))' } : undefined}
+                            style={pathname.includes('/settings') ? { color: 'var(--primary)' } : undefined}
                         />
                         {!collapsed && <span className="truncate">{c_common('editGroup')}</span>}
                     </Link>

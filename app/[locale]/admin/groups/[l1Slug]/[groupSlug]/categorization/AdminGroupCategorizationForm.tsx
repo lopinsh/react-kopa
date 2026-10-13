@@ -11,6 +11,7 @@ import TagPicker from '@/components/groups/TagPicker';
 import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { useToast } from '@/hooks/use-toast';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
+import { categoryColor } from '@/lib/theme/category';
 
 type Props = {
     locale: string;
@@ -76,7 +77,7 @@ export default function AdminGroupCategorizationForm({
                     <h1 className="mt-1 text-2xl font-bold text-foreground">{groupName}</h1>
                     <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
 
-                    <div style={{ '--accent': selectedL1.color } as React.CSSProperties}>
+                    <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>
                         <TagPicker l1={selectedL1} allowL3={false} maxTags={initialTagIds.length} />
                     </div>
                 </div>

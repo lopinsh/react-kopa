@@ -17,6 +17,7 @@ import BasicInfoStep from '@/components/groups/create-wizard/BasicInfoStep';
 import AccessStep from '@/components/groups/create-wizard/AccessStep';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
+import { categoryColor } from '@/lib/theme/category';
 import { clsx } from 'clsx';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -55,7 +56,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         return {
             kind: 'existing' as const,
             categoryId: l1.id,
-            l1Color: l1.color,
+            l1Color: categoryColor(l1.slug, l1.color),
             label: l1.title
         };
     }, [initialL1Slug, taxonomy]);

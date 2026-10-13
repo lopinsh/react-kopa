@@ -31,7 +31,6 @@ import type { GroupContext } from '@/lib/services/group.service';
 import CompactGroupBar from './CompactGroupBar';
 import GroupMoreMenu from './GroupMoreMenu';
 import AdminToolsMenu from './AdminToolsMenu';
-import { getContrastForeground } from '@/lib/color-utils';
 import { UI } from '@/lib/constants';
 
 type Props = {
@@ -170,7 +169,6 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         {breadcrumbSegments.map((seg, i) => {
                             const L1Color = group.category.color;
                             const Icon = seg.isL1 && seg.slug ? getCategoryIcon(seg.slug) : null;
-                            const l1Text = getContrastForeground(L1Color || '#3B82F6');
 
                             return (
                                 <span key={i} className="flex items-center gap-1 sm:gap-1.5">
@@ -185,14 +183,14 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                         )}
                                         style={{
                                             backgroundColor: (seg.isL1 ? L1Color : undefined) as string | undefined,
-                                            color: seg.isL1 ? l1Text : undefined,
+                                            color: seg.isL1 ? 'var(--on-cat)' : undefined,
                                             ['--l1-color' as string]: L1Color,
                                             ['--l2-bg' as string]: `color-mix(in srgb, ${L1Color} 15%, var(--surface))`,
                                             ['--l2-text' as string]: `color-mix(in srgb, ${L1Color} 60%, var(--foreground))`,
                                         } as React.CSSProperties}
                                     >
                                         {seg.isL1 && Icon && (
-                                            <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" style={{ color: l1Text === 'white' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.7)' }} strokeWidth={2.5} />
+                                            <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" style={{ color: 'var(--on-cat)' }} strokeWidth={2.5} />
                                         )}
                                         {i === breadcrumbSegments.length - 1 && !seg.isL1 && (
                                             <span className="h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-current opacity-80" />

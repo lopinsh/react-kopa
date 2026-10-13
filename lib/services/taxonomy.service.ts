@@ -3,6 +3,7 @@ import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { categoryColor } from '@/lib/theme/category';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { MAX_GROUP_TAGS, MIN_PENDING_TAG_SUPPORTERS } from '@/lib/constants';
@@ -227,7 +228,7 @@ export const TaxonomyService = {
                         id: l1.id,
                         slug: l1.slug,
                         title: getTitle(l1),
-                        color: l1.color ?? '#6366f1',
+                        color: categoryColor(l1.slug, l1.color),
                         subcategories,
                         aliases: l1.aliases,
                     };

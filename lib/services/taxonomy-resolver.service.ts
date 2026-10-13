@@ -1,3 +1,5 @@
+import { categoryColor } from '@/lib/theme/category';
+
 export interface ResolvedTaxonomy {
     categoryId: string;
     categorySlug: string;
@@ -43,16 +45,13 @@ export const TaxonomyResolver = {
      * Resolves full hierarchy details from a category object.
      * Expects titles and parents to be pre-fetched based on the TaxonomyModel shape.
      */
-    resolve(category: TaxonomyModel, fallbackColor: string = '#6366f1'): ResolvedTaxonomy {
+    resolve(category: TaxonomyModel): ResolvedTaxonomy {
         const l1 = category.level === 1 ? category : (category.level === 2 ? category.parent : category.parent?.parent);
 
         const l1Slug = l1?.slug || category.slug;
 
-        // Color inheritance: Category > Parent > Grandparent > Fallback
-        const accentColor = category.color
-            || category.parent?.color
-            || category.parent?.parent?.color
-            || fallbackColor;
+        // The main category's theme tone (light and dark follow the site theme); a stored colour only for a main category without a tone.
+        const accentColor = categoryColor(l1Slug, category.color || category.parent?.color || category.parent?.parent?.color);
 
         const categoryTitle = category.titles?.[0]?.title || category.slug;
         const parentTitle = category.parent?.titles?.[0]?.title || null;

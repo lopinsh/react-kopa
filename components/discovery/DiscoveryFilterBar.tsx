@@ -441,7 +441,7 @@ export default function DiscoveryFilterBar({
                         {/* L1 chip */}
                         <div
                             className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-semibold"
-                            style={{ backgroundColor: activeL1.color, color: '#fff' }}
+                            style={{ backgroundColor: activeL1.color, color: 'var(--on-cat)' }}
                         >
                             {(() => { const Icon = getCategoryIcon(activeL1.slug); return <Icon className="h-4 w-4" />; })()}
                             <span className="hidden sm:inline">{activeL1.title}</span>

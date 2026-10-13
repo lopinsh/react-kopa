@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { LayoutGrid, ChevronLeft } from 'lucide-react';
 import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
+import { tint } from '@/lib/color-utils';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 
 type Category = {
@@ -184,7 +185,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                             )}
                             style={
                                 isActive && isExpanded
-                                    ? { backgroundColor: `${cat.color}18` }
+                                    ? { backgroundColor: tint(cat.color, 10) }
                                     : {}
                             }
                         >
@@ -200,7 +201,7 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                                     'flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all',
                                     !isActive && 'group-hover:bg-surface-elevated'
                                 )}
-                                style={isActive ? { backgroundColor: cat.color, color: '#fff', boxShadow: `0 4px 12px ${cat.color}40` } : { color: cat.color }}
+                                style={isActive ? { backgroundColor: cat.color, color: 'var(--on-cat)' } : { color: cat.color }}
                             >
                                 <Icon className="h-5 w-5" />
                             </span>

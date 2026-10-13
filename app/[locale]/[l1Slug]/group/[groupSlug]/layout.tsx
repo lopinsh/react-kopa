@@ -5,7 +5,6 @@ import GroupHeader from '@/components/groups/GroupHeader';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import GroupTabs from '@/components/groups/GroupTabs';
 import { GroupProvider } from '@/components/providers/GroupProvider';
-import { ensureContrast, getContrastForeground } from '@/lib/color-utils';
 
 export default async function GroupLayout({
     children,
@@ -22,14 +21,8 @@ export default async function GroupLayout({
         notFound();
     }
 
-    const accentColor = ensureContrast(group.theme.accentColor || group.category.color || '#3B82F6');
-    const accentForeground = getContrastForeground(accentColor);
-
-    const accentStyle = {
-        '--accent': accentColor,
-        '--accent-foreground': accentForeground === 'white' ? '#ffffff' : '#000000',
-        '--group-accent': accentColor
-    } as React.CSSProperties;
+    // var(--cat-<l1Slug>) or a validated hex from TaxonomyResolver: safe inside <style>. Light/dark come from the site theme.
+    const accentColor = group.theme.accentColor;
 
     const pendingCount = group.stats.pendingCount;
 
@@ -42,20 +35,8 @@ export default async function GroupLayout({
             // Titles only: the client navigation needs no section text.
             sections: group.sections.map(({ id, title, titleLang, order, visibility }) => ({ id, title, titleLang, order, visibility }))
         }}>
-            <div
-                style={accentStyle}
-                className="min-h-full bg-background"
-                suppressHydrationWarning
-            >
-                <style dangerouslySetInnerHTML={{
-                    __html: `
-                        :root {
-                            --accent: ${accentColor};
-                            --accent-foreground: ${accentForeground === 'white' ? '#ffffff' : '#000000'};
-                            --group-accent: ${accentColor};
-                        }
-                    `
-                }} />
+            <div className="min-h-full bg-background">
+                <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${accentColor};--accent-foreground:var(--on-cat)}` }} />
                 {group.moderation.hidden && (
                     <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
                 )}

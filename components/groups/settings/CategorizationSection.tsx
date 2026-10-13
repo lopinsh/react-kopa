@@ -9,7 +9,7 @@ import TagPicker from '@/components/groups/TagPicker';
 import type { L1Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
 import SettingsSection from './SettingsSection';
-import { NEUTRAL_ACCENT } from '@/lib/constants';
+import { categoryColor } from '@/lib/theme/category';
 
 type Props = {
     taxonomy: TaxonomyTree;
@@ -55,7 +55,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                             </p>
                         )}
                         {/* The picker colours itself from the category's accent. */}
-                        <div style={{ '--accent': selectedL1.color || NEUTRAL_ACCENT } as React.CSSProperties}>
+                        <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>
                             <TagPicker l1={selectedL1} allowL3={false} maxTags={maxTags} />
                         </div>
                     </div>

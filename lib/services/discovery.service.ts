@@ -7,6 +7,7 @@ import type {
     ContextualTaxonomy
 } from '@/lib/types/discovery';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { categoryColor } from '@/lib/theme/category';
 import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
 import { getTranslations } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
@@ -388,7 +389,7 @@ export const DiscoveryService = {
                     id: c.id,
                     slug: c.slug,
                     title: c.titles[0]?.title ?? c.slug,
-                    color: c.color ?? '#6366f1'
+                    color: categoryColor(c.slug, c.color)
                 }));
             },
             [`discovery-categories-${lang}`],
@@ -484,7 +485,7 @@ export const DiscoveryService = {
                         id: l1Tree.id,
                         slug: l1Tree.slug,
                         title: pickTitle(l1Tree.titles, lang, l1Tree.slug),
-                        color: l1Tree.color ?? '#6366f1'
+                        color: categoryColor(l1Tree.slug, l1Tree.color)
                     },
                     l2s: l1Tree.children.map(c2 => ({
                         id: c2.id,

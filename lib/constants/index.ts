@@ -3,8 +3,8 @@
  * Used across components, schemas, and services to ensure consistency.
  */
 
-/** Accent when no category is chosen: the site colour (the theme's `--primary`), so a theme change shows everywhere. */
-export const NEUTRAL_ACCENT = 'var(--primary)';
+/** Accent when no category is chosen: quiet text colour. The site colour is for buttons only (AR-06). */
+export const NEUTRAL_ACCENT = 'var(--foreground-muted)';
 
 /**
  * Most sub-categories (tags) one group can have, pending ones included. A limit "for now" while

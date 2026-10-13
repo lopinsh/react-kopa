@@ -1,12 +1,13 @@
+import { categoryColor } from '@/lib/theme/category';
 import type { GroupContext } from '@/lib/services/group.service';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import type { AnnouncementRow } from '@/lib/services/post.service';
 import type { DiscoverableEvent } from '@/lib/services/event.service';
 import type { Member } from '@/components/groups/MemberCard';
 
-/** Colour of the sample group's L1 category ("Movement & Wellness"). */
-export const SAMPLE_ACCENT = '#4ADE80';
-export const SAMPLE_L1_SLUG = 'movement';
+/** The sample group's main category (Sports) and its tone. */
+export const SAMPLE_L1_SLUG = 'sports';
+export const SAMPLE_ACCENT = categoryColor(SAMPLE_L1_SLUG);
 
 /** Looks up one sample text in the current language (`admin.handbook.ui.sample.*`). */
 export type SampleText = (key: string) => string;
