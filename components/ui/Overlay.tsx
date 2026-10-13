@@ -84,8 +84,11 @@ export default function Overlay({
                 main?.classList.remove('overflow-hidden');
                 document.body.style.overflow = '';
             }
+            // Only when focus was in this pop-up (now gone, so on <body>): a parent closing in the same commit
+            // (Discard over a dirty form) has already put it back on its opener, which a child must not undo.
+            const active = document.activeElement;
             // eslint-disable-next-line react-hooks/exhaustive-deps -- the ref is wanted as it is at close time
-            restoreFocus(returnFocusRef?.current, opener);
+            if (!active || active === document.body || !active.isConnected) restoreFocus(returnFocusRef?.current, opener);
         };
     }, [id, opener, returnFocusRef]);
 

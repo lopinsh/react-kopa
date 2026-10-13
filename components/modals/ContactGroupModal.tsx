@@ -22,8 +22,12 @@ type Props = {
     allowJoin: boolean;
 };
 
-/** The one form for writing to a group's team. With the switch on it also files the join request. */
-export default function ContactGroupModal({ isOpen, onClose, groupId, groupName, locale, allowJoin }: Props) {
+/** The one form for writing to a group's team. With the switch on it also files the join request. Each opening starts empty. */
+export default function ContactGroupModal(props: Props) {
+    return props.isOpen ? <ContactGroupDialog {...props} /> : null;
+}
+
+function ContactGroupDialog({ onClose, groupId, groupName, locale, allowJoin }: Props) {
     const t = useTranslations('contactForm');
     const tCommon = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -32,8 +36,6 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
     const [error, setError] = useState<string | null>(null);
     const [chatId, setChatId] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
-
-    if (!isOpen) return null;
 
     const joining = allowJoin && wantsToJoin;
     const over = isOverLimit(message, MESSAGE_MAX_LENGTH);

@@ -23,6 +23,8 @@ export default function MeMenu({ variant }: { variant: 'side' | 'drawer' }) {
                     <Link
                         key={href}
                         href={href}
+                        // In the drawer the link takes over the drawer's history entry, so Back returns in one step.
+                        replace={variant === 'drawer'}
                         aria-current={current ? 'page' : undefined}
                         className={clsx(
                             'flex min-h-10 items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
