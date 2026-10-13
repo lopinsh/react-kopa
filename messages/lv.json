@@ -1084,11 +1084,7 @@
   },
   "shell": {
     "footer": {
-      "information": "Informācija",
-      "forCommunity": "kopienai",
       "logoSubtitle": "Atrodi savējos, augam kopā.",
-      "madeWith": "Radīts ar",
-      "mission": "Ejam Kopā – veicinām vietējās kopienas saziņu.",
       "privacy": "Privātums"
     },
     "header": {
@@ -1097,9 +1093,6 @@
       "search": "Meklēt",
       "searchPlaceholder": "Meklē grupu vai nodarbi…",
       "closeSearch": "Aizvērt meklēšanu"
-    },
-    "search": {
-      "title": "Globālā meklēšana"
     },
     "sidebar": {
       "anyCity": "Jebkura pilsēta",

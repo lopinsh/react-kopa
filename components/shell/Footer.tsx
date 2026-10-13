@@ -1,78 +1,29 @@
 'use client';
 
-import { Link } from '@/i18n/routing';
-import { Heart } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { Link, usePathname } from '@/i18n/routing';
+import Logo from '@/components/ui/Logo';
 import { UI } from '@/lib/constants';
+import { FOOTER_PATHS } from '@/lib/navigation';
 
+const FOOTER_LINK = 'font-semibold text-primary underline decoration-border underline-offset-[3px] hover:decoration-primary';
+
+/** The slim footer that ends discovery and reading pages (AR-16); group, own-area and admin pages have none. */
 export function Footer() {
     const t = useTranslations('shell.footer');
-  const c_common = useTranslations('common');
-    const currentYear = new Date().getFullYear();
+    const tCommon = useTranslations('common');
+    const pathname = usePathname();
 
-    const sections = [
-        {
-            title: c_common('platform'),
-            links: [
-                { label: c_common('discover'), href: `/` },
-                { label: c_common('myGroups'), href: `/profile/my-groups` },
-                { label: c_common('createGroup'), href: `/create` },
-            ]
-        },
-        {
-            title: t('information'),
-            links: [
-                { label: c_common('about'), href: '/about' },
-                { label: t('privacy'), href: '/privacy' },
-            ]
-        }
-    ];
+    if (!(FOOTER_PATHS as readonly string[]).includes(pathname)) return null;
 
     return (
-        <footer data-ui={UI.footer} className="border-t border-border bg-surface-elevated/30 py-12 pb-24 md:pb-12">
-            <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    {/* Brand */}
-                    <div className="col-span-1">
-                        <Link href={`/`} className="flex items-center gap-2 group">
-                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
-                                <span className="text-primary-foreground font-bold text-sm">{c_common('brandShort')}</span>
-                            </div>
-                            <span className="text-xl font-semibold text-primary">
-                                {t('logoSubtitle')}
-                            </span>
-                        </Link>
-                        <p className="mt-4 max-w-xs text-sm leading-relaxed text-foreground-muted">
-                            {t('mission')}
-                        </p>
-                    </div>
-
-                    {/* Links */}
-                    {sections.map((section) => (
-                        <div key={section.title}>
-                            <h3 className="text-xs font-semibold text-foreground-muted mb-4">{section.title}</h3>
-                            <ul className="space-y-3">
-                                {section.links.map((link) => (
-                                    <li key={link.label}>
-                                        <Link
-                                            href={link.href}
-                                            className="text-sm text-foreground-muted hover:text-primary transition-colors"
-                                        >
-                                            {link.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
-                    <p className="text-sm text-foreground-muted">
-                        © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-danger mx-1 fill-danger" /> {t('forCommunity')}
-                    </p>
-                </div>
-            </div>
+        <footer data-ui={UI.footer} className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-t border-border bg-surface px-3 py-3 text-[13px] text-foreground-muted md:px-5 md:py-3.5">
+            <Link href="/" aria-label={tCommon('brandName')}>
+                <Logo size="sm" />
+            </Link>
+            <span className="min-w-0 flex-[1_1_200px]">{t('logoSubtitle')}</span>
+            <Link href="/about" className={FOOTER_LINK}>{tCommon('about')}</Link>
+            <Link href="/privacy" className={FOOTER_LINK}>{t('privacy')}</Link>
         </footer>
     );
 }

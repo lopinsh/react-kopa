@@ -1084,11 +1084,7 @@
   },
   "shell": {
     "footer": {
-      "forCommunity": "for the community",
-      "information": "Information",
       "logoSubtitle": "Find your tribe, grow together.",
-      "madeWith": "Built with",
-      "mission": "Ejam Kopā – localizing community connection.",
       "privacy": "Privacy"
     },
     "header": {
@@ -1097,9 +1093,6 @@
       "search": "Search",
       "searchPlaceholder": "Search for a group or an activity…",
       "closeSearch": "Close search"
-    },
-    "search": {
-      "title": "Global Search"
     },
     "sidebar": {
       "anyCity": "Any City",
