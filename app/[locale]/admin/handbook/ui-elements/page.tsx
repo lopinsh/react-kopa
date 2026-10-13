@@ -16,7 +16,7 @@ import ListViewCard from '@/components/discovery/ListViewCard';
 import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import EventRow from '@/components/groups/EventRow';
-import GroupBanner from '@/components/groups/frame/GroupBanner';
+import { GroupBannerDemo, GroupPagesDemo } from '@/components/handbook/GroupFrameDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import MemberCard from '@/components/groups/MemberCard';
 import RequestCard from '@/components/groups/RequestCard';
@@ -168,12 +168,12 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </AccentScope>
                 </UiSpecimen>
 
-                <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupBanner.tsx', 'components/groups/frame/GroupActions.tsx']} padding="bleed">
-                    <AccentScope color={samples.accent}>
-                        <GroupProvider value={groupState(group)}>
-                            <GroupBanner />
-                        </GroupProvider>
-                    </AccentScope>
+                <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupBanner.tsx', 'components/groups/frame/GroupActions.tsx', 'components/groups/frame/GroupPagesDrawer.tsx']} padding="bleed">
+                    <div className="p-4"><GroupBannerDemo samples={samples} /></div>
+                </UiSpecimen>
+
+                <UiSpecimen id="groupPages" names={[UI.groupMenu, UI.tabs, UI.nextMeeting, UI.socialLinks]} files={['components/groups/frame/GroupPagesNav.tsx', 'components/ui/PageNavLink.tsx', 'components/groups/frame/GroupPartTabs.tsx', 'components/groups/NextMeetingBox.tsx', 'components/groups/GroupSocialLinks.tsx']}>
+                    <GroupPagesDemo samples={samples} />
                 </UiSpecimen>
 
                 <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/MemberCard.tsx']}>

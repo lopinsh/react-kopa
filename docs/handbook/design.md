@@ -9,14 +9,14 @@ Five layouts cover every screen. A new screen picks one of them.
 | Layout | Name | Used for |
 |---|---|---|
 | A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. A notes the filter line and category drawer (R5a). |
-| B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
+| B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). A group's banner is 96 px: the group's image with a dark shade and white text, or the category tint and mark; on phones a 64 px bar with ☰ for the pages. Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
 | D | Focus | One centred column, max 560 px, no sidebar. Sign-in, register, wizards, onboarding. |
 | E | Two panes | List + detail; on mobile one at a time with a back link. Messages. |
 | F | Reading | Text column, max 680 px. About, privacy, profiles. Admin uses F with tables. |
 
 **Fluid between the drawings.** The drawings are made at 375 and 1280 px; they show proportions, not fixed widths. Every layout is fluid between and beyond them: bars (header, footer, bottom bar, person header) span the full width with the brand at the left edge and the tools at the right edge, the search field grows in the middle up to `max-w-2xl`; a page's content sits in one centred container (`max-w-6xl` for frames and grids, the layout's reading width for D and F), never stuck to the left on a wide screen. Fixed pixel widths copied from a drawing are not used; fixed widths are kept only for side columns (a 260–280 px sidebar, the 190 px own-area menu), dialog sizes and small parts. Every screen is checked at 768, 1024, 1440 and 1920 px as well as 375 and 1280.
 
-Rule: the group's own content starts near the top. The banner carries the at-a-glance signals (name, category, city, members) and the same Join / Contact button on every group page.
+Rule: the group's own content starts near the top. The banner carries the at-a-glance signals (name, category, city, members) and the same "Sazināties" for visitors on every group page.
 
 ## Every screen and its layout
 
@@ -27,14 +27,14 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Discovery: groups and events | A | R5a, R5b |
 | Find | Manas grupas | A | R8 |
 | Create | Create group wizard | D | R4, R12 |
-| Join | Group Informācija | B | R3a |
+| Join | Group Informācija | B | R3a done |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b |
 | Join | Sign in, register, onboarding | D | R12 |
 | Talk | Jaunumi | B | R9b |
 | Talk | Messages | E | R8 |
 | Talk | Notifications | panel | R8 |
 | Group life | Biedri, Requests | B | R9b |
-| Group life | Pasākumi tab | B | R3a, R5b |
+| Group life | Pasākumi tab | B | R3a (rows R5b) done |
 | Group life | Event page | B | R9a |
 | Group life | Create / edit event | B | R4, R9a |
 | Group life | Group settings | B | R4, R9b |
@@ -128,5 +128,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Text counter.** Under the field's right end: quiet "71 / 2000", the warning colour in the last tenth, red "2013 / 2000 · 13 par daudz" past the limit.
 
 - **Shell.** The header (AR-12, AR-13) is the logo, a plain search field (R7 makes it the search), "LV ▾" and, signed in, messages, bell and your picture; the shield joins for site admins. The three menus (profile, shield, language) are one `Menu` component: same look, same keys. Light and dark is the Izskats setting in Iestatījumi, not a header control. On phones the bottom bar has Atklāt, Grupas, +, Ziņas, Es; a group page marks the tab you came from (AR-20). The footer is a slim line on discovery and reading pages only (AR-16). Every header and bar control is at least 40 px.
+
+- **Part tabs.** Links, the site colour under the open one, the page's one action at the right end ("Izveidot pasākumu"); on phones the page's name stands over them.
 
 Also one each: sub-tabs (underline), the "…" menu, avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).

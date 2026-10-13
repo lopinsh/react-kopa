@@ -22,7 +22,12 @@ One word per thing, everywhere.
 | Private chats | Ziņas | Messages |
 | Asking to join | Pieteikties | Join (request) |
 | Writing to a group (the one button; its form can also ask to join) | Sazināties | Contact |
-| Owner + admins | Grupas komanda | Group team |
+| Owner + moderators | Grupas komanda | Group team |
+| A group's pages | Informācija, Jaunumi, Pasākumi, Biedri, Iestatījumi | Information, Announcements, Events, Members, Settings |
+| Parts of Biedri | Biedri / Pieteikumi | Members / Requests |
+| Parts of Pasākumi | Gaidāmie / Pagājušie | Upcoming / Past |
+| A group moderator | the tag "Mod"; in lists and menus "Moderators" | "Mod"; "Moderator" |
+| A private group | Tikai biedriem | Members only |
 
 ## Say, not
 

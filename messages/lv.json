@@ -651,7 +651,7 @@
         "theme": "Motīvs",
         "names": "data-ui",
         "file": "Fails",
-        "notShown": "Nav parādīts: galvene, sānjosla, mobilā josla un kājene (šīs lapas rāmis), grupas cilņu josla (vajag īstu grupas lapu), meklēšana, paziņojumi un teksta redaktors.",
+        "notShown": "Nav parādīts: galvene, mobilā josla un kājene (šīs lapas rāmis), grupas lapu atvilktne (atveras ar ☰ tālruņa joslā), meklēšana, paziņojumi un teksta redaktors.",
         "unknownName": "Nezināms",
         "buttonPrimary": "Saglabāt",
         "buttonSecondary": "Atcelt",
@@ -718,8 +718,7 @@
           "groupCard": "Grupas kartīte un rinda",
           "eventCard": "Pasākuma kartīte un rinda (atklāšana)",
           "eventRow": "Pasākuma rinda (grupas lapā)",
-          "header": "Grupas galvene ar pievienošanās pogu",
-          "slimBar": "Šaurā josla",
+          "header": "Grupas josla un tālruņa josla: apmeklētājam, gaidošam pieteikumam un komandai",
           "memberCard": "Biedra kartīte",
           "requestCard": "Pieteikuma kartīte",
           "announcement": "Jaunuma kartīte",
@@ -739,7 +738,8 @@
           "skeleton": "Ielādes formas",
           "counter": "Rakstzīmju skaitītājs",
           "errorState": "Kļūdas stāvoklis",
-          "confirmPopover": "Apstiprinājums pie pogas"
+          "confirmPopover": "Apstiprinājums pie pogas",
+          "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites"
         },
         "sample": {
           "category": "Pārgājieni",

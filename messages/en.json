@@ -651,7 +651,7 @@
         "theme": "Theme",
         "names": "data-ui",
         "file": "File",
-        "notShown": "Not shown: header, sidebar, mobile bar and footer (the frame of this page itself), the group tab bar (needs a live group page), search, notifications and the rich-text editor.",
+        "notShown": "Not shown: header, mobile bar and footer (the frame of this page itself), the group's pages drawer (opens from the ☰ in the phone bar), search, notifications and the rich-text editor.",
         "unknownName": "Unknown",
         "buttonPrimary": "Save",
         "buttonSecondary": "Cancel",
@@ -718,8 +718,7 @@
           "groupCard": "Group card and row",
           "eventCard": "Event card and row (discovery)",
           "eventRow": "Event row (group page)",
-          "header": "Group header with join button",
-          "slimBar": "Slim bar",
+          "header": "Group banner and phone bar, for a visitor, a waiting request and the team",
           "memberCard": "Member card",
           "requestCard": "Request card",
           "announcement": "Announcement card",
@@ -739,7 +738,8 @@
           "skeleton": "Loading shapes",
           "counter": "Character counter",
           "errorState": "Error state",
-          "confirmPopover": "Confirmation at the button"
+          "confirmPopover": "Confirmation at the button",
+          "groupPages": "Group pages, part tabs, next event and links"
         },
         "sample": {
           "category": "Hiking",
