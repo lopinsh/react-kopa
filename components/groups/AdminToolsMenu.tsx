@@ -53,7 +53,7 @@ export default function AdminToolsMenu({ onHide }: Props) {
     };
 
     return (
-        <div className="relative" ref={ref}>
+        <div className="relative flex" ref={ref}>
             <button
                 ref={triggerRef}
                 type="button"

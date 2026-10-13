@@ -101,7 +101,7 @@ export default function GroupActions() {
             <GroupMoreMenu onReport={onReport} onWriteToTeam={onWriteToTeam} />
 
             {(dialog === 'join' || dialog === 'team') && (
-                <ContactGroupModal isOpen onClose={close} groupId={g.id} groupName={g.name} locale={locale} allowJoin={dialog === 'join' && g.isAcceptingMembers} />
+                <ContactGroupModal isOpen onClose={close} groupId={g.id} groupName={g.name} locale={locale} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? menuReturnRef : undefined} />
             )}
             {dialog === 'hide' && <HideGroupModal isOpen onClose={close} groupId={g.id} returnFocusRef={menuReturnRef} />}
             {dialog === 'report' && <ReportModal isOpen onClose={close} targetGroupId={g.id} returnFocusRef={menuReturnRef} />}

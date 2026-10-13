@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import { Send, Check } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -20,6 +20,8 @@ type Props = {
     locale: string;
     /** The group takes new members: show the "I'd like to join" switch (on by default). */
     allowJoin: boolean;
+    /** Where focus goes on close when the opener is gone (a menu item). */
+    returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
 /** The one form for writing to a group's team. With the switch on it also files the join request. Each opening starts empty. */
@@ -27,7 +29,7 @@ export default function ContactGroupModal(props: Props) {
     return props.isOpen ? <ContactGroupDialog {...props} /> : null;
 }
 
-function ContactGroupDialog({ onClose, groupId, groupName, locale, allowJoin }: Props) {
+function ContactGroupDialog({ onClose, groupId, groupName, locale, allowJoin, returnFocusRef }: Props) {
     const t = useTranslations('contactForm');
     const tCommon = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -61,6 +63,7 @@ function ContactGroupDialog({ onClose, groupId, groupName, locale, allowJoin }: 
     return (
         <Modal
             onClose={onClose}
+            returnFocusRef={returnFocusRef}
             locked={isPending}
             dirty={!chatId && message.trim() !== ''}
             title={chatId ? t('sentTitle') : joining ? t('titleJoin', { name: groupName }) : t('title', { name: groupName })}

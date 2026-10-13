@@ -67,7 +67,7 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam }: Props) {
     };
 
     return (
-        <div className="relative" ref={ref}>
+        <div className="relative flex" ref={ref}>
             <button
                 ref={triggerRef}
                 type="button"
@@ -91,7 +91,7 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam }: Props) {
                     </button>
 
                     {isMember && !isAdmin && (
-                        <button type="button" onClick={(e) => { setOpen(false); onWriteToTeam(e.currentTarget); }} className={ITEM}>
+                        <button type="button" onClick={() => { setOpen(false); onWriteToTeam(triggerRef.current); }} className={ITEM}>
                             <MessageSquare className="h-4 w-4 text-foreground-muted" />
                             {tGroup('writeToTeam')}
                         </button>
