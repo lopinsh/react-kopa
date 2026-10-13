@@ -109,7 +109,6 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
                     isExpanded ? 'w-[280px]' : 'w-12',
                     // Desktop adjustments
                     'md:relative md:z-30',
-                    isExpanded && isMobile && 'shadow-premium'
                 )}
             >
             {/* Unified Toggle Button Handle */}

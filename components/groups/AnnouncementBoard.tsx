@@ -107,7 +107,7 @@ export default function AnnouncementBoard({ groupId, locale }: Props) {
                     <button
                         type="button"
                         onClick={() => setIsComposing(true)}
-                        className="soft-press flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground shadow-premium transition-opacity hover:opacity-90"
+                        className="soft-press flex h-11 items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
                     >
                         <Plus className="h-4 w-4" />
                         {t('announcementNew')}

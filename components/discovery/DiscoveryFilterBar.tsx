@@ -389,7 +389,7 @@ export default function DiscoveryFilterBar({
                         onClick={() => handleTabChange(DISCOVERY_TABS[0])}
                         className={clsx(
                             'flex items-center justify-center gap-1.5 px-3 text-xs font-bold rounded-md transition-all',
-                            currentTab === DISCOVERY_TABS[0] ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
+                            currentTab === DISCOVERY_TABS[0] ? 'bg-background text-primary' : 'text-foreground-muted hover:text-foreground'
                         )}
                     >
                         <Users className={clsx('h-3.5 w-3.5', currentTab === DISCOVERY_TABS[0] ? 'text-primary' : 'text-foreground-muted')} />
@@ -399,7 +399,7 @@ export default function DiscoveryFilterBar({
                         onClick={() => handleTabChange(DISCOVERY_TABS[1])}
                         className={clsx(
                             'flex items-center justify-center gap-1.5 px-3 text-xs font-bold rounded-md transition-all',
-                            currentTab === DISCOVERY_TABS[1] ? 'bg-background text-primary shadow-premium' : 'text-foreground-muted hover:text-foreground'
+                            currentTab === DISCOVERY_TABS[1] ? 'bg-background text-primary' : 'text-foreground-muted hover:text-foreground'
                         )}
                     >
                         <Calendar className={clsx('h-3.5 w-3.5', currentTab === DISCOVERY_TABS[1] ? 'text-primary' : 'text-foreground-muted')} />

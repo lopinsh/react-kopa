@@ -200,7 +200,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
             className={clsx(
                 "z-30 transition-all duration-300 sticky top-0 bg-surface",
                 isScrolled
-                    ? "backdrop-blur-md border-b border-border shadow-premium"
+                    ? "backdrop-blur-md border-b border-border"
                     : "border-b border-border/50"
             )}
         >

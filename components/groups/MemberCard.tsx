@@ -151,7 +151,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                     )}
                     {hasAdminRights(member.role) && (
                         <div
-                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface shadow-premium bg-primary"
+                            className="absolute -top-2 -right-2 p-1.5 rounded-full border-2 border-surface bg-primary"
                             title={t(`role_${member.role.toLowerCase()}`)}
                         >
                             <Shield className="h-3 w-3 text-primary-foreground" />

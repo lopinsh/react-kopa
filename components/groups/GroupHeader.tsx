@@ -125,7 +125,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
     return (
         <header
             data-ui={UI.groupHeader}
-            className="relative z-40 bg-surface border-b border-border shadow-premium transition-shadow duration-300"
+            className="relative z-40 bg-surface border-b border-border transition-shadow duration-300"
             suppressHydrationWarning
         >
             {/* Banner Image Support */}
@@ -176,7 +176,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     <Link
                                         href={seg.href}
                                         className={clsx(
-                                            "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold transition-all shadow-premium border",
+                                            "inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-1.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-bold transition-all border",
                                             seg.isL1
                                                 ? "border-white/10"
                                                 : "border-[color:var(--l1-color)] bg-[color:var(--l2-bg)] text-[color:var(--l2-text)]"
@@ -332,7 +332,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
 
                         {/* Member Status Badge - ONLY for members/admins/owners */}
                         {(isMember || isOwner) && (
-                            <div className="flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold border border-white/10 bg-white/10 text-white shadow-premium backdrop-blur-md">
+                            <div className="flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold border border-white/10 bg-white/10 text-white backdrop-blur-md">
                                 {isOwner ? (
                                     <><Shield className="h-4 w-4 text-foreground-muted" /> {c_common('role_owner')}</>
                                 ) : userRole === 'ADMIN' ? (

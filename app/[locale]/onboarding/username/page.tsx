@@ -74,7 +74,7 @@ export default async function UsernameOnboardingPage({
                 </p>
 
                 {/* Form — client component handles all interactivity */}
-                <div className="rounded-[2rem] border border-border bg-surface p-8 shadow-premium">
+                <div className="rounded-[2rem] border border-border bg-surface p-8">
                     <UsernameForm suggestedUsername={suggestedUsername} />
                 </div>
             </div>

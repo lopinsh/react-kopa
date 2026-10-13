@@ -147,7 +147,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                         type="button"
                         onClick={() => onSave(lang)}
                         disabled={isPending}
-                        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-primary-foreground shadow-premium transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-primary-foreground transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                     >
                         <Save className="h-4 w-4" />
                         {t('saveSection')}

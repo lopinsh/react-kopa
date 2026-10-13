@@ -1,7 +1,7 @@
 import { CATEGORY_TONES, CATEGORY_TONE_SLUGS, THEME_FONTS, type ThemeDefinition, type ThemeFontId, type ThemeModeTokens } from '@/lib/constants';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
 
-/** White text unless the colour is clearly light; today's indigo (#6366f1) keeps white. */
+/** White text unless the colour is clearly light (Sūna's light primary keeps white, its light-sage dark primary gets near-black). */
 function onPrimary(hex: string): string {
     const rgb = hexToRgb(hex);
     return rgb && getLuminance(rgb.r, rgb.g, rgb.b) > 0.22 ? '#111111' : '#ffffff';

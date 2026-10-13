@@ -35,7 +35,7 @@ export default function AnnouncementCard({ post, busy, onArchive, onDelete }: Pr
         : format.dateTime(created, { dateStyle: 'long' });
 
     return (
-        <article data-ui={UI.announcementCard} className="rounded-2xl border border-border bg-surface p-5 shadow-premium sm:p-6">
+        <article data-ui={UI.announcementCard} className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
             <h3 className="break-words text-lg font-semibold leading-snug tracking-tight text-foreground">{post.title}</h3>
             <p className="mt-1 text-xs font-medium text-foreground-muted">
                 <time dateTime={created.toISOString()}>{when}</time>

@@ -589,7 +589,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                                         void commitTypedText();
                                     }}
                                     disabled={isSubmittingPending}
-                                    className="w-full rounded-full bg-primary py-2 text-sm font-bold text-primary-foreground shadow-premium transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+                                    className="w-full rounded-full bg-primary py-2 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                                 >
                                     {c('done')}
                                 </button>
