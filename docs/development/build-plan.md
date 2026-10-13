@@ -156,6 +156,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** preview cookie must also swap the category tones on group pages (today it swaps site tokens only).
 - **Out of scope:** the Vietne section frame (R11; Dizains stays at `/admin/design` until then).
 - **Size:** M.
+- **Spec:** [specs/R1b.md](specs/R1b.md). No migration and no change to the stored theme shape (R1a already stores tones per mode); the contrast floor is checked live in the editor and enforced in `ThemeService` (`CONTRAST_TOO_LOW`); parts are sub-tabs on `/admin/design?part=` until R11. The preview already swaps tones on group pages (R1a pipeline); the spec verifies it.
 
 ### R2a · Header, menus, bottom bar, footer, own area (L)
 
@@ -438,8 +439,8 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 
 | Release | Status | Spec | Commits |
 |---|---|---|---|
-| R1a Identity | built, Opus review done | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`9708a63` (local, not pushed; Opus review fixes `4232adc`, `9708a63`) |
-| R1b Admin → Dizains | not started | | |
+| R1a Identity | pushed, live; owner checked 13 Oct | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`557b6bc` (Opus review fixes `4232adc`, `9708a63`) |
+| R1b Admin → Dizains | specced | [specs/R1b.md](specs/R1b.md) | |
 | R2a Header, menus, own area | not started | | |
 | R2b Behaviour pieces | not started | | |
 | R3a Group frame | not started | | |
