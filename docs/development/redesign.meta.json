@@ -1,7 +1,12 @@
 {
-  "version": "9.7.1",
-  "updated": "2026-10-13T19:00:00+03:00",
+  "version": "9.8",
+  "updated": "2026-10-13T22:00:00+03:00",
   "changes": [
+    "9.8, the design freeze: your notes of 13 October, evening. Every Agreed rule now has a stable id (AR-01 … AR-71) and every approval its own (AP-01 … AP-07), shown on the page and usable as an anchor (#AR-23), so the build plan can name them.",
+    "Approved: one theme at a time in the search (AP-06), and \"Rādīt visus rezultātus\" as discovery with the search word as a chip (AP-07); the results page (B) was declined and is removed. Still open 1 is settled; the other numbers stay.",
+    "Agreed, site-wide: every text field with a limit shows a counter under it, \"71 / 2000\" (a message's limit in the live app). Proposal: warning colour in the last tenth, red past the limit, \"Nosūtīt\" waits.",
+    "Agreed: a group's chosen image fills its banner (shaded, white text), on every group page and the event page; without an image, the category tint and icon. Drawn with and without. Proposal: the shade, heights, the phone bar the same.",
+    "Join requests: \"Sazināties\" with the chat icon instead of \"Atbildēt\". \"Eju\" in event rows now lines up with the time. Released in parts R1–R12, one by one, with no feature switch.",
     "9.7.1, after an independent review: the weekend tint and the phone date sheet (quick choices above the month) are marked as my proposals; the Vēja zirdžiņš announcement names its date.",
     "9.7, your notes of 13 October, afternoon. Approved and marked so in the Agreed rules: the filter line, \"+3\" opening the Veids list, the search's look and its theme chips, and \"Pieteikums nosūtīts\" + \"Atvērt sarunu\" after asking to join.",
     "Veids: \"+N\" is the way into the Veids list (search, tick boxes, several at once); your later note answered the \"more than 8\" idea, so there is no separate \"Veids\" button and no limit.",
@@ -26,21 +31,16 @@
     "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded.",
     "The phone search drawing is marked as my suggestion; \"Izveidot grupu\" staying in the phone profile menu (next to the bottom bar's +) is marked as my suggestion too.",
     "9.4, your notes of 13 October. The + leaves the header: on phones it sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es); on desktop \"Izveidot grupu\" is a line in the profile menu. Every header, bottom bar and profile menu follows.",
-    "Search: the bar is a plain field; a tap or click opens the search at once. At its top, chips: the place (the place list, set from the page's filter) and the matching categories, the same chips as elsewhere. A phone drawing is added.",
-    "Option B under \"More compact\" is withdrawn: it relied on the place in the search bar.",
-    "The overlaps are fixed at the root: on phones the filter row scrolls sideways, and a chip that didn't fit was cut off hard at the Grupas | Pasākumi switch. The one scroller (filter row, chosen line, search chips) now fades it out before the edge.",
-    "Checked at 375, 1280, 1440, 1600, 1680 and 1920 px, light and dark: no chip or filter overlaps another, no text overflows its chip.",
-    "The filter row is \"Liked, awaiting approval\": the sub-category appears only once a category is chosen (the drop-down drawings now show the chosen category too); Šodien, Rīt, Šonedēļ, Nedēļas nogalē and the range always sit on one line, also in the calendar.",
-    "The day strip has no arrows (a day is tapped directly); the calendar's month arrows sit right next to the month's name; \"Rādīt nākamo nedēļu\" is a plain text link."
+    "Search: the bar is a plain field; a tap or click opens the search at once. At its top, chips: the place (the place list, set from the page's filter) and the matching categories, the same chips as elsewhere. A phone drawing is added."
   ],
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.8"
     },
     "h-open": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.8"
     },
     "h-id": {
       "kind": "new",
@@ -56,15 +56,15 @@
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.8"
     },
     "h-group": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.8"
     },
     "h-event": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.8"
     },
     "h-me": {
       "kind": "updated",
@@ -72,7 +72,7 @@
     },
     "h-pop": {
       "kind": "updated",
-      "version": "9.6"
+      "version": "9.8"
     },
     "h-admin": {
       "kind": "updated",
@@ -80,11 +80,11 @@
     },
     "h-live": {
       "kind": "updated",
-      "version": "9.6.1"
+      "version": "9.8"
     },
     "h-notes": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.8"
     }
   }
 }

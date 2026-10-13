@@ -181,7 +181,7 @@ const R = [
   ['R4', 'Discovery data', '"Ko meklējam?" and the event\'s place (with the form fields), several cities, counts, dates, sub-categories for events, each group\'s next meeting (D1, D2, D7–D11). Released: the new fields in the forms; the lists keep working as today. An independent review before release: it changes the database.', 'add_group_looking_for, add_event_city'],
   ['R5', 'Discovery', 'The filter line (Kur, Tēma, the Veids chips, "Notīrīt visu"), the place and Veids lists, the drawer with counts and search, the group card and row, the create card, "Rādīt vēl", event rows by day a week at a time. The day strip and the calendar only after your review. Plan item 3.1.', ''],
   ['R6', 'Panels', 'The opened group and event panels with their own addresses, "Sazināties" and "Eju" from them, and the event cases (question 8) (D15).', ''],
-  ['R7', 'Search', 'The plain header field that opens the search at once, the Kur button and the matching themes as chips at its top, recent searches; "Rādīt visus rezultātus" as you decide in question 1. Plan item 3.5.', ''],
+  ['R7', 'Search', 'The plain header field that opens the search at once, the Kur button and the matching themes as chips at its top, recent searches; "Rādīt visus rezultātus" opening discovery with the search word as a chip (approved 13 Oct, AP-07). Plan item 3.5.', ''],
   ['R8', 'Your own area', 'Manas grupas (with question 9 answered), the Ziņas page in the frame, the Paziņojumi page, the "new" count (D4, D13, D14).', 'add_user_my_groups_seen_at'],
   ['R9', 'A group\'s life', 'The event page, the event form with its place, Biedri, Jaunumi, settings with "Ko meklējam?", Mans profils and someone else\'s profile. Plan items 3.3 (and 3.6 later).', ''],
   ['R10', 'Citur and the unknown place', 'Distances between cities, the visitor\'s place kept on the device (D5, D16).', 'add_city_coordinates'],
@@ -238,7 +238,7 @@ export const liveSection = () => {
   ${tbl('d', ['', 'Item', 'Why', 'What it needs'], D.map(([id, item, why, need, mig]) => row([`<b>${id}</b>`, item, why, `${need}${mig ? ` <span class="rd-mig">Migration</span>${path(mig)}` : ''}`])))}
 
   <h3 id="live-order">Build order: twelve parts, each released on its own ${st('ag', 'Agreed 13 Oct')}</h3>
-  <p class="lead">Your answer of 13 October: not one big release. Each part is built, reviewed and released before the next; the site works after every one. Identity comes first, because every later part is drawn in it.</p>
+  <p class="lead">Your answer of 13 October: not one big release. Each part is built, reviewed and released before the next; the site works after every one. Identity comes first, because every later part is drawn in it. <b>No feature switch</b> (your decision at the design freeze, 9.8): a part is not hidden behind a switch while it is built; it goes live for everyone when it is released, and the build plan names the rules each part carries by their ids (AR-…, AP-…, <a href="#h-rules">Agreed rules</a>).</p>
   <ol class="rd-build">${R.map(([id, t, what, mig]) => `<li><b>${id} · ${t}</b><p>${what}${mig ? ` <span class="rd-mig">Migration</span>${path(mig)}` : ''}</p></li>`).join('')}</ol>
 
   <h3>Questions this raised</h3>
