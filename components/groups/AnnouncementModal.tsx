@@ -43,7 +43,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
     };
 
     return (
-        <Modal onClose={onClose} locked={isPending} variant="card" size="lg" accentLine title={t('announcementNew')}>
+        <Modal onClose={onClose} locked={isPending} dirty={title !== '' || content !== ''} size="lg" title={t('announcementNew')}>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                     <label htmlFor="announcement-title" className="mb-1.5 block text-xs font-bold text-foreground">{t('announcementTitleLabel')}</label>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { LogIn } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import SignInForm from '@/components/auth/SignInForm';
 import { safeCallbackPath } from '@/lib/auth-redirect';
@@ -27,13 +26,6 @@ export default function AuthGateModal({ isOpen, onClose }: Props) {
             onClose={onClose}
             size="md"
             title={t('modalTitle')}
-            icon={
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                    <LogIn className="h-5 w-5 text-primary" />
-                </div>
-            }
-            panelClassName="p-8"
-            headerClassName="mb-2"
         >
             <p className="mb-6 text-sm leading-relaxed text-foreground-muted">{t('modalDesc')}</p>
 

@@ -16,11 +16,13 @@ type Props = {
     groupSlug: string;
     collapsed: boolean;
     hideHeader?: boolean;
+    /** Links replace the history entry (inside a drawer, whose own entry becomes the new page). */
+    replaceLinks?: boolean;
     /** Called once we know the group does not exist (404), so the parent can drop the whole sidebar. */
     onMissing?: () => void;
 };
 
-export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false, onMissing }: Props) {
+export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hideHeader = false, replaceLinks = false, onMissing }: Props) {
   const c_common = useTranslations('common');
     const pathname = usePathname();
     const locale = useLocale();
@@ -90,6 +92,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                     <Link
                         key={id}
                         href={href}
+                        replace={replaceLinks}
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all text-left w-full soft-press relative',
                             active
@@ -126,6 +129,7 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                 <div className="mt-4 pt-4 border-t border-border/50">
                     <Link
                         href={`${baseUrl}/settings`}
+                        replace={replaceLinks}
                         className={clsx(
                             'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold transition-all text-left w-full soft-press',
                             pathname.includes('/settings')

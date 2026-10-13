@@ -1,5 +1,6 @@
 'use client';
 
+import { useBackClose } from '@/hooks/useBackClose';
 import { useEffect, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
@@ -30,15 +31,17 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
     const [error, setError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
 
+    const requestClose = useBackClose(true, onClose, isPending);
+
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
             if (e.key !== 'Escape') return;
             e.stopPropagation();
-            if (!isPending) onClose();
+            if (!isPending) requestClose();
         };
         window.addEventListener('keydown', onKey, true);
         return () => window.removeEventListener('keydown', onKey, true);
-    }, [isPending, onClose]);
+    }, [isPending, requestClose]);
 
     const errorText = (code: string) => (tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
@@ -68,8 +71,8 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
     return (
         <div
             data-feedback-ignore
-            className="fixed inset-0 z-[70] flex items-end justify-center bg-black/50 p-4 backdrop-blur-sm sm:items-center"
-            onMouseDown={(e) => { if (e.target === e.currentTarget && !isPending) onClose(); }}
+            className="fixed inset-0 z-[70] flex items-end justify-center bg-scrim p-4 sm:items-center sm:backdrop-blur-[1.5px]"
+            onMouseDown={(e) => { if (e.target === e.currentTarget && !isPending) requestClose(); }}
         >
             <div role="dialog" aria-modal="true" aria-label={t('newTitle')} className="w-full max-w-md rounded-3xl bg-surface p-5 shadow-2xl">
                 <h2 className="text-lg font-semibold tracking-tight text-foreground">{t('newTitle')}</h2>
@@ -107,7 +110,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                 {error && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{error}</p>}
 
                 <div className="mt-4 flex items-center justify-end gap-3">
-                    <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-4 py-2.5 text-sm font-bold text-foreground-muted hover:text-foreground disabled:opacity-50">
+                    <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-2.5 text-sm font-bold text-foreground-muted hover:text-foreground disabled:opacity-50">
                         {t('cancel')}
                     </button>
                     <button

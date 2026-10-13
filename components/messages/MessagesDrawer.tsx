@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { ExternalLink, Loader2 } from 'lucide-react';
 import { getInbox } from '@/actions/message-actions';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { useMessagesInbox } from '@/hooks/useMessagesInbox';
 import type { InboxRow } from '@/lib/services/message.service';
 import Modal from '@/components/ui/Modal';
@@ -25,6 +25,17 @@ export default function MessagesDrawer({ onClose, returnFocusRef }: Props) {
     const userId = session?.user?.id;
     const [rows, setRows] = useState<InboxRow[] | null>(null);
     const [failed, setFailed] = useState(false);
+    const pathname = usePathname();
+    const openedOn = useRef(pathname);
+    const closeRef = useRef(onClose);
+    useEffect(() => {
+        closeRef.current = onClose;
+    });
+
+    // The link to the full view replaces the drawer's history entry; the drawer ends when the page has changed.
+    useEffect(() => {
+        if (pathname !== openedOn.current) closeRef.current();
+    }, [pathname]);
 
     useEffect(() => {
         let cancelled = false;
@@ -44,13 +55,10 @@ export default function MessagesDrawer({ onClose, returnFocusRef }: Props) {
             title={t('title')}
             placement="right"
             flush
-            closeOnBackdrop
             returnFocusRef={returnFocusRef}
-            headerClassName="border-b border-border px-4 py-3"
-            titleClassName="text-lg font-bold text-foreground"
         >
             {rows && userId ? (
-                <DrawerBody initialConversations={rows} currentUserId={userId} locale={locale} onNavigate={onClose} />
+                <DrawerBody initialConversations={rows} currentUserId={userId} locale={locale} />
             ) : (
                 <div className="flex flex-1 items-center justify-center p-8 text-sm text-foreground-muted" role="status">
                     {failed
@@ -62,11 +70,10 @@ export default function MessagesDrawer({ onClose, returnFocusRef }: Props) {
     );
 }
 
-function DrawerBody({ initialConversations, currentUserId, locale, onNavigate }: {
+function DrawerBody({ initialConversations, currentUserId, locale }: {
     initialConversations: InboxRow[];
     currentUserId: string;
     locale: string;
-    onNavigate: () => void;
 }) {
     const t = useTranslations('messages');
     const { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked } =
@@ -101,7 +108,7 @@ function DrawerBody({ initialConversations, currentUserId, locale, onNavigate }:
             </div>
             <Link
                 href={activeConversation ? { pathname: '/messages', query: { c: activeConversation.id } } : '/messages'}
-                onClick={onNavigate}
+                replace
                 className="flex shrink-0 items-center justify-center gap-2 border-t border-border bg-surface px-4 py-3 text-sm font-bold text-primary transition-colors hover:bg-surface-elevated"
             >
                 <ExternalLink className="h-4 w-4" aria-hidden="true" />

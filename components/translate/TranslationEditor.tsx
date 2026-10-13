@@ -79,9 +79,9 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
         <Modal
             onClose={onClose}
             locked={isPending}
+            dirty={!!entry && (values.lv !== (entry.pending.lv ?? entry.lv) || values.en !== (entry.pending.en ?? entry.en))}
             size="4xl"
             translateIgnore
-            closeOnBackdrop
             zIndexClassName="z-[70]"
             panelClassName="flex max-h-[90vh] flex-col"
             title={t('editTitle')}

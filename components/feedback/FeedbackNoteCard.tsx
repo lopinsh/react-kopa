@@ -1,5 +1,6 @@
 'use client';
 
+import { useBackClose } from '@/hooks/useBackClose';
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
@@ -21,6 +22,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
     const t = useTranslations('feedbackMode');
     const format = useDateFormatter();
     const [confirming, setConfirming] = useState(false);
+    const requestClose = useBackClose(true, onClose);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
@@ -29,17 +31,17 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
             // An empty reply field closes itself first (FeedbackThread); the card stays.
             if (e.target instanceof HTMLTextAreaElement && e.target.closest('[data-ui="feedback-thread"]') && !e.target.value.trim()) return;
             e.stopPropagation();
-            onClose();
+            requestClose();
         };
         window.addEventListener('keydown', onKey, true);
         return () => window.removeEventListener('keydown', onKey, true);
-    }, [onClose, confirming]);
+    }, [requestClose, confirming]);
 
     return (
         <div
             data-feedback-ignore
-            className="fixed inset-0 z-[70] flex items-end justify-center bg-black/50 p-4 backdrop-blur-sm sm:items-center"
-            onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}
+            className="fixed inset-0 z-[70] flex items-end justify-center bg-scrim p-4 sm:items-center sm:backdrop-blur-[1.5px]"
+            onMouseDown={(e) => { if (e.target === e.currentTarget) requestClose(); }}
         >
             <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-2xl">
                 <div className="mb-3 flex items-start justify-between gap-3">
@@ -47,7 +49,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
                         <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
                         <span className="rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">{t(`status.${note.status}`)}</span>
                     </div>
-                    <button type="button" onClick={onClose} aria-label={t('close')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
+                    <button type="button" onClick={() => requestClose()} aria-label={t('close')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
                         <X className="h-4 w-4" />
                     </button>
                 </div>

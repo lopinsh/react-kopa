@@ -8,6 +8,7 @@ import { clsx } from 'clsx';
 import { getCategoryIcon } from '@/lib/icons';
 import { tint } from '@/lib/color-utils';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useBackClose } from '@/hooks/useBackClose';
 
 type Category = {
     id: string;
@@ -72,15 +73,21 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
         [searchParams]
     );
 
+    // Back closes the phone drawer (AR-67); a category chosen in it replaces its history entry and the drawer closes once the address has changed.
+    const requestClose = useBackClose(isMobileOpen, () => setIsMobileOpen(false));
+    const query = searchParams.toString();
+    const [seenQuery, setSeenQuery] = useState(query);
+    if (seenQuery !== query) {
+        setSeenQuery(query);
+        setIsMobileOpen(false);
+    }
+
     const handleCategoryClick = (slug: string | null) => {
         const isAlreadyActive = slug !== null && slug === activeCat;
-        if (isAlreadyActive || slug === null) {
-            router.push(`${pathname}?${createQueryString({ category: null, tags: null })}`);
-        } else {
-            router.push(`${pathname}?${createQueryString({ category: slug, tags: null })}`);
-        }
-        // Always auto-close when a category is selected (whether desktop manual open or mobile)
-        if (isMobileOpen) setIsMobileOpen(false);
+        const next = `${pathname}?${createQueryString({ category: isAlreadyActive ? null : slug, tags: null })}`;
+        if (!isMobileOpen) router.push(next);
+        else if (next === `${pathname}?${query.replace(/%2C/g, ',')}`) requestClose();
+        else router.replace(next);
     };
 
     const isAllActive = !activeCat;
@@ -95,8 +102,8 @@ export default function DiscoverySidebar({ categories, activeCat }: Props) {
             {/* Modal backdrop for mobile */}
             {isMobileOpen && (
                 <div
-                    className="fixed inset-0 z-[60] md:hidden bg-background/40 backdrop-blur-md transition-all duration-500 animate-in fade-in"
-                    onClick={() => setIsMobileOpen(false)}
+                    className="fixed inset-0 z-[60] md:hidden bg-scrim motion-safe:animate-fade"
+                    onClick={() => requestClose()}
                 />
             )}
             <aside

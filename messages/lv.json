@@ -138,7 +138,7 @@
     "moreOptions": "Vairāk iespēju",
     "shareFailed": "Neizdevās kopīgot saiti.",
     "linkCopied": "Saite nokopēta starpliktuvē!",
-    "loading": "Ielādē...",
+    "loading": "Ielādē…",
     "manageSuccess": "Biedra statuss atjaunots!",
     "markAsResolved": "Atzīmēt kā atrisinātu",
     "members": "biedri",
@@ -250,7 +250,20 @@
     "originalLangHint": "Valoda, kurā raksti. Ja tulkojuma nav, apmeklētāji redz šo tekstu.",
     "originalLangNeedsText": "Vispirms uzraksti tekstu šajā valodā",
     "sectionSaved": "Saglabāts",
-    "contact": "Sazināties"
+    "contact": "Sazināties",
+    "counter": "{count, number} / {max, number}",
+    "counterOver": "{count, number} / {max, number} · {over, number} par daudz",
+    "counterNearSr": "{left, plural, one {Atlikusi # rakstzīme} other {Atlikušas # rakstzīmes}}",
+    "counterOverSr": "{over, plural, one {# rakstzīme par daudz} other {# rakstzīmes par daudz}}",
+    "errorState": {
+      "title": "Kaut kas nogāja greizi",
+      "text": "Šo lapu neizdevās ielādēt. Pamēģini vēlreiz.",
+      "retry": "Mēģināt vēlreiz"
+    },
+    "discardTitle": "Atmest izmaiņas?",
+    "discardText": "Ierakstītais netiks saglabāts.",
+    "keepEditing": "Turpināt rediģēt",
+    "discard": "Atmest"
   },
   "discovery": {
     "active": "Aktīva",
@@ -437,7 +450,8 @@
     "createEvent": "Izveidot pasākumu",
     "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai",
     "openChat": "Atvērt sarunu",
-    "deleteSectionConfirm": "Dzēst šo sadaļu? To nevarēs atjaunot."
+    "deleteSectionConfirm": "Dzēst šo sadaļu? To nevarēs atjaunot.",
+    "withdrawRequest": "Atsaukt pieteikumu"
   },
   "admin": {
     "dashboard": {

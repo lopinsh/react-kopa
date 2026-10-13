@@ -55,10 +55,9 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
     return (
         <Modal
             onClose={onClose}
-            variant="card"
             size="lg"
-            accentLine
             locked={isPending}
+            dirty={!chatId && message.trim() !== ''}
             title={chatId ? t('sentTitle') : joining ? t('titleJoin', { name: groupName }) : t('title', { name: groupName })}
         >
             {chatId ? (

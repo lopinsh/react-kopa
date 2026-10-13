@@ -11,12 +11,16 @@ export type OverlayLayout = 'dialog' | 'sheet' | 'right' | 'left';
 
 type Props = {
     layout: OverlayLayout;
+    /** id of the panel, for a button's aria-controls. */
+    id?: string;
     onClose: () => void;
     /** While saving: Esc, scrim, × and Back do nothing. */
     locked?: boolean;
     /** Typed input that would be lost: closing calls `onBlocked` first (Modal asks "Discard changes?"). */
     dirty?: boolean;
     onBlocked?: () => void;
+    /** Own history entry for Back (default). Off for a prompt over a pop-up that already has one. */
+    backClose?: boolean;
     role?: 'dialog' | 'alertdialog';
     labelledBy?: string;
     label?: string;
@@ -75,7 +79,7 @@ function panelClasses(layout: OverlayLayout, size: NonNullable<Props['size']>, f
  * Render it only while it should be open (mount = open). Modal, Sheet and the drawers sit on it.
  */
 export default function Overlay({
-    layout, onClose, locked = false, dirty = false, onBlocked, role = 'dialog', labelledBy, label, describedBy, dataUi,
+    layout, id: panelId, onClose, locked = false, dirty = false, onBlocked, backClose = true, role = 'dialog', labelledBy, label, describedBy, dataUi,
     size = 'md', flush = false, panelClassName, zIndexClassName = 'z-50', translateIgnore = false, returnFocusRef, children,
 }: Props) {
     const id = useId();
@@ -85,7 +89,7 @@ export default function Overlay({
     const [opener] = useState<HTMLElement | null>(() =>
         typeof document !== 'undefined' && document.activeElement instanceof HTMLElement ? document.activeElement : null
     );
-    const requestClose = useBackClose(mounted, onClose, locked, dirty && onBlocked ? { dirty, onBlocked } : undefined);
+    const requestClose = useBackClose(mounted && backClose, onClose, locked, dirty && onBlocked ? { dirty, onBlocked } : undefined);
     const [downOnScrim, setDownOnScrim] = useState(false);
 
     useEffect(() => {
@@ -136,6 +140,7 @@ export default function Overlay({
                 />
                 <div
                     ref={panelRef}
+                    id={panelId}
                     role={role}
                     aria-modal="true"
                     aria-labelledby={labelledBy}

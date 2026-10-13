@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useBackClose } from '@/hooks/useBackClose';
 import { X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
@@ -19,6 +20,7 @@ type Props = {
 
 export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose, tree, categories, pendingTags }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
+    const requestClose = useBackClose(!!selectedNode, onClose);
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
@@ -61,8 +63,8 @@ export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose,
         <div className="fixed inset-0 z-50 flex justify-end">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
-                onClick={onClose}
+                className="absolute inset-0 bg-scrim"
+                onClick={() => requestClose()}
             />
 
             {/* Panel */}
@@ -71,7 +73,7 @@ export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose,
                     <h2 className="text-lg font-bold">{t('details')}</h2>
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={() => requestClose()}
                         className="p-2 hover:bg-border rounded-full transition-colors text-foreground-muted hover:text-foreground"
                     >
                         <X className="w-5 h-5" />

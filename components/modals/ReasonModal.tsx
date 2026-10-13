@@ -61,8 +61,8 @@ export default function ReasonModal({
             onClose={onClose}
             returnFocusRef={returnFocusRef}
             locked={isPending}
-            title={<>{icon}{title}</>}
-            titleClassName="flex items-center gap-2 text-xl font-bold text-danger"
+            dirty={reason !== initialReason}
+            title={<span className="inline-flex items-center gap-2">{icon}{title}</span>}
         >
             {subject && <p className="mb-2 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">{subject}</p>}
             <p className="mb-4 text-sm leading-relaxed text-foreground-muted">{description}</p>

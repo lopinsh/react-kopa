@@ -138,7 +138,7 @@
     "linkCopied": "Link copied to clipboard!",
     "moreOptions": "More options",
     "shareFailed": "Could not share the link.",
-    "loading": "Loading...",
+    "loading": "Loading…",
     "manageSuccess": "Member updated successfully!",
     "markAsResolved": "Mark as Resolved",
     "members": "members",
@@ -250,7 +250,20 @@
     "originalLangHint": "The language you write this in. Visitors see it when there is no translation.",
     "originalLangNeedsText": "Write the text in this language first",
     "sectionSaved": "Saved",
-    "contact": "Contact"
+    "contact": "Contact",
+    "counter": "{count, number} / {max, number}",
+    "counterOver": "{count, number} / {max, number} · {over, number} too many",
+    "counterNearSr": "{left, plural, one {# character left} other {# characters left}}",
+    "counterOverSr": "{over, plural, one {# character too many} other {# characters too many}}",
+    "errorState": {
+      "title": "Something went wrong",
+      "text": "This page didn't load. Please try again.",
+      "retry": "Try again"
+    },
+    "discardTitle": "Discard changes?",
+    "discardText": "What you typed won't be saved.",
+    "keepEditing": "Keep editing",
+    "discard": "Discard"
   },
   "discovery": {
     "active": "Active",
@@ -437,7 +450,8 @@
     "createEvent": "Create event",
     "visibilityPublicDesc": "Anyone can find it and ask to join",
     "openChat": "Open chat",
-    "deleteSectionConfirm": "Delete this section? It can't be restored."
+    "deleteSectionConfirm": "Delete this section? It can't be restored.",
+    "withdrawRequest": "Withdraw request"
   },
   "admin": {
     "dashboard": {

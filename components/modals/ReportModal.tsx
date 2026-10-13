@@ -43,9 +43,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
             onClose={onClose}
             returnFocusRef={returnFocusRef}
             locked={isPending}
-            title={<><ShieldAlert className="h-5 w-5" />{t('title')}</>}
-            titleClassName="flex items-center gap-2 text-xl font-bold text-danger"
-            headerClassName="mb-6"
+            title={<span className="inline-flex items-center gap-2"><ShieldAlert className="size-5" />{t('title')}</span>}
         >
             <div className="space-y-4">
                 <p className="text-sm text-foreground-muted leading-relaxed">

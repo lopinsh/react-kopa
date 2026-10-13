@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import GroupSidebarContent from '../shell/GroupSidebarContent';
+import { useBackClose } from '@/hooks/useBackClose';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface GroupInfoDrawerProps {
@@ -54,6 +55,9 @@ export default function GroupInfoDrawer({
         };
     }, [isOpen, onClose]);
 
+    // Back closes the drawer (AR-67).
+    const requestClose = useBackClose(isOpen && mounted, onClose);
+
     // Declared after the effect above so the opener is read before focus moves into the drawer.
     const drawerRef = useFocusTrap<HTMLDivElement>(isOpen && mounted);
 
@@ -64,10 +68,10 @@ export default function GroupInfoDrawer({
             {/* Backdrop */}
             <div
                 className={clsx(
-                    "fixed inset-0 z-[44] bg-background/80 backdrop-blur-sm transition-opacity duration-300 md:hidden",
+                    "fixed inset-0 z-[44] bg-scrim transition-opacity duration-300 md:hidden",
                     isOpen ? "opacity-100" : "pointer-events-none opacity-0"
                 )}
-                onClick={onClose}
+                onClick={() => requestClose()}
             />
 
             {/* Navigation Drawer */}
@@ -112,11 +116,12 @@ export default function GroupInfoDrawer({
                             groupSlug={groupSlug}
                             collapsed={false}
                             hideHeader={true} // New prop to hide internal title
+                            replaceLinks
                         />
                     </div>
 
                     {/* Footer */}
-                    <div className="border-t border-border/50 p-4 bg-background/20">
+                    <div className="border-t border-border/50 p-4">
                         <button
                             onClick={onClose}
                             className="w-full rounded-xl bg-surface-elevated py-3 text-[11px] font-semibold text-foreground shadow-card hover:bg-white/5 transition-all active:scale-[0.98] border border-border/50"

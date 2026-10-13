@@ -2,6 +2,7 @@
 
 import { useId, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
+import Button from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
 
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
     returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
-/** In-app replacement for window.confirm (which blocks the page and can't be styled). */
+/** In-app dialog for steps that cannot be undone (undoable ones use ConfirmPopover). */
 export default function ConfirmDialog({ isOpen, title, message, confirmLabel, destructive = false, isPending = false, onConfirm, onCancel, returnFocusRef }: Props) {
     const tCommon = useTranslations('common');
     const messageId = useId();
@@ -28,38 +29,22 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
     return (
         <Modal
             role="alertdialog"
-            variant="card"
             size="sm"
             title={title}
-            titleClassName="text-lg font-semibold tracking-tight text-foreground"
-            headerClassName="mb-2"
             describedBy={messageId}
             hideClose
             locked={isPending}
             onClose={onCancel}
             returnFocusRef={returnFocusRef}
         >
-            <p id={messageId} className="text-sm font-medium leading-relaxed text-foreground-muted">{message}</p>
-            <div className="mt-6 flex items-center justify-end gap-3">
+            <p id={messageId} className="text-sm text-foreground-muted">{message}</p>
+            <div className="mt-4 flex justify-end gap-2">
                 {/* Focus starts on the safe choice. */}
-                <button
-                    data-autofocus
-                    type="button"
-                    onClick={onCancel}
-                    disabled={isPending}
-                    className="rounded-xl px-5 py-3 text-[11px] font-semibold text-foreground-muted transition-all hover:text-foreground disabled:opacity-50"
-                >
-                    {tCommon('cancel')}
-                </button>
-                <button
-                    type="button"
-                    onClick={onConfirm}
-                    disabled={isPending}
-                    className={`flex items-center gap-2 rounded-full px-6 py-3 text-[11px] font-semibold shadow-xl transition-all active:scale-95 disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
-                >
-                    {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
+                <Button variant="secondary" size="sm" data-autofocus onClick={onCancel} disabled={isPending}>{tCommon('cancel')}</Button>
+                <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={onConfirm} disabled={isPending}>
+                    {isPending && <span className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
                     {confirmLabel}
-                </button>
+                </Button>
             </div>
         </Modal>
     );
