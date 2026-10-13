@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { clsx } from 'clsx';
 import { useBackClose } from '@/hooks/useBackClose';
@@ -71,7 +71,7 @@ export default function Overlay({
         typeof document !== 'undefined' && document.activeElement instanceof HTMLElement ? document.activeElement : null
     );
     const requestClose = useBackClose(mounted && backClose, onClose, locked, dirty && onBlocked ? { dirty, onBlocked } : undefined);
-    const [downOnScrim, setDownOnScrim] = useState(false);
+    const downOnScrim = useRef(false);
 
     useEffect(() => {
         const main = document.getElementById('main-content');
@@ -116,8 +116,8 @@ export default function Overlay({
                 <div
                     aria-hidden="true"
                     className={clsx('absolute inset-0 bg-scrim motion-safe:animate-fade', layout === 'dialog' && 'sm:backdrop-blur-[1.5px]')}
-                    onMouseDown={(e) => setDownOnScrim(e.target === e.currentTarget)}
-                    onMouseUp={(e) => { if (downOnScrim && e.target === e.currentTarget) requestClose(); setDownOnScrim(false); }}
+                    onMouseDown={(e) => { downOnScrim.current = e.target === e.currentTarget; }}
+                    onMouseUp={(e) => { if (downOnScrim.current && e.target === e.currentTarget) requestClose(); downOnScrim.current = false; }}
                 />
                 <div
                     ref={panelRef}

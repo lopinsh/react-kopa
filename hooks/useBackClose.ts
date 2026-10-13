@@ -16,13 +16,16 @@ export function useBackClose(open: boolean, onClose: () => void, locked = false,
     const key = useId();
     const latest = useRef({ onClose, locked, guard });
     const forced = useRef(false);
+    const alive = useRef(false);
     useEffect(() => {
         latest.current = { onClose, locked, guard };
     });
 
     useEffect(() => {
         if (!open) return;
-        window.history.pushState({ ekOverlay: key }, '');
+        alive.current = true;
+        // Development StrictMode mounts, cleans up and mounts again: the entry from the first mount is reused.
+        if (topKey() !== key) window.history.pushState({ ekOverlay: key }, '');
         const onPop = () => {
             if (topKey() === key) return;
             const { onClose: close, locked: isLocked, guard: g } = latest.current;
@@ -36,7 +39,11 @@ export function useBackClose(open: boolean, onClose: () => void, locked = false,
         window.addEventListener('popstate', onPop);
         return () => {
             window.removeEventListener('popstate', onPop);
-            if (topKey() === key) window.history.back();
+            alive.current = false;
+            // Closed by the code: take the entry off again, unless the pop-up came straight back (StrictMode) or a link navigated.
+            queueMicrotask(() => {
+                if (!alive.current && topKey() === key) window.history.back();
+            });
         };
     }, [open, key]);
 

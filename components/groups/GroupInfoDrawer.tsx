@@ -3,7 +3,8 @@
 import { X, Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { usePathname } from '@/i18n/routing';
 import { createPortal } from 'react-dom';
 import GroupSidebarContent from '../shell/GroupSidebarContent';
 import { useBackClose } from '@/hooks/useBackClose';
@@ -54,6 +55,14 @@ export default function GroupInfoDrawer({
             if (opener && opener.isConnected) opener.focus();
         };
     }, [isOpen, onClose]);
+
+    // A page chosen in the drawer ends it (its links replace the drawer's history entry).
+    const pathname = usePathname();
+    const openedOn = useRef(pathname);
+    useEffect(() => {
+        if (!isOpen) openedOn.current = pathname;
+        else if (pathname !== openedOn.current) onClose();
+    }, [isOpen, pathname, onClose]);
 
     // Back closes the drawer (AR-67).
     const requestClose = useBackClose(isOpen && mounted, onClose);
