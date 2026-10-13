@@ -899,7 +899,7 @@
         "partHasIssues": "(kontrasts par zemu)"
       },
       "resetTonesTitle": "Gatavs noskaņojums atjaunos kategoriju krāsas",
-      "resetTonesMessage": "Tu esi mainījis kategoriju krāsas. Izvēloties gatavo noskaņojumu, tās atgriezīsies noklusētajās. Turpināt?",
+      "resetTonesMessage": "Kategoriju krāsas ir mainītas. Izvēloties gatavo noskaņojumu, tās atgriezīsies noklusētajās. Turpināt?",
       "resetTonesConfirm": "Izvēlēties noskaņojumu"
     }
   },
