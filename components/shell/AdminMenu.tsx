@@ -10,9 +10,9 @@ import { MENU_ITEM_CLASS, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from
 import { ICON_BUTTON } from './header-styles';
 
 /** Header shield with the site admin's tools (AR-18). Render it for site admins only; the actions behind it check the role again. */
-export default function AdminMenu() {
+export default function AdminMenu({ initialOpen }: { initialOpen?: boolean }) {
     const t = useTranslations('nav');
-    const { open, close, rootRef, triggerProps, menuProps } = useMenu();
+    const { open, close, rootRef, triggerProps, menuProps } = useMenu(initialOpen);
 
     return (
         <div className="relative shrink-0" ref={rootRef}>

@@ -708,7 +708,12 @@
           "toast": "Paziņojumi (toast)",
           "tabs": "Cilnes",
           "banner": "Josla",
-          "notice": "Paziņojuma lapa"
+          "notice": "Paziņojuma lapa",
+          "shellHeader": "Galvene (ienācis, administrators, neienācis)",
+          "shellMenus": "Galvenes izvēlnes: profils, administrēšanas vairogs, valoda",
+          "bottomBar": "Tālruņa apakšējā josla, katra cilne iezīmēta",
+          "footer": "Šaurā kājene",
+          "ownArea": "Tava vieta: personas galvene, tavas vietas izvēlne, izskats"
         },
         "sample": {
           "category": "Pārgājieni",

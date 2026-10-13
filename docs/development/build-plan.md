@@ -442,7 +442,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 |---|---|---|---|
 | R1a Identity | pushed, live; owner checked 13 Oct | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`557b6bc` (Opus review fixes `4232adc`, `9708a63`) |
 | R1b Admin → Dizains | built; Opus review done, ready to push | [specs/R1b.md](specs/R1b.md) | `e4f18e7`..`5bc9cb7` |
-| R2a Header, menus, own area | specced 13 Oct | [specs/R2a.md](specs/R2a.md) | |
+| R2a Header, menus, own area | built, in review | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`85da16a` and the close-out commit |
 | R2b Behaviour pieces | not started | | |
 | R3a Group frame | not started | | |
 | R3b Sazināties, pending, "…" | not started | | |

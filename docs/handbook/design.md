@@ -9,7 +9,7 @@ Five layouts cover every screen. A new screen picks one of them.
 | Layout | Name | Used for |
 |---|---|---|
 | A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. A notes the filter line and category drawer (R5a). |
-| B | Group page | Banner (96 px, the group's image or its tone) and the group's pages down the left (a ☰ drawer on phones). Every group page, from R3a (AR-47, AR-48). |
+| B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
 | D | Focus | One centred column, max 560 px, no sidebar. Sign-in, register, wizards, onboarding. |
 | E | Two panes | List + detail; on mobile one at a time with a back link. Messages. |
 | F | Reading | Text column, max 680 px. About, privacy, profiles. Admin uses F with tables. |
@@ -36,7 +36,8 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Group life | Event page | B | R9a |
 | Group life | Create / edit event | B | R4, R9a |
 | Group life | Group settings | B | R4, R9b |
-| Me | Own and public profile | F | R2a, R9b |
+| Me | Own profile, Manas grupas, Ziņas, Iestatījumi | B (frame) | R2a frame; content R8, R9b |
+| Me | Public profile | F | R9b |
 | Me | Edit profile | D | R9b |
 | Static | About, privacy, 404 | F | R12 |
 | Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | R11 |
@@ -120,6 +121,8 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Pop-up.** One shell: title + close, body, buttons right. On phones it opens as a sheet from the bottom.
 - **Announcement card.** Meta line (when, who), bold title, short text.
 - **Empty state.** Outline icon, one sentence, at most one action.
+
+- **Shell.** The header (AR-12, AR-13) is the logo, a plain search field (R7 makes it the search), "LV ▾" and, signed in, messages, bell and your picture; the shield joins for site admins. The three menus (profile, shield, language) are one `Menu` component: same look, same keys. Light and dark is the Izskats setting in Iestatījumi, not a header control. On phones the bottom bar has Atklāt, Grupas, +, Ziņas, Es; a group page marks the tab you came from (AR-20). The footer is a slim line on discovery and reading pages only (AR-16). Every header and bar control is at least 40 px.
 
 R2b updates form fields, pop-ups and empty states.
 

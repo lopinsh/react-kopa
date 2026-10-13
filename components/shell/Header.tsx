@@ -20,7 +20,7 @@ export default async function Header() {
     const admin = isSiteAdmin(user?.role);
 
     return (
-        <header data-ui={UI.header} className="sticky top-0 z-50 flex h-header items-center gap-2 border-b border-border bg-surface px-3 md:px-4">
+        <header data-ui={UI.header} className="sticky top-0 z-50 flex h-header items-center gap-0.5 border-b border-border bg-surface px-3 md:gap-2 md:px-4">
             <Link href="/" aria-label={t('logoText')} className="flex min-h-10 shrink-0 items-center">
                 <span className="md:hidden"><Logo size="sm" /></span>
                 <span className="hidden md:inline-flex"><Logo /></span>

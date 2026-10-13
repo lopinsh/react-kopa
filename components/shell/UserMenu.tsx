@@ -15,19 +15,20 @@ import { buttonClass } from '@/components/ui/Button';
 import { MenuItemButton, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 
 type Props = {
+    initialOpen?: boolean;
     user: { id: string; avatarSeed?: string | null; name?: string | null; image?: string | null } | null;
 };
 
 const ICON = 'size-[17px] text-foreground-muted';
 
 /** The picture at the end of the header: the profile menu when signed in, the sign-in button when not (AR-14). */
-export default function UserMenu({ user }: Props) {
+export default function UserMenu({ user, initialOpen }: Props) {
     const t = useTranslations('nav');
     const tCommon = useTranslations('common');
     const locale = useLocale();
     const pathname = usePathname();
     const search = useSearchParams().toString();
-    const { open, rootRef, triggerProps, menuProps } = useMenu();
+    const { open, rootRef, triggerProps, menuProps } = useMenu(initialOpen);
     const [imageError, setImageError] = useState(false);
     const [signingOut, setSigningOut] = useState(false);
 

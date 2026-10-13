@@ -14,7 +14,7 @@ import { UI } from '@/lib/constants';
 
 const CELL = 'relative flex h-full flex-1 flex-col items-center justify-center gap-0.5 text-[11px] text-foreground-muted focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary';
 
-function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
+export function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
     const t = useTranslations('nav');
     const unread = useUnreadMessages();
     const Icon = link.icon;

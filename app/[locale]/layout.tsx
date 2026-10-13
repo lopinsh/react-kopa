@@ -78,7 +78,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 
                 <div className="flex flex-1 overflow-hidden">
                     <Sidebar />
-                    {/* The scroll container; the page's <main> and the slim footer sit inside it. */}
+                    {/* The scroll container; the page's main element and the slim footer sit inside it. */}
                     <div
                         className="flex-1 overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] md:pb-0"
                         id="main-content"

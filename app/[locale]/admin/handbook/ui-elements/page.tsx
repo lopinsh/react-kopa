@@ -4,6 +4,7 @@ import { Calendar, Check, Search } from 'lucide-react';
 import AccentScope from '@/components/handbook/AccentScope';
 import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/IdentitySpecimens';
 import HandbookShell from '@/components/handbook/HandbookShell';
+import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
@@ -73,6 +74,28 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="colours" names={[UI.categoryDisc]} files={['app/globals.css', 'lib/constants/theme.ts', 'components/ui/CategoryIcon.tsx']}>
                     <ColourSamples />
+                </UiSpecimen>
+
+                <UiSpecimen id="shellHeader" names={[UI.header, UI.searchBar]} files={['components/shell/Header.tsx', 'components/shell/HeaderSearchField.tsx', 'components/shell/PhoneSearchToggle.tsx']} padding="bleed">
+                    <HeaderDemo signedIn />
+                    <HeaderDemo signedIn admin />
+                    <HeaderDemo signedIn={false} />
+                </UiSpecimen>
+
+                <UiSpecimen id="shellMenus" names={[UI.profileMenu, UI.shieldMenu, UI.languageSwitch, UI.languageList]} files={['components/ui/Menu.tsx', 'components/shell/UserMenu.tsx', 'components/shell/AdminMenu.tsx', 'components/shell/LanguageMenu.tsx']}>
+                    <MenusDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="bottomBar" names={[UI.mobileNav]} files={['components/shell/MobileNav.tsx', 'hooks/useBottomTab.ts', 'lib/navigation.ts']} padding="bleed">
+                    <BottomBarDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="footer" names={[UI.footer]} files={['components/shell/Footer.tsx']} padding="bleed">
+                    <FooterDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="ownArea" names={[UI.personHeader, UI.ownMenu, UI.ownBarPhone]} files={['app/[locale]/(me)/layout.tsx', 'components/me/PersonHeader.tsx', 'components/me/MeMenu.tsx', 'components/me/MePhoneBar.tsx', 'components/me/MeDrawer.tsx', 'components/me/AppearanceSetting.tsx']} padding="bleed">
+                    <OwnAreaDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="buttons" names={[UI.buttonPrimary, UI.buttonSecondary, UI.buttonQuiet, UI.buttonDanger]} files={['components/ui/Button.tsx']}>

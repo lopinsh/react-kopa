@@ -429,7 +429,7 @@
     "tabProfileDescription": "Name, city, image and whether the group takes new members.",
     "nav": {
       "discover": "Discover",
-      "myGroups": "My Groups",
+      "myGroups": "My groups",
       "profile": "Profile"
     },
     "attendButton": "Sign up",
@@ -708,7 +708,12 @@
           "toast": "Toasts",
           "tabs": "Tabs",
           "banner": "Banner",
-          "notice": "Notice page"
+          "notice": "Notice page",
+          "shellHeader": "Header (signed in, admin, signed out)",
+          "shellMenus": "Header menus: profile, admin shield, language",
+          "bottomBar": "Phone bottom bar, each tab marked",
+          "footer": "Slim footer",
+          "ownArea": "Own area: person header, own menu, appearance"
         },
         "sample": {
           "category": "Hiking",

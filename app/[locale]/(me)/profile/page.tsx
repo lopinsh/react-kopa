@@ -112,12 +112,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                         </div>
                     </section>
 
-                    {/* My Groups Preview */}
+                    {/* Preview of your groups */}
                     <section>
                         <div className="mb-6 flex items-center justify-between">
                             <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                                 <span className="h-2 w-2 rounded-full bg-secondary" />
-                                {/* Reuse nav translation since in previous versions it mapped to My Groups */}
                                 {tCommon('myGroups')}
                             </h2>
                             <Link

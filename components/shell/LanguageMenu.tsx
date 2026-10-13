@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { Check, ChevronDown } from 'lucide-react';
@@ -9,12 +10,16 @@ import { LOCALES, LOCALE_NAMES, UI, type Locale } from '@/lib/constants';
 import { MenuItemLink, MenuPanel, useMenu } from '@/components/ui/Menu';
 
 /** "LV ▾": a short list of the site's languages; the choice keeps the page and its query (AR-15). */
-export default function LanguageMenu() {
+export default function LanguageMenu({ initialOpen }: { initialOpen?: boolean }) {
     const t = useTranslations('nav');
     const locale = useLocale() as Locale;
     const pathname = usePathname();
     const search = useSearchParams().toString();
-    const { open, rootRef, triggerProps, menuProps } = useMenu();
+    const { open, rootRef, triggerProps, menuProps } = useMenu(initialOpen);
+    // The root layout does not re-render on a client-side language switch, so keep <html lang> in step.
+    useEffect(() => {
+        document.documentElement.lang = locale;
+    }, [locale]);
     const href = pathname + (search ? `?${search}` : '');
 
     return (

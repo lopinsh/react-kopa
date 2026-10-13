@@ -17,7 +17,7 @@ type Spot = { id: string; n: number; x: number; y: number };
 /**
  * Numbered pins over the elements the notes were left on. A fixed layer that follows each element's
  * bounding box, so the page layout is never touched. Re-measured on scroll (the page scrolls inside
- * <main>, hence the capture listener), on resize, and once a second for content that arrives late.
+ * the main element, hence the capture listener), on resize, and once a second for content that arrives late.
  */
 export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
     const t = useTranslations('feedbackMode');
