@@ -15,12 +15,16 @@ function textOf(node: ReactNode): string {
 /**
  * Chapter files link to each other as `values.md`, which works on GitHub.
  * On the site that becomes `/admin/handbook/values`. Other relative links
- * (e.g. `../execution_handoff.md`) point outside the Handbook and render as plain text.
+ * (e.g. `../execution_handoff.md`) point outside the Handbook and render as plain text,
+ * except the build plan's `redesign.html#…` links to the redesign page.
  */
 function resolveHref(href: string | undefined): { kind: 'internal' | 'anchor' | 'external' | 'none'; href: string } {
     if (!href) return { kind: 'none', href: '' };
     if (/^https?:\/\//.test(href)) return { kind: 'external', href };
     if (href.startsWith('#')) return { kind: 'anchor', href };
+    // The build plan (docs/development/) links rules on the redesign page as `redesign.html#AR-23`.
+    const redesign = /^redesign\.html(#[\w-]+)?$/.exec(href);
+    if (redesign) return { kind: 'internal', href: `/admin/development/redesign${redesign[1] ?? ''}` };
     const match = /^([A-Za-z]+)\.md(#.*)?$/.exec(href);
     if (match) {
         const [, name, hash = ''] = match;
@@ -55,6 +59,9 @@ const components: Components = {
     ),
     blockquote: ({ children }) => (
         <blockquote className="my-6 rounded-xl border border-border border-l-4 border-l-primary bg-surface px-4 py-1 text-foreground">{children}</blockquote>
+    ),
+    pre: ({ children }) => (
+        <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-4 text-sm leading-snug [&>code]:bg-transparent [&>code]:p-0">{children}</pre>
     ),
     hr: () => <hr className="my-8 border-border" />,
     table: ({ children }) => (
