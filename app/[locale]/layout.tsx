@@ -6,7 +6,6 @@ import { routing } from '@/i18n/routing';
 import { NAV_TAB_COOKIE, isBottomTab } from '@/lib/navigation';
 import Providers from '@/components/providers/Providers';
 import Header from '@/components/shell/Header';
-import Sidebar from '@/components/shell/Sidebar';
 import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
@@ -77,7 +76,6 @@ export default async function LocaleLayout({ children, params }: Props) {
                 <Header />
 
                 <div className="flex flex-1 overflow-hidden">
-                    <Sidebar />
                     {/* The scroll container; the page's main element and the slim footer sit inside it. */}
                     <div
                         className="flex-1 overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] md:pb-0"

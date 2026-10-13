@@ -717,65 +717,6 @@ export const GroupService = {
     },
 
     /**
-     * Fetches the current user's role, sections, and pending count for a given group.
-     */
-    async getGroupRole(l1Slug: string, groupSlug: string, userId?: string): Promise<{
-        /** False when the group does not exist (or is hidden from this user), so the sidebar can hide its menu. */
-        exists: boolean;
-        role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING' | null;
-        pendingCount: number;
-        sections: Array<{ id: string; visibility: string }>;
-    }> {
-        const group = await prisma.group.findFirst({
-            where: findGroupByPath(groupSlug, l1Slug),
-            select: {
-                hiddenAt: true,
-                sections: {
-                    orderBy: { order: 'asc' },
-                    select: { id: true, visibility: true }
-                },
-                members: {
-                    where: { userId: userId || 'none' },
-                    select: { role: true }
-                }
-            }
-        });
-
-        if (!group) return { exists: false, role: null, pendingCount: 0, sections: [] };
-
-        const role = group.members?.length > 0 ? group.members[0].role : null;
-
-        // Hidden groups exist only for their owner and site admins (same rule as getGroupWithContext).
-        if (group.hiddenAt && role !== 'OWNER') {
-            if (!isSiteAdminRole(userId ? await getSiteRole(userId) : null)) {
-                return { exists: false, role: null, pendingCount: 0, sections: [] };
-            }
-        }
-
-        let pendingCount = 0;
-        if (hasAdminRights(role)) {
-            pendingCount = await prisma.membership.count({
-                where: {
-                    group: findGroupByPath(groupSlug, l1Slug),
-                    role: 'PENDING'
-                }
-            });
-        }
-
-        // Members-only sections are not even listed for people who may not read them (same rule as the group page).
-        const canSeeMembersOnly = !!role && role !== 'PENDING';
-        const sections = group.sections.length > 0
-            ? group.sections.filter((s) => s.visibility !== 'MEMBERS_ONLY' || canSeeMembersOnly)
-            : GroupService.getVirtualSections({ description: null }, 'lv');
-
-        return {
-            exists: true,
-            role,
-            pendingCount,
-            sections: sections.map((s) => ({ id: s.id, visibility: s.visibility }))
-        };
-    },
-    /**
      * Internal helper to resolve group slugs.
      */
     async getGroupSlugs(groupId: string): Promise<{ slug: string; l1Slug: string } | null> {

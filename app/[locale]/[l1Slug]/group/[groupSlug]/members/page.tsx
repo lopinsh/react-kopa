@@ -94,7 +94,6 @@ export default async function GroupMembersPage({
                         <MembershipPanel
                             groupId={group.id}
                             pendingMembers={pendingMembers}
-                            locale={locale}
                         />
                     ) : (
                         <div className="flex flex-col items-center justify-center py-24 text-center">

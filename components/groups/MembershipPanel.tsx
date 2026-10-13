@@ -22,10 +22,9 @@ type Props = {
         chatId: string | null;
         applicationMessages: Message[];
     }[];
-    locale: string;
 };
 
-export default function MembershipPanel({ groupId, pendingMembers, locale }: Props) {
+export default function MembershipPanel({ groupId, pendingMembers }: Props) {
     const t = useTranslations('group');
 
     if (pendingMembers.length === 0) return null;
@@ -45,7 +44,6 @@ export default function MembershipPanel({ groupId, pendingMembers, locale }: Pro
                         targetUser={membership.user}
                         chatId={membership.chatId}
                         messages={membership.applicationMessages}
-                        locale={locale}
                     />
                 ))}
             </div>

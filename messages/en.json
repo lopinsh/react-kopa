@@ -451,7 +451,25 @@
     "visibilityPublicDesc": "Anyone can find it and ask to join",
     "openChat": "Open chat",
     "deleteSectionConfirm": "Delete this section? It can't be restored.",
-    "withdrawRequest": "Withdraw request"
+    "withdrawRequest": "Withdraw request",
+    "pages": {
+      "info": "Information",
+      "announcements": "Announcements",
+      "events": "Events",
+      "members": "Members",
+      "settings": "Settings"
+    },
+    "frame": {
+      "pagesLabel": "Group pages",
+      "partsLabel": "Page parts",
+      "members": "{count, plural, one {# member} other {# members}}",
+      "membersOnly": "Members only"
+    },
+    "nextMeeting": {
+      "title": "Next event",
+      "all": "All"
+    },
+    "writeToTeam": "Write to the team"
   },
   "admin": {
     "dashboard": {

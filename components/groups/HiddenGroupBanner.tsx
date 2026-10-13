@@ -38,7 +38,7 @@ export default function HiddenGroupBanner({ groupId, reason, canRestore }: Props
                 <button
                     onClick={handleRestore}
                     disabled={isPending}
-                    className="rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-danger hover:bg-white/90 disabled:opacity-50"
+                    className="rounded-lg bg-danger-foreground px-3 py-1.5 text-xs font-bold text-danger hover:opacity-90 disabled:opacity-50"
                 >
                     {t('restore')}
                 </button>

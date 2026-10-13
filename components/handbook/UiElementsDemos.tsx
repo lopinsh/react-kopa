@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import AnnouncementCard from '@/components/groups/AnnouncementCard';
 import { GroupProvider } from '@/components/providers/GroupProvider';
+import { toGroupState } from '@/components/providers/to-group-state';
 import ChatPanel from '@/components/messages/ChatPanel';
 import ConversationList from '@/components/messages/ConversationList';
 import ContactGroupModal from '@/components/modals/ContactGroupModal';
@@ -52,7 +53,7 @@ export function AnnouncementDemo({ samples }: { samples: UiSamples }) {
     return (
         <div className="grid gap-4 lg:grid-cols-2">
             {([null, 'ADMIN'] as const).map((role) => (
-                <GroupProvider key={role ?? 'member'} value={{ id: 'sample', slug: 'sample', user: { role, isMember: true, isAdmin: role !== null }, sections: [] }}>
+                <GroupProvider key={role ?? 'member'} value={toGroupState({ ...samples.group, user: { role, isMember: true, isAdmin: role !== null } })}>
                     <AnnouncementCard post={samples.announcement} busy={false} onArchive={noop} onDelete={noop} />
                 </GroupProvider>
             ))}

@@ -2,10 +2,27 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 import { MembershipRole } from '@prisma/client';
+import type { GroupPageLink } from '@/lib/group-pages';
 
+/** Everything the group's frame (banner, pages, drawer, actions) shows; hydrated from the service in the layout. */
 export interface GroupState {
     id: string;
     slug: string;
+    name: string;
+    /** The group's base path without locale: `/${l1Slug}/group/${slug}`. */
+    href: string;
+    /** The group's picture (ready to render), or null: the banner then shows the category tint and mark. */
+    image: string | null;
+    /** "Tikai biedriem": out of discovery, a quiet note on the banner. */
+    isPrivate: boolean;
+    category: { l1Slug: string; l1Title: string; subCategories: string[] };
+    /** City slug; the client labels it with `cityLabel`. */
+    city: string;
+    memberCount: number;
+    isAcceptingMembers: boolean;
+    /** The pages this viewer sees, in order. */
+    pages: GroupPageLink[];
+    moderation: { isSiteAdmin: boolean; hidden: boolean };
     user: {
         role: MembershipRole | 'PENDING' | null;
         isMember: boolean;

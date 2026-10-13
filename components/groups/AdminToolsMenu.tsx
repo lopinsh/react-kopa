@@ -7,15 +7,11 @@ import { clsx } from 'clsx';
 import { Link, useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
-import type { GroupContext } from '@/lib/services/group.service';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { groupChip } from './frame/chip';
 
 type Props = {
-    group: GroupContext;
-    l1Slug: string;
-    /** `overlay` sits on the banner (mobile breadcrumb row); `bar` sits in the action row. */
-    variant: 'overlay' | 'bar';
-    className?: string;
     onHide: (trigger: HTMLElement | null) => void;
 };
 
@@ -25,7 +21,8 @@ const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium t
  * Site-admin tools for one group, kept apart from the "…" menu everybody sees.
  * Rendered only for site admins (User.role === 'ADMIN'); the actions behind it check the role again on the server.
  */
-export default function AdminToolsMenu({ group, l1Slug, variant, className, onHide }: Props) {
+export default function AdminToolsMenu({ onHide }: Props) {
+    const group = useGroupContext();
     const t = useTranslations('adminTools');
     const tMod = useTranslations('moderation');
     const tErrors = useTranslations('errors');
@@ -41,7 +38,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
 
     if (!group.moderation.isSiteAdmin) return null;
 
-    const isHidden = !!group.moderation.hidden;
+    const isHidden = group.moderation.hidden;
     // A site admin who owns the group manages it as an owner, not by hiding it from themselves.
     const canHide = !isHidden && group.user.role !== 'OWNER';
 
@@ -56,7 +53,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
     };
 
     return (
-        <div className={clsx('relative', className)} ref={ref}>
+        <div className="relative" ref={ref}>
             <button
                 ref={triggerRef}
                 type="button"
@@ -64,23 +61,15 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                 aria-label={t('label')}
                 title={t('label')}
                 aria-expanded={isOpen}
-                className={clsx(
-                    'flex items-center justify-center transition-all active:scale-95',
-                    variant === 'overlay'
-                        ? 'h-7 w-7 rounded-xl border border-white/10 bg-black/20 text-white shadow-premium backdrop-blur-md'
-                        : 'h-10 w-10 rounded-xl border border-border bg-surface text-foreground-muted hover:bg-surface-elevated'
-                )}
+                className={clsx('grid size-10 place-items-center rounded-full transition-all active:scale-95', groupChip(group.image !== null))}
             >
-                <UserCog className="h-4 w-4" />
+                <UserCog aria-hidden className="size-5" />
             </button>
 
             {isOpen && (
                 <div
                     data-ui="dropdown-menu"
-                    className={clsx(
-                        'absolute right-0 z-[45] min-w-[240px] max-w-[calc(100vw-32px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-2xl shadow-black/20',
-                        variant === 'overlay' ? 'top-9' : 'top-12'
-                    )}
+                    className="absolute right-0 top-12 z-[45] min-w-[240px] max-w-[calc(100vw-24px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-premium"
                 >
                     <p className="px-4 pb-1 pt-2 text-[11px] font-semibold text-foreground-muted">{t('label')}</p>
 
@@ -105,7 +94,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                         <Tags className="h-4 w-4 text-foreground-muted" />
                         {t('fixCategorization')}
                     </Link>
-                    <Link href={`/${l1Slug}/group/${group.slug}/settings`} className={ITEM} onClick={() => setOpen(false)}>
+                    <Link href={`${group.href}/settings`} className={ITEM} onClick={() => setOpen(false)}>
                         <Pencil className="h-4 w-4 text-foreground-muted" />
                         {t('editGroup')}
                     </Link>

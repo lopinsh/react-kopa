@@ -4,7 +4,6 @@ import { useTransition } from 'react';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { Check, X, MessageSquare, History } from 'lucide-react';
 import { manageMembership } from '@/actions/group-actions';
-import { GROUP_MEMBERSHIP_CHANGED } from '@/lib/constants/events';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
@@ -29,10 +28,9 @@ type Props = {
     };
     chatId: string | null;
     messages: Message[];
-    locale: string;
 };
 
-export default function RequestCard({ membershipId, targetUser, chatId, messages, locale }: Props) {
+export default function RequestCard({ membershipId, targetUser, chatId, messages }: Props) {
     const t = useTranslations('group');
   const c_common = useTranslations('common');
     const { success, error: toastError } = useToast();
@@ -46,8 +44,6 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
         startTransition(async () => {
             const result = await manageMembership(membershipId, action);
             if (result.success) {
-                // The shell sidebar is outside the group layout, so tell it to reload its badge.
-                window.dispatchEvent(new Event(GROUP_MEMBERSHIP_CHANGED));
                 success(c_common('manageSuccess'));
             } else {
                 toastError(t('ACTION_FAILED'));

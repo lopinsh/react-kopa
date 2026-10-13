@@ -451,7 +451,25 @@
     "visibilityPublicDesc": "Ikviens to var atrast un pieteikties dalībai",
     "openChat": "Atvērt sarunu",
     "deleteSectionConfirm": "Dzēst šo sadaļu? To nevarēs atjaunot.",
-    "withdrawRequest": "Atsaukt pieteikumu"
+    "withdrawRequest": "Atsaukt pieteikumu",
+    "pages": {
+      "info": "Informācija",
+      "announcements": "Jaunumi",
+      "events": "Pasākumi",
+      "members": "Biedri",
+      "settings": "Iestatījumi"
+    },
+    "frame": {
+      "pagesLabel": "Grupas lapas",
+      "partsLabel": "Lapas daļas",
+      "members": "{count, plural, zero {# biedru} one {# biedrs} other {# biedri}}",
+      "membersOnly": "Tikai biedriem"
+    },
+    "nextMeeting": {
+      "title": "Nākamais pasākums",
+      "all": "Visi"
+    },
+    "writeToTeam": "Rakstīt komandai"
   },
   "admin": {
     "dashboard": {

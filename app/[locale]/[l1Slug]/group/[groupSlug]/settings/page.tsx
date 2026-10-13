@@ -94,7 +94,6 @@ export default async function GroupSettingsPage(props: {
                 <MembershipPanel
                     groupId={group.id}
                     pendingMembers={pendingMembers}
-                    locale={locale}
                 />
             )}
 

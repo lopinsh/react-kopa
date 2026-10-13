@@ -15,14 +15,14 @@ import GroupCard from '@/components/discovery/GroupCard';
 import ListViewCard from '@/components/discovery/ListViewCard';
 import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
-import CompactGroupBar from '@/components/groups/CompactGroupBar';
 import EventRow from '@/components/groups/EventRow';
-import GroupHeader from '@/components/groups/GroupHeader';
+import GroupBanner from '@/components/groups/frame/GroupBanner';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import MemberCard from '@/components/groups/MemberCard';
 import RequestCard from '@/components/groups/RequestCard';
 import SettingsTabs from '@/components/groups/SettingsTabs';
 import { GroupProvider } from '@/components/providers/GroupProvider';
+import { toGroupState } from '@/components/providers/to-group-state';
 import Badge from '@/components/ui/Badge';
 import Button, { buttonClass } from '@/components/ui/Button';
 import CategoryLine from '@/components/ui/CategoryLine';
@@ -47,8 +47,8 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
     const tTag = await getTranslations('common.tag');
     const chapters = await HandbookService.listChapters();
     const samples = buildUiSamples((key) => t(`sample.${key}`), locale);
-    const { group, memberGroupContext } = samples;
-    const groupState = (g: typeof group) => ({ id: g.id, slug: g.slug, user: g.user, sections: [] });
+    const { group } = samples;
+    const groupState = toGroupState;
 
     return (
         <HandbookShell chapters={chapters} current={null} headings={[]} active="ui-elements" wide>
@@ -168,25 +168,17 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </AccentScope>
                 </UiSpecimen>
 
-                <UiSpecimen id="header" names={[UI.groupHeader, UI.joinButton]} files={['components/groups/GroupHeader.tsx']} padding="bleed">
+                <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupBanner.tsx', 'components/groups/frame/GroupActions.tsx']} padding="bleed">
                     <AccentScope color={samples.accent}>
                         <GroupProvider value={groupState(group)}>
-                            <GroupHeader group={group} l1Slug={samples.l1Slug} />
-                        </GroupProvider>
-                    </AccentScope>
-                </UiSpecimen>
-
-                <UiSpecimen id="slimBar" names={[UI.slimBar]} files={['components/groups/CompactGroupBar.tsx']} padding="bleed">
-                    <AccentScope color={samples.accent}>
-                        <GroupProvider value={groupState(memberGroupContext)}>
-                            <CompactGroupBar group={memberGroupContext} l1Slug={samples.l1Slug} />
+                            <GroupBanner />
                         </GroupProvider>
                     </AccentScope>
                 </UiSpecimen>
 
                 <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/MemberCard.tsx']}>
                     <AccentScope color={samples.accent} className="grid gap-4 md:grid-cols-2">
-                        <GroupProvider value={{ id: group.id, slug: group.slug, user: { role: 'OWNER', isMember: true, isAdmin: true }, sections: [] }}>
+                        <GroupProvider value={groupState({ ...group, user: { role: 'OWNER', isMember: true, isAdmin: true } })}>
                             {samples.members.map((member) => (
                                 <MemberCard key={member.id} member={member} canMessage groupId={group.id} locale={locale} l1Slug={samples.l1Slug} />
                             ))}
@@ -202,7 +194,6 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                             targetUser={samples.marta}
                             chatId="c-1"
                             messages={[samples.requestMessage]}
-                            locale={locale}
                         />
                     </AccentScope>
                 </UiSpecimen>
