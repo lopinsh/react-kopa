@@ -8,7 +8,8 @@ import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
 import { isEventPast } from '@/lib/event-dates';
-import { UI } from '@/lib/constants';
+import EmptyState from '@/components/ui/EmptyState';
+import { buttonClass } from '@/components/ui/Button';
 
 export async function generateMetadata({
     params,
@@ -91,28 +92,17 @@ export default async function GroupEventsPage({
                     ))}
                 </div>
             ) : (
-                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-border py-20 text-center bg-surface/30">
-                    <div className="h-16 w-16 rounded-2xl bg-surface border border-border flex items-center justify-center mb-6 shadow-sm">
-                        <Calendar className="h-8 w-8 text-foreground-muted" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">{t('noEvents')}</h3>
-                    <p className="text-foreground-muted max-w-xs mx-auto mb-8">
-                        {currentTab === 'upcoming'
-                            ? t('noUpcomingEvents')
-                            : currentTab === 'past'
-                                ? t('noPastEvents')
-                                : t('noRsvps')}
-                    </p>
-                    {isOwnerOrAdmin && currentTab === 'upcoming' && (
-                        <Link
-                            href={`/${l1Slug}/group/${groupSlug}/create-event`}
-                            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold bg-surface border border-border hover:bg-surface-elevated transition-colors"
-                        >
-                            <Plus className="h-4 w-4" />
+                <EmptyState
+                    icon={Calendar}
+                    title={t('noEvents')}
+                    description={currentTab === 'upcoming' ? t('noUpcomingEvents') : currentTab === 'past' ? t('noPastEvents') : t('noRsvps')}
+                    action={isOwnerOrAdmin && currentTab === 'upcoming' ? (
+                        <Link href={`/${l1Slug}/group/${groupSlug}/create-event`} className={buttonClass('secondary')}>
+                            <Plus aria-hidden="true" />
                             {t('createFirstEvent')}
                         </Link>
-                    )}
-                </div>
+                    ) : undefined}
+                />
             )}
         </section>
     );

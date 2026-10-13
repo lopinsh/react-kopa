@@ -6,7 +6,8 @@ import { Users, LogIn, Compass } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
 import MyGroupsListRow from '@/components/profile/MyGroupsListRow';
-import { UI } from '@/lib/constants';
+import EmptyState from '@/components/ui/EmptyState';
+import { buttonClass } from '@/components/ui/Button';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -34,24 +35,17 @@ export default async function MyGroupsPage({
                     {tCommon('myGroups')}
                 </h1>
 
-                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary/10 text-primary">
-                        <LogIn className="h-10 w-10" />
-                    </div>
-                    <h2 className="mt-8 text-2xl font-semibold text-foreground">
-                        {tAuth('signInToSeeGroups')}
-                    </h2>
-                    <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
-                        {tAuth('modalDesc')}
-                    </p>
-                    <a
-                        href={signInUrl(locale, '/profile/my-groups')}
-                        className="mt-6 flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
-                    >
-                        <LogIn className="h-4 w-4" />
-                        {tAuth('signInButton')}
-                    </a>
-                </div>
+                <EmptyState
+                    icon={LogIn}
+                    title={tAuth('signInToSeeGroups')}
+                    description={tAuth('modalDesc')}
+                    action={
+                        <a href={signInUrl(locale, '/profile/my-groups')} className={buttonClass('primary')}>
+                            <LogIn aria-hidden="true" />
+                            {tAuth('signInButton')}
+                        </a>
+                    }
+                />
             </div>
         );
     }
@@ -139,21 +133,16 @@ export default async function MyGroupsPage({
                     )}
                 </div>
             ) : (
-                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-20">
-                        <Users className="h-10 w-10" />
-                    </div>
-                    <h2 className="mt-8 text-2xl font-semibold text-foreground">
-                        {tProfile('empty')}
-                    </h2>
-                    <Link
-                        href="/"
-                        className="mt-6 flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:opacity-90 active:scale-[0.98]"
-                    >
-                        <Compass className="h-4 w-4" />
-                        {tProfile('discover')}
-                    </Link>
-                </div>
+                <EmptyState
+                    icon={Users}
+                    title={tProfile('empty')}
+                    action={
+                        <Link href="/" className={buttonClass('primary')}>
+                            <Compass aria-hidden="true" />
+                            {tProfile('discover')}
+                        </Link>
+                    }
+                />
             )}
         </div>
     );

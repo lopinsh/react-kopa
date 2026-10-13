@@ -10,7 +10,7 @@ import { Link } from '@/i18n/routing';
 import { avatarUrl } from '@/lib/avatar';
 import { MessageService } from '@/lib/services/message.service';
 import MessageUserButton from '@/components/messages/MessageUserButton';
-import { UI } from '@/lib/constants';
+import EmptyState from '@/components/ui/EmptyState';
 import { createDateFormatter } from '@/lib/date-format';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; username: string }> }): Promise<Metadata> {
@@ -42,15 +42,7 @@ export default async function PublicProfilePage({
     if (!dbUser.isProfilePublic && !isOwnProfile) {
         return (
             <div className="container mx-auto px-4 py-24 max-w-2xl text-center">
-                <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 bg-surface">
-                    <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-surface-elevated text-foreground-muted opacity-50 mb-6">
-                        <ShieldAlert className="h-10 w-10" />
-                    </div>
-                    <h1 className="text-3xl font-semibold text-foreground mb-4">{t('privateProfile')}</h1>
-                    <p className="text-foreground-muted">
-                        {t('privateProfileDesc')}
-                    </p>
-                </div>
+                <EmptyState icon={ShieldAlert} title={t('privateProfile')} description={t('privateProfileDesc')} />
             </div>
         );
     }

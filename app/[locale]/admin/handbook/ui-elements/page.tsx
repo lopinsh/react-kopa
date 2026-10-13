@@ -222,7 +222,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="emptyState" names={[UI.emptyState]} files={['components/ui/EmptyState.tsx']}>
                     <EmptyState
-                        icon={<Calendar className="h-10 w-10" />}
+                        icon={Calendar}
                         title={t('sample.emptyTitle')}
                         description={t('sample.emptyDescription')}
                         action={<Button variant="secondary"><Search className="h-4 w-4" />{t('sample.emptyAction')}</Button>}

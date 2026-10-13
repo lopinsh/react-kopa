@@ -3,10 +3,11 @@
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { isReportReason, UI } from '@/lib/constants';
+import { isReportReason } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
+import EmptyState from '@/components/ui/EmptyState';
 import { avatarUrl } from '@/lib/avatar';
 import { useDateFormatter } from '@/lib/date-format';
 
@@ -64,17 +65,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
 
     if (reports.length === 0) {
         return (
-            <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center bg-surface">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-success/10 text-success">
-                    <CheckCircle2 className="h-10 w-10" />
-                </div>
-                <h2 className="mt-8 text-2xl font-semibold text-foreground">
-                    {t('allClear')}
-                </h2>
-                <p className="mt-2 text-foreground-muted max-w-sm mx-auto">
-                    {t('allClearDesc')}
-                </p>
-            </div>
+            <EmptyState icon={CheckCircle2} title={t('allClear')} description={t('allClearDesc')} />
         );
     }
 

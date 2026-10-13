@@ -1,29 +1,27 @@
 import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import { clsx } from 'clsx';
 import { UI } from '@/lib/constants';
 
 type Props = {
-    icon: ReactNode;
+    icon: LucideIcon;
     title: string;
+    /** One sentence, in the site's own voice. */
     description?: string;
-    /** Optional call to action (a Button or link). */
+    /** At most one: a Button or link. */
     action?: ReactNode;
+    headingLevel?: 'h2' | 'h3';
     className?: string;
 };
 
-/** Dashed box shown where a list would be when it has nothing in it. Says what is missing and, if possible, what to do next. */
-export default function EmptyState({ icon, title, description, action, className }: Props) {
+/** Where a list would be when it has nothing in it (AR-66): outline icon, a short title, one italic sentence, at most one action. */
+export default function EmptyState({ icon: Icon, title, description, action, headingLevel: Heading = 'h2', className }: Props) {
     return (
-        <div
-            data-ui={UI.emptyState}
-            className={clsx('flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border bg-surface-elevated/30 px-6 py-24 text-center', className)}
-        >
-            <div className="mb-2 flex h-24 w-24 items-center justify-center rounded-full bg-surface-elevated text-foreground-muted opacity-40">
-                {icon}
-            </div>
-            <h2 className="mt-6 text-3xl font-semibold tracking-tight text-foreground">{title}</h2>
-            {description && <p className="mx-auto mt-3 max-w-sm text-lg text-foreground-muted">{description}</p>}
-            {action && <div className="mt-6">{action}</div>}
+        <div data-ui={UI.emptyState} className={clsx('grid justify-items-center gap-1.5 px-4 pb-7 pt-6 text-center', className)}>
+            <Icon aria-hidden="true" strokeWidth={1.6} className="size-7 text-foreground-muted" />
+            <Heading className="font-heading text-base font-semibold text-foreground">{title}</Heading>
+            {description && <p className="max-w-[30ch] text-[13px] italic text-primary">{description}</p>}
+            {action && <div className="mt-2">{action}</div>}
         </div>
     );
 }
