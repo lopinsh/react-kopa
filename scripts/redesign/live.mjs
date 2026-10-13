@@ -30,13 +30,13 @@ const A = [
   [20, 'Contact / join form', 'components/modals/ContactGroupModal.tsx', 'h-group', 'A group', 'cov', 'Button words change (C1, C3).'],
   [21, 'Sign-in pop-up', 'components/modals/AuthGateModal.tsx', 'h-pop', 'Pop-ups and panels', 'part', 'Named only; follows the dialog rule and today\'s fields.'],
   [22, 'Group Pasākumi', '[groupSlug]/events/page.tsx, EventRow.tsx, GroupTabs.tsx', 'h-group', 'A group', 'cov*', '"Mani pasākumi" goes (13 Oct); "Izveidot pasākumu" drawn at the right of the tabs; the empty list follows the empty-state rule; joining moves from the row to the panel (C28); "Pārvaldīt · N gaida" moves to the event page\'s "Rīkotājiem".'],
-  [23, 'Event page', '[groupSlug]/events/[eventSlug]/page.tsx', 'h-event', 'An event', 'cov*', 'Drawn as a proposal (13 Oct).'],
+  [23, 'Event page', '[groupSlug]/events/[eventSlug]/page.tsx', 'h-event', 'An event', 'cov*', 'Drawn; agreed 13 Oct (build plan OD-23).'],
   [24, 'Organiser tools: lists, edit, delete', 'EventOrganiserPanel.tsx, EventManageActions.tsx', 'h-event', 'An event', 'part*', 'The "Rīkotājiem" box drawn on the event page; its lists keep today\'s layout.'],
   [25, 'Members-only event, seen from outside', 'components/events/MembersOnlyNotice.tsx', '', '—', 'no', q(13)],
   [26, 'Create / edit event', 'create-event/page.tsx, forms/EventCreationWizard.tsx', '', '—', 'no', 'Today\'s fields plus the event\'s place (13 Oct), in the new look.'],
-  [27, 'Members list (Biedri)', '[groupSlug]/members/page.tsx, MemberCard.tsx', 'h-group', 'A group', 'cov*', 'Drawn as a proposal (13 Oct).'],
+  [27, 'Members list (Biedri)', '[groupSlug]/members/page.tsx, MemberCard.tsx', 'h-group', 'A group', 'cov*', 'Drawn; agreed 13 Oct (build plan OD-24).'],
   [28, 'Join requests (Pieteikumi)', 'MembershipPanel.tsx, RequestCard.tsx', 'h-group', 'A group', 'cov', ''],
-  [29, 'Group Jaunumi', '[groupSlug]/announcements/page.tsx, AnnouncementBoard.tsx', 'h-group', 'A group', 'cov*', 'Drawn as a proposal (13 Oct): new item, Arhīvs, delete.'],
+  [29, 'Group Jaunumi', '[groupSlug]/announcements/page.tsx, AnnouncementBoard.tsx', 'h-group', 'A group', 'cov*', 'Drawn; agreed 13 Oct (build plan OD-24): new item, Arhīvs, delete.'],
   [30, 'Group settings (Grupa, Sadaļas, Īpašnieks)', '[groupSlug]/settings/page.tsx, components/groups/settings/*', 'h-group', 'A group', 'nav', 'Keeps its three tabs, gains "Ko meklējam?", in the new look.'],
   [31, 'Report a group', 'components/modals/ReportModal.tsx', 'h-group', 'A group', 'part*', '"Ziņot par grupu" in the "…" menu (drawn); the form keeps today\'s fields.'],
   [32, 'Hide / delete a hidden group (admin)', 'HideGroupModal.tsx, DeleteHiddenGroupModal.tsx', '', '—', 'no', 'Stay as today, in the new look.'],
@@ -45,7 +45,7 @@ const A = [
   [35, 'Sign in', 'app/[locale]/auth/signin/page.tsx', '', '—', 'no', 'Today\'s fields in the new look (the Handbook\'s layout D).'],
   [36, 'Register', 'app/[locale]/auth/register/page.tsx', '', '—', 'no', 'The same.'],
   [37, 'Choosing a username', 'app/[locale]/onboarding/username/page.tsx', '', '—', 'no', 'The same.'],
-  [38, 'Own profile (Mans profils)', 'app/[locale]/profile/page.tsx', 'h-me', 'Your own area', 'cov*', 'Drawn as a proposal (13 Oct).'],
+  [38, 'Own profile (Mans profils)', 'app/[locale]/profile/page.tsx', 'h-me', 'Your own area', 'cov*', 'Drawn; agreed 13 Oct (build plan OD-25).'],
   [39, 'Someone else\'s profile', 'profile/[username]/page.tsx', 'h-me', 'Your own area', 'no', 'Follows Mans profils: only the groups you share, and "Sūtīt ziņu".'],
   [40, 'Edit profile', 'profile/edit/page.tsx, ProfileEditForm.tsx', 'h-me', 'Your own area', 'part', q(10)],
   [41, 'My groups (Manas grupas)', 'profile/my-groups/page.tsx', 'h-me', 'Your own area', 'cov', `Its content changes (C26); the team's waiting requests: ${q(9)}.`],
@@ -205,13 +205,13 @@ export const liveSection = () => {
   const migs = D.filter((r) => r[4]).length;
   return `<section aria-labelledby="h-live">
   <h2 id="h-live">Salīdzinājums ar dzīvo lapu · Compared with the live app</h2>
-  <p class="lead">On 13 October every screen of the live site was compared with this page, by reading the code on <code>main</code>. Below is everything that came out of it, not a summary: each live screen and where it is on this page; what the live site does that this page didn't mention, and what happens to it; where the two disagree, and whether that is an intended change, a mistake on this page, or still unclear; and what needs new data. Unclear points became questions in <a href="#h-open">Still open</a> (8–18), each with a default. File names are in small print, for the builders.</p>
+  <p class="lead">On 13 October every screen of the live site was compared with this page, by reading the code on <code>main</code>. Below is everything that came out of it, not a summary: each live screen and where it is on this page; what the live site does that this page didn't mention, and what happens to it; where the two disagree, and whether that is an intended change, a mistake on this page, or still unclear; and what needs new data. Unclear points became questions in <a href="#h-open">Still open</a> (8–18), each answered on 13 October by agreeing to its default. File names are in small print, for the builders.</p>
 
   <h3>Your answers of 13 October</h3>
   <div class="rd-rows">
     <div><b>1 · One release?</b> No: the redesign ships in logical parts, one by one (the build order below). <a href="#h-rules">Agreed rules → Identity</a></div>
     <div><b>2 · Language and footer.</b> The language switch is important: it stays visible in the header on every page, "LV ▾", built for more languages. A slim footer on discovery and reading pages. <a href="#h-shell">Header and navigation</a></div>
-    <div><b>3 · Screens not drawn.</b> They follow the decisions on this page. The four most important are now drawn: the event page, Biedri, a group's Jaunumi, Mans profils (as proposals). <a href="#h-rules">Agreed rules</a></div>
+    <div><b>3 · Screens not drawn.</b> They follow the decisions on this page. The four most important are now drawn: the event page, Biedri, a group's Jaunumi, Mans profils (agreed 13 Oct). <a href="#h-rules">Agreed rules</a></div>
     <div><b>4 · Events that need approval or are full.</b> Redone as pictures: <a href="#q-states">An event → Events you can't simply join</a> (Still open, 8).</div>
     <div><b>5 · The event's place.</b> A required city from the list, filled in with the group's city, plus a free address; "Tiešsaistē" for online events, shown under "Visur". <a href="#h-event">An event</a></div>
     <div><b>6 · Faces of who is going.</b> Only for signed-in viewers; visitors see "12 iet". <a href="#h-event">An event</a></div>
@@ -242,6 +242,6 @@ export const liveSection = () => {
   <ol class="rd-build">${R.map(([id, t, what, mig]) => `<li><b>${id} · ${t}</b><p>${what}${mig ? ` <span class="rd-mig">Migration</span>${path(mig)}` : ''}</p></li>`).join('')}</ol>
 
   <h3>Questions this raised</h3>
-  <p class="lead">All in <a href="#h-open">Still open</a>, each with the default I would build: 8 events you can't simply join (pictures), 9 the team's waiting requests (pictures), 10 where you change your profile, 11 private groups, 12 the word behind "Mod", 13 members-only events, 14 how a member writes to the team, 15 "are you sure?" for steps that can be undone, 16 deleting your account, 17 "Ko meklējam?" in one language or two, 18 the four new drawings; reporting an event joined question 7. Where the Handbook or this page already decides (short messages, loading and error pages, text in another language, the cards / list switch, repeating events, the category-moving page), the answer is written in the tables above instead of asked.</p>
+  <p class="lead">All in <a href="#h-open">Still open</a>, each answered on 13 October by agreeing to the default: 8 events you can't simply join (pictures), 9 the team's waiting requests (pictures), 10 where you change your profile, 11 private groups, 12 the word behind "Mod", 13 members-only events, 14 how a member writes to the team, 15 "are you sure?" for steps that can be undone, 16 deleting your account, 17 "Ko meklējam?" in one language or two, 18 the four new drawings; reporting an event joined question 7. Where the Handbook or this page already decides (short messages, loading and error pages, text in another language, the cards / list switch, repeating events, the category-moving page), the answer is written in the tables above instead of asked.</p>
 </section>`;
 };

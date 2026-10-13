@@ -1,7 +1,8 @@
 {
-  "version": "9.8.2",
-  "updated": "2026-10-13T23:30:00+03:00",
+  "version": "9.8.3",
+  "updated": "2026-10-13T23:59:00+03:00",
   "changes": [
+    "9.8.3, your answers in the build plan: all 26 owner decisions agreed on 13 October (OD-01…OD-27). Every Proposal and Open rule is now Agreed (AR-20, 39, 40, 48, 51, 53, 56, 59, 62, 63, 70, 71); Still open questions 2–18 are settled.",
     "9.8.2, approved: on the phone group bar \"Sazināties\" for visitors is an icon-only chat button, label \"Sazināties\" (AP-08); the group name stays fully readable in the 64 px bar.",
     "9.8.1, your notes on the banner height: every group banner, with or without an image, on every page, is the one height of the Pasākumi banner (96 px; phone bar 64 px) (AR-70). On phones \"Sazināties\" is a chat icon, so the name is never cut.",
     "9.8, the design freeze: your notes of 13 October, evening. Every Agreed rule now has a stable id (AR-01 … AR-71) and every approval its own (AP-01 … AP-07), shown on the page and usable as an anchor (#AR-23), so the build plan can name them.",
@@ -30,17 +31,16 @@
     "A join request gets \"Atbildēt\" next to Noraidīt and Apstiprināt; it opens the conversation.",
     "Checked at 375, 1280, 1600 and 1920 px, light and dark: nothing overlaps, no line wraps or runs over, only the intended \"…\" cuts.",
     "9.5, after an independent review. Every overlap you marked was in a phone drawing: the filter buttons and the Grupas | Pasākumi switch shared one 300 px line, so the second button was cut at the switch. 9.4 faded it out, which still looked like a half-drawn button.",
-    "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded.",
-    "The phone search drawing is marked as my suggestion; \"Izveidot grupu\" staying in the phone profile menu (next to the bottom bar's +) is marked as my suggestion too."
+    "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded."
   ],
   "sections": {
     "h-rules": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-open": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-id": {
       "kind": "new",
@@ -48,27 +48,27 @@
     },
     "h-shell": {
       "kind": "updated",
-      "version": "9.5"
+      "version": "9.8.3"
     },
     "h-disc": {
       "kind": "updated",
-      "version": "9.7.1"
+      "version": "9.8.3"
     },
     "h-search": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-group": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-event": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-me": {
       "kind": "updated",
-      "version": "9.7"
+      "version": "9.8.3"
     },
     "h-pop": {
       "kind": "updated",
@@ -80,7 +80,7 @@
     },
     "h-live": {
       "kind": "updated",
-      "version": "9.8"
+      "version": "9.8.3"
     },
     "h-notes": {
       "kind": "updated",
