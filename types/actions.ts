@@ -52,6 +52,7 @@ export const ERROR_CODES = [
     'CITY_EXISTS',
     'CITY_IN_USE',
     'DB_MIGRATION_REQUIRED',
+    'CONTRAST_TOO_LOW',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];

@@ -6,6 +6,7 @@ import {
     DEFAULT_THEME_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS, THEME_PRESET_KEYS,
     type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey,
 } from '@/lib/constants';
+import { themeContrastIssues } from '@/lib/theme/contrast';
 import { themeInputSchema, type ThemeInput } from '@/lib/validations/theme';
 
 /** A resolved theme, ready for the layout and the Design page. */
@@ -90,6 +91,7 @@ export const ThemeService = {
     async saveDraft(adminId: string, input: ThemeInput): Promise<ThemeResult<{ id: string }>> {
         const parsed = themeInputSchema.safeParse(input);
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+        if (themeContrastIssues(parsed.data).length > 0) return { success: false, error: 'CONTRAST_TOO_LOW' };
         const created = await prisma.$transaction(async (tx) => {
             await tx.siteTheme.deleteMany({ where: { isPublished: false, updatedById: adminId } });
             return tx.siteTheme.create({ data: { ...parsed.data, isPublished: false, updatedById: adminId } });
@@ -101,6 +103,7 @@ export const ThemeService = {
     async publish(adminId: string, input: ThemeInput): Promise<ThemeResult> {
         const parsed = themeInputSchema.safeParse(input);
         if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+        if (themeContrastIssues(parsed.data).length > 0) return { success: false, error: 'CONTRAST_TOO_LOW' };
         await prisma.$transaction([
             prisma.siteTheme.deleteMany({ where: { OR: [{ isPublished: true }, { isPublished: false, updatedById: adminId }] } }),
             prisma.siteTheme.create({ data: { ...parsed.data, isPublished: true, updatedById: adminId } }),

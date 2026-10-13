@@ -82,7 +82,7 @@ export default function DesignEditor({ initial }: { initial: ThemeInput }) {
                         <fieldset key={mode} className="space-y-3 rounded-2xl border border-border bg-surface p-4">
                             <legend className="px-2 text-sm font-bold text-foreground">{t(`mode.${mode}`)}</legend>
                             {THEME_EDITABLE_TOKENS.map((token) => (
-                                <ColorField key={token} label={t(`token.${token}`)} value={theme[mode][token]} disabled={busy} onChange={(hex) => setColor(mode, token, hex)} />
+                                <ColorField key={token} label={t(`token.${token}`)} value={theme[mode][token] ?? ''} disabled={busy} onChange={(hex) => setColor(mode, token, hex)} />
                             ))}
                         </fieldset>
                     ))}

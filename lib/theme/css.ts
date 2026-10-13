@@ -2,7 +2,7 @@ import { CATEGORY_TONES, CATEGORY_TONE_SLUGS, THEME_FONTS, type ThemeDefinition,
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
 
 /** White text unless the colour is clearly light (Sūna's light primary keeps white, its light-sage dark primary gets near-black). */
-function onPrimary(hex: string): string {
+export function onPrimary(hex: string): string {
     const rgb = hexToRgb(hex);
     return rgb && getLuminance(rgb.r, rgb.g, rgb.b) > 0.22 ? '#111111' : '#ffffff';
 }

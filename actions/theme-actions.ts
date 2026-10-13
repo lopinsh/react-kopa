@@ -89,7 +89,7 @@ export async function discardPreviewTheme(): Promise<ActionResponse> {
     }
 }
 
-/** Back to the "Pašreizējais" preset for everyone. */
+/** Back to the default preset (Sūna) for everyone. */
 export async function resetTheme(): Promise<ActionResponse> {
     const check = await requireSiteAdmin();
     if (!check.success) return { success: false, error: check.error };

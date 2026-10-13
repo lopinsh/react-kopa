@@ -100,7 +100,14 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
 };
 
 /** Colours the custom editor offers, per mode. */
-export const THEME_EDITABLE_TOKENS = ['primary', 'background', 'surface', 'foreground'] as const;
+export const THEME_EDITABLE_TOKENS = ['primary', 'background', 'surface', 'foreground', 'muted', 'border', 'tint'] as const;
+export type ThemeMode = 'light' | 'dark';
+/** The three parts of Admin > Dizains (AR-69), in order. */
+export const DESIGN_PARTS = ['colours', 'categories', 'fonts'] as const;
+export type DesignPart = (typeof DESIGN_PARTS)[number];
+/** Contrast floor (Handbook, design.md): text AA everywhere; a dark-mode tone 7:1 with the dark background. */
+export const THEME_CONTRAST_MIN = 4.5;
+export const THEME_DARK_TONE_MIN = 7;
 export type ThemeEditableToken = (typeof THEME_EDITABLE_TOKENS)[number];
 
 export const THEME_PREVIEW_COOKIE = 'theme_preview';

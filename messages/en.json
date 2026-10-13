@@ -325,6 +325,7 @@
     "ALIAS_CONFLICT": "This alias already exists for the selected locale.",
     "CATEGORY_IN_USE": "This category is in use and cannot be removed.",
     "DB_MIGRATION_REQUIRED": "A database schema update is required to support this feature. Please contact the administrator.",
+    "CONTRAST_TOO_LOW": "Some colours are too low in contrast to read. Check them in Design.",
     "CREATE_FAILED": "Failed to create resource.",
     "DELETE_FAILED": "Failed to delete resource.",
     "DM_NOT_ALLOWED": "You can only message people who share a group with you. Use the group's contact form instead.",

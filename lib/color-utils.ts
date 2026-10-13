@@ -30,3 +30,23 @@ export function getLuminance(r: number, g: number, b: number): number {
 export function tint(color: string, percent: number): string {
     return `color-mix(in srgb, ${color} ${percent}%, transparent)`;
 }
+
+/** CSS `color-mix(in srgb, a <percent>%, b)` as a hex, so the editor can show and check a derived token. */
+export function mixHex(a: string, b: string, percent: number): string {
+    const ra = hexToRgb(a);
+    const rb = hexToRgb(b);
+    if (!ra || !rb) return a;
+    const p = percent / 100;
+    const ch = (x: number, y: number) => Math.round(x * p + y * (1 - p)).toString(16).padStart(2, '0');
+    return `#${ch(ra.r, rb.r)}${ch(ra.g, rb.g)}${ch(ra.b, rb.b)}`;
+}
+
+/** WCAG 2.x contrast ratio of two hex colours (1-21). An unparsable colour gives 1 (fails every check). */
+export function contrastRatio(a: string, b: string): number {
+    const ra = hexToRgb(a);
+    const rb = hexToRgb(b);
+    if (!ra || !rb) return 1;
+    const la = getLuminance(ra.r, ra.g, ra.b);
+    const lb = getLuminance(rb.r, rb.g, rb.b);
+    return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
