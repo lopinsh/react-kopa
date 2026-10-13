@@ -1,10 +1,15 @@
 // docs/development/redesign.html is generated from here (npm run redesign:build); never hand-edit the HTML.
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { CSS, CSS_FIX } from './css.mjs';
 import * as P from './parts.mjs';
 import { liveSection } from './live.mjs';
 const { I, G, st, cat, catLine, catName, catIco, cv, pill, biedri } = P;
+
+// The admin page parses the meta with redesignMetaSchema (lib/validations/development.ts) and fails on a breach: check its limits here.
+const META = JSON.parse(readFileSync(new URL('../../docs/development/redesign.meta.json', import.meta.url), 'utf8'));
+const metaErr = [META.changes.length > 30 && `changes has ${META.changes.length} items (max 30)`, ...META.changes.map((c, i) => c.length > 300 && `changes[${i}] has ${c.length} characters (max 300)`)].filter(Boolean);
+if (metaErr.length) { console.error(`redesign.meta.json breaks the page's schema:\n  ${metaErr.join('\n  ')}`); process.exit(1); }
 
 const OUT = process.argv[2] ?? fileURLToPath(new URL('../../docs/development/redesign.html', import.meta.url));
 const fmt = new Intl.DateTimeFormat('lv', { weekday: 'short', day: 'numeric', month: 'short' });
