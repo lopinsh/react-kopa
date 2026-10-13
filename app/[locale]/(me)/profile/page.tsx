@@ -14,7 +14,7 @@ import { createDateFormatter } from '@/lib/date-format';
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'nav' });
-    return { title: t('profile') };
+    return { title: t('myProfile') };
 }
 
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -27,7 +27,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
 
     const t = await getTranslations('profile');
     const tCities = await getTranslations('cities');
-  const c_common_get = await getTranslations('common');
+    const tCommon = await getTranslations('common');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
 
     const dbUser = await UserService.getOwnProfile(session.user.id);
@@ -118,7 +118,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                             <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
                                 <span className="h-2 w-2 rounded-full bg-secondary" />
                                 {/* Reuse nav translation since in previous versions it mapped to My Groups */}
-                                {c_common_get('myGroups')}
+                                {tCommon('myGroups')}
                             </h2>
                             <Link
                                 href="/profile/my-groups"

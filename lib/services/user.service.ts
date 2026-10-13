@@ -29,6 +29,17 @@ type ProfileGroup = ReturnType<typeof toProfileGroup>;
 export type PublicProfile = ProfileFields & { publicGroups: ProfileGroup[]; showsAllGroups: boolean };
 export type OwnProfile = ProfileFields & { recentGroups: ProfileGroup[] };
 
+/** What the own area's head shows (R2a): the person, their first city (a city slug) and how many groups they belong to. */
+export type OwnAreaContext = {
+    id: string;
+    name: string | null;
+    username: string | null;
+    image: string | null;
+    avatarSeed: string | null;
+    firstCity: string | null;
+    groupCount: number;
+};
+
 export const UserService = {
     async getUserProfile(userId: string) {
         return await prisma.user.findUnique({
@@ -195,6 +206,19 @@ export const UserService = {
 
         const { memberships, ...fields } = user;
         return { ...fields, recentGroups: memberships.map(toProfileGroup) };
+    },
+
+    async getOwnAreaContext(userId: string): Promise<OwnAreaContext | null> {
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true, name: true, username: true, image: true, avatarSeed: true, cities: true,
+                _count: { select: { memberships: { where: { role: { not: 'PENDING' }, group: { hiddenAt: null } } } } },
+            },
+        });
+        if (!user) return null;
+        const { cities, _count, ...person } = user;
+        return { ...person, firstCity: cities[0] ?? null, groupCount: _count.memberships };
     },
 
     async getMyGroups(userId: string, locale: string) {

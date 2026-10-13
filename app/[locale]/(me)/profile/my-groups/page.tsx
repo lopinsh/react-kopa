@@ -21,7 +21,7 @@ export default async function MyGroupsPage({
 }) {
     const { locale } = await params;
     const session = await auth();
-  const c_common_get = await getTranslations('common');
+    const tCommon = await getTranslations('common');
     const tAuth = await getTranslations('auth');
     const tProfile = await getTranslations('profile');
 
@@ -31,7 +31,7 @@ export default async function MyGroupsPage({
             <div className="container mx-auto px-4 py-12 min-h-full">
                 <h1 className="text-4xl font-semibold tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                     <Users className="h-8 w-8 text-primary" />
-                    {c_common_get('myGroups')}
+                    {tCommon('myGroups')}
                 </h1>
 
                 <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center mt-12 bg-surface">
@@ -72,7 +72,7 @@ export default async function MyGroupsPage({
         <div className="container mx-auto px-4 py-12 min-h-full max-w-5xl">
             <h1 className="text-4xl font-semibold tracking-tight text-foreground mb-8 text-center md:text-left flex items-center md:justify-start justify-center gap-3">
                 <Users className="h-8 w-8 text-primary" />
-                {c_common_get('myGroups')}
+                {tCommon('myGroups')}
             </h1>
 
             {formattedGroups.length > 0 ? (
@@ -84,7 +84,7 @@ export default async function MyGroupsPage({
                                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
                                   <span className="relative inline-flex rounded-full h-3 w-3 bg-danger"></span>
                                 </span>
-                                {c_common_get('actionRequired')}
+                                {tCommon('actionRequired')}
                             </h2>
                             <div className="flex flex-col gap-3">
                                 {actionRequiredGroups.map(group => (

@@ -1068,7 +1068,19 @@
     "sharedGroups": "Kopīgās grupas",
     "groupsHeading": "Grupas",
     "viewAllGroups": "Skatīt visu",
-    "viewingOwnPublicProfile": "Šādi tavu profilu redz citi."
+    "viewingOwnPublicProfile": "Šādi tavu profilu redz citi.",
+    "area": {
+      "label": "Tava vieta",
+      "openMenu": "Tavas vietas lapas",
+      "groupCount": "{count, plural, zero {# grupu} one {# grupa} other {# grupas}}"
+    },
+    "settings": {
+      "title": "Iestatījumi",
+      "appearance": "Izskats",
+      "light": "Gaišs",
+      "dark": "Tumšs",
+      "system": "Kā ierīcē"
+    }
   },
   "report": {
     "title": "Ziņot par grupu",

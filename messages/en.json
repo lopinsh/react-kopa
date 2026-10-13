@@ -1068,7 +1068,19 @@
     "sharedGroups": "Shared Groups",
     "groupsHeading": "Groups",
     "viewAllGroups": "View All",
-    "viewingOwnPublicProfile": "You're viewing your public profile."
+    "viewingOwnPublicProfile": "You're viewing your public profile.",
+    "area": {
+      "label": "Your space",
+      "openMenu": "Your space's pages",
+      "groupCount": "{count, plural, one {# group} other {# groups}}"
+    },
+    "settings": {
+      "title": "Settings",
+      "appearance": "Appearance",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "Same as device"
+    }
   },
   "report": {
     "title": "Report this group",
