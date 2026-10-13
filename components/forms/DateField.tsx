@@ -76,7 +76,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
                     className={clsx(
                         'min-w-0 flex-1 rounded-xl border bg-background px-3 py-2.5 text-sm tabular-nums focus:outline-none disabled:opacity-60',
-                        invalid || badText ? 'border-red-400' : 'border-border focus:border-primary'
+                        invalid || badText ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
                 <button
@@ -91,7 +91,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     <Calendar className="h-4 w-4" />
                 </button>
             </div>
-            {badText && <p className="mt-1 text-xs text-red-500">{t('invalidDate')}</p>}
+            {badText && <p className="mt-1 text-xs text-danger">{t('invalidDate')}</p>}
             {open && (
                 <MonthGrid
                     id={calendarId}

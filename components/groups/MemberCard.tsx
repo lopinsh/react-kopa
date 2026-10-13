@@ -206,7 +206,7 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                                     onClick={() => handleAction('promote')}
                                     className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
-                                    <ArrowUpCircle className="h-4 w-4 text-green-500" />
+                                    <ArrowUpCircle className="h-4 w-4 text-success" />
                                     {c_common('promote')}
                                 </button>
                             )}
@@ -215,13 +215,13 @@ export default function MemberCard({ member, canMessage, groupId, locale }: Prop
                                     onClick={() => handleAction('demote')}
                                     className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-foreground hover:bg-surface-elevated transition-colors"
                                 >
-                                    <ArrowDownCircle className="h-4 w-4 text-orange-500" />
+                                    <ArrowDownCircle className="h-4 w-4 text-warning" />
                                     {c_common('demote')}
                                 </button>
                             )}
                             <button
                                 onClick={() => handleAction('kick')}
-                                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-red-500 hover:bg-red-500/5 transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-left text-xs font-bold text-danger hover:bg-danger/10 transition-colors"
                             >
                                 <Trash2 className="h-4 w-4" />
                                 {c_common('kick')}

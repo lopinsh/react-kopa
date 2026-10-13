@@ -129,7 +129,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                         type="button"
                         onClick={onDelete}
                         disabled={isPending}
-                        className="flex items-center gap-1.5 text-xs font-medium text-red-500 transition-colors hover:text-red-600 disabled:opacity-40"
+                        className="flex items-center gap-1.5 text-xs font-medium text-danger transition-colors hover:text-danger disabled:opacity-40"
                     >
                         <Trash2 className="h-3.5 w-3.5" />
                         {t('deleteSection')}

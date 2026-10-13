@@ -62,7 +62,7 @@ export default function ReasonModal({
             returnFocusRef={returnFocusRef}
             locked={isPending}
             title={<>{icon}{title}</>}
-            titleClassName="flex items-center gap-2 text-xl font-bold text-red-500"
+            titleClassName="flex items-center gap-2 text-xl font-bold text-danger"
         >
             {subject && <p className="mb-2 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">{subject}</p>}
             <p className="mb-4 text-sm leading-relaxed text-foreground-muted">{description}</p>
@@ -75,10 +75,10 @@ export default function ReasonModal({
                 maxLength={500}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full resize-none rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-red-500/50"
+                className="w-full resize-none rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-danger/40"
             />
             <p className="mt-1 text-xs text-foreground-muted">{hint}</p>
-            {error && <p role="alert" className="mt-2 text-sm font-medium text-red-500">{error}</p>}
+            {error && <p role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
 
             <div className="mt-6 flex justify-end gap-3">
                 <button
@@ -93,7 +93,7 @@ export default function ReasonModal({
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white transition-all hover:bg-red-700 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}
                 </button>

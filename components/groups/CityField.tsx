@@ -76,7 +76,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                 id={id}
                 autoFocus={autoFocus}
                 {...register('city')}
-                className={clsx(selectClassName, errors.city && 'border-red-400')}
+                className={clsx(selectClassName, errors.city && 'border-danger/40')}
             >
                 <option value="">{t('fieldCityPlaceholder')}</option>
                 {options.map((c) => (
@@ -137,8 +137,8 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                     {t('citySuggestOpen')}
                 </button>
             )}
-            {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-            {errors.city?.message && <p className="mt-1 text-xs text-red-500">{t(errors.city.message as 'CITY_REQUIRED')}</p>}
+            {error && <p className="mt-1 text-xs text-danger">{error}</p>}
+            {errors.city?.message && <p className="mt-1 text-xs text-danger">{t(errors.city.message as 'CITY_REQUIRED')}</p>}
         </div>
     );
 }

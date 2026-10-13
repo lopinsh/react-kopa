@@ -24,7 +24,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const [color, setColor] = useState(l1.color || '#6366f1');
+    const [color, setColor] = useState(l1.color || '#586474');
 
     const [aliasValue, setAliasValue] = useState('');
     const [aliasLocale, setAliasLocale] = useState('');
@@ -112,7 +112,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{tFields('color')}</h3>
                     {color !== l1.color && (
-                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
                 <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
@@ -169,7 +169,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-xs text-red-600 font-semibold hover:bg-red-50 dark:hover:bg-red-900/30 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                        className="text-xs text-danger font-semibold hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
                                     >
                                         {c('delete')}
                                     </button>

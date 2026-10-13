@@ -92,7 +92,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
             }
         >
             {loadError ? (
-                <p className="text-sm font-medium text-red-500">{errorText(loadError)}</p>
+                <p className="text-sm font-medium text-danger">{errorText(loadError)}</p>
             ) : !entry ? (
                 <p className="text-sm text-foreground-muted">{t('loading')}</p>
             ) : (
@@ -108,7 +108,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                             <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">{t('edited')}</span>
                                         )}
                                         {entry.pending[lang] !== null && (
-                                            <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-600">{t('waiting')}</span>
+                                            <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-warning">{t('waiting')}</span>
                                         )}
                                     </label>
                                     <textarea
@@ -121,10 +121,10 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                         aria-invalid={!!issue}
                                         className={clsx(
                                             'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-sm text-foreground outline-none focus:border-primary/50',
-                                            issue ? 'border-red-500/60' : 'border-border'
+                                            issue ? 'border-danger/40' : 'border-border'
                                         )}
                                     />
-                                    {issue && <p role="alert" className="mt-1 text-xs font-medium text-red-500">{describe(issue)}</p>}
+                                    {issue && <p role="alert" className="mt-1 text-xs font-medium text-danger">{describe(issue)}</p>}
                                     {entry.pending[lang] !== null && (
                                         <p className="mt-1 text-xs text-foreground-muted">
                                             {t('live')}: <span className="font-mono">{entry[lang]}</span>
@@ -141,7 +141,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                     </div>
                     <p className="mt-3 text-xs text-foreground-muted">{t('suggestHint')}</p>
                     <p className="mt-1 text-xs text-foreground-muted">{t('syntaxHint')}</p>
-                    {saveError && <p role="alert" className="mt-2 text-sm font-medium text-red-500">{saveError}</p>}
+                    {saveError && <p role="alert" className="mt-2 text-sm font-medium text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
                         <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}

@@ -37,7 +37,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
                         if (hexColorSchema.safeParse(next).success) onChange(next.toLowerCase());
                     }}
                     onBlur={() => setDraft(null)}
-                    className="mt-1 block w-full rounded-lg border border-border bg-surface px-3 py-1.5 font-mono text-sm text-foreground aria-[invalid=true]:border-red-500"
+                    className="mt-1 block w-full rounded-lg border border-border bg-surface px-3 py-1.5 font-mono text-sm text-foreground aria-[invalid=true]:border-danger/40"
                 />
             </label>
         </div>

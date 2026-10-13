@@ -72,8 +72,8 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
             {/* Metadata (Right aligned) */}
             <div className="flex shrink-0 items-center justify-between sm:justify-end gap-4 text-xs font-semibold text-foreground-muted ml-6 sm:ml-4">
                 {actionRequired && group.pendingCount && group.pendingCount > 0 && (
-                    <div className="flex items-center gap-1.5 rounded-lg bg-red-500/10 px-2.5 py-1 text-red-600 dark:text-red-400 font-bold animate-in zoom-in">
-                        <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] text-white">
+                    <div className="flex items-center gap-1.5 rounded-lg bg-danger/10 px-2.5 py-1 text-danger font-bold animate-in zoom-in">
+                        <span className="flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] text-danger-foreground">
                             {group.pendingCount}
                         </span>
                         <span className="hidden sm:inline text-[10px] uppercase tracking-wider">{t('pendingRequests', { count: group.pendingCount }).replace(/[0-9]+/, '').trim()}</span>

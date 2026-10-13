@@ -113,7 +113,7 @@ export default function CitiesSection({ cities }: Props) {
                                     title={city.groupCount > 0 ? t('inUse') : c('delete')}
                                     disabled={isPending || city.groupCount > 0}
                                     onClick={() => { if (confirm(t('confirmDelete', { name: city.nameLv }))) run(() => deleteCity(city.id), t('deleted')); }}
-                                    className="rounded p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-40"
+                                    className="rounded p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     <Trash2 className="h-4 w-4" />
                                 </button>

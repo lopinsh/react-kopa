@@ -123,7 +123,7 @@ export default function UserMenu({ user }: Props) {
                             <button
                                 data-ui="menu-item"
                                 onClick={() => signOut()}
-                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-500/5 transition-colors"
+                                className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium text-danger hover:bg-danger/10 transition-colors"
                             >
                                 <LogOut className="h-4 w-4" />
                                 {t('signOut')}

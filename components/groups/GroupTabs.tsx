@@ -267,7 +267,7 @@ export default function GroupTabs({ group, l1Slug, pendingCount }: Props) {
                                     <div className="relative">
                                         <tab.icon className="hidden h-3.5 w-3.5 sm:block" />
                                         {tab.id === 'requests' && pendingCount > 0 && isOwnerOrAdmin && (
-                                            <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-red-500 px-0.5 text-[8px] font-black text-white shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
+                                            <span className="absolute -top-1.5 -right-2 flex h-3 min-w-[12px] items-center justify-center rounded-full bg-danger px-0.5 text-[8px] font-black text-danger-foreground shadow-sm ring-1 ring-surface animate-in zoom-in duration-300">
                                                 {pendingCount}
                                             </span>
                                         )}

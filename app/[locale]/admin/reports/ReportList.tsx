@@ -65,7 +65,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
     if (reports.length === 0) {
         return (
             <div data-ui={UI.emptyState} className="flex flex-col items-center justify-center rounded-[3rem] border-2 border-dashed border-border py-24 text-center bg-surface">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-green-50 text-green-500">
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-success/10 text-success">
                     <CheckCircle2 className="h-10 w-10" />
                 </div>
                 <h2 className="mt-8 text-2xl font-black text-foreground">
@@ -90,14 +90,14 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                 />
             )}
             {error && (
-                <p role="alert" className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-500">{error}</p>
+                <p role="alert" className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger">{error}</p>
             )}
             {reports.map((report) => (
                 <div key={report.id} className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-all hover:shadow-md">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                                <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-3 py-1 text-xs font-bold text-danger">
                                     <AlertTriangle className="h-3.5 w-3.5" />
                                     {isReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
@@ -120,7 +120,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     )}
                                     {report.event && (
                                         <div className="flex items-center gap-2 mt-1">
-                                            <Calendar className="h-4 w-4 text-blue-500" />
+                                            <Calendar className="h-4 w-4 text-primary" />
                                             <span className="text-sm font-medium text-foreground">{report.event.title}</span>
                                         </div>
                                     )}
@@ -143,7 +143,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => handleResolve(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-green-500 hover:bg-green-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-sm font-bold text-background shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -169,10 +169,10 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => handleDeleteContent(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 px-6 py-3 text-sm font-bold text-red-600 shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-sm font-bold text-danger shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
-                                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
+                                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-danger/40 border-t-transparent" />
                                 ) : (
                                     <>
                                         <AlertTriangle className="h-4 w-4" />

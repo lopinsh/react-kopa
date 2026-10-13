@@ -140,7 +140,7 @@ export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
                 {...register('confirmPassword')}
             />
 
-            {serverError && <p className="text-sm text-red-500">{serverError}</p>}
+            {serverError && <p className="text-sm text-danger">{serverError}</p>}
 
             <button
                 type="submit"

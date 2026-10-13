@@ -321,7 +321,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 {userRole === 'PENDING' && !isPending && (
                                     <button
                                         onClick={handleCancelRequest}
-                                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted hover:bg-red-500 hover:text-white hover:border-red-500 transition-all group/cancel"
+                                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted hover:bg-danger hover:text-danger-foreground hover:border-danger/40 transition-all group/cancel"
                                         title="Cancel join request"
                                     >
                                         <X className="h-4 w-4" />
@@ -334,9 +334,9 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                         {(isMember || isOwner) && (
                             <div className="flex h-10 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold border border-white/10 bg-white/10 text-white shadow-premium backdrop-blur-md">
                                 {isOwner ? (
-                                    <><Shield className="h-4 w-4 text-emerald-400" /> {c_common('role_owner')}</>
+                                    <><Shield className="h-4 w-4 text-foreground-muted" /> {c_common('role_owner')}</>
                                 ) : userRole === 'ADMIN' ? (
-                                    <><Shield className="h-4 w-4 text-blue-400" /> {c_common('role_admin')}</>
+                                    <><Shield className="h-4 w-4 text-foreground-muted" /> {c_common('role_admin')}</>
                                 ) : (
                                     <><User className="h-4 w-4 text-white/70" /> {c_common('role_member')}</>
                                 )}

@@ -119,7 +119,7 @@ function L2Node({
     return (
         <div
             className={`group flex items-center gap-3 pl-6 pr-4 py-2 cursor-pointer hover:bg-surface-elevated transition-colors border-l-2 ml-[-1px] ${isPending
-                ? 'border-dashed border-amber-200 hover:border-amber-300'
+                ? 'border-dashed border-warning/40 hover:border-warning/40'
                 : 'border-transparent hover:border-border'
                 } ${isSelected ? 'bg-surface-elevated border-primary' : ''}`}
             onClick={onSelect}
@@ -143,9 +143,9 @@ function L2Node({
                 {/* Drag handle placeholder (drag logic out of scope) */}
             </div>
 
-            {isPending && <div className="w-2 h-2 rounded-full bg-amber-500 flex-shrink-0" />}
+            {isPending && <div className="w-2 h-2 rounded-full bg-warning flex-shrink-0" />}
 
-            <span className={`text-sm ${isPending ? 'text-amber-700 dark:text-amber-500 font-medium' : 'font-medium'}`}>
+            <span className={`text-sm ${isPending ? 'text-warning font-medium' : 'font-medium'}`}>
                 {title}
             </span>
 

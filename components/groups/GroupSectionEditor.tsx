@@ -182,7 +182,7 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
             </div>
 
             {error && (
-                <div role="alert" className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-sm font-bold text-red-600">
+                <div role="alert" className="rounded-xl border border-danger/40 bg-danger/10 p-4 text-sm font-bold text-danger">
                     {tErrors(error as 'ACTION_FAILED')}
                 </div>
             )}

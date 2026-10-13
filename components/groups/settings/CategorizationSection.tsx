@@ -43,7 +43,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                         onChange={onTaxChange}
                     />
                     {errors.categoryId && (
-                        <p className="mt-2 text-xs text-red-500">{errors.categoryId.message}</p>
+                        <p className="mt-2 text-xs text-danger">{errors.categoryId.message}</p>
                     )}
                 </div>
 

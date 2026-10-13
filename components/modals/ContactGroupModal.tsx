@@ -63,7 +63,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
         >
             {chatId ? (
                 <div className="space-y-6 text-center">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-500/10 text-green-500">
+                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success">
                         <Check className="h-7 w-7" />
                     </div>
                     <p className="text-sm font-medium text-foreground-muted">{t('sentBody')}</p>
@@ -113,7 +113,7 @@ export default function ContactGroupModal({ isOpen, onClose, groupId, groupName,
                         </div>
                     )}
 
-                    {error && <p role="alert" className="text-sm font-medium text-red-500">{error}</p>}
+                    {error && <p role="alert" className="text-sm font-medium text-danger">{error}</p>}
 
                     <div className="flex items-center justify-end gap-3 pt-2">
                         <button

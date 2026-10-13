@@ -70,7 +70,7 @@ export default function PendingCityCard({ city }: Props) {
                         type="button"
                         disabled={isPending}
                         onClick={() => { if (confirm(t('confirmRejectCity'))) run(() => rejectCity(city.id), c('reject') + ' - ' + c('success')); }}
-                        className="px-3 py-1.5 text-sm font-semibold rounded text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors disabled:opacity-50"
+                        className="px-3 py-1.5 text-sm font-semibold rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors disabled:opacity-50"
                     >
                         {c('reject')}
                     </button>

@@ -119,7 +119,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'merge' ? null : 'merge')}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${activeAction === 'merge' ? 'bg-amber-500 text-white' : 'bg-amber-100 hover:bg-amber-200 text-amber-900 dark:bg-amber-900/50 dark:hover:bg-amber-900 dark:text-amber-100'}`}
+                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
                     >
                         {c('merge')}
                     </button>
@@ -127,7 +127,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         type="button"
                         onClick={handleReject}
                         disabled={isPending}
-                        className="px-3 py-1.5 text-sm font-semibold rounded text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 transition-colors"
+                        className="px-3 py-1.5 text-sm font-semibold rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
                     >
                         {c('reject')}
                     </button>
@@ -241,7 +241,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                             type="button"
                             onClick={handleMerge}
                             disabled={isPending || !mergeIntoId}
-                            className="px-4 py-2 text-sm font-semibold bg-amber-500 text-white rounded hover:bg-amber-600 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-sm font-semibold bg-warning text-background rounded hover:opacity-90 transition-colors disabled:opacity-50"
                         >
                             {t('mergeAndNotify')}
                         </button>

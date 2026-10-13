@@ -12,10 +12,10 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const toastIcons: Record<ToastType, React.ReactNode> = {
-    success: <CheckCircle2 className="h-5 w-5 text-emerald-500" />,
-    error: <XCircle className="h-5 w-5 text-red-500" />,
-    warning: <AlertCircle className="h-5 w-5 text-amber-500" />,
-    info: <Info className="h-5 w-5 text-blue-500" />,
+    success: <CheckCircle2 className="h-5 w-5 text-success" />,
+    error: <XCircle className="h-5 w-5 text-danger" />,
+    warning: <AlertCircle className="h-5 w-5 text-warning" />,
+    info: <Info className="h-5 w-5 text-primary" />,
 };
 
 interface ToastProps {

@@ -259,10 +259,10 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldNamePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        titleError ? 'border-red-400' : 'border-border focus:border-primary'
+                                        titleError ? 'border-danger/40' : 'border-border focus:border-primary'
                                     )}
                                 />
-                                {titleError && <p className="mt-1 text-xs text-red-500">{t(titleError.message as 'INVALID_URL')}</p>}
+                                {titleError && <p className="mt-1 text-xs text-danger">{t(titleError.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div>
@@ -290,10 +290,10 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldBannerImagePlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-primary'
+                                        errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
                                     )}
                                 />
-                                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
+                                {errors.bannerImage && <p className="mt-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                             </div>
 
                             <div className="space-y-4">
@@ -309,7 +309,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                         defaultTime={splitLocal(nextFullHourLocal()).time}
                                         invalid={!!errors.startDate}
                                     />
-                                    {errors.startDate && <p className="mt-1 text-xs text-red-500">{t(errors.startDate.message as 'INVALID_URL')}</p>}
+                                    {errors.startDate && <p className="mt-1 text-xs text-danger">{t(errors.startDate.message as 'INVALID_URL')}</p>}
                                 </div>
 
                                 <div role="group" aria-labelledby="event-end-label">
@@ -324,7 +324,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                         defaultTime={splitLocal(addMinutesLocal(startValue, 120)).time || '12:00'}
                                         invalid={!!errors.endDate}
                                     />
-                                    {errors.endDate && <p className="mt-1 text-xs text-red-500">{t(errors.endDate.message as 'INVALID_URL')}</p>}
+                                    {errors.endDate && <p className="mt-1 text-xs text-danger">{t(errors.endDate.message as 'INVALID_URL')}</p>}
                                 </div>
                                 <p className="text-xs text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
                             </div>
@@ -340,10 +340,10 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldLocationPlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.location ? 'border-red-400' : 'border-border focus:border-primary'
+                                        errors.location ? 'border-danger/40' : 'border-border focus:border-primary'
                                     )}
                                 />
-                                {errors.location && <p className="mt-1 text-xs text-red-500">{t(errors.location.message as 'INVALID_URL')}</p>}
+                                {errors.location && <p className="mt-1 text-xs text-danger">{t(errors.location.message as 'INVALID_URL')}</p>}
                             </div>
                         </div>
                     )}
@@ -417,11 +417,11 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     placeholder={t('fieldMaxParticipantsPlaceholder')}
                                     className={clsx(
                                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.maxParticipants ? 'border-red-400' : 'border-border focus:border-primary'
+                                        errors.maxParticipants ? 'border-danger/40' : 'border-border focus:border-primary'
                                     )}
                                 />
                                 <p className="mt-1 text-xs text-foreground-muted">{t('fieldMaxParticipantsHint')}</p>
-                                {errors.maxParticipants && <p className="mt-1 text-xs text-red-500">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
+                                {errors.maxParticipants && <p className="mt-1 text-xs text-danger">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
                             </div>
 
 
@@ -469,7 +469,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                     )}
 
                     {serverError && (
-                        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">
+                        <p className="mt-4 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger">
                             {tErrors(serverError as 'ACTION_FAILED')}
                         </p>
                     )}

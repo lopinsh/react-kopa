@@ -61,7 +61,7 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
                 </div>
             </dl>
             <p className="mt-3 text-xs text-foreground-muted">{t('suggestedBy', { name: by, when })}</p>
-            {error && <p role="alert" className="mt-2 text-sm font-medium text-red-500">{error}</p>}
+            {error && <p role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
             <div className="mt-3 flex flex-wrap justify-end gap-2">
                 <button
                     type="button"

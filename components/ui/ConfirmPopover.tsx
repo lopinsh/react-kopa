@@ -109,7 +109,7 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
                             type="button"
                             onClick={onConfirm}
                             disabled={isPending}
-                            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold disabled:opacity-50 ${destructive ? 'bg-red-500 text-white' : 'bg-foreground text-background'}`}
+                            className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-bold disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
                         >
                             {isPending && <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />}
                             {confirmLabel}

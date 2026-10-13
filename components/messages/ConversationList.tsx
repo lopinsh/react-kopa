@@ -99,7 +99,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                             {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[10px]" />}
                             <p className={clsx('truncate text-xs', conv.unread ? 'font-semibold text-foreground' : 'text-foreground-muted')}>
                                 {conv.isBlocked ? (
-                                    <span className="flex items-center gap-1 italic text-red-500"><Ban className="h-3 w-3" /> {t('blocked')}</span>
+                                    <span className="flex items-center gap-1 italic text-danger"><Ban className="h-3 w-3" /> {t('blocked')}</span>
                                 ) : (
                                     conv.lastMessage?.content || t('noMessages')
                                 )}

@@ -35,7 +35,7 @@ export default function BasicsSection({ canEditName }: Props) {
                         <label htmlFor="group-name" className={LABEL}>{t('fieldName')}</label>
                         <input id="group-name" {...register('name')} className={INPUT} />
                         {errors.name?.message && (
-                            <p className="ml-1 text-xs text-red-500">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>
+                            <p className="ml-1 text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>
                         )}
                     </div>
                 )}
@@ -59,7 +59,7 @@ export default function BasicsSection({ canEditName }: Props) {
                 </div>
                 <p className="ml-1 text-[11px] text-foreground-muted">{gt('bannerImageUrlDesc')}</p>
                 {errors.bannerImage?.message && (
-                    <p className="ml-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>
+                    <p className="ml-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>
                 )}
             </div>
         </SettingsSection>

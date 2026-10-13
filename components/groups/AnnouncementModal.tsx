@@ -70,7 +70,7 @@ export default function AnnouncementModal({ groupId, locale, onClose, onPublishe
                     />
                 </div>
 
-                {error && <p role="alert" className="text-sm font-medium text-red-500">{error}</p>}
+                {error && <p role="alert" className="text-sm font-medium text-danger">{error}</p>}
 
                 <div className="flex items-center justify-end gap-3 pt-2">
                     <button

@@ -62,7 +62,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
                 <div className="mt-4 flex items-center justify-between gap-3 text-xs text-foreground-muted">
                     <span>{format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</span>
                     <div className="flex items-center gap-3">
-                        <FeedbackDeleteButton id={note.id} onDeleted={onDeleted} onConfirmChange={setConfirming} className="flex items-center gap-1 font-semibold text-red-500 hover:underline disabled:opacity-50" />
+                        <FeedbackDeleteButton id={note.id} onDeleted={onDeleted} onConfirmChange={setConfirming} className="flex items-center gap-1 font-semibold text-danger hover:underline disabled:opacity-50" />
                         <Link href="/admin/feedback" className="font-semibold text-primary hover:underline">{t('openList')}</Link>
                     </div>
                 </div>

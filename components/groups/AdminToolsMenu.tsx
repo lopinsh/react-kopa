@@ -88,7 +88,7 @@ export default function AdminToolsMenu({ group, l1Slug, variant, className, onHi
                         <button
                             type="button"
                             onClick={() => { setOpen(false); onHide(triggerRef.current); }}
-                            className={clsx(ITEM, 'text-red-500')}
+                            className={clsx(ITEM, 'text-danger')}
                         >
                             <EyeOff className="h-4 w-4" />
                             {tMod('hideGroup')}

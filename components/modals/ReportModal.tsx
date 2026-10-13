@@ -44,7 +44,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
             returnFocusRef={returnFocusRef}
             locked={isPending}
             title={<><ShieldAlert className="h-5 w-5" />{t('title')}</>}
-            titleClassName="flex items-center gap-2 text-xl font-bold text-red-500"
+            titleClassName="flex items-center gap-2 text-xl font-bold text-danger"
             headerClassName="mb-6"
         >
             <div className="space-y-4">
@@ -55,7 +55,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                 <select
                     value={reason}
                     onChange={(e) => setReason(e.target.value)}
-                    className="w-full cursor-pointer rounded-xl border border-border bg-surface-elevated px-4 py-3 outline-none focus:border-red-500/50 transition-all text-sm font-medium text-foreground"
+                    className="w-full cursor-pointer rounded-xl border border-border bg-surface-elevated px-4 py-3 outline-none focus:border-danger/40 transition-all text-sm font-medium text-foreground"
                 >
                     {REPORT_REASONS.map((value) => (
                         <option key={value} value={value}>{t(`reason${value}`)}</option>
@@ -76,7 +76,7 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-red-600/20 transition-all hover:bg-red-700 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground shadow-lg shadow-danger/20 transition-all hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                 >
                     {isPending ? (
                         <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

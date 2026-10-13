@@ -58,7 +58,7 @@ export default function AccessStep() {
                     </button>
                 );
             })}
-            {errors.type && <p className="mt-1 text-xs text-red-500 sm:col-span-2">{errors.type.message}</p>}
+            {errors.type && <p className="mt-1 text-xs text-danger sm:col-span-2">{errors.type.message}</p>}
 
             <div className="mt-6 space-y-4 border-t border-border pt-6 sm:col-span-2">
                 <label className="flex items-center gap-3 cursor-pointer group">

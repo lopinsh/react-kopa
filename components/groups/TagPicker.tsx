@@ -287,14 +287,14 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
         <div ref={containerRef} className="relative w-full mt-6 space-y-3">
             <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-foreground">
-                    {allowL3 ? t('tagsAndSubtopics') : t('subtopics')} <span className="text-xs text-red-500 font-bold">*</span>
+                    {allowL3 ? t('tagsAndSubtopics') : t('subtopics')} <span className="text-xs text-danger font-bold">*</span>
                 </label>
             </div>
 
             <div
                 className={clsx(
                     'flex flex-col gap-2 rounded-xl border-2 bg-surface px-3 py-2 transition-shadow',
-                    isOpen ? 'border-primary' : errors.tagIds ? 'border-red-400' : 'border-border'
+                    isOpen ? 'border-primary' : errors.tagIds ? 'border-danger/40' : 'border-border'
                 )}
             >
                 {(selectedTags.length > 0 || selectedPending.length > 0) && (
@@ -389,7 +389,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
             </div>
 
             {limitReached && !errors.tagIds && <p className="text-xs text-foreground-muted">{t('tagLimitHint', { max: tagLimit })}</p>}
-            {errors.tagIds && <p className="text-xs text-red-500 font-medium">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
+            {errors.tagIds && <p className="text-xs text-danger font-medium">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
 
             {isOpen && !limitReached && (
                 <div 

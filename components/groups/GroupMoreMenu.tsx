@@ -114,7 +114,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                     </button>
 
                     {isMember && !isOwner && (
-                        <button type="button" onClick={() => { setOpen(false); setLeaveConfirmOpen(true); }} disabled={isPending} className={clsx(ITEM, 'text-red-500')}>
+                        <button type="button" onClick={() => { setOpen(false); setLeaveConfirmOpen(true); }} disabled={isPending} className={clsx(ITEM, 'text-danger')}>
                             <LogOut className="h-4 w-4" />
                             {c('leaveGroup')}
                         </button>
@@ -135,7 +135,7 @@ export default function GroupMoreMenu({ group, l1Slug, variant, className, onRep
                     <button
                         type="button"
                         onClick={() => { setOpen(false); onReport(triggerRef.current); }}
-                        className={clsx(ITEM, 'text-foreground-muted hover:text-red-500')}
+                        className={clsx(ITEM, 'text-foreground-muted hover:text-danger')}
                     >
                         <Flag className="h-4 w-4" />
                         {c('reportGroup')}

@@ -60,7 +60,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                         id={note.id}
                         iconOnly
                         onDeleted={() => { setDeleted(true); router.refresh(); }}
-                        className="rounded-lg border border-red-500/40 p-1.5 text-red-500 hover:bg-red-500/10 disabled:opacity-50"
+                        className="rounded-lg border border-danger/40 p-1.5 text-danger hover:bg-danger/10 disabled:opacity-50"
                     />
                 </div>
             </div>

@@ -99,7 +99,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                                     </button>
                                 )}
                                 {canManage && member.role !== 'OWNER' && (
-                                    <button type="button" disabled={isPending} onClick={() => setConfirming({ kind: 'remove', person: member })} className={`${BUTTON} text-red-500`}>
+                                    <button type="button" disabled={isPending} onClick={() => setConfirming({ kind: 'remove', person: member })} className={`${BUTTON} text-danger`}>
                                         <ShieldOff className="h-4 w-4" />
                                         {t('removeAdmin')}
                                     </button>

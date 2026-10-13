@@ -215,7 +215,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                         {serverError && (
                             <p
                                 role="alert"
-                                className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950 dark:text-red-400 border border-red-200"
+                                className="mt-4 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger border border-danger/40"
                             >
                                 {tErrors(serverError as 'ACTION_FAILED', { max: MAX_GROUP_TAGS })}
                             </p>

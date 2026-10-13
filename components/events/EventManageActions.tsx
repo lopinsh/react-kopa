@@ -66,7 +66,7 @@ export default function EventManageActions({ eventId, locale, groupPath, eventPa
                 onCancel={() => setConfirmOpen(false)}
             />
             {error && (
-                <p role="alert" className="w-full text-sm text-red-500">
+                <p role="alert" className="w-full text-sm text-danger">
                     {tErrors(error as 'ACTION_FAILED')}
                 </p>
             )}

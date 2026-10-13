@@ -198,7 +198,7 @@ export default function GroupSettingsForm({
             </button>
 
             {serverError ? (
-                <div role="alert" className="flex items-center gap-2 rounded-2xl border border-red-500/10 bg-red-500/5 p-4 text-red-500">
+                <div role="alert" className="flex items-center gap-2 rounded-2xl border border-danger/40 bg-danger/10 p-4 text-danger">
                     <AlertCircle className="h-4 w-4" />
                     <p className="text-sm font-bold">{serverError}</p>
                 </div>

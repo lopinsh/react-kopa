@@ -108,14 +108,14 @@ export default function GroupSidebarContent({ l1Slug, groupSlug, collapsed, hide
                                 style={active ? { color: 'var(--primary)' } : undefined}
                             />
                             {id === 'members' && state.pendingCount > 0 && isOwnerOrAdmin && (
-                                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-black text-white shadow-sm ring-2 ring-surface animate-in zoom-in duration-300">
+                                <span className="absolute -top-1.5 -right-1.5 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-danger px-1 text-[10px] font-black text-danger-foreground shadow-sm ring-2 ring-surface animate-in zoom-in duration-300">
                                     {state.pendingCount}
                                 </span>
                             )}
                         </div>
                         {!collapsed && <span className="truncate">{label}</span>}
                         {id === 'members' && state.pendingCount > 0 && isOwnerOrAdmin && collapsed && (
-                            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 ring-1 ring-surface" />
+                            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-danger ring-1 ring-surface" />
                         )}
                     </Link>
                 );

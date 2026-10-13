@@ -51,7 +51,7 @@ export default function FloatingActionBar({
                         <button
                             type="button"
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onApprove(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 transition-colors cursor-pointer"
+                            className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-success/10 text-success transition-colors cursor-pointer"
                         >
                             <span className="pointer-events-none flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function FloatingActionBar({
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMerge(); }}
                         disabled={selectedIds.length < 2}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-blue-500/10 text-blue-600 dark:text-blue-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-tint text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         title={selectedIds.length < 2 ? t('mergeRequiresTwo') : ''}
                     >
                         <span className="pointer-events-none flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function FloatingActionBar({
                     <button
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-red-500/10 text-red-600 dark:text-red-400 transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-danger/10 text-danger transition-colors cursor-pointer"
                     >
                         <span className="pointer-events-none flex items-center gap-2">
                             <Trash2 className="w-4 h-4" />

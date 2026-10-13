@@ -35,7 +35,7 @@ const PHONE = 'phone';
 function Badge({ count, danger }: { count: number; danger?: boolean }) {
     if (count <= 0) return null;
     return (
-        <span className={clsx('rounded-full px-2 py-0.5 text-xs font-semibold', danger ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary')}>
+        <span className={clsx('rounded-full px-2 py-0.5 text-xs font-semibold', danger ? 'bg-danger/10 text-danger' : 'bg-primary/10 text-primary')}>
             {count}
         </span>
     );
@@ -169,9 +169,9 @@ export default function AdminNav({ pendingTags, pendingCities, pendingReports, p
                     item.active ? 'bg-primary/10' : 'hover:bg-surface-elevated'
                 )}
             >
-                <Icon className={clsx('mt-0.5 h-4 w-4 shrink-0', item.active ? (item.danger ? 'text-red-500' : 'text-primary') : 'text-foreground-muted')} />
+                <Icon className={clsx('mt-0.5 h-4 w-4 shrink-0', item.active ? (item.danger ? 'text-danger' : 'text-primary') : 'text-foreground-muted')} />
                 <span className="min-w-0 flex-1">
-                    <span className={clsx('block text-sm font-bold', item.active ? (item.danger ? 'text-red-500' : 'text-primary') : 'text-foreground')}>
+                    <span className={clsx('block text-sm font-bold', item.active ? (item.danger ? 'text-danger' : 'text-primary') : 'text-foreground')}>
                         {t(item.id)}
                     </span>
                     <span className="block text-xs text-foreground-muted">{t(`desc.${item.id}`)}</span>

@@ -29,8 +29,8 @@ export default async function AdminLocationsPage({ params }: { params: Promise<{
             </div>
             <div className="space-y-6">
                 {pending.length > 0 && (
-                    <section aria-labelledby="locations-pending" className="grid gap-4 rounded-xl border border-amber-200 bg-amber-50 p-4 dark:bg-amber-950/20">
-                        <h2 id="locations-pending" className="font-bold text-amber-900 dark:text-amber-100">{t('inbox.title')}</h2>
+                    <section aria-labelledby="locations-pending" className="grid gap-4 rounded-xl border border-warning/40 bg-warning/10 p-4 ">
+                        <h2 id="locations-pending" className="font-bold text-warning ">{t('inbox.title')}</h2>
                         {pending.map((city) => (
                             <PendingCityCard key={city.id} city={city} />
                         ))}

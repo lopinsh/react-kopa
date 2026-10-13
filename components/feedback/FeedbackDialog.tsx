@@ -104,7 +104,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     className="mt-4 w-full resize-none rounded-xl border border-border bg-surface-elevated p-3 text-sm text-foreground outline-none focus:border-primary/50"
                 />
                 <div className="mt-1 text-right text-xs text-foreground-muted">{text.length}/{FEEDBACK_TEXT_MAX}</div>
-                {error && <p role="alert" className="mt-2 text-sm font-semibold text-red-500">{error}</p>}
+                {error && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{error}</p>}
 
                 <div className="mt-4 flex items-center justify-end gap-3">
                     <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-4 py-2.5 text-sm font-bold text-foreground-muted hover:text-foreground disabled:opacity-50">

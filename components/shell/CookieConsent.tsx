@@ -44,7 +44,7 @@ export default function CookieConsent() {
         <div ref={bannerRef} className="fixed bottom-4 left-4 right-4 z-[48] md:left-auto md:max-w-md">
             <div className="overflow-hidden rounded-2xl border border-border bg-surface-elevated p-5 shadow-2xl shadow-black/20 animate-in fade-in slide-in-from-bottom-5 duration-500">
                 <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tint text-primary">
                         <ShieldCheck className="h-6 w-6" />
                     </div>
 

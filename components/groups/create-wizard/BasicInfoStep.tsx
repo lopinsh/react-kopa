@@ -18,7 +18,7 @@ export default function BasicInfoStep() {
                 <label htmlFor="group-name" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
                     <Type className="h-3.5 w-3.5 text-foreground-muted" />
                     {t('fieldName')}
-                    <span className="text-red-500">*</span>
+                    <span className="text-danger">*</span>
                 </label>
                 <input
                     id="group-name"
@@ -28,10 +28,10 @@ export default function BasicInfoStep() {
                     placeholder={t('fieldNamePlaceholder')}
                     className={clsx(
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.name ? 'border-red-400' : 'border-border focus:border-primary'
+                        errors.name ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
-                {errors.name && <p className="mt-1 text-xs text-red-500">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
+                {errors.name && <p className="mt-1 text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
             </div>
 
             {/* Description */}
@@ -46,7 +46,7 @@ export default function BasicInfoStep() {
                     onChange={(val) => setValue('description', val)}
                     placeholder={t('fieldDescriptionPlaceholder')}
                 />
-                {errors.description && <p className="mt-1 text-xs text-red-500">{t(errors.description.message as 'DESCRIPTION_TOO_LONG')}</p>}
+                {errors.description && <p className="mt-1 text-xs text-danger">{t(errors.description.message as 'DESCRIPTION_TOO_LONG')}</p>}
             </div>
 
             {/* Banner Image */}
@@ -63,10 +63,10 @@ export default function BasicInfoStep() {
                     placeholder={t('fieldBannerImagePlaceholder')}
                     className={clsx(
                         'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.bannerImage ? 'border-red-400' : 'border-border focus:border-primary'
+                        errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
-                {errors.bannerImage && <p className="mt-1 text-xs text-red-500">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
+                {errors.bannerImage && <p className="mt-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                 <p className="mt-1 text-[10px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
             </div>
         </div>

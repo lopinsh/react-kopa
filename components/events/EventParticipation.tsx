@@ -143,7 +143,7 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
             {!compact && note && <p className="text-center text-xs text-foreground-muted">{note}</p>}
             {secondary && <div className="text-center">{secondary}</div>}
             {error && (
-                <p role="alert" className="text-sm text-red-500">
+                <p role="alert" className="text-sm text-danger">
                     {tErrors(error as 'ACTION_FAILED')}
                 </p>
             )}

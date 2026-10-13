@@ -21,18 +21,18 @@ export default function PendingInbox({ pendingTags, categories, onNodeSelect }: 
     }
 
     return (
-        <div className={`w-full rounded-xl border border-amber-200 shadow-sm overflow-hidden transition-colors ${isExpanded ? 'bg-amber-50 dark:bg-amber-950/20' : 'bg-surface'}`}>
+        <div className={`w-full rounded-xl border border-warning/40 shadow-sm overflow-hidden transition-colors ${isExpanded ? 'bg-warning/10 ' : 'bg-surface'}`}>
             <button
                 type="button"
-                className="w-full flex items-center justify-between p-4 hover:bg-amber-100/50 dark:hover:bg-amber-900/30 transition-colors"
+                className="w-full flex items-center justify-between p-4 hover:bg-warning/10 transition-colors"
                 onClick={() => setIsExpanded(!isExpanded)}
             >
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-warning/10 text-warning ">
                         {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
                     </div>
-                    <span className="font-bold text-amber-900 dark:text-amber-100">{t('title')}</span>
-                    <span className="bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="font-bold text-warning ">{t('title')}</span>
+                    <span className="bg-warning text-background text-xs font-bold px-2 py-0.5 rounded-full">
                         {total}
                     </span>
                 </div>

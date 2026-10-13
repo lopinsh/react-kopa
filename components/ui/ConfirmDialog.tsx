@@ -55,7 +55,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
                     type="button"
                     onClick={onConfirm}
                     disabled={isPending}
-                    className={`flex items-center gap-2 rounded-xl px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] shadow-xl transition-all active:scale-95 disabled:opacity-50 ${destructive ? 'bg-red-500 text-white' : 'bg-foreground text-background'}`}
+                    className={`flex items-center gap-2 rounded-full px-6 py-3 text-[10px] font-black uppercase tracking-[0.15em] shadow-xl transition-all active:scale-95 disabled:opacity-50 ${destructive ? 'bg-danger text-danger-foreground' : 'bg-foreground text-background'}`}
                 >
                     {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
                     {confirmLabel}

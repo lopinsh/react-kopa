@@ -46,7 +46,7 @@ export default function EventLangBar({ lang, onLangChange, onCopy }: Props) {
             </div>
             {lang !== original && !filled[lang] && <UntranslatedNotice original={original} onCopy={onCopy} />}
             {hiddenError && (
-                <p role="alert" className="text-xs text-red-500">
+                <p role="alert" className="text-xs text-danger">
                     {t(hiddenError === original ? 'originalLangTitleError' : 'otherLangTitleError', { lang: hiddenError.toUpperCase() })}
                 </p>
             )}

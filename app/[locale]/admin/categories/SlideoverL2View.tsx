@@ -112,7 +112,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{t('l2Title')}</h3>
                     {(nameEn !== initialEn || nameLv !== initialLv || slugEn !== l2.slug || slugLv !== (l2.slugLv || l2.slug)) && (
-                        <span className="bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
 
@@ -192,7 +192,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-xs text-red-600 font-semibold hover:bg-red-50 dark:hover:bg-red-900/30 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                        className="text-xs text-danger font-semibold hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
                                     >
                                         {c('delete')}
                                     </button>

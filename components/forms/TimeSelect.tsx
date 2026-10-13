@@ -32,7 +32,7 @@ export default function TimeSelect({ id, value, onChange, invalid, disabled }: P
             onChange={(e) => onChange(e.target.value)}
             className={clsx(
                 'w-full rounded-xl border bg-background px-3 py-2.5 text-sm tabular-nums focus:outline-none disabled:opacity-60',
-                invalid ? 'border-red-400' : 'border-border focus:border-primary'
+                invalid ? 'border-danger/40' : 'border-border focus:border-primary'
             )}
         >
             {!value && <option value="" />}

@@ -74,7 +74,7 @@ export default function ProfileEditForm({ user }: Props) {
     const previewSrc = avatarUrl({ id: user.id, image: watchedImage, avatarSeed: watchedSeed });
 
     const fieldError = (message?: string) =>
-        message ? <p className="text-xs text-red-500">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
+        message ? <p className="text-xs text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
 
     const onSubmit = (data: ProfileFormValues) => {
         if (isPending) return;
@@ -175,7 +175,7 @@ export default function ProfileEditForm({ user }: Props) {
             </fieldset>
 
             {errors.root?.message && (
-                <p role="alert" className="text-sm text-red-500">{tErrors(errors.root.message as 'ACTION_FAILED')}</p>
+                <p role="alert" className="text-sm text-danger">{tErrors(errors.root.message as 'ACTION_FAILED')}</p>
             )}
 
             <button

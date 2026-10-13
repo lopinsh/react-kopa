@@ -141,7 +141,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
             )}
 
             {error && (
-                <p role="alert" className="text-sm text-red-500">
+                <p role="alert" className="text-sm text-danger">
                     {tErrors(error as 'ACTION_FAILED')}
                 </p>
             )}

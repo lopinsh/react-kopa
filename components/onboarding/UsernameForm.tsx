@@ -81,7 +81,7 @@ export default function UsernameForm({ suggestedUsername }: UsernameFormProps) {
 
             {/* Server-level error (unexpected failures) */}
             {serverError && (
-                <p className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">
+                <p className="rounded-xl bg-danger/10 px-4 py-3 text-sm text-danger">
                     {serverError}
                 </p>
             )}

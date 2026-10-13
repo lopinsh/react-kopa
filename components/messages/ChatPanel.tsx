@@ -100,7 +100,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         onClick={() => setBlockConfirmOpen(true)}
                         className="flex items-center gap-2 rounded-full bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
                     >
-                        <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-red-500')} />
+                        <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
                         {conversation.isBlocked ? t('unblock') : t('block')}
                     </button>
                 )}
@@ -152,13 +152,13 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         {t('groupGoneNote')}
                     </div>
                 ) : conversation.isBlocked ? (
-                    <div className="flex items-center justify-center gap-2 rounded-xl bg-red-500/10 p-3 text-center text-sm font-bold text-red-500">
+                    <div className="flex items-center justify-center gap-2 rounded-xl bg-danger/10 p-3 text-center text-sm font-bold text-danger">
                         <AlertCircle className="h-4 w-4" />
                         {t('conversationBlocked')}
                     </div>
                 ) : (
                     <>
-                        {sendError && <p role="alert" className="mb-2 text-xs font-bold text-red-500">{sendError}</p>}
+                        {sendError && <p role="alert" className="mb-2 text-xs font-bold text-danger">{sendError}</p>}
                         <form onSubmit={handleSend} className="flex gap-2">
                             <input
                                 type="text"

@@ -78,11 +78,11 @@ export default async function MyGroupsPage({
             {formattedGroups.length > 0 ? (
                 <div className="flex flex-col gap-10">
                     {actionRequiredGroups.length > 0 && (
-                        <section className="bg-red-500/5 -mx-4 px-4 py-6 rounded-3xl border border-red-500/20 shadow-sm animate-in fade-in slide-in-from-top-4">
-                            <h2 className="mb-4 text-xl font-bold text-red-600 dark:text-red-400 flex items-center gap-2">
+                        <section className="bg-danger/10 -mx-4 px-4 py-6 rounded-3xl border border-danger/40 shadow-sm animate-in fade-in slide-in-from-top-4">
+                            <h2 className="mb-4 text-xl font-bold text-danger flex items-center gap-2">
                                 <span className="relative flex h-3 w-3">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-3 w-3 bg-danger"></span>
                                 </span>
                                 {c_common_get('actionRequired')}
                             </h2>

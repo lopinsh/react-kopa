@@ -38,7 +38,7 @@ export function Footer() {
                             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
                                 <span className="text-white font-bold text-sm">{c_common('brandShort')}</span>
                             </div>
-                            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary to-rose-500">
+                            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary to-danger">
                                 {t('logoSubtitle')}
                             </span>
                         </Link>
@@ -69,7 +69,7 @@ export function Footer() {
 
                 <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
                     <p className="text-sm text-foreground-muted">
-                        © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-rose-500 mx-1 fill-rose-500" /> {t('forCommunity')}
+                        © {currentYear} {c_common('brandName')}. {t('madeWith')} <Heart className="h-3 w-3 inline text-danger mx-1 fill-danger" /> {t('forCommunity')}
                     </p>
                 </div>
             </div>

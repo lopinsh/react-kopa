@@ -42,7 +42,7 @@ export default function MessageUserButton({ userId }: { userId: string }) {
                     : <MessageSquare className="h-4 w-4" />}
                 {t('message')}
             </button>
-            {error && <p role="alert" className="mt-2 text-xs font-bold text-red-500">{error}</p>}
+            {error && <p role="alert" className="mt-2 text-xs font-bold text-danger">{error}</p>}
         </div>
     );
 }

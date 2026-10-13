@@ -116,7 +116,7 @@ export default function AnnouncementBoard({ groupId, locale }: Props) {
             )}
 
             {error && (
-                <p role="alert" className="mb-6 text-sm font-semibold text-red-500">{tErrors(error)}</p>
+                <p role="alert" className="mb-6 text-sm font-semibold text-danger">{tErrors(error)}</p>
             )}
 
             {active.length > 0 ? (

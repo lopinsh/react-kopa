@@ -65,7 +65,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
             href={`/${group.category.l1Slug}/group/${group.slug}`}
             data-ui={UI.groupCard}
             className="group relative flex flex-col h-full overflow-hidden rounded-[20px] bg-surface text-foreground 
-                border-slate-200 border shadow-sm transition-transform duration-200 ease-out 
+                border-border border shadow-sm transition-transform duration-200 ease-out 
                 hover:shadow-md hover:border-primary hover:scale-[1.02] soft-press"
             style={{ ['--accent' as string]: accentColor }}
         >
@@ -122,12 +122,12 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                 </div>
 
                 {/* Description - Exactly 2 lines tight leading */}
-                <p className="line-clamp-2 text-[13px] leading-[1.4] text-slate-500 mb-4 sm:mb-6 flex-1 text-balance">
+                <p className="line-clamp-2 text-[13px] leading-[1.4] text-foreground-muted mb-4 sm:mb-6 flex-1 text-balance">
                     {cleanDescription || t('noDescription')}
                 </p>
 
                 {/* Footer Section */}
-                <div className="mt-auto border-t border-slate-100 pt-3 sm:pt-4 flex flex-col gap-2 sm:gap-3">
+                <div className="mt-auto border-t border-border pt-3 sm:pt-4 flex flex-col gap-2 sm:gap-3">
 
                     {/* Real Member Avatars & Active Status */}
                     <div className="flex items-center justify-between">
@@ -142,24 +142,24 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                                         width={24}
                                         height={24}
                                         unoptimized
-                                        className="inline-block h-6 w-6 rounded-full ring-2 ring-surface bg-slate-100"
+                                        className="inline-block h-6 w-6 rounded-full ring-2 ring-surface bg-tint"
                                     />
                                 ))}
                                 {overflowCount > 0 && (
                                     <span className={clsx(
                                         'inline-flex items-center justify-center h-6 min-w-[24px] px-1 rounded-full ring-2 ring-surface',
-                                        'bg-slate-200 text-[9px] font-bold text-slate-600'
+                                        'bg-tint text-[9px] font-bold text-foreground-muted'
                                     )}>
                                         +{overflowCount}
                                     </span>
                                 )}
                             </div>
-                            <span className="text-xs font-semibold text-slate-500">
+                            <span className="text-xs font-semibold text-foreground-muted">
                                 {t('memberCount', { count: group.memberCount })}
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-400">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground-muted">
                             <Clock className="h-3.5 w-3.5" />
                             <span>{t('active')}</span>
                         </div>

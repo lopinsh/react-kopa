@@ -66,7 +66,7 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
                     required
                 />
 
-                {error && <p className="text-sm text-red-500">{error}</p>}
+                {error && <p className="text-sm text-danger">{error}</p>}
 
                 <button
                     type="submit"

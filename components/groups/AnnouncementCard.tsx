@@ -53,7 +53,7 @@ export default function AnnouncementCard({ post, busy, onArchive, onDelete }: Pr
                         {archived ? <ArchiveRestore className="h-3.5 w-3.5" /> : <Archive className="h-3.5 w-3.5" />}
                         {archived ? t('announcementRestore') : t('announcementArchive')}
                     </button>
-                    <button type="button" onClick={() => onDelete(post)} disabled={busy} className={`${BUTTON} hover:!text-red-500`}>
+                    <button type="button" onClick={() => onDelete(post)} disabled={busy} className={`${BUTTON} hover:!text-danger`}>
                         <Trash2 className="h-3.5 w-3.5" />
                         {tCommon('delete')}
                     </button>

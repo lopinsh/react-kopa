@@ -53,7 +53,7 @@ export default async function AdminDashboardPage({
             </div>
 
             {error && (
-                <p role="alert" className="mb-4 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm font-medium text-red-500">
+                <p role="alert" className="mb-4 rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger">
                     {tErrors.has(error) ? tErrors(error) : tErrors('ACTION_FAILED')}
                 </p>
             )}
