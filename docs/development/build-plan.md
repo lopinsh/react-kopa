@@ -32,7 +32,6 @@ Each has a recommended default (the page's own default where it has one). If the
 | OD-01 | Small tag word "Mod" (Still open 12) | Still open | Tag stays "Mod"; lists and menus say "Moderators"; "grupas komanda" = owner + moderators | R1a |
 | OD-02 | Where "Grupas" and "Es" lead, which tab a group page marks (AR-20, Still open 2) | Open rule | "Grupas" → Manas grupas, "Es" → Mans profils; on a group page the tab you came from stays marked | R2a |
 | OD-03 | Where Iestatījumi lives (Still open 3) | Still open | Fifth page of your own area, last in its menu | R2a |
-| OD-04 | "Izveidot grupu" also in the phone profile menu (AR-14 inline proposal) | Proposal | Yes: one menu everywhere | R2a |
 | OD-05 | Counter warning in the last tenth; past the limit red "+N" and "Nosūtīt" waits (AR-71 inline proposal) | Proposal | Yes, as drawn | R2b |
 | OD-06 | "Are you sure?" for undoable steps (Still open 15) | Still open | Small pop-over at the button (leave group, remove member); permanent deletes keep their dialog | R2b |
 | OD-07 | Private groups (Still open 11) | Still open | Keep: out of discovery and search, one word "Tikai biedriem", a link-holder sees Informācija + "Sazināties" | R3a |
@@ -57,7 +56,7 @@ Each has a recommended default (the page's own default where it has one). If the
 | OD-26 | Where you change your profile (Still open 10) | Still open | "Labot profilu" on Mans profils opens the form in place; Iestatījumi keeps Izskats | R9b |
 | OD-27 | Deleting your account (Still open 16) | Still open | "Dzēst kontu" at the end of Iestatījumi, with a dialog; built before real users | R12 |
 
-**27 decisions; one blocks R1** (OD-01, R1a; its default is harmless). Closed, listed for completeness: Still open 1 (settled, AP-07); the discovery "One Filtri button" option C (option A was chosen; C is not built). Builder defaults that are not owner decisions are stated in the cards (category tones stored in the site theme, R1a; theme preference kept by next-themes, R2a).
+**26 decisions; one blocks R1** (OD-01, R1a; its default is harmless). Ids stay stable: OD-04 ("Izveidot grupu" also in the phone profile menu) was dropped in review because AR-14 is agreed with it. Closed, listed for completeness: Still open 1 (settled, AP-07); the discovery "One Filtri button" option C (option A was chosen; C is not built). Builder defaults that are not owner decisions are stated in the cards (category tones stored in the site theme, R1a; theme preference kept by next-themes, R2a).
 
 ## 3. Old → new map
 
@@ -129,20 +128,20 @@ R1a ─► R1b
 
 Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS.md: typecheck, eslint on changed files, `npm run i18n:check`, migration if schema changed) + checked in a running app in lv and en at 375 px and 1280 px, light and dark, side by side with each named drawing; no horizontal page scroll; Laws respected; `npm run plan:check` passes. **Handbook**: `docs/handbook/design.md` gets its screen entries updated by every release that changes a screen. **UI elements**: every new or changed shared component appears on `/admin/handbook/ui-elements` (`components/handbook/UiElementsDemos.tsx`) with sample data.
 
-### R1a · Identity (M)
+### R1a · Identity (M/L)
 
 - **Goal:** today's screens in the new look: Sūna and its neutrals, Literata + Commissioner, the fifteen category tones (light and dark, chosen on the server), soft shapes, small tags, sentence case, dates with the weekday.
 - **Rules (owner):** AR-01, AR-03, AR-04, AR-05, AR-06, AR-07, AR-08, AR-09, AR-10, AR-11. Also in: AR-69 (R1b edits what R1a stores).
 - **Drawings:** Identity `#h-id` (logo, colour, type, tags, category line, the 15-tone table).
-- **Components:** `app/globals.css` (tokens: Sūna, neutrals, danger/success/warning, radii; remove the six `--color-cat-*` and indigo `--primary`), `lib/constants/theme.ts` (Sūna as default preset, with the 15 tones per L1 slug, light and dark), `lib/validations/theme.ts` (theme gains `categories: Record<l1Slug, {light, dark}>`, optional so stored themes still parse), `lib/theme/css.ts` (emits `--cat-<slug>` for `html:root` and `html.dark:root`), `lib/theme-fonts.ts` (preload Literata + Commissioner, stop preloading Geist), `lib/services/taxonomy-resolver.service.ts` + group layout (accent = the L1 tone from the active theme, fallback `Category.color`), `lib/date-format.ts`, `components/ui/{Button,Badge,FilterChip,CategoryIcon}.tsx`, new `components/ui/Logo.tsx` (wordmark + circles), `components/shell/Header.tsx` (logo only; drop the inline `var(--group-accent)` logo colour: the logo is site colour, AR-06), sweep `uppercase` classes (AR-10).
+- **Components:** `app/globals.css` (tokens: Sūna, neutrals, danger/success/warning, radii; remove the six `--color-cat-*`; `--primary` keeps its name, used in ~79 files, and takes Sūna instead of indigo), `lib/constants/theme.ts` (Sūna as default preset, with the 15 tones per L1 slug, light and dark), `lib/validations/theme.ts` (theme gains `categories: Record<l1Slug, {light, dark}>`, optional so stored themes still parse), `lib/theme/css.ts` (emits `--cat-<slug>` for `html:root` and `html.dark:root`), `lib/theme-fonts.ts` (preload Literata + Commissioner, stop preloading Geist), `lib/services/taxonomy-resolver.service.ts` + group layout (accent = the L1 tone from the active theme, fallback `Category.color`), `lib/date-format.ts`, `components/ui/{Button,Badge,FilterChip,CategoryIcon}.tsx`, new `components/ui/Logo.tsx` (wordmark + circles), `components/shell/Header.tsx` (logo only; drop the inline `var(--group-accent)` logo colour: the logo is site colour, AR-06), sweep `uppercase` classes (AR-10).
 - **Data:** no migration. Builder default from D3: tones live in the site theme (which already has preview and publish); `add_category_color_dark` only if the owner asks for per-category columns. `Category.color` stays as fallback (no contract step).
 - **Services/actions:** `ThemeService` (read tones), taxonomy resolver; no new actions.
 - **i18n:** `common` (tag words: Eju, Īpašnieks, Mod, Gaida), `theme`.
 - **Handbook:** rewrite `docs/handbook/design.md` to the agreed rules (foundations, identity, components, the new page order; remove Geist, indigo, group-colour buttons, layout C) (C31). Voice: sentence case.
-- **Risks:** every screen changes at once (visual regressions on 61 screens; the reviewer walks the screen list A1–A61 at both widths); dark tones must be chosen without client JS (class `.dark` + `html.dark:root` rule, both emitted on the server, Taxonomy Law); L1 slugs in the DB must match the tone keys (check all 15 on the dev DB and prod data).
+- **Risks:** every screen changes at once (visual regressions on 61 screens; the reviewer walks the redesign's [Every live screen](redesign#live-screens) list, all 61, at both widths, and the spec lists the routes to open); dark tones must be chosen without client JS (class `.dark` + `html.dark:root` rule, both emitted on the server, Taxonomy Law); L1 slugs in the DB must match the tone keys (check all 15 on the dev DB and prod data).
 - **Out of scope:** layout changes, Dizains editing (R1b), header structure (R2a).
 - **Acceptance (extra):** contrast: white on every light tone ≥ 4.5:1, near-black on every dark tone ≥ 7:1 (script or test page); no flash of wrong colour on a group page with a cold cache in dark mode; category colour never on a site button (grep `bg-[var(--accent)]` on buttons).
-- **Size:** M.
+- **Size:** M/L (the token change is small; the sweeps of `uppercase` in ~57 files and of the atoms make it long).
 
 ### R1b · Admin → Dizains (M)
 
@@ -168,7 +167,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `shell`, `nav`, new `settings` keys under `profile`.
 - **Risks:** moving `/messages` and `/profile` under one layout must not change URLs or break `/profile/[username]`; the header at 375 px for admins overflowed by 11 px on the redesign page once (check the real one); feedback and translate modes keep their switches in the shield menu.
 - **Out of scope:** the search overlay (R7), Paziņojumi page and bell look (R8), Mans profils content (R9b), the "new" count (R8).
-- **Size:** L (one session if the spec is tight; split off the own-area frame into R2b if the spec runs long).
+- **Size:** L (one session if the spec is tight; if the spec runs long, the own-area frame and Iestatījumi split off as R2c, released before R2b).
 
 ### R2b · Behaviour pieces (M)
 
@@ -203,7 +202,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Drawings:** One button "Sazināties" (6), the "…" menu (3), "Desktop · Dialog in the middle".
 - **Components:** replace `modals/ContactGroupModal.tsx` with `groups/contact/ContactForm.tsx` (switch "Vēlos pievienoties grupai", `TextCounter`, "Nosūtīt", toast "Ziņa nosūtīta"), new `groups/contact/PendingState.tsx`, replace `groups/GroupMoreMenu.tsx` (role line, Rakstīt komandai, Dalīties, Ziņot par grupu, Pamest grupu / Atsaukt pieteikumu with `ConfirmPopover`), `modals/ReportModal.tsx` restyle.
 - **Data:** none.
-- **Services/actions:** `GroupService.sendInquiry`/`cancelJoinRequest`/`leave` (exist); `actions/group-actions` returns codes only; "Rakstīt komandai" = the same group conversation (OD-10).
+- **Services/actions:** `GroupService.sendInquiry`/`cancelJoinRequest`/`leaveGroup` (exist); `actions/group-actions` returns codes only; "Rakstīt komandai" = the same group conversation (OD-10).
 - **i18n:** `contactForm` (C1–C3 words), `group`.
 - **Risks:** messaging flow (Opus review: request + message land once, notification to the team, conversation opens from "Atvērt sarunu").
 - **Size:** M.
@@ -215,7 +214,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Drawings:** none new (fields in today's forms).
 - **Components:** `GroupSettingsForm` + create wizard `BasicInfoStep` ("Ko meklējam?", 60, with `TextCounter`), `forms/EventCreationWizard.tsx` (city from the list pre-filled with the group's city, "Tiešsaistē" switch, free address stays).
 - **Data (expand only):** `add_group_looking_for` (`Group.lookingFor String? @db.VarChar(60)`, one language per OD-12). `add_event_city` (`Event.city String?` (City.slug, like `Group.city`), `Event.isOnline Boolean @default(false)`, backfill `city` from the group's city in the same migration, index on `(city, startDate)`). The NOT NULL contract step ships in R5a (see there).
-- **Services/actions:** `lib/validations/{group,event}.ts`; `GroupService.updateGroup`/`createGroup`; `EventService.createEvent`/`updateEvent` always write `city`; DiscoveryService and EventService gain: several cities (D7, `?city=a,b`, the single-city URL keeps working), counts per category, sub-category and city (D8, cached), date range + limit + count per day (D9), sub-category filter for events through the group's tags (D10). Not yet wired to UI.
+- **Services/actions:** `lib/validations/{group,event}.ts`; `GroupService.updateGroup`/`createGroup`; `EventService.createEvent`/`updateEvent` always write `city` (online events too: AR-57 makes the city required, "Tiešsaistē" is `isOnline`), and so does `prisma/seed.ts`; DiscoveryService and EventService gain: several cities (D7, `?city=a,b`, the single-city URL keeps working), counts per category, sub-category and city (D8, cached), date range + limit + count per day (D9), sub-category filter for events through the group's tags (D10). Not yet wired to UI.
 - **i18n:** `groupSettings`, `wizard`, `eventWizard`.
 - **Risks:** migration runs while R3 code serves (old code creates events without `city` between migrate and swap: R5a's contract step re-backfills); count queries on every discovery load (cache them; measure).
 - **Size:** M.
@@ -226,7 +225,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Rules (owner):** AR-22, AR-23, AP-01, AR-25, AP-02, AR-26, AR-27, AR-28, AR-29, AR-30, AR-31, AR-32, AR-33, AR-34, AR-36, AR-37. Also in: AR-43 (the search-word chip), AR-35 (card note).
 - **Drawings:** Discovery top (2), the filter line (7, the date parts are R5b), the drop-downs (Kur, Veids, place sheet, no match), the category drawer (3), group card and row (6).
 - **Components:** replace `discovery/DiscoveryFilterBar.tsx` (570) + `DiscoveryFilterBarWrapper` with `discovery/filter/{FilterLine,PlaceButton,TopicButton,VeidsChips,ViewSwitch,ClearAll,SearchWordChip}.tsx` and `discovery/lists/{PlaceList,VeidsList}.tsx` (shared by R7); replace `DiscoverySidebar.tsx` (225) with `discovery/CategoryDrawer.tsx` (icon rail, phone sheet, search incl. Veidi, "Ieteikt jaunu kategoriju"); replace `GroupCard.tsx` with `discovery/{GroupCard,GroupRow,CreateCard}.tsx` (also used on profiles); delete `ListViewCard.tsx`, `InfiniteScrollTrigger.tsx`, `DISCOVERY_VIEWS` and the `view` param (B31); `app/[locale]/page.tsx` (no heading, no "Rāda:", 24 + "Rādīt vēl").
-- **Data (contract):** `require_event_city`: re-backfill `city` where null, then `SET NOT NULL` (safe: R4 code always writes it). Name follows the spirit of the conventions; the spec confirms it.
+- **Data (contract):** `require_event_city`: re-backfill `city` where null, then `SET NOT NULL`. Safe only because the code still serving during this migration is R4's, which always writes `city`: R4 must be deployed and live on its own before R5a is pushed (never push R4 and R5a together, or R3 code would serve during the `NOT NULL` step and its event creates would fail). Name follows the spirit of the conventions; the spec confirms it.
 - **Services/actions:** wire R4's queries; place from the URL, "Visur" when none (OD-14).
 - **i18n:** `discovery`.
 - **Risks:** one line at 375 px with long names (truncate with "…" and keep the full name in the accessible label); filter state in the URL stays shareable; the private-group filter (`?type=`) goes per OD-07.
@@ -252,7 +251,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Components:** intercepting + parallel routes under `app/[locale]`: `@panel/default.tsx`, `@panel/(.)[l1Slug]/group/[groupSlug]/page.tsx`, `@panel/(.)[l1Slug]/group/[groupSlug]/events/[eventSlug]/page.tsx` (soft navigation opens the panel; a reload or shared link renders the full page; `default.tsx` required for `children` and the slot; see `intercepting-routes.md`, `parallel-routes.md`, `default.md`), new `components/panels/{GroupPanel,EventPanel,PanelShell}.tsx` (on `Modal` placement right / `Sheet`), `events/EventParticipation.tsx` (152) replaced by `events/GoingButton.tsx` + `events/JoinStep.tsx`, `FacesLine`.
 - **Data:** none. D12: `EventService` returns the people going with pictures only when the viewer is signed in.
 - **i18n:** `event`, `discovery`.
-- **Risks:** interception from `/` into the dynamic `[l1Slug]` segment; Back closes the panel and restores scroll; the panel must not double-fetch the group (Service Law: one service call returns the panel context).
+- **Risks:** interception from `/` into the dynamic `[l1Slug]` segment; panels open only over discovery (and search results), so a group link in Manas grupas, Ziņas or a profile still opens the full page: the slot lives in a discovery-only layout, and the spec proves it against the docs; Back closes the panel and restores scroll; the panel must not double-fetch the group (Service Law: one service call returns the panel context).
 - **Size:** L.
 
 ### R7 · Search (M)
@@ -331,13 +330,13 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Components:** `auth/*`, `onboarding/UsernameForm`, `groups/create-wizard/*` (`GroupCreationWizard` 262 split), `about`, `privacy` (reading pages with the slim footer), `app/[locale]/not-found.tsx` (empty-state rule, "Uz sākumu", sign-in hint), `shell/CookieConsent.tsx`; delete account in Iestatījumi (OD-27).
 - **Data:** none expected (delete account uses existing relations; the spec checks cascades and the group-owner case).
 - **i18n:** `auth`, `onboarding`, `wizard`, `pages`.
-- **Risks:** account deletion when the user owns groups (block with a clear code, `OWNS_GROUPS`).
+- **Risks:** account deletion when the user owns groups (block with a clear code, `OWNS_GROUPS`, added to the registry in `types/actions.ts`).
 - **Size:** M.
 
 ## 6. Cross-cutting
 
 - **Tokens and components first.** R1a fixes tokens and atoms; R2b fixes behaviour pieces. Later releases compose them and add to `/admin/handbook/ui-elements`, which is the component library: a builder looks there before making a new piece (Reuse before creating).
-- **Taxonomy Law with images and dark tones.** The accent and the banner background are decided on the server: the group layout's `<style>` sets `--accent` for light (`html:root`) and dark (`html.dark:root`) from the theme's tones, and the image URL as a CSS variable; no client resolves a colour. Category colour never on site buttons (AR-06).
+- **Taxonomy Law with images and dark tones.** The accent and the banner background are decided on the server: the group layout's `<style>` sets `--accent` for light (`html:root`) and dark (`html.dark:root`) from the theme's tones; the banner image is an image element rendered on the server (never a URL inside the `<style>` block: a user-supplied URL there is a CSS-injection path); no client resolves a colour. Category colour never on site buttons (AR-06).
 - **Context Law for frames.** Group frame (R3a), own area (R2a) and admin (R11) layouts fetch their context through services; providers hydrate; client parts read hooks. The client-fetched group sidebar (`GroupSidebarContent` via an action) goes in R3a; `userRole`/accent props in `MemberCard`, `EventRow`, `AnnouncementCard`, `GroupSettingsForm` go when those are replaced (R3a, R5b, R9b).
 - **Components over 150 lines** are split when touched: DiscoveryFilterBar 570 (R5a), TagPicker 604 and MemberCard 270, GroupSettingsForm 285 (R9b), EventCreationWizard 517 (R9a), GroupHeader 398 and GroupTabs 301 (R3a), AdminNav 280 (R11), NotificationCenter 238 (R8), DiscoverySidebar 225 (R5a), DateField 222 (R5b/R9a), Modal 172 (R2b), GroupCard 172 (R5a), DesignEditor 169 (R1b), GroupCreationWizard 262 (R12).
 - **Known debt cleared on the way:** five modals in GroupHeader (R3a/R3b); accent prop-drilling and inline styles (R1a Header logo, R3a, R9b); admin `confirm()` (R11); `TagPicker` `as any` (R9b); `c_common_get` naming in `Header.tsx` (R2a). Anything an agent can fix in a few minutes next to the release is fixed, not logged.
