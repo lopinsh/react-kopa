@@ -28,7 +28,7 @@ export default function AppearanceSetting() {
                         value={choice}
                         checked={mounted && theme === choice}
                         onChange={() => setTheme(choice)}
-                        className="size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-border bg-surface checked:border-[5px] checked:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                        className="size-4 shrink-0 cursor-pointer appearance-none rounded-full border border-foreground-muted bg-surface checked:border-[5px] checked:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                     />
                     {t(choice)}
                 </label>
