@@ -54,7 +54,7 @@ export default function ListViewCard({ group, accentColor: globalAccentColor }: 
                     )}
                     <span
                         className="rounded-md px-1.5 py-0.5 text-[11px] font-bold shadow-sm"
-                        style={{ color: 'white', backgroundColor: accentColor }}
+                        style={{ color: 'var(--on-cat)', backgroundColor: accentColor }}
                     >
                         {group.category.title}
                     </span>

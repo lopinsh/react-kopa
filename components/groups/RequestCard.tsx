@@ -84,7 +84,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                     <button
                         onClick={() => handleAction('APPROVE')}
                         disabled={isPending}
-                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-success/10 text-success border border-success/40 hover:bg-success hover:text-background disabled:opacity-50 transition-all font-bold shadow-sm"
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-success/10 text-success border border-success/40 hover:bg-success hover:text-background disabled:opacity-50 transition-all font-bold shadow-sm"
                         title={c_common('approve')}
                     >
                         <Check className="h-4 w-4" />
@@ -92,7 +92,7 @@ export default function RequestCard({ membershipId, targetUser, chatId, messages
                     <button
                         onClick={() => handleAction('DECLINE')}
                         disabled={isPending}
-                        className="flex h-10 w-10 items-center justify-center rounded-xl bg-danger/10 text-danger border border-danger/40 hover:bg-danger hover:text-danger-foreground disabled:opacity-50 transition-all font-bold shadow-sm"
+                        className="flex h-10 w-10 items-center justify-center rounded-full bg-danger/10 text-danger border border-danger/40 hover:bg-danger hover:text-danger-foreground disabled:opacity-50 transition-all font-bold shadow-sm"
                         title={c_common('decline')}
                     >
                         <X className="h-4 w-4" />

@@ -21,7 +21,7 @@ type Props = {
     waitlist: Person[];
 };
 
-const SMALL_BUTTON = 'inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-60';
+const SMALL_BUTTON = 'inline-flex items-center gap-1 rounded-full px-2.5 py-1.5 text-xs font-bold transition-colors disabled:opacity-60';
 
 export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale, going, pending, waitlist }: Props) {
     const t = useTranslations('event');
@@ -76,7 +76,7 @@ export default function EventOrganiserPanel({ eventId, joinMode, isFull, locale,
                         disabled={isPending}
                         onClick={() => run(() => setEventFull(eventId, !isFull, locale))}
                         className={clsx(
-                            'w-full rounded-2xl px-4 py-3 text-sm font-bold transition-colors disabled:opacity-60',
+                            'w-full rounded-full px-4 py-3 text-sm font-bold transition-colors disabled:opacity-60',
                             isFull
                                 ? 'bg-primary text-primary-foreground hover:opacity-90'
                                 : 'border border-border bg-background text-foreground hover:bg-surface-elevated'

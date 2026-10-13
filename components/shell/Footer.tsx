@@ -36,9 +36,9 @@ export function Footer() {
                     <div className="col-span-1">
                         <Link href={`/`} className="flex items-center gap-2 group">
                             <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center group-hover:rotate-12 transition-transform shadow-md">
-                                <span className="text-white font-bold text-sm">{c_common('brandShort')}</span>
+                                <span className="text-primary-foreground font-bold text-sm">{c_common('brandShort')}</span>
                             </div>
-                            <span className="text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-primary to-danger">
+                            <span className="text-xl font-semibold text-primary">
                                 {t('logoSubtitle')}
                             </span>
                         </Link>

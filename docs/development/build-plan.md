@@ -438,7 +438,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 
 | Release | Status | Spec | Commits |
 |---|---|---|---|
-| R1a Identity | spec written | [specs/R1a.md](specs/R1a.md) | |
+| R1a Identity | built, in review | [specs/R1a.md](specs/R1a.md) | `a0468c3`..`HEAD` (local, not pushed) |
 | R1b Admin → Dizains | not started | | |
 | R2a Header, menus, own area | not started | | |
 | R2b Behaviour pieces | not started | | |

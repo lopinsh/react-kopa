@@ -292,7 +292,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                     onClick={handleMembership}
                                     disabled={isPending || userRole === 'PENDING'}
                                     className={clsx(
-                                        "flex h-10 items-center gap-2 rounded-xl px-5 text-sm font-bold transition-all disabled:opacity-50",
+                                        "flex h-10 items-center gap-2 rounded-full px-5 text-sm font-bold transition-all disabled:opacity-50",
                                         userRole === 'PENDING'
                                             ? "bg-surface-elevated text-foreground-muted cursor-default"
                                             : "bg-primary text-primary-foreground shadow-md hover:opacity-90 active:scale-95"
@@ -321,7 +321,7 @@ export default function GroupHeader({ group, l1Slug }: Props) {
                                 {userRole === 'PENDING' && !isPending && (
                                     <button
                                         onClick={handleCancelRequest}
-                                        className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted hover:bg-danger hover:text-danger-foreground hover:border-danger/40 transition-all group/cancel"
+                                        className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface-elevated text-foreground-muted hover:bg-danger hover:text-danger-foreground hover:border-danger/40 transition-all group/cancel"
                                         title="Cancel join request"
                                     >
                                         <X className="h-4 w-4" />

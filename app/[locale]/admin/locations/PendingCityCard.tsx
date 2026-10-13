@@ -62,7 +62,7 @@ export default function PendingCityCard({ city }: Props) {
                     <button
                         type="button"
                         onClick={() => setEditing(!editing)}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-sm font-semibold rounded-full transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>

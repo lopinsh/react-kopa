@@ -111,7 +111,7 @@ export default function GroupCard({ group, accentColor: globalAccentColor, prior
                         )}
                         <span
                             className="flex items-center rounded-md px-1.5 py-0.5 text-[11px] font-bold shadow-sm"
-                            style={{ color: 'white', backgroundColor: accentColor }}
+                            style={{ color: 'var(--on-cat)', backgroundColor: accentColor }}
                         >
                             {group.category.title}
                         </span>

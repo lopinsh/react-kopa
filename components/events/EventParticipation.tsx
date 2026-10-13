@@ -36,10 +36,10 @@ export default function EventParticipation({ eventId, joinMode, isFull, myStatus
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
     const [signInOpen, setSignInOpen] = useState(false);
-    const size = compact ? 'rounded-xl px-3 py-2 text-xs' : 'rounded-2xl px-4 py-3.5 text-sm shadow-lg';
+    const size = compact ? 'rounded-full px-3 py-2 text-xs' : 'rounded-full px-4 py-3.5 text-sm shadow-lg';
     const PRIMARY = clsx(PRIMARY_BASE, size);
     const NEUTRAL = clsx(NEUTRAL_BASE, size);
-    const DONE = clsx(DONE_BASE, compact ? 'rounded-xl px-3 py-2 text-xs' : 'rounded-2xl px-4 py-3.5 text-sm');
+    const DONE = clsx(DONE_BASE, compact ? 'rounded-full px-3 py-2 text-xs' : 'rounded-full px-4 py-3.5 text-sm');
 
     function run(action: () => Promise<{ success: boolean; error?: string }>) {
         setError(null);
