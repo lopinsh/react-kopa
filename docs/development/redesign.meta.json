@@ -1,7 +1,8 @@
 {
-  "version": "9.8",
-  "updated": "2026-10-13T22:00:00+03:00",
+  "version": "9.8.1",
+  "updated": "2026-10-13T23:00:00+03:00",
   "changes": [
+    "9.8.1, your notes on the banner height: every group banner, with or without an image, on every page and the event page, now has the one height of the Pasākumi banner (96 px; phone bar 64 px). The tall Informācija banner is gone (AR-70).",
     "9.8, the design freeze: your notes of 13 October, evening. Every Agreed rule now has a stable id (AR-01 … AR-71) and every approval its own (AP-01 … AP-07), shown on the page and usable as an anchor (#AR-23), so the build plan can name them.",
     "Approved: one theme at a time in the search (AP-06), and \"Rādīt visus rezultātus\" as discovery with the search word as a chip (AP-07); the results page (B) was declined and is removed. Still open 1 is settled; the other numbers stay.",
     "Agreed, site-wide: every text field with a limit shows a counter under it, \"70 / 2000\" (a message's limit in the live app). Proposal: warning colour in the last tenth, red past the limit, \"Nosūtīt\" waits.",
@@ -30,8 +31,7 @@
     "9.5, after an independent review. Every overlap you marked was in a phone drawing: the filter buttons and the Grupas | Pasākumi switch shared one 300 px line, so the second button was cut at the switch. 9.4 faded it out, which still looked like a half-drawn button.",
     "Now, on phones, the switch has a full-width line of its own and the filter buttons wrap below it; the chosen line and the search chips wrap too. Nothing scrolls sideways, is cut or faded.",
     "The phone search drawing is marked as my suggestion; \"Izveidot grupu\" staying in the phone profile menu (next to the bottom bar's +) is marked as my suggestion too.",
-    "9.4, your notes of 13 October. The + leaves the header: on phones it sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es); on desktop \"Izveidot grupu\" is a line in the profile menu. Every header, bottom bar and profile menu follows.",
-    "Search: the bar is a plain field; a tap or click opens the search at once. At its top, chips: the place (the place list, set from the page's filter) and the matching categories, the same chips as elsewhere. A phone drawing is added."
+    "9.4, your notes of 13 October. The + leaves the header: on phones it sits in the middle of the bottom bar (Atklāt, Grupas, +, Ziņas, Es); on desktop \"Izveidot grupu\" is a line in the profile menu. Every header, bottom bar and profile menu follows."
   ],
   "sections": {
     "h-rules": {

@@ -401,12 +401,11 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-drw .h small{font-size:12px;color:var(--muted)}
 
 /* ── Group page */
-.rd .rd-gban{background:linear-gradient(120deg,color-mix(in srgb,var(--c) 22%,var(--surface)),color-mix(in srgb,var(--c) 7%,var(--surface)));padding:24px 22px 20px;border-bottom:1px solid var(--line)}
-.rd .rd-gban.low{padding:14px 22px}
+.rd .rd-gban{background:linear-gradient(120deg,color-mix(in srgb,var(--c) 22%,var(--surface)),color-mix(in srgb,var(--c) 7%,var(--surface)));padding:0 22px;height:96px;box-sizing:border-box;display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.rd .rd-gban .gid{flex:1;min-width:0}
 .rd .rd-gban .gid{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .rd .rd-gban .t{flex:1;min-width:200px;display:grid;gap:5px}
-.rd .rd-gban h3{font-size:26px}
-.rd .rd-gban.low h3{font-size:20px}
+.rd .rd-gban h3{font-size:20px}
 .rd .rd-gban .sig{display:flex;align-items:baseline;gap:4px 14px;flex-wrap:wrap}
 .rd .rd-gban .q{font-size:13px;color:var(--muted)}
 .rd .rd-gban .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -415,11 +414,11 @@ html.dark .rd{--bg:#161814;--surface:#1e211c;--tint:#282c25;--line:#353a31;--fg:
 .rd .rd-gpic.md{width:44px;height:44px;border-radius:13px}
 .rd .rd-gpic.sm{width:34px;height:34px;border-radius:10px}
 .rd .rd-gpic.sm svg{width:18px;height:18px}
-.rd .rd-gbar{display:flex;align-items:center;flex-wrap:wrap;gap:8px 10px;padding:9px 12px;background:var(--surface);border-bottom:1px solid var(--line);min-width:0}
+.rd .rd-gbar{display:flex;align-items:center;flex-wrap:nowrap;gap:8px 10px;padding:0 12px;height:64px;box-sizing:border-box;background:var(--surface);border-bottom:1px solid var(--line);min-width:0}
 .rd .rd-gbar .t{display:grid;flex:1;min-width:0;line-height:1.3}
 .rd .rd-gbar .t b{font:600 15px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rd .rd-gbar .t small{font-size:12px;color:var(--muted)}
-.rd .rd-gbar .act{flex-basis:100%;display:flex;justify-content:flex-end;gap:8px}
+.rd .rd-gbar .act{flex:none;display:flex;gap:8px}
 .rd .mbtn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--tint);color:var(--fg);flex:none}
 .rd .mbtn.q{background:transparent}
 .rd .rd-frame{display:grid;grid-template-columns:190px minmax(0,1fr);gap:22px;padding:18px 22px 22px}
