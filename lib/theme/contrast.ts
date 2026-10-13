@@ -77,3 +77,8 @@ export function themeContrastIssues(def: ThemeDefinition): ContrastIssue[] {
     }
     return issues;
 }
+
+/** Ratio as shown to people: cut, not rounded, to one decimal, so 4.46 never shows as a passing 4.5. */
+export function floorRatio(ratio: number): number {
+    return Math.floor(ratio * 10) / 10;
+}

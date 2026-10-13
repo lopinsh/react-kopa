@@ -473,7 +473,9 @@
         "nameEn": "Name EN",
         "nameLv": "Name LV",
         "slugEn": "Slug EN",
-        "slugLv": "Slug LV"
+        "slugLv": "Slug LV",
+        "colorInDesign": "A main category's colour for the light and dark theme is set in Design.",
+        "colorInDesignLink": "Open category colours"
       },
       "bulk": {
         "confirmDelete": "Are you sure you want to delete the selected categories? This will permanently remove them from all groups.",
@@ -784,7 +786,7 @@
     },
     "design": {
       "title": "Design",
-      "subtitle": "Try and pick the site's look: colour, background and fonts.",
+      "subtitle": "The site's colours, category colours and fonts. Preview them yourself first, then publish for everyone.",
       "previewActive": "You have a saved preview. Only you see it until you publish or discard it.",
       "presetsTitle": "Ready-made themes",
       "presets": {
@@ -794,8 +796,6 @@
       },
       "fontSampleHeading": "Let's go together",
       "fontSampleBody": "Looking for a drummer in Jelgava",
-      "customTitle": "Make your own",
-      "customHint": "Change colours and fonts and the sample below updates at once. Light and dark mode have their own colours.",
       "customActive": "Now: custom look",
       "mode": {
         "light": "Light mode",
@@ -805,7 +805,10 @@
         "primary": "Site colour",
         "background": "Background",
         "surface": "Surface (cards)",
-        "foreground": "Text"
+        "foreground": "Text",
+        "muted": "Quiet text",
+        "border": "Lines",
+        "tint": "Quiet fill"
       },
       "headingFont": "Heading font",
       "bodyFont": "Body font",
@@ -820,8 +823,8 @@
         "badge": "New",
         "link": "See all groups"
       },
-      "savePreview": "Save preview",
-      "publish": "Publish",
+      "savePreview": "Preview for me",
+      "publish": "Publish for everyone",
       "reset": "Reset",
       "previewHint": "Only you see the preview, on every page. Publishing changes the look for everyone.",
       "previewSaved": "Preview saved. You see it across the whole site.",
@@ -832,11 +835,72 @@
       "bar": {
         "label": "Design preview",
         "preview": "Preview",
-        "publish": "Publish",
+        "publish": "Publish for everyone",
         "discard": "Discard",
         "published": "Look published for everyone.",
         "discarded": "Preview discarded."
-      }
+      },
+      "parts": {
+        "label": "Design parts",
+        "colours": "Colours",
+        "categories": "Category colours",
+        "fonts": "Fonts"
+      },
+      "colours": {
+        "lead": "The site colour and the background, lines and quiet text that go with it, for the light and the dark theme."
+      },
+      "categories": {
+        "lead": "Each category has two tones, one for the light theme and one for the dark. The check shows as soon as you pick a colour."
+      },
+      "fonts": {
+        "lead": "Fonts for headings and text. The list only has fonts with every Latvian letter."
+      },
+      "presetResetsTones": "A ready-made theme also brings back the default category colours.",
+      "tones": {
+        "swatchLight": "Light",
+        "swatchDark": "Dark",
+        "modeLight": "light theme",
+        "modeDark": "dark theme",
+        "swatchLabel": "{category} ({tone}), {mode}",
+        "ok": "AA ✓",
+        "low": "{mode} {ratio}:1",
+        "ratios": "Contrast: light {light}:1, dark {dark}:1",
+        "names": {
+          "travel": "Paparde",
+          "dancing": "Pīlādzis",
+          "hobbies": "Smiltsērkšķis",
+          "community": "Egle",
+          "politics": "Kūdra",
+          "pets": "Lazda",
+          "art": "Virsis",
+          "music": "Mellene",
+          "religion": "Akmens",
+          "social": "Brūklene",
+          "games": "Plūme",
+          "sports": "Rudzupuķe",
+          "family": "Ezers",
+          "wellbeing": "Kadiķis",
+          "education": "Medus"
+        }
+      },
+      "contrast": {
+        "low": "{pair}: {ratio}:1, needs at least {min}:1",
+        "pair": {
+          "textOnBackground": "Text on background",
+          "textOnSurface": "Text on surface",
+          "textOnTint": "Text on quiet fill",
+          "mutedOnBackground": "Quiet text on background",
+          "mutedOnSurface": "Quiet text on surface",
+          "linkOnBackground": "Link on background",
+          "linkOnSurface": "Link on surface",
+          "textOnButton": "Text on a button"
+        },
+        "blocked": "Some colours fail the contrast check, so this can't be saved yet. See:",
+        "partHasIssues": "(contrast too low)"
+      },
+      "resetTonesTitle": "This theme will reset the category colours",
+      "resetTonesMessage": "You have changed some category colours. Choosing a ready-made theme brings back the default ones. Continue?",
+      "resetTonesConfirm": "Choose theme"
     }
   },
   "messages": {

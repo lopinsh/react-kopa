@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import Badge from '@/components/ui/Badge';
+import { buttonClass } from '@/components/ui/Button';
 import type { ThemeFontId, ThemeModeTokens } from '@/lib/constants';
 import { themeSampleVars } from '@/lib/theme/css';
 
@@ -18,16 +20,16 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, dark }: Pro
     return (
         <div
             style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light') as React.CSSProperties}
-            className={`${dark ? 'dark ' : ''}rounded-2xl border border-border bg-background p-4 font-sans text-foreground sm:p-6`}
+            className={`${dark ? 'dark ' : ''}rounded-2xl bg-background p-4 font-sans text-foreground ring-1 ring-inset ring-border sm:p-6`}
         >
-            <div className="rounded-2xl border border-border bg-surface p-4 sm:p-5">
+            <div className="rounded-2xl bg-surface p-4 sm:p-5">
                 <h3 className="text-2xl font-bold">{t('heading')}</h3>
                 <p className="mt-2 text-sm text-foreground-muted">{t('body')}</p>
                 <p className="mt-2 text-base">{t('latvian')}</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                    <button type="button" tabIndex={-1} className="rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">{t('primaryButton')}</button>
-                    <button type="button" tabIndex={-1} className="rounded-xl border border-border bg-surface-elevated px-4 py-2 text-sm font-bold text-foreground">{t('secondaryButton')}</button>
-                    <span className="rounded-full bg-primary/10 px-3 py-2 text-xs font-bold text-primary">{t('badge')}</span>
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                    <button type="button" tabIndex={-1} className={buttonClass('primary', '', 'sm')}>{t('primaryButton')}</button>
+                    <button type="button" tabIndex={-1} className={buttonClass('secondary', '', 'sm')}>{t('secondaryButton')}</button>
+                    <Badge>{t('badge')}</Badge>
                 </div>
                 <p className="mt-4 text-sm">
                     <span className="font-semibold text-primary underline underline-offset-4">{t('link')}</span>

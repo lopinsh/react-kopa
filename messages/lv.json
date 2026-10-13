@@ -473,7 +473,9 @@
         "nameEn": "Nosaukums EN",
         "nameLv": "Nosaukums LV",
         "slugEn": "Adreses daļa EN",
-        "slugLv": "Adreses daļa LV"
+        "slugLv": "Adreses daļa LV",
+        "colorInDesign": "Galvenās kategorijas krāsu gaišajai un tumšajai tēmai maina Dizains.",
+        "colorInDesignLink": "Atvērt kategoriju krāsas"
       },
       "bulk": {
         "confirmDelete": "Vai tiešām dzēst izvēlētās kategorijas? Tās tiks neatgriezeniski noņemtas no visām grupām.",
@@ -784,7 +786,7 @@
     },
     "design": {
       "title": "Dizains",
-      "subtitle": "Izmēģini un izvēlies vietnes izskatu: krāsu, fonu un burtus.",
+      "subtitle": "Vietnes krāsas, kategoriju krāsas un burti. Vispirms priekšskati pats, tad publicē visiem.",
       "previewActive": "Tev ir saglabāts priekšskatījums. To redzi tikai tu, līdz to publicē vai atmet.",
       "presetsTitle": "Gatavie noskaņojumi",
       "presets": {
@@ -794,8 +796,6 @@
       },
       "fontSampleHeading": "Ejam kopā",
       "fontSampleBody": "Meklē bundzinieku Jelgavā",
-      "customTitle": "Pielāgot pats",
-      "customHint": "Maini krāsas un burtus, un paraugs zemāk uzreiz atjaunojas. Katram režīmam (gaišajam un tumšajam) krāsas ir atsevišķas.",
       "customActive": "Pašlaik: pielāgots izskats",
       "mode": {
         "light": "Gaišais režīms",
@@ -805,7 +805,10 @@
         "primary": "Vietnes krāsa",
         "background": "Fons",
         "surface": "Virsma (kartītes)",
-        "foreground": "Teksts"
+        "foreground": "Teksts",
+        "muted": "Klusais teksts",
+        "border": "Līnijas",
+        "tint": "Klusais fons"
       },
       "headingFont": "Virsrakstu burti",
       "bodyFont": "Pamatteksta burti",
@@ -820,8 +823,8 @@
         "badge": "Jauns",
         "link": "Skatīt visas grupas"
       },
-      "savePreview": "Saglabāt priekšskatījumu",
-      "publish": "Publicēt",
+      "savePreview": "Priekšskatīt man",
+      "publish": "Publicēt visiem",
       "reset": "Atiestatīt",
       "previewHint": "Priekšskatījumu redzi tikai tu, visās lapās. Publicējot izskats mainās visiem.",
       "previewSaved": "Priekšskatījums saglabāts. Tu to redzi visā vietnē.",
@@ -832,11 +835,72 @@
       "bar": {
         "label": "Dizaina priekšskatījums",
         "preview": "Priekšskatījums",
-        "publish": "Publicēt",
+        "publish": "Publicēt visiem",
         "discard": "Atmest",
         "published": "Izskats publicēts visiem.",
         "discarded": "Priekšskatījums atmests."
-      }
+      },
+      "parts": {
+        "label": "Dizaina daļas",
+        "colours": "Krāsas",
+        "categories": "Kategoriju krāsas",
+        "fonts": "Fonti"
+      },
+      "colours": {
+        "lead": "Vietnes krāsa un tai piederīgais fons, līnijas un klusais teksts, gaišajai un tumšajai tēmai."
+      },
+      "categories": {
+        "lead": "Katrai kategorijai ir divi toņi: gaišajai un tumšajai tēmai. Pārbaude parādās, tiklīdz izvēlies krāsu."
+      },
+      "fonts": {
+        "lead": "Burti virsrakstiem un tekstam. Sarakstā ir tikai burti ar visām latviešu zīmēm."
+      },
+      "presetResetsTones": "Gatavs noskaņojums atjauno arī noklusētās kategoriju krāsas.",
+      "tones": {
+        "swatchLight": "Gaišā",
+        "swatchDark": "Tumšā",
+        "modeLight": "gaišā tēma",
+        "modeDark": "tumšā tēma",
+        "swatchLabel": "{category} ({tone}), {mode}",
+        "ok": "AA ✓",
+        "low": "{mode} {ratio}:1",
+        "ratios": "Kontrasts: gaišā {light}:1, tumšā {dark}:1",
+        "names": {
+          "travel": "Paparde",
+          "dancing": "Pīlādzis",
+          "hobbies": "Smiltsērkšķis",
+          "community": "Egle",
+          "politics": "Kūdra",
+          "pets": "Lazda",
+          "art": "Virsis",
+          "music": "Mellene",
+          "religion": "Akmens",
+          "social": "Brūklene",
+          "games": "Plūme",
+          "sports": "Rudzupuķe",
+          "family": "Ezers",
+          "wellbeing": "Kadiķis",
+          "education": "Medus"
+        }
+      },
+      "contrast": {
+        "low": "{pair}: {ratio}:1, vajag vismaz {min}:1",
+        "pair": {
+          "textOnBackground": "Teksts uz fona",
+          "textOnSurface": "Teksts uz virsmas",
+          "textOnTint": "Teksts uz klusā fona",
+          "mutedOnBackground": "Klusais teksts uz fona",
+          "mutedOnSurface": "Klusais teksts uz virsmas",
+          "linkOnBackground": "Saite uz fona",
+          "linkOnSurface": "Saite uz virsmas",
+          "textOnButton": "Teksts uz pogas"
+        },
+        "blocked": "Dažas krāsas neiztur kontrasta pārbaudi, tāpēc vēl nevar saglabāt. Skaties:",
+        "partHasIssues": "(kontrasts par zemu)"
+      },
+      "resetTonesTitle": "Gatavs noskaņojums atjaunos kategoriju krāsas",
+      "resetTonesMessage": "Tu esi mainījis kategoriju krāsas. Izvēloties gatavo noskaņojumu, tās atgriezīsies noklusētajās. Turpināt?",
+      "resetTonesConfirm": "Izvēlēties noskaņojumu"
     }
   },
   "messages": {

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Palette } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
+import { DESIGN_PARTS, type DesignPart } from '@/lib/constants';
 import { getActiveTheme } from '@/lib/theme/server';
 import DesignEditor from '@/components/admin/design/DesignEditor';
 
@@ -11,11 +12,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('design') };
 }
 
-export default async function AdminDesignPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function AdminDesignPage({
+    params,
+    searchParams,
+}: {
+    params: Promise<{ locale: string }>;
+    searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
     const { locale } = await params;
     const t = await getTranslations('admin.design');
 
     await requireAdminPage(locale, '/admin/design');
+
+    const { part } = await searchParams;
+    const initialPart: DesignPart = typeof part === 'string' && (DESIGN_PARTS as readonly string[]).includes(part) ? (part as DesignPart) : 'colours';
 
     // Start from what this admin currently sees: their preview if they have one, otherwise the published theme.
     const theme = await getActiveTheme();
@@ -31,9 +41,10 @@ export default async function AdminDesignPage({ params }: { params: Promise<{ lo
                     <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
                 </div>
             </div>
-            {theme.isPreview && <p className="mb-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-semibold text-foreground">{t('previewActive')}</p>}
+            {theme.isPreview && <p className="mb-6 rounded-xl bg-surface px-4 py-3 text-sm font-semibold text-foreground">{t('previewActive')}</p>}
             <DesignEditor
                 key={`${theme.id ?? 'default'}-${theme.presetKey}`}
+                initialPart={initialPart}
                 initial={{ presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont }}
             />
         </div>
