@@ -1,6 +1,6 @@
 // Checks docs/development/build-plan.md against the redesign's rule ids (scripts/redesign/gen.mjs):
 // every AR-nn / AP-nn appears in the plan's coverage table exactly once with an owner release that has
-// a card in the plan, and the plan references no id the redesign doesn't define. Run: npm run plan:check
+// a card in the plan, each card's owned rules match the table, and the plan references no id the redesign doesn't define. Run: npm run plan:check
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -35,6 +35,14 @@ for (const line of (section ?? '').split('\n')) {
     else if (!releases.has(owner)) errors.push(`${id}: owner ${owner} has no release card`);
 }
 for (const id of known) if (!owners.has(id)) errors.push(`${id} has no owner in the coverage table`);
+
+// Each card's "Rules (owner):" list (before "Also in") must agree with the coverage table.
+for (const m of plan.matchAll(/^### (R\d+[a-z]?) · [^\n]*\n[\s\S]*?^- \*\*Rules \(owner\):\*\* ([^\n]*)/gm)) {
+    const [release, rules] = [m[1], m[2].split('Also in')[0]];
+    for (const id of rules.match(/\bA[RP]-\d+\b/g) ?? []) {
+        if (owners.has(id) && owners.get(id) !== release) errors.push(`${id}: card ${release} claims it, the coverage table says ${owners.get(id)}`);
+    }
+}
 
 // No unknown ids anywhere in the plan.
 for (const m of plan.matchAll(/\bA[RP]-\d+\b/g)) {
