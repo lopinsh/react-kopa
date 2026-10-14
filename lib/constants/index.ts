@@ -23,6 +23,10 @@ export const INBOX_LIMIT = 100;
 export const GROUP_EVENTS_LIMIT = 200;
 /** Events the discovery list loads per source (public, members-only). */
 export const DISCOVERY_EVENTS_LIMIT = 100;
+/** Most events one discovery list call may ask for. */
+export const DISCOVERY_EVENTS_MAX_LIMIT = 200;
+/** Longest date span (days) the event list and the per-day counts accept: a month view plus its spill weeks. */
+export const DISCOVERY_DAY_RANGE_MAX = 62;
 /** Announcements one group loads (newest first). */
 export const ANNOUNCEMENTS_LIMIT = 100;
 

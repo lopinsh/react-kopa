@@ -16,6 +16,7 @@ import { searchContextual } from '@/actions/discovery-actions';
 import { Link } from '@/i18n/routing';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 import { tint } from '@/lib/color-utils';
+import { parseCities } from '@/lib/discovery-params';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +90,8 @@ export default function DiscoveryFilterBar({
     const [, startTransition] = useTransition();
 
     const currentTab = searchParams.get('tab') || DISCOVERY_TABS[0];
-    const city = searchParams.get('city') || 'all';
+    // A two-city link shows its first city instead of a blank select (R5a replaces this bar).
+    const city = parseCities(searchParams.get('city'))[0] ?? 'all';
 
     // ── Search state ────────────────────────────────────────────────────────
     const [searchQuery, setSearchQuery] = useState(initialQuery || '');

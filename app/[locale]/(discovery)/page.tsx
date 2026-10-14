@@ -15,6 +15,7 @@ import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
+import { parseCities } from '@/lib/discovery-params';
 import { Search, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import type { Metadata } from 'next';
@@ -33,9 +34,10 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
         title = displayName || category.charAt(0).toUpperCase() + category.slice(1);
     }
 
-    if (city && city !== 'all') {
+    const cities = parseCities(city);
+    if (cities.length > 0) {
         const tCities = await getTranslations({ locale, namespace: 'cities' });
-        title += ` ${t('inCity')} ${cityLabel(tCities, city)}`;
+        title += ` ${t('inCity')} ${cities.map((c) => cityLabel(tCities, c)).join(', ')}`;
     }
 
     return {
@@ -54,6 +56,7 @@ type Props = {
 export default async function DiscoveryPage({ params, searchParams }: Props) {
     const { locale } = await params;
     const { q, city, category, tags: tagsParam, view, type, limit, tab } = await searchParams;
+    const selectedCities = parseCities(city);
     const activeTags = tagsParam ? tagsParam.split(',').filter(Boolean) : [];
     const currentTab = tab === 'events' ? 'events' : 'groups';
     const currentView = view === 'list' ? 'list' : 'grid';
@@ -90,10 +93,10 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         l1HighlightId = snap.l1Id ?? snap.id;
     }
 
-    const [groupsRes, discoverableEvents, taxonomy, cities] = await Promise.all([
+    const [groupsRes, eventsRes, taxonomy, cities] = await Promise.all([
         DiscoveryService.getGroups({
             query: q,
-            city,
+            cities: selectedCities,
             categoryId: effectiveCategoryId,
             tags: activeTags,
             type: type as string | undefined,
@@ -103,16 +106,18 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         currentTab === 'events'
             ? EventService.getDiscoverableEvents({
                 category: category,
-                city,
+                cities: selectedCities,
+                tags: activeTags,
                 search: q,
                 status: 'upcoming'
             }, locale, session?.user?.id)
-            : Promise.resolve([]),
+            : Promise.resolve({ events: [], hasMore: false }),
         DiscoveryService.getContextualTaxonomy(effectiveCategoryId || null, locale),
         CityService.listActive(locale)
     ]);
 
     const { groups, hasMore, totalCount } = groupsRes;
+    const discoverableEvents = eventsRes.events;
 
     // Dynamic accent color based on selected or snapped hierarchy
     const activeL1 = taxonomy ? taxonomy.l1 : categories.find(c => c.id === l1HighlightId);
@@ -162,7 +167,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                         <h2 className="text-lg sm:text-xl font-bold text-foreground">
                             {currentTab === 'groups' ? t('groupsFoundCount', { count: totalCount }) : t('eventsFoundCount', { count: discoverableEvents.length })}
                         </h2>
-                        {(q || (city && city !== 'all') || category || activeTags.length > 0) && (
+                        {(q || selectedCities.length > 0 || category || activeTags.length > 0) && (
                             <Link
                                 href="/"
                                 className="text-xs font-bold text-primary hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"

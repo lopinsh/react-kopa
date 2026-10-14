@@ -68,9 +68,14 @@ const loadAllNames = unstable_cache(
     async (): Promise<Record<CityLang, Record<string, string>>> => {
         const all = await prisma.city.findMany({ select: { slug: true, nameLv: true, nameEn: true, status: true } });
         const pendingSlugs = all.filter((row) => row.status === 'PENDING_REVIEW').map((row) => row.slug);
-        const used = pendingSlugs.length
-            ? new Set((await prisma.group.findMany({ where: { city: { in: pendingSlugs } }, distinct: ['city'], select: { city: true } })).map((g) => g.city))
-            : new Set<string>();
+        // A pending city counts as used when a group or an event has it.
+        const [groupCities, eventCities] = pendingSlugs.length
+            ? await Promise.all([
+                prisma.group.findMany({ where: { city: { in: pendingSlugs } }, distinct: ['city'], select: { city: true } }),
+                prisma.event.findMany({ where: { city: { in: pendingSlugs } }, distinct: ['city'], select: { city: true } }),
+            ])
+            : [[], []];
+        const used = new Set<string | null>([...groupCities, ...eventCities].map((row) => row.city));
         const rows = all.filter((row) => row.status === 'ACTIVE' || used.has(row.slug));
         const map: Record<CityLang, Record<string, string>> = { lv: {}, en: {} };
         for (const row of rows) {
@@ -212,6 +217,17 @@ export const CityService = {
         return city.status === 'ACTIVE' || city.submittedById === userId;
     },
 
+    /**
+     * An event may be placed in an approved city, or in one it (or its group) already has, even if that
+     * one is still waiting for approval. The event form does not suggest new cities.
+     */
+    async isUsableForEvent(slug: string, keep: Array<string | null | undefined>): Promise<boolean> {
+        if (!slug) return false;
+        if (keep.some((k) => !!k && k === slug)) return true;
+        const city = await prisma.city.findUnique({ where: { slug }, select: { status: true } });
+        return city?.status === 'ACTIVE';
+    },
+
     async createActive(names: { nameLv: string; nameEn: string }): Promise<void> {
         if (await nameTakenByOther(names)) throw new ActionError('CITY_EXISTS');
         const base = citySlugBase(names.nameEn);
@@ -252,6 +268,8 @@ export const CityService = {
         const groups = await groupsUsing(city.slug);
         await prisma.$transaction([
             prisma.group.updateMany({ where: { city: city.slug }, data: { city: '' } }),
+            // Events follow their group: '' like Group.city, never NULL (R5a's NOT NULL step relies on it).
+            prisma.event.updateMany({ where: { city: city.slug }, data: { city: '' } }),
             prisma.city.deleteMany({ where: { id, status: 'PENDING_REVIEW' } }),
         ]);
         return { nameLv: city.nameLv, nameEn: city.nameEn, submittedById: city.submittedById, groups };
@@ -261,7 +279,11 @@ export const CityService = {
     async deleteUnused(id: string): Promise<void> {
         const city = await prisma.city.findFirst({ where: { id, status: 'ACTIVE' }, select: { slug: true } });
         if (!city) throw new ActionError('NOT_FOUND');
-        if ((await prisma.group.count({ where: { city: city.slug } })) > 0) throw new ActionError('CITY_IN_USE');
+        const [groups, events] = await Promise.all([
+            prisma.group.count({ where: { city: city.slug } }),
+            prisma.event.count({ where: { city: city.slug } }),
+        ]);
+        if (groups + events > 0) throw new ActionError('CITY_IN_USE');
         await prisma.city.deleteMany({ where: { id, status: 'ACTIVE' } });
     },
 };

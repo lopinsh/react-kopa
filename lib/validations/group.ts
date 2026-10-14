@@ -20,6 +20,8 @@ export const step1Object = z.object({
 export const step1Schema = step1Object;
 
 export const GROUP_NAME_MAX = 80;
+/** "Ko meklējam?" (AR-35): one short line. */
+export const GROUP_LOOKING_FOR_MAX = 60;
 
 // Step 2: The Basics
 export const step2Schema = z.object({
@@ -33,6 +35,8 @@ export const step2Schema = z.object({
         .optional()
         .nullable()
         .or(z.literal('')),
+    /** "Ko meklējam?" (AR-35): optional, trimmed; empty → null. */
+    lookingFor: z.string().trim().max(GROUP_LOOKING_FOR_MAX, 'LOOKING_FOR_TOO_LONG').nullish().transform((v) => v || null),
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
     /** The city's stored value (`City.slug`). The server checks that it exists and may be used. */
     city: z.string().min(1, 'CITY_REQUIRED').max(80, 'CITY_REQUIRED'),

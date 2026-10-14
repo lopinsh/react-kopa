@@ -107,6 +107,7 @@ export default async function GroupSettingsPage(props: {
                         group={{
                             id: group.id,
                             name: group.name,
+                            lookingFor: group.lookingFor,
                             city: group.city,
                             type: group.type,
                             categoryId: group.categoryId,

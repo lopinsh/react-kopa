@@ -74,6 +74,8 @@ export interface GroupContext {
     name: string;
     slug: string;
     description: string | null;
+    /** "Ko meklējam?" (AR-35): the team's one short line, or null. */
+    lookingFor: string | null;
     city: string;
     type: 'PUBLIC' | 'PRIVATE';
     categoryId: string;
@@ -283,6 +285,7 @@ export const GroupService = {
             name: g.name,
             slug: g.slug,
             description: g.description,
+            lookingFor: g.lookingFor,
             city: g.city,
             type: g.type as 'PUBLIC' | 'PRIVATE',
             categoryId: g.categoryId,
@@ -412,6 +415,7 @@ export const GroupService = {
                 name: data.name,
                 slug,
                 description: data.description,
+                lookingFor: data.lookingFor,
                 city: data.city,
                 type: data.type,
                 categoryId: targetCategoryId,
@@ -625,6 +629,7 @@ export const GroupService = {
 
         const updateData: Prisma.GroupUpdateInput = {
             description: data.description,
+            lookingFor: data.lookingFor,
             city: data.city,
             bannerImage: data.bannerImage,
             discordLink: data.discordLink,

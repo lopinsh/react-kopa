@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
@@ -40,12 +40,14 @@ export default function AdminGroupCategorizationForm({
     const [isPending, startTransition] = useTransition();
 
     const methods = useForm<GroupFormValues>({
-        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
+        // The schema turns an empty "Ko meklējam?" into null, so its input and output types differ.
+        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)) as unknown as Resolver<GroupFormValues>,
         defaultValues: {
             categoryId: selectedL1.id,
             tagIds: initialTagIds,
             name: groupName,
             description: '',
+            lookingFor: null,
             city: 'Riga',
             type: 'PUBLIC',
             isAcceptingMembers: true,

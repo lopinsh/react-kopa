@@ -53,6 +53,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         name: s('groupName'),
         slug: 'sample-group',
         description: s('groupDescription'),
+        lookingFor: null,
         city: 'Jelgava',
         type: 'PUBLIC',
         categoryId: 'sample-category',
@@ -83,6 +84,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
 
     const eventBase = {
         titleLang: lang,
+        city: 'Jelgava',
+        isOnline: false,
         bannerImage: null,
         group: {
             name: s('groupName'),

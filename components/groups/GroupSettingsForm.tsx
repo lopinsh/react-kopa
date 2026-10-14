@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition, useMemo, useState } from 'react';
-import { useForm, useWatch, FormProvider } from 'react-hook-form';
+import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { isOverLimit } from '@/lib/text-limit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { buildGroupFormSchema, GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
@@ -32,6 +32,7 @@ type Props = {
     group: {
         id: string;
         name: string;
+        lookingFor: string | null;
         city: string;
         type: GroupFormValues['type'];
         categoryId: string;
@@ -85,9 +86,11 @@ export default function GroupSettingsForm({
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
     const methods = useForm<GroupFormValues>({
-        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)),
+        // The schema turns an empty "Ko meklējam?" into null, so its input and output types differ.
+        resolver: zodResolver(buildGroupFormSchema(initialTagIds.length)) as unknown as Resolver<GroupFormValues>,
         defaultValues: {
             name: group.name,
+            lookingFor: group.lookingFor,
             city: group.city,
             type: group.type,
             // Moderators never see the category picker: their form carries the stored values, which the service compares.

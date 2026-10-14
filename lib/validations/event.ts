@@ -18,6 +18,10 @@ export const eventSchema = z.object({
     texts: z.object({ lv: eventTextSchema, en: eventTextSchema }),
     startDate: z.string().or(z.date()).transform((val) => new Date(val)).refine((d) => !Number.isNaN(d.getTime()), 'START_DATE_REQUIRED'),
     endDate: z.string().or(z.date()).optional().nullable().transform((val) => val ? new Date(val) : null).refine((d) => d === null || !Number.isNaN(d.getTime()), 'END_DATE_INVALID'),
+    /** The event's place (`City.slug`, AR-57). The server checks that it may be used. */
+    city: z.string().trim().min(1, 'CITY_REQUIRED').max(80, 'CITY_REQUIRED'),
+    /** "Tiešsaistē": `location` then holds the link. */
+    isOnline: z.boolean().default(false),
     location: z.string().min(2, 'LOCATION_REQUIRED'),
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
     maxParticipants: z.number('MAX_PARTICIPANTS_INVALID').int('MAX_PARTICIPANTS_INVALID').positive('MAX_PARTICIPANTS_INVALID').nullable().optional(),
@@ -49,6 +53,8 @@ export type EventFormData = {
     texts: Record<TextLang, { title: string; description: string; instructions: string }>;
     startDate: string | Date;
     endDate?: string | Date | null;
+    city: string;
+    isOnline: boolean;
     location: string;
     bannerImage?: string | null;
     maxParticipants?: number | null;

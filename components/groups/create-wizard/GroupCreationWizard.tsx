@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition, useMemo, useEffect, useRef } from 'react';
-import { useForm, useWatch, FormProvider } from 'react-hook-form';
+import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { isOverLimit } from '@/lib/text-limit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
@@ -86,11 +86,13 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     }, [step]);
 
     const form = useForm<GroupFormValues>({
-        resolver: zodResolver(groupFormSchema),
+        // The schema turns an empty "Ko meklējam?" into null, so its input and output types differ.
+        resolver: zodResolver(groupFormSchema) as unknown as Resolver<GroupFormValues>,
         defaultValues: {
             categoryId: defaultTaxSelection?.kind === 'existing' ? defaultTaxSelection.categoryId : '',
             name: '',
             description: '',
+            lookingFor: null,
             city: undefined,
             tagIds: [],
             type: 'PUBLIC',

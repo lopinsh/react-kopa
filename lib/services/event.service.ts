@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { DISCOVERY_EVENTS_LIMIT, GROUP_EVENTS_LIMIT } from '@/lib/constants';
+import { DISCOVERY_EVENTS_LIMIT, DISCOVERY_EVENTS_MAX_LIMIT, GROUP_EVENTS_LIMIT } from '@/lib/constants';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
@@ -14,6 +14,10 @@ import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, 
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { plainExcerpt } from '@/lib/text-excerpt';
+import { CityService } from './city.service';
+import { eventWhere, clampRange, bucketByDay } from './discovery-query';
+import { DEFAULT_TIME_ZONE, isValidTimeZone } from '@/lib/time-zone';
+import type { DayCount, EventDiscoveryFilters } from '@/lib/types/discovery';
 
 export interface EventServiceResponse<T = void> {
     success: true;
@@ -55,8 +59,14 @@ export interface EventActionContext {
 }
 
 type EventWithGroup = Prisma.EventGetPayload<{
-    include: { translations: { select: { lang: true; title: true } }; group: { select: { id: true; name: true; slug: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
+    include: { translations: { select: { lang: true; title: true } }; group: { select: { id: true; name: true; slug: true; city: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
 }>;
+
+export interface DiscoverableEventPage {
+    events: DiscoverableEvent[];
+    /** More events matched than `limit`. */
+    hasMore: boolean;
+}
 
 /** One discovery result: just what the cards need (no instructions, no attendee lists). */
 export interface DiscoverableEvent {
@@ -67,6 +77,9 @@ export interface DiscoverableEvent {
     slug: string;
     startDate: Date;
     location: string | null;
+    /** The event's own place (`City.slug`); null only for events the old code created during the R4 deploy. */
+    city: string | null;
+    isOnline: boolean;
     bannerImage: string | null;
     joinMode: EventJoinMode;
     isFull: boolean;
@@ -96,6 +109,8 @@ export interface NextEventView {
     startDate: Date;
     endDate: Date | null;
     location: string | null;
+    city: string | null;
+    isOnline: boolean;
     /** First words of the description as plain text (at most 140 characters, no HTML), or null. */
     excerpt: string | null;
 }
@@ -155,6 +170,7 @@ export class EventService {
                         id: true,
                         name: true,
                         slug: true,
+                        city: true,
                         hiddenAt: true,
                         category: { include: TaxonomyResolver.getInclude('lv') }
                     }
@@ -371,6 +387,11 @@ export class EventService {
             return { success: false, error: 'FORBIDDEN' };
         }
 
+        // The event's place starts as the group's city; the organiser may pick another approved city (AR-57).
+        const group = await prisma.group.findUnique({ where: { id: groupId }, select: { city: true } });
+        if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (!(await CityService.isUsableForEvent(data.city, [group.city]))) return { success: false, error: 'VALIDATION_FAILED' };
+
         // The organiser's own language is the event's original language (and the slug comes from its title).
         const originalTitle = data.texts[data.originalLang].title.trim();
         const event = await prisma.event.create({
@@ -381,6 +402,8 @@ export class EventService {
                 startDate: data.startDate,
                 endDate: data.endDate,
                 location: data.location,
+                city: data.city,
+                isOnline: data.isOnline,
                 maxParticipants: data.maxParticipants,
                 visibility: data.visibility,
                 joinMode: data.joinMode,
@@ -447,6 +470,7 @@ export class EventService {
         const { event, error } = await EventService.loadForOrganiser(eventId, userId);
         if (!event) return { success: false, error };
         if (isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
+        if (!(await CityService.isUsableForEvent(data.city, [event.group.city, event.city]))) return { success: false, error: 'VALIDATION_FAILED' };
 
         const opening = event.joinMode === 'REQUEST' && data.joinMode === 'OPEN';
 
@@ -484,6 +508,8 @@ export class EventService {
                     startDate: data.startDate,
                     endDate: data.endDate,
                     location: data.location,
+                    city: data.city,
+                    isOnline: data.isOnline,
                     maxParticipants: data.maxParticipants,
                     visibility: data.visibility,
                     joinMode: data.joinMode,
@@ -567,7 +593,7 @@ export class EventService {
             orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],
             distinct: ['groupId'],
             select: {
-                id: true, slug: true, groupId: true, startDate: true, endDate: true, location: true, originalLang: true,
+                id: true, slug: true, groupId: true, startDate: true, endDate: true, location: true, city: true, isOnline: true, originalLang: true,
                 translations: { select: { lang: true, title: true, description: true, instructions: true } }
             }
         });
@@ -576,7 +602,7 @@ export class EventService {
             result.set(e.groupId, {
                 id: e.id, slug: e.slug, groupId: e.groupId,
                 title: text.title, titleLang: text.titleLang,
-                startDate: e.startDate, endDate: e.endDate, location: e.location,
+                startDate: e.startDate, endDate: e.endDate, location: e.location, city: e.city, isOnline: e.isOnline,
                 excerpt: plainExcerpt(text.description, 140)
             });
         }
@@ -855,60 +881,12 @@ export class EventService {
      * Members-only events of the viewer's own groups are fetched uncached and merged in,
      * so one user's members-only events can never reach another user's results.
      */
-    static async getDiscoverableEvents(filters: {
-        category?: string;
-        city?: string;
-        search?: string;
-        status?: 'upcoming' | 'past';
-    }, locale: string, userId?: string): Promise<DiscoverableEvent[]> {
-        const todayStart = startOfTodayInRiga();
-        const { category, city, search, status } = filters;
-
-        const buildWhere = (fCity?: string, fCategory?: string, fSearch?: string, fStatus?: string): Prisma.EventWhereInput => {
-            const groupFilters: Prisma.GroupWhereInput[] = [{ hiddenAt: null }];
-            if (fCity) groupFilters.push({ city: fCity });
-            if (fCategory) {
-                groupFilters.push({
-                    OR: [
-                        { category: { slug: fCategory } },
-                        { category: { parent: { slug: fCategory } } },
-                        { category: { parent: { parent: { slug: fCategory } } } }
-                    ]
-                });
-            }
-            return {
-                // Past = the event's last day is before today (Latvian time); see isEventPast.
-                ...(fStatus === 'past'
-                    ? { OR: [{ endDate: { lt: todayStart } }, { endDate: null, startDate: { lt: todayStart } }] }
-                    : { OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] }),
-                AND: [
-                    { group: { AND: groupFilters } },
-                    // Matches the text in any language (instructions are restricted and never searched).
-                    ...(fSearch ? [{
-                        OR: [
-                            {
-                                translations: {
-                                    some: {
-                                        OR: [
-                                            { title: { contains: fSearch, mode: 'insensitive' as const } },
-                                            { description: { contains: fSearch, mode: 'insensitive' as const } }
-                                        ]
-                                    }
-                                }
-                            },
-                            {
-                                group: {
-                                    OR: [
-                                        { name: { contains: fSearch, mode: 'insensitive' as const } },
-                                        { description: { contains: fSearch, mode: 'insensitive' as const } }
-                                    ]
-                                }
-                            }
-                        ]
-                    }] : [])
-                ]
-            };
-        };
+    static async getDiscoverableEvents(filters: EventDiscoveryFilters, locale: string, userId?: string): Promise<DiscoverableEventPage> {
+        const limit = Math.min(Math.max(Math.floor(filters.limit ?? DISCOVERY_EVENTS_LIMIT), 1), DISCOVERY_EVENTS_MAX_LIMIT);
+        const { status = 'upcoming' } = filters;
+        const cities = [...(filters.cities ?? [])].sort();
+        const tags = [...(filters.tags ?? [])].sort();
+        const where = { ...filters, cities, tags, status };
 
         const include = {
             // Titles only: descriptions and instructions never go into discovery payloads.
@@ -943,28 +921,27 @@ export class EventService {
         const orderBy = { startDate: status === 'past' ? 'desc' : 'asc' } as const;
 
         const loadPublic = unstable_cache(
-            async (fCity?: string, fCategory?: string, fSearch?: string, fStatus?: string) => {
-                return await prisma.event.findMany({
-                    where: { AND: [buildWhere(fCity, fCategory, fSearch, fStatus), { visibility: 'PUBLIC' }] },
-                    include,
-                    orderBy,
-                    take: DISCOVERY_EVENTS_LIMIT
-                });
-            },
-            [`events-discovery-v2-${locale}-${city}-${category}-${search}-${status}`],
+            async () => prisma.event.findMany({
+                where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] },
+                include,
+                orderBy,
+                take: limit + 1
+            }),
+            [`events-discovery-v3-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
-                tags: ['events']
+                // A group's hide or category change moves its events too.
+                tags: ['events', 'groups']
             }
         );
 
         const [publicRows, memberRows] = await Promise.all([
-            loadPublic(city, category, search, status),
+            loadPublic(),
             userId
                 ? prisma.event.findMany({
                     where: {
                         AND: [
-                            buildWhere(city, category, search, status),
+                            eventWhere(where),
                             {
                                 visibility: 'MEMBERS_ONLY',
                                 group: { members: { some: { userId, role: { not: 'PENDING' } } } }
@@ -973,7 +950,7 @@ export class EventService {
                     },
                     include,
                     orderBy,
-                    take: DISCOVERY_EVENTS_LIMIT
+                    take: limit + 1
                 })
                 : Promise.resolve([])
         ]);
@@ -981,7 +958,7 @@ export class EventService {
         const direction = status === 'past' ? -1 : 1;
         const lang = toTextLang(locale);
         // Cached rows come back with dates as strings in some Next versions; normalise before sorting.
-        return [...publicRows, ...memberRows]
+        const merged = [...publicRows, ...memberRows]
             .map(e => {
                 const text = resolveEventText(e.translations.map(t => ({ ...t, description: null, instructions: null })), lang, e.originalLang, true);
                 return { e, text };
@@ -993,6 +970,8 @@ export class EventService {
                 slug: e.slug,
                 startDate: new Date(e.startDate),
                 location: e.location,
+                city: e.city,
+                isOnline: e.isOnline,
                 bannerImage: e.bannerImage,
                 joinMode: e.joinMode,
                 isFull: e.isFull,
@@ -1000,7 +979,44 @@ export class EventService {
                 goingCount: e._count.attendees,
                 group: e.group
             }))
-            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()))
-            .slice(0, DISCOVERY_EVENTS_LIMIT);
+            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()));
+        return { events: merged.slice(0, limit), hasMore: merged.length > limit };
+    }
+
+    /**
+     * Events per day inside a date range (D9), for the day strip and calendar. Same filters and visibility as the list:
+     * public rows cached 5 minutes, the viewer's own members-only events added uncached. Days are cut in `timeZone`;
+     * a multi-day event counts on the day it starts (or on the first day of the range if it began earlier).
+     */
+    static async countEventsPerDay(
+        filters: Omit<EventDiscoveryFilters, 'status' | 'limit'> & { from: Date; to: Date },
+        timeZone: string,
+        userId?: string
+    ): Promise<DayCount[]> {
+        const range = clampRange(filters.from, filters.to);
+        if (!range) return [];
+        const zone = isValidTimeZone(timeZone) ? timeZone : DEFAULT_TIME_ZONE;
+        const cities = [...(filters.cities ?? [])].sort();
+        const tags = [...(filters.tags ?? [])].sort();
+        const where = { ...filters, cities, tags, ...range };
+        const select = { startDate: true } as const;
+
+        const loadPublic = unstable_cache(
+            async () => prisma.event.findMany({ where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] }, select }),
+            [`events-days-v1-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${range.from.toISOString()}-${range.to.toISOString()}`],
+            { revalidate: 300, tags: ['events', 'groups'] }
+        );
+        const [publicRows, memberRows] = await Promise.all([
+            loadPublic(),
+            userId
+                ? prisma.event.findMany({
+                    where: {
+                        AND: [eventWhere(where), { visibility: 'MEMBERS_ONLY', group: { members: { some: { userId, role: { not: 'PENDING' } } } } }]
+                    },
+                    select
+                })
+                : Promise.resolve([])
+        ]);
+        return bucketByDay([...publicRows, ...memberRows], range.from, range.to, zone);
     }
 }

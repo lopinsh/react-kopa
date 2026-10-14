@@ -3,9 +3,13 @@ import { unstable_cache } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import type {
     ScopedResult,
-    DiscoveryFilters,
+    GroupDiscoveryFilters,
+    FacetInput,
+    DiscoveryCounts,
     ContextualTaxonomy
 } from '@/lib/types/discovery';
+import { groupWhere, publicSectionMatch, loadGroupFacetRows, loadEventFacetRows, aggregateFacets } from './discovery-query';
+import { startOfTodayInRiga } from '@/lib/event-dates';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { categoryColor } from '@/lib/theme/category';
 import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
@@ -16,21 +20,6 @@ import { pickTitle } from '@/lib/utils/localized-title';
 
 /** All titles: a sub-category may exist in one language only (see pickTitle). */
 const ALL_TITLES = { select: { lang: true, title: true } } as const;
-
-/**
- * A group matches when one of its PUBLIC sections has the text in any language. Members-only sections
- * are never searched, so their text cannot be found (or inferred) by outsiders.
- */
-function publicSectionMatch(q: { contains: string; mode: 'insensitive' }): Prisma.GroupWhereInput {
-    return {
-        sections: {
-            some: {
-                visibility: 'PUBLIC',
-                translations: { some: { OR: [{ title: q }, { content: q }] } }
-            }
-        }
-    };
-}
 
 /**
  * Service to handle discovery logic (searching groups and categories).
@@ -94,7 +83,7 @@ export const DiscoveryService = {
         });
 
         // 3. Fetch Matching Groups within context
-        const groupWhere: Prisma.GroupWhereInput = {
+        const contextGroupWhere: Prisma.GroupWhereInput = {
             type: 'PUBLIC',
             hiddenAt: null,
             OR: [
@@ -122,10 +111,10 @@ export const DiscoveryService = {
         groupAnd.push({
             category: { status: 'ACTIVE' }
         });
-        groupWhere.AND = groupAnd;
+        contextGroupWhere.AND = groupAnd;
 
         const groups = await prisma.group.findMany({
-            where: groupWhere,
+            where: contextGroupWhere,
             take: 5,
             include: {
                 category: {
@@ -178,6 +167,7 @@ export const DiscoveryService = {
 
         // 4. Map and Combine
         const tCities = await getTranslations({ locale: lang, namespace: 'cities' });
+        const tEvent = await getTranslations({ locale: lang, namespace: 'event' });
         const mappedCategories: ScopedResult[] = categories.map(c => {
             const resolved = TaxonomyResolver.resolve(c);
             const l2 = c.level === 2 ? c : (c.level === 3 ? c.parent : undefined);
@@ -218,7 +208,7 @@ export const DiscoveryService = {
                 id: e.id,
                 slug: e.slug,
                 title: resolveText(e.translations, toTextLang(lang), e.originalLang, (t) => t.title).value,
-                subtitle: e.location || cityLabel(tCities, e.group.city),
+                subtitle: e.isOnline ? tEvent('online') : (e.location || cityLabel(tCities, e.city ?? e.group.city)),
                 l1Slug: resolved.l1Slug || 'sigulda',
                 color: resolved.accentColor,
                 image: e.bannerImage || e.group.bannerImage,
@@ -232,90 +222,14 @@ export const DiscoveryService = {
     /**
      * Standard page-level group fetching with full filters.
      */
-    async getGroups(filters: DiscoveryFilters, locale: string) {
+    async getGroups(filters: GroupDiscoveryFilters, locale: string) {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         try {
-            const { city, categoryId, tag, tags, query, type, take = 12, skip = 0 } = filters;
-            const where: Prisma.GroupWhereInput = {};
-            const whereAnd: Prisma.GroupWhereInput[] = [];
+            const { take = 12, skip = 0 } = filters;
+            const where = groupWhere({ ...filters, cities: filters.cities && [...filters.cities].sort() }, lang);
 
-            // 0. Content Safety: Only allow ACTIVE and non-wildcard categories
-            whereAnd.push({
-                category: {
-                    status: 'ACTIVE',
-                    isWildcard: false
-                }
-            });
-
-            // 1. City Filter
-            if (city && city !== 'all') {
-                where.city = city;
-            }
-
-            where.hiddenAt = null;
-
-            // 2. Type Filter - Show only PUBLIC groups by default in discovery
-            if (type === 'PUBLIC' || type === 'PRIVATE') {
-                where.type = type;
-            } else {
-                where.type = 'PUBLIC';
-            }
-
-            // 2. Category Hierarchy Filter
-            if (categoryId) {
-                const categoryMatch = {
-                    OR: [
-                        { id: categoryId },              // Direct match (L1, L2, or L3)
-                        { parentId: categoryId },        // Children (L2 or L3)
-                        { parent: { parentId: categoryId } } // Grandchildren (L3)
-                    ]
-                };
-                whereAnd.push({
-                    OR: [
-                        { category: categoryMatch },
-                        { tags: { some: categoryMatch } }
-                    ]
-                });
-            }
-
-            // 2b. Specific Tag Filter (L2/L3) with Hierarchy Support
-            const searchTags = tags?.length ? tags : (tag ? [tag] : []);
-            if (searchTags.length > 0) {
-                whereAnd.push({
-                    OR: searchTags.flatMap((t) => [
-                        { category: { slug: t } },
-                        { category: { parent: { slug: t } } },
-                        { category: { parent: { parent: { slug: t } } } },
-                        { tags: { some: { slug: t } } },
-                        { tags: { some: { parent: { slug: t } } } },
-                        { tags: { some: { parent: { parent: { slug: t } } } } }
-                    ])
-                });
-            }
-
-            // 3. Search Query
-            if (query) {
-                const searchQuery = { contains: query, mode: 'insensitive' as const };
-                whereAnd.push({
-                    OR: [
-                        { name: searchQuery },
-                        { description: searchQuery },
-                        publicSectionMatch(searchQuery),
-                        {
-                            category: {
-                                OR: [
-                                    { titles: { some: { lang, title: searchQuery } } },
-                                    { slug: searchQuery }
-                                ]
-                            }
-                        }
-                    ]
-                });
-            }
-            where.AND = whereAnd;
-
-            // 4. Fetch Groups with Caching for Taxonomy Heavy Joins
+            // Fetch groups with caching for Taxonomy Heavy Joins
             const fetchRawGroups = async (searchWhere: typeof where, reqLang: string, reqTake: number, reqSkip: number) => {
                 const results = await prisma.group.findMany({
                     where: searchWhere,
@@ -356,7 +270,7 @@ export const DiscoveryService = {
 
             const { items: groups, hasMore } = await fetchGroupsWithCategories(where, lang, take, skip);
 
-            // 5. Get total count for display (uncached for accuracy or cached with shorter TTL)
+            // Total count for display (uncached for accuracy or cached with shorter TTL)
             const totalCount = await prisma.group.count({ where });
 
             const mappedGroups = groups.map(toGroupCard);
@@ -366,6 +280,30 @@ export const DiscoveryService = {
             console.error('[DiscoveryService.getGroups] Error:', error);
             return { groups: [], hasMore: false, totalCount: 0 };
         }
+    },
+
+    /**
+     * Counts for the filter lists and the drawer (D8): total, per category, per sub-category, per city, online.
+     * Public groups and events only, so the numbers are the same for everyone. Cached 5 minutes per filter set;
+     * the 'groups', 'events' and 'categories' tags drop them. A search word is unbounded, so it runs uncached.
+     */
+    async getCounts(input: FacetInput, locale: string): Promise<DiscoveryCounts> {
+        const lang = locale === 'en' ? 'en' : 'lv';
+        const cities = [...(input.cities ?? [])].sort();
+        const tags = [...(input.tags ?? [])].sort();
+        const sorted: FacetInput = { ...input, cities, tags };
+        // If a kind ever passes a few thousand rows, move this aggregation into SQL.
+        const compute = async (): Promise<DiscoveryCounts> => {
+            const rows = input.kind === 'groups' ? await loadGroupFacetRows(sorted, lang) : await loadEventFacetRows(sorted);
+            return { kind: input.kind, ...aggregateFacets(rows, sorted) };
+        };
+        if (input.query) return compute();
+        return unstable_cache(compute, [
+            'discovery-counts-v1', input.kind, cities.join(','), input.l1Slug ?? '', tags.join(','),
+            input.from?.toISOString() ?? '', input.to?.toISOString() ?? '',
+            // The Latvian day, so "upcoming" rolls over at midnight.
+            input.kind === 'events' ? startOfTodayInRiga().toISOString() : ''
+        ], { tags: ['groups', 'events', 'categories'], revalidate: 300 })();
     },
 
     async getDiscoveryCategories(locale: string) {
