@@ -252,7 +252,16 @@
     "discardTitle": "Atmest izmaiņas?",
     "discardText": "Ierakstītais netiks saglabāts.",
     "keepEditing": "Turpināt rediģēt",
-    "discard": "Atmest"
+    "discard": "Atmest",
+    "weekdayInitials": {
+      "mon": "P",
+      "tue": "O",
+      "wed": "T",
+      "thu": "C",
+      "fri": "Pk",
+      "sat": "S",
+      "sun": "Sv"
+    }
   },
   "discovery": {
     "adjustFilters": "Mēģini pielāgot filtrus vai meklēšanas vaicājumu, lai atrastu meklēto.",
@@ -294,7 +303,30 @@
     "suggestSent": "Ieteikums nosūtīts",
     "showMore": "Rādīt vēl",
     "nextMeeting": "Nākamā tikšanās: {date}",
-    "metaDescription": "Atrodi cilvēkus, ar ko kopā sportot, spēlēt, dziedāt un darīt citas lietas savā pilsētā."
+    "metaDescription": "Atrodi cilvēkus, ar ko kopā sportot, spēlēt, dziedāt un darīt citas lietas savā pilsētā.",
+    "dateLabel": "Datums",
+    "today": "Šodien",
+    "thisWeek": "Šonedēļ",
+    "weekend": "Nedēļas nogalē",
+    "pickDates": "Izvēlēties datumus",
+    "dateChoiceLabel": "Datums: {when}",
+    "days": "Dienas",
+    "dayEvents": "{date}, {count, plural, zero {# pasākumu} one {# pasākums} other {# pasākumi}}",
+    "previousWeek": "Iepriekšējā nedēļa",
+    "nextWeek": "Nākamā nedēļa",
+    "previousMonth": "Iepriekšējais mēnesis",
+    "nextMonth": "Nākamais mēnesis",
+    "wholeMonth": "Viss mēnesis",
+    "pickEnd": "Izvēlies beigu dienu vai spied „Rādīt”",
+    "show": "Rādīt",
+    "showCount": "Rādīt {count}",
+    "showNextWeek": "Rādīt nākamo nedēļu",
+    "dayToday": "Šodien · {date}",
+    "dayTomorrow": "Rīt · {date}",
+    "noEventsThisWeek": "Šonedēļ pasākumu nav",
+    "noEventsInPeriod": "Šajā laikā pasākumu nav",
+    "eventsCut": "Rādīti pirmie {count}. Izvēlies īsāku laiku vai vietu.",
+    "noNextMeeting": "Tikšanās vēl nav izziņota"
   },
   "moderation": {
     "hideGroup": "Paslēpt grupu",
@@ -1383,7 +1415,8 @@
     "editEvent": "Labot",
     "deleteEvent": "Dzēst",
     "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot.",
-    "online": "Tiešsaistē"
+    "online": "Tiešsaistē",
+    "continuesFrom": "kopš {date}"
   },
   "eventWizard": {
     "stepOf": "{current}. solis no {total}",

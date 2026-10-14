@@ -252,7 +252,16 @@
     "discardTitle": "Discard changes?",
     "discardText": "What you typed won't be saved.",
     "keepEditing": "Keep editing",
-    "discard": "Discard"
+    "discard": "Discard",
+    "weekdayInitials": {
+      "mon": "Mo",
+      "tue": "Tu",
+      "wed": "We",
+      "thu": "Th",
+      "fri": "Fr",
+      "sat": "Sa",
+      "sun": "Su"
+    }
   },
   "discovery": {
     "adjustFilters": "Try adjusting your filters or search query to find what you're looking for.",
@@ -294,7 +303,30 @@
     "suggestSent": "Suggestion sent",
     "showMore": "Show more",
     "nextMeeting": "Next meeting: {date}",
-    "metaDescription": "Find people to do sports, play, sing and do other things with in your town."
+    "metaDescription": "Find people to do sports, play, sing and do other things with in your town.",
+    "dateLabel": "Date",
+    "today": "Today",
+    "thisWeek": "This week",
+    "weekend": "This weekend",
+    "pickDates": "Pick dates",
+    "dateChoiceLabel": "Date: {when}",
+    "days": "Days",
+    "dayEvents": "{date}, {count, plural, one {# event} other {# events}}",
+    "previousWeek": "Previous week",
+    "nextWeek": "Next week",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "wholeMonth": "Whole month",
+    "pickEnd": "Pick the last day or press “Show”",
+    "show": "Show",
+    "showCount": "Show {count}",
+    "showNextWeek": "Show next week",
+    "dayToday": "Today · {date}",
+    "dayTomorrow": "Tomorrow · {date}",
+    "noEventsThisWeek": "No events this week",
+    "noEventsInPeriod": "No events at this time",
+    "eventsCut": "Showing the first {count}. Pick a shorter time or a place.",
+    "noNextMeeting": "No meeting announced yet"
   },
   "moderation": {
     "hideGroup": "Hide group",
@@ -1383,7 +1415,8 @@
     "editEvent": "Edit",
     "deleteEvent": "Delete",
     "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone.",
-    "online": "Online"
+    "online": "Online",
+    "continuesFrom": "since {date}"
   },
   "eventWizard": {
     "stepOf": "Step {current} of {total}",

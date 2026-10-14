@@ -2,13 +2,14 @@ import { GroupService } from '@/lib/services/group.service';
 import { EventService } from '@/lib/services/event.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
-import EventRow from '@/components/groups/EventRow';
-import { getTranslations } from 'next-intl/server';
+import EventDayList from '@/components/events/EventDayList';
+import { getTimeZone, getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
 import type { Metadata } from 'next';
-import { isEventPast } from '@/lib/event-dates';
+import { dayInZone, zonedDayStart } from '@/lib/discovery-dates';
+import { groupByDay } from '@/lib/event-days';
 import EmptyState from '@/components/ui/EmptyState';
 import { buttonClass } from '@/components/ui/Button';
 
@@ -45,14 +46,18 @@ export default async function GroupEventsPage({
         notFound();
     }
 
-    const eventsData = await EventService.getGroupEvents(group.id, locale, session?.user?.id);
-    const [t, tFrame, tCommon] = await Promise.all([getTranslations('group'), getTranslations('group.frame'), getTranslations('common')]);
+    // Gaidāmie and Pagājušie only; any other value (an old link to "Mani pasākumi") shows Gaidāmie.
+    const currentTab = tab === 'past' ? 'past' : 'upcoming';
+    const [rows, zone, t, tFrame, tCommon] = await Promise.all([
+        EventService.getGroupEventRows(group.id, locale, session?.user?.id, currentTab),
+        getTimeZone(),
+        getTranslations('group'), getTranslations('group.frame'), getTranslations('common')
+    ]);
     const isOwnerOrAdmin = group.user.isAdmin;
     const base = `/${l1Slug}/group/${groupSlug}`;
 
-    // Gaidāmie and Pagājušie only; any other value (an old link to "Mani pasākumi") shows Gaidāmie.
-    const currentTab = tab === 'past' ? 'past' : 'upcoming';
-    const filteredEvents = eventsData.filter((event) => isEventPast(event) === (currentTab === 'past'));
+    const today = dayInZone(new Date(), zone);
+    const days = groupByDay(rows, currentTab === 'past' ? new Date(0) : zonedDayStart(today, zone), zone);
 
     return (
         <>
@@ -68,34 +73,8 @@ export default async function GroupEventsPage({
                     <Link href={`${base}/create-event`} className={buttonClass('secondary', undefined, 'sm')}>{t('createEvent')}</Link>
                 ) : undefined}
             />
-            {filteredEvents.length > 0 ? (
-                <div className="flex flex-col gap-3">
-                    {filteredEvents.map((event) => (
-                        <EventRow
-                            key={event.id}
-                            event={{
-                                id: event.id,
-                                title: event.title,
-                                titleLang: event.titleLang,
-                                startDate: event.startDate,
-                                endDate: event.endDate,
-                                location: event.location,
-                                maxParticipants: event.maxParticipants,
-                                isMembersOnly: event.visibility === 'MEMBERS_ONLY',
-                                joinMode: event.joinMode,
-                                isFull: event.isFull,
-                                goingCount: event.viewer.goingCount,
-                                myStatus: event.viewer.myStatus,
-                                canManage: event.viewer.canManage,
-                                pendingCount: event.viewer.pendingCount,
-                            }}
-                            locale={locale}
-                            href={`/${locale}/${l1Slug}/group/${groupSlug}/events/${event.slug}`}
-                            requireSignIn={!session?.user?.id}
-                            isPast={isEventPast(event)}
-                        />
-                    ))}
-                </div>
+            {rows.length > 0 ? (
+                <EventDayList days={days} today={today} showGroup={false} showCity />
             ) : (
                 <EmptyState
                     icon={Calendar}
