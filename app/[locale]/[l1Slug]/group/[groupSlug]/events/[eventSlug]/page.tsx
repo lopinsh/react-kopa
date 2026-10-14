@@ -28,6 +28,7 @@ import { isEventPast } from '@/lib/event-dates';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import Badge from '@/components/ui/Badge';
 import { langAttr } from '@/lib/translations';
+import { cityLabel } from '@/lib/city-label';
 import { capitalizeFirst, createDateFormatter, EVENT_DAY } from '@/lib/date-format';
 
 export async function generateMetadata({
@@ -68,6 +69,7 @@ export default async function EventPage({
     }
 
     const t = await getTranslations('event');
+    const tCities = await getTranslations('cities');
     const formatter = createDateFormatter(await getLocale(), await getTimeZone());
     const group = event.group;
 
@@ -91,7 +93,13 @@ export default async function EventPage({
         ended ? (goingCount > 0 ? t('wentCount', { count: goingCount }) : null) : isRequest ? t('approvedCount', { count: goingCount }) : t('goingCount', { count: goingCount }),
         !ended && event.maxParticipants ? t('aboutPeople', { count: event.maxParticipants }) : null
     ].filter(Boolean).join(' · ');
-    const isOnlineLocation = !!event.location && event.location.includes('http');
+    // Events saved before "Tiešsaistē" existed are recognised by a link in the address.
+    const isOnlineLocation = event.isOnline || !!event.location?.toLowerCase().includes('http');
+    // Only a real web link is ever made clickable.
+    const locationLink = event.location && /^https?:\/\//i.test(event.location.trim()) ? event.location.trim() : null;
+    const cityName = cityLabel(tCities, event.city);
+    const placeHeading = event.isOnline ? t('online') : (cityName || event.location || t('tba'));
+    const placeDetail = placeHeading === event.location ? null : event.location;
 
     // JSON-LD for SEO
     const jsonLd = {
@@ -102,14 +110,20 @@ export default async function EventPage({
         startDate: event.startDate.toISOString(),
         ...(event.endDate && { endDate: event.endDate.toISOString() }),
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: event.location?.toLowerCase().includes('http')
+        eventAttendanceMode: isOnlineLocation
             ? 'https://schema.org/OnlineEventAttendanceMode'
             : 'https://schema.org/OfflineEventAttendanceMode',
-        location: {
-            '@type': event.location?.toLowerCase().includes('http') ? 'VirtualLocation' : 'Place',
-            name: event.location,
-            ...(event.location?.toLowerCase().includes('http') ? { url: event.location } : { address: event.location })
-        },
+        location: isOnlineLocation
+            ? { '@type': 'VirtualLocation', name: event.location, ...(locationLink && { url: locationLink }) }
+            : {
+                '@type': 'Place',
+                name: event.location,
+                address: {
+                    '@type': 'PostalAddress',
+                    streetAddress: event.location,
+                    ...(cityName && { addressLocality: cityName })
+                }
+            },
         image: [event.bannerImage],
         organizer: {
             '@type': 'Organization',
@@ -257,10 +271,11 @@ export default async function EventPage({
                                 </div>
                                 <div className="min-w-0 flex-1">
                                     <p className="mb-0.5 text-[11px] font-semibold text-foreground-muted">{t('location')}</p>
-                                    <p className="truncate text-sm font-bold leading-snug text-foreground">{event.location || t('tba')}</p>
-                                    {event.location && (
+                                    <p className="truncate text-sm font-bold leading-snug text-foreground">{placeHeading}</p>
+                                    {placeDetail && <p className="truncate text-xs text-foreground-muted">{placeDetail}</p>}
+                                    {event.location && (!isOnlineLocation || locationLink) && (
                                         <a
-                                            href={isOnlineLocation ? event.location : `https://maps.google.com/?q=${encodeURIComponent(event.location)}`}
+                                            href={isOnlineLocation && locationLink ? locationLink : `https://maps.google.com/?q=${encodeURIComponent([event.location, cityName].filter(Boolean).join(', '))}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="mt-1 inline-block text-[11px] font-semibold text-primary hover:underline"

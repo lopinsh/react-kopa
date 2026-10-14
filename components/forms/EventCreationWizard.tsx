@@ -8,7 +8,6 @@ import { useRouter } from '@/i18n/routing';
 import { clsx } from 'clsx';
 import {
     Calendar,
-    MapPin,
     Type,
     AlignLeft,
     Users,
@@ -24,6 +23,8 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
 import EventLangBar from '@/components/forms/EventLangBar';
+import EventPlaceFields from '@/components/forms/EventPlaceFields';
+import { useGroupContext } from '@/components/providers/GroupProvider';
 import DateTimeField from '@/components/forms/DateTimeField';
 import { addMinutesLocal, minutesBetween, nextFullHourLocal, splitLocal, toLocalValue } from '@/lib/local-datetime';
 import { toTextLang, type TextLang } from '@/lib/translations';
@@ -41,6 +42,8 @@ export type EventToEdit = {
     /** Text of every language; null when there is none yet. */
     texts: EventFormData['texts'] | null;
     location: string | null;
+    city: string | null;
+    isOnline: boolean;
     startDate: string;
     endDate: string | null;
     maxParticipants: number | null;
@@ -64,6 +67,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const tErrors = useTranslations('errors');
     const locale = useLocale();
     const router = useRouter();
+    const groupCity = useGroupContext().city;
     const [step, setStep] = useState<StepIndex>(0);
     // One language switch for the whole form; it opens on the original language.
     const originalAtStart = event?.originalLang ?? toTextLang(locale);
@@ -83,6 +87,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 lv: { title: '', description: '', instructions: '' },
                 en: { title: '', description: '', instructions: '' }
             },
+            city: event?.city || groupCity,
+            isOnline: event?.isOnline ?? false,
             location: event?.location ?? '',
             // Times are in the viewer's browser zone, which the server does not know: filled in after mount (see below).
             startDate: '',
@@ -144,7 +150,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const titleOver = isOverLimit(watched.texts?.lv?.title, EVENT_TITLE_MAX) || isOverLimit(watched.texts?.en?.title, EVENT_TITLE_MAX);
 
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['texts.lv.title', 'texts.en.title', 'startDate', 'endDate', 'location']);
+        if (s === 0) return trigger(['texts.lv.title', 'texts.en.title', 'startDate', 'endDate', 'city', 'location']);
         if (s === 1) return trigger(['visibility', 'joinMode', 'maxParticipants']);
         return true;
     }
@@ -337,22 +343,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 <p className="text-xs text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
                             </div>
 
-                            <div>
-                                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                                    <MapPin className="h-3.5 w-3.5 text-foreground-muted" />
-                                    {t('fieldLocation')}
-                                </label>
-                                <input
-                                    type="text"
-                                    {...register('location')}
-                                    placeholder={t('fieldLocationPlaceholder')}
-                                    className={clsx(
-                                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                                        errors.location ? 'border-danger/40' : 'border-border focus:border-primary'
-                                    )}
-                                />
-                                {errors.location && <p className="mt-1 text-xs text-danger">{t(errors.location.message as 'INVALID_URL')}</p>}
-                            </div>
+                            <EventPlaceFields />
                         </div>
                     )}
 

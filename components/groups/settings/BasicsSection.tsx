@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import CityField from '@/components/groups/CityField';
 import { ImageIcon, Settings } from 'lucide-react';
 import { clsx } from 'clsx';
-import { GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
 import SettingsSection from './SettingsSection';
 
@@ -17,7 +17,7 @@ type Props = {
 const INPUT = 'w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/5';
 const LABEL = 'ml-1 text-xs font-semibold text-foreground-muted';
 
-/** Name, city and banner. */
+/** Name, city, "Ko meklējam?" and banner. */
 export default function BasicsSection({ canEditName }: Props) {
     const t = useTranslations('wizard');
     const gt = useTranslations('group');
@@ -47,6 +47,23 @@ export default function BasicsSection({ canEditName }: Props) {
                 <div className="space-y-2">
                     <label htmlFor="group-city" className={LABEL}>{t('fieldCity')}</label>
                     <CityField id="group-city" selectClassName={INPUT} inputClassName={INPUT} />
+                </div>
+            </div>
+
+            <div className="space-y-2">
+                <label htmlFor="group-looking-for" className={LABEL}>{t('fieldLookingFor')}</label>
+                <input
+                    id="group-looking-for"
+                    {...register('lookingFor')}
+                    aria-describedby="group-looking-for-count group-looking-for-hint"
+                    placeholder={t('fieldLookingForPlaceholder')}
+                    className={INPUT}
+                />
+                <div className="flex items-start gap-2">
+                    {errors.lookingFor?.message
+                        ? <p id="group-looking-for-hint" className="ml-1 text-xs text-danger">{t(errors.lookingFor.message as 'LOOKING_FOR_TOO_LONG')}</p>
+                        : <p id="group-looking-for-hint" className="ml-1 text-[11px] text-foreground-muted">{t('fieldLookingForHint')}</p>}
+                    <TextCounter id="group-looking-for-count" length={(watch('lookingFor') ?? '').length} max={GROUP_LOOKING_FOR_MAX} />
                 </div>
             </div>
 

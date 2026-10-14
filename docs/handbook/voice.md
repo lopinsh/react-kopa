@@ -32,6 +32,8 @@ One word per thing, everywhere.
 | Parts of Pasākumi | Gaidāmie / Pagājušie | Upcoming / Past |
 | A group moderator | the tag "Mod"; in lists and menus "Moderators" | "Mod"; "Moderator" |
 | A private group | Tikai biedriem | Members only |
+| An event that happens online | Tiešsaistē | Online |
+| What a group is looking for right now | Ko meklējam? | What are we looking for? |
 
 ## Say, not
 

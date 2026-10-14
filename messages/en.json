@@ -371,7 +371,7 @@
     "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first.",
     "CITY_NAME_INVALID": "Enter a city name (2 to 60 letters).",
     "CITY_EXISTS": "A city with this name already exists.",
-    "CITY_IN_USE": "Groups still use this city, so it cannot be removed."
+    "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted."
   },
   "group": {
     "acceptingMembersDesc": "When off, new people can't ask to join.",
@@ -1238,7 +1238,11 @@
     "citySuggestPlaceholder": "City name",
     "citySuggestAdd": "Suggest",
     "citySuggestCancel": "Cancel",
-    "citySuggestedHint": "“{name}” is waiting for a site admin to approve it. Your group keeps it meanwhile."
+    "citySuggestedHint": "“{name}” is waiting for a site admin to approve it. Your group keeps it meanwhile.",
+    "fieldLookingFor": "What are we looking for?",
+    "fieldLookingForPlaceholder": "e.g. Looking for a drummer",
+    "fieldLookingForHint": "One short line about what the group is looking for right now.",
+    "LOOKING_FOR_TOO_LONG": "The text cannot exceed 60 characters."
   },
   "pages": {
     "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",
@@ -1365,7 +1369,8 @@
     "editSubtitle": "Changes show up right away.",
     "editEvent": "Edit",
     "deleteEvent": "Delete",
-    "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone."
+    "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone.",
+    "online": "Online"
   },
   "eventWizard": {
     "stepOf": "Step {current} of {total}",
@@ -1391,8 +1396,8 @@
     "nextMonth": "Next month",
     "invalidDate": "Enter the date as day.month.year, e.g. 25.12.2026.",
     "timeZoneHint": "Times are in your time zone ({zone}).",
-    "fieldLocation": "Location",
-    "fieldLocationPlaceholder": "Address or a meeting link",
+    "fieldLocation": "Address",
+    "fieldLocationPlaceholder": "Street, building or meeting point",
     "fieldMaxParticipants": "About how many people?",
     "fieldMaxParticipantsPlaceholder": "Optional — just to give an idea",
     "fieldVisibility": "Who can see this event",
@@ -1409,7 +1414,7 @@
     "START_DATE_REQUIRED": "Please choose a start date and time.",
     "END_DATE_INVALID": "Please enter a valid end date.",
     "END_BEFORE_START": "The end must be after the start.",
-    "LOCATION_REQUIRED": "Please enter a location.",
+    "LOCATION_REQUIRED": "Enter an address or a link.",
     "INVALID_URL": "Please enter a valid URL (starting with https://).",
     "MAX_PARTICIPANTS_INVALID": "Enter a whole number greater than 0, or leave empty.",
     "fieldInstructionsHintOpen": "Shown to everyone who can see the event.",
@@ -1424,7 +1429,14 @@
     "openConfirmYes": "Open it and let them in",
     "openConfirmNo": "Not yet",
     "originalLangTitleError": "The title in the original language ({lang}) needs at least 3 characters.",
-    "otherLangTitleError": "The {lang} title needs at least 3 characters. Fix it or clear it."
+    "otherLangTitleError": "The {lang} title needs at least 3 characters. Fix it or clear it.",
+    "fieldCity": "City",
+    "fieldCityHint": "Where the event takes place. It starts as the group's city.",
+    "CITY_REQUIRED": "Choose a city.",
+    "fieldOnline": "Online",
+    "fieldOnlineHint": "The event happens online. Put the link where the address goes.",
+    "fieldLink": "Link",
+    "fieldLinkPlaceholder": "https://…"
   },
   "groupSettings": {
     "tabsLabel": "Group settings",

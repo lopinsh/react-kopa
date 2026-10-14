@@ -8,7 +8,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
-import { groupFormSchema, GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import { groupFormSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import { createGroup } from '@/actions/group-actions';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
@@ -123,12 +123,14 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['categoryId', 'tagIds', 'city']); // Taxonomy + City
-        if (s === 1) return trigger(['name', 'description', 'bannerImage']); // Basic Info
+        if (s === 1) return trigger(['name', 'lookingFor', 'description', 'bannerImage']); // Basic Info
         if (s === 2) return trigger(['type']); // Access
         return true;
     }
 
     const nameOver = isOverLimit(useWatch({ control: form.control, name: 'name' }), GROUP_NAME_MAX);
+    const lookingForOver = isOverLimit(useWatch({ control: form.control, name: 'lookingFor' }), GROUP_LOOKING_FOR_MAX);
+    const textOver = nameOver || lookingForOver;
 
     async function nextStep() {
         const valid = await validateStep(step);
@@ -244,7 +246,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="button"
                                 onClick={nextStep}
-                                disabled={nameOver}
+                                disabled={textOver}
                                 className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-50"
                             >
                                 {c('next')}
@@ -253,7 +255,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                         ) : (
                             <button
                                 type="submit"
-                                disabled={isPending || nameOver}
+                                disabled={isPending || textOver}
                                 className="flex h-12 items-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}

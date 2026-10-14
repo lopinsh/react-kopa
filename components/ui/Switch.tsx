@@ -8,18 +8,21 @@ type Props = {
     onChange: (checked: boolean) => void;
     /** id of the element holding the row's text; it is the switch's name. */
     labelledBy: string;
+    /** id of a hint under the row. */
+    describedBy?: string;
     disabled?: boolean;
     className?: string;
 };
 
 /** An on/off switch: a pill track in the site colour, the row's text is its label. */
-export default function Switch({ checked, onChange, labelledBy, disabled = false, className }: Props) {
+export default function Switch({ checked, onChange, labelledBy, describedBy, disabled = false, className }: Props) {
     return (
         <button
             type="button"
             role="switch"
             aria-checked={checked}
             aria-labelledby={labelledBy}
+            aria-describedby={describedBy}
             disabled={disabled}
             data-ui={UI.switch}
             onClick={() => onChange(!checked)}

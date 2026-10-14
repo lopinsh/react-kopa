@@ -26,7 +26,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 |---|---|---|---|
 | Find | Discovery: groups and events | A | R5a, R5b |
 | Find | Manas grupas | A | R8 |
-| Create | Create group wizard | D | R4, R12 |
+| Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a done |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |
 | Join | Sign in, register, onboarding | D | R12 |
@@ -36,8 +36,8 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Group life | Biedri, Requests | B | R9b |
 | Group life | Pasākumi tab | B | R3a (rows R5b) done |
 | Group life | Event page | B | R9a |
-| Group life | Create / edit event | B | R4, R9a |
-| Group life | Group settings | B | R4, R9b |
+| Group life | Create / edit event | B | R4 done (place), R9a |
+| Group life | Group settings | B | R4 done (field), R9b |
 | Me | Own profile, Manas grupas, Ziņas, Iestatījumi | B (frame) | R2a frame; content R8, R9b |
 | Me | Public profile | F | R9b |
 | Me | Edit profile | D | R9b |

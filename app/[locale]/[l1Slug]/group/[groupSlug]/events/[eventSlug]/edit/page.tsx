@@ -9,6 +9,8 @@ import { EventService } from '@/lib/services/event.service';
 import { isEventPast } from '@/lib/event-dates';
 import { toTextLang } from '@/lib/translations';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
+import { CitiesProvider } from '@/components/providers/CitiesContext';
+import { CityService } from '@/lib/services/city.service';
 
 type Params = { locale: string; l1Slug: string; groupSlug: string; eventSlug: string };
 
@@ -28,7 +30,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
     // A finished event can't be edited (organisers can still delete it).
     if (isEventPast(event)) redirect(`/${locale}${eventPath}`);
 
-    const t = await getTranslations('event');
+    const [t, cities] = await Promise.all([getTranslations('event'), CityService.listActive(locale)]);
 
     return (
         <div className="py-2 md:py-6">
@@ -47,25 +49,29 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                     <p className="mt-2 text-foreground-muted">{t('editSubtitle')}</p>
                 </div>
 
-                <EventCreationWizard
-                    groupId={event.groupId}
-                    groupSlug={groupSlug}
-                    l1Slug={l1Slug}
-                    waitingCount={event.viewer.pendingCount + event.viewer.waitlistCount}
-                    event={{
-                        id: event.id,
-                        // The edit form works on the text of every language.
-                        originalLang: event.editable?.originalLang ?? toTextLang(locale),
-                        texts: event.editable?.texts ?? null,
-                        location: event.location,
-                        startDate: event.startDate.toISOString(),
-                        endDate: event.endDate ? event.endDate.toISOString() : null,
-                        maxParticipants: event.maxParticipants,
-                        visibility: event.visibility,
-                        joinMode: event.joinMode,
-                        bannerImage: event.bannerImage,
-                    }}
-                />
+                <CitiesProvider cities={cities}>
+                    <EventCreationWizard
+                        groupId={event.groupId}
+                        groupSlug={groupSlug}
+                        l1Slug={l1Slug}
+                        waitingCount={event.viewer.pendingCount + event.viewer.waitlistCount}
+                        event={{
+                            id: event.id,
+                            // The edit form works on the text of every language.
+                            originalLang: event.editable?.originalLang ?? toTextLang(locale),
+                            texts: event.editable?.texts ?? null,
+                            location: event.location,
+                            city: event.city,
+                            isOnline: event.isOnline,
+                            startDate: event.startDate.toISOString(),
+                            endDate: event.endDate ? event.endDate.toISOString() : null,
+                            maxParticipants: event.maxParticipants,
+                            visibility: event.visibility,
+                            joinMode: event.joinMode,
+                            bannerImage: event.bannerImage,
+                        }}
+                    />
+                </CitiesProvider>
             </div>
         </div>
     );

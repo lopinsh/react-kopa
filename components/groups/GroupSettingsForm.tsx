@@ -4,7 +4,7 @@ import { useTransition, useMemo, useState } from 'react';
 import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { isOverLimit } from '@/lib/text-limit';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { buildGroupFormSchema, GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import { buildGroupFormSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import { updateGroup, deleteGroup } from '@/actions/group-actions';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
@@ -108,6 +108,7 @@ export default function GroupSettingsForm({
 
     const { handleSubmit, setValue } = methods;
     const nameOver = isOverLimit(useWatch({ control: methods.control, name: 'name' }), GROUP_NAME_MAX);
+    const lookingForOver = isOverLimit(useWatch({ control: methods.control, name: 'lookingFor' }), GROUP_LOOKING_FOR_MAX);
 
     // Colour of the category picker itself; the page colour always comes from the category (set in the layout).
 
@@ -191,7 +192,7 @@ export default function GroupSettingsForm({
         <div className="mt-12 flex flex-wrap items-center gap-4 border-t border-border pt-8">
             <button
                 type="submit"
-                disabled={isPending || nameOver}
+                disabled={isPending || nameOver || lookingForOver}
                 className="flex h-14 items-center gap-3 rounded-full bg-primary px-10 font-semibold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? (

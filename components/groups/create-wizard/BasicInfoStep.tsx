@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { Type, AlignLeft, Image as ImageIcon } from 'lucide-react';
-import { GROUP_NAME_MAX, type GroupFormValues } from '@/lib/validations/group';
+import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 
@@ -36,6 +36,31 @@ export default function BasicInfoStep() {
                 <div className="mt-1 flex items-start gap-2">
                     {errors.name && <p className="text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
                     <TextCounter id="group-name-count" length={(watch('name') ?? '').length} max={GROUP_NAME_MAX} />
+                </div>
+            </div>
+
+            {/* Ko meklējam? (AR-35) */}
+            <div>
+                <label htmlFor="group-looking-for" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                    {t('fieldLookingFor')}
+                    <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
+                </label>
+                <input
+                    id="group-looking-for"
+                    type="text"
+                    {...register('lookingFor')}
+                    aria-describedby="group-looking-for-count group-looking-for-hint"
+                    placeholder={t('fieldLookingForPlaceholder')}
+                    className={clsx(
+                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        errors.lookingFor ? 'border-danger/40' : 'border-border focus:border-primary'
+                    )}
+                />
+                <div className="mt-1 flex items-start gap-2">
+                    {errors.lookingFor
+                        ? <p id="group-looking-for-hint" className="text-xs text-danger">{t(errors.lookingFor.message as 'LOOKING_FOR_TOO_LONG')}</p>
+                        : <p id="group-looking-for-hint" className="text-[11px] text-foreground-muted">{t('fieldLookingForHint')}</p>}
+                    <TextCounter id="group-looking-for-count" length={(watch('lookingFor') ?? '').length} max={GROUP_LOOKING_FOR_MAX} />
                 </div>
             </div>
 

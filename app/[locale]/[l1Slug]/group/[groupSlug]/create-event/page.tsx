@@ -1,6 +1,8 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
 import EventCreationWizard from '@/components/forms/EventCreationWizard';
+import { CitiesProvider } from '@/components/providers/CitiesContext';
+import { CityService } from '@/lib/services/city.service';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { getTranslations } from 'next-intl/server';
@@ -32,7 +34,7 @@ export default async function CreateEventPage({
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
-    const t = await getTranslations('event');
+    const [t, cities] = await Promise.all([getTranslations('event'), CityService.listActive(locale)]);
 
     return (
         <div className="py-2 md:py-6">
@@ -51,11 +53,13 @@ export default async function CreateEventPage({
                     <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
                 </div>
 
-                <EventCreationWizard
-                    groupId={group.id}
-                    groupSlug={groupSlug}
-                    l1Slug={l1Slug}
-                />
+                <CitiesProvider cities={cities}>
+                    <EventCreationWizard
+                        groupId={group.id}
+                        groupSlug={groupSlug}
+                        l1Slug={l1Slug}
+                    />
+                </CitiesProvider>
             </div>
         </div>
     );

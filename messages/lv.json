@@ -371,7 +371,7 @@
     "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to.",
     "CITY_NAME_INVALID": "Ievadi pilsētas nosaukumu (no 2 līdz 60 simboliem).",
     "CITY_EXISTS": "Pilsēta ar šādu nosaukumu jau ir.",
-    "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas, tāpēc to nevar dzēst."
+    "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst."
   },
   "group": {
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
@@ -1238,7 +1238,11 @@
     "citySuggestPlaceholder": "Pilsētas nosaukums",
     "citySuggestAdd": "Ieteikt",
     "citySuggestCancel": "Atcelt",
-    "citySuggestedHint": "„{name}” gaida vietnes administratora apstiprinājumu. Grupa to līdz tam saglabā."
+    "citySuggestedHint": "„{name}” gaida vietnes administratora apstiprinājumu. Grupa to līdz tam saglabā.",
+    "fieldLookingFor": "Ko meklējam?",
+    "fieldLookingForPlaceholder": "piem., Meklējam bundzinieku",
+    "fieldLookingForHint": "Viens īss teikums par to, ko grupa šobrīd meklē.",
+    "LOOKING_FOR_TOO_LONG": "Teksts nedrīkst pārsniegt 60 rakstzīmes."
   },
   "pages": {
     "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",
@@ -1365,7 +1369,8 @@
     "editSubtitle": "Izmaiņas būs redzamas uzreiz.",
     "editEvent": "Labot",
     "deleteEvent": "Dzēst",
-    "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot."
+    "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot.",
+    "online": "Tiešsaistē"
   },
   "eventWizard": {
     "stepOf": "{current}. solis no {total}",
@@ -1391,8 +1396,8 @@
     "nextMonth": "Nākamais mēnesis",
     "invalidDate": "Ievadi datumu kā diena.mēnesis.gads, piemēram, 25.12.2026.",
     "timeZoneHint": "Laiki ir tavā laika joslā ({zone}).",
-    "fieldLocation": "Vieta",
-    "fieldLocationPlaceholder": "Adrese vai tiešsaistes saite",
+    "fieldLocation": "Adrese",
+    "fieldLocationPlaceholder": "Iela, māja vai vieta, kur satiekamies",
     "fieldMaxParticipants": "Apmēram cik cilvēku?",
     "fieldMaxParticipantsPlaceholder": "Nav obligāti — tikai lai dotu priekšstatu",
     "fieldVisibility": "Kam pasākums ir redzams",
@@ -1409,7 +1414,7 @@
     "START_DATE_REQUIRED": "Izvēlies sākuma datumu un laiku.",
     "END_DATE_INVALID": "Ievadi derīgu beigu datumu.",
     "END_BEFORE_START": "Beigu laikam jābūt pēc sākuma laika.",
-    "LOCATION_REQUIRED": "Ievadi vietu.",
+    "LOCATION_REQUIRED": "Ievadi adresi vai saiti.",
     "INVALID_URL": "Ievadi derīgu saiti (sākot ar https://).",
     "MAX_PARTICIPANTS_INVALID": "Ievadi veselu skaitli, lielāku par 0, vai atstāj tukšu.",
     "fieldInstructionsHintOpen": "Redzama ikvienam, kam pasākums ir redzams.",
@@ -1424,7 +1429,14 @@
     "openConfirmYes": "Atvērt un ielaist",
     "openConfirmNo": "Vēl ne",
     "originalLangTitleError": "Nosaukumam oriģinālvalodā ({lang}) jābūt vismaz 3 rakstzīmes garam.",
-    "otherLangTitleError": "Nosaukumam valodā {lang} jābūt vismaz 3 rakstzīmes garam. Salabo to vai izdzēs."
+    "otherLangTitleError": "Nosaukumam valodā {lang} jābūt vismaz 3 rakstzīmes garam. Salabo to vai izdzēs.",
+    "fieldCity": "Pilsēta",
+    "fieldCityHint": "Kur pasākums notiek. Sākumā tā ir grupas pilsēta.",
+    "CITY_REQUIRED": "Izvēlies pilsētu.",
+    "fieldOnline": "Tiešsaistē",
+    "fieldOnlineHint": "Pasākums notiek tiešsaistē. Adreses vietā ieliec saiti.",
+    "fieldLink": "Saite",
+    "fieldLinkPlaceholder": "https://…"
   },
   "groupSettings": {
     "tabsLabel": "Grupas iestatījumi",

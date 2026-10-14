@@ -68,7 +68,7 @@ export default function ListViewEventCard({ event, locale, l1Slug, groupSlug, ac
                 </div>
                 <div className="hidden items-center gap-1 md:flex max-w-[120px] truncate">
                     <MapPin className="h-3.5 w-3.5" />
-                    {event.location || cityLabel(tCities, event.group.city)}
+                    {event.isOnline ? t('online') : event.location || cityLabel(tCities, event.city ?? event.group.city)}
                 </div>
                 <div className="flex items-center gap-1.5 justify-end whitespace-nowrap font-bold text-foreground">
                     <Users className="h-3.5 w-3.5 text-foreground-muted" />
