@@ -224,6 +224,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `groupSettings`, `wizard`, `eventWizard`.
 - **Risks:** migration runs while R3 code serves (old code creates events without `city` between migrate and swap: R5a's contract step re-backfills); count queries on every discovery load (cache them; measure).
 - **Size:** M.
+- **Spec:** [specs/R4.md](specs/R4.md). Migrations `20261014100000_add_group_looking_for`, `20261014100100_add_event_city` (backfill from the group's city, index `(city, startDate)`); one where-builder module `lib/services/discovery-query.ts` shared by lists and counts; events filter by their own city (group-city fallback for the deploy window, removed in R5a) and by sub-categories through the group's tags; `DiscoveryService.getCounts` and `EventService.countEventsPerDay` cached with `unstable_cache` on the existing `groups`/`events`/`categories` tags (Cache Components not enabled); no new error codes; five orchestrator defaults to confirm; stop point after the migrations.
 
 ### R5a · Discovery: filters, drawer, cards (L)
 
@@ -450,7 +451,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R2b Behaviour pieces | pushed, live | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
 | R3b Sazināties, pending, "…" | pushed, live | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`bd69362` (Opus review fix `31c4020` share toast without "!") |
-| R4 Discovery data | not started | | |
+| R4 Discovery data | spec written | [specs/R4.md](specs/R4.md) | |
 | R5a Discovery filters and cards | not started | | |
 | R5b Events by day | not started | | |
 | R6 Panels | not started | | |
