@@ -145,3 +145,8 @@ export function addMonths(month: string, n: number): string {
     const total = y * 12 + (m - 1) + n;
     return `${Math.floor(total / 12)}-${pad((total % 12) + 1)}`;
 }
+
+/** A whole week as the choice: Šonedēļ, or a Monday–Sunday range. */
+export function isWeekChoice(c: DateChoice): boolean {
+    return c.kind === 'week' || (c.kind === 'range' && weekdayIndex(c.from) === 0 && c.to === addDays(c.from, 6));
+}

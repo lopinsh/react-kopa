@@ -11,13 +11,13 @@ import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, Swit
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
-import EventCard from '@/components/discovery/EventCard';
 import CreateCard from '@/components/discovery/CreateCard';
 import GroupCard from '@/components/discovery/GroupCard';
 import GroupRow from '@/components/discovery/GroupRow';
-import ListViewEventCard from '@/components/discovery/ListViewEventCard';
+import DayStrip from '@/components/discovery/dates/DayStrip';
+import EventDayList from '@/components/events/EventDayList';
+import { DatesDemo } from '@/components/handbook/DateDemos';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
-import EventRow from '@/components/groups/EventRow';
 import { GroupBannerDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
 import { GroupMenuDemo } from '@/components/handbook/GroupMenuDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
@@ -31,6 +31,7 @@ import Button, { buttonClass } from '@/components/ui/Button';
 import CategoryLine from '@/components/ui/CategoryLine';
 import EmptyState from '@/components/ui/EmptyState';
 import RoleTag from '@/components/ui/RoleTag';
+import TextLink from '@/components/ui/TextLink';
 import { UI } from '@/lib/constants';
 import { requireHandbookAccess } from '@/lib/handbook-access';
 import { SAMPLE_ACCENT, buildUiSamples } from '@/lib/handbook/ui-samples';
@@ -149,7 +150,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
                         <GroupCard group={samples.groupCardNote} />
                         <GroupCard group={samples.groupCard} nextMeeting={samples.nextMeeting} />
-                        <GroupCard group={{ ...samples.groupCard, id: 'sample-group-bare' }} />
+                        <GroupCard group={samples.groupCardBare} />
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>
                     <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5">
@@ -158,25 +159,19 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="eventCard" names={[UI.eventCard, UI.eventListRow]} files={['components/discovery/EventCard.tsx', 'components/discovery/ListViewEventCard.tsx']}>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                        {samples.discoverableEvents.map((event) => (
-                            <EventCard key={event.id} event={event} locale={locale} l1Slug={samples.l1Slug} groupSlug={group.slug} accentColor={samples.accent} />
-                        ))}
-                    </div>
-                    <div className="mt-4 space-y-3">
-                        {samples.discoverableEvents.map((event) => (
-                            <ListViewEventCard key={event.id} event={event} locale={locale} l1Slug={samples.l1Slug} groupSlug={group.slug} accentColor={samples.accent} />
-                        ))}
+                <UiSpecimen id="eventRow" names={[UI.eventRow]} files={['components/events/EventRow.tsx', 'components/events/EventDayList.tsx']}>
+                    <div className="grid gap-4 lg:grid-cols-2">
+                        <EventDayList days={samples.eventDays} today={samples.today} showGroup showCity />
+                        <EventDayList days={samples.eventDays} today={samples.today} showGroup={false} showCity />
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="eventRow" names={[UI.eventRow]} files={['components/groups/EventRow.tsx']}>
-                    <AccentScope color={samples.accent} className="space-y-3">
-                        {samples.eventRows.map((event, i) => (
-                            <EventRow key={event.id} event={event} locale={locale} href="#eventRow" isPast={i === 2} requireSignIn />
-                        ))}
-                    </AccentScope>
+                <UiSpecimen id="dates" names={[UI.dayStrip, UI.dateChoices, UI.datePhone, UI.datePicker, UI.textLink]} files={['components/discovery/dates/DayStrip.tsx', 'components/discovery/dates/DateChoices.tsx', 'components/discovery/dates/DateButton.tsx', 'components/discovery/dates/MonthCalendar.tsx', 'components/ui/MonthGrid.tsx', 'components/ui/TextLink.tsx']}>
+                    <div className="max-w-xl space-y-4">
+                        <DayStrip window={samples.strip} params={{ kind: 'events', cities: [], category: null, tags: [], q: '', limit: 24, date: { kind: 'week' }, day: null }} counts={samples.stripCounts} />
+                        <DatesDemo today={samples.today} />
+                        <TextLink href="/?tab=events">{t('sample.nextWeek')}</TextLink>
+                    </div>
                 </UiSpecimen>
 
                 <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupBanner.tsx', 'components/groups/frame/GroupActions.tsx', 'components/groups/frame/GroupPagesDrawer.tsx']} padding="bleed">

@@ -45,7 +45,8 @@ export function eventWindow(params: Pick<DiscoveryParams, 'date' | 'day'>, today
         listFrom,
         bounds: periodBounds({ from: listFrom, to: period.to }, zone),
         week,
-        weekBounds: periodBounds({ from: week, to: addDays(week, 6) }, zone),
+        // From today on: a running multi-day event counts on today's dot, where the list shows it.
+        weekBounds: periodBounds({ from: week > today ? week : today, to: addDays(week, 6) }, zone),
         calendar,
         calendarBounds: periodBounds(calendar, zone)
     };

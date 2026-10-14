@@ -63,7 +63,7 @@ export function GroupBannerDemo({ samples }: { samples: UiSamples }) {
 export async function GroupPagesDemo({ samples }: { samples: UiSamples }) {
     const [t, tCommon, tFrame] = await Promise.all([getTranslations('group'), getTranslations('common'), getTranslations('group.frame')]);
     const base = `/${samples.group.category.l1Slug}/group/${samples.group.slug}`;
-    const nextEvent = { slug: 'sample', title: samples.eventRows[0]?.title ?? '', titleLang: 'lv' as const, startDate: samples.eventRows[0]?.startDate ?? new Date(), excerpt: samples.group.description };
+    const nextEvent = { slug: 'sample', title: samples.eventDays[0]?.rows[0]?.title ?? '', titleLang: 'lv' as const, startDate: samples.eventDays[0]?.rows[0]?.startDate ?? new Date(), excerpt: samples.group.description };
     return (
         <AccentScope color={SAMPLE_ACCENT}>
             <GroupProvider value={sampleState(samples.group, 'team')}>

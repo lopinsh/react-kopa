@@ -1,32 +1,51 @@
-import { Search } from 'lucide-react';
-import { getLocale, getTranslations } from 'next-intl/server';
-import EventCard from './EventCard';
-import ListViewEventCard from './ListViewEventCard';
+import { CalendarDays } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import DayStrip from './dates/DayStrip';
 import EmptyState from '@/components/ui/EmptyState';
-import type { DiscoverableEvent } from '@/lib/services/event.service';
+import TextLink from '@/components/ui/TextLink';
+import EventDayList from '@/components/events/EventDayList';
+import { addDays, isThisWeek, isWeekChoice, weekRange, type DayKey } from '@/lib/discovery-dates';
+import { discoveryHref, type DiscoveryParams } from '@/lib/discovery-params';
+import { groupByDay } from '@/lib/event-days';
+import type { EventWindow } from '@/lib/discovery-window';
+import type { EventRowData } from '@/lib/services/event-row';
+import { DISCOVERY_EVENTS_MAX_LIMIT } from '@/lib/constants';
 
-/** The main category's slug of an event's group (its category may be a sub-category). */
-function l1SlugOf(group: DiscoverableEvent['group']): string {
-    const c = group.category;
-    if (c.level === 3 && c.parent?.parent) return c.parent.parent.slug;
-    if (c.level === 2 && c.parent) return c.parent.slug;
-    return c.slug;
-}
+type Props = {
+    events: EventRowData[];
+    hasMore: boolean;
+    window: EventWindow;
+    params: DiscoveryParams;
+    zone: string;
+    /** Events per day of the strip's week. */
+    weekCounts: Record<DayKey, number>;
+};
 
-/** The Pasākumi list as today's event cards (R5b replaces them with rows and dates): a grid from `md`, rows on phones. */
-export default async function EventResults({ events }: { events: DiscoverableEvent[] }) {
-    const t = await getTranslations('discovery');
-    const locale = await getLocale();
+/** Pasākumi (AR-54): the day strip, then the events under day headings; a week choice ends with "Rādīt nākamo nedēļu", a cut list with a quiet note. */
+export default function EventResults({ events, hasMore, window: w, params, zone, weekCounts }: Props) {
+    const t = useTranslations('discovery');
+    const nextWeek = isWeekChoice(w.choice) ? (
+        <TextLink href={discoveryHref(params, { date: weekRange(addDays(w.week, 7)), day: null })}>{t('showNextWeek')}</TextLink>
+    ) : null;
 
-    if (events.length === 0) return <EmptyState icon={Search} title={t('noEventsFound')} description={t('adjustFilters')} />;
     return (
         <>
-            <div className="hidden gap-4 md:grid md:grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))]">
-                {events.map((e) => <EventCard key={e.id} event={e} locale={locale} l1Slug={l1SlugOf(e.group)} groupSlug={e.group.slug} />)}
-            </div>
-            <div className="flex flex-col gap-3 md:hidden">
-                {events.map((e) => <ListViewEventCard key={e.id} event={e} locale={locale} l1Slug={l1SlugOf(e.group)} groupSlug={e.group.slug} />)}
-            </div>
+            <DayStrip window={w} params={params} counts={weekCounts} />
+            {events.length === 0 ? (
+                <>
+                    <EmptyState icon={CalendarDays} title={isThisWeek(w.choice, w.today) ? t('noEventsThisWeek') : t('noEventsInPeriod')} description={t('adjustFilters')} />
+                    {nextWeek && <div className="text-center">{nextWeek}</div>}
+                </>
+            ) : (
+                <EventDayList
+                    days={groupByDay(events, w.bounds.from, zone)}
+                    today={w.today}
+                    showGroup
+                    showCity={params.cities.length !== 1}
+                    columns
+                    footer={hasMore ? <p className="text-[13px] text-foreground-muted">{t('eventsCut', { count: DISCOVERY_EVENTS_MAX_LIMIT })}</p> : nextWeek}
+                />
+            )}
         </>
     );
 }

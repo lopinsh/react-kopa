@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext } from 'react';
-import type { DiscoveryState } from '@/lib/types/discovery';
+import type { DiscoveryDates, DiscoveryState } from '@/lib/types/discovery';
 
 const DiscoveryContext = createContext<DiscoveryState | null>(null);
 
@@ -14,4 +14,11 @@ export function useDiscovery(): DiscoveryState {
     const state = useContext(DiscoveryContext);
     if (!state) throw new Error('useDiscovery must be used inside DiscoveryProvider');
     return state;
+}
+
+/** Pasākumi's dates (today in the viewer's zone, the choice, the strip's and the calendar's counts). Only inside the Pasākumi page. */
+export function useDiscoveryDates(): DiscoveryDates {
+    const { dates } = useDiscovery();
+    if (!dates) throw new Error('useDiscoveryDates is only available on Pasākumi');
+    return dates;
 }

@@ -7,10 +7,10 @@ import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 import { UI } from '@/lib/constants';
 
-const PANEL_WIDTH = 250;
+const DEFAULT_WIDTH = 250;
 
 /** Open state of one filter list: where the panel sits (flipped at the right edge) and whether it is a drop-down or a phone sheet. */
-export function usePopover() {
+export function usePopover(width = DEFAULT_WIDTH) {
     // A callback ref in state: the host element is read in handlers and effects only.
     const [host, bindHost] = useState<HTMLDivElement | null>(null);
     const id = useId();
@@ -18,7 +18,7 @@ export function usePopover() {
     const [alignRight, setAlignRight] = useState(false);
     const desktop = useMediaQuery('(min-width: 768px)');
     const toggle = () => {
-        if (!open) setAlignRight((host?.getBoundingClientRect().left ?? 0) + PANEL_WIDTH > window.innerWidth - 12);
+        if (!open) setAlignRight((host?.getBoundingClientRect().left ?? 0) + width > window.innerWidth - 12);
         setOpen(!open);
     };
     return { host, bindHost, id, open, setOpen, toggle, alignRight, desktop };
@@ -30,10 +30,12 @@ type Props = {
     /** Called when the list closes by Esc, a click outside, Tab out, the sheet's × or Back. */
     onClose: () => void;
     children: ReactNode;
+    /** Panel width in px for the drop-down (the same number given to `usePopover`). */
+    width?: number;
 };
 
 /** A filter list: an anchored panel under its button from `md`, a bottom sheet on phones (dim only). The host element must be `relative` and hold the button. */
-export default function FilterPopover({ pop, title, onClose, children }: Props) {
+export default function FilterPopover({ pop, title, onClose, children, width = DEFAULT_WIDTH }: Props) {
     const { host, id, open, desktop, alignRight } = pop;
 
     useEffect(() => {
@@ -62,9 +64,10 @@ export default function FilterPopover({ pop, title, onClose, children }: Props) 
         <div
             id={id}
             data-ui={UI.filterList}
+            style={{ ['--panel-w' as string]: `${width}px` }}
             onBlur={(e) => { if (e.relatedTarget instanceof Node && !host?.contains(e.relatedTarget)) onClose(); }}
             className={clsx(
-                'absolute z-40 mt-1.5 max-h-[min(60vh,420px)] w-[250px] max-w-[calc(100vw-24px)] overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-premium ring-1 ring-border',
+                'absolute z-40 mt-1.5 max-h-[min(60vh,420px)] w-[var(--panel-w)] max-w-[calc(100vw-24px)] overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-premium ring-1 ring-border',
                 alignRight ? 'right-0' : 'left-0'
             )}
         >

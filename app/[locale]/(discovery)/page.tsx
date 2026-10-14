@@ -1,10 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from '@/i18n/routing';
-import { getTranslations } from 'next-intl/server';
+import { getTimeZone, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { GroupService } from '@/lib/services/group.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
-import { EventService } from '@/lib/services/event.service';
 import { nextMeetingDates } from '@/lib/services/next-meetings';
 import { CityService } from '@/lib/services/city.service';
 import { TaxonomyService } from '@/lib/services/taxonomy.service';
@@ -14,10 +13,13 @@ import CategoryDrawer from '@/components/discovery/CategoryDrawer';
 import FilterLine from '@/components/discovery/filter/FilterLine';
 import GroupResults from '@/components/discovery/GroupResults';
 import EventResults from '@/components/discovery/EventResults';
+import { loadEvents } from './load-events';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
 import { discoveryHref, parseDiscoveryParams } from '@/lib/discovery-params';
 import { DISCOVERY_RAIL_COOKIE } from '@/lib/constants';
+import { dayInZone } from '@/lib/discovery-dates';
+import { eventWindow } from '@/lib/discovery-window';
 import type { DiscoveryState } from '@/lib/types/discovery';
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -58,17 +60,22 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const session = await auth();
     const viewerId = session?.user?.id;
 
-    const [categories, tree, cities, counts, groupsRes, eventsRes, cookieStore] = await Promise.all([
+    // Pasākumi's dates: today in the viewer's zone, once, on the server. A choice that has ended redirects to Šonedēļ.
+    const zone = await getTimeZone();
+    const w = eventWindow(p, dayInZone(new Date(), zone), zone);
+    if (p.kind === 'events' && w.expired) redirect({ href: discoveryHref(p, { date: { kind: 'week' }, day: null }), locale });
+
+    const [categories, tree, cities, counts, groupsRes, events, cookieStore] = await Promise.all([
         DiscoveryService.getDiscoveryCategories(locale),
         TaxonomyService.getTaxonomy(locale),
         CityService.listActive(locale),
-        DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined }, locale),
+        DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined, ...(p.kind === 'events' ? w.bounds : {}) }, locale),
         p.kind === 'groups'
             ? DiscoveryService.getGroups({ query: p.q || undefined, cities: p.cities, categoryId: found?.id, tags: p.tags, take: p.limit }, locale)
             : Promise.resolve({ groups: [], hasMore: false }),
         p.kind === 'events'
-            ? EventService.getDiscoverableEvents({ category: p.category ?? undefined, cities: p.cities, tags: p.tags, search: p.q || undefined, status: 'upcoming' }, locale, viewerId)
-            : Promise.resolve({ events: [], hasMore: false }),
+            ? loadEvents(p, w, locale, zone, viewerId)
+            : Promise.resolve(null),
         cookies()
     ]);
 
@@ -84,7 +91,8 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         veidi: tree.flatMap((l1) => l1.subcategories.filter((s) => s.status === 'ACTIVE').map((s) => ({
             slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0
         }))),
-        counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online }
+        counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online },
+        dates: events ? { today: w.today, choice: w.choice, period: w.period, listFrom: w.listFrom, week: w.week, weekCounts: events.weekCounts, calendar: w.calendar, calendarCounts: events.calendarCounts } : undefined
     };
 
     return (
@@ -97,7 +105,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             {p.kind === 'groups'
                                 ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} />
-                                : <EventResults events={eventsRes.events} />}
+                                : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>
                 </div>

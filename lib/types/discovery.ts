@@ -12,6 +12,8 @@ export type ScopedResult = {
     groupSlug?: string;
 };
 
+import type { DateChoice, DayKey, DayPeriod } from '@/lib/discovery-dates';
+
 export type DiscoveryKind = 'groups' | 'events';
 
 export interface GroupDiscoveryFilters {
@@ -77,6 +79,22 @@ export interface DayCount {
     count: number;
 }
 
+/** Pasākumi's dates, computed once on the server in the viewer's zone (client parts never call `new Date()` for "today"). */
+export interface DiscoveryDates {
+    today: DayKey;
+    choice: DateChoice;
+    /** The choice's days. */
+    period: DayPeriod;
+    /** The list's first day (the chosen day on the strip). */
+    listFrom: DayKey;
+    /** The strip's Monday and its events per day. */
+    week: DayKey;
+    weekCounts: Record<DayKey, number>;
+    /** The days the calendar knows counts for, and those counts. */
+    calendar: DayPeriod;
+    calendarCounts: Record<DayKey, number>;
+}
+
 /** What the discovery page hands to its provider: plain data from the services (Context Law). */
 export interface DiscoveryState {
     kind: DiscoveryKind;
@@ -84,4 +102,6 @@ export interface DiscoveryState {
     /** Active level-2 sub-categories of every main category ("Veidi"). */
     veidi: Array<{ slug: string; title: string; l1Slug: string; count: number }>;
     counts: Pick<DiscoveryCounts, 'total' | 'anyTopic' | 'anyPlace' | 'byCity' | 'online'>;
+    /** Pasākumi only. */
+    dates?: DiscoveryDates;
 }

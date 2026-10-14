@@ -782,8 +782,7 @@
           "fields": "Form fields",
           "filterLine": "Filter line",
           "groupCard": "Group card and row",
-          "eventCard": "Event card and row (discovery)",
-          "eventRow": "Event row (group page)",
+          "eventRow": "Event row and day list",
           "header": "Group banner and phone bar, for a visitor, a waiting request and the team",
           "memberCard": "Member card",
           "requestCard": "Request card",
@@ -807,7 +806,8 @@
           "confirmPopover": "Confirmation at the button",
           "moreMenu": "Group \"…\" menu: member, waiting, visitor",
           "switch": "Switch",
-          "groupPages": "Group pages, part tabs, next event and links"
+          "groupPages": "Group pages, part tabs, next event and links",
+          "dates": "Dates: day strip, quick choices and calendar"
         },
         "sample": {
           "category": "Hiking",
@@ -840,7 +840,10 @@
           "popoverMessage": "Leave the group?",
           "popoverConfirm": "Leave",
           "lookingFor": "Looking for new walkers",
-          "category2": "Walks"
+          "category2": "Walks",
+          "eventExcerpt": "Bring gloves and a good mood. We meet at the main gate.",
+          "groupTagline": "Walks around Zemgale for beginners and old hands. Everyone is welcome.",
+          "nextWeek": "Show next week"
         }
       }
     },

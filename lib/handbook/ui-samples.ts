@@ -2,7 +2,10 @@ import { categoryColor } from '@/lib/theme/category';
 import type { GroupContext } from '@/lib/services/group.service';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import type { AnnouncementRow } from '@/lib/services/post.service';
-import type { DiscoverableEvent } from '@/lib/services/event.service';
+import type { EventRowData } from '@/lib/services/event-row';
+import { addDays, dayInZone } from '@/lib/discovery-dates';
+import { eventWindow } from '@/lib/discovery-window';
+import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import type { Member } from '@/components/groups/MemberCard';
 
 /** The sample group's main category (Sports) and its tone. */
@@ -40,12 +43,14 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         slug: 'sample-group',
         city: 'Jelgava',
         lookingFor: null,
+        tagline: s('groupTagline'),
         bannerImage: null,
         memberCount: 23,
         category: { slug: 'hiking', l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },
         subCategories: [s('category'), s('category2')],
     };
     const groupCardNote = { ...groupCard, id: 'sample-group-note', lookingFor: s('lookingFor') };
+    const groupCardBare = { ...groupCard, id: 'sample-group-bare', tagline: null };
     const nextMeeting = inDays(3, 10);
 
     const group: GroupContext = {
@@ -82,40 +87,32 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
 
     const memberGroupContext = { ...group, user: { isMember: true, role: 'MEMBER' as const, isAdmin: false, chatId: null } };
 
-    const eventBase = {
-        titleLang: lang,
-        city: 'Jelgava',
-        isOnline: false,
-        bannerImage: null,
-        group: {
-            name: s('groupName'),
-            slug: 'sample-group',
-            city: 'Jelgava',
-            bannerImage: null,
-            accentColor: SAMPLE_ACCENT,
-            category: { slug: 'hiking', level: 2, parent: { slug: SAMPLE_L1_SLUG, parent: null } },
-        },
-    };
-
-    const discoverableEvents: DiscoverableEvent[] = [
-        { ...eventBase, id: 'sample-event-1', title: s('eventTitle'), slug: 'sample-event-1', startDate: inDays(3, 10), location: s('eventLocation'), joinMode: 'OPEN', isFull: false, isMembersOnly: false, goingCount: 12 },
-        { ...eventBase, id: 'sample-event-2', title: s('eventTitle2'), slug: 'sample-event-2', startDate: inDays(6), location: null, joinMode: 'REQUEST', isFull: true, isMembersOnly: true, goingCount: 8 },
-    ];
-
-    const eventRowBase = {
+    // Event rows (AR-54): with an excerpt, one going, one asked, one online, one running since an earlier day.
+    const today = dayInZone(now, DEFAULT_TIME_ZONE);
+    const rowBase = {
         titleLang: lang,
         endDate: null,
-        maxParticipants: 20,
-        isFull: false,
-        myStatus: null,
-        canManage: false,
-        pendingCount: 0,
+        city: 'Jelgava',
+        isOnline: false,
+        excerpt: s('eventExcerpt'),
+        tag: null,
+        group: { name: s('groupName'), slug: 'sample-group' },
+        category: { l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },
+        subCategories: [s('category'), s('category2')],
     };
-    const eventRows = [
-        { ...eventRowBase, id: 'row-1', title: s('eventTitle'), startDate: inDays(3, 10), endDate: inDays(3, 13), location: s('eventLocation'), isMembersOnly: false, joinMode: 'OPEN' as const, goingCount: 12 },
-        { ...eventRowBase, id: 'row-2', title: s('eventTitle2'), startDate: inDays(6), location: null, isMembersOnly: true, joinMode: 'REQUEST' as const, isFull: true, goingCount: 20 },
-        { ...eventRowBase, id: 'row-3', title: s('eventTitle3'), startDate: inDays(-9), location: s('eventLocation'), isMembersOnly: false, joinMode: 'OPEN' as const, goingCount: 15, maxParticipants: null },
+    const at = (day: string, hour: number, minute = 0) => new Date(`${day}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00Z`);
+    const eventDays: Array<{ day: string; rows: EventRowData[] }> = [
+        { day: today, rows: [
+            { ...rowBase, id: 'row-1', slug: 'sample-event-1', title: s('eventTitle'), startDate: at(today, 7, 30), tag: 'going' },
+            { ...rowBase, id: 'row-2', slug: 'sample-event-2', title: s('eventTitle2'), startDate: at(today, 16), excerpt: null, tag: 'waiting' },
+        ] },
+        { day: addDays(today, 1), rows: [
+            { ...rowBase, id: 'row-3', slug: 'sample-event-3', title: s('eventTitle3'), startDate: at(today, 6), endDate: at(addDays(today, 2), 15), city: 'Riga' },
+            { ...rowBase, id: 'row-4', slug: 'sample-event-4', title: s('eventTitle2'), startDate: at(addDays(today, 1), 17), isOnline: true },
+        ] },
     ];
+    const strip = eventWindow({ date: { kind: 'week' }, day: null }, today, DEFAULT_TIME_ZONE);
+    const stripCounts: Record<string, number> = { [today]: 2, [addDays(today, 1)]: 2, [addDays(today, 3)]: 1 };
 
     const member = (id: string, p: typeof anna, role: string): Member => ({
         id,
@@ -168,11 +165,14 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         l1Slug: SAMPLE_L1_SLUG,
         groupCard,
         groupCardNote,
+        groupCardBare,
         nextMeeting,
         group,
         memberGroupContext,
-        discoverableEvents,
-        eventRows,
+        eventDays,
+        today,
+        strip,
+        stripCounts,
         members,
         requestMessage,
         announcement,

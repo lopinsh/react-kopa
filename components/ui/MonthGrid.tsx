@@ -81,7 +81,7 @@ export default function MonthGrid({ month, onMonth, today, selected, isDisabled,
                 <button type="button" aria-label={labels.prev} disabled={!canMove(addMonths(month, -1))} onClick={() => step(-1)} className={clsx(arrow, 'order-first')}><ChevronLeft aria-hidden="true" className="size-4" /></button>
                 <button type="button" aria-label={labels.next} disabled={!canMove(addMonths(month, 1))} onClick={() => step(1)} className={arrow}><ChevronRight aria-hidden="true" className="size-4" /></button>
             </div>
-            <div ref={gridRef} role="grid" className="grid grid-cols-7 gap-y-0.5 text-center">
+            <div ref={gridRef} role="grid" className="grid grid-cols-7 text-center">
                 {WEEKDAYS.map((w, i) => (
                     <span key={w} role="columnheader" className={clsx('py-1 text-[11px] font-semibold', i >= 5 ? 'bg-tint text-foreground' : 'text-foreground-muted')}>{t(w)}</span>
                 ))}
