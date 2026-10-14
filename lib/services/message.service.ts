@@ -368,6 +368,15 @@ export const MessageService = {
         }
     },
 
+    /** The id of the one chat between a person and a group's team, or null. Read-only (never creates). */
+    async findGroupChatId(groupId: string, personId: string): Promise<string | null> {
+        const chat = await prisma.conversation.findUnique({
+            where: { originGroupId_contactUserId: { originGroupId: groupId, contactUserId: personId } },
+            select: { id: true }
+        });
+        return chat?.id ?? null;
+    },
+
     /**
      * The one chat between a person and a group's team. Reused when it exists (whatever its origin);
      * `originType` only records how a new one started.

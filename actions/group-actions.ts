@@ -50,12 +50,15 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
 
     try {
         const result = await GroupService.joinGroup(groupId, session.user.id, message);
-        if (!result.success) return result as ActionResponse<{ pending: boolean; conversationId: string }>;
+        if (!result.success) {
+            // A stale tab catches up to the pending state.
+            if (result.error === 'ALREADY_REQUESTED') revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+            return result as ActionResponse<{ pending: boolean; conversationId: string }>;
+        }
 
         const { slugs, groupName, adminIds, conversationId } = result.data!;
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
-        }
+        // The frame (banner, pages, member count) lives in the layout.
+        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
 
         await Promise.all(adminIds.map(adminId => NotificationService.notify({
             userId: adminId,
@@ -74,7 +77,7 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
 /**
  * Cancel a pending join request.
  */
-export async function cancelJoinRequest(groupId: string, locale: string): Promise<ActionResponse> {
+export async function cancelJoinRequest(groupId: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
@@ -82,10 +85,7 @@ export async function cancelJoinRequest(groupId: string, locale: string): Promis
         const result = await GroupService.cancelJoinRequest(groupId, session.user.id);
         if (!result.success) return result as ActionResponse;
 
-        const slugs = result.data?.slugs;
-        if (slugs) {
-            revalidatePath(`/${locale}/${slugs.l1Slug}/group/${slugs.slug}`, 'page');
-        }
+        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'CANCEL_FAILED');
@@ -133,6 +133,7 @@ export async function leaveGroup(groupId: string): Promise<ActionResponse> {
         if (!result.success) return result as ActionResponse;
 
         updateTag('groups');
+        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'LEAVE_FAILED');

@@ -338,6 +338,8 @@
     "FORBIDDEN": "You do not have permission to perform this action.",
     "INTERNAL_SERVER_ERROR": "An internal server error occurred.",
     "JOIN_FAILED": "Failed to join group.",
+    "ALREADY_REQUESTED": "You've already sent a request.",
+    "NOT_ACCEPTING_MEMBERS": "The group isn't taking new members right now. Turn the switch off to just send a message.",
     "LEAVE_FAILED": "Failed to leave the group.",
     "INQUIRY_FAILED": "Failed to send your message.",
     "REPORT_FAILED": "Failed to send the report.",

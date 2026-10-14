@@ -338,6 +338,8 @@
     "FORBIDDEN": "Tev nav atļaujas veikt šo darbību.",
     "INTERNAL_SERVER_ERROR": "Servera kļūda.",
     "JOIN_FAILED": "Neizdevās pievienoties grupai.",
+    "ALREADY_REQUESTED": "Tavs pieteikums jau ir nosūtīts.",
+    "NOT_ACCEPTING_MEMBERS": "Grupa šobrīd neuzņem jaunus biedrus. Izslēdz slēdzi, lai vienkārši uzrakstītu.",
     "LEAVE_FAILED": "Neizdevās izstāties no grupas.",
     "INQUIRY_FAILED": "Neizdevās nosūtīt tavu ziņu.",
     "REPORT_FAILED": "Neizdevās nosūtīt ziņojumu.",

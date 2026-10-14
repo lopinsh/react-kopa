@@ -53,7 +53,7 @@ export function AnnouncementDemo({ samples }: { samples: UiSamples }) {
     return (
         <div className="grid gap-4 lg:grid-cols-2">
             {([null, 'ADMIN'] as const).map((role) => (
-                <GroupProvider key={role ?? 'member'} value={toGroupState({ ...samples.group, user: { role, isMember: true, isAdmin: role !== null } })}>
+                <GroupProvider key={role ?? 'member'} value={toGroupState({ ...samples.group, user: { role, isMember: true, isAdmin: role !== null, chatId: null } })}>
                     <AnnouncementCard post={samples.announcement} busy={false} onArchive={noop} onDelete={noop} />
                 </GroupProvider>
             ))}

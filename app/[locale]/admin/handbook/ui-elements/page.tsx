@@ -178,7 +178,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/MemberCard.tsx']}>
                     <AccentScope color={samples.accent} className="grid gap-4 md:grid-cols-2">
-                        <GroupProvider value={groupState({ ...group, user: { role: 'OWNER', isMember: true, isAdmin: true } })}>
+                        <GroupProvider value={groupState({ ...group, user: { role: 'OWNER', isMember: true, isAdmin: true, chatId: null } })}>
                             {samples.members.map((member) => (
                                 <MemberCard key={member.id} member={member} canMessage groupId={group.id} locale={locale} l1Slug={samples.l1Slug} />
                             ))}

@@ -93,6 +93,8 @@ export interface GroupContext {
         isMember: boolean;
         role: MembershipRole | 'PENDING' | null;
         isAdmin: boolean;
+        /** The viewer's own chat with the team; only read while their request is pending, otherwise null. */
+        chatId: string | null;
     };
     theme: {
         accentColor: string;
@@ -237,6 +239,9 @@ export const GroupService = {
         const canSeeApplications = isAdmin || isSiteAdmin;
         const pendingCount = canSeeApplications ? await prisma.membership.count({ where: { groupId: g.id, role: 'PENDING' } }) : 0;
 
+        // A waiting applicant gets a link to their own chat with the team (nobody else's, never queried for others).
+        const chatId = currentUserId && userRole === 'PENDING' ? await MessageService.findGroupChatId(g.id, currentUserId) : null;
+
         // 3. Resolve Taxonomy & Breadcrumbs
         const resolved = TaxonomyResolver.resolve(g.category);
         let categoryTitle = resolved.categoryTitle;
@@ -296,6 +301,7 @@ export const GroupService = {
                 isMember,
                 role: userRole as MembershipRole | null,
                 isAdmin,
+                chatId,
             },
             theme: {
                 accentColor,
@@ -471,7 +477,7 @@ export const GroupService = {
             where: { userId_groupId: { userId, groupId } },
         });
 
-        if (existing) return { success: false, error: 'JOIN_FAILED' };
+        if (existing) return { success: false, error: existing.role === 'PENDING' ? 'ALREADY_REQUESTED' : 'JOIN_FAILED' };
 
         if (!message?.trim()) {
             return { success: false, error: 'VALIDATION_FAILED' };
@@ -482,7 +488,7 @@ export const GroupService = {
             select: { name: true, isAcceptingMembers: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
         });
         if (!group) return { success: false, error: 'NOT_FOUND' };
-        if (!group.isAcceptingMembers) return { success: false, error: 'JOIN_FAILED' };
+        if (!group.isAcceptingMembers) return { success: false, error: 'NOT_ACCEPTING_MEMBERS' };
 
         const slugs = await this.getGroupSlugs(groupId);
 
@@ -497,7 +503,7 @@ export const GroupService = {
         } catch (error) {
             // A second request from the same person landed first (double click, two tabs).
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                return { success: false, error: 'JOIN_FAILED' };
+                return { success: false, error: 'ALREADY_REQUESTED' };
             }
             throw error;
         }

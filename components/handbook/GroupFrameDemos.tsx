@@ -18,10 +18,10 @@ const SAMPLE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="
 
 type Viewer = 'visitor' | 'pending' | 'member' | 'team';
 const USER: Record<Viewer, GroupContext['user']> = {
-    visitor: { isMember: false, role: null, isAdmin: false },
-    pending: { isMember: false, role: 'PENDING', isAdmin: false },
-    member: { isMember: true, role: 'MEMBER', isAdmin: false },
-    team: { isMember: true, role: 'OWNER', isAdmin: true },
+    visitor: { isMember: false, role: null, isAdmin: false, chatId: null },
+    pending: { isMember: false, role: 'PENDING', isAdmin: false, chatId: 'sample-chat' },
+    member: { isMember: true, role: 'MEMBER', isAdmin: false, chatId: null },
+    team: { isMember: true, role: 'OWNER', isAdmin: true, chatId: null },
 };
 
 function sampleState(group: GroupContext, viewer: Viewer, o: { image?: boolean; isPrivate?: boolean } = {}) {

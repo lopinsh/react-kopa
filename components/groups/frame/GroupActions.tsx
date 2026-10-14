@@ -58,7 +58,7 @@ export default function GroupActions() {
 
     const withdraw = () => {
         setCancelOpen(false);
-        startTransition(async () => { await cancelJoinRequest(g.id, locale); });
+        startTransition(async () => { await cancelJoinRequest(g.id); });
     };
     // Menu items close their menu, so the pop-ups they open return focus to the menu's button.
     const onHide = (trigger: HTMLElement | null) => { menuReturnRef.current = trigger; setDialog('hide'); };

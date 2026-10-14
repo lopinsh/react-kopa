@@ -27,6 +27,8 @@ export interface GroupState {
         role: MembershipRole | 'PENDING' | null;
         isMember: boolean;
         isAdmin: boolean;
+        /** The viewer's own chat with the team while their request waits (never anyone else's), or null. */
+        chatId: string | null;
     };
     pendingCount?: number;
     sections: Array<{

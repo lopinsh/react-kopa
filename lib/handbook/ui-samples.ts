@@ -60,7 +60,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         isAcceptingMembers: true,
         socialLinks: { discord: null, website: 'https://example.org', instagram: null },
         stats: { memberCount: 23, pendingCount: 0 },
-        user: { isMember: false, role: null, isAdmin: false },
+        user: { isMember: false, role: null, isAdmin: false, chatId: null },
         theme: { accentColor: SAMPLE_ACCENT },
         sections: [],
         pages: [],
@@ -79,7 +79,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         moderation: { isSiteAdmin: false, hidden: null },
     };
 
-    const memberGroupContext = { ...group, user: { isMember: true, role: 'MEMBER' as const, isAdmin: false } };
+    const memberGroupContext = { ...group, user: { isMember: true, role: 'MEMBER' as const, isAdmin: false, chatId: null } };
 
     const eventBase = {
         titleLang: lang,
