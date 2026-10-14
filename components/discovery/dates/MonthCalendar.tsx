@@ -31,9 +31,10 @@ export default function MonthCalendar({ onClose, onApply }: { onClose: () => voi
         else { setStart(day); setEnd(null); }
     };
     const dayText = (day: DayKey) => capitalizeFirst(format.dateTime(dayNoon(day), { ...EVENT_DAY, timeZone: 'UTC' }));
+    // Two single dates, not `dateTimeRange`: the server's and the browser's ICU space a range differently, and a preset renders on the server.
     const picked = !range ? null : picking ? t('pickEnd') : range.from === range.to
         ? dayText(range.from)
-        : capitalizeFirst(format.dateTimeRange(dayNoon(range.from), dayNoon(range.to), { ...EVENT_DAY, timeZone: 'UTC' }));
+        : `${dayText(range.from)} – ${format.dateTime(dayNoon(range.to), { ...EVENT_DAY, timeZone: 'UTC' })}`;
 
     // N is the sum of the per-day counts the page loaded (this month and the next); beyond them the button reads plain "Rādīt".
     let count: number | null = null;

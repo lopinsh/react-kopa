@@ -65,11 +65,13 @@ export function zonedDayStart(day: DayKey, zone: string): Date {
     return new Date(hi);
 }
 
-/** The URL's `date` value as a choice: junk → this week, a reversed range swapped, a long range cut to DISCOVERY_DAY_RANGE_MAX days. */
+/** The URL's `date` value as a choice: junk → this week, a reversed range swapped, a long range cut to DISCOVERY_DAY_RANGE_MAX days.
+ * Years outside 2000–2999 are junk too (the calendar maths past 9999 has no ISO day key). */
 export function parseDateChoice(raw: string | undefined): DateChoice {
     const s = (raw ?? '').trim();
     if (s === 'today') return { kind: 'today' };
     if (s === 'weekend') return { kind: 'weekend' };
+    if (!/^2\d{3}-/.test(s)) return { kind: 'week' };
     if (isDayKey(s)) return { kind: 'day', day: s };
     if (/^\d{4}-(0[1-9]|1[0-2])$/.test(s)) return { kind: 'month', month: s };
     const [a, b, ...rest] = s.split('..');
