@@ -238,6 +238,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** one line at 375 px with long names (truncate with "…" and keep the full name in the accessible label); filter state in the URL stays shareable; the private-group filter (`?type=`) goes per OD-07.
 - **Out of scope:** dates, day strip, calendar, event rows (R5b); Citur (R10).
 - **Size:** L.
+- **Spec:** [specs/R5a.md](specs/R5a.md). Contract migration `20261014200000_require_event_city` (re-fill from the group's city, `SET NOT NULL`; the group-city read fallback goes) is stop point 1; URL state in one pure `lib/discovery-params.ts` read by the page and a `DiscoveryProvider`; filter parts under `discovery/filter/`, lists under `discovery/lists/` (desktop drop-down, phone sheet); drawer from `lg` with its fold in a cookie; card/row/create card through one `GroupList` (also on profiles), note = "Ko meklējam?" or R3a's next meeting; counts gain `anyTopic`/`anyPlace`; Pasākumi keeps today's event cards until R5b; no new error codes; fifteen orchestrator defaults to confirm.
 
 ### R5b · Discovery: events by day (M/L)
 
@@ -452,7 +453,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
 | R3b Sazināties, pending, "…" | pushed, live | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`bd69362` (Opus review fix `31c4020` share toast without "!") |
 | R4 Discovery data | pushed, live | [specs/R4.md](specs/R4.md) | `5d5186f`..`c6adace` (Opus review fixes `2a8ad05` cache refresh on city reject and group tag changes, `a2e76d9` counts see every L1 a group matches) |
-| R5a Discovery filters and cards | not started | | |
+| R5a Discovery filters and cards | spec written 14 Oct, building | [specs/R5a.md](specs/R5a.md) | |
 | R5b Events by day | not started | | |
 | R6 Panels | not started | | |
 | R7 Search | not started | | |
