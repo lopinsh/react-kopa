@@ -65,6 +65,8 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
             id={id}
             data-ui={UI.filterList}
             style={{ ['--panel-w' as string]: `${width}px` }}
+            // A click on plain text inside the panel would move focus to <main> and close it before the click lands.
+            onMouseDown={(e) => { if (!(e.target instanceof Element && e.target.closest('input, button, a, select, textarea'))) e.preventDefault(); }}
             onBlur={(e) => { if (e.relatedTarget instanceof Node && !host?.contains(e.relatedTarget)) onClose(); }}
             className={clsx(
                 'absolute z-40 mt-1.5 max-h-[min(60vh,420px)] w-[var(--panel-w)] max-w-[calc(100vw-24px)] overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-premium ring-1 ring-border',

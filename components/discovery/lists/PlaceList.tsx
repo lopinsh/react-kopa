@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
+import CheckRow from './CheckRow';
 import ListSearch from './ListSearch';
 import { useCities } from '@/components/providers/CitiesContext';
 import { useDiscovery } from '@/components/providers/DiscoveryProvider';
@@ -45,13 +46,7 @@ export default function PlaceList({ selected, onChange, autoFocus }: Props) {
                     <div className="mx-2.5 my-1 border-t border-border" />
                 </>
             )}
-            {rows.map((c) => (
-                <label key={c.slug} className={clsx('flex min-h-11 cursor-pointer items-center gap-2.5 rounded-xl px-2.5 text-sm hover:bg-tint md:min-h-9', c.count === 0 && !selected.includes(c.slug) && 'opacity-45')}>
-                    <input type="checkbox" checked={selected.includes(c.slug)} onChange={() => toggle(c.slug)} className="size-4 shrink-0 accent-primary" />
-                    <span className="min-w-0 flex-1 truncate">{c.name}</span>
-                    <span className="text-xs text-foreground-muted">{c.count}</span>
-                </label>
-            ))}
+            {rows.map((c) => <CheckRow key={c.slug} name={c.name} count={c.count} checked={selected.includes(c.slug)} faded={c.count === 0} onToggle={() => toggle(c.slug)} />)}
             {rows.length === 0 && (
                 <div className="px-2.5 py-3 text-sm">
                     <p className="italic text-foreground-muted">{t('nothingFound')}</p>

@@ -18,7 +18,7 @@ type Props = {
 export default function GroupList({ groups, nextMeetings = {}, createFor }: Props) {
     return (
         <>
-            <div className="hidden gap-3 md:grid md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+            <div className="hidden gap-3 md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
                 {groups.map((g) => <GroupCard key={g.id} group={g} nextMeeting={nextMeetings[g.id]} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>

@@ -5,7 +5,7 @@ import { cityLabel } from '@/lib/city-label';
 import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
 
-/** A group on a phone (AR-36): name up to two lines, one quiet line (sub-categories give way first), the tone mark at the right. No photo, no note. */
+/** A group on a phone (AR-36): name up to two lines, one quiet line (sub-categories give way first), the tagline, the tone mark at the right. No photo, no note. */
 export default function GroupRow({ group }: { group: GroupCardData }) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
@@ -24,6 +24,7 @@ export default function GroupRow({ group }: { group: GroupCardData }) {
                     <span className="min-w-0 truncate">{topic}</span>
                     <span className="shrink-0 whitespace-pre"> · {cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
                 </span>
+                {group.tagline && <span className="mt-0.5 block truncate text-xs text-foreground-muted">{group.tagline}</span>}
             </span>
             <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
                 <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />
