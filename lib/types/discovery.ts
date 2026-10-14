@@ -13,6 +13,7 @@ export type ScopedResult = {
 };
 
 import type { DateChoice, DayKey, DayPeriod } from '@/lib/discovery-dates';
+import type { DiscoveryParams } from '@/lib/discovery-params';
 
 export type DiscoveryKind = 'groups' | 'events';
 
@@ -98,6 +99,8 @@ export interface DiscoveryDates {
 /** What the discovery page hands to its provider: plain data from the services (Context Law). */
 export interface DiscoveryState {
     kind: DiscoveryKind;
+    /** The list's choice as parsed from its URL; read through `useDiscoveryNav` (the live URL is a panel's while one is open). */
+    params: DiscoveryParams;
     categories: Array<{ id: string; slug: string; title: string; color: string; count: number }>;
     /** Active level-2 sub-categories of every main category ("Veidi"). */
     veidi: Array<{ slug: string; title: string; l1Slug: string; count: number }>;

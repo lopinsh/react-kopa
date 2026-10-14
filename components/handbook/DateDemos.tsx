@@ -5,6 +5,7 @@ import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import MonthCalendar from '@/components/discovery/dates/MonthCalendar';
 import QuickChoices from '@/components/discovery/dates/QuickChoices';
 import { addDays } from '@/lib/discovery-dates';
+import { parseDiscoveryParams } from '@/lib/discovery-params';
 import type { DiscoveryDates } from '@/lib/types/discovery';
 
 const NOOP = () => undefined;
@@ -22,7 +23,7 @@ export function DatesDemo({ today }: { today: string }) {
         calendar: { from: today, to: addDays(today, 39) }, calendarCounts
     };
     return (
-        <DiscoveryProvider state={{ kind: 'events', categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, dates }}>
+        <DiscoveryProvider state={{ kind: 'events', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, dates }}>
             <div className="flex flex-wrap items-start gap-6">
                 <div className="flex flex-col gap-3">
                     <div className="inline-flex h-8 items-center rounded-full bg-surface p-[3px] ring-1 ring-inset ring-border"><QuickChoices variant="line" onPick={NOOP} /></div>

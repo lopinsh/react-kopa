@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useTransition } from 'react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from '@/i18n/routing';
-import { discoveryHref, parseDiscoveryParams, type DiscoveryParams } from '@/lib/discovery-params';
+import { discoveryHref, type DiscoveryParams } from '@/lib/discovery-params';
+import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 
-/** The current discovery choice (from the URL) and `go(change)` to change it; `replace` keeps Back clean for ticks. */
+/** The list's current choice (from the page's own URL params, so it holds while a panel's address is in the bar) and `go(change)` to change it; `replace` keeps Back clean for ticks. */
 export function useDiscoveryNav() {
     const router = useRouter();
-    const params = parseDiscoveryParams(useSearchParams());
+    const { params } = useDiscovery();
     const [pending, startTransition] = useTransition();
 
     const go = useCallback((change: Partial<DiscoveryParams>, options?: { replace?: boolean }) => {

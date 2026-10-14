@@ -325,7 +325,11 @@
     "noEventsThisWeek": "No events this week",
     "noEventsInPeriod": "No events at this time",
     "eventsCut": "Showing the first {count}. Pick a shorter time or a place.",
-    "noNextMeeting": "No meeting announced yet"
+    "noNextMeeting": "No meeting announced yet",
+    "panel": {
+      "openPage": "Open the group's page",
+      "groupGone": "This group is no longer available."
+    }
   },
   "moderation": {
     "hideGroup": "Hide group",
@@ -1369,7 +1373,8 @@
       "bodyLoggedOut": "If you are a member of this group, sign in to see it.",
       "bodyMember": "Only members of {group} can see this event. Ask to join the group to take part.",
       "signIn": "Sign in",
-      "goToGroup": "Go to {group}"
+      "goToGroup": "Go to {group}",
+      "sentence": "This event is for the group's members only."
     },
     "signInToRsvp": "Sign in to sign up",
     "goingDone": "Going",
@@ -1384,7 +1389,7 @@
     "onWaitlist": "On the waitlist",
     "leaveWaitlist": "Leave the waitlist",
     "full": "Full",
-    "fullNote": "The organiser has marked this event as full. You can join the waitlist.",
+    "fullNote": "The event is full. You can join the waiting list.",
     "waitlistNote": "The organiser will let people in by hand if there is room.",
     "requestNote": "The organiser approves who joins.",
     "openNote": "Let others know you're coming.",
@@ -1416,7 +1421,24 @@
     "deleteEvent": "Delete",
     "deleteConfirm": "Delete this event? Everyone who signed up will be notified. This can't be undone.",
     "online": "Online",
-    "continuesFrom": "since {date}"
+    "continuesFrom": "since {date}",
+    "panel": {
+      "allInfo": "Full details",
+      "organisedBy": "Organised by",
+      "goingCount": "{count} going",
+      "goingNamed": "{name} {others, plural, =0 {is going} other {and # more are going}}",
+      "goingYou": "You {others, plural, =0 {are going} other {and # more are going}}",
+      "gone": "This event is no longer available."
+    },
+    "join": {
+      "go": "I'm going",
+      "undoGoing": "Not going",
+      "confirmLeave": "Give up your place? You may not get it back.",
+      "confirmLeaveWaitlist": "Leave the waiting list?"
+    },
+    "state": {
+      "request": "Approval"
+    }
   },
   "eventWizard": {
     "stepOf": "Step {current} of {total}",

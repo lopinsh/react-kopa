@@ -85,6 +85,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const collator = new Intl.Collator(locale);
     const state: DiscoveryState = {
         kind: p.kind,
+        params: p,
         categories: categories
             .map((c) => ({ ...c, count: counts.byCategory[c.slug] ?? 0 }))
             .sort((a, b) => collator.compare(a.title, b.title)),

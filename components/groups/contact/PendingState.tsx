@@ -15,9 +15,25 @@ import { groupChip } from '@/components/groups/frame/chip';
  */
 export default function PendingState() {
     const g = useGroupContext();
+    return <PendingStateView chatId={g.user.chatId} onImage={g.image !== null} variant="banner" />;
+}
+
+/** The pending state from its own data: the banner variant above, or the one-line panel variant (the opened card, R6). */
+export function PendingStateView({ chatId, onImage, variant }: { chatId: string | null; onImage: boolean; variant: 'banner' | 'panel' }) {
     const t = useTranslations('group');
-    const onImage = g.image !== null;
-    const href = g.user.chatId ? `/messages?c=${g.user.chatId}` : '/messages';
+    const href = chatId ? `/messages?c=${chatId}` : '/messages';
+
+    if (variant === 'panel') {
+        return (
+            <div data-ui={UI.pendingState} className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <span className="inline-flex h-10 items-center gap-1.5 rounded-full bg-tint px-4 text-sm font-semibold text-foreground">
+                    <Check aria-hidden className="size-4" />
+                    {t('pending.sent')}
+                </span>
+                <Link href={href} className={buttonClass('quiet')}>{t('openChat')}</Link>
+            </div>
+        );
+    }
 
     return (
         <div data-ui={UI.pendingState} className="flex items-center gap-2 max-md:order-last">

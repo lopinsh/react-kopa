@@ -325,7 +325,11 @@
     "noEventsThisWeek": "Šonedēļ pasākumu nav",
     "noEventsInPeriod": "Šajā laikā pasākumu nav",
     "eventsCut": "Rādīti pirmie {count}. Izvēlies īsāku laiku vai vietu.",
-    "noNextMeeting": "Tikšanās vēl nav izziņota"
+    "noNextMeeting": "Tikšanās vēl nav izziņota",
+    "panel": {
+      "openPage": "Atvērt grupas lapu",
+      "groupGone": "Šī grupa vairs nav pieejama."
+    }
   },
   "moderation": {
     "hideGroup": "Paslēpt grupu",
@@ -1369,7 +1373,8 @@
       "bodyLoggedOut": "Ja esi šīs grupas biedrs, ienāc, lai to redzētu.",
       "bodyMember": "Šo pasākumu redz tikai grupas “{group}” biedri. Piesakies grupai, lai piedalītos.",
       "signIn": "Ienākt",
-      "goToGroup": "Uz grupu “{group}”"
+      "goToGroup": "Uz grupu “{group}”",
+      "sentence": "Šis pasākums ir tikai grupas biedriem."
     },
     "signInToRsvp": "Ieej, lai pieteiktos",
     "goingDone": "Piedalīšos",
@@ -1384,7 +1389,7 @@
     "onWaitlist": "Gaidīšanas sarakstā",
     "leaveWaitlist": "Izstāties no gaidīšanas saraksta",
     "full": "Pilns",
-    "fullNote": "Organizators ir atzīmējis, ka pasākums ir pilns. Vari pieteikties gaidīšanas sarakstā.",
+    "fullNote": "Pasākums ir pilns. Vari pieteikties gaidīšanas sarakstā.",
     "waitlistNote": "Ja atbrīvosies vieta, organizators pats uzņems cilvēkus.",
     "requestNote": "Organizators apstiprina, kas piedalīsies.",
     "openNote": "Dod citiem zināt, ka nāksi.",
@@ -1416,7 +1421,24 @@
     "deleteEvent": "Dzēst",
     "deleteConfirm": "Dzēst šo pasākumu? Visi, kas pieteikušies, saņems paziņojumu. Pasākumu vairs nevarēs atjaunot.",
     "online": "Tiešsaistē",
-    "continuesFrom": "kopš {date}"
+    "continuesFrom": "kopš {date}",
+    "panel": {
+      "allInfo": "Visa informācija",
+      "organisedBy": "Rīko",
+      "goingCount": "{count} iet",
+      "goingNamed": "{name} {others, plural, =0 {iet} other {un vēl # iet}}",
+      "goingYou": "Tu {others, plural, =0 {ej} other {un vēl # iet}}",
+      "gone": "Šis pasākums vairs nav pieejams."
+    },
+    "join": {
+      "go": "Eju",
+      "undoGoing": "Atteikties",
+      "confirmLeave": "Atteikties no vietas? To var neatgūt.",
+      "confirmLeaveWaitlist": "Izstāties no gaidīšanas saraksta?"
+    },
+    "state": {
+      "request": "Pieteikšanās"
+    }
   },
   "eventWizard": {
     "stepOf": "{current}. solis no {total}",
