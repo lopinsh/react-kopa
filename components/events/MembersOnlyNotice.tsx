@@ -1,47 +1,12 @@
-'use client';
-
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { Lock } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/routing';
-import Button, { buttonClass } from '@/components/ui/Button';
+import { getTranslations } from 'next-intl/server';
 import { UI } from '@/lib/constants';
 
-const AuthGateModal = dynamic(() => import('../modals/AuthGateModal'), { ssr: false });
-
-type Props = {
-    groupName: string;
-    groupHref: string;
-    isLoggedIn: boolean;
-};
-
-/** Shown instead of a 404 when someone opens a members-only event they may not see. Shows nothing about the event itself. */
-export default function MembersOnlyNotice({ groupName, groupHref, isLoggedIn }: Props) {
-    const t = useTranslations('event.gate');
-    const [signInOpen, setSignInOpen] = useState(false);
-
+/** Shown instead of a 404 when someone opens a members-only event they may not see (OD-19): one sentence, nothing about the event. The group banner above carries "Sazināties". */
+export default async function MembersOnlyNotice() {
+    const t = await getTranslations('event.gate');
     return (
-        <div data-ui={UI.notice} className="container mx-auto max-w-2xl px-4 py-24 text-center">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-surface-elevated text-foreground-muted">
-                <Lock className="h-8 w-8" />
-            </div>
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
-            <p className="mt-4 leading-relaxed text-foreground-muted">
-                {isLoggedIn ? t('bodyMember', { group: groupName }) : t('bodyLoggedOut')}
-            </p>
-
-            {isLoggedIn ? (
-                <Link href={groupHref} data-ui={UI.buttonPrimary} className={buttonClass('primary', 'mt-10')}>
-                    {t('goToGroup', { group: groupName })}
-                </Link>
-            ) : (
-                <Button onClick={() => setSignInOpen(true)} className="mt-10">
-                    {t('signIn')}
-                </Button>
-            )}
-
-            {signInOpen && <AuthGateModal isOpen onClose={() => setSignInOpen(false)} />}
+        <div data-ui={UI.notice} className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px] text-foreground">
+            {t('sentence')}
         </div>
     );
 }

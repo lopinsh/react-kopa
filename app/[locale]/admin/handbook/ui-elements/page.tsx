@@ -271,7 +271,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 </UiSpecimen>
 
                 <UiSpecimen id="notice" names={[UI.notice]} files={['components/events/MembersOnlyNotice.tsx']}>
-                    <MembersOnlyNotice groupName={t('sample.groupName')} groupHref="#notice" isLoggedIn />
+                    <MembersOnlyNotice />
                 </UiSpecimen>
             </div>
 

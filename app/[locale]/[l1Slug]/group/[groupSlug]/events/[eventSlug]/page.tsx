@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { clsx } from 'clsx';
-import EventParticipation from '@/components/events/EventParticipation';
+import JoinStep from '@/components/events/JoinStep';
 import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
 import AddToCalendar from '@/components/events/AddToCalendar';
 import ShareEventButton from '@/components/events/ShareEventButton';
@@ -60,11 +60,7 @@ export default async function EventPage({
         const gate = await EventService.getMembersOnlyGate(eventSlug, groupSlug, userId, l1Slug);
         if (!gate) notFound();
         return (
-            <MembersOnlyNotice
-                groupName={gate.groupName}
-                groupHref={`/${gate.l1Slug}/group/${gate.groupSlug}`}
-                isLoggedIn={!!userId}
-            />
+            <MembersOnlyNotice />
         );
     }
 
@@ -169,10 +165,7 @@ export default async function EventPage({
                             {capitalizeFirst(formatter.dateTime(startDate, EVENT_DAY))}
                         </span>
                         {event.visibility === 'MEMBERS_ONLY' && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
-                                <Lock className="h-3 w-3" />
-                                {t('membersOnly')}
-                            </span>
+                            <span className="text-foreground-muted">{t('membersOnly')}</span>
                         )}
                         {isRequest && (
                             <span className="inline-flex items-center gap-1 rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">
@@ -210,14 +203,7 @@ export default async function EventPage({
                             {!ended && !(isRequest && canManage) && (
                                 <div className="space-y-4 rounded-3xl border border-border bg-surface p-5 shadow-sm">
                                     <h2 className="text-lg font-semibold tracking-tight text-foreground">{t('areYouComing')}</h2>
-                                    <EventParticipation
-                                        eventId={event.id}
-                                        joinMode={event.joinMode}
-                                        isFull={event.isFull}
-                                        myStatus={myStatus}
-                                        locale={locale}
-                                        requireSignIn={!userId}
-                                    />
+                                    <JoinStep join={{ eventId: event.id, mode: event.joinMode, isFull: event.isFull, ended, myStatus, canManage }} />
                                 </div>
                             )}
 

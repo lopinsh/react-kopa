@@ -1,6 +1,7 @@
 import { CalendarDays, MapPin } from 'lucide-react';
 import { getLocale, getTimeZone, getTranslations } from 'next-intl/server';
 import CategoryLine from '@/components/ui/CategoryLine';
+import JoinStep from '@/components/events/JoinStep';
 import FacesLine from '@/components/events/FacesLine';
 import { cityLabel } from '@/lib/city-label';
 import { capitalizeFirst, createDateFormatter, EVENT_DAY_TIME } from '@/lib/date-format';
@@ -35,9 +36,7 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
                 {event.membersOnly && <p className="text-sm text-foreground-muted">{t('membersOnly')}</p>}
                 {event.text && <p lang={langAttr(event.textLang, locale)} className="text-sm leading-relaxed text-foreground">{event.text}</p>}
                 <FacesLine going={event.going} ended={event.join.ended} />
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                    <FullPageLink path={`${groupPath}/events/${event.slug}`} className={PANEL_LINK}>{t('panel.allInfo')}</FullPageLink>
-                </div>
+                <JoinStep join={event.join} trailing={<FullPageLink path={`${groupPath}/events/${event.slug}`} className={PANEL_LINK}>{t('panel.allInfo')}</FullPageLink>} />
                 <p className="text-[13px] text-foreground-muted">
                     {t('panel.organisedBy')}{' '}
                     <FullPageLink path={groupPath} className="font-semibold text-foreground hover:underline">{event.group.name}</FullPageLink>
