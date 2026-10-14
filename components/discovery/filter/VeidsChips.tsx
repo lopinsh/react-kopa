@@ -48,7 +48,7 @@ export default function VeidsChips() {
 
     return (
         <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex min-w-0 items-center gap-1.5">
-            <div className="flex min-w-0 flex-1 items-center gap-1.5 overflow-hidden py-0.5">
+            <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5">
                 {chips.slice(0, fit).map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} onClick={() => toggle(v.slug)} />)}
             </div>
             {hidden > 0 && (

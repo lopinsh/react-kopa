@@ -55,12 +55,6 @@ export type EventVisibility = (typeof EVENT_VISIBILITY)[number];
 export const EVENT_JOIN_MODES = ['OPEN', 'REQUEST'] as const;
 export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 
-/**
- * Discovery Page Constants
- */
-export const DISCOVERY_TABS = ['groups', 'events'] as const;
-export type DiscoveryTab = (typeof DISCOVERY_TABS)[number];
-
 /** Group cards one discovery page shows, and how many "Rādīt vēl" adds. */
 export const DISCOVERY_GROUPS_PAGE = 24;
 /** Most group cards one discovery URL may ask for (`?limit=`). */

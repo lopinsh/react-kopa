@@ -18,7 +18,7 @@ export default function TopicButton() {
     const { bindHost, ...pop } = usePopover();
     const [suggest, setSuggest] = useState<string | null>(null);
     const chosen = categories.find((c) => c.slug === params.category);
-    const dot = chosen && <span aria-hidden="true" className="size-2 shrink-0 rounded-full" style={{ backgroundColor: chosen.color }} />;
+    const dot = chosen && <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" style={{ ['--c' as string]: chosen.color }} />;
 
     return (
         <div ref={bindHost} className="relative min-w-0 shrink">
