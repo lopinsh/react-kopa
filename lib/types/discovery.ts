@@ -1,5 +1,3 @@
-import { GroupType } from '@prisma/client';
-
 export type ScopedResult = {
     type: 'category' | 'group' | 'event';
     id: string;
@@ -23,7 +21,6 @@ export interface GroupDiscoveryFilters {
     /** Sub-category slugs (L2/L3); a group matches any of them. */
     tags?: string[];
     query?: string;
-    type?: GroupType | string;
     take?: number;
     skip?: number;
 }
@@ -62,8 +59,12 @@ export interface DiscoveryCounts {
     total: number;
     /** L1 slug → count; cities, query and dates applied, topic not (each facet ignores its own filter). */
     byCategory: Record<string, number>;
-    /** L2/L3 slug → count inside `l1Slug`; cities, query, dates applied, tags not. `{}` without `l1Slug`. */
+    /** Every sub-category slug (L2/L3) → count; cities, query, dates applied, tags not. */
     bySubCategory: Record<string, number>;
+    /** Cities, query, dates applied, topic not: the drawer's "Visas" row. */
+    anyTopic: number;
+    /** Topic, query, dates applied, cities not, online included: the place list's "Visur" row. */
+    anyPlace: number;
     /** City slug → count; topic, query, dates applied, cities not; online events never here. */
     byCity: Record<string, number>;
     /** Events only: online events matching topic, query and dates; 0 for groups. */
@@ -76,13 +77,11 @@ export interface DayCount {
     count: number;
 }
 
-export type ContextualTaxonomy = {
-    l1: { id: string; slug: string; title: string; color: string };
-    l2s: {
-        id: string;
-        slug: string;
-        title: string;
-        children: { id: string; slug: string; title: string }[];
-    }[];
-    activeHierarchy: { id: string; title: string; level: number }[];
-};
+/** What the discovery page hands to its provider: plain data from the services (Context Law). */
+export interface DiscoveryState {
+    kind: DiscoveryKind;
+    categories: Array<{ id: string; slug: string; title: string; color: string; count: number }>;
+    /** Active level-2 sub-categories of every main category ("Veidi"). */
+    veidi: Array<{ slug: string; title: string; l1Slug: string; count: number }>;
+    counts: Pick<DiscoveryCounts, 'total' | 'anyTopic' | 'anyPlace' | 'byCity' | 'online'>;
+}

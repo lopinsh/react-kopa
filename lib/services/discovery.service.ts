@@ -5,8 +5,7 @@ import type {
     ScopedResult,
     GroupDiscoveryFilters,
     FacetInput,
-    DiscoveryCounts,
-    ContextualTaxonomy
+    DiscoveryCounts
 } from '@/lib/types/discovery';
 import { groupWhere, publicSectionMatch, loadGroupFacetRows, loadEventFacetRows, aggregateFacets } from './discovery-query';
 import { startOfTodayInRiga } from '@/lib/event-dates';
@@ -17,6 +16,7 @@ import { getTranslations } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { toTextLang, resolveText } from '@/lib/translations';
 import { pickTitle } from '@/lib/utils/localized-title';
+import { DISCOVERY_GROUPS_PAGE } from '@/lib/constants';
 
 /** All titles: a sub-category may exist in one language only (see pickTitle). */
 const ALL_TITLES = { select: { lang: true, title: true } } as const;
@@ -226,7 +226,7 @@ export const DiscoveryService = {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         try {
-            const { take = 12, skip = 0 } = filters;
+            const { take = DISCOVERY_GROUPS_PAGE, skip = 0 } = filters;
             const where = groupWhere({ ...filters, cities: filters.cities && [...filters.cities].sort() }, lang);
 
             // Fetch groups with caching for Taxonomy Heavy Joins
@@ -239,9 +239,8 @@ export const DiscoveryService = {
                         id: true,
                         name: true,
                         slug: true,
-                        description: true,
                         city: true,
-                        type: true,
+                        lookingFor: true,
                         bannerImage: true,
                         createdAt: true,
                         category: {
@@ -271,15 +270,10 @@ export const DiscoveryService = {
 
             const { items: groups, hasMore } = await fetchGroupsWithCategories(where, lang, take, skip);
 
-            // Total count for display (uncached for accuracy or cached with shorter TTL)
-            const totalCount = await prisma.group.count({ where });
-
-            const mappedGroups = groups.map(toGroupCard);
-
-            return { groups: mappedGroups, hasMore, totalCount };
+            return { groups: groups.map((g) => toGroupCard(g, lang)), hasMore };
         } catch (error) {
             console.error('[DiscoveryService.getGroups] Error:', error);
-            return { groups: [], hasMore: false, totalCount: 0 };
+            return { groups: [], hasMore: false };
         }
     },
 
@@ -300,7 +294,7 @@ export const DiscoveryService = {
         };
         if (input.query) return compute();
         return unstable_cache(compute, [
-            'discovery-counts-v1', input.kind, cities.join(','), input.l1Slug ?? '', tags.join(','),
+            'discovery-counts-v2', input.kind, cities.join(','), input.l1Slug ?? '', tags.join(','),
             input.from?.toISOString() ?? '', input.to?.toISOString() ?? '',
             // The Latvian day, so "upcoming" rolls over at midnight.
             input.kind === 'events' ? startOfTodayInRiga().toISOString() : ''
@@ -336,111 +330,6 @@ export const DiscoveryService = {
                 revalidate: 3600, // Revalidate every hour
                 tags: ['categories']
             }
-        )();
-    },
-
-    /** Matches a title in either language: a sub-category may be named in one language only. */
-    async snapInterest(query: string) {
-        const snapped = await prisma.category.findFirst({
-            where: {
-                level: { in: [1, 2] },
-                status: 'ACTIVE',
-                titles: {
-                    some: {
-                        title: { equals: query, mode: 'insensitive' }
-                    }
-                }
-            },
-            include: {
-                parent: true
-            }
-        });
-
-        if (!snapped) return null;
-
-        return {
-            id: snapped.id,
-            l1Id: snapped.level === 1 ? snapped.id : snapped.parentId
-        };
-    },
-
-    async getContextualTaxonomy(categoryId: string | null, locale: string): Promise<ContextualTaxonomy | null> {
-        if (!categoryId) return null;
-        const lang = locale === 'en' ? 'en' : 'lv';
-
-        return await unstable_cache(
-            async () => {
-                const target = await prisma.category.findUnique({
-                    where: { id: categoryId },
-                    include: {
-                        titles: ALL_TITLES,
-                        parent: {
-                            include: {
-                                titles: ALL_TITLES,
-                                parent: {
-                                    include: { titles: ALL_TITLES }
-                                }
-                            }
-                        }
-                    }
-                });
-                if (!target) return null;
-
-                let l1Id = target.id;
-                const activeHierarchy = [{ id: target.id, title: pickTitle(target.titles, lang, target.slug), level: target.level }];
-
-                if (target.level === 3 && target.parent?.parent) {
-                    l1Id = target.parent.parentId!;
-                    activeHierarchy.unshift({ id: target.parent.id, title: pickTitle(target.parent.titles, lang, target.parent.slug), level: 2 });
-                    activeHierarchy.unshift({ id: target.parent.parent.id, title: pickTitle(target.parent.parent.titles, lang, target.parent.parent.slug), level: 1 });
-                } else if (target.level === 2 && target.parent) {
-                    l1Id = target.parentId!;
-                    activeHierarchy.unshift({ id: target.parent.id, title: pickTitle(target.parent.titles, lang, target.parent.slug), level: 1 });
-                }
-
-                const l1Tree = await prisma.category.findUnique({
-                    where: { id: l1Id },
-                    include: {
-                        titles: ALL_TITLES,
-                        children: {
-                            where: { status: 'ACTIVE' },
-                            include: {
-                                titles: ALL_TITLES,
-                                children: {
-                                    where: { status: 'ACTIVE' },
-                                    include: { titles: ALL_TITLES },
-                                    orderBy: { slug: 'asc' }
-                                }
-                            },
-                            orderBy: { slug: 'asc' }
-                        }
-                    }
-                });
-
-                if (!l1Tree) return null;
-
-                return {
-                    l1: {
-                        id: l1Tree.id,
-                        slug: l1Tree.slug,
-                        title: pickTitle(l1Tree.titles, lang, l1Tree.slug),
-                        color: categoryColor(l1Tree.slug, l1Tree.color)
-                    },
-                    l2s: l1Tree.children.map(c2 => ({
-                        id: c2.id,
-                        slug: c2.slug,
-                        title: pickTitle(c2.titles, lang, c2.slug),
-                        children: c2.children.map(c3 => ({
-                            id: c3.id,
-                            slug: c3.slug,
-                            title: pickTitle(c3.titles, lang, c3.slug)
-                        }))
-                    })),
-                    activeHierarchy
-                };
-            },
-            [`contextual-taxonomy-${lang}-${categoryId}`],
-            { revalidate: 3600, tags: ['categories'] }
         )();
     },
 

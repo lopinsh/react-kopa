@@ -17,7 +17,7 @@ function bump(map: Record<string, number>, key: string): void {
 export function aggregateFacets(rows: FacetRow[], input: FacetInput): Omit<DiscoveryCounts, 'kind'> {
     const cities = input.cities ?? [];
     const tags = input.tags ?? [];
-    const out: Omit<DiscoveryCounts, 'kind'> = { total: 0, byCategory: {}, bySubCategory: {}, byCity: {}, online: 0 };
+    const out: Omit<DiscoveryCounts, 'kind'> = { total: 0, anyTopic: 0, anyPlace: 0, byCategory: {}, bySubCategory: {}, byCity: {}, online: 0 };
 
     for (const row of rows) {
         const inCities = cities.length === 0 || (!row.isOnline && !!row.city && cities.includes(row.city));
@@ -26,8 +26,12 @@ export function aggregateFacets(rows: FacetRow[], input: FacetInput): Omit<Disco
         const inTopic = inL1 && inTags;
 
         if (inCities && inTopic) out.total++;
-        if (inCities) row.l1Slugs.forEach((s) => bump(out.byCategory, s));
-        if (inCities && inL1 && input.l1Slug) row.tagSlugs.forEach((s) => bump(out.bySubCategory, s));
+        if (inCities) out.anyTopic++;
+        if (inTopic) out.anyPlace++;
+        if (inCities) {
+            row.l1Slugs.forEach((s) => bump(out.byCategory, s));
+            row.tagSlugs.forEach((s) => bump(out.bySubCategory, s));
+        }
         if (inTopic) {
             if (row.isOnline) out.online++;
             else if (row.city) bump(out.byCity, row.city);

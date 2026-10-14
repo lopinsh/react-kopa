@@ -1,6 +1,6 @@
 import { Link } from '@/i18n/routing';
 import { Users, MapPin } from 'lucide-react';
-import type { GroupType, MembershipRole } from '@prisma/client';
+import type { MembershipRole } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { cityLabel } from '@/lib/city-label';
 import RoleTag from '@/components/ui/RoleTag';
@@ -11,17 +11,14 @@ type Props = {
         slug: string;
         name: string;
         city: string;
-        type: GroupType;
         memberCount: number;
         pendingCount?: number;
         role: MembershipRole;
         category: {
-            title: string;
             l1Slug: string;
-            parentTitle?: string | null;
+            l1Title: string;
             color: string;
         };
-        accentColor: string;
     };
     locale: string;
     actionRequired?: boolean;
@@ -30,7 +27,7 @@ type Props = {
 export default function MyGroupsListRow({ group, actionRequired }: Props) {
     const t = useTranslations('group');
     const tCities = useTranslations('cities');
-    const accentColor = group.category.color || group.accentColor;
+    const accentColor = group.category.color;
 
     // If action required is true, link directly to the requests tab
     const targetHref = actionRequired
@@ -57,7 +54,7 @@ export default function MyGroupsListRow({ group, actionRequired }: Props) {
                     </h3>
                     <div className="flex items-center gap-2 text-[11px] font-semibold text-foreground-muted">
                         <span className="shrink-0 rounded-md bg-surface-elevated px-2 py-0.5">
-                            {group.category.title}
+                            {group.category.l1Title}
                         </span>
                         {group.city && (
                             <span className="flex items-center gap-0.5 shrink-0">

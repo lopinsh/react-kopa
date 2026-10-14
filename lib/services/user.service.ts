@@ -13,16 +13,16 @@ const PROFILE_USER_SELECT = {
     cities: true, createdAt: true, isProfilePublic: true,
 } as const;
 
-const PROFILE_GROUP_INCLUDE = {
-    category: { include: { parent: { include: { parent: true, titles: true } }, titles: true } },
-    ...GROUP_CARD_RELATIONS,
-} as const;
+/** The group columns a profile's cards need, with the category titles in the viewer's language. */
+function profileGroupInclude(lang: string) {
+    return { category: { include: TaxonomyResolver.getInclude(lang) }, ...GROUP_CARD_RELATIONS };
+}
 
-type ProfileMembership = Prisma.MembershipGetPayload<{ include: { group: { include: typeof PROFILE_GROUP_INCLUDE } } }>;
+type ProfileMembership = Prisma.MembershipGetPayload<{ include: { group: { include: ReturnType<typeof profileGroupInclude> } } }>;
 type ProfileFields = Prisma.UserGetPayload<{ select: typeof PROFILE_USER_SELECT }>;
 
-function toProfileGroup(m: ProfileMembership) {
-    return toGroupCard(m.group);
+function toProfileGroup(m: ProfileMembership, lang: string) {
+    return toGroupCard(m.group, lang);
 }
 
 type ProfileGroup = ReturnType<typeof toProfileGroup>;
@@ -148,7 +148,8 @@ export const UserService = {
      * show to fellow members, and moderation-hidden groups never show.
      * Returns only what the profile page shows (never the email or password hash).
      */
-    async getUserByUsername(username: string, viewerId?: string): Promise<PublicProfile | null> {
+    async getUserByUsername(username: string, viewerId: string | undefined, locale: string): Promise<PublicProfile | null> {
+        const lang = locale === 'en' ? 'en' : 'lv';
         const profile = await prisma.user.findUnique({
             where: { username },
             select: { ...PROFILE_USER_SELECT, showGroupsOnProfile: true },
@@ -177,18 +178,19 @@ export const UserService = {
                 group: { hiddenAt: null, ...groupFilter },
             },
             orderBy: { joinedAt: 'desc' },
-            include: { group: { include: PROFILE_GROUP_INCLUDE } },
+            include: { group: { include: profileGroupInclude(lang) } },
         });
 
         const { showGroupsOnProfile, ...fields } = profile;
         return {
             ...fields,
-            publicGroups: memberships.map(toProfileGroup),
+            publicGroups: memberships.map((m) => toProfileGroup(m, lang)),
             showsAllGroups: isOwnProfile || showGroupsOnProfile,
         };
     },
 
-    async getOwnProfile(userId: string): Promise<OwnProfile | null> {
+    async getOwnProfile(userId: string, locale: string): Promise<OwnProfile | null> {
+        const lang = locale === 'en' ? 'en' : 'lv';
         const user = await prisma.user.findUnique({
             where: { id: userId },
             select: {
@@ -197,7 +199,7 @@ export const UserService = {
                     take: 6,
                     where: { role: { not: 'PENDING' }, group: { hiddenAt: null } },
                     orderBy: { joinedAt: 'desc' },
-                    include: { group: { include: PROFILE_GROUP_INCLUDE } },
+                    include: { group: { include: profileGroupInclude(lang) } },
                 },
             },
         });
@@ -205,7 +207,7 @@ export const UserService = {
         if (!user) return null;
 
         const { memberships, ...fields } = user;
-        return { ...fields, recentGroups: memberships.map(toProfileGroup) };
+        return { ...fields, recentGroups: memberships.map((m) => toProfileGroup(m, lang)) };
     },
 
     async getOwnAreaContext(userId: string): Promise<OwnAreaContext | null> {
@@ -254,7 +256,7 @@ export const UserService = {
         const pendingCountMap = new Map(pendingCounts.map(pc => [pc.groupId, pc._count]));
 
         return memberships.map(m => ({
-            ...toGroupCard(m.group),
+            ...toGroupCard(m.group, lang),
             pendingCount: pendingCountMap.get(m.group.id) || 0,
             role: m.role
         }));

@@ -61,8 +61,12 @@ export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 export const DISCOVERY_TABS = ['groups', 'events'] as const;
 export type DiscoveryTab = (typeof DISCOVERY_TABS)[number];
 
-export const DISCOVERY_VIEWS = ['grid', 'list'] as const;
-export type DiscoveryView = (typeof DISCOVERY_VIEWS)[number];
+/** Group cards one discovery page shows, and how many "Rādīt vēl" adds. */
+export const DISCOVERY_GROUPS_PAGE = 24;
+/** Most group cards one discovery URL may ask for (`?limit=`). */
+export const DISCOVERY_GROUPS_MAX = 480;
+/** Cookie holding whether the category drawer is folded ('1'), read on the server. */
+export const DISCOVERY_RAIL_COOKIE = 'ek_disc_rail';
 
 /**
  * Titles of the sections a new group starts with. They are stored as ordinary per-language title rows
@@ -110,7 +114,16 @@ export const FEEDBACK_TEXT_MAX = 2000;
  */
 export const UI = {
     groupCard: 'group-card',
-    groupListRow: 'group-list-row',
+    groupRow: 'group-row',
+    createCard: 'create-card',
+    filterLine: 'filter-line',
+    filterButton: 'filter-button',
+    searchWordChip: 'filter-search-word',
+    veidsLine: 'veids-line',
+    viewSwitch: 'view-switch',
+    clearAll: 'clear-all',
+    filterList: 'filter-list',
+    categoryDrawer: 'category-drawer',
     eventCard: 'event-card',
     eventListRow: 'event-list-row',
     eventRow: 'event-row',

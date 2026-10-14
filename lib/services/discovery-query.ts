@@ -51,9 +51,9 @@ function anyTopic(slugs: string[]): Prisma.GroupWhereInput[] {
     return slugs.length > 0 ? [{ OR: slugs.map(topicMatch) }] : [];
 }
 
-/** The discovery group list's where (PUBLIC unless type says PRIVATE, not hidden, ACTIVE non-wildcard category). */
+/** The discovery group list's where: PUBLIC only (private groups never appear, OD-07), not hidden, ACTIVE non-wildcard category. */
 export function groupWhere(filters: GroupDiscoveryFilters, lang: TextLang): Prisma.GroupWhereInput {
-    const { cities, categoryId, tags, query, type } = filters;
+    const { cities, categoryId, tags, query } = filters;
     const and: Prisma.GroupWhereInput[] = [
         // Content safety: only ACTIVE and non-wildcard categories.
         { category: { status: 'ACTIVE', isWildcard: false } }
@@ -85,7 +85,7 @@ export function groupWhere(filters: GroupDiscoveryFilters, lang: TextLang): Pris
 
     return {
         hiddenAt: null,
-        type: type === 'PRIVATE' ? 'PRIVATE' : 'PUBLIC',
+        type: 'PUBLIC',
         ...(cities && cities.length > 0 ? { city: { in: cities } } : {}),
         AND: and
     };

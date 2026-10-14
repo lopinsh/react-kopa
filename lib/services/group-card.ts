@@ -1,28 +1,16 @@
-import type { GroupType } from '@prisma/client';
 import { TaxonomyResolver, type TaxonomyModel } from './taxonomy-resolver.service';
-
-/** Minimal user shape used in group member avatar stacks */
-export interface GroupMemberPreview {
-    id: string;
-    name: string | null;
-    avatarSeed: string | null;
-    image: string | null;
-}
+import { pickTitle } from '@/lib/utils/localized-title';
 
 /**
  * Query fragment every group card needs besides the group's own columns and its category: the
- * member count (pending applicants are not members) and up to 5 recent member previews. Spread it
- * into a Prisma `select` or `include`.
+ * member count (pending applicants are not members) and the active tags (the card's sub-categories).
+ * Spread it into a Prisma `select` or `include`.
  */
 export const GROUP_CARD_RELATIONS = {
     _count: { select: { members: { where: { role: { not: 'PENDING' as const } } } } },
-    members: {
-        where: { role: { not: 'PENDING' as const } },
-        take: 5,
-        orderBy: { joinedAt: 'desc' as const },
-        select: {
-            user: { select: { id: true, name: true, avatarSeed: true, image: true } },
-        },
+    tags: {
+        where: { status: 'ACTIVE' as const },
+        select: { level: true, slug: true, titles: { select: { lang: true, title: true } } },
     },
 } as const;
 
@@ -31,37 +19,32 @@ export interface GroupCardSource {
     id: string;
     name: string;
     slug: string;
-    description: string | null;
     city: string;
-    type: GroupType;
+    lookingFor: string | null;
     bannerImage: string | null;
     category: TaxonomyModel;
     _count: { members: number };
-    members: { user: GroupMemberPreview }[];
+    tags: Array<{ level: number; slug: string; titles: Array<{ lang: string; title: string }> }>;
 }
 
-/** The one shape the group cards (discovery, profile, my groups) are rendered from. */
-export function toGroupCard(group: GroupCardSource) {
+/** The one shape the group cards and rows (discovery, profile, my groups) are rendered from. */
+export function toGroupCard(group: GroupCardSource, lang: string) {
     const resolved = TaxonomyResolver.resolve(group.category);
     return {
         id: group.id,
         name: group.name,
         slug: group.slug,
-        description: group.description,
         city: group.city,
-        type: group.type,
+        lookingFor: group.lookingFor,
         bannerImage: group.bannerImage,
         memberCount: group._count.members,
-        members: group.members.map((m) => m.user),
-        accentColor: resolved.accentColor,
         category: {
-            id: resolved.categoryId,
             slug: resolved.categorySlug,
             l1Slug: resolved.l1Slug,
-            title: resolved.categoryTitle,
-            parentTitle: resolved.parentTitle,
+            l1Title: resolved.l1Title,
             color: resolved.accentColor,
         },
+        subCategories: group.tags.filter((t) => t.level === 2).map((t) => pickTitle(t.titles, lang, t.slug)),
     };
 }
 
