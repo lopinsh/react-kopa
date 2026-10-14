@@ -449,7 +449,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R2a Header, menus, own area | pushed, live | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
 | R2b Behaviour pieces | pushed, live | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
-| R3b Sazināties, pending, "…" | spec written | [specs/R3b.md](specs/R3b.md) | |
+| R3b Sazināties, pending, "…" | built; awaiting Opus review | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`7ca1f36` and the close-out commit |
 | R4 Discovery data | not started | | |
 | R5a Discovery filters and cards | not started | | |
 | R5b Events by day | not started | | |
