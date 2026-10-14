@@ -250,6 +250,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `discovery`, `event`.
 - **Risks:** time zone: weeks and "Šodien" in the viewer's zone (`tz` cookie), DST weeks; Monday-first in both locales.
 - **Size:** M/L.
+- **Spec:** [specs/R5b.md](specs/R5b.md). No migration; dates in the URL (`date` = today/weekend/day/range/month, absent = Šonedēļ; `day` = the strip's tap) through pure `lib/discovery-dates.ts` + `lib/discovery-window.ts` (days in the viewer's `tz` zone, instants only from `zonedDayStart`, DST-checked); one `EventRowData` shape from `lib/services/event-row.ts` for `components/events/{EventRow,EventDayList}.tsx` on discovery and a group's Pasākumi (old row and both event cards deleted); `DayStrip`, quick choices, `MonthCalendar` on a `ui/MonthGrid` shared with `DateField`; folds in three owner notes (whole Kur/Veids row ticks; one group-card height and a tagline from the public home section, a proposal); sixteen orchestrator defaults to confirm.
 
 ### R6 · Panels (L)
 
@@ -454,7 +455,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R3b Sazināties, pending, "…" | pushed, live | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`bd69362` (Opus review fix `31c4020` share toast without "!") |
 | R4 Discovery data | pushed, live | [specs/R4.md](specs/R4.md) | `5d5186f`..`c6adace` (Opus review fixes `2a8ad05` cache refresh on city reject and group tag changes, `a2e76d9` counts see every L1 a group matches) |
 | R5a Discovery filters and cards | pushed, live | [specs/R5a.md](specs/R5a.md) | `902d93a`..`a9523b6` (Opus review fixes `6efb0c1` quick ticks and Veids fit, `60ee81f` suggestion sign-in and name limit, `a9523b6` level-3 links, folded rail, groups cache key) |
-| R5b Events by day | not started | | |
+| R5b Events by day | spec written | [specs/R5b.md](specs/R5b.md) | |
 | R6 Panels | not started | | |
 | R7 Search | not started | | |
 | R8 Own area | not started | | |
