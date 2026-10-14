@@ -57,7 +57,7 @@ The same situation behaves the same way on every screen.
 
 ## Dates and times
 
-- Riga time, 24 h, Monday first, in both languages.
+- Riga time, 24 h, Monday first, in both languages. Weeks start on Monday; "today" is the viewer's day in their own time zone.
 - Today: relative ("pirms 5 min"). Older: date ("9. okt., 20:07").
 - Time pickers in 15-minute steps.
 

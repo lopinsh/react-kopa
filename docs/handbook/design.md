@@ -24,7 +24,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 
 | Step | Screen | Layout | Today |
 |---|---|---|---|
-| Find | Discovery: groups and events | A | R5a done (filters, cards), R5b |
+| Find | Discovery: groups and events | A | R5a, R5b done (filters, cards, events by day) |
 | Find | Manas grupas | A | R8 |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a done |
@@ -34,7 +34,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Talk | Messages | E | R8 |
 | Talk | Notifications | panel | R8 |
 | Group life | Biedri, Requests | B | R9b |
-| Group life | Pasākumi tab | B | R3a (rows R5b) done |
+| Group life | Pasākumi tab | B | R3a, R5b done |
 | Group life | Event page | B | R9a |
 | Group life | Create / edit event | B | R4 done (place), R9a |
 | Group life | Group settings | B | R4 done (field), R9b |
@@ -134,6 +134,8 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **The "…" menu.** The shared Menu anchored to its chip: your role as a quiet first line, then what you can do; rows hidden, never greyed; an undoable step asks in a pop-over at the chip.
 - **Switch.** A pill track in the site colour; the label is the row's text.
 - **Filter line.** Kur and Tēma as 32 px pills (chosen: dark ring and a small ×; open: site-colour ring), the Veids chips of the chosen Tēma on one line with "+N" for the rest, "Notīrīt visu" from two chosen things and the Grupas | Pasākumi switch at the right end (a full-width line on phones). Lists open under their button, as a bottom sheet on phones. Used on discovery.
-- **Group card and row.** The card (from 768 px) shows name, category line, place and members, the group's note ("Ko meklējam?" or the next meeting) and the photo or the tone and icon at the right; the row (phones) is two quiet lines and a tone mark. Both end with the create card in a chosen category. Used on discovery and the profiles.
+- **Group card and row.** The card (from 768 px) shows name, category line, place and members, the group's tagline (the first words of its public home text), the group's note ("Ko meklējam?", the next meeting, or "Tikšanās vēl nav izziņota") and the photo or the tone and icon at the right; every card in a grid is the same height (name, tagline and note each reserve two lines). The row (phones) is two quiet lines, the tagline and a tone mark. Both end with the create card in a chosen category. Used on discovery and the profiles.
+- **Event row.** One row everywhere: the time, the category dot, the name and the city on line one; "Eju" (or outlined "Gaida") under the time, its tick starting where the time's first digit starts; line two the group as a link, the category and sub-categories; last the first words of the description, one line. Thin lines between rows, 8 px hover radius. Rows sit under day headings ("Šodien · pirmd., 12. okt.", "Rīt · …", then the date) on one surface, in two columns when the list is wide. A group's own pages leave line two out. The row opens the event page; no join button on it.
+- **Day strip and date picker.** The strip shows seven days, Monday first, the month between ‹ and ›, a dot under days with events, weekends on the tint, the list's first day filled in the site colour; a tap starts the list at that day. The filter line holds Šodien · Šonedēļ · Nedēļas nogalē and the calendar as one pill (one date button where the line is narrow and on phones, opening the same choices above the calendar). The calendar shows one month; a first tap picks a day, a second a range; "Rādīt N" applies it.
 
 Also one each: sub-tabs (underline), avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).

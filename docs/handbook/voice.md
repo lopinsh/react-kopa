@@ -37,6 +37,8 @@ One word per thing, everywhere.
 | A sub-category | Veids | Type |
 | Every place | Visur | Everywhere |
 | Load the next 24 | Rādīt vēl | Show more |
+| Today / this week / this weekend | Šodien / Šonedēļ / Nedēļas nogalē | Today / This week / This weekend |
+| Load the next week | Rādīt nākamo nedēļu | Show next week |
 
 ## Say, not
 
