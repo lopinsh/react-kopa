@@ -5,14 +5,16 @@ import AccentScope from '@/components/handbook/AccentScope';
 import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/IdentitySpecimens';
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
+import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
 import EventCard from '@/components/discovery/EventCard';
+import CreateCard from '@/components/discovery/CreateCard';
 import GroupCard from '@/components/discovery/GroupCard';
-import ListViewCard from '@/components/discovery/ListViewCard';
+import GroupRow from '@/components/discovery/GroupRow';
 import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import EventRow from '@/components/groups/EventRow';
@@ -139,12 +141,20 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupListRow]} files={['components/discovery/GroupCard.tsx', 'components/discovery/ListViewCard.tsx']}>
-                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                        <GroupCard group={samples.groupCard} accentColor={samples.accent} locale={locale} />
-                        <div className="sm:col-span-1 lg:col-span-2">
-                            <ListViewCard group={samples.groupCard} accentColor={samples.accent} locale={locale} />
-                        </div>
+                <UiSpecimen id="filterLine" names={[UI.filterLine, UI.filterButton, UI.veidsLine, UI.viewSwitch, UI.clearAll, UI.filterList]} files={['components/discovery/filter/FilterLine.tsx', 'components/discovery/filter/FilterButton.tsx', 'components/discovery/filter/VeidsChips.tsx', 'components/discovery/filter/ViewSwitch.tsx']}>
+                    <FilterLineDemo accent={samples.accent} />
+                </UiSpecimen>
+
+                <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>
+                    <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+                        <GroupCard group={samples.groupCardNote} />
+                        <GroupCard group={samples.groupCard} nextMeeting={samples.nextMeeting} />
+                        <GroupCard group={{ ...samples.groupCard, id: 'sample-group-bare' }} />
+                        <CreateCard l1Slug={samples.l1Slug} variant="card" />
+                    </div>
+                    <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5">
+                        <GroupRow group={samples.groupCard} />
+                        <CreateCard l1Slug={samples.l1Slug} variant="row" />
                     </div>
                 </UiSpecimen>
 

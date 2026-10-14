@@ -34,6 +34,9 @@ One word per thing, everywhere.
 | A private group | Tikai biedriem | Members only |
 | An event that happens online | Tiešsaistē | Online |
 | What a group is looking for right now | Ko meklējam? | What are we looking for? |
+| A sub-category | Veids | Type |
+| Every place | Visur | Everywhere |
+| Load the next 24 | Rādīt vēl | Show more |
 
 ## Say, not
 

@@ -33,20 +33,20 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const janis = { id: 'sample-janis', name: 'Jānis Bērziņš', image: null, avatarSeed: 'janis' };
     const marta = { id: 'sample-marta', name: 'Marta Ozola', image: null, avatarSeed: 'marta' };
 
-    const category = { title: s('category'), l1Slug: SAMPLE_L1_SLUG, parentTitle: s('parentCategory'), color: SAMPLE_ACCENT };
 
     const groupCard = {
         id: 'sample-group',
         name: s('groupName'),
         slug: 'sample-group',
-        description: s('groupDescription'),
         city: 'Jelgava',
-        type: 'PUBLIC' as const,
-        memberCount: 23,
+        lookingFor: null,
         bannerImage: null,
-        members: [anna, janis, marta].map((p) => ({ id: p.id, name: p.name, avatarSeed: p.avatarSeed, image: null })),
-        category,
+        memberCount: 23,
+        category: { slug: 'hiking', l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },
+        subCategories: [s('category'), s('category2')],
     };
+    const groupCardNote = { ...groupCard, id: 'sample-group-note', lookingFor: s('lookingFor') };
+    const nextMeeting = inDays(3, 10);
 
     const group: GroupContext = {
         id: 'sample-group',
@@ -167,6 +167,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         accent: SAMPLE_ACCENT,
         l1Slug: SAMPLE_L1_SLUG,
         groupCard,
+        groupCardNote,
+        nextMeeting,
         group,
         memberGroupContext,
         discoverableEvents,

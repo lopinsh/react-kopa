@@ -8,7 +8,7 @@ Five layouts cover every screen. A new screen picks one of them.
 
 | Layout | Name | Used for |
 |---|---|---|
-| A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. A notes the filter line and category drawer (R5a). |
+| A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. On discovery the category drawer (a 232 px column from 1024 px, folds to a rail), the filter line (Kur, Tēma, the Veids chips, the Grupas | Pasākumi switch) and group cards from 768 px (rows on phones) fill the frame. |
 | B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). A group's banner is 96 px: the group's image with a dark shade and white text, or the category tint and mark; on phones a 64 px bar with ☰ for the pages. Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
 | D | Focus | One centred column, max 560 px, no sidebar. Sign-in, register, wizards, onboarding. |
 | E | Two panes | List + detail; on mobile one at a time with a back link. Messages. |
@@ -24,7 +24,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 
 | Step | Screen | Layout | Today |
 |---|---|---|---|
-| Find | Discovery: groups and events | A | R5a, R5b |
+| Find | Discovery: groups and events | A | R5a done (filters, cards), R5b |
 | Find | Manas grupas | A | R8 |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a done |
@@ -133,5 +133,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 
 - **The "…" menu.** The shared Menu anchored to its chip: your role as a quiet first line, then what you can do; rows hidden, never greyed; an undoable step asks in a pop-over at the chip.
 - **Switch.** A pill track in the site colour; the label is the row's text.
+- **Filter line.** Kur and Tēma as 32 px pills (chosen: dark ring and a small ×; open: site-colour ring), the Veids chips of the chosen Tēma on one line with "+N" for the rest, "Notīrīt visu" from two chosen things and the Grupas | Pasākumi switch at the right end (a full-width line on phones). Lists open under their button, as a bottom sheet on phones. Used on discovery.
+- **Group card and row.** The card (from 768 px) shows name, category line, place and members, the group's note ("Ko meklējam?" or the next meeting) and the photo or the tone and icon at the right; the row (phones) is two quiet lines and a tone mark. Both end with the create card in a chosen category. Used on discovery and the profiles.
 
 Also one each: sub-tabs (underline), avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
