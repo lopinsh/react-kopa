@@ -49,8 +49,12 @@ export default function GroupActions() {
         if (pendingAction !== 'join_group' && pendingAction !== 'report_group') return;
         clearPendingAction();
         if (pendingAction === 'join_group' && canContact) openContact();
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- the one-time continuation after the sign-in reload
-        if (pendingAction === 'report_group' && !isTeam) setDialog('report');
+        if (pendingAction === 'report_group' && !isTeam) {
+            // The reload lost the opener: hand focus back to the "…" button, as on the normal path.
+            menuReturnRef.current = document.querySelector<HTMLElement>(`[data-ui="${UI.groupMoreButton}"]`);
+            // eslint-disable-next-line react-hooks/set-state-in-effect -- the one-time continuation after the sign-in reload
+            setDialog('report');
+        }
     }, [isModalOpen, isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, openContact, canContact, isTeam]);
 
     // Menu items close their menu, so the pop-ups they open return focus to the menu's button.

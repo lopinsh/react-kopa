@@ -118,6 +118,7 @@ export const UI = {
     contactDialog: 'contact-dialog',
     pendingState: 'pending-state',
     groupMoreMenu: 'group-more-menu',
+    groupMoreButton: 'group-more-button',
     switch: 'switch',
     memberCard: 'member-card',
     requestCard: 'request-card',

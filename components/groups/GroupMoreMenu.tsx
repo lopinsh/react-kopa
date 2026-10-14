@@ -78,6 +78,7 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
             <button
                 {...triggerProps}
                 aria-label={c('moreOptions')}
+                data-ui={UI.groupMoreButton}
                 className={clsx('grid size-10 place-items-center rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-primary active:scale-95', groupChip(g.image !== null))}
             >
                 <MoreHorizontal aria-hidden className="size-5" />
