@@ -7,7 +7,7 @@ const GAP = 6;
 /**
  * How many of `count` chips fit on one line. The chips are measured in an invisible copy (`probe`: the chips in order,
  * then one "+N" chip), so the visible line never has to be measured while it changes. `pinned` chips always stay.
- * `signature` changes with the chips' labels (they must be measured again). `moreExists`: some things are never chips (so "+N" shows even when every chip fits). Measures on size changes only.
+ * `signature` changes with the chips' labels (they must be measured again). `moreExists`: some things are never chips (so "+N" shows even when every chip fits). Measures when the line or the copy changes size.
  */
 export function useChipFit(signature: string, count: number, pinned: number, moreExists: boolean) {
     const row = useRef<HTMLDivElement>(null);
@@ -37,6 +37,8 @@ export function useChipFit(signature: string, count: number, pinned: number, mor
         };
         const observer = new ResizeObserver(measure);
         observer.observe(el);
+        // The copy changes size too when the fonts or styles arrive after the first measure.
+        observer.observe(copy);
         return () => observer.disconnect();
     }, [signature, count, pinned, moreExists]);
 

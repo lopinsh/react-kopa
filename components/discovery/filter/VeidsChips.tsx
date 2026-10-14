@@ -11,13 +11,14 @@ import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { useChipFit } from '@/hooks/useChipFit';
 import { UI } from '@/lib/constants';
 
-const CHIP = 'relative inline-flex h-7 shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-xs ring-1 ring-inset after:absolute after:-inset-y-2 after:inset-x-0';
+const CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-xs ring-1 ring-inset after:absolute after:-inset-y-2 after:inset-x-0';
 const CHOSEN = 'bg-[color-mix(in_srgb,var(--c)_15%,var(--surface))] font-semibold text-foreground ring-[color-mix(in_srgb,var(--c)_45%,transparent)]';
 
 export function Chip({ label, chosen, onClick }: { label: string; chosen: boolean; onClick?: () => void }) {
     return (
-        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? CHOSEN : 'bg-surface font-medium text-foreground ring-border hover:bg-tint')}>
-            {label}
+        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : 'shrink-0 bg-surface font-medium text-foreground ring-border hover:bg-tint')}>
+            {/* A chosen chip always stays; on a narrow line its name is cut instead. */}
+            <span className="min-w-0 truncate">{label}</span>
             {chosen && <X aria-hidden="true" className="size-3 shrink-0" />}
         </button>
     );
@@ -44,7 +45,7 @@ export default function VeidsChips() {
         if (!pop.desktop && draft.join() !== params.tags.join()) go({ tags: draft });
         pop.setOpen(false);
     };
-    const more = <span className={clsx(CHIP, 'bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>;
+    const more = <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>;
 
     return (
         <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex min-w-0 items-center gap-1.5">
@@ -53,14 +54,14 @@ export default function VeidsChips() {
             </div>
             {hidden > 0 && (
                 <div ref={bindHost} className="relative shrink-0">
-                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && 'ring-primary')}>
+                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && 'ring-primary')}>
                         +{hidden}
                     </button>
                     <FilterPopover pop={pop} title={t('veids')} onClose={close}>
                         <VeidsList
                             l1Slug={params.category}
-                            selected={pop.desktop ? params.tags : draft}
-                            onChange={(next) => (pop.desktop ? go({ tags: next }, { replace: true }) : setDraft(next))}
+                            selected={draft}
+                            onChange={(next) => { setDraft(next); if (pop.desktop) go({ tags: next }, { replace: true }); }}
                             autoFocus={pop.desktop}
                         />
                     </FilterPopover>

@@ -9,7 +9,10 @@ import PlaceList from '@/components/discovery/lists/PlaceList';
 import { useCities } from '@/components/providers/CitiesContext';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 
-/** "Kur": the place list. Desktop ticks apply at once (replace); the phone sheet applies its ticks together when it closes (push). */
+/**
+ * "Kur": the place list. Desktop ticks apply at once (replace); the phone sheet applies its ticks together when it closes (push).
+ * The ticks live in `draft` while the list is open, so a second quick tick never builds on a URL that has not caught up.
+ */
 export default function PlaceButton() {
     const t = useTranslations('discovery');
     const cities = useCities();
@@ -40,8 +43,8 @@ export default function PlaceButton() {
             />
             <FilterPopover pop={pop} title={t('where')} onClose={close}>
                 <PlaceList
-                    selected={pop.desktop ? params.cities : draft}
-                    onChange={(next) => (pop.desktop ? go({ cities: next }, { replace: true }) : setDraft(next))}
+                    selected={draft}
+                    onChange={(next) => { setDraft(next); if (pop.desktop) go({ cities: next }, { replace: true }); }}
                     autoFocus={pop.desktop}
                 />
             </FilterPopover>
