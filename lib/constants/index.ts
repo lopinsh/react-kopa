@@ -33,6 +33,12 @@ export const DISCOVERY_CALENDAR_MONTHS_AHEAD = 12;
 export const GROUP_TAGLINE_MAX = 160;
 /** Longest event excerpt on a row, characters. */
 export const EVENT_EXCERPT_MAX = 140;
+/** Longest text in a group or event panel, characters. */
+export const PANEL_TEXT_MAX = 400;
+/** Most faces the "who is going" line shows. */
+export const FACES_MAX = 3;
+/** id of a panel's title element (only one panel exists at a time): focus goes there when the content changes. */
+export const PANEL_TITLE_ID = 'panel-title';
 /** Announcements one group loads (newest first). */
 export const ANNOUNCEMENTS_LIMIT = 100;
 
@@ -186,6 +192,12 @@ export const UI = {
     personHeader: 'person-header',
     ownMenu: 'own-menu',
     ownBarPhone: 'own-bar-phone',
+    panel: 'panel',
+    groupPanel: 'group-panel',
+    eventPanel: 'event-panel',
+    facesLine: 'faces',
+    joinStep: 'join-step',
+    goingButton: 'going-button',
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 

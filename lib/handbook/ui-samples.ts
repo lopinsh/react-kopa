@@ -100,16 +100,17 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         group: { name: s('groupName'), slug: 'sample-group' },
         category: { l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },
         subCategories: [s('category'), s('category2')],
+        joinState: 'open' as const,
     };
     const at = (day: string, hour: number, minute = 0) => new Date(`${day}T${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}:00Z`);
     const eventDays: Array<{ day: string; rows: EventRowData[] }> = [
         { day: today, rows: [
             { ...rowBase, id: 'row-1', slug: 'sample-event-1', title: s('eventTitle'), startDate: at(today, 7, 30), tag: 'going' },
-            { ...rowBase, id: 'row-2', slug: 'sample-event-2', title: s('eventTitle2'), startDate: at(today, 16), excerpt: null, tag: 'waiting' },
+            { ...rowBase, id: 'row-2', slug: 'sample-event-2', title: s('eventTitle2'), startDate: at(today, 16), excerpt: null, tag: 'waiting', joinState: 'request' as const },
         ] },
         { day: addDays(today, 1), rows: [
             { ...rowBase, id: 'row-3', slug: 'sample-event-3', title: s('eventTitle3'), startDate: at(today, 6), endDate: at(addDays(today, 2), 15), city: 'Riga' },
-            { ...rowBase, id: 'row-4', slug: 'sample-event-4', title: s('eventTitle2'), startDate: at(addDays(today, 1), 17), isOnline: true },
+            { ...rowBase, id: 'row-4', slug: 'sample-event-4', title: s('eventTitle2'), startDate: at(addDays(today, 1), 17), isOnline: true, joinState: 'full' as const },
         ] },
     ];
     const strip = eventWindow({ date: { kind: 'week' }, day: null }, today, DEFAULT_TIME_ZONE);

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { DISCOVERY_EVENTS_LIMIT, DISCOVERY_EVENTS_MAX_LIMIT, GROUP_EVENTS_LIMIT } from '@/lib/constants';
+import { FACES_MAX, DISCOVERY_EVENTS_LIMIT, DISCOVERY_EVENTS_MAX_LIMIT, GROUP_EVENTS_LIMIT } from '@/lib/constants';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
@@ -15,6 +15,7 @@ import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
+import { EVENT_PANEL_INCLUDE, toEventPanel, toFace, type EventPanelData, type Face } from './event-panel';
 import { CityService } from './city.service';
 import { eventWhere, clampRange, bucketByDay } from './discovery-query';
 import { DEFAULT_TIME_ZONE, isValidTimeZone } from '@/lib/time-zone';
@@ -62,6 +63,12 @@ export interface EventActionContext {
 type EventWithGroup = Prisma.EventGetPayload<{
     include: { translations: { select: { lang: true; title: true } }; group: { select: { id: true; name: true; slug: true; city: true; hiddenAt: true; category: { include: ReturnType<typeof TaxonomyResolver.getInclude> } } } };
 }>;
+
+/** The event panel's answer: the event, the members-only gate for an outsider, or null (missing or hidden). */
+export type EventPanelResult =
+    | { kind: 'event'; event: EventPanelData }
+    | { kind: 'membersOnly'; group: { id: string; name: string; isAcceptingMembers: boolean; canContact: boolean } }
+    | null;
 
 export interface DiscoverableEventPage {
     events: EventRowData[];
@@ -311,6 +318,63 @@ export class EventService {
     });
 
     /** Text of every language for the organiser's edit form (a missing language is empty text). */
+    /**
+     * The event panel (R6), one call: the event as this viewer may see it, whether they may join and how, and who is going.
+     * Faces are read only for signed-in viewers (D12: visitors get the number, no user is even queried); only people going with a
+     * public profile, the viewer's own face first. Instructions are never selected. A members-only event for an outsider gives
+     * the gate (group facts only); missing or hidden gives null.
+     */
+    static getEventPanel = cache(async (
+        eventSlug: string,
+        groupSlug: string,
+        l1Slug: string,
+        locale: string,
+        viewerId?: string
+    ): Promise<EventPanelResult> => {
+        const lang = toTextLang(locale);
+        const group = await prisma.group.findFirst({
+            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
+            select: { id: true, name: true, isAcceptingMembers: true }
+        });
+        if (!group) return null;
+        const event = await prisma.event.findFirst({
+            where: { slug: eventSlug, groupId: group.id },
+            include: EVENT_PANEL_INCLUDE(lang)
+        });
+        if (!event) return null;
+
+        const access = await EventService.getAccess(group.id, viewerId);
+        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) {
+            const pending = viewerId
+                ? (await prisma.membership.findUnique({ where: { userId_groupId: { userId: viewerId, groupId: group.id } }, select: { role: true } }))?.role === 'PENDING'
+                : false;
+            return { kind: 'membersOnly', group: { id: group.id, name: group.name, isAcceptingMembers: group.isAcceptingMembers, canContact: !pending } };
+        }
+
+        const mine = viewerId
+            ? await prisma.attendance.findUnique({ where: { userId_eventId: { userId: viewerId, eventId: event.id } }, select: { status: true } })
+            : null;
+        const myStatus = mine?.status ?? null;
+        const canManage = !!viewerId && (event.creatorId === viewerId || access.isGroupAdmin);
+        const people = viewerId ? await EventService.goingFaces(event.id, viewerId, myStatus === 'GOING') : null;
+        return { kind: 'event', event: toEventPanel(event, lang, { myStatus, canManage, people }) };
+    });
+
+    /** Up to FACES_MAX people going with a public profile; the viewer's own face first when they go (it is them, whatever their profile says). */
+    private static async goingFaces(eventId: string, viewerId: string, viewerGoing: boolean): Promise<Face[]> {
+        const select = { id: true, name: true, username: true, image: true, avatarSeed: true } as const;
+        const [own, others] = await Promise.all([
+            viewerGoing ? prisma.user.findUnique({ where: { id: viewerId }, select }) : null,
+            prisma.attendance.findMany({
+                where: { eventId, status: 'GOING', userId: { not: viewerId }, user: { isProfilePublic: true } },
+                orderBy: { joinedAt: 'asc' },
+                take: FACES_MAX,
+                select: { user: { select } }
+            })
+        ]);
+        return [...(own ? [own] : []), ...others.map((a) => a.user)].slice(0, FACES_MAX).map(toFace);
+    }
+
     private static toEditableTexts(
         translations: { lang: string; title: string; description: string | null; instructions: string | null }[],
         originalLang: string
@@ -814,7 +878,7 @@ export class EventService {
                 orderBy,
                 take: limit + 1
             })).map((e) => toEventRow(e, lang, null)),
-            [`events-discovery-v4-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
+            [`events-discovery-v5-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
                 // A group's hide, category or tag change (including a tag merge) moves its events too.

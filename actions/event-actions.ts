@@ -195,6 +195,7 @@ export async function setEventFull(eventId: string, isFull: boolean, locale: str
         if (!result.success) return result;
         await Promise.all(result.data!.waitlistedUserIds.map(id => notifyEvent(id, 'EVENT_ROOM_AGAIN', result.data!)));
         revalidateEventPaths(locale, result.data!);
+        updateTag('events');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');

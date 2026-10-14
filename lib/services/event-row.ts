@@ -38,6 +38,8 @@ export interface EventRowData {
     category: { l1Slug: string; l1Title: string; color: string };
     /** The group's level-2 tag titles, as on the group card. */
     subCategories: string[];
+    /** How one joins (AR-56): 'open' joins at once, 'request' needs the organiser's OK, 'full' is marked full by the organiser. */
+    joinState: 'open' | 'request' | 'full';
 }
 
 export function tagOf(status: AttendanceStatus | null | undefined): EventRowData['tag'] {
@@ -61,6 +63,7 @@ export function toEventRow(e: EventRowSource, lang: TextLang, status: Attendance
         tag: tagOf(status),
         group: { name: e.group.name, slug: e.group.slug },
         category: { l1Slug: resolved.l1Slug, l1Title: resolved.l1Title, color: resolved.accentColor },
-        subCategories: subCategoryTitles(e.group.tags, lang)
+        subCategories: subCategoryTitles(e.group.tags, lang),
+        joinState: e.joinMode === 'OPEN' ? 'open' : e.isFull ? 'full' : 'request'
     };
 }

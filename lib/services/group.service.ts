@@ -19,6 +19,8 @@ import { MessageService } from './message.service';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
+import { EventService } from './event.service';
+import { toGroupPanel, type GroupPanelData } from './group-panel';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -339,6 +341,16 @@ export const GroupService = {
             }
         };
     }),
+
+    /**
+     * The opened group card (R6): the group as this viewer may see it, narrowed to the panel's own shape. One call returns the
+     * whole panel context; null when the group is missing or hidden from this viewer.
+     */
+    async getGroupPanel(groupSlug: string, l1Slug: string, locale: string, viewerId?: string): Promise<GroupPanelData | null> {
+        const g = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, viewerId);
+        if (!g) return null;
+        return toGroupPanel(g, await EventService.getNextVisibleEvent(g.id, locale, viewerId));
+    },
 
     /**
      * The member list of a group, for the pages that show it (members, group home, settings); the
