@@ -168,10 +168,11 @@ function toRow(
     category: CategoryChain,
     tags: CategoryChain[]
 ): FacetRow {
-    const own = chainSlugs(category);
+    const chains = [chainSlugs(category), ...tags.map(chainSlugs)];
     // The top of a chain is the L1; everything below it is a sub-category slug.
-    const subs = [own.slice(0, -1), ...tags.map((t) => chainSlugs(t).slice(0, -1))].flat();
-    return { city, isOnline, l1Slug: own[own.length - 1], tagSlugs: [...new Set(subs)] };
+    const l1s = chains.map((c) => c[c.length - 1]);
+    const subs = chains.flatMap((c) => c.slice(0, -1));
+    return { city, isOnline, l1Slugs: [...new Set(l1s)], tagSlugs: [...new Set(subs)] };
 }
 
 /** One narrow row per matching group (query applied; cities and topic are applied by `aggregateFacets`). */

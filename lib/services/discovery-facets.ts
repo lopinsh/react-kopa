@@ -4,7 +4,8 @@ import type { DayCount, DiscoveryCounts, FacetInput } from '@/lib/types/discover
 export interface FacetRow {
     city: string | null;
     isOnline: boolean;
-    l1Slug: string;
+    /** The L1 of its category, plus the L1 of any tag from another category (older groups may keep one), as `topicMatch` sees them. */
+    l1Slugs: string[];
     tagSlugs: string[];
 }
 
@@ -20,12 +21,12 @@ export function aggregateFacets(rows: FacetRow[], input: FacetInput): Omit<Disco
 
     for (const row of rows) {
         const inCities = cities.length === 0 || (!row.isOnline && !!row.city && cities.includes(row.city));
-        const inL1 = !input.l1Slug || row.l1Slug === input.l1Slug;
-        const inTags = tags.length === 0 || tags.some((t) => t === row.l1Slug || row.tagSlugs.includes(t));
+        const inL1 = !input.l1Slug || row.l1Slugs.includes(input.l1Slug);
+        const inTags = tags.length === 0 || tags.some((t) => row.l1Slugs.includes(t) || row.tagSlugs.includes(t));
         const inTopic = inL1 && inTags;
 
         if (inCities && inTopic) out.total++;
-        if (inCities) bump(out.byCategory, row.l1Slug);
+        if (inCities) row.l1Slugs.forEach((s) => bump(out.byCategory, s));
         if (inCities && inL1 && input.l1Slug) row.tagSlugs.forEach((s) => bump(out.bySubCategory, s));
         if (inTopic) {
             if (row.isOnline) out.online++;
