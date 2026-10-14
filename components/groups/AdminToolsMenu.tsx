@@ -1,24 +1,24 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { EyeOff, Eye, History, Pencil, Tags, UserCog } from 'lucide-react';
 import { clsx } from 'clsx';
-import { Link, useRouter } from '@/i18n/routing';
+import { useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import { useClickOutside } from '@/hooks/useClickOutside';
+import { MenuItemButton, MenuItemLink, MenuPanel, useMenu } from '@/components/ui/Menu';
 import { groupChip } from './frame/chip';
 
 type Props = {
     onHide: (trigger: HTMLElement | null) => void;
 };
 
-const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated';
+const ICON = 'size-[17px] text-foreground-muted';
 
 /**
- * Site-admin tools for one group, kept apart from the "…" menu everybody sees.
+ * Site-admin tools for one group, kept apart from the "…" menu everybody sees (the same menu, anchored to its own chip).
  * Rendered only for site admins (User.role === 'ADMIN'); the actions behind it check the role again on the server.
  */
 export default function AdminToolsMenu({ onHide }: Props) {
@@ -29,12 +29,8 @@ export default function AdminToolsMenu({ onHide }: Props) {
     const locale = useLocale();
     const router = useRouter();
     const { error: toastError } = useToast();
-    const [isOpen, setOpen] = useState(false);
+    const { open, rootRef, triggerProps, menuProps } = useMenu();
     const [isPending, startTransition] = useTransition();
-    const ref = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
-
-    useClickOutside(ref, () => setOpen(false), isOpen);
 
     if (!group.moderation.isSiteAdmin) return null;
 
@@ -44,7 +40,6 @@ export default function AdminToolsMenu({ onHide }: Props) {
 
     const handleRestore = () => {
         if (isPending) return;
-        setOpen(false);
         startTransition(async () => {
             const res = await restoreGroup(group.id, locale);
             if (res.success) router.refresh();
@@ -53,56 +48,30 @@ export default function AdminToolsMenu({ onHide }: Props) {
     };
 
     return (
-        <div className="relative flex" ref={ref}>
+        <div className="relative flex" ref={rootRef}>
             <button
-                ref={triggerRef}
-                type="button"
-                onClick={() => setOpen((o) => !o)}
+                {...triggerProps}
                 aria-label={t('label')}
                 title={t('label')}
-                aria-expanded={isOpen}
-                className={clsx('grid size-10 place-items-center rounded-full transition-all active:scale-95', groupChip(group.image !== null))}
+                className={clsx('grid size-10 place-items-center rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-primary active:scale-95', groupChip(group.image !== null))}
             >
                 <UserCog aria-hidden className="size-5" />
             </button>
 
-            {isOpen && (
-                <div
-                    data-ui="dropdown-menu"
-                    className="absolute right-0 top-12 z-[45] min-w-[240px] max-w-[calc(100vw-24px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-premium"
-                >
-                    <p className="px-4 pb-1 pt-2 text-[11px] font-semibold text-foreground-muted">{t('label')}</p>
+            {open && (
+                <MenuPanel label={t('label')} placement="anchor" {...menuProps}>
+                    <p role="none" className="px-2.5 pb-1.5 pt-1 text-xs text-foreground-muted">{t('label')}</p>
 
                     {canHide && (
-                        <button
-                            type="button"
-                            onClick={() => { setOpen(false); onHide(triggerRef.current); }}
-                            className={clsx(ITEM, 'text-danger')}
-                        >
-                            <EyeOff className="h-4 w-4" />
-                            {tMod('hideGroup')}
-                        </button>
+                        <MenuItemButton icon={<EyeOff aria-hidden className={ICON} />} onSelect={() => onHide(triggerProps.ref.current)}>{tMod('hideGroup')}</MenuItemButton>
                     )}
                     {isHidden && (
-                        <button type="button" onClick={handleRestore} disabled={isPending} className={ITEM}>
-                            <Eye className="h-4 w-4 text-foreground-muted" />
-                            {tMod('restore')}
-                        </button>
+                        <MenuItemButton icon={<Eye aria-hidden className={ICON} />} disabled={isPending} onSelect={handleRestore}>{tMod('restore')}</MenuItemButton>
                     )}
-
-                    <Link href={`/admin/groups/${group.category.l1Slug}/${group.slug}/categorization`} className={ITEM} onClick={() => setOpen(false)}>
-                        <Tags className="h-4 w-4 text-foreground-muted" />
-                        {t('fixCategorization')}
-                    </Link>
-                    <Link href={`${group.href}/settings`} className={ITEM} onClick={() => setOpen(false)}>
-                        <Pencil className="h-4 w-4 text-foreground-muted" />
-                        {t('editGroup')}
-                    </Link>
-                    <Link href={`/admin?tab=moderation&group=${group.id}`} className={ITEM} onClick={() => setOpen(false)}>
-                        <History className="h-4 w-4 text-foreground-muted" />
-                        {t('moderationLog')}
-                    </Link>
-                </div>
+                    <MenuItemLink href={`/admin/groups/${group.category.l1Slug}/${group.slug}/categorization`} icon={<Tags aria-hidden className={ICON} />}>{t('fixCategorization')}</MenuItemLink>
+                    <MenuItemLink href={`${group.href}/settings`} icon={<Pencil aria-hidden className={ICON} />}>{t('editGroup')}</MenuItemLink>
+                    <MenuItemLink href={`/admin?tab=moderation&group=${group.id}`} icon={<History aria-hidden className={ICON} />}>{t('moderationLog')}</MenuItemLink>
+                </MenuPanel>
             )}
         </div>
     );

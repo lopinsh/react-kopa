@@ -1,141 +1,125 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
-import { ArrowRightLeft, Flag, LogOut, MessageSquare, MoreHorizontal, Share2 } from 'lucide-react';
+import { useId, useState, useTransition } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Flag, LogOut, MessageCircle, MoreHorizontal, Share2, X } from 'lucide-react';
 import { clsx } from 'clsx';
-import { leaveGroup } from '@/actions/group-actions';
-import { Link } from '@/i18n/routing';
+import { cancelJoinRequest, leaveGroup } from '@/actions/group-actions';
+import { useRouter } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
-import { isOwner as checkIsOwner } from '@/lib/utils/permissions';
+import { useShareLink } from '@/hooks/useShareLink';
+import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import { useClickOutside } from '@/hooks/useClickOutside';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
+import { MenuItemButton, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 import { groupChip } from './frame/chip';
 
 type Props = {
     /** Gets the menu's trigger button so the report pop-up can hand focus back to it. */
     onReport: (trigger: HTMLElement | null) => void;
-    /** Plain members write to the team from here (OD-10); same conversation as "Sazināties". */
+    /** Members write to the team from here (OD-10); same conversation as "Sazināties". */
     onWriteToTeam: (trigger: HTMLElement | null) => void;
+    /** Opens the menu at once (the UI-elements page only). */
+    initialOpen?: boolean;
 };
 
-const ITEM = 'flex w-full items-center gap-2.5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-surface-elevated';
+const ICON = 'size-[17px] text-foreground-muted';
 
-/** The one "…" menu of the group page, in the banner's action cluster; it reads the group from the context. */
-export default function GroupMoreMenu({ onReport, onWriteToTeam }: Props) {
+/**
+ * The one "…" menu of the group page (AR-51), in the banner's action cluster: the viewer's role as a quiet first line, then what
+ * they can do. Rows are hidden, never greyed. An undoable step (withdraw, leave) asks once in a pop-over at this button.
+ */
+export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: Props) {
     const c = useTranslations('common');
-    const tGroup = useTranslations('group');
+    const t = useTranslations('group');
     const tErrors = useTranslations('errors');
+    const locale = useLocale();
+    const router = useRouter();
+    const share = useShareLink();
     const { success, error: toastError } = useToast();
-    const group = useGroupContext();
-    const { user: { role, isMember, isAdmin } } = group;
-    const [isOpen, setOpen] = useState(false);
-    const [leaveConfirmOpen, setLeaveConfirmOpen] = useState(false);
+    const g = useGroupContext();
+    const { open, rootRef, triggerProps, menuProps } = useMenu(initialOpen);
+    const roleId = useId();
+    const [confirm, setConfirm] = useState<'withdraw' | 'leave' | null>(null);
     const [isPending, startTransition] = useTransition();
-    const ref = useRef<HTMLDivElement>(null);
-    const triggerRef = useRef<HTMLButtonElement>(null);
 
-    const isOwner = checkIsOwner(role);
+    const { role } = g.user;
+    const isOwner = role === 'OWNER';
+    const isTeam = isOwner || role === 'ADMIN';
+    const canLeave = role === 'MEMBER' || role === 'ADMIN';
+    const trigger = () => triggerProps.ref.current;
 
-    useClickOutside(ref, () => setOpen(false), isOpen);
+    const showError = (code: string) => toastError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
-    const handleShare = async () => {
-        setOpen(false);
-        const url = window.location.href;
-        try {
-            if (typeof navigator.share === 'function') {
-                await navigator.share({ title: group.name, url });
-                return;
-            }
-            await navigator.clipboard.writeText(url);
-            success(c('linkCopied'));
-        } catch (err) {
-            // Closing the native share sheet is not an error.
-            if (err instanceof DOMException && err.name === 'AbortError') return;
-            toastError(c('shareFailed'));
-        }
-    };
-
-    const handleLeave = () => {
+    const withdraw = () => {
         if (isPending) return;
         startTransition(async () => {
-            const res = await leaveGroup(group.id);
-            setLeaveConfirmOpen(false);
-            if (!res.success) toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+            const res = await cancelJoinRequest(g.id);
+            setConfirm(null);
+            if (res.success) success(t('requestWithdrawn'));
+            else showError(res.error);
+        });
+    };
+
+    const leave = () => {
+        if (isPending) return;
+        startTransition(async () => {
+            const res = await leaveGroup(g.id);
+            setConfirm(null);
+            if (!res.success) return showError(res.error);
+            // The pages that need membership would redirect mid-render: go to Informācija first.
+            success(t('leftGroup'));
+            router.replace(g.href);
         });
     };
 
     return (
-        <div className="relative flex" ref={ref}>
+        <div className="relative flex" ref={rootRef}>
             <button
-                ref={triggerRef}
-                type="button"
-                onClick={() => setOpen((o) => !o)}
+                {...triggerProps}
                 aria-label={c('moreOptions')}
-                aria-expanded={isOpen}
-                className={clsx('grid size-10 place-items-center rounded-full transition-all active:scale-95', groupChip(group.image !== null))}
+                className={clsx('grid size-10 place-items-center rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-primary active:scale-95', groupChip(g.image !== null))}
             >
                 <MoreHorizontal aria-hidden className="size-5" />
             </button>
 
-            {isOpen && (
-                <div
-                    data-ui="dropdown-menu"
-                    className="absolute right-0 top-12 z-[45] min-w-[220px] max-w-[calc(100vw-24px)] origin-top-right overflow-hidden rounded-xl border border-border bg-surface py-1 text-foreground shadow-premium"
-                >
+            {open && (
+                <MenuPanel label={c('moreOptions')} placement="anchor" describedBy={role ? roleId : undefined} dataUi={UI.groupMoreMenu} {...menuProps}>
+                    {role && <p id={roleId} role="none" className="px-2.5 pb-1.5 pt-1 text-xs text-foreground-muted">{t(`more.role.${role}`)}</p>}
 
-                    <button type="button" onClick={handleShare} className={ITEM}>
-                        <Share2 className="h-4 w-4 text-foreground-muted" />
+                    {role === 'PENDING' && (
+                        <>
+                            <MenuItemButton icon={<X aria-hidden className={ICON} />} onSelect={() => setConfirm('withdraw')}>{t('withdrawRequest')}</MenuItemButton>
+                            <MenuSeparator />
+                        </>
+                    )}
+                    {role === 'MEMBER' && (
+                        <MenuItemButton icon={<MessageCircle aria-hidden className={ICON} />} onSelect={() => onWriteToTeam(trigger())}>{t('writeToTeam')}</MenuItemButton>
+                    )}
+                    <MenuItemButton icon={<Share2 aria-hidden className={ICON} />} onSelect={() => void share({ title: g.name, url: `${window.location.origin}/${locale}${g.href}` })}>
                         {c('shareGroup')}
-                    </button>
-
-                    {isMember && !isAdmin && (
-                        <button type="button" onClick={() => { setOpen(false); onWriteToTeam(triggerRef.current); }} className={ITEM}>
-                            <MessageSquare className="h-4 w-4 text-foreground-muted" />
-                            {tGroup('writeToTeam')}
-                        </button>
+                    </MenuItemButton>
+                    {!isTeam && (
+                        <MenuItemButton icon={<Flag aria-hidden className={ICON} />} onSelect={() => onReport(trigger())}>{c('reportGroup')}</MenuItemButton>
                     )}
-
-                    {isMember && !isOwner && (
-                        <button type="button" onClick={() => { setOpen(false); setLeaveConfirmOpen(true); }} disabled={isPending} className={clsx(ITEM, 'text-danger')}>
-                            <LogOut className="h-4 w-4" />
-                            {c('leaveGroup')}
-                        </button>
+                    {canLeave && (
+                        <>
+                            <MenuSeparator />
+                            <MenuItemButton icon={<LogOut aria-hidden className={ICON} />} onSelect={() => setConfirm('leave')}>{c('leaveGroup')}</MenuItemButton>
+                        </>
                     )}
-
-                    {/* The owner cannot just leave: the group has to go to someone else first. */}
-                    {isOwner && (
-                        <Link
-                            href={`${group.href}/settings?tab=owner#transfer`}
-                            className={ITEM}
-                            onClick={() => setOpen(false)}
-                        >
-                            <ArrowRightLeft className="h-4 w-4 text-foreground-muted" />
-                            {c('transferOwnership')}
-                        </Link>
-                    )}
-
-                    <button
-                        type="button"
-                        onClick={() => { setOpen(false); onReport(triggerRef.current); }}
-                        className={clsx(ITEM, 'text-foreground-muted hover:text-danger')}
-                    >
-                        <Flag className="h-4 w-4" />
-                        {c('reportGroup')}
-                    </button>
-                </div>
+                </MenuPanel>
             )}
 
             <ConfirmPopover
-                anchorRef={triggerRef}
-                isOpen={leaveConfirmOpen}
-                onOpenChange={setLeaveConfirmOpen}
-                message={c('confirmLeave')}
-                confirmLabel={c('leaveGroup')}
+                anchorRef={triggerProps.ref}
+                isOpen={confirm !== null}
+                onOpenChange={(o) => { if (!o) setConfirm(null); }}
+                message={confirm === 'withdraw' ? t('confirmCancelRequest') : c('confirmLeave')}
+                confirmLabel={confirm === 'withdraw' ? t('withdrawRequest') : c('leaveGroup')}
                 destructive
                 isPending={isPending}
-                onConfirm={handleLeave}
+                onConfirm={confirm === 'withdraw' ? withdraw : leave}
             />
         </div>
     );

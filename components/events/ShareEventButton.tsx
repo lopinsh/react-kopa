@@ -2,7 +2,7 @@
 
 import { Share2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useToast } from '@/hooks/use-toast';
+import { useShareLink } from '@/hooks/useShareLink';
 
 type Props = {
     title: string;
@@ -10,28 +10,12 @@ type Props = {
 
 export default function ShareEventButton({ title }: Props) {
     const t = useTranslations('event');
-    const { success, error: toastError } = useToast();
-
-    const handleShare = async () => {
-        const url = window.location.href;
-        try {
-            if (typeof navigator.share === 'function') {
-                await navigator.share({ title, url });
-                return;
-            }
-            await navigator.clipboard.writeText(url);
-            success(t('shareCopied'));
-        } catch (err) {
-            // Closing the native share sheet is not an error.
-            if (err instanceof DOMException && err.name === 'AbortError') return;
-            toastError(t('shareFailed'));
-        }
-    };
+    const share = useShareLink();
 
     return (
         <button
             type="button"
-            onClick={handleShare}
+            onClick={() => share({ title, url: window.location.href })}
             className="flex w-full items-center justify-center gap-2 text-[11px] font-semibold text-foreground-muted hover:text-foreground transition-colors group/share"
         >
             <Share2 className="h-3.5 w-3.5 group-hover/share:text-primary transition-colors" />

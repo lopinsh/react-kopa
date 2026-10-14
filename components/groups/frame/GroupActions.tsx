@@ -1,19 +1,16 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
-import { Check, MessageCircle } from 'lucide-react';
-import { clsx } from 'clsx';
-import { cancelJoinRequest } from '@/actions/group-actions';
+import { MessageCircle } from 'lucide-react';
 import { usePathname } from '@/i18n/routing';
 import { useAuthGate } from '@/lib/useAuthGate';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import AdminToolsMenu from '@/components/groups/AdminToolsMenu';
 import GroupMoreMenu from '@/components/groups/GroupMoreMenu';
-import { groupChip } from './chip';
+import PendingState from '@/components/groups/contact/PendingState';
 
 const ContactForm = dynamic(() => import('@/components/groups/contact/ContactForm'), { ssr: false });
 const ReportModal = dynamic(() => import('@/components/modals/ReportModal'), { ssr: false });
@@ -23,79 +20,59 @@ const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'),
 type Dialog = 'join' | 'team' | 'report' | 'hide' | null;
 
 /**
- * The banner's right end, once for both widths: "Sazināties" for visitors (round on phones, AP-08), "✓ Pieprasīts" with the
- * withdraw pop-over while a request waits, nothing for members and the team, then the site-admin tools and the "…" menu.
- * It also owns the pop-ups those open, so the sign-in resume (`join_group`) runs once.
+ * The banner's right end, once for both widths: "Sazināties" for visitors (round on phones, AP-08), the pending state while a
+ * request waits, nothing for members and the team, then the site-admin tools and the "…" menu. It also owns the pop-ups those
+ * open, so the sign-in resume (`join_group`, `report_group`) runs once.
  */
 export default function GroupActions() {
     const g = useGroupContext();
-    const t = useTranslations('group');
     const c = useTranslations('common');
     const pathname = usePathname();
     const [dialog, setDialog] = useState<Dialog>(null);
-    const [cancelOpen, setCancelOpen] = useState(false);
-    const [isPending, startTransition] = useTransition();
     // The menu button that opened a pop-up.
     const menuReturnRef = useRef<HTMLElement | null>(null);
     const { gateAction, isModalOpen, closeModal, pendingAction, pendingUrl, isAuthenticated, clearPendingAction } = useAuthGate();
 
     const { role, isMember } = g.user;
-    const isRequested = role === 'PENDING';
-    const isVisitor = !isMember && !isRequested;
-    const onImage = g.image !== null;
+    const isVisitor = !isMember && role !== 'PENDING';
+    const isTeam = role === 'OWNER' || role === 'ADMIN';
+    // Only the owner and site admins can see a hidden group, and writing to it fails: no "Sazināties" there.
+    const canContact = isVisitor && !g.moderation.hidden;
 
     const openContact = useCallback(() => gateAction(() => setDialog('join'), 'join_group'), [gateAction]);
 
-    // After signing in, the contact form opens once. The sign-in pop-up ends in a full page load, so the form waits for that load
-    // (the pop-up is closed then) instead of opening under the pop-up and being lost. The stored URL keeps the locale prefix, which next-intl's pathname drops.
+    // After signing in, the stored action continues once: the contact form or the report. The sign-in pop-up ends in a full page load,
+    // so the pop-up waits for that load (the sign-in pop-up is closed then) instead of opening under it and being lost. The stored URL keeps
+    // the locale prefix, which next-intl's pathname drops.
     useEffect(() => {
-        if (!isModalOpen && isAuthenticated && pendingAction === 'join_group' && pendingUrl === window.location.pathname) {
-            clearPendingAction();
-            if (isVisitor) openContact();
-        }
-    }, [isModalOpen, isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, openContact, isVisitor]);
+        if (isModalOpen || !isAuthenticated || pendingUrl !== window.location.pathname) return;
+        if (pendingAction !== 'join_group' && pendingAction !== 'report_group') return;
+        clearPendingAction();
+        if (pendingAction === 'join_group' && canContact) openContact();
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- the one-time continuation after the sign-in reload
+        if (pendingAction === 'report_group' && !isTeam) setDialog('report');
+    }, [isModalOpen, isAuthenticated, pendingAction, pendingUrl, pathname, clearPendingAction, openContact, canContact, isTeam]);
 
-    const withdraw = () => {
-        setCancelOpen(false);
-        startTransition(async () => { await cancelJoinRequest(g.id); });
-    };
     // Menu items close their menu, so the pop-ups they open return focus to the menu's button.
     const onHide = (trigger: HTMLElement | null) => { menuReturnRef.current = trigger; setDialog('hide'); };
-    const onReport = (trigger: HTMLElement | null) => { menuReturnRef.current = trigger; gateAction(() => setDialog('report')); };
+    const onReport = (trigger: HTMLElement | null) => { menuReturnRef.current = trigger; gateAction(() => setDialog('report'), 'report_group'); };
     const onWriteToTeam = (trigger: HTMLElement | null) => { menuReturnRef.current = trigger; setDialog('team'); };
     const close = () => setDialog(null);
-    const round = 'grid size-10 shrink-0 place-items-center rounded-full text-sm font-semibold md:inline-flex md:w-auto md:gap-1.5';
 
     return (
         <div className="flex shrink-0 items-center gap-2">
-            {isVisitor && (
+            {canContact && (
                 <button
                     type="button"
                     data-ui={UI.joinButton}
                     onClick={openContact}
-                    className={clsx(round, 'order-last bg-primary text-primary-foreground hover:opacity-90 md:order-first md:px-5')}
+                    className="order-last grid size-10 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 md:order-first md:inline-flex md:w-auto md:gap-1.5 md:px-5"
                 >
                     <MessageCircle aria-hidden className="size-5 md:hidden" />
                     <span className="sr-only md:not-sr-only">{c('contact')}</span>
                 </button>
             )}
-            {isRequested && (
-                <ConfirmPopover
-                    isOpen={cancelOpen}
-                    onOpenChange={setCancelOpen}
-                    message={t('confirmCancelRequest')}
-                    confirmLabel={t('withdrawRequest')}
-                    destructive
-                    isPending={isPending}
-                    onConfirm={withdraw}
-                    renderTrigger={(trigger) => (
-                        <button {...trigger} type="button" disabled={isPending} className={clsx(round, 'order-last disabled:opacity-60 md:order-first md:px-4', groupChip(onImage))}>
-                            <Check aria-hidden className="size-5 md:size-4" />
-                            <span className="sr-only md:not-sr-only">{c('requested')}</span>
-                        </button>
-                    )}
-                />
-            )}
+            {role === 'PENDING' && <PendingState />}
             <AdminToolsMenu onHide={onHide} />
             <GroupMoreMenu onReport={onReport} onWriteToTeam={onWriteToTeam} />
 
@@ -103,7 +80,7 @@ export default function GroupActions() {
                 <ContactForm onClose={close} groupId={g.id} groupName={g.name} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? menuReturnRef : undefined} />
             )}
             {dialog === 'hide' && <HideGroupModal isOpen onClose={close} groupId={g.id} returnFocusRef={menuReturnRef} />}
-            {dialog === 'report' && <ReportModal isOpen onClose={close} targetGroupId={g.id} returnFocusRef={menuReturnRef} />}
+            {dialog === 'report' && <ReportModal onClose={close} targetGroupId={g.id} returnFocusRef={menuReturnRef} />}
             {isModalOpen && <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />}
         </div>
     );

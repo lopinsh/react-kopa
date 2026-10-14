@@ -1,37 +1,35 @@
 'use client';
 
-import { useState, useTransition, type RefObject } from 'react';
+import { useId, useState, useTransition, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import { createReport } from '@/actions/report-actions';
-import { ShieldAlert } from 'lucide-react';
+import Button, { buttonClass } from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal';
+import { OverlayCloseButton } from '@/components/ui/overlay-support';
 import { useToast } from '@/hooks/use-toast';
 import { REPORT_REASONS, isReportReason } from '@/lib/constants';
 
 type Props = {
-    isOpen: boolean;
     onClose: () => void;
-    targetGroupId?: string;
-    targetEventId?: string;
+    targetGroupId: string;
     returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
-export default function ReportModal({ isOpen, onClose, targetGroupId, targetEventId, returnFocusRef }: Props) {
+/** Reporting a group (OD-11: groups only for now): one reason from a short list, then "Nosūtīt". Mount = open. */
+export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: Props) {
     const t = useTranslations('report');
+    const name = useId();
     const [reason, setReason] = useState<string>(REPORT_REASONS[0]);
     const [isPending, startTransition] = useTransition();
     const { success, error: toastError } = useToast();
 
-    if (!isOpen) return null;
-
     const handleSubmit = () => {
-        if (isPending) return;
+        if (isPending || !isReportReason(reason)) return;
         startTransition(async () => {
-            if (!isReportReason(reason)) return;
-            const res = await createReport({ targetGroupId, targetEventId, reason });
+            const res = await createReport({ targetGroupId, reason });
             if (res.success) {
-                success(t('success'));
                 onClose();
+                success(t('success'));
             } else {
                 toastError(t('error'));
             }
@@ -39,49 +37,32 @@ export default function ReportModal({ isOpen, onClose, targetGroupId, targetEven
     };
 
     return (
-        <Modal
-            onClose={onClose}
-            returnFocusRef={returnFocusRef}
-            locked={isPending}
-            title={<span className="inline-flex items-center gap-2"><ShieldAlert className="size-5" />{t('title')}</span>}
-        >
-            <div className="space-y-4">
-                <p className="text-sm text-foreground-muted leading-relaxed">
-                    {t('description')}
-                </p>
+        <Modal onClose={onClose} returnFocusRef={returnFocusRef} locked={isPending} title={t('title')}>
+            <p className="text-sm leading-relaxed text-foreground-muted">{t('description')}</p>
 
-                <select
-                    value={reason}
-                    onChange={(e) => setReason(e.target.value)}
-                    className="w-full cursor-pointer rounded-xl border border-border bg-surface-elevated px-4 py-3 outline-none focus:border-danger/40 transition-all text-sm font-medium text-foreground"
-                >
-                    {REPORT_REASONS.map((value) => (
-                        <option key={value} value={value}>{t(`reason${value}`)}</option>
-                    ))}
-                </select>
-            </div>
+            <fieldset className="mt-3 flex flex-col gap-0.5">
+                <legend className="sr-only">{t('reasonLabel')}</legend>
+                {REPORT_REASONS.map((value) => (
+                    <label key={value} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3 text-sm text-foreground hover:bg-tint">
+                        <input
+                            type="radio"
+                            name={name}
+                            value={value}
+                            checked={reason === value}
+                            onChange={() => setReason(value)}
+                            className="size-4 shrink-0 accent-primary"
+                        />
+                        {t(`reason${value}`)}
+                    </label>
+                ))}
+            </fieldset>
 
-            <div className="mt-8 flex justify-end gap-3">
-                <button
-                    type="button"
-                    onClick={onClose}
-                    disabled={isPending}
-                    className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
-                >
-                    {t('cancel')}
-                </button>
-                <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={isPending}
-                    className="flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground shadow-lg shadow-danger/20 transition-all hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-                >
-                    {isPending ? (
-                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    ) : (
-                        t('submit')
-                    )}
-                </button>
+            <div className="mt-4 flex items-center justify-end gap-2.5">
+                <OverlayCloseButton disabled={isPending} className={buttonClass('secondary')}>{t('cancel')}</OverlayCloseButton>
+                <Button onClick={handleSubmit} disabled={isPending}>
+                    {isPending ? <span aria-hidden className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : null}
+                    {t('submit')}
+                </Button>
             </div>
         </Modal>
     );

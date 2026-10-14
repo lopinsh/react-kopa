@@ -79,7 +79,7 @@
     "collapseAll": "Sakļaut visus",
     "color": "Krāsa",
     "confirm": "Apstiprināt",
-    "confirmLeave": "Vai tiešām vēlies pamest šo grupu?",
+    "confirmLeave": "Pamest grupu?",
     "confirm_3": "Apstiprināt apvienošanu",
     "copyLink": "Kopēt saiti",
     "createGroup": "Izveidot grupu",
@@ -149,7 +149,6 @@
     "messageAdmins": "Rakstīt moderatoriem",
     "messagePlaceholder": "Ieraksti ziņu šeit...",
     "messageRequired": "Ziņojums ir obligāts",
-    "messageSent": "Ziņa nosūtīta!",
     "messageSuccess": "Grupas moderatoriem ir nosūtīts paziņojums.",
     "moderationReports": "Admin: Moderācijas ziņojumi",
     "moderationReportsDesc": "Sūdzības par grupām un pasākumiem, kas jāizskata.",
@@ -176,7 +175,6 @@
     "reportLabel": "Ziņojums",
     "reportedByLabel": "Ziņoja",
     "reportedEntity": "Ziņotā vienība",
-    "requested": "Pieprasīts",
     "requestsTab": "Pieteikumi",
     "resolvedByAdmin": "Atrisina administrators",
     "role_admin": "Moderators",
@@ -196,7 +194,7 @@
     "selectedCanonicalLabel": "Izvēlētā kanoniskā birka:",
     "sendApplication": "Nosūtīt pieteikumu",
     "sendInquiry": "Nosūtīt ziņu",
-    "shareGroup": "Kopīgot grupu",
+    "shareGroup": "Dalīties",
     "slugEn": "Adreses daļa EN",
     "slugLv": "Adreses daļa LV",
     "social_discord": "Discord",
@@ -232,7 +230,6 @@
     "visibilityMembersOnlyDesc": "Tikai ar uzaicinājumu vai apstiprinājumu",
     "visibilityPublicDesc": "Ikviens to var atrast un pieteikties",
     "yourMessageLabel": "Tava ziņa",
-    "transferOwnership": "Nodot grupu citam",
     "langSwitchLabel": "Teksta valoda",
     "langFilled": "ir teksts",
     "langEmpty": "teksta vēl nav",
@@ -386,7 +383,20 @@
     "attendingStatus": "Piedalās",
     "bannerImageUrlDesc": "Ielīmē attēla saiti. Ieteicamais izmērs: 1200 × 400 px.",
     "bannerImageUrlLabel": "Banera attēla URL",
-    "confirmCancelRequest": "Vai tiešām vēlies atsaukt pievienošanās pieprasījumu?",
+    "confirmCancelRequest": "Atsaukt pieteikumu?",
+    "leftGroup": "Tu pameti grupu",
+    "requestWithdrawn": "Pieteikums atsaukts",
+    "pending": {
+      "sent": "Pieteikums nosūtīts"
+    },
+    "more": {
+      "role": {
+        "OWNER": "Tu esi šīs grupas īpašnieks",
+        "ADMIN": "Tu esi šīs grupas moderators",
+        "MEMBER": "Tu esi šīs grupas biedrs",
+        "PENDING": "Tavs pieteikums gaida atbildi"
+      }
+    },
     "confirmDeletePost": "Jaunums tiks dzēsts visiem. Šo nevar atsaukt.",
     "confirmDemote": "Noņemt moderatora lomu? Cilvēks paliks grupā kā parasts biedrs.",
     "confirmKick": "Vai tiešām vēlies noņemt šo biedru?",
@@ -1123,6 +1133,7 @@
   "report": {
     "title": "Ziņot par grupu",
     "description": "Pastāsti, kas nav kārtībā. Vietnes administrators to izskatīs.",
+    "reasonLabel": "Iemesls",
     "reasonSpam": "Mēstules",
     "reasonHarassment": "Uzmākšanās",
     "reasonInappropriate": "Nepiemērots saturs",
@@ -1301,8 +1312,6 @@
       "goToGroup": "Uz grupu “{group}”"
     },
     "signInToRsvp": "Ieej, lai pieteiktos",
-    "shareCopied": "Saite nokopēta",
-    "shareFailed": "Neizdevās kopīgot saiti.",
     "goingDone": "Piedalīšos",
     "cancelGoing": "Plāni mainījušies? Atcelt",
     "requestToJoin": "Pieteikties",
