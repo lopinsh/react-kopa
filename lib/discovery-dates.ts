@@ -31,9 +31,7 @@ export function addDays(day: DayKey, n: number): DayKey {
 }
 
 /** 0 = Monday … 6 = Sunday. */
-export function weekdayIndex(day: DayKey): number {
-    return (new Date(msOf(day)).getUTCDay() + 6) % 7;
-}
+export const weekdayIndex = (day: DayKey): number => (new Date(msOf(day)).getUTCDay() + 6) % 7;
 
 export function mondayOf(day: DayKey): DayKey {
     return addDays(day, -weekdayIndex(day));
@@ -98,18 +96,12 @@ export function serializeDateChoice(c: DateChoice): string | null {
 /** The days a choice covers (inclusive), for a given today. */
 export function resolvePeriod(c: DateChoice, today: DayKey): DayPeriod {
     switch (c.kind) {
-        case 'week': { const mon = mondayOf(today); return { from: mon, to: addDays(mon, 6) }; }
+        case 'week': return { from: mondayOf(today), to: addDays(mondayOf(today), 6) };
         case 'today': return { from: today, to: today };
-        case 'weekend': {
-            const sat = addDays(mondayOf(today), 5);
-            return { from: today > sat ? today : sat, to: addDays(sat, 1) };
-        }
+        case 'weekend': return { from: today > addDays(mondayOf(today), 5) ? today : addDays(mondayOf(today), 5), to: addDays(mondayOf(today), 6) };
         case 'day': return { from: c.day, to: c.day };
         case 'range': return { from: c.from, to: c.to };
-        case 'month': {
-            const [y, m] = c.month.split('-').map(Number);
-            return { from: `${c.month}-01`, to: keyOf(Date.UTC(y, m, 0)) };
-        }
+        case 'month': return { from: `${c.month}-01`, to: addDays(`${addMonths(c.month, 1)}-01`, -1) };
     }
 }
 
@@ -125,16 +117,13 @@ export function isThisWeek(c: DateChoice, today: DayKey): boolean {
     return c.kind === 'range' && c.from === w.from && c.to === w.to;
 }
 
-export function weekRange(monday: DayKey): DateChoice {
-    return { kind: 'range', from: monday, to: addDays(monday, 6) };
-}
+export const weekRange = (monday: DayKey): DateChoice => ({ kind: 'range', from: monday, to: addDays(monday, 6) });
 
 /** A day as a Date at 12:00 UTC, for the formatters (always with `timeZone: 'UTC'`). */
 export function dayNoon(day: DayKey): Date {
     return new Date(msOf(day) + 12 * 3_600_000);
 }
 
-/** 'YYYY-MM' of a day. */
 export function monthOf(day: DayKey): string {
     return day.slice(0, 7);
 }
@@ -146,7 +135,7 @@ export function addMonths(month: string, n: number): string {
     return `${Math.floor(total / 12)}-${pad((total % 12) + 1)}`;
 }
 
-/** A whole week as the choice: Šonedēļ, or a Monday–Sunday range. */
+/** Šonedēļ, or a Monday–Sunday range. */
 export function isWeekChoice(c: DateChoice): boolean {
     return c.kind === 'week' || (c.kind === 'range' && weekdayIndex(c.from) === 0 && c.to === addDays(c.from, 6));
 }

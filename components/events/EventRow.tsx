@@ -30,7 +30,6 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
     const start = new Date(event.startDate);
     const since = dayInZone(start, zone) < headingDay ? t('continuesFrom', { date: format.dateTime(start, { day: 'numeric', month: 'short' }) }) : null;
     const place = event.isOnline ? t('online') : showCity ? cityLabel(tCities, event.city) : '';
-    const lineTwo = showGroup ? 'row-start-2' : 'hidden';
 
     return (
         <article
@@ -57,11 +56,13 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
                         : <Badge tone="outline">{tCommon('pending')}</Badge>}
                 </span>
             )}
-            <p className={`col-span-2 col-start-3 flex min-w-0 text-xs text-foreground-muted ${lineTwo}`}>
-                <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
-                <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
-                {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
-            </p>
+            {showGroup && (
+                <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-xs text-foreground-muted">
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
+                    {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
+                </p>
+            )}
             {event.excerpt && (
                 <p className={`col-span-2 col-start-3 min-w-0 truncate text-[13px] text-foreground-muted ${showGroup ? 'row-start-3' : 'row-start-2'}`}>{event.excerpt}</p>
             )}

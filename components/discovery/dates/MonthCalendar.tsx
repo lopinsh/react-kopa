@@ -57,7 +57,6 @@ export default function MonthCalendar({ onClose, onApply }: { onClose: () => voi
                 selected={range}
                 isDisabled={isDisabled}
                 onPick={onPick}
-                onEscape={onClose}
                 minMonth={thisMonth}
                 maxMonth={addMonths(thisMonth, DISCOVERY_CALENDAR_MONTHS_AHEAD)}
                 labels={{ prev: t('previousMonth'), next: t('nextMonth') }}

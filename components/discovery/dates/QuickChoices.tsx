@@ -21,7 +21,7 @@ export default function QuickChoices({ onPick, variant }: Props) {
         { key: 'weekend', label: t('weekend'), value: { kind: 'weekend' }, pressed: choice.kind === 'weekend' }
     ];
     return (
-        <div role="group" aria-label={t('dateLabel')} className={clsx('flex', variant === 'sheet' ? 'gap-1.5' : 'items-center')}>
+        <div role="group" aria-label={t('dateLabel')} className={clsx('flex', variant === 'sheet' ? 'gap-1.5' : 'shrink-0 items-center')}>
             {items.map((i) => (
                 <button
                     key={i.key}
