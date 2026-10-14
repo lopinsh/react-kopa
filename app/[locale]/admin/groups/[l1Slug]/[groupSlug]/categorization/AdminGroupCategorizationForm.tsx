@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 import { FormProvider, useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
+import { loadFullPage } from '@/lib/full-page';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { adminUpdateGroupTags } from '@/actions/taxonomy-actions';
 import TagPicker from '@/components/groups/TagPicker';
@@ -36,7 +36,6 @@ export default function AdminGroupCategorizationForm({
     const c = useTranslations('common');
     const te = useTranslations('errors');
     const { success, error } = useToast();
-    const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
     const methods = useForm<GroupFormValues>({
@@ -67,7 +66,7 @@ export default function AdminGroupCategorizationForm({
             }
 
             success(t('override.saved'));
-            router.push(`/${l1Slug}/group/${groupSlug}`);
+            loadFullPage(`/${locale}/${l1Slug}/group/${groupSlug}`);
         });
     });
 
