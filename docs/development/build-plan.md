@@ -451,7 +451,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R2b Behaviour pieces | pushed, live | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
 | R3b Sazināties, pending, "…" | pushed, live | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`bd69362` (Opus review fix `31c4020` share toast without "!") |
-| R4 Discovery data | built, awaiting Opus review (database step reviewable alone at `5d5186f`) | [specs/R4.md](specs/R4.md) | `5d5186f`..`5eed404` |
+| R4 Discovery data | pushed, live | [specs/R4.md](specs/R4.md) | `5d5186f`..`c6adace` (Opus review fixes `2a8ad05` cache refresh on city reject and group tag changes, `a2e76d9` counts see every L1 a group matches) |
 | R5a Discovery filters and cards | not started | | |
 | R5b Events by day | not started | | |
 | R6 Panels | not started | | |
