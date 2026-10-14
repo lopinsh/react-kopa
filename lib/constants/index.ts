@@ -59,6 +59,8 @@ export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 export const DISCOVERY_GROUPS_PAGE = 24;
 /** Most group cards one discovery URL may ask for (`?limit=`). */
 export const DISCOVERY_GROUPS_MAX = 480;
+/** Longest category or tag name (`categoryNameSchema`). */
+export const CATEGORY_NAME_MAX = 60;
 /** Cookie holding whether the category drawer is folded ('1'), read on the server. */
 export const DISCOVERY_RAIL_COOKIE = 'ek_disc_rail';
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
@@ -12,9 +13,9 @@ import { useAuthGate } from '@/lib/useAuthGate';
 import { submitPendingTag } from '@/actions/taxonomy-actions';
 import { submitPendingTagSchema } from '@/lib/validations/taxonomy';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
+import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
-const NAME_MAX = 60;
 
 /** "Ieteikt jaunu kategoriju": the typed word goes to the admins as a waiting Veids of the chosen Tēma. Signed out: the sign-in pop-up. */
 export default function CategorySuggest({ word, onClose }: { word: string; onClose: () => void }) {
@@ -25,8 +26,9 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
     const toast = useToast();
     const { categories } = useDiscovery();
     const { params } = useDiscoveryNav();
+    const { status } = useSession();
     const { isAuthenticated, isModalOpen, closeModal, gateAction } = useAuthGate();
-    const [name, setName] = useState(word.slice(0, NAME_MAX));
+    const [name, setName] = useState(word.slice(0, CATEGORY_NAME_MAX));
     const [topicId, setTopicId] = useState(categories.find((c) => c.slug === params.category)?.id ?? '');
     const [isPending, setIsPending] = useState(false);
     const [invalid, setInvalid] = useState(false);
@@ -42,10 +44,12 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
                 setIsPending(false);
                 if (res.success) { toast.success(t('suggestSent')); onClose(); }
                 else toast.error(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
-            });
+            }, () => { setIsPending(false); toast.error(tErrors('ACTION_FAILED')); });
         });
     };
 
+    // Signed out: the sign-in pop-up instead of the dialog.
+    if (status === 'unauthenticated') return <AuthGateModal isOpen onClose={onClose} />;
     if (!isAuthenticated && isModalOpen) return <AuthGateModal isOpen onClose={closeModal} />;
     return (
         <Modal onClose={onClose} title={t('suggestTitle')} locked={isPending}>
@@ -54,7 +58,7 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
                 <div>
                     <label htmlFor="suggest-name" className="mb-1 block text-sm font-medium">{t('suggestName')}</label>
                     <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-primary" />
-                    <TextCounter id="suggest-count" length={name.length} max={NAME_MAX} className="mt-1 text-right" />
+                    <TextCounter id="suggest-count" length={name.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
                     <label htmlFor="suggest-topic" className="mb-1 block text-sm font-medium">{t('topic')}</label>
@@ -66,7 +70,7 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
                 </div>
                 <div className="mt-1 flex justify-end gap-2">
                     <Button type="button" variant="secondary" onClick={onClose} disabled={isPending}>{tCommon('cancel')}</Button>
-                    <Button type="submit" disabled={isPending}>{t('suggestSend')}</Button>
+                    <Button type="submit" disabled={isPending || name.trim().length < 2}>{t('suggestSend')}</Button>
                 </div>
             </form>
         </Modal>
