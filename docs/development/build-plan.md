@@ -211,6 +211,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `contactForm` (C1–C3 words), `group`.
 - **Risks:** messaging flow (Opus review: request + message land once, notification to the team, conversation opens from "Atvērt sarunu").
 - **Size:** M.
+- **Spec:** [specs/R3b.md](specs/R3b.md). No migration. `ContactForm` (props, so R6 reuses it) with `Switch`, counter and the "Ziņa nosūtīta" toast; `PendingState` reads the viewer's own group chat id from `GroupContext` (`MessageService.findGroupChatId`, pending only); the "…" menu and the site-admin tools on the shared `Menu` (anchored panel), role line first; join/withdraw/leave revalidate the group layout; new codes `ALREADY_REQUESTED`, `NOT_ACCEPTING_MEMBERS`; stop point after step 3.
 
 ### R4 · Discovery data (M) · independent review (database)
 
@@ -448,7 +449,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R2a Header, menus, own area | pushed, live | [specs/R2a.md](specs/R2a.md) | `945b9c6`..`0bc9ce1` (Opus review fixes `5575b68`, `fad1dd7`, `d105ab0`, `c25a556`, `40866cc`) |
 | R2b Behaviour pieces | pushed, live | [specs/R2b.md](specs/R2b.md) | `0f4887d`..`6ba0969` (Opus review fixes `1fd82af` fluid header/own area, `087d75a`, `cfc662f`, `f83bce2`) |
 | R3a Group frame | pushed, live | [specs/R3a.md](specs/R3a.md) | `71c397b`..`c1ae00a` (Opus review fixes `862f2e9` next meeting on a hidden group for owner/site admin, `b147248` banner chip alignment and "Rakstīt komandai" focus return) |
-| R3b Sazināties, pending, "…" | not started | | |
+| R3b Sazināties, pending, "…" | spec written | [specs/R3b.md](specs/R3b.md) | |
 | R4 Discovery data | not started | | |
 | R5a Discovery filters and cards | not started | | |
 | R5b Events by day | not started | | |
