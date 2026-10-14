@@ -2,7 +2,7 @@ import { TaxonomyResolver, type TaxonomyModel } from './taxonomy-resolver.servic
 import { pickTitle } from '@/lib/utils/localized-title';
 import { GROUP_TAGLINE_MAX } from '@/lib/constants';
 import { plainExcerpt } from '@/lib/text-excerpt';
-import { resolveText, toTextLang } from '@/lib/translations';
+import { resolveText, toTextLang, type TextLang } from '@/lib/translations';
 
 /**
  * Query fragment every group card needs besides the group's own columns and its category: the
@@ -50,11 +50,14 @@ export function subCategoryTitles(tags: CardTag[], lang: string): string[] {
  * The card's short idea of the group: the first words of the PUBLIC home section in the viewer's language (the written language
  * when there is no translation), plain text. A members-only home section gives none; `description` only when the group has no sections.
  */
-function taglineOf(group: GroupCardSource, lang: string): string | null {
+function taglineOf(group: GroupCardSource, lang: string): { tagline: string | null; taglineLang: TextLang } {
+    const viewer = toTextLang(lang);
     const home = group.sections[0];
-    if (!home) return group._count.sections === 0 ? plainExcerpt(group.description, GROUP_TAGLINE_MAX) : null;
-    if (home.visibility !== 'PUBLIC') return null;
-    return plainExcerpt(resolveText(home.translations, toTextLang(lang), home.originalLang, (r) => r.content).value, GROUP_TAGLINE_MAX);
+    if (!home) return { tagline: group._count.sections === 0 ? plainExcerpt(group.description, GROUP_TAGLINE_MAX) : null, taglineLang: viewer };
+    if (home.visibility !== 'PUBLIC') return { tagline: null, taglineLang: viewer };
+    const text = resolveText(home.translations, viewer, home.originalLang, (r) => r.content);
+    // The written language when there is no translation: the card marks it with `lang`.
+    return { tagline: plainExcerpt(text.value, GROUP_TAGLINE_MAX), taglineLang: text.lang };
 }
 
 /** The one shape the group cards and rows (discovery, profile, my groups) are rendered from. */
@@ -66,7 +69,7 @@ export function toGroupCard(group: GroupCardSource, lang: string) {
         slug: group.slug,
         city: group.city,
         lookingFor: group.lookingFor,
-        tagline: taglineOf(group, lang),
+        ...taglineOf(group, lang),
         bannerImage: group.bannerImage,
         memberCount: group._count.members,
         category: {

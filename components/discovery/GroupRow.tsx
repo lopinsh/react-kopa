@@ -1,7 +1,8 @@
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { cityLabel } from '@/lib/city-label';
+import { langAttr } from '@/lib/translations';
 import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
 
@@ -9,6 +10,7 @@ import { UI } from '@/lib/constants';
 export default function GroupRow({ group }: { group: GroupCardData }) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
+    const locale = useLocale();
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
 
     return (
@@ -24,7 +26,7 @@ export default function GroupRow({ group }: { group: GroupCardData }) {
                     <span className="min-w-0 truncate">{topic}</span>
                     <span className="shrink-0 whitespace-pre"> · {cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
                 </span>
-                {group.tagline && <span className="mt-0.5 block truncate text-xs text-foreground-muted">{group.tagline}</span>}
+                {group.tagline && <span lang={langAttr(group.taglineLang, locale)} className="mt-0.5 block truncate text-xs text-foreground-muted">{group.tagline}</span>}
             </span>
             <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
                 <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />

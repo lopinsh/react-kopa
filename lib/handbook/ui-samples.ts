@@ -44,6 +44,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         city: 'Jelgava',
         lookingFor: null,
         tagline: s('groupTagline'),
+        taglineLang: lang,
         bannerImage: null,
         memberCount: 23,
         category: { slug: 'hiking', l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },

@@ -1,12 +1,13 @@
 import Image from 'next/image';
 import { CalendarDays } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import CategoryLine from '@/components/ui/CategoryLine';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { cityLabel } from '@/lib/city-label';
 import { EVENT_DAY, useDateFormatter } from '@/lib/date-format';
 import { getSmartImageUrl } from '@/lib/image-utils';
+import { langAttr } from '@/lib/translations';
 import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
 
@@ -24,6 +25,7 @@ export default function GroupCard({ group, nextMeeting }: Props) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const formatter = useDateFormatter();
+    const locale = useLocale();
 
     return (
         <Link
@@ -36,7 +38,7 @@ export default function GroupCard({ group, nextMeeting }: Props) {
                 <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">{group.name}</h3>
                 <CategoryLine oneLine color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} />
                 <p className="truncate text-[13px] text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>
-                <p className="mt-1 line-clamp-2 min-h-[2lh] text-[13px] leading-snug text-foreground-muted">{group.tagline}</p>
+                <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-[13px] leading-snug text-foreground-muted">{group.tagline}</p>
             </div>
             <div className="col-start-1 row-start-2 mx-3.5 mt-2 border-t border-border pb-[11px] pt-2 text-[13px] leading-snug">
                 {group.lookingFor ? (
