@@ -165,14 +165,16 @@ export const GroupService = {
     /**
      * Finds a category by its slug.
      */
-    async findCategoryBySlug(slug: string): Promise<{ id: string; slug: string; level: number; l1Slug: string } | null> {
+    /** Also its main category's slug and, below level 1, the level-2 slug ("Veids") it sits in (itself at level 2). */
+    async findCategoryBySlug(slug: string): Promise<{ id: string; slug: string; level: number; l1Slug: string; veidsSlug: string | null } | null> {
         const c = await prisma.category.findUnique({
             where: { slug },
             select: { id: true, slug: true, level: true, parent: { select: { slug: true, parent: { select: { slug: true } } } } }
         });
         if (!c) return null;
         const l1Slug = c.level === 1 ? c.slug : c.level === 2 ? c.parent?.slug : c.parent?.parent?.slug;
-        return { id: c.id, slug: c.slug, level: c.level, l1Slug: l1Slug ?? c.slug };
+        const veidsSlug = c.level === 2 ? c.slug : c.level === 3 ? (c.parent?.slug ?? null) : null;
+        return { id: c.id, slug: c.slug, level: c.level, l1Slug: l1Slug ?? c.slug, veidsSlug };
     },
 
     /**

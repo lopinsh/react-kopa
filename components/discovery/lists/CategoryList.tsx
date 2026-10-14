@@ -30,7 +30,8 @@ export default function CategoryList({ folded = false, onChoose, onSuggest, auto
     const { params } = useDiscoveryNav();
     const [typed, setTyped] = useState('');
 
-    const word = typed.trim();
+    // The folded rail has no search field, so a word typed before folding does not narrow it.
+    const word = folded ? '' : typed.trim();
     const needle = foldText(word);
     const rows = categories.filter((c) => !word || foldText(c.title).includes(needle));
     const veidiRows = word

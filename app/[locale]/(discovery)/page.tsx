@@ -46,9 +46,13 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const { locale } = await params;
     const p = parseDiscoveryParams(await searchParams);
 
-    // Old links: a sub-category in `category` lands on its Tēma with that Veids chosen; an unknown one is dropped.
+    // Old links: a sub-category in `category` lands on its Tēma with its Veids chosen (a level-3 one: its level-2 parent,
+    // since only level-2 Veidi show as chips); an unknown one is dropped.
     const found = p.category ? await GroupService.findCategoryBySlug(p.category) : null;
-    if (found && found.level > 1) redirect({ href: discoveryHref(p, { category: found.l1Slug, tags: [found.slug, ...p.tags] }), locale });
+    if (found && found.level > 1) {
+        const tags = [...new Set([...(found.veidsSlug ? [found.veidsSlug] : []), ...p.tags])];
+        redirect({ href: discoveryHref(p, { category: found.l1Slug, tags }), locale });
+    }
     if (!found) p.category = null;
 
     const session = await auth();

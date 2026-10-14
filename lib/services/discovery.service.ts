@@ -260,7 +260,8 @@ export const DiscoveryService = {
             // Wrap in unstable_cache for revalidation, preserving TypeScript inference via typed wrapper
             const fetchGroupsWithCategories = unstable_cache(
                 fetchRawGroups,
-                [`groups-search-${lang}-${JSON.stringify(where)}-${take}-${skip}`],
+                // v2: the card shape changed in R5a (lookingFor, tags), so no entry of the old shape is read.
+                [`groups-search-v2-${lang}-${JSON.stringify(where)}-${take}-${skip}`],
                 {
                     revalidate: 60,
                     // A tag merge or delete moves groups between sub-categories.
