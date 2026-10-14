@@ -1,284 +1,103 @@
+import { cookies } from 'next/headers';
+import { redirect } from '@/i18n/routing';
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
 import { GroupService } from '@/lib/services/group.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import { EventService } from '@/lib/services/event.service';
+import { nextMeetingDates } from '@/lib/services/next-meetings';
 import { CityService } from '@/lib/services/city.service';
+import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
-import { getTaxonomy } from '@/actions/taxonomy-actions';
-import DiscoveryFilterBarWrapper from '@/components/discovery/DiscoveryFilterBarWrapper';
-import ListViewCard from '@/components/discovery/ListViewCard';
-import GroupCard from '@/components/discovery/GroupCard';
-import EventCard from '@/components/discovery/EventCard';
-import ListViewEventCard from '@/components/discovery/ListViewEventCard';
-import EmptyState from '@/components/ui/EmptyState';
-import InfiniteScrollTrigger from '@/components/discovery/InfiniteScrollTrigger';
-import DiscoverySidebar from '@/components/discovery/DiscoverySidebar';
-import { getTranslations } from 'next-intl/server';
+import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
+import CategoryDrawer from '@/components/discovery/CategoryDrawer';
+import FilterLine from '@/components/discovery/filter/FilterLine';
+import GroupResults from '@/components/discovery/GroupResults';
+import EventResults from '@/components/discovery/EventResults';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
-import { parseCities } from '@/lib/discovery-params';
-import { Search, Plus } from 'lucide-react';
-import { Link } from '@/i18n/routing';
-import type { Metadata } from 'next';
+import { discoveryHref, parseDiscoveryParams } from '@/lib/discovery-params';
+import { DISCOVERY_RAIL_COOKIE } from '@/lib/constants';
+import type { DiscoveryState } from '@/lib/types/discovery';
+
+type SearchParams = Record<string, string | string[] | undefined>;
+type Props = { params: Promise<{ locale: string }>; searchParams: Promise<SearchParams> };
 
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const { locale } = await params;
-    const { city, category, q, tab } = await searchParams;
-
+    const p = parseDiscoveryParams(await searchParams);
     const t = await getTranslations({ locale, namespace: 'discovery' });
-    let title = tab === 'events' ? t('eventsPageTitle') : t('groupsPageTitle');
+    let title = p.kind === 'events' ? t('eventsPageTitle') : t('groupsPageTitle');
 
-    if (q) {
-        title = `"${q}"`;
-    } else if (category) {
-        const displayName = await DiscoveryService.getCategoryDisplayName(category, locale);
-        title = displayName || category.charAt(0).toUpperCase() + category.slice(1);
+    if (p.q) {
+        title = `"${p.q}"`;
+    } else if (p.category) {
+        const displayName = await DiscoveryService.getCategoryDisplayName(p.category, locale);
+        title = displayName || p.category.charAt(0).toUpperCase() + p.category.slice(1);
     }
-
-    const cities = parseCities(city);
-    if (cities.length > 0) {
+    if (p.cities.length > 0) {
         const tCities = await getTranslations({ locale, namespace: 'cities' });
-        title += ` ${t('inCity')} ${cities.map((c) => cityLabel(tCities, c)).join(', ')}`;
+        title += ` ${t('inCity')} ${p.cities.map((c) => cityLabel(tCities, c)).join(', ')}`;
     }
-
-    return {
-        title,
-        description: 'Find groups and communities near you for sports, hobbies, and social activities.',
-    };
+    return { title, description: t('metaDescription') };
 }
-
-import { NEUTRAL_ACCENT } from '@/lib/constants';
-
-type Props = {
-    params: Promise<{ locale: string }>;
-    searchParams: Promise<{ q?: string; city?: string; category?: string; tags?: string; view?: 'grid' | 'list'; type?: string; limit?: string; tab?: 'groups' | 'events' }>;
-};
 
 export default async function DiscoveryPage({ params, searchParams }: Props) {
     const { locale } = await params;
-    const { q, city, category, tags: tagsParam, view, type, limit, tab } = await searchParams;
-    const selectedCities = parseCities(city);
-    const activeTags = tagsParam ? tagsParam.split(',').filter(Boolean) : [];
-    const currentTab = tab === 'events' ? 'events' : 'groups';
-    const currentView = view === 'list' ? 'list' : 'grid';
-    const t = await getTranslations('discovery');
+    const p = parseDiscoveryParams(await searchParams);
+
+    // Old links: a sub-category in `category` lands on its Tēma with that Veids chosen; an unknown one is dropped.
+    const found = p.category ? await GroupService.findCategoryBySlug(p.category) : null;
+    if (found && found.level > 1) redirect({ href: discoveryHref(p, { category: found.l1Slug, tags: [found.slug, ...p.tags] }), locale });
+    if (!found) p.category = null;
+
     const session = await auth();
+    const viewerId = session?.user?.id;
 
-    const rawLimit = Math.max(12, parseInt(limit as string || '12'));
-    const take = rawLimit;
-    const skip = 0; // Always start from 0 to simulate lazy load with server component
-
-    const [categories, taxonomyRes, catRecord, snap] = await Promise.all([
+    const [categories, tree, cities, counts, groupsRes, eventsRes, cookieStore] = await Promise.all([
         DiscoveryService.getDiscoveryCategories(locale),
-        getTaxonomy(locale),
-        category ? GroupService.findCategoryBySlug(category) : Promise.resolve(null),
-        (q && !category) ? DiscoveryService.snapInterest(q) : Promise.resolve(null)
-    ]);
-
-    if (!taxonomyRes.success) {
-        throw new Error('FAILED_TO_LOAD_TAXONOMY');
-    }
-    const fullTaxonomy = taxonomyRes.data!;
-
-    // Interest Snapping
-    let effectiveCategoryId = undefined;
-
-    if (category && catRecord) {
-        effectiveCategoryId = catRecord.id;
-    }
-
-    let l1HighlightId = effectiveCategoryId;
-
-    if (q && !category && snap) {
-        effectiveCategoryId = snap.id;
-        l1HighlightId = snap.l1Id ?? snap.id;
-    }
-
-    const [groupsRes, eventsRes, taxonomy, cities] = await Promise.all([
-        DiscoveryService.getGroups({
-            query: q,
-            cities: selectedCities,
-            categoryId: effectiveCategoryId,
-            tags: activeTags,
-            type: type as string | undefined,
-            take: currentTab === 'groups' ? take : 0,
-            skip
-        }, locale),
-        currentTab === 'events'
-            ? EventService.getDiscoverableEvents({
-                category: category,
-                cities: selectedCities,
-                tags: activeTags,
-                search: q,
-                status: 'upcoming'
-            }, locale, session?.user?.id)
+        TaxonomyService.getTaxonomy(locale),
+        CityService.listActive(locale),
+        DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined }, locale),
+        p.kind === 'groups'
+            ? DiscoveryService.getGroups({ query: p.q || undefined, cities: p.cities, categoryId: found?.id, tags: p.tags, take: p.limit }, locale)
+            : Promise.resolve({ groups: [], hasMore: false }),
+        p.kind === 'events'
+            ? EventService.getDiscoverableEvents({ category: p.category ?? undefined, cities: p.cities, tags: p.tags, search: p.q || undefined, status: 'upcoming' }, locale, viewerId)
             : Promise.resolve({ events: [], hasMore: false }),
-        DiscoveryService.getContextualTaxonomy(effectiveCategoryId || null, locale),
-        CityService.listActive(locale)
+        cookies()
     ]);
 
-    const { groups, hasMore, totalCount } = groupsRes;
-    const discoverableEvents = eventsRes.events;
+    // Each group's next meeting (only the date is shown), for groups without a "Ko meklējam?" line.
+    const nextMeetings = await nextMeetingDates(groupsRes.groups, locale, viewerId);
 
-    // Dynamic accent color based on selected or snapped hierarchy
-    const activeL1 = taxonomy ? taxonomy.l1 : categories.find(c => c.id === l1HighlightId);
-    const accentColor = activeL1?.color || NEUTRAL_ACCENT;
-    const accentStyle = { '--accent': accentColor } as React.CSSProperties;
-
-    const createGroupCard = effectiveCategoryId ? (
-        <Link
-            href={`/create?category=${activeL1?.slug || ''}`}
-            className="group relative flex flex-col items-center justify-center h-full min-h-[200px] sm:min-h-[280px] rounded-[20px] bg-surface-elevated text-foreground border-2 border-dashed border-border/60 transition-transform duration-200 ease-out hover:border-primary hover:bg-surface hover:scale-[1.02] soft-press"
-            style={{ ['--accent' as string]: accentColor }}
-        >
-            <div className="flex flex-col items-center justify-center p-6 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-background mb-4 text-foreground-muted group-hover:text-primary group-hover:bg-primary/10 transition-colors shadow-sm">
-                    <Plus className="h-7 w-7" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground">{t('createNewGroup')}</h3>
-                <p className="mt-1 text-sm text-foreground-muted">{t('inThisCategory')}</p>
-            </div>
-        </Link>
-    ) : null;
+    const collator = new Intl.Collator(locale);
+    const state: DiscoveryState = {
+        kind: p.kind,
+        categories: categories
+            .map((c) => ({ ...c, count: counts.byCategory[c.slug] ?? 0 }))
+            .sort((a, b) => collator.compare(a.title, b.title)),
+        veidi: tree.flatMap((l1) => l1.subcategories.filter((s) => s.status === 'ACTIVE').map((s) => ({
+            slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0
+        }))),
+        counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online }
+    };
 
     return (
-        <div style={accentStyle} className="flex min-h-full">
-            {/* Discovery Sidebar */}
-            <DiscoverySidebar
-                categories={categories}
-                activeCat={category}
-                locale={locale}
-            />
-
-            {/* Main Content Area */}
-            <div className="flex-1 min-w-0 pb-20 pt-4">
-                <div className="px-4 max-w-6xl mx-auto w-full">
-                    <CitiesProvider cities={cities}>
-                        <DiscoveryFilterBarWrapper
-                            taxonomy={fullTaxonomy}
-                            activeCat={category}
-                            activeTags={activeTags}
-                            initialQuery={q}
-                            locale={locale}
-                            currentView={currentView}
-                        />
-                    </CitiesProvider>
-
-                    <div className="mb-4 mt-6 flex items-center gap-4 flex-wrap">
-                        <h2 className="text-lg sm:text-xl font-bold text-foreground">
-                            {currentTab === 'groups' ? t('groupsFoundCount', { count: totalCount }) : t('eventsFoundCount', { count: discoverableEvents.length })}
-                        </h2>
-                        {(q || selectedCities.length > 0 || category || activeTags.length > 0) && (
-                            <Link
-                                href="/"
-                                className="text-xs font-bold text-primary hover:opacity-70 transition-opacity underline decoration-dotted underline-offset-4"
-                            >
-                                {t('clearAll')}
-                            </Link>
-                        )}
+        <CitiesProvider cities={cities}>
+            <DiscoveryProvider state={state}>
+                <div className="flex min-h-full">
+                    <CategoryDrawer folded={cookieStore.get(DISCOVERY_RAIL_COOKIE)?.value === '1'} />
+                    <div className="min-w-0 flex-1 pb-20 pt-3 md:pt-4">
+                        <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+                            <FilterLine />
+                            {p.kind === 'groups'
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} />
+                                : <EventResults events={eventsRes.events} />}
+                        </div>
                     </div>
-
-                    {/* Results Grid / List */}
-                    {currentTab === 'groups' ? (
-                        groups.length > 0 ? (
-                            currentView === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                    {groups.map((group) => (
-                                        <GroupCard
-                                            key={group.id}
-                                            group={group}
-                                            accentColor={accentColor}
-                                            locale={locale}
-                                        />
-                                    ))}
-                                    {createGroupCard}
-                                </div>
-                            ) : (
-                                <div className="flex flex-col gap-3">
-                                    {groups.map((group) => (
-                                        <ListViewCard
-                                            key={group.id}
-                                            group={group}
-                                            accentColor={accentColor}
-                                            locale={locale}
-                                        />
-                                    ))}
-                                </div>
-                            )
-                        ) : null
-                    ) : (
-                        discoverableEvents.length > 0 ? (
-                            currentView === 'grid' ? (
-                                <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                    {discoverableEvents.map((event) => {
-                                        const group = event.group;
-                                        let eventL1Slug = group.category.slug;
-                                        if (group.category.level === 3 && group.category.parent?.parent) {
-                                            eventL1Slug = group.category.parent.parent.slug;
-                                        } else if (group.category.level === 2 && group.category.parent) {
-                                            eventL1Slug = group.category.parent.slug;
-                                        }
-
-                                        return (
-                                            <EventCard
-                                                key={event.id}
-                                                event={event}
-                                                locale={locale}
-                                                l1Slug={eventL1Slug}
-                                                groupSlug={group.slug}
-                                                accentColor={accentColor}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            ) : (
-                                <div className="flex flex-col gap-3">
-                                    {discoverableEvents.map((event) => {
-                                        const group = event.group;
-                                        let eventL1Slug = group.category.slug;
-                                        if (group.category.level === 3 && group.category.parent?.parent) {
-                                            eventL1Slug = group.category.parent.parent.slug;
-                                        } else if (group.category.level === 2 && group.category.parent) {
-                                            eventL1Slug = group.category.parent.slug;
-                                        }
-
-                                        return (
-                                            <ListViewEventCard
-                                                key={event.id}
-                                                event={event}
-                                                locale={locale}
-                                                l1Slug={eventL1Slug}
-                                                groupSlug={group.slug}
-                                                accentColor={accentColor}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            )
-                        ) : null
-                    )}
-
-                    {/* Empty State Logic */}
-                    {((currentTab === 'groups' && groups.length === 0) || (currentTab === 'events' && discoverableEvents.length === 0)) && (
-                        <EmptyState
-                            icon={Search}
-                            title={currentTab === 'groups' ? t('noGroupsFound') : t('noEventsFound')}
-                            description={t('adjustFilters')}
-                        />
-                    )}
-
-                    {/* A category with no groups yet still offers the way to start the first one. */}
-                    {currentTab === 'groups' && groups.length === 0 && createGroupCard && (
-                        <div className="mt-6 grid grid-cols-1 gap-4 sm:max-w-xs">{createGroupCard}</div>
-                    )}
-
-                    {/* Lazy Load Action */}
-                    <InfiniteScrollTrigger
-                        hasMore={hasMore}
-                        currentLimit={take}
-                        increment={12}
-                    />
                 </div>
-            </div>
-        </div>
+            </DiscoveryProvider>
+        </CitiesProvider>
     );
 }
