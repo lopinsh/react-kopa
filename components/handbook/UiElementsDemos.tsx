@@ -1,13 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import AnnouncementCard from '@/components/groups/AnnouncementCard';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { toGroupState } from '@/components/providers/to-group-state';
 import ChatPanel from '@/components/messages/ChatPanel';
 import ConversationList from '@/components/messages/ConversationList';
-import ContactGroupModal from '@/components/modals/ContactGroupModal';
+import ContactForm from '@/components/groups/contact/ContactForm';
 import Button from '@/components/ui/Button';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import FilterChip from '@/components/ui/FilterChip';
@@ -84,7 +84,6 @@ export function ToastDemo() {
 /** The pop-ups are full-screen overlays, so they open on request and close again. */
 export function PopupDemo() {
     const t = useTranslations('admin.handbook.ui');
-    const locale = useLocale();
     const [contactOpen, setContactOpen] = useState(false);
     const [confirmOpen, setConfirmOpen] = useState(false);
     const [destructiveOpen, setDestructiveOpen] = useState(false);
@@ -96,14 +95,7 @@ export function PopupDemo() {
                 <Button variant="secondary" onClick={() => setConfirmOpen(true)}>{t('openConfirm')}</Button>
                 <Button variant="secondary" onClick={() => setDestructiveOpen(true)}>{t('openDestructive')}</Button>
             </div>
-            <ContactGroupModal
-                isOpen={contactOpen}
-                onClose={() => setContactOpen(false)}
-                groupId="sample-group"
-                groupName={t('sample.groupName')}
-                locale={locale}
-                allowJoin
-            />
+            {contactOpen && <ContactForm groupId="sample-group" groupName={t('sample.groupName')} allowJoin onClose={() => setContactOpen(false)} />}
             <ConfirmDialog
                 isOpen={confirmOpen}
                 title={t('confirmTitle')}

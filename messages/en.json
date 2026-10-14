@@ -1512,13 +1512,10 @@
     "description": "Write to the group's organizers. Their replies arrive in Messages.",
     "descriptionJoin": "Tell the organizers why you'd like to join and what you're looking for. Their replies arrive in Messages.",
     "messageLabel": "Your message",
-    "placeholder": "Write your message here...",
+    "placeholder": "Write your message…",
     "joinSwitch": "I'd like to join",
-    "send": "Send message",
-    "sendJoin": "Send request",
-    "sentTitle": "Sent",
-    "sentBody": "Replies arrive in Messages.",
-    "openChat": "Open chat"
+    "send": "Send",
+    "sentToast": "Message sent"
   },
   "richText": {
     "bold": "Bold",

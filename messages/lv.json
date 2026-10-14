@@ -1512,13 +1512,10 @@
     "description": "Uzraksti grupas organizatoriem. Atbildes būs sadaļā Ziņas.",
     "descriptionJoin": "Pastāsti organizatoriem, kāpēc vēlies pievienoties un ko meklē. Atbildes būs sadaļā Ziņas.",
     "messageLabel": "Tava ziņa",
-    "placeholder": "Uzraksti savu ziņu šeit...",
+    "placeholder": "Uzraksti savu ziņu…",
     "joinSwitch": "Vēlos pievienoties grupai",
-    "send": "Sūtīt ziņu",
-    "sendJoin": "Sūtīt pieprasījumu",
-    "sentTitle": "Nosūtīts",
-    "sentBody": "Atbildes būs sadaļā Ziņas.",
-    "openChat": "Atvērt sarunu"
+    "send": "Nosūtīt",
+    "sentToast": "Ziņa nosūtīta"
   },
   "richText": {
     "bold": "Treknraksts",

@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import dynamic from 'next/dynamic';
 import { Check, MessageCircle } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -15,7 +15,7 @@ import AdminToolsMenu from '@/components/groups/AdminToolsMenu';
 import GroupMoreMenu from '@/components/groups/GroupMoreMenu';
 import { groupChip } from './chip';
 
-const ContactGroupModal = dynamic(() => import('@/components/modals/ContactGroupModal'), { ssr: false });
+const ContactForm = dynamic(() => import('@/components/groups/contact/ContactForm'), { ssr: false });
 const ReportModal = dynamic(() => import('@/components/modals/ReportModal'), { ssr: false });
 const HideGroupModal = dynamic(() => import('@/components/modals/HideGroupModal'), { ssr: false });
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
@@ -31,7 +31,6 @@ export default function GroupActions() {
     const g = useGroupContext();
     const t = useTranslations('group');
     const c = useTranslations('common');
-    const locale = useLocale();
     const pathname = usePathname();
     const [dialog, setDialog] = useState<Dialog>(null);
     const [cancelOpen, setCancelOpen] = useState(false);
@@ -101,7 +100,7 @@ export default function GroupActions() {
             <GroupMoreMenu onReport={onReport} onWriteToTeam={onWriteToTeam} />
 
             {(dialog === 'join' || dialog === 'team') && (
-                <ContactGroupModal isOpen onClose={close} groupId={g.id} groupName={g.name} locale={locale} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? menuReturnRef : undefined} />
+                <ContactForm onClose={close} groupId={g.id} groupName={g.name} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? menuReturnRef : undefined} />
             )}
             {dialog === 'hide' && <HideGroupModal isOpen onClose={close} groupId={g.id} returnFocusRef={menuReturnRef} />}
             {dialog === 'report' && <ReportModal isOpen onClose={close} targetGroupId={g.id} returnFocusRef={menuReturnRef} />}

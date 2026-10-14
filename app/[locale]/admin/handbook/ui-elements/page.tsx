@@ -206,7 +206,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <InboxDemo samples={samples} />
                 </UiSpecimen>
 
-                <UiSpecimen id="popups" names={[UI.modal, UI.confirmDialog]} files={['components/modals/ContactGroupModal.tsx', 'components/ui/ConfirmDialog.tsx', 'components/ui/Modal.tsx', 'components/ui/Overlay.tsx']}>
+                <UiSpecimen id="popups" names={[UI.modal, UI.confirmDialog]} files={['components/groups/contact/ContactForm.tsx', 'components/ui/ConfirmDialog.tsx', 'components/ui/Modal.tsx', 'components/ui/Overlay.tsx']}>
                     <AccentScope color={samples.accent}>
                         <PopupDemo />
                     </AccentScope>
