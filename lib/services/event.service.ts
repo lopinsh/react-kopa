@@ -317,7 +317,6 @@ export class EventService {
         };
     });
 
-    /** Text of every language for the organiser's edit form (a missing language is empty text). */
     /**
      * The event panel (R6), one call: the event as this viewer may see it, whether they may join and how, and who is going.
      * Faces are read only for signed-in viewers (D12: visitors get the number, no user is even queried); only people going with a
@@ -375,6 +374,7 @@ export class EventService {
         return [...(own ? [own] : []), ...others.map((a) => a.user)].slice(0, FACES_MAX).map(toFace);
     }
 
+    /** Text of every language for the organiser's edit form (a missing language is empty text). */
     private static toEditableTexts(
         translations: { lang: string; title: string; description: string | null; instructions: string | null }[],
         originalLang: string
