@@ -248,9 +248,8 @@ model GroupSectionTranslation {
 model Event {
   id                String             @id @default(cuid())
   location          String?
-  /// The event's own place (AR-57): a `City.slug` like `Group.city`, no foreign key. Filled from the group's city.
-  /// Nullable until R5a's `require_event_city` (old code may still create events without it during the R4 deploy).
-  city              String?
+  /// The event's own place (AR-57): a `City.slug` like `Group.city`, no foreign key. '' only when its city was rejected (CityService.reject).
+  city              String
   /// "Tiešsaistē": the event happens online; `location` then holds the link.
   isOnline          Boolean            @default(false)
   visibility        Visibility         @default(PUBLIC)

@@ -77,8 +77,8 @@ export interface DiscoverableEvent {
     slug: string;
     startDate: Date;
     location: string | null;
-    /** The event's own place (`City.slug`); null only for events the old code created during the R4 deploy. */
-    city: string | null;
+    /** The event's own place (`City.slug`). */
+    city: string;
     isOnline: boolean;
     bannerImage: string | null;
     joinMode: EventJoinMode;
@@ -89,7 +89,7 @@ export interface DiscoverableEvent {
     group: {
         name: string;
         slug: string;
-        city: string | null;
+        city: string;
         bannerImage: string | null;
         category: {
             slug: string;
@@ -109,7 +109,7 @@ export interface NextEventView {
     startDate: Date;
     endDate: Date | null;
     location: string | null;
-    city: string | null;
+    city: string;
     isOnline: boolean;
     /** First words of the description as plain text (at most 140 characters, no HTML), or null. */
     excerpt: string | null;

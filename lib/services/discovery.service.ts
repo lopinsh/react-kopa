@@ -208,7 +208,7 @@ export const DiscoveryService = {
                 id: e.id,
                 slug: e.slug,
                 title: resolveText(e.translations, toTextLang(lang), e.originalLang, (t) => t.title).value,
-                subtitle: e.isOnline ? tEvent('online') : (e.location || cityLabel(tCities, e.city ?? e.group.city)),
+                subtitle: e.isOnline ? tEvent('online') : (e.location || cityLabel(tCities, e.city)),
                 l1Slug: resolved.l1Slug || 'sigulda',
                 color: resolved.accentColor,
                 image: e.bannerImage || e.group.bannerImage,

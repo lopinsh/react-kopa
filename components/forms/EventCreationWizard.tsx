@@ -42,7 +42,7 @@ export type EventToEdit = {
     /** Text of every language; null when there is none yet. */
     texts: EventFormData['texts'] | null;
     location: string | null;
-    city: string | null;
+    city: string;
     isOnline: boolean;
     startDate: string;
     endDate: string | null;

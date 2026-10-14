@@ -2,7 +2,7 @@ import type { DayCount, DiscoveryCounts, FacetInput } from '@/lib/types/discover
 
 /** One group or event as the counts need it. `tagSlugs` holds the L2/L3 slugs of its category and tags, parents included. */
 export interface FacetRow {
-    city: string | null;
+    city: string;
     isOnline: boolean;
     /** The L1 of its category, plus the L1 of any tag from another category (older groups may keep one), as `topicMatch` sees them. */
     l1Slugs: string[];

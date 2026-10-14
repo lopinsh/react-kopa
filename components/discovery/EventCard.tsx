@@ -82,7 +82,7 @@ export default function EventCard({ event, locale, l1Slug, groupSlug, accentColo
                     <div className="flex items-center justify-between text-xs text-foreground-muted">
                         <div className="flex min-w-0 items-center gap-1.5">
                             <MapPin className="h-3.5 w-3.5 shrink-0" />
-                            <span className="truncate">{event.isOnline ? t('online') : event.location || cityLabel(tCities, event.city ?? event.group.city)}</span>
+                            <span className="truncate">{event.isOnline ? t('online') : event.location || cityLabel(tCities, event.city)}</span>
                         </div>
                         <div className="flex shrink-0 items-center gap-1.5 whitespace-nowrap pl-2">
                             <Users className="h-3.5 w-3.5" />

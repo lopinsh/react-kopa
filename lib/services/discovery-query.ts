@@ -108,12 +108,8 @@ export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date(
     const and: Prisma.EventWhereInput[] = [{ group: { AND: groupAnd } }];
 
     if (cities && cities.length > 0) {
-        // Online events belong to "Visur" only. The `city: null` branch covers events the old code created
-        // during the R4 deploy; R5a deletes it together with the NOT NULL step.
-        and.push({
-            isOnline: false,
-            OR: [{ city: { in: cities } }, { city: null, group: { city: { in: cities } } }]
-        });
+        // Online events belong to "Visur" only.
+        and.push({ isOnline: false, city: { in: cities } });
     }
 
     if (from && to) {
@@ -163,7 +159,7 @@ const CHAIN_SELECT = {
 } as const;
 
 function toRow(
-    city: string | null,
+    city: string,
     isOnline: boolean,
     category: CategoryChain,
     tags: CategoryChain[]
@@ -191,11 +187,10 @@ export async function loadEventFacetRows(input: FacetInput, now: Date = new Date
         select: {
             city: true,
             isOnline: true,
-            group: { select: { city: true, category: { select: CHAIN_SELECT }, tags: { select: CHAIN_SELECT } } }
+            group: { select: { category: { select: CHAIN_SELECT }, tags: { select: CHAIN_SELECT } } }
         }
     });
-    // An event without its own city (created by the old code in the deploy window) takes its group's.
-    return events.map((e) => toRow(e.city ?? e.group.city, e.isOnline, e.group.category, e.group.tags));
+    return events.map((e) => toRow(e.city, e.isOnline, e.group.category, e.group.tags));
 }
 
 export { aggregateFacets, bucketByDay } from './discovery-facets';
