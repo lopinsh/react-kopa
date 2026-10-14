@@ -14,6 +14,7 @@ import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, 
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { plainExcerpt } from '@/lib/text-excerpt';
+import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
 import { CityService } from './city.service';
 import { eventWhere, clampRange, bucketByDay } from './discovery-query';
 import { DEFAULT_TIME_ZONE, isValidTimeZone } from '@/lib/time-zone';
@@ -63,40 +64,9 @@ type EventWithGroup = Prisma.EventGetPayload<{
 }>;
 
 export interface DiscoverableEventPage {
-    events: DiscoverableEvent[];
+    events: EventRowData[];
     /** More events matched than `limit`. */
     hasMore: boolean;
-}
-
-/** One discovery result: just what the cards need (no instructions, no attendee lists). */
-export interface DiscoverableEvent {
-    id: string;
-    title: string;
-    /** Language the title is written in; differs from the viewer's when only another language exists. */
-    titleLang: TextLang;
-    slug: string;
-    startDate: Date;
-    location: string | null;
-    /** The event's own place (`City.slug`). */
-    city: string;
-    isOnline: boolean;
-    bannerImage: string | null;
-    joinMode: EventJoinMode;
-    isFull: boolean;
-    isMembersOnly: boolean;
-    /** GOING attendees — "approved" for Request-to-join events. */
-    goingCount: number;
-    group: {
-        name: string;
-        slug: string;
-        city: string;
-        bannerImage: string | null;
-        category: {
-            slug: string;
-            level: number;
-            parent: { slug: string; parent: { slug: string } | null } | null;
-        };
-    };
 }
 
 /** A group's next event as the Informācija box (and later cards and panels) show it: no attendees, no instructions. */
@@ -616,89 +586,34 @@ export class EventService {
     });
 
     /**
-     * Get all events for a group with the current viewer's status.
-     * Instructions are stripped here for viewers who may not read them.
+     * A group's events as rows (the Pasākumi page): the `GROUP_EVENTS_LIMIT` newest by start, split into upcoming (oldest first)
+     * and past (newest first) by `isEventPast`. Members and site admins also see members-only events. The viewer's tag comes
+     * from one attendance query; titles and descriptions only, never instructions.
      */
-    static async getGroupEvents(groupId: string, locale: string, userId?: string) {
+    static async getGroupEventRows(groupId: string, locale: string, viewerId: string | undefined, when: 'upcoming' | 'past'): Promise<EventRowData[]> {
         const lang = toTextLang(locale);
-        try {
-            const access = await EventService.getAccess(groupId, userId);
-            const canSeeAll = access.isMember || access.isSiteAdmin;
-            const events = await prisma.event.findMany({
-                where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
-                // The newest events by start date, turned back to oldest first below.
-                orderBy: { startDate: 'desc' },
-                take: GROUP_EVENTS_LIMIT,
-                include: {
-                    translations: true,
-                    _count: {
-                        select: { attendees: { where: { status: 'GOING' } } }
-                    },
-                    attendees: {
-                        where: { status: 'GOING' },
-                        orderBy: { joinedAt: 'asc' },
-                        include: {
-                            user: {
-                                select: { id: true, name: true, image: true }
-                            }
-                        },
-                        take: 5 // Fetch first 5 for the avatar list
-                    }
-                }
-            });
+        const access = await EventService.getAccess(groupId, viewerId);
+        const canSeeAll = access.isMember || access.isSiteAdmin;
+        const rows = await prisma.event.findMany({
+            where: { groupId, ...(canSeeAll ? {} : { visibility: 'PUBLIC' }) },
+            orderBy: { startDate: 'desc' },
+            take: GROUP_EVENTS_LIMIT,
+            include: EVENT_ROW_INCLUDE(lang)
+        });
+        const wanted = rows.filter((e) => isEventPast(e) === (when === 'past'));
+        if (when === 'upcoming') wanted.reverse();
+        const mine = await EventService.myTags(wanted.map((e) => e.id), viewerId);
+        return wanted.map((e) => toEventRow(e, lang, mine.get(e.id) ?? null));
+    }
 
-            const [mine, waitlistCounts] = await Promise.all([
-                userId
-                    ? prisma.attendance.findMany({
-                        where: { userId, eventId: { in: events.map(e => e.id) } },
-                        select: { eventId: true, status: true }
-                    })
-                    : Promise.resolve([]),
-                prisma.attendance.groupBy({
-                    by: ['eventId', 'status'],
-                    where: { eventId: { in: events.map(e => e.id) }, status: { in: ['WAITLISTED', 'PENDING'] } },
-                    _count: { _all: true }
-                })
-            ]);
-            const myStatus = new Map(mine.map(a => [a.eventId, a.status]));
-            const waiting = (eventId: string, status: AttendanceStatus) =>
-                waitlistCounts.find(w => w.eventId === eventId && w.status === status)?._count._all ?? 0;
-
-            return events.reverse().map(e => {
-                const status = myStatus.get(e.id) ?? null;
-                const canManage = !!userId && (e.creatorId === userId || access.isGroupAdmin);
-                const canSeeInstructions = EventService.instructionsVisible(e.joinMode, canManage, status);
-                // Resolved to the viewer's language; restricted instructions are never read, in any language.
-                const text = resolveEventText(e.translations, lang, e.originalLang, !canSeeInstructions);
-                const viewer: EventViewer = {
-                    canSee: true,
-                    canManage,
-                    canSeeInstructions,
-                    instructionsLocked: !canSeeInstructions && text.hasInstructions,
-                    myStatus: status,
-                    goingCount: e._count.attendees,
-                    waitlistCount: canManage ? waiting(e.id, 'WAITLISTED') : 0,
-                    pendingCount: canManage ? waiting(e.id, 'PENDING') : 0
-                };
-                const { translations: _translations, ...eventFields } = e;
-                void _translations;
-                return {
-                    ...eventFields,
-                    title: text.title,
-                    titleLang: text.titleLang,
-                    description: text.description,
-                    instructions: text.instructions,
-                    fallbackLang: text.fallbackLang,
-                    isAttending: status === 'GOING',
-                    attendeeCount: e._count.attendees,
-                    attendeeList: e.attendees.map(a => a.user),
-                    viewer
-                };
-            });
-        } catch (error) {
-            console.error('[EventService.getGroupEvents] Error:', error);
-            return [];
-        }
+    /** The viewer's attendance status per event (going, asked or waiting only); empty when signed out. */
+    private static async myTags(eventIds: string[], viewerId: string | undefined): Promise<Map<string, AttendanceStatus>> {
+        if (!viewerId || eventIds.length === 0) return new Map();
+        const mine = await prisma.attendance.findMany({
+            where: { userId: viewerId, eventId: { in: eventIds }, status: { in: ['GOING', 'PENDING', 'WAITLISTED'] } },
+            select: { eventId: true, status: true }
+        });
+        return new Map(mine.map((a) => [a.eventId, a.status]));
     }
 
     /** Checks that the event exists, its group is visible and the user may see it. */
@@ -887,47 +802,19 @@ export class EventService {
         const cities = [...(filters.cities ?? [])].sort();
         const tags = [...(filters.tags ?? [])].sort();
         const where = { ...filters, cities, tags, status };
-
-        const include = {
-            // Titles only: descriptions and instructions never go into discovery payloads.
-            translations: { select: { lang: true, title: true } },
-            group: {
-                select: {
-                    name: true,
-                    slug: true,
-                    city: true,
-                    bannerImage: true,
-                    category: {
-                        select: {
-                            slug: true,
-                            level: true,
-                            parent: {
-                                select: {
-                                    slug: true,
-                                    parent: { select: { slug: true } }
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            _count: {
-                select: {
-                    attendees: { where: { status: 'GOING' as const } }
-                }
-            }
-        } satisfies Prisma.EventInclude;
-
+        const lang = toTextLang(locale);
+        const include = EVENT_ROW_INCLUDE(lang);
         const orderBy = { startDate: status === 'past' ? 'desc' : 'asc' } as const;
 
+        // The cache holds the narrow row shape (an excerpt, not whole descriptions).
         const loadPublic = unstable_cache(
-            async () => prisma.event.findMany({
+            async () => (await prisma.event.findMany({
                 where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] },
                 include,
                 orderBy,
                 take: limit + 1
-            }),
-            [`events-discovery-v3-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
+            })).map((e) => toEventRow(e, lang, null)),
+            [`events-discovery-v4-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
                 // A group's hide, category or tag change (including a tag merge) moves its events too.
@@ -951,36 +838,22 @@ export class EventService {
                     include,
                     orderBy,
                     take: limit + 1
-                })
+                }).then((rows) => rows.map((e) => toEventRow(e, lang, null)))
                 : Promise.resolve([])
         ]);
 
         const direction = status === 'past' ? -1 : 1;
-        const lang = toTextLang(locale);
-        // Cached rows come back with dates as strings in some Next versions; normalise before sorting.
+        // Cached rows come back with dates as strings; revive them before sorting.
         const merged = [...publicRows, ...memberRows]
-            .map(e => {
-                const text = resolveEventText(e.translations.map(t => ({ ...t, description: null, instructions: null })), lang, e.originalLang, true);
-                return { e, text };
-            })
-            .map(({ e, text }) => ({
-                id: e.id,
-                title: text.title,
-                titleLang: text.titleLang,
-                slug: e.slug,
-                startDate: new Date(e.startDate),
-                location: e.location,
-                city: e.city,
-                isOnline: e.isOnline,
-                bannerImage: e.bannerImage,
-                joinMode: e.joinMode,
-                isFull: e.isFull,
-                isMembersOnly: e.visibility === 'MEMBERS_ONLY',
-                goingCount: e._count.attendees,
-                group: e.group
-            }))
-            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()));
-        return { events: merged.slice(0, limit), hasMore: merged.length > limit };
+            .map((e) => ({ ...e, startDate: new Date(e.startDate), endDate: e.endDate ? new Date(e.endDate) : null }))
+            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()))
+            .slice(0, limit + 1);
+        const shown = merged.slice(0, limit);
+        const mine = await EventService.myTags(shown.map((e) => e.id), userId);
+        return {
+            events: shown.map((e) => ({ ...e, tag: tagOf(mine.get(e.id)) })),
+            hasMore: merged.length > limit
+        };
     }
 
     /**

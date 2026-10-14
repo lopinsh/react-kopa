@@ -268,6 +268,9 @@ export async function reorderSectionsAction(
         const result = await GroupService.reorderSections(groupId, sectionIds, session.user.id);
         if (!result.success) return result as ActionResponse;
 
+        // The home section feeds the group card's tagline.
+        updateTag('groups');
+
         const { slug, l1Slug } = result.data!;
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
@@ -289,6 +292,9 @@ export async function deleteSectionAction(
     try {
         const result = await GroupService.deleteSection(sectionId, session.user.id);
         if (!result.success) return result as ActionResponse;
+
+        // The home section feeds the group card's tagline.
+        updateTag('groups');
 
         const { slug, l1Slug } = result.data!;
 

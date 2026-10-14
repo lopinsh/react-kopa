@@ -241,6 +241,7 @@ export const DiscoveryService = {
                         slug: true,
                         city: true,
                         lookingFor: true,
+                        description: true,
                         bannerImage: true,
                         createdAt: true,
                         category: {
@@ -260,8 +261,8 @@ export const DiscoveryService = {
             // Wrap in unstable_cache for revalidation, preserving TypeScript inference via typed wrapper
             const fetchGroupsWithCategories = unstable_cache(
                 fetchRawGroups,
-                // v2: the card shape changed in R5a (lookingFor, tags), so no entry of the old shape is read.
-                [`groups-search-v2-${lang}-${JSON.stringify(where)}-${take}-${skip}`],
+                // v3: the card shape changed in R5b (tagline data), so no entry of the old shape is read.
+                [`groups-search-v3-${lang}-${JSON.stringify(where)}-${take}-${skip}`],
                 {
                     revalidate: 60,
                     // A tag merge or delete moves groups between sub-categories.
