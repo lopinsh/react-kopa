@@ -22,6 +22,10 @@ One word per thing, everywhere.
 | Private chats | Ziņas | Messages |
 | Asking to join | Pieteikties | Join (request) |
 | Writing to a group (the one button; its form can also ask to join) | Sazināties | Contact |
+| A member writing to the team | Rakstīt komandai | Write to the team |
+| Taking back a join request | Atsaukt pieteikumu | Withdraw request |
+| Sharing a link | Dalīties | Share |
+| Reporting a group | Ziņot par grupu | Report group |
 | Owner + moderators | Grupas komanda | Group team |
 | A group's pages | Informācija, Jaunumi, Pasākumi, Biedri, Iestatījumi | Information, Announcements, Events, Members, Settings |
 | Parts of Biedri | Biedri / Pieteikumi | Members / Requests |
@@ -35,6 +39,7 @@ One word per thing, everywhere.
 |---|---|
 | Vēl nav ziņu. Uzraksti grupai vai kādam dalībniekam — sarunas parādīsies šeit. | ~~Jums vēl nav ziņojumu.~~ |
 | Nosūtīts. Atbildes nāks sadaļā Ziņas. | ~~Success!~~ |
+| Ziņa nosūtīta | ~~Nosūtīts! Atvērt sarunu?~~ |
 | Ziņa ir par īsu — uzraksti vismaz 1 vārdu. | ~~VALIDATION_FAILED~~ |
 | Šī grupa vairs nepastāv. Sarunu var lasīt, bet ne turpināt. | ~~Error: group not found~~ |
 

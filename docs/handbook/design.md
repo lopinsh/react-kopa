@@ -28,7 +28,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Manas grupas | A | R8 |
 | Create | Create group wizard | D | R4, R12 |
 | Join | Group Informācija | B | R3a done |
-| Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b |
+| Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |
 | Join | Sign in, register, onboarding | D | R12 |
 | Talk | Jaunumi | B | R9b |
 | Talk | Messages | E | R8 |
@@ -123,7 +123,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Pop-up.** Overlay is the one shell. Modal (dialog: dim + 1.5 px blur, title + close, body, buttons right; a sheet from the bottom on phones), Sheet, side panels and drawers (dim only). A small confirmation for an undoable step is a pop-over at the button.
 - **Announcement card.** Meta line (when, who), bold title, short text.
 - **Empty state.** Outline icon, a short title, one italic sentence in the site colour, at most one action.
-- **Toast.** One line at the bottom (above the bottom bar on phones), inverted (foreground on background), one at a time, goes by itself.
+- **Toast.** One line at the bottom (above the bottom bar on phones), inverted (foreground on background), one at a time, goes by itself (after "Nosūtīt": "Ziņa nosūtīta").
 - **Skeleton.** Neutral tint in the shape of the content it stands for.
 - **Text counter.** Under the field's right end: quiet "71 / 2000", the warning colour in the last tenth, red "2013 / 2000 · 13 par daudz" past the limit.
 
@@ -131,4 +131,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 
 - **Part tabs.** Links, the site colour under the open one, the page's one action at the right end ("Izveidot pasākumu"); on phones the page's name stands over them.
 
-Also one each: sub-tabs (underline), the "…" menu, avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).
+- **The "…" menu.** The shared Menu anchored to its chip: your role as a quiet first line, then what you can do; rows hidden, never greyed; an undoable step asks in a pop-over at the chip.
+- **Switch.** A pill track in the site colour; the label is the row's text.
+
+Also one each: sub-tabs (underline), avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).

@@ -704,6 +704,13 @@
         "fieldPlaceholder": "name@example.com",
         "fieldError": "Enter a valid email address.",
         "openContact": "Open: write to a group",
+        "switchOn": "I'd like to join the group",
+        "switchOff": "Notifications",
+        "menuViewer": {
+          "member": "Member",
+          "pending": "Request waiting",
+          "visitor": "Visitor"
+        },
         "openConfirm": "Open: confirm",
         "openDestructive": "Open: confirm deletion",
         "confirmTitle": "Leave the group?",
@@ -751,6 +758,8 @@
           "counter": "Character counter",
           "errorState": "Error state",
           "confirmPopover": "Confirmation at the button",
+          "moreMenu": "Group \"…\" menu: member, waiting, visitor",
+          "switch": "Switch",
           "groupPages": "Group pages, part tabs, next event and links"
         },
         "sample": {

@@ -16,7 +16,7 @@ import { Link } from '@/i18n/routing';
 /** A plain picture for the sample banner (no network): a soft landscape in two greys. */
 const SAMPLE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd6c4"/><stop offset="1" stop-color="#8f9a82"/></linearGradient></defs><rect width="1600" height="400" fill="url(#g)"/><circle cx="1250" cy="120" r="70" fill="#f1f3ec"/></svg>')}`;
 
-type Viewer = 'visitor' | 'pending' | 'member' | 'team';
+export type Viewer = 'visitor' | 'pending' | 'member' | 'team';
 const USER: Record<Viewer, GroupContext['user']> = {
     visitor: { isMember: false, role: null, isAdmin: false, chatId: null },
     pending: { isMember: false, role: 'PENDING', isAdmin: false, chatId: 'sample-chat' },
@@ -24,7 +24,7 @@ const USER: Record<Viewer, GroupContext['user']> = {
     team: { isMember: true, role: 'OWNER', isAdmin: true, chatId: null },
 };
 
-function sampleState(group: GroupContext, viewer: Viewer, o: { image?: boolean; isPrivate?: boolean } = {}) {
+export function sampleState(group: GroupContext, viewer: Viewer, o: { image?: boolean; isPrivate?: boolean } = {}) {
     const user = USER[viewer];
     const base = `/${group.category.l1Slug}/group/${group.slug}`;
     const state = toGroupState({
@@ -43,6 +43,7 @@ export function GroupBannerDemo({ samples }: { samples: UiSamples }) {
         { viewer: 'visitor', image: true },
         { viewer: 'visitor', image: false, isPrivate: true },
         { viewer: 'pending', image: true },
+        { viewer: 'pending', image: false },
         { viewer: 'team', image: false },
     ];
     return (

@@ -704,6 +704,13 @@
         "fieldPlaceholder": "vards@piemers.lv",
         "fieldError": "Ievadi derīgu e-pasta adresi.",
         "openContact": "Atvērt: rakstīt grupai",
+        "switchOn": "Vēlos pievienoties grupai",
+        "switchOff": "Paziņojumi",
+        "menuViewer": {
+          "member": "Biedrs",
+          "pending": "Pieteikums gaida atbildi",
+          "visitor": "Apmeklētājs"
+        },
         "openConfirm": "Atvērt: apstiprinājums",
         "openDestructive": "Atvērt: dzēšanas apstiprinājums",
         "confirmTitle": "Pamest grupu?",
@@ -751,6 +758,8 @@
           "counter": "Rakstzīmju skaitītājs",
           "errorState": "Kļūdas stāvoklis",
           "confirmPopover": "Apstiprinājums pie pogas",
+          "moreMenu": "Grupas «…» izvēlne: biedrs, gaida atbildi, apmeklētājs",
+          "switch": "Slēdzis",
           "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites"
         },
         "sample": {

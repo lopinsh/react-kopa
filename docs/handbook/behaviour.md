@@ -52,7 +52,7 @@ The same situation behaves the same way on every screen.
 
 ## Sign-in needed
 
-- Inside the site: the sign-in pop-up, and afterwards the action continues where it was.
+- Inside the site: the sign-in pop-up, and afterwards the action continues where it was (the contact form, a report).
 - Direct visits to private pages: the sign-in page.
 
 ## Dates and times

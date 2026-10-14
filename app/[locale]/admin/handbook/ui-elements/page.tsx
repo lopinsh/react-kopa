@@ -6,7 +6,7 @@ import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/I
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
-import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
+import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
@@ -16,7 +16,8 @@ import ListViewCard from '@/components/discovery/ListViewCard';
 import ListViewEventCard from '@/components/discovery/ListViewEventCard';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import EventRow from '@/components/groups/EventRow';
-import { GroupBannerDemo, GroupPagesDemo } from '@/components/handbook/GroupFrameDemos';
+import { GroupBannerDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
+import { GroupMenuDemo } from '@/components/handbook/GroupMenuDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import MemberCard from '@/components/groups/MemberCard';
 import RequestCard from '@/components/groups/RequestCard';
@@ -30,7 +31,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import RoleTag from '@/components/ui/RoleTag';
 import { UI } from '@/lib/constants';
 import { requireHandbookAccess } from '@/lib/handbook-access';
-import { buildUiSamples } from '@/lib/handbook/ui-samples';
+import { SAMPLE_ACCENT, buildUiSamples } from '@/lib/handbook/ui-samples';
 import { HandbookService } from '@/lib/services/handbook.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -176,6 +177,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <GroupPagesDemo samples={samples} />
                 </UiSpecimen>
 
+                <UiSpecimen id="moreMenu" names={[UI.groupMoreMenu, UI.pendingState]} files={['components/groups/GroupMoreMenu.tsx', 'components/groups/AdminToolsMenu.tsx', 'components/groups/contact/PendingState.tsx', 'components/ui/Menu.tsx']}>
+                    <GroupMenuDemo accent={SAMPLE_ACCENT} states={{ member: sampleState(group, 'member'), pending: sampleState(group, 'pending'), visitor: sampleState(group, 'visitor') }} />
+                </UiSpecimen>
+
                 <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/MemberCard.tsx']}>
                     <AccentScope color={samples.accent} className="grid gap-4 md:grid-cols-2">
                         <GroupProvider value={groupState({ ...group, user: { role: 'OWNER', isMember: true, isAdmin: true, chatId: null } })}>
@@ -240,6 +245,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="skeleton" names={[UI.skeleton]} files={['components/ui/Skeleton.tsx']}>
                     <SkeletonDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="switch" names={[UI.switch]} files={['components/ui/Switch.tsx']}>
+                    <SwitchDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="counter" names={[UI.fieldCounter]} files={['components/ui/TextCounter.tsx', 'lib/text-limit.ts']}>
