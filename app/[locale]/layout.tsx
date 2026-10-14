@@ -29,10 +29,12 @@ export function generateStaticParams() {
 
 type Props = {
     children: React.ReactNode;
+    /** The opened group card and the event panel (R6): intercepted group and event addresses render here, over the page that stays. */
+    panel: React.ReactNode;
     params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({ children, params }: Props) {
+export default async function LocaleLayout({ children, panel, params }: Props) {
     const { locale } = await params;
 
     // Validate locale
@@ -88,6 +90,8 @@ export default async function LocaleLayout({ children, params }: Props) {
                     </div>
                 </div>
             </div>
+
+            {panel}
 
             {/* Mobile Bottom Nav */}
             <MobileNav initialTab={initialTab} />
