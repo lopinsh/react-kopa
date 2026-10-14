@@ -1,20 +1,11 @@
 import { DEFAULT_TIME_ZONE as EVENT_TIME_ZONE } from '@/lib/time-zone';
+import { dayInZone, zonedDayStart } from '@/lib/discovery-dates';
 
 // "Past" is one fact for everyone, so it is decided at the Latvian day boundary, not per viewer zone.
 
 /** The instant today began (midnight) in Latvian time. */
 export function startOfTodayInRiga(now: Date = new Date()): Date {
-    const parts = new Intl.DateTimeFormat('en-CA', {
-        timeZone: EVENT_TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit'
-    }).formatToParts(now);
-    const get = (type: string) => Number(parts.find(p => p.type === type)?.value);
-    const utcMidnight = Date.UTC(get('year'), get('month') - 1, get('day'));
-    // Offset of Riga from UTC at that midnight, e.g. "GMT+03:00".
-    const offsetName = new Intl.DateTimeFormat('en-US', { timeZone: EVENT_TIME_ZONE, timeZoneName: 'longOffset' })
-        .formatToParts(new Date(utcMidnight)).find(p => p.type === 'timeZoneName')?.value ?? 'GMT';
-    const match = offsetName.match(/([+-])(\d{2}):(\d{2})/);
-    const offsetMinutes = match ? (match[1] === '-' ? -1 : 1) * (Number(match[2]) * 60 + Number(match[3])) : 0;
-    return new Date(utcMidnight - offsetMinutes * 60_000);
+    return zonedDayStart(dayInZone(now, EVENT_TIME_ZONE), EVENT_TIME_ZONE);
 }
 
 /**

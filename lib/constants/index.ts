@@ -27,6 +27,12 @@ export const DISCOVERY_EVENTS_LIMIT = 100;
 export const DISCOVERY_EVENTS_MAX_LIMIT = 200;
 /** Longest date span (days) the event list and the per-day counts accept: a month view plus its spill weeks. */
 export const DISCOVERY_DAY_RANGE_MAX = 62;
+/** Months ahead (after this one) the discovery calendar offers. */
+export const DISCOVERY_CALENDAR_MONTHS_AHEAD = 12;
+/** Longest group tagline (first words of the public home section), characters. */
+export const GROUP_TAGLINE_MAX = 160;
+/** Longest event excerpt on a row, characters. */
+export const EVENT_EXCERPT_MAX = 140;
 /** Announcements one group loads (newest first). */
 export const ANNOUNCEMENTS_LIMIT = 100;
 
