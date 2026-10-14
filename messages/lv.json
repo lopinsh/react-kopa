@@ -2,6 +2,7 @@
   "auth": {
     "invalidCredentials": "Nepareizs e-pasts vai parole.",
     "modalDesc": "Ienāc, lai sazinātos.",
+    "modalDescJoin": "Ienāc, lai pieteiktos.",
     "modalTitle": "Pievienojies kopienai",
     "password": "Parole",
     "signInButton": "Ienākt",

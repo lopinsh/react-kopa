@@ -9,10 +9,12 @@ import Modal from '@/components/ui/Modal';
 type Props = {
     isOpen: boolean;
     onClose: () => void;
+    /** Why sign-in is asked: the sentence under the title names it ("Eju" and "Pieteikties" say join). */
+    reason?: 'contact' | 'join';
 };
 
 /** Sign-in pop-up for actions inside the site, so people stay on the page they were on. */
-export default function AuthGateModal({ isOpen, onClose }: Props) {
+export default function AuthGateModal({ isOpen, onClose, reason = 'contact' }: Props) {
     const t = useTranslations('auth');
     const locale = useLocale();
     const pathname = usePathname();
@@ -27,7 +29,7 @@ export default function AuthGateModal({ isOpen, onClose }: Props) {
             size="md"
             title={t('modalTitle')}
         >
-            <p className="mb-6 text-sm leading-relaxed text-foreground-muted">{t('modalDesc')}</p>
+            <p className="mb-6 text-sm leading-relaxed text-foreground-muted">{t(reason === 'join' ? 'modalDescJoin' : 'modalDesc')}</p>
 
             <SignInForm callbackUrl={callbackUrl} />
         </Modal>

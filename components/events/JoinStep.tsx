@@ -107,7 +107,7 @@ export default function JoinStep({ join, trailing }: { join: EventJoinView; trai
                     {trailing}
                 </div>
             )}
-            {isModalOpen && <AuthGateModal isOpen onClose={closeModal} />}
+            {isModalOpen && <AuthGateModal isOpen onClose={closeModal} reason="join" />}
             {error && <p role="alert" className="text-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
         </div>
     );

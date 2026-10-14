@@ -2,6 +2,7 @@
   "auth": {
     "invalidCredentials": "Wrong email or password.",
     "modalDesc": "Sign in to connect.",
+    "modalDescJoin": "Sign in to join.",
     "modalTitle": "Join the Community",
     "password": "Password",
     "signInButton": "Sign In",
