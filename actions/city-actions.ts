@@ -113,6 +113,9 @@ export async function rejectCity(id: string): Promise<ActionResponse> {
             });
         }
         refreshCities();
+        // The groups and events that had the city lost it: lists and counts change.
+        updateTag('groups');
+        updateTag('events');
         return { success: true };
     } catch (error) {
         return mapCityError(error, 'DELETE_FAILED');

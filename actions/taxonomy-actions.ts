@@ -242,6 +242,8 @@ export async function adminUpdateGroupTags(groupId: string, tagIds: string[], lo
 
     try {
         const { slug, l1Slug } = await TaxonomyService.adminUpdateGroupTags(groupId, tagIds);
+        // The group's sub-categories changed: discovery lists and counts follow.
+        revalidateTag('groups', 'max');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
 

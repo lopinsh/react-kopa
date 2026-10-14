@@ -930,8 +930,8 @@ export class EventService {
             [`events-discovery-v3-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
-                // A group's hide or category change moves its events too.
-                tags: ['events', 'groups']
+                // A group's hide, category or tag change (including a tag merge) moves its events too.
+                tags: ['events', 'groups', 'categories']
             }
         );
 
@@ -1004,7 +1004,7 @@ export class EventService {
         const loadPublic = unstable_cache(
             async () => prisma.event.findMany({ where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] }, select }),
             [`events-days-v1-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${range.from.toISOString()}-${range.to.toISOString()}`],
-            { revalidate: 300, tags: ['events', 'groups'] }
+            { revalidate: 300, tags: ['events', 'groups', 'categories'] }
         );
         const [publicRows, memberRows] = await Promise.all([
             loadPublic(),

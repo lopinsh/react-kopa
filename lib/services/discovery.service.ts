@@ -264,7 +264,8 @@ export const DiscoveryService = {
                 [`groups-search-${lang}-${JSON.stringify(where)}-${take}-${skip}`],
                 {
                     revalidate: 60,
-                    tags: ['groups']
+                    // A tag merge or delete moves groups between sub-categories.
+                    tags: ['groups', 'categories']
                 }
             ) as unknown as typeof fetchRawGroups;
 
