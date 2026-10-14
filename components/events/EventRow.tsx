@@ -5,6 +5,7 @@ import Badge from '@/components/ui/Badge';
 import { cityLabel } from '@/lib/city-label';
 import { useDateFormatter } from '@/lib/date-format';
 import { dayInZone, type DayKey } from '@/lib/discovery-dates';
+import { rowWordOf } from '@/lib/event-join';
 import { langAttr } from '@/lib/translations';
 import type { EventRowData } from '@/lib/services/event-row';
 import { UI } from '@/lib/constants';
@@ -29,6 +30,8 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
     const format = useDateFormatter();
     const start = new Date(event.startDate);
     const since = dayInZone(start, zone) < headingDay ? t('continuesFrom', { date: format.dateTime(start, { day: 'numeric', month: 'short' }) }) : null;
+    const rowWord = rowWordOf(event.joinState);
+    const word = rowWord ? t(rowWord === 'request' ? 'state.request' : 'full') : null;
     const place = event.isOnline ? t('online') : showCity ? cityLabel(tCities, event.city) : '';
 
     return (
@@ -43,12 +46,13 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
             <span aria-hidden="true" className="size-2 rounded-full bg-[var(--c)]" />
             <Link
                 href={`/${event.category.l1Slug}/group/${event.group.slug}/events/${event.slug}`}
+                scroll={false}
                 lang={langAttr(event.titleLang, locale)}
                 className="truncate font-semibold text-foreground after:absolute after:inset-0"
             >
                 {event.title}
             </Link>
-            <span className="whitespace-nowrap text-[13px] text-foreground-muted">{[place, since].filter(Boolean).join(' · ')}</span>
+            <span className="whitespace-nowrap text-[13px] text-foreground-muted">{[place, since, word].filter(Boolean).join(' · ')}</span>
             {event.tag && (
                 <span className="col-start-1 row-start-2 -ml-2 self-start pt-0.5">
                     {event.tag === 'going'
@@ -58,7 +62,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
             )}
             {showGroup && (
                 <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-xs text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>

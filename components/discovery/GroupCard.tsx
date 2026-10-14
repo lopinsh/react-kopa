@@ -30,6 +30,7 @@ export default function GroupCard({ group, nextMeeting }: Props) {
     return (
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
+            scroll={false}
             data-ui={UI.groupCard}
             style={{ ['--c' as string]: group.category.color }}
             className="grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl bg-surface transition-colors hover:bg-tint/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"

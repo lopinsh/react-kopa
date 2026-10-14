@@ -16,6 +16,7 @@ export default function GroupRow({ group }: { group: GroupCardData }) {
     return (
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
+            scroll={false}
             data-ui={UI.groupRow}
             style={{ ['--c' as string]: group.category.color }}
             className="flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0"
