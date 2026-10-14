@@ -1,0 +1,59 @@
+'use client';
+
+import type { ReactNode } from 'react';
+import { ChevronDown, X } from 'lucide-react';
+import { clsx } from 'clsx';
+import { UI } from '@/lib/constants';
+
+type Props = {
+    icon: ReactNode;
+    /** What the button shows; cut with "…" when it does not fit. */
+    label: ReactNode;
+    /** The full choice for screen readers ("Vieta: Jelgava, Ozolnieki"), so a cut name is still read in full. */
+    ariaLabel: string;
+    chosen: boolean;
+    open?: boolean;
+    /** Opens the list. Without it the part is a plain chip (the search word). */
+    onToggle?: () => void;
+    controls?: string;
+    onClear: () => void;
+    clearLabel: string;
+    /** Max width of the pill (it shrinks below that, cutting its label). */
+    widthClass: string;
+};
+
+/** The shared look of the filter line's buttons: a 32 px pill; chosen = dark ring and a small ×; open = site-colour ring and tint. */
+export default function FilterButton({ icon, label, ariaLabel, chosen, open = false, onToggle, controls, onClear, clearLabel, widthClass }: Props) {
+    const body = (
+        <>
+            {icon}
+            <span className="min-w-0 truncate">{label}</span>
+            {!chosen && onToggle && <ChevronDown aria-hidden="true" className="size-3.5 shrink-0 text-foreground-muted" />}
+        </>
+    );
+    const bodyClass = clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-full text-[13px] font-medium text-foreground', chosen ? 'pl-2.5' : 'px-2.5');
+
+    return (
+        <div
+            data-ui={UI.filterButton}
+            className={clsx(
+                'flex h-8 min-w-0 shrink items-center rounded-full ring-inset',
+                widthClass,
+                open ? 'bg-tint ring-1 ring-primary' : chosen ? 'bg-surface ring-[1.5px] ring-foreground' : 'bg-surface ring-1 ring-border'
+            )}
+        >
+            {onToggle ? (
+                <button type="button" onClick={onToggle} aria-expanded={open} aria-controls={controls} aria-haspopup="true" aria-label={ariaLabel} className={clsx(bodyClass, 'after:absolute after:-inset-y-1.5 after:inset-x-0')}>
+                    {body}
+                </button>
+            ) : (
+                <span className={bodyClass} aria-label={ariaLabel} role="group">{body}</span>
+            )}
+            {chosen && (
+                <button type="button" onClick={onClear} aria-label={clearLabel} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-tint hover:text-foreground after:absolute after:-inset-y-2.5 after:-inset-x-1">
+                    <X aria-hidden="true" className="size-3.5" />
+                </button>
+            )}
+        </div>
+    );
+}
