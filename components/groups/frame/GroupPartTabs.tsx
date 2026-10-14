@@ -1,4 +1,6 @@
-import type { ReactNode } from 'react';
+'use client';
+
+import type { MouseEvent, ReactNode } from 'react';
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
 import { UI } from '@/lib/constants';
@@ -14,10 +16,13 @@ type Props = {
     active: string;
     /** The page's one action, at the right end of the tab row. */
     action?: ReactNode;
+    /** The parts are on the page already: a click shows one without loading (the address follows with `?part=`). */
+    onSelect?: (key: string) => void;
 };
 
 /** The parts of a group page as tabs (AR-21): each tab is its own URL, the open one is underlined in the site colour. */
-export default function GroupPartTabs({ title, label, items, active, action }: Props) {
+export default function GroupPartTabs({ title, label, items, active, action, onSelect }: Props) {
+    const Tag = onSelect ? 'a' : Link;
     return (
         <div>
             <h2 className="font-heading text-xl font-semibold md:sr-only">{title}</h2>
@@ -25,10 +30,10 @@ export default function GroupPartTabs({ title, label, items, active, action }: P
                 <div data-ui={UI.tabs} className="mt-2 flex items-end gap-3 border-b border-border md:mt-0">
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-[18px] overflow-x-auto [scrollbar-width:none]">
                         {items.map(({ key, label: text, href, lang, count }) => (
-                            <Link
+                            <Tag
                                 key={key}
                                 href={href}
-                                scroll={false}
+                                {...(onSelect ? { onClick: (e: MouseEvent<HTMLAnchorElement>) => { if (e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey) { e.preventDefault(); onSelect(key); } } } : { scroll: false })}
                                 lang={lang}
                                 aria-current={key === active ? 'page' : undefined}
                                 className={clsx(
@@ -38,7 +43,7 @@ export default function GroupPartTabs({ title, label, items, active, action }: P
                             >
                                 {text}
                                 {count !== undefined && count > 0 && <span className="ml-1 tabular-nums">{count}</span>}
-                            </Link>
+                            </Tag>
                         ))}
                     </nav>
                     {action && <div className="mb-1.5 shrink-0">{action}</div>}

@@ -17,7 +17,8 @@ import { loadEvents } from './load-events';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
 import { discoveryHref, parseDiscoveryParams } from '@/lib/discovery-params';
-import { DISCOVERY_RAIL_COOKIE } from '@/lib/constants';
+import { DISCOVERY_RAIL_COOKIE, LOCALES } from '@/lib/constants';
+import { notFound } from 'next/navigation';
 import { dayInZone } from '@/lib/discovery-dates';
 import { eventWindow } from '@/lib/discovery-window';
 import type { DiscoveryState } from '@/lib/types/discovery';
@@ -46,6 +47,8 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
 
 export default async function DiscoveryPage({ params, searchParams }: Props) {
     const { locale } = await params;
+    // `/.well-known/…` and other stray addresses land on this route with a segment that is no locale: a 404, not a crash in Intl.
+    if (!(LOCALES as readonly string[]).includes(locale)) notFound();
     const p = parseDiscoveryParams(await searchParams);
 
     // Old links: a sub-category in `category` lands on its Tēma with its Veids chosen (a level-3 one: its level-2 parent,

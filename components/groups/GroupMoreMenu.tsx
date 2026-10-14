@@ -1,11 +1,11 @@
 'use client';
 
+import { loadFullPage } from '@/lib/full-page';
 import { useId, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Flag, LogOut, MessageCircle, MoreHorizontal, Share2, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { cancelJoinRequest, leaveGroup } from '@/actions/group-actions';
-import { useRouter } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
 import { useShareLink } from '@/hooks/useShareLink';
 import { UI } from '@/lib/constants';
@@ -34,7 +34,6 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
     const t = useTranslations('group');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
-    const router = useRouter();
     const share = useShareLink();
     const { success, error: toastError } = useToast();
     const g = useGroupContext();
@@ -69,7 +68,7 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
             if (!res.success) return showError(res.error);
             // The pages that need membership would redirect mid-render: go to Informācija first.
             success(t('leftGroup'));
-            router.replace(g.href);
+            loadFullPage(`/${locale}${g.href}`);
         });
     };
 

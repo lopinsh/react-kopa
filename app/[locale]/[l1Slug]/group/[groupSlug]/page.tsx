@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import InfoParts from '@/components/groups/frame/InfoParts';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import NextMeetingBox from '@/components/groups/NextMeetingBox';
 import { langAttr } from '@/lib/translations';
@@ -35,23 +35,24 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     ]);
     const base = `/${l1Slug}/group/${group.slug}`;
     const open = group.sections.find((s) => s.id === part) ?? group.sections[0];
-    const items = group.sections.map((s, i) => ({
-        key: s.id,
-        label: i === 0 ? tCommon('about') : s.title,
-        lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
-        href: i === 0 ? base : `${base}?part=${s.id}`,
-    }));
-    const contentLang = open ? langAttr(open.contentLang, locale) : undefined;
-
-    return (
-        <>
-            <GroupPartTabs title={t('pages.info')} label={tFrame('partsLabel')} items={items} active={open?.id ?? ''} />
-            {open && (
+    const parts = group.sections.map((s, i) => {
+        const contentLang = langAttr(s.contentLang, locale);
+        return {
+            key: s.id,
+            label: i === 0 ? tCommon('about') : s.title,
+            lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
+            href: i === 0 ? base : `${base}?part=${s.id}`,
+            content: (
                 <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px]">
                     {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
-                    <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(open.content) }} />
+                    <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(s.content) }} />
                 </article>
-            )}
+            ),
+        };
+    });
+    return (
+        <>
+            <InfoParts title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
             <NextMeetingBox groupId={group.id} groupHref={base} viewerId={session?.user?.id} />
             <GroupSocialLinks websiteLink={group.socialLinks.website} instagramLink={group.socialLinks.instagram} discordLink={group.socialLinks.discord} />
         </>

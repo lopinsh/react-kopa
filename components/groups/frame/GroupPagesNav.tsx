@@ -24,7 +24,7 @@ export default function GroupPagesNav({ variant, active }: { variant: 'side' | '
     return (
         <nav data-ui={UI.groupMenu} aria-label={t('frame.pagesLabel')} className={clsx('flex-col gap-0.5', variant === 'side' ? 'sticky top-[18px] hidden self-start md:flex' : 'flex pt-2')}>
             {pages.map(({ key, href, badge }) => (
-                <PageNavLink key={key} href={href} icon={ICONS[key]} label={t(`pages.${key}`)} current={current === key} badge={badge} replace={variant === 'drawer'} />
+                <PageNavLink key={key} href={href} icon={ICONS[key]} label={t(`pages.${key}`)} current={current === key} badge={badge} replace={variant === 'drawer'} full={key === 'info'} />
             ))}
         </nav>
     );

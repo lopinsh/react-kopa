@@ -1,6 +1,5 @@
 import { CalendarDays, MapPin } from 'lucide-react';
 import { getLocale, getTimeZone, getTranslations } from 'next-intl/server';
-import { Link } from '@/i18n/routing';
 import CategoryLine from '@/components/ui/CategoryLine';
 import FacesLine from '@/components/events/FacesLine';
 import { cityLabel } from '@/lib/city-label';
@@ -41,7 +40,7 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
                 </div>
                 <p className="text-[13px] text-foreground-muted">
                     {t('panel.organisedBy')}{' '}
-                    <Link href={groupPath} scroll={false} className="font-semibold text-foreground hover:underline">{event.group.name}</Link>
+                    <FullPageLink path={groupPath} className="font-semibold text-foreground hover:underline">{event.group.name}</FullPageLink>
                     {' · '}{cityLabel(tCities, event.group.city)}
                 </p>
             </PanelBody>

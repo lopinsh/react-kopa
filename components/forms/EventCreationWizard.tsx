@@ -1,5 +1,6 @@
 'use client';
 
+import { loadFullPage } from '@/lib/full-page';
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -192,9 +193,8 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 }
                 eventSlug = result.data!.event.slug;
             }
-            // Land on the event's own page.
-            router.push(`/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
-            router.refresh();
+            // Land on the event's own page, in full (a soft click on an event's address would open its panel).
+            loadFullPage(`/${locale}/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
         });
     }
 

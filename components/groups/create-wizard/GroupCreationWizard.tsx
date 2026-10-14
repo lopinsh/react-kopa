@@ -1,11 +1,11 @@
 'use client';
 
+import { loadFullPage } from '@/lib/full-page';
 import { useState, useTransition, useMemo, useEffect, useRef } from 'react';
 import { useForm, useWatch, FormProvider, type Resolver } from 'react-hook-form';
 import { isOverLimit } from '@/lib/text-limit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
 import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
 import { groupFormSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
@@ -41,7 +41,6 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
-    const router = useRouter();
     const [step, setStep] = useState<StepIndex>(0);
     const [readyStep, setReadyStep] = useState<StepIndex | null>(null);
     const [isPending, startTransition] = useTransition();
@@ -153,7 +152,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             if (!result.success) {
                 setServerError(result.error);
             } else if (result.data?.slug && result.data?.l1Slug) {
-                router.push(`/${result.data.l1Slug}/group/${result.data.slug}`);
+                loadFullPage(`/${locale}/${result.data.l1Slug}/group/${result.data.slug}`);
             }
         });
     });
