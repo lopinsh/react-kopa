@@ -262,6 +262,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `event`, `discovery`.
 - **Risks:** interception from `/` into the dynamic `[l1Slug]` segment; panels open only over discovery (and search results), so a group link in Manas grupas, Ziņas or a profile still opens the full page: the slot lives in a discovery-only layout, and the spec proves it against the docs; Back closes the panel and restores scroll; the panel must not double-fetch the group (Service Law: one service call returns the panel context).
 - **Size:** L.
+- **Spec:** [specs/R6.md](specs/R6.md). No migration. The `@panel` slot lives in a new `app/[locale]/(discovery)/layout.tsx` with `(.)[l1Slug]` group and event pages, `default.tsx` for `children` and the slot, and a slot `page.tsx` that closes it; because interception applies whenever `Next-Url` is anywhere under `/[locale]`, `proxy.ts` drops that header unless the click came from discovery (proved by ten routing checks at the stop point after step 2); one `Overlay` layout `panel` (right from 768 px, sheet below) closed by `router.back()`; `GroupService.getGroupPanel` and `EventService.getEventPanel` return each panel's whole context, faces only for signed-in viewers and never instructions; `EventParticipation` gives way to `JoinStep` + `GoingButton` (resume after sign-in on the item's own page); the row gets "Pieteikšanās"/"Pilns"; `useDiscoveryNav` reads the list's params from the provider; eleven orchestrator defaults to confirm.
 
 ### R7 · Search (M)
 
@@ -456,7 +457,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R4 Discovery data | pushed, live | [specs/R4.md](specs/R4.md) | `5d5186f`..`c6adace` (Opus review fixes `2a8ad05` cache refresh on city reject and group tag changes, `a2e76d9` counts see every L1 a group matches) |
 | R5a Discovery filters and cards | pushed, live | [specs/R5a.md](specs/R5a.md) | `902d93a`..`a9523b6` (Opus review fixes `6efb0c1` quick ticks and Veids fit, `60ee81f` suggestion sign-in and name limit, `a9523b6` level-3 links, folded rail, groups cache key) |
 | R5b Events by day | reviewed 14 Oct, ready to push | [specs/R5b.md](specs/R5b.md) | `33b21f0`..`3f998cb` (Opus review fixes `749cb98` far-future date links and calendar footer hydration, `39caa1c` tagline `lang`, `3f998cb` UI elements calendar hydration) |
-| R6 Panels | not started | | |
+| R6 Panels | spec written | [specs/R6.md](specs/R6.md) | |
 | R7 Search | not started | | |
 | R8 Own area | not started | | |
 | R9a Event page and form | not started | | |
