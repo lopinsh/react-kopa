@@ -208,6 +208,8 @@ async function main() {
 
   type GroupSeed = {
     slug: string; name: string; description: string;
+    /** "Ko meklējam?": the card's note (AR-35); most groups have none. */
+    lookingFor?: string;
     city: string; category: string; type?: 'PUBLIC' | 'PRIVATE';
     bannerImage?: string;
     instructions?: string;
@@ -239,6 +241,7 @@ async function main() {
     },
     {
       slug: 'running-riga', name: 'Rīgas Skrējēji', category: 'running',
+      lookingFor: 'Gaidām jaunus skrējējus, arī iesācējus',
       description: 'Kopīgas rieta skrējiens Mežaparkā un Uzvaras parkā. Katru rītu plkst. 7:00. Visi tempi laipni gaidīti!',
       bannerImage: 'https://picsum.photos/seed/running/800/400',
       instructions: 'Sākam precīzi 7:05. WhatsApp grupa operatīvai saziņai.',
@@ -253,6 +256,7 @@ async function main() {
     },
     {
       slug: 'boardgames-riga', name: 'Galda Spēļu Klubs Rīga', category: 'boardgames',
+      lookingFor: 'Meklējam ceturto spēlētāju trešdienās',
       description: 'Tikamies katru piektdienas vakaru, lai spēlētu galda spēles. Paši piedāvājam Catan, Ticket to Ride, Wingspan un daudz ko citu.',
       bannerImage: 'https://picsum.photos/seed/boardgames/800/400',
       instructions: 'Gathering at "Lude" cafe. Support the venue by ordering a drink.',
@@ -317,6 +321,7 @@ async function main() {
     },
     {
       slug: 'brivpratigais-riga', name: 'Rīgas Brīvprātīgie', category: 'volunteering',
+      lookingFor: 'Vajag vēl divus brīvprātīgos sestdienai',
       description: 'Kopā darām Rīgu labāku! Organizējam pasākumus, palīdzam tiem, kam tā vajadzīga.',
       bannerImage: 'https://picsum.photos/seed/volunteering/800/400',
       city: 'Riga', owner: andris,
@@ -324,6 +329,7 @@ async function main() {
     },
     {
       slug: 'koris-riga', name: 'Rīgas Pilsētas Koris', category: 'choirs',
+      lookingFor: 'Meklējam tenorus un basus',
       description: 'Draudzīgs amatieru koris, kurš mēdz uzstāties pilsētas svētkos.',
       bannerImage: 'https://picsum.photos/seed/choir/800/400',
       city: 'Riga', owner: santa,
@@ -388,6 +394,7 @@ async function main() {
   ];
 
   const groupIdBySlug: Record<string, string> = {};
+  const groupCityBySlug: Record<string, string> = {};
 
   for (const g of groupSeeds) {
     const originalCatId = categoryIdBySlug[g.category];
@@ -399,7 +406,7 @@ async function main() {
 
     const group = await prisma.group.create({
       data: {
-        name: g.name, slug: properSlug, description: g.description,
+        name: g.name, slug: properSlug, description: g.description, lookingFor: g.lookingFor,
         city: g.city, categoryId: l1CatId, type: g.type ?? 'PUBLIC',
         bannerImage: g.bannerImage,
         discordLink: g.discordLink,
@@ -439,6 +446,7 @@ async function main() {
       },
     });
     groupIdBySlug[g.slug] = group.id;
+    groupCityBySlug[g.slug] = g.city;
     console.log(`  ✓ ${g.name}`);
   }
 
@@ -448,13 +456,17 @@ async function main() {
   type EventSeed = {
     title: string; description: string; location: string;
     startDate: Date; groupSlug: string; creator: typeof oskars;
+    /** The event's own place (AR-57); the group's city when omitted. */
+    city?: string;
+    /** Happens online: `location` holds the link. */
+    isOnline?: boolean;
   };
 
   const eventSeeds: EventSeed[] = [
     // Pārgājieni Rīgā
-    { title: 'Ķemeru purvājs – pavasara taka', description: 'Dosimies apkārt Ķemeru lielajam purvam un apskatīsim pavasara putnus. Maršruts ~12km, vidēja grūtības pakāpe.', location: 'Ķemeri, Jūrmala', startDate: days(3), groupSlug: 'pargajieni-riga', creator: oskars },
+    { title: 'Ķemeru purvājs – pavasara taka', description: 'Dosimies apkārt Ķemeru lielajam purvam un apskatīsim pavasara putnus. Maršruts ~12km, vidēja grūtības pakāpe.', location: 'Ķemeri, Jūrmala', startDate: days(3), groupSlug: 'pargajieni-riga', creator: oskars, city: 'Jurmala' },
     { title: 'Rīgas kanāls – vakara pastaiga', description: 'Viegla vakara pastaiga pa Rīgas centra parkiem un kanāla malām. Beigsim ar kafejnīcas apmeklējumu.', location: 'Vērmanes dārzs, Rīga', startDate: days(10), groupSlug: 'pargajieni-riga', creator: liga },
-    { title: 'Gauja – Sigulda uz Cēsīm', description: 'Vienas dienas pārgājiens pa Gaujas ielejas taku. ~20km, labs solis vajadzīgs!', location: 'Sigulda (starts/finishes Cēsis)', startDate: days(17), groupSlug: 'pargajieni-riga', creator: oskars },
+    { title: 'Gauja – Sigulda uz Cēsīm', description: 'Vienas dienas pārgājiens pa Gaujas ielejas taku. ~20km, labs solis vajadzīgs!', location: 'Sigulda (starts/finishes Cēsis)', startDate: days(17), groupSlug: 'pargajieni-riga', creator: oskars, city: 'Sigulda' },
 
     // Running Riga
     { title: 'Mežaparka rieta skrējiens', description: 'Kopīgs 10km skrējiens pa Mežaparku. Temps ~5:30min/km. Siltināties plkst. 6:55.', location: 'Mežaparks, Rīga', startDate: days(2), groupSlug: 'running-riga', creator: andris },
@@ -491,7 +503,7 @@ async function main() {
 
     // English club
     { title: 'English Debate Night: AI & Society', description: 'Structured debate on AI impact on jobs and creativity. All levels welcome – we adapt pace!', location: 'Cafe Griezums, Riga', startDate: days(5), groupSlug: 'english-riga', creator: liga },
-    { title: 'Pronunciation & Accent Workshop', description: 'A friendly workshop focused on common pronunciation pitfalls for Latvian speakers.', location: 'Cafe Griezums, Riga', startDate: days(12), groupSlug: 'english-riga', creator: oskars },
+    { title: 'Pronunciation & Accent Workshop', description: 'A friendly workshop focused on common pronunciation pitfalls for Latvian speakers.', location: 'https://meet.jit.si/ejam-english', startDate: days(12), groupSlug: 'english-riga', creator: oskars, isOnline: true },
 
     // Volunteering
     { title: 'Talka Rīgas kanāla krastos', description: 'Sakopjam kanāla malu pie Esplanādes. Cimdus un maisus nodrošinām. Atnāc tā kā atnāc!', location: 'Kanālmala, Rīga', startDate: days(8), groupSlug: 'brivpratigais-riga', creator: andris },
@@ -554,6 +566,8 @@ async function main() {
           },
         },
         location: e.location,
+        city: e.city ?? groupCityBySlug[e.groupSlug],
+        isOnline: e.isOnline ?? false,
         startDate: e.startDate,
         groupId,
         creatorId: e.creator.id,
