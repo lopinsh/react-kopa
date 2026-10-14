@@ -16,6 +16,7 @@ import GroupCard from '@/components/discovery/GroupCard';
 import GroupRow from '@/components/discovery/GroupRow';
 import DayStrip from '@/components/discovery/dates/DayStrip';
 import EventDayList from '@/components/events/EventDayList';
+import PanelDemos from '@/components/handbook/PanelDemos';
 import { DatesDemo } from '@/components/handbook/DateDemos';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import { GroupBannerDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
@@ -164,6 +165,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                         <EventDayList days={samples.eventDays} today={samples.today} showGroup showCity />
                         <EventDayList days={samples.eventDays} today={samples.today} showGroup={false} showCity />
                     </div>
+                </UiSpecimen>
+
+                <UiSpecimen id="panels" names={[UI.panel, UI.groupPanel, UI.eventPanel, UI.facesLine, UI.joinStep, UI.goingButton]} files={['components/panels/GroupPanel.tsx', 'components/panels/EventPanel.tsx', 'components/panels/PanelShell.tsx', 'components/events/FacesLine.tsx', 'components/events/JoinStep.tsx', 'components/events/GoingButton.tsx']}>
+                    <PanelDemos group={samples.groupCard} row={samples.eventDays[0].rows[0]} text={t('sample.eventExcerpt')} />
                 </UiSpecimen>
 
                 <UiSpecimen id="dates" names={[UI.dayStrip, UI.dateChoices, UI.datePhone, UI.datePicker, UI.textLink]} files={['components/discovery/dates/DayStrip.tsx', 'components/discovery/dates/DateChoices.tsx', 'components/discovery/dates/DateButton.tsx', 'components/discovery/dates/MonthCalendar.tsx', 'components/ui/MonthGrid.tsx', 'components/ui/TextLink.tsx']}>

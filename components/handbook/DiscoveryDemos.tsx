@@ -3,6 +3,8 @@
 import { useTranslations } from 'next-intl';
 import { LayoutGrid, MapPin } from 'lucide-react';
 import FilterButton from '@/components/discovery/filter/FilterButton';
+import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
+import { parseDiscoveryParams } from '@/lib/discovery-params';
 import ViewSwitch from '@/components/discovery/filter/ViewSwitch';
 import { Chip } from '@/components/discovery/filter/VeidsChips';
 
@@ -22,7 +24,9 @@ export function FilterLineDemo({ accent }: { accent: string }) {
                 <Chip label={t('veids')} chosen onClick={NOOP} />
                 <Chip label={t('veids')} chosen={false} onClick={NOOP} />
             </div>
-            <ViewSwitch className="self-start" />
+            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 } }}>
+                <ViewSwitch className="self-start" />
+            </DiscoveryProvider>
         </div>
     );
 }

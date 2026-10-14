@@ -810,7 +810,8 @@
           "moreMenu": "Group \"…\" menu: member, waiting, visitor",
           "switch": "Switch",
           "groupPages": "Group pages, part tabs, next event and links",
-          "dates": "Dates: day strip, quick choices and calendar"
+          "dates": "Dates: day strip, quick choices and calendar",
+          "panels": "Panels and who is going"
         },
         "sample": {
           "category": "Hiking",

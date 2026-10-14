@@ -25,6 +25,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Step | Screen | Layout | Today |
 |---|---|---|---|
 | Find | Discovery: groups and events | A | R5a, R5b done (filters, cards, events by day) |
+| Find | Group and event panels | panel (sheet on phones) | R6 done |
 | Find | Manas grupas | A | R8 |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a done |
@@ -120,6 +121,8 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.
 - **Logo.** Wordmark in two sizes, or the circles only.
 - **Form field.** Label above, input, optional help text below; an error replaces the help text, in the danger colour, under the field.
+- **Panel.** The opened card and the event panel: from the right over the dimmed page from 768 px, a sheet below; the picture with ×, the name, the category line, the facts, the text, one main button and a text link. It has its own address (the group's or the event's page): Back closes it, a reload or a shared link opens the full page. It opens from any page (discovery, a group's Pasākumi, Manas grupas, Ziņas, profiles); a group's home from inside the same group, an event from its own forms, and the group wizard and admin open the full page.
+- **Who is going.** Up to three faces and one name for signed-in viewers ("Ilze un vēl 11 iet"), the number for visitors ("12 iet"); people whose profile is private are counted but never shown.
 - **Pop-up.** Overlay is the one shell. Modal (dialog: dim + 1.5 px blur, title + close, body, buttons right; a sheet from the bottom on phones), Sheet, side panels and drawers (dim only). A small confirmation for an undoable step is a pop-over at the button.
 - **Announcement card.** Meta line (when, who), bold title, short text.
 - **Empty state.** Outline icon, a short title, one italic sentence in the site colour, at most one action.
@@ -135,7 +138,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Switch.** A pill track in the site colour; the label is the row's text.
 - **Filter line.** Kur and Tēma as 32 px pills (chosen: dark ring and a small ×; open: site-colour ring), the Veids chips of the chosen Tēma on one line with "+N" for the rest, "Notīrīt visu" from two chosen things and the Grupas | Pasākumi switch at the right end (a full-width line on phones). Lists open under their button, as a bottom sheet on phones. Used on discovery.
 - **Group card and row.** The card (from 768 px) shows name, category line, place and members, the group's tagline (the first words of its public home text), the group's note ("Ko meklējam?", the next meeting, or "Tikšanās vēl nav izziņota") and the photo or the tone and icon at the right; every card in a grid is the same height (name, tagline and note each reserve two lines). The row (phones) is two quiet lines, the tagline and a tone mark. Both end with the create card in a chosen category. Used on discovery and the profiles.
-- **Event row.** One row everywhere: the time, the category dot, the name and the city on line one; "Eju" (or outlined "Gaida") under the time, its tick starting where the time's first digit starts; line two the group as a link, the category and sub-categories; last the first words of the description, one line. Thin lines between rows, 8 px hover radius. Rows sit under day headings ("Šodien · pirmd., 12. okt.", "Rīt · …", then the date) on one surface, in two columns when the list is wide. A group's own pages leave line two out. The row opens the event page; no join button on it.
+- **Event row.** One row everywhere: the time, the category dot, the name and the city on line one; "Eju" (or outlined "Gaida") under the time, its tick starting where the time's first digit starts; line two the group as a link, the category and sub-categories; last the first words of the description, one line. Thin lines between rows, 8 px hover radius. Rows sit under day headings ("Šodien · pirmd., 12. okt.", "Rīt · …", then the date) on one surface, in two columns when the list is wide. A group's own pages leave line two out. After the city a quiet word for events you cannot simply join: "Pieteikšanās" (the organiser approves) or "Pilns". The row opens the event's panel; no join button on it.
 - **Day strip and date picker.** The strip shows seven days, Monday first, the month between ‹ and ›, a dot under days with events, weekends on the tint, the list's first day filled in the site colour; a tap starts the list at that day. The filter line holds Šodien · Šonedēļ · Nedēļas nogalē and the calendar as one pill (one date button where the line is narrow and on phones, opening the same choices above the calendar). The calendar shows one month; a first tap picks a day, a second a range; "Rādīt N" applies it.
 
 Also one each: sub-tabs (underline), avatar, the date and time fields. Icons only from `lucide-react`, 16 or 20 px, always next to a word unless the meaning is universal (close, menu, back).

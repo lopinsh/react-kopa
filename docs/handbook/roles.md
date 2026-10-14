@@ -11,6 +11,8 @@ A screen shows only what the viewer can use. Hidden, not disabled.
 
 **Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
 
+**Who is going.** The number for logged-out visitors; faces and a name for signed-in viewers (D12).
+
 **A private group ("Tikai biedriem")** is out of discovery and search; someone with the link sees what a signed-in visitor sees (OD-07).
 
 **One button (owner, 2026-10-12).** A group is reached through one button, "Sazināties" (Contact). Its form has a switch, "Vēlos pievienoties grupai", on while the group takes new members, so the same message also asks to join; without the switch it is only a message. There is no separate Join button. After "Nosūtīt" the form closes and a toast says "Ziņa nosūtīta" (AR-45). A hidden group shows no "Sazināties".

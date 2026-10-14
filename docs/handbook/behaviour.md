@@ -28,6 +28,7 @@ The same situation behaves the same way on every screen.
 - A click outside, Esc, × and Back close them. Back does not leave the page.
 - A form with typed input asks "Atmest izmaiņas?" first; keeping on editing is the default.
 - On phones a dialog opens as a sheet from the bottom.
+- A panel has its own address: Back closes it; a reload or a shared link opens the full page.
 
 ## Text limits
 
@@ -53,6 +54,7 @@ The same situation behaves the same way on every screen.
 ## Sign-in needed
 
 - Inside the site: the sign-in pop-up, and afterwards the action continues where it was (the contact form, a report).
+- From a panel you land on the thing's own page after signing in, and the step continues there.
 - Direct visits to private pages: the sign-in page.
 
 ## Dates and times

@@ -20,7 +20,11 @@ One word per thing, everywhere.
 |---|---|---|
 | Group's news | Jaunumi | Announcements |
 | Private chats | Ziņas | Messages |
-| Asking to join | Pieteikties | Join (request) |
+| Asking to join | Pieteikties | Request to join |
+| Joining an open event | Eju | I'm going |
+| Asking to join a full event | Pieteikties gaidīšanas sarakstā | Join the waiting list |
+| An event's full page, from its panel | Visa informācija | Full details |
+| A group's full page, from its panel | Atvērt grupas lapu | Open the group's page |
 | Writing to a group (the one button; its form can also ask to join) | Sazināties | Contact |
 | A member writing to the team | Rakstīt komandai | Write to the team |
 | Taking back a join request | Atsaukt pieteikumu | Withdraw request |
