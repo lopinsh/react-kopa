@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
-import GroupCard from '@/components/discovery/GroupCard';
+import GroupList from '@/components/discovery/GroupList';
+import { nextMeetingDates } from '@/lib/services/next-meetings';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { Settings, MapPin, Calendar, Users, Plus } from 'lucide-react';
@@ -30,12 +31,13 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     const tCommon = await getTranslations('common');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
 
-    const dbUser = await UserService.getOwnProfile(session.user.id);
+    const dbUser = await UserService.getOwnProfile(session.user.id, locale);
 
     if (!dbUser) {
         redirect(`/${locale}`);
     }
 
+    const nextMeetings = await nextMeetingDates(dbUser.recentGroups, locale, session.user.id);
     const memberSince = format.dateTime(dbUser.createdAt, { year: 'numeric', month: 'long', day: 'numeric' });
     const avatarSrc = avatarUrl(dbUser);
 
@@ -128,11 +130,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                         </div>
 
                         {dbUser.recentGroups.length > 0 ? (
-                            <div className="grid gap-6 sm:grid-cols-2">
-                                {dbUser.recentGroups.map((group) => (
-                                    <GroupCard key={group.id} group={group} accentColor={group.accentColor} locale={locale} />
-                                ))}
-                            </div>
+                            <GroupList groups={dbUser.recentGroups} nextMeetings={nextMeetings} />
                         ) : (
                             <div className="rounded-3xl border border-dashed border-border py-12 text-center bg-surface">
                                 <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />

@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
-import GroupCard from '@/components/discovery/GroupCard';
+import GroupList from '@/components/discovery/GroupList';
+import { nextMeetingDates } from '@/lib/services/next-meetings';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
@@ -30,13 +31,14 @@ export default async function PublicProfilePage({
     const tCities = await getTranslations('cities');
     const format = createDateFormatter(await getLocale(), await getTimeZone());
 
-    const dbUser = await UserService.getUserByUsername(username, session?.user?.id);
+    const dbUser = await UserService.getUserByUsername(username, session?.user?.id, locale);
 
     if (!dbUser) {
         notFound();
     }
 
     const isOwnProfile = session?.user?.id === dbUser.id;
+    const nextMeetings = await nextMeetingDates(dbUser.publicGroups, locale, session?.user?.id);
 
     // Privacy check
     if (!dbUser.isProfilePublic && !isOwnProfile) {
@@ -131,11 +133,7 @@ export default async function PublicProfilePage({
                     </div>
 
                     {dbUser.publicGroups.length > 0 ? (
-                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {dbUser.publicGroups.map((group) => (
-                                <GroupCard key={group.id} group={group} accentColor={group.accentColor} locale={locale} />
-                            ))}
-                        </div>
+                        <GroupList groups={dbUser.publicGroups} nextMeetings={nextMeetings} />
                     ) : (
                         <div className="rounded-3xl border border-dashed border-border py-12 text-center bg-surface">
                             <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />
