@@ -4,6 +4,11 @@ const L = LOCALES.join('|');
 /** Pages a panel must never open over: the group wizard and admin (their links and redirects want the full page). */
 const NEVER_UNDER = new RegExp(`^/(${L})/(create|admin)(/|$)`);
 
+/** A group's or an event's address without the locale (`/travel/group/x`, `…/events/y`): a soft click on it opens a panel over the page. */
+export function isPanelAddress(path: string): boolean {
+    return /^\/[^/]+\/group\/[^/]+(\/events\/[^/]+)?\/?$/.test(path);
+}
+
 /** A panel's address: the group's home, or one of its events. */
 export interface PanelTarget {
     locale: string;
