@@ -8,7 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations, useLocale } from 'next-intl';
 import { ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
 
-import { groupFormSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
+import { groupCreateSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupCreateValues } from '@/lib/validations/group';
+import { TEXT_LANGS, firstLangWithError, langRecord, toTextLang, type TextLang } from '@/lib/translations';
 import { createGroup } from '@/actions/group-actions';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
@@ -45,6 +46,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     const [readyStep, setReadyStep] = useState<StepIndex | null>(null);
     const [isPending, startTransition] = useTransition();
     const [serverError, setServerError] = useState<string | null>(null);
+    // The language of "Par mums" on screen; it opens on the language of the page (the original).
+    const [aboutLang, setAboutLang] = useState<TextLang>(toTextLang(locale));
     const titleRef = useRef<HTMLHeadingElement>(null);
     const containerRef = useFocusTrap<HTMLDivElement>(true);
 
@@ -84,13 +87,14 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
         titleRef.current?.focus();
     }, [step]);
 
-    const form = useForm<GroupFormValues>({
+    const form = useForm<GroupCreateValues>({
         // The schema turns an empty "Ko meklējam?" into null, so its input and output types differ.
-        resolver: zodResolver(groupFormSchema) as unknown as Resolver<GroupFormValues>,
+        resolver: zodResolver(groupCreateSchema) as unknown as Resolver<GroupCreateValues>,
         defaultValues: {
             categoryId: defaultTaxSelection?.kind === 'existing' ? defaultTaxSelection.categoryId : '',
             name: '',
-            description: '',
+            originalLang: toTextLang(locale),
+            about: langRecord(() => ''),
             lookingFor: null,
             city: undefined,
             tagIds: [],
@@ -122,7 +126,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) return trigger(['categoryId', 'tagIds', 'city']); // Taxonomy + City
-        if (s === 1) return trigger(['name', 'lookingFor', 'description', 'bannerImage']); // Basic Info
+        if (s === 1) return trigger(['name', 'lookingFor', ...TEXT_LANGS.map((l) => `about.${l}` as const), 'bannerImage']); // Basic Info
         if (s === 2) return trigger(['type']); // Access
         return true;
     }
@@ -134,6 +138,15 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     async function nextStep() {
         const valid = await validateStep(step);
         if (valid) setStep((s) => Math.min(s + 1, LAST_STEP) as StepIndex);
+        else if (step === 1) showAboutProblem();
+    }
+
+    /** A problem in a "Par mums" language that is not on screen is shown (the original first). */
+    function showAboutProblem() {
+        const failing = TEXT_LANGS.filter((l) => form.getFieldState(`about.${l}`).error);
+        if (failing.length === 0 || failing.includes(aboutLang)) return;
+        const target = firstLangWithError(failing, form.getValues('originalLang'));
+        if (target) setAboutLang(target);
     }
 
     function prevStep() {
@@ -215,7 +228,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 tagsCleared={tagsCleared}
                             />
                         )}
-                        {step === 1 && <BasicInfoStep />}
+                        {step === 1 && <BasicInfoStep lang={aboutLang} onLangChange={setAboutLang} />}
                         {step === 2 && <AccessStep />}
 
                         {serverError && (

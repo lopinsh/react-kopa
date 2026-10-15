@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { CityService } from './city.service';
 import { cache } from 'react';
 import { MembershipRole } from '@prisma/client';
-import { GroupFormValues } from '@/lib/validations/group';
+import { GroupFormValues, GroupCreateValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
@@ -150,11 +150,11 @@ export type GroupServiceResult<T = void> = GroupServiceResponse<T> | GroupServic
  * This acts as the single source of truth for group state and hierarchy resolution.
  */
 /** Translation rows of a default section: title in both languages, text only in the creator's language. */
-function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, creatorLang: TextLang, content: string) {
+function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, content: Partial<Record<TextLang, string>>) {
     return TEXT_LANGS.map((lang) => ({
         lang,
         title: DEFAULT_SECTION_TITLES[key][lang],
-        content: lang === creatorLang ? content : ''
+        content: content[lang] ?? ''
     }));
 }
 
@@ -410,7 +410,7 @@ export const GroupService = {
         });
     },
 
-    async createGroup(data: GroupFormValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+    async createGroup(data: GroupCreateValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
         const lang = toTextLang(locale);
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
@@ -448,7 +448,8 @@ export const GroupService = {
             data: {
                 name: data.name,
                 slug,
-                description: data.description,
+                // The summary is the original language's "Par mums" text (kept in sync by upsertSection).
+                description: data.about[data.originalLang] ?? '',
                 lookingFor: data.lookingFor,
                 city: data.city,
                 type: data.type,
@@ -470,15 +471,15 @@ export const GroupService = {
                         {
                             order: 0,
                             visibility: 'PUBLIC',
-                            originalLang: lang,
-                            translations: { create: defaultSectionRows('about', lang, data.description || '') }
+                            originalLang: data.originalLang,
+                            translations: { create: defaultSectionRows('about', data.about) }
                         },
                         {
                             // A sample the owner rewrites or deletes; its text exists only in the creator's language.
                             order: 1,
                             visibility: 'MEMBERS_ONLY',
                             originalLang: lang,
-                            translations: { create: defaultSectionRows('practical', lang, PRACTICAL_INFO_SAMPLE[lang]) }
+                            translations: { create: defaultSectionRows('practical', { [lang]: PRACTICAL_INFO_SAMPLE[lang] }) }
                         }
                     ]
                 }

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { GROUP_TYPES, MAX_GROUP_TAGS } from '@/lib/constants';
+import { TEXT_LANGS } from '@/lib/translations';
 
 
 // Step 1: Categorization
@@ -23,6 +24,9 @@ export const GROUP_NAME_MAX = 80;
 /** "Ko meklējam?" (AR-35): one short line. */
 export const GROUP_LOOKING_FOR_MAX = 60;
 
+/** The longest "Par mums" text, per language. */
+export const GROUP_ABOUT_MAX = 10000;
+
 // Step 2: The Basics
 export const step2Schema = z.object({
     name: z
@@ -31,7 +35,7 @@ export const step2Schema = z.object({
         .max(GROUP_NAME_MAX, 'NAME_TOO_LONG'),
     description: z
         .string()
-        .max(10000, 'DESCRIPTION_TOO_LONG')
+        .max(GROUP_ABOUT_MAX, 'DESCRIPTION_TOO_LONG')
         .optional()
         .nullable()
         .or(z.literal('')),
@@ -62,6 +66,14 @@ export function buildGroupFormSchema(maxTags: number = MAX_GROUP_TAGS) {
 }
 
 export const groupFormSchema = buildGroupFormSchema();
+
+/** Creating a group: the form's fields plus "Par mums" in every language and the language it is written in (the original). */
+export const groupCreateSchema = groupFormSchema.extend({
+    originalLang: z.enum(TEXT_LANGS),
+    about: z.record(z.enum(TEXT_LANGS), z.string().max(GROUP_ABOUT_MAX, 'DESCRIPTION_TOO_LONG')),
+});
+
+export type GroupCreateValues = z.infer<typeof groupCreateSchema>;
 
 export type GroupFormValues = z.infer<typeof groupFormSchema>;
 export type Step1Values = z.infer<typeof step1Schema>;

@@ -1,7 +1,7 @@
 ﻿'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
-import { GroupFormValues, groupFormSchema, buildGroupFormSchema } from '@/lib/validations/group';
+import { GroupFormValues, GroupCreateValues, groupCreateSchema, buildGroupFormSchema } from '@/lib/validations/group';
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
 import { auth } from '@/lib/auth';
 import { GroupService } from '@/lib/services/group.service';
@@ -15,12 +15,12 @@ import { messageTextSchema } from '@/lib/validations/message';
 /**
  * Creates a new group and handles optional wildcard category creation.
  */
-export async function createGroup(data: GroupFormValues, locale: string): Promise<ActionResponse<{ slug: string; l1Slug: string }>> {
+export async function createGroup(data: GroupCreateValues, locale: string): Promise<ActionResponse<{ slug: string; l1Slug: string }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const validation = await validateActionData(groupFormSchema, data);
+        const validation = await validateActionData(groupCreateSchema, data);
         if (!validation.success) return validation;
 
         const result = await GroupService.createGroup(validation.data, session.user.id, locale);

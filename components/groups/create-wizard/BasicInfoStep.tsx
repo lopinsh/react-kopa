@@ -3,14 +3,21 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Type, AlignLeft, Image as ImageIcon } from 'lucide-react';
+import { Type, Image as ImageIcon } from 'lucide-react';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
-import RichTextEditor from '@/components/ui/RichTextEditor';
+import AboutField from '@/components/groups/create-wizard/AboutField';
+import type { TextLang } from '@/lib/translations';
 
-export default function BasicInfoStep() {
+interface Props {
+    /** The language of "Par mums" on screen. */
+    lang: TextLang;
+    onLangChange: (lang: TextLang) => void;
+}
+
+export default function BasicInfoStep({ lang, onLangChange }: Props) {
     const t = useTranslations('wizard');
-    const { register, watch, setValue, formState: { errors } } = useFormContext<GroupFormValues>();
+    const { register, watch, formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
         <div className="space-y-4">
@@ -64,20 +71,8 @@ export default function BasicInfoStep() {
                 </div>
             </div>
 
-            {/* Description */}
-            <div>
-                <label htmlFor="group-desc" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <AlignLeft className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldDescription')}
-                    <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
-                </label>
-                <RichTextEditor
-                    value={watch('description') || ''}
-                    onChange={(val) => setValue('description', val)}
-                    placeholder={t('fieldDescriptionPlaceholder')}
-                />
-                {errors.description && <p className="mt-1 text-xs text-danger">{t(errors.description.message as 'DESCRIPTION_TOO_LONG')}</p>}
-            </div>
+            {/* Par mums: one language at a time */}
+            <AboutField lang={lang} onLangChange={onLangChange} />
 
             {/* Banner Image */}
             <div>
