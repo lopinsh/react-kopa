@@ -2,7 +2,7 @@
 
 > The living "what's next" list. Read `AGENTS.md` first, then this file, then run `npm run feedback` (open notes from the site admins). Product/UI questions: `docs/handbook/README.md`.
 > Release work (R1a–R12) follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
-> Finished work is not kept here; history lives in git.
+> Finished work is not kept here: it moves to `docs/archive/` (not required reading; search it for the history of a decision).
 
 **Last updated:** 2026-10-15 (R1a–R7 live, main `d056213`; next: R8 Own area).
 
