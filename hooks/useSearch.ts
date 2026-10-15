@@ -30,7 +30,10 @@ export function useSearch({ active, initialWord, initialCities, initialTheme, ki
     const pathname = usePathname();
     const current = useSearchParams();
     const [word, setWordState] = useState(initialWord);
-    const [theme, setTheme] = useState<string | null>(initialTheme);
+    const [theme, setThemeState] = useState<string | null>(initialTheme);
+    // A chosen Veids (its Tēma is `theme`): carried to "Rādīt visus rezultātus", where it filters the list.
+    const [tag, setTag] = useState<string | null>(null);
+    const setTheme = useCallback((next: string | null | ((cur: string | null) => string | null)) => { setTag(null); setThemeState(next); }, []);
     const [cities, setCities] = useState(initialCities);
     const [results, setResults] = useState<SearchResults | null>(null);
     const [loading, setLoading] = useState(false);
@@ -76,12 +79,12 @@ export function useSearch({ active, initialWord, initialCities, initialTheme, ki
             clearTimeout(timer);
             controller.abort();
         };
-    }, [active, q, theme, cityKey, locale, kind]);
+    }, [active, q, theme, cityKey, locale, kind, setTheme]);
 
     const total = results?.total;
     const landing: DiscoveryKind = total && total.events > 0 && (total.groups === 0 || kind === 'events') ? 'events' : 'groups';
     const base = parseDiscoveryParams(new URLSearchParams());
-    const showAllHref = discoveryHref(base, { q, cities, category: theme, tags: [], kind: landing });
+    const showAllHref = discoveryHref(base, { q, cities, category: theme, tags: tag ? [tag] : [], kind: landing });
     // Already on that discovery list: "Rādīt visus rezultātus" only closes the search.
     const here = pathname === '/' && discoveryHref(parseDiscoveryParams(current), {}) === showAllHref;
 
@@ -91,7 +94,10 @@ export function useSearch({ active, initialWord, initialCities, initialTheme, ki
         setWord: useCallback((next: string, immediately = false) => { now.current = immediately; setWordState(next); }, []),
         theme,
         /** One theme at a time: choosing replaces, choosing the chosen one clears. */
-        toggleTheme: useCallback((slug: string) => setTheme((cur) => (cur === slug ? null : slug)), []),
+        toggleTheme: useCallback((slug: string) => setTheme((cur) => (cur === slug ? null : slug)), [setTheme]),
+        tag,
+        /** A matching Veids: chooses its Tēma too; choosing the chosen one clears just the Veids. */
+        toggleVeids: useCallback((slug: string, l1Slug: string) => { setThemeState(l1Slug); setTag((cur) => (cur === slug ? null : slug)); }, []),
         cities,
         setCities,
         results,
@@ -100,7 +106,7 @@ export function useSearch({ active, initialWord, initialCities, initialTheme, ki
         showAllHref,
         here,
         /** The address changed under the search: start from the new page's word, places and category. */
-        reset: useCallback((nextWord: string, nextCities: string[], nextTheme: string | null) => { setWordState(nextWord); setTheme(nextTheme); setCities(nextCities); setResults(null); }, [])
+        reset: useCallback((nextWord: string, nextCities: string[], nextTheme: string | null) => { setWordState(nextWord); setTheme(nextTheme); setCities(nextCities); setResults(null); }, [setTheme])
     };
 }
 

@@ -9,7 +9,7 @@ import { EVENT_ROW_INCLUDE, tagOf, toEventRow } from './event-row';
 import { matchTopics, toTopicSources } from '@/lib/search-topics';
 import { toTextLang } from '@/lib/translations';
 import { SEARCH_IDLE_THEMES, SEARCH_MIN_CHARS, SEARCH_ROWS_MAX } from '@/lib/constants';
-import type { SearchResults, SearchTheme } from '@/lib/types/search';
+import type { SearchResults, SearchTheme, SearchVeids } from '@/lib/types/search';
 
 export interface SearchInput {
     /** Trimmed, at most SEARCH_WORD_MAX letters. */
@@ -62,9 +62,17 @@ export async function runSearch({ word, cities, theme: askedTheme }: SearchInput
     // The chosen theme is a choice, not a match: it stays in the row.
     if (chosen && !themes.some((t) => t.slug === chosen.slug)) themes = [toTheme(chosen), ...themes];
 
+    const veidi: SearchVeids[] = short
+        ? []
+        : matchTopics(word, toTopicSources(tree, categories))
+              .filter((m) => m.kind === 'veids' && (!theme || m.l1Slug === theme))
+              .map((m) => ({ slug: m.slug, title: m.title, color: m.color, l1Slug: m.l1Slug, count: (g.bySubCategory[m.slug] ?? 0) + (e.bySubCategory[m.slug] ?? 0) }))
+              .filter((v) => v.count > 0)
+              .sort(byBusiest);
+
     const places = { cities: cityList, byCity: g.byCity, anyPlace: g.anyPlace };
     if (short && !theme) {
-        return { word, theme, cities, themes, groups: [], events: [], total: { groups: 0, events: 0 }, elsewhere: 0, places };
+        return { word, theme, cities, themes, veidi: [], groups: [], events: [], total: { groups: 0, events: 0 }, elsewhere: 0, places };
     }
 
     const [groupIds, eventIds] = query ? await Promise.all([matchingGroupIds(query, lang), matchingEventIds(query)]) : [undefined, undefined];
@@ -89,6 +97,7 @@ export async function runSearch({ word, cities, theme: askedTheme }: SearchInput
         theme,
         cities,
         themes,
+        veidi,
         groups: groupRows.map((r) => toGroupCard(r, lang)),
         events: eventRows.map((r) => toEventRow(r, lang, null)).map((r) => ({ ...r, tag: mine.get(r.id) ?? null })),
         total: { groups: g.total, events: e.total },

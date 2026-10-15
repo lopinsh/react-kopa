@@ -9,6 +9,10 @@ export interface SearchTheme {
     count: number;
 }
 
+export interface SearchVeids extends SearchTheme {
+    l1Slug: string;
+}
+
 /** What `GET /api/search` answers (Date fields arrive as strings; `reviveSearchResults` turns them back). */
 export interface SearchResults {
     word: string;
@@ -16,6 +20,8 @@ export interface SearchResults {
     cities: string[];
     /** The chip row: the themes that match the word, or the busiest when the word is short. */
     themes: SearchTheme[];
+    /** The Veidi (sub-categories) that match the word, within the chosen theme if there is one; none for a short word. */
+    veidi: SearchVeids[];
     /** At most SEARCH_ROWS_MAX. */
     groups: GroupCardData[];
     /** At most SEARCH_ROWS_MAX, upcoming, public. */

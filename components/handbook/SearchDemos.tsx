@@ -18,7 +18,7 @@ const SPORTS = categoryColor('sports');
 /** The search's state with no fetching (a stub `useSearch`): the panel renders whatever it is given. */
 function stub(word: string, theme: string | null, results: SearchResults): SearchModel {
     return {
-        word, setWord: NOOP, theme, toggleTheme: NOOP, cities: results.cities, setCities: NOOP, results,
+        word, setWord: NOOP, theme, toggleTheme: NOOP, tag: null, toggleVeids: NOOP, cities: results.cities, setCities: NOOP, results,
         loading: false, error: false, showAllHref: '/?q=sp', here: false, reset: NOOP
     };
 }
@@ -39,7 +39,7 @@ export function SearchDemo({ groups, event }: { groups: GroupCardData[]; event: 
         { slug: 'games', title: 'Spēles', color: GAMES, count: 3 },
         { slug: 'sports', title: 'Sports un fitness', color: SPORTS, count: 6 }
     ];
-    const typed: SearchResults = { word: 'sp', theme: null, cities: ['Jelgava'], themes, groups, events: [event], total: { groups: 2, events: 1 }, elsewhere: 14, places };
+    const typed: SearchResults = { word: 'sp', theme: null, cities: ['Jelgava'], themes, veidi: [], groups, events: [event], total: { groups: 2, events: 1 }, elsewhere: 14, places };
     const chosen: SearchResults = { ...typed, theme: 'games', word: 'vak', groups: groups.slice(0, 1), total: { groups: 1, events: 1 } };
     const idle: SearchResults = { ...typed, word: '', groups: [], events: [], total: { groups: 0, events: 0 }, elsewhere: 0, cities: [] };
     const matches = [
