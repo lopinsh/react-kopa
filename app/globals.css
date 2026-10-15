@@ -215,3 +215,25 @@ body {
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
+/* R6b: the opened card and the event panel grow out of the clicked card and close back into it (lib/panel-origin.ts names one element at a time).
+   Durations mirror PANEL_GROW_MS and PANEL_SHRINK_MS; nothing moves under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition { pointer-events: none; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+  ::view-transition-group(panel-origin) {
+    animation-duration: 260ms;
+    animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+    border-radius: 16px;
+    overflow: clip;
+  }
+  ::view-transition-old(panel-origin), ::view-transition-new(panel-origin) {
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+  ::view-transition-old(panel-origin) { animation: ek-fade 120ms ease-in reverse both; }
+  ::view-transition-new(panel-origin) { animation: ek-fade 180ms ease-out 60ms both; }
+  html.vt-shrink::view-transition-group(panel-origin) { animation-duration: 220ms; }
+  html.vt-shrink::view-transition-old(panel-origin) { animation: ek-fade 160ms ease-in reverse both; }
+  html.vt-shrink::view-transition-new(panel-origin) { animation: ek-fade 120ms ease-out 80ms both; }
+}

@@ -1,9 +1,10 @@
 'use client';
 
-import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Overlay from '@/components/ui/Overlay';
 import { PANEL_DIALOG_ID, PANEL_TITLE_ID, UI } from '@/lib/constants';
+import { isGrowing, originLink, panelMounted, panelPath, panelUnmounted, shrinkOrClose } from '@/lib/panel-origin';
 
 const PanelContext = createContext(false);
 /** True inside a panel: shared parts (the join step) know they sit over discovery. */
@@ -24,9 +25,19 @@ export default function PanelShell({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const root = useRef<HTMLDivElement>(null);
     const first = useRef(true);
+    // Opened by a grow out of a card (R6b): its own CSS pop stays off, the transition animates it. Focus goes back to that card's link.
+    const [growing] = useState(isGrowing);
+    const returnFocus = useMemo<RefObject<HTMLElement | null>>(() => ({ get current() { return originLink(); } }), []);
+
+    // Tells lib/panel-origin.ts when the panel is there / gone, so a transition can capture the new state.
+    useLayoutEffect(() => {
+        panelMounted();
+        return panelUnmounted;
+    }, []);
 
     // The content changed inside the same shell (loading to content, one panel to the next): focus goes to the new title.
     useEffect(() => {
+        panelPath(pathname);
         if (first.current) { first.current = false; return; }
         focusTitle();
     }, [pathname]);
@@ -44,7 +55,7 @@ export default function PanelShell({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <Overlay layout="panel" id={PANEL_DIALOG_ID} backClose={false} onClose={() => router.back()} labelledBy={PANEL_TITLE_ID} dataUi={UI.panel} flush>
+        <Overlay layout="panel" id={PANEL_DIALOG_ID} backClose={false} onClose={() => shrinkOrClose(() => router.back())} labelledBy={PANEL_TITLE_ID} dataUi={UI.panel} flush returnFocusRef={returnFocus} panelClassName={growing ? 'md:animate-none!' : undefined}>
             <PanelContext.Provider value={true}>
                 <div ref={root} className="contents">{children}</div>
             </PanelContext.Provider>

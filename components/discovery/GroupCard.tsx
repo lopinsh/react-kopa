@@ -47,6 +47,7 @@ export default function GroupCard({ group, nextMeeting, filters, highlight, full
     return (
         <div
             data-ui={UI.groupCard}
+            data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
             className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary"
         >
@@ -55,7 +56,7 @@ export default function GroupCard({ group, nextMeeting, filters, highlight, full
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
                     {fullPage
                         ? <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}`} data-card-link className={NAME_LINK}><Highlight text={group.name} word={highlight} /></a>
-                        : <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className={NAME_LINK}><Highlight text={group.name} word={highlight} /></Link>}
+                        : <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link data-opens-panel className={NAME_LINK}><Highlight text={group.name} word={highlight} /></Link>}
                 </h3>
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
                 <p className="flex min-w-0 items-center gap-2 text-[13px] text-foreground-muted">

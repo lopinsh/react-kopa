@@ -43,6 +43,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
     return (
         <div
             data-ui={UI.groupRow}
+            data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
             className="relative flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0 has-[a[data-row-link]:focus-visible]:outline has-[a[data-row-link]:focus-visible]:outline-2 has-[a[data-row-link]:focus-visible]:outline-primary"
         >
@@ -50,7 +51,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                 <span className="line-clamp-2 block font-heading text-[15px] font-semibold leading-snug text-foreground">
                     {fullPage
                         ? <a href={`/${locale}${path}`} data-row-link className={NAME_LINK} {...searchAttr}>{name}</a>
-                        : <Link href={path} scroll={false} replace={replace} data-row-link className={NAME_LINK} {...searchAttr}>{name}</Link>}
+                        : <Link href={path} scroll={false} replace={replace} data-row-link data-opens-panel className={NAME_LINK} {...searchAttr}>{name}</Link>}
                 </span>
                 <span className="mt-0.5 flex items-center text-xs text-foreground-muted">
                     <span aria-hidden="true" className="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]" />

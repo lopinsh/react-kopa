@@ -17,6 +17,7 @@ import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 import { getActiveTheme } from '@/lib/theme/server';
 import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
 import TimeZoneSync from '@/components/shell/TimeZoneSync';
+import PanelOriginListener from '@/components/panels/PanelOriginListener';
 
 // The title template lives in app/layout.tsx; repeating it here would stack it twice.
 export const metadata: Metadata = {
@@ -92,6 +93,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             </div>
 
             {panel}
+            <PanelOriginListener />
 
             {/* Mobile Bottom Nav */}
             <MobileNav initialTab={initialTab} />
