@@ -53,7 +53,7 @@ All 26 were decided by the owner on 13 October, each by agreeing to the recommen
 | OD-23 | Event page (AR-59, Still open 18), incl. "an event without its own image shows no picture on its page" | Decided 13 Oct (note cmv6mosr) | Build as drawn, incl. the no-picture proposal | Proposal rule | R9a |
 | OD-24 | Biedri and Jaunumi (AR-53, Still open 18) | Decided 13 Oct (note cmv6mozm) | Build as drawn | Proposal rule | R9b |
 | OD-25 | Mans profils (AR-63, Still open 18) | Decided 13 Oct (note cmv6mp2e) | Build as drawn | Proposal rule | R9b |
-| OD-26 | Where you change your profile (Still open 10) | Decided 13 Oct (note cmv6mp75) | "Labot profilu" on Mans profils opens the form in place; Iestatījumi keeps Izskats | Still open | R9b |
+| OD-26 | Where you change your profile (Still open 10) | Decided 13 Oct (note cmv6mp75) | ~~"Labot profilu" on Mans profils opens the form in place~~ Changed 15 Oct (note cmv9aq31h): LinkedIn model, Mans profils shows exactly what others see with "Labot" leading to a separate edit page; privacy toggles move to Iestatījumi (cmv9anua9); Iestatījumi keeps Izskats | Still open | R9b |
 | OD-27 | Deleting your account (Still open 16) | Decided 13 Oct (note cmv6mphx) | "Dzēst kontu" at the end of Iestatījumi, with a dialog; built before real users | Still open | R12 |
 
 **No open decisions.** Ids stay stable: OD-04 ("Izveidot grupu" also in the phone profile menu) was dropped in review because AR-14 is agreed with it. Closed, listed for completeness: Still open 1 (settled, AP-07); the discovery "One Filtri button" option C (option A was chosen; C is not built). Builder defaults that are not owner decisions are stated in the cards (category tones stored in the site theme, R1a; theme preference kept by next-themes, R2a).
@@ -287,6 +287,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Services/actions:** `UserService.getMyGroups` → `getMyGroupsOverview` (D14: upcoming events, news, requests, a declined answer shown once from notifications, waiting-request counts for the team); `NotificationService` paging; mark-seen action.
 - **i18n:** `profile`, `notifications`, `messages`.
 - **Risks:** the "answer shown once" logic; query count on Manas grupas (one service call, batched).
+- **Owner notes 15 Oct (fold in):** Ziņas must not open on Manas grupas (cmv9ajgmd); own-area pages (Ziņas, profile edit) sit right under the header like every page: fix once in the frame, add the rule to `docs/handbook/design.md` (cmv9aist6, cmv9aom44); Manas grupas uses the discovery card and its responsive behaviour (cmv9ak7k4, cmv9al64n); a group you belong to or are pending in opens its full page, never the panel (cmv9amjft); messages and bell as small dropdowns opened on click, not hover (last ~5 items + "Visas ziņas"/"Visi paziņojumi"; phones open the page) (cmv9ahbt5).
 - **Size:** M/L.
 
 ### R9a · Event page and event form (L)
@@ -298,6 +299,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Data:** none.
 - **i18n:** `event`, `eventWizard`.
 - **Risks:** time fields (DST, viewer zone; Opus review); members-only gate unchanged.
+- **Owner notes 15 Oct (fold in):** "Svarīga informācija" in red becomes a normal section "Praktiskā informācija" styled like "Par pasākumu", with a small lock line "redzams tikai dalībniekiem" (cmv9b6daz); "Visi pasākumi" moves up as a breadcrumb next to the group name, no gap between image and header (cmv9b80zl); the form's "Adrese" becomes "Kur?" with a hint that any place works (cmv9b418s); language input uses the shared `LanguageEditor` (see "Cross-cutting: owner decisions 15 Oct").
 - **Size:** L.
 
 ### R9b · Biedri, Jaunumi, settings, profiles (L)
@@ -309,6 +311,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Data:** none.
 - **i18n:** `group`, `groupSettings`, `profile`.
 - **Risks:** role changes and removal keep their service permission checks; the browser `confirm()` in member removal goes (B8).
+- **Owner notes 15 Oct (fold in):** profiles per the changed OD-26 (cmv9aq31h, cmv9anua9); Informācija is one page: sections stacked, the tabs become jump links with scroll-spy; Pasākumi and Biedri stay their own pages (cmv9bb8ci); Pasākumi gets a "Pagājušie" list, discovery never shows past events (cmv9at6co); Jaunumi: newest announcement on the group landing page, each announcement public or members-only (migration `add_announcement_visibility`, expand only), board restyled (cmv9avg8o); settings: "Ko meklējam?" label becomes "Sauklis" / "Tagline" (cmv9bbzze), a whole section row opens it and a chevron ▾/▴ shows open/closed (cmv9bd0na, cmv9bdszj); language input uses `LanguageEditor` (cmv9bemab); group header uses the event-page image format (see cross-cutting).
 - **Size:** L (split again if the spec shows settings + profiles exceed one session: settings and profiles as R9c).
 
 ### R10 · Citur and the unknown place (S/M)
@@ -345,6 +348,14 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Size:** M.
 
 ## 6. Cross-cutting
+
+- **Owner decisions 15 Oct (notes batch, all agreed).**
+  - **C1 Panel → centred overlay that grows from the clicked card** (cmv9afy29): the side panel pulls focus away from the card. Desktop: a centred overlay animated from the card (View Transitions API) and closing back into it; phones keep the sheet; R6 routes unchanged, only `Overlay` placement and animation change. Follow-up "R6b", size M, before R8.
+  - **C2 The card's bottom line shows the group's latest activity** (cmv9addnl, cmv9axmh5): next event, else the newest public announcement, else the tagline (`lookingFor`); nothing at all when none exists, never "Tikšanās nav izziņota". Not "Par mums" (the card already shows it). Computed when read, no automatic announcement records. The tagline must stay visible somewhere: the group panel and the group header always show it.
+  - **C3 Announcements** (cmv9avg8o): newest on the group landing page; public or members-only per announcement (R9b).
+  - **C4 `LanguageEditor`, one shared piece for owner text in every language** (cmv9az6sn, cmv9b0tth, cmv9b1v6h, cmv9bemab): original language pre-selected from the UI locale; one language edited at a time via "Valoda: Latviešu ▾" + "+ Pievienot tulkojumu"; every draft kept in form state, switching never loses text; visitors without their language see the original with its language badge (exists). Built before R9a, used by the event form, the group wizard and sections.
+  - **C5 Group header uses the event-page image format** (cmv9b9pbr): a contained, rounded 16:9 image (as Meetup and Eventbrite do), no full-width background; without an image a category-colour tile with the category icon as a large pattern. Fits the planned banner picker. R9b (or R3a follow-up if earlier).
+  - **D** Informācija as one page with jump links; past events only on a group's Pasākumi ("Pagājušie").
 
 - **Fluid layout (owner, 13 Oct).** The drawings are at 375 and 1280 px and are not pixel specs for other widths. Implementations are fluid between and beyond: bars span the full width (brand left, tools right, search growing in the middle), page content sits in one centred container (`max-w-6xl`, or the layout's reading width), no fixed widths copied from a drawing except side columns, dialog sizes and small parts. Each spec's acceptance lists 768, 1024, 1440 and 1920 px next to 375 and 1280, and the reviewer measures the header and the page container there.
 - **Tokens and components first.** R1a fixes tokens and atoms; R2b fixes behaviour pieces. Later releases compose them and add to `/admin/handbook/ui-elements`, which is the component library: a builder looks there before making a new piece (Reuse before creating).

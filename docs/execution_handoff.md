@@ -4,7 +4,7 @@
 > Release work (R1a–R12) follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
 > Finished work is not kept here: it moves to `docs/archive/` (not required reading; search it for the history of a decision).
 
-**Last updated:** 2026-10-15 (R1a–R7 live, main `d056213`; next: R8 Own area).
+**Last updated:** 2026-10-15 (R1a–R7 live; owner notes batch planned; next: quick batch, R6b, then R8 Own area).
 
 ---
 
@@ -26,6 +26,15 @@
 - **The "tree" idea** (https://claude.ai/artifact/KxCiZs1x2Cz31jdJApsmLi) is parked until everything else works.
 - **Session hygiene:** start the dev server only via the browser pane (`.claude/launch.json`, config "dev"); only one session may run it. If something already listens on :3000 (`Get-NetTCPConnection -LocalPort 3000 -State Listen`) it is a leftover `next dev`: confirm it is this repo's and stop it. Stop your own server before reporting done. Don't run `npm run build` while dev runs. Switching seed accounts (`owner@local`, `member@local`, …) is fine on localhost, never on ejam.lumm.eu. Native `confirm()` blocks the browser pane: set `window.confirm = () => true` first.
 
+## Owner notes batch 15 Oct (planned, not built)
+
+Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisions 15 Oct"); release-bound notes are in the R8, R9a and R9b cards. Order: quick batch below → R6b (centred overlay, C1) → `LanguageEditor` (C4) → R8 …
+
+- [ ] **Quick batch** (each under ~4 min): drop the "Kategorijas" drawer heading, keep it for screen readers (cmv9ae721); search result rows get the category dot of the cards (cmv9aaifn); event form "Adrese" → "Kur?" + hint (cmv9b418s); settings "Ko meklējam?" → "Sauklis"/"Tagline" (cmv9bbzze); whole section row opens it, chevron ▾/▴ (cmv9bd0na, cmv9bdszj); seed events: public open, request-to-join, members-only, several dates per group (cmv9as5hl).
+- [ ] **Accent-insensitive search** (cmv9a8pkg, promoted from Parked ideas): theme chips already fold (`lib/search-topics.ts`), so first reproduce why "par" showed no "Pārgājieni" chip; group results use Postgres `ILIKE` → Postgres `unaccent` extension (migration `add_unaccent_extension`, expand only).
+- [ ] **R6b** centred overlay growing from the card (C1).
+- [ ] **C2** card bottom line = latest activity (next event › public announcement › tagline › nothing); tagline always in panel and group header.
+
 ## Waiting on the owner
 
 - `cmv5on08v` (Your own area: one space, like a group): "this is ok, but will still review". Leave open until the owner has looked at R8.
@@ -41,7 +50,6 @@
 
 - Event series (recurring events): members-only events only, each date its own event with RSVP per date; public events never recur.
 - Private groups with an invite mechanism (today a private group is link-only, "Tikai biedriem").
-- Accent-insensitive search ("lugsanu" vs "lūgšanu").
 - Owners uploading their own group image (needs storage).
 - Owner-chosen date/number format in settings (today European format, Monday first, 24 h, in both languages).
 - A "town hall" message board for a whole town (the removed `[l1]/messages` placeholder).
