@@ -23,7 +23,7 @@ type Notification = {
     audience: 'USER' | 'ADMIN';
     createdAt: Date;
     /** The group the notification is about, with its category line; null when it is not about a group. */
-    group: { name: string; categoryTitle: string } | null;
+    group: { name: string; categoryTitle: string | null } | null;
     /** Ids this row stands for (grouped unread notifications of one type and target). */
     ids?: string[];
     /** How many more unread ones are folded into this row. */
@@ -31,6 +31,16 @@ type Notification = {
 };
 
 type Audience = Notification['audience'];
+
+/** Both tabs' newest rows (replaced by the bell dropdown in this release). */
+async function loadBoth(locale: string): Promise<Notification[] | null> {
+    const [user, admin] = await Promise.all([
+        getNotifications(locale, { audience: 'USER', take: 5 }),
+        getNotifications(locale, { audience: 'ADMIN', take: 5 }),
+    ]);
+    if (!user.success || !user.data) return null;
+    return [...user.data.rows, ...(admin.success && admin.data ? admin.data.rows : [])].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
+}
 
 /** Context line (group · time), one headline (who did what), then the content itself. */
 function NotificationContent({ n }: { n: Notification }) {
@@ -81,10 +91,8 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
 
     useEffect(() => {
         const fetchNotifications = async () => {
-            const result = await getNotifications(locale);
-            if (result.success && result.data) {
-                setNotifications(result.data as Notification[]);
-            }
+            const rows = await loadBoth(locale);
+            if (rows) setNotifications(rows);
         };
         fetchNotifications();
 
@@ -93,8 +101,8 @@ export default function NotificationCenter({ isAdmin = false }: { isAdmin?: bool
     useRealtimeEvent<Notification>('new-notification', (notification) => {
         // The pushed row has no group line yet; show it at once, then fill the line in from the server.
         setNotifications((current) => current.some(n => n.id === notification.id) ? current : [{ ...notification, audience: notification.audience ?? 'USER', group: null }, ...current]);
-        getNotifications(locale).then((result) => {
-            if (result.success && result.data) setNotifications(result.data as Notification[]);
+        void loadBoth(locale).then((rows) => {
+            if (rows) setNotifications(rows);
         });
     });
 

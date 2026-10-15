@@ -3,19 +3,22 @@
 import { auth } from '@/lib/auth';
 import type { ActionResponse } from '@/types/actions';
 import { validateActionData } from '@/lib/action-utils';
-import { notificationIdsSchema } from '@/lib/validations/notification';
+import { notificationIdsSchema, notificationListSchema } from '@/lib/validations/notification';
 import { NotificationService, type NotificationAudience } from '@/lib/services/notification.service';
+import type { NotificationView } from '@/lib/types/own-area';
 
 /**
- * Fetch notifications for the current user.
+ * The newest notifications of one tab for the current user (the bell's dropdown).
  */
-export async function getNotifications(locale: string): Promise<ActionResponse<Awaited<ReturnType<typeof NotificationService.getUserNotifications>>>> {
+export async function getNotifications(locale: string, input: { audience: NotificationAudience; take: number }): Promise<ActionResponse<{ rows: NotificationView[]; hasMore: boolean }>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    const valid = await validateActionData(notificationListSchema, input);
+    if (!valid.success) return valid;
 
     try {
-        const notifications = await NotificationService.getUserNotifications(session.user.id, 20, locale);
-        return { success: true, data: notifications };
+        const list = await NotificationService.list(session.user.id, { ...valid.data, locale });
+        return { success: true, data: list };
     } catch (error) {
         console.error('[getNotifications] Error:', error);
         return { success: false, error: 'ACTION_FAILED' };

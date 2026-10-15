@@ -1104,6 +1104,7 @@
       "JOIN_REQUEST": "{authorName} wants to join",
       "APPLICATION_RECEIVED": "{authorName} wants to join",
       "APPLICATION_ACCEPTED": "Your request to join was approved",
+      "APPLICATION_DECLINED": "Your request was not accepted this time",
       "REQUEST_APPROVED": "Your request to join was approved",
       "APPLICATION_INQUIRY": "The group moderators asked about your request",
       "INQUIRY_RECEIVED": "{authorName} sent a question",

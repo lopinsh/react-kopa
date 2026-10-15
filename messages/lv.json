@@ -1104,6 +1104,7 @@
       "JOIN_REQUEST": "{authorName} vēlas pievienoties",
       "APPLICATION_RECEIVED": "{authorName} vēlas pievienoties",
       "APPLICATION_ACCEPTED": "Tavs pieteikums apstiprināts",
+      "APPLICATION_DECLINED": "Tavs pieteikums šoreiz netika apstiprināts",
       "REQUEST_APPROVED": "Tavs pieteikums apstiprināts",
       "APPLICATION_INQUIRY": "Grupas moderatori jautā par tavu pieteikumu",
       "INQUIRY_RECEIVED": "{authorName} uzdeva jautājumu",

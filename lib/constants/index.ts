@@ -44,6 +44,22 @@ export const PANEL_TITLE_ID = 'panel-title';
 /** Announcements one group loads (newest first). */
 export const ANNOUNCEMENTS_LIMIT = 100;
 
+/** Manas grupas (AR-61): how far ahead "Tuvākie pasākumi" looks (days) and how many events it lists. */
+export const MY_UPCOMING_DAYS = 30;
+export const MY_UPCOMING_MAX = 20;
+/** Manas grupas "Jaunumi": how far back announcements go (days) and how many are listed. */
+export const MY_NEWS_DAYS = 30;
+export const MY_NEWS_MAX = 10;
+/** The "new" count counts from the last visit to Manas grupas, or this many days back when there was none (AR-14). */
+export const MY_NEW_FALLBACK_DAYS = 7;
+/** Rows in the messages and bell dropdowns. */
+export const DROPDOWN_ROWS = 5;
+/** Paziņojumi page: rows per page and most pages "Rādīt vēl" reaches. */
+export const NOTIFICATIONS_PAGE = 30;
+export const NOTIFICATIONS_MAX_PAGES = 10;
+/** Group names shown on a personal Ziņas row ("groups you share"), then "+N". */
+export const SHARED_GROUPS_SHOWN = 2;
+
 /** Most sections (About, Practical info, …) one group can have. */
 export const MAX_SECTIONS = 6;
 

@@ -6,13 +6,16 @@ import { MessageService, type InboxRow, type MessageView } from '@/lib/services/
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { messageTextSchema } from '@/lib/validations/message';
+import { INBOX_LIMIT } from '@/lib/constants';
 
-export async function getInbox(locale: string): Promise<ActionResponse<InboxRow[]>> {
+/** The viewer's chats, newest first; `limit` is for the header dropdown (the first rows), the page takes the lot. */
+export async function getInbox(locale: string, limit?: number): Promise<ActionResponse<InboxRow[]>> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (limit !== undefined && !(Number.isInteger(limit) && limit >= 1 && limit <= INBOX_LIMIT)) return { success: false, error: 'VALIDATION_FAILED' };
 
     try {
-        const rows = await MessageService.listInbox(session.user.id, locale);
+        const rows = await MessageService.listInbox(session.user.id, locale, limit);
         return { success: true, data: rows };
     } catch (error) {
         return handleActionError(error);

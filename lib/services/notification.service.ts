@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
-import { TaxonomyResolver } from './taxonomy-resolver.service';
-import { groupCategoryTitle } from './message.service';
+import { resolveNotificationGroups } from './notification-groups';
+import type { NotificationView } from '@/lib/types/own-area';
 import { isSiteAdmin } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 
@@ -17,7 +17,7 @@ export type AdminNotificationPayload = {
 
 export type NotificationPayload = {
     userId: string;
-    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'APPLICATION_INQUIRY' | 'TAG_MERGED' | 'GROUP_HIDDEN' | 'GROUP_DELETED' | 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN' | 'EVENT_CANCELLED' | 'OWNERSHIP_TRANSFERRED' | 'ADMIN_GRANTED' | 'ADMIN_REVOKED' | 'CITY_APPROVED' | 'CITY_REJECTED';
+    type: 'JOIN_REQUEST' | 'REQUEST_APPROVED' | 'NEW_POST' | 'NEW_EVENT' | 'APPLICATION_RECEIVED' | 'APPLICATION_ACCEPTED' | 'INQUIRY_RECEIVED' | 'APPLICATION_INQUIRY' | 'TAG_MERGED' | 'GROUP_HIDDEN' | 'GROUP_DELETED' | 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN' | 'EVENT_CANCELLED' | 'OWNERSHIP_TRANSFERRED' | 'ADMIN_GRANTED' | 'ADMIN_REVOKED' | 'CITY_APPROVED' | 'CITY_REJECTED' | 'APPLICATION_DECLINED';
     translationKey: string;
     args?: Record<string, string | number>;
     link?: string;
@@ -69,71 +69,41 @@ function withShortExcerpt(args: NotificationPayload['args']): NotificationPayloa
 }
 
 export const NotificationService = {
+    /** Links → the group each is about (see `resolveNotificationGroups`). */
+    resolveGroups: resolveNotificationGroups,
+
     /**
-     * Fetches the most recent notifications for a user.
+     * One tab's notifications, newest first: `take` rows and whether more exist. Admin rows only for someone who is a site admin
+     * right now. Unread ones of the same type and target fold into one row.
      */
-    async getUserNotifications(userId: string, limit: number = 10, locale: string = 'lv') {
-        // Admin notifications are only ever listed for someone who is a site admin right now.
-        const audiences: NotificationAudience[] = isSiteAdmin(await getSiteRole(userId)) ? ['USER', 'ADMIN'] : ['USER'];
-        const perAudience = await Promise.all(audiences.map((audience) =>
-            prisma.notification.findMany({
-                where: { userId, audience },
-                orderBy: { createdAt: 'desc' },
-                take: limit,
-            })
-        ));
-        const notifications = perAudience.flat().sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
-
-        // The group a notification is about is named by its link: the group page itself, or a conversation
-        // that started from a group. Resolved here so the list can show "Group · Category" like the inbox.
-        const groupLink = /^\/([^/?#]+)\/group\/([^/?#]+)/;
-        const conversationLink = /^\/messages\?c=([^&#]+)/;
-        const slugs = new Set<string>();
-        const conversationIds = new Set<string>();
-        for (const n of notifications) {
-            const g = n.link ? groupLink.exec(n.link) : null;
-            if (g) slugs.add(g[2]);
-            const c = n.link ? conversationLink.exec(n.link) : null;
-            if (c) conversationIds.add(c[1]);
-        }
-
-        const groupSelect = {
-            id: true,
-            name: true,
-            slug: true,
-            category: { include: TaxonomyResolver.getInclude(locale) },
-            tags: {
-                where: { level: 2 },
-                take: 1,
-                select: { slug: true, titles: { select: { lang: true, title: true } } },
-            },
-        } as const;
-        const [groups, conversations] = await Promise.all([
-            slugs.size > 0 ? prisma.group.findMany({ where: { slug: { in: [...slugs] }, hiddenAt: null }, select: groupSelect }) : [],
-            conversationIds.size > 0
-                ? prisma.conversation.findMany({
-                    where: { id: { in: [...conversationIds] }, originGroupId: { not: null } },
-                    select: { id: true, originGroup: { select: groupSelect } },
-                })
-                : [],
-        ]);
-
-        const describe = (g: (typeof groups)[number]) => {
-            const resolved = TaxonomyResolver.resolve(g.category);
-            return { name: g.name, categoryTitle: groupCategoryTitle(resolved, g.tags, locale), l1Slug: resolved.l1Slug, slug: g.slug };
-        };
-        const byConversation = new Map(
-            conversations.flatMap((c) => (c.originGroup ? [[c.id, describe(c.originGroup)] as const] : []))
-        );
-        const byPath = new Map(groups.map((g) => { const d = describe(g); return [`${d.l1Slug}/${d.slug}`, d] as const; }));
-
-        const withGroup = notifications.map((n) => {
-            const g = n.link ? groupLink.exec(n.link) : null;
-            const c = n.link ? conversationLink.exec(n.link) : null;
-            const found = g ? byPath.get(`${g[1]}/${g[2]}`) : c ? byConversation.get(c[1]) : undefined;
-            return { ...n, group: found ? { name: found.name, categoryTitle: found.categoryTitle } : null };
+    async list(userId: string, opts: { audience: NotificationAudience; take: number; skip?: number; locale: string }): Promise<{ rows: NotificationView[]; hasMore: boolean }> {
+        if (opts.audience === 'ADMIN' && !isSiteAdmin(await getSiteRole(userId))) return { rows: [], hasMore: false };
+        const found = await prisma.notification.findMany({
+            where: { userId, audience: opts.audience },
+            orderBy: { createdAt: 'desc' },
+            take: opts.take + 1,
+            skip: opts.skip ?? 0,
         });
-        return groupUnread(withGroup);
+        const page = found.slice(0, opts.take);
+        const groups = await resolveNotificationGroups(page.map((n) => n.link), opts.locale);
+        const rows = groupUnread(page.map((n) => ({ ...n, audience: opts.audience, group: (n.link && groups.get(n.link)) || null })));
+        return {
+            hasMore: found.length > opts.take,
+            rows: rows.map((n): NotificationView => ({
+                id: n.id, ids: n.ids, moreCount: n.moreCount, type: n.type, message: n.message, link: n.link,
+                read: n.read, audience: n.audience, createdAt: n.createdAt, group: n.group,
+            })),
+        };
+    },
+
+    /** Unread notifications per tab; the admin tab counts only for a site admin. One query. */
+    async getUnreadCounts(userId: string): Promise<{ user: number; admin: number }> {
+        const [grouped, role] = await Promise.all([
+            prisma.notification.groupBy({ by: ['audience'], where: { userId, read: false }, _count: true }),
+            getSiteRole(userId),
+        ]);
+        const countOf = (audience: NotificationAudience) => grouped.find((g) => g.audience === audience)?._count ?? 0;
+        return { user: countOf('USER'), admin: isSiteAdmin(role) ? countOf('ADMIN') : 0 };
     },
 
     /**

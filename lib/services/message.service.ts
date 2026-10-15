@@ -2,7 +2,7 @@ import { Prisma, type ConversationKind, type MembershipRole } from '@prisma/clie
 import { prisma } from '@/lib/prisma';
 import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
-import { CHAT_HISTORY_LIMIT, INBOX_LIMIT } from '@/lib/constants';
+import { CHAT_HISTORY_LIMIT, INBOX_LIMIT, SHARED_GROUPS_SHOWN } from '@/lib/constants';
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 import { isSiteAdmin } from '@/lib/site-role';
 import { pickTitle } from '@/lib/utils/localized-title';
@@ -53,6 +53,9 @@ export interface InboxRow {
     /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
     group: { id: string; name: string; categoryTitle: string; subCategories: string[]; l1Slug: string; accentColor: string; href: string | null } | null;
     lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
+    /** DIRECT chats: names of up to SHARED_GROUPS_SHOWN groups both people belong to (members or team, not hidden), and how many more. */
+    sharedGroups: string[];
+    sharedMore: number;
     origin: { type: string; groupName: string | null; groupHref: string | null } | null;
 }
 
@@ -170,6 +173,28 @@ export function groupCategoryParts(
     return { categoryTitle: resolved.l1Title, subCategories: [...new Set(subs)] };
 }
 
+/** For each partner id, the names of the groups they share with the viewer (one query for the viewer and all partners). */
+async function sharedGroupNames(viewerId: string, partnerIds: string[]): Promise<Map<string, string[]>> {
+    if (partnerIds.length === 0) return new Map();
+    const rows = await prisma.membership.findMany({
+        where: { userId: { in: [viewerId, ...partnerIds] }, role: { not: 'PENDING' }, group: { hiddenAt: null } },
+        select: { userId: true, group: { select: { id: true, name: true } } },
+        orderBy: { joinedAt: 'desc' }
+    });
+    const mine = new Set(rows.filter(r => r.userId === viewerId).map(r => r.group.id));
+    const out = new Map<string, string[]>();
+    for (const r of rows) {
+        if (r.userId === viewerId || !mine.has(r.group.id)) continue;
+        out.set(r.userId, [...(out.get(r.userId) ?? []), r.group.name]);
+    }
+    return out;
+}
+
+function sharedOf(partnerId: string | undefined, shared: Map<string, string[]>): { sharedGroups: string[]; sharedMore: number } {
+    const names = (partnerId && shared.get(partnerId)) || [];
+    return { sharedGroups: names.slice(0, SHARED_GROUPS_SHOWN), sharedMore: Math.max(0, names.length - SHARED_GROUPS_SHOWN) };
+}
+
 export const MessageService = {
     /**
      * The one access check. Returns how the user relates to the conversation, or null when they may not see it.
@@ -189,12 +214,12 @@ export const MessageService = {
         };
     },
 
-    async listInbox(userId: string, locale: string): Promise<InboxRow[]> {
+    async listInbox(userId: string, locale: string, take: number = INBOX_LIMIT): Promise<InboxRow[]> {
         try {
             const conversations = await prisma.conversation.findMany({
                 where: accessWhere(userId),
                 orderBy: { updatedAt: 'desc' },
-                take: INBOX_LIMIT,
+                take,
                 select: {
                     id: true,
                     kind: true,
@@ -227,7 +252,10 @@ export const MessageService = {
                 }
             });
 
-            const newest = await newestFromOthers(conversations.map(c => c.id), userId);
+            const [newest, shared] = await Promise.all([
+                newestFromOthers(conversations.map(c => c.id), userId),
+                sharedGroupNames(userId, conversations.filter(c => c.kind === 'DIRECT').flatMap(c => c.participants.filter(p => p.id !== userId).map(p => p.id)))
+            ]);
 
             return conversations.map((c): InboxRow => {
                 const isGroup = c.kind === 'GROUP';
@@ -254,6 +282,7 @@ export const MessageService = {
                         ? { id: c.originGroupId, name: c.originGroup.name, categoryTitle: category?.categoryTitle ?? '', subCategories: category?.subCategories ?? [], l1Slug: resolved.l1Slug, accentColor: resolved.accentColor, href }
                         : null,
                     lastMessage: c.messages[0] ?? null,
+                    ...sharedOf(c.kind === 'DIRECT' ? c.participants.find(p => p.id !== userId)?.id : undefined, shared),
                     origin: c.originType
                         ? { type: c.originType, groupName: c.originGroup?.name ?? null, groupHref: href }
                         : null

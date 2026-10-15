@@ -86,6 +86,7 @@ export async function cancelJoinRequest(groupId: string): Promise<ActionResponse
         if (!result.success) return result as ActionResponse;
 
         revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidatePath('/[locale]/profile/my-groups', 'page');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'CANCEL_FAILED');
@@ -164,10 +165,20 @@ export async function manageMembership(
                 args: { groupName },
                 link: `/${l1Slug}/group/${groupSlug}`
             });
+        } else {
+            // Declining deletes the membership; without a word the person would never learn the answer.
+            await NotificationService.notify({
+                userId: targetUserId,
+                type: 'APPLICATION_DECLINED',
+                translationKey: 'applicationDeclined',
+                args: { groupName },
+                link: `/${l1Slug}/group/${groupSlug}`
+            });
         }
 
         // The frame (Biedri badge, member count) lives in the group layout: invalidate it with the pages.
         revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidatePath('/[locale]/profile/my-groups', 'page');
         // Approving changes the member count and avatars on discovery cards.
         updateTag('groups');
         return { success: true };

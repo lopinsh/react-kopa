@@ -145,12 +145,14 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
             other: marta,
             group: { id: 'sample-group', name: s('groupName'), categoryTitle: s('category'), subCategories: [s('parentCategory')], l1Slug: SAMPLE_L1_SLUG, accentColor: SAMPLE_ACCENT, href: null },
             lastMessage: { id: 'lm-1', content: s('chatIn2'), createdAt: ago(HOUR), senderId: marta.id },
+            sharedGroups: [], sharedMore: 0,
             origin: { type: 'JOIN_REQUEST', groupName: s('groupName'), groupHref: null },
         },
         {
             id: 'c-2', kind: 'DIRECT', isBlocked: false, readOnly: false, canBlock: true, viewerIsContact: false, unread: false, updatedAt: ago(DAY),
             other: janis, group: null,
             lastMessage: { id: 'lm-2', content: s('inboxLast'), createdAt: ago(DAY), senderId: anna.id },
+            sharedGroups: [s('groupName')], sharedMore: 1,
             origin: null,
         },
     ];

@@ -44,6 +44,8 @@ model User {
   messageSuggestions   MessageSuggestion[]
   feedback             Feedback[]
   feedbackReplies      FeedbackReply[]     @relation("FeedbackReplyAuthor")
+  /// When Manas grupas was last opened; its 'new' count counts from here (AR-14).
+  myGroupsSeenAt       DateTime?
 }
 
 model Account {
