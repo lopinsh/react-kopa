@@ -4,7 +4,7 @@
 > Release work (R1a–R12) follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
 > Finished work is not kept here: it moves to `docs/archive/` (not required reading; search it for the history of a decision).
 
-**Last updated:** 2026-10-15 (R1a–R8 live; next: owner notes quick batch, then R6b).
+**Last updated:** 2026-10-15 (R1a–R8, the quick batch and R6b live; next: C2, then `LanguageEditor` (C4), then R9a).
 
 ---
 
@@ -13,7 +13,7 @@
 - Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.1`), built and released as R1a–R12 one by one.
 - **Live:** R1a Identity, R1b Dizains, R2a Header/menus/own-area frame, R2b Behaviour pieces, R3a Group frame, R3b Sazināties/pending/"…", R4 Discovery data, R5a Filters/drawer/cards, R5b Events by day, R6 Panels, R7 Search (with the Session A owner-notes batch), R8 Own area.
 - [x] **R8 Own area live** (`2f4b554`..`3d1165c`, review fixes `605807b`, `3d1165c`): Manas grupas sections, Ziņas in the frame, Paziņojumi page, messages and bell as click dropdowns, the "new" count, groups you belong to open their full page; migration `add_user_my_groups_seen_at`; Prisma `relationJoins` preview on. Notes cmv9ajgmd, cmv9aist6, cmv9aom44, cmv9ak7k4, cmv9al64n, cmv9amjft, cmv9ahbt5 done.
-- **Next:** the owner notes quick batch and R6b (below), then R9a, R9b, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
+- **Next:** C2, then `LanguageEditor` (C4) (below), then R9a, R9b, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
 - Workflow per release: Opus spec → Sonnet build → Opus review (independent review for migrations and R4-like data work) → reviewer pushes.
 - Review (2026-10-15): group panel (lookingFor, no-next-meeting line checked LV/EN at 375 and 1280) and search theme fixes verified; a page category the search does not know is now dropped.
 
@@ -33,7 +33,7 @@ Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisi
 
 - [x] **Quick batch** (83175ee, bd933df, bd16140, 343b17e; the group row's dot is on every `GroupRow`, not only in search) (each under ~4 min): drop the "Kategorijas" drawer heading, keep it for screen readers (cmv9ae721); search result rows get the category dot of the cards (cmv9aaifn); event form "Adrese" → "Kur?" + hint (cmv9b418s); settings "Ko meklējam?" → "Sauklis"/"Tagline" (cmv9bbzze); whole section row opens it, chevron ▾/▴ (cmv9bd0na, cmv9bdszj); seed events: public open, request-to-join, members-only, several dates per group (cmv9as5hl).
 - [x] **Accent-insensitive search** (5ac1d36, 81f6532; the "par" chip was dropped because chips need a count above zero and the counts used accent-sensitive ILIKE) (cmv9a8pkg, promoted from Parked ideas): theme chips already fold (`lib/search-topics.ts`), so first reproduce why "par" showed no "Pārgājieni" chip; group results use Postgres `ILIKE` → Postgres `unaccent` extension (migration `add_unaccent_extension`, expand only).
-- [x] **R6b** centred overlay growing from the card (C1) (b7a7774 placement, c2c1dc4 grow; View Transitions driven by hand, 560 px overlay from 768 px; built, in review).
+- [x] **R6b** centred overlay growing from the card (C1) (b7a7774 placement, c2c1dc4 grow; View Transitions driven by hand, 560 px overlay from 768 px; review fix 5eeb69a: search results are never grown; pushed, live).
 - [ ] **C2** card bottom line = latest activity (next event › public announcement › tagline › nothing); tagline always in panel and group header.
 
 ## Waiting on the owner
@@ -75,4 +75,6 @@ Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisi
 - Remaining `confirm()` in admin: ReportList, CitiesSection, PendingCityCard, PendingInboxCard, TaxonomyAdminClient → `ConfirmDialog` / `ConfirmPopover` (planned in R11).
 - Possible Service Law violations in some actions and accent-colour prop-drilling (unverified, from a 2026-03 audit); `TagPicker` `as any` is planned for R9b. Components over 150 lines (listed in `build-plan.md` section 6) are split when touched.
 - `package.json` `overrides` pins `@swc/core` to 1.15.47 (pulled in by next-intl's plugin). 1.16.x refuses to start on the owner's Windows machine (`ERR_SWC_NATIVE_CACHE` cache-folder permission check), breaking `npm run dev` and `npm run build`. next-intl is held at 4.13.x for the same reason (4.14 needs SWC ~1.16). Revisit when SWC relaxes the check.
+- A hidden leftover streamed copy `div#S:0[hidden]` stays in group subpages (settings in prod), duplicating ids; cause unknown.
+- The accent-insensitive search sends every matching id back into the query uncapped: fine at prototype scale, move the match into one query before real scale.
 - `npm audit`: `deepmerge-ts` inside the Prisma CLI (runs only during migrations, no user input); fixing needs a breaking Prisma change, accepted for now.
