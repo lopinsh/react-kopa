@@ -8,7 +8,7 @@ import CategoryList from './lists/CategoryList';
 import CategorySuggest from './CategorySuggest';
 import { DISCOVERY_RAIL_COOKIE, UI } from '@/lib/constants';
 
-/** The category drawer (AR-30): a side column from `lg`, sticky under the header, foldable to a rail of icons (remembered per device in a cookie). */
+/** The category drawer (AR-30): a side column from `lg`, sticky flush under the header (the scroll container already starts below it), its head on the filter line's row, foldable to a rail of icons (remembered per device in a cookie). */
 export default function CategoryDrawer({ folded: initiallyFolded }: { folded: boolean }) {
     const t = useTranslations('discovery');
     const tSidebar = useTranslations('shell.sidebar');
@@ -24,9 +24,9 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
         <aside
             data-ui={UI.categoryDrawer}
             aria-label={tSidebar('categoriesNav')}
-            className={clsx('sticky top-16 hidden h-[calc(100dvh-4rem)] shrink-0 flex-col overflow-y-auto border-r border-border bg-surface lg:flex', folded ? 'w-14' : 'w-[232px]')}
+            className={clsx('sticky top-0 hidden h-[calc(100dvh-var(--spacing-header))] shrink-0 flex-col overflow-y-auto border-r border-border bg-surface lg:flex', folded ? 'w-14' : 'w-[232px]')}
         >
-            <div className={clsx('flex items-center px-3 pb-1 pt-3', folded ? 'justify-center' : 'justify-between')}>
+            <div className={clsx('mt-4 flex h-8 shrink-0 items-center px-3', folded ? 'justify-center' : 'justify-between')}>
                 {!folded && <h2 className="px-1 text-[13px] font-semibold text-foreground-muted">{t('categories')}</h2>}
                 <button
                     type="button"

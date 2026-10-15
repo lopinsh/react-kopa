@@ -42,7 +42,7 @@
   --scrim: rgb(0 0 0 / 0.3);
 
   /* Shell Dimensions */
-  --header-height: 56px;
+  --header-height: var(--spacing-header);
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 68px;
 }
