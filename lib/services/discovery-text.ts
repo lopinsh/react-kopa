@@ -10,7 +10,8 @@ import type { TextLang } from '@/lib/translations';
 
 /** `%word%` with the LIKE wildcards in the word escaped. */
 function likePattern(word: string): string {
-    return `%${word.trim().replace(/[\%_]/g, (c) => `\${c}`)}%`;
+    const escaped = word.trim().replace(/[\\%_]/g, (c) => '\\' + c);
+    return '%' + escaped + '%';
 }
 
 /** Ids of the groups whose name, description, public section text (any language) or category title/slug contain the word. */
