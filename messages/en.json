@@ -549,6 +549,7 @@
     },
     "frame": {
       "pagesLabel": "Group pages",
+      "breadcrumb": "Breadcrumb",
       "partsLabel": "Page parts",
       "members": "{count, plural, one {# member} other {# members}}",
       "membersOnly": "Members only"
@@ -1431,17 +1432,18 @@
     "onlineLinkLocked": "The link shows once the organiser approves you.",
     "addToCalendar": "Add to calendar",
     "share": "Share",
+    "organiser": {
+      "title": "For organisers",
+      "going": "Going",
+      "approved": "Approved",
+      "requests": "Requests",
+      "waitlist": "On the waiting list"
+    },
     "runningNow": "On now",
     "runningUntil": "On now · until {until}",
-    "aboutEvent": "About the event",
-    "addToGoogleCalendar": "Add to Google Calendar",
-    "areYouComing": "Are you coming?",
-    "dateAndTime": "Date & Time",
-    "importantInfo": "Important info",
-    "joinLink": "Join online",
-    "location": "Location",
-    "openInMaps": "Open in Maps",
-    "shareEvent": "Share event",
+    "aboutEvent": "About the event",
+    "joinLink": "Join online",
+    "openInMaps": "Open in Maps",
     "tba": "To be announced",
     "createSubtitle": "Create a new event for your group",
     "membersOnly": "Members only",
@@ -1460,19 +1462,11 @@
     "fullNote": "The event is full. You can join the waiting list.",
     "waitlistNote": "The organiser will let people in by hand if there is room.",
     "requestNote": "The organiser approves who joins.",
-    "instructionsLocked": "Practical details are shown once the organiser approves you.",
-    "goingCount": "{count} going",
-    "approvedCount": "{count} approved",
-    "aboutPeople": "About {count, plural, one {# person} other {# people}}",
-    "badgeRequest": "Request to join",
-    "organiserTitle": "For organisers",
+    "instructionsLocked": "Practical details are shown once the organiser approves you.",
+    "aboutPeople": "About {count, plural, one {# person} other {# people}}",
     "closeSignups": "Close sign-ups",
     "reopenSignups": "Reopen sign-ups",
-    "closeSignupsHint": "People can still join the waitlist.",
-    "requestsTitle": "Requests",
-    "waitlistTitle": "Waitlist",
-    "goingTitle": "Going",
-    "approvedTitle": "Approved",
+    "closeSignupsHint": "People can still join the waitlist.",
     "approve": "Approve",
     "decline": "Decline",
     "letIn": "Let in",

@@ -4,8 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { EventService } from '@/lib/services/event.service';
 import EventArticle from '@/components/events/page/EventArticle';
-import EventOrganiserPanel from '@/components/events/EventOrganiserPanel';
-import EventManageActions from '@/components/events/EventManageActions';
+import EventOrganiserBox from '@/components/events/page/EventOrganiserBox';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import { eventJsonLd } from '@/lib/event-json-ld';
 import { cityLabel } from '@/lib/city-label';
@@ -46,12 +45,7 @@ export default async function EventPage({ params }: { params: Promise<Params> })
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonForScript(jsonLd) }} />
             <EventArticle
                 event={event}
-                organiser={team && (
-                    <div className="mt-3.5 grid gap-3">
-                        <EventManageActions eventId={event.id} locale={locale} groupPath={groupPath} eventPath={`${groupPath}/events/${event.slug}`} canEdit={event.timing !== 'past'} />
-                        {event.timing !== 'past' && <EventOrganiserPanel eventId={event.id} joinMode={event.joinMode} isFull={event.isFull} locale={locale} going={team.going} pending={team.pending} waitlist={team.waitlist} />}
-                    </div>
-                )}
+                organiser={team && <EventOrganiserBox event={event} lists={team} locale={locale} groupPath={groupPath} eventPath={`${groupPath}/events/${event.slug}`} />}
             />
         </>
     );

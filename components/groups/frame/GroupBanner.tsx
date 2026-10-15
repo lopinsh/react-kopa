@@ -10,6 +10,7 @@ import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import CategoryLine from '@/components/ui/CategoryLine';
+import BannerName from './BannerName';
 import GroupActions from './GroupActions';
 import GroupPagesDrawer from './GroupPagesDrawer';
 
@@ -42,7 +43,7 @@ export default function GroupBanner() {
                     </span>
                 )}
                 <div className="min-w-0 flex-1">
-                    <h1 className="truncate font-heading text-[15px] font-semibold leading-tight md:text-xl">{g.name}</h1>
+                    <BannerName onImage={onImage} />
                     <p className={clsx('flex items-center gap-1.5 text-xs md:hidden', quiet)}>
                         <span aria-hidden className={clsx('size-2 shrink-0 rounded-full bg-[var(--accent)]', onImage && 'ring-[1.5px] ring-on-image')} />
                         <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>

@@ -549,6 +549,7 @@
     },
     "frame": {
       "pagesLabel": "Grupas lapas",
+      "breadcrumb": "Ceļš",
       "partsLabel": "Lapas daļas",
       "members": "{count, plural, zero {# biedru} one {# biedrs} other {# biedri}}",
       "membersOnly": "Tikai biedriem"
@@ -1431,17 +1432,18 @@
     "onlineLinkLocked": "Saite būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
     "addToCalendar": "Pievienot kalendāram",
     "share": "Dalīties",
+    "organiser": {
+      "title": "Rīkotājiem",
+      "going": "Iet",
+      "approved": "Apstiprināti",
+      "requests": "Pieteikumi",
+      "waitlist": "Gaidīšanas sarakstā"
+    },
     "runningNow": "Notiek tagad",
     "runningUntil": "Notiek tagad · līdz {until}",
-    "aboutEvent": "Par pasākumu",
-    "addToGoogleCalendar": "Pievienot Google kalendāram",
-    "areYouComing": "Vai nāksi?",
-    "dateAndTime": "Datums un laiks",
-    "importantInfo": "Svarīga informācija",
-    "joinLink": "Pievienoties tiešsaistē",
-    "location": "Vieta",
-    "openInMaps": "Atvērt kartē",
-    "shareEvent": "Dalīties ar pasākumu",
+    "aboutEvent": "Par pasākumu",
+    "joinLink": "Pievienoties tiešsaistē",
+    "openInMaps": "Atvērt kartē",
     "tba": "Tiks precizēta",
     "createSubtitle": "Izveido jaunu pasākumu savai grupai",
     "membersOnly": "Tikai biedriem",
@@ -1460,19 +1462,11 @@
     "fullNote": "Pasākums ir pilns. Vari pieteikties gaidīšanas sarakstā.",
     "waitlistNote": "Ja atbrīvosies vieta, organizators pats uzņems cilvēkus.",
     "requestNote": "Organizators apstiprina, kas piedalīsies.",
-    "instructionsLocked": "Praktiskā informācija būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
-    "goingCount": "{count} piedalās",
-    "approvedCount": "{count, plural, zero {# apstiprināti} one {# apstiprināts} other {# apstiprināti}}",
-    "aboutPeople": "Apmēram {count, plural, zero {# cilvēku} one {# cilvēks} other {# cilvēki}}",
-    "badgeRequest": "Pieteikšanās",
-    "organiserTitle": "Organizatoram",
+    "instructionsLocked": "Praktiskā informācija būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
+    "aboutPeople": "Apmēram {count, plural, zero {# cilvēku} one {# cilvēks} other {# cilvēki}}",
     "closeSignups": "Slēgt pieteikšanos",
     "reopenSignups": "Atvērt pieteikšanos",
-    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
-    "requestsTitle": "Pieteikumi",
-    "waitlistTitle": "Gaidīšanas saraksts",
-    "goingTitle": "Piedalās",
-    "approvedTitle": "Apstiprinātie",
+    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
     "approve": "Apstiprināt",
     "decline": "Noraidīt",
     "letIn": "Uzņemt",
