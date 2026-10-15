@@ -33,8 +33,6 @@
 
 ## Open follow-ups not in any release
 
-- BUG `cmv987j9t`: the "Dejas" choice chip in the search/filter is pre-selected before anything is typed; suggestions should appear only after letters are entered (check against R7).
-- BUG `cmv988s2d`: `/lv/?city=Riga&category=travel` applies the city but not the category in the initial filters.
 - Reporting a person (OD-11): later, after R12; needs migration `add_report_target_user`. Until then only "Ziņot par grupu" and event reports exist.
 - Banner picker: one picker (group wizard, group settings, event wizard) replacing the plain URL field in `BasicsSection`: ~6–8 curated Unsplash photos per L1 category (URLs and photographer credit in `lib/constants`) plus "no image" (category-colour tile). "Search for another photo" via a server action needs an Unsplash app and production approval from the owner; follow the Unsplash API rules (hotlink, `download_location`, credit). Mockup and owner OK first.
 
