@@ -5,6 +5,7 @@ import type {
     FacetInput,
     DiscoveryCounts
 } from '@/lib/types/discovery';
+import { matchingGroupIds } from './discovery-text';
 import { groupWhere, loadGroupFacetRows, loadEventFacetRows, aggregateFacets } from './discovery-query';
 import { startOfTodayInRiga } from '@/lib/event-dates';
 import { categoryColor } from '@/lib/theme/category';
@@ -34,7 +35,8 @@ export const DiscoveryService = {
 
         try {
             const { take = DISCOVERY_GROUPS_PAGE, skip = 0 } = filters;
-            const where = groupWhere({ ...filters, cities: filters.cities && [...filters.cities].sort() }, lang);
+            const queryIds = filters.query ? await matchingGroupIds(filters.query, lang) : undefined;
+            const where = groupWhere({ ...filters, queryIds, cities: filters.cities && [...filters.cities].sort() }, lang);
 
             // Fetch groups with caching for Taxonomy Heavy Joins
             const fetchRawGroups = async (searchWhere: typeof where, reqLang: string, reqTake: number, reqSkip: number) => {

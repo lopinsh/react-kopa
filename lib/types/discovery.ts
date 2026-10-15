@@ -10,6 +10,8 @@ export interface GroupDiscoveryFilters {
     /** Sub-category slugs (L2/L3); a group matches any of them. */
     tags?: string[];
     query?: string;
+    /** Ids of the groups the query matches ignoring marks (`matchingGroupIds`); without them the match falls back to case-insensitive. */
+    queryIds?: string[];
     take?: number;
     skip?: number;
 }
@@ -20,6 +22,8 @@ export interface EventDiscoveryFilters {
     category?: string;
     tags?: string[];
     search?: string;
+    /** Ids of the events the search matches ignoring marks (`matchingEventIds`); without them the match falls back to case-insensitive. */
+    searchIds?: string[];
     /** Ignored when `from`/`to` are set. Default 'upcoming'. */
     status?: 'upcoming' | 'past';
     from?: Date;

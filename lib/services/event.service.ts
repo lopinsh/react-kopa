@@ -18,6 +18,7 @@ import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event
 import { EVENT_PANEL_INCLUDE, toEventPanel, toFace, type EventPanelData, type Face } from './event-panel';
 import { CityService } from './city.service';
 import { eventWhere, clampRange, bucketByDay } from './discovery-query';
+import { matchingEventIds } from './discovery-text';
 import { DEFAULT_TIME_ZONE, isValidTimeZone } from '@/lib/time-zone';
 import type { DayCount, EventDiscoveryFilters } from '@/lib/types/discovery';
 
@@ -889,13 +890,14 @@ export class EventService {
         const tags = [...(filters.tags ?? [])].sort();
         const where = { ...filters, cities, tags, status };
         const lang = toTextLang(locale);
+        const withIds = async () => ({ ...where, searchIds: where.search ? await matchingEventIds(where.search) : undefined });
         const include = EVENT_ROW_INCLUDE(lang);
         const orderBy = { startDate: status === 'past' ? 'desc' : 'asc' } as const;
 
         // The cache holds the narrow row shape (an excerpt, not whole descriptions).
         const loadPublic = unstable_cache(
             async () => (await prisma.event.findMany({
-                where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] },
+                where: { AND: [eventWhere(await withIds()), { visibility: 'PUBLIC' }] },
                 include,
                 orderBy,
                 take: limit + 1
@@ -911,10 +913,10 @@ export class EventService {
         const [publicRows, memberRows] = await Promise.all([
             loadPublic(),
             userId
-                ? prisma.event.findMany({
+                ? withIds().then((w) => prisma.event.findMany({
                     where: {
                         AND: [
-                            eventWhere(where),
+                            eventWhere(w),
                             {
                                 visibility: 'MEMBERS_ONLY',
                                 group: { members: { some: { userId, role: { not: 'PENDING' } } } }
@@ -924,7 +926,7 @@ export class EventService {
                     include,
                     orderBy,
                     take: limit + 1
-                }).then((rows) => rows.map((e) => toEventRow(e, lang, null)))
+                })).then((rows) => rows.map((e) => toEventRow(e, lang, null)))
                 : Promise.resolve([])
         ]);
 
@@ -959,21 +961,22 @@ export class EventService {
         const tags = [...(filters.tags ?? [])].sort();
         const where = { ...filters, cities, tags, ...range };
         const select = { startDate: true } as const;
+        const withIds = async () => ({ ...where, searchIds: where.search ? await matchingEventIds(where.search) : undefined });
 
         const loadPublic = unstable_cache(
-            async () => prisma.event.findMany({ where: { AND: [eventWhere(where), { visibility: 'PUBLIC' }] }, select }),
+            async () => prisma.event.findMany({ where: { AND: [eventWhere(await withIds()), { visibility: 'PUBLIC' }] }, select }),
             [`events-days-v2-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${range.from.toISOString()}-${range.to.toISOString()}`],
             { revalidate: 300, tags: ['events', 'groups', 'categories'] }
         );
         const [publicRows, memberRows] = await Promise.all([
             loadPublic(),
             userId
-                ? prisma.event.findMany({
+                ? withIds().then((w) => prisma.event.findMany({
                     where: {
-                        AND: [eventWhere(where), { visibility: 'MEMBERS_ONLY', group: { members: { some: { userId, role: { not: 'PENDING' } } } } }]
+                        AND: [eventWhere(w), { visibility: 'MEMBERS_ONLY', group: { members: { some: { userId, role: { not: 'PENDING' } } } } }]
                     },
                     select
-                })
+                }))
                 : Promise.resolve([])
         ]);
         return bucketByDay([...publicRows, ...memberRows], range.from, range.to, zone);

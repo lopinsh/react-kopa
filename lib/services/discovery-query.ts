@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client';
 import { DISCOVERY_DAY_RANGE_MAX } from '@/lib/constants';
 import { startOfTodayInRiga } from '@/lib/event-dates';
 import type { TextLang } from '@/lib/translations';
+import { matchingEventIds, matchingGroupIds } from './discovery-text';
 import type { FacetRow } from './discovery-facets';
 import type {
     EventDiscoveryFilters,
@@ -53,7 +54,7 @@ function anyTopic(slugs: string[]): Prisma.GroupWhereInput[] {
 
 /** The discovery group list's where: PUBLIC only (private groups never appear, OD-07), not hidden, ACTIVE non-wildcard category. */
 export function groupWhere(filters: GroupDiscoveryFilters, lang: TextLang): Prisma.GroupWhereInput {
-    const { cities, categoryId, tags, query } = filters;
+    const { cities, categoryId, tags, query, queryIds } = filters;
     const and: Prisma.GroupWhereInput[] = [
         // Content safety: only ACTIVE and non-wildcard categories.
         { category: { status: 'ACTIVE', isWildcard: false } }
@@ -71,7 +72,9 @@ export function groupWhere(filters: GroupDiscoveryFilters, lang: TextLang): Pris
     }
     and.push(...anyTopic(tags ?? []));
 
-    if (query) {
+    if (query && queryIds) {
+        and.push({ id: { in: queryIds } });
+    } else if (query) {
         const q = { contains: query, mode: 'insensitive' as const };
         and.push({
             OR: [
@@ -100,7 +103,7 @@ export function clampRange(from: Date, to: Date): { from: Date; to: Date } | nul
 
 /** The event list's where, without the visibility part (callers add PUBLIC or the viewer's MEMBERS_ONLY). */
 export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date()): Prisma.EventWhereInput {
-    const { cities, category, tags, search, status, from, to } = filters;
+    const { cities, category, tags, search, searchIds, status, from, to } = filters;
     // A private group's events are out of discovery and search (OD-07): its event list would show the group.
     const groupAnd: Prisma.GroupWhereInput[] = [{ hiddenAt: null, type: 'PUBLIC' }];
     if (category) groupAnd.push(topicMatch(category));
@@ -130,7 +133,9 @@ export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date(
             : { OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] });
     }
 
-    if (search) {
+    if (search && searchIds) {
+        and.push({ id: { in: searchIds } });
+    } else if (search) {
         const q = { contains: search, mode: 'insensitive' as const };
         // Text in any language (instructions are restricted and never searched).
         and.push({
@@ -175,7 +180,7 @@ function toRow(
 /** One narrow row per matching group (query applied; cities and topic are applied by `aggregateFacets`). */
 export async function loadGroupFacetRows(input: FacetInput, lang: TextLang): Promise<FacetRow[]> {
     const groups = await prisma.group.findMany({
-        where: groupWhere({ query: input.query }, lang),
+        where: groupWhere({ query: input.query, queryIds: input.query ? await matchingGroupIds(input.query, lang) : undefined }, lang),
         select: { city: true, category: { select: CHAIN_SELECT }, tags: { select: CHAIN_SELECT } }
     });
     return groups.map((g) => toRow(g.city, false, g.category, g.tags));
@@ -183,8 +188,9 @@ export async function loadGroupFacetRows(input: FacetInput, lang: TextLang): Pro
 
 /** One narrow row per matching public event (query and dates applied; cities and topic by `aggregateFacets`). */
 export async function loadEventFacetRows(input: FacetInput, now: Date = new Date()): Promise<FacetRow[]> {
+    const searchIds = input.query ? await matchingEventIds(input.query) : undefined;
     const events = await prisma.event.findMany({
-        where: { AND: [eventWhere({ search: input.query, from: input.from, to: input.to }, now), { visibility: 'PUBLIC' }] },
+        where: { AND: [eventWhere({ search: input.query, searchIds, from: input.from, to: input.to }, now), { visibility: 'PUBLIC' }] },
         select: {
             city: true,
             isOnline: true,
