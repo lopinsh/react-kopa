@@ -48,7 +48,6 @@
   "common": {
     "about": "Par mums",
     "accept": "Skaidrs",
-    "actionRequired": "Nepieciešama rīcība",
     "add": "Pievienot aizstājvārdu",
     "addAlias": "Pievienot",
     "addSubcategory": "Pievienot apakštēmu",
@@ -832,7 +831,9 @@
           "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites",
           "dates": "Datumi: dienu josla, izvēle un kalendārs",
           "panels": "Paneļi un kas iet",
-          "search": "Meklēšana"
+          "search": "Meklēšana",
+          "ownSections": "Manas grupas: sadaļu izvēlne, jaunumi un pieteikums",
+          "headerLists": "Galvenes saraksti: zvans (abas cilnes), ziņas, tukšie stāvokļi, paziņojuma rinda"
         },
         "sample": {
           "category": "Pārgājieni",
@@ -1043,7 +1044,6 @@
     "blocked": "Bloķēts",
     "confirmBlock": "Vai tiešām vēlies bloķēt/atbloķēt šo lietotāju?",
     "conversationBlocked": "Šī saruna ir bloķēta.",
-    "emptyInbox": "Vēl nav ziņu. Uzraksti grupai vai kādam dalībniekam — sarunas parādīsies šeit.",
     "noMessages": "Pagaidām nav ziņu",
     "originJoinRequest": "Saruna sākta no pieteikuma grupai <group>{name}</group>",
     "originJoinRequestGone": "Saruna sākta no pieteikuma grupai",
@@ -1065,9 +1065,6 @@
     "unreadBadge": "{count, plural, zero {# nelasītu sarunu} one {# nelasīta saruna} other {# nelasītas sarunas}}",
     "back": "Atpakaļ uz ziņām",
     "send": "Sūtīt",
-    "drawerLoadFailed": "Neizdevās ielādēt ziņas.",
-    "drawerLoading": "Ielādē ziņas…",
-    "openFullView": "Atvērt pilnu skatu",
     "allMessages": "Visas ziņas",
     "emptyTitle": "Pagaidām kluss",
     "emptyText": "Kad uzrakstīsi grupai vai kāds uzrakstīs tev, saruna būs šeit.",
@@ -1100,7 +1097,6 @@
   },
   "notifications": {
     "title": "Paziņojumi",
-    "empty": "Vēl nav paziņojumu",
     "markAllRead": "Atzīmēt visus kā izlasītus",
     "markRead": "Atzīmēt kā izlasītu",
     "more": "{count, plural, one {un vēl #} other {un vēl #}}",
@@ -1200,7 +1196,6 @@
     },
     "editDesc": "Atjaunini savu publisko profila informāciju.",
     "editTitle": "Labot profilu",
-    "empty": "Tu vēl neesi pievienojies nevienai grupai.",
     "fieldImage": "Profila attēla URL",
     "fieldName": "Vārds",
     "handle": "@{username}",
@@ -1212,10 +1207,6 @@
     "noSharedGroups": "Kopīgas grupas nav atrastas.",
     "privateProfile": "Privāts profils",
     "privateProfileDesc": "Šis profils ir privāts.",
-    "sectionAdmin": "Grupas, kurās esmu moderators",
-    "sectionMember": "Grupas, kurās esmu biedrs",
-    "sectionOwner": "Grupas, ko vadu",
-    "sectionPending": "Gaida apstiprinājumu",
     "sharedGroups": "Kopīgās grupas",
     "groupsHeading": "Grupas",
     "viewAllGroups": "Skatīt visu",

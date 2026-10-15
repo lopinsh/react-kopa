@@ -8,6 +8,7 @@ import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@
 import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
 import { SearchDemo } from '@/components/handbook/SearchDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
+import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
@@ -154,13 +155,13 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>
                     <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
-                        <GroupCard group={samples.groupCardNote} />
-                        <GroupCard group={samples.groupCard} nextMeeting={samples.nextMeeting} />
+                        <GroupCard group={samples.groupCardNote} role="OWNER" requestCount={2} />
+                        <GroupCard group={samples.groupCard} nextMeeting={samples.nextMeeting} role="ADMIN" />
                         <GroupCard group={samples.groupCardBare} />
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>
                     <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5">
-                        <GroupRow group={samples.groupCard} />
+                        <GroupRow group={samples.groupCard} role="OWNER" requestCount={2} />
                         <CreateCard l1Slug={samples.l1Slug} variant="row" />
                     </div>
                 </UiSpecimen>
@@ -222,8 +223,16 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <AnnouncementDemo samples={samples} />
                 </UiSpecimen>
 
-                <UiSpecimen id="inbox" names={[UI.conversationList, UI.chatListItem, UI.chatBubble]} files={['components/messages/ConversationList.tsx', 'components/messages/ChatPanel.tsx']}>
+                <UiSpecimen id="inbox" names={[UI.conversationList, UI.chatListItem, UI.chatBubble]} files={['components/messages/ConversationList.tsx', 'components/messages/ConversationRow.tsx', 'components/messages/ChatPanel.tsx']}>
                     <InboxDemo samples={samples} />
+                </UiSpecimen>
+
+                <UiSpecimen id="ownSections" names={[UI.myGroupsSections, UI.sectionMenu, UI.newsItem, UI.requestRow]} files={['components/me/MyGroupsSections.tsx', 'components/me/SectionMenu.tsx', 'components/me/NewsItem.tsx', 'components/me/RequestRow.tsx', 'components/handbook/OwnAreaDemos.tsx']}>
+                    <MyGroupsPartsDemo samples={samples} />
+                </UiSpecimen>
+
+                <UiSpecimen id="headerLists" names={[UI.headerDropdown, UI.bellList, UI.notificationItem, UI.conversationRow, UI.notificationFeed]} files={['components/shell/HeaderDropdown.tsx', 'components/notifications/BellList.tsx', 'components/notifications/BellPanel.tsx', 'components/notifications/NotificationItem.tsx', 'components/notifications/NotificationFeed.tsx', 'components/messages/MessagesDropdown.tsx']}>
+                    <HeaderListsDemo samples={samples} />
                 </UiSpecimen>
 
                 <UiSpecimen id="popups" names={[UI.modal, UI.confirmDialog]} files={['components/groups/contact/ContactForm.tsx', 'components/ui/ConfirmDialog.tsx', 'components/ui/Modal.tsx', 'components/ui/Overlay.tsx']}>

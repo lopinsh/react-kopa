@@ -7,6 +7,7 @@ import { addDays, dayInZone } from '@/lib/discovery-dates';
 import { eventWindow } from '@/lib/discovery-window';
 import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import type { Member } from '@/components/groups/MemberCard';
+import type { MyRequest, NewsGroup, NewsItem, NotificationView } from '@/lib/types/own-area';
 
 /** The sample group's main category (Sports) and its tone. */
 export const SAMPLE_L1_SLUG = 'sports';
@@ -166,6 +167,20 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         chatMessage('cm-3', marta, s('chatIn2'), HOUR),
     ];
 
+    // Own area (R8): the notification rows (unread with a quote, read with the category line, one for site admins), news and a waiting request.
+    const newsGroup: NewsGroup = { name: s('groupName'), path: `/${SAMPLE_L1_SLUG}/group/sample-group`, l1Slug: SAMPLE_L1_SLUG, color: SAMPLE_ACCENT, categoryTitle: s('parentCategory'), subCategory: s('category') };
+    const notification = (id: string, type: string, args: Record<string, string>, read: boolean, ms: number): NotificationView => ({
+        id, ids: [id], moreCount: 0, type, message: JSON.stringify({ args }), link: `/${SAMPLE_L1_SLUG}/group/sample-group`, read, audience: 'USER', createdAt: ago(ms), group: newsGroup,
+    });
+    const notifications: NotificationView[] = [
+        notification('n-1', 'JOIN_REQUEST', { authorName: marta.name, excerpt: s('requestMessage') }, false, HOUR),
+        notification('n-2', 'APPLICATION_ACCEPTED', {}, true, 2 * DAY),
+    ];
+    const adminNotification: NotificationView = { ...notification('n-3', 'ADMIN_REPORT', { excerpt: s('requestMessage') }, false, 3 * HOUR), audience: 'ADMIN', link: '/admin/reports', group: null };
+    const newsPost: NewsItem = { kind: 'post', id: 'np-1', at: ago(5 * HOUR), isNew: true, group: newsGroup, title: s('announcementTitle'), excerpt: s('announcementBody') };
+    const newsAnswer: NewsItem = { kind: 'answer', id: 'na-1', at: ago(DAY), isNew: true, group: newsGroup, accepted: true };
+    const myRequest: MyRequest = { groupId: 'sample-group-request', name: s('groupName'), path: `/${SAMPLE_L1_SLUG}/group/sample-group`, color: SAMPLE_ACCENT, since: ago(2 * DAY) };
+
     return {
         accent: SAMPLE_ACCENT,
         l1Slug: SAMPLE_L1_SLUG,
@@ -184,6 +199,11 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         announcement,
         conversations,
         chatMessages,
+        notifications,
+        adminNotification,
+        newsPost,
+        newsAnswer,
+        myRequest,
         viewerId: anna.id,
         marta,
     };

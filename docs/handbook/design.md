@@ -29,20 +29,20 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Discovery: groups and events | A | R5a, R5b done (filters, cards, events by day) |
 | Find | Group and event panels | panel (sheet on phones) | R6 done |
 | Find | Search | header field, panel (full screen on phones) | R7 done |
-| Find | Manas grupas | A | R8 |
+| Find | Manas grupas | A | R8 done |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a done |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |
 | Join | Sign in, register, onboarding | D | R12 |
 | Talk | Jaunumi | B | R9b |
-| Talk | Messages | E | R8 |
-| Talk | Notifications | panel | R8 |
+| Talk | Messages | E | R8 done |
+| Talk | Notifications | header dropdown, page (phones: the page) | R8 done |
 | Group life | Biedri, Requests | B | R9b |
 | Group life | Pasākumi tab | B | R3a, R5b done |
 | Group life | Event page | B | R9a |
 | Group life | Create / edit event | B | R4 done (place), R9a |
 | Group life | Group settings | B | R4 done (field), R9b |
-| Me | Own profile, Manas grupas, Ziņas, Iestatījumi | B (frame) | R2a frame; content R8, R9b |
+| Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9b |
 | Me | Public profile | F | R9b |
 | Me | Edit profile | D | R9b |
 | Static | About, privacy, 404 | F | R12 |
@@ -124,7 +124,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.
 - **Logo.** Wordmark in two sizes, or the circles only.
 - **Form field.** Label above, input, optional help text below; an error replaces the help text, in the danger colour, under the field.
-- **Panel.** The opened card and the event panel: from the right over the dimmed page from 768 px, a sheet below; the picture with ×, the name, the category line, the facts, the text, one main button and a text link. An opened panel shows at least everything its card shows. It has its own address (the group's or the event's page): Back closes it, a reload or a shared link opens the full page. It opens from any page (discovery, a group's Pasākumi, Manas grupas, Ziņas, profiles); a group's home from inside the same group, an event from its own forms, and the group wizard and admin open the full page.
+- **Panel.** The opened card and the event panel: from the right over the dimmed page from 768 px, a sheet below; the picture with ×, the name, the category line, the facts, the text, one main button and a text link. An opened panel shows at least everything its card shows. It has its own address (the group's or the event's page): Back closes it, a reload or a shared link opens the full page. It opens from any page (discovery, a group's Pasākumi, Manas grupas, Ziņas, profiles); a group's home from inside the same group, an event from its own forms, and the group wizard and admin open the full page. A group you belong to or wait for opens its full page, never the panel.
 - **Who is going.** Up to three faces and one name for signed-in viewers ("Ilze un vēl 11 iet"), the number for visitors ("12 iet"); people whose profile is private are counted but never shown.
 - **Pop-up.** Overlay is the one shell. Modal (dialog: dim + 1.5 px blur, title + close, body, buttons right; a sheet from the bottom on phones), Sheet, side panels and drawers (dim only). A small confirmation for an undoable step is a pop-over at the button.
 - **Announcement card.** Meta line (when, who), bold title, short text.
@@ -133,7 +133,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **Skeleton.** Neutral tint in the shape of the content it stands for.
 - **Text counter.** Under the field's right end: quiet "71 / 2000", the warning colour in the last tenth, red "2013 / 2000 · 13 par daudz" past the limit.
 
-- **Shell.** The header (AR-12, AR-13) is the logo, a search field (a click, a tap or the first letter opens the search), "LV ▾" and, signed in, messages, bell and your picture; the shield joins for site admins. The three menus (profile, shield, language) are one `Menu` component: same look, same keys. Light and dark is the Izskats setting in Iestatījumi, not a header control. On phones the bottom bar has Atklāt, Grupas, +, Ziņas, Es; a group page marks the tab you came from (AR-20). The footer is a slim line on discovery and reading pages only (AR-16). Every header and bar control is at least 40 px.
+- **Shell.** The header (AR-12, AR-13) is the logo, a search field (a click, a tap or the first letter opens the search), "LV ▾" and, signed in, messages, bell and your picture; the shield joins for site admins. Messages and the bell open small lists on a click (the last five, then "Visas ziņas" / "Visi paziņojumi"); on phones the bell opens Paziņojumi. The three menus (profile, shield, language) are one `Menu` component: same look, same keys. Light and dark is the Izskats setting in Iestatījumi, not a header control. On phones the bottom bar has Atklāt, Grupas, +, Ziņas, Es; a group page marks the tab you came from (AR-20). The footer is a slim line on discovery and reading pages only (AR-16). Every header and bar control is at least 40 px.
 
 - **Part tabs.** Links, the site colour under the open one, the page's one action at the right end ("Izveidot pasākumu"); on phones the page's name stands over them.
 
