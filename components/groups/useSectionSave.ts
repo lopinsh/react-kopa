@@ -43,12 +43,13 @@ export function useSectionSave({ groupId, locale, setSections, setEditingId }: O
             let failed: string | null = null;
             for (const lang of langs) {
                 const { title, content } = section.texts[lang];
+                // A lost connection rejects the call: stop like a failed save, so the drafts stay and the languages done are kept.
                 const result = await upsertSectionAction(
                     groupId,
                     // The first save of a new section creates it with that language as its original.
                     { id: isNew ? undefined : sectionId, lang, title, content, visibility: section.visibility, originalLang: isNew ? undefined : section.originalLang },
                     locale
-                );
+                ).catch(() => ({ success: false as const, error: 'SAVE_FAILED' }));
                 if (!result.success) {
                     failed = result.error;
                     break;

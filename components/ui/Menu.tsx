@@ -69,6 +69,7 @@ export function MenuItemLink({ href, icon, trailing, locale, hrefLang, current, 
         >
             {icon}
             {children}
+            {trailing && <span className="sr-only">, </span>}
             {trailing}
         </Link>
     );
@@ -80,6 +81,7 @@ export function MenuItemButton({ onSelect, icon, trailing, disabled, current, cl
         <button type="button" role={radio ? 'menuitemradio' : 'menuitem'} aria-checked={radio ? current : undefined} tabIndex={-1} data-ui={UI.menuItem} disabled={disabled} onClick={onSelect} className={clsx(ITEM_BASE, current && 'font-semibold', className)}>
             {icon}
             {children}
+            {trailing && <span className="sr-only">, </span>}
             {trailing}
         </button>
     );
@@ -91,5 +93,5 @@ export function MenuSeparator() {
 
 /** The look of a menu row, for items that bring their own markup (the admin mode toggles). */
 export const MENU_ITEM_CLASS = ITEM_BASE;
-/** Trailing text/state slot of a row. */
+/** Trailing text/state slot of a row (read after a comma: "English, empty"). */
 export const MENU_TRAILING_CLASS = 'ml-auto text-xs text-foreground-muted';

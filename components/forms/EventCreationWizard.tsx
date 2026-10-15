@@ -194,13 +194,16 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         setStep((s) => Math.max(s - 1, 0) as StepIndex);
     }
 
+    // A lost connection rejects the action: show it as a failed save and keep the form (an uncaught rejection would drop it for the error page).
+    const SAVE_FAILED = { success: false as const, error: 'SAVE_FAILED' };
+
     function save(data: EventFormData, confirmOpenWaiting: boolean) {
         setServerError(null);
         startTransition(async () => {
             const values = data as unknown as EventFormValues;
             let eventSlug: string;
             if (event) {
-                const result = await updateEvent(event.id, values, locale, confirmOpenWaiting);
+                const result = await updateEvent(event.id, values, locale, confirmOpenWaiting).catch(() => SAVE_FAILED);
                 if (!result.success) {
                     setServerError(result.error);
                     // Someone new started waiting since the page loaded: refresh the count and ask again.
@@ -209,7 +212,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                 }
                 eventSlug = result.data!.eventSlug;
             } else {
-                const result = await createEvent(groupId, values, locale);
+                const result = await createEvent(groupId, values, locale).catch(() => SAVE_FAILED);
                 if (!result.success) {
                     setServerError(result.error);
                     return;

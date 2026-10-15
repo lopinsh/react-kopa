@@ -45,7 +45,8 @@ export default function LanguageEditor({ lang, onLangChange, originalLang, onOri
     const [added, setAdded] = useState<readonly TextLang[]>(() => TEXT_LANGS.filter((l) => l === originalLang || filled[l]));
     const [announcement, setAnnouncement] = useState('');
 
-    const versions = TEXT_LANGS.filter((l) => l === originalLang || filled[l] || added.includes(l));
+    // The language on screen is always a version (the editor may remount while an empty translation is open, e.g. a wizard step back).
+    const versions = TEXT_LANGS.filter((l) => l === originalLang || l === lang || filled[l] || added.includes(l));
     const addable = TEXT_LANGS.filter((l) => !versions.includes(l));
     const others = versions.filter((l) => l !== lang);
 

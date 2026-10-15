@@ -58,6 +58,8 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
                 )}
             >
                 <span lang={lang}>{LOCALE_NAMES[lang]}</span>
+                {/* A space, so the accessible name reads "Latviešu Oriģināls", not "LatviešuOriģināls". */}
+                {' '}
                 {lang === original && <Badge tone="muted">{t('original')}</Badge>}
                 <ChevronDown aria-hidden className="size-4" />
             </button>

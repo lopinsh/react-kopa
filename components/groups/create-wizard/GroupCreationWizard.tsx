@@ -161,7 +161,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
         setServerError(null);
         startTransition(async () => {
-            const result = await createGroup(data, locale);
+            // A lost connection rejects the action: a failed save, the wizard keeps its fields.
+            const result = await createGroup(data, locale).catch(() => ({ success: false as const, error: 'SAVE_FAILED' }));
             if (!result.success) {
                 setServerError(result.error);
             } else if (result.data?.slug && result.data?.l1Slug) {

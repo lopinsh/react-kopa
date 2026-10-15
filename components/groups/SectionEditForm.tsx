@@ -46,6 +46,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
 
     const text = section.texts[lang];
     const counterId = useId();
+    const titleId = useId();
     const titleOver = TEXT_LANGS.some((l) => isOverLimit(section.texts[l].title, SECTION_TITLE_MAX));
     const missing = titleMissing && lang === section.originalLang && section.texts[lang].title.trim() === '';
     const errorLangs = TEXT_LANGS.filter((l) => isOverLimit(section.texts[l].title, SECTION_TITLE_MAX) || (titleMissing && l === section.originalLang && section.texts[l].title.trim() === ''));
@@ -70,6 +71,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
         if (section.texts[section.originalLang].title.trim() === '') {
             setTitleMissing(true);
             setLang(section.originalLang);
+            requestAnimationFrame(() => document.getElementById(titleId)?.focus());
             return;
         }
         onSave(lang);
@@ -91,9 +93,10 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                 <div className="space-y-6">
                     <div className="grid gap-6 md:grid-cols-2">
                         <div>
-                            <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
+                            <label htmlFor={titleId} className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
                             <input
                                 key={`title-${lang}`}
+                                id={titleId}
                                 type="text"
                                 lang={lang}
                                 value={text.title}
