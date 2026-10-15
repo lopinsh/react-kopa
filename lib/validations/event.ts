@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { TEXT_LANGS, type TextLang } from '@/lib/translations';
+import { TEXT_LANGS, hasText, type TextLang } from '@/lib/translations';
 
 export const EVENT_TITLE_MAX = 120;
 
@@ -12,10 +12,15 @@ const eventTextSchema = z.object({
 
 export type EventText = z.infer<typeof eventTextSchema>;
 
+/** A language counts as written when any of its title, description or instructions has text. */
+export function isEventTextFilled(text: { title?: string; description?: string | null; instructions?: string | null } | undefined): boolean {
+    return !!text && ((text.title ?? '').trim() !== '' || hasText(text.description) || hasText(text.instructions));
+}
+
 export const eventSchema = z.object({
     /** The language the organiser writes in; the title is required here only. */
     originalLang: z.enum(TEXT_LANGS),
-    texts: z.object({ lv: eventTextSchema, en: eventTextSchema }),
+    texts: z.record(z.enum(TEXT_LANGS), eventTextSchema),
     startDate: z.string().or(z.date()).transform((val) => new Date(val)).refine((d) => !Number.isNaN(d.getTime()), 'START_DATE_REQUIRED'),
     endDate: z.string().or(z.date()).optional().nullable().transform((val) => val ? new Date(val) : null).refine((d) => d === null || !Number.isNaN(d.getTime()), 'END_DATE_INVALID'),
     /** The event's place (`City.slug`, AR-57). The server checks that it may be used. */

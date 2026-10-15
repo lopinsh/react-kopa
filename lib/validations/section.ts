@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { TEXT_LANGS } from '@/lib/translations';
+import { isDefaultSectionTitle } from '@/lib/constants';
+import { TEXT_LANGS, hasText } from '@/lib/translations';
 
 export const SECTION_TITLE_MAX = 120;
 
@@ -14,3 +15,8 @@ export const sectionSaveSchema = z.object({
 });
 
 export type SectionSaveValues = z.infer<typeof sectionSaveSchema>;
+
+/** A language counts as written when it has content or an owner-written (non-default) title: the seeded "About us" row is not a version. */
+export function isSectionTextFilled(text: { title: string; content: string }): boolean {
+    return hasText(text.content) || (text.title.trim() !== '' && !isDefaultSectionTitle(text.title));
+}

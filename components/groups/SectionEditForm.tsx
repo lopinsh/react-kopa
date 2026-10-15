@@ -2,17 +2,15 @@
 
 import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { Trash2, Save, Lock, Globe, Check } from 'lucide-react';
-import { clsx } from 'clsx';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
+import LanguageEditor from '@/components/ui/LanguageEditor';
+import SectionFormFooter from '@/components/groups/SectionFormFooter';
+import SectionVisibilityField from '@/components/groups/SectionVisibilityField';
 import { isOverLimit } from '@/lib/text-limit';
-import { SECTION_TITLE_MAX } from '@/lib/validations/section';
-import LangSwitch from '@/components/ui/LangSwitch';
-import UntranslatedNotice from '@/components/ui/UntranslatedNotice';
-import OriginalLangControl from '@/components/ui/OriginalLangControl';
-import { DEFAULT_SECTION_TITLES, isDefaultSectionTitle } from '@/lib/constants';
-import { hasText, type TextLang } from '@/lib/translations';
+import { SECTION_TITLE_MAX, isSectionTextFilled } from '@/lib/validations/section';
+import { DEFAULT_SECTION_TITLES } from '@/lib/constants';
+import { TEXT_LANGS, langRecord, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
 
 type SectionText = { title: string; content: string };
@@ -23,11 +21,6 @@ export type SectionDraft = EditableSection & { savedTexts: Record<TextLang, Sect
 /** True when a language has edits that are not saved yet. */
 export function isTextChanged(text: SectionText, saved: SectionText): boolean {
     return text.title !== saved.title || text.content !== saved.content;
-}
-
-/** A language counts as written when it has content or an owner-written (non-default) title. */
-export function isLangFilled(text: SectionText): boolean {
-    return hasText(text.content) || (text.title.trim() !== '' && !isDefaultSectionTitle(text.title));
 }
 
 interface Props {
@@ -43,124 +36,95 @@ interface Props {
 
 export default function SectionEditForm({ section, isPending, canDelete, justSaved, onChange, onSave, onDelete }: Props) {
     const t = useTranslations('common');
-    // Opens on the original language; a new section only has that one.
+    const tErrors = useTranslations('errors');
+    // Opens on the original language.
     const [lang, setLang] = useState<TextLang>(section.originalLang);
-    // Bumped when text is copied in, so the rich-text editor reloads its value.
+    // Bumped when text is copied in or cleared, so the rich-text editor reloads its value.
     const [rev, setRev] = useState(0);
+    // Set by a save with no title in the original language (checked here, no round trip).
+    const [titleMissing, setTitleMissing] = useState(false);
 
     const text = section.texts[lang];
-    const filled = { lv: isLangFilled(section.texts.lv), en: isLangFilled(section.texts.en) };
-    const isFirst = section.order === 0;
     const counterId = useId();
-    const titleOver = isOverLimit(text.title, SECTION_TITLE_MAX);
+    const titleOver = TEXT_LANGS.some((l) => isOverLimit(section.texts[l].title, SECTION_TITLE_MAX));
+    const missing = titleMissing && lang === section.originalLang && section.texts[lang].title.trim() === '';
+    const errorLangs = TEXT_LANGS.filter((l) => isOverLimit(section.texts[l].title, SECTION_TITLE_MAX) || (titleMissing && l === section.originalLang && section.texts[l].title.trim() === ''));
 
     const setText = (updates: Partial<SectionText>) =>
         onChange({ texts: { ...section.texts, [lang]: { ...text, ...updates } } });
 
-    const copyFromOriginal = () => {
+    const copyFromOriginal = (to: TextLang) => {
         const original = section.texts[section.originalLang];
         // A built-in title ("Par mums") is copied as its own translation ("About us").
         const defaults = Object.values(DEFAULT_SECTION_TITLES).find((d) => d[section.originalLang] === original.title.trim());
-        onChange({ texts: { ...section.texts, [lang]: { title: defaults ? defaults[lang] : original.title, content: original.content } } });
+        onChange({ texts: { ...section.texts, [to]: { title: defaults ? defaults[to] : original.title, content: original.content } } });
         setRev((r) => r + 1);
     };
 
+    const clear = (l: TextLang) => {
+        onChange({ texts: { ...section.texts, [l]: { title: '', content: '' } } });
+        setRev((r) => r + 1);
+    };
+
+    const save = () => {
+        if (section.texts[section.originalLang].title.trim() === '') {
+            setTitleMissing(true);
+            setLang(section.originalLang);
+            return;
+        }
+        onSave(lang);
+    };
+
     return (
-        <div className="space-y-6 pt-6">
-            {!section.isNew && (
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <LangSwitch value={lang} onChange={setLang} filled={filled} />
-                    <OriginalLangControl value={section.originalLang} onChange={(l) => onChange({ originalLang: l })} filled={filled} />
-                </div>
-            )}
+        <div className="pt-6">
+            <LanguageEditor
+                lang={lang}
+                onLangChange={setLang}
+                originalLang={section.originalLang}
+                onOriginalLangChange={(l) => onChange({ originalLang: l })}
+                filled={langRecord((l) => isSectionTextFilled(section.texts[l]))}
+                errorLangs={errorLangs}
+                onCopyFromOriginal={copyFromOriginal}
+                onClear={clear}
+                disabled={isPending}
+            >
+                <div className="space-y-6">
+                    <div className="grid gap-6 md:grid-cols-2">
+                        <div>
+                            <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
+                            <input
+                                key={`title-${lang}`}
+                                type="text"
+                                lang={lang}
+                                value={text.title}
+                                onChange={(e) => setText({ title: e.target.value })}
+                                placeholder={t('fieldTitlePlaceholder')}
+                                aria-describedby={counterId}
+                                aria-invalid={missing || undefined}
+                                className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
+                            />
+                            <div className="mt-1 flex items-start gap-2">
+                                {missing && <p role="alert" className="text-xs text-danger">{tErrors('TITLE_REQUIRED')}</p>}
+                                <TextCounter id={counterId} length={text.title.length} max={SECTION_TITLE_MAX} />
+                            </div>
+                        </div>
 
-            {!section.isNew && !filled[lang] && lang !== section.originalLang && (
-                <UntranslatedNotice original={section.originalLang} onCopy={copyFromOriginal} />
-            )}
-
-            <div className="grid gap-6 md:grid-cols-2">
-                <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
-                    <input
-                        type="text"
-                        lang={lang}
-                        value={text.title}
-                        onChange={(e) => setText({ title: e.target.value })}
-                        placeholder={t('fieldTitlePlaceholder')}
-                        aria-describedby={counterId}
-                        className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none"
-                    />
-                    <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={text.title.length} max={SECTION_TITLE_MAX} /></div>
-                </div>
-
-                <div>
-                    <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldVisibility')}</label>
-                    <div className="flex gap-2">
-                        {(['PUBLIC', 'MEMBERS_ONLY'] as const).map((v) => {
-                            const Icon = v === 'PUBLIC' ? Globe : Lock;
-                            const locked = isFirst && v === 'MEMBERS_ONLY';
-                            return (
-                                <button
-                                    key={v}
-                                    type="button"
-                                    disabled={locked}
-                                    onClick={() => onChange({ visibility: v })}
-                                    className={clsx(
-                                        'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all disabled:opacity-40',
-                                        section.visibility === v ? 'border-primary bg-primary/5 text-primary' : 'border-border bg-surface text-foreground-muted hover:bg-surface-elevated'
-                                    )}
-                                >
-                                    <Icon className="h-3.5 w-3.5" />
-                                    {v === 'PUBLIC' ? t('public') : t('visibilityMembersOnly')}
-                                </button>
-                            );
-                        })}
+                        <SectionVisibilityField value={section.visibility} isFirst={section.order === 0} onChange={(visibility) => onChange({ visibility })} />
                     </div>
-                    {isFirst && <span className="mt-1 inline-block text-[11px] text-foreground-muted">{t('homeVisibilityWarning')}</span>}
+
+                    <div className="space-y-2" lang={lang}>
+                        <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldContent')}</label>
+                        <RichTextEditor
+                            key={`${lang}-${rev}`}
+                            value={text.content}
+                            onChange={(val) => setText({ content: val })}
+                            placeholder={t('fieldContentPlaceholder')}
+                        />
+                    </div>
                 </div>
-            </div>
+            </LanguageEditor>
 
-            <div className="space-y-2" lang={lang}>
-                <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldContent')}</label>
-                <RichTextEditor
-                    key={`${lang}-${rev}`}
-                    value={text.content}
-                    onChange={(val) => setText({ content: val })}
-                    placeholder={t('fieldContentPlaceholder')}
-                />
-            </div>
-
-            <div className="flex items-center justify-between border-t border-border pt-4">
-                {canDelete ? (
-                    <button
-                        type="button"
-                        onClick={onDelete}
-                        disabled={isPending}
-                        className="flex items-center gap-1.5 text-xs font-medium text-danger transition-colors hover:text-danger disabled:opacity-40"
-                    >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        {t('deleteSection')}
-                    </button>
-                ) : <span />}
-
-                <div className="flex items-center gap-3">
-                    {justSaved && (
-                        <span className="flex items-center gap-1 text-xs font-semibold text-foreground-muted" role="status">
-                            <Check className="h-3.5 w-3.5" />
-                            {t('sectionSaved')}
-                        </span>
-                    )}
-                    <button
-                        type="button"
-                        onClick={() => onSave(lang)}
-                        disabled={isPending || titleOver}
-                        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 font-bold text-primary-foreground transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
-                    >
-                        <Save className="h-4 w-4" />
-                        {t('saveSection')}
-                    </button>
-                </div>
-            </div>
+            <SectionFormFooter canDelete={canDelete} isPending={isPending} saveDisabled={titleOver} justSaved={justSaved} onDelete={onDelete} onSave={save} />
         </div>
     );
 }

@@ -8,7 +8,7 @@ import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { MAX_SECTIONS, PANEL_EVENTS_MAX, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
-import { resolveSectionText, TEXT_LANGS, toTextLang, hasText, type TextLang } from '@/lib/translations';
+import { resolveSectionText, TEXT_LANGS, langRecord, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
@@ -51,7 +51,7 @@ function toEditableSection(s: { id: string; order: number; visibility: 'PUBLIC' 
         const row = s.translations.find((t) => t.lang === lang);
         return { title: row?.title ?? '', content: row?.content ?? '' };
     };
-    return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: { lv: text('lv'), en: text('en') } };
+    return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: langRecord(text) };
 }
 
 /** One row of a group's member list (see `GroupService.getMembers`). */

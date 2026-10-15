@@ -10,7 +10,7 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
-import { resolveEventText, originalEventTitle, toTextLang, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
+import { resolveEventText, originalEventTitle, toTextLang, langRecord, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { plainExcerpt } from '@/lib/text-excerpt';
@@ -384,7 +384,7 @@ export class EventService {
             const row = translations.find((t) => t.lang === lang);
             return { title: row?.title ?? '', description: row?.description ?? '', instructions: row?.instructions ?? '' };
         };
-        return { originalLang: toTextLang(originalLang), texts: { lv: text('lv'), en: text('en') } };
+        return { originalLang: toTextLang(originalLang), texts: langRecord(text) };
     }
 
     /**

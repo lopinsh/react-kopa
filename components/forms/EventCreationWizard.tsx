@@ -23,14 +23,14 @@ import {
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
-import EventLangBar from '@/components/forms/EventLangBar';
+import LanguageEditor from '@/components/ui/LanguageEditor';
 import EventPlaceFields from '@/components/forms/EventPlaceFields';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import DateTimeField from '@/components/forms/DateTimeField';
 import { addMinutesLocal, minutesBetween, nextFullHourLocal, splitLocal, toLocalValue } from '@/lib/local-datetime';
-import { toTextLang, type TextLang } from '@/lib/translations';
+import { TEXT_LANGS, firstLangWithError, langRecord, toTextLang, type TextLang } from '@/lib/translations';
 
-import { eventSchema, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
+import { eventSchema, isEventTextFilled, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent, updateEvent } from '@/actions/event-actions';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 
@@ -84,10 +84,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
         defaultValues: {
             originalLang: originalAtStart,
-            texts: event?.texts ?? {
-                lv: { title: '', description: '', instructions: '' },
-                en: { title: '', description: '', instructions: '' }
-            },
+            texts: event?.texts ?? langRecord(() => ({ title: '', description: '', instructions: '' })),
             city: event?.city || groupCity,
             isOnline: event?.isOnline ?? false,
             location: event?.location ?? '',
@@ -147,11 +144,25 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
         setValue('endDate', next, { shouldDirty: true, shouldValidate: true });
     }
     const titleError = errors.texts?.[lang]?.title;
-    // Either language over the limit holds the form back, whichever one is showing.
-    const titleOver = isOverLimit(watched.texts?.lv?.title, EVENT_TITLE_MAX) || isOverLimit(watched.texts?.en?.title, EVENT_TITLE_MAX);
+    // Any language over the limit holds the form back, whichever one is showing.
+    const overLimit = TEXT_LANGS.filter((l) => isOverLimit(watched.texts?.[l]?.title, EVENT_TITLE_MAX));
+    const titleOver = overLimit.length > 0;
+    const langsWithErrors = TEXT_LANGS.filter((l) => errors.texts?.[l] || overLimit.includes(l));
+    const titlePaths = TEXT_LANGS.map((l) => `texts.${l}.title` as const);
+
+    /** After a failed submit: a problem only in a language that is not on screen is shown (the original first), and its title takes focus. */
+    function showTextProblem() {
+        const failing = TEXT_LANGS.filter((l) => form.getFieldState(`texts.${l}.title`).error);
+        if (failing.length === 0) return;
+        const target = failing.includes(lang) ? lang : firstLangWithError(failing, getValues('originalLang'));
+        if (!target) return;
+        setStep(0);
+        setLang(target);
+        window.setTimeout(() => form.setFocus(`texts.${target}.title`), 50);
+    }
 
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['texts.lv.title', 'texts.en.title', 'startDate', 'endDate', 'city', 'location']);
+        if (s === 0) return trigger([...titlePaths, 'startDate', 'endDate', 'city', 'location']);
         if (s === 1) return trigger(['visibility', 'joinMode', 'maxParticipants']);
         return true;
     }
@@ -159,12 +170,24 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     async function nextStep() {
         const valid = await validateStep(step);
         if (valid) setStep((s) => Math.min(s + 1, 1) as StepIndex);
+        else showTextProblem();
     }
 
-    function copyFromOriginal() {
+    function copyFromOriginal(to: TextLang) {
         const { texts, originalLang } = form.getValues();
-        setValue(`texts.${lang}`, { ...texts[originalLang] }, { shouldValidate: true });
+        setValue(`texts.${to}`, { ...texts[originalLang] }, { shouldValidate: true });
         setRev((r) => r + 1);
+    }
+
+    function clearText(l: TextLang) {
+        setValue(`texts.${l}`, { title: '', description: '', instructions: '' }, { shouldValidate: true });
+        setRev((r) => r + 1);
+    }
+
+    // Which title is required just changed: re-check them all.
+    function changeOriginal(l: TextLang) {
+        setValue('originalLang', l);
+        void trigger(titlePaths);
     }
 
     function prevStep() {
@@ -206,7 +229,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
             return;
         }
         save(data, false);
-    });
+    }, showTextProblem);
     // Enter in a step-1 field moves to the next step instead of creating the event early.
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         if (step < 1) {
@@ -219,7 +242,7 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
     const onConfirmOpen = handleSubmit((data) => {
         setAskingToOpen(false);
         save(data, true);
-    });
+    }, showTextProblem);
 
     return (
         <div
@@ -251,8 +274,17 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                         </p>
                     </div>
 
-                    <EventLangBar lang={lang} onLangChange={setLang} onCopy={copyFromOriginal} />
-
+                    <LanguageEditor
+                        lang={lang}
+                        onLangChange={setLang}
+                        originalLang={watched.originalLang ?? originalAtStart}
+                        onOriginalLangChange={changeOriginal}
+                        filled={langRecord((l) => isEventTextFilled(watched.texts?.[l]))}
+                        errorLangs={langsWithErrors}
+                        onCopyFromOriginal={copyFromOriginal}
+                        onClear={clearText}
+                        disabled={isPending}
+                    >
                     {/* Step 1: Logistics */}
                     {step === 0 && (
                         <div className="space-y-4">
@@ -284,12 +316,14 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                     <AlignLeft className="h-3.5 w-3.5 text-foreground-muted" />
                                     {t('fieldDescription')}
                                 </label>
-                                <RichTextEditor
-                                    key={`description-${lang}-${rev}`}
-                                    value={watched.texts?.[lang]?.description || ''}
-                                    onChange={(val) => setValue(`texts.${lang}.description`, val)}
-                                    placeholder={t('fieldDescriptionPlaceholder')}
-                                />
+                                <div lang={lang}>
+                                    <RichTextEditor
+                                        key={`description-${lang}-${rev}`}
+                                        value={watched.texts?.[lang]?.description || ''}
+                                        onChange={(val) => setValue(`texts.${lang}.description`, val)}
+                                        placeholder={t('fieldDescriptionPlaceholder')}
+                                    />
+                                </div>
                             </div>
 
                             <div>
@@ -432,15 +466,19 @@ export default function EventCreationWizard({ groupId, groupSlug, l1Slug, event,
                                 <p className="mb-1.5 text-xs text-foreground-muted">
                                     {watched.joinMode === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
                                 </p>
-                                <RichTextEditor
-                                    key={`instructions-${lang}-${rev}`}
-                                    value={watched.texts?.[lang]?.instructions || ''}
-                                    onChange={(val) => setValue(`texts.${lang}.instructions`, val)}
-                                    placeholder={t('fieldInstructionsPlaceholder')}
-                                />
+                                <div lang={lang}>
+                                    <RichTextEditor
+                                        key={`instructions-${lang}-${rev}`}
+                                        value={watched.texts?.[lang]?.instructions || ''}
+                                        onChange={(val) => setValue(`texts.${lang}.instructions`, val)}
+                                        placeholder={t('fieldInstructionsPlaceholder')}
+                                    />
+                                </div>
                             </div>
                         </div>
                     )}
+
+                    </LanguageEditor>
 
                     {askingToOpen && opensToWaiting && (
                         <div role="alertdialog" aria-live="assertive" className="mt-4 space-y-3 rounded-xl border border-primary/40 bg-primary/10 p-4">
