@@ -58,6 +58,8 @@ export function useSearch({ active, initialWord, initialCities, initialTheme, ki
                 const body = (await res.json()) as ActionResponse<SearchResults>;
                 if (controller.signal.aborted) return;
                 if (body.success && body.data) {
+                    // A page category the search does not know (a sub-category slug, a stale link) is dropped, so no hidden theme is left to clear.
+                    if (theme && body.data.theme !== theme) setTheme(null);
                     setResults(reviveSearchResults(body.data));
                     setError(false);
                 } else {
