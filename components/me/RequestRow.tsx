@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
@@ -22,11 +22,15 @@ export default function RequestRow({ request }: { request: MyRequest }) {
     const { success, error: toastError } = useToast();
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
+    // A second click in the same moment must not send a second request (the state only catches up after a render).
+    const sent = useRef(false);
 
     const withdraw = () => {
-        if (isPending) return;
+        if (isPending || sent.current) return;
+        sent.current = true;
         startTransition(async () => {
             const res = await cancelJoinRequest(request.groupId);
+            sent.current = false;
             if (res.success) {
                 setOpen(false);
                 success(tGroup('requestWithdrawn'));

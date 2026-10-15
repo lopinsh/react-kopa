@@ -132,7 +132,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                         {dbUser.recentGroups.length > 0 ? (
                             <GroupList groups={dbUser.recentGroups} nextMeetings={nextMeetings} />
                         ) : (
-                            <div className="rounded-3xl border border-dashed border-border py-12 text-center bg-surface">
+                            <div className="rounded-3xl border border-dashed border-border py-8 text-center bg-surface">
                                 <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />
                                 <p className="text-sm text-foreground-muted italic">{t('noJoinedGroups')}</p>
                             </div>

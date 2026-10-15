@@ -35,7 +35,7 @@ export default async function MyGroupsSections({ overview }: { overview: MyGroup
         );
     }
     return (
-        <div data-ui={UI.myGroupsSections} className="grid gap-4">
+        <div data-ui={UI.myGroupsSections} className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-4">
             <SectionMenu sections={sections.map(({ key, label }) => ({ key, label }))} />
             {sections.map(({ key, label, body }) => (
                 <section key={key} id={key} aria-labelledby={`${key}-title`} className="scroll-mt-28 border-t border-border pt-4 first-of-type:border-t-0 first-of-type:pt-0">
