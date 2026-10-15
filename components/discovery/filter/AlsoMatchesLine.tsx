@@ -17,7 +17,6 @@ type Match = DiscoveryState['alsoMatches'][number];
 
 const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] font-medium text-foreground ring-border hover:bg-tint';
 
-/** What a chip does (AR-43): the theme or Veids in place of the word; place (and on Pasākumi the dates) stay. */
 function Dot({ match }: { match: Match }) {
     return match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null;
 }
@@ -47,6 +46,7 @@ export default function AlsoMatchesLine() {
     const { params } = useDiscoveryNav();
     const { bindHost, ...pop } = usePopover();
     const picked = useRef<string | null>(null);
+    // A tap chooses the theme or Veids in place of the word; place (and on Pasākumi the dates) stay (AR-43).
     const hrefOf = (m: Match) => discoveryHref(params, m.kind === 'theme' ? { q: '', category: m.slug, tags: [] } : { q: '', category: m.l1Slug, tags: [m.slug] });
     const { row, probe, fit } = useChipFit(matches.map((m) => m.title).join('|'), matches.length, 0, false);
 

@@ -36,8 +36,7 @@ export default function HeaderSearchField({ className }: { className?: string })
     // The word and places of discovery's own list; any other page starts empty, on Visur.
     const page = parseDiscoveryParams(searchParams);
     const onDiscovery = pathname === '/';
-    const initialWord = onDiscovery ? page.q : '';
-    const initialCities = onDiscovery ? page.cities : [];
+    const [initialWord, initialCities] = onDiscovery ? [page.q, page.cities] : ['', []];
     const search = useSearch({ active: open, initialWord, initialCities, kind: onDiscovery ? page.kind : 'groups' });
 
     // A new address (a result opened, "Rādīt visus rezultātus", a link elsewhere) closes the search and starts from the new page's word.
