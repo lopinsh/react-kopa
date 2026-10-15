@@ -4,7 +4,7 @@
 > Release work (R1a–R12) follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
 > Finished work is not kept here: it moves to `docs/archive/` (not required reading; search it for the history of a decision).
 
-**Last updated:** 2026-10-15 (R1a–R8, the quick batch, R6b and C2 live; C4 built, in review; next R9a).
+**Last updated:** 2026-10-15 (R1a–R8, the quick batch, R6b, C2 and C4 live; next R9a).
 
 ---
 
@@ -13,7 +13,7 @@
 - Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.1`), built and released as R1a–R12 one by one.
 - **Live:** R1a Identity, R1b Dizains, R2a Header/menus/own-area frame, R2b Behaviour pieces, R3a Group frame, R3b Sazināties/pending/"…", R4 Discovery data, R5a Filters/drawer/cards, R5b Events by day, R6 Panels, R7 Search (with the Session A owner-notes batch), R8 Own area.
 - [x] **R8 Own area live** (`2f4b554`..`3d1165c`, review fixes `605807b`, `3d1165c`): Manas grupas sections, Ziņas in the frame, Paziņojumi page, messages and bell as click dropdowns, the "new" count, groups you belong to open their full page; migration `add_user_my_groups_seen_at`; Prisma `relationJoins` preview on. Notes cmv9ajgmd, cmv9aist6, cmv9aom44, cmv9ak7k4, cmv9al64n, cmv9amjft, cmv9ahbt5 done.
-- **Next:** C4 review and push, then R9a, R9b, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
+- **Next:** R9a, then R9b, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
 - Workflow per release: Opus spec → Sonnet build → Opus review (independent review for migrations and R4-like data work) → reviewer pushes.
 - Review (2026-10-15): group panel (lookingFor, no-next-meeting line checked LV/EN at 375 and 1280) and search theme fixes verified; a page category the search does not know is now dropped.
 
@@ -35,7 +35,7 @@ Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisi
 - [x] **Accent-insensitive search** (5ac1d36, 81f6532; the "par" chip was dropped because chips need a count above zero and the counts used accent-sensitive ILIKE) (cmv9a8pkg, promoted from Parked ideas): theme chips already fold (`lib/search-topics.ts`), so first reproduce why "par" showed no "Pārgājieni" chip; group results use Postgres `ILIKE` → Postgres `unaccent` extension (migration `add_unaccent_extension`, expand only).
 - [x] **R6b** centred overlay growing from the card (C1) (b7a7774 placement, c2c1dc4 grow; View Transitions driven by hand, 560 px overlay from 768 px; review fix 5eeb69a: search results are never grown; pushed, live).
 - [x] **C2** card bottom line = latest activity (next event › public announcement › tagline › nothing); tagline always in panel and group header. `cardActivities` (lib/services/card-activity.ts) holds the one public-announcement filter R9b plugs into; panel drops "no meeting" line; tagline in banner from md and on Informācija on phones. (`0310185`, review `b50e650`; pushed, live)
-- [x] **C4** `LanguageEditor` (`bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard; built, in review, not pushed): one control for owner text in every language on the event form, group sections (also before the first save) and the create-group wizard ("Par mums" per language); notes cmv9az6sn, cmv9b0tth, cmv9b1v6h, cmv9bemab await the reviewer's `feedback done`. Spec `docs/development/specs/C4.md`.
+- [x] **C4** `LanguageEditor` (`bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard, `5bbc026` docs; review `787d698`: a lost connection mid-save keeps the form instead of the error page, screen-reader names; pushed, live): one control for owner text in every language on the event form, group sections (also before the first save) and the create-group wizard ("Par mums" per language); notes cmv9az6sn, cmv9b0tth, cmv9b1v6h, cmv9bemab done. Spec `docs/development/specs/C4.md`.
 
 ## Waiting on the owner
 
