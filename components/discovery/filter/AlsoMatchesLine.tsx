@@ -17,9 +17,7 @@ type Match = DiscoveryState['alsoMatches'][number];
 
 const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] font-medium text-foreground ring-border hover:bg-tint';
 
-function Dot({ match }: { match: Match }) {
-    return match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null;
-}
+const Dot = ({ match }: { match: Match }) => (match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null);
 
 function MatchChip({ match, href }: { match: Match; href?: string }) {
     const body = (
@@ -54,12 +52,10 @@ export default function AlsoMatchesLine() {
     const hidden = matches.length - fit;
     // The phone sheet closes as by Back first, then the pick is pushed (a push before that would be undone when the sheet takes its entry off).
     const close = () => {
-        const href = picked.current;
-        picked.current = null;
+        const href = picked.current; picked.current = null;
         pop.setOpen(false);
         if (href) router.push(href, { scroll: false });
     };
-    const more = <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>;
 
     return (
         <div data-ui={UI.alsoMatches} role="group" aria-label={t('alsoMatchesTitle')} className="-mt-1.5 mb-3 flex min-w-0 items-center gap-2 md:-mt-2 md:mb-4">
@@ -105,7 +101,7 @@ export default function AlsoMatchesLine() {
                 )}
                 <div ref={probe} inert aria-hidden="true" className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5 whitespace-nowrap">
                     {matches.map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} />)}
-                    {more}
+                    <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>
                 </div>
             </div>
         </div>
