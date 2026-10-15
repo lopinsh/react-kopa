@@ -456,8 +456,8 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R3b Sazināties, pending, "…" | pushed, live | [specs/R3b.md](specs/R3b.md) | `f68d88c`..`bd69362` (Opus review fix `31c4020` share toast without "!") |
 | R4 Discovery data | pushed, live | [specs/R4.md](specs/R4.md) | `5d5186f`..`c6adace` (Opus review fixes `2a8ad05` cache refresh on city reject and group tag changes, `a2e76d9` counts see every L1 a group matches) |
 | R5a Discovery filters and cards | pushed, live | [specs/R5a.md](specs/R5a.md) | `902d93a`..`a9523b6` (Opus review fixes `6efb0c1` quick ticks and Veids fit, `60ee81f` suggestion sign-in and name limit, `a9523b6` level-3 links, folded rail, groups cache key) |
-| R5b Events by day | reviewed 14 Oct, ready to push | [specs/R5b.md](specs/R5b.md) | `33b21f0`..`3f998cb` (Opus review fixes `749cb98` far-future date links and calendar footer hydration, `39caa1c` tagline `lang`, `3f998cb` UI elements calendar hydration) |
-| R6 Panels | reviewed 14 Oct, ready to push | [specs/R6.md](specs/R6.md) | `99f0b74`..`627ea7e` (routes `a02e690`; Opus review fixes `34acffa` sign-in resume of the event step, `e1595b0` panel focus after a step, `916f24a` footer under a panel, `8585c91` part tab locale and admin save, `627ea7e` comment) |
+| R5b Events by day | pushed, live | [specs/R5b.md](specs/R5b.md) | `33b21f0`..`3f998cb` (Opus review fixes `749cb98` far-future date links and calendar footer hydration, `39caa1c` tagline `lang`, `3f998cb` UI elements calendar hydration) |
+| R6 Panels | pushed, live | [specs/R6.md](specs/R6.md) | `99f0b74`..`627ea7e` (routes `a02e690`; Opus review fixes `34acffa` sign-in resume of the event step, `e1595b0` panel focus after a step, `916f24a` footer under a panel, `8585c91` part tab locale and admin save, `627ea7e` comment) |
 | R7 Search | not started | | |
 | R8 Own area | not started | | |
 | R9a Event page and form | not started | | |
