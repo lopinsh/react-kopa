@@ -56,7 +56,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
                 href={`/${event.category.l1Slug}/group/${event.group.slug}/events/${event.slug}`}
                 scroll={false}
                 replace={replace}
-                data-opens-panel
+                data-opens-panel={replace ? undefined : true}
                 {...(searchItem ? { 'data-search-item': true } : {})}
                 lang={langAttr(event.titleLang, locale)}
                 className="truncate font-semibold text-foreground after:absolute after:inset-0"
@@ -73,7 +73,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
             )}
             {showGroup && (
                 <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-xs text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} data-opens-panel className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} data-opens-panel={replace ? undefined : true} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>

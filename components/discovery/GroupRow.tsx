@@ -51,7 +51,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                 <span className="line-clamp-2 block font-heading text-[15px] font-semibold leading-snug text-foreground">
                     {fullPage
                         ? <a href={`/${locale}${path}`} data-row-link className={NAME_LINK} {...searchAttr}>{name}</a>
-                        : <Link href={path} scroll={false} replace={replace} data-row-link data-opens-panel className={NAME_LINK} {...searchAttr}>{name}</Link>}
+                        : <Link href={path} scroll={false} replace={replace} data-row-link data-opens-panel={replace ? undefined : true} className={NAME_LINK} {...searchAttr}>{name}</Link>}
                 </span>
                 <span className="mt-0.5 flex items-center text-xs text-foreground-muted">
                     <span aria-hidden="true" className="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]" />
