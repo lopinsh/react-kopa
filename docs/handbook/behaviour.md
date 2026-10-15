@@ -36,6 +36,12 @@ The same situation behaves the same way on every screen.
 - A field with a limit shows a count under its right end: quiet, then the warning colour in the last tenth, then red with how many are too many.
 - Past the limit the send button waits; the text is never cut.
 
+## Text in several languages
+
+- Owner text is written in one language, the original, and can have translations. One language is on screen at a time, chosen in "Valoda: Latviešu ▾"; "+ Pievienot tulkojumu" adds one.
+- Switching never loses text: every version is kept until you save. Only the original needs the required fields.
+- An empty translation is not saved. Visitors without their language see the original with its language label. Nothing is machine-translated.
+
 ## Empty
 
 - An outline icon, one sentence, at most one action.

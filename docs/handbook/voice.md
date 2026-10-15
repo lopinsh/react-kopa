@@ -34,6 +34,8 @@ One word per thing, everywhere.
 | A group's pages | Informācija, Jaunumi, Pasākumi, Biedri, Iestatījumi | Information, Announcements, Events, Members, Settings |
 | Parts of Biedri | Biedri / Pieteikumi | Members / Requests |
 | Parts of Pasākumi | Gaidāmie / Pagājušie | Upcoming / Past |
+| The language a text was first written in | Oriģināls | Original |
+| Adding a language version | Pievienot tulkojumu | Add a translation |
 | A group moderator | the tag "Mod"; in lists and menus "Moderators" | "Mod"; "Moderator" |
 | A private group | Tikai biedriem | Members only |
 | An event that happens online | Tiešsaistē | Online |

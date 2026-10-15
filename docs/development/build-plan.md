@@ -300,7 +300,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Data:** none.
 - **i18n:** `event`, `eventWizard`.
 - **Risks:** time fields (DST, viewer zone; Opus review); members-only gate unchanged.
-- **Owner notes 15 Oct (fold in):** "Svarīga informācija" in red becomes a normal section "Praktiskā informācija" styled like "Par pasākumu", with a small lock line "redzams tikai dalībniekiem" (cmv9b6daz); "Visi pasākumi" moves up as a breadcrumb next to the group name, no gap between image and header (cmv9b80zl); the form's "Adrese" becomes "Kur?" with a hint that any place works (cmv9b418s); language input uses the shared `LanguageEditor` (see "Cross-cutting: owner decisions 15 Oct").
+- **Owner notes 15 Oct (fold in):** "Svarīga informācija" in red becomes a normal section "Praktiskā informācija" styled like "Par pasākumu", with a small lock line "redzams tikai dalībniekiem" (cmv9b6daz); "Visi pasākumi" moves up as a breadcrumb next to the group name, no gap between image and header (cmv9b80zl); the form's "Adrese" becomes "Kur?" with a hint that any place works (cmv9b418s); language input uses the shared `LanguageEditor` (wired in C4; moved with the split).
 - **Size:** L.
 
 ### R9b · Biedri, Jaunumi, settings, profiles (L)
@@ -312,7 +312,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Data:** none.
 - **i18n:** `group`, `groupSettings`, `profile`.
 - **Risks:** role changes and removal keep their service permission checks; the browser `confirm()` in member removal goes (B8).
-- **Owner notes 15 Oct (fold in):** profiles per the changed OD-26 (cmv9aq31h, cmv9anua9); Informācija is one page: sections stacked, the tabs become jump links with scroll-spy; Pasākumi and Biedri stay their own pages (cmv9bb8ci); Pasākumi gets a "Pagājušie" list, discovery never shows past events (cmv9at6co); Jaunumi: newest announcement on the group landing page, each announcement public or members-only (migration `add_announcement_visibility`, expand only), board restyled (cmv9avg8o); settings: "Ko meklējam?" label becomes "Sauklis" / "Tagline" (cmv9bbzze), a whole section row opens it and a chevron ▾/▴ shows open/closed (cmv9bd0na, cmv9bdszj); language input uses `LanguageEditor` (cmv9bemab); group header uses the event-page image format (see cross-cutting).
+- **Owner notes 15 Oct (fold in):** profiles per the changed OD-26 (cmv9aq31h, cmv9anua9); Informācija is one page: sections stacked, the tabs become jump links with scroll-spy; Pasākumi and Biedri stay their own pages (cmv9bb8ci); Pasākumi gets a "Pagājušie" list, discovery never shows past events (cmv9at6co); Jaunumi: newest announcement on the group landing page, each announcement public or members-only (migration `add_announcement_visibility`, expand only), board restyled (cmv9avg8o); settings: "Ko meklējam?" label becomes "Sauklis" / "Tagline" (cmv9bbzze), a whole section row opens it and a chevron ▾/▴ shows open/closed (cmv9bd0na, cmv9bdszj); language input uses `LanguageEditor` (wired in C4; moved with the split) (cmv9bemab); group header uses the event-page image format (see cross-cutting).
 - **Size:** L (split again if the spec shows settings + profiles exceed one session: settings and profiles as R9c).
 
 ### R10 · Citur and the unknown place (S/M)
@@ -474,6 +474,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R7 Search | pushed, live | [specs/R7.md](specs/R7.md) | `0c242ed`..`051acf6` (drawer `0c242ed`, data `f14509f`, shared pieces `fbe986c`, search `33fbcac`, discovery `4368d94`, docs `8d9b345`, trim `3618000`; review fixes: blocked storage `fbaec42`, focus reopening the search `6464315`, size limits `5d624d2`, show-all bar `8403899`, specimen hydration `051acf6`) |
 | R8 Own area | pushed, live | [specs/R8.md](specs/R8.md) | `2f4b554`..`3d1165c` (frame `2f4b554`, data `699db3f`, overview `c7ced99` (7 queries; `relationJoins` preview, join for every query, same data checked), full page `30bc2f5`, Manas grupas `c731303`, dropdowns and Paziņojumi `7b3aa5a`, docs `0cf8bbb`, fixes `eda583b`; Opus review fixes `605807b` five bell rows after folding and arrow-key tabs, `3d1165c` section menu sticky and marking in the shell's scroller) |
 | R6b Centred overlay from the card (C1) | pushed, live | [specs/R6b.md](specs/R6b.md) | `b7a7774`..`5eeb69a` (placement `b7a7774`, grow `c2c1dc4`, docs `051612a`; review fix `5eeb69a`: links that replace the history entry, the search's results, are never taken over by the grow) |
+| C4 LanguageEditor | built, in review | [specs/C4.md](specs/C4.md) | `bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard, docs commit follows |
 | R9a Event page and form | not started | | |
 | R9b Biedri, Jaunumi, settings, profiles | not started | | |
 | R10 Citur | not started | | |
