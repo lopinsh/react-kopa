@@ -52,7 +52,7 @@ export default function DayStrip({ window: w, params, counts }: Props) {
                         );
                         const look = clsx(
                             'flex min-h-11 flex-col items-center justify-center rounded-xl py-1',
-                            chosen ? 'bg-primary text-primary-foreground' : clsx(weekdayIndex(day) >= 5 && 'bg-tint', day === w.today && 'bg-background ring-[1.5px] ring-inset ring-border')
+                            chosen ? 'bg-primary text-primary-foreground' : clsx(weekdayIndex(day) >= 5 && 'bg-tint/40', day === w.today && 'bg-background ring-[1.5px] ring-inset ring-border')
                         );
                         if (past) return <span key={day} aria-disabled="true" aria-label={label} className={clsx(look, 'opacity-45')}>{body}</span>;
                         const href = inChoice

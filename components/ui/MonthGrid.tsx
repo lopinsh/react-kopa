@@ -83,11 +83,11 @@ export default function MonthGrid({ month, onMonth, today, selected, isDisabled,
             </div>
             <div ref={gridRef} role="grid" className="grid grid-cols-7 text-center">
                 {WEEKDAYS.map((w, i) => (
-                    <span key={w} role="columnheader" className={clsx('py-1 text-[11px] font-semibold', i >= 5 ? 'bg-tint text-foreground' : 'text-foreground-muted')}>{t(w)}</span>
+                    <span key={w} role="columnheader" className={clsx('py-1 text-[11px] font-semibold', i >= 5 ? 'bg-tint/40 text-foreground' : 'text-foreground-muted')}>{t(w)}</span>
                 ))}
                 {cells.map((day, i) => {
                     const weekend = i % 7 >= 5;
-                    if (!day) return <span key={i} className={weekend ? 'bg-tint' : undefined} />;
+                    if (!day) return <span key={i} className={weekend ? 'bg-tint/40' : undefined} />;
                     const start = selected?.from === day, end = selected?.to === day;
                     const between = !!selected && day > selected.from && day < selected.to;
                     const off = !!isDisabled?.(day);
@@ -104,7 +104,7 @@ export default function MonthGrid({ month, onMonth, today, selected, isDisabled,
                             onClick={() => { if (!off) onPick(day); }}
                             className={clsx(
                                 'h-9 text-sm tabular-nums',
-                                start || end ? 'bg-primary font-semibold text-primary-foreground' : between ? BAND : clsx(weekend && 'bg-tint', !off && 'hover:bg-surface-elevated'),
+                                start || end ? 'bg-primary font-semibold text-primary-foreground' : between ? BAND : clsx(weekend && 'bg-tint/40', !off && 'hover:bg-surface-elevated'),
                                 start && end ? 'rounded-lg' : start ? 'rounded-l-lg' : end ? 'rounded-r-lg' : !between && 'rounded-lg',
                                 off && 'cursor-default opacity-55',
                                 day === today && 'font-bold underline underline-offset-4'
