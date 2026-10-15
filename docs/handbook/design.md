@@ -16,6 +16,8 @@ Five layouts cover every screen. A new screen picks one of them.
 
 **Fluid between the drawings.** The drawings are made at 375 and 1280 px; they show proportions, not fixed widths. Every layout is fluid between and beyond them: bars (header, footer, bottom bar, person header) span the full width with the brand at the left edge and the tools at the right edge, the search field grows in the middle up to `max-w-2xl`; a page's content sits in one centred container (`max-w-6xl` for frames and grids, the layout's reading width for D and F), never stuck to the left on a wide screen. Fixed pixel widths copied from a drawing are not used; fixed widths are kept only for side columns (a 260–280 px sidebar, the 190 px own-area menu), dialog sizes and small parts. Every screen is checked at 768, 1024, 1440 and 1920 px as well as 375 and 1280.
 
+**Content starts right under the bars.** A page's first line sits at the frame's top spacing (12 px on phones, 18 px from 768 px), level with the pages menu: the layout owns that spacing, a page never adds its own top margin, container or card around itself. The same for group pages, your own area and admin.
+
 Rule: the group's own content starts near the top. The banner carries the at-a-glance signals (name, category, city, members) and the same "Sazināties" for visitors on every group page.
 
 ## Every screen and its layout

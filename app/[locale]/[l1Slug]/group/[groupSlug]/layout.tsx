@@ -4,6 +4,7 @@ import { auth } from '@/lib/auth';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import GroupBanner from '@/components/groups/frame/GroupBanner';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
+import FrameColumns from '@/components/ui/FrameColumns';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { toGroupState } from '@/components/providers/to-group-state';
 
@@ -34,10 +35,7 @@ export default async function GroupLayout({
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
             <GroupBanner />
-            <div className="mx-auto max-w-6xl px-3 pb-6 pt-3 md:grid md:grid-cols-[190px_minmax(0,1fr)] md:gap-[22px] md:px-[22px] md:pt-[18px]">
-                <GroupPagesNav variant="side" />
-                <div className="grid min-w-0 content-start gap-3">{children}</div>
-            </div>
+            <FrameColumns nav={<GroupPagesNav variant="side" />}>{children}</FrameColumns>
         </GroupProvider>
     );
 }

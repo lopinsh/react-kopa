@@ -6,7 +6,7 @@ export default async function MeLoading() {
     const t = await getTranslations('common');
     return (
         <LoadingRegion label={t('loading')}>
-            <div className="px-4 py-6 md:px-0">
+            <div>
                 <SkeletonBlock className="mb-4 h-7 w-56" />
                 {Array.from({ length: 4 }, (_, i) => <SkeletonRow key={i} />)}
             </div>

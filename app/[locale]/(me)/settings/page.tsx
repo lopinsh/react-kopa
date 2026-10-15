@@ -20,7 +20,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
     const t = await getTranslations('profile.settings');
 
     return (
-        <div className="grid max-w-xl gap-4 px-4 py-4 md:px-0 md:pt-0">
+        <div className="grid max-w-xl gap-4">
             {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
             <h1 className="font-heading text-xl font-semibold md:sr-only">{t('title')}</h1>
             <AppearanceSetting />

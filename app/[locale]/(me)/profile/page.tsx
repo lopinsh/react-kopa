@@ -42,9 +42,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
     const avatarSrc = avatarUrl(dbUser);
 
     return (
-        <div className="container mx-auto px-4 py-12 max-w-5xl">
+        <div>
             {/* Header Section */}
-            <div className="mb-12 flex flex-col items-center md:flex-row md:items-start gap-8 bg-surface-elevated/30 p-8 rounded-[3rem] border border-border">
+            <div className="mb-8 flex flex-col items-center md:flex-row md:items-start gap-8 bg-surface-elevated/30 p-8 rounded-[3rem] border border-border">
                 <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface shadow-xl relative bg-primary/10">
                     <img src={avatarSrc} alt={dbUser.name || t('anonymousUser')} className="h-full w-full object-cover" />
                 </div>
