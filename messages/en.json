@@ -503,7 +503,9 @@
     "saveChangesDesc": "Changes show up right away.",
     "sections": {
       "count": "{count} / 6 Sections",
-      "add": "Add new section"
+      "add": "Add new section",
+      "moveUp": "Move up",
+      "moveDown": "Move down"
     },
     "sendMessage": "Send Message",
     "specialInstructions": "Special Instructions",
@@ -1334,7 +1336,7 @@
     "citySuggestAdd": "Suggest",
     "citySuggestCancel": "Cancel",
     "citySuggestedHint": "“{name}” is waiting for a site admin to approve it. Your group keeps it meanwhile.",
-    "fieldLookingFor": "What are we looking for?",
+    "fieldLookingFor": "Tagline",
     "fieldLookingForPlaceholder": "e.g. Looking for a drummer",
     "fieldLookingForHint": "One short line about what the group is looking for right now.",
     "LOOKING_FOR_TOO_LONG": "The text cannot exceed 60 characters."
@@ -1498,7 +1500,8 @@
     "nextMonth": "Next month",
     "invalidDate": "Enter the date as day.month.year, e.g. 25.12.2026.",
     "timeZoneHint": "Times are in your time zone ({zone}).",
-    "fieldLocation": "Address",
+    "fieldLocation": "Where?",
+    "fieldLocationHint": "An address, a place or, say, \"at Oskars' house\".",
     "fieldLocationPlaceholder": "Street, building or meeting point",
     "fieldMaxParticipants": "About how many people?",
     "fieldMaxParticipantsPlaceholder": "Optional — just to give an idea",

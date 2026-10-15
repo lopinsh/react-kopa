@@ -508,7 +508,9 @@
     "saveChangesDesc": "Izmaiņas būs redzamas uzreiz.",
     "sections": {
       "count": "{count} / 6 sadaļas",
-      "add": "Pievienot sadaļu"
+      "add": "Pievienot sadaļu",
+      "moveUp": "Pārvietot augšup",
+      "moveDown": "Pārvietot lejup"
     },
     "sendMessage": "Sūtīt ziņu",
     "specialInstructions": "Īpašas instrukcijas",
@@ -1334,7 +1336,7 @@
     "citySuggestAdd": "Ieteikt",
     "citySuggestCancel": "Atcelt",
     "citySuggestedHint": "„{name}” gaida vietnes administratora apstiprinājumu. Grupa to līdz tam saglabā.",
-    "fieldLookingFor": "Ko meklējam?",
+    "fieldLookingFor": "Sauklis",
     "fieldLookingForPlaceholder": "piem., Meklējam bundzinieku",
     "fieldLookingForHint": "Viens īss teikums par to, ko grupa šobrīd meklē.",
     "LOOKING_FOR_TOO_LONG": "Teksts nedrīkst pārsniegt 60 rakstzīmes."
@@ -1498,7 +1500,8 @@
     "nextMonth": "Nākamais mēnesis",
     "invalidDate": "Ievadi datumu kā diena.mēnesis.gads, piemēram, 25.12.2026.",
     "timeZoneHint": "Laiki ir tavā laika joslā ({zone}).",
-    "fieldLocation": "Adrese",
+    "fieldLocation": "Kur?",
+    "fieldLocationHint": "Var būt adrese, vieta vai, piemēram, „pie Oskara mājās”.",
     "fieldLocationPlaceholder": "Iela, māja vai vieta, kur satiekamies",
     "fieldMaxParticipants": "Apmēram cik cilvēku?",
     "fieldMaxParticipantsPlaceholder": "Nav obligāti — tikai lai dotu priekšstatu",

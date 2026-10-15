@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Plus, ChevronUp, ChevronDown, GripVertical, Lock, Settings2 } from 'lucide-react';
+import { Plus, ArrowUp, ArrowDown, ChevronUp, ChevronDown, GripVertical, Lock } from 'lucide-react';
 import { clsx } from 'clsx';
 import { upsertSectionAction, reorderSectionsAction, deleteSectionAction } from '@/actions/group-actions';
 import { useRouter } from '@/i18n/routing';
@@ -201,14 +201,25 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                     : 'border-border bg-surface hover:border-primary/30'
                             )}
                         >
-                            <div className="flex items-center gap-4 p-4 md:p-6">
+                            <div className="relative flex items-center gap-4 p-4 has-[button[data-row-toggle]:focus-visible]:outline has-[button[data-row-toggle]:focus-visible]:outline-2 has-[button[data-row-toggle]:focus-visible]:-outline-offset-2 has-[button[data-row-toggle]:focus-visible]:outline-primary md:p-6">
                                 <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted">
                                     {index === 0 ? <span className="text-xs font-semibold">0</span> : <GripVertical className="h-4 w-4" />}
                                 </div>
 
                                 <div className="min-w-0 flex-1">
                                     <div className="flex items-center gap-2">
-                                        <h3 lang={section.originalLang} className="font-semibold text-foreground">{original.title}</h3>
+                                        <h3 lang={section.originalLang} className="font-semibold text-foreground">
+                                            {/* The whole row is the button: the stretched overlay opens and closes the section; the move buttons sit above it. */}
+                                            <button
+                                                type="button"
+                                                data-row-toggle
+                                                aria-expanded={isEditing}
+                                                onClick={() => setEditingId(isEditing ? null : section.id)}
+                                                className="cursor-pointer text-left outline-none after:absolute after:inset-0"
+                                            >
+                                                {original.title}
+                                            </button>
+                                        </h3>
                                         {section.visibility === 'MEMBERS_ONLY' && (
                                             <span className="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
                                                 <Lock className="h-2.5 w-2.5" />
@@ -228,29 +239,26 @@ export default function GroupSectionEditor({ groupId, initialSections, locale }:
                                                 type="button"
                                                 onClick={() => handleMove(index, 'up')}
                                                 disabled={index === 1 || isPending}
-                                                className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
+                                                aria-label={t('sections.moveUp')}
+                                                className="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
                                             >
-                                                <ChevronUp className="h-4 w-4" />
+                                                <ArrowUp aria-hidden="true" className="h-4 w-4" />
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={() => handleMove(index, 'down')}
                                                 disabled={index === sections.length - 1 || isPending}
-                                                className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
+                                                aria-label={t('sections.moveDown')}
+                                                className="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
                                             >
-                                                <ChevronDown className="h-4 w-4" />
+                                                <ArrowDown aria-hidden="true" className="h-4 w-4" />
                                             </button>
                                         </>
                                     )}
 
-                                    <button
-                                        type="button"
-                                        onClick={() => setEditingId(isEditing ? null : section.id)}
-                                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-primary"
-                                        title={isEditing ? c_common('done') : c_common('edit')}
-                                    >
-                                        <Settings2 className="h-4 w-4" />
-                                    </button>
+                                    <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted group-hover:text-primary">
+                                        {isEditing ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                                    </span>
                                 </div>
                             </div>
 

@@ -37,7 +37,7 @@ One word per thing, everywhere.
 | A group moderator | the tag "Mod"; in lists and menus "Moderators" | "Mod"; "Moderator" |
 | A private group | Tikai biedriem | Members only |
 | An event that happens online | Tiešsaistē | Online |
-| What a group is looking for right now | Ko meklējam? | What are we looking for? |
+| What a group is looking for right now | Sauklis | Tagline |
 | A sub-category | Veids | Type |
 | Every place | Visur | Everywhere |
 | Load the next 24 | Rādīt vēl | Show more |

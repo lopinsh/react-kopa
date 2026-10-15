@@ -86,6 +86,7 @@ export default function EventPlaceFields() {
                     placeholder={isOnline ? t('fieldLinkPlaceholder') : t('fieldLocationPlaceholder')}
                     className={clsx(INPUT, errors.location ? 'border-danger/40' : 'border-border focus:border-primary')}
                 />
+                {!isOnline && !errors.location && <p className="mt-1 text-xs text-foreground-muted">{t('fieldLocationHint')}</p>}
                 {errors.location && <p className="mt-1 text-xs text-danger">{t(errors.location.message as 'LOCATION_REQUIRED')}</p>}
             </div>
         </>
