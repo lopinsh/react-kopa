@@ -16,7 +16,7 @@ import type { MyGroup, MyGroupsOverview, MyRequest, NewsItem } from '@/lib/types
 const DAY_MS = 86_400_000;
 
 const GOING = { in: ['GOING', 'PENDING', 'WAITLISTED'] as Array<'GOING' | 'PENDING' | 'WAITLISTED'> };
-/** One SQL statement per list, nested relations joined: without it every nested level (category chain, tags, translations) is a query of its own. */
+/** One SQL statement per list, nested relations joined (the default with the `relationJoins` preview; said here so these lists keep it). */
 const JOIN = { relationLoadStrategy: 'join' } as const;
 
 function groupNameOf(message: string): string {

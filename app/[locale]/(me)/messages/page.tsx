@@ -1,8 +1,16 @@
+import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
-import { getInbox } from '@/actions/message-actions';
+import { getTranslations } from 'next-intl/server';
+import { MessageService } from '@/lib/services/message.service';
 import MessagesLayout from '@/components/messages/MessagesLayout';
 import { signInUrl } from '@/lib/auth-redirect';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+    const { locale } = await params;
+    const t = await getTranslations({ locale, namespace: 'messages' });
+    return { title: t('title') };
+}
 
 export default async function MessagesPage({ params, searchParams }: {
     params: Promise<{ locale: string }>;
@@ -17,8 +25,7 @@ export default async function MessagesPage({ params, searchParams }: {
         redirect(signInUrl(locale, c ? `/messages?c=${encodeURIComponent(c)}` : '/messages'));
     }
 
-    const inbox = await getInbox(locale);
-    const conversations = inbox.success ? (inbox.data ?? []) : [];
+    const conversations = await MessageService.listInbox(session.user.id, locale);
 
     return (
         <MessagesLayout

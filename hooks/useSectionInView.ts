@@ -1,38 +1,47 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type RefObject } from 'react';
 
-/** Space the sticky bars (header and the section menu) take at the top: a section counts as "in view" from under them. */
-const BARS_PX = 112;
+/** The nearest ancestor that scrolls (the app shell scrolls its content area, not the window). */
+function scrollerOf(el: HTMLElement | null): HTMLElement {
+    for (let e = el?.parentElement ?? null; e; e = e.parentElement) {
+        const y = getComputedStyle(e).overflowY;
+        if ((y === 'auto' || y === 'scroll') && e.scrollHeight > e.clientHeight) return e;
+    }
+    return document.scrollingElement as HTMLElement;
+}
 
 /**
- * Which of the page's sections (by element id, in page order) is being read: the last one whose top has passed under the sticky bars.
- * The first is active at the top of the page, so there is always one.
+ * Which of the page's sections (by element id, in page order) is being read: the last one whose top has passed under `lineRef`
+ * (the sticky section menu). The first is active at the top of the page, so there is always one.
  */
-export function useSectionInView(ids: string[]): string {
+export function useSectionInView(ids: string[], lineRef: RefObject<HTMLElement | null>): string {
     const [active, setActive] = useState(ids[0] ?? '');
     const key = ids.join('|');
 
     useEffect(() => {
         const list = key ? key.split('|') : [];
+        const scroller = scrollerOf(lineRef.current);
         const update = () => {
+            const line = lineRef.current?.getBoundingClientRect().bottom ?? 0;
             let current = list[0] ?? '';
             for (const id of list) {
                 const el = document.getElementById(id);
-                if (el && el.getBoundingClientRect().top <= BARS_PX + 8) current = id;
+                if (el && el.getBoundingClientRect().top <= line + 8) current = id;
             }
             // At the very bottom the last section wins even when it is too short to reach the top.
-            if (window.scrollY > 0 && window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) current = list[list.length - 1] ?? current;
+            if (scroller.scrollTop > 0 && scroller.scrollTop + scroller.clientHeight >= scroller.scrollHeight - 2) current = list[list.length - 1] ?? current;
             setActive(current);
         };
         update();
-        window.addEventListener('scroll', update, { passive: true });
+        // Scroll events do not bubble: listen in the capture phase, whichever element scrolls.
+        document.addEventListener('scroll', update, { capture: true, passive: true });
         window.addEventListener('resize', update);
         return () => {
-            window.removeEventListener('scroll', update);
+            document.removeEventListener('scroll', update, { capture: true });
             window.removeEventListener('resize', update);
         };
-    }, [key]);
+    }, [key, lineRef]);
 
     return active;
 }

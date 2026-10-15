@@ -1,6 +1,7 @@
 generator client {
   provider        = "prisma-client-js"
-  /// Lets a list ask for `relationLoadStrategy: 'join'`: one SQL statement for nested relations instead of one per level (Manas grupas).
+  /// Nested relations load in one SQL statement (LATERAL JOIN) instead of one query per level. With the preview on, `join` is the default
+  /// for every query in the app (checked in the R8 review: the services return the same data either way; group page 11 → 3 queries).
   previewFeatures = ["relationJoins"]
 }
 
