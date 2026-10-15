@@ -27,7 +27,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Step | Screen | Layout | Today |
 |---|---|---|---|
 | Find | Discovery: groups and events | A | R5a, R5b done (filters, cards, events by day) |
-| Find | Group and event panels | panel (sheet on phones) | R6 done |
+| Find | Group and event panels | centred overlay (sheet on phones) | R6b done |
 | Find | Search | header field, panel (full screen on phones) | R7 done |
 | Find | Manas grupas | A | R8 done |
 | Create | Create group wizard | D | R4 done (field), R12 |
@@ -124,7 +124,7 @@ One component per job, in `components/ui/`. Pages use these and don't restyle th
 - **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.
 - **Logo.** Wordmark in two sizes, or the circles only.
 - **Form field.** Label above, input, optional help text below; an error replaces the help text, in the danger colour, under the field.
-- **Panel.** The opened card and the event panel: from the right over the dimmed page from 768 px, a sheet below; the picture with ×, the name, the category line, the facts, the text, one main button and a text link. An opened panel shows at least everything its card shows. It has its own address (the group's or the event's page): Back closes it, a reload or a shared link opens the full page. It opens from any page (discovery, a group's Pasākumi, Manas grupas, Ziņas, profiles); a group's home from inside the same group, an event from its own forms, and the group wizard and admin open the full page. A group you belong to or wait for opens its full page, never the panel.
+- **Panel.** The opened card and the event panel: from 768 px a centred overlay that grows out of the card or row you clicked and closes back into it (only a short movement, none with reduced motion), a sheet from the bottom below 768 px; the picture with ×, the name, the category line, the facts, the text, one main button and a text link. An opened panel shows at least everything its card shows. It has its own address (the group's or the event's page): Back closes it, a reload or a shared link opens the full page. It opens from any page (discovery, a group's Pasākumi, Manas grupas, Ziņas, profiles); a group's home from inside the same group, an event from its own forms, and the group wizard and admin open the full page. A group you belong to or wait for opens its full page, never the panel.
 - **Who is going.** Up to three faces and one name for signed-in viewers ("Ilze un vēl 11 iet"), the number for visitors ("12 iet"); people whose profile is private are counted but never shown.
 - **Pop-up.** Overlay is the one shell. Modal (dialog: dim + 1.5 px blur, title + close, body, buttons right; a sheet from the bottom on phones), Sheet, side panels and drawers (dim only). A small confirmation for an undoable step is a pop-over at the button.
 - **Announcement card.** Meta line (when, who), bold title, short text.

@@ -6,7 +6,9 @@ import type { EventRowData } from '@/lib/services/event-row';
 import type { EventJoinView, EventPanelData, Face } from '@/lib/services/event-panel';
 import type { GroupPanelData } from '@/lib/services/group-panel';
 
+/** The computer overlay (560 px) and the phone sheet (360 px). */
 const FRAME = 'w-full max-w-[360px] overflow-hidden rounded-2xl border border-border bg-surface shadow-premium';
+const FRAME_WIDE = 'w-full max-w-[560px] overflow-hidden rounded-2xl border border-border bg-surface shadow-premium';
 const JOIN: EventJoinView = { eventId: 'sample', mode: 'OPEN', isFull: false, ended: false, myStatus: null, canManage: false };
 
 /** The group panel and the event panel as bodies in a 360 px column (the real Overlay is not used), plus the four join steps side by side. */
@@ -29,9 +31,9 @@ export default async function PanelDemos({ group, row, text }: { group: GroupCar
     return (
         <div className="grid gap-6">
             <div className="flex flex-wrap items-start gap-4">
-                <div className={FRAME}><GroupPanel data={groupData('https://picsum.photos/seed/panel/800/400')} /></div>
+                <div className={FRAME_WIDE}><GroupPanel data={groupData('https://picsum.photos/seed/panel/800/400')} /></div>
                 <div className={FRAME}><GroupPanel data={groupData(null)} /></div>
-                <div className={FRAME}><EventPanel event={eventData(faces, 'https://picsum.photos/seed/panel2/800/400')} l1Slug={row.category.l1Slug} /></div>
+                <div className={FRAME_WIDE}><EventPanel event={eventData(faces, 'https://picsum.photos/seed/panel2/800/400')} l1Slug={row.category.l1Slug} /></div>
                 <div className={FRAME}><EventPanel event={eventData(null, null)} l1Slug={row.category.l1Slug} /></div>
             </div>
             <div className="flex flex-wrap items-start gap-6">

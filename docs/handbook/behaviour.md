@@ -24,7 +24,8 @@ The same situation behaves the same way on every screen.
 
 ## Pop-ups
 
-- Dialogs in the middle dim the page and blur it lightly; side panels, sheets and drawers only dim.
+- Dialogs in the middle dim the page and blur it lightly; side panels, sheets and drawers only dim. The opened card and the event panel sit in the middle over the dimmed page (dim only, no blur) and grow out of the card you clicked; Back, Esc, × and a click outside close them.
+- Movement that shows where something came from is kept short and left out under reduced motion.
 - A click outside, Esc, × and Back close them. Back does not leave the page.
 - A form with typed input asks "Atmest izmaiņas?" first; keeping on editing is the default.
 - On phones a dialog opens as a sheet from the bottom.

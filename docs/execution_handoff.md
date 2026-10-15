@@ -33,7 +33,7 @@ Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisi
 
 - [x] **Quick batch** (83175ee, bd933df, bd16140, 343b17e; the group row's dot is on every `GroupRow`, not only in search) (each under ~4 min): drop the "Kategorijas" drawer heading, keep it for screen readers (cmv9ae721); search result rows get the category dot of the cards (cmv9aaifn); event form "Adrese" → "Kur?" + hint (cmv9b418s); settings "Ko meklējam?" → "Sauklis"/"Tagline" (cmv9bbzze); whole section row opens it, chevron ▾/▴ (cmv9bd0na, cmv9bdszj); seed events: public open, request-to-join, members-only, several dates per group (cmv9as5hl).
 - [x] **Accent-insensitive search** (5ac1d36, 81f6532; the "par" chip was dropped because chips need a count above zero and the counts used accent-sensitive ILIKE) (cmv9a8pkg, promoted from Parked ideas): theme chips already fold (`lib/search-topics.ts`), so first reproduce why "par" showed no "Pārgājieni" chip; group results use Postgres `ILIKE` → Postgres `unaccent` extension (migration `add_unaccent_extension`, expand only).
-- [ ] **R6b** centred overlay growing from the card (C1).
+- [x] **R6b** centred overlay growing from the card (C1) (b7a7774 placement, c2c1dc4 grow; View Transitions driven by hand, 560 px overlay from 768 px; built, in review).
 - [ ] **C2** card bottom line = latest activity (next event › public announcement › tagline › nothing); tagline always in panel and group header.
 
 ## Waiting on the owner
