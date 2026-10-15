@@ -52,7 +52,8 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                         ? <a href={`/${locale}${path}`} data-row-link className={NAME_LINK} {...searchAttr}>{name}</a>
                         : <Link href={path} scroll={false} replace={replace} data-row-link className={NAME_LINK} {...searchAttr}>{name}</Link>}
                 </span>
-                <span className="mt-0.5 flex text-xs text-foreground-muted">
+                <span className="mt-0.5 flex items-center text-xs text-foreground-muted">
+                    <span aria-hidden="true" className="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]" />
                     <span className="min-w-0 truncate">{topic}</span>
                     <span className="shrink-0 whitespace-pre"> · {cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
                 </span>
