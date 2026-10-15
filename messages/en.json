@@ -261,6 +261,31 @@
       "fri": "Fr",
       "sat": "Sa",
       "sun": "Su"
+    },
+    "languageEditor": {
+      "label": "Language",
+      "menuLabel": "Text languages",
+      "menuNote": "The original is the language you write in. Visitors without their own language see it.",
+      "original": "Original",
+      "others": "Other languages:",
+      "moreCount": "+{count}",
+      "stateFilled": "has text",
+      "stateEmpty": "empty",
+      "stateError": "needs a fix",
+      "add": "Add a translation",
+      "addOne": "Add a translation: {language}",
+      "addMenuLabel": "Translation language",
+      "makeOriginal": "Make it the original",
+      "madeOriginal": "{language} is now the original",
+      "remove": "Remove translation",
+      "removeConfirm": "Remove the {language} translation? Its text goes when you save.",
+      "removeConfirmButton": "Remove",
+      "removed": "Translation removed",
+      "translationHint": "While the translation is empty, visitors see the original ({original}).",
+      "copyOriginal": "Start from the original text",
+      "originalEmpty": "There is no text in the original language ({original}) yet. Write it, or make another language the original.",
+      "errorElsewhere": "Something in the {language} version needs a fix.",
+      "open": "Open"
     }
   },
   "discovery": {
@@ -828,6 +853,7 @@
           "counter": "Character counter",
           "errorState": "Error state",
           "confirmPopover": "Confirmation at the button",
+          "languageEditor": "Language editor: text in several languages",
           "moreMenu": "Group \"…\" menu: member, waiting, visitor",
           "switch": "Switch",
           "groupPages": "Group pages, part tabs, next event and links",
@@ -871,7 +897,13 @@
           "category2": "Walks",
           "eventExcerpt": "Bring gloves and a good mood. We meet at the main gate.",
           "groupTagline": "Walks around Zemgale for beginners and old hands. Everyone is welcome.",
-          "nextWeek": "Show next week"
+          "nextWeek": "Show next week",
+          "langTitle": "Title",
+          "langTextLv": "Pastaiga gar upi",
+          "langTextEn": "Walk by the river",
+          "langClosed": "Closed",
+          "langMenu": "Menu open",
+          "langEmpty": "Empty translation"
         }
       }
     },

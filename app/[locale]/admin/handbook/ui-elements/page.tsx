@@ -7,7 +7,7 @@ import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
 import { SearchDemo } from '@/components/handbook/SearchDemos';
-import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
+import { AnnouncementDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
@@ -257,6 +257,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="confirmPopover" names={[UI.confirmPopover]} files={['components/ui/ConfirmPopover.tsx']}>
                     <PopoverDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="languageEditor" names={[UI.languageEditor, UI.languageEditorMenu]} files={['components/ui/LanguageEditor.tsx', 'components/ui/language-editor/LanguageMenu.tsx', 'components/ui/language-editor/AddTranslationButton.tsx', 'components/ui/language-editor/EditorHint.tsx']}>
+                    <LanguageEditorDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="toast" names={[UI.toast]} files={['components/ui/Toast.tsx', 'components/ui/ToastContainer.tsx', 'hooks/use-toast.tsx']}>

@@ -18,6 +18,8 @@ type PanelProps = {
     width?: 'md' | 'sm';
     /** `header`: under the sticky header (full width on phones). `anchor`: right under its own button at every width, for buttons inside the page. */
     placement?: 'header' | 'anchor';
+    /** With `placement="anchor"`: which edge of the button the panel lines up with (`end` = right edge, `start` = left edge). */
+    align?: 'start' | 'end';
     /** id of a line inside the panel that describes it (a role line, not a row). */
     describedBy?: string;
     dataUi?: string;
@@ -26,7 +28,7 @@ type PanelProps = {
 };
 
 /** The floating list: in the header it is full width under the header on phones and anchored to the trigger from `sm`; `placement="anchor"` keeps it under its button at every width. */
-export function MenuPanel({ label, id, menuRef, onKeyDown, onClick, width = 'md', placement = 'header', describedBy, dataUi = UI.dropdownMenu, className, children }: PanelProps) {
+export function MenuPanel({ label, id, menuRef, onKeyDown, onClick, width = 'md', placement = 'header', align = 'end', describedBy, dataUi = UI.dropdownMenu, className, children }: PanelProps) {
     return (
         <div
             id={id}
@@ -40,7 +42,7 @@ export function MenuPanel({ label, id, menuRef, onKeyDown, onClick, width = 'md'
             className={clsx(
                 'z-50 rounded-[14px] border border-border bg-surface p-1.5 shadow-premium',
                 placement === 'anchor'
-                    ? 'absolute right-0 top-full mt-2 w-60 max-w-[calc(100vw-24px)]'
+                    ? ['absolute top-full mt-2 w-60 max-w-[calc(100vw-24px)]', align === 'start' ? 'left-0' : 'right-0']
                     : ['fixed top-[calc(var(--header-height)+4px)] sm:absolute sm:right-0 sm:top-auto sm:mt-2', width === 'sm' ? 'right-4 w-[200px]' : 'inset-x-4 sm:inset-x-auto sm:w-60'],
                 className
             )}
@@ -72,9 +74,10 @@ export function MenuItemLink({ href, icon, trailing, locale, hrefLang, current, 
     );
 }
 
-export function MenuItemButton({ onSelect, icon, trailing, disabled, className, children }: ItemProps & { onSelect: () => void; disabled?: boolean }) {
+export function MenuItemButton({ onSelect, icon, trailing, disabled, current, className, children }: ItemProps & { onSelect: () => void; disabled?: boolean; current?: boolean }) {
+    const radio = typeof current === 'boolean';
     return (
-        <button type="button" role="menuitem" tabIndex={-1} data-ui={UI.menuItem} disabled={disabled} onClick={onSelect} className={clsx(ITEM_BASE, className)}>
+        <button type="button" role={radio ? 'menuitemradio' : 'menuitem'} aria-checked={radio ? current : undefined} tabIndex={-1} data-ui={UI.menuItem} disabled={disabled} onClick={onSelect} className={clsx(ITEM_BASE, current && 'font-semibold', className)}>
             {icon}
             {children}
             {trailing}

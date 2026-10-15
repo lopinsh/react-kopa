@@ -3,13 +3,25 @@
  * language a visitor sees: their own if the owner wrote it, else the original, else anything.
  * Owner text is never machine-translated.
  */
-import { LOCALES, type Locale } from '@/lib/constants';
+import { DEFAULT_LOCALE, LOCALES, type Locale } from '@/lib/constants';
 
 export const TEXT_LANGS = LOCALES;
 export type TextLang = Locale;
 
 export function toTextLang(value: string | null | undefined): TextLang {
-    return value === 'en' ? 'en' : 'lv';
+    return TEXT_LANGS.find((l) => l === value) ?? DEFAULT_LOCALE;
+}
+
+/** The one typed builder of a per-language record (defaults, `filled` flags, editable texts). */
+export function langRecord<T>(make: (lang: TextLang) => T): Record<TextLang, T> {
+    // Object.fromEntries widens the keys to string; every TEXT_LANGS key is set, so the cast is exact.
+    return Object.fromEntries(TEXT_LANGS.map((l) => [l, make(l)])) as Record<TextLang, T>;
+}
+
+/** The language a form should jump to after a failed submit: the original if it has a problem, else the first one that does. */
+export function firstLangWithError(errorLangs: readonly TextLang[], original: TextLang): TextLang | null {
+    if (errorLangs.includes(original)) return original;
+    return TEXT_LANGS.find((l) => errorLangs.includes(l)) ?? null;
 }
 
 /** True when a (possibly rich-text) value holds something a person would read. */

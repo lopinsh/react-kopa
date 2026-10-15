@@ -261,6 +261,31 @@
       "fri": "Pk",
       "sat": "S",
       "sun": "Sv"
+    },
+    "languageEditor": {
+      "label": "Valoda",
+      "menuLabel": "Teksta valodas",
+      "menuNote": "Oriģināls ir valoda, kurā raksti. Apmeklētāji, kuriem nav savas valodas, redz to.",
+      "original": "Oriģināls",
+      "others": "Citas valodas:",
+      "moreCount": "+{count}",
+      "stateFilled": "ir teksts",
+      "stateEmpty": "tukšs",
+      "stateError": "jālabo",
+      "add": "Pievienot tulkojumu",
+      "addOne": "Pievienot tulkojumu: {language}",
+      "addMenuLabel": "Tulkojuma valoda",
+      "makeOriginal": "Padarīt par oriģinālu",
+      "madeOriginal": "{language} tagad ir oriģināls",
+      "remove": "Noņemt tulkojumu",
+      "removeConfirm": "Noņemt {language} tulkojumu? Tā teksts pazudīs, kad saglabāsi.",
+      "removeConfirmButton": "Noņemt",
+      "removed": "Tulkojums noņemts",
+      "translationHint": "Kamēr tulkojums ir tukšs, apmeklētāji redz oriģinālu ({original}).",
+      "copyOriginal": "Sākt ar oriģināla tekstu",
+      "originalEmpty": "Oriģinālvalodā ({original}) vēl nav teksta. Uzraksti to vai padari citu valodu par oriģinālu.",
+      "errorElsewhere": "{language} versijā kaut kas jālabo.",
+      "open": "Atvērt"
     }
   },
   "discovery": {
@@ -828,6 +853,7 @@
           "counter": "Rakstzīmju skaitītājs",
           "errorState": "Kļūdas stāvoklis",
           "confirmPopover": "Apstiprinājums pie pogas",
+          "languageEditor": "Valodu redaktors: teksts vairākās valodās",
           "moreMenu": "Grupas «…» izvēlne: biedrs, gaida atbildi, apmeklētājs",
           "switch": "Slēdzis",
           "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites",
@@ -871,7 +897,13 @@
           "category2": "Pastaigas",
           "eventExcerpt": "Ņem līdzi cimdus un labu garastāvokli. Tiekamies pie galvenajiem vārtiem.",
           "groupTagline": "Pārgājieni pa Zemgali iesācējiem un pieredzējušiem. Visi laipni gaidīti.",
-          "nextWeek": "Rādīt nākamo nedēļu"
+          "nextWeek": "Rādīt nākamo nedēļu",
+          "langTitle": "Nosaukums",
+          "langTextLv": "Pastaiga gar upi",
+          "langTextEn": "Walk by the river",
+          "langClosed": "Aizvērts",
+          "langMenu": "Izvēlne atvērta",
+          "langEmpty": "Tukšs tulkojums"
         }
       }
     },

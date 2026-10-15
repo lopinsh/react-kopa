@@ -223,6 +223,8 @@ export const UI = {
     searchBar: 'search-bar',
     languageSwitch: 'language-switch',
     languageList: 'language-list',
+    languageEditor: 'language-editor',
+    languageEditorMenu: 'language-editor-menu',
     profileMenu: 'profile-menu',
     shieldMenu: 'shield-menu',
     personHeader: 'person-header',

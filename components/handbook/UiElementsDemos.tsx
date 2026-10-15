@@ -9,9 +9,11 @@ import ChatPanel from '@/components/messages/ChatPanel';
 import ConversationList from '@/components/messages/ConversationList';
 import ContactForm from '@/components/groups/contact/ContactForm';
 import Button from '@/components/ui/Button';
+import LanguageEditor from '@/components/ui/LanguageEditor';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import FilterChip from '@/components/ui/FilterChip';
 import { Toast } from '@/components/ui/Toast';
+import { langRecord, type TextLang } from '@/lib/translations';
 import type { UiSamples } from '@/lib/handbook/ui-samples';
 import type { ToastType } from '@/hooks/use-toast';
 
@@ -114,5 +116,50 @@ export function PopupDemo() {
                 onCancel={() => setDestructiveOpen(false)}
             />
         </>
+    );
+}
+
+/** One editor on a sample title: Latvian original, English filled or empty. The real component, with its drafts held here. */
+function LanguageEditorSample({ label, englishText, initialMenuOpen = false, startLang = 'lv' }: { label: string; englishText: string; initialMenuOpen?: boolean; startLang?: TextLang }) {
+    const t = useTranslations('admin.handbook.ui');
+    const [lang, setLang] = useState<TextLang>(startLang);
+    const [original, setOriginal] = useState<TextLang>('lv');
+    const [texts, setTexts] = useState<Record<TextLang, string>>({ lv: t('sample.langTextLv'), en: englishText });
+    return (
+        <div className={initialMenuOpen ? 'min-h-[22rem] [&_[role=menu]]:static!' : undefined}>
+            <p className="mb-2 text-xs font-semibold text-foreground-muted">{label}</p>
+            <LanguageEditor
+                lang={lang}
+                onLangChange={setLang}
+                originalLang={original}
+                onOriginalLangChange={setOriginal}
+                filled={langRecord((l) => texts[l].trim() !== '')}
+                onCopyFromOriginal={(l) => setTexts((prev) => ({ ...prev, [l]: prev[original] }))}
+                onClear={(l) => setTexts((prev) => ({ ...prev, [l]: '' }))}
+                initialMenuOpen={initialMenuOpen}
+            >
+                <label className="block text-sm font-medium text-foreground">
+                    {t('sample.langTitle')}
+                    <input
+                        key={lang}
+                        lang={lang}
+                        value={texts[lang]}
+                        onChange={(e) => setTexts((prev) => ({ ...prev, [lang]: e.target.value }))}
+                        className="mt-1.5 block h-11 w-full rounded-xl border border-border bg-surface px-3 text-[15px] md:h-10"
+                    />
+                </label>
+            </LanguageEditor>
+        </div>
+    );
+}
+
+export function LanguageEditorDemo() {
+    const t = useTranslations('admin.handbook.ui');
+    return (
+        <div className="grid gap-8 lg:grid-cols-3">
+            <LanguageEditorSample label={t('sample.langClosed')} englishText={t('sample.langTextEn')} />
+            <LanguageEditorSample label={t('sample.langMenu')} englishText={t('sample.langTextEn')} initialMenuOpen />
+            <LanguageEditorSample label={t('sample.langEmpty')} englishText="" startLang="en" />
+        </div>
     );
 }
