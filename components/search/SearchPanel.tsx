@@ -14,6 +14,8 @@ type Props = {
     mode: 'desktop' | 'phone';
     inputRef: RefObject<HTMLInputElement | null>;
     requestClose: () => void;
+    /** Sample recent searches instead of this device's (the UI elements page, which renders on the server too). */
+    recentSample?: string[];
 };
 
 /** The printable keys send you back to the field (Space stays with the button it is pressed on). */
@@ -23,7 +25,7 @@ const typing = (e: KeyboardEvent) => !e.ctrlKey && !e.metaKey && !e.altKey && ((
  * The open search's body, the same on computers and phones (AR-41): the Kur button and theme chips, then your recent searches
  * (empty field) or the results. It fetches nothing itself. Arrow keys move through `[data-search-item]`; a letter on an item returns to the field.
  */
-export default function SearchPanel({ search, mode, inputRef, requestClose }: Props) {
+export default function SearchPanel({ search, mode, inputRef, requestClose, recentSample }: Props) {
     const t = useTranslations('discovery');
     const tSearch = useTranslations('discovery.search');
     const tErrors = useTranslations('errors');
@@ -52,7 +54,7 @@ export default function SearchPanel({ search, mode, inputRef, requestClose }: Pr
                 {error
                     ? <p className="px-0.5 py-4 text-sm text-foreground-muted">{tErrors('ACTION_FAILED')}</p>
                     : idle
-                        ? <RecentSearches onPick={(w) => { setWord(w, true); inputRef.current?.focus(); }} inputRef={inputRef} />
+                        ? <RecentSearches onPick={(w) => { setWord(w, true); inputRef.current?.focus(); }} inputRef={inputRef} sample={recentSample} />
                         : <SearchResults search={search} requestClose={requestClose} />}
             </div>
             <p aria-live="polite" className="sr-only">

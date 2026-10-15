@@ -27,9 +27,9 @@ function Frame({ children }: { children: ReactNode }) {
     return <div className="w-full max-w-[600px] rounded-2xl border border-border bg-surface px-3.5 pb-3 shadow-premium">{children}</div>;
 }
 
-function Panel({ search }: { search: SearchModel }) {
+function Panel({ search, recent }: { search: SearchModel; recent?: string[] }) {
     const inputRef = useRef<HTMLInputElement>(null);
-    return <Frame><SearchPanel search={search} mode="desktop" inputRef={inputRef} requestClose={NOOP} /></Frame>;
+    return <Frame><SearchPanel search={search} mode="desktop" inputRef={inputRef} requestClose={NOOP} recentSample={recent} /></Frame>;
 }
 
 /** The search panel as static samples: "sp" typed, "Spēles" chosen, an empty field with recent searches; and the "Atbilst arī:" line of discovery. */
@@ -53,7 +53,7 @@ export function SearchDemo({ groups, event }: { groups: GroupCardData[]; event: 
             <div className="flex flex-wrap items-start gap-6">
                 <Panel search={stub('sp', null, typed)} />
                 <Panel search={stub('vak', 'games', chosen)} />
-                <Panel search={stub('', null, idle)} />
+                <Panel search={stub('', null, idle)} recent={['sp', 'galda spēles', 'jelgava']} />
             </div>
             <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({ q: 'sp' }), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: matches }}>
                 <div className="max-w-2xl"><AlsoMatchesLine /></div>
