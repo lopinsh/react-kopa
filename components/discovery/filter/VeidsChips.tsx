@@ -12,9 +12,9 @@ import { useChipFit } from '@/hooks/useChipFit';
 import { UI } from '@/lib/constants';
 import { CHIP, CHOSEN } from './chip-styles';
 
-export function Chip({ label, chosen, onClick }: { label: string; chosen: boolean; onClick?: () => void }) {
+export function Chip({ label, chosen, onClick, muted = false }: { label: string; chosen: boolean; onClick?: () => void; muted?: boolean }) {
     return (
-        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : 'shrink-0 bg-surface font-medium text-foreground ring-border hover:bg-tint')}>
+        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : clsx('shrink-0 bg-surface font-medium ring-border hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
             {/* A chosen chip always stays; on a narrow line its name is cut instead. */}
             <span className="min-w-0 truncate">{label}</span>
             {chosen && <X aria-hidden="true" className="size-3 shrink-0" />}
@@ -22,7 +22,7 @@ export function Chip({ label, chosen, onClick }: { label: string; chosen: boolea
     );
 }
 
-/** The Veidi of the chosen Tēma as chips on one line: the chosen ones first (tinted, with ×), then the busiest; "+N" opens the full list. */
+/** The Veidi of the chosen Tēma as chips on one line: the chosen ones first (tinted, with ×), then the busiest (a Veids with no groups yet still shows, muted, last); "+N" opens the full list. */
 export default function VeidsChips() {
     const t = useTranslations('discovery');
     const { veidi, categories } = useDiscovery();
@@ -34,7 +34,7 @@ export default function VeidsChips() {
 
     const all = veidi.filter((v) => v.l1Slug === params.category);
     const chosen = params.tags.flatMap((slug) => all.find((v) => v.slug === slug) ?? []);
-    const rest = all.filter((v) => !params.tags.includes(v.slug) && v.count > 0).sort((a, b) => b.count - a.count || a.title.localeCompare(b.title));
+    const rest = all.filter((v) => !params.tags.includes(v.slug)).sort((a, b) => b.count - a.count || a.title.localeCompare(b.title));
     const chips = [...chosen, ...rest];
     const { row, probe, fit } = useChipFit(chips.map((c) => c.title).join('|'), chips.length, chosen.length, all.length > chips.length);
 
@@ -64,7 +64,7 @@ export default function VeidsChips() {
     return (
         <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex min-w-0 items-center gap-1.5">
             <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5">
-                {chips.slice(0, fit).map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} onClick={() => toggle(v.slug)} />)}
+                {chips.slice(0, fit).map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} muted={v.count === 0} onClick={() => toggle(v.slug)} />)}
             </div>
             {hidden > 0 && (
                 <div ref={bindHost} className="relative shrink-0">
@@ -83,7 +83,7 @@ export default function VeidsChips() {
                 </div>
             )}
             <div ref={probe} inert aria-hidden="true" className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5 whitespace-nowrap">
-                {chips.map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} />)}
+                {chips.map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} muted={v.count === 0} />)}
                 {more}
             </div>
         </div>
