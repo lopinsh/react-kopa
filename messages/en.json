@@ -851,6 +851,7 @@
           "switch": "Switch",
           "groupPages": "Group pages, part tabs, next event and links",
           "dates": "Dates: day strip, quick choices and calendar",
+          "eventPage": "Event page: for a visitor (with a picture, with locked practical info) and for the team (For organisers)",
           "panels": "Panels and who is going",
           "search": "Search",
           "ownSections": "My groups: section menu, news and a waiting request",

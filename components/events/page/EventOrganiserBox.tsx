@@ -39,13 +39,13 @@ export default function EventOrganiserBox({ event, lists, locale, groupPath, eve
     const [open, setOpen] = useState<PeopleKind | null>(isRequest && lists.pending.length > 0 ? 'pending' : null);
 
     // After approving, declining or letting someone in, their row is gone: focus the list's next button, else the count that opened it.
-    const sizes = lists.pending.length + lists.waitlist.length + lists.going.length;
+    const sizes = `${lists.pending.length}/${lists.waitlist.length}/${lists.going.length}`;
     useEffect(() => {
         if (!acted.current) return;
         acted.current = false;
         const active = document.activeElement;
         if (active && active !== document.body && active.isConnected) return;
-        (root.current?.querySelector<HTMLElement>(`[id="${listId}"] button`) ?? root.current?.querySelector<HTMLElement>('[aria-expanded]'))?.focus();
+        (root.current?.querySelector<HTMLElement>(`[id="${listId}"] button`) ?? root.current?.querySelector<HTMLElement>('[aria-expanded="true"]'))?.focus();
     }, [sizes, listId]);
 
     const run: RunAction = (call) => {
@@ -65,8 +65,9 @@ export default function EventOrganiserBox({ event, lists, locale, groupPath, eve
             const result = await deleteEvent(event.id, locale);
             setConfirmOpen(false);
             if (!result.success) { setError(result.error); return; }
-            router.push(`${groupPath}/events`);
-            router.refresh();
+            // The move to the list, a beat later: the action's own refresh re-renders this (now deleted) address and Next then
+            // reloads it, which swallowed an immediate move (the old Dzēst ended on a 404).
+            setTimeout(() => router.push(`${groupPath}/events`), 400);
         });
     };
 
@@ -107,7 +108,7 @@ export default function EventOrganiserBox({ event, lists, locale, groupPath, eve
                 )}
                 <Button size="sm" variant="quiet" className="text-danger" disabled={busy} onClick={() => setConfirmOpen(true)}>{t('deleteEvent')}</Button>
             </div>
-            {!past && isRequest && <p className="text-[13px] text-foreground-muted">{t('closeSignupsHint')}</p>}
+            {!past && isRequest && !event.isFull && <p className="text-[13px] text-foreground-muted">{t('closeSignupsHint')}</p>}
             {error && <p role="alert" className="text-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
             <ConfirmDialog isOpen={confirmOpen} title={t('deleteEvent')} message={t('deleteConfirm')} confirmLabel={t('deleteEvent')} destructive isPending={busy} onConfirm={remove} onCancel={() => setConfirmOpen(false)} />
         </div>

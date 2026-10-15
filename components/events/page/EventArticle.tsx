@@ -33,7 +33,7 @@ export default async function EventArticle({ event, organiser }: { event: EventP
         : undefined;
 
     return (
-        <article data-ui={UI.eventPage} style={{ ['--c' as string]: event.category.color }} className="grid max-w-[760px] gap-2.5 rounded-2xl bg-surface p-[18px] md:p-6">
+        <article data-ui={UI.eventPage} style={{ ['--c' as string]: event.category.color }} className="grid max-w-[760px] gap-2.5 rounded-2xl bg-surface p-[18px] [overflow-wrap:anywhere] md:p-6">
             <EventPicture image={event.image} />
             <h1 lang={titleLabel} className="font-heading text-[22px] font-semibold leading-snug text-foreground md:text-[28px]">{event.title}</h1>
             {titleLabel && <FallbackLangLabel lang={titleLabel} className="justify-self-start" />}
