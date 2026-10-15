@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
-import { topicHref } from '@/lib/discovery-params';
+import { topicHref, type DiscoveryParams } from '@/lib/discovery-params';
 import { UI } from '@/lib/constants';
 
 type Props = {
@@ -11,6 +11,8 @@ type Props = {
     /** With `l1Slug` the category and each sub-category (`subSlugs`, same order) link to discovery filtered by them. */
     l1Slug?: string;
     subSlugs?: string[];
+    /** A card in the discovery list: the links add to the list's own filters instead of starting afresh. */
+    from?: DiscoveryParams;
     /** On a photo (the group banner): all text white and the dot ringed white. */
     onImage?: boolean;
     /** One line without wrapping; the sub-categories are cut with "…" (group cards). */
@@ -20,7 +22,7 @@ type Props = {
 };
 
 /** "● Sports  Nordic walking, Walks": the category with its dot, then the sub-categories, in one wrapping line. */
-export default function CategoryLine({ color, category, subCategories, l1Slug, subSlugs = [], onImage = false, oneLine = false, aboveCardLink = false }: Props) {
+export default function CategoryLine({ color, category, subCategories, l1Slug, subSlugs = [], from, onImage = false, oneLine = false, aboveCardLink = false }: Props) {
     const link = (href: string, label: string) => (
         <Link href={href} className={clsx('hover:underline', aboveCardLink && 'relative z-10')}>{label}</Link>
     );
@@ -28,14 +30,14 @@ export default function CategoryLine({ color, category, subCategories, l1Slug, s
         <p data-ui={UI.categoryLine} className={clsx('flex items-center gap-x-2 gap-y-0.5 text-[13px]', oneLine ? 'min-w-0 flex-nowrap overflow-hidden' : 'flex-wrap')}>
             <span className={clsx('inline-flex shrink-0 items-center gap-1.5 font-medium', onImage ? 'text-on-image' : 'text-foreground')}>
                 <span aria-hidden="true" className={clsx('h-2 w-2 shrink-0 rounded-full', onImage && 'ring-[1.5px] ring-on-image')} style={{ backgroundColor: color }} />
-                {l1Slug ? link(topicHref(l1Slug), category) : category}
+                {l1Slug ? link(topicHref(l1Slug, undefined, from), category) : category}
             </span>
             {subCategories.length > 0 && (
                 <span className={clsx(oneLine && 'min-w-0 truncate', onImage ? 'text-on-image' : 'text-foreground-muted')}>
                     {subCategories.map((title, i) => (
                         <span key={subSlugs[i] ?? title}>
                             {i > 0 && ', '}
-                            {l1Slug && subSlugs[i] ? link(topicHref(l1Slug, subSlugs[i]), title) : title}
+                            {l1Slug && subSlugs[i] ? link(topicHref(l1Slug, subSlugs[i], from), title) : title}
                         </span>
                     ))}
                 </span>

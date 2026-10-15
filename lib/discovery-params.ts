@@ -67,9 +67,15 @@ export function discoveryHref(current: DiscoveryParams, change: Partial<Discover
     return s ? `/?${s}` : '/';
 }
 
-/** The discovery list filtered by a category (and one Veids of it): the link on a category line. */
-export function topicHref(l1Slug: string, tagSlug?: string): string {
-    return discoveryHref(parseDiscoveryParams(new URLSearchParams()), { category: l1Slug, tags: tagSlug ? [tagSlug] : [] });
+/**
+ * The discovery list filtered by a category (and one Veids of it): the link on a category line. With `from` (a card in the list)
+ * the choice is added to the list's own: place and word stay, a Veids of the chosen Tēma joins the ticked ones.
+ */
+export function topicHref(l1Slug: string, tagSlug?: string, from?: DiscoveryParams): string {
+    const current = from ?? parseDiscoveryParams(new URLSearchParams());
+    const kept = current.category === l1Slug ? current.tags : [];
+    const tags = tagSlug && !kept.includes(tagSlug) ? [...kept, tagSlug] : kept;
+    return discoveryHref(current, { category: l1Slug, tags });
 }
 
 /** How many things are chosen ("Notīrīt visu" from 2): the word, the place (1 however many cities), the Tēma, each Veids, a date other than Šonedēļ. */

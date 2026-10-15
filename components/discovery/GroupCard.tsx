@@ -10,18 +10,21 @@ import { getSmartImageUrl } from '@/lib/image-utils';
 import { langAttr } from '@/lib/translations';
 import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
+import type { DiscoveryParams } from '@/lib/discovery-params';
 
 type Props = {
     group: GroupCardData;
     /** Start of the group's next visible meeting; shown when the group has no "Ko meklējam?" line. */
     nextMeeting?: Date | null;
+    /** The discovery list's filters: the category links add to them. */
+    filters?: DiscoveryParams;
 };
 
 /**
  * A group in a grid (AR-34): name, category line, place and members, the tagline; under a thin line the group's note; the photo (or the tone
  * and icon) at the right. Every card reserves the same lines (name 2, tagline 2, note 2), so a grid has one card height.
  */
-export default function GroupCard({ group, nextMeeting }: Props) {
+export default function GroupCard({ group, nextMeeting, filters }: Props) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const formatter = useDateFormatter();
@@ -38,7 +41,7 @@ export default function GroupCard({ group, nextMeeting }: Props) {
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
                     <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className="outline-none after:absolute after:inset-0 after:z-[1]">{group.name}</Link>
                 </h3>
-                <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} />
+                <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
                 <p className="truncate text-[13px] text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>
                 <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-[13px] leading-snug text-foreground-muted">{group.tagline}</p>
             </div>
