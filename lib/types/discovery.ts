@@ -93,4 +93,9 @@ export interface DiscoveryState {
     counts: Pick<DiscoveryCounts, 'total' | 'anyTopic' | 'anyPlace' | 'byCity' | 'online'>;
     /** Pasākumi only. */
     dates?: DiscoveryDates;
+    /**
+     * With a search word and no Tēma: the themes and Veidi the word also matches, each with the number you get when you choose it in place
+     * of the word (place and, on Pasākumi, the dates kept). Themes first, then Veidi, busiest first; empty otherwise ("Atbilst arī:").
+     */
+    alsoMatches: Array<{ kind: 'theme' | 'veids'; slug: string; l1Slug: string; title: string; color: string; count: number }>;
 }

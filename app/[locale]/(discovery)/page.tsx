@@ -11,9 +11,11 @@ import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import CategoryDrawer from '@/components/discovery/CategoryDrawer';
 import FilterLine from '@/components/discovery/filter/FilterLine';
+import AlsoMatchesLine from '@/components/discovery/filter/AlsoMatchesLine';
 import GroupResults from '@/components/discovery/GroupResults';
 import EventResults from '@/components/discovery/EventResults';
 import { loadEvents } from './load-events';
+import { buildAlsoMatches, wantsAlsoMatches } from './also-matches';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';
 import { discoveryHref, parseDiscoveryParams } from '@/lib/discovery-params';
@@ -68,11 +70,15 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const w = eventWindow(p, dayInZone(new Date(), zone), zone);
     if (p.kind === 'events' && w.expired) redirect({ href: discoveryHref(p, { date: { kind: 'week' }, day: null }), locale });
 
-    const [categories, tree, cities, counts, groupsRes, events, cookieStore] = await Promise.all([
+    const [categories, tree, cities, counts, plain, groupsRes, events, cookieStore] = await Promise.all([
         DiscoveryService.getDiscoveryCategories(locale),
         TaxonomyService.getTaxonomy(locale),
         CityService.listActive(locale),
         DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined, ...(p.kind === 'events' ? w.bounds : {}) }, locale),
+        // The same list without the word (cached): what choosing a theme or Veids "in place of the word" gives.
+        wantsAlsoMatches(p.q, p.category)
+            ? DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, ...(p.kind === 'events' ? w.bounds : {}) }, locale)
+            : Promise.resolve(null),
         p.kind === 'groups'
             ? DiscoveryService.getGroups({ query: p.q || undefined, cities: p.cities, categoryId: found?.id, tags: p.tags, take: p.limit }, locale)
             : Promise.resolve({ groups: [], hasMore: false }),
@@ -96,6 +102,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0
         }))),
         counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online },
+        alsoMatches: buildAlsoMatches(p.q, plain, tree, categories),
         dates: events ? { today: w.today, choice: w.choice, period: w.period, listFrom: w.listFrom, week: w.week, weekCounts: events.weekCounts, calendar: w.calendar, calendarCounts: events.calendarCounts } : undefined
     };
 
@@ -107,6 +114,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                     <div className="min-w-0 flex-1 pb-20 pt-3 md:pt-4">
                         <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
                             <FilterLine />
+                            <AlsoMatchesLine />
                             {p.kind === 'groups'
                                 ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}

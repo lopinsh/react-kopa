@@ -24,7 +24,7 @@ export function FilterLineDemo({ accent }: { accent: string }) {
                 <Chip label={t('veids')} chosen onClick={NOOP} />
                 <Chip label={t('veids')} chosen={false} onClick={NOOP} />
             </div>
-            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 } }}>
+            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: [] }}>
                 <ViewSwitch className="self-start" />
             </DiscoveryProvider>
         </div>
