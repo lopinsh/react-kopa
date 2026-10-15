@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -31,6 +31,8 @@ export default function VeidsChips() {
     const { params, go } = useDiscoveryNav();
     const { bindHost, ...pop } = usePopover();
     const [draft, setDraft] = useState<string[]>([]);
+    // The phone sheet's name click: applied by `close` once Back has taken the sheet's history entry off (AR-67).
+    const picked = useRef<string[] | null>(null);
 
     const all = veidi.filter((v) => v.l1Slug === params.category);
     const chosen = params.tags.flatMap((slug) => all.find((v) => v.slug === slug) ?? []);
@@ -42,14 +44,22 @@ export default function VeidsChips() {
     const hidden = all.length - fit;
     const toggle = (slug: string) => go({ tags: params.tags.includes(slug) ? params.tags.filter((s) => s !== slug) : [...params.tags, slug] });
     const close = () => {
-        if (!pop.desktop && draft.join() !== params.tags.join()) go({ tags: draft });
+        const next = picked.current ?? draft;
+        picked.current = null;
+        if (!pop.desktop && next.join() !== params.tags.join()) go({ tags: next });
         pop.setOpen(false);
     };
+    // A name click: only that Veids, and the list closes; on a phone the sheet closes as by Back first, then `close` pushes it.
     const pick = (slug: string) => {
         setDraft([slug]);
-        go({ tags: [slug] }, pop.desktop ? { replace: true } : undefined);
+        if (!pop.desktop) {
+            picked.current = [slug];
+            window.history.back();
+            return;
+        }
+        go({ tags: [slug] }, { replace: true });
         pop.setOpen(false);
-        if (pop.desktop) pop.host?.querySelector('button')?.focus();
+        pop.host?.querySelector('button')?.focus();
     };
     const more = <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>;
 

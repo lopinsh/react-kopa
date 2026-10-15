@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { MapPin } from 'lucide-react';
 import FilterButton from './FilterButton';
@@ -19,20 +19,30 @@ export default function PlaceButton() {
     const { params, go } = useDiscoveryNav();
     const { bindHost, ...pop } = usePopover();
     const [draft, setDraft] = useState<string[]>([]);
+    // The phone sheet's name click: applied by `close` once Back has taken the sheet's history entry off (AR-67).
+    const picked = useRef<string[] | null>(null);
 
     const names = params.cities.map((slug) => cities.find((c) => c.slug === slug)?.name ?? slug);
     const more = names.length - 1;
     const close = () => {
-        if (!pop.desktop && draft.join() !== params.cities.join()) go({ cities: draft });
+        const next = picked.current ?? draft;
+        picked.current = null;
+        if (!pop.desktop && next.join() !== params.cities.join()) go({ cities: next });
         pop.setOpen(false);
     };
 
-    // A name click: only that city. The phone sheet pushes it at once (the draft is not applied on top).
+    // A name click: only that city, and the list closes. The phone sheet closes as by Back first (a push before that would
+    // be undone when the sheet takes its history entry off), then `close` pushes the pick.
     const pick = (slug: string) => {
         setDraft([slug]);
-        go({ cities: [slug] }, pop.desktop ? { replace: true } : undefined);
+        if (!pop.desktop) {
+            picked.current = [slug];
+            window.history.back();
+            return;
+        }
+        go({ cities: [slug] }, { replace: true });
         pop.setOpen(false);
-        if (pop.desktop) pop.host?.querySelector('button')?.focus();
+        pop.host?.querySelector('button')?.focus();
     };
 
     return (
