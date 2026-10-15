@@ -460,6 +460,11 @@ async function main() {
     city?: string;
     /** Happens online: `location` holds the link. */
     isOnline?: boolean;
+    /** Default PUBLIC. MEMBERS_ONLY events are 404 for everyone outside the group. */
+    visibility?: 'PUBLIC' | 'MEMBERS_ONLY';
+    /** Default OPEN ("Eju"); REQUEST = the organiser approves each person. */
+    joinMode?: 'OPEN' | 'REQUEST';
+    maxParticipants?: number;
   };
 
   const eventSeeds: EventSeed[] = [
@@ -536,6 +541,23 @@ async function main() {
     // LAN Party
     { title: 'Liepājas LAN Party #12', description: '24h LAN party Liepājā! CS2, Dota, un jūsu izvēle. Ienest savu datoru. Vietu limits: 40.', location: 'IT hubs Liepāja', startDate: days(14), groupSlug: 'pc-games-liepaja', creator: janis },
 
+    // Every kind of event, and several dates per group (recurring series do not exist: each date is its own event).
+    // Open + public
+    { title: 'Rīta pastaiga Mežaparkā', description: 'Viegla rīta pastaiga ap Mežaparku, pēc tam kafija. Nāc, kad vēlies, – pievienojies pa ceļam.', location: 'Mežaparka estrāde, Rīga', startDate: days(1), groupSlug: 'pargajieni-riga', creator: liga },
+    // Request to join, public
+    { title: 'Tempa treniņš nelielai grupai', description: 'Intervālu treniņš stadionā ar treneri. Vietu skaits ierobežots, organizators apstiprina katru dalībnieku.', location: 'Daugavas stadions, Rīga', startDate: days(3), groupSlug: 'running-riga', creator: andris, joinMode: 'REQUEST', maxParticipants: 10 },
+    { title: 'Mazā Catan turnīra pusfināls', description: 'Pusfināls ar sešiem dalībniekiem. Dalību apstiprina organizators.', location: 'Kafejnīca Labums, Rīga', startDate: days(6), groupSlug: 'boardgames-riga', creator: toms, joinMode: 'REQUEST', maxParticipants: 6 },
+    // Members only
+    { title: 'Biedru ugunskura vakars', description: 'Slēgts vakars tikai grupas biedriem: ugunskurs, tēja un nākamās sezonas plāni.', location: 'Pie Oskara mājās, Ķekava', startDate: days(5), groupSlug: 'pargajieni-riga', creator: oskars, visibility: 'MEMBERS_ONLY', city: 'Riga' },
+    { title: 'Biedru treniņs pirms sacensībām', description: 'Tikai biedriem: kopīgs treniņš pirms sacensībām, treneris sniegs atsauksmes.', location: 'Mežaparks, Rīga', startDate: days(2), groupSlug: 'running-riga', creator: marta, visibility: 'MEMBERS_ONLY' },
+    // Several dates in one group (a weekly yoga morning and a weekly game night)
+    { title: 'Rīta joga – 1. nedēļa', description: 'Nedēļas rīta joga pie jūras, paklāji pieejami.', location: 'Majori pludmale, Jūrmala', startDate: days(1), groupSlug: 'yoga-jurmala', creator: liga },
+    { title: 'Rīta joga – 2. nedēļa', description: 'Nedēļas rīta joga pie jūras, paklāji pieejami.', location: 'Majori pludmale, Jūrmala', startDate: days(8), groupSlug: 'yoga-jurmala', creator: liga },
+    { title: 'Rīta joga – 3. nedēļa', description: 'Nedēļas rīta joga pie jūras, paklāji pieejami.', location: 'Majori pludmale, Jūrmala', startDate: days(15), groupSlug: 'yoga-jurmala', creator: liga },
+    { title: 'Spēļu vakars – 1. nedēļa', description: 'Nedēļas spēļu vakars, ņem līdzi savu mīļāko spēli.', location: 'Kafejnīca Labums, Rīga', startDate: days(2), groupSlug: 'boardgames-riga', creator: santa },
+    { title: 'Spēļu vakars – 2. nedēļa', description: 'Nedēļas spēļu vakars, ņem līdzi savu mīļāko spēli.', location: 'Kafejnīca Labums, Rīga', startDate: days(9), groupSlug: 'boardgames-riga', creator: santa },
+    { title: 'Spēļu vakars – 3. nedēļa', description: 'Nedēļas spēļu vakars, ņem līdzi savu mīļāko spēli.', location: 'Kafejnīca Labums, Rīga', startDate: days(16), groupSlug: 'boardgames-riga', creator: santa },
+
     // Legacy
     { title: 'Siguldas zelta rudens', description: 'Dosimies rudenīgā pārgājienā pa Siguldas takām.', location: 'Siguldas stacija', startDate: days(2), groupSlug: 'pargajieni', creator: oskars },
     { title: 'Vakara pastaiga gar jūru', description: 'Relaksējoša pastaiga Jūrmalas pludmalē.', location: 'Majori', startDate: days(7), groupSlug: 'pargajieni', creator: liga },
@@ -568,6 +590,9 @@ async function main() {
         location: e.location,
         city: e.city ?? groupCityBySlug[e.groupSlug],
         isOnline: e.isOnline ?? false,
+        visibility: e.visibility ?? 'PUBLIC',
+        joinMode: e.joinMode ?? 'OPEN',
+        maxParticipants: e.maxParticipants,
         startDate: e.startDate,
         groupId,
         creatorId: e.creator.id,
