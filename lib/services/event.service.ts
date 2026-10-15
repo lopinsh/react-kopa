@@ -7,7 +7,7 @@ import { EventFormValues } from '@/lib/validations/event';
 import { ErrorCode } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
-import { isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
+import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
 import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, langRecord, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
@@ -86,6 +86,8 @@ export interface NextEventView {
     titleLang: TextLang;
     startDate: Date;
     endDate: Date | null;
+    /** Started and not yet ended (`eventTiming`): cards and panels say "Notiek tagad · līdz …". */
+    running: boolean;
     location: string | null;
     city: string;
     isOnline: boolean;
@@ -592,7 +594,7 @@ export class EventService {
     }
 
     /**
-     * Each group's next event the viewer may see: not past (the Gaidāmie rule), public, plus members-only
+     * Each group's next event the viewer may see: not past (the Gaidāmie rule) and not already ended, public, plus members-only
      * for approved members and site admins (the rule of `canSeeMembersOnly`). Hidden groups only for their owner and site admins
      * (the people who may open them). Groups with none are absent.
      */
@@ -615,11 +617,14 @@ export class EventService {
             privileged = admin ? groupIds : memberships.map((m) => m.groupId);
             seesHidden = admin ? groupIds : memberships.filter((m) => m.role === 'OWNER').map((m) => m.groupId);
         }
-        const today = startOfTodayInRiga();
+        const now = new Date();
+        const today = startOfTodayInRiga(now);
         const events = await prisma.event.findMany({
             where: {
                 groupId: { in: groupIds },
                 AND: [
+                    // An event that already ended this morning is not "the next meeting" (lists still show it under today).
+                    { OR: [{ endDate: null }, { endDate: { gt: now } }] },
                     { OR: [{ group: { hiddenAt: null } }, { groupId: { in: seesHidden } }] },
                     { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
                     { OR: [{ visibility: 'PUBLIC' }, { visibility: 'MEMBERS_ONLY', groupId: { in: privileged } }] }
@@ -637,7 +642,7 @@ export class EventService {
             result.set(e.groupId, {
                 id: e.id, slug: e.slug, groupId: e.groupId,
                 title: text.title, titleLang: text.titleLang,
-                startDate: e.startDate, endDate: e.endDate, location: e.location, city: e.city, isOnline: e.isOnline,
+                startDate: e.startDate, endDate: e.endDate, running: eventTiming(e, now) === 'running', location: e.location, city: e.city, isOnline: e.isOnline,
                 excerpt: plainExcerpt(text.description, 140)
             });
         }

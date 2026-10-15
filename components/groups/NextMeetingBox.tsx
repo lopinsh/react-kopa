@@ -5,7 +5,7 @@ import { UI } from '@/lib/constants';
 import { EventService, type NextEventView } from '@/lib/services/event.service';
 import NextMeetingRow from './NextMeetingRow';
 
-type ViewProps = { event: Pick<NextEventView, 'slug' | 'title' | 'titleLang' | 'startDate' | 'excerpt'>; title: string; allLabel: string; groupHref: string };
+type ViewProps = { event: Pick<NextEventView, 'slug' | 'title' | 'titleLang' | 'startDate' | 'endDate' | 'running' | 'excerpt'>; title: string; allLabel: string; groupHref: string };
 
 /** The box itself, without data: "Nākamais pasākums", "Visi →" and one row (also used by the UI-elements page). */
 export function NextMeetingView({ event, title, allLabel, groupHref }: ViewProps) {

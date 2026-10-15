@@ -1426,6 +1426,8 @@
     }
   },
   "event": {
+    "runningNow": "On now",
+    "runningUntil": "On now · until {until}",
     "aboutEvent": "About the event",
     "addToGoogleCalendar": "Add to Google Calendar",
     "areYouComing": "Are you coming?",

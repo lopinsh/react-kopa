@@ -16,3 +16,15 @@ export function isEventPast(event: { startDate: Date | string; endDate?: Date | 
     const last = new Date(event.endDate ?? event.startDate);
     return last < startOfTodayInRiga(now);
 }
+
+export type EventTiming = 'upcoming' | 'running' | 'past';
+
+/**
+ * Past by the Latvian day (isEventPast); running while start <= now < end (only events with an end); otherwise upcoming.
+ * Computed on the server and handed down as data, so no client renders "now".
+ */
+export function eventTiming(event: { startDate: Date | string; endDate?: Date | string | null }, now: Date = new Date()): EventTiming {
+    if (isEventPast(event, now)) return 'past';
+    if (event.endDate && new Date(event.startDate) <= now && now < new Date(event.endDate)) return 'running';
+    return 'upcoming';
+}

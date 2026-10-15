@@ -136,6 +136,8 @@ function slugify(text: string): string {
 }
 
 const days = (n: number) => { const d = new Date(); d.setDate(d.getDate() + n); return d; };
+/** Day offset at a given hour (local time of the machine running the seed). */
+const daysAt = (n: number, hour: number) => { const d = days(n); d.setHours(hour, 0, 0, 0); return d; };
 
 async function main() {
   console.log('🌱 Seeding taxonomy...');
@@ -467,6 +469,15 @@ async function main() {
     /** Default OPEN ("Eju"); REQUEST = the organiser approves each person. */
     joinMode?: 'OPEN' | 'REQUEST';
     maxParticipants?: number;
+    /** Set by hand by the organiser (request events); the waitlist opens. */
+    isFull?: boolean;
+    /** Several days or hours long. */
+    endDate?: Date;
+    /** Practical info; for request events only approved people and organisers see it. */
+    instructions?: string;
+    /** The event's own picture (most seed events have none). */
+    bannerImage?: string;
+    attendees?: { user: typeof oskars; status: 'GOING' | 'PENDING' | 'WAITLISTED' | 'DECLINED' }[];
   };
 
   const eventSeeds: EventSeed[] = [
@@ -545,10 +556,14 @@ async function main() {
 
     // Every kind of event, and several dates per group (recurring series do not exist: each date is its own event).
     // Open + public
-    { title: 'Rīta pastaiga Mežaparkā', description: 'Viegla rīta pastaiga ap Mežaparku, pēc tam kafija. Nāc, kad vēlies, – pievienojies pa ceļam.', location: 'Mežaparka estrāde, Rīga', startDate: days(1), groupSlug: 'pargajieni-riga', creator: liga },
+    { title: 'Rīta pastaiga Mežaparkā', description: 'Viegla rīta pastaiga ap Mežaparku, pēc tam kafija. Nāc, kad vēlies, – pievienojies pa ceļam.', location: 'Mežaparka estrāde, Rīga', startDate: days(1), groupSlug: 'pargajieni-riga', creator: liga, instructions: 'Tiekamies pie estrādes kases. Ņem līdzi ūdeni un ērtus apavus.', bannerImage: 'https://picsum.photos/seed/mezaparks-morning/1200/675', attendees: [{ user: andris, status: 'GOING' }, { user: anna, status: 'GOING' }] },
+    // Running now: two days, started yesterday (card, panel and Informācija say "Notiek tagad · līdz …")
+    { title: 'Divu dienu kempings Siguldā', description: 'Divas dienas teltīs Gaujas krastā: kopīgs ugunskurs, pārgājieni un vakara stāsti.', location: 'Siguldas kempings', startDate: daysAt(-1, 10), endDate: daysAt(1, 16), groupSlug: 'camping-sigulda', creator: andris, instructions: 'Mašīnas atstāj pie kempinga vārtiem. Telts vietas numurs: 12.' },
     // Request to join, public
-    { title: 'Tempa treniņš nelielai grupai', description: 'Intervālu treniņš stadionā ar treneri. Vietu skaits ierobežots, organizators apstiprina katru dalībnieku.', location: 'Daugavas stadions, Rīga', startDate: days(3), groupSlug: 'running-riga', creator: andris, joinMode: 'REQUEST', maxParticipants: 10 },
-    { title: 'Mazā Catan turnīra pusfināls', description: 'Pusfināls ar sešiem dalībniekiem. Dalību apstiprina organizators.', location: 'Kafejnīca Labums, Rīga', startDate: days(6), groupSlug: 'boardgames-riga', creator: toms, joinMode: 'REQUEST', maxParticipants: 6 },
+    { title: 'Tempa treniņš nelielai grupai', description: 'Intervālu treniņš stadionā ar treneri. Vietu skaits ierobežots, organizators apstiprina katru dalībnieku.', location: 'Daugavas stadions, Rīga', startDate: days(3), groupSlug: 'running-riga', creator: andris, joinMode: 'REQUEST', maxParticipants: 10, instructions: 'Tempa treniņš sākas precīzi laikā. Vārti uz stadionu: ieeja no Daugavas ielas, kods 4821.', attendees: [{ user: marta, status: 'GOING' }, { user: toms, status: 'PENDING' }] },
+    { title: 'Mazā Catan turnīra pusfināls', description: 'Pusfināls ar sešiem dalībniekiem. Dalību apstiprina organizators.', location: 'Kafejnīca Labums, Rīga', startDate: days(6), groupSlug: 'boardgames-riga', creator: toms, joinMode: 'REQUEST', maxParticipants: 6, isFull: true, instructions: 'Mazā Catan: ņem līdzi savu zīmuli. Durvis uz kafejnīcu aizver 18:00, zvani uz 2000 0000.', attendees: [{ user: andris, status: 'GOING' }, { user: janis, status: 'GOING' }, { user: marta, status: 'WAITLISTED' }] },
+    // Request to join, online (the meeting link stays hidden until approved)
+    { title: 'Tiešsaistes šaha vakars', description: 'Draudzīgs šaha vakars tiešsaistē, organizators sastāda pārus.', location: 'https://meet.jit.si/ejam-chess-vakars', isOnline: true, startDate: days(4), groupSlug: 'boardgames-riga', creator: toms, joinMode: 'REQUEST', instructions: 'Ieej ar kameru izslēgtu. Pāru saraksts tiks nosūtīts 19:45.', attendees: [{ user: janis, status: 'GOING' }] },
     // Members only
     { title: 'Biedru ugunskura vakars', description: 'Slēgts vakars tikai grupas biedriem: ugunskurs, tēja un nākamās sezonas plāni.', location: 'Pie Oskara mājās, Ķekava', startDate: days(5), groupSlug: 'pargajieni-riga', creator: oskars, visibility: 'MEMBERS_ONLY', city: 'Riga' },
     { title: 'Biedru treniņš pirms sacensībām', description: 'Tikai biedriem: kopīgs treniņš pirms sacensībām, treneris sniegs atsauksmes.', location: 'Mežaparks, Rīga', startDate: days(2), groupSlug: 'running-riga', creator: marta, visibility: 'MEMBERS_ONLY' },
@@ -586,7 +601,7 @@ async function main() {
             lang,
             title: e.title,
             description: e.description,
-            instructions: 'Please be on time and bring a positive attitude!',
+            instructions: e.instructions ?? null,
           },
         },
         location: e.location,
@@ -596,9 +611,12 @@ async function main() {
         joinMode: e.joinMode ?? 'OPEN',
         maxParticipants: e.maxParticipants,
         startDate: e.startDate,
+        endDate: e.endDate,
+        isFull: e.isFull ?? false,
         groupId,
         creatorId: e.creator.id,
-        bannerImage: `https://picsum.photos/seed/${e.groupSlug}/800/400`,
+        bannerImage: e.bannerImage ?? null,
+        attendees: e.attendees ? { create: e.attendees.map((a) => ({ userId: a.user.id, status: a.status })) } : undefined,
       },
     });
   }

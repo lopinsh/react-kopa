@@ -6,6 +6,7 @@ import EventDayList from '@/components/events/EventDayList';
 import { cityLabel } from '@/lib/city-label';
 import { dayInZone, type DayKey } from '@/lib/discovery-dates';
 import { capitalizeFirst, createDateFormatter, EVENT_DAY_TIME } from '@/lib/date-format';
+import { meetingLine } from '@/lib/event-when';
 import { langAttr } from '@/lib/translations';
 import { UI } from '@/lib/constants';
 import type { GroupPanelData } from '@/lib/services/group-panel';
@@ -18,6 +19,7 @@ import FullPageLink from './FullPageLink';
 export default async function GroupPanel({ data }: { data: GroupPanelData }) {
     const locale = await getLocale();
     const t = await getTranslations('discovery');
+    const tEvent = await getTranslations('event');
     const tCities = await getTranslations('cities');
     const zone = await getTimeZone();
     const formatter = createDateFormatter(locale, zone);
@@ -48,7 +50,10 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                 {nextMeeting && !data.events.some((e) => e.slug === nextMeeting.slug) && (
                     <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-sm italic text-primary hover:underline">
                         <CalendarDays aria-hidden="true" className="mt-[3px] size-4 shrink-0" />
-                        <span>{t('nextMeeting', { date: capitalizeFirst(formatter.dateTime(nextMeeting.startDate, EVENT_DAY_TIME)) })}</span>
+                        <span>{meetingLine(
+                            { at: nextMeeting.startDate, until: nextMeeting.running ? nextMeeting.endDate : null }, formatter, zone,
+                            { next: (date) => t('nextMeeting', { date: capitalizeFirst(date) }), running: (until) => tEvent('runningUntil', { until }) }, EVENT_DAY_TIME
+                        )}</span>
                     </Link>
                 )}
                 {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}

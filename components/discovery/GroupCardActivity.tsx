@@ -1,6 +1,7 @@
 import { CalendarDays, Megaphone } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import { EVENT_DAY, useDateFormatter } from '@/lib/date-format';
+import { useTimeZone, useTranslations } from 'next-intl';
+import { useDateFormatter } from '@/lib/date-format';
+import { meetingLine } from '@/lib/event-when';
 import type { CardActivity } from '@/lib/services/card-activity';
 
 /**
@@ -9,6 +10,8 @@ import type { CardActivity } from '@/lib/services/card-activity';
  */
 export default function GroupCardActivity({ activity, lookingFor }: { activity?: CardActivity; lookingFor: string | null }) {
     const t = useTranslations('discovery');
+    const tEvent = useTranslations('event');
+    const zone = useTimeZone() ?? 'Europe/Riga';
     const formatter = useDateFormatter();
     if (!activity && !lookingFor) return null;
 
@@ -17,7 +20,7 @@ export default function GroupCardActivity({ activity, lookingFor }: { activity?:
             {activity?.kind === 'event' ? (
                 <p className="flex min-h-[2lh] items-start gap-1.5 italic text-primary">
                     <CalendarDays aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" />
-                    <span className="line-clamp-2">{t('nextMeeting', { date: formatter.dateTime(activity.at, EVENT_DAY) })}</span>
+                    <span className="line-clamp-2">{meetingLine(activity, formatter, zone, { next: (date) => t('nextMeeting', { date }), running: (until) => tEvent('runningUntil', { until }) })}</span>
                 </p>
             ) : activity?.kind === 'announcement' ? (
                 <p className="flex min-h-[2lh] items-start gap-1.5 italic text-primary">

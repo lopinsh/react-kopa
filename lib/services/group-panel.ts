@@ -24,7 +24,7 @@ export interface GroupPanelData {
     textLang: TextLang;
     /** Up to three upcoming PUBLIC events as rows; members-only events never appear here, whoever the viewer is. */
     events: EventRowData[];
-    nextMeeting: Pick<NextEventView, 'slug' | 'title' | 'titleLang' | 'startDate'> | null;
+    nextMeeting: Pick<NextEventView, 'slug' | 'title' | 'titleLang' | 'startDate' | 'endDate' | 'running'> | null;
     viewer: {
         /** "Sazināties": a visitor (not a member, not waiting) and the group is not hidden. */
         canContact: boolean;
@@ -51,7 +51,7 @@ export function toGroupPanel(g: GroupContext, next: NextEventView | null, events
         text: home ? plainExcerpt(home.content, PANEL_TEXT_MAX) : null,
         events,
         textLang: home?.contentLang ?? 'lv',
-        nextMeeting: next ? { slug: next.slug, title: next.title, titleLang: next.titleLang, startDate: next.startDate } : null,
+        nextMeeting: next ? { slug: next.slug, title: next.title, titleLang: next.titleLang, startDate: next.startDate, endDate: next.endDate, running: next.running } : null,
         viewer: {
             canContact,
             isAcceptingMembers: g.isAcceptingMembers

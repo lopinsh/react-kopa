@@ -1426,6 +1426,8 @@
     }
   },
   "event": {
+    "runningNow": "Notiek tagad",
+    "runningUntil": "Notiek tagad · līdz {until}",
     "aboutEvent": "Par pasākumu",
     "addToGoogleCalendar": "Pievienot Google kalendāram",
     "areYouComing": "Vai nāksi?",
