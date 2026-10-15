@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Overlay from '@/components/ui/Overlay';
-import { PANEL_TITLE_ID, UI } from '@/lib/constants';
+import { PANEL_DIALOG_ID, PANEL_TITLE_ID, UI } from '@/lib/constants';
 
 const PanelContext = createContext(false);
 /** True inside a panel: shared parts (the join step) know they sit over discovery. */
@@ -44,7 +44,7 @@ export default function PanelShell({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <Overlay layout="panel" backClose={false} onClose={() => router.back()} labelledBy={PANEL_TITLE_ID} dataUi={UI.panel} flush>
+        <Overlay layout="panel" id={PANEL_DIALOG_ID} backClose={false} onClose={() => router.back()} labelledBy={PANEL_TITLE_ID} dataUi={UI.panel} flush>
             <PanelContext.Provider value={true}>
                 <div ref={root} className="contents">{children}</div>
             </PanelContext.Provider>

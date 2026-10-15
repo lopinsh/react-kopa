@@ -6,8 +6,8 @@ export type OverlaySize = 'sm' | 'md' | 'lg' | '2xl' | '4xl';
 const SIZE = { sm: 'sm:max-w-sm', md: 'sm:max-w-[420px]', lg: 'sm:max-w-lg', '2xl': 'sm:max-w-2xl', '4xl': 'sm:max-w-4xl' } as const;
 const SHEET = 'w-full max-h-[90dvh] overflow-y-auto rounded-t-3xl bg-surface shadow-dialog motion-safe:animate-rise';
 const PANEL_PAD = 'p-[18px] pb-[calc(18px+env(safe-area-inset-bottom))] sm:pb-[18px]';
-// The opened card and the event panel (AR-44, AR-55): a sheet below md, from md a full-height panel at the right.
-const PANEL = 'w-full max-h-[90dvh] overflow-y-auto rounded-t-3xl bg-surface shadow-dialog motion-safe:animate-rise md:h-full md:max-h-none md:max-w-[400px] md:rounded-none md:border-l md:border-border md:shadow-premium motion-safe:md:animate-from-right';
+// The opened card and the event panel (AR-44, AR-55, R6b): a sheet below md, from md a centred overlay that is as tall as its content.
+const PANEL = 'w-full max-h-[90dvh] overflow-y-auto rounded-t-3xl bg-surface shadow-dialog motion-safe:animate-rise md:max-h-[min(calc(100dvh-3rem),800px)] md:max-w-[560px] md:rounded-2xl motion-safe:md:animate-pop';
 
 /** The panel's classes for a layout (the wrapper's alignment stays in Overlay). */
 export function panelClasses(layout: OverlayLayout, size: OverlaySize, flush: boolean) {

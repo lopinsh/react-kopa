@@ -41,6 +41,16 @@ export const PANEL_EVENTS_MAX = 3;
 export const FACES_MAX = 3;
 /** id of a panel's title element (only one panel exists at a time): focus goes there when the content changes. */
 export const PANEL_TITLE_ID = 'panel-title';
+/** id of the panel's dialog element, for the grow/shrink from the clicked card (lib/panel-origin.ts). */
+export const PANEL_DIALOG_ID = 'panel-dialog';
+/** The one view-transition name: set on the clicked card or on the overlay at click time, never at rest. */
+export const PANEL_VT_NAME = 'panel-origin';
+/** The overlay grows out of the card (ms, mirrored in app/globals.css). */
+export const PANEL_GROW_MS = 260;
+/** The overlay shrinks back into the card (ms, mirrored in app/globals.css). */
+export const PANEL_SHRINK_MS = 220;
+/** Longest wait for the panel to mount or unmount inside a view transition (ms): then the transition ends without a target. */
+export const PANEL_VT_WAIT_MS = 300;
 /** Announcements one group loads (newest first). */
 export const ANNOUNCEMENTS_LIMIT = 100;
 

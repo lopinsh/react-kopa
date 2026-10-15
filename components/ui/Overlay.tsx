@@ -90,7 +90,7 @@ export default function Overlay({
                     layout === 'dialog' && 'items-end justify-center sm:items-center sm:p-4',
                     layout === 'sheet' && 'items-end justify-center',
                     layout === 'right' && 'justify-end',
-                    layout === 'panel' && 'items-end justify-center md:items-stretch md:justify-end',
+                    layout === 'panel' && 'items-end justify-center md:items-center md:p-6',
                     layout === 'left' && 'justify-start',
                     layout === 'screen' && 'items-stretch',
                     zIndexClassName
