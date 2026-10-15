@@ -831,7 +831,8 @@
           "switch": "Slēdzis",
           "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites",
           "dates": "Datumi: dienu josla, izvēle un kalendārs",
-          "panels": "Paneļi un kas iet"
+          "panels": "Paneļi un kas iet",
+          "search": "Meklēšana"
         },
         "sample": {
           "category": "Pārgājieni",

@@ -43,6 +43,10 @@ One word per thing, everywhere.
 | Load the next 24 | Rādīt vēl | Show more |
 | Today / this week / this weekend | Šodien / Šonedēļ / Nedēļas nogalē | Today / This week / This weekend |
 | Load the next week | Rādīt nākamo nedēļu | Show next week |
+| All search results | Rādīt visus rezultātus | Show all results |
+| What else a search word matches | Atbilst arī | Also matches |
+| Your last search words | Nesen meklēts | Recent searches |
+| Search in every place | meklēt visur | search everywhere |
 
 ## Say, not
 

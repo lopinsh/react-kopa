@@ -6,6 +6,7 @@ import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/I
 import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
+import { SearchDemo } from '@/components/handbook/SearchDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
@@ -145,6 +146,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="filterLine" names={[UI.filterLine, UI.filterButton, UI.veidsLine, UI.viewSwitch, UI.clearAll, UI.filterList]} files={['components/discovery/filter/FilterLine.tsx', 'components/discovery/filter/FilterButton.tsx', 'components/discovery/filter/VeidsChips.tsx', 'components/discovery/filter/ViewSwitch.tsx']}>
                     <FilterLineDemo accent={samples.accent} />
+                </UiSpecimen>
+
+                <UiSpecimen id="search" names={[UI.searchOverlay, UI.searchPanel, UI.searchChips, UI.themeChip, UI.recentSearches, UI.searchResults, UI.alsoMatches]} files={['components/search/SearchPanel.tsx', 'components/search/SearchChips.tsx', 'components/search/ThemeChips.tsx', 'components/search/SearchResults.tsx', 'components/search/RecentSearches.tsx', 'components/search/SearchOverlay.tsx', 'components/discovery/filter/AlsoMatchesLine.tsx', 'components/ui/Highlight.tsx']}>
+                    <SearchDemo groups={[samples.groupCard, samples.groupCardNote]} event={samples.eventDays[0].rows[0]} />
                 </UiSpecimen>
 
                 <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>

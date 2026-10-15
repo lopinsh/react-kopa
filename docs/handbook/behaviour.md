@@ -63,6 +63,13 @@ The same situation behaves the same way on every screen.
 - Today: relative ("pirms 5 min"). Older: date ("9. okt., 20:07").
 - Time pickers in 15-minute steps.
 
+## Search
+
+- Results come as you type; the newest word wins.
+- Esc or a click outside closes the search and keeps the word; Back closes it.
+- A result opens its panel; Back returns to the page you were on.
+- Recent searches stay on this device and can be removed one by one.
+
 ## Notifications
 
 - Stored only when the person must act or would miss something.
