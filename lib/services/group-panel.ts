@@ -15,9 +15,9 @@ export interface GroupPanelData {
     city: string;
     memberCount: number;
     image: string | null;
-    /** The home section's first words (only when this viewer may read it), plain text, at most PANEL_TEXT_MAX. */
-    /** The card's short line (the home text's first words, same rule as the group card); null when there is none. */
+    /** The home text's first words at the card's tagline length (GROUP_TAGLINE_MAX); null when there is none. */
     tagline: string | null;
+    /** The home section's first words (only when this viewer may read it), plain text, at most PANEL_TEXT_MAX. */
     text: string | null;
     textLang: TextLang;
     /** Up to three upcoming PUBLIC events as rows; members-only events never appear here, whoever the viewer is. */

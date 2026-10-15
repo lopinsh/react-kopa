@@ -25,6 +25,9 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
     const formatter = createDateFormatter(locale, zone);
     const base = `/${data.l1Slug}/group/${data.slug}`;
     const { viewer, nextMeeting } = data;
+    // A home text short enough to be the card's tagline shows as the tagline; a longer one shows once as the text (it opens with
+    // the tagline's words, so both would repeat them). The next meeting line only when that event is not among the rows below.
+    const shortText = !!data.tagline && data.text === data.tagline;
     // The upcoming public events under their day headings (the same rows as every event list).
     const days: Array<{ day: DayKey; rows: GroupPanelData['events'] }> = [];
     for (const row of data.events) {
@@ -42,14 +45,14 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                 <PanelTitle>{data.name}</PanelTitle>
                 <CategoryLine color={data.category.color} category={data.category.l1Title} subCategories={data.category.subCategories} l1Slug={data.l1Slug} subSlugs={data.category.subCategorySlugs} />
                 <p className="text-sm text-foreground-muted">{cityLabel(tCities, data.city)} · {t('memberCount', { count: data.memberCount })}</p>
-                {data.tagline && <p lang={langAttr(data.textLang, locale)} className="text-sm font-medium leading-snug text-foreground">{data.tagline}</p>}
-                {nextMeeting && (
+                {shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm font-medium leading-snug text-foreground">{data.tagline}</p>}
+                {nextMeeting && !data.events.some((e) => e.slug === nextMeeting.slug) && (
                     <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-sm italic text-primary hover:underline">
                         <CalendarDays aria-hidden="true" className="mt-[3px] size-4 shrink-0" />
                         <span>{t('nextMeeting', { date: capitalizeFirst(formatter.dateTime(nextMeeting.startDate, EVENT_DAY_TIME)) })}</span>
                     </Link>
                 )}
-                {data.text && data.text !== data.tagline && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
+                {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
                 {days.length > 0 && <EventDayList days={days} today={dayInZone(new Date(), zone)} showGroup={false} showCity />}
                 {viewer.canContact && <ContactButton groupId={data.id} groupName={data.name} allowJoin={viewer.isAcceptingMembers} />}
                 {viewer.pending && <PendingStateView chatId={viewer.pending.chatId} onImage={false} variant="panel" />}
