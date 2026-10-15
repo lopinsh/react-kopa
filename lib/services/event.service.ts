@@ -16,6 +16,7 @@ import { getSiteRole } from './site-role.service';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
 import { EVENT_PANEL_INCLUDE, toEventPanel, toFace, type EventPanelData, type Face } from './event-panel';
+import { EVENT_PAGE_INCLUDE, toEventPage, loadOrganiserLists, type EventPageData } from './event-page';
 import { CityService } from './city.service';
 import { eventWhere, clampRange, bucketByDay } from './discovery-query';
 import { matchingEventIds } from './discovery-text';
@@ -360,6 +361,39 @@ export class EventService {
         const canManage = !!viewerId && (event.creatorId === viewerId || access.isGroupAdmin);
         const people = viewerId ? await EventService.goingFaces(event.id, viewerId, myStatus === 'GOING') : null;
         return { kind: 'event', event: toEventPanel(event, lang, { myStatus, canManage, people }) };
+    });
+
+    /**
+     * The event page (R9a), one typed answer: the event as this viewer may see it (null when missing, hidden, or members-only for an
+     * outsider; the page then asks `getMembersOnlyGate`). Instructions and an online request event's link are stripped here, faces are
+     * read for signed-in viewers only (D12), and the people lists only for organisers. The edit page still uses `getEventWithContext`.
+     */
+    static getEventPage = cache(async (
+        eventSlug: string,
+        groupSlug: string,
+        locale: string,
+        userId?: string,
+        l1Slug?: string
+    ): Promise<EventPageData | null> => {
+        const lang = toTextLang(locale);
+        const group = await prisma.group.findFirst({ where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null }, select: { id: true } });
+        if (!group) return null;
+        const event = await prisma.event.findFirst({ where: { slug: eventSlug, groupId: group.id }, include: EVENT_PAGE_INCLUDE(lang) });
+        if (!event) return null;
+        const access = await EventService.getAccess(group.id, userId);
+        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) return null;
+
+        const mine = userId
+            ? await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId: event.id } }, select: { status: true } })
+            : null;
+        const myStatus = mine?.status ?? null;
+        const canManage = !!userId && (event.creatorId === userId || access.isGroupAdmin);
+        const [people, organiser] = await Promise.all([
+            userId ? EventService.goingFaces(event.id, userId, myStatus === 'GOING') : null,
+            canManage ? loadOrganiserLists(event.id) : null
+        ]);
+        const canSeeInstructions = EventService.instructionsVisible(event.joinMode, canManage, myStatus);
+        return toEventPage(event, lang, { myStatus, canManage, canSeeInstructions, people, organiser });
     });
 
     /** Up to FACES_MAX people going with a public profile; the viewer's own face first when they go (it is them, whatever their profile says). */
