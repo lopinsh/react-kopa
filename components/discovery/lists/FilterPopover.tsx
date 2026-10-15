@@ -5,6 +5,7 @@ import { clsx } from 'clsx';
 import Sheet from '@/components/ui/Sheet';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
+import { useFeedbackMode } from '@/components/providers/FeedbackModeContext';
 import { UI } from '@/lib/constants';
 
 const DEFAULT_WIDTH = 250;
@@ -37,6 +38,7 @@ type Props = {
 /** A filter list: an anchored panel under its button from `md`, a bottom sheet on phones (dim only). The host element must be `relative` and hold the button. */
 export default function FilterPopover({ pop, title, onClose, children, width = DEFAULT_WIDTH }: Props) {
     const { host, id, open, desktop, alignRight } = pop;
+    const feedbackMode = useFeedbackMode();
 
     useEffect(() => {
         if (!open || !desktop) return;
@@ -50,7 +52,7 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
         };
         const onDown = (e: MouseEvent) => {
             if (e.target instanceof Node && host?.contains(e.target)) return;
-            if (!inFeedbackLayer(e.target)) onClose();
+            if (!feedbackMode && !inFeedbackLayer(e.target)) onClose();
         };
         document.addEventListener('keydown', onKey);
         document.addEventListener('mousedown', onDown);
@@ -58,7 +60,7 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
             document.removeEventListener('keydown', onKey);
             document.removeEventListener('mousedown', onDown);
         };
-    }, [open, desktop, onClose, host]);
+    }, [open, desktop, onClose, host, feedbackMode]);
 
     if (!open) return null;
     if (!desktop) return <Sheet title={title} onClose={onClose}><div id={id}>{children}</div></Sheet>;
