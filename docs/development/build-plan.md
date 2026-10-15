@@ -473,6 +473,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R6 Panels | pushed, live | [specs/R6.md](specs/R6.md) | `99f0b74`..`627ea7e` (routes `a02e690`; Opus review fixes `34acffa` sign-in resume of the event step, `e1595b0` panel focus after a step, `916f24a` footer under a panel, `8585c91` part tab locale and admin save, `627ea7e` comment) |
 | R7 Search | pushed, live | [specs/R7.md](specs/R7.md) | `0c242ed`..`051acf6` (drawer `0c242ed`, data `f14509f`, shared pieces `fbe986c`, search `33fbcac`, discovery `4368d94`, docs `8d9b345`, trim `3618000`; review fixes: blocked storage `fbaec42`, focus reopening the search `6464315`, size limits `5d624d2`, show-all bar `8403899`, specimen hydration `051acf6`) |
 | R8 Own area | pushed, live | [specs/R8.md](specs/R8.md) | `2f4b554`..`3d1165c` (frame `2f4b554`, data `699db3f`, overview `c7ced99` (7 queries; `relationJoins` preview, join for every query, same data checked), full page `30bc2f5`, Manas grupas `c731303`, dropdowns and Paziņojumi `7b3aa5a`, docs `0cf8bbb`, fixes `eda583b`; Opus review fixes `605807b` five bell rows after folding and arrow-key tabs, `3d1165c` section menu sticky and marking in the shell's scroller) |
+| R6b Centred overlay from the card (C1) | spec written | [specs/R6b.md](specs/R6b.md) | |
 | R9a Event page and form | not started | | |
 | R9b Biedri, Jaunumi, settings, profiles | not started | | |
 | R10 Citur | not started | | |
