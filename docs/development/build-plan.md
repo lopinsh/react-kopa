@@ -458,7 +458,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R5a Discovery filters and cards | pushed, live | [specs/R5a.md](specs/R5a.md) | `902d93a`..`a9523b6` (Opus review fixes `6efb0c1` quick ticks and Veids fit, `60ee81f` suggestion sign-in and name limit, `a9523b6` level-3 links, folded rail, groups cache key) |
 | R5b Events by day | pushed, live | [specs/R5b.md](specs/R5b.md) | `33b21f0`..`3f998cb` (Opus review fixes `749cb98` far-future date links and calendar footer hydration, `39caa1c` tagline `lang`, `3f998cb` UI elements calendar hydration) |
 | R6 Panels | pushed, live | [specs/R6.md](specs/R6.md) | `99f0b74`..`627ea7e` (routes `a02e690`; Opus review fixes `34acffa` sign-in resume of the event step, `e1595b0` panel focus after a step, `916f24a` footer under a panel, `8585c91` part tab locale and admin save, `627ea7e` comment) |
-| R7 Search | built, awaiting Opus review | [specs/R7.md](specs/R7.md) | `0c242ed`..`3618000` (drawer `0c242ed`, data `f14509f`, shared pieces `fbe986c`, search `33fbcac`, discovery `4368d94`, docs `8d9b345`, trim `3618000`) |
+| R7 Search | pushed, live | [specs/R7.md](specs/R7.md) | `0c242ed`..`051acf6` (drawer `0c242ed`, data `f14509f`, shared pieces `fbe986c`, search `33fbcac`, discovery `4368d94`, docs `8d9b345`, trim `3618000`; review fixes: blocked storage `fbaec42`, focus reopening the search `6464315`, size limits `5d624d2`, show-all bar `8403899`, specimen hydration `051acf6`) |
 | R8 Own area | not started | | |
 | R9a Event page and form | not started | | |
 | R9b Biedri, Jaunumi, settings, profiles | not started | | |
