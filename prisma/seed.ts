@@ -352,6 +352,8 @@ async function main() {
     {
       slug: 'sakopsana-valmiera', name: 'Valmiera Zaļā', category: 'cleanup',
       description: 'Regulāras talkas Valmierā un apkārtnē.',
+      // C2 card case "tagline": no upcoming event, no announcement.
+      lookingFor: 'Meklējam brīvprātīgos rudens talkai',
       bannerImage: 'https://picsum.photos/seed/cleanup/800/400',
       city: 'Valmiera', owner: andris,
       members: [{ user: janis, role: 'MEMBER' }],
@@ -523,14 +525,14 @@ async function main() {
     { title: 'Naksnīgā laipa – pusnakts stars', description: 'Nakts pārgājiens ar blaušanu un naktsmājiņu mežā. Aprīkojuma saraksts tiek sūtīts.', location: 'Sigulda', startDate: days(22), groupSlug: 'camping-sigulda', creator: andris },
 
     // Meditation
-    { title: 'Rīta meditācija – mierīgas sākums', description: '30 minūšu vadīta meditācija rīta cēlienā. Tēja pēc sesijas. Iegūstiet dienas enerģiju!', location: 'Zen centrs, Rīga', startDate: days(2), groupSlug: 'meditatija-riga', creator: liga },
-    { title: 'Pilnmēness vizualizācija', description: 'Garāka 90 minūšu meditācija ar pilnmēness noslēpumu tematiku. Sveļas un sveces.', location: 'Zen centrs, Rīga', startDate: days(16), groupSlug: 'meditatija-riga', creator: santa },
+    { title: 'Rīta meditācija – mierīgas sākums', description: '30 minūšu vadīta meditācija rīta cēlienā. Tēja pēc sesijas. Iegūstiet dienas enerģiju!', location: 'Zen centrs, Rīga', startDate: days(-2), groupSlug: 'meditatija-riga', creator: liga },
+    { title: 'Pilnmēness vizualizācija', description: 'Garāka 90 minūšu meditācija ar pilnmēness noslēpumu tematiku. Sveļas un sveces.', location: 'Zen centrs, Rīga', startDate: days(-16), groupSlug: 'meditatija-riga', creator: santa },
 
     // Cleanup
-    { title: 'Pavasara talka Valmierā', description: 'Pilsētas pavasara lieltā talka – sakopjam parkus un ielas kopā. Kafija un maizītes – nodrošinātas!', location: 'Raiņa parks, Valmiera', startDate: days(5), groupSlug: 'sakopsana-valmiera', creator: andris },
+    { title: 'Pavasara talka Valmierā', description: 'Pilsētas pavasara lieltā talka – sakopjam parkus un ielas kopā. Kafija un maizītes – nodrošinātas!', location: 'Raiņa parks, Valmiera', startDate: days(-5), groupSlug: 'sakopsana-valmiera', creator: andris },
 
     // Writing
-    { title: 'Rakstīšanas maratons – 24h', description: 'NaNoWriMo iedvesmota rakstīšanas nakts. Ierodies brīdī, kad vēlies, raksti, ko gribi!', location: 'Bibliotēka, Rīga', startDate: days(11), groupSlug: 'rakstnieki-riga', creator: marta },
+    { title: 'Rakstīšanas maratons – 24h', description: 'NaNoWriMo iedvesmota rakstīšanas nakts. Ierodies brīdī, kad vēlies, raksti, ko gribi!', location: 'Bibliotēka, Rīga', startDate: days(-11), groupSlug: 'rakstnieki-riga', creator: marta },
 
     // Dog owners
     { title: 'Suņu svētki Jūrmalā', description: 'Lielais suņu satikšanās pasākums Jūrmalas pludmalē. Sacensības, fotokonkurss un balvas!', location: 'Bulduri pludmale, Jūrmala', startDate: days(9), groupSlug: 'suni-jurmala', creator: marta },
@@ -605,7 +607,10 @@ async function main() {
   // ─── Discussion Posts ─────────────────────────────────────────────────────────
   console.log('💬 Seeding posts...');
 
-  const postSeeds: { content: string; author: typeof oskars; groupSlug: string }[] = [
+  const postSeeds: { title?: string; content: string; author: typeof oskars; groupSlug: string }[] = [
+    // C2 card case "announcement": the group's only event is past, so its card shows this. ('meditatija-riga', past events only, shows no line.)
+    { title: 'Nākamā tēma: īsie stāsti', content: 'Novembrī rakstām īsos stāstus līdz 2000 vārdiem. Tikšanās datumu izziņosim drīz.', author: marta, groupSlug: 'rakstnieki-riga' },
+
     { content: 'Sveiki visiem! Prieks redzēt, ka grupa aug. Kad plānots nākamais pārgājiens?', author: andris, groupSlug: 'pargajieni-riga' },
     { content: 'Pagājušajā nedēļā Ķemeri bija fantastiski – putni dziedāja un sūnas spīdēja! Ieteiktu visiem apmeklēt.', author: liga, groupSlug: 'pargajieni-riga' },
     { content: 'Vai kāds zinās, kur var atrast labas apavu soles pārgājieniem? Mani vecās vairs neder 😅', author: oskars, groupSlug: 'pargajieni-riga' },
@@ -646,7 +651,7 @@ async function main() {
     .map(p => {
       const groupId = groupIdBySlug[p.groupSlug];
       if (!groupId) return null;
-      return { content: p.content, authorId: p.author.id, groupId };
+      return { title: p.title, content: p.content, authorId: p.author.id, groupId };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
 

@@ -30,7 +30,7 @@ function groupNameOf(message: string): string {
 }
 
 /**
- * Manas grupas in two parallel waves of queries (at most 8, none per group): your memberships with their cards, then the waiting
+ * Manas grupas in parallel waves of queries (none per group): your memberships with their cards, then the waiting
  * requests, the next 30 days of events, recent announcements, answers to your requests and each card's latest activity.
  * Read-only: "seen" is written by `markMyGroupsSeen` once the page has shown in the browser, so an answer is listed until the visit after it.
  */
