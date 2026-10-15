@@ -97,10 +97,10 @@ export const NotificationService = {
     },
 
     /** Unread notifications per tab; the admin tab counts only for a site admin. One query. */
-    async getUnreadCounts(userId: string): Promise<{ user: number; admin: number }> {
+    async getUnreadCounts(userId: string, knownRole?: string | null): Promise<{ user: number; admin: number }> {
         const [grouped, role] = await Promise.all([
             prisma.notification.groupBy({ by: ['audience'], where: { userId, read: false }, _count: true }),
-            getSiteRole(userId),
+            knownRole !== undefined ? knownRole : getSiteRole(userId),
         ]);
         const countOf = (audience: NotificationAudience) => grouped.find((g) => g.audience === audience)?._count ?? 0;
         return { user: countOf('USER'), admin: isSiteAdmin(role) ? countOf('ADMIN') : 0 };

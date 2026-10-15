@@ -3,6 +3,7 @@ import type { Prisma } from '@prisma/client';
 import type { ActionResponse } from '@/types/actions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
+import { getMyGroupsOverview, getOwnCounts, markMyGroupsSeen } from './my-groups';
 import bcrypt from 'bcryptjs';
 import type { RegisterValues } from '@/lib/validations/auth';
 import { USERNAME_MAX_LENGTH } from '@/lib/username';
@@ -221,6 +222,27 @@ export const UserService = {
         if (!user) return null;
         const { cities, _count, ...person } = user;
         return { ...person, firstCity: cities[0] ?? null, groupCount: _count.memberships };
+    },
+
+    /** Manas grupas in one call (see `my-groups.ts`). */
+    getMyGroupsOverview(userId: string, locale: string, zone?: string) {
+        return getMyGroupsOverview(userId, locale, zone);
+    },
+
+    /** The numbers in the menus: unread notifications and what is new in Manas grupas. */
+    getOwnCounts(userId: string) {
+        return getOwnCounts(userId);
+    },
+
+    /** Manas grupas was opened: its "new" count restarts from now. */
+    markMyGroupsSeen(userId: string) {
+        return markMyGroupsSeen(userId);
+    },
+
+    /** Ids of every group the person is in or waits for (PENDING included): lists link those straight to the full page. */
+    async getMyGroupIds(userId: string): Promise<string[]> {
+        const rows = await prisma.membership.findMany({ where: { userId, group: { hiddenAt: null } }, select: { groupId: true } });
+        return rows.map((r) => r.groupId);
     },
 
     async getMyGroups(userId: string, locale: string) {

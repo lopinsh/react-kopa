@@ -5,6 +5,7 @@ import { UserService } from '@/lib/services/user.service';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { profileSchema } from '@/lib/validations/user';
 import type { ActionResponse } from '@/types/actions';
+import type { OwnCounts } from '@/lib/types/own-area';
 
 export async function updateProfile(formData: unknown): Promise<ActionResponse> {
     const session = await auth();
@@ -37,4 +38,31 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
     revalidateTag('groups', 'max');
     revalidatePath('/', 'layout');
     return { success: true };
+}
+
+/** The numbers in the menus (own counts); the client asks on load, on focus and after anything that changes them. */
+export async function getOwnCounts(): Promise<ActionResponse<OwnCounts>> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    try {
+        return { success: true, data: await UserService.getOwnCounts(session.user.id) };
+    } catch (error) {
+        console.error('[getOwnCounts] Error:', error);
+        return { success: false, error: 'ACTION_FAILED' };
+    }
+}
+
+/** Manas grupas has shown in the browser: its "new" count restarts. No revalidation: the page keeps what it showed. */
+export async function markMyGroupsSeen(): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    try {
+        await UserService.markMyGroupsSeen(session.user.id);
+        return { success: true };
+    } catch (error) {
+        console.error('[markMyGroupsSeen] Error:', error);
+        return { success: false, error: 'UPDATE_FAILED' };
+    }
 }
