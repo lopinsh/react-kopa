@@ -4,14 +4,16 @@ import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { CHIP, CHOSEN } from '@/components/discovery/filter/chip-styles';
-import { UI } from '@/lib/constants';
+import { SEARCH_MIN_CHARS, UI } from '@/lib/constants';
 import type { SearchModel } from '@/hooks/useSearch';
 
-/** The themes that match the word (the busiest with an empty field) as choice chips. One at a time (AP-06): the chosen one is tinted with ×, the others step aside until it is cleared. */
-export default function ThemeChips({ search }: { search: Pick<SearchModel, 'results' | 'theme' | 'toggleTheme'> }) {
+/** The themes that match the word as choice chips, once letters are typed (none before; only a chosen theme shows). One at a time (AP-06): the chosen one is tinted with ×, the others step aside until it is cleared. */
+export default function ThemeChips({ search }: { search: Pick<SearchModel, 'word' | 'results' | 'theme' | 'toggleTheme'> }) {
     const t = useTranslations('discovery');
-    const { results, theme, toggleTheme } = search;
-    const shown = (results?.themes ?? []).filter((c) => !theme || c.slug === theme);
+    const { word, results, theme, toggleTheme } = search;
+    // Nothing is suggested before letters are typed; a theme already chosen (carried over from the page) stays, so it can be cleared.
+    const typed = word.trim().length >= SEARCH_MIN_CHARS;
+    const shown = (results?.themes ?? []).filter((c) => (theme ? c.slug === theme : typed));
 
     return (
         <>
