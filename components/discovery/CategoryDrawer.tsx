@@ -26,8 +26,8 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
             aria-label={tSidebar('categoriesNav')}
             className={clsx('sticky top-0 hidden h-[calc(100dvh-var(--spacing-header))] shrink-0 flex-col overflow-y-auto border-r border-border bg-surface lg:flex', folded ? 'w-14' : 'w-[232px]')}
         >
-            <div className={clsx('mt-4 flex h-8 shrink-0 items-center px-3', folded ? 'justify-center' : 'justify-between')}>
-                {!folded && <h2 className="px-1 text-[13px] font-semibold text-foreground-muted">{t('categories')}</h2>}
+            <div className={clsx('mt-4 flex h-8 shrink-0 items-center px-3', folded ? 'justify-center' : 'justify-end')}>
+                <h2 className="sr-only">{t('categories')}</h2>
                 <button
                     type="button"
                     onClick={fold}
