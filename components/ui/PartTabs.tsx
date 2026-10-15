@@ -8,8 +8,8 @@ import { UI } from '@/lib/constants';
 type Item = { key: string; label: string; href: string; /** Language code when the label is not in the page language. */ lang?: string; count?: number };
 
 type Props = {
-    /** The page's name: on phones it stands over the tabs; from `md` the pages column already names it. */
-    title: string;
+    /** The page's name: on phones it stands over the tabs; from `md` the pages column already names it. Without it the tabs stand alone (a menu of sections on one page). */
+    title?: string;
     /** Accessible name of the tab row. */
     label: string;
     items: Item[];
@@ -20,14 +20,14 @@ type Props = {
     onSelect?: (key: string) => void;
 };
 
-/** The parts of a group page as tabs (AR-21): each tab is its own URL, the open one is underlined in the site colour. */
-export default function GroupPartTabs({ title, label, items, active, action, onSelect }: Props) {
+/** The parts of a page as tabs (AR-21): each tab is its own URL (or, with `onSelect`, a part already on the page); the open one is underlined in the site colour. */
+export default function PartTabs({ title, label, items, active, action, onSelect }: Props) {
     const Tag = onSelect ? 'a' : Link;
     return (
         <div>
-            <h2 className="font-heading text-xl font-semibold md:sr-only">{title}</h2>
+            {title && <h2 className="font-heading text-xl font-semibold md:sr-only">{title}</h2>}
             {items.length > 0 && (
-                <div data-ui={UI.tabs} className="mt-2 flex items-end gap-3 border-b border-border md:mt-0">
+                <div data-ui={UI.tabs} className={clsx('flex items-end gap-3 border-b border-border', title && 'mt-2 md:mt-0')}>
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-[18px] overflow-x-auto [scrollbar-width:none]">
                         {items.map(({ key, label: text, href, lang, count }) => (
                             <Tag

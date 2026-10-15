@@ -6,7 +6,7 @@ import EventDayList from '@/components/events/EventDayList';
 import { getTimeZone, getTranslations } from 'next-intl/server';
 import { Calendar, Plus } from 'lucide-react';
 import { Link } from '@/i18n/routing';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 import type { Metadata } from 'next';
 import { dayInZone, zonedDayStart } from '@/lib/discovery-dates';
 import { groupByDay } from '@/lib/event-days';
@@ -61,7 +61,7 @@ export default async function GroupEventsPage({
 
     return (
         <>
-            <GroupPartTabs
+            <PartTabs
                 title={t('pages.events')}
                 label={tFrame('partsLabel')}
                 active={currentTab}

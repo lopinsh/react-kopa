@@ -118,11 +118,14 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
     });
 
     const postItems: NewsItem[] = posts.map((p) => {
+        // An announcement without a title: its first line stands in; when that line was cut, the text itself is the headline.
         const legacy = p.title ? null : legacyTitle(p.content);
+        const wholeText = !!legacy && legacy.body === p.content.trim();
         return {
             kind: 'post', id: p.id, at: p.createdAt, isNew: p.createdAt > since && p.authorId !== userId,
-            group: toNewsGroup(p.group, locale), title: p.title ?? legacy?.title ?? '',
-            excerpt: plainExcerpt(legacy ? legacy.body : p.content, 160) ?? '',
+            group: toNewsGroup(p.group, locale),
+            title: wholeText ? (plainExcerpt(p.content, 160) ?? '') : (p.title ?? legacy?.title ?? ''),
+            excerpt: wholeText ? '' : (plainExcerpt(legacy ? legacy.body : p.content, 160) ?? ''),
         };
     });
     const answerItems: NewsItem[] = answers.map((a) => ({

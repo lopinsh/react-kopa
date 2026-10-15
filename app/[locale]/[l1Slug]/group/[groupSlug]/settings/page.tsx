@@ -7,7 +7,7 @@ import { auth } from '@/lib/auth';
 import { CityService } from '@/lib/services/city.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
@@ -91,7 +91,7 @@ export default async function GroupSettingsPage(props: {
 
     return (
         <div className="w-full max-w-4xl space-y-6">
-            <GroupPartTabs title={t('pages.settings')} label="" items={[]} active="" />
+            <PartTabs title={t('pages.settings')} label="" items={[]} active="" />
             {pendingMembers.length > 0 && (
                 <MembershipPanel
                     groupId={group.id}

@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { User as UserIcon } from 'lucide-react';
 import MembershipPanel from '@/components/groups/MembershipPanel';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 import MemberCard from '@/components/groups/MemberCard';
 import type { Metadata } from 'next';
 import { MembershipRole } from '@prisma/client';
@@ -91,7 +91,7 @@ export default async function GroupMembersPage({
 
     return (
         <>
-            <GroupPartTabs
+            <PartTabs
                 title={t('pages.members')}
                 label={tFrame('partsLabel')}
                 active={currentTab}

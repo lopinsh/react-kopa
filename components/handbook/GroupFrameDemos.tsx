@@ -7,7 +7,7 @@ import { toGroupState } from '@/components/providers/to-group-state';
 import AccentScope from '@/components/handbook/AccentScope';
 import GroupBanner from '@/components/groups/frame/GroupBanner';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import { NextMeetingView } from '@/components/groups/NextMeetingBox';
 import { buttonClass } from '@/components/ui/Button';
@@ -70,7 +70,7 @@ export async function GroupPagesDemo({ samples }: { samples: UiSamples }) {
                 <div className="grid gap-[22px] md:grid-cols-[190px_minmax(0,1fr)]">
                     <GroupPagesNav variant="side" active="events" />
                     <div className="grid min-w-0 content-start gap-3">
-                        <GroupPartTabs
+                        <PartTabs
                             title={t('pages.events')}
                             label={tFrame('partsLabel')}
                             active="upcoming"

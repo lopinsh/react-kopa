@@ -243,44 +243,5 @@ export const UserService = {
     async getMyGroupIds(userId: string): Promise<string[]> {
         const rows = await prisma.membership.findMany({ where: { userId, group: { hiddenAt: null } }, select: { groupId: true } });
         return rows.map((r) => r.groupId);
-    },
-
-    async getMyGroups(userId: string, locale: string) {
-        const lang = locale === 'en' ? 'en' : 'lv';
-        const memberships = await prisma.membership.findMany({
-            where: { userId, group: { hiddenAt: null } },
-            include: {
-                group: {
-                    include: {
-                        category: {
-                            include: TaxonomyResolver.getInclude(lang)
-                        },
-                        ...GROUP_CARD_RELATIONS
-                    }
-                }
-            },
-            orderBy: { joinedAt: 'desc' }
-        });
-
-        // Re-fetch pending count for each group manually since Prisma _count doesn't allow multiple where clauses on the same relation easily
-        // But wait, we can just do a parallel query or raw count, or better: we just pull `members: { where: { role: 'PENDING' } }` since we only need the count.
-        // Actually let's query the pending counts for these groups.
-        const groupIds = memberships.map(m => m.group.id);
-        const pendingCounts = await prisma.membership.groupBy({
-            by: ['groupId'],
-            where: {
-                groupId: { in: groupIds },
-                role: 'PENDING'
-            },
-            _count: true
-        });
-
-        const pendingCountMap = new Map(pendingCounts.map(pc => [pc.groupId, pc._count]));
-
-        return memberships.map(m => ({
-            ...toGroupCard(m.group, lang),
-            pendingCount: pendingCountMap.get(m.group.id) || 0,
-            role: m.role
-        }));
     }
 };

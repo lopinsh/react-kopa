@@ -188,7 +188,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <div className="p-4"><GroupBannerDemo samples={samples} /></div>
                 </UiSpecimen>
 
-                <UiSpecimen id="groupPages" names={[UI.groupMenu, UI.tabs, UI.nextMeeting, UI.socialLinks]} files={['components/groups/frame/GroupPagesNav.tsx', 'components/ui/PageNavLink.tsx', 'components/groups/frame/GroupPartTabs.tsx', 'components/groups/NextMeetingBox.tsx', 'components/groups/GroupSocialLinks.tsx']}>
+                <UiSpecimen id="groupPages" names={[UI.groupMenu, UI.tabs, UI.nextMeeting, UI.socialLinks]} files={['components/groups/frame/GroupPagesNav.tsx', 'components/ui/PageNavLink.tsx', 'components/ui/PartTabs.tsx', 'components/groups/NextMeetingBox.tsx', 'components/groups/GroupSocialLinks.tsx']}>
                     <GroupPagesDemo samples={samples} />
                 </UiSpecimen>
 

@@ -1067,7 +1067,12 @@
     "send": "Sūtīt",
     "drawerLoadFailed": "Neizdevās ielādēt ziņas.",
     "drawerLoading": "Ielādē ziņas…",
-    "openFullView": "Atvērt pilnu skatu"
+    "openFullView": "Atvērt pilnu skatu",
+    "allMessages": "Visas ziņas",
+    "emptyTitle": "Pagaidām kluss",
+    "emptyText": "Kad uzrakstīsi grupai vai kāds uzrakstīs tev, saruna būs šeit.",
+    "loadFailed": "Neizdevās ielādēt ziņas.",
+    "sharedMore": "+{count}"
   },
   "nav": {
     "adminPanel": "Administrēšanas panelis",
@@ -1088,7 +1093,10 @@
     "languageCurrent": "Valoda: {language}",
     "messagesUnread": "Ziņas, {count, plural, zero {# nelasītu sarunu} one {# nelasīta saruna} other {# nelasītas sarunas}}",
     "modeOn": "Ieslēgts",
-    "modeOff": "Izslēgts"
+    "modeOff": "Izslēgts",
+    "notifications": "Paziņojumi",
+    "myGroupsNew": "{count, plural, zero {Manas grupas, # jaunu} one {Manas grupas, # jauns} other {Manas grupas, # jauni}}",
+    "notificationsUnread": "{count, plural, zero {Paziņojumi, # nelasītu} one {Paziņojumi, # nelasīts} other {Paziņojumi, # nelasīti}}"
   },
   "notifications": {
     "title": "Paziņojumi",
@@ -1134,7 +1142,14 @@
       "CITY_REJECTED": "Pilsēta „{cityName}” netika pieņemta. Izvēlies citu savai grupai"
     },
     "tabPersonal": "Personīgie",
-    "tabAdmin": "Administrācija"
+    "tabAdmin": "Administrācija",
+    "emptyTitle": "Pagaidām kluss",
+    "emptyText": "Kad kāds pieteiksies tavā grupā vai parādīsies jauns pasākums, tas būs šeit.",
+    "all": "Visi paziņojumi",
+    "today": "Šodien",
+    "earlier": "Agrāk",
+    "showMore": "Rādīt vēl",
+    "unread": "Nelasīts"
   },
   "onboarding": {
     "username": {
@@ -1215,6 +1230,21 @@
       "light": "Gaišs",
       "dark": "Tumšs",
       "system": "Kā ierīcē"
+    },
+    "myGroups": {
+      "menuLabel": "Manas grupas sadaļas",
+      "upcoming": "Tuvākie pasākumi",
+      "news": "Jaunumi",
+      "groups": "Tavas grupas",
+      "requests": "Tavi pieteikumi",
+      "requestCount": "{count, plural, zero {# pieteikumu} one {# pieteikums} other {# pieteikumi}}",
+      "since": "kopš {date}",
+      "new": "Jauns",
+      "answerAccepted": "Tavs pieteikums grupā <group>{name}</group> ir apstiprināts",
+      "answerDeclined": "Grupa <group>{name}</group> šoreiz tavu pieteikumu neapstiprināja",
+      "end": "Tas ir viss jaunais.",
+      "emptyTitle": "Pagaidām kluss",
+      "emptyText": "Kad pievienosies kādai grupai, tās pasākumi un jaunumi būs šeit."
     }
   },
   "report": {

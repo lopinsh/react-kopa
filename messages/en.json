@@ -1067,7 +1067,12 @@
     "send": "Send",
     "drawerLoadFailed": "Could not load messages.",
     "drawerLoading": "Loading messages…",
-    "openFullView": "Open full view"
+    "openFullView": "Open full view",
+    "allMessages": "All messages",
+    "emptyTitle": "All quiet for now",
+    "emptyText": "When you write to a group or someone writes to you, the conversation will be here.",
+    "loadFailed": "Could not load messages.",
+    "sharedMore": "+{count}"
   },
   "nav": {
     "adminPanel": "Admin panel",
@@ -1088,7 +1093,10 @@
     "languageCurrent": "Language: {language}",
     "messagesUnread": "Messages, {count, plural, one {# unread conversation} other {# unread conversations}}",
     "modeOn": "On",
-    "modeOff": "Off"
+    "modeOff": "Off",
+    "notifications": "Notifications",
+    "myGroupsNew": "{count, plural, one {My groups, # new} other {My groups, # new}}",
+    "notificationsUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}"
   },
   "notifications": {
     "title": "Notifications",
@@ -1134,7 +1142,14 @@
       "CITY_REJECTED": "The city “{cityName}” was not accepted. Choose another one for your group"
     },
     "tabPersonal": "Personal",
-    "tabAdmin": "Admin"
+    "tabAdmin": "Admin",
+    "emptyTitle": "All quiet for now",
+    "emptyText": "When someone asks to join your group or a new event appears, it will show up here.",
+    "all": "All notifications",
+    "today": "Today",
+    "earlier": "Earlier",
+    "showMore": "Show more",
+    "unread": "Unread"
   },
   "onboarding": {
     "username": {
@@ -1215,6 +1230,21 @@
       "light": "Light",
       "dark": "Dark",
       "system": "Same as device"
+    },
+    "myGroups": {
+      "menuLabel": "My groups sections",
+      "upcoming": "Coming up",
+      "news": "News",
+      "groups": "Your groups",
+      "requests": "Your requests",
+      "requestCount": "{count, plural, one {# request} other {# requests}}",
+      "since": "since {date}",
+      "new": "New",
+      "answerAccepted": "Your request to join <group>{name}</group> was accepted",
+      "answerDeclined": "<group>{name}</group> did not accept your request this time",
+      "end": "That's everything new.",
+      "emptyTitle": "All quiet for now",
+      "emptyText": "Once you join a group, its events and news will show up here."
     }
   },
   "report": {

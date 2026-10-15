@@ -1,7 +1,7 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
 import AnnouncementBoard from '@/components/groups/AnnouncementBoard';
-import GroupPartTabs from '@/components/groups/frame/GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
@@ -45,7 +45,7 @@ export default async function GroupAnnouncementsPage({
 
     return (
         <>
-            <GroupPartTabs title={t('pages.announcements')} label={tFrame('partsLabel')} items={[]} active="" />
+            <PartTabs title={t('pages.announcements')} label={tFrame('partsLabel')} items={[]} active="" />
             <AnnouncementBoard
                 groupId={group.id}
                 locale={locale}

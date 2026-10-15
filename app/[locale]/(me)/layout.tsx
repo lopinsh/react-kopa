@@ -17,7 +17,8 @@ export default async function MeLayout({ children, params }: { children: React.R
     const { locale } = await params;
     const session = await auth();
     const ctx = session?.user?.id ? await UserService.getOwnAreaContext(session.user.id) : null;
-    if (!ctx) return children;
+    // Signed out there is no frame, but the page still starts at the frame's spacing.
+    if (!ctx) return <div className="mx-auto max-w-6xl px-3 pb-6 pt-3 md:px-[22px] md:pt-[18px]">{children}</div>;
 
     const [t, tCities] = await Promise.all([
         getTranslations({ locale, namespace: 'profile' }),

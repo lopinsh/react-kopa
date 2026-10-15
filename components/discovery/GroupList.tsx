@@ -3,6 +3,7 @@ import GroupRow from './GroupRow';
 import CreateCard from './CreateCard';
 import type { GroupCardData } from '@/lib/services/group-card';
 import type { DiscoveryParams } from '@/lib/discovery-params';
+import type { MyRole } from '@/lib/types/own-area';
 
 type Props = {
     groups: GroupCardData[];
@@ -18,22 +19,24 @@ type Props = {
     fullPage?: boolean;
     /** Ids of groups the viewer belongs to or waits for: those link straight to the full page (cmv9amjft). */
     fullPageIds?: string[];
+    /** Manas grupas: group id → your role there and the requests waiting for the team (AR-09, OD-21). */
+    mine?: Record<string, { role: MyRole; requestCount: number }>;
 };
 
 /**
  * Groups as cards from `md` (a grid that fills the width) and as rows on phones. Both are server-rendered; the one not in use is
  * `display: none`. Used by discovery and the profiles.
  */
-export default function GroupList({ groups, nextMeetings = {}, createFor, filters, highlight, fullPage = false, fullPageIds }: Props) {
+export default function GroupList({ groups, nextMeetings = {}, createFor, filters, highlight, fullPage = false, fullPageIds, mine }: Props) {
     const full = (id: string) => fullPage || !!fullPageIds?.includes(id);
     return (
         <>
             <div className="hidden gap-3 md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
-                {groups.map((g) => <GroupCard key={g.id} group={g} nextMeeting={nextMeetings[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} />)}
+                {groups.map((g) => <GroupCard key={g.id} group={g} nextMeeting={nextMeetings[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={mine?.[g.id]?.role} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>
             <div className="rounded-2xl bg-surface px-3.5 md:hidden">
-                {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} />)}
+                {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} role={mine?.[g.id]?.role} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="row" />}
             </div>
         </>

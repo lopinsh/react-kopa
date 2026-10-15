@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { useLocale } from 'next-intl';
-import GroupPartTabs from './GroupPartTabs';
+import PartTabs from '@/components/ui/PartTabs';
 
 type Part = { key: string; label: string; lang?: string; href: string; content: ReactNode };
 
@@ -20,7 +20,7 @@ export default function InfoParts({ title, label, parts, initial }: { title: str
     };
     return (
         <>
-            <GroupPartTabs title={title} label={label} items={parts.map(({ key, label: text, lang, href }) => ({ key, label: text, lang, href: `/${locale}${href}` }))} active={active} onSelect={select} />
+            <PartTabs title={title} label={label} items={parts.map(({ key, label: text, lang, href }) => ({ key, label: text, lang, href: `/${locale}${href}` }))} active={active} onSelect={select} />
             {parts.map((p) => <div key={p.key} hidden={p.key !== active}>{p.content}</div>)}
         </>
     );
