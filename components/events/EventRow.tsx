@@ -2,6 +2,7 @@ import { Check } from 'lucide-react';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import Badge from '@/components/ui/Badge';
+import Highlight from '@/components/ui/Highlight';
 import { cityLabel } from '@/lib/city-label';
 import { useDateFormatter } from '@/lib/date-format';
 import { dayInZone, type DayKey } from '@/lib/discovery-dates';
@@ -18,10 +19,16 @@ type Props = {
     showCity: boolean;
     /** The day this row sits under, to say "kopš 12. okt." for an event that started earlier. */
     headingDay: DayKey;
+    /** The search word, marked in the title. */
+    highlight?: string;
+    /** Replace the history entry on both links (a result of the search). */
+    replace?: boolean;
+    /** Marks the title link for the search's arrow keys. */
+    searchItem?: boolean;
 };
 
 /** The one event row (AR-54): time, dot, name, city; the viewer's tag under the time; the group line; the first words of the description. */
-export default function EventRow({ event, showGroup, showCity, headingDay }: Props) {
+export default function EventRow({ event, showGroup, showCity, headingDay, highlight, replace = false, searchItem = false }: Props) {
     const t = useTranslations('event');
     const tCommon = useTranslations('common.tag');
     const tCities = useTranslations('cities');
@@ -47,10 +54,12 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
             <Link
                 href={`/${event.category.l1Slug}/group/${event.group.slug}/events/${event.slug}`}
                 scroll={false}
+                replace={replace}
+                {...(searchItem ? { 'data-search-item': true } : {})}
                 lang={langAttr(event.titleLang, locale)}
                 className="truncate font-semibold text-foreground after:absolute after:inset-0"
             >
-                {event.title}
+                <Highlight text={event.title} word={highlight} />
             </Link>
             <span className="whitespace-nowrap text-[13px] text-foreground-muted">{[place, since, word].filter(Boolean).join(' · ')}</span>
             {event.tag && (
@@ -62,7 +71,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay }: Pro
             )}
             {showGroup && (
                 <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-xs text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>

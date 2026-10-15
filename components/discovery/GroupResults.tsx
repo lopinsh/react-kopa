@@ -32,7 +32,7 @@ export default async function GroupResults({ groups, hasMore, nextMeetings, para
     }
     return (
         <>
-            <GroupList groups={groups} nextMeetings={nextMeetings} createFor={createFor} filters={params} />
+            <GroupList groups={groups} nextMeetings={nextMeetings} createFor={createFor} filters={params} highlight={params.q} />
             {canAskMore && (
                 <div className="mt-5 flex justify-center">
                     <Link href={discoveryHref(params, { limit: params.limit + DISCOVERY_GROUPS_PAGE })} scroll={false} className={buttonClass('quiet')}>

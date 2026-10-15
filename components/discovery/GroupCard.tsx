@@ -3,6 +3,7 @@ import { CalendarDays } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import CategoryLine from '@/components/ui/CategoryLine';
+import Highlight from '@/components/ui/Highlight';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { cityLabel } from '@/lib/city-label';
 import { EVENT_DAY, useDateFormatter } from '@/lib/date-format';
@@ -18,13 +19,15 @@ type Props = {
     nextMeeting?: Date | null;
     /** The discovery list's filters: the category links add to them. */
     filters?: DiscoveryParams;
+    /** The search word, marked in the name. */
+    highlight?: string;
 };
 
 /**
  * A group in a grid (AR-34): name, category line, place and members, the tagline; under a thin line the group's note; the photo (or the tone
  * and icon) at the right. Every card reserves the same lines (name 2, tagline 2, note 2), so a grid has one card height.
  */
-export default function GroupCard({ group, nextMeeting, filters }: Props) {
+export default function GroupCard({ group, nextMeeting, filters, highlight }: Props) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const formatter = useDateFormatter();
@@ -39,7 +42,7 @@ export default function GroupCard({ group, nextMeeting, filters }: Props) {
             <div className="flex min-w-0 flex-col gap-[3px] px-3.5 pt-3">
                 <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
-                    <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className="outline-none after:absolute after:inset-0 after:z-[1]">{group.name}</Link>
+                    <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className="outline-none after:absolute after:inset-0 after:z-[1]"><Highlight text={group.name} word={highlight} /></Link>
                 </h3>
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
                 <p className="truncate text-[13px] text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>

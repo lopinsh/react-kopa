@@ -5,11 +5,13 @@ import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import CheckRow from './CheckRow';
 import ListSearch from './ListSearch';
-import { useCities } from '@/components/providers/CitiesContext';
-import { useDiscovery } from '@/components/providers/DiscoveryProvider';
+import type { CityOption } from '@/lib/services/city.service';
 import { foldText } from '@/lib/text-fold';
 
 type Props = {
+    cities: CityOption[];
+    /** Groups per city and anywhere, for the rows' counts. */
+    counts: { byCity: Record<string, number>; anyPlace: number };
     selected: string[];
     onChange: (cities: string[]) => void;
     /** A click on a city's name: only that city, and the list closes. */
@@ -18,10 +20,8 @@ type Props = {
 };
 
 /** "Kur": Visur with its count, a thin line, then the cities with tick boxes and counts (ticked first, then by count). */
-export default function PlaceList({ selected, onChange, onPick, autoFocus }: Props) {
+export default function PlaceList({ cities, counts, selected, onChange, onPick, autoFocus }: Props) {
     const t = useTranslations('discovery');
-    const cities = useCities();
-    const { counts } = useDiscovery();
     const [typed, setTyped] = useState('');
     const [start] = useState(selected);
 

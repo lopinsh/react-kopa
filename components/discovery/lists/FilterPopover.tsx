@@ -42,6 +42,8 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
         if (!open || !desktop) return;
         const onKey = (e: KeyboardEvent) => {
             if (e.key === 'Escape') {
+                // The search under it listens on `window` later and must not close with the list.
+                e.preventDefault();
                 onClose();
                 host?.querySelector('button')?.focus();
             }

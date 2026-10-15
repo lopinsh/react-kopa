@@ -7,6 +7,7 @@ import FilterButton from './FilterButton';
 import FilterPopover, { usePopover } from '@/components/discovery/lists/FilterPopover';
 import PlaceList from '@/components/discovery/lists/PlaceList';
 import { useCities } from '@/components/providers/CitiesContext';
+import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 
 /**
@@ -17,6 +18,7 @@ export default function PlaceButton() {
     const t = useTranslations('discovery');
     const cities = useCities();
     const { params, go } = useDiscoveryNav();
+    const { counts } = useDiscovery();
     const { bindHost, ...pop } = usePopover();
     const [draft, setDraft] = useState<string[]>([]);
     // The phone sheet's name click: applied by `close` once Back has taken the sheet's history entry off (AR-67).
@@ -61,6 +63,8 @@ export default function PlaceButton() {
             />
             <FilterPopover pop={pop} title={t('where')} onClose={close}>
                 <PlaceList
+                    cities={cities}
+                    counts={counts}
                     selected={draft}
                     onChange={(next) => { setDraft(next); if (pop.desktop) go({ cities: next }, { replace: true }); }}
                     onPick={pick}

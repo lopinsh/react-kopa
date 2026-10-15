@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import { clsx } from 'clsx';
 import { useBackClose } from '@/hooks/useBackClose';
 import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useOverlayLayer } from '@/hooks/useOverlayLayer';
 import { CloseContext, restoreFocus } from '@/components/ui/overlay-support';
 import { panelClasses, type OverlayLayout, type OverlaySize } from '@/components/ui/overlay-layouts';
 import type { UiName } from '@/lib/constants';
@@ -40,18 +41,14 @@ type Props = {
     children: ReactNode;
 };
 
-// Open overlays, topmost last: Esc only closes the top one; scroll stays locked until the last one closes.
-const stack: string[] = [];
-
 /**
- * The one pop-up shell (AR-67): portal, scrim, stack, scroll lock, Esc, Back, focus trap and focus return.
+ * The one pop-up shell (AR-67): portal, scrim, layer stack and scroll lock (useOverlayLayer), Esc, Back, focus trap and focus return.
  * Render it only while it should be open (mount = open). Modal, Sheet and the drawers sit on it.
  */
 export default function Overlay({
     layout, id: panelId, onClose, locked = false, dirty = false, onBlocked, backClose = true, role = 'dialog', labelledBy, label, describedBy, dataUi,
     size = 'md', flush = false, panelClassName, zIndexClassName = 'z-50', translateIgnore = false, returnFocusRef, children,
 }: Props) {
-    const id = useId();
     const mounted = useSyncExternalStore(() => () => { }, () => true, () => false);
     const panelRef = useFocusTrap<HTMLDivElement>(mounted);
     // The element that opened the overlay, read while rendering so a field with autoFocus cannot replace it.
@@ -61,32 +58,25 @@ export default function Overlay({
     const requestClose = useBackClose(mounted && backClose, onClose, locked, dirty && onBlocked ? { dirty, onBlocked } : undefined);
     const downOnScrim = useRef(false);
 
+    const isTop = useOverlayLayer(true);
+
     useEffect(() => {
-        const main = document.getElementById('main-content');
-        stack.push(id);
-        main?.classList.add('overflow-hidden');
-        document.body.style.overflow = 'hidden';
         return () => {
-            stack.splice(stack.indexOf(id), 1);
-            if (stack.length === 0) {
-                main?.classList.remove('overflow-hidden');
-                document.body.style.overflow = '';
-            }
             // Only when focus was in this pop-up (now gone, so on <body>): a parent closing in the same commit
             // (Discard over a dirty form) has already put it back on its opener, which a child must not undo.
             const active = document.activeElement;
             // eslint-disable-next-line react-hooks/exhaustive-deps -- the ref is wanted as it is at close time
             if (!active || active === document.body || !active.isConnected) restoreFocus(returnFocusRef?.current, opener);
         };
-    }, [id, opener, returnFocusRef]);
+    }, [opener, returnFocusRef]);
 
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && stack[stack.length - 1] === id) requestClose();
+            if (e.key === 'Escape' && isTop()) requestClose();
         };
         window.addEventListener('keydown', onKey);
         return () => window.removeEventListener('keydown', onKey);
-    }, [id, requestClose]);
+    }, [isTop, requestClose]);
 
     if (!mounted) return null;
 
@@ -102,6 +92,7 @@ export default function Overlay({
                     layout === 'right' && 'justify-end',
                     layout === 'panel' && 'items-end justify-center md:items-stretch md:justify-end',
                     layout === 'left' && 'justify-start',
+                    layout === 'screen' && 'items-stretch',
                     zIndexClassName
                 )}
             >

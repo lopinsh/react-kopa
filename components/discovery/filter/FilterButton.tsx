@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import { clsx } from 'clsx';
-import { UI } from '@/lib/constants';
+import { UI, type UiName } from '@/lib/constants';
 
 type Props = {
     icon: ReactNode;
@@ -20,10 +20,12 @@ type Props = {
     clearLabel: string;
     /** Max width of the pill (it shrinks below that, cutting its label). */
     widthClass: string;
+    /** The `data-ui` name (the filter button by default). */
+    dataUi?: UiName;
 };
 
 /** The shared look of the filter line's buttons: a 32 px pill; chosen = dark ring and a small ×; open = site-colour ring and tint. */
-export default function FilterButton({ icon, label, ariaLabel, chosen, open = false, onToggle, controls, onClear, clearLabel, widthClass }: Props) {
+export default function FilterButton({ icon, label, ariaLabel, chosen, open = false, onToggle, controls, onClear, clearLabel, widthClass, dataUi = UI.filterButton }: Props) {
     const body = (
         <>
             {icon}
@@ -35,7 +37,7 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
 
     return (
         <div
-            data-ui={UI.filterButton}
+            data-ui={dataUi}
             className={clsx(
                 'flex h-8 min-w-0 shrink items-center rounded-full ring-inset',
                 widthClass,

@@ -1,6 +1,6 @@
 import { clsx } from 'clsx';
 
-export type OverlayLayout = 'dialog' | 'sheet' | 'right' | 'left' | 'panel';
+export type OverlayLayout = 'dialog' | 'sheet' | 'right' | 'left' | 'panel' | 'screen';
 export type OverlaySize = 'sm' | 'md' | 'lg' | '2xl' | '4xl';
 
 const SIZE = { sm: 'sm:max-w-sm', md: 'sm:max-w-[420px]', lg: 'sm:max-w-lg', '2xl': 'sm:max-w-2xl', '4xl': 'sm:max-w-4xl' } as const;
@@ -16,6 +16,8 @@ export function panelClasses(layout: OverlayLayout, size: OverlaySize, flush: bo
         case 'sheet': return clsx(SHEET, 'sm:max-w-[560px]', !flush && PANEL_PAD);
         case 'panel': return clsx(PANEL, !flush && 'p-[18px]');
         case 'right': return clsx('flex h-full w-full flex-col overflow-y-auto bg-surface shadow-premium sm:max-w-md sm:border-l sm:border-border motion-safe:animate-from-right', !flush && 'p-[18px]');
+        // The phone search (OD-20): the whole screen, no handle, corners or shadow; the scrim is covered.
+        case 'screen': return 'flex h-dvh w-full flex-col overflow-hidden bg-surface motion-safe:animate-fade';
         case 'left': return clsx('flex h-full w-4/5 max-w-[320px] flex-col overflow-y-auto bg-surface shadow-premium motion-safe:animate-from-left', !flush && 'p-[18px]');
     }
 }

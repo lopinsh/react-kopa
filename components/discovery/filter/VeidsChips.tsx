@@ -10,9 +10,7 @@ import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { useChipFit } from '@/hooks/useChipFit';
 import { UI } from '@/lib/constants';
-
-const CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-full px-2.5 text-xs ring-1 ring-inset after:absolute after:-inset-y-2 after:inset-x-0';
-const CHOSEN = 'bg-[color-mix(in_srgb,var(--c)_15%,var(--surface))] font-semibold text-foreground ring-[color-mix(in_srgb,var(--c)_45%,transparent)]';
+import { CHIP, CHOSEN } from './chip-styles';
 
 export function Chip({ label, chosen, onClick }: { label: string; chosen: boolean; onClick?: () => void }) {
     return (

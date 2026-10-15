@@ -14,10 +14,18 @@ type Props = {
     columns?: boolean;
     /** Sits centred under the last day (the "next week" link, the "cut" note). */
     footer?: ReactNode;
+    /** The search word, marked in the titles. */
+    highlight?: string;
+    /** Rows replace the history entry (the search's results). */
+    replace?: boolean;
+    /** Marks the title links for the search's arrow keys. */
+    searchItem?: boolean;
+    /** No surface, corners or side padding: it already sits on one (the search panel). */
+    flat?: boolean;
 };
 
 /** Events under day headings on one surface (AR-54): "Šodien · pirmd., 12. okt.", "Rīt · …", then the capitalised date. Days without events have no heading. */
-export default function EventDayList({ days, today, showGroup, showCity, columns = false, footer }: Props) {
+export default function EventDayList({ days, today, showGroup, showCity, columns = false, footer, highlight, replace, searchItem, flat = false }: Props) {
     const t = useTranslations('discovery');
     const format = useDateFormatter();
     const heading = (day: DayKey) => {
@@ -26,12 +34,12 @@ export default function EventDayList({ days, today, showGroup, showCity, columns
         return day === addDays(today, 1) ? t('dayTomorrow', { date }) : capitalizeFirst(date);
     };
     return (
-        <div className="@container/events rounded-2xl bg-surface px-3.5 pb-2.5">
+        <div className={flat ? '@container/events' : '@container/events rounded-2xl bg-surface px-3.5 pb-2.5'}>
             {days.map(({ day, rows }) => (
                 <section key={day} className="border-t border-border first:border-t-0">
                     <h3 className="pb-0.5 pt-3 text-[13px] font-semibold text-foreground-muted">{heading(day)}</h3>
                     <div className={columns ? '@3xl/events:columns-2 @3xl/events:gap-x-6' : undefined}>
-                        {rows.map((event) => <EventRow key={event.id} event={event} showGroup={showGroup} showCity={showCity} headingDay={day} />)}
+                        {rows.map((event) => <EventRow key={event.id} event={event} showGroup={showGroup} showCity={showCity} headingDay={day} highlight={highlight} replace={replace} searchItem={searchItem} />)}
                     </div>
                 </section>
             ))}

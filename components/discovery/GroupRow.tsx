@@ -1,5 +1,6 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
+import Highlight from '@/components/ui/Highlight';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { cityLabel } from '@/lib/city-label';
 import { langAttr } from '@/lib/translations';
@@ -7,7 +8,15 @@ import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
 
 /** A group on a phone (AR-36): name up to two lines, one quiet line (sub-categories give way first), the tagline, the tone mark at the right. No photo, no note. */
-export default function GroupRow({ group }: { group: GroupCardData }) {
+export default function GroupRow({ group, highlight, replace = false, searchItem = false }: {
+    group: GroupCardData;
+    /** The search word, marked in the name. */
+    highlight?: string;
+    /** Replace the history entry (a result of the search). */
+    replace?: boolean;
+    /** Marks the link for the search's arrow keys. */
+    searchItem?: boolean;
+}) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const locale = useLocale();
@@ -17,12 +26,14 @@ export default function GroupRow({ group }: { group: GroupCardData }) {
         <Link
             href={`/${group.category.l1Slug}/group/${group.slug}`}
             scroll={false}
+            replace={replace}
+            {...(searchItem ? { 'data-search-item': true } : {})}
             data-ui={UI.groupRow}
             style={{ ['--c' as string]: group.category.color }}
             className="flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0"
         >
             <span className="min-w-0 flex-1">
-                <span className="line-clamp-2 block font-heading text-[15px] font-semibold leading-snug text-foreground">{group.name}</span>
+                <span className="line-clamp-2 block font-heading text-[15px] font-semibold leading-snug text-foreground"><Highlight text={group.name} word={highlight} /></span>
                 <span className="mt-0.5 flex text-xs text-foreground-muted">
                     <span className="min-w-0 truncate">{topic}</span>
                     <span className="shrink-0 whitespace-pre"> · {cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
