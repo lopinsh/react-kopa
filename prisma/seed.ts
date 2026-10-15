@@ -549,7 +549,7 @@ async function main() {
     { title: 'Mazā Catan turnīra pusfināls', description: 'Pusfināls ar sešiem dalībniekiem. Dalību apstiprina organizators.', location: 'Kafejnīca Labums, Rīga', startDate: days(6), groupSlug: 'boardgames-riga', creator: toms, joinMode: 'REQUEST', maxParticipants: 6 },
     // Members only
     { title: 'Biedru ugunskura vakars', description: 'Slēgts vakars tikai grupas biedriem: ugunskurs, tēja un nākamās sezonas plāni.', location: 'Pie Oskara mājās, Ķekava', startDate: days(5), groupSlug: 'pargajieni-riga', creator: oskars, visibility: 'MEMBERS_ONLY', city: 'Riga' },
-    { title: 'Biedru treniņs pirms sacensībām', description: 'Tikai biedriem: kopīgs treniņš pirms sacensībām, treneris sniegs atsauksmes.', location: 'Mežaparks, Rīga', startDate: days(2), groupSlug: 'running-riga', creator: marta, visibility: 'MEMBERS_ONLY' },
+    { title: 'Biedru treniņš pirms sacensībām', description: 'Tikai biedriem: kopīgs treniņš pirms sacensībām, treneris sniegs atsauksmes.', location: 'Mežaparks, Rīga', startDate: days(2), groupSlug: 'running-riga', creator: marta, visibility: 'MEMBERS_ONLY' },
     // Several dates in one group (a weekly yoga morning and a weekly game night)
     { title: 'Rīta joga – 1. nedēļa', description: 'Nedēļas rīta joga pie jūras, paklāji pieejami.', location: 'Majori pludmale, Jūrmala', startDate: days(1), groupSlug: 'yoga-jurmala', creator: liga },
     { title: 'Rīta joga – 2. nedēļa', description: 'Nedēļas rīta joga pie jūras, paklāji pieejami.', location: 'Majori pludmale, Jūrmala', startDate: days(8), groupSlug: 'yoga-jurmala', creator: liga },

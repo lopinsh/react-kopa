@@ -84,10 +84,12 @@ export default function EventPlaceFields() {
                     inputMode={isOnline ? 'url' : undefined}
                     {...register('location')}
                     placeholder={isOnline ? t('fieldLinkPlaceholder') : t('fieldLocationPlaceholder')}
+                    aria-invalid={errors.location ? true : undefined}
+                    aria-describedby={errors.location ? 'event-location-error' : isOnline ? undefined : 'event-location-hint'}
                     className={clsx(INPUT, errors.location ? 'border-danger/40' : 'border-border focus:border-primary')}
                 />
-                {!isOnline && !errors.location && <p className="mt-1 text-xs text-foreground-muted">{t('fieldLocationHint')}</p>}
-                {errors.location && <p className="mt-1 text-xs text-danger">{t(errors.location.message as 'LOCATION_REQUIRED')}</p>}
+                {!isOnline && !errors.location && <p id="event-location-hint" className="mt-1 text-xs text-foreground-muted">{t('fieldLocationHint')}</p>}
+                {errors.location && <p id="event-location-error" className="mt-1 text-xs text-danger">{t(errors.location.message as 'LOCATION_REQUIRED')}</p>}
             </div>
         </>
     );
