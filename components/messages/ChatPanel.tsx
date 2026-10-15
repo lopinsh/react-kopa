@@ -9,7 +9,7 @@ import { avatarUrl } from '@/lib/avatar';
 import { Link } from '@/i18n/routing';
 import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
-import { GroupLabel } from './ConversationList';
+import GroupLabel from './GroupLabel';
 import { useMessageTime } from './useMessageTime';
 import { UI } from '@/lib/constants';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';

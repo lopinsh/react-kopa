@@ -1149,7 +1149,8 @@
     "today": "Today",
     "earlier": "Earlier",
     "showMore": "Show more",
-    "unread": "Unread"
+    "unread": "Unread",
+    "loadFailed": "Could not load notifications."
   },
   "onboarding": {
     "username": {

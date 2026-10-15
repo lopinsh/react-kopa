@@ -1,4 +1,4 @@
-import { Compass, Users, User, MessageSquare, Settings, type LucideIcon } from 'lucide-react';
+import { Bell, Compass, Users, User, MessageSquare, Settings, type LucideIcon } from 'lucide-react';
 
 /** The four tabs of the phone bottom bar (the fifth cell is the + button). */
 export const BOTTOM_TABS = ['discover', 'groups', 'messages', 'me'] as const;
@@ -25,7 +25,7 @@ export function tabForPath(pathname: string): BottomTab | 'keep' | null {
     if (pathname === '/') return 'discover';
     if (under(pathname, '/profile/my-groups')) return 'groups';
     if (under(pathname, '/messages')) return 'messages';
-    if (pathname === '/profile' || pathname === '/profile/edit' || under(pathname, '/settings')) return 'me';
+    if (pathname === '/profile' || pathname === '/profile/edit' || under(pathname, '/settings') || under(pathname, '/notifications')) return 'me';
     if (groupBasePath(pathname)) return 'keep';
     return null;
 }
@@ -41,17 +41,19 @@ export const BOTTOM_LINKS: BottomLink[] = [
 
 export type MePage = {
     href: string;
-    labelKey: 'myProfile' | 'myGroups' | 'messages' | 'settings';
+    labelKey: 'myProfile' | 'myGroups' | 'messages' | 'notifications' | 'settings';
     icon: LucideIcon;
     match: (pathname: string) => boolean;
-    badge?: 'messages';
+    /** Which count the menu shows at the end of the entry (`useOwnCounts`, `useUnreadMessages`). */
+    badge?: 'messages' | 'myGroups' | 'notifications';
 };
 
-/** The pages of the own area, in menu order (AR-60; Paziņojumi joins in R8, Iestatījumi stays last, OD-03). */
+/** The pages of the own area, in menu order (AR-60: Paziņojumi sits between Ziņas and Iestatījumi, which stays last, OD-03). */
 export const ME_PAGES: MePage[] = [
     { href: '/profile', labelKey: 'myProfile', icon: User, match: (p) => p === '/profile' || p === '/profile/edit' },
-    { href: '/profile/my-groups', labelKey: 'myGroups', icon: Users, match: (p) => under(p, '/profile/my-groups') },
+    { href: '/profile/my-groups', labelKey: 'myGroups', icon: Users, match: (p) => under(p, '/profile/my-groups'), badge: 'myGroups' },
     { href: '/messages', labelKey: 'messages', icon: MessageSquare, match: (p) => under(p, '/messages'), badge: 'messages' },
+    { href: '/notifications', labelKey: 'notifications', icon: Bell, match: (p) => under(p, '/notifications'), badge: 'notifications' },
     { href: '/settings', labelKey: 'settings', icon: Settings, match: (p) => under(p, '/settings') },
 ];
 

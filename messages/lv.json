@@ -1149,7 +1149,8 @@
     "today": "Šodien",
     "earlier": "Agrāk",
     "showMore": "Rādīt vēl",
-    "unread": "Nelasīts"
+    "unread": "Nelasīts",
+    "loadFailed": "Neizdevās ielādēt paziņojumus."
   },
   "onboarding": {
     "username": {

@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react';
 
 import RealtimeProvider from './RealtimeProvider';
 import { UnreadMessagesProvider } from './UnreadMessagesProvider';
+import { OwnCountsProvider } from './OwnCountsProvider';
 import { ToastProvider } from '@/hooks/use-toast';
 import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
@@ -34,6 +35,7 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                    <FeedbackModeProvider value={feedbackMode}>
                     <RealtimeProvider>
                       <UnreadMessagesProvider>
+                       <OwnCountsProvider>
                         <ThemeProvider
                             attribute="class"
                             defaultTheme="system"
@@ -42,6 +44,7 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                         >
                             {children}
                         </ThemeProvider>
+                       </OwnCountsProvider>
                       </UnreadMessagesProvider>
                     </RealtimeProvider>
                     <ToastContainer />

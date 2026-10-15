@@ -6,7 +6,7 @@ import { UI } from '@/lib/constants';
 import { isSiteAdmin } from '@/lib/site-role';
 import UserMenu from './UserMenu';
 import AdminMenu from './AdminMenu';
-import NotificationCenter from './NotificationCenter';
+import BellButton from '@/components/notifications/BellButton';
 import LanguageMenu from './LanguageMenu';
 import HeaderSearchField from './HeaderSearchField';
 import PhoneSearchButton from './PhoneSearchButton';
@@ -35,7 +35,7 @@ export default async function Header() {
             <PhoneSearchButton />
             {user && admin && <AdminMenu />}
             {user && <HeaderMessages />}
-            {user && <NotificationCenter isAdmin={admin} />}
+            {user && <BellButton isAdmin={admin} />}
             <UserMenu user={user} />
         </header>
     );

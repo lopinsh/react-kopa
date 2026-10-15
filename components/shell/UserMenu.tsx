@@ -13,6 +13,8 @@ import { signInUrl } from '@/lib/auth-redirect';
 import { UI } from '@/lib/constants';
 import { ME_PAGES } from '@/lib/navigation';
 import { buttonClass } from '@/components/ui/Button';
+import { useOwnCounts } from '@/components/providers/OwnCountsProvider';
+import { ICON_DOT } from './header-styles';
 import { MenuItemButton, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 
 type Props = {
@@ -21,6 +23,7 @@ type Props = {
 };
 
 const ICON = 'size-[17px] text-foreground-muted';
+const NEW_COUNT_CLASS = 'ml-auto text-xs font-semibold text-primary';
 
 /** The picture at the end of the header: the profile menu when signed in, the sign-in button when not (AR-14). */
 export default function UserMenu({ user, initialOpen }: Props) {
@@ -30,6 +33,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
     const pathname = usePathname();
     const search = useSearchParams().toString();
     const { open, rootRef, triggerProps, menuProps } = useMenu(initialOpen);
+    const { myGroupsNew } = useOwnCounts();
     const [imageError, setImageError] = useState(false);
     const [signingOut, setSigningOut] = useState(false);
 
@@ -46,11 +50,11 @@ export default function UserMenu({ user, initialOpen }: Props) {
 
     // A broken photo URL falls back to the generated avatar.
     const avatarSrc = avatarUrl(imageError ? { id: user.id, avatarSeed: user.avatarSeed } : user);
-    const ownArea = pathname !== '/messages' && ME_PAGES.some((p) => p.match(pathname));
+    const ownArea = !pathname.startsWith('/messages') && !pathname.startsWith('/notifications') && ME_PAGES.some((p) => p.match(pathname));
 
     return (
         <div className="relative shrink-0" ref={rootRef}>
-            <button {...triggerProps} aria-label={t('profileMenu')} className="grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            <button {...triggerProps} aria-label={t('profileMenu')} className="relative grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img
                     src={avatarSrc}
                     alt=""
@@ -58,11 +62,23 @@ export default function UserMenu({ user, initialOpen }: Props) {
                     referrerPolicy="no-referrer"
                     onError={() => setImageError(true)}
                 />
+                {myGroupsNew > 0 && <span aria-hidden className={ICON_DOT} />}
             </button>
             {open && (
                 <MenuPanel label={t('profileMenu')} dataUi={UI.profileMenu} {...menuProps}>
                     <MenuItemLink href="/profile" icon={<User aria-hidden className={ICON} />}>{t('myProfile')}</MenuItemLink>
-                    <MenuItemLink href="/profile/my-groups" icon={<Users aria-hidden className={ICON} />}>{t('myGroups')}</MenuItemLink>
+                    <MenuItemLink
+                        href="/profile/my-groups"
+                        icon={<Users aria-hidden className={ICON} />}
+                        trailing={myGroupsNew > 0 && (
+                            <span className={NEW_COUNT_CLASS}>
+                                <span aria-hidden>{myGroupsNew > 9 ? '9+' : myGroupsNew}</span>
+                                <span className="sr-only">{t('myGroupsNew', { count: myGroupsNew })}</span>
+                            </span>
+                        )}
+                    >
+                        {t('myGroups')}
+                    </MenuItemLink>
                     <MenuItemLink href="/create" icon={<Plus aria-hidden className={ICON} />}>{tCommon('createGroup')}</MenuItemLink>
                     <MenuSeparator />
                     <MenuItemLink href="/settings" icon={<Settings aria-hidden className={ICON} />}>{t('settings')}</MenuItemLink>
