@@ -16,7 +16,7 @@ export default async function PanelDemos({ group, row, text }: { group: GroupCar
         category: { l1Title: group.category.l1Title, color: group.category.color, subCategories: group.subCategories, subCategorySlugs: group.subCategorySlugs },
         city: group.city, lookingFor: group.lookingFor, memberCount: group.memberCount, image, text, tagline: group.tagline, events: [row],
         textLang: 'lv', nextMeeting: { slug: row.slug, title: row.title, titleLang: row.titleLang, startDate: row.startDate },
-        viewer: { canContact: true, isAcceptingMembers: true, pending: null, isMember: false },
+        viewer: { canContact: true, isAcceptingMembers: true },
     });
     const faces: Face[] = ['anna', 'janis', 'marta'].map((seed) => ({ id: seed, name: seed, image: `https://api.dicebear.com/10.x/clay/svg?seed=${seed}` }));
     const eventData = (people: Face[] | null, image: string | null): EventPanelData => ({

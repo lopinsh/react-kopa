@@ -8,7 +8,7 @@ import type { GroupCardData } from '@/lib/services/group-card';
 import { UI } from '@/lib/constants';
 
 /** A group on a phone (AR-36): name up to two lines, one quiet line (sub-categories give way first), the tagline, the tone mark at the right. No photo, no note. */
-export default function GroupRow({ group, highlight, replace = false, searchItem = false }: {
+export default function GroupRow({ group, highlight, replace = false, searchItem = false, fullPage = false }: {
     group: GroupCardData;
     /** The search word, marked in the name. */
     highlight?: string;
@@ -16,22 +16,23 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
     replace?: boolean;
     /** Marks the link for the search's arrow keys. */
     searchItem?: boolean;
+    /** A group you belong to or wait for: a plain link to its full page, no panel (cmv9amjft). */
+    fullPage?: boolean;
 }) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const locale = useLocale();
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
 
-    return (
-        <Link
-            href={`/${group.category.l1Slug}/group/${group.slug}`}
-            scroll={false}
-            replace={replace}
-            {...(searchItem ? { 'data-search-item': true } : {})}
-            data-ui={UI.groupRow}
-            style={{ ['--c' as string]: group.category.color }}
-            className="flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0"
-        >
+    const href = `/${group.category.l1Slug}/group/${group.slug}`;
+    const common = {
+        ...(searchItem ? { 'data-search-item': true } : {}),
+        'data-ui': UI.groupRow,
+        style: { ['--c' as string]: group.category.color },
+        className: 'flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0',
+    };
+    const body = (
+        <>
             <span className="min-w-0 flex-1">
                 <span className="line-clamp-2 block font-heading text-[15px] font-semibold leading-snug text-foreground"><Highlight text={group.name} word={highlight} /></span>
                 <span className="mt-0.5 flex text-xs text-foreground-muted">
@@ -43,6 +44,10 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
             <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
                 <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />
             </span>
-        </Link>
+        </>
     );
+
+    return fullPage
+        ? <a href={`/${locale}${href}`} {...common}>{body}</a>
+        : <Link href={href} scroll={false} replace={replace} {...common}>{body}</Link>;
 }

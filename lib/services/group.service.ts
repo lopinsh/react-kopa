@@ -346,6 +346,16 @@ export const GroupService = {
     }),
 
     /**
+     * The viewer's role in the group at this address (PENDING included), or null: one query. The group panel asks it to send members
+     * and applicants to the full page instead (cmv9amjft); no group, no viewer or no membership all give null.
+     */
+    async getViewerMembershipRole(groupSlug: string, l1Slug: string, viewerId: string | undefined): Promise<MembershipRole | null> {
+        if (!viewerId) return null;
+        const m = await prisma.membership.findFirst({ where: { userId: viewerId, group: findGroupByPath(groupSlug, l1Slug) }, select: { role: true } });
+        return m?.role ?? null;
+    },
+
+    /**
      * The opened group card (R6): the group as this viewer may see it, narrowed to the panel's own shape. One call returns the
      * whole panel context; null when the group is missing or hidden from this viewer.
      */

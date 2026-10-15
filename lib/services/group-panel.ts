@@ -29,10 +29,6 @@ export interface GroupPanelData {
         /** "Sazināties": a visitor (not a member, not waiting) and the group is not hidden. */
         canContact: boolean;
         isAcceptingMembers: boolean;
-        /** The viewer's request waits: the pending view with "Atvērt sarunu". */
-        pending: { chatId: string | null } | null;
-        /** Members and the team: "Atvērt grupas lapu" is the main button. */
-        isMember: boolean;
     };
 }
 
@@ -58,9 +54,7 @@ export function toGroupPanel(g: GroupContext, next: NextEventView | null, events
         nextMeeting: next ? { slug: next.slug, title: next.title, titleLang: next.titleLang, startDate: next.startDate } : null,
         viewer: {
             canContact,
-            isAcceptingMembers: g.isAcceptingMembers,
-            pending: isPending ? { chatId: g.user.chatId } : null,
-            isMember: !canContact && !isPending
+            isAcceptingMembers: g.isAcceptingMembers
         }
     };
 }

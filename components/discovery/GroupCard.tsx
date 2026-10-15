@@ -21,13 +21,17 @@ type Props = {
     filters?: DiscoveryParams;
     /** The search word, marked in the name. */
     highlight?: string;
+    /** A group you belong to or wait for: the name is a plain link, so the full page loads with no panel in between (cmv9amjft). */
+    fullPage?: boolean;
 };
+
+const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
  * A group in a grid (AR-34): name, category line, place and members, the tagline; under a thin line the group's note; the photo (or the tone
  * and icon) at the right. Every card reserves the same lines (name 2, tagline 2, note 2), so a grid has one card height.
  */
-export default function GroupCard({ group, nextMeeting, filters, highlight }: Props) {
+export default function GroupCard({ group, nextMeeting, filters, highlight, fullPage = false }: Props) {
     const t = useTranslations('discovery');
     const tCities = useTranslations('cities');
     const formatter = useDateFormatter();
@@ -42,7 +46,9 @@ export default function GroupCard({ group, nextMeeting, filters, highlight }: Pr
             <div className="flex min-w-0 flex-col gap-[3px] px-3.5 pt-3">
                 <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
-                    <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className="outline-none after:absolute after:inset-0 after:z-[1]"><Highlight text={group.name} word={highlight} /></Link>
+                    {fullPage
+                        ? <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}`} data-card-link className={NAME_LINK}><Highlight text={group.name} word={highlight} /></a>
+                        : <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className={NAME_LINK}><Highlight text={group.name} word={highlight} /></Link>}
                 </h3>
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
                 <p className="truncate text-[13px] text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>

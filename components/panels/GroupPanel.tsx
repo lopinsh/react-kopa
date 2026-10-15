@@ -2,8 +2,6 @@ import { CalendarDays } from 'lucide-react';
 import { getLocale, getTimeZone, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import CategoryLine from '@/components/ui/CategoryLine';
-import { buttonClass } from '@/components/ui/Button';
-import { PendingStateView } from '@/components/groups/contact/PendingState';
 import EventDayList from '@/components/events/EventDayList';
 import { cityLabel } from '@/lib/city-label';
 import { dayInZone, type DayKey } from '@/lib/discovery-dates';
@@ -36,7 +34,7 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
         if (last?.day === day) last.rows.push(row);
         else days.push({ day, rows: [row] });
     }
-    const pageLink = <FullPageLink path={base} className={viewer.isMember ? buttonClass('primary', 'w-full') : `justify-self-center ${PANEL_LINK}`}>{t('panel.openPage')}</FullPageLink>;
+    const pageLink = <FullPageLink path={base} className={`justify-self-center ${PANEL_LINK}`}>{t('panel.openPage')}</FullPageLink>;
 
     return (
         <div data-ui={UI.groupPanel} style={{ ['--c' as string]: data.category.color }}>
@@ -57,7 +55,6 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                 {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
                 {days.length > 0 && <EventDayList days={days} today={dayInZone(new Date(), zone)} showGroup={false} showCity />}
                 {viewer.canContact && <ContactButton groupId={data.id} groupName={data.name} allowJoin={viewer.isAcceptingMembers} />}
-                {viewer.pending && <PendingStateView chatId={viewer.pending.chatId} onImage={false} variant="panel" />}
                 {pageLink}
             </PanelBody>
         </div>

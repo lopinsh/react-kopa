@@ -3,6 +3,7 @@ import { redirect } from '@/i18n/routing';
 import { getTimeZone, getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { GroupService } from '@/lib/services/group.service';
+import { UserService } from '@/lib/services/user.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import { nextMeetingDates } from '@/lib/services/next-meetings';
 import { CityService } from '@/lib/services/city.service';
@@ -89,7 +90,11 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     ]);
 
     // Each group's next meeting (only the date is shown), for groups without a "Ko meklējam?" line.
-    const nextMeetings = await nextMeetingDates(groupsRes.groups, locale, viewerId);
+    // A group you belong to or wait for opens as its page, not the panel: those cards link straight to it (cmv9amjft).
+    const [nextMeetings, myGroupIds] = await Promise.all([
+        nextMeetingDates(groupsRes.groups, locale, viewerId),
+        viewerId && p.kind === 'groups' ? UserService.getMyGroupIds(viewerId) : Promise.resolve([]),
+    ]);
 
     const collator = new Intl.Collator(locale);
     const state: DiscoveryState = {
@@ -116,7 +121,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'
-                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} />
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} fullPageIds={myGroupIds} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>

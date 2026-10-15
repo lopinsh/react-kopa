@@ -14,21 +14,26 @@ type Props = {
     filters?: DiscoveryParams;
     /** The search word, marked in the names. */
     highlight?: string;
+    /** Every group links straight to its full page (Manas grupas: all of them are yours). */
+    fullPage?: boolean;
+    /** Ids of groups the viewer belongs to or waits for: those link straight to the full page (cmv9amjft). */
+    fullPageIds?: string[];
 };
 
 /**
  * Groups as cards from `md` (a grid that fills the width) and as rows on phones. Both are server-rendered; the one not in use is
  * `display: none`. Used by discovery and the profiles.
  */
-export default function GroupList({ groups, nextMeetings = {}, createFor, filters, highlight }: Props) {
+export default function GroupList({ groups, nextMeetings = {}, createFor, filters, highlight, fullPage = false, fullPageIds }: Props) {
+    const full = (id: string) => fullPage || !!fullPageIds?.includes(id);
     return (
         <>
             <div className="hidden gap-3 md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
-                {groups.map((g) => <GroupCard key={g.id} group={g} nextMeeting={nextMeetings[g.id]} filters={filters} highlight={highlight} />)}
+                {groups.map((g) => <GroupCard key={g.id} group={g} nextMeeting={nextMeetings[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>
             <div className="rounded-2xl bg-surface px-3.5 md:hidden">
-                {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} />)}
+                {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="row" />}
             </div>
         </>

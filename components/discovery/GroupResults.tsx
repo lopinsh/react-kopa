@@ -14,10 +14,12 @@ type Props = {
     hasMore: boolean;
     nextMeetings: Record<string, Date>;
     params: DiscoveryParams;
+    /** Groups the viewer belongs to or waits for: they open as full pages. */
+    fullPageIds?: string[];
 };
 
 /** The Grupas list: the cards or rows, "Rādīt vēl" when more are left, the create card at the true end of a chosen category (also when it is empty). */
-export default async function GroupResults({ groups, hasMore, nextMeetings, params }: Props) {
+export default async function GroupResults({ groups, hasMore, nextMeetings, params, fullPageIds }: Props) {
     const t = await getTranslations('discovery');
     const createFor = params.category && !hasMore ? params.category : null;
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
@@ -32,7 +34,7 @@ export default async function GroupResults({ groups, hasMore, nextMeetings, para
     }
     return (
         <>
-            <GroupList groups={groups} nextMeetings={nextMeetings} createFor={createFor} filters={params} highlight={params.q} />
+            <GroupList groups={groups} nextMeetings={nextMeetings} createFor={createFor} filters={params} highlight={params.q} fullPageIds={fullPageIds} />
             {canAskMore && (
                 <div className="mt-5 flex justify-center">
                     <Link href={discoveryHref(params, { limit: params.limit + DISCOVERY_GROUPS_PAGE })} scroll={false} className={buttonClass('quiet')}>
