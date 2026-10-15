@@ -101,7 +101,8 @@ export function clampRange(from: Date, to: Date): { from: Date; to: Date } | nul
 /** The event list's where, without the visibility part (callers add PUBLIC or the viewer's MEMBERS_ONLY). */
 export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date()): Prisma.EventWhereInput {
     const { cities, category, tags, search, status, from, to } = filters;
-    const groupAnd: Prisma.GroupWhereInput[] = [{ hiddenAt: null }];
+    // A private group's events are out of discovery and search (OD-07): its event list would show the group.
+    const groupAnd: Prisma.GroupWhereInput[] = [{ hiddenAt: null, type: 'PUBLIC' }];
     if (category) groupAnd.push(topicMatch(category));
     groupAnd.push(...anyTopic(tags ?? []));
 

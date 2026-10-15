@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client';
 import { TaxonomyResolver, type TaxonomyModel } from './taxonomy-resolver.service';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { GROUP_TAGLINE_MAX } from '@/lib/constants';
@@ -22,6 +23,20 @@ export const GROUP_CARD_RELATIONS = {
         select: { level: true, slug: true, titles: { select: { lang: true, title: true } } },
     },
 } as const;
+
+/** The whole card select (own columns, category chain, GROUP_CARD_RELATIONS): discovery's list and the search's rows share it. */
+export const GROUP_CARD_SELECT = (lang: string) => ({
+    id: true,
+    name: true,
+    slug: true,
+    city: true,
+    lookingFor: true,
+    description: true,
+    bannerImage: true,
+    createdAt: true,
+    category: { include: TaxonomyResolver.getInclude(lang) },
+    ...GROUP_CARD_RELATIONS
+}) satisfies Prisma.GroupSelect;
 
 /** What `toGroupCard` reads from a group fetched with the card columns, its category chain and GROUP_CARD_RELATIONS. */
 export interface GroupCardSource {

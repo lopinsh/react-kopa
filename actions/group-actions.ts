@@ -195,6 +195,8 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
         updateTag('groups');
+        // A group made private (or public) moves its events out of (into) discovery and search.
+        updateTag('events');
         updateTag(CITIES_TAG);
 
         return { success: true, data: { slug, l1Slug } };

@@ -73,6 +73,14 @@ export type EventJoinModeValue = (typeof EVENT_JOIN_MODES)[number];
 export const DISCOVERY_GROUPS_PAGE = 24;
 /** Most group cards one discovery URL may ask for (`?limit=`). */
 export const DISCOVERY_GROUPS_MAX = 480;
+/** Search (R7): fewest letters of a word that searches, the wait after the last key, rows per kind, themes on an empty field, recent words kept, their storage key, the longest word. */
+export const SEARCH_MIN_CHARS = 2;
+export const SEARCH_DEBOUNCE_MS = 200;
+export const SEARCH_ROWS_MAX = 5;
+export const SEARCH_IDLE_THEMES = 8;
+export const SEARCH_RECENT_MAX = 5;
+export const SEARCH_RECENT_KEY = 'ek:recent-searches';
+export const SEARCH_WORD_MAX = 100;
 /** Longest category or tag name (`categoryNameSchema`). */
 export const CATEGORY_NAME_MAX = 60;
 /** Cookie holding whether the category drawer is folded ('1'), read on the server. */
@@ -200,6 +208,13 @@ export const UI = {
     facesLine: 'faces',
     joinStep: 'join-step',
     goingButton: 'going-button',
+    searchOverlay: 'search',
+    searchPanel: 'search-panel',
+    searchChips: 'search-chips',
+    themeChip: 'choice-chip',
+    recentSearches: 'recent-searches',
+    searchResults: 'search-results',
+    alsoMatches: 'search-matches',
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 

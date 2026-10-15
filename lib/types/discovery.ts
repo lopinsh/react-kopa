@@ -1,17 +1,3 @@
-export type ScopedResult = {
-    type: 'category' | 'group' | 'event';
-    id: string;
-    slug: string;
-    title: string;
-    subtitle?: string;
-    l1Slug: string;
-    l2Slug?: string;
-    color: string;
-    image?: string | null;
-    level?: number;
-    groupSlug?: string;
-};
-
 import type { DateChoice, DayKey, DayPeriod } from '@/lib/discovery-dates';
 import type { DiscoveryParams } from '@/lib/discovery-params';
 
