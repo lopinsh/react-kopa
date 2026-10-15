@@ -3,6 +3,26 @@
 import { useSession } from 'next-auth/react';
 import { useState, useCallback } from 'react';
 
+// Session storage can be blocked (private windows, site settings): the gate works without remembering the action.
+function readStored(key: string): string | null {
+    try {
+        return typeof window === 'undefined' ? null : window.sessionStorage.getItem(key);
+    } catch {
+        return null;
+    }
+}
+
+function writeStored(entries: Record<string, string | null>): void {
+    try {
+        for (const [key, value] of Object.entries(entries)) {
+            if (value === null) window.sessionStorage.removeItem(key);
+            else window.sessionStorage.setItem(key, value);
+        }
+    } catch {
+        // Blocked storage: the pending action is simply not resumed after sign-in.
+    }
+}
+
 /**
  * Hook for gating actions behind authentication.
  * If the user has a session, the callback runs immediately.
@@ -22,11 +42,8 @@ export function useAuthGate() {
             if (session?.user) {
                 callback();
             } else {
-                if (actionKey) {
-                    sessionStorage.setItem('pending_auth_action', actionKey);
-                    // Also store the current URL to ensure we are on the same page when we return
-                    sessionStorage.setItem('pending_auth_url', window.location.pathname);
-                }
+                // Also store the current URL to ensure we are on the same page when we return
+                if (actionKey) writeStored({ pending_auth_action: actionKey, pending_auth_url: window.location.pathname });
                 setIsModalOpen(true);
             }
         },
@@ -38,8 +55,7 @@ export function useAuthGate() {
     }, []);
 
     const clearPendingAction = useCallback(() => {
-        sessionStorage.removeItem('pending_auth_action');
-        sessionStorage.removeItem('pending_auth_url');
+        writeStored({ pending_auth_action: null, pending_auth_url: null });
     }, []);
 
     return {
@@ -47,8 +63,8 @@ export function useAuthGate() {
         isModalOpen,
         closeModal,
         isAuthenticated: !!session?.user,
-        pendingAction: typeof window !== 'undefined' ? sessionStorage.getItem('pending_auth_action') : null,
-        pendingUrl: typeof window !== 'undefined' ? sessionStorage.getItem('pending_auth_url') : null,
+        pendingAction: readStored('pending_auth_action'),
+        pendingUrl: readStored('pending_auth_url'),
         clearPendingAction
     };
 }

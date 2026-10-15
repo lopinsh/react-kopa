@@ -10,7 +10,14 @@ export default function CookieConsent() {
     // Server/hydration snapshot says "already answered" so nothing flashes; the client reads storage.
     const hasConsent = useSyncExternalStore(
         () => () => { },
-        () => localStorage.getItem('cookie-consent') !== null,
+        () => {
+            // Blocked storage reads as answered: the banner could not remember a choice anyway.
+            try {
+                return window.localStorage.getItem('cookie-consent') !== null;
+            } catch {
+                return true;
+            }
+        },
         () => true
     );
     const [accepted, setAccepted] = useState(false);
@@ -34,7 +41,11 @@ export default function CookieConsent() {
     }, [isVisible]);
 
     const handleAccept = () => {
-        localStorage.setItem('cookie-consent', 'accepted');
+        try {
+            window.localStorage.setItem('cookie-consent', 'accepted');
+        } catch {
+            // Blocked storage: hidden for this page view only.
+        }
         setAccepted(true);
     };
 
