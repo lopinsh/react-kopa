@@ -27,6 +27,14 @@ export default function PlaceButton() {
         pop.setOpen(false);
     };
 
+    // A name click: only that city. The phone sheet pushes it at once (the draft is not applied on top).
+    const pick = (slug: string) => {
+        setDraft([slug]);
+        go({ cities: [slug] }, pop.desktop ? { replace: true } : undefined);
+        pop.setOpen(false);
+        if (pop.desktop) pop.host?.querySelector('button')?.focus();
+    };
+
     return (
         <div ref={bindHost} className="relative min-w-0 shrink">
             <FilterButton
@@ -45,6 +53,7 @@ export default function PlaceButton() {
                 <PlaceList
                     selected={draft}
                     onChange={(next) => { setDraft(next); if (pop.desktop) go({ cities: next }, { replace: true }); }}
+                    onPick={pick}
                     autoFocus={pop.desktop}
                 />
             </FilterPopover>

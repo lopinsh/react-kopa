@@ -45,6 +45,12 @@ export default function VeidsChips() {
         if (!pop.desktop && draft.join() !== params.tags.join()) go({ tags: draft });
         pop.setOpen(false);
     };
+    const pick = (slug: string) => {
+        setDraft([slug]);
+        go({ tags: [slug] }, pop.desktop ? { replace: true } : undefined);
+        pop.setOpen(false);
+        if (pop.desktop) pop.host?.querySelector('button')?.focus();
+    };
     const more = <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>;
 
     return (
@@ -62,6 +68,7 @@ export default function VeidsChips() {
                             l1Slug={params.category}
                             selected={draft}
                             onChange={(next) => { setDraft(next); if (pop.desktop) go({ tags: next }, { replace: true }); }}
+                            onPick={pick}
                             autoFocus={pop.desktop}
                         />
                     </FilterPopover>

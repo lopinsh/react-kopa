@@ -12,11 +12,13 @@ import { foldText } from '@/lib/text-fold';
 type Props = {
     selected: string[];
     onChange: (cities: string[]) => void;
+    /** A click on a city's name: only that city, and the list closes. */
+    onPick: (slug: string) => void;
     autoFocus: boolean;
 };
 
 /** "Kur": Visur with its count, a thin line, then the cities with tick boxes and counts (ticked first, then by count). */
-export default function PlaceList({ selected, onChange, autoFocus }: Props) {
+export default function PlaceList({ selected, onChange, onPick, autoFocus }: Props) {
     const t = useTranslations('discovery');
     const cities = useCities();
     const { counts } = useDiscovery();
@@ -46,7 +48,7 @@ export default function PlaceList({ selected, onChange, autoFocus }: Props) {
                     <div className="mx-2.5 my-1 border-t border-border" />
                 </>
             )}
-            {rows.map((c) => <CheckRow key={c.slug} name={c.name} count={c.count} checked={selected.includes(c.slug)} faded={c.count === 0} onToggle={() => toggle(c.slug)} />)}
+            {rows.map((c) => <CheckRow key={c.slug} name={c.name} count={c.count} checked={selected.includes(c.slug)} faded={c.count === 0} onToggle={() => toggle(c.slug)} onPick={() => onPick(c.slug)} />)}
             {rows.length === 0 && (
                 <div className="px-2.5 py-3 text-sm">
                     <p className="italic text-foreground-muted">{t('nothingFound')}</p>
