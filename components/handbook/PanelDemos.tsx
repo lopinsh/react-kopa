@@ -14,7 +14,7 @@ export default async function PanelDemos({ group, row, text }: { group: GroupCar
     const groupData = (image: string | null): GroupPanelData => ({
         id: group.id, name: group.name, slug: group.slug, l1Slug: group.category.l1Slug,
         category: { l1Title: group.category.l1Title, color: group.category.color, subCategories: group.subCategories, subCategorySlugs: group.subCategorySlugs },
-        city: group.city, memberCount: group.memberCount, image, text, tagline: group.tagline, events: [row],
+        city: group.city, lookingFor: group.lookingFor, memberCount: group.memberCount, image, text, tagline: group.tagline, events: [row],
         textLang: 'lv', nextMeeting: { slug: row.slug, title: row.title, titleLang: row.titleLang, startDate: row.startDate },
         viewer: { canContact: true, isAcceptingMembers: true, pending: null, isMember: false },
     });

@@ -13,6 +13,8 @@ export interface GroupPanelData {
     l1Slug: string;
     category: { l1Title: string; color: string; subCategories: string[]; subCategorySlugs: string[] };
     city: string;
+    /** "Ko meklējam?": the team's one short line, as on the card; null when none. */
+    lookingFor: string | null;
     memberCount: number;
     image: string | null;
     /** The home text's first words at the card's tagline length (GROUP_TAGLINE_MAX); null when there is none. */
@@ -46,6 +48,7 @@ export function toGroupPanel(g: GroupContext, next: NextEventView | null, events
         l1Slug: g.category.l1Slug,
         category: { l1Title: g.category.l1Title, color: g.theme.accentColor, subCategories: g.category.subCategories, subCategorySlugs: g.category.subCategorySlugs },
         city: g.city,
+        lookingFor: g.lookingFor,
         memberCount: g.stats.memberCount,
         image: g.bannerImage,
         tagline: home ? plainExcerpt(home.content, GROUP_TAGLINE_MAX) : null,

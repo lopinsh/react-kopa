@@ -45,6 +45,7 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                 <PanelTitle>{data.name}</PanelTitle>
                 <CategoryLine color={data.category.color} category={data.category.l1Title} subCategories={data.category.subCategories} l1Slug={data.l1Slug} subSlugs={data.category.subCategorySlugs} />
                 <p className="text-sm text-foreground-muted">{cityLabel(tCities, data.city)} · {t('memberCount', { count: data.memberCount })}</p>
+                {data.lookingFor && <p className="text-sm italic leading-snug text-primary">{data.lookingFor}</p>}
                 {shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm font-medium leading-snug text-foreground">{data.tagline}</p>}
                 {nextMeeting && !data.events.some((e) => e.slug === nextMeeting.slug) && (
                     <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-sm italic text-primary hover:underline">
@@ -52,6 +53,7 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                         <span>{t('nextMeeting', { date: capitalizeFirst(formatter.dateTime(nextMeeting.startDate, EVENT_DAY_TIME)) })}</span>
                     </Link>
                 )}
+                {!nextMeeting && days.length === 0 && <p className="text-sm text-foreground-muted">{t('noNextMeeting')}</p>}
                 {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
                 {days.length > 0 && <EventDayList days={days} today={dayInZone(new Date(), zone)} showGroup={false} showCity />}
                 {viewer.canContact && <ContactButton groupId={data.id} groupName={data.name} allowJoin={viewer.isAcceptingMembers} />}
