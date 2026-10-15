@@ -1,39 +1,31 @@
 'use client';
 
-import { Calendar } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { TEXT_LINK_CLASS } from '@/components/ui/TextLink';
 
 type Props = {
     event: {
         title: string;
+        /** Plain text: the page strips the tags. Never the practical info. */
         description: string;
+        /** Address with the city, or the online link; empty when none may be shown. */
         location: string;
         startDate: Date;
         endDate?: Date;
     };
 };
 
+const stamp = (d: Date) => d.toISOString().replace(/-|:|\.\d\d\d/g, '');
+
+/** "Pievienot kalendāram": a text link that opens Google Calendar with the event filled in; the end defaults to one hour. */
 export default function AddToCalendar({ event }: Props) {
     const t = useTranslations('event');
-    const generateGoogleLink = () => {
-        const base = 'https://www.google.com/calendar/render?action=TEMPLATE';
-        const text = encodeURIComponent(event.title);
-        const dates = `${event.startDate.toISOString().replace(/-|:|\.\d\d\d/g, '')}/${(event.endDate || new Date(event.startDate.getTime() + 3600000)).toISOString().replace(/-|:|\.\d\d\d/g, '')}`;
-        const details = encodeURIComponent(event.description.replace(/<[^>]*>?/gm, ''));
-        const location = encodeURIComponent(event.location);
-
-        return `${base}&text=${text}&dates=${dates}&details=${details}&location=${location}`;
-    };
+    const end = event.endDate ?? new Date(event.startDate.getTime() + 3600000);
+    const href = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${stamp(event.startDate)}/${stamp(end)}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
 
     return (
-        <a
-            href={generateGoogleLink()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-3 text-[11px] font-bold text-foreground transition-all hover:bg-surface-elevated active:scale-[0.98]"
-        >
-            <Calendar className="h-3.5 w-3.5 text-primary" />
-            {t('addToGoogleCalendar')}
+        <a href={href} target="_blank" rel="noopener noreferrer" className={`${TEXT_LINK_CLASS} ml-1 whitespace-nowrap`}>
+            {t('addToCalendar')}
         </a>
     );
 }

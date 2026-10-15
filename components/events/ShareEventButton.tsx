@@ -4,11 +4,8 @@ import { Share2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useShareLink } from '@/hooks/useShareLink';
 
-type Props = {
-    title: string;
-};
-
-export default function ShareEventButton({ title }: Props) {
+/** "Dalīties": a quiet text button with a 44 px touch target. */
+export default function ShareEventButton({ title }: { title: string }) {
     const t = useTranslations('event');
     const share = useShareLink();
 
@@ -16,10 +13,10 @@ export default function ShareEventButton({ title }: Props) {
         <button
             type="button"
             onClick={() => share({ title, url: window.location.href })}
-            className="flex w-full items-center justify-center gap-2 text-[11px] font-semibold text-foreground-muted hover:text-foreground transition-colors group/share"
+            className="inline-flex h-11 items-center gap-1.5 rounded-full text-sm font-semibold text-foreground-muted transition-colors hover:text-foreground md:h-10"
         >
-            <Share2 className="h-3.5 w-3.5 group-hover/share:text-primary transition-colors" />
-            {t('shareEvent')}
+            <Share2 aria-hidden="true" className="size-4" />
+            {t('share')}
         </button>
     );
 }

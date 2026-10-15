@@ -241,6 +241,8 @@ export const UI = {
     panel: 'panel',
     groupPanel: 'group-panel',
     eventPanel: 'event-panel',
+    eventPage: 'event-page',
+    eventOrganiser: 'event-organiser',
     facesLine: 'faces',
     joinStep: 'join-step',
     goingButton: 'going-button',

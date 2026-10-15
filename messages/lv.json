@@ -1426,6 +1426,11 @@
     }
   },
   "event": {
+    "practicalInfo": "Praktiskā informācija",
+    "practicalInfoMembers": "Redzama tikai dalībniekiem",
+    "onlineLinkLocked": "Saite būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
+    "addToCalendar": "Pievienot kalendāram",
+    "share": "Dalīties",
     "runningNow": "Notiek tagad",
     "runningUntil": "Notiek tagad · līdz {until}",
     "aboutEvent": "Par pasākumu",
@@ -1433,7 +1438,7 @@
     "areYouComing": "Vai nāksi?",
     "dateAndTime": "Datums un laiks",
     "importantInfo": "Svarīga informācija",
-    "joinLink": "Pievienošanās saite",
+    "joinLink": "Pievienoties tiešsaistē",
     "location": "Vieta",
     "openInMaps": "Atvērt kartē",
     "shareEvent": "Dalīties ar pasākumu",

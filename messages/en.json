@@ -1426,6 +1426,11 @@
     }
   },
   "event": {
+    "practicalInfo": "Practical info",
+    "practicalInfoMembers": "Shown only to people taking part",
+    "onlineLinkLocked": "The link shows once the organiser approves you.",
+    "addToCalendar": "Add to calendar",
+    "share": "Share",
     "runningNow": "On now",
     "runningUntil": "On now · until {until}",
     "aboutEvent": "About the event",
@@ -1433,7 +1438,7 @@
     "areYouComing": "Are you coming?",
     "dateAndTime": "Date & Time",
     "importantInfo": "Important info",
-    "joinLink": "Join Link",
+    "joinLink": "Join online",
     "location": "Location",
     "openInMaps": "Open in Maps",
     "shareEvent": "Share event",
