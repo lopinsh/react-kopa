@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { notFound } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupList from '@/components/discovery/GroupList';
-import { nextMeetingDates } from '@/lib/services/next-meetings';
+import { cardActivities } from '@/lib/services/card-activity';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { MapPin, Calendar, Info, Users, ShieldAlert } from 'lucide-react';
@@ -38,7 +38,7 @@ export default async function PublicProfilePage({
     }
 
     const isOwnProfile = session?.user?.id === dbUser.id;
-    const nextMeetings = await nextMeetingDates(dbUser.publicGroups, locale, session?.user?.id);
+    const activity = await cardActivities(dbUser.publicGroups, locale, session?.user?.id);
 
     // Privacy check
     if (!dbUser.isProfilePublic && !isOwnProfile) {
@@ -133,7 +133,7 @@ export default async function PublicProfilePage({
                     </div>
 
                     {dbUser.publicGroups.length > 0 ? (
-                        <GroupList groups={dbUser.publicGroups} nextMeetings={nextMeetings} />
+                        <GroupList groups={dbUser.publicGroups} activity={activity} />
                     ) : (
                         <div className="rounded-3xl border border-dashed border-border py-12 text-center bg-surface">
                             <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />

@@ -325,7 +325,7 @@
     "noEventsThisWeek": "No events this week",
     "noEventsInPeriod": "No events at this time",
     "eventsCut": "Showing the first {count}. Pick a shorter time or a place.",
-    "noNextMeeting": "No meeting announced yet",
+    "latestAnnouncement": "News: {title}",
     "panel": {
       "openPage": "Open the group's page",
       "groupGone": "This group is no longer available."

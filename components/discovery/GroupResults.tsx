@@ -8,18 +8,19 @@ import { buttonClass } from '@/components/ui/Button';
 import { discoveryHref, type DiscoveryParams } from '@/lib/discovery-params';
 import { DISCOVERY_GROUPS_MAX, DISCOVERY_GROUPS_PAGE } from '@/lib/constants';
 import type { GroupCardData } from '@/lib/services/group-card';
+import type { CardActivity } from '@/lib/services/card-activity';
 
 type Props = {
     groups: GroupCardData[];
     hasMore: boolean;
-    nextMeetings: Record<string, Date>;
+    activity: Record<string, CardActivity>;
     params: DiscoveryParams;
     /** Groups the viewer belongs to or waits for: they open as full pages. */
     fullPageIds?: string[];
 };
 
 /** The Grupas list: the cards or rows, "Rādīt vēl" when more are left, the create card at the true end of a chosen category (also when it is empty). */
-export default async function GroupResults({ groups, hasMore, nextMeetings, params, fullPageIds }: Props) {
+export default async function GroupResults({ groups, hasMore, activity, params, fullPageIds }: Props) {
     const t = await getTranslations('discovery');
     const createFor = params.category && !hasMore ? params.category : null;
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
@@ -34,7 +35,7 @@ export default async function GroupResults({ groups, hasMore, nextMeetings, para
     }
     return (
         <>
-            <GroupList groups={groups} nextMeetings={nextMeetings} createFor={createFor} filters={params} highlight={params.q} fullPageIds={fullPageIds} />
+            <GroupList groups={groups} activity={activity} createFor={createFor} filters={params} highlight={params.q} fullPageIds={fullPageIds} />
             {canAskMore && (
                 <div className="mt-5 flex justify-center">
                     <Link href={discoveryHref(params, { limit: params.limit + DISCOVERY_GROUPS_PAGE })} scroll={false} className={buttonClass('quiet')}>

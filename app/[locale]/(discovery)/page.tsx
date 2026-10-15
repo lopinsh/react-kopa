@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 import { GroupService } from '@/lib/services/group.service';
 import { UserService } from '@/lib/services/user.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
-import { nextMeetingDates } from '@/lib/services/next-meetings';
+import { cardActivities } from '@/lib/services/card-activity';
 import { CityService } from '@/lib/services/city.service';
 import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
@@ -89,10 +89,10 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
         cookies()
     ]);
 
-    // Each group's next meeting (only the date is shown), for groups without a "Ko meklējam?" line.
+    // Each group's latest activity for the card's bottom line (C2): next meeting, else newest public announcement.
     // A group you belong to or wait for opens as its page, not the panel: those cards link straight to it (cmv9amjft).
-    const [nextMeetings, myGroupIds] = await Promise.all([
-        nextMeetingDates(groupsRes.groups, locale, viewerId),
+    const [activity, myGroupIds] = await Promise.all([
+        cardActivities(groupsRes.groups, locale, viewerId),
         viewerId && p.kind === 'groups' ? UserService.getMyGroupIds(viewerId) : Promise.resolve([]),
     ]);
 
@@ -121,7 +121,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'
-                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} nextMeetings={nextMeetings} params={p} fullPageIds={myGroupIds} />
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} params={p} fullPageIds={myGroupIds} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>

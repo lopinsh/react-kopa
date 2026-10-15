@@ -325,7 +325,7 @@
     "noEventsThisWeek": "Šonedēļ pasākumu nav",
     "noEventsInPeriod": "Šajā laikā pasākumu nav",
     "eventsCut": "Rādīti pirmie {count}. Izvēlies īsāku laiku vai vietu.",
-    "noNextMeeting": "Tikšanās vēl nav izziņota",
+    "latestAnnouncement": "Jaunums: {title}",
     "panel": {
       "openPage": "Atvērt grupas lapu",
       "groupGone": "Šī grupa vairs nav pieejama."

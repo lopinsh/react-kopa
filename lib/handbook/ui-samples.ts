@@ -1,4 +1,5 @@
 import { categoryColor } from '@/lib/theme/category';
+import type { CardActivity } from '@/lib/services/card-activity';
 import type { GroupContext } from '@/lib/services/group.service';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import type { AnnouncementRow } from '@/lib/services/post.service';
@@ -55,6 +56,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const groupCardNote = { ...groupCard, id: 'sample-group-note', lookingFor: s('lookingFor') };
     const groupCardBare = { ...groupCard, id: 'sample-group-bare', tagline: null };
     const nextMeeting = inDays(3, 10);
+    const cardEvent: CardActivity = { kind: 'event', at: nextMeeting };
+    const cardAnnouncement: CardActivity = { kind: 'announcement', at: ago(5 * HOUR), title: s('announcementTitle') };
 
     const group: GroupContext = {
         id: 'sample-group',
@@ -188,6 +191,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         groupCardNote,
         groupCardBare,
         nextMeeting,
+        cardEvent,
+        cardAnnouncement,
         group,
         memberGroupContext,
         eventDays,

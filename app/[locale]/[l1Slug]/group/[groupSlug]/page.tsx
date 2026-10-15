@@ -52,6 +52,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
+            {group.lookingFor && <p className="mb-3 text-sm italic leading-snug text-primary md:hidden">{group.lookingFor}</p>}
             <InfoParts title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
             <NextMeetingBox groupId={group.id} groupHref={base} viewerId={session?.user?.id} />
             <GroupSocialLinks websiteLink={group.socialLinks.website} instagramLink={group.socialLinks.instagram} discordLink={group.socialLinks.discord} />

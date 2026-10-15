@@ -1,4 +1,5 @@
 import type { GroupCardData } from '@/lib/services/group-card';
+import type { CardActivity } from '@/lib/services/card-activity';
 import type { EventRowData } from '@/lib/services/event-row';
 import type { DayKey } from '@/lib/discovery-dates';
 
@@ -40,7 +41,7 @@ export interface MyGroupsOverview {
     upcoming: Array<{ day: DayKey; rows: EventRowData[] }>;
     news: NewsItem[];
     groups: MyGroup[];
-    nextMeetings: Record<string, Date>;
+    activity: Record<string, CardActivity>;
     requests: MyRequest[];
 }
 

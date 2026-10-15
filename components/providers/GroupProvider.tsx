@@ -19,6 +19,8 @@ export interface GroupState {
     /** City slug; the client labels it with `cityLabel`. */
     city: string;
     memberCount: number;
+    /** The tagline ("Ko meklējam?"): the banner (from md) and Informācija (phones) always show it when set. */
+    lookingFor: string | null;
     isAcceptingMembers: boolean;
     /** The pages this viewer sees, in order. */
     pages: GroupPageLink[];

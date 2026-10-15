@@ -153,10 +153,11 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <SearchDemo groups={[samples.groupCard, samples.groupCardNote]} event={samples.eventDays[0].rows[0]} />
                 </UiSpecimen>
 
-                <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>
+                <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupCardActivity.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>
                     <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
                         <GroupCard group={samples.groupCardNote} role="OWNER" requestCount={2} />
-                        <GroupCard group={samples.groupCard} nextMeeting={samples.nextMeeting} role="ADMIN" />
+                        <GroupCard group={samples.groupCard} activity={samples.cardEvent} role="ADMIN" />
+                        <GroupCard group={samples.groupCard} activity={samples.cardAnnouncement} />
                         <GroupCard group={samples.groupCardBare} />
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>

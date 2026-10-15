@@ -3,7 +3,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { UserService } from '@/lib/services/user.service';
 import GroupList from '@/components/discovery/GroupList';
-import { nextMeetingDates } from '@/lib/services/next-meetings';
+import { cardActivities } from '@/lib/services/card-activity';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { cityLabel } from '@/lib/city-label';
 import { Settings, MapPin, Calendar, Users, Plus } from 'lucide-react';
@@ -37,7 +37,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
         redirect(`/${locale}`);
     }
 
-    const nextMeetings = await nextMeetingDates(dbUser.recentGroups, locale, session.user.id);
+    const activity = await cardActivities(dbUser.recentGroups, locale, session.user.id);
     const memberSince = format.dateTime(dbUser.createdAt, { year: 'numeric', month: 'long', day: 'numeric' });
     const avatarSrc = avatarUrl(dbUser);
 
@@ -130,7 +130,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
                         </div>
 
                         {dbUser.recentGroups.length > 0 ? (
-                            <GroupList groups={dbUser.recentGroups} nextMeetings={nextMeetings} />
+                            <GroupList groups={dbUser.recentGroups} activity={activity} />
                         ) : (
                             <div className="rounded-3xl border border-dashed border-border py-8 text-center bg-surface">
                                 <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />

@@ -7,6 +7,7 @@ import { plainExcerpt } from '@/lib/text-excerpt';
 import { legacyTitle } from '@/lib/utils/announcement-title';
 import { toTextLang } from '@/lib/translations';
 import { MY_NEWS_DAYS, MY_NEWS_MAX, MY_UPCOMING_DAYS, MY_UPCOMING_MAX } from '@/lib/constants';
+import { cardActivities } from './card-activity';
 import { GROUP_CARD_SELECT, toGroupCard } from './group-card';
 import { EVENT_ROW_INCLUDE, toEventRow } from './event-row';
 import { NEWS_GROUP_SELECT, toNewsGroup, resolveNotificationGroups } from './notification-groups';
@@ -30,7 +31,7 @@ function groupNameOf(message: string): string {
 
 /**
  * Manas grupas in two parallel waves of queries (at most 8, none per group): your memberships with their cards, then the waiting
- * requests, the next 30 days of events, recent announcements, answers to your requests and each group's next meeting.
+ * requests, the next 30 days of events, recent announcements, answers to your requests and each card's latest activity.
  * Read-only: "seen" is written by `markMyGroupsSeen` once the page has shown in the browser, so an answer is listed until the visit after it.
  */
 export async function getMyGroupsOverview(userId: string, locale: string, zone: string = DEFAULT_TIME_ZONE): Promise<MyGroupsOverview> {
@@ -50,11 +51,10 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
     const joined = memberships.filter((m) => m.role !== 'PENDING');
     const memberIds = joined.map((m) => m.group.id);
     const teamIds = joined.filter((m) => m.role !== 'MEMBER').map((m) => m.group.id);
-    const meetingIds = joined.filter((m) => !m.group.lookingFor).map((m) => m.group.id);
     const today = startOfTodayInRiga(now);
     const until = zonedDayStart(addDays(dayInZone(now, zone), MY_UPCOMING_DAYS), zone);
 
-    const [waiting, events, posts, answers, nextOnes] = await Promise.all([
+    const [waiting, events, posts, answers, activity] = await Promise.all([
         teamIds.length > 0 ? prisma.membership.groupBy({ by: ['groupId'], where: { groupId: { in: teamIds }, role: 'PENDING' }, _count: true }) : [],
         prisma.event.findMany({
             ...JOIN,
@@ -85,14 +85,7 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
             take: 10,
             select: { id: true, type: true, link: true, message: true, createdAt: true },
         }),
-        meetingIds.length > 0
-            ? prisma.event.findMany({
-                where: { AND: [{ groupId: { in: meetingIds } }, stillOn(today)] },
-                orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],
-                distinct: ['groupId'],
-                select: { groupId: true, startDate: true },
-            })
-            : [],
+        cardActivities(joined.map((m) => m.group), locale, userId),
     ]);
 
     const answerGroups = await resolveNotificationGroups(answers.map((a) => a.link), locale);
@@ -128,7 +121,7 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
         upcoming: groupByDay(events.map((e) => toEventRow(e, lang, e.attendees[0]?.status ?? null)), now, zone),
         news: [...postItems, ...answerItems].sort((a, b) => b.at.getTime() - a.at.getTime()),
         groups,
-        nextMeetings: Object.fromEntries(nextOnes.map((n) => [n.groupId, n.startDate])),
+        activity,
         requests,
     };
 }

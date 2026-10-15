@@ -14,6 +14,7 @@ export function toGroupState(group: GroupContext): GroupState {
         category: { l1Slug: group.category.l1Slug, l1Title: group.category.l1Title, subCategories: group.category.subCategories, subCategorySlugs: group.category.subCategorySlugs },
         city: group.city,
         memberCount: group.stats.memberCount,
+        lookingFor: group.lookingFor,
         isAcceptingMembers: group.isAcceptingMembers,
         pages: group.pages,
         moderation: { isSiteAdmin: group.moderation.isSiteAdmin, hidden: !!group.moderation.hidden },

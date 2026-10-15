@@ -51,6 +51,7 @@ export default function GroupBanner() {
                         <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} onImage={onImage} />
                         <p className={clsx('text-[13px]', quiet)}>{facts.join(' · ')}</p>
                     </div>
+                    {g.lookingFor && <p className={clsx('hidden truncate text-[13px] italic md:block', onImage ? 'text-on-image' : 'text-primary')}>{g.lookingFor}</p>}
                 </div>
                 <GroupActions />
             </div>

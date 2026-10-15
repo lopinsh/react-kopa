@@ -51,7 +51,6 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                         <span>{t('nextMeeting', { date: capitalizeFirst(formatter.dateTime(nextMeeting.startDate, EVENT_DAY_TIME)) })}</span>
                     </Link>
                 )}
-                {!nextMeeting && days.length === 0 && <p className="text-sm text-foreground-muted">{t('noNextMeeting')}</p>}
                 {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
                 {days.length > 0 && <EventDayList days={days} today={dayInZone(new Date(), zone)} showGroup={false} showCity />}
                 {viewer.canContact && <ContactButton groupId={data.id} groupName={data.name} allowJoin={viewer.isAcceptingMembers} />}

@@ -21,7 +21,7 @@ export default async function MyGroupsSections({ overview }: { overview: MyGroup
     const sections: Array<{ key: string; label: string; body: ReactNode }> = [];
     if (overview.upcoming.length > 0) sections.push({ key: 'upcoming', label: t('myGroups.upcoming'), body: <UpcomingSection overview={overview} /> });
     if (overview.news.length > 0) sections.push({ key: 'news', label: t('myGroups.news'), body: <NewsSection items={overview.news} /> });
-    if (overview.groups.length > 0) sections.push({ key: 'groups', label: t('myGroups.groups'), body: <YourGroupsSection groups={overview.groups} nextMeetings={overview.nextMeetings} /> });
+    if (overview.groups.length > 0) sections.push({ key: 'groups', label: t('myGroups.groups'), body: <YourGroupsSection groups={overview.groups} activity={overview.activity} /> });
     if (overview.requests.length > 0) sections.push({ key: 'requests', label: t('myGroups.requests'), body: <YourRequestsSection requests={overview.requests} /> });
 
     if (sections.length === 0) {
