@@ -58,7 +58,8 @@ export default function SearchResults({ search, requestClose }: Props) {
                 </p>
             )}
             {found > 0 && (
-                <div className="sticky bottom-0 mt-3 border-t border-border bg-surface pt-1">
+                // On phones the bar reaches over the list's bottom padding (--search-pb), so no row shows under it.
+                <div className="sticky bottom-[calc(var(--search-pb,0px)*-1)] z-20 mt-3 border-t border-border bg-surface pb-[var(--search-pb,0px)] pt-1">
                     <Link
                         href={showAllHref}
                         replace
