@@ -84,7 +84,7 @@ export const NotificationService = {
         const window = opts.take * FOLD_WINDOW;
         const found = await prisma.notification.findMany({
             where: { userId, audience: opts.audience },
-            orderBy: { createdAt: 'desc' },
+            orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
             take: window,
         });
         const folded = groupUnread(found.map((n) => ({ ...n, audience: opts.audience })));

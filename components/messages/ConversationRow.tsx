@@ -42,7 +42,7 @@ export default function ConversationRow({ conversation: conv, title, active = fa
                     : conv.group ? <CategoryDisc slug={conv.group.l1Slug} color={conv.group.accentColor} size={40} /> : <Users aria-hidden className="size-5 text-foreground-muted" />}
             </span>
             <span className="min-w-0 flex-1">
-                <span className={clsx('block truncate text-sm', conv.unread ? 'font-semibold' : 'font-bold')}>{title}</span>
+                <span className={clsx('block truncate text-sm', conv.unread ? 'font-bold' : 'font-medium')}>{title}</span>
                 {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[11px]" />}
                 <span className={clsx('block truncate text-xs', conv.unread ? 'font-semibold text-foreground' : 'text-foreground-muted')}>
                     {conv.isBlocked
