@@ -288,6 +288,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `profile`, `notifications`, `messages`.
 - **Risks:** the "answer shown once" logic; query count on Manas grupas (one service call, batched).
 - **Owner notes 15 Oct (fold in):** Ziņas must not open on Manas grupas (cmv9ajgmd); own-area pages (Ziņas, profile edit) sit right under the header like every page: fix once in the frame, add the rule to `docs/handbook/design.md` (cmv9aist6, cmv9aom44); Manas grupas uses the discovery card and its responsive behaviour (cmv9ak7k4, cmv9al64n); a group you belong to or are pending in opens its full page, never the panel (cmv9amjft); messages and bell as small dropdowns opened on click, not hover (last ~5 items + "Visas ziņas"/"Visi paziņojumi"; phones open the page) (cmv9ahbt5).
+- **Decision (note cmv9ahbt5):** AR-64 said the messages icon opens a drawer from the right; it now opens a small dropdown on a click (the last five, then "Visas ziņas"), quick replies happen on the Ziņas page. The redesign page is not regenerated for it.
 - **Size:** M/L.
 
 ### R9a · Event page and event form (L)
@@ -471,7 +472,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R5b Events by day | pushed, live | [specs/R5b.md](specs/R5b.md) | `33b21f0`..`3f998cb` (Opus review fixes `749cb98` far-future date links and calendar footer hydration, `39caa1c` tagline `lang`, `3f998cb` UI elements calendar hydration) |
 | R6 Panels | pushed, live | [specs/R6.md](specs/R6.md) | `99f0b74`..`627ea7e` (routes `a02e690`; Opus review fixes `34acffa` sign-in resume of the event step, `e1595b0` panel focus after a step, `916f24a` footer under a panel, `8585c91` part tab locale and admin save, `627ea7e` comment) |
 | R7 Search | pushed, live | [specs/R7.md](specs/R7.md) | `0c242ed`..`051acf6` (drawer `0c242ed`, data `f14509f`, shared pieces `fbe986c`, search `33fbcac`, discovery `4368d94`, docs `8d9b345`, trim `3618000`; review fixes: blocked storage `fbaec42`, focus reopening the search `6464315`, size limits `5d624d2`, show-all bar `8403899`, specimen hydration `051acf6`) |
-| R8 Own area | spec written | [specs/R8.md](specs/R8.md) | |
+| R8 Own area | built, in review | [specs/R8.md](specs/R8.md) | `2f4b554`..`eda583b` (frame `2f4b554`, data `699db3f`, overview `c7ced99` (7 queries; `relationJoins` preview feature), full page `30bc2f5`, Manas grupas `c731303`, dropdowns and Paziņojumi `7b3aa5a`, docs `0cf8bbb`, fixes `eda583b`) |
 | R9a Event page and form | not started | | |
 | R9b Biedri, Jaunumi, settings, profiles | not started | | |
 | R10 Citur | not started | | |
