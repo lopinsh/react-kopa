@@ -17,9 +17,8 @@ import { saveRecent } from '@/lib/recent-searches';
 import { SEARCH_MIN_CHARS } from '@/lib/constants';
 
 /**
- * The desktop header's search (AR-12, AR-41): a plain field that opens the search on a click, a tap, keyboard focus, ↓ and the first
- * letter typed. The panel hangs under the header over the dimmed page; Esc, a click outside, the scrim and Back close it and the word
- * stays. Enter is "Rādīt visus rezultātus". Below `md` the phone search takes over (PhoneSearchButton).
+ * The desktop header's search (AR-12, AR-41): a click, a tap, keyboard focus, ↓ or the first letter opens it; the panel hangs under the
+ * header over the dimmed page. Esc, a click outside, the scrim and Back close it, the word stays; Enter is "Rādīt visus rezultātus".
  */
 export default function HeaderSearchField({ className }: { className?: string }) {
     const t = useTranslations('discovery.search');
@@ -29,8 +28,6 @@ export default function HeaderSearchField({ className }: { className?: string })
     const panelId = useId();
     const inputRef = useRef<HTMLInputElement>(null);
     const skipOpen = useRef(false);
-    // Switching back to the window focuses the field again without the person doing it: that must not open the search.
-    const windowBlur = useRef(false);
     const [open, setOpen] = useState(false);
 
     // The word and places of discovery's own list; any other page starts empty, on Visur.
@@ -98,8 +95,9 @@ export default function HeaderSearchField({ className }: { className?: string })
                 open={open}
                 controls={open ? panelId : undefined}
                 onKeyDown={onKeyDown}
-                onFocus={() => { if (windowBlur.current) windowBlur.current = false; else openIt(); }}
-                onBlur={(e) => { windowBlur.current = document.activeElement === e.currentTarget; }}
+                // Tab or Shift+Tab come from another element. Focus from nowhere (back to the window, or put back when a result's
+                // panel closes, as Safari leaves it in the field on a tap) must not open the search.
+                onFocus={(e) => { if (e.relatedTarget) openIt(); }}
                 onMouseDown={openIt}
                 className="w-full"
             />

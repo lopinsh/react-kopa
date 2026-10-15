@@ -16,8 +16,7 @@ type Props = {
     /** id of the panel the field controls. */
     controls?: string;
     onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
-    onFocus?: () => void;
-    onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+    onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
     onMouseDown?: () => void;
     /** The phone bar: 36 px, focused at once. */
     compact?: boolean;
@@ -26,7 +25,7 @@ type Props = {
 };
 
 /** The field of the header and of the phone bar (AR-41): a quiet tint pill while idle, a surface with a site-colour outline while open. */
-export default function SearchInput({ value, onChange, onEnter, inputRef, open, controls, onKeyDown, onFocus, onBlur, onMouseDown, compact = false, autoFocus = false, className }: Props) {
+export default function SearchInput({ value, onChange, onEnter, inputRef, open, controls, onKeyDown, onFocus, onMouseDown, compact = false, autoFocus = false, className }: Props) {
     const t = useTranslations('shell.header');
     const tSearch = useTranslations('discovery.search');
     const locale = useLocale();
@@ -39,7 +38,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
             <label htmlFor={id} className="sr-only">{t('search')}</label>
             <input
                 ref={inputRef} id={id} type="search" name="q" value={value} maxLength={SEARCH_WORD_MAX} placeholder={t('searchPlaceholder')}
-                onChange={(e) => onChange(e.target.value)} onKeyDown={onKeyDown} onFocus={onFocus} onBlur={onBlur} onMouseDown={onMouseDown}
+                onChange={(e) => onChange(e.target.value)} onKeyDown={onKeyDown} onFocus={onFocus} onMouseDown={onMouseDown}
                 enterKeyHint="search" autoComplete="off" autoFocus={autoFocus} data-autofocus={autoFocus ? true : undefined}
                 role="combobox" aria-expanded={open} aria-controls={controls} aria-autocomplete="list" aria-haspopup="dialog"
                 className="min-w-0 flex-1 truncate bg-transparent text-foreground placeholder:text-foreground-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
