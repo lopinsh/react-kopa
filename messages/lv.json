@@ -330,6 +330,25 @@
     "panel": {
       "openPage": "Atvērt grupas lapu",
       "groupGone": "Šī grupa vairs nav pieejama."
+    },
+    "search": {
+      "label": "Meklēšana",
+      "back": "Atpakaļ",
+      "clear": "Notīrīt meklēto",
+      "chipsLabel": "Vieta un tēmas",
+      "hint": "Meklē grupu, pasākumu vai nodarbi.",
+      "recent": "Nesen meklēts",
+      "removeRecent": "Noņemt “{word}”",
+      "headingWithTheme": "{kind} · {theme}",
+      "elsewhere": "{count, plural, zero {Vēl # rezultāti citās pilsētās} one {Vēl # rezultāts citās pilsētās} other {Vēl # rezultāti citās pilsētās}}",
+      "everywhere": "meklēt visur",
+      "showAll": "Rādīt visus rezultātus",
+      "showAllCount": "Rādīt visus rezultātus ({count})",
+      "resultCount": "{count, plural, zero {# rezultāti} one {# rezultāts} other {# rezultāti}}",
+      "loading": "Meklē…",
+      "alsoMatches": "Atbilst arī:",
+      "alsoMatchesTitle": "Atbilst arī",
+      "moreMatches": "{count, plural, zero {Vēl # tēmas un veidi} one {Vēl # tēma vai veids} other {Vēl # tēmas un veidi}}"
     }
   },
   "moderation": {
@@ -1218,8 +1237,7 @@
       "logoText": "Ejam kopā",
       "messages": "Ziņas",
       "search": "Meklēt",
-      "searchPlaceholder": "Meklē grupu vai nodarbi…",
-      "closeSearch": "Aizvērt meklēšanu"
+      "searchPlaceholder": "Meklē grupu vai nodarbi…"
     },
     "sidebar": {
       "collapse": "Sakļaut sānu joslu",
@@ -1346,7 +1364,8 @@
       "title": "Privātums",
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
       "visibility2": "Ziņas tiek glabātas mūsu serverī, un tās nav šifrētas no gala līdz galam.",
-      "visibilityTitle": "Kas to var redzēt"
+      "visibilityTitle": "Kas to var redzēt",
+      "cookies4": "Tava pārlūkprogramma šajā ierīcē atceras pēdējos meklētos vārdus, lai meklēšana tos varētu parādīt vēlreiz. Tie netiek sūtīti mums; katru var noņemt ar ×."
     },
     "notFound": {
       "signInHint": "Ja esi slēgtas grupas biedrs,",

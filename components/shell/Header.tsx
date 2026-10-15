@@ -9,7 +9,7 @@ import AdminMenu from './AdminMenu';
 import NotificationCenter from './NotificationCenter';
 import LanguageMenu from './LanguageMenu';
 import HeaderSearchField from './HeaderSearchField';
-import PhoneSearchToggle from './PhoneSearchToggle';
+import PhoneSearchButton from './PhoneSearchButton';
 import HeaderMessages from './HeaderMessages';
 
 /** The site header (AR-12, AR-13): logo, search field, language, then the signed-in tools. One server read of the session. */
@@ -32,7 +32,7 @@ export default async function Header() {
             </div>
 
             <LanguageMenu />
-            <PhoneSearchToggle />
+            <PhoneSearchButton />
             {user && admin && <AdminMenu />}
             {user && <HeaderMessages />}
             {user && <NotificationCenter isAdmin={admin} />}

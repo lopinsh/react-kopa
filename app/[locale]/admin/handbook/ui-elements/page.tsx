@@ -82,7 +82,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <ColourSamples />
                 </UiSpecimen>
 
-                <UiSpecimen id="shellHeader" names={[UI.header, UI.searchBar]} files={['components/shell/Header.tsx', 'components/shell/HeaderSearchField.tsx', 'components/shell/PhoneSearchToggle.tsx']} padding="bleed">
+                <UiSpecimen id="shellHeader" names={[UI.header, UI.searchBar]} files={['components/shell/Header.tsx', 'components/shell/HeaderSearchField.tsx', 'components/shell/PhoneSearchButton.tsx', 'components/search/SearchInput.tsx']} padding="bleed">
                     <HeaderDemo signedIn />
                     <HeaderDemo signedIn admin />
                     <HeaderDemo signedIn={false} />

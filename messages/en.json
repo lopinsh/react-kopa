@@ -330,6 +330,25 @@
     "panel": {
       "openPage": "Open the group's page",
       "groupGone": "This group is no longer available."
+    },
+    "search": {
+      "label": "Search",
+      "back": "Back",
+      "clear": "Clear the search",
+      "chipsLabel": "Place and themes",
+      "hint": "Look for a group, an event or an activity.",
+      "recent": "Recent searches",
+      "removeRecent": "Remove “{word}”",
+      "headingWithTheme": "{kind} · {theme}",
+      "elsewhere": "{count, plural, one {# more result in other places} other {# more results in other places}}",
+      "everywhere": "search everywhere",
+      "showAll": "Show all results",
+      "showAllCount": "Show all results ({count})",
+      "resultCount": "{count, plural, one {# result} other {# results}}",
+      "loading": "Searching…",
+      "alsoMatches": "Also matches:",
+      "alsoMatchesTitle": "Also matches",
+      "moreMatches": "{count, plural, one {# more theme or type} other {# more themes and types}}"
     }
   },
   "moderation": {
@@ -1218,8 +1237,7 @@
       "logoText": "Ejam kopā",
       "messages": "Messages",
       "search": "Search",
-      "searchPlaceholder": "Search for a group or an activity…",
-      "closeSearch": "Close search"
+      "searchPlaceholder": "Search for a group or an activity…"
     },
     "sidebar": {
       "collapse": "Collapse sidebar",
@@ -1346,7 +1364,8 @@
       "title": "Privacy",
       "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",
       "visibility2": "Messages are stored on our server and are not end-to-end encrypted.",
-      "visibilityTitle": "Who can see it"
+      "visibilityTitle": "Who can see it",
+      "cookies4": "Your browser remembers your last few search words on this device so the search can show them again. They are never sent to us; you can remove each one with ×."
     },
     "notFound": {
       "signInHint": "If you are a member of a closed group,",

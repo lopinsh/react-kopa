@@ -1,0 +1,86 @@
+'use client';
+
+import { useId, type FocusEvent, type KeyboardEvent, type RefObject } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
+import { Search, X } from 'lucide-react';
+import { clsx } from 'clsx';
+import { SEARCH_WORD_MAX, UI } from '@/lib/constants';
+
+type Props = {
+    value: string;
+    onChange: (value: string) => void;
+    /** Enter with JavaScript: "Rādīt visus rezultātus". Without it the form goes to discovery with `?q=` on its own. */
+    onEnter: () => void;
+    inputRef: RefObject<HTMLInputElement | null>;
+    open: boolean;
+    /** id of the panel the field controls. */
+    controls?: string;
+    onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
+    onFocus?: () => void;
+    onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+    onMouseDown?: () => void;
+    /** The phone bar: 36 px, focus at once. */
+    compact?: boolean;
+    autoFocus?: boolean;
+    className?: string;
+};
+
+/** The search field of the header and of the phone bar (AR-41): a pill that is a quiet tint while idle and a surface with a site-colour outline while open. */
+export default function SearchInput({ value, onChange, onEnter, inputRef, open, controls, onKeyDown, onFocus, onBlur, onMouseDown, compact = false, autoFocus = false, className }: Props) {
+    const t = useTranslations('shell.header');
+    const tSearch = useTranslations('discovery.search');
+    const locale = useLocale();
+    const id = useId();
+
+    return (
+        <form
+            action={`/${locale}`}
+            role="search"
+            data-ui={UI.searchBar}
+            onSubmit={(e) => { e.preventDefault(); onEnter(); }}
+            className={clsx(
+                'flex items-center gap-2 rounded-full px-3 text-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary',
+                compact ? 'h-9' : 'h-[38px]',
+                open ? 'bg-surface outline-2 outline-primary' : 'bg-tint',
+                className
+            )}
+        >
+            <Search aria-hidden className="size-4 shrink-0 text-foreground-muted" />
+            <label htmlFor={id} className="sr-only">{t('search')}</label>
+            <input
+                ref={inputRef}
+                id={id}
+                type="search"
+                name="q"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                onKeyDown={onKeyDown}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onMouseDown={onMouseDown}
+                maxLength={SEARCH_WORD_MAX}
+                placeholder={t('searchPlaceholder')}
+                enterKeyHint="search"
+                autoComplete="off"
+                autoFocus={autoFocus}
+                data-autofocus={autoFocus ? true : undefined}
+                role="combobox"
+                aria-expanded={open}
+                aria-controls={controls}
+                aria-autocomplete="list"
+                aria-haspopup="dialog"
+                className="min-w-0 flex-1 truncate bg-transparent text-foreground placeholder:text-foreground-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
+            />
+            {value && (
+                <button
+                    type="button"
+                    aria-label={tSearch('clear')}
+                    onClick={() => { onChange(''); inputRef.current?.focus(); }}
+                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2.5"
+                >
+                    <X aria-hidden="true" className="size-4" />
+                </button>
+            )}
+        </form>
+    );
+}
