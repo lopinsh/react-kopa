@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import { NotificationService } from '@/lib/services/notification.service';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
@@ -236,10 +237,12 @@ export async function updateEvent(
 /**
  * Delete an event. Everyone who was going, waiting or on the waitlist is told.
  */
+/** On success it never returns: it redirects to the group's Pasākumi in the same response (the deleted page is never re-rendered). */
 export async function deleteEvent(eventId: string, locale: string): Promise<ActionResponse> {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
+    let listPath: string;
     try {
         const result = await EventService.deleteEvent(eventId, session.user.id);
         if (!result.success) return result;
@@ -253,9 +256,11 @@ export async function deleteEvent(eventId: string, locale: string): Promise<Acti
         })));
         revalidateEventPaths(locale, ctx);
         updateTag('events');
-        return { success: true };
+        listPath = `/${locale}/${ctx.l1Slug}/group/${ctx.groupSlug}/events`;
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
     }
+    // Outside the try: redirect() throws by design.
+    redirect(listPath);
 }
 

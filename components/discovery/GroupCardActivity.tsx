@@ -2,6 +2,7 @@ import { CalendarDays, Megaphone } from 'lucide-react';
 import { useTimeZone, useTranslations } from 'next-intl';
 import { useDateFormatter } from '@/lib/date-format';
 import { meetingLine } from '@/lib/event-when';
+import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import type { CardActivity } from '@/lib/services/card-activity';
 
 /**
@@ -11,7 +12,7 @@ import type { CardActivity } from '@/lib/services/card-activity';
 export default function GroupCardActivity({ activity, lookingFor }: { activity?: CardActivity; lookingFor: string | null }) {
     const t = useTranslations('discovery');
     const tEvent = useTranslations('event');
-    const zone = useTimeZone() ?? 'Europe/Riga';
+    const zone = useTimeZone() ?? DEFAULT_TIME_ZONE;
     const formatter = useDateFormatter();
     if (!activity && !lookingFor) return null;
 

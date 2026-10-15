@@ -33,7 +33,7 @@ export default function EventPageDemos({ row, text }: { row: EventRowData; text:
             <EventArticle event={request} />
             <EventArticle
                 event={team}
-                organiser={<EventOrganiserBox event={team} lists={{ going: PEOPLE.slice(0, 2), pending: PEOPLE.slice(2), waitlist: [] }} locale="lv" groupPath="/sample/group/sample" eventPath="/sample/group/sample/events/sample" />}
+                organiser={<EventOrganiserBox event={team} lists={{ going: PEOPLE.slice(0, 2), pending: PEOPLE.slice(2), waitlist: [] }} locale="lv" eventPath="/sample/group/sample/events/sample" />}
             />
         </div>
     );

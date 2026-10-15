@@ -1442,9 +1442,9 @@
     },
     "runningNow": "Notiek tagad",
     "runningUntil": "Notiek tagad · līdz {until}",
-    "aboutEvent": "Par pasākumu",
-    "joinLink": "Pievienoties tiešsaistē",
-    "openInMaps": "Atvērt kartē",
+    "aboutEvent": "Par pasākumu",
+    "joinLink": "Pievienoties tiešsaistē",
+    "openInMaps": "Atvērt kartē",
     "tba": "Tiks precizēta",
     "createSubtitle": "Izveido jaunu pasākumu savai grupai",
     "membersOnly": "Tikai biedriem",
@@ -1463,11 +1463,11 @@
     "fullNote": "Pasākums ir pilns. Vari pieteikties gaidīšanas sarakstā.",
     "waitlistNote": "Ja atbrīvosies vieta, organizators pats uzņems cilvēkus.",
     "requestNote": "Organizators apstiprina, kas piedalīsies.",
-    "instructionsLocked": "Praktiskā informācija būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
-    "aboutPeople": "Apmēram {count, plural, zero {# cilvēku} one {# cilvēks} other {# cilvēki}}",
+    "instructionsLocked": "Praktiskā informācija būs redzama pēc tam, kad organizators apstiprinās tavu dalību.",
+    "aboutPeople": "Apmēram {count, plural, zero {# cilvēku} one {# cilvēks} other {# cilvēki}}",
     "closeSignups": "Slēgt pieteikšanos",
     "reopenSignups": "Atvērt pieteikšanos",
-    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
+    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
     "approve": "Apstiprināt",
     "decline": "Noraidīt",
     "letIn": "Uzņemt",

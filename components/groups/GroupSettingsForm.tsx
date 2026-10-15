@@ -151,12 +151,9 @@ export default function GroupSettingsForm({
     const handleDelete = () => {
         if (isPending) return;
         startTransition(async () => {
+            // On success the action redirects to the start page itself; only a failure comes back.
             const result = await deleteGroup(group.id, locale);
-            if (result.success) {
-                router.push('/');
-            } else {
-                setDeleteConfirmOpen(false);
-            }
+            if (!result.success) setDeleteConfirmOpen(false);
         });
     };
 

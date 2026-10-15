@@ -14,8 +14,7 @@ type Props = {
     event: Pick<EventPageData, 'id' | 'joinMode' | 'isFull' | 'timing'>;
     lists: NonNullable<EventPageData['organiser']>;
     locale: string;
-    /** `/l1/group/slug`, without the locale. */
-    groupPath: string;
+    /** `/l1/group/slug/events/slug`, without the locale. */
     eventPath: string;
 };
 
@@ -23,7 +22,7 @@ type Props = {
  * "Rīkotājiem" (AR-59), the team's box at the bottom of the event page: the counts as buttons that open their list, "Labot", "Slēgt pieteikšanos"
  * and "Dzēst". Every action runs in a transition with all buttons disabled meanwhile; the page refreshes after it. A finished event keeps only "Dzēst".
  */
-export default function EventOrganiserBox({ event, lists, locale, groupPath, eventPath }: Props) {
+export default function EventOrganiserBox({ event, lists, locale, eventPath }: Props) {
     const t = useTranslations('event');
     const tOrg = useTranslations('event.organiser');
     const tErrors = useTranslations('errors');
@@ -62,12 +61,10 @@ export default function EventOrganiserBox({ event, lists, locale, groupPath, eve
         if (busy) return;
         setError(null);
         startTransition(async () => {
+            // On success the action redirects to Pasākumi in the same response; only a failure comes back.
             const result = await deleteEvent(event.id, locale);
             setConfirmOpen(false);
-            if (!result.success) { setError(result.error); return; }
-            // The move to the list, a beat later: the action's own refresh re-renders this (now deleted) address and Next then
-            // reloads it, which swallowed an immediate move (the old Dzēst ended on a 404).
-            setTimeout(() => router.push(`${groupPath}/events`), 400);
+            if (!result.success) setError(result.error);
         });
     };
 

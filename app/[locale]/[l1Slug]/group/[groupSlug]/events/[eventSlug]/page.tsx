@@ -32,7 +32,7 @@ export default async function EventPage({ params }: { params: Promise<Params> })
         // A members-only event gets a notice instead of a 404; anything else does not exist for this viewer.
         const gate = await EventService.getMembersOnlyGate(eventSlug, groupSlug, userId, l1Slug);
         if (!gate) notFound();
-        return <MembersOnlyNotice />;
+        return <MembersOnlyNotice heading />;
     }
 
     const tCities = await getTranslations('cities');
@@ -45,7 +45,7 @@ export default async function EventPage({ params }: { params: Promise<Params> })
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonForScript(jsonLd) }} />
             <EventArticle
                 event={event}
-                organiser={team && <EventOrganiserBox event={event} lists={team} locale={locale} groupPath={groupPath} eventPath={`${groupPath}/events/${event.slug}`} />}
+                organiser={team && <EventOrganiserBox event={event} lists={team} locale={locale} eventPath={`${groupPath}/events/${event.slug}`} />}
             />
         </>
     );

@@ -1,5 +1,6 @@
 ﻿'use server';
 
+import { redirect } from 'next/navigation';
 import { revalidatePath, updateTag } from 'next/cache';
 import { GroupFormValues, GroupCreateValues, groupCreateSchema, buildGroupFormSchema } from '@/lib/validations/group';
 import { sectionSaveSchema, type SectionSaveValues } from '@/lib/validations/section';
@@ -231,12 +232,12 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
-        updateTag('groups');
-
-        return { success: true };
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
     }
+    // On success it never returns: the redirect lands on the start page in the same response, so the deleted group's page is never
+    // re-rendered (outside the try, as redirect() throws by design).
+    redirect(`/${locale}`);
 }
 
 /**
