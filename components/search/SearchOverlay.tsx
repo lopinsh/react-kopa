@@ -24,7 +24,7 @@ function SearchScreen() {
     const requestClose = useOverlayClose();
     const inputRef = useRef<HTMLInputElement>(null);
     const onDiscovery = pathname === '/';
-    const search = useSearch({ active: true, initialWord: onDiscovery ? page.q : '', initialCities: onDiscovery ? page.cities : [], kind: onDiscovery ? page.kind : 'groups' });
+    const search = useSearch({ active: true, initialWord: onDiscovery ? page.q : '', initialCities: onDiscovery ? page.cities : [], initialTheme: onDiscovery ? page.category : null, kind: onDiscovery ? page.kind : 'groups' });
 
     const onEnter = () => {
         if (search.word.trim().length < SEARCH_MIN_CHARS && !search.theme) return;

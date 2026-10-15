@@ -14,6 +14,8 @@ type Options = {
     active: boolean;
     initialWord: string;
     initialCities: string[];
+    /** The page's own category (its L1 slug): the search starts with that theme chosen. */
+    initialTheme: string | null;
     /** The page the search was opened on (Pasākumi lands on Pasākumi when it found events). */
     kind: DiscoveryKind;
 };
@@ -23,12 +25,12 @@ type Options = {
  * A word change waits SEARCH_DEBOUNCE_MS; a theme or place change goes at once. A newer request aborts the older one and
  * a response that is not the newest is dropped, so the latest query wins. The old results stay while a newer one runs.
  */
-export function useSearch({ active, initialWord, initialCities, kind }: Options) {
+export function useSearch({ active, initialWord, initialCities, initialTheme, kind }: Options) {
     const locale = useLocale();
     const pathname = usePathname();
     const current = useSearchParams();
     const [word, setWordState] = useState(initialWord);
-    const [theme, setTheme] = useState<string | null>(null);
+    const [theme, setTheme] = useState<string | null>(initialTheme);
     const [cities, setCities] = useState(initialCities);
     const [results, setResults] = useState<SearchResults | null>(null);
     const [loading, setLoading] = useState(false);
@@ -95,8 +97,8 @@ export function useSearch({ active, initialWord, initialCities, kind }: Options)
         error,
         showAllHref,
         here,
-        /** The address changed under the search: start from the new page's word and places. */
-        reset: useCallback((nextWord: string, nextCities: string[]) => { setWordState(nextWord); setTheme(null); setCities(nextCities); setResults(null); }, [])
+        /** The address changed under the search: start from the new page's word, places and category. */
+        reset: useCallback((nextWord: string, nextCities: string[], nextTheme: string | null) => { setWordState(nextWord); setTheme(nextTheme); setCities(nextCities); setResults(null); }, [])
     };
 }
 

@@ -30,11 +30,11 @@ export default function HeaderSearchField({ className }: { className?: string })
     const skipOpen = useRef(false);
     const [open, setOpen] = useState(false);
 
-    // The word and places of discovery's own list; any other page starts empty, on Visur.
+    // The word, places and category of discovery's own list; any other page starts empty, on Visur.
     const page = parseDiscoveryParams(searchParams);
     const onDiscovery = pathname === '/';
-    const [initialWord, initialCities] = onDiscovery ? [page.q, page.cities] : ['', []];
-    const search = useSearch({ active: open, initialWord, initialCities, kind: onDiscovery ? page.kind : 'groups' });
+    const [initialWord, initialCities, initialTheme] = onDiscovery ? [page.q, page.cities, page.category] : ['', [], null];
+    const search = useSearch({ active: open, initialWord, initialCities, initialTheme, kind: onDiscovery ? page.kind : 'groups' });
 
     // A new address (a result opened, "Rādīt visus rezultātus", a link elsewhere) closes the search and starts from the new page's word.
     const url = `${pathname}?${searchParams}`;
@@ -42,7 +42,7 @@ export default function HeaderSearchField({ className }: { className?: string })
     if (seen !== url) {
         setSeen(url);
         setOpen(false);
-        search.reset(initialWord, initialCities);
+        search.reset(initialWord, initialCities, initialTheme);
     }
 
     const close = useCallback(() => setOpen(false), []);
