@@ -14,6 +14,8 @@ export interface MyGroup {
 }
 
 export interface MyRequest {
+    /** The group as a row (the phone group row). */
+    card: GroupCardData;
     groupId: string;
     name: string;
     /** `/<l1>/group/<slug>` */

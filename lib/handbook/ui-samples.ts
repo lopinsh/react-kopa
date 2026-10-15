@@ -182,7 +182,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const adminNotification: NotificationView = { ...notification('n-3', 'ADMIN_REPORT', { excerpt: s('requestMessage') }, false, 3 * HOUR), audience: 'ADMIN', link: '/admin/reports', group: null };
     const newsPost: NewsItem = { kind: 'post', id: 'np-1', at: ago(5 * HOUR), isNew: true, group: newsGroup, title: s('announcementTitle'), excerpt: s('announcementBody') };
     const newsAnswer: NewsItem = { kind: 'answer', id: 'na-1', at: ago(DAY), isNew: true, group: newsGroup, accepted: true };
-    const myRequest: MyRequest = { groupId: 'sample-group-request', name: s('groupName'), path: `/${SAMPLE_L1_SLUG}/group/sample-group`, color: SAMPLE_ACCENT, since: ago(2 * DAY) };
+    const myRequest: MyRequest = { card: groupCard, groupId: 'sample-group-request', name: s('groupName'), path: `/${SAMPLE_L1_SLUG}/group/sample-group`, color: SAMPLE_ACCENT, since: ago(2 * DAY) };
 
     return {
         accent: SAMPLE_ACCENT,

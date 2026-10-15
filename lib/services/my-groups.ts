@@ -97,7 +97,7 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
     }));
     const requests: MyRequest[] = memberships.filter((m) => m.role === 'PENDING').map((m) => {
         const card = toGroupCard(m.group, lang);
-        return { groupId: card.id, name: card.name, path: `/${card.category.l1Slug}/group/${card.slug}`, color: card.category.color, since: m.joinedAt };
+        return { card, groupId: card.id, name: card.name, path: `/${card.category.l1Slug}/group/${card.slug}`, color: card.category.color, since: m.joinedAt };
     });
 
     const postItems: NewsItem[] = posts.map((p) => {

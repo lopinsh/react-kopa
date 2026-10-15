@@ -2,22 +2,19 @@
 
 import { useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { useLocale, useTranslations } from 'next-intl';
+import { useTranslations } from 'next-intl';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
-import RoleTag from '@/components/ui/RoleTag';
+import GroupRow from '@/components/discovery/GroupRow';
+import Button from '@/components/ui/Button';
 import { cancelJoinRequest } from '@/actions/group-actions';
 import { useToast } from '@/hooks/use-toast';
-import { EVENT_DAY, useDateFormatter } from '@/lib/date-format';
 import { UI } from '@/lib/constants';
 import type { MyRequest } from '@/lib/types/own-area';
 
-/** One request that waits (AR-61, AR-46): the group (full page), since when, "Gaida", and "Atsaukt pieteikumu" asking in a pop-over at the button. */
+/** One request that waits (AR-61, AR-46): the group as the phone group row (full page) with the "Gaida" tag, a little faded, and "Atsaukt" as a small outlined button asking in a pop-over. */
 export default function RequestRow({ request }: { request: MyRequest }) {
-    const t = useTranslations('profile.myGroups');
     const tGroup = useTranslations('group');
     const tErrors = useTranslations('errors');
-    const locale = useLocale();
-    const format = useDateFormatter();
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [open, setOpen] = useState(false);
@@ -42,12 +39,8 @@ export default function RequestRow({ request }: { request: MyRequest }) {
     };
 
     return (
-        <li data-ui={UI.requestRow} className="flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border px-3.5 py-2.5 first:border-t-0">
-            <div className="flex min-w-0 flex-1 basis-48 flex-wrap items-center gap-x-2 gap-y-0.5 text-sm">
-                <a href={`/${locale}${request.path}`} className="min-w-0 truncate font-semibold text-foreground hover:underline">{request.name}</a>
-                <span className="text-foreground-muted">· {t('since', { date: format.dateTime(request.since, EVENT_DAY) })}</span>
-                <RoleTag role="PENDING" />
-            </div>
+        <li data-ui={UI.requestRow} className="flex items-center gap-2 border-t border-border px-3.5 first:border-t-0">
+            <div className="min-w-0 flex-1 opacity-75"><GroupRow group={request.card} fullPage role="PENDING" /></div>
             <ConfirmPopover
                 isOpen={open}
                 onOpenChange={setOpen}
@@ -56,9 +49,9 @@ export default function RequestRow({ request }: { request: MyRequest }) {
                 isPending={isPending}
                 onConfirm={withdraw}
                 renderTrigger={(props) => (
-                    <button type="button" disabled={isPending} className="min-h-11 rounded-full px-2 text-sm text-foreground-muted underline decoration-border underline-offset-4 hover:text-foreground md:min-h-8" {...props}>
-                        {tGroup('withdrawRequest')}
-                    </button>
+                    <Button variant="quiet" size="sm" disabled={isPending} className="shrink-0" {...props}>
+                        {tGroup('withdrawRequestShort')}
+                    </Button>
                 )}
             />
         </li>

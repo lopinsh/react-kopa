@@ -540,6 +540,7 @@
     "openChat": "Open chat",
     "deleteSectionConfirm": "Delete this section? It can't be restored.",
     "withdrawRequest": "Withdraw request",
+    "withdrawRequestShort": "Withdraw",
     "pages": {
       "info": "Information",
       "announcements": "Announcements",
@@ -1442,7 +1443,7 @@
     },
     "runningNow": "On now",
     "runningUntil": "On now · until {until}",
-    "aboutEvent": "About the event",
+    "aboutEvent": "About the event",
     "joinLink": "Join online",
     "openInMaps": "Open in Maps",
     "tba": "To be announced",
@@ -1467,7 +1468,7 @@
     "aboutPeople": "About {count, plural, one {# person} other {# people}}",
     "closeSignups": "Close sign-ups",
     "reopenSignups": "Reopen sign-ups",
-    "closeSignupsHint": "People can still join the waitlist.",
+    "closeSignupsHint": "People can still join the waitlist.",
     "approve": "Approve",
     "decline": "Decline",
     "letIn": "Let in",

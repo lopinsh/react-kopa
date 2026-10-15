@@ -540,6 +540,7 @@
     "openChat": "Atvērt sarunu",
     "deleteSectionConfirm": "Dzēst šo sadaļu? To nevarēs atjaunot.",
     "withdrawRequest": "Atsaukt pieteikumu",
+    "withdrawRequestShort": "Atsaukt",
     "pages": {
       "info": "Informācija",
       "announcements": "Jaunumi",
@@ -1442,7 +1443,7 @@
     },
     "runningNow": "Notiek tagad",
     "runningUntil": "Notiek tagad · līdz {until}",
-    "aboutEvent": "Par pasākumu",
+    "aboutEvent": "Par pasākumu",
     "joinLink": "Pievienoties tiešsaistē",
     "openInMaps": "Atvērt kartē",
     "tba": "Tiks precizēta",
@@ -1467,7 +1468,7 @@
     "aboutPeople": "Apmēram {count, plural, zero {# cilvēku} one {# cilvēks} other {# cilvēki}}",
     "closeSignups": "Slēgt pieteikšanos",
     "reopenSignups": "Atvērt pieteikšanos",
-    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
+    "closeSignupsHint": "Cilvēki joprojām var pieteikties gaidīšanas sarakstā.",
     "approve": "Apstiprināt",
     "decline": "Noraidīt",
     "letIn": "Uzņemt",

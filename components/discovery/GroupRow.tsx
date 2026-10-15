@@ -27,7 +27,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
     /** A group you belong to or wait for: a plain link to its full page, no panel (cmv9amjft). */
     fullPage?: boolean;
     /** Your role in the group (Manas grupas); a plain member gets no tag. */
-    role?: MyRole;
+    role?: MyRole | 'PENDING';
     /** Join requests waiting for the team (Manas grupas, team only). */
     requestCount?: number;
 }) {
