@@ -49,6 +49,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         memberCount: 23,
         category: { slug: 'hiking', l1Slug: SAMPLE_L1_SLUG, l1Title: s('parentCategory'), color: SAMPLE_ACCENT },
         subCategories: [s('category'), s('category2')],
+        subCategorySlugs: ['sample-sub-1', 'sample-sub-2'],
     };
     const groupCardNote = { ...groupCard, id: 'sample-group-note', lookingFor: s('lookingFor') };
     const groupCardBare = { ...groupCard, id: 'sample-group-bare', tagline: null };
@@ -80,6 +81,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
             l1Slug: SAMPLE_L1_SLUG,
             l1Title: s('parentCategory'),
             subCategories: [s('category')],
+            subCategorySlugs: ['sample-sub-1'],
             color: SAMPLE_ACCENT,
         },
         tags: [],

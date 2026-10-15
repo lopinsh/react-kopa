@@ -15,7 +15,7 @@ export interface GroupState {
     image: string | null;
     /** "Tikai biedriem": out of discovery, a quiet note on the banner. */
     isPrivate: boolean;
-    category: { l1Slug: string; l1Title: string; subCategories: string[] };
+    category: { l1Slug: string; l1Title: string; subCategories: string[]; subCategorySlugs: string[] };
     /** City slug; the client labels it with `cityLabel`. */
     city: string;
     memberCount: number;

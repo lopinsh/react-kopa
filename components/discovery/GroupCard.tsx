@@ -28,16 +28,17 @@ export default function GroupCard({ group, nextMeeting }: Props) {
     const locale = useLocale();
 
     return (
-        <Link
-            href={`/${group.category.l1Slug}/group/${group.slug}`}
-            scroll={false}
+        <div
             data-ui={UI.groupCard}
             style={{ ['--c' as string]: group.category.color }}
-            className="grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl bg-surface transition-colors hover:bg-tint/40 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+            className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary"
         >
             <div className="flex min-w-0 flex-col gap-[3px] px-3.5 pt-3">
-                <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">{group.name}</h3>
-                <CategoryLine oneLine color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} />
+                <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">
+                    {/* The stretched link: its ::after covers the card; the category links sit above it. */}
+                    <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link className="outline-none after:absolute after:inset-0 after:z-[1]">{group.name}</Link>
+                </h3>
+                <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} />
                 <p className="truncate text-[13px] text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>
                 <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-[13px] leading-snug text-foreground-muted">{group.tagline}</p>
             </div>
@@ -55,11 +56,11 @@ export default function GroupCard({ group, nextMeeting }: Props) {
             </div>
             <div className="relative col-start-2 row-span-2 row-start-1 min-h-14 overflow-hidden bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
                 {group.bannerImage ? (
-                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="84px" className="object-cover" />
+                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="320px" className="object-cover" />
                 ) : (
                     <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={26} /></span>
                 )}
             </div>
-        </Link>
+        </div>
     );
 }

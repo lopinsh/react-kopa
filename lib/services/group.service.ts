@@ -7,7 +7,7 @@ import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
-import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
+import { MAX_SECTIONS, PANEL_EVENTS_MAX, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, TEXT_LANGS, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
@@ -117,6 +117,8 @@ export interface GroupContext {
         l1Title: string;
         /** Titles of the level-2 tags, in the viewer's language. */
         subCategories: string[];
+        /** Slugs of the same level-2 tags, in the same order. */
+        subCategorySlugs: string[];
         color: string | null;
     };
     tags: Array<{
@@ -327,6 +329,7 @@ export const GroupService = {
                 l1Slug: resolved.l1Slug,
                 l1Title: resolved.l1Title,
                 subCategories: g.tags.filter((t) => t.level === 2).map((t) => pickTitle(t.titles ?? [], lang, t.slug)),
+                subCategorySlugs: g.tags.filter((t) => t.level === 2).map((t) => t.slug),
                 color: resolved.accentColor
             },
             tags: g.tags.map((t) => ({
@@ -349,7 +352,11 @@ export const GroupService = {
     async getGroupPanel(groupSlug: string, l1Slug: string, locale: string, viewerId?: string): Promise<GroupPanelData | null> {
         const g = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, viewerId);
         if (!g) return null;
-        return toGroupPanel(g, await EventService.getNextVisibleEvent(g.id, locale, viewerId));
+        const [next, events] = await Promise.all([
+            EventService.getNextVisibleEvent(g.id, locale, viewerId),
+            EventService.getPanelEventRows(g.id, locale, viewerId, PANEL_EVENTS_MAX)
+        ]);
+        return toGroupPanel(g, next, events);
     },
 
     /**

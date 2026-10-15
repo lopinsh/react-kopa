@@ -11,7 +11,7 @@ export function toGroupState(group: GroupContext): GroupState {
         href: `/${group.category.l1Slug}/group/${group.slug}`,
         image: group.bannerImage ? getSmartImageUrl(group.bannerImage) : null,
         isPrivate: group.type === 'PRIVATE',
-        category: { l1Slug: group.category.l1Slug, l1Title: group.category.l1Title, subCategories: group.category.subCategories },
+        category: { l1Slug: group.category.l1Slug, l1Title: group.category.l1Title, subCategories: group.category.subCategories, subCategorySlugs: group.category.subCategorySlugs },
         city: group.city,
         memberCount: group.stats.memberCount,
         isAcceptingMembers: group.isAcceptingMembers,

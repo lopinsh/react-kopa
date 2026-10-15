@@ -35,6 +35,8 @@ export const GROUP_TAGLINE_MAX = 160;
 export const EVENT_EXCERPT_MAX = 140;
 /** Longest text in a group or event panel, characters. */
 export const PANEL_TEXT_MAX = 400;
+/** Upcoming public events listed in the group panel. */
+export const PANEL_EVENTS_MAX = 3;
 /** Most faces the "who is going" line shows. */
 export const FACES_MAX = 3;
 /** id of a panel's title element (only one panel exists at a time): focus goes there when the content changes. */

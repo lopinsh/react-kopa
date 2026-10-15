@@ -46,6 +46,11 @@ export function subCategoryTitles(tags: CardTag[], lang: string): string[] {
     return tags.filter((t) => t.level === 2).map((t) => pickTitle(t.titles, lang, t.slug));
 }
 
+/** The slugs of the same level-2 tags, in the same order (the category line links to discovery with them). */
+export function subCategorySlugs(tags: CardTag[]): string[] {
+    return tags.filter((t) => t.level === 2).map((t) => t.slug);
+}
+
 /**
  * The card's short idea of the group: the first words of the PUBLIC home section in the viewer's language (the written language
  * when there is no translation), plain text. A members-only home section gives none; `description` only when the group has no sections.
@@ -79,6 +84,7 @@ export function toGroupCard(group: GroupCardSource, lang: string) {
             color: resolved.accentColor,
         },
         subCategories: subCategoryTitles(group.tags, lang),
+        subCategorySlugs: subCategorySlugs(group.tags),
     };
 }
 

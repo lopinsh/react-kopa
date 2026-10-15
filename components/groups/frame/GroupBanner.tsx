@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
+import { Link } from '@/i18n/routing';
 import { cityLabel } from '@/lib/city-label';
+import { topicHref } from '@/lib/discovery-params';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
@@ -43,10 +45,10 @@ export default function GroupBanner() {
                     <h1 className="truncate font-heading text-[15px] font-semibold leading-tight md:text-xl">{g.name}</h1>
                     <p className={clsx('flex items-center gap-1.5 text-xs md:hidden', quiet)}>
                         <span aria-hidden className={clsx('size-2 shrink-0 rounded-full bg-[var(--accent)]', onImage && 'ring-[1.5px] ring-on-image')} />
-                        <span className="truncate">{[g.category.l1Title, ...facts].join(' · ')}</span>
+                        <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>
                     </p>
-                    <div className="hidden max-h-10 flex-wrap items-baseline gap-x-3.5 gap-y-0.5 overflow-hidden md:flex">
-                        <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} onImage={onImage} />
+                    <div className="hidden max-h-10 flex-wrap items-baseline gap-x-3.5 gap-y-0.5 overflow-hidden px-0.5 -mx-0.5 md:flex">
+                        <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} onImage={onImage} />
                         <p className={clsx('text-[13px]', quiet)}>{facts.join(' · ')}</p>
                     </div>
                 </div>

@@ -670,6 +670,28 @@ export class EventService {
         return wanted.map((e) => toEventRow(e, lang, mine.get(e.id) ?? null));
     }
 
+    /**
+     * A group's next upcoming events as rows for the group panel: PUBLIC ones only, whoever asks (members-only events never leave
+     * with a panel; members see them on the group's Pasākumi page). Still running or later today and after, oldest first. The caller
+     * has already checked that the viewer may open the group.
+     */
+    static async getPanelEventRows(groupId: string, locale: string, viewerId: string | undefined, limit: number): Promise<EventRowData[]> {
+        const lang = toTextLang(locale);
+        const today = startOfTodayInRiga();
+        const rows = await prisma.event.findMany({
+            where: {
+                groupId,
+                visibility: 'PUBLIC',
+                OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }]
+            },
+            orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],
+            take: limit,
+            include: EVENT_ROW_INCLUDE(lang)
+        });
+        const mine = await EventService.myTags(rows.map((e) => e.id), viewerId);
+        return rows.map((e) => toEventRow(e, lang, mine.get(e.id) ?? null));
+    }
+
     /** The viewer's attendance status per event (going, asked or waiting only); empty when signed out. */
     private static async myTags(eventIds: string[], viewerId: string | undefined): Promise<Map<string, AttendanceStatus>> {
         if (!viewerId || eventIds.length === 0) return new Map();
