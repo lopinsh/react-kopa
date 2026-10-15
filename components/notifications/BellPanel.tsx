@@ -27,10 +27,16 @@ export default function BellPanel({ headingId, isAdmin, tab, onTab, counts, onMa
     const t = useTranslations('notifications');
     const unread = tab === 'ADMIN' ? counts.admin : counts.user;
 
+    const tabId = (audience: Audience) => `${headingId}-tab-${audience}`;
+    const panelId = `${headingId}-panel`;
+
+    // Arrow keys move between the two tabs and take the focus along (the unselected tab is out of the Tab order).
     const onTabKey = (e: KeyboardEvent) => {
-        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
         e.preventDefault();
-        onTab(tab === 'USER' ? 'ADMIN' : 'USER');
+        const next: Audience = e.key === 'Home' ? 'USER' : e.key === 'End' ? 'ADMIN' : tab === 'USER' ? 'ADMIN' : 'USER';
+        onTab(next);
+        document.getElementById(tabId(next))?.focus();
     };
 
     return (
@@ -50,9 +56,11 @@ export default function BellPanel({ headingId, isAdmin, tab, onTab, counts, onMa
                         return (
                             <button
                                 key={audience}
+                                id={tabId(audience)}
                                 type="button"
                                 role="tab"
                                 aria-selected={selected}
+                                aria-controls={panelId}
                                 tabIndex={selected ? 0 : -1}
                                 onClick={() => onTab(audience)}
                                 className={clsx('-mb-px border-b-2 pb-2 pt-2.5 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', selected ? 'border-primary font-semibold text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground')}
@@ -64,7 +72,7 @@ export default function BellPanel({ headingId, isAdmin, tab, onTab, counts, onMa
                     })}
                 </div>
             )}
-            <div role={isAdmin ? 'tabpanel' : undefined} className="max-h-[min(70vh,28rem)] overflow-y-auto">{children}</div>
+            <div id={panelId} role={isAdmin ? 'tabpanel' : undefined} aria-labelledby={isAdmin ? tabId(tab) : undefined} className="max-h-[min(70vh,28rem)] overflow-y-auto">{children}</div>
             <DropdownFooter href={tab === 'ADMIN' ? { pathname: '/notifications', query: { tab: 'admin' } } : '/notifications'} label={t('all')} />
         </div>
     );

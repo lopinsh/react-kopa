@@ -24,6 +24,8 @@ export type NotificationPayload = {
 };
 
 const EXCERPT_MAX = 160;
+/** How many notifications a list reads per row it shows, so folded unread ones still leave a full list. */
+const FOLD_WINDOW = 3;
 
 /** One bell row: the newest notification of its kind, and how many other unread ones of that kind it stands for. */
 export type NotificationRow<T extends { id: string }> = T & {
@@ -76,19 +78,21 @@ export const NotificationService = {
      * One tab's notifications, newest first: `take` rows and whether more exist. Admin rows only for someone who is a site admin
      * right now. Unread ones of the same type and target fold into one row.
      */
-    async list(userId: string, opts: { audience: NotificationAudience; take: number; skip?: number; locale: string }): Promise<{ rows: NotificationView[]; hasMore: boolean }> {
+    async list(userId: string, opts: { audience: NotificationAudience; take: number; locale: string }): Promise<{ rows: NotificationView[]; hasMore: boolean }> {
         if (opts.audience === 'ADMIN' && !isSiteAdmin(await getSiteRole(userId))) return { rows: [], hasMore: false };
+        // Folding shrinks the list, so read a wider window and cut the folded rows to `take` (the bell shows five rows, not five notifications).
+        const window = opts.take * FOLD_WINDOW;
         const found = await prisma.notification.findMany({
             where: { userId, audience: opts.audience },
             orderBy: { createdAt: 'desc' },
-            take: opts.take + 1,
-            skip: opts.skip ?? 0,
+            take: window,
         });
-        const page = found.slice(0, opts.take);
+        const folded = groupUnread(found.map((n) => ({ ...n, audience: opts.audience })));
+        const page = folded.slice(0, opts.take);
         const groups = await resolveNotificationGroups(page.map((n) => n.link), opts.locale);
-        const rows = groupUnread(page.map((n) => ({ ...n, audience: opts.audience, group: (n.link && groups.get(n.link)) || null })));
+        const rows = page.map((n) => ({ ...n, group: (n.link && groups.get(n.link)) || null }));
         return {
-            hasMore: found.length > opts.take,
+            hasMore: folded.length > opts.take || found.length === window,
             rows: rows.map((n): NotificationView => ({
                 id: n.id, ids: n.ids, moreCount: n.moreCount, type: n.type, message: n.message, link: n.link,
                 read: n.read, audience: n.audience, createdAt: n.createdAt, group: n.group,

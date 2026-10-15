@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { getNotifications } from '@/actions/notification-actions';
 import { useNotificationRows } from '@/hooks/useNotificationRows';
@@ -24,8 +24,13 @@ export default function BellList({ headingId, isAdmin }: { headingId: string; is
     const [loaded, setLoaded] = useState<Audience | 'failed' | null>(null);
     const { rows, setRows, markRead, markAll, isPending } = useNotificationRows([]);
 
+    // Only the newest request may fill the list: a quick tab switch must not show the other tab's rows under it.
+    const latest = useRef(0);
+
     const load = useCallback((audience: Audience) => {
+        const request = ++latest.current;
         void getNotifications(locale, { audience, take: DROPDOWN_ROWS }).then((res) => {
+            if (request !== latest.current) return;
             if (res.success && res.data) {
                 setRows(res.data.rows);
                 setLoaded(audience);
