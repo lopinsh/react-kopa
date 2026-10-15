@@ -29,6 +29,8 @@ One word per thing, everywhere.
 | A member writing to the team | Rakstīt komandai | Write to the team |
 | Taking back a join request | Atsaukt pieteikumu | Withdraw request |
 | Sharing a link | Dalīties | Share |
+| A section of an event only participants see | Praktiskā informācija · Redzama tikai dalībniekiem | Practical info · Shown only to people taking part |
+| An event happening now | Notiek tagad · līdz 18. okt. | On now · until 18 Oct |
 | Reporting a group | Ziņot par grupu | Report group |
 | Owner + moderators | Grupas komanda | Group team |
 | A group's pages | Informācija, Jaunumi, Pasākumi, Biedri, Iestatījumi | Information, Announcements, Events, Members, Settings |

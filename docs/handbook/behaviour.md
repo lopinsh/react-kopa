@@ -66,7 +66,7 @@ The same situation behaves the same way on every screen.
 
 ## Dates and times
 
-- Riga time, 24 h, Monday first, in both languages. Weeks start on Monday; "today" is the viewer's day in their own time zone.
+- 24 h in the viewer's own zone, named on the event page when it is not Latvian time; Monday first, in both languages. Weeks start on Monday; "today" is the viewer's day in their own time zone. An event is past after its last day in Latvian time; a running event says "Notiek tagad · līdz …". Organisers enter times in their own zone, in 15-minute steps; a time the clock skips that night cannot be chosen.
 - Today: relative ("pirms 5 min"). Older: date ("9. okt., 20:07").
 - Time pickers in 15-minute steps.
 
