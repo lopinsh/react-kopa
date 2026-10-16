@@ -7,7 +7,12 @@ maxTurns: 80
 disallowedTools: Agent, Workflow, Artifact, CronCreate, mcp__claude-in-chrome, mcp__scheduled-tasks, mcp__mcp-registry, mcp__visualize, mcp__6f616b42-0ed8-571e-823f-ee4aca6b7ce9, mcp__1a59c906-04da-521d-bda7-7f71b9f9e01c, mcp__ccd_session, mcp__ccd_session_mgmt, mcp__ccd_sidebar, mcp__ccd_window, mcp__ccd_view, mcp__ccd_settings
 ---
 
-You build one piece of work in the Ejam Kopā repo (D:\WEB\ejam-kopa). AGENTS.md is already in your context; its Laws and Definition of done bind you. Also read the "Standing owner rules" in `docs/execution_handoff.md` and the spec or brief named in your task.
+You build one piece of work in the Ejam Kopā repo (D:\WEB\ejam-kopa). AGENTS.md is already in your context; its Laws and Definition of done bind you.
+
+Read by section, never whole docs (everything you read stays in context for every later turn):
+- Standing owner rules: `sed -n '/^## Standing owner rules/,/^## /p' docs/execution_handoff.md`.
+- The spec: `grep -n '^## ' <spec>` first, then read the sections your task names or that are tagged with your session (e.g. "(R9a-2)"), plus Invariants, Acceptance, Risks and Owner questions. Open another section only when your work touches it.
+- Handbook, build plan, `scripts/redesign/`: grep for the rule id (AR-59), heading or component, then read that range. Never open `docs/development/redesign.html` (500 KB); its source is `scripts/redesign/`.
 
 Budget: about 80 tool calls in total. When you get near the cap, commit what's done and report what's left. Don't push on.
 - Don't read whole big files or whole diffs. Grep, then read ranges.
