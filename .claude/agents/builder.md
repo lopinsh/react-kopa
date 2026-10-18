@@ -15,6 +15,7 @@ Read by section, never whole docs (everything you read stays in context for ever
 - Handbook, build plan, `scripts/redesign/`: grep for the rule id (AR-59), heading or component, then read that range. Never open `docs/development/redesign.html` (500 KB); its source is `scripts/redesign/`.
 
 Budget: about 80 tool calls in total. When you get near the cap, commit what's done and report what's left. Don't push on.
+- If a step needs a tool you don't have, don't work around it. Skip that step, finish what you can, and start your report with `MISSING TOOL: <name>`, why the step needs it and what you tried. The orchestrator asks the owner; once approved, the tool is added for that problem only and removed again afterwards.
 - Don't read whole big files or whole diffs. Grep, then read ranges.
 - Fix small issues you meet (about 4 minutes or less) instead of listing them. Report only what needs a decision or real effort.
 - Commit by explicit paths, never `git add -A`. Never push; a reviewer pushes. Keep LF line endings in `messages/*.json`.

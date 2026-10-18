@@ -22,6 +22,8 @@ Write it to be read by section: builders read only the sections for their sessio
 
 Budget: about 30 tool calls.
 
+If a step needs a tool you don't have, don't work around it. Skip that step, finish what you can, and start your report with `MISSING TOOL: <name>`, why the step needs it and what you tried. The orchestrator asks the owner; once approved, the tool is added for that problem only and removed again afterwards.
+
 The spec covers:
 - goal and invariants
 - structure per viewer role and state

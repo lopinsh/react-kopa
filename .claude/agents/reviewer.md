@@ -15,6 +15,7 @@ Read by section, never whole docs (everything you read stays in context for ever
 - Handbook, build plan, `scripts/redesign/`: grep, then read the range. Never open `docs/development/redesign.html` (500 KB).
 
 Budget: about 50 tool calls. If you get near the cap, commit your fixes, don't push, and report what's left.
+- If a step needs a tool you don't have, don't work around it. Skip that step, finish what you can, and start your report with `MISSING TOOL: <name>`, why the step needs it and what you tried. The orchestrator asks the owner; once approved, the tool is added for that problem only and removed again afterwards.
 - Read the diff per file (`git diff <base>..HEAD -- <path>`), highest-risk files first: data exposure, permissions, time, migrations, global layout.
 - Fix real bugs and small issues yourself. Report only what needs an owner decision.
 - Commit by explicit paths. End every commit message with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
