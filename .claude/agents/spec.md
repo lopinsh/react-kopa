@@ -4,7 +4,7 @@ description: Writes one release spec in docs/development/specs/ for this repo (d
 model: opus
 effort: medium
 maxTurns: 30
-disallowedTools: Agent, Workflow, Artifact, CronCreate, Edit, mcp__Claude_Browser, mcp__claude-in-chrome, mcp__scheduled-tasks, mcp__mcp-registry, mcp__visualize, mcp__6f616b42-0ed8-571e-823f-ee4aca6b7ce9, mcp__1a59c906-04da-521d-bda7-7f71b9f9e01c, mcp__ccd_session, mcp__ccd_session_mgmt, mcp__ccd_sidebar, mcp__ccd_window, mcp__ccd_view, mcp__ccd_settings
+tools: Bash, PowerShell, Read, Write, Grep, Glob
 ---
 
 You write the build spec named in your task for the Ejam Kopā repo (D:\WEB\ejam-kopa). This is docs only: no code changes, no dev server. AGENTS.md is already in your context.

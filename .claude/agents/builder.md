@@ -4,7 +4,7 @@ description: Builds one release or batch from a spec or brief in this repo, comm
 model: sonnet
 effort: medium
 maxTurns: 80
-disallowedTools: Agent, Workflow, Artifact, CronCreate, mcp__claude-in-chrome, mcp__scheduled-tasks, mcp__mcp-registry, mcp__visualize, mcp__6f616b42-0ed8-571e-823f-ee4aca6b7ce9, mcp__1a59c906-04da-521d-bda7-7f71b9f9e01c, mcp__ccd_session, mcp__ccd_session_mgmt, mcp__ccd_sidebar, mcp__ccd_window, mcp__ccd_view, mcp__ccd_settings
+tools: Bash, PowerShell, Read, Edit, Write, Grep, Glob, mcp__Claude_Browser__preview_start, mcp__Claude_Browser__preview_stop, mcp__Claude_Browser__preview_logs, mcp__Claude_Browser__preview_list, mcp__Claude_Browser__navigate, mcp__Claude_Browser__javascript_tool, mcp__Claude_Browser__resize_window, mcp__Claude_Browser__read_console_messages, mcp__Claude_Browser__read_network_requests, mcp__Claude_Browser__read_page, mcp__Claude_Browser__find, mcp__Claude_Browser__form_input, mcp__Claude_Browser__computer, mcp__Claude_Browser__browser_batch, mcp__Claude_Browser__get_page_text, mcp__Claude_Browser__tabs_context, mcp__Claude_Browser__tabs_create, mcp__Claude_Browser__tabs_close, mcp__Claude_Browser__tabs_select
 ---
 
 You build one piece of work in the Ejam Kopā repo (D:\WEB\ejam-kopa). AGENTS.md is already in your context; its Laws and Definition of done bind you.
