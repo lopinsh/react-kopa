@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MapPin } from 'lucide-react';
 import { useDateFormatter } from '@/lib/date-format';
 import { useRouter } from '@/i18n/routing';
@@ -24,6 +25,7 @@ export default function PendingCityCard({ city }: Props) {
     const { success, error } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const [askReject, setAskReject] = useState(false);
     const [editing, setEditing] = useState(false);
     const [nameLv, setNameLv] = useState(city.nameLv);
     const [nameEn, setNameEn] = useState(city.nameEn);
@@ -69,7 +71,7 @@ export default function PendingCityCard({ city }: Props) {
                     <button
                         type="button"
                         disabled={isPending}
-                        onClick={() => { if (confirm(t('confirmRejectCity'))) run(() => rejectCity(city.id), c('reject') + ' - ' + c('success')); }}
+                        onClick={() => setAskReject(true)}
                         className="px-3 py-1.5 text-sm font-semibold rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors disabled:opacity-50"
                     >
                         {c('reject')}
@@ -104,6 +106,16 @@ export default function PendingCityCard({ city }: Props) {
                     </div>
                 </div>
             )}
+            <ConfirmDialog
+                isOpen={askReject}
+                title={t('rejectCityTitle')}
+                message={t('confirmRejectCity')}
+                confirmLabel={c('reject')}
+                destructive
+                isPending={isPending}
+                onConfirm={() => { setAskReject(false); run(() => rejectCity(city.id), c('reject') + ' - ' + c('success')); }}
+                onCancel={() => setAskReject(false)}
+            />
         </div>
     );
 }

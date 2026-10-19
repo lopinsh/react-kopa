@@ -601,7 +601,9 @@
         "usedByGroups": "Izmanto grupas:",
         "confirmReject": "Vai tiešām vēlies noraidīt šo birku? Tā tiks neatgriezeniski dzēsta.",
         "cityGroups": "{count, plural, =0 {Neviena grupa to vēl neizmanto} one {# grupa to izmanto} other {# grupas to izmanto}}",
-        "confirmRejectCity": "Noraidīt šo pilsētu? Grupām, kas to izmanto, pilsēta tiks noņemta, un īpašniekiem lūgs izvēlēties citu."
+        "confirmRejectCity": "Noraidīt šo pilsētu? Grupām, kas to izmanto, pilsēta tiks noņemta, un īpašniekiem lūgs izvēlēties citu.",
+        "rejectTitle": "Noraidīt birku?",
+        "rejectCityTitle": "Noraidīt pilsētu?"
       },
       "fields": {
         "color": "Krāsa",
@@ -616,7 +618,9 @@
         "confirmDelete": "Vai tiešām dzēst izvēlētās kategorijas? Tās tiks neatgriezeniski noņemtas no visām grupām.",
         "selected": "atzīmētas",
         "clearSelection": "Notīrīt izvēli",
-        "mergeRequiresTwo": "Lai apvienotu, izvēlies vismaz 2 birkas"
+        "mergeRequiresTwo": "Lai apvienotu, izvēlies vismaz 2 birkas",
+        "deleteTitle": "Dzēst kategorijas?",
+        "deleteConfirm": "Dzēst"
       },
       "slideover": {
         "addAlias": "Pievienot aizstājvārdu",
@@ -669,7 +673,8 @@
         "deleted": "Pilsēta dzēsta.",
         "groups": "{count, plural, =0 {Nav grupu} one {# grupa} other {# grupas}}",
         "inUse": "Šo pilsētu vēl izmanto grupas.",
-        "confirmDelete": "Dzēst pilsētu „{name}”?"
+        "confirmDelete": "Dzēst pilsētu „{name}”?",
+        "deleteCityTitle": "Dzēst pilsētu?"
       }
     },
     "reports": {
@@ -683,7 +688,9 @@
       "subtitle": "Izskati sūdzības par grupām un pasākumiem.",
       "title": "Sūdzības",
       "allClear": "Viss tīrs!",
-      "allClearDesc": "Nav neatrisinātu sūdzību, kam vajadzīga uzmanība."
+      "allClearDesc": "Nav neatrisinātu sūdzību, kam vajadzīga uzmanība.",
+      "deleteContentTitle": "Dzēst saturu?",
+      "deleteContentConfirm": "Dzēst"
     },
     "team": {
       "title": "Komanda",

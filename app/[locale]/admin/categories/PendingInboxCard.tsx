@@ -1,5 +1,6 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { useDateFormatter } from '@/lib/date-format';
 import { useRouter } from '@/i18n/routing';
@@ -25,6 +26,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     const { success, error } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
+    const [askReject, setAskReject] = useState(false);
 
     const [activeAction, setActiveAction] = useState<'approve' | 'merge' | null>(null);
 
@@ -73,7 +75,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     };
 
     const handleReject = async () => {
-        if (!confirm(t('confirmReject'))) return;
+        setAskReject(false);
         startTransition(async () => {
             const res = await rejectWildcard(item.id);
             if (res.success) {
@@ -125,7 +127,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     </button>
                     <button
                         type="button"
-                        onClick={handleReject}
+                        onClick={() => setAskReject(true)}
                         disabled={isPending}
                         className="px-3 py-1.5 text-sm font-semibold rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
                     >
@@ -248,6 +250,16 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     </div>
                 </div>
             )}
+            <ConfirmDialog
+                isOpen={askReject}
+                title={t('rejectTitle')}
+                message={t('confirmReject')}
+                confirmLabel={c('reject')}
+                destructive
+                isPending={isPending}
+                onConfirm={handleReject}
+                onCancel={() => setAskReject(false)}
+            />
         </div>
     );
 }

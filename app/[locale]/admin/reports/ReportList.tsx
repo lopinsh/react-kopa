@@ -7,6 +7,7 @@ import { isStoredReportReason } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EmptyState from '@/components/ui/EmptyState';
 import { avatarUrl } from '@/lib/avatar';
 import { useDateFormatter } from '@/lib/date-format';
@@ -32,6 +33,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
     const [reports, setReports] = useState<ReportItem[]>(initialReports);
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
+    const [askDelete, setAskDelete] = useState<string | null>(null);
     const [hidingReport, setHidingReport] = useState<ReportItem | null>(null);
 
     const showError = (code: string) => setError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
@@ -49,9 +51,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
     };
 
     const handleDeleteContent = (id: string) => {
-        if (!confirm(t('confirmDeleteContent'))) {
-            return;
-        }
+        setAskDelete(null);
         setError(null);
         startTransition(async () => {
             const res = await deleteReportedContent(id);
@@ -158,7 +158,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             {/* Groups are hidden first ("Hide group"); only events are deleted from here. */}
                             {report.event && (
                             <button
-                                onClick={() => handleDeleteContent(report.id)}
+                                onClick={() => setAskDelete(report.id)}
                                 disabled={isPending}
                                 className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-sm font-bold text-danger shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
@@ -176,6 +176,16 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                     </div>
                 </div>
             ))}
+            <ConfirmDialog
+                isOpen={askDelete !== null}
+                title={t('deleteContentTitle')}
+                message={t('confirmDeleteContent')}
+                confirmLabel={t('deleteContentConfirm')}
+                destructive
+                isPending={isPending}
+                onConfirm={() => askDelete && handleDeleteContent(askDelete)}
+                onCancel={() => setAskDelete(null)}
+            />
         </div>
     );
 }

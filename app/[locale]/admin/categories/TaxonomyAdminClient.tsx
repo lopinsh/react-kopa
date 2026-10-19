@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import type { ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import PendingInbox from './PendingInbox';
 import TaxonomyTree, { SelectedTaxonomyNode } from './TaxonomyTree';
 import TaxonomySlideover from './TaxonomySlideover';
@@ -20,7 +21,8 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
     const t = useTranslations('admin.taxonomy.bulk');
     const [selectedNode, setSelectedNode] = useState<SelectedTaxonomyNode | null>(null);
     const [selectedActionIds, setSelectedActionIds] = useState<string[]>([]);
-    const [, startTransition] = useTransition();
+    const [isPending, startTransition] = useTransition();
+    const [askDelete, setAskDelete] = useState(false);
 
     const toggleActionId = (id: string) => {
         setSelectedActionIds((prev) =>
@@ -40,14 +42,13 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
     };
 
     const handleDelete = () => {
-        if (window.confirm(t('confirmDelete'))) {
-            startTransition(async () => {
-                const res = await bulkDeleteAction(selectedActionIds);
-                if (res.success) {
-                    setSelectedActionIds([]);
-                }
-            });
-        }
+        setAskDelete(false);
+        startTransition(async () => {
+            const res = await bulkDeleteAction(selectedActionIds);
+            if (res.success) {
+                setSelectedActionIds([]);
+            }
+        });
     };
 
     const handleMerge = () => {
@@ -86,8 +87,18 @@ export default function TaxonomyAdminClient({ pending, categories, tree }: Props
                 onClearSelection={() => setSelectedActionIds([])}
                 hasPending={hasPending}
                 onApprove={handleApprove}
-                onDelete={handleDelete}
+                onDelete={() => setAskDelete(true)}
                 onMerge={handleMerge}
+            />
+            <ConfirmDialog
+                isOpen={askDelete}
+                title={t('deleteTitle')}
+                message={t('confirmDelete')}
+                confirmLabel={t('deleteConfirm')}
+                destructive
+                isPending={isPending}
+                onConfirm={handleDelete}
+                onCancel={() => setAskDelete(false)}
             />
         </div>
     );

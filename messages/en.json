@@ -601,7 +601,9 @@
         "usedByGroups": "Used by groups:",
         "confirmReject": "Are you sure you want to reject this request? This will permanently delete the suggestion.",
         "cityGroups": "{count, plural, =0 {No groups use it yet} one {# group uses it} other {# groups use it}}",
-        "confirmRejectCity": "Reject this city? Groups using it are left without a city and their owners are asked to choose another."
+        "confirmRejectCity": "Reject this city? Groups using it are left without a city and their owners are asked to choose another.",
+        "rejectTitle": "Reject tag?",
+        "rejectCityTitle": "Reject city?"
       },
       "fields": {
         "color": "Color",
@@ -616,7 +618,9 @@
         "confirmDelete": "Are you sure you want to delete the selected categories? This will permanently remove them from all groups.",
         "selected": "selected",
         "clearSelection": "Clear selection",
-        "mergeRequiresTwo": "Select at least 2 tags to merge"
+        "mergeRequiresTwo": "Select at least 2 tags to merge",
+        "deleteTitle": "Delete categories?",
+        "deleteConfirm": "Delete"
       },
       "slideover": {
         "addAlias": "Add alias",
@@ -669,7 +673,8 @@
         "deleted": "City removed.",
         "groups": "{count, plural, =0 {No groups} one {# group} other {# groups}}",
         "inUse": "Groups still use this city.",
-        "confirmDelete": "Remove the city “{name}”?"
+        "confirmDelete": "Remove the city “{name}”?",
+        "deleteCityTitle": "Delete city?"
       }
     },
     "reports": {
@@ -683,7 +688,9 @@
       "subtitle": "Look through the reports about groups and events.",
       "title": "Reports",
       "allClear": "All Clear!",
-      "allClearDesc": "No active reports require attention."
+      "allClearDesc": "No active reports require attention.",
+      "deleteContentTitle": "Delete content?",
+      "deleteContentConfirm": "Delete"
     },
     "team": {
       "title": "Team",

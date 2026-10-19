@@ -8,8 +8,9 @@ import { tint } from '@/lib/color-utils';
 import { Link } from '@/i18n/routing';
 import { isCategoryToneSlug } from '@/lib/theme/category';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import { updateL1, addAlias, deleteAlias, createL2 } from '@/actions/taxonomy-actions';
+import { updateL1, createL2 } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
+import L1Aliases from './L1Aliases';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
 type Props = {
@@ -20,7 +21,6 @@ type Props = {
 export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
     const tFields = useTranslations('admin.taxonomy.fields');
-    const tAliases = useTranslations('admin.taxonomy.aliases');
     const tNode = useTranslations('admin.taxonomy.node');
     const c = useTranslations('common');
     const { success, error } = useToast();
@@ -33,9 +33,6 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const inDesign = isCategoryToneSlug(l1.slug);
     const shown = inDesign ? l1.color : color;
 
-    const [aliasValue, setAliasValue] = useState('');
-    const [aliasLocale, setAliasLocale] = useState('');
-
     const [newNameEn, setNewNameEn] = useState('');
     const [newNameLv, setNewNameLv] = useState('');
 
@@ -44,34 +41,6 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             const res = await updateL1(l1.id, color);
             if (res.success) {
                 success(t('save') + ' - ' + c('success'));
-                router.refresh();
-            } else {
-                error(c('error'));
-            }
-        });
-    };
-
-    const handleAddAlias = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!aliasValue.trim()) return;
-        startTransition(async () => {
-            const res = await addAlias(aliasValue.trim(), l1.id, aliasLocale || undefined);
-            if (res.success) {
-                success(tAliases('added'));
-                setAliasValue('');
-                setAliasLocale('');
-                router.refresh();
-            } else {
-                error(c('error'));
-            }
-        });
-    };
-
-    const handleDeleteAlias = async (aliasId: string) => {
-        startTransition(async () => {
-            const res = await deleteAlias(aliasId);
-            if (res.success) {
-                success(tAliases('deleted'));
                 router.refresh();
             } else {
                 error(c('error'));
@@ -161,70 +130,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 )}
             </section>
 
-            {/* Aliases */}
-            <section>
-                <div className="mb-4">
-                    <h3 className="text-lg font-bold">{t('aliases')}</h3>
-                    <p className="text-sm text-foreground-muted mt-1">{t('aliasHelper')}</p>
-                </div>
-
-                <div className="space-y-4">
-                    {(l1.aliases && l1.aliases.length > 0) ? (
-                        <div className="space-y-2">
-                            {l1.aliases.map(alias => (
-                                <div key={alias.id} className="flex flex-wrap items-center justify-between p-3 border border-border rounded-lg bg-surface">
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-medium text-sm">{alias.value}</span>
-                                        <span className="bg-surface-elevated text-xs px-2 py-0.5 rounded-full text-foreground-muted">
-                                            {alias.locale || tAliases('anyLocaleShort')}
-                                        </span>
-                                    </div>
-                                    <button
-                                        type="button"
-                                        disabled={isPending}
-                                        onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-xs text-danger font-semibold hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
-                                    >
-                                        {c('delete')}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg border border-border text-center">
-                            {tAliases('empty')}
-                        </p>
-                    )}
-
-                    <form onSubmit={handleAddAlias} className="flex flex-col sm:flex-row gap-2 mt-4 items-start sm:items-center">
-                        <input
-                            type="text"
-                            value={aliasValue}
-                            onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface border border-border rounded px-3 py-2 text-sm"
-                            placeholder={tAliases('valuePlaceholder')}
-                        />
-                        <div className="flex gap-2 w-full sm:w-auto">
-                            <select
-                                value={aliasLocale}
-                                onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface border border-border rounded px-3 py-2 text-sm flex-1 sm:w-auto"
-                            >
-                                <option value="">{tAliases('anyLocale')}</option>
-                                <option value="en">en</option>
-                                <option value="lv">lv</option>
-                            </select>
-                            <button
-                                type="submit"
-                                disabled={isPending || !aliasValue.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
-                            >
-                                {t('addAlias')}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
+            <L1Aliases l1={l1} />
 
             {/* Subcategories View */}
             <section>

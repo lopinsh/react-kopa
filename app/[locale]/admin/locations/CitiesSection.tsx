@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MapPin, Pencil, Trash2 } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
@@ -23,6 +24,7 @@ export default function CitiesSection({ cities }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
+    const [askDelete, setAskDelete] = useState<CityRow | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [nameLv, setNameLv] = useState('');
     const [nameEn, setNameEn] = useState('');
@@ -112,7 +114,7 @@ export default function CitiesSection({ cities }: Props) {
                                     aria-label={c('delete')}
                                     title={city.groupCount > 0 ? t('inUse') : c('delete')}
                                     disabled={isPending || city.groupCount > 0}
-                                    onClick={() => { if (confirm(t('confirmDelete', { name: city.nameLv }))) run(() => deleteCity(city.id), t('deleted')); }}
+                                    onClick={() => setAskDelete(city)}
                                     className="rounded p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
                                 >
                                     <Trash2 className="h-4 w-4" />
@@ -123,6 +125,16 @@ export default function CitiesSection({ cities }: Props) {
                     </li>
                 ))}
             </ul>
+            <ConfirmDialog
+                isOpen={askDelete !== null}
+                title={t('deleteCityTitle')}
+                message={askDelete ? t('confirmDelete', { name: askDelete.nameLv }) : ''}
+                confirmLabel={c('delete')}
+                destructive
+                isPending={isPending}
+                onConfirm={() => { if (askDelete) run(() => deleteCity(askDelete.id), t('deleted'), () => setAskDelete(null)); }}
+                onCancel={() => setAskDelete(null)}
+            />
         </section>
     );
 }
