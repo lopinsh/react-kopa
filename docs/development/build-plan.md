@@ -476,7 +476,7 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R8 Own area | pushed, live | [specs/R8.md](specs/R8.md) | `2f4b554`..`3d1165c` (frame `2f4b554`, data `699db3f`, overview `c7ced99` (7 queries; `relationJoins` preview, join for every query, same data checked), full page `30bc2f5`, Manas grupas `c731303`, dropdowns and Paziņojumi `7b3aa5a`, docs `0cf8bbb`, fixes `eda583b`; Opus review fixes `605807b` five bell rows after folding and arrow-key tabs, `3d1165c` section menu sticky and marking in the shell's scroller) |
 | R6b Centred overlay from the card (C1) | pushed, live | [specs/R6b.md](specs/R6b.md) | `b7a7774`..`5eeb69a` (placement `b7a7774`, grow `c2c1dc4`, docs `051612a`; review fix `5eeb69a`: links that replace the history entry, the search's results, are never taken over by the grow) |
 | C4 LanguageEditor | pushed, live | [specs/C4.md](specs/C4.md) | `bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard, `5bbc026` docs, review `787d698` |
-| R9a Event page and form | R9a-1 built (event page), R9a-2 not started | [specs/R9a.md](specs/R9a.md) | `5927a8d`..`0beedc2` (timing `5927a8d`, service `d18bdca`, page `356e8f9`, breadcrumb and Rīkotājiem `92f661f`, fixes `0beedc2`) |
+| R9a Event page and form | R9a-1 built (event page), R9a-2 built (event form, `ca9cfa5` split, restyle and skipped-hour check after it) | [specs/R9a.md](specs/R9a.md) | `5927a8d`..`0beedc2` (timing `5927a8d`, service `d18bdca`, page `356e8f9`, breadcrumb and Rīkotājiem `92f661f`, fixes `0beedc2`) |
 | R9b Biedri, Jaunumi, settings, profiles | not started | | |
 | R10 Citur | not started | | |
 | R11 Admin frame | not started | | |
