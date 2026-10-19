@@ -322,7 +322,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **From R9b (split 19 Oct):** `GroupSettingsForm` (288) split per tab (sections already in `groups/settings/*`), `TagPicker` (604) split and its `as any` removed, the LanguageEditor bar wrap at 768 px (C4 review); `/profile` and `/profile/[username]` share `profile/ProfileView.tsx`; Mans profils shows what others see with "Labot" to a separate edit page, privacy switches move to Iestatījumi, Iestatījumi keeps Izskats (OD-26 changed 15 Oct; notes cmv9aq31h, cmv9anua9; consider cmv9l5a3q, cmv9l6kmv for the own bar links).
 - **Rules (owner):** AR-63. Also in: AR-35, AR-14, AR-60. **Data:** none expected. **i18n:** `groupSettings`, `profile`.
 
-### R10 · Citur and the unknown place (S/M)
+### R10 · Citur and the unknown place (S/M) — cancelled by owner 19 Oct
 
 - **Goal:** "Citur" under fewer than five results, nearest cities first; a visitor's place asked once and kept on the device.
 - **Rules (owner):** AR-38. Also in: AR-32.
@@ -485,6 +485,6 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R9a Event page and form | R9a-1 built (event page), R9a-2 built (event form, `ca9cfa5` split, restyle and skipped-hour check after it) | [specs/R9a.md](specs/R9a.md) | `5927a8d`..`0beedc2` (timing `5927a8d`, service `d18bdca`, page `356e8f9`, breadcrumb and Rīkotājiem `92f661f`, fixes `0beedc2`) |
 | R9b Biedri, Jaunumi, Informācija, group picture | R9b-1, R9b-2 pushed, live; R9b-3 Informācija + C5 built (review pending) | [specs/R9b.md](specs/R9b.md) | `e4860ef`..`634e93f` (R9b-1), `be3c98e` (R9b-2), `1f500e4`..`65ed62e` (R9b-3) |
 | R9c Group settings and profiles | built (R9c-1 profiles live, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | |
-| R10 Citur | not started | | |
-| R11 Admin frame | not started | | |
+| R10 Citur | cancelled by owner 19 Oct | | |
+| R11 Admin frame | spec written | [specs/R11.md](specs/R11.md) | |
 | R12 Everything else | not started | | |
