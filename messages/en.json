@@ -460,7 +460,7 @@
   },
   "group": {
     "members": {
-      "since": "since {date}",
+      "since": "Joined {date}",
       "contact": "Get in touch"
     },
     "acceptingMembersDesc": "When off, new people can't ask to join.",

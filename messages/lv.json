@@ -460,7 +460,7 @@
   },
   "group": {
     "members": {
-      "since": "kopš {date}",
+      "since": "Pievienojās: {date}",
       "contact": "Sazināties"
     },
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
