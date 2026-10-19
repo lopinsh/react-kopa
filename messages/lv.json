@@ -459,6 +459,10 @@
     "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst."
   },
   "group": {
+    "members": {
+      "since": "kopš {date}",
+      "contact": "Sazināties"
+    },
     "acceptingMembersDesc": "Ja izslēgts, jauni cilvēki nevar pieteikties grupai.",
     "acceptingMembersLabel": "Uzņem jaunus biedrus",
     "anonymousUser": "Anonīms lietotājs",
@@ -525,7 +529,6 @@
     "noAnnouncementsYet": "Vēl nav jaunumu.",
     "announcementsTeamHint": "Jaunumi visiem grupas dalībniekiem nonāk kā paziņojums. Atbildēt uz tiem nevar; dalībnieki raksta tev grupas sarunā.",
     "noUpcomingEvents": "Šai grupai nav plānotu pasākumu.",
-    "pendingRequests": "{count} gaida apstiprinājumu",
     "recurring": "Atkārtojas",
     "role_admin": "Moderators",
     "role_member": "Biedrs",

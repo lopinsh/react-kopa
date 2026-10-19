@@ -1,36 +1,14 @@
 import { GroupService } from '@/lib/services/group.service';
+import { GroupMembersService } from '@/lib/services/group-members';
 import { auth } from '@/lib/auth';
 import { notFound, redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { User as UserIcon } from 'lucide-react';
-import MembershipPanel from '@/components/groups/MembershipPanel';
+import { UserCheck } from 'lucide-react';
 import PartTabs from '@/components/ui/PartTabs';
-import MemberCard from '@/components/groups/MemberCard';
+import EmptyState from '@/components/ui/EmptyState';
+import MemberRow from '@/components/groups/members/MemberRow';
+import RequestRow from '@/components/groups/members/RequestRow';
 import type { Metadata } from 'next';
-import { MembershipRole } from '@prisma/client';
-import { MessageService } from '@/lib/services/message.service';
-
-interface Member {
-    id: string;
-    role: MembershipRole | 'PENDING';
-    user: {
-        id: string;
-        name: string | null;
-        username?: string | null;
-        avatarSeed?: string;
-        image: string | null;
-        allowDirectMessages: boolean;
-        isProfilePublic: boolean;
-    };
-    chatId: string | null;
-    applicationMessages: {
-        id: string;
-        content: string;
-        createdAt: Date;
-        senderId: string;
-        sender: { name: string | null; image: string | null };
-    }[];
-}
 
 export async function generateMetadata({
     params,
@@ -71,22 +49,11 @@ export default async function GroupMembersPage({
     }
 
     const t = await getTranslations('group');
-    const c_common_get = await getTranslations('common');
-    const isOwnerOrAdmin = group.user.isAdmin;
-    const members = await GroupService.getMembers(group, session?.user?.id);
-    const pendingMembers = members.filter((m) => m.role === 'PENDING') as Member[];
-    const acceptedMembers = members.filter((m) => m.role !== 'PENDING')
-        .sort((a, b) => {
-            const roles: Record<string, number> = { OWNER: 0, ADMIN: 1, MEMBER: 2, PENDING: 3 };
-            return roles[a.role as keyof typeof roles] - roles[b.role as keyof typeof roles];
-        }) as Member[];
-
-    // Who this viewer may start a chat with is decided here, not in the card.
-    const messageable = await MessageService.messageableUserIds(session?.user?.id, acceptedMembers.map((m) => m.user.id));
-
-    // Ensure users can't see requests if not admin
-    const currentTab = isOwnerOrAdmin && tab === 'requests' ? 'requests' : 'members';
+    const tCommon = await getTranslations('common');
     const tFrame = await getTranslations('group.frame');
+    const { members, requests } = await GroupMembersService.getMembersPage(group, session?.user?.id);
+    // Requests are for the team only: anyone else with ?tab=requests sees the members.
+    const currentTab = requests && tab === 'requests' ? 'requests' : 'members';
     const base = `/${l1Slug}/group/${groupSlug}`;
 
     return (
@@ -96,43 +63,25 @@ export default async function GroupMembersPage({
                 label={tFrame('partsLabel')}
                 active={currentTab}
                 items={[
-                    { key: 'members', label: c_common_get('membersList'), href: `${base}/members` },
-                    ...(isOwnerOrAdmin ? [{ key: 'requests', label: c_common_get('requestsTab'), href: `${base}/members?tab=requests`, count: group.stats.pendingCount }] : []),
+                    { key: 'members', label: tCommon('membersList'), href: `${base}/members` },
+                    ...(requests ? [{ key: 'requests', label: tCommon('requestsTab'), href: `${base}/members?tab=requests`, count: requests.length }] : []),
                 ]}
             />
-            {currentTab === 'requests' ? (
-                <div className="space-y-8">
-                    {pendingMembers.length > 0 ? (
-                        <MembershipPanel
-                            groupId={group.id}
-                            pendingMembers={pendingMembers}
-                        />
+            <div className="max-w-[760px]">
+                {currentTab === 'requests' && requests ? (
+                    requests.length > 0 ? (
+                        <ul className="divide-y divide-border">
+                            {requests.map((r) => <RequestRow key={r.membershipId} request={r} />)}
+                        </ul>
                     ) : (
-                        <div className="flex flex-col items-center justify-center py-24 text-center">
-                            <div className="h-16 w-16 rounded-full bg-surface-elevated flex items-center justify-center mb-4">
-                                <UserIcon className="h-8 w-8 text-foreground-muted/30" />
-                            </div>
-                            <h3 className="text-lg font-bold text-foreground">{c_common_get('noActivity')}</h3>
-                            <p className="text-sm text-foreground-muted mt-1 max-w-xs mx-auto">
-                                {t('noPendingRequests')}
-                            </p>
-                        </div>
-                    )}
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    {acceptedMembers.map((member) => (
-                        <MemberCard
-                            key={member.id}
-                            member={member}
-                            canMessage={messageable.has(member.user.id)}
-                            groupId={group.id}
-                            locale={locale}
-                            l1Slug={l1Slug}
-                        />
-                    ))}
-                </div>
-            )}
+                        <EmptyState icon={UserCheck} title={tCommon('noActivity')} description={t('noPendingRequests')} />
+                    )
+                ) : (
+                    <ul className="divide-y divide-border">
+                        {members.map((m) => <MemberRow key={m.userId} member={m} groupId={group.id} />)}
+                    </ul>
+                )}
+            </div>
         </>
     );
 }

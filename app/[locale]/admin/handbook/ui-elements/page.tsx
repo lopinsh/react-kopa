@@ -25,11 +25,9 @@ import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import { GroupBannerDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
 import { GroupMenuDemo } from '@/components/handbook/GroupMenuDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
-import MemberCard from '@/components/groups/MemberCard';
-import RequestCard from '@/components/groups/RequestCard';
+import MemberRow from '@/components/groups/members/MemberRow';
+import RequestRow from '@/components/groups/members/RequestRow';
 import SettingsTabs from '@/components/groups/SettingsTabs';
-import { GroupProvider } from '@/components/providers/GroupProvider';
-import { toGroupState } from '@/components/providers/to-group-state';
 import Badge from '@/components/ui/Badge';
 import Button, { buttonClass } from '@/components/ui/Button';
 import CategoryLine from '@/components/ui/CategoryLine';
@@ -56,7 +54,6 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
     const chapters = await HandbookService.listChapters();
     const samples = buildUiSamples((key) => t(`sample.${key}`), locale);
     const { group } = samples;
-    const groupState = toGroupState;
 
     return (
         <HandbookShell chapters={chapters} current={null} headings={[]} active="ui-elements" wide>
@@ -203,25 +200,21 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <GroupMenuDemo accent={SAMPLE_ACCENT} states={{ member: sampleState(group, 'member'), pending: sampleState(group, 'pending'), visitor: sampleState(group, 'visitor') }} />
                 </UiSpecimen>
 
-                <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/MemberCard.tsx']}>
-                    <AccentScope color={samples.accent} className="grid gap-4 md:grid-cols-2">
-                        <GroupProvider value={groupState({ ...group, user: { role: 'OWNER', isMember: true, isAdmin: true, chatId: null } })}>
+                <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/members/MemberRow.tsx', 'components/groups/members/MemberRowMenu.tsx']}>
+                    <AccentScope color={samples.accent} className="max-w-[760px]">
+                        <ul className="divide-y divide-border">
                             {samples.members.map((member) => (
-                                <MemberCard key={member.id} member={member} canMessage groupId={group.id} locale={locale} l1Slug={samples.l1Slug} />
+                                <MemberRow key={member.userId} member={member} groupId={group.id} />
                             ))}
-                        </GroupProvider>
+                        </ul>
                     </AccentScope>
                 </UiSpecimen>
 
-                <UiSpecimen id="requestCard" names={[UI.requestCard]} files={['components/groups/RequestCard.tsx']}>
-                    <AccentScope color={samples.accent} className="max-w-2xl">
-                        <RequestCard
-                            groupId={group.id}
-                            membershipId="sample-membership"
-                            targetUser={samples.marta}
-                            chatId="c-1"
-                            messages={[samples.requestMessage]}
-                        />
+                <UiSpecimen id="requestCard" names={[UI.requestCard]} files={['components/groups/members/RequestRow.tsx']}>
+                    <AccentScope color={samples.accent} className="max-w-[760px]">
+                        <ul>
+                            <RequestRow request={samples.request} />
+                        </ul>
                     </AccentScope>
                 </UiSpecimen>
 

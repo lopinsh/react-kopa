@@ -459,6 +459,10 @@
     "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted."
   },
   "group": {
+    "members": {
+      "since": "since {date}",
+      "contact": "Get in touch"
+    },
     "acceptingMembersDesc": "When off, new people can't ask to join.",
     "acceptingMembersLabel": "Accepting New Members",
     "anonymousUser": "Anonymous user",
@@ -520,7 +524,6 @@
     "noAnnouncementsYet": "No announcements yet.",
     "announcementsTeamHint": "Announcements reach every member of the group as a notification. There are no replies; members write to you in the group chat.",
     "noUpcomingEvents": "There are no upcoming events planned for this group.",
-    "pendingRequests": "{count} pending requests",
     "recurring": "Recurring",
     "role_admin": "Moderator",
     "role_member": "Member",

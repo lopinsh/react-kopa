@@ -7,7 +7,7 @@ import type { EventRowData } from '@/lib/services/event-row';
 import { addDays, dayInZone } from '@/lib/discovery-dates';
 import { eventWindow } from '@/lib/discovery-window';
 import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
-import type { Member } from '@/components/groups/MemberCard';
+import type { MemberRowData, RequestRowData } from '@/lib/services/group-members';
 import type { MyRequest, NewsGroup, NewsItem, NotificationView } from '@/lib/types/own-area';
 
 /** The sample group's main category (Sports) and its tone. */
@@ -122,14 +122,24 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const strip = eventWindow({ date: { kind: 'week' }, day: null }, today, DEFAULT_TIME_ZONE);
     const stripCounts: Record<string, number> = { [today]: 2, [addDays(today, 1)]: 2, [addDays(today, 3)]: 1 };
 
-    const member = (id: string, p: typeof anna, role: string): Member => ({
-        id,
+    const member = (p: typeof anna, role: MemberRowData['role'], actions: MemberRowData['actions']): MemberRowData => ({
+        userId: p.id,
+        name: p.name,
+        username: p.name.split(' ')[0].toLowerCase(),
+        avatar: `https://api.dicebear.com/10.x/clay/svg?seed=${p.avatarSeed}`,
         role,
-        user: { id: p.id, name: p.name, username: p.name.split(' ')[0].toLowerCase(), avatarSeed: p.avatarSeed, image: null, allowDirectMessages: true, isProfilePublic: true },
+        since: ago(400 * 24 * HOUR),
+        profileHref: `/profile/${p.name.split(' ')[0].toLowerCase()}`,
+        canMessage: true,
+        actions,
     });
-    const members = [member('m-1', anna, 'OWNER'), member('m-2', janis, 'ADMIN'), member('m-3', marta, 'MEMBER')];
+    const members = [
+        member(anna, 'OWNER', ['message', 'profile']),
+        member(janis, 'ADMIN', ['message', 'profile', 'demote', 'remove']),
+        member(marta, 'MEMBER', ['message', 'profile', 'promote', 'remove']),
+    ];
 
-    const requestMessage = { id: 'rm-1', content: s('requestMessage'), createdAt: ago(2 * HOUR), senderId: marta.id, sender: { name: marta.name, image: null } };
+    const request: RequestRowData = { membershipId: 'sample-membership', userId: marta.id, name: marta.name, avatar: `https://api.dicebear.com/10.x/clay/svg?seed=${marta.avatarSeed}`, askedAt: ago(2 * HOUR), message: s('requestMessage'), chatId: 'c-1' };
 
     const announcement: AnnouncementItemData = {
         id: 'sample-post',
@@ -198,7 +208,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         strip,
         stripCounts,
         members,
-        requestMessage,
+        request,
         announcement,
         conversations,
         chatMessages,

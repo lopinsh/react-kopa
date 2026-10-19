@@ -8,7 +8,6 @@ import { CityService } from '@/lib/services/city.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
 import PartTabs from '@/components/ui/PartTabs';
-import MembershipPanel from '@/components/groups/MembershipPanel';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
 import { signInUrl } from '@/lib/auth-redirect';
@@ -76,7 +75,6 @@ export default async function GroupSettingsPage(props: {
     const canEditOwnerFields = isOwner || isAppAdmin;
     const t = await getTranslations('group');
     const members = await GroupService.getMembers(group, session.user.id);
-    const pendingMembers = members.filter((m) => m.role === 'PENDING');
     const transferCandidates = isOwner
         ? members
             .filter((m): m is typeof m & { role: 'ADMIN' | 'MEMBER' } => m.role === 'ADMIN' || m.role === 'MEMBER')
@@ -92,12 +90,6 @@ export default async function GroupSettingsPage(props: {
     return (
         <div className="w-full max-w-4xl space-y-6">
             <PartTabs title={t('pages.settings')} label="" items={[]} active="" />
-            {pendingMembers.length > 0 && (
-                <MembershipPanel
-                    groupId={group.id}
-                    pendingMembers={pendingMembers}
-                />
-            )}
 
             <SettingsTabs active={activeTab} showOwner={showOwnerTab} />
 
