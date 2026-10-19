@@ -80,14 +80,16 @@ export const GROUP_TYPES = ['PUBLIC', 'PRIVATE'] as const;
 export type GroupType = (typeof GROUP_TYPES)[number];
 
 /**
- * Reasons a person can pick when reporting. The English words are what is stored in `Report.reason`
- * (keep them stable); the label shown comes from `report.reason<Value>` in the messages.
+ * Reasons a person can pick when reporting, in the order shown. The English words are what is stored in `Report.reason`
+ * (keep them stable); the label shown comes from `report.reason<Value>` in the messages. 'Inappropriate' is shown as
+ * "Harmful content".
  */
-export const REPORT_REASONS = ['Spam', 'Harassment', 'Inappropriate', 'Other'] as const;
+export const REPORT_REASONS = ['Spam', 'Inappropriate', 'Violence', 'Other'] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];
 
-export function isReportReason(value: string): value is ReportReason {
-    return (REPORT_REASONS as readonly string[]).includes(value);
+/** Values that can stand in `Report.reason`: the ones offered, plus 'Harassment' from older reports (shown as "Harmful content" too). */
+export function isReportReason(value: string): boolean {
+    return (REPORT_REASONS as readonly string[]).includes(value) || value === 'Harassment';
 }
 
 export const EVENT_VISIBILITY = ['PUBLIC', 'MEMBERS_ONLY'] as const;
