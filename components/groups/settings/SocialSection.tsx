@@ -2,7 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { Globe, MessageSquare, Instagram as InstagramIcon, Share2 } from 'lucide-react';
+import { Globe, MessageSquare, Instagram as InstagramIcon } from 'lucide-react';
 import { type GroupFormValues } from '@/lib/validations/group';
 import SettingsSection from './SettingsSection';
 

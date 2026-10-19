@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { type GroupFormValues } from '@/lib/validations/group';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
-import TagPicker from '@/components/groups/TagPicker';
+import TagPicker from '@/components/groups/tag-picker/TagPicker';
 import type { L1Category, TaxonomyTree } from '@/lib/services/taxonomy.service';
 import { type TaxonomySelection } from '@/lib/types/taxonomy';
 import SettingsSection from './SettingsSection';

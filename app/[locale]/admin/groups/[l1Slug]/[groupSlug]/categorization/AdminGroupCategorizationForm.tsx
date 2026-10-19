@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { loadFullPage } from '@/lib/full-page';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { adminUpdateGroupTags } from '@/actions/taxonomy-actions';
-import TagPicker from '@/components/groups/TagPicker';
+import TagPicker from '@/components/groups/tag-picker/TagPicker';
 import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/group';
 import { useToast } from '@/hooks/use-toast';
 import { MAX_GROUP_TAGS } from '@/lib/constants';

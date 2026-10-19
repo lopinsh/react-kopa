@@ -6,7 +6,7 @@ import type { GroupFormValues } from '@/lib/validations/group';
 import { useTranslations } from 'next-intl';
 import type { TaxonomySelection } from '@/lib/types/taxonomy';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
-import TagPicker from '@/components/groups/TagPicker';
+import TagPicker from '@/components/groups/tag-picker/TagPicker';
 import LocationStep from '@/components/groups/create-wizard/LocationStep';
 
 type Props = {
