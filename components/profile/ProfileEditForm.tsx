@@ -1,17 +1,19 @@
 'use client';
 
-import { useTransition } from 'react';
-import { useForm, useWatch, type UseFormRegisterReturn } from 'react-hook-form';
+import { useEffect, useState, useTransition } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { profileSchema, USER_BIO_MAX, USER_NAME_MAX, type ProfileFormValues } from '@/lib/validations/user';
 import TextCounter from '@/components/ui/TextCounter';
+import Button from '@/components/ui/Button';
+import ConfirmDialog from '@/components/ui/ConfirmDialog';
+import AvatarField from './AvatarField';
 import { isOverLimit } from '@/lib/text-limit';
 import { updateProfile } from '@/actions/user-actions';
 import { useSession } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
-import { Dices, Loader2, Save } from 'lucide-react';
-import { avatarUrl } from '@/lib/avatar';
+import { Loader2 } from 'lucide-react';
 
 type Props = {
     user: {
@@ -22,38 +24,22 @@ type Props = {
         bio?: string | null;
         cities?: string[];
         avatarSeed?: string | null;
-        isProfilePublic: boolean;
-        allowDirectMessages: boolean;
-        showGroupsOnProfile: boolean;
     };
 };
 
 const INPUT = 'w-full rounded-xl border border-border bg-surface px-4 py-3 text-foreground placeholder:text-foreground-muted outline-none transition-all focus:border-primary';
 
-function SwitchRow({ label, description, registration }: { label: string; description: string; registration: UseFormRegisterReturn }) {
-    return (
-        <label className="flex cursor-pointer items-start gap-4 py-3">
-            <div className="flex-1">
-                <span className="block text-sm font-bold text-foreground">{label}</span>
-                <span className="mt-0.5 block text-xs leading-relaxed text-foreground-muted">{description}</span>
-            </div>
-            <div className="relative mt-0.5 flex shrink-0 items-center">
-                <input type="checkbox" className="peer sr-only" {...registration} />
-                <div className="h-5 w-9 rounded-full bg-border transition-colors peer-checked:bg-primary peer-focus-visible:ring-2 peer-focus-visible:ring-primary/40" />
-                <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-4" />
-            </div>
-        </label>
-    );
-}
-
+/** Labot profilu: name, username, picture, about you and places. The privacy switches are in Iestatījumi, not here (OD-26). */
 export default function ProfileEditForm({ user }: Props) {
     const t = useTranslations('profile');
     const tv = useTranslations('profile.edit.validation');
     const tErrors = useTranslations('errors');
-    const c_common = useTranslations('common');
+    const tCommon = useTranslations('common');
     const router = useRouter();
     const { update } = useSession();
     const [isPending, startTransition] = useTransition();
+    const [askDiscard, setAskDiscard] = useState(false);
+    const [leaving, setLeaving] = useState(false);
 
     const form = useForm<ProfileFormValues>({
         resolver: zodResolver(profileSchema),
@@ -64,18 +50,20 @@ export default function ProfileEditForm({ user }: Props) {
             bio: user.bio || '',
             cities: (user.cities || []).join(', '),
             avatarSeed: user.avatarSeed || '',
-            isProfilePublic: user.isProfilePublic,
-            allowDirectMessages: user.allowDirectMessages,
-            showGroupsOnProfile: user.showGroupsOnProfile,
         },
     });
-    const { errors } = form.formState;
+    const { errors, isDirty } = form.formState;
 
-    // Live preview: a photo URL wins, otherwise the clay figure for the current seed.
-    const [watchedImage, watchedSeed] = useWatch({ control: form.control, name: ['image', 'avatarSeed'] });
-    const [watchedName, watchedBio] = useWatch({ control: form.control, name: ['name', 'bio'] });
+    // Leaving the page (reload, closing the tab) with typed changes asks first.
+    useEffect(() => {
+        if (!isDirty || leaving) return;
+        const warn = (e: BeforeUnloadEvent) => { e.preventDefault(); };
+        window.addEventListener('beforeunload', warn);
+        return () => window.removeEventListener('beforeunload', warn);
+    }, [isDirty, leaving]);
+
+    const [watchedImage, watchedSeed, watchedName, watchedBio] = useWatch({ control: form.control, name: ['image', 'avatarSeed', 'name', 'bio'] });
     const over = isOverLimit(watchedName, USER_NAME_MAX) || isOverLimit(watchedBio, USER_BIO_MAX);
-    const previewSrc = avatarUrl({ id: user.id, image: watchedImage, avatarSeed: watchedSeed });
 
     const fieldError = (message?: string) =>
         message ? <p className="text-xs text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
@@ -85,6 +73,7 @@ export default function ProfileEditForm({ user }: Props) {
         startTransition(async () => {
             const result = await updateProfile(data);
             if (result.success) {
+                setLeaving(true);
                 await update({ name: data.name, image: data.image, avatarSeed: data.avatarSeed || null });
                 router.push('/profile');
                 router.refresh();
@@ -96,101 +85,77 @@ export default function ProfileEditForm({ user }: Props) {
         });
     };
 
+    const cancel = () => (isDirty ? setAskDiscard(true) : router.push('/profile'));
+
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="flex items-center gap-6">
-                <img
-                    src={previewSrc}
-                    alt=""
-                    className="h-20 w-20 shrink-0 rounded-3xl bg-surface-elevated object-cover"
-                    referrerPolicy="no-referrer"
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <AvatarField
+                userId={user.id}
+                image={watchedImage}
+                seed={watchedSeed}
+                onNewSeed={(seed) => form.setValue('avatarSeed', seed, { shouldDirty: true })}
+            />
+
+            <div className="space-y-2">
+                <label htmlFor="name" className="block text-sm font-bold text-foreground">{t('fieldName')}</label>
+                <input id="name" {...form.register('name')} aria-describedby="name-count" className={INPUT} />
+                <div className="flex items-start gap-2">{fieldError(errors.name?.message)}<TextCounter id="name-count" length={(watchedName ?? '').length} max={USER_NAME_MAX} /></div>
+            </div>
+
+            <div className="space-y-2">
+                <label htmlFor="username" className="block text-sm font-bold text-foreground">{tCommon('username')}</label>
+                <div className="relative">
+                    <span className="absolute left-4 top-3 font-bold text-foreground-muted">@</span>
+                    <input id="username" {...form.register('username')} className={`${INPUT} pl-10`} />
+                </div>
+                {fieldError(errors.username?.message)}
+            </div>
+
+            <div className="space-y-2">
+                <label htmlFor="bio" className="block text-sm font-bold text-foreground">{t('edit.bio')}</label>
+                <textarea
+                    id="bio"
+                    {...form.register('bio')}
+                    aria-describedby="bio-count"
+                    placeholder={t('edit.bioPlaceholder')}
+                    rows={4}
+                    className={`${INPUT} resize-none`}
                 />
-                <button
-                    type="button"
-                    onClick={() => form.setValue('avatarSeed', Math.random().toString(36).slice(2, 10), { shouldDirty: true })}
-                    className="flex items-center gap-1.5 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-surface-elevated soft-press"
-                >
-                    <Dices className="h-4 w-4" />
-                    {t('edit.newAvatar')}
-                </button>
+                <div className="flex items-start gap-2">{fieldError(errors.bio?.message)}<TextCounter id="bio-count" length={(watchedBio ?? '').length} max={USER_BIO_MAX} /></div>
             </div>
 
-            <div className="space-y-6">
-                <div className="space-y-2">
-                    <label htmlFor="name" className="block text-sm font-bold text-foreground">{t('fieldName')}</label>
-                    <input id="name" {...form.register('name')} aria-describedby="name-count" className={INPUT} />
-                    <div className="flex items-start gap-2">{fieldError(errors.name?.message)}<TextCounter id="name-count" length={(watchedName ?? '').length} max={USER_NAME_MAX} /></div>
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="username" className="block text-sm font-bold text-foreground">{c_common('username')}</label>
-                    <div className="relative">
-                        <span className="absolute left-4 top-3 font-bold text-foreground-muted">@</span>
-                        <input id="username" {...form.register('username')} className={`${INPUT} pl-10`} />
-                    </div>
-                    {fieldError(errors.username?.message)}
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="bio" className="block text-sm font-bold text-foreground">{t('edit.bio')}</label>
-                    <textarea
-                        id="bio"
-                        {...form.register('bio')}
-                        aria-describedby="bio-count"
-                        placeholder={t('edit.bioPlaceholder')}
-                        rows={4}
-                        className={`${INPUT} resize-none`}
-                    />
-                    <div className="flex items-start gap-2">{fieldError(errors.bio?.message)}<TextCounter id="bio-count" length={(watchedBio ?? '').length} max={USER_BIO_MAX} /></div>
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="cities" className="block text-sm font-bold text-foreground">{t('edit.citiesLabel')}</label>
-                    <input id="cities" {...form.register('cities')} placeholder={t('edit.citiesPlaceholder')} className={INPUT} />
-                </div>
-
-                <div className="space-y-2">
-                    <label htmlFor="image" className="block text-sm font-bold text-foreground">{t('fieldImage')}</label>
-                    <input id="image" {...form.register('image')} placeholder="https://..." className={INPUT} />
-                    {fieldError(errors.image?.message)}
-                </div>
+            <div className="space-y-2">
+                <label htmlFor="cities" className="block text-sm font-bold text-foreground">{t('edit.citiesLabel')}</label>
+                <input id="cities" {...form.register('cities')} placeholder={t('edit.citiesPlaceholder')} className={INPUT} />
             </div>
 
-            <fieldset className="rounded-2xl border border-border px-5 py-2">
-                <legend className="px-2 text-sm font-semibold text-foreground-muted">
-                    {t('edit.privacy.title')}
-                </legend>
-                <div className="divide-y divide-border">
-                    <SwitchRow
-                        label={t('edit.privacy.publicProfile')}
-                        description={t('edit.privacy.publicProfileDesc')}
-                        registration={form.register('isProfilePublic')}
-                    />
-                    <SwitchRow
-                        label={t('edit.privacy.allowMessages')}
-                        description={t('edit.privacy.allowMessagesDesc')}
-                        registration={form.register('allowDirectMessages')}
-                    />
-                    <SwitchRow
-                        label={t('edit.privacy.showGroups')}
-                        description={t('edit.privacy.showGroupsDesc')}
-                        registration={form.register('showGroupsOnProfile')}
-                    />
-                </div>
-            </fieldset>
+            <div className="space-y-2">
+                <label htmlFor="image" className="block text-sm font-bold text-foreground">{t('fieldImage')}</label>
+                <input id="image" {...form.register('image')} placeholder="https://..." className={INPUT} />
+                {fieldError(errors.image?.message)}
+            </div>
 
             {errors.root?.message && (
                 <p role="alert" className="text-sm text-danger">{tErrors(errors.root.message as 'ACTION_FAILED')}</p>
             )}
 
-            <button
-                type="submit"
-                disabled={isPending || over}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-8 font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
-            >
-                {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                {c_common('saveChanges')}
-            </button>
+            <div className="flex gap-2">
+                <Button type="submit" disabled={isPending || over}>
+                    {isPending && <Loader2 aria-hidden className="animate-spin" />}
+                    {tCommon('saveChanges')}
+                </Button>
+                <Button variant="quiet" disabled={isPending} onClick={cancel}>{tCommon('cancel')}</Button>
+            </div>
+
+            <ConfirmDialog
+                isOpen={askDiscard}
+                title={tCommon('discardTitle')}
+                message={tCommon('discardText')}
+                confirmLabel={tCommon('discard')}
+                destructive
+                onConfirm={() => { setLeaving(true); router.push('/profile'); }}
+                onCancel={() => setAskDiscard(false)}
+            />
         </form>
     );
 }

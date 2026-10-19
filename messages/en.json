@@ -1126,7 +1126,7 @@
     "mobileLabel": "Main navigation",
     "languageLabel": "Language",
     "myProfile": "My profile",
-    "groups": "Groups",
+    "groups": "My groups",
     "me": "Me",
     "profileMenu": "Profile menu",
     "languageCurrent": "Language: {language}",
@@ -1216,15 +1216,6 @@
       "cities": "Cities",
       "citiesLabel": "Cities (comma separated)",
       "citiesPlaceholder": "Riga, Liepaja, Valmiera...",
-      "privacy": {
-        "title": "Privacy",
-        "publicProfile": "Public profile",
-        "publicProfileDesc": "Anyone can open your profile page.",
-        "allowMessages": "Allow messages",
-        "allowMessagesDesc": "Other members can send you direct messages.",
-        "showGroups": "Show my groups",
-        "showGroupsDesc": "Your profile lists the public groups you belong to. Private groups are never shown."
-      },
       "validation": {
         "NAME_TOO_SHORT": "Name must be at least 2 characters.",
         "NAME_TOO_LONG": "Name must be at most 50 characters.",
@@ -1241,7 +1232,7 @@
     "fieldImage": "Profile Image URL",
     "fieldName": "Name",
     "handle": "@{username}",
-    "memberSince": "Member since {date}",
+    "memberSince": "On Ejam Kopā since {date}",
     "message": "Message",
     "noActivity": "No activity yet.",
     "noBio": "Add a bio to tell others about yourself.",
@@ -1251,19 +1242,28 @@
     "privateProfileDesc": "This profile is private.",
     "sharedGroups": "Shared Groups",
     "groupsHeading": "Groups",
-    "viewAllGroups": "View All",
-    "viewingOwnPublicProfile": "You're viewing your public profile.",
     "area": {
       "label": "Your space",
       "openMenu": "Your space's pages",
-      "groupCount": "{count, plural, one {# group} other {# groups}}"
+      "groupCount": "{count, plural, one {# group} other {# groups}}",
+      "viewProfile": "view profile"
     },
     "settings": {
       "title": "Settings",
       "appearance": "Appearance",
       "light": "Light",
       "dark": "Dark",
-      "system": "Same as device"
+      "system": "Same as device",
+      "privacy": {
+        "title": "Privacy",
+        "publicProfile": "Public profile",
+        "publicProfileDesc": "Anyone can open your profile page.",
+        "allowMessages": "Allow messages",
+        "allowMessagesDesc": "Other members can send you direct messages.",
+        "showGroups": "Show my groups",
+        "showGroupsDesc": "Your profile lists the public groups you belong to. Private groups are never shown."
+      },
+      "saved": "Saved"
     },
     "myGroups": {
       "menuLabel": "My groups sections",
@@ -1279,6 +1279,12 @@
       "end": "That's everything new.",
       "emptyTitle": "All quiet for now",
       "emptyText": "Once you join a group, its events and news will show up here."
+    },
+    "view": {
+      "asOthersSee": "This is how others see your profile.",
+      "groupsHidden": "Others don't see your groups; people who share a group with you see the ones you share.",
+      "privateNote": "Your profile is private: others only see that it is private.",
+      "changePrivacy": "Change in Settings"
     }
   },
   "report": {

@@ -8,28 +8,20 @@ import { getOwnCounts, markMyGroupsSeen } from './own-counts';
 import bcrypt from 'bcryptjs';
 import type { RegisterValues } from '@/lib/validations/auth';
 import { USERNAME_MAX_LENGTH } from '@/lib/username';
+import { MessageService } from './message.service';
+import type { MyRole } from '@/lib/types/own-area';
+import type { PrivacySettings, ProfileViewContext } from '@/lib/types/profile';
 
 /** The fields a profile page shows. Never the email, password hash or role. */
 const PROFILE_USER_SELECT = {
     id: true, name: true, image: true, avatarSeed: true, username: true, bio: true,
-    cities: true, createdAt: true, isProfilePublic: true,
+    cities: true, createdAt: true, isProfilePublic: true, showGroupsOnProfile: true,
 } as const;
 
 /** The group columns a profile's cards need, with the category titles in the viewer's language. */
 function profileGroupInclude(lang: string) {
     return { category: { include: TaxonomyResolver.getInclude(lang) }, ...GROUP_CARD_RELATIONS };
 }
-
-type ProfileMembership = Prisma.MembershipGetPayload<{ include: { group: { include: ReturnType<typeof profileGroupInclude> } } }>;
-type ProfileFields = Prisma.UserGetPayload<{ select: typeof PROFILE_USER_SELECT }>;
-
-function toProfileGroup(m: ProfileMembership, lang: string) {
-    return toGroupCard(m.group, lang);
-}
-
-type ProfileGroup = ReturnType<typeof toProfileGroup>;
-export type PublicProfile = ProfileFields & { publicGroups: ProfileGroup[]; showsAllGroups: boolean };
-export type OwnProfile = ProfileFields & { recentGroups: ProfileGroup[] };
 
 /** What the own area's head shows (R2a): the person, their first city (a city slug) and how many groups they belong to. */
 export type OwnAreaContext = {
@@ -48,9 +40,33 @@ export const UserService = {
             where: { id: userId },
             select: {
                 id: true, name: true, image: true, email: true, username: true, bio: true, cities: true, avatarSeed: true,
-                isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true,
             }
         });
+    },
+
+    async getPrivacySettings(userId: string): Promise<PrivacySettings | null> {
+        return await prisma.user.findUnique({
+            where: { id: userId },
+            select: { isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true },
+        });
+    },
+
+    /** Saves only the switches given (Prisma ignores `undefined`); never touches name, bio, places or picture. */
+    async updatePrivacy(userId: string, data: Partial<PrivacySettings>): Promise<ActionResponse> {
+        try {
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    isProfilePublic: data.isProfilePublic,
+                    allowDirectMessages: data.allowDirectMessages,
+                    showGroupsOnProfile: data.showGroupsOnProfile,
+                },
+            });
+            return { success: true };
+        } catch (error) {
+            console.error('[UserService.updatePrivacy] Error:', error);
+            return { success: false, error: 'UPDATE_FAILED' };
+        }
     },
 
     /**
@@ -120,9 +136,6 @@ export const UserService = {
         bio?: string;
         cities?: string[];
         avatarSeed?: string;
-        isProfilePublic?: boolean;
-        allowDirectMessages?: boolean;
-        showGroupsOnProfile?: boolean;
     }): Promise<ActionResponse> {
         try {
             // Username uniqueness check — only when a username is being set
@@ -143,34 +156,53 @@ export const UserService = {
     },
 
     /**
-     * A person's public profile. Which groups come with it is decided here, not in the page:
-     * the viewer always sees the groups they share with the person; everyone sees all the
-     * person's public groups only if the person opted in (`showGroupsOnProfile`); the person
-     * themselves sees all of theirs. Pending applications never count, private groups only
-     * show to fellow members, and moderation-hidden groups never show.
-     * Returns only what the profile page shows (never the email or password hash).
+     * A person's profile as `viewerId` may see it; the one place that decides this (R9c). Rules:
+     * pending applications never count, moderation-hidden groups never show, private groups only to fellow members,
+     * all public groups only when the person opted in (`showGroupsOnProfile`), signed-out visitors share no group.
+     * A private profile (`isProfilePublic = false`) gives any other viewer `isPrivate` with empty person fields and no groups.
+     * `asStranger` (Mans profils) builds it as a signed-in person who shares no group would see it, person fields kept.
+     * Never returns the email, password hash or role.
      */
-    async getUserByUsername(username: string, viewerId: string | undefined, locale: string): Promise<PublicProfile | null> {
+    async getProfileView(
+        target: { username: string } | { userId: string },
+        viewerId: string | undefined,
+        locale: string,
+        opts: { asStranger?: boolean } = {},
+    ): Promise<ProfileViewContext | null> {
         const lang = locale === 'en' ? 'en' : 'lv';
         const profile = await prisma.user.findUnique({
-            where: { username },
-            select: { ...PROFILE_USER_SELECT, showGroupsOnProfile: true },
+            where: 'userId' in target ? { id: target.userId } : { username: target.username },
+            select: PROFILE_USER_SELECT,
         });
         if (!profile) return null;
 
-        const isOwnProfile = viewerId === profile.id;
-        const sharedWithViewer: Prisma.GroupWhereInput | null = viewerId
-            ? { members: { some: { userId: viewerId, role: { not: 'PENDING' } } } }
-            : null;
+        const isOwn = viewerId === profile.id;
+        const asStranger = !!opts.asStranger && isOwn;
+
+        if (!profile.isProfilePublic && !isOwn) {
+            return {
+                person: { id: profile.id, name: null, username: null, image: null, avatarSeed: null, bio: null, cities: [], createdAt: profile.createdAt },
+                isOwn, isPrivate: true, groups: [], groupsScope: 'none', canMessage: false,
+            };
+        }
 
         let groupFilter: Prisma.GroupWhereInput;
-        if (isOwnProfile) {
+        let groupsScope: ProfileViewContext['groupsScope'];
+        if (isOwn && !asStranger) {
             groupFilter = {};
-        } else if (profile.showGroupsOnProfile) {
-            groupFilter = { OR: sharedWithViewer ? [{ type: 'PUBLIC' }, sharedWithViewer] : [{ type: 'PUBLIC' }] };
+            groupsScope = 'all';
         } else {
-            // Logged-out visitors share no groups with anyone.
-            groupFilter = sharedWithViewer ?? { id: { in: [] } };
+            const shared: Prisma.GroupWhereInput | null = viewerId && !asStranger
+                ? { members: { some: { userId: viewerId, role: { not: 'PENDING' } } } }
+                : null;
+            if (profile.showGroupsOnProfile) {
+                groupFilter = { OR: shared ? [{ type: 'PUBLIC' }, shared] : [{ type: 'PUBLIC' }] };
+                groupsScope = 'all';
+            } else {
+                groupFilter = shared ?? { id: { in: [] } };
+                // A signed-in viewer gets the "shared groups" section (maybe empty); signed-out visitors and the own-page stranger view none.
+                groupsScope = shared ? 'shared' : 'none';
+            }
         }
 
         const memberships = await prisma.membership.findMany({
@@ -183,33 +215,19 @@ export const UserService = {
             include: { group: { include: profileGroupInclude(lang) } },
         });
 
-        const { showGroupsOnProfile, ...fields } = profile;
+        const canMessage = isOwn ? false : (await MessageService.messageableUserIds(viewerId, [profile.id])).has(profile.id);
+
         return {
-            ...fields,
-            publicGroups: memberships.map((m) => toProfileGroup(m, lang)),
-            showsAllGroups: isOwnProfile || showGroupsOnProfile,
-        };
-    },
-
-    async getOwnProfile(userId: string, locale: string): Promise<OwnProfile | null> {
-        const lang = locale === 'en' ? 'en' : 'lv';
-        const user = await prisma.user.findUnique({
-            where: { id: userId },
-            select: {
-                ...PROFILE_USER_SELECT,
-                memberships: {
-                    take: 6,
-                    where: { role: { not: 'PENDING' }, group: { hiddenAt: null } },
-                    orderBy: { joinedAt: 'desc' },
-                    include: { group: { include: profileGroupInclude(lang) } },
-                },
+            person: {
+                id: profile.id, name: profile.name, username: profile.username, image: profile.image, avatarSeed: profile.avatarSeed,
+                bio: profile.bio, cities: profile.cities, createdAt: profile.createdAt,
             },
-        });
-
-        if (!user) return null;
-
-        const { memberships, ...fields } = user;
-        return { ...fields, recentGroups: memberships.map((m) => toProfileGroup(m, lang)) };
+            isOwn,
+            isPrivate: !profile.isProfilePublic,
+            groups: memberships.map((m) => ({ card: toGroupCard(m.group, lang), role: m.role as MyRole })),
+            groupsScope,
+            canMessage,
+        };
     },
 
     async getOwnAreaContext(userId: string): Promise<OwnAreaContext | null> {

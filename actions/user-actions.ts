@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { UserService } from '@/lib/services/user.service';
 import { revalidateTag, revalidatePath } from 'next/cache';
-import { profileSchema } from '@/lib/validations/user';
+import { profileSchema, privacySchema } from '@/lib/validations/user';
 import type { ActionResponse } from '@/types/actions';
 import type { OwnCounts } from '@/lib/types/own-area';
 
@@ -28,11 +28,24 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
         bio: data.bio || undefined,
         cities: citiesArray,
         avatarSeed: data.avatarSeed || undefined,
-        isProfilePublic: data.isProfilePublic,
-        allowDirectMessages: data.allowDirectMessages,
-        showGroupsOnProfile: data.showGroupsOnProfile,
     });
 
+    if (!result.success) return { success: false, error: result.error };
+
+    revalidateTag('groups', 'max');
+    revalidatePath('/', 'layout');
+    return { success: true };
+}
+
+/** One or more privacy switches from Iestatījumi. Never touches name, bio, places or picture. */
+export async function updatePrivacy(input: unknown): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    const parsed = privacySchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+
+    const result = await UserService.updatePrivacy(session.user.id, parsed.data);
     if (!result.success) return { success: false, error: result.error };
 
     revalidateTag('groups', 'max');

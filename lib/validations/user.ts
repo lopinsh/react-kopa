@@ -15,9 +15,16 @@ export const profileSchema = z.object({
     bio: z.string().max(USER_BIO_MAX, 'BIO_TOO_LONG').optional().or(z.literal('')),
     cities: z.string().optional().or(z.literal('')),
     avatarSeed: z.string().optional().or(z.literal('')),
-    isProfilePublic: z.boolean(),
-    allowDirectMessages: z.boolean(),
-    showGroupsOnProfile: z.boolean(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;
+
+/** The three privacy switches in Iestatījumi; each saves on its own, so any subset (at least one) is valid. */
+export const privacySchema = z
+    .object({
+        isProfilePublic: z.boolean(),
+        allowDirectMessages: z.boolean(),
+        showGroupsOnProfile: z.boolean(),
+    })
+    .partial()
+    .refine((v) => Object.values(v).some((x) => x !== undefined), 'VALIDATION_FAILED');

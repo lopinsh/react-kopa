@@ -1216,15 +1216,6 @@
       "cities": "Pilsētas",
       "citiesLabel": "Pilsētas (atdalītas ar komatu)",
       "citiesPlaceholder": "Rīga, Liepāja, Valmāja...",
-      "privacy": {
-        "title": "Privātums",
-        "publicProfile": "Publisks profils",
-        "publicProfileDesc": "Ikviens var atvērt tavu profila lapu.",
-        "allowMessages": "Atļaut ziņas",
-        "allowMessagesDesc": "Citi biedri var tev rakstīt privātas ziņas.",
-        "showGroups": "Rādīt manas grupas",
-        "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad."
-      },
       "validation": {
         "NAME_TOO_SHORT": "Vārdam jābūt vismaz 2 rakstzīmes garam.",
         "NAME_TOO_LONG": "Vārds nedrīkst būt garāks par 50 rakstzīmēm.",
@@ -1241,7 +1232,7 @@
     "fieldImage": "Profila attēla URL",
     "fieldName": "Vārds",
     "handle": "@{username}",
-    "memberSince": "Biedrs kopš {date}",
+    "memberSince": "Ejam kopā kopš {date}",
     "message": "Ziņa",
     "noActivity": "Pagaidām nav aktivitāšu.",
     "noBio": "Pievieno aprakstu, lai citi uzzinātu par tevi.",
@@ -1251,19 +1242,28 @@
     "privateProfileDesc": "Šis profils ir privāts.",
     "sharedGroups": "Kopīgās grupas",
     "groupsHeading": "Grupas",
-    "viewAllGroups": "Skatīt visu",
-    "viewingOwnPublicProfile": "Šādi tavu profilu redz citi.",
     "area": {
       "label": "Tava vieta",
       "openMenu": "Tavas vietas lapas",
-      "groupCount": "{count, plural, zero {# grupu} one {# grupa} other {# grupas}}"
+      "groupCount": "{count, plural, zero {# grupu} one {# grupa} other {# grupas}}",
+      "viewProfile": "skatīt profilu"
     },
     "settings": {
       "title": "Iestatījumi",
       "appearance": "Izskats",
       "light": "Gaišs",
       "dark": "Tumšs",
-      "system": "Kā ierīcē"
+      "system": "Kā ierīcē",
+      "privacy": {
+        "title": "Privātums",
+        "publicProfile": "Publisks profils",
+        "publicProfileDesc": "Ikviens var atvērt tavu profila lapu.",
+        "allowMessages": "Atļaut ziņas",
+        "allowMessagesDesc": "Citi biedri var tev rakstīt privātas ziņas.",
+        "showGroups": "Rādīt manas grupas",
+        "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad."
+      },
+      "saved": "Saglabāts"
     },
     "myGroups": {
       "menuLabel": "Manas grupas sadaļas",
@@ -1279,6 +1279,12 @@
       "end": "Tas ir viss jaunais.",
       "emptyTitle": "Pagaidām kluss",
       "emptyText": "Kad pievienosies kādai grupai, tās pasākumi un jaunumi būs šeit."
+    },
+    "view": {
+      "asOthersSee": "Tā tavu profilu redz citi.",
+      "groupsHidden": "Tavas grupas citi neredz; kopīgo grupu biedri redz tās, kas jums kopīgas.",
+      "privateNote": "Tavs profils ir privāts: citi redz tikai, ka tas ir privāts.",
+      "changePrivacy": "Mainīt Iestatījumos"
     }
   },
   "report": {

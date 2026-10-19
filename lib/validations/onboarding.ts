@@ -9,7 +9,9 @@ export const usernameSchema = z
     .string()
     .min(3, 'USERNAME_TOO_SHORT')
     .max(30, 'USERNAME_TOO_LONG')
-    .regex(/^[a-z0-9_]+$/, 'USERNAME_INVALID_CHARS');
+    .regex(/^[a-z0-9_]+$/, 'USERNAME_INVALID_CHARS')
+    // /profile/edit is a page of its own and wins over /profile/[username].
+    .refine((u) => u !== 'edit', 'USERNAME_TAKEN');
 
 /**
  * Zod schema for the username onboarding form.

@@ -1,16 +1,13 @@
 import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { UserService } from '@/lib/services/user.service';
-import GroupList from '@/components/discovery/GroupList';
-import { cardActivities } from '@/lib/services/card-activity';
-import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
-import { cityLabel } from '@/lib/city-label';
-import { Settings, MapPin, Calendar, Users, Plus } from 'lucide-react';
-import { Link } from '@/i18n/routing';
 import { signInUrl } from '@/lib/auth-redirect';
-import { avatarUrl } from '@/lib/avatar';
-import { createDateFormatter } from '@/lib/date-format';
+import { buttonClass } from '@/components/ui/Button';
+import { Link } from '@/i18n/routing';
+import ProfileView from '@/components/profile/ProfileView';
+import ProfileViewerNote from '@/components/profile/ProfileViewerNote';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -18,129 +15,29 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('myProfile') };
 }
 
+/** Mans profils: exactly what others see (a signed-in person who shares no group with you), with "Labot profilu" at the facts line (OD-26). */
 export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const session = await auth();
+    if (!session?.user?.id) redirect(signInUrl(locale, '/profile'));
 
-    if (!session?.user?.id) {
-        redirect(signInUrl(locale, '/profile'));
-    }
-
-    const t = await getTranslations('profile');
-    const tCities = await getTranslations('cities');
-    const tCommon = await getTranslations('common');
-    const format = createDateFormatter(await getLocale(), await getTimeZone());
-
-    const dbUser = await UserService.getOwnProfile(session.user.id, locale);
-
-    if (!dbUser) {
-        redirect(`/${locale}`);
-    }
-
-    const activity = await cardActivities(dbUser.recentGroups, locale, session.user.id);
-    const memberSince = format.dateTime(dbUser.createdAt, { year: 'numeric', month: 'long', day: 'numeric' });
-    const avatarSrc = avatarUrl(dbUser);
+    const [t, view, privacy] = await Promise.all([
+        getTranslations('profile'),
+        UserService.getProfileView({ userId: session.user.id }, session.user.id, locale, { asStranger: true }),
+        UserService.getPrivacySettings(session.user.id),
+    ]);
+    if (!view || !privacy) redirect(`/${locale}`);
 
     return (
-        <div>
-            {/* Header Section */}
-            <div className="mb-8 flex flex-col items-center md:flex-row md:items-start gap-8 bg-surface-elevated/30 p-8 rounded-[3rem] border border-border">
-                <div className="h-32 w-32 shrink-0 overflow-hidden rounded-full border-4 border-surface shadow-xl relative bg-primary/10">
-                    <img src={avatarSrc} alt={dbUser.name || t('anonymousUser')} className="h-full w-full object-cover" />
-                </div>
-
-                <div className="flex-1 text-center md:text-left">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div>
-                            <h1 className="text-3xl font-semibold tracking-tight text-foreground">
-                                {dbUser.name || t('anonymousUser')}
-                            </h1>
-                            {dbUser.username && (
-                                <p className="text-primary font-bold mt-1 text-lg">
-                                    {t('handle', { username: dbUser.username })}
-                                </p>
-                            )}
-                        </div>
-                        <Link
-                            href="/profile/edit"
-                            className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-primary/20"
-                        >
-                            <Settings className="h-4 w-4" />
-                            {t('editTitle')}
-                        </Link>
-                    </div>
-
-                    <div className="mt-6 flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 text-sm text-foreground-muted font-medium">
-                        {dbUser.cities.length > 0 && (
-                            <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4 text-primary/70" />
-                                {dbUser.cities.map((c) => cityLabel(tCities, c)).join(', ')}
-                            </div>
-                        )}
-                        <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4 text-primary/70" />
-                            {t('memberSince', { date: memberSince })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <div className="space-y-12">
-                    {/* Bio Section */}
-                    <section>
-                        <h2 className="mb-6 text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                            <span className="h-2 w-2 rounded-full bg-primary" />
-                            {t('edit.bio')}
-                        </h2>
-
-                        <div className="rounded-3xl border border-border bg-surface p-6">
-                            {dbUser.bio ? (
-                                <div className="prose prose-sm md:prose-base prose-p:text-foreground-muted max-w-none whitespace-pre-wrap">
-                                    {dbUser.bio}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8">
-                                    <p className="text-foreground-muted italic mb-4">{t('noBio')}</p>
-                                    <Link
-                                        href="/profile/edit"
-                                        className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
-                                    >
-                                        <Plus className="h-4 w-4" />
-                                        {t('editTitle')}
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
-                    </section>
-
-                    {/* Preview of your groups */}
-                    <section>
-                        <div className="mb-6 flex items-center justify-between">
-                            <h2 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-secondary" />
-                                {tCommon('myGroups')}
-                            </h2>
-                            <Link
-                                href="/profile/my-groups"
-                                className="text-sm font-bold text-primary hover:underline"
-                            >
-                                {t('viewAllGroups')}
-                            </Link>
-                        </div>
-
-                        {dbUser.recentGroups.length > 0 ? (
-                            <GroupList groups={dbUser.recentGroups} activity={activity} />
-                        ) : (
-                            <div className="rounded-3xl border border-dashed border-border py-8 text-center bg-surface">
-                                <Users className="mx-auto mb-3 h-8 w-8 text-foreground-muted opacity-20" />
-                                <p className="text-sm text-foreground-muted italic">{t('noJoinedGroups')}</p>
-                            </div>
-                        )}
-                    </section>
-                </div>
-
-            </div>
+        <div className="grid gap-5">
+            <ProfileViewerNote privacy={privacy} />
+            <ProfileView
+                view={view}
+                viewerId={session.user.id}
+                locale={locale}
+                own
+                action={<Link href="/profile/edit" className={buttonClass('secondary')}>{t('editTitle')}</Link>}
+            />
         </div>
     );
 }
