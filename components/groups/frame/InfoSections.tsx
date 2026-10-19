@@ -19,12 +19,12 @@ export default function InfoSections({ title, label, parts, initial }: { title: 
     const locale = useLocale();
     const wrap = useRef<HTMLDivElement>(null);
     const tabs = useRef<HTMLElement | null>(null);
-    const { active, activate } = useScrollSpy(parts.map((p) => p.key), tabs, parts[0]?.key ?? '');
+    const { active, activate } = useScrollSpy(parts.map((p) => p.key), wrap, tabs, parts[0]?.key ?? '');
     const many = parts.length > 1;
 
     const jump = (key: string, smooth: boolean) => {
         const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        document.getElementById(anchor(key))?.scrollIntoView({ behavior: smooth && !reduce ? 'smooth' : 'auto', block: 'start' });
+        wrap.current?.querySelector(`[id="${anchor(key)}"]`)?.scrollIntoView({ behavior: smooth && !reduce ? 'smooth' : 'auto', block: 'start' });
         activate(key);
     };
     const select = (key: string) => {
