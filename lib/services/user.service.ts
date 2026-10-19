@@ -7,7 +7,7 @@ import { getMyGroupsOverview } from './my-groups';
 import { getOwnCounts, markMyGroupsSeen } from './own-counts';
 import bcrypt from 'bcryptjs';
 import type { RegisterValues } from '@/lib/validations/auth';
-import { USERNAME_MAX_LENGTH } from '@/lib/username';
+import { USERNAME_MAX_LENGTH, RESERVED_USERNAMES } from '@/lib/username';
 import { MessageService } from './message.service';
 import type { MyRole } from '@/lib/types/own-area';
 import type { PrivacySettings, ProfileViewContext } from '@/lib/types/profile';
@@ -90,7 +90,7 @@ export const UserService = {
             where: { username: { startsWith: base.slice(0, USERNAME_MAX_LENGTH - 3), mode: 'insensitive' } },
             select: { username: true },
         });
-        const takenSet = new Set(taken.map((u) => u.username?.toLowerCase()));
+        const takenSet = new Set([...RESERVED_USERNAMES, ...taken.map((u) => u.username?.toLowerCase())]);
         if (!takenSet.has(base)) return base;
 
         for (let n = 2; ; n++) {
@@ -200,7 +200,8 @@ export const UserService = {
                 groupsScope = 'all';
             } else {
                 groupFilter = shared ?? { id: { in: [] } };
-                // A signed-in viewer gets the "shared groups" section (maybe empty); signed-out visitors and the own-page stranger view none.
+                // "Kopīgās grupas" only when there are some (set below). Signed-out visitors and the own-page stranger view get none,
+                // so Mans profils matches what a signed-in stranger sees.
                 groupsScope = shared ? 'shared' : 'none';
             }
         }
@@ -225,7 +226,8 @@ export const UserService = {
             isOwn,
             isPrivate: !profile.isProfilePublic,
             groups: memberships.map((m) => ({ card: toGroupCard(m.group, lang), role: m.role as MyRole })),
-            groupsScope,
+            // No heading over an empty list: a stranger sees no section, and Mans profils shows the same.
+            groupsScope: memberships.length === 0 ? 'none' : groupsScope,
             canMessage,
         };
     },

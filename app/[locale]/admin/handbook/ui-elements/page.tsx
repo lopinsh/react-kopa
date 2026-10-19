@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
-import { Calendar, Check, Search } from 'lucide-react';
+import { Calendar, Check, Search, ShieldAlert } from 'lucide-react';
 import AccentScope from '@/components/handbook/AccentScope';
 import { ColourSamples, LogoSamples, TypeSamples } from '@/components/handbook/IdentitySpecimens';
 import HandbookShell from '@/components/handbook/HandbookShell';
@@ -11,6 +11,10 @@ import { AnnouncementDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, T
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
+import ProfileView from '@/components/profile/ProfileView';
+import ProfileViewerNote from '@/components/profile/ProfileViewerNote';
+import MessageUserButton from '@/components/messages/MessageUserButton';
+import PrivacySettings from '@/components/me/PrivacySettings';
 import ThemeToggle from '@/components/handbook/SampleThemeToggle';
 import AuthTextField from '@/components/auth/AuthTextField';
 import CreateCard from '@/components/discovery/CreateCard';
@@ -51,6 +55,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
     await requireHandbookAccess(locale, '/admin/handbook/ui-elements');
 
     const t = await getTranslations('admin.handbook.ui');
+    const tProfile = await getTranslations('profile');
     const tTag = await getTranslations('common.tag');
     const chapters = await HandbookService.listChapters();
     const samples = buildUiSamples((key) => t(`sample.${key}`), locale);
@@ -286,6 +291,23 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="switch" names={[UI.switch]} files={['components/ui/Switch.tsx']}>
                     <SwitchDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="profileView" names={[]} files={['components/profile/ProfileView.tsx', 'components/profile/ProfileViewerNote.tsx', 'lib/services/user.service.ts']}>
+                    <div className="grid gap-10">
+                        <div className="grid gap-5">
+                            <ProfileViewerNote privacy={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true }} />
+                            <ProfileView view={samples.profileOwn} locale={locale} own action={<span className={buttonClass('secondary')}>{tProfile('editTitle')}</span>} />
+                        </div>
+                        <ProfileView view={samples.profileOther} locale={locale} action={<MessageUserButton userId={samples.profileOther.person.id} />} />
+                        <EmptyState icon={ShieldAlert} title={tProfile('privateProfile')} description={tProfile('privateProfileDesc')} />
+                    </div>
+                </UiSpecimen>
+
+                <UiSpecimen id="privacySettings" names={[]} files={['components/me/PrivacySettings.tsx']}>
+                    <div className="max-w-xl">
+                        <PrivacySettings initial={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: false }} demo />
+                    </div>
                 </UiSpecimen>
 
                 <UiSpecimen id="counter" names={[UI.fieldCounter]} files={['components/ui/TextCounter.tsx', 'lib/text-limit.ts']}>

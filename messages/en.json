@@ -863,6 +863,8 @@
           "languageEditor": "Language editor: text in several languages",
           "moreMenu": "Group \"…\" menu: member, waiting, visitor",
           "switch": "Switch",
+          "profileView": "Profile: your own (with the note) and another person's, private",
+          "privacySettings": "Privacy switches",
           "groupPages": "Group pages, part tabs, next event and links",
           "dates": "Dates: day strip, quick choices and calendar",
           "eventPage": "Event page: for a visitor (with a picture, with locked practical info) and for the team (For organisers)",
@@ -872,6 +874,7 @@
           "headerLists": "Header lists: the bell (both tabs), messages, empty states, a notification row"
         },
         "sample": {
+          "profileBio": "Weekend walks and board games. Looking for people to run with in the mornings.",
           "category": "Hiking",
           "parentCategory": "Sports",
           "groupName": "Jelgava Hiking Club",
@@ -1236,8 +1239,6 @@
     "message": "Message",
     "noActivity": "No activity yet.",
     "noBio": "Add a bio to tell others about yourself.",
-    "noJoinedGroups": "You haven't joined any groups yet.",
-    "noSharedGroups": "No shared groups found.",
     "privateProfile": "Private Profile",
     "privateProfileDesc": "This profile is private.",
     "sharedGroups": "Shared Groups",

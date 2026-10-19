@@ -23,7 +23,7 @@ export type ProfileViewContext = {
     /** True: the page renders the private-profile empty state; for another viewer the person fields are empty. */
     isPrivate: boolean;
     groups: ProfileGroupRow[];
-    /** Heading: Grupas (all), Kopīgās grupas (only shared), or no groups section. */
+    /** Heading: Grupas (all), Kopīgās grupas (only shared); never over an empty list, or no groups section. */
     groupsScope: 'all' | 'shared' | 'none';
     canMessage: boolean;
 };

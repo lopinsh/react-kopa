@@ -863,6 +863,8 @@
           "languageEditor": "Valodu redaktors: teksts vairākās valodās",
           "moreMenu": "Grupas «…» izvēlne: biedrs, gaida atbildi, apmeklētājs",
           "switch": "Slēdzis",
+          "profileView": "Profils: savējais (ar piezīmi), cita cilvēka, privāts",
+          "privacySettings": "Privātuma slēdži",
           "groupPages": "Grupas lapas, daļu cilnes, nākamais pasākums un saites",
           "dates": "Datumi: dienu josla, izvēle un kalendārs",
           "panels": "Paneļi un kas iet",
@@ -872,6 +874,7 @@
           "headerLists": "Galvenes saraksti: zvans (abas cilnes), ziņas, tukšie stāvokļi, paziņojuma rinda"
         },
         "sample": {
+          "profileBio": "Nedēļas nogales pastaigas un galda spēles. Meklēju, ar ko kopā skriet no rīta.",
           "category": "Pārgājieni",
           "parentCategory": "Sports",
           "groupName": "Jelgavas pārgājienu kopa",
@@ -1236,8 +1239,6 @@
     "message": "Ziņa",
     "noActivity": "Pagaidām nav aktivitāšu.",
     "noBio": "Pievieno aprakstu, lai citi uzzinātu par tevi.",
-    "noJoinedGroups": "Tu vēl neesi nevienā grupā.",
-    "noSharedGroups": "Kopīgas grupas nav atrastas.",
     "privateProfile": "Privāts profils",
     "privateProfileDesc": "Šis profils ir privāts.",
     "sharedGroups": "Kopīgās grupas",

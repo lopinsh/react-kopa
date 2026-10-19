@@ -1,5 +1,6 @@
 import { categoryColor } from '@/lib/theme/category';
 import type { CardActivity } from '@/lib/services/card-activity';
+import type { ProfileViewContext } from '@/lib/types/profile';
 import type { GroupContext } from '@/lib/services/group.service';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import type { AnnouncementItemData } from '@/lib/services/announcements-page';
@@ -192,7 +193,16 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const newsAnswer: NewsItem = { kind: 'answer', id: 'na-1', at: ago(DAY), isNew: true, group: newsGroup, accepted: true };
     const myRequest: MyRequest = { card: groupCard, groupId: 'sample-group-request', name: s('groupName'), path: `/${SAMPLE_L1_SLUG}/group/sample-group`, color: SAMPLE_ACCENT, since: ago(2 * DAY) };
 
+    // Profiles (R9c): your own (what others see), another person's with Sūtīt ziņu.
+    const profileOwn: ProfileViewContext = {
+        person: { id: janis.id, name: janis.name, username: 'janis_berzins', image: null, avatarSeed: janis.avatarSeed, bio: s('profileBio'), cities: ['Jelgava', 'Riga'], createdAt: new Date(now.getFullYear() - 1, 2, 1) },
+        isOwn: true, isPrivate: false, groups: [{ card: groupCard, role: 'ADMIN' }], groupsScope: 'all', canMessage: false,
+    };
+    const profileOther: ProfileViewContext = { ...profileOwn, isOwn: false, groups: [{ card: groupCardBare, role: 'MEMBER' }], groupsScope: 'shared', canMessage: true };
+
     return {
+        profileOwn,
+        profileOther,
         accent: SAMPLE_ACCENT,
         l1Slug: SAMPLE_L1_SLUG,
         groupCard,

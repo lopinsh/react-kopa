@@ -27,3 +27,6 @@ export function usernameFromName(name: string): string {
         .slice(0, USERNAME_MAX_LENGTH)
         .replace(/_+$/, '');
 }
+
+/** Words a username can't be: static pages under /profile win over /profile/[username] (`my-groups` already fails the a–z0–9_ rule). */
+export const RESERVED_USERNAMES: readonly string[] = ['edit'];

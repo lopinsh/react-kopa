@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
-import { Users } from 'lucide-react';
 import GroupList from '@/components/discovery/GroupList';
 import TextLink from '@/components/ui/TextLink';
 import { cardActivities } from '@/lib/services/card-activity';
@@ -66,14 +65,7 @@ export default async function ProfileView({ view, viewerId, locale, action, own 
             {groupsScope !== 'none' && (
                 <section className="grid gap-3">
                     <h2 className="font-heading text-[17px] font-semibold">{groupsScope === 'all' ? t('groupsHeading') : t('sharedGroups')}</h2>
-                    {groups.length > 0 ? (
-                        <GroupList groups={groups.map((g) => g.card)} activity={activity} mine={mine} fullPage />
-                    ) : (
-                        <p className="flex items-center gap-2 text-sm italic text-foreground-muted">
-                            <Users aria-hidden strokeWidth={1.6} className="size-5 shrink-0" />
-                            {groupsScope === 'all' ? t('noJoinedGroups') : t('noSharedGroups')}
-                        </p>
-                    )}
+                    <GroupList groups={groups.map((g) => g.card)} activity={activity} mine={mine} fullPage />
                 </section>
             )}
         </div>

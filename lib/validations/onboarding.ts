@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { RESERVED_USERNAMES } from '@/lib/username';
 
 /**
  * Username (public handle) rules, shared by registration and onboarding.
@@ -10,8 +11,8 @@ export const usernameSchema = z
     .min(3, 'USERNAME_TOO_SHORT')
     .max(30, 'USERNAME_TOO_LONG')
     .regex(/^[a-z0-9_]+$/, 'USERNAME_INVALID_CHARS')
-    // /profile/edit is a page of its own and wins over /profile/[username].
-    .refine((u) => u !== 'edit', 'USERNAME_TAKEN');
+    // /profile/edit is a page of its own and wins over /profile/[username] (lib/username).
+    .refine((u) => !RESERVED_USERNAMES.includes(u), 'USERNAME_TAKEN');
 
 /**
  * Zod schema for the username onboarding form.
