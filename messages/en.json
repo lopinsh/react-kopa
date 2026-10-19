@@ -516,7 +516,7 @@
     "latestAnnouncement": "News",
     "allAnnouncements": "All news",
     "announcementRestore": "Restore",
-    "announcementDeleteTitle": "Delete announcement?",
+    "announcementDeleteNamed": "Delete “{title}”?",
     "noAnnouncementsYet": "No announcements yet.",
     "announcementsTeamHint": "Announcements reach every member of the group as a notification. There are no replies; members write to you in the group chat.",
     "noUpcomingEvents": "There are no upcoming events planned for this group.",

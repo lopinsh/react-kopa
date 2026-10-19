@@ -12,10 +12,10 @@ import { MenuItemButton, MenuPanel, useMenu } from '@/components/ui/Menu';
 
 const ICON = 'size-[17px] text-foreground-muted';
 
-type Props = { postId: string; archived: boolean };
+type Props = { postId: string; title: string; archived: boolean };
 
 /** The "…" of one announcement for the team: archive or restore (undoable, no question), delete (asks, naming the post). */
-export default function AnnouncementItemMenu({ postId, archived }: Props) {
+export default function AnnouncementItemMenu({ postId, title, archived }: Props) {
     const t = useTranslations('group');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -59,7 +59,7 @@ export default function AnnouncementItemMenu({ postId, archived }: Props) {
             )}
             <ConfirmDialog
                 isOpen={confirmDelete}
-                title={t('announcementDeleteTitle')}
+                title={t('announcementDeleteNamed', { title })}
                 message={t('confirmDeletePost')}
                 confirmLabel={c('delete')}
                 destructive

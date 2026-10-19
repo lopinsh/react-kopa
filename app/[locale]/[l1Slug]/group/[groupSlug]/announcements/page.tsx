@@ -75,7 +75,7 @@ export default async function GroupAnnouncementsPage({
             />
             <div className="mt-4 grid max-w-[760px] gap-3">
                 {page.items.length > 0 ? page.items.map((item) => (
-                    <AnnouncementItem key={item.id} item={item} menu={page.canManage ? <AnnouncementItemMenu postId={item.id} archived={item.archivedAt !== null} /> : undefined} />
+                    <AnnouncementItem key={item.id} item={item} menu={page.canManage ? <AnnouncementItemMenu postId={item.id} title={item.title} archived={item.archivedAt !== null} /> : undefined} />
                 )) : (
                     <EmptyState
                         icon={MessageSquareText}

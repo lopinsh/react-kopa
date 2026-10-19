@@ -630,8 +630,8 @@ async function main() {
     { title: 'Nākamā tēma: īsie stāsti', content: 'Novembrī rakstām īsos stāstus līdz 2000 vārdiem. Tikšanās datumu izziņosim drīz.', author: marta, groupSlug: 'rakstnieki-riga' },
 
     // R9b visibility: one public, one members-only, one archived (public).
-    { title: 'Sapulce atcelta', content: 'Šonedēļ tikšanās nenotiks. Sekojiet jaunumiem.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'PUBLIC' },
     { title: 'Tikai biedriem: sapulces vieta', content: 'Tiekamies pie mājas durvīm, kods tiek sūtīts privāti.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'MEMBERS_ONLY' },
+    { title: 'Sapulce atcelta', content: 'Šonedēļ tikšanās nenotiks. Sekojiet jaunumiem.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'PUBLIC' },
     { title: 'Veca ziņa', content: 'Šī ziņa jau ir arhivēta.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'PUBLIC', archived: true },
 
     { content: 'Sveiki visiem! Prieks redzēt, ka grupa aug. Kad plānots nākamais pārgājiens?', author: andris, groupSlug: 'pargajieni-riga' },
@@ -671,13 +671,15 @@ async function main() {
   ];
 
   const postCreateData = postSeeds
-    .map(p => {
+    .map((p, i) => {
       const groupId = groupIdBySlug[p.groupSlug];
       if (!groupId) return null;
       return {
         title: p.title, content: p.content, authorId: p.author.id, groupId,
         visibility: p.visibility ?? ('PUBLIC' as const),
         archivedAt: p.archived ? new Date() : null,
+        // Earlier in the list = newer, so "the newest" is well defined.
+        createdAt: new Date(Date.now() - i * 60_000),
       };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);

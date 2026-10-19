@@ -521,7 +521,7 @@
     "latestAnnouncement": "Jaunumi",
     "allAnnouncements": "Visi jaunumi",
     "announcementRestore": "Atjaunot",
-    "announcementDeleteTitle": "Dzēst jaunumu?",
+    "announcementDeleteNamed": "Dzēst „{title}”?",
     "noAnnouncementsYet": "Vēl nav jaunumu.",
     "announcementsTeamHint": "Jaunumi visiem grupas dalībniekiem nonāk kā paziņojums. Atbildēt uz tiem nevar; dalībnieki raksta tev grupas sarunā.",
     "noUpcomingEvents": "Šai grupai nav plānotu pasākumu.",
