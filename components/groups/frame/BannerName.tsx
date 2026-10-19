@@ -14,7 +14,7 @@ const NAME = 'font-heading text-[15px] font-semibold leading-tight md:text-xl';
  * "Group › Visi pasākumi" (cmv9b80zl): the page's own heading is then the event, so the name is not a heading there. Elsewhere it is
  * the page's `<h1>`. Reads the segments below the group layout, which is where the banner lives.
  */
-export default function BannerName({ onImage }: { onImage: boolean }) {
+export default function BannerName() {
     const t = useTranslations('group.frame');
     const tEvent = useTranslations('event');
     const g = useGroupContext();
@@ -27,7 +27,7 @@ export default function BannerName({ onImage }: { onImage: boolean }) {
             <p className={clsx('flex items-center gap-1', NAME)}>
                 <Link href={g.href} className="min-w-0 truncate hover:underline">{g.name}</Link>
                 <ChevronRight aria-hidden className="size-3.5 shrink-0" />
-                <Link href={`${g.href}/events`} className={clsx('shrink-0 font-sans font-normal hover:underline', onImage ? 'text-on-image' : 'text-foreground-muted')}>{tEvent('allEvents')}</Link>
+                <Link href={`${g.href}/events`} className={clsx('shrink-0 font-sans font-normal hover:underline', 'text-foreground-muted')}>{tEvent('allEvents')}</Link>
             </p>
         </nav>
     );

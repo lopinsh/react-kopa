@@ -23,9 +23,6 @@
   --on-cat: #ffffff;
 
   /* Text and chips on a photo (the group banner): the same in both modes, because the image is shaded the same way */
-  --on-image: #ffffff;
-  --image-chip: rgb(255 255 255 / 0.9);
-  --image-chip-foreground: #1f221c;
 
   /* Status colours (single variables: one edit changes them everywhere) */
   --danger: #A63A2E;
@@ -77,9 +74,6 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-on-image: var(--on-image);
-  --color-image-chip: var(--image-chip);
-  --color-image-chip-foreground: var(--image-chip-foreground);
   --color-danger: var(--danger);
   --color-danger-foreground: var(--danger-foreground);
   --color-success: var(--success);
@@ -150,10 +144,7 @@ body {
   color: var(--primary);
 }
 
-/* Group banner (AR-70): a dark shade under white text on the group's image (5.7:1 even on a white photo), or the category tint and mark. */
-@utility image-shade {
-  background-image: linear-gradient(to top, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.6));
-}
+/* Group banner (AR-70, C5): the category tint and mark; the group's picture is on Informācija. */
 
 @utility banner-tint {
   background-image: linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), color-mix(in srgb, var(--accent) 7%, var(--surface)));

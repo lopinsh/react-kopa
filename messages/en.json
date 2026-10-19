@@ -839,6 +839,7 @@
           "groupCard": "Group card and row",
           "eventRow": "Event row and day list",
           "header": "Group banner and phone bar, for a visitor, a waiting request and the team",
+          "groupPicture": "Group picture on Informācija, with and without an image; the jump links are the part tabs above",
           "memberCard": "Member card",
           "requestCard": "Request card",
           "announcement": "Announcement card",

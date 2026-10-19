@@ -15,10 +15,10 @@ import { groupChip } from '@/components/groups/frame/chip';
  */
 export default function PendingState() {
     const g = useGroupContext();
-    return <PendingStateView chatId={g.user.chatId} onImage={g.image !== null} />;
+    return <PendingStateView chatId={g.user.chatId} />;
 }
 
-function PendingStateView({ chatId, onImage }: { chatId: string | null; onImage: boolean }) {
+function PendingStateView({ chatId }: { chatId: string | null }) {
     const t = useTranslations('group');
     const href = chatId ? `/messages?c=${chatId}` : '/messages';
 
@@ -26,21 +26,18 @@ function PendingStateView({ chatId, onImage }: { chatId: string | null; onImage:
         <div data-ui={UI.pendingState} className="flex items-center gap-2 max-md:order-last">
             <div className="hidden items-center gap-2 md:flex">
                 {/* A status, not a button: no hover, no press, not focusable. */}
-                <span className={clsx('inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-semibold', groupChip(onImage, false))}>
+                <span className={clsx('inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-semibold', groupChip(false))}>
                     <Check aria-hidden className="size-4" />
                     {t('pending.sent')}
                 </span>
-                <Link
-                    href={href}
-                    className={onImage ? 'inline-flex h-10 items-center rounded-full bg-image-chip px-[18px] text-[15px] font-medium text-image-chip-foreground hover:opacity-90' : buttonClass('quiet')}
-                >
+                <Link href={href} className={buttonClass('quiet')}>
                     {t('openChat')}
                 </Link>
             </div>
             <Link
                 href={href}
                 aria-label={t('openChat')}
-                className={clsx('grid size-10 place-items-center rounded-full md:hidden', groupChip(onImage))}
+                className={clsx('grid size-10 place-items-center rounded-full md:hidden', groupChip())}
             >
                 <MessageCircle aria-hidden className="size-5" />
             </Link>

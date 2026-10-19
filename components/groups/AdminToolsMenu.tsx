@@ -53,7 +53,7 @@ export default function AdminToolsMenu({ onHide }: Props) {
                 {...triggerProps}
                 aria-label={t('label')}
                 title={t('label')}
-                className={clsx('grid size-10 place-items-center rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-primary active:scale-95', groupChip(group.image !== null))}
+                className={clsx('grid size-10 place-items-center rounded-full outline-none transition-all focus-visible:ring-2 focus-visible:ring-primary active:scale-95', groupChip())}
             >
                 <UserCog aria-hidden className="size-5" />
             </button>

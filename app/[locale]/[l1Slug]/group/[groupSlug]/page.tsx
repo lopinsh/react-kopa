@@ -5,6 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
+import { getSmartImageUrl } from '@/lib/image-utils';
+import GroupPicture from '@/components/groups/frame/GroupPicture';
 import InfoSections from '@/components/groups/frame/InfoSections';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import LatestAnnouncement from '@/components/groups/announcements/LatestAnnouncement';
@@ -54,6 +56,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
+            <GroupPicture image={group.bannerImage ? getSmartImageUrl(group.bannerImage) : null} l1Slug={group.category.l1Slug} />
             {group.lookingFor && <p className="mb-3 text-sm italic leading-snug text-primary md:hidden">{group.lookingFor}</p>}
             {latest && <LatestAnnouncement item={latest} allHref={group.user.isMember ? `${base}/announcements` : undefined} />}
             <InfoSections title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />

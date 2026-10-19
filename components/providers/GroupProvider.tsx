@@ -11,8 +11,6 @@ export interface GroupState {
     name: string;
     /** The group's base path without locale: `/${l1Slug}/group/${slug}`. */
     href: string;
-    /** The group's picture (ready to render), or null: the banner then shows the category tint and mark. */
-    image: string | null;
     /** "Tikai biedriem": out of discovery, a quiet note on the banner. */
     isPrivate: boolean;
     category: { l1Slug: string; l1Title: string; subCategories: string[]; subCategorySlugs: string[] };
