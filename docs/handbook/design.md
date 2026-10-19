@@ -18,6 +18,8 @@ Five layouts cover every screen. A new screen picks one of them.
 
 **Content starts right under the bars.** A page's first line sits at the frame's top spacing (12 px on phones, 18 px from 768 px), level with the pages menu: the layout owns that spacing, a page never adds its own top margin, container or card around itself. The same for group pages, your own area and admin.
 
+**Bars and menus stay in reach.** The header is always sticky, and so is a page's own horizontal menu (the admin menu, a group's or your own area's menu bar, the filter line) — it sits right under the header with no gap, so moving to another section never needs a scroll back to the top. Owner, 19 Oct 2026, after comparing other sites: all of them keep the header and horizontal menu sticky.
+
 Rule: the group's own content starts near the top. The banner carries the at-a-glance signals (name, category, city, members) and the same "Sazināties" for visitors on every group page.
 
 ## Every screen and its layout
