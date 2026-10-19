@@ -43,7 +43,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Group life | Pasākumi tab | B | R3a, R5b done |
 | Group life | Event page | B | R9a done (page; the form follows) |
 | Group life | Create / edit event | B | R4 done (place), R9a |
-| Group life | Group settings | B | R4 done (field), R9c |
+| Group life | Group settings | B | R4 done (field), R9c done (settings cards like Iestatījumi; language bar wraps by group) |
 | Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9c done (Mans profils shows what others see; Privātums in Iestatījumi) |
 | Me | Public profile | F | R9c done |
 | Me | Edit profile | D | R9c done ("Labot profilu" is a page of its own; the switches are in Iestatījumi) |
