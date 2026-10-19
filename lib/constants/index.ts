@@ -193,7 +193,7 @@ export const UI = {
     switch: 'switch',
     memberCard: 'member-card',
     requestCard: 'request-card',
-    announcementCard: 'announcement-card',
+    announcementItem: 'announcement-item',
     conversationList: 'conversation-list',
     chatListItem: 'chat-list-item',
     chatBubble: 'chat-bubble',

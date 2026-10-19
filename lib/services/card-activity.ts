@@ -10,11 +10,11 @@ export type CardActivity =
     | { kind: 'announcement'; at: Date; title: string };
 
 /**
- * The one place that decides which announcements a card may show to anyone. Until announcements carry their own visibility
- * (R9b, `add_announcement_visibility`), the public ones are the not archived ones of a public group; R9b adds its filter here.
+ * The one place that decides which announcements a card may show to anyone: the not archived, public ones of a public group
+ * (members-only items never reach a card).
  */
 function publicAnnouncements(): Prisma.PostWhereInput {
-    return { archivedAt: null, group: { type: 'PUBLIC', hiddenAt: null } };
+    return { archivedAt: null, visibility: 'PUBLIC', group: { type: 'PUBLIC', hiddenAt: null } };
 }
 
 /**

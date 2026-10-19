@@ -2,7 +2,7 @@ import { categoryColor } from '@/lib/theme/category';
 import type { CardActivity } from '@/lib/services/card-activity';
 import type { GroupContext } from '@/lib/services/group.service';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
-import type { AnnouncementRow } from '@/lib/services/post.service';
+import type { AnnouncementItemData } from '@/lib/services/announcements-page';
 import type { EventRowData } from '@/lib/services/event-row';
 import { addDays, dayInZone } from '@/lib/discovery-dates';
 import { eventWindow } from '@/lib/discovery-window';
@@ -131,17 +131,14 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
 
     const requestMessage = { id: 'rm-1', content: s('requestMessage'), createdAt: ago(2 * HOUR), senderId: marta.id, sender: { name: marta.name, image: null } };
 
-    const announcement: AnnouncementRow = {
+    const announcement: AnnouncementItemData = {
         id: 'sample-post',
         title: s('announcementTitle'),
         content: s('announcementBody'),
-        authorId: anna.id,
-        groupId: 'sample-group',
-        archivedAt: null,
         visibility: 'PUBLIC',
+        archivedAt: null,
         createdAt: ago(3 * DAY),
-        updatedAt: ago(3 * DAY),
-        author: anna,
+        author: { name: anna.name, username: anna.name.split(' ')[0].toLowerCase() },
     };
 
     const conversations: InboxRow[] = [

@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import AnnouncementCard from '@/components/groups/AnnouncementCard';
-import { GroupProvider } from '@/components/providers/GroupProvider';
-import { toGroupState } from '@/components/providers/to-group-state';
+import AnnouncementItem from '@/components/groups/announcements/AnnouncementItem';
 import ChatPanel from '@/components/messages/ChatPanel';
 import ConversationList from '@/components/messages/ConversationList';
 import ContactForm from '@/components/groups/contact/ContactForm';
@@ -53,12 +51,9 @@ export function InboxDemo({ samples }: { samples: UiSamples }) {
 
 export function AnnouncementDemo({ samples }: { samples: UiSamples }) {
     return (
-        <div className="grid gap-4 lg:grid-cols-2">
-            {([null, 'ADMIN'] as const).map((role) => (
-                <GroupProvider key={role ?? 'member'} value={toGroupState({ ...samples.group, user: { role, isMember: true, isAdmin: role !== null, chatId: null } })}>
-                    <AnnouncementCard post={samples.announcement} busy={false} onArchive={noop} onDelete={noop} />
-                </GroupProvider>
-            ))}
+        <div className="grid gap-3 lg:grid-cols-2">
+            <AnnouncementItem item={samples.announcement} />
+            <AnnouncementItem item={{ ...samples.announcement, visibility: 'MEMBERS_ONLY' }} />
         </div>
     );
 }

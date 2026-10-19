@@ -225,7 +225,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </AccentScope>
                 </UiSpecimen>
 
-                <UiSpecimen id="announcement" names={[UI.announcementCard]} files={['components/groups/AnnouncementCard.tsx']}>
+                <UiSpecimen id="announcement" names={[UI.announcementItem]} files={['components/groups/announcements/AnnouncementItem.tsx']}>
                     <AnnouncementDemo samples={samples} />
                 </UiSpecimen>
 

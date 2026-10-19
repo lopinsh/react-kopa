@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { NotificationService } from '@/lib/services/notification.service';
-import { PostService, type AnnouncementRow } from '@/lib/services/post.service';
+import { PostService } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { announcementSchema, type AnnouncementInput } from '@/lib/validations/announcement';
@@ -40,20 +40,6 @@ export async function createPost(groupId: string, input: AnnouncementInput, loca
         return { success: true, data: { postId: post.postId } };
     } catch (error) {
         return handleActionError(error, 'CREATE_FAILED');
-    }
-}
-
-/**
- * Announcements of a group. Members only.
- */
-export async function getGroupPosts(groupId: string): Promise<ActionResponse<AnnouncementRow[]>> {
-    const session = await auth();
-    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
-
-    try {
-        return { success: true, data: await PostService.getAnnouncements(groupId, session.user.id) };
-    } catch (error) {
-        return handleActionError(error, 'ACTION_FAILED');
     }
 }
 

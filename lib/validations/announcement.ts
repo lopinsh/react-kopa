@@ -8,6 +8,7 @@ export const ANNOUNCEMENT_MAX_LENGTH = 5000;
 export const announcementSchema = z.object({
     title: z.string().trim().min(ANNOUNCEMENT_TITLE_MIN).max(ANNOUNCEMENT_TITLE_MAX),
     content: z.string().trim().min(1).max(ANNOUNCEMENT_MAX_LENGTH),
+    visibility: z.enum(['PUBLIC', 'MEMBERS_ONLY']),
 });
 
 export type AnnouncementInput = z.infer<typeof announcementSchema>;
