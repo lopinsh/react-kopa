@@ -707,9 +707,7 @@
       "removedAdmin": "Administrators noņemts"
     },
     "nav": {
-      "label": "Administrēšanas sadaļas",
-      "reports": "Sūdzības",
-      "decisions": "Lēmumi",
+      "reports": "Ziņojumi",
       "categories": "Kategorijas",
       "locations": "Vietas",
       "translations": "Tulkojumi",
@@ -720,16 +718,8 @@
       "design": "Dizains",
       "team": "Komanda",
       "menu": "Admins",
-      "groups": {
-        "moderation": "Moderācija",
-        "structure": "Struktūra",
-        "site": "Vietne",
-        "team": "Komanda",
-        "development": "Izstrāde"
-      },
       "desc": {
-        "decisions": "Paslēptās grupas un noņemtais saturs",
-        "reports": "Dalībnieku sūdzības izskatīšanai",
+        "reports": "Dalībnieku ziņojumi izskatīšanai",
         "categories": "Kategorijas, apakškategorijas un jaunās birkas pārskatīšanai",
         "locations": "Pilsētas un jaunās pilsētas pārskatīšanai",
         "translations": "Vietnes tekstu labošana un apstiprināšana",
@@ -738,7 +728,27 @@
         "team": "Vietnes administratori un īpašnieks",
         "feedback": "Administratoru atstātās piezīmes",
         "redesign": "Apstiprinātais dizains, ko būvē pēc būvplāna",
-        "buildPlan": "Pārveides izlaidumu īstenošanas plāns"
+        "buildPlan": "Pārveides izlaidumu īstenošanas plāns",
+        "overview": "Paslēptās grupas un noņemtais saturs"
+      },
+      "sections": {
+        "moderation": "Moderācija",
+        "structure": "Struktūra",
+        "site": "Vietne",
+        "team": "Komanda",
+        "development": "Izstrāde"
+      },
+      "overview": "Pārskats",
+      "uiElements": "UI elementi",
+      "pagesLabel": "Administrēšanas lapas",
+      "sectionsLabel": "Administrēšanas sadaļas",
+      "drawerTitle": "Administrēšana",
+      "openMenu": "Atvērt administrēšanas izvēlni",
+      "onThisPage": "Šajā lapā",
+      "parts": {
+        "colours": "Krāsas",
+        "categories": "Kategoriju krāsas",
+        "fonts": "Fonti"
       }
     },
     "development": {

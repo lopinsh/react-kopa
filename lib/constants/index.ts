@@ -272,3 +272,4 @@ export const DEFAULT_LOCALE: Locale = 'lv';
 
 /** Each language in its own words, the same in every locale (AR-15). */
 export const LOCALE_NAMES: Record<Locale, string> = { lv: 'Latviešu', en: 'English' };
+export * from './adminNav';

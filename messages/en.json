@@ -707,9 +707,7 @@
       "removedAdmin": "Admin removed"
     },
     "nav": {
-      "label": "Admin sections",
       "reports": "Reports",
-      "decisions": "Decisions",
       "categories": "Categories",
       "locations": "Locations",
       "translations": "Translations",
@@ -720,15 +718,7 @@
       "design": "Design",
       "team": "Team",
       "menu": "Admin",
-      "groups": {
-        "moderation": "Moderation",
-        "structure": "Structure",
-        "site": "Site",
-        "team": "Team",
-        "development": "Development"
-      },
       "desc": {
-        "decisions": "Hidden groups and content taken down",
         "reports": "Reports from members to review",
         "categories": "Categories, subcategories and new tags to review",
         "locations": "Cities and new cities to review",
@@ -738,7 +728,27 @@
         "team": "Site admins and owner",
         "feedback": "Notes left by the site admins",
         "redesign": "The signed-off design the build plan builds",
-        "buildPlan": "Implementation plan for the redesign releases"
+        "buildPlan": "Implementation plan for the redesign releases",
+        "overview": "Hidden groups and content taken down"
+      },
+      "sections": {
+        "moderation": "Moderation",
+        "structure": "Structure",
+        "site": "Site",
+        "team": "Team",
+        "development": "Development"
+      },
+      "overview": "Overview",
+      "uiElements": "UI elements",
+      "pagesLabel": "Admin pages",
+      "sectionsLabel": "Admin sections",
+      "drawerTitle": "Administration",
+      "openMenu": "Open the admin menu",
+      "onThisPage": "On this page",
+      "parts": {
+        "colours": "Colours",
+        "categories": "Category colours",
+        "fonts": "Fonts"
       }
     },
     "development": {
