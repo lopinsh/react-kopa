@@ -39,7 +39,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     ]);
     const base = `/${l1Slug}/group/${group.slug}`;
     const latest = await getLatestForInfo(group.id, { isMember: group.user.isMember });
-    const open = group.sections.find((s) => s.id === part) ?? group.sections[0];
+    const open = group.sections.find((s) => s.id === part);
     const parts = group.sections.map((s, i) => {
         const contentLang = langAttr(s.contentLang, locale);
         return {

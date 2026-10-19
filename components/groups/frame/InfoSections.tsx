@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, type ReactNode } from 'react';
-import { useLocale } from 'next-intl';
 import PartTabs from '@/components/ui/PartTabs';
 import { UI } from '@/lib/constants';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
@@ -16,7 +15,6 @@ const anchor = (key: string) => `part-${key}`;
  * `initial` is an old `?part=` link: scrolled to once and rewritten to the hash.
  */
 export default function InfoSections({ title, label, parts, initial }: { title: string; label: string; parts: Part[]; initial: string }) {
-    const locale = useLocale();
     const wrap = useRef<HTMLDivElement>(null);
     const tabs = useRef<HTMLElement | null>(null);
     const { active, activate } = useScrollSpy(parts.map((p) => p.key), wrap, tabs, parts[0]?.key ?? '');
@@ -51,7 +49,7 @@ export default function InfoSections({ title, label, parts, initial }: { title: 
 
     return (
         <>
-            {many && <PartTabs title={title} label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `/${locale}#${anchor(key)}` }))} active={active} onSelect={select} />}
+            {many && <PartTabs title={title} label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `#${anchor(key)}` }))} active={active} onSelect={select} />}
             <div ref={wrap} className="mt-4 flex flex-col gap-6">
                 {parts.map((p) => (
                     <section key={p.key} id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
