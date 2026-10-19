@@ -138,6 +138,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         authorId: anna.id,
         groupId: 'sample-group',
         archivedAt: null,
+        visibility: 'PUBLIC',
         createdAt: ago(3 * DAY),
         updatedAt: ago(3 * DAY),
         author: anna,

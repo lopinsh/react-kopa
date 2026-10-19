@@ -336,6 +336,8 @@ model Post {
   groupId    String
   /// Set when the team moved the announcement to the archive.
   archivedAt DateTime?
+  /// Who may read it: everyone who can see the group, or members only (C3).
+  visibility Visibility @default(MEMBERS_ONLY)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)

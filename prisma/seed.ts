@@ -625,9 +625,14 @@ async function main() {
   // ─── Discussion Posts ─────────────────────────────────────────────────────────
   console.log('💬 Seeding posts...');
 
-  const postSeeds: { title?: string; content: string; author: typeof oskars; groupSlug: string }[] = [
+  const postSeeds: { title?: string; content: string; author: typeof oskars; groupSlug: string; visibility?: 'PUBLIC' | 'MEMBERS_ONLY'; archived?: boolean }[] = [
     // C2 card case "announcement": the group's only event is past, so its card shows this. ('meditatija-riga', past events only, shows no line.)
     { title: 'Nākamā tēma: īsie stāsti', content: 'Novembrī rakstām īsos stāstus līdz 2000 vārdiem. Tikšanās datumu izziņosim drīz.', author: marta, groupSlug: 'rakstnieki-riga' },
+
+    // R9b visibility: one public, one members-only, one archived (public).
+    { title: 'Sapulce atcelta', content: 'Šonedēļ tikšanās nenotiks. Sekojiet jaunumiem.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'PUBLIC' },
+    { title: 'Tikai biedriem: sapulces vieta', content: 'Tiekamies pie mājas durvīm, kods tiek sūtīts privāti.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'MEMBERS_ONLY' },
+    { title: 'Veca ziņa', content: 'Šī ziņa jau ir arhivēta.', author: oskars, groupSlug: 'pargajieni-riga', visibility: 'PUBLIC', archived: true },
 
     { content: 'Sveiki visiem! Prieks redzēt, ka grupa aug. Kad plānots nākamais pārgājiens?', author: andris, groupSlug: 'pargajieni-riga' },
     { content: 'Pagājušajā nedēļā Ķemeri bija fantastiski – putni dziedāja un sūnas spīdēja! Ieteiktu visiem apmeklēt.', author: liga, groupSlug: 'pargajieni-riga' },
@@ -669,7 +674,11 @@ async function main() {
     .map(p => {
       const groupId = groupIdBySlug[p.groupSlug];
       if (!groupId) return null;
-      return { title: p.title, content: p.content, authorId: p.author.id, groupId };
+      return {
+        title: p.title, content: p.content, authorId: p.author.id, groupId,
+        visibility: p.visibility ?? ('PUBLIC' as const),
+        archivedAt: p.archived ? new Date() : null,
+      };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null);
 
