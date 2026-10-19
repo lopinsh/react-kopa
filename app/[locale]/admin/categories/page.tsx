@@ -28,7 +28,7 @@ export default async function AdminTaxonomyPage({
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="space-y-6">
             <div className="mb-6">
                 <h1 className="text-3xl font-bold">{t('title')}</h1>
             </div>

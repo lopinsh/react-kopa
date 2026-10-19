@@ -43,7 +43,7 @@ export default async function AdminDashboardPage({
     const format = createDateFormatter(locale, timeZone);
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="space-y-6">
             <div className="mb-8">
                 <h1 className="text-3xl font-bold flex items-center gap-3">
                     <ShieldAlert className="h-8 w-8 text-primary" />

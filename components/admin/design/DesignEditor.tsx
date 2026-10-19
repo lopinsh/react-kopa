@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { publishTheme, resetTheme, savePreviewTheme } from '@/actions/theme-actions';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -13,7 +13,6 @@ import type { ActionResponse } from '@/types/actions';
 import CategoryColorsEditor, { type ToneRow } from './CategoryColorsEditor';
 import ColoursPart from './ColoursPart';
 import DesignActions from './DesignActions';
-import DesignPartTabs from './DesignPartTabs';
 import FontsPart from './FontsPart';
 
 type Pending = 'preview' | 'publish' | 'reset' | null;
@@ -25,7 +24,8 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
     const { theme, issues, tonesEdited, choosePreset, setColor, setTone, setFont } = useThemeDraft(initial);
-    const [part, setPart] = useState<DesignPart>(initialPart);
+    const param = useSearchParams().get('part');
+    const part: DesignPart = (DESIGN_PARTS as readonly string[]).includes(param ?? '') ? (param as DesignPart) : initialPart;
     const [pending, setPending] = useState<Pending>(null);
     const [confirmReset, setConfirmReset] = useState(false);
     const [presetAsked, setPresetAsked] = useState<ThemePresetKey | null>(null);
@@ -51,14 +51,10 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
         });
     };
 
-    const showPart = (p: DesignPart) => {
-        setPart(p);
-        window.history.replaceState(null, '', `?part=${p}`);
-    };
+    const showPart = (p: DesignPart) => router.replace(`?part=${p}`, { scroll: false });
 
     return (
         <div>
-            <DesignPartTabs part={part} blockedParts={blockedParts} onSelect={setPart} />
             {part === 'colours' && <ColoursPart theme={theme} issues={issues} disabled={busy} onPreset={askPreset} onColor={setColor} />}
             {part === 'categories' && <CategoryColorsEditor rows={toneRows} theme={theme} disabled={busy} onTone={setTone} />}
             {part === 'fonts' && <FontsPart theme={theme} disabled={busy} onFont={setFont} />}

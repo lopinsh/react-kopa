@@ -42,7 +42,6 @@ import TextLink from '@/components/ui/TextLink';
 import { UI } from '@/lib/constants';
 import { requireHandbookAccess } from '@/lib/handbook-access';
 import { SAMPLE_ACCENT, buildUiSamples } from '@/lib/handbook/ui-samples';
-import { HandbookService } from '@/lib/services/handbook.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -57,12 +56,11 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
     const t = await getTranslations('admin.handbook.ui');
     const tProfile = await getTranslations('profile');
     const tTag = await getTranslations('common.tag');
-    const chapters = await HandbookService.listChapters();
     const samples = buildUiSamples((key) => t(`sample.${key}`), locale);
     const { group } = samples;
 
     return (
-        <HandbookShell chapters={chapters} current={null} headings={[]} active="ui-elements" wide>
+        <HandbookShell headings={[]} wide>
             <div className="mb-8 flex items-start justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>

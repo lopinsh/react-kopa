@@ -15,10 +15,10 @@ export default async function HandbookIndexPage({ params }: { params: Promise<{ 
     const { locale } = await params;
     await requireHandbookAccess(locale, '/admin/handbook');
 
-    const [chapters, page] = await Promise.all([HandbookService.listChapters(), HandbookService.getPage(null)]);
+    const page = await HandbookService.getPage(null);
 
     return (
-        <HandbookShell chapters={chapters} current={null} headings={page.headings}>
+        <HandbookShell headings={page.headings}>
             <HandbookMarkdown markdown={page.markdown} />
         </HandbookShell>
     );

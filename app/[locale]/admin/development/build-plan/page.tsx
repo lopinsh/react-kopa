@@ -19,7 +19,7 @@ export default async function BuildPlanPage({ params }: { params: Promise<{ loca
     const markdown = await DevelopmentService.getBuildPlan();
 
     return (
-        <div className="container mx-auto max-w-5xl px-4 py-8">
+        <div className="max-w-5xl">
             <article className="min-w-0">
                 {markdown === null ? (
                     <p className="rounded-xl border border-border bg-surface p-6 text-foreground-muted">{t('buildPlanMissing')}</p>

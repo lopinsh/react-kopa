@@ -40,7 +40,7 @@ export default async function AdminFeedbackPage({
     const tab = filter.tab ?? 'open';
 
     return (
-        <div className="container mx-auto max-w-6xl px-4 py-8">
+        <div className="space-y-6">
             <div className="mb-6 flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <MessageSquareText className="h-6 w-6" />

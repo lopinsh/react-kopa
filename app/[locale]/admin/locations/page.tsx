@@ -23,7 +23,7 @@ export default async function AdminLocationsPage({ params }: { params: Promise<{
     const pending = cities.filter((city) => city.status === 'PENDING_REVIEW');
 
     return (
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
+        <div className="space-y-6">
             <div className="mb-6">
                 <h1 className="text-3xl font-bold">{tNav('locations')}</h1>
             </div>

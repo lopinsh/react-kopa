@@ -38,7 +38,7 @@ export default async function AdminGroupCategorizationPage({
     }
 
     return (
-        <div className="container mx-auto max-w-4xl px-4 py-8">
+        <div className="max-w-4xl">
             <AdminGroupCategorizationForm
                 locale={locale}
                 groupId={group.id}

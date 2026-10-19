@@ -19,10 +19,10 @@ export default async function HandbookChapterPage({ params }: { params: Params }
     await requireHandbookAccess(locale, `/admin/handbook/${chapter}`);
     if (!isChapterSlug(chapter)) notFound();
 
-    const [chapters, page] = await Promise.all([HandbookService.listChapters(), HandbookService.getPage(chapter)]);
+    const page = await HandbookService.getPage(chapter);
 
     return (
-        <HandbookShell chapters={chapters} current={chapter} headings={page.headings}>
+        <HandbookShell headings={page.headings}>
             <HandbookMarkdown markdown={page.markdown} />
         </HandbookShell>
     );
