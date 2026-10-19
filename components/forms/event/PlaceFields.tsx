@@ -4,14 +4,12 @@ import { useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useLocale, useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { MapPin } from 'lucide-react';
+import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import Switch from '@/components/ui/Switch';
 import { useCities } from '@/components/providers/CitiesContext';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { cityLabel } from '@/lib/city-label';
 import type { EventFormData } from '@/lib/validations/event';
-
-const INPUT = 'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none';
 
 /**
  * Where an event happens (AR-57): its city (starts as the group's), "Tiešsaistē", and the address,
@@ -41,25 +39,22 @@ export default function PlaceFields() {
 
     return (
         <>
-            <div>
-                <label htmlFor="event-city" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <MapPin className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldCity')}
-                    <span className="text-danger">*</span>
-                </label>
+            <Field
+                id="event-city"
+                label={t('fieldCity')}
+                hint={t('fieldCityHint')}
+                error={errors.city ? t(errors.city.message as 'CITY_REQUIRED') : undefined}
+            >
                 <select
                     id="event-city"
                     {...register('city')}
                     aria-describedby="event-city-hint"
-                    className={clsx(INPUT, errors.city ? 'border-danger/40' : 'border-border focus:border-primary')}
+                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.city))}
                 >
                     {!city && <option value="" disabled>{wt('fieldCityPlaceholder')}</option>}
                     {options.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}
                 </select>
-                <p id="event-city-hint" className={clsx('mt-1 text-xs', errors.city ? 'text-danger' : 'text-foreground-muted')}>
-                    {errors.city ? t(errors.city.message as 'CITY_REQUIRED') : t('fieldCityHint')}
-                </p>
-            </div>
+            </Field>
 
             <div>
                 <div className="flex min-h-11 items-center justify-between gap-4">
@@ -74,10 +69,12 @@ export default function PlaceFields() {
                 <p id="event-online-hint" className="text-xs text-foreground-muted">{t('fieldOnlineHint')}</p>
             </div>
 
-            <div>
-                <label htmlFor="event-location" className="mb-1.5 block text-sm font-medium text-foreground">
-                    {isOnline ? t('fieldLink') : t('fieldLocation')}
-                </label>
+            <Field
+                id="event-location"
+                label={isOnline ? t('fieldLink') : t('fieldLocation')}
+                hint={isOnline ? undefined : t('fieldLocationHint')}
+                error={errors.location ? t(errors.location.message as 'LOCATION_REQUIRED') : undefined}
+            >
                 <input
                     id="event-location"
                     type="text"
@@ -85,12 +82,10 @@ export default function PlaceFields() {
                     {...register('location')}
                     placeholder={isOnline ? t('fieldLinkPlaceholder') : t('fieldLocationPlaceholder')}
                     aria-invalid={errors.location ? true : undefined}
-                    aria-describedby={errors.location ? 'event-location-error' : isOnline ? undefined : 'event-location-hint'}
-                    className={clsx(INPUT, errors.location ? 'border-danger/40' : 'border-border focus:border-primary')}
+                    aria-describedby={errors.location || !isOnline ? 'event-location-hint' : undefined}
+                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.location))}
                 />
-                {!isOnline && !errors.location && <p id="event-location-hint" className="mt-1 text-xs text-foreground-muted">{t('fieldLocationHint')}</p>}
-                {errors.location && <p id="event-location-error" className="mt-1 text-xs text-danger">{t(errors.location.message as 'LOCATION_REQUIRED')}</p>}
-            </div>
+            </Field>
         </>
     );
 }

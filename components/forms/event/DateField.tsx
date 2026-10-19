@@ -5,6 +5,7 @@ import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import { Calendar } from 'lucide-react';
 import { formatDateText, parseDateText } from '@/lib/local-datetime';
+import { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import MonthGrid from '@/components/ui/MonthGrid';
 import { isDayKey, monthOf } from '@/lib/discovery-dates';
 import { useClickOutside } from '@/hooks/useClickOutside';
@@ -72,8 +73,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     }}
                     onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
                     className={clsx(
-                        'min-w-0 flex-1 rounded-xl border bg-background px-3 py-2.5 text-sm tabular-nums focus:outline-none disabled:opacity-60',
-                        invalid || badText ? 'border-danger/40' : 'border-border focus:border-primary'
+                        FIELD_INPUT, 'min-w-0 flex-1 tabular-nums disabled:opacity-60', fieldBorder(!!invalid || badText)
                     )}
                 />
                 <button
@@ -83,7 +83,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     aria-expanded={open}
                     aria-controls={open ? calendarId : undefined}
                     aria-label={t('openCalendar')}
-                    className="shrink-0 rounded-xl border border-border px-3 text-foreground-muted hover:bg-surface-elevated disabled:opacity-60"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground-muted hover:bg-surface-elevated disabled:opacity-60 md:h-10 md:w-10"
                 >
                     <Calendar className="h-4 w-4" />
                 </button>

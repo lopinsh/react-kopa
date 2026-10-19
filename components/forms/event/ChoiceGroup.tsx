@@ -1,6 +1,6 @@
 'use client';
 
-import { clsx } from 'clsx';
+import { useId } from 'react';
 
 type Props<V extends string> = {
     label: string;
@@ -9,29 +9,33 @@ type Props<V extends string> = {
     onChange: (value: V) => void;
 };
 
-/** One choice among a few, as buttons with a title and a line of explanation. */
+/**
+ * One choice among a few: native radios in labelled rows (Tab enters the group, arrows move the choice).
+ * The chosen row gets the site-colour ring and tint, never the category colour.
+ */
 export default function ChoiceGroup<V extends string>({ label, value, options, onChange }: Props<V>) {
+    const id = useId();
     return (
-        <div className="space-y-3">
-            <p className="text-sm font-medium text-foreground">{label}</p>
-            {options.map((o) => {
-                const isSelected = value === o.value;
-                return (
-                    <button
-                        key={o.value}
-                        type="button"
-                        onClick={() => onChange(o.value)}
-                        aria-pressed={isSelected}
-                        className={clsx(
-                            'flex w-full flex-col rounded-xl border-2 p-4 text-left transition-all',
-                            isSelected ? 'border-primary bg-primary/10 shadow-sm' : 'border-border hover:border-foreground-muted/40'
-                        )}
-                    >
-                        <span className="font-semibold">{o.title}</span>
-                        <span className="text-xs text-foreground-muted">{o.description}</span>
-                    </button>
-                );
-            })}
+        <div role="radiogroup" aria-labelledby={`${id}-label`} className="space-y-2">
+            <p id={`${id}-label`} className="text-sm font-medium text-foreground">{label}</p>
+            {options.map((o) => (
+                <label
+                    key={o.value}
+                    className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl p-3 ring-1 ring-inset ring-border hover:bg-tint has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary"
+                >
+                    <input
+                        type="radio"
+                        name={id}
+                        checked={value === o.value}
+                        onChange={() => onChange(o.value)}
+                        className="mt-0.5 size-4 shrink-0 accent-primary"
+                    />
+                    <span className="min-w-0">
+                        <span className="block text-[15px] font-medium text-foreground">{o.title}</span>
+                        <span className="block text-xs text-foreground-muted">{o.description}</span>
+                    </span>
+                </label>
+            ))}
         </div>
     );
 }

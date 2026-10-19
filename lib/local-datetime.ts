@@ -80,3 +80,13 @@ export function parseDateText(text: string): string | null {
     if (probe.getUTCFullYear() !== year || probe.getUTCMonth() !== month - 1 || probe.getUTCDate() !== day) return null;
     return `${year}-${pad(month)}-${pad(day)}`;
 }
+
+/**
+ * False when a local "YYYY-MM-DDTHH:mm" does not exist in the browser's zone: the hour the clocks skip
+ * (03:00-03:59 on the last Sunday of March in Riga), which `new Date` silently moves forward. A time that happens
+ * twice (the last Sunday of October) exists, and reads as its first occurrence (the browser's behaviour; no UI).
+ * Client-side only: the server runs in UTC and would never find a skipped hour.
+ */
+export function localTimeExists(value: string): boolean {
+    return toLocalValue(new Date(value)) === value;
+}

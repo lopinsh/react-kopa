@@ -3,8 +3,8 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Users, HelpCircle } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
+import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import ChoiceGroup from '@/components/forms/event/ChoiceGroup';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 import type { EventFormData } from '@/lib/validations/event';
@@ -41,32 +41,30 @@ export default function WhoCanComeStep({ lang, rev }: Props) {
                 ]}
             />
 
-            <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <Users className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldMaxParticipants')}
-                </label>
+            <Field
+                id="event-max"
+                label={t('fieldMaxParticipants')}
+                hint={t('fieldMaxParticipantsHint')}
+                error={errors.maxParticipants ? t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID') : undefined}
+            >
                 <input
+                    id="event-max"
                     type="number"
+                    inputMode="numeric"
                     {...register('maxParticipants', { setValueAs: (v) => (v === '' || v == null ? null : Number(v)) })}
                     placeholder={t('fieldMaxParticipantsPlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                        errors.maxParticipants ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    aria-invalid={errors.maxParticipants ? true : undefined}
+                    aria-describedby="event-max-hint"
+                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.maxParticipants))}
                 />
-                <p className="mt-1 text-xs text-foreground-muted">{t('fieldMaxParticipantsHint')}</p>
-                {errors.maxParticipants && <p className="mt-1 text-xs text-danger">{t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID')}</p>}
-            </div>
+            </Field>
 
-            <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <HelpCircle className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldInstructions')}
-                </label>
-                <p className="mb-1.5 text-xs text-foreground-muted">
-                    {joinMode === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
-                </p>
+            <Field
+                group
+                id="event-instructions"
+                label={t('fieldInstructions')}
+                hint={joinMode === 'REQUEST' ? t('fieldInstructionsHintRequest') : t('fieldInstructionsHintOpen')}
+            >
                 <div lang={lang}>
                     <RichTextEditor
                         key={`instructions-${lang}-${rev}`}
@@ -75,7 +73,7 @@ export default function WhoCanComeStep({ lang, rev }: Props) {
                         placeholder={t('fieldInstructionsPlaceholder')}
                     />
                 </div>
-            </div>
+            </Field>
         </div>
     );
 }

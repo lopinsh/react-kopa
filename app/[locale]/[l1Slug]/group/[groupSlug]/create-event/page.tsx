@@ -32,24 +32,18 @@ export default async function CreateEventPage({
         redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
     }
 
-    const [t, cities] = await Promise.all([getTranslations('event'), CityService.listActive(locale)]);
+    const [t, tw, cities] = await Promise.all([getTranslations('event'), getTranslations('eventWizard'), CityService.listActive(locale)]);
 
     return (
-        <div className="py-2 md:py-6">
-            <div>
-                <div className="mb-10 text-center">
-                    <h1 className="text-3xl font-bold text-foreground">{group.name}</h1>
-                    <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
-                </div>
-
-                <CitiesProvider cities={cities}>
-                    <EventForm
-                        groupId={group.id}
-                        groupSlug={groupSlug}
-                        l1Slug={l1Slug}
-                    />
-                </CitiesProvider>
+        <>
+            <div className="mb-6">
+                <h1 className="text-[22px] md:text-[28px]">{tw('createTitle')}</h1>
+                <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
             </div>
-        </div>
+
+            <CitiesProvider cities={cities}>
+                <EventForm groupId={group.id} groupSlug={groupSlug} l1Slug={l1Slug} />
+            </CitiesProvider>
+        </>
     );
 }

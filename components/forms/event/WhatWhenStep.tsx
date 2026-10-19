@@ -3,9 +3,9 @@
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Type, AlignLeft, Image as ImageIcon } from 'lucide-react';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
+import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import EventTimeFields from '@/components/forms/event/EventTimeFields';
 import PlaceFields from '@/components/forms/event/PlaceFields';
 import { EVENT_TITLE_MAX, type EventFormData } from '@/lib/validations/event';
@@ -28,34 +28,26 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
 
     return (
         <div className="space-y-4">
-            <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <Type className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldName')}
-                </label>
+            <Field
+                id="event-title"
+                label={t('fieldName')}
+                error={titleError ? t(titleError.message as 'INVALID_URL') : undefined}
+                counter={<TextCounter id="event-title-count" length={(texts?.[lang]?.title ?? '').length} max={EVENT_TITLE_MAX} />}
+            >
                 <input
+                    id="event-title"
                     key={`title-${lang}`}
                     type="text"
                     lang={lang}
                     {...register(`texts.${lang}.title`)}
-                    aria-describedby="event-title-count"
+                    aria-describedby={titleError ? 'event-title-hint event-title-count' : 'event-title-count'}
+                    aria-invalid={titleError ? true : undefined}
                     placeholder={t('fieldNamePlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                        titleError ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    className={clsx(FIELD_INPUT, fieldBorder(!!titleError))}
                 />
-                <div className="mt-1 flex items-start gap-2">
-                    {titleError && <p className="text-xs text-danger">{t(titleError.message as 'INVALID_URL')}</p>}
-                    <TextCounter id="event-title-count" length={(texts?.[lang]?.title ?? '').length} max={EVENT_TITLE_MAX} />
-                </div>
-            </div>
+            </Field>
 
-            <div>
-                <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <AlignLeft className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldDescription')}
-                </label>
+            <Field group id="event-description" label={t('fieldDescription')}>
                 <div lang={lang}>
                     <RichTextEditor
                         key={`description-${lang}-${rev}`}
@@ -64,25 +56,19 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
                         placeholder={t('fieldDescriptionPlaceholder')}
                     />
                 </div>
-            </div>
+            </Field>
 
-            <div>
-                <label htmlFor="event-banner" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <ImageIcon className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldBannerImage')}
-                </label>
+            <Field id="event-banner" label={t('fieldBannerImage')} error={errors.bannerImage ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}>
                 <input
                     id="event-banner"
                     type="text"
                     {...register('bannerImage')}
                     placeholder={t('fieldBannerImagePlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:outline-none',
-                        errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    aria-invalid={errors.bannerImage ? true : undefined}
+                    aria-describedby={errors.bannerImage ? 'event-banner-hint' : undefined}
+                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.bannerImage))}
                 />
-                {errors.bannerImage && <p className="mt-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
-            </div>
+            </Field>
 
             <EventTimeFields onStartChange={onStartChange} onEndChange={onEndChange} />
             <PlaceFields />

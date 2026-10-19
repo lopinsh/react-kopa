@@ -7,7 +7,7 @@ import { useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { loadFullPage } from '@/lib/full-page';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import { addMinutesLocal, minutesBetween, nextFullHourLocal, toLocalValue } from '@/lib/local-datetime';
+import { addMinutesLocal, localTimeExists, minutesBetween, nextFullHourLocal, toLocalValue } from '@/lib/local-datetime';
 import { TEXT_LANGS, firstLangWithError, langRecord, toTextLang, type TextLang } from '@/lib/translations';
 import { isOverLimit } from '@/lib/text-limit';
 import { eventSchema, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
@@ -58,7 +58,7 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
         },
         mode: 'onChange',
     });
-    const { handleSubmit, formState: { errors }, setValue, getValues, trigger } = form;
+    const { handleSubmit, formState: { errors }, setValue, getValues, trigger, setError } = form;
     const watched = useWatch({ control: form.control });
     // Once the organiser empties the end, start changes stop filling it in again.
     const endLeftEmpty = useRef(!!event && !event.endDate);
@@ -116,7 +116,16 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
     }
 
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger([...titlePaths, 'startDate', 'endDate', 'city', 'location']);
+        if (s === 0) {
+            const valid = await trigger([...titlePaths, 'startDate', 'endDate', 'city', 'location']);
+            // The hour the clocks skip would silently become the next one: ask for another time (client-only, see localTimeExists).
+            const skipped = (['startDate', 'endDate'] as const).filter((n) => {
+                const v = String(getValues(n) ?? '');
+                return v !== '' && !localTimeExists(v);
+            });
+            skipped.forEach((n) => setError(n, { type: 'custom', message: 'TIME_SKIPPED' }));
+            return valid && skipped.length === 0;
+        }
         return trigger(['visibility', 'joinMode', 'maxParticipants']);
     }
 

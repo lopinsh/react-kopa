@@ -2,6 +2,7 @@
 
 import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
+import { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import { TIME_OPTIONS } from '@/lib/local-datetime';
 
 type Props = {
@@ -31,8 +32,7 @@ export default function TimeSelect({ id, value, onChange, invalid, disabled }: P
             aria-invalid={invalid || undefined}
             onChange={(e) => onChange(e.target.value)}
             className={clsx(
-                'w-full rounded-xl border bg-background px-3 py-2.5 text-sm tabular-nums focus:outline-none disabled:opacity-60',
-                invalid ? 'border-danger/40' : 'border-border focus:border-primary'
+                FIELD_INPUT, 'tabular-nums disabled:opacity-60', fieldBorder(!!invalid)
             )}
         >
             {!value && <option value="" />}

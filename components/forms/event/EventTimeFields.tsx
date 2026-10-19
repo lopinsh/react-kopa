@@ -2,7 +2,7 @@
 
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslations, useTimeZone } from 'next-intl';
-import { Calendar } from 'lucide-react';
+import Field from '@/components/forms/event/Field';
 import DateTimeField from '@/components/forms/event/DateTimeField';
 import { addMinutesLocal, nextFullHourLocal, splitLocal } from '@/lib/local-datetime';
 import type { EventFormData } from '@/lib/validations/event';
@@ -19,11 +19,7 @@ export default function EventTimeFields({ onStartChange, onEndChange }: Props) {
 
     return (
         <div className="space-y-4">
-            <div role="group" aria-labelledby="event-start-label">
-                <p id="event-start-label" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldDate')}
-                </p>
+            <Field group id="event-start" label={t('fieldDate')} error={errors.startDate ? t(errors.startDate.message as 'INVALID_URL') : undefined}>
                 <DateTimeField
                     idPrefix="event-start"
                     value={startValue}
@@ -31,14 +27,8 @@ export default function EventTimeFields({ onStartChange, onEndChange }: Props) {
                     defaultTime={splitLocal(nextFullHourLocal()).time}
                     invalid={!!errors.startDate}
                 />
-                {errors.startDate && <p className="mt-1 text-xs text-danger">{t(errors.startDate.message as 'INVALID_URL')}</p>}
-            </div>
-
-            <div role="group" aria-labelledby="event-end-label">
-                <p id="event-end-label" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
-                    <Calendar className="h-3.5 w-3.5 text-foreground-muted" />
-                    {t('fieldEndDate')}
-                </p>
+            </Field>
+            <Field group id="event-end" label={t('fieldEndDate')} error={errors.endDate ? t(errors.endDate.message as 'INVALID_URL') : undefined}>
                 <DateTimeField
                     idPrefix="event-end"
                     value={endValue}
@@ -46,8 +36,7 @@ export default function EventTimeFields({ onStartChange, onEndChange }: Props) {
                     defaultTime={splitLocal(addMinutesLocal(startValue, 120)).time || '12:00'}
                     invalid={!!errors.endDate}
                 />
-                {errors.endDate && <p className="mt-1 text-xs text-danger">{t(errors.endDate.message as 'INVALID_URL')}</p>}
-            </div>
+            </Field>
             <p className="text-xs text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
         </div>
     );
