@@ -9,7 +9,7 @@ Five layouts cover every screen. A new screen picks one of them.
 | Layout | Name | Used for |
 |---|---|---|
 | A | Browse | Category drawer + filter line + grid or list. Discovery, Manas grupas. On discovery the category drawer (a 232 px column from 1024 px, folds to a rail), the filter line (Kur, Tēma, the Veids chips, the Grupas | Pasākumi switch) and group cards from 768 px (rows on phones) fill the frame. |
-| B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). A group's banner is 96 px: the group's image with a dark shade and white text, or the category tint and mark; on phones a 64 px bar with ☰ for the pages. Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
+| B | Group page or your own area | A head (a banner for a group, your picture and name for you) and the pages down the left (a ☰ drawer on phones). A group's banner is 96 px: always the category tint and mark, never a picture (C5); the group's picture is a 16:9 picture at the top of Informācija only (a category tile when it has none); on phones a 64 px bar with ☰ for the pages. Group pages from R3a (AR-47, AR-48), your own area from R2a (AR-21, AR-60). |
 | D | Focus | One centred column, max 560 px, no sidebar. Sign-in, register, wizards, onboarding. |
 | E | Two panes | List + detail; on mobile one at a time with a back link. Messages. |
 | F | Reading | Text column, max 680 px. About, privacy, profiles. Admin uses F with tables. |
@@ -33,20 +33,20 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Search | header field, panel (full screen on phones) | R7 done |
 | Find | Manas grupas | A | R8 done |
 | Create | Create group wizard | D | R4 done (field), R12 |
-| Join | Group Informācija | B | R3a done |
+| Join | Group Informācija | B | R3a, R9b done (parts on one page, tabs jump; group picture) |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |
 | Join | Sign in, register, onboarding | D | R12 |
-| Talk | Jaunumi | B | R9b |
+| Talk | Jaunumi | B | R9b done |
 | Talk | Messages | E | R8 done |
 | Talk | Notifications | header dropdown, page (phones: the page) | R8 done |
-| Group life | Biedri, Requests | B | R9b |
+| Group life | Biedri, Requests | B | R9b done |
 | Group life | Pasākumi tab | B | R3a, R5b done |
 | Group life | Event page | B | R9a done (page; the form follows) |
 | Group life | Create / edit event | B | R4 done (place), R9a |
-| Group life | Group settings | B | R4 done (field), R9b |
+| Group life | Group settings | B | R4 done (field), R9c |
 | Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9b |
-| Me | Public profile | F | R9b |
-| Me | Edit profile | D | R9b |
+| Me | Public profile | F | R9c |
+| Me | Edit profile | D | R9c |
 | Static | About, privacy, 404 | F | R12 |
 | Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | R11 |
 
