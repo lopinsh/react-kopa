@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { L1Category, PendingTagOption } from '@/lib/services/taxonomy.service';
-import { getPendingTagOptions, submitPendingTag } from '@/actions/taxonomy-actions';
+import type { L1Category } from '@/lib/services/taxonomy.service';
+import { submitPendingTag } from '@/actions/taxonomy-actions';
+import { usePendingOptions } from './usePendingOptions';
 import type { TagSearch } from './useTagSearch';
 import type { PendingTag } from './types';
 
@@ -20,29 +21,12 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
     const t = useTranslations('wizard');
     const locale = useLocale();
     const { query, setQuery, flatTags, mergedResults, searchResults } = search;
-
     const [wildcardMode, setWildcardMode] = useState(false);
     const [inlineWildcardParentId, setInlineWildcardParentId] = useState<string | null>(null);
     const [inlineWildcardText, setInlineWildcardText] = useState('');
     const [pendingById, setPendingById] = useState<Record<string, PendingTag>>({});
     const [isSubmittingPending, setIsSubmittingPending] = useState(false);
-    // Pending sub-categories other people share with everyone (and the ones already on this group), per L1.
-    const [pendingOptions, setPendingOptions] = useState<{ l1Id: string; items: PendingTagOption[] }>({ l1Id: '', items: [] });
-
-    const tagIdsRef = useRef(tagIds);
-    useEffect(() => {
-        tagIdsRef.current = tagIds;
-    });
-
-    useEffect(() => {
-        let cancelled = false;
-        void getPendingTagOptions(l1.id, tagIdsRef.current, locale).then((result) => {
-            if (!cancelled && result.success) setPendingOptions({ l1Id: l1.id, items: result.data ?? [] });
-        });
-        return () => {
-            cancelled = true;
-        };
-    }, [l1.id, locale]);
+    const { sharedPending } = usePendingOptions(l1.id, tagIds, locale);
 
     function resetTyping() {
         setQuery('');
@@ -105,7 +89,6 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
         closeList();
     }
 
-    const sharedPending = useMemo(() => (pendingOptions.l1Id === l1.id ? pendingOptions.items : []), [pendingOptions, l1.id]);
     // Only suggestions shared by several people are offered as choices; the rest show only as the chip of whoever picked them.
     const offeredPending = sharedPending.filter((option) => option.isPublic);
     const pendingMatches = query.trim() ? offeredPending.filter((option) => option.title.toLowerCase().includes(query.trim().toLowerCase())) : [];

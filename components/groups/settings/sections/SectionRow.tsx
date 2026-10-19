@@ -72,7 +72,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
             </div>
 
             {isEditing && (
-                <div className="animate-in border-t border-border/50 p-6 pt-0 duration-300 fade-in slide-in-from-top-4">
+                <div className="border-t border-border/50 p-6 pt-0">
                     {children}
                 </div>
             )}

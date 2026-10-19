@@ -492,6 +492,7 @@
     "confirmPromote": "Iecelt šo biedru par moderatoru? Moderators var apstiprināt pieteikumus, kārtot sadaļas un pasākumus.",
     "createFirstEvent": "Izveidot pirmo pasākumu",
     "deleteConfirm": "Dzēst šo grupu? To vairs nevarēs atjaunot.",
+    "deleteConfirmNamed": "Dzēst grupu “{name}”? To vairs nevarēs atjaunot.",
     "descriptionTitle": "Par grupu",
     "inquiryDesc": "Ir jautājumi moderatoriem? Uzraksti viņiem zemāk.",
     "membersPageTitle": "{name} | Biedri",

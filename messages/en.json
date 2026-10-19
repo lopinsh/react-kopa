@@ -492,6 +492,7 @@
     "confirmPromote": "Make this member a moderator? Moderators can approve requests and manage sections and events.",
     "createFirstEvent": "Create the first event",
     "deleteConfirm": "Delete this group? It can't be restored.",
+    "deleteConfirmNamed": "Delete “{name}”? It can't be restored.",
     "descriptionTitle": "About the group",
     "inquiryDesc": "Have questions for the moderators? Send them a message below.",
     "membersPageTitle": "{name} | Members",

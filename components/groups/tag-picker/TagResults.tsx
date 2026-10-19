@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import PendingTagOption from './PendingTagOption';
 import TagBrowseList from './TagBrowseList';
-import TagCheck from './TagCheck';
+import TagResultRow from './TagResultRow';
 import type { TagSearch } from './useTagSearch';
 import type { PendingTags } from './usePendingTags';
 
@@ -63,22 +63,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                             <PendingTagOption key={option.id} option={option} selected={tagIds.includes(option.id)} onToggle={onToggle} />
                                         ))}
                                         {mergedResults.map((tag) => (
-                                            <button
-                                                key={tag.id}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    onToggle(tag.id);
-                                                }}
-                                                className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-secondary"
-                                            >
-                                                <div className="flex flex-col">
-                                                    <span className="text-sm font-semibold text-foreground">{tag.title}</span>
-                                                    <span className="text-xs text-foreground-muted">
-                                                        {tag.level === 3 ? `${l1.title} - ${tag.l2Title}` : l1.title}
-                                                    </span>
-                                                </div>
-                                                <TagCheck selected={tagIds.includes(tag.id)} />
-                                            </button>
+                                            <TagResultRow key={tag.id} tag={tag} l1Title={l1.title} selected={tagIds.includes(tag.id)} onToggle={onToggle} />
                                         ))}
                                     </>
                                 ) : (

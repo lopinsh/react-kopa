@@ -60,7 +60,7 @@ export default function OwnerTab({ transferCandidates, ...formProps }: Props) {
                         <ConfirmDialog
                             isOpen={deleteConfirmOpen}
                             title={c_common('deleteGroupTitle')}
-                            message={gt('deleteConfirm')}
+                            message={gt('deleteConfirmNamed', { name: group.name })}
                             confirmLabel={c_common('deleteGroupTitle')}
                             destructive
                             isPending={isPending}
