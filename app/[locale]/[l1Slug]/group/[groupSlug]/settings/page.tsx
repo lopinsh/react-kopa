@@ -6,7 +6,9 @@ import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { CityService } from '@/lib/services/city.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
-import GroupSettingsForm from '@/components/groups/GroupSettingsForm';
+import GroupTab from '@/components/groups/settings/GroupTab';
+import OwnerTab from '@/components/groups/settings/OwnerTab';
+import SectionsTab from '@/components/groups/settings/SectionsTab';
 import PartTabs from '@/components/ui/PartTabs';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
@@ -87,6 +89,30 @@ export default async function GroupSettingsPage(props: {
     // The editor gets the text of every language (managers only).
     const editableSections = activeTab === 'sections' ? await GroupService.getEditableSections(group.id, session.user.id) : [];
 
+    const formProps = {
+        group: {
+            id: group.id,
+            name: group.name,
+            lookingFor: group.lookingFor,
+            city: group.city,
+            type: group.type,
+            categoryId: group.categoryId,
+            isAcceptingMembers: group.isAcceptingMembers,
+            discordLink: group.socialLinks.discord,
+            websiteLink: group.socialLinks.website,
+            instagramLink: group.socialLinks.instagram,
+            bannerImage: group.bannerImage,
+            tags: group.tags || [],
+            slug: group.slug,
+            l1Slug: group.category.l1Slug,
+        },
+        taxonomy,
+        locale,
+        activeTab,
+        canEditOwnerFields,
+        initialTaxonomy,
+    };
+
     return (
         <div className="w-full max-w-4xl space-y-6">
             <PartTabs title={t('pages.settings')} label="" items={[]} active="" />
@@ -95,31 +121,13 @@ export default async function GroupSettingsPage(props: {
 
             <div className="min-h-[400px] rounded-3xl border border-border bg-surface p-5 shadow-sm sm:p-8 md:p-10">
                 <CitiesProvider cities={cities}>
-                    <GroupSettingsForm
-                        group={{
-                            id: group.id,
-                            name: group.name,
-                            lookingFor: group.lookingFor,
-                            city: group.city,
-                            type: group.type,
-                            categoryId: group.categoryId,
-                            isAcceptingMembers: group.isAcceptingMembers,
-                            discordLink: group.socialLinks.discord,
-                            websiteLink: group.socialLinks.website,
-                            instagramLink: group.socialLinks.instagram,
-                            bannerImage: group.bannerImage,
-                            sections: editableSections,
-                            tags: group.tags || [],
-                            slug: group.slug,
-                            l1Slug: group.category.l1Slug,
-                        }}
-                        taxonomy={taxonomy}
-                        locale={locale}
-                        activeTab={activeTab}
-                        canEditOwnerFields={canEditOwnerFields}
-                        transferCandidates={transferCandidates}
-                        initialTaxonomy={initialTaxonomy}
-                    />
+                    {activeTab === 'sections' ? (
+                        <SectionsTab groupId={group.id} sections={editableSections} locale={locale} />
+                    ) : activeTab === 'owner' ? (
+                        <OwnerTab {...formProps} transferCandidates={transferCandidates} />
+                    ) : (
+                        <GroupTab {...formProps} />
+                    )}
                 </CitiesProvider>
             </div>
         </div>
