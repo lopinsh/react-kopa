@@ -26,7 +26,7 @@ export default function SettingsTabs({ active, showOwner }: Props) {
     ];
 
     return (
-        <div data-ui={UI.tabs} className="mb-6 border-b border-border/60">
+        <div data-ui={UI.tabs} className="sticky top-0 z-10 mb-6 border-b border-border/60 bg-background">
             <nav className="flex items-center gap-1 overflow-x-auto scrollbar-none" aria-label={t('tabsLabel')}>
                 {tabs.map(({ id, label, icon: Icon }) => (
                     <Link

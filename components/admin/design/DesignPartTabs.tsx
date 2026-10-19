@@ -9,7 +9,7 @@ type Props = { part: DesignPart; blockedParts: DesignPart[]; onSelect: (part: De
 export default function DesignPartTabs({ part, blockedParts, onSelect }: Props) {
     const t = useTranslations('admin.design');
     return (
-        <nav aria-label={t('parts.label')} data-ui={UI.tabs} className="mb-6 flex gap-[18px] overflow-x-auto border-b border-border text-sm text-foreground-muted scrollbar-none">
+        <nav aria-label={t('parts.label')} data-ui={UI.tabs} className="sticky top-0 z-10 mb-6 flex gap-[18px] overflow-x-auto border-b border-border bg-background text-sm text-foreground-muted scrollbar-none">
             {DESIGN_PARTS.map((p) => {
                 const on = p === part;
                 return (

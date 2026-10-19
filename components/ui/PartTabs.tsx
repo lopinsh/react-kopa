@@ -24,10 +24,11 @@ type Props = {
 export default function PartTabs({ title, label, items, active, action, onSelect }: Props) {
     const Tag = onSelect ? 'a' : Link;
     return (
-        <div>
+        // `contents`: the tab row sticks within the page, not within this wrapper.
+        <div className="contents">
             {title && <h2 className="font-heading text-xl font-semibold md:sr-only">{title}</h2>}
             {items.length > 0 && (
-                <div data-ui={UI.tabs} className={clsx('flex items-end gap-3 border-b border-border', title && 'mt-2 md:mt-0')}>
+                <div data-ui={UI.tabs} className={clsx('sticky top-0 z-10 flex items-end gap-3 border-b border-border bg-background', title && 'mt-2 md:mt-0')}>
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-[18px] overflow-x-auto [scrollbar-width:none]">
                         {items.map(({ key, label: text, href, lang, count }) => (
                             <Tag

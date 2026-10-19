@@ -20,7 +20,7 @@ import { UI } from '@/lib/constants';
 export default function FilterLine() {
     const { params, pending } = useDiscoveryNav();
     return (
-        <div data-ui={UI.filterLine} aria-busy={pending} className="@container/filter mb-3 flex flex-wrap items-center gap-x-1.5 gap-y-2 md:mb-4">
+        <div data-ui={UI.filterLine} aria-busy={pending} className="@container/filter sticky top-0 z-20 mb-1 flex flex-wrap items-center gap-x-1.5 gap-y-2 bg-background pb-2 pt-3 md:pt-4">
             <ViewSwitch className="order-1 w-full md:order-3 md:w-auto" />
             <div className="order-2 flex w-full min-w-0 items-center gap-1.5 md:order-1 md:w-auto md:flex-1">
                 <SearchWordChip />

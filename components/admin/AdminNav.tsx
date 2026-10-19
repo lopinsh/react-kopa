@@ -186,7 +186,7 @@ export default function AdminNav({ pendingTags, pendingCities, pendingReports, p
     const phoneBadge = groups.reduce((sum, g) => sum + g.items.reduce((s, i) => s + i.badge, 0), 0);
 
     return (
-        <div className="container mx-auto max-w-6xl px-4 pt-6">
+        <div className="container sticky top-0 z-30 mx-auto mb-6 max-w-6xl bg-background px-4">
             <nav aria-label={t('label')} className="border-b border-border" onKeyDown={onRootKeyDown}>
                 <div ref={rootRef}>
                     {/* Phone: one button, groups as headings. */}

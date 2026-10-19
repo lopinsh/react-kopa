@@ -116,7 +116,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             <DiscoveryProvider state={state}>
                 <div className="flex min-h-full">
                     <CategoryDrawer folded={cookieStore.get(DISCOVERY_RAIL_COOKIE)?.value === '1'} />
-                    <div className="min-w-0 flex-1 pb-20 pt-3 md:pt-4">
+                    <div className="min-w-0 flex-1 pb-20">
                         <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
                             <FilterLine />
                             <AlsoMatchesLine />
