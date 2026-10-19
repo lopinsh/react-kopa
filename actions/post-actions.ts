@@ -36,6 +36,7 @@ export async function createPost(groupId: string, input: AnnouncementInput, loca
             console.error('[createPost] notify failed:', notifyError);
         }
 
+        revalidatePath(`/${locale}/${post.l1Slug}/group/${post.slug}`, 'page');
         revalidatePath(`/${locale}/${post.l1Slug}/group/${post.slug}/announcements`, 'page');
         return { success: true, data: { postId: post.postId } };
     } catch (error) {
@@ -52,6 +53,7 @@ export async function setPostArchived(postId: string, archived: boolean, locale:
 
     try {
         const { slug, l1Slug } = await PostService.setArchived(postId, session.user.id, archived);
+        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
         return { success: true };
     } catch (error) {

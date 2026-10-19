@@ -12,7 +12,7 @@ export type PostWithAuthor = Prisma.PostGetPayload<{
     include: { author: { select: typeof AUTHOR_SELECT } };
 }>;
 
-/** An announcement as the board shows it: `title` is always filled (old posts: their first line). */
+/** An announcement row: `title` is always filled (old posts: their first line). */
 export type AnnouncementRow = Omit<PostWithAuthor, 'title' | 'createdAt' | 'archivedAt'> & {
     title: string;
     createdAt: Date;
@@ -64,7 +64,7 @@ export const PostService = {
             }
         });
 
-        // Only the id goes over the (public) channel; clients refetch through the members-only action.
+        // Only the id goes over the (public) channel; open pages refresh from the server (members-only page).
         await triggerRealtime(`group-${data.groupId}`, 'new-post', { id: post.id });
         return {
             postId: post.id,
@@ -102,7 +102,7 @@ export const PostService = {
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
 
         await prisma.post.update({ where: { id: postId }, data: { archivedAt: archived ? new Date() : null } });
-        // Only the id goes over the (public) channel; open boards refetch through the members-only action.
+        // Only the id goes over the (public) channel; open pages refresh from the server.
         await triggerRealtime(`group-${post.groupId}`, 'archive-post', { id: postId });
         return { slug: post.group.slug, l1Slug: TaxonomyResolver.resolve(post.group.category).l1Slug };
     },
@@ -119,7 +119,7 @@ export const PostService = {
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
 
         await prisma.post.delete({ where: { id: postId } });
-        // Only the id goes over the (public) group channel; open boards drop the post.
+        // Only the id goes over the (public) group channel; open pages refresh from the server.
         await triggerRealtime(`group-${post.groupId}`, 'delete-post', { postId });
         return { slug: post.group.slug, l1Slug: TaxonomyResolver.resolve(post.group.category).l1Slug };
     }

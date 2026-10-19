@@ -676,7 +676,8 @@ async function main() {
       if (!groupId) return null;
       return {
         title: p.title, content: p.content, authorId: p.author.id, groupId,
-        visibility: p.visibility ?? ('PUBLIC' as const),
+        // As the service: a private group's posts are always members only.
+        visibility: groupSeeds.find(g => g.slug === p.groupSlug)?.type === 'PRIVATE' ? ('MEMBERS_ONLY' as const) : (p.visibility ?? ('PUBLIC' as const)),
         archivedAt: p.archived ? new Date() : null,
         // Earlier in the list = newer, so "the newest" is well defined.
         createdAt: new Date(Date.now() - i * 60_000),

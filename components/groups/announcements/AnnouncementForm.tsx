@@ -34,7 +34,7 @@ export default function AnnouncementForm({ groupId, locale, canChooseVisibility 
     const over = isOverLimit(title, ANNOUNCEMENT_TITLE_MAX) || isOverLimit(content, ANNOUNCEMENT_MAX_LENGTH);
     const canSubmit = announcementSchema.safeParse({ title, content, visibility }).success && !isPending && !over;
 
-    const close = () => { setIsOpen(false); setTitle(''); setContent(''); setError(null); };
+    const close = () => { setIsOpen(false); setTitle(''); setContent(''); setVisibility(canChooseVisibility ? 'PUBLIC' : 'MEMBERS_ONLY'); setError(null); };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

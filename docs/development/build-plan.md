@@ -320,7 +320,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 ### R9c · Group settings and profiles (M/L)
 
 - **From R9b (split 19 Oct):** `GroupSettingsForm` (288) split per tab (sections already in `groups/settings/*`), `TagPicker` (604) split and its `as any` removed, the LanguageEditor bar wrap at 768 px (C4 review); `/profile` and `/profile/[username]` share `profile/ProfileView.tsx`; Mans profils shows what others see with "Labot" to a separate edit page, privacy switches move to Iestatījumi, Iestatījumi keeps Izskats (OD-26 changed 15 Oct; notes cmv9aq31h, cmv9anua9; consider cmv9l5a3q, cmv9l6kmv for the own bar links).
-- **Rules:** AR-63, AR-35, AR-14, AR-60. **Data:** none expected. **i18n:** `groupSettings`, `profile`.
+- **Rules (owner):** none. Also in: AR-63, AR-35, AR-14, AR-60. **Data:** none expected. **i18n:** `groupSettings`, `profile`.
 
 ### R10 · Citur and the unknown place (S/M)
 
