@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useRef, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useForm, useWatch, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocale } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { loadFullPage } from '@/lib/full-page';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import { addMinutesLocal, localTimeExists, minutesBetween, nextFullHourLocal, toLocalValue } from '@/lib/local-datetime';
 import { TEXT_LANGS, firstLangWithError, langRecord, toTextLang, type TextLang } from '@/lib/translations';
 import { isOverLimit } from '@/lib/text-limit';
 import { eventSchema, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
 import { createEvent, updateEvent } from '@/actions/event-actions';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES } from '@/lib/constants';
 import type { EventToEdit } from '@/components/forms/event/EventForm';
+import { useEventTimes } from '@/components/forms/event/useEventTimes';
 
 export type StepIndex = 0 | 1;
 
@@ -58,45 +58,9 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
         },
         mode: 'onChange',
     });
-    const { handleSubmit, formState: { errors }, setValue, getValues, trigger, setError } = form;
+    const { handleSubmit, formState: { errors }, setValue, getValues, trigger } = form;
     const watched = useWatch({ control: form.control });
-    // Once the organiser empties the end, start changes stop filling it in again.
-    const endLeftEmpty = useRef(!!event && !event.endDate);
-
-    // Done after mount because the server renders in its own zone (UTC in production), not the viewer's:
-    // computing these during render would show server-zone times and mismatch on hydration.
-    // Editing: the stored times in the browser zone. New event: start at the next full hour.
-    useEffect(() => {
-        if (getValues('startDate')) return;
-        if (event) {
-            setValue('startDate', toLocalValue(event.startDate));
-            setValue('endDate', toLocalValue(event.endDate));
-            return;
-        }
-        const start = nextFullHourLocal();
-        setValue('startDate', start);
-        setValue('endDate', addMinutesLocal(start, 120));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    /** The end moves with the start: same length as before, or 2 hours when there was none. */
-    function changeStart(next: string) {
-        const previousStart = String(getValues('startDate') ?? '');
-        const previousEnd = String(getValues('endDate') ?? '');
-        setValue('startDate', next, { shouldDirty: true, shouldValidate: true });
-        if (!next) return;
-        if (previousEnd) {
-            const length = previousStart ? minutesBetween(previousStart, previousEnd) : null;
-            setValue('endDate', addMinutesLocal(next, length && length > 0 ? length : 120), { shouldDirty: true, shouldValidate: true });
-        } else if (!endLeftEmpty.current) {
-            setValue('endDate', addMinutesLocal(next, 120), { shouldDirty: true, shouldValidate: true });
-        }
-    }
-
-    function changeEnd(next: string) {
-        endLeftEmpty.current = next === '';
-        setValue('endDate', next, { shouldDirty: true, shouldValidate: true });
-    }
+    const { changeStart, changeEnd, markSkippedTimes } = useEventTimes(form, event);
 
     // Any language over the limit holds the form back, whichever one is showing.
     const overLimit = TEXT_LANGS.filter((l) => isOverLimit(watched.texts?.[l]?.title, EVENT_TITLE_MAX));
@@ -118,13 +82,7 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
     async function validateStep(s: StepIndex): Promise<boolean> {
         if (s === 0) {
             const valid = await trigger([...titlePaths, 'startDate', 'endDate', 'city', 'location']);
-            // The hour the clocks skip would silently become the next one: ask for another time (client-only, see localTimeExists).
-            const skipped = (['startDate', 'endDate'] as const).filter((n) => {
-                const v = String(getValues(n) ?? '');
-                return v !== '' && !localTimeExists(v);
-            });
-            skipped.forEach((n) => setError(n, { type: 'custom', message: 'TIME_SKIPPED' }));
-            return valid && skipped.length === 0;
+            return markSkippedTimes() && valid;
         }
         return trigger(['visibility', 'joinMode', 'maxParticipants']);
     }
