@@ -14,6 +14,7 @@ import { UI } from '@/lib/constants';
 export default function RequestRow({ request }: { request: RequestRowData }) {
     const t = useTranslations('group');
     const c = useTranslations('common');
+    const tErrors = useTranslations('errors');
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
     const router = useRouter();
@@ -28,7 +29,7 @@ export default function RequestRow({ request }: { request: RequestRowData }) {
             if (res.success) {
                 success(c('manageSuccess'));
                 router.refresh();
-            } else toastError(t('ACTION_FAILED'));
+            } else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
     };
 

@@ -221,7 +221,7 @@ async function main() {
     instagramLink?: string;
     websiteLink?: string;
     owner: typeof oskars;
-    members: { user: typeof oskars; role: 'ADMIN' | 'MEMBER' | 'PENDING' }[];
+    members: { user: typeof oskars; role: 'ADMIN' | 'MEMBER' | 'PENDING'; message?: string }[];
   };
 
   const groupSeeds: GroupSeed[] = [
@@ -238,7 +238,7 @@ async function main() {
         { user: liga, role: 'ADMIN' },
         { user: andris, role: 'MEMBER' },
         { user: anna, role: 'MEMBER' },
-        { user: santa, role: 'PENDING' }
+        { user: santa, role: 'PENDING', message: 'Sveiki! Pārgājienos esmu iesācēja, bet labprāt pievienotos sestdienas gājienam. Vai var nākt ar suni?' }
       ],
     },
     {
@@ -449,6 +449,17 @@ async function main() {
         },
       },
     });
+    // A join request with a message lives in the group chat (as `requestToJoin` writes it).
+    for (const m of g.members) {
+      if (m.role !== 'PENDING' || !m.message) continue;
+      await prisma.conversation.create({
+        data: {
+          kind: 'GROUP', originType: 'JOIN_REQUEST', originGroupId: group.id, contactUserId: m.user.id,
+          participants: { connect: { id: m.user.id } },
+          messages: { create: { content: m.message, senderId: m.user.id } },
+        },
+      });
+    }
     groupIdBySlug[g.slug] = group.id;
     groupCityBySlug[g.slug] = g.city;
     console.log(`  ✓ ${g.name}`);
