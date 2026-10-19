@@ -119,7 +119,7 @@ export default async function GroupSettingsPage(props: {
 
             <SettingsTabs active={activeTab} showOwner={showOwnerTab} />
 
-            <div className="min-h-[400px] rounded-3xl border border-border bg-surface p-5 shadow-sm sm:p-8 md:p-10">
+            <div className="min-h-[400px]">
                 <CitiesProvider cities={cities}>
                     {activeTab === 'sections' ? (
                         <SectionsTab groupId={group.id} sections={editableSections} locale={locale} />

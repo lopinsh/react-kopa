@@ -14,7 +14,6 @@ export default function SocialSection() {
         <SettingsSection
             title={c_common('tabSocial')}
             description={c_common('tabSocialDescription')}
-            icon={Share2}
         >
             <div className="grid gap-8 md:grid-cols-1 max-w-2xl">
                 <div className="space-y-3">

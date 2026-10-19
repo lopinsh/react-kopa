@@ -1,27 +1,20 @@
 'use client';
 
-import { type LucideIcon } from 'lucide-react';
-
 type Props = {
     title: string;
     description: string;
-    icon: LucideIcon;
     children: React.ReactNode;
 };
 
-export default function SettingsSection({ title, description, icon: Icon, children }: Props) {
+/** One settings card: the same look as the cards in Iestatījumi. */
+export default function SettingsSection({ title, description, children }: Props) {
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <section className="grid gap-4 rounded-2xl bg-surface px-4 py-3.5">
             <div>
-                <h3 className="text-xl font-semibold text-foreground mb-1 flex items-center gap-2">
-                    <Icon className="h-6 w-6 text-primary" />
-                    {title}
-                </h3>
-                <p className="text-sm text-foreground-muted mb-8">
-                    {description}
-                </p>
+                <h3 className="font-heading text-[15px] font-semibold text-foreground">{title}</h3>
+                <p className="mt-0.5 text-sm text-foreground-muted">{description}</p>
             </div>
             {children}
-        </div>
+        </section>
     );
 }

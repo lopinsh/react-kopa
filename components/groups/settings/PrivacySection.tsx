@@ -15,7 +15,6 @@ export default function PrivacySection() {
         <SettingsSection
             title={c_common('tabPrivacy')}
             description={c_common('tabPrivacyDescription')}
-            icon={LockIcon}
         >
             <div className="grid gap-6 md:grid-cols-2 max-w-2xl">
                 {[
@@ -25,7 +24,7 @@ export default function PrivacySection() {
                     <label
                         key={type.id}
                         className={clsx(
-                            "relative flex cursor-pointer flex-col rounded-3xl border-2 p-6 transition-all text-left group",
+                            "relative flex cursor-pointer flex-col rounded-2xl border-2 p-4 transition-all text-left group",
                             watch('type') === type.id
                                 ? "border-primary bg-primary/5 shadow-lg ring-4 ring-primary/5"
                                 : "border-border bg-surface hover:border-primary/50 hover:bg-surface-elevated/5"

@@ -12,7 +12,7 @@ export default function AcceptingMembersSection() {
     const { register, watch } = useFormContext<GroupFormValues>();
 
     return (
-        <div className="flex items-center gap-4 rounded-3xl border border-border bg-surface-elevated/10 p-5 transition-all hover:bg-surface-elevated/20 sm:p-6">
+        <div className="flex items-center gap-4 rounded-2xl bg-surface px-4 py-3.5">
             <div className="relative flex shrink-0 items-center">
                 <input
                     type="checkbox"

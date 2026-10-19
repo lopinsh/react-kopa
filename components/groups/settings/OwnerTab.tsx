@@ -41,9 +41,9 @@ export default function OwnerTab({ transferCandidates, ...formProps }: Props) {
     };
 
     return (
-        <div className="space-y-12">
+        <div className="space-y-4">
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-12">
+                <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
                     <AcceptingMembersSection />
                     <div id="access" className="scroll-mt-24">
                         <PrivacySection />

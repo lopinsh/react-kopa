@@ -2,7 +2,6 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { Tags } from 'lucide-react';
 import { type GroupFormValues } from '@/lib/validations/group';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
 import TagPicker from '@/components/groups/TagPicker';
@@ -33,9 +32,8 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
         <SettingsSection
             title={c_common('tabCategorization')}
             description={gt('tabCategorizationDescription')}
-            icon={Tags}
         >
-            <div className="p-4 sm:p-8 rounded-3xl border border-border bg-surface-elevated/5 dark:bg-surface-elevated/20 space-y-8">
+            <div className="space-y-8">
                 <div>
                     <L1Picker
                         taxonomy={taxonomy}
@@ -48,7 +46,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                 </div>
 
                 {selectedL1 && (
-                    <div className="pt-8 border-t border-border animate-in fade-in slide-in-from-top-4 duration-500">
+                    <div className="pt-8 border-t border-border">
                         {tagsCleared && noTagsYet && (
                             <p role="status" className="mb-4 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground-muted">
                                 {t('tagsClearedOnCategoryChange')}

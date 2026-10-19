@@ -3,7 +3,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import CityField from '@/components/groups/CityField';
-import { ImageIcon, Settings } from 'lucide-react';
+import { ImageIcon } from 'lucide-react';
 import { clsx } from 'clsx';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
@@ -28,7 +28,6 @@ export default function BasicsSection({ canEditName }: Props) {
         <SettingsSection
             title={gs('basicsTitle')}
             description={gt('tabProfileDescription')}
-            icon={Settings}
         >
             <div className="grid gap-6 md:grid-cols-2 md:gap-8">
                 {canEditName && (

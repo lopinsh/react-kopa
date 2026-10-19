@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { ArrowRightLeft, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { transferOwnership } from '@/actions/group-actions';
 import { useRouter } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
@@ -47,7 +47,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
 
     return (
         <div id="transfer" className="scroll-mt-24">
-            <SettingsSection title={t('transferTitle')} description={t('transferDescription')} icon={ArrowRightLeft}>
+            <SettingsSection title={t('transferTitle')} description={t('transferDescription')}>
                 {candidates.length === 0 ? (
                     <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-foreground-muted">{t('transferNobody')}</p>
                 ) : (
