@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
-import InfoParts from '@/components/groups/frame/InfoParts';
+import InfoSections from '@/components/groups/frame/InfoSections';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import LatestAnnouncement from '@/components/groups/announcements/LatestAnnouncement';
 import { getLatestForInfo } from '@/lib/services/announcements-page';
@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     return group ? { title: group.name } : {};
 }
 
-/** Informācija (AR-50): the group's parts as tabs, one shown; then the next meeting and the links. Members-only parts are not in the list for visitors. */
+/** Informācija (AR-50): the group's parts stacked on one page, the tabs jump to them; then the next meeting and the links. Members-only parts are not in the list for visitors. */
 export default async function GroupPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<{ part?: string }> }) {
     const { locale, groupSlug, l1Slug } = await params;
     const { part } = await searchParams;
@@ -44,7 +44,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
             key: s.id,
             label: i === 0 ? tCommon('about') : s.title,
             lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
-            href: i === 0 ? base : `${base}?part=${s.id}`,
             content: (
                 <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px]">
                     {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
@@ -57,7 +56,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         <>
             {group.lookingFor && <p className="mb-3 text-sm italic leading-snug text-primary md:hidden">{group.lookingFor}</p>}
             {latest && <LatestAnnouncement item={latest} allHref={group.user.isMember ? `${base}/announcements` : undefined} />}
-            <InfoParts title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
+            <InfoSections title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
             <NextMeetingBox groupId={group.id} groupHref={base} viewerId={session?.user?.id} />
             <GroupSocialLinks websiteLink={group.socialLinks.website} instagramLink={group.socialLinks.instagram} discordLink={group.socialLinks.discord} />
         </>

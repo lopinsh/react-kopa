@@ -84,7 +84,7 @@ export async function runSearch({ word, cities, theme: askedTheme }: SearchInput
             take: SEARCH_ROWS_MAX
         }),
         prisma.event.findMany({
-            where: { AND: [eventWhere({ search: query, searchIds: eventIds, cities, category: theme ?? undefined, status: 'upcoming' }), { visibility: 'PUBLIC' }] },
+            where: { AND: [eventWhere({ search: query, searchIds: eventIds, cities, category: theme ?? undefined }), { visibility: 'PUBLIC' }] },
             include: EVENT_ROW_INCLUDE(lang),
             orderBy: { startDate: 'asc' },
             take: SEARCH_ROWS_MAX

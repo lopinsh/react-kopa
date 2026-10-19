@@ -24,8 +24,7 @@ export interface EventDiscoveryFilters {
     search?: string;
     /** Ids of the events the search matches ignoring marks (`matchingEventIds`); without them the match falls back to case-insensitive. */
     searchIds?: string[];
-    /** Ignored when `from`/`to` are set. Default 'upcoming'. */
-    status?: 'upcoming' | 'past';
+    /** Without `from`/`to` only upcoming events are listed. */
     from?: Date;
     to?: Date;
     /** Default DISCOVERY_EVENTS_LIMIT (100), clamped to 1…DISCOVERY_EVENTS_MAX_LIMIT (200). */

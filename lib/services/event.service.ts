@@ -924,14 +924,13 @@ export class EventService {
      */
     static async getDiscoverableEvents(filters: EventDiscoveryFilters, locale: string, userId?: string): Promise<DiscoverableEventPage> {
         const limit = Math.min(Math.max(Math.floor(filters.limit ?? DISCOVERY_EVENTS_LIMIT), 1), DISCOVERY_EVENTS_MAX_LIMIT);
-        const { status = 'upcoming' } = filters;
         const cities = [...(filters.cities ?? [])].sort();
         const tags = [...(filters.tags ?? [])].sort();
-        const where = { ...filters, cities, tags, status };
+        const where = { ...filters, cities, tags };
         const lang = toTextLang(locale);
         const withIds = async () => ({ ...where, searchIds: where.search ? await matchingEventIds(where.search) : undefined });
         const include = EVENT_ROW_INCLUDE(lang);
-        const orderBy = { startDate: status === 'past' ? 'desc' : 'asc' } as const;
+        const orderBy = { startDate: 'asc' } as const;
 
         // The cache holds the narrow row shape (an excerpt, not whole descriptions).
         const loadPublic = unstable_cache(
@@ -969,11 +968,10 @@ export class EventService {
                 : Promise.resolve([])
         ]);
 
-        const direction = status === 'past' ? -1 : 1;
         // Cached rows come back with dates as strings; revive them before sorting.
         const merged = [...publicRows, ...memberRows]
             .map((e) => ({ ...e, startDate: new Date(e.startDate), endDate: e.endDate ? new Date(e.endDate) : null }))
-            .sort((a, b) => direction * (a.startDate.getTime() - b.startDate.getTime()))
+            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
             .slice(0, limit + 1);
         const shown = merged.slice(0, limit);
         const mine = await EventService.myTags(shown.map((e) => e.id), userId);

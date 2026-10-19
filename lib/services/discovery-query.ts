@@ -103,7 +103,7 @@ export function clampRange(from: Date, to: Date): { from: Date; to: Date } | nul
 
 /** The event list's where, without the visibility part (callers add PUBLIC or the viewer's MEMBERS_ONLY). */
 export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date()): Prisma.EventWhereInput {
-    const { cities, category, tags, search, searchIds, status, from, to } = filters;
+    const { cities, category, tags, search, searchIds, from, to } = filters;
     // A private group's events are out of discovery and search (OD-07): its event list would show the group.
     const groupAnd: Prisma.GroupWhereInput[] = [{ hiddenAt: null, type: 'PUBLIC' }];
     if (category) groupAnd.push(topicMatch(category));
@@ -126,11 +126,9 @@ export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date(
             }
             : { id: { in: [] } });
     } else {
-        // Past = the event's last day is before today (Latvian time); see isEventPast.
+        // Upcoming = the event's last day is today or later (Latvian time); see isEventPast.
         const todayStart = startOfTodayInRiga(now);
-        and.push(status === 'past'
-            ? { OR: [{ endDate: { lt: todayStart } }, { endDate: null, startDate: { lt: todayStart } }] }
-            : { OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] });
+        and.push({ OR: [{ endDate: { gte: todayStart } }, { endDate: null, startDate: { gte: todayStart } }] });
     }
 
     if (search && searchIds) {
