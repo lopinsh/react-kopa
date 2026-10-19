@@ -1,31 +1,25 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLocale } from 'next-intl';
-import { useRouter } from '@/i18n/routing';
-import { loadFullPage } from '@/lib/full-page';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { TEXT_LANGS, firstLangWithError, langRecord, toTextLang, type TextLang } from '@/lib/translations';
 import { isOverLimit } from '@/lib/text-limit';
-import { eventSchema, EVENT_TITLE_MAX, type EventFormValues, type EventFormData } from '@/lib/validations/event';
-import { createEvent, updateEvent } from '@/actions/event-actions';
+import { eventSchema, EVENT_TITLE_MAX, type EventFormData } from '@/lib/validations/event';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES } from '@/lib/constants';
 import type { EventToEdit } from '@/components/forms/event/EventForm';
 import { useEventTimes } from '@/components/forms/event/useEventTimes';
+import { useEventSave } from '@/components/forms/event/useEventSave';
 
 export type StepIndex = 0 | 1;
 
 type Options = { groupId: string; groupSlug: string; l1Slug: string; event?: EventToEdit; waitingCount: number };
 
-// A lost connection rejects the action: show it as a failed save and keep the form (an uncaught rejection would drop it for the error page).
-const SAVE_FAILED = { success: false as const, error: 'SAVE_FAILED' };
-
 /** State and handlers of the event form (create and edit): the fields, the step, the language on screen, saving. */
 export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }: Options) {
     const locale = useLocale();
-    const router = useRouter();
     const groupCity = useGroupContext().city;
     const [step, setStep] = useState<StepIndex>(0);
     // One language switch for the whole form; it opens on the original language.
@@ -33,10 +27,6 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
     const [lang, setLang] = useState<TextLang>(originalAtStart);
     // Bumped when text is copied in, so the rich-text editors reload their value.
     const [rev, setRev] = useState(0);
-    const [isPending, startTransition] = useTransition();
-    const [serverError, setServerError] = useState<string | null>(null);
-    // Opening a Request-to-join event lets in everyone waiting: ask before doing it.
-    const [askingToOpen, setAskingToOpen] = useState(false);
 
     const form = useForm<EventFormData>({
         resolver: zodResolver(eventSchema) as unknown as Resolver<EventFormData>,
@@ -58,7 +48,7 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
         },
         mode: 'onChange',
     });
-    const { handleSubmit, formState: { errors }, setValue, getValues, trigger } = form;
+    const { formState: { errors }, setValue, getValues, trigger } = form;
     const watched = useWatch({ control: form.control });
     const { changeStart, changeEnd, markSkippedTimes } = useEventTimes(form, event);
 
@@ -114,59 +104,10 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
         void trigger(titlePaths);
     }
 
-    function save(data: EventFormData, confirmOpenWaiting: boolean) {
-        setServerError(null);
-        startTransition(async () => {
-            const values = data as unknown as EventFormValues;
-            let eventSlug: string;
-            if (event) {
-                const result = await updateEvent(event.id, values, locale, confirmOpenWaiting).catch(() => SAVE_FAILED);
-                if (!result.success) {
-                    setServerError(result.error);
-                    // Someone new started waiting since the page loaded: refresh the count and ask again.
-                    if (result.error === 'CONFIRMATION_REQUIRED') router.refresh();
-                    return;
-                }
-                eventSlug = result.data!.eventSlug;
-            } else {
-                const result = await createEvent(groupId, values, locale).catch(() => SAVE_FAILED);
-                if (!result.success) {
-                    setServerError(result.error);
-                    return;
-                }
-                eventSlug = result.data!.event.slug;
-            }
-            // Land on the event's own page, in full (a soft click on an event's address would open its panel).
-            loadFullPage(`/${locale}/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
-        });
-    }
-
-    const opensToWaiting = !!event && event.joinMode === 'REQUEST' && watched.joinMode === 'OPEN' && waitingCount > 0;
-
-    const submitForm = handleSubmit((data) => {
-        if (opensToWaiting) {
-            setAskingToOpen(true);
-            return;
-        }
-        save(data, false);
-    }, showTextProblem);
-    // Enter in a step-1 field moves to the next step instead of creating the event early.
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        if (step < 1) {
-            e.preventDefault();
-            if (!titleOver) void nextStep();
-            return;
-        }
-        void submitForm(e);
-    };
-    const onConfirmOpen = handleSubmit((data) => {
-        setAskingToOpen(false);
-        save(data, true);
-    }, showTextProblem);
+    const saving = useEventSave({ form, groupId, groupSlug, l1Slug, event, waitingCount, step, titleOver, nextStep, onInvalid: showTextProblem });
 
     return {
-        form, watched, step, lang, setLang, rev, originalAtStart, isPending, serverError, askingToOpen, setAskingToOpen,
-        opensToWaiting, titleOver, langsWithErrors, changeStart, changeEnd, nextStep, prevStep, copyFromOriginal, clearText,
-        changeOriginal, onSubmit, onConfirmOpen,
+        form, watched, step, lang, setLang, rev, originalAtStart, titleOver, langsWithErrors, changeStart, changeEnd,
+        nextStep, prevStep, copyFromOriginal, clearText, changeOriginal, ...saving,
     };
 }
