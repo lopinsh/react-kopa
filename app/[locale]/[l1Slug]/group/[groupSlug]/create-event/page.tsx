@@ -1,6 +1,6 @@
 import { GroupService } from '@/lib/services/group.service';
 import { notFound, redirect } from 'next/navigation';
-import EventCreationWizard from '@/components/forms/EventCreationWizard';
+import EventForm from '@/components/forms/event/EventForm';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { CityService } from '@/lib/services/city.service';
 import { auth } from '@/lib/auth';
@@ -43,7 +43,7 @@ export default async function CreateEventPage({
                 </div>
 
                 <CitiesProvider cities={cities}>
-                    <EventCreationWizard
+                    <EventForm
                         groupId={group.id}
                         groupSlug={groupSlug}
                         l1Slug={l1Slug}

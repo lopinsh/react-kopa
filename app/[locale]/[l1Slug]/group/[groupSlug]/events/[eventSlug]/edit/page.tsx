@@ -8,7 +8,7 @@ import { signInUrl } from '@/lib/auth-redirect';
 import { EventService } from '@/lib/services/event.service';
 import { isEventPast } from '@/lib/event-dates';
 import { toTextLang } from '@/lib/translations';
-import EventCreationWizard from '@/components/forms/EventCreationWizard';
+import EventForm from '@/components/forms/event/EventForm';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { CityService } from '@/lib/services/city.service';
 
@@ -50,7 +50,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                 </div>
 
                 <CitiesProvider cities={cities}>
-                    <EventCreationWizard
+                    <EventForm
                         groupId={event.groupId}
                         groupSlug={groupSlug}
                         l1Slug={l1Slug}

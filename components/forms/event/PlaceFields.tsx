@@ -17,7 +17,7 @@ const INPUT = 'w-full rounded-xl border bg-background px-3 py-2.5 text-sm focus:
  * Where an event happens (AR-57): its city (starts as the group's), "Tiešsaistē", and the address,
  * which turns into the meeting link when the event is online.
  */
-export default function EventPlaceFields() {
+export default function PlaceFields() {
     const t = useTranslations('eventWizard');
     const tCities = useTranslations('cities');
     const wt = useTranslations('wizard');

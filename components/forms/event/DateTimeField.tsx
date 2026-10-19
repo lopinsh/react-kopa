@@ -1,8 +1,8 @@
 'use client';
 
 import { splitLocal, joinLocal } from '@/lib/local-datetime';
-import DateField from '@/components/forms/DateField';
-import TimeSelect from '@/components/forms/TimeSelect';
+import DateField from '@/components/forms/event/DateField';
+import TimeSelect from '@/components/forms/event/TimeSelect';
 
 type Props = {
     /** Local "YYYY-MM-DDTHH:mm" in the viewer's zone, or '' when empty. */
