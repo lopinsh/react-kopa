@@ -48,7 +48,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Me | Public profile | F | R9c done |
 | Me | Edit profile | D | R9c done ("Labot profilu" is a page of its own; the switches are in Iestatījumi) |
 | Static | About, privacy, 404 | F | R12 |
-| Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | R11 |
+| Admin | Five sections across (Moderācija, Struktūra, Vietne, Komanda, Izstrāde), pages down the left, parts indented under the open page, one drawer on phones; a one-page section (Komanda) is full width | F + tables | R11 |
 
 ## Foundations
 

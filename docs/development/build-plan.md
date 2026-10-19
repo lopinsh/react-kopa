@@ -486,5 +486,5 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R9b Biedri, Jaunumi, Informācija, group picture | R9b-1, R9b-2 pushed, live; R9b-3 Informācija + C5 built (review pending) | [specs/R9b.md](specs/R9b.md) | `e4860ef`..`634e93f` (R9b-1), `be3c98e` (R9b-2), `1f500e4`..`65ed62e` (R9b-3) |
 | R9c Group settings and profiles | built (R9c-1 profiles live, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | |
 | R10 Citur | cancelled by owner 19 Oct | | |
-| R11 Admin frame | spec written | [specs/R11.md](specs/R11.md) | |
+| R11 Admin frame | built (frame, drawer, five dialogs); the card look of each page is R11b | [specs/R11.md](specs/R11.md) | |
 | R12 Everything else | not started | | |
