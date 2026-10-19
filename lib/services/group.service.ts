@@ -5,7 +5,7 @@ import { MembershipRole } from '@prisma/client';
 import { GroupFormValues, GroupCreateValues } from '@/lib/validations/group';
 import { ErrorCode } from '@/types/actions';
 import { Prisma } from '@prisma/client';
-import { hasAdminRights } from '@/lib/utils/permissions';
+import { hasAdminRights, allowedMemberActions } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { MAX_SECTIONS, PANEL_EVENTS_MAX, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, TEXT_LANGS, langRecord, toTextLang, hasText, type TextLang } from '@/lib/translations';
@@ -59,7 +59,7 @@ export interface GroupMember {
     id: string;
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
     joinedAt: Date;
-    user: { id: string; name: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
+    user: { id: string; name: string | null; username: string | null; avatarSeed: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
     /** The group chat with this person (their join request and everything said since); only loaded for pending applicants, and only for admins and the applicant. */
     chatId: string | null;
     applicationMessages: Array<{
@@ -979,6 +979,13 @@ export const GroupService = {
             return { success: false, error: 'VALIDATION_FAILED' };
         }
 
+        // The same rule the member menu shows.
+        const target = await prisma.membership.findUnique({ where: { userId_groupId: { userId: targetUserId, groupId } }, select: { role: true } });
+        if (!target) return { success: false, error: 'NOT_FOUND' };
+        if (!allowedMemberActions(actorMembership.role, target.role).includes(newRole === 'ADMIN' ? 'promote' : 'demote')) {
+            return { success: false, error: 'FORBIDDEN' };
+        }
+
         // Promote a member, or demote a moderator: nothing else.
         const expectedCurrent: MembershipRole = newRole === 'ADMIN' ? 'MEMBER' : 'ADMIN';
         const updated = await prisma.membership.updateMany({
@@ -1103,15 +1110,14 @@ export const GroupService = {
 
         if (!targetMembership) return { success: false, error: 'NOT_FOUND' };
 
-        if (targetMembership.role === 'OWNER') return { success: false, error: 'FORBIDDEN' };
-
-        if (actorMembership.role === 'ADMIN' && targetMembership.role !== 'MEMBER' && targetMembership.role !== 'PENDING') {
-            return { success: false, error: 'FORBIDDEN' };
-        }
-
         // Prevent self-removal here (use leaveGroup for that)
         if (targetUserId === actorId) {
             return { success: false, error: 'VALIDATION_FAILED' };
+        }
+
+        // The same rule the member menu shows.
+        if (!allowedMemberActions(actorMembership.role, targetMembership.role).includes('remove')) {
+            return { success: false, error: 'FORBIDDEN' };
         }
 
         await prisma.membership.delete({
