@@ -51,8 +51,8 @@ All 26 were decided by the owner on 13 October, each by agreeing to the recommen
 | OD-21 | The team's waiting requests (AR-62, Still open 9) | Decided 13 Oct (note cmv6mofz) | No "Jārīkojas" section; "2 pieteikumi" on the group's row in Tavas grupas | Open rule | R8 |
 | OD-22 | When a notification is read (Still open 6) | Decided 13 Oct (note cmv6mojy) | When you tap it, as today | Still open | R8 |
 | OD-23 | Event page (AR-59, Still open 18), incl. "an event without its own image shows no picture on its page" | Decided 13 Oct (note cmv6mosr) | Build as drawn, incl. the no-picture proposal | Proposal rule | R9a |
-| OD-24 | Biedri and Jaunumi (AR-53, Still open 18) | Decided 13 Oct (note cmv6mozm) | Build as drawn | Proposal rule | R9b |
-| OD-25 | Mans profils (AR-63, Still open 18) | Decided 13 Oct (note cmv6mp2e) | Build as drawn | Proposal rule | R9b |
+| OD-24 | Biedri and Jaunumi (AR-53, Still open 18) | Decided 13 Oct (note cmv6mozm) | Build as drawn | Proposal rule | R9c |
+| OD-25 | Mans profils (AR-63, Still open 18) | Decided 13 Oct (note cmv6mp2e) | Build as drawn | Proposal rule | R9c |
 | OD-26 | Where you change your profile (Still open 10) | Decided 13 Oct (note cmv6mp75) | ~~"Labot profilu" on Mans profils opens the form in place~~ Changed 15 Oct (note cmv9aq31h): LinkedIn model, Mans profils shows exactly what others see with "Labot" leading to a separate edit page; privacy toggles move to Iestatījumi (cmv9anua9); Iestatījumi keeps Izskats | Still open | R9b |
 | OD-27 | Deleting your account (Still open 16) | Decided 13 Oct (note cmv6mphx) | "Dzēst kontu" at the end of Iestatījumi, with a dialog; built before real users | Still open | R12 |
 
@@ -307,7 +307,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 
 - **Split 19 Oct (spec):** R9b = Jaunumi (C3, migration), Biedri, Informācija on one page (D), group picture (C5), in three sessions R9b-1..3; settings and profiles moved to **R9c** below.
 - **Goal:** Biedri with Pieteikumi, Jaunumi, group settings in the new look, Mans profils, someone else's profile, profile editing.
-- **Rules (owner):** AR-52, AR-53, AR-63. Also in: AR-35 (settings field), AR-09 (role tags).
+- **Rules (owner):** AR-52, AR-53. Also in: AR-35 (settings field), AR-09 (role tags).
 - **Drawings:** "Desktop · Biedri → Pieteikumi · group team", "Desktop · Biedri · group team, one member's … open", "Desktop · Jaunumi · group team", Mans profils (2).
 - **Components:** replace `groups/{MemberCard (270),RequestCard,MembershipPanel}.tsx` and `modals/MemberMoreModal.tsx` with `groups/members/{MemberRow,RequestRow,MemberRowMenu}.tsx`; `groups/Announcement*` restyle (161-line board split); `GroupSettingsForm` (285) split per tab, `TagPicker` (604) split and its `as any` removed; `/profile` and `/profile/[username]` share `profile/ProfileView.tsx`; `ProfileEditForm` (191) per OD-26.
 - **Data:** none.
@@ -320,7 +320,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 ### R9c · Group settings and profiles (M/L)
 
 - **From R9b (split 19 Oct):** `GroupSettingsForm` (288) split per tab (sections already in `groups/settings/*`), `TagPicker` (604) split and its `as any` removed, the LanguageEditor bar wrap at 768 px (C4 review); `/profile` and `/profile/[username]` share `profile/ProfileView.tsx`; Mans profils shows what others see with "Labot" to a separate edit page, privacy switches move to Iestatījumi, Iestatījumi keeps Izskats (OD-26 changed 15 Oct; notes cmv9aq31h, cmv9anua9; consider cmv9l5a3q, cmv9l6kmv for the own bar links).
-- **Rules (owner):** none. Also in: AR-63, AR-35, AR-14, AR-60. **Data:** none expected. **i18n:** `groupSettings`, `profile`.
+- **Rules (owner):** AR-63. Also in: AR-35, AR-14, AR-60. **Data:** none expected. **i18n:** `groupSettings`, `profile`.
 
 ### R10 · Citur and the unknown place (S/M)
 
@@ -452,7 +452,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-60 | Own area | R2a | R8 |
 | AR-61 | Manas grupas | R8 | |
 | AR-62 | The team's waiting requests | R8 | |
-| AR-63 | Mans profils | R9b | R2a |
+| AR-63 | Mans profils | R9c | R2a |
 | AR-64 | Ziņas | R8 | |
 | AR-65 | Paziņojumi | R8 | |
 | AR-66 | Empty states | R2b | R8, R12 |

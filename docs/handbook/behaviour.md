@@ -4,6 +4,7 @@ The same situation behaves the same way on every screen.
 
 ## Saving and sending
 
+- A switch saves when you change it (Iestatījumi, Privātums); forms save with Saglabāt.
 - The button shows it is working and can't be pressed twice.
 - Success: a short toast (one line at the bottom, above the bottom bar on phones, one at a time, it goes by itself), or the result appears in place.
 - After creating something, open its page.

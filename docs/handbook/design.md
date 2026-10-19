@@ -44,9 +44,9 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Group life | Event page | B | R9a done (page; the form follows) |
 | Group life | Create / edit event | B | R4 done (place), R9a |
 | Group life | Group settings | B | R4 done (field), R9c |
-| Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9b |
-| Me | Public profile | F | R9c |
-| Me | Edit profile | D | R9c |
+| Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9c done (Mans profils shows what others see; Privātums in Iestatījumi) |
+| Me | Public profile | F | R9c done |
+| Me | Edit profile | D | R9c done ("Labot profilu" is a page of its own; the switches are in Iestatījumi) |
 | Static | About, privacy, 404 | F | R12 |
 | Admin | Dashboard, reports, taxonomy, moderation, handbook | F + tables | R11 |
 
