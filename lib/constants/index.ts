@@ -87,9 +87,14 @@ export type GroupType = (typeof GROUP_TYPES)[number];
 export const REPORT_REASONS = ['Spam', 'Inappropriate', 'Violence', 'Other'] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];
 
+/** A reason a new report may carry (only the ones offered). */
+export function isReportReason(value: string): value is ReportReason {
+    return (REPORT_REASONS as readonly string[]).includes(value);
+}
+
 /** Values that can stand in `Report.reason`: the ones offered, plus 'Harassment' from older reports (shown as "Harmful content" too). */
-export function isReportReason(value: string): boolean {
-    return (REPORT_REASONS as readonly string[]).includes(value) || value === 'Harassment';
+export function isStoredReportReason(value: string): value is ReportReason | 'Harassment' {
+    return isReportReason(value) || value === 'Harassment';
 }
 
 export const EVENT_VISIBILITY = ['PUBLIC', 'MEMBERS_ONLY'] as const;

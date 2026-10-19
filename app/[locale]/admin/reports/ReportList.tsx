@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
-import { isReportReason } from '@/lib/constants';
+import { isStoredReportReason } from '@/lib/constants';
 import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
@@ -90,7 +90,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <div className="flex items-center gap-3">
                                 <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-3 py-1 text-xs font-bold text-danger">
                                     <AlertTriangle className="h-3.5 w-3.5" />
-                                    {isReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
+                                    {isStoredReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
                                 <span className="text-sm font-medium text-foreground-muted">
                                     {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short' })}
