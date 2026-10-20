@@ -13,7 +13,7 @@
 - Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.1`), built and released as R1a–R12 one by one.
 - **Live:** R1a Identity, R1b Dizains, R2a Header/menus/own-area frame, R2b Behaviour pieces, R3a Group frame, R3b Sazināties/pending/"…", R4 Discovery data, R5a Filters/drawer/cards, R5b Events by day, R6 Panels, R7 Search (with the Session A owner-notes batch), R8 Own area.
 - [x] **R8 Own area live** (`2f4b554`..`3d1165c`, review fixes `605807b`, `3d1165c`): Manas grupas sections, Ziņas in the frame, Paziņojumi page, messages and bell as click dropdowns, the "new" count, groups you belong to open their full page; migration `add_user_my_groups_seen_at`; Prisma `relationJoins` preview on. Notes cmv9ajgmd, cmv9aist6, cmv9aom44, cmv9ak7k4, cmv9al64n, cmv9amjft, cmv9ahbt5 done.
-- R13 Templates (palette + style) built locally, awaiting review and push.
+- R13 Templates (palette + style): pushed, live.
 - **Next:** R9c, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
 - Workflow per release: Opus spec → Sonnet build → Opus review (independent review for migrations and R4-like data work) → reviewer pushes.
 - Review (2026-10-15): group panel (lookingFor, no-next-meeting line checked LV/EN at 375 and 1280) and search theme fixes verified; a page category the search does not know is now dropped.
