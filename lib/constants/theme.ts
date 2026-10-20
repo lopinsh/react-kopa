@@ -56,6 +56,7 @@ export const THEME_FONTS = [
     { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif' },
     { id: 'lora', label: 'Lora', cssVar: '--font-lora' },
     { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans' },
+    { id: 'raleway', label: 'Raleway', cssVar: '--font-raleway' },
     /** Single-weight display face: as a heading it wins over the style's heading weight. */
     { id: 'archivo-black', label: 'Archivo Black', cssVar: '--font-archivo-black', weight: 400 },
 ] as const satisfies readonly { id: string; label: string; cssVar: string; weight?: number }[];
@@ -63,7 +64,7 @@ export type ThemeFontId = (typeof THEME_FONTS)[number]['id'];
 export const THEME_FONT_IDS = THEME_FONTS.map((f) => f.id) as [ThemeFontId, ...ThemeFontId[]];
 
 /** Shape tokens of a template (R13): corners, lines, shadows, press, heading weight. Palette and style are chosen apart. */
-export const THEME_STYLE_KEYS = ['calm', 'bold'] as const;
+export const THEME_STYLE_KEYS = ['calm', 'bold', 'airy'] as const;
 export type ThemeStyleKey = (typeof THEME_STYLE_KEYS)[number];
 export const DEFAULT_THEME_STYLE_KEY: ThemeStyleKey = 'calm';
 
@@ -75,23 +76,31 @@ export interface ThemeStyleTokens {
     ink: 'border' | 'foreground';
     /** Edge on things that have none today. */
     frameWidth: string;
-    /** Hard shadow offsets (no blur); null = the soft shadows from globals.css. */
-    shadowOffset: { card: string; control: string; premium: string; dialog: string } | null;
+    /** Shadows: `soft` = the ones in globals.css, `none` = every shadow token off, or hard offsets without blur. */
+    shadows: 'soft' | 'none' | { card: string; control: string; premium: string; dialog: string };
     pressShift: string;
     /** Room a clipping parent leaves for a hard shadow. */
     shadowRoom: string;
     headingWeight: number;
     /** Category tiles (card picture, row icon): a tint of the category tone or the solid tone. */
     tile: 'tint' | 'solid';
+    /** Room in a group card (`--card-pad`) and between cards (`--card-gap`). */
+    cardSpace: string;
 }
 
 export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
-    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadowOffset: null, pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint' },
+    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadows: 'soft', pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint', cardSpace: '1.25rem' },
     bold: {
         radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', '4xl': '12px', pill: '6px', menu: '6px', item: '5px' },
         lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
-        shadowOffset: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
-        pressShift: '3px', shadowRoom: '5px', headingWeight: 700, tile: 'solid',
+        shadows: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
+        pressShift: '3px', shadowRoom: '5px', headingWeight: 700, tile: 'solid', cardSpace: '1.25rem',
+    },
+    airy: {
+        radius: { md: '2px', lg: '3px', xl: '3px', '2xl': '4px', '3xl': '4px', '4xl': '4px', pill: '9999px', menu: '4px', item: '3px' },
+        lineWidth: '1px', ink: 'border', frameWidth: '1px',
+        shadows: 'none',
+        pressShift: '0px', shadowRoom: '0px', headingWeight: 500, tile: 'solid', cardSpace: '1.75rem',
     },
 };
 
@@ -103,7 +112,7 @@ export interface ThemeDefinition {
     styleKey: ThemeStyleKey;
 }
 
-export const THEME_PRESET_KEYS = ['moss', 'sea', 'rye', 'sun'] as const;
+export const THEME_PRESET_KEYS = ['moss', 'sea', 'rye', 'sun', 'air'] as const;
 export type ThemePresetKey = (typeof THEME_PRESET_KEYS)[number];
 /** A saved theme is either one of the presets or edited by hand. */
 export const THEME_KEYS = [...THEME_PRESET_KEYS, 'custom'] as const;
@@ -143,6 +152,14 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
         headingFont: 'archivo-black',
         bodyFont: 'commissioner',
         styleKey: 'bold',
+    },
+    air: {
+        label: 'Gaiss',
+        light: { primary: '#111111', background: '#F2F3F1', surface: '#FFFFFF', foreground: '#151515', surfaceElevated: '#FFFFFF', tint: '#E8EAE6', muted: '#575C56', border: '#D9DCD6', categories: { travel: '#598101', dancing: '#D34303', hobbies: '#A96605', community: '#018844', politics: '#8F6E65', pets: '#936F44', art: '#A84CCC', music: '#8D57E0', religion: '#5F7892', social: '#D93457', games: '#C23EA5', sports: '#486BED', family: '#04809E', wellbeing: '#018574', education: '#7C7903' } },
+        dark: { primary: '#F2F3F1', background: '#0E0F0E', surface: '#181A18', foreground: '#F2F3F1', surfaceElevated: '#222522', tint: '#242724', muted: '#A3A8A1', border: '#343734', categories: { travel: '#7DAC2D', dancing: '#F57A54', hobbies: '#E28A00', community: '#33B465', politics: '#B9968C', pets: '#BD976B', art: '#C982E8', music: '#B08AF9', religion: '#87A1BC', social: '#F77485', games: '#E279C6', sports: '#789AFF', family: '#06ABD2', wellbeing: '#0DB19C', education: '#A6A209' } },
+        headingFont: 'raleway',
+        bodyFont: 'commissioner',
+        styleKey: 'airy',
     },
 };
 

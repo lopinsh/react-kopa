@@ -58,7 +58,17 @@ Few values, used everywhere. The tokens live in `app/globals.css`; the site them
 
 ### Templates
 
-A template is a palette plus a style. Mierīgs is the default and what every statement in this chapter describes. Drosmīgs swaps the shape tokens: 2 px ink lines, hard offset shadows without blur (about 4 px), corners of 4–10 px, buttons that press onto their shadow. Palette and style are chosen apart in `/admin/design` (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti); a look (Sūna, Jūra, Rudzu maize, Saule) is a ready-made set of all of them, with its own 15 category tones, and Saule selects Drosmīgs.
+A template is a palette plus a style. Mierīgs is the default and what every statement in this chapter describes; the other two swap the shape tokens. Palette and style are chosen apart in `/admin/design` (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti); a look (Sūna, Jūra, Rudzu maize, Saule, Gaiss) is a ready-made set of all of them, with its own 15 category tones. Saule selects Drosmīgs, Gaiss selects Gaisīgs.
+
+| | Mierīgs (calm) | Drosmīgs (bold) | Gaisīgs (airy) |
+|---|---|---|---|
+| Corners | 6–32 px scale, 14 / 10 px menus | 4–12 px, pills 6 px | 2–4 px, pills stay round |
+| Lines | 1 px soft border | 2 px ink | 1 px soft border, `frame` 1 px |
+| Shadows | none on cards, soft float above the page | hard offset, no blur (3–6 px) | none at all (`--shadow-*: none`); the edge is the line |
+| Press | scale | sinks 3 px onto its shadow | scale |
+| Headings | 600 | 700 | 500 |
+| Category tiles | tint | solid | solid |
+| Card space (`--card-pad`, `--card-gap`) | 20 px | 20 px | 28 px |
 
 ### Colour
 
@@ -117,6 +127,7 @@ Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-l
 - Space inside a card is never more than the space between cards: 20 px inside (padding, 6 px between lines), 20 px visible air between cards in the grid (Drosmīgs adds `--shadow-room` so the hard shadow does not eat it).
 - Cards are flat. The float shadow (`shadow-premium`) is only for things above the page: menus, drop-downs, pop-overs, toasts, drawers. Dialogs use `shadow-dialog`. Shadows are the same in dark mode.
 - Drosmīgs gives cards and controls a hard offset shadow (`shadow-card`, `shadow-control`); `shadow-room` leaves space inside a clipping parent (chip rows) and `press` sinks a filled button onto its shadow (position change kept under reduced motion, transition dropped).
+- Gaisīgs draws no shadow, so everything that floats (menus, pop-ups, panel picture button, preview bar, slide-over) carries `line` or `frame` as its edge.
 - Category tiles (card picture, row icon, panel picture) use `cat-tile`: Mierīgs tints the tone (20 % on the surface, tone as glyph), Drosmīgs fills it solid with the on-tone glyph (`--tile-mix`, `--tile-on`; style token `tile`).
 
 ## Identity

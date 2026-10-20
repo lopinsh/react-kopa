@@ -14,7 +14,7 @@ const PALETTE = THEME_PRESETS.moss;
 export function StyleDemos() {
     const t = useTranslations('admin.design');
     return (
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 xl:grid-cols-3 md:grid-cols-2">
             {THEME_STYLE_KEYS.map((key) => (
                 <div
                     key={key}

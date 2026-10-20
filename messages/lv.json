@@ -1000,7 +1000,8 @@
         "moss": "Sūna",
         "sea": "Jūra",
         "rye": "Rudzu maize",
-        "sun": "Saule"
+        "sun": "Saule",
+        "air": "Gaiss"
       },
       "fontSampleHeading": "Ejam kopā",
       "fontSampleBody": "Meklē bundzinieku Jelgavā",
@@ -1121,11 +1122,13 @@
       "styleNote": "Stils maina stūrus, līnijas un ēnas. Krāsas paliek tās, kas izvēlētas sadaļā Krāsas.",
       "styles": {
         "calm": "Mierīgs",
-        "bold": "Drosmīgs"
+        "bold": "Drosmīgs",
+        "airy": "Gaisīgs"
       },
       "styleHints": {
         "calm": "Mīksti stūri, plānas līnijas, ēna tikai virs lapas.",
-        "bold": "Stingras līnijas, cieta ēna, mazi stūri. Pogas iespiežas."
+        "bold": "Stingras līnijas, cieta ēna, mazi stūri. Pogas iespiežas.",
+        "airy": "Asi mazi stūri, matlīnijas, bez ēnām, plaša vieta kartēs."
       },
       "styleSample": {
         "title": "Ejam kopā",

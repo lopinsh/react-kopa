@@ -43,6 +43,8 @@
   --shadow-control: none;
   --press-shift: 0px;
   --shadow-room: 0px;
+  --card-pad: 1.25rem;
+  --card-gap: 1.25rem;
   /* Category tiles: share of the tone in the fill and of the on-tone colour in the glyph (plain percentages: var(--c) is set per card). */
   --tile-mix: 20%;
   --tile-on: 0%;

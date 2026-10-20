@@ -68,7 +68,7 @@ export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose,
             />
 
             {/* Panel */}
-            <div className="relative w-full max-w-lg h-full bg-surface shadow-premium flex flex-col transform transition-transform animate-slide-in-right">
+            <div className="relative w-full max-w-lg h-full bg-surface shadow-premium frame flex flex-col transform transition-transform animate-slide-in-right">
                 <div className="flex items-center justify-between p-4 border-b border-border bg-surface-elevated/30">
                     <h2 className="text-lg font-bold">{t('details')}</h2>
                     <button

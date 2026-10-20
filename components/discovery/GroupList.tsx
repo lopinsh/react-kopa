@@ -32,7 +32,7 @@ export default function GroupList({ groups, activity = {}, createFor, filters, h
     const full = (id: string) => fullPage || !!fullPageIds?.includes(id);
     return (
         <>
-            <div className="hidden gap-[calc(1.25rem+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+            <div className="hidden gap-[calc(var(--card-gap)+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
                 {groups.map((g) => <GroupCard key={g.id} group={g} activity={activity[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={mine?.[g.id]?.role} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>

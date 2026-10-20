@@ -22,7 +22,7 @@ export default function PanelPicture({ image, l1Slug }: { image: string | null; 
                 type="button"
                 onClick={() => close()}
                 aria-label={t('close')}
-                className="absolute right-2.5 top-2.5 grid size-10 place-items-center rounded-pill bg-surface text-foreground shadow-premium hover:bg-tint"
+                className="absolute right-2.5 top-2.5 grid size-10 place-items-center rounded-pill bg-surface text-foreground shadow-premium frame hover:bg-tint"
             >
                 <X aria-hidden="true" className="size-5" />
             </button>

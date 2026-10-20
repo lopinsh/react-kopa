@@ -1000,7 +1000,8 @@
         "moss": "Moss",
         "sea": "Sea",
         "rye": "Rye bread",
-        "sun": "Sun"
+        "sun": "Sun",
+        "air": "Air"
       },
       "fontSampleHeading": "Let's go together",
       "fontSampleBody": "Looking for a drummer in Jelgava",
@@ -1121,11 +1122,13 @@
       "styleNote": "The style changes corners, lines and shadows. Colours stay as chosen under Colours.",
       "styles": {
         "calm": "Calm",
-        "bold": "Bold"
+        "bold": "Bold",
+        "airy": "Airy"
       },
       "styleHints": {
         "calm": "Soft corners, thin lines, shadows only above the page.",
-        "bold": "Strong lines, hard shadows, small corners. Buttons press in."
+        "bold": "Strong lines, hard shadows, small corners. Buttons press in.",
+        "airy": "Sharp small corners, hairlines, no shadows, roomy cards."
       },
       "styleSample": {
         "title": "Let's go together",

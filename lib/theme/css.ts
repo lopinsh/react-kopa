@@ -34,7 +34,7 @@ function inkValue(style: ThemeStyleTokens, mode: 'light' | 'dark'): string {
 }
 
 /**
- * The style tokens as CSS variables (R13). Calm (`radius`/`shadowOffset` null) emits no radii and shadows: those stay at the
+ * The style tokens as CSS variables (R13). Calm (`radius` null, `shadows` soft) emits no radii and shadows: those stay at the
  * globals.css values, which is what keeps it identical to the site before styles existed.
  * `withDefaults` also writes the calm radii and shadows (for the editor's sample, which must not inherit the root's style).
  */
@@ -48,6 +48,8 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         '--ink': inkValue(style, mode),
         '--press-shift': style.pressShift,
         '--shadow-room': style.shadowRoom,
+        '--card-pad': style.cardSpace,
+        '--card-gap': style.cardSpace,
         // Active/open edges (chosen chip, open filter): the ink in bold; calm leaves it unset so each element's own fallback colour applies.
         ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),
@@ -64,12 +66,14 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
     if (radius) {
         for (const [k, v] of Object.entries(radius)) vars[`--radius-${k}`] = v;
     }
-    const off = style.shadowOffset;
-    if (off) {
-        vars['--shadow-card'] = `${off.card} ${off.card} 0 0 var(--ink)`;
-        vars['--shadow-control'] = `${off.control} ${off.control} 0 0 var(--ink)`;
-        vars['--shadow-premium'] = `${off.premium} ${off.premium} 0 0 var(--ink)`;
-        vars['--shadow-dialog'] = `${off.dialog} ${off.dialog} 0 0 var(--ink)`;
+    const sh = style.shadows;
+    if (sh === 'none') {
+        for (const k of ['card', 'control', 'premium', 'dialog']) vars[`--shadow-${k}`] = 'none';
+    } else if (sh !== 'soft') {
+        vars['--shadow-card'] = `${sh.card} ${sh.card} 0 0 var(--ink)`;
+        vars['--shadow-control'] = `${sh.control} ${sh.control} 0 0 var(--ink)`;
+        vars['--shadow-premium'] = `${sh.premium} ${sh.premium} 0 0 var(--ink)`;
+        vars['--shadow-dialog'] = `${sh.dialog} ${sh.dialog} 0 0 var(--ink)`;
     } else if (withDefaults) {
         vars['--shadow-card'] = CALM_SHADOWS.card;
         vars['--shadow-control'] = CALM_SHADOWS.control;

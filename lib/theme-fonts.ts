@@ -1,5 +1,5 @@
 import {
-    Geist, Literata, Commissioner, Atkinson_Hyperlegible, Alegreya_Sans, Source_Serif_4, Lora, Nunito_Sans, Archivo_Black,
+    Geist, Literata, Commissioner, Atkinson_Hyperlegible, Alegreya_Sans, Source_Serif_4, Lora, Nunito_Sans, Archivo_Black, Raleway,
 } from 'next/font/google';
 
 /**
@@ -16,8 +16,9 @@ const sourceSerif = Source_Serif_4({ variable: '--font-source-serif', subsets: [
 const lora = Lora({ variable: '--font-lora', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
 const nunito = Nunito_Sans({ variable: '--font-nunito-sans', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
 const archivoBlack = Archivo_Black({ variable: '--font-archivo-black', subsets: ['latin', 'latin-ext'], weight: '400', display: 'swap', preload: false });
+const raleway = Raleway({ variable: '--font-raleway', subsets: ['latin', 'latin-ext'], display: 'swap', preload: false });
 
 /** Class names that define all the font variables; put them on `<html>`. */
-export const THEME_FONT_CLASSES = [geist, literata, commissioner, atkinson, alegreya, sourceSerif, lora, nunito, archivoBlack]
+export const THEME_FONT_CLASSES = [geist, literata, commissioner, atkinson, alegreya, sourceSerif, lora, nunito, archivoBlack, raleway]
     .map((f) => f.variable)
     .join(' ');
