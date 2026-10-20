@@ -53,52 +53,43 @@ export default async function AdminDashboardPage({
                 </p>
             )}
 
-            {/* Content */}
-            <div className="space-y-6">
-
-                {(
-                    <>
-                    <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
-                        <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('hiddenGroupsTitle')}</h2>
-                        {hiddenGroups.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-8">{tMod('hiddenGroupsEmpty')}</p>
-                        ) : (
-                            <ul className="space-y-3">
-                                {hiddenGroups.map(g => (
-                                    <li key={g.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
-                                        <div className="min-w-0 space-y-1">
-                                            <Link href={`/${locale}${g.href}`} className="font-bold text-primary hover:underline [overflow-wrap:anywhere]">{g.name}</Link>
-                                            <p className="text-sm text-foreground-muted">{g.ownerName ? tMod('hiddenOwner', { name: g.ownerName }) : tInbox('unknown')}</p>
-                                            <p className="text-sm text-foreground [overflow-wrap:anywhere]">{g.reason || '—'}</p>
-                                            <p className="text-xs text-foreground-muted">
-                                                {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
-                                            </p>
-                                        </div>
-                                        <HiddenGroupActions groupId={g.id} groupName={g.name} hiddenReason={g.reason} canDelete={isOwner} />
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                    </section>
-                    <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
-                        <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('logTitle')}</h2>
-                        {group && (
-                            <p className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground-muted">
-                                {tMod('logFiltered')}
-                                <Link href={`/${locale}/admin?tab=moderation`} className="font-semibold text-primary hover:underline">{tMod('logShowAll')}</Link>
-                            </p>
-                        )}
-                        {moderationLog.length === 0 ? (
-                            <p className="text-foreground-muted text-center py-12">{tMod('logEmpty')}</p>
-                        ) : (
-                            <ModerationLog entries={moderationLog} locale={locale} formatDate={(d) => format.dateTime(d, { dateStyle: 'medium', timeStyle: 'short' })} />
-                        )}
-                    </section>
-                    </>
+            <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+                <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('hiddenGroupsTitle')}</h2>
+                {hiddenGroups.length === 0 ? (
+                    <p className="text-foreground-muted text-center py-8">{tMod('hiddenGroupsEmpty')}</p>
+                ) : (
+                    <ul className="space-y-3">
+                        {hiddenGroups.map(g => (
+                            <li key={g.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
+                                <div className="min-w-0 space-y-1">
+                                    <Link href={`/${locale}${g.href}`} className="font-bold text-primary hover:underline [overflow-wrap:anywhere]">{g.name}</Link>
+                                    <p className="text-sm text-foreground-muted">{g.ownerName ? tMod('hiddenOwner', { name: g.ownerName }) : tInbox('unknown')}</p>
+                                    <p className="text-sm text-foreground [overflow-wrap:anywhere]">{g.reason || '—'}</p>
+                                    <p className="text-xs text-foreground-muted">
+                                        {tMod('hiddenBy', { name: g.hiddenByName || tInbox('unknown'), date: format.dateTime(g.hiddenAt, { dateStyle: 'medium', timeStyle: 'short' }) })}
+                                    </p>
+                                </div>
+                                <HiddenGroupActions groupId={g.id} groupName={g.name} hiddenReason={g.reason} canDelete={isOwner} />
+                            </li>
+                        ))}
+                    </ul>
                 )}
-
-            </div>
-        </div>
+            </section>
+            <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+                <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('logTitle')}</h2>
+                {group && (
+                    <p className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground-muted">
+                        {tMod('logFiltered')}
+                        <Link href={`/${locale}/admin?tab=moderation`} className="font-semibold text-primary hover:underline">{tMod('logShowAll')}</Link>
+                    </p>
+                )}
+                {moderationLog.length === 0 ? (
+                    <p className="text-foreground-muted text-center py-12">{tMod('logEmpty')}</p>
+                ) : (
+                    <ModerationLog entries={moderationLog} locale={locale} formatDate={(d) => format.dateTime(d, { dateStyle: 'medium', timeStyle: 'short' })} />
+                )}
+            </section>
+</div>
     );
 }
 

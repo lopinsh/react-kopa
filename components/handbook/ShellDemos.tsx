@@ -26,7 +26,7 @@ const OPEN = 'min-h-[19rem] [&_[role=menu]]:static!';
 export function HeaderDemo({ signedIn, admin }: { signedIn: boolean; admin?: boolean }) {
     const tNav = useTranslations('nav');
     return (
-        <div className="flex h-14 items-center gap-2 border-b border-border bg-surface px-3 md:px-4">
+        <div className="flex h-14 items-center overflow-x-auto gap-2 border-b border-border bg-surface px-3 md:px-4">
             <Logo />
             <div className="mx-2 flex min-w-0 flex-1 justify-center">
                 <HeaderSearchField className="flex w-full max-w-2xl" />
