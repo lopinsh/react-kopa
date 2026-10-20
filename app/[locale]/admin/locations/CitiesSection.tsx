@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MapPin, Pencil, Trash2 } from 'lucide-react';
@@ -9,6 +9,8 @@ import { useToast } from '@/hooks/use-toast';
 import { createCity, deleteCity, renameCity } from '@/actions/city-actions';
 import type { ActionResponse } from '@/types/actions';
 import type { CityRow } from '@/lib/services/city.service';
+import TextCounter from '@/components/ui/TextCounter';
+import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { cities: CityRow[] };
 
@@ -27,6 +29,7 @@ export default function CitiesSection({ cities }: Props) {
     const [askDelete, setAskDelete] = useState<CityRow | null>(null);
     const [editingId, setEditingId] = useState<string | null>(null);
     const [nameLv, setNameLv] = useState('');
+    const uid = useId();
     const [nameEn, setNameEn] = useState('');
 
     const active = cities.filter((city) => city.status === 'ACTIVE');
@@ -57,11 +60,13 @@ export default function CitiesSection({ cities }: Props) {
             <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                     <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameLv')}</label>
-                    <input type="text" value={nameLv} onChange={(e) => setNameLv(e.target.value)} maxLength={60} className={INPUT} />
+                    <input type="text" aria-describedby={`${uid}-lv`} value={nameLv} onChange={(e) => setNameLv(e.target.value)} className={INPUT} />
+                    <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
                     <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameEn')}</label>
-                    <input type="text" value={nameEn} onChange={(e) => setNameEn(e.target.value)} maxLength={60} className={INPUT} />
+                    <input type="text" aria-describedby={`${uid}-en`} value={nameEn} onChange={(e) => setNameEn(e.target.value)} className={INPUT} />
+                    <TextCounter id={`${uid}-en`} length={nameEn.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
             </div>
             <div className="mt-4 flex justify-end gap-2">
@@ -76,7 +81,7 @@ export default function CitiesSection({ cities }: Props) {
     );
 
     return (
-        <section className="rounded-xl border border-border bg-surface p-4 shadow-sm sm:p-6" data-ui="cities-section" aria-labelledby="cities-heading">
+        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6" data-ui="cities-section" aria-labelledby="cities-heading">
             <div className="flex items-center justify-between gap-3">
                 <h2 id="cities-heading" className="flex items-center gap-2 text-xl font-bold">
                     <MapPin className="h-5 w-5 text-foreground-muted" />

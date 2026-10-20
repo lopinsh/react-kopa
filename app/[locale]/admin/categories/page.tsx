@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getAllTags, getPendingTags, getTaxonomy } from '@/actions/taxonomy-actions';
 import { getTranslations } from 'next-intl/server';
 import TaxonomyAdminClient from './TaxonomyAdminClient';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -29,9 +30,7 @@ export default async function AdminTaxonomyPage({
 
     return (
         <div className="space-y-6">
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold">{t('title')}</h1>
-            </div>
+            <AdminPageHeader title={t('title')} />
             <TaxonomyAdminClient
                 locale={locale}
                 pending={pendingRes.data ?? []}

@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { pickTitle } from '@/lib/utils/localized-title';
@@ -10,6 +10,8 @@ import { approveTag, mergeTag } from '@/actions/taxonomy-actions';
 import { rejectWildcard } from '@/actions/admin-actions';
 import { useToast } from '@/hooks/use-toast';
 import type { PendingCategoryWithContext, ActiveL2WithAliases } from '@/lib/services/taxonomy.service';
+import TextCounter from '@/components/ui/TextCounter';
+import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
 type Props = {
     item: PendingCategoryWithContext;
@@ -33,6 +35,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     // Approve form state
     // The suggestion exists in one language only; the admin fills in the other one.
     const isLv = item.submittedLang === 'lv';
+    const uid = useId();
     const [nameEn, setNameEn] = useState(isLv ? '' : item.submittedLabel);
     const [nameLv, setNameLv] = useState(isLv ? item.submittedLabel : '');
     const [slugEn, setSlugEn] = useState(isLv ? '' : slugify(item.submittedLabel));
@@ -88,7 +91,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
     };
 
     return (
-        <div className="bg-surface border border-border rounded-lg p-5 shadow-sm">
+        <div className="rounded-2xl border border-border bg-surface p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                     <h3 className="text-xl font-bold cursor-pointer hover:underline break-words" onClick={onSelect}>
@@ -160,20 +163,22 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => { setNameEn(e.target.value); setSlugEn(slugify(e.target.value)); }}
                                 className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
                             />
+                            <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameLv')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => { setNameLv(e.target.value); setSlugLv(slugify(e.target.value)); }}
                                 className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
                             />
+                            <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('slugEn')}</label>

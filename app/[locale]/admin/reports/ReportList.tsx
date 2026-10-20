@@ -84,7 +84,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                 <p role="alert" className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger">{error}</p>
             )}
             {reports.map((report) => (
-                <div key={report.id} className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-all hover:shadow-md">
+                <div key={report.id} className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">

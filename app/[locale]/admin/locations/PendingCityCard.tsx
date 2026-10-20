@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MapPin } from 'lucide-react';
@@ -10,6 +10,8 @@ import { useToast } from '@/hooks/use-toast';
 import { approveCity, rejectCity } from '@/actions/city-actions';
 import type { ActionResponse } from '@/types/actions';
 import type { CityRow } from '@/lib/services/city.service';
+import TextCounter from '@/components/ui/TextCounter';
+import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { city: CityRow };
 
@@ -28,6 +30,7 @@ export default function PendingCityCard({ city }: Props) {
     const [askReject, setAskReject] = useState(false);
     const [editing, setEditing] = useState(false);
     const [nameLv, setNameLv] = useState(city.nameLv);
+    const uid = useId();
     const [nameEn, setNameEn] = useState(city.nameEn);
 
     const run = (action: () => Promise<ActionResponse>, done: string) => {
@@ -45,7 +48,7 @@ export default function PendingCityCard({ city }: Props) {
     };
 
     return (
-        <div className="bg-surface border border-border rounded-lg p-5 shadow-sm" data-ui="pending-city-card">
+        <div className="rounded-2xl border border-border bg-surface p-5" data-ui="pending-city-card">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                     <h3 className="flex items-center gap-2 text-xl font-bold break-words">
@@ -84,11 +87,13 @@ export default function PendingCityCard({ city }: Props) {
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div>
                             <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameLv')}</label>
-                            <input type="text" value={nameLv} onChange={(e) => setNameLv(e.target.value)} maxLength={60} className={INPUT} />
+                            <input type="text" aria-describedby={`${uid}-lv`} value={nameLv} onChange={(e) => setNameLv(e.target.value)} className={INPUT} />
+                            <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameEn')}</label>
-                            <input type="text" value={nameEn} onChange={(e) => setNameEn(e.target.value)} maxLength={60} className={INPUT} />
+                            <input type="text" aria-describedby={`${uid}-en`} value={nameEn} onChange={(e) => setNameEn(e.target.value)} className={INPUT} />
+                            <TextCounter id={`${uid}-en`} length={nameEn.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                     </div>
                     <div className="mt-4 flex justify-end gap-2">

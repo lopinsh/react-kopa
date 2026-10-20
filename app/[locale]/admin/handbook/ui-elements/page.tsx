@@ -10,6 +10,7 @@ import { SearchDemo } from '@/components/handbook/SearchDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
+import { AdminPagesDemo, AdminSectionsDemo } from '@/components/handbook/AdminFrameDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ProfileView from '@/components/profile/ProfileView';
 import ProfileViewerNote from '@/components/profile/ProfileViewerNote';
@@ -63,7 +64,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
         <HandbookShell headings={[]} wide>
             <div className="mb-8 flex items-start justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
+                    <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
                     <p className="mt-2 max-w-[70ch] text-foreground-muted">{t('intro')}</p>
                     <p className="mt-2 max-w-[70ch] text-sm text-foreground-muted">{t('sampleNote')}</p>
                 </div>
@@ -310,6 +311,18 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="counter" names={[UI.fieldCounter]} files={['components/ui/TextCounter.tsx', 'lib/text-limit.ts']}>
                     <CounterDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="adminSections" names={[UI.tabs]} files={['components/admin/frame/AdminSections.tsx', 'lib/constants/adminNav.ts']}>
+                    <AdminSectionsDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="adminPages" names={[UI.tabs]} files={['components/admin/frame/AdminPagesNav.tsx']}>
+                    <AdminPagesDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="adminDrawer" names={[UI.tabs]} files={['components/admin/frame/AdminDrawer.tsx']}>
+                    <AdminPagesDemo drawer />
                 </UiSpecimen>
 
                 <UiSpecimen id="tabs" names={[UI.tabs]} files={['components/groups/SettingsTabs.tsx']}>

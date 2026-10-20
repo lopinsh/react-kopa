@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { MessageSquareText } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
 import { FEEDBACK_KINDS, FEEDBACK_TABS } from '@/lib/constants';
@@ -8,6 +7,7 @@ import { feedbackFilterSchema } from '@/lib/validations/feedback';
 import { Link } from '@/i18n/routing';
 import FeedbackAdminRow from '@/components/admin/FeedbackAdminRow';
 import FeedbackPurgeButton from '@/components/admin/FeedbackPurgeButton';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -41,15 +41,7 @@ export default async function AdminFeedbackPage({
 
     return (
         <div className="space-y-6">
-            <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <MessageSquareText className="h-6 w-6" />
-                </div>
-                <div>
-                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
-                    <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
-                </div>
-            </div>
+            <AdminPageHeader title={t('title')} subtitle={t('subtitle')} />
 
             <nav aria-label={t('tabs')} className="mb-6 flex border-b border-border">
                 {FEEDBACK_TABS.map((id) => (

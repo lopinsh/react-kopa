@@ -21,7 +21,7 @@ export default function PendingInbox({ pendingTags, categories, onNodeSelect }: 
     }
 
     return (
-        <div className={`w-full rounded-xl border border-warning/40 shadow-sm overflow-hidden transition-colors ${isExpanded ? 'bg-warning/10 ' : 'bg-surface'}`}>
+        <div className={`w-full rounded-2xl border border-warning/40 overflow-hidden transition-colors ${isExpanded ? 'bg-warning/10 ' : 'bg-surface'}`}>
             <button
                 type="button"
                 className="w-full flex items-center justify-between p-4 hover:bg-warning/10 transition-colors"

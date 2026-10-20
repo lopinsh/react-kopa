@@ -1,4 +1,4 @@
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { approveTag, addAlias, deleteAlias } from '@/actions/taxonomy-actions';
@@ -8,6 +8,8 @@ import type { ActiveL2WithAliases, TaxonomyTree as TaxonomyTreeData } from '@/li
 import { tint } from '@/lib/color-utils';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
+import TextCounter from '@/components/ui/TextCounter';
+import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
 type Props = {
     l2: ActiveL2WithAliases;
@@ -28,6 +30,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
     const initialEn = l2.translations.find(t => t.lang === 'en')?.title || '';
     const initialLv = l2.translations.find(t => t.lang === 'lv')?.title || '';
 
+    const uid = useId();
     const [nameEn, setNameEn] = useState(initialEn);
     const [nameLv, setNameLv] = useState(initialLv);
     const [slugEn, setSlugEn] = useState(l2.slug);
@@ -122,20 +125,22 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
                                 className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
                             />
+                            <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameLv')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
                                 className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
                             />
+                            <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">

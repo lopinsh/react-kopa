@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { UserCog } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
 import { TeamService } from '@/lib/services/team.service';
 import TeamManager from '@/components/admin/TeamManager';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -24,15 +24,7 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
 
     return (
         <div className="space-y-6">
-            <div className="mb-6 flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                    <UserCog className="h-6 w-6" />
-                </div>
-                <div>
-                    <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
-                    <p className="mt-1 text-foreground-muted">{t(isOwner ? 'subtitle' : 'subtitleReadOnly')}</p>
-                </div>
-            </div>
+            <AdminPageHeader title={t('title')} subtitle={t(isOwner ? 'subtitle' : 'subtitleReadOnly')} />
             <TeamManager team={result.data ?? []} canManage={isOwner} viewerId={userId} />
         </div>
     );

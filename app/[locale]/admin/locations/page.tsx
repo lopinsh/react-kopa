@@ -4,6 +4,7 @@ import { requireAdminPage } from '@/lib/admin-access';
 import { CityService } from '@/lib/services/city.service';
 import CitiesSection from './CitiesSection';
 import PendingCityCard from './PendingCityCard';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -24,12 +25,10 @@ export default async function AdminLocationsPage({ params }: { params: Promise<{
 
     return (
         <div className="space-y-6">
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold">{tNav('locations')}</h1>
-            </div>
+            <AdminPageHeader title={tNav('locations')} />
             <div className="space-y-6">
                 {pending.length > 0 && (
-                    <section aria-labelledby="locations-pending" className="grid gap-4 rounded-xl border border-warning/40 bg-warning/10 p-4">
+                    <section aria-labelledby="locations-pending" className="grid gap-4 rounded-2xl border border-warning/40 bg-warning/10 p-5">
                         <h2 id="locations-pending" className="font-bold text-warning">{t('inbox.title')}</h2>
                         {pending.map((city) => (
                             <PendingCityCard key={city.id} city={city} />

@@ -75,7 +75,7 @@ export default function AdminGroupCategorizationForm({
             <form onSubmit={onSubmit} className="space-y-6">
                 <div className="rounded-2xl border border-border bg-surface p-6">
                     <p className="text-xs font-semibold text-foreground-muted">{t('override.title')}</p>
-                    <h1 className="mt-1 text-2xl font-bold text-foreground">{groupName}</h1>
+                    <h1 className="mt-1 font-serif text-2xl font-semibold text-foreground">{groupName}</h1>
                     <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
 
                     <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>

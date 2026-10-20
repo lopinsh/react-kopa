@@ -26,7 +26,7 @@ export default function FloatingActionBar({
     if (selectedIds.length === 0) return null;
 
     return (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none animate-in slide-in-from-bottom-5 fade-in duration-200">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
             <div className="flex items-center gap-4 bg-surface-elevated border border-border shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] px-4 py-3 rounded-full pointer-events-auto">
 
                 {/* Selection Count & Clear (Clickable area) */}

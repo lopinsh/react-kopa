@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { Download, Languages } from 'lucide-react';
+import { Download } from 'lucide-react';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
 import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
 import { createDateFormatter } from '@/lib/date-format';
+import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -26,17 +27,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
     return (
         <div className="space-y-6">
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                        <Languages className="h-6 w-6" />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
-                        <p className="mt-1 text-foreground-muted">{t('subtitle')}</p>
-                    </div>
-                </div>
-                {/* A plain link: the route sends the file as a download. */}
+            <AdminPageHeader title={t('title')} subtitle={t('subtitle')} action={
                 <a
                     href="/api/admin/translations/export"
                     download
@@ -45,7 +36,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                     <Download className="h-4 w-4" />
                     {t('export')}
                 </a>
-            </div>
+            } />
 
             <section aria-labelledby="suggestions-heading" className="mb-10">
                 <h2 id="suggestions-heading" className="mb-3 text-xl font-bold text-foreground">{t('suggestionsTitle')}</h2>

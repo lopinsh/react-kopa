@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useId, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { bulkMergeAction } from '@/actions/taxonomy-actions';
 import type { ActiveL2WithAliases, PendingCategoryWithContext } from '@/lib/services/taxonomy.service';
 import { Merge } from 'lucide-react';
+import TextCounter from '@/components/ui/TextCounter';
+import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
 type Props = {
     selectedIds: string[];
@@ -20,6 +22,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
 
     const [isPending, startTransition] = useTransition();
     const [canonicalId, setCanonicalId] = useState<string>('');
+    const uid = useId();
     const [nameEn, setNameEn] = useState('');
     const [nameLv, setNameLv] = useState('');
     const [slugEn, setSlugEn] = useState('');
@@ -69,7 +72,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
     };
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-300">
+        <div className="space-y-8">
             <div>
                 <h3 className="text-xl font-bold flex items-center gap-2">
                     <Merge className="w-5 h-5 text-primary" />
@@ -109,20 +112,22 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1.5">{f('nameEn')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={(e) => setNameEn(e.target.value)}
                                 className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
+                            <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1.5">{f('nameLv')}</label>
                             <input
-                                type="text"
+                                type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={(e) => setNameLv(e.target.value)}
                                 className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
+                            <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1.5">{f('slugEn')}</label>
