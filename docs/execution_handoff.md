@@ -1,22 +1,38 @@
 # Execution Handoff: Ejam Kopā
 
 > The living "what's next" list. Read `AGENTS.md` first, then this file, then run `npm run feedback` (open notes from the site admins). Product/UI questions: `docs/handbook/README.md`.
-> Release work (R1a–R12) follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
-> Finished work is not kept here: it moves to `docs/archive/` (not required reading; search it for the history of a decision).
+> Release work follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
+> Finished work is not kept here: it moves to `docs/archive/` (latest: `execution_handoff_2026-10-20.md`, the 15 Oct notes batch, R9a–R11b and quick batches 2–3).
 
-**Last updated:** 2026-10-15 (R1a–R8, the quick batch, R6b, C2 and C4 live; R9a-1 event page and R9a-2 event form live).
+**Last updated:** 2026-10-20 (everything up to R13 live; R14 spec written; R10 cancelled).
 
 ---
 
 ## Current state
 
-- Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.1`), built and released as R1a–R12 one by one.
-- **Live:** R1a Identity, R1b Dizains, R2a Header/menus/own-area frame, R2b Behaviour pieces, R3a Group frame, R3b Sazināties/pending/"…", R4 Discovery data, R5a Filters/drawer/cards, R5b Events by day, R6 Panels, R7 Search (with the Session A owner-notes batch), R8 Own area.
-- [x] **R8 Own area live** (`2f4b554`..`3d1165c`, review fixes `605807b`, `3d1165c`): Manas grupas sections, Ziņas in the frame, Paziņojumi page, messages and bell as click dropdowns, the "new" count, groups you belong to open their full page; migration `add_user_my_groups_seen_at`; Prisma `relationJoins` preview on. Notes cmv9ajgmd, cmv9aist6, cmv9aom44, cmv9ak7k4, cmv9al64n, cmv9amjft, cmv9ahbt5 done.
-- R13 Templates (palette + style): pushed, live.
-- **Next:** R9c, R10 (Citur), R11 (Admin frame), R12 (everything else). Cards, owner decisions OD-01…OD-27 (all decided) and the old → new map are in `build-plan.md`.
-- Workflow per release: Opus spec → Sonnet build → Opus review (independent review for migrations and R4-like data work) → reviewer pushes.
-- Review (2026-10-15): group panel (lookingFor, no-next-meeting line checked LV/EN at 375 and 1280) and search theme fixes verified; a page category the search does not know is now dropped.
+- Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.2`), built release by release.
+- **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search.
+- **Cancelled:** R10 Citur and "Kur tu esi?" (owner, 19 Oct). Its rule AR-38 stays unbuilt; discovery keeps starting on "Visur".
+
+## What's next (in this order)
+
+1. **R14 Kopā** (spec `docs/development/specs/R14.md`, written and approved): R14a faces (Facepile, "Eju · N" with faces, faces on group cards), then R14b ("Šonedēļ" strip, Informācija reorder, 3:1 picture). No migration.
+2. **R12 Everything else**, the last redesign release: sign in, register, username, create-group wizard, Par mums, Privātums, 404, cookie banner, delete account (OD-27). Needs its spec.
+3. **After R12:** reporting a person (OD-11, `add_report_target_user`), the banner picker (see Open follow-ups).
+
+Workflow per release: spec agent → builder → reviewer (Opus for auth, migrations, time, messaging; Sonnet otherwise) → the reviewer pushes. Explain each release and get the owner's OK before its spec and build.
+
+## Owner notes with no release yet
+
+Open in `npm run feedback`; each needs a short discussion before it gets a home.
+
+- `cmv9q3gb6` discovery cards don't show which groups you belong to (use the Manas grupas mark). Fits R14a, which already changes group cards.
+- `cmvamisxc` getting back to discovery and to your groups is hard away from the main page (bottom bar, header).
+- `cmv9uw02g` an "admin mode" for a group: edit only when switched on, view the page as member / non-member.
+- `cmv9kcok8` Manas grupas: each part gets a visible heading matching its tab.
+- `cmv9kj0qc`, `cmv9l90i3` (ideas): Manas grupas as an upcoming schedule; "Mans saturs" as the own area's landing page.
+- R13 leftover: `font-serif` headings (AdminPageHeader and five more) ignore the theme's heading font.
+- `cmv9addnl` ("Tikšanās nav izziņota") is answered by C2 (live) and can be closed.
 
 ## Standing owner rules
 
@@ -28,33 +44,12 @@
 - **The "tree" idea** (https://claude.ai/artifact/KxCiZs1x2Cz31jdJApsmLi) is parked until everything else works.
 - **Session hygiene:** start the dev server only via the browser pane (`.claude/launch.json`, config "dev"); only one session may run it. If something already listens on :3000 (`Get-NetTCPConnection -LocalPort 3000 -State Listen`) it is a leftover `next dev`: confirm it is this repo's and stop it. Stop your own server before reporting done. Don't run `npm run build` while dev runs. Switching seed accounts (`owner@local`, `member@local`, …) is fine on localhost, never on ejam.lumm.eu. Native `confirm()` blocks the browser pane: set `window.confirm = () => true` first.
 
-## Owner notes batch 15 Oct (planned, not built)
-
-Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisions 15 Oct"); release-bound notes are in the R8, R9a and R9b cards. Order: quick batch below → R6b (centred overlay, C1) → `LanguageEditor` (C4) → R9a …
-
-- [x] **Quick batch** (83175ee, bd933df, bd16140, 343b17e; the group row's dot is on every `GroupRow`, not only in search) (each under ~4 min): drop the "Kategorijas" drawer heading, keep it for screen readers (cmv9ae721); search result rows get the category dot of the cards (cmv9aaifn); event form "Adrese" → "Kur?" + hint (cmv9b418s); settings "Ko meklējam?" → "Sauklis"/"Tagline" (cmv9bbzze); whole section row opens it, chevron ▾/▴ (cmv9bd0na, cmv9bdszj); seed events: public open, request-to-join, members-only, several dates per group (cmv9as5hl).
-- [x] **Accent-insensitive search** (5ac1d36, 81f6532; the "par" chip was dropped because chips need a count above zero and the counts used accent-sensitive ILIKE) (cmv9a8pkg, promoted from Parked ideas): theme chips already fold (`lib/search-topics.ts`), so first reproduce why "par" showed no "Pārgājieni" chip; group results use Postgres `ILIKE` → Postgres `unaccent` extension (migration `add_unaccent_extension`, expand only).
-- [x] **R6b** centred overlay growing from the card (C1) (b7a7774 placement, c2c1dc4 grow; View Transitions driven by hand, 560 px overlay from 768 px; review fix 5eeb69a: search results are never grown; pushed, live).
-- [x] **C2** card bottom line = latest activity (next event › public announcement › tagline › nothing); tagline always in panel and group header. `cardActivities` (lib/services/card-activity.ts) holds the one public-announcement filter R9b plugs into; panel drops "no meeting" line; tagline in banner from md and on Informācija on phones. (`0310185`, review `b50e650`; pushed, live)
-- [x] **C4** `LanguageEditor` (`bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard, `5bbc026` docs; review `787d698`: a lost connection mid-save keeps the form instead of the error page, screen-reader names; pushed, live): one control for owner text in every language on the event form, group sections (also before the first save) and the create-group wizard ("Par mums" per language); notes cmv9az6sn, cmv9b0tth, cmv9b1v6h, cmv9bemab done. Spec `docs/development/specs/C4.md`.
-
-- [x] **R9a-1 Event page** (`5927a8d` one timing rule and "Notiek tagad · līdz …" on cards, panels and Informācija, seed; `d18bdca` `getEventPage` service; `356e8f9` the page in the new look; `92f661f` banner breadcrumb and Rīkotājiem box; `0beedc2` fixes and UI-elements specimen; `0ad728f` docs; review fix "Dzēst redirects in the action": Dzēst (event and group) redirects inside the server action instead of a client timer, the members-only gate page has its own `<h1>`, messages files back to LF; pushed, live): notes cmv9b6daz (Praktiskā informācija) and cmv9b80zl (Visi pasākumi as a breadcrumb) done, C2 review item (running event on the card) done. Spec `docs/development/specs/R9a.md`. Next: **R9a-2** the event form (spec section 6: split of `EventCreationWizard`, restyle, skipped-hour check).
-- [x] **R9a-2 Event form** (`ca9cfa5` `EventCreationWizard` split into `forms/event/*`; `e3196d6` new look (Field, radio rows, Button, ConfirmDialog, left-aligned page heads) and `localTimeExists`: a time in the skipped DST hour is refused on step 1 with `eventWizard.TIME_SKIPPED`; checked create and edit LV/EN at 360-1920 px, skipped hour 28 Mar 2027 03:30; review fix: time logic moved to `useEventTimes` (useEventForm under the size limit), re-checked create/edit LV/EN 360-1920, skipped hour refused, repeated 25 Oct hour saved as its first occurrence; reviewed, pushed, live). R9a-2 leftovers closed (`a08b634` useEventForm split into useEventSave, both under 150 lines; open-switch verified; the double h1 is Next's hidden previous route (display:none), not a bug; create and edit smoke-checked in LV at 360 and 1280). Next: **R9b**. Spec `docs/development/specs/R9a.md` section 6.
-- [x] **R9b-1 Jaunumi** (`e4860ef` migration `add_announcement_visibility`, `29f41c5` visibility in services and cards, new Jaunumi page `components/groups/announcements/*`, `347fe8f` newest announcement on Informācija; Opus review `634e93f`: Informācija revalidated on create/archive, seed private posts members only, plan:check fixed; checked signed-out HTML/RSC, card filter, private-group forcing, archive/restore, 360-1920, dark; pushed, live). Services and page share one commit so each typechecks. Next: R9b-2 Biedri, R9b-3.
-- [x] **R9b-2 Biedri** (`allowedMemberActions` in `lib/utils/permissions.ts` is the one rule: `updateMemberRole`/`removeMember` call it and the menu items come from `GroupMembersService.getMembersPage`; `MemberRow`, `MemberRowMenu`, `RequestRow` replace MemberCard/RequestCard/MembershipPanel; requests only in Biedri → Pieteikumi, settings page without the panel. Checked owner/mod/member menus, forced calls refused (FORBIDDEN), promote/demote/approve at 360 and 1280, LV/EN; review: request errors via `errors.*`, seed request with a message, decline + Sazināties + 768-1920 checked; reviewed, pushed, live). "Kopš" shown as "Pievienojās: {date}" (the LV month would read nominative). Next: R9b-3.
-- [x] **R9b-3 Informācija on one page, group picture** (`1f500e4` `InfoSections` + `hooks/useScrollSpy` (jump links with replaceState, scroll-spy on the app's scroll area, `?part=` and `#part-` land once), dead discovery `status` option removed; `e5b35e8` C5: banner is tint and mark only, `GroupPicture` 16:9 on Informācija with category-tile fallback, shared `PictureBox`, `onImage`/image-shade/image-chip removed; `65ed62e` scope fix. Checked LV/EN at 360 and 1280, jump lands under the tabs, marked tab follows both ways, last at bottom; review: no hash or scroll on a plain load (initial only for ?part=), jump links are plain #part hrefs; checked 768-1920, dark tile, owner vs visitor parts; reviewed, pushed, live). Feedback notes cmv9bb8ci, cmv9b9pbr, cmv9at6co closed. Next: R9c.
-- [x] **R9c-1 Profiles** (OD-26 changed 15 Oct): `UserService.getProfileView` is the one place that decides what a viewer sees (replaces getUserByUsername/getOwnProfile), `ProfileView` shared by Mans profils (seen as a stranger who shares no group) and `/profile/[username]`; Labot profilu a page of its own; `PrivacySettings` in Iestatījumi (each switch saves on change, `updatePrivacy`); own-bar links; EN bottom bar "My groups"; `edit` reserved as username. Checked signed-out, stranger, co-member, private profile and yourself, LV/EN at 360–1920. Review: no groups heading over an empty list (a stranger and Mans profils match), switches revert with a toast when offline and never send twice, reserved usernames in `lib/username`, handbook demos ProfileView and PrivacySettings. Pushed, live. Next: R9c-2 (group settings).
-- [x] **R9c-2 Group settings**: `GroupSettingsForm` split into `GroupTab`, `OwnerTab`, `SectionsTab`, `SaveRow`, `useGroupSettingsForm`; `GroupSectionEditor` into `settings/sections/` (`SectionsEditor`, `SectionRow`, `SectionRowActions`, `useSectionsList`); settings cards in the Iestatījumi look (no outer card, no entry animation, no section icons); `LanguageEditor` bar wraps by two groups; `TagPicker` split into `tag-picker/` (search and pending hooks, results, browse list, chips). No behaviour change; permissions stay in the services. Checked as group owner and group admin (no Owner tab), LV/EN, 360/768/1280. Review: delete dialog names the group, tag-picker hooks within limits, dead animate-in dropped. Pushed, live.
-- [x] **R11a Admin frame, pushed, live** (frame only; R11b = card look per page): `lib/constants/adminNav.ts` + `lib/admin-nav.ts` (sections, pages, parts), `components/admin/frame/*` (sections bar, pages list, phone drawer, provider); pages lose their containers; Handbook chapters sit in the left list; `DesignPartTabs` and `AdminNav` deleted; red reports pill and per-part contrast dot in the pages list; five `confirm()` -> `ConfirmDialog`; `SlideoverL1View` aliases split out. 
-- [x] **R11b Admin pages in the card look, pushed, live**: shared `AdminPageHeader`, cards for every page (Pārskats in two cards, log as card rows on phones via `ModerationLog`), `TextCounter` on category and city name fields, frame specimens in UI elements (`AdminFrameDemos`), admin paragraph in `docs/handbook/design.md`.
-- [x] **Quick batch 2** (`5b2db44` menus/pop-ups stay open in feedback mode, cmv2rea3z; `128a12d` footer at the bottom, cmv9l06dg; `a2b7443` Veidi always chips, cmv9k2uey; `81e3202` search finds and suggests Veidi, cmv9lczhq; `74c8d12` Tavi pieteikumi as group rows, cmv9keww2; reviewed, pushed, live; notes marked done; cmv2rea3z newer request, recolor the floating icons by state, still open).
-- [x] **Quick batch 3** (`3dc4830` saving Par mums of a group without section rows no longer says NOT_FOUND: the virtual "about" section is now created on first save, cmv9usuov, cmv9v5u7a; `e3178e4` Tēma is a left side drawer on phones and the Kur sheet list scrolls inside, cmv9l0zno, cmv9kyl0x; `e4b288f` report reasons Spams / Kaitīgs saturs / Aicinājums uz vardarbību / Cits, no migration (Report.reason is a string), cmv9uxtk9; sticky horizontal menus under the header: admin menu, part tabs, settings tabs, filter line, cmv9kq33f; review `cf1eeeb` new reports accept only offered reasons, `60c47e3` phone filter line sticks at 48 px, the view switch scrolls away). Reviewed, pushed, live.
 
 ## Waiting on the owner
 
 - `cmv5on08v` (Your own area: one space, like a group): "this is ok, but will still review". Leave open until the owner has looked at R8.
-- `cmv85o4gn` (idea): group discovery results visually by place while no filter is set. Parked until R10 ("Kur tu esi?"); needs a discussion first (Riga would push small towns down).
-- Nothing else is awaiting an OK: OD-01…OD-27 and the former "Still open 1–18" are decided.
+- `cmv85o4gn` (idea): group discovery results visually by place while no filter is set. Was parked for R10, which is cancelled; parked with it.
+- No owner decision is open: OD-01…OD-27 are decided.
 
 ## Open follow-ups not in any release
 

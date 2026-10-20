@@ -1,4 +1,4 @@
-# Build plan: the redesign, R1–R12
+# Build plan: the redesign, R1–R14
 
 The plan for building the signed-off redesign (git tag `redesign-v9.8.2`) into the live site, one release at a time. Shown to admins at `/admin/development/build-plan`.
 
@@ -41,7 +41,7 @@ All 26 were decided by the owner on 13 October, each by agreeing to the recommen
 | OD-11 | Reporting people and events (Still open 7) | Decided 13 Oct (note cmv6mmf8) | Later (after R12, needs `add_report_target_user`); until then "Ziņot par grupu" only | Still open | R3b |
 | OD-12 | "Ko meklējam?" in one language or two (Still open 17) | Decided 13 Oct (note cmv6mmn5) | One text as the team writes it (one column) | Still open | R4 |
 | OD-13 | End of the group list (Still open 4) | Decided 13 Oct (note cmv6mmsu) | 24 cards, then "Rādīt vēl"; no endless scrolling | Still open | R5a |
-| OD-14 | Place for someone we don't know (Still open 5) | Decided 13 Oct (note cmv6mn1i) | Start on "Visur"; R10 adds "Kur tu esi?" once, kept on the device, never guessed from IP; signed in: first profile city | Still open | R5a (start), R10 (ask) |
+| OD-14 | Place for someone we don't know (Still open 5) | Decided 13 Oct (note cmv6mn1i) | Start on "Visur"; ~~R10 adds "Kur tu esi?"~~ (R10 cancelled 19 Oct: "Visur" stays the start) | Still open | R5a (start), R10 (ask) |
 | OD-15 | Day strip (AR-39) | Decided 13 Oct (note cmv6mn8a) | Build as drawn (seven days, Monday first, ‹ month ›) | Open rule | R5b |
 | OD-16 | Weekend look = soft tint (AR-11, AR-39, AR-40 inline proposals) | Decided 13 Oct (note cmv6mnbg) | Yes | Proposal | R5b |
 | OD-17 | Phone date button opens a sheet with the quick choices above the calendar (AR-40 inline proposal) | Decided 13 Oct (note cmv6mngu) | Yes | Proposal | R5b |
@@ -104,7 +104,7 @@ Action: **keep** (unchanged apart from tokens), **restyle** (same component, new
 
 ## 4. Release order
 
-The owner's order stands. Five parts are split into two because each is more than one build and review session (R1, R2, R3, R5, R9: see the sizes in the cards), so there are 17 releases. Two items move:
+The owner's order stands. Five parts are split into two because each is more than one build and review session (R1, R2, R3, R5, R9: see the sizes in the cards), so there are 17 releases, plus R13 and R14 added on 20 Oct (built before R12) and R10 cancelled on 19 Oct. **Remaining: R14, then R12.** Two items move:
 
 - **D11 (each group's next meeting) moves from R4 to R3a.** R3a's Informācija gets the "Nākamais pasākums" box (C24), so the query lands with its first user; R5a's card and R6's panel reuse it.
 - **The search word chip lands in R5a, the rest of search in R7.** Discovery's search field lives in today's filter bar, which R5a deletes. To avoid a release without search: R2a's header field is a plain form that opens `/?q=…` (works today), and R5a shows the word as the first chip on the filter line ("“sp” ×", part of AR-43). R7 then adds the instant search overlay, the theme chips and the "Atbilst arī:" line.
@@ -388,7 +388,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Context Law for frames.** Group frame (R3a), own area (R2a) and admin (R11) layouts fetch their context through services; providers hydrate; client parts read hooks. The client-fetched group sidebar (`GroupSidebarContent` via an action) goes in R3a; `userRole`/accent props in `MemberCard`, `EventRow`, `AnnouncementCard`, `GroupSettingsForm` go when those are replaced (R3a, R5b, R9b).
 - **Components over 150 lines** are split when touched: DiscoveryFilterBar 570 (R5a), TagPicker 604 and MemberCard 270, GroupSettingsForm 285 (R9b), EventCreationWizard 517 (R9a), GroupHeader 398 and GroupTabs 301 (R3a), AdminNav 280 (R11), NotificationCenter 238 (R8), DiscoverySidebar 225 (R5a), DateField 222 (R5b/R9a), Modal 172 (R2b), GroupCard 172 (R5a), SlideoverL1View 297 (R11), GroupCreationWizard 262 (R12).
 - **Known debt cleared on the way:** five modals in GroupHeader (R3a/R3b); accent prop-drilling and inline styles (R1a Header logo, R3a, R9b); admin `confirm()` (R11); `TagPicker` `as any` (R9b); `c_common_get` naming in `Header.tsx` (R2a). Anything an agent can fix in a few minutes next to the release is fixed, not logged.
-- **Migrations (expand → contract).** R4 `add_group_looking_for`, `add_event_city` (expand) → R5a `require_event_city` (contract); R8 `add_user_my_groups_seen_at` (+ maybe `add_notification_group_relation`); R10 `add_city_coordinates`. No drops in R1–R12. Later, outside this plan: `add_report_target_user` (OD-11).
+- **Migrations (expand → contract).** R4 `add_group_looking_for`, `add_event_city` (expand) → R5a `require_event_city` (contract); R8 `add_user_my_groups_seen_at` (+ maybe `add_notification_group_relation`); ~~R10 `add_city_coordinates`~~ (cancelled). No drops in R1–R12. Later, outside this plan: `add_report_target_user` (OD-11).
 - **Accessibility.** Icon-only buttons carry the visible word as their label (AP-08 "Sazināties"); truncated filter names keep the full name in the label; dialogs trap focus and return it; panels and sheets close on Esc and Back; day strip and calendar days are buttons named with the full date; white text on images keeps 4.5:1 through the shade; touch targets 44 px; motion respects `prefers-reduced-motion`.
 - **Performance.** Preload only Literata and Commissioner (R1a); cached count queries with an index on event city and date (R4); panels load their data once (R6); `loading.tsx` shapes so nothing jumps (R2b); no client fetch for anything a layout already has.
 - **Feedback.** The owner tags notes with the release (`R3a: …`); the release's reviewer marks them done with `npm run feedback -- done <id> "…"`.
@@ -499,11 +499,11 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R8 Own area | pushed, live | [specs/R8.md](specs/R8.md) | `2f4b554`..`3d1165c` (frame `2f4b554`, data `699db3f`, overview `c7ced99` (7 queries; `relationJoins` preview, join for every query, same data checked), full page `30bc2f5`, Manas grupas `c731303`, dropdowns and Paziņojumi `7b3aa5a`, docs `0cf8bbb`, fixes `eda583b`; Opus review fixes `605807b` five bell rows after folding and arrow-key tabs, `3d1165c` section menu sticky and marking in the shell's scroller) |
 | R6b Centred overlay from the card (C1) | pushed, live | [specs/R6b.md](specs/R6b.md) | `b7a7774`..`5eeb69a` (placement `b7a7774`, grow `c2c1dc4`, docs `051612a`; review fix `5eeb69a`: links that replace the history entry, the search's results, are never taken over by the grow) |
 | C4 LanguageEditor | pushed, live | [specs/C4.md](specs/C4.md) | `bbe5cd1` piece, `d41720e` event form and sections, `4c00bcf` create-group wizard, `5bbc026` docs, review `787d698` |
-| R9a Event page and form | R9a-1 built (event page), R9a-2 built (event form, `ca9cfa5` split, restyle and skipped-hour check after it) | [specs/R9a.md](specs/R9a.md) | `5927a8d`..`0beedc2` (timing `5927a8d`, service `d18bdca`, page `356e8f9`, breadcrumb and Rīkotājiem `92f661f`, fixes `0beedc2`) |
-| R9b Biedri, Jaunumi, Informācija, group picture | R9b-1, R9b-2 pushed, live; R9b-3 Informācija + C5 built (review pending) | [specs/R9b.md](specs/R9b.md) | `e4860ef`..`634e93f` (R9b-1), `be3c98e` (R9b-2), `1f500e4`..`65ed62e` (R9b-3) |
-| R9c Group settings and profiles | built (R9c-1 profiles live, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | |
+| R9a Event page and form | pushed, live (R9a-1 page, R9a-2 form) | [specs/R9a.md](specs/R9a.md) | `5927a8d`..`a08b634` |
+| R9b Biedri, Jaunumi, Informācija, group picture | pushed, live (R9b-1, R9b-2, R9b-3 + C5) | [specs/R9b.md](specs/R9b.md) | `e4860ef`..`634e93f` (R9b-1), `be3c98e` (R9b-2), `1f500e4`..`7f018c2` (R9b-3) |
+| R9c Group settings and profiles | pushed, live (R9c-1 profiles, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | `91a2bce`..`b83b7c8` (R9c-1), `62e5edd`..`0a05aa2` (R9c-2) |
 | R10 Citur | cancelled by owner 19 Oct | | |
-| R11 Admin frame | built (frame, drawer, five dialogs, card look per page, counters on admin name fields, frame specimens in UI elements) | [specs/R11.md](specs/R11.md) | |
-| R13 Templates (before R12) | built, awaiting review (R13-1 e9a919e..687a89e, R13-2 sweep + docs) | [specs/R13.md](specs/R13.md) | |
-| R14 Kopā (before R12) | spec written | [specs/R14.md](specs/R14.md) | |
-| R12 Everything else | not started | | |
+| R11 Admin frame | pushed, live (R11a frame, R11b card look) | [specs/R11.md](specs/R11.md) | `402a4ae`..`466714c` (R11a), `2f3785e`..`4b12d6b` (R11b) |
+| R13 Templates (before R12) | pushed, live | [specs/R13.md](specs/R13.md) | `e9a919e`..`33ff35e` |
+| R14 Kopā (before R12) | **next**: spec written, build R14a then R14b | [specs/R14.md](specs/R14.md) | |
+| R12 Everything else | after R14: spec not written | | |
