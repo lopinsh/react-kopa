@@ -495,5 +495,5 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R9c Group settings and profiles | built (R9c-1 profiles live, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | |
 | R10 Citur | cancelled by owner 19 Oct | | |
 | R11 Admin frame | built (frame, drawer, five dialogs, card look per page, counters on admin name fields, frame specimens in UI elements) | [specs/R11.md](specs/R11.md) | |
-| R13 Templates (before R12) | spec written | [specs/R13.md](specs/R13.md) | |
+| R13 Templates (before R12) | built, awaiting review (R13-1 e9a919e..687a89e, R13-2 sweep + docs) | [specs/R13.md](specs/R13.md) | |
 | R12 Everything else | not started | | |

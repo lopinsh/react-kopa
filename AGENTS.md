@@ -104,6 +104,7 @@ type ActionResponse<T> =
 - UI work follows the Design chapter of `docs/handbook/design.md`.
 - Tailwind v4 only — no CSS modules, styled-components, or inline `style` (except setting CSS variables at layout level).
 - Use theme variables (`var(--background)`, `var(--surface)`, `var(--accent)`) and existing utilities (`shadow-premium`, `soft-press`); never hardcode colors, radii, or shadows.
+- Edges use `line`/`frame`, pills `rounded-pill`, card and control shadows `shadow-card`/`shadow-control`, filled buttons `press`: never `border border-border` or `rounded-full` on a control (dividers keep `border-border`).
 - Mobile-first. Server Components by default; add `"use client"` only for interactivity.
 - Redesign drawings (docs/development/redesign.html) are illustrations at 375 and 1280 px, not pixel specs: build the intent, fluid between and beyond (bars span the full width, content sits in the shared container, no widths copied from a drawing). Check UI at 360, 768, 1024, 1280, 1440 and 1920 px (rule: Fluid in `docs/handbook/design.md`).
 - Keep components small; consider splitting past ~150 lines.

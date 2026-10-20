@@ -56,6 +56,10 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 
 Few values, used everywhere. The tokens live in `app/globals.css`; the site theme (`/admin/design`) sets the same names on the server, so the first paint is already right.
 
+### Templates
+
+A template is a palette plus a style. Mierīgs is the default and what every statement in this chapter describes. Drosmīgs swaps the shape tokens: 2 px ink lines, hard offset shadows without blur (about 4 px), corners of 4–10 px, buttons that press onto their shadow. Palette and style are chosen apart in `/admin/design` (Krāsas, Stils, Kategoriju krāsas, Fonti); the Saule palette selects Drosmīgs.
+
 ### Colour
 
 Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colour** (Sūna, a moss green) is for buttons and links, a **category tone** marks a category, and three status colours say danger, success and warning. No other colours, no hardcoded `red-500`, no hex in components.
@@ -84,7 +88,7 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 
 ### Type
 
-Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900.
+Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900, except Archivo Black, the Saule heading font: one black weight, the single exception, and headings never get synthetic bold.
 
 | Role | Font | Size / weight | Example |
 |---|---|---|---|
@@ -103,12 +107,15 @@ Nothing is smaller than 11 px.
 
 Pill buttons, chips, tags, avatars and the search field (AR-08). Cards, panels, pop-ups and boxes 16 px. Inputs, menu items and toasts 12 px; an event row's hover 8 px. Group cards carry a thin 1 px border (`border-border`) so they do not blend into the background; panels and pop-ups have none. Thin lines divide rows (the phone group row is a divided row, not a card).
 
+Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-lg … rounded-4xl`, `rounded-menu` and `rounded-item`. Three utilities carry the edge: `line` for the edge of a surface or control (1 px soft border in Mierīgs, 2 px ink in Drosmīgs), `frame` for edges only Drosmīgs draws (0 px in Mierīgs), and dividers stay `border-border` (one-sided rules and `divide-*` never change). Avatars, dots, the switch knob and unread badges stay `rounded-full`.
+
 ### Space and depth
 
 - 4 px grid. Page sides 16 px (phone), 24–32 px (desktop).
 - Content widths: 760 group pages, 680 reading, 560 focus, 1200 browse.
 - Gaps: 8 inside a row, 12–16 between items, 24–32 between sections.
 - Cards are flat. The float shadow (`shadow-premium`) is only for things above the page: menus, drop-downs, pop-overs, toasts, drawers. Dialogs use `shadow-dialog`. Shadows are the same in dark mode.
+- Drosmīgs gives cards and controls a hard offset shadow (`shadow-card`, `shadow-control`); `shadow-room` leaves space inside a clipping parent (chip rows) and `press` sinks a filled button onto its shadow (position change kept under reduced motion, transition dropped).
 
 ## Identity
 

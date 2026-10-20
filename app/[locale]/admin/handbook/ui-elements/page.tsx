@@ -8,6 +8,7 @@ import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@
 import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
 import { SearchDemo } from '@/components/handbook/SearchDemos';
 import { AnnouncementDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
+import { StyleDemos } from '@/components/handbook/StyleDemos';
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
 import { AdminPagesDemo, AdminSectionsDemo } from '@/components/handbook/AdminFrameDemos';
@@ -139,6 +140,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="chips" names={[UI.filterChip]} files={['components/ui/FilterChip.tsx']}>
                     <ChipDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="styles" names={[UI.filterChip]} files={['components/handbook/StyleDemos.tsx', 'app/globals.css']}>
+                    <StyleDemos />
                 </UiSpecimen>
 
                 <UiSpecimen id="fields" names={[UI.formField]} files={['components/auth/AuthTextField.tsx']}>
