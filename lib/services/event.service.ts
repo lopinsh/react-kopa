@@ -940,7 +940,7 @@ export class EventService {
                 orderBy,
                 take: limit + 1
             })).map((e) => toEventRow(e, lang, null)),
-            [`events-discovery-v6-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${status}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
+            [`events-discovery-v7-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
                 // A group's hide, category or tag change (including a tag merge) moves its events too.
