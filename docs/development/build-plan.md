@@ -365,7 +365,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 
 ### R14 · Kopā (M/L, two sessions) — owner-approved 20 Oct, built before R12
 
-- **Goal:** show who you would go with and what happens now. Shared `Facepile` (up to 3 faces + "+N", initials on the category tone without a photo); the event page's "Eju · N" with faces beside it; group cards show faces + count instead of "N biedri"; a "Šonedēļ" strip of 3–5 public events on discovery's Grupas; Informācija reordered (next meetup first on phones, beside the parts on desktop) with a 3:1 picture.
+- **Goal:** show who you would go with and what happens now. Shared `Facepile` (up to 3 faces + "+N"; no photo keeps the seeded DiceBear avatar from `lib/avatar.ts`); the event page's "Eju · N" with faces beside it; group cards show faces + count instead of "N biedri"; a "Šonedēļ" strip of 3–5 public events on discovery's Grupas; Informācija reordered (next meetup first on phones, beside the parts on desktop) with a 3:1 picture.
 - **Rules (owner):** none (owner brief, 20 Oct). Also in: AR-10, AR-55, AR-59, AR-24; changes AR-50 (member faces on group cards) and C5 (Informācija picture 3:1).
 - **Privacy (owner):** strangers can't browse faces. Signed out: count only. Signed in: faces on public groups and events; on private groups and members-only events only for the group's members (members keep what they see today). Decided in the service; no per-viewer data in `unstable_cache` entries.
 - **Data:** none (no migration).
