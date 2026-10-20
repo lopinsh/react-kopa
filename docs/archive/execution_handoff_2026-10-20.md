@@ -25,3 +25,48 @@ Decisions C1–C5 and D are recorded in `build-plan.md` section 6 ("Owner decisi
 - [x] **R11b Admin pages in the card look, pushed, live**: shared `AdminPageHeader`, cards for every page (Pārskats in two cards, log as card rows on phones via `ModerationLog`), `TextCounter` on category and city name fields, frame specimens in UI elements (`AdminFrameDemos`), admin paragraph in `docs/handbook/design.md`.
 - [x] **Quick batch 2** (`5b2db44` menus/pop-ups stay open in feedback mode, cmv2rea3z; `128a12d` footer at the bottom, cmv9l06dg; `a2b7443` Veidi always chips, cmv9k2uey; `81e3202` search finds and suggests Veidi, cmv9lczhq; `74c8d12` Tavi pieteikumi as group rows, cmv9keww2; reviewed, pushed, live; notes marked done; cmv2rea3z newer request, recolor the floating icons by state, still open).
 - [x] **Quick batch 3** (`3dc4830` saving Par mums of a group without section rows no longer says NOT_FOUND: the virtual "about" section is now created on first save, cmv9usuov, cmv9v5u7a; `e3178e4` Tēma is a left side drawer on phones and the Kur sheet list scrolls inside, cmv9l0zno, cmv9kyl0x; `e4b288f` report reasons Spams / Kaitīgs saturs / Aicinājums uz vardarbību / Cits, no migration (Report.reason is a string), cmv9uxtk9; sticky horizontal menus under the header: admin menu, part tabs, settings tabs, filter line, cmv9kq33f; review `cf1eeeb` new reports accept only offered reasons, `60c47e3` phone filter line sticks at 48 px, the view switch scrolls away). Reviewed, pushed, live.
+
+---
+
+# Cleared 20 Oct (fresh start, not built)
+
+The owner cleared every pending item on 20 Oct. Kept here as it stood; the R14 spec is in git history (`685b03e`).
+
+### What's next (in this order)
+
+1. **R14 Kopā** (spec `docs/development/specs/R14.md`, written and approved): R14a faces (Facepile, "Eju · N" with faces, faces on group cards), then R14b ("Šonedēļ" strip, Informācija reorder, 3:1 picture). No migration.
+2. **R12 Everything else**, the last redesign release: sign in, register, username, create-group wizard, Par mums, Privātums, 404, cookie banner, delete account (OD-27). Needs its spec.
+3. **After R12:** reporting a person (OD-11, `add_report_target_user`), the banner picker (see Open follow-ups).
+
+Workflow per release: spec agent → builder → reviewer (Opus for auth, migrations, time, messaging; Sonnet otherwise) → the reviewer pushes. Explain each release and get the owner's OK before its spec and build.
+
+### Owner notes with no release yet
+
+Open in `npm run feedback`; each needs a short discussion before it gets a home.
+
+- `cmv9q3gb6` discovery cards don't show which groups you belong to (use the Manas grupas mark). Fits R14a, which already changes group cards.
+- `cmvamisxc` getting back to discovery and to your groups is hard away from the main page (bottom bar, header).
+- `cmv9uw02g` an "admin mode" for a group: edit only when switched on, view the page as member / non-member.
+- `cmv9kcok8` Manas grupas: each part gets a visible heading matching its tab.
+- `cmv9kj0qc`, `cmv9l90i3` (ideas): Manas grupas as an upcoming schedule; "Mans saturs" as the own area's landing page.
+- R13 leftover: `font-serif` headings (AdminPageHeader and five more) ignore the theme's heading font.
+- `cmv9addnl` ("Tikšanās nav izziņota") is answered by C2 (live) and can be closed.
+
+### Waiting on the owner
+
+- `cmv5on08v` (Your own area: one space, like a group): "this is ok, but will still review". Leave open until the owner has looked at R8.
+- `cmv85o4gn` (idea): group discovery results visually by place while no filter is set. Was parked for R10, which is cancelled; parked with it.
+- No owner decision is open: OD-01…OD-27 are decided.
+
+### Open follow-ups not in any release
+
+- Reporting a person (OD-11): later, after R12; needs migration `add_report_target_user`. Until then only "Ziņot par grupu" and event reports exist.
+- Banner picker: one picker (group wizard, group settings, event wizard) replacing the plain URL field in `BasicsSection`: ~6–8 curated Unsplash photos per L1 category (URLs and photographer credit in `lib/constants`) plus "no image" (category-colour tile). "Search for another photo" via a server action needs an Unsplash app and production approval from the owner; follow the Unsplash API rules (hotlink, `download_location`, credit). Mockup and owner OK first.
+
+### Parked ideas
+
+- Event series (recurring events): members-only events only, each date its own event with RSVP per date; public events never recur.
+- Private groups with an invite mechanism (today a private group is link-only, "Tikai biedriem").
+- Owners uploading their own group image (needs storage).
+- Owner-chosen date/number format in settings (today European format, Monday first, 24 h, in both languages).
+- A "town hall" message board for a whole town (the removed `[l1]/messages` placeholder).

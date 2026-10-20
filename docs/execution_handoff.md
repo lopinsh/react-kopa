@@ -2,9 +2,9 @@
 
 > The living "what's next" list. Read `AGENTS.md` first, then this file, then run `npm run feedback` (open notes from the site admins). Product/UI questions: `docs/handbook/README.md`.
 > Release work follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
-> Finished work is not kept here: it moves to `docs/archive/` (latest: `execution_handoff_2026-10-20.md`, the 15 Oct notes batch, R9a–R11b and quick batches 2–3).
+> Finished work is not kept here: it moves to `docs/archive/` (latest: `execution_handoff_2026-10-20.md`: the 15 Oct notes batch, R9a–R11b, quick batches 2–3, and the plan cleared on 20 Oct).
 
-**Last updated:** 2026-10-20 (everything up to R13 live; R14 spec written; R10 cancelled).
+**Last updated:** 2026-10-20 (everything up to R13 live; plans cleared for a fresh start; R10 cancelled).
 
 ---
 
@@ -14,25 +14,9 @@
 - **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search.
 - **Cancelled:** R10 Citur and "Kur tu esi?" (owner, 19 Oct). Its rule AR-38 stays unbuilt; discovery keeps starting on "Visur".
 
-## What's next (in this order)
+## What's next
 
-1. **R14 Kopā** (spec `docs/development/specs/R14.md`, written and approved): R14a faces (Facepile, "Eju · N" with faces, faces on group cards), then R14b ("Šonedēļ" strip, Informācija reorder, 3:1 picture). No migration.
-2. **R12 Everything else**, the last redesign release: sign in, register, username, create-group wizard, Par mums, Privātums, 404, cookie banner, delete account (OD-27). Needs its spec.
-3. **After R12:** reporting a person (OD-11, `add_report_target_user`), the banner picker (see Open follow-ups).
-
-Workflow per release: spec agent → builder → reviewer (Opus for auth, migrations, time, messaging; Sonnet otherwise) → the reviewer pushes. Explain each release and get the owner's OK before its spec and build.
-
-## Owner notes with no release yet
-
-Open in `npm run feedback`; each needs a short discussion before it gets a home.
-
-- `cmv9q3gb6` discovery cards don't show which groups you belong to (use the Manas grupas mark). Fits R14a, which already changes group cards.
-- `cmvamisxc` getting back to discovery and to your groups is hard away from the main page (bottom bar, header).
-- `cmv9uw02g` an "admin mode" for a group: edit only when switched on, view the page as member / non-member.
-- `cmv9kcok8` Manas grupas: each part gets a visible heading matching its tab.
-- `cmv9kj0qc`, `cmv9l90i3` (ideas): Manas grupas as an upcoming schedule; "Mans saturs" as the own area's landing page.
-- R13 leftover: `font-serif` headings (AdminPageHeader and five more) ignore the theme's heading font.
-- `cmv9addnl` ("Tikšanās nav izziņota") is answered by C2 (live) and can be closed.
+Nothing planned (cleared 20 Oct for a fresh start; the earlier list, including R14 and R12, is in `docs/archive/execution_handoff_2026-10-20.md`). The owner sets the next work.
 
 ## Standing owner rules
 
@@ -43,26 +27,6 @@ Open in `npm run feedback`; each needs a short discussion before it gets a home.
 - **No small debt:** anything an agent can fix in about 4 minutes is fixed now. Tell builders and reviewers.
 - **The "tree" idea** (https://claude.ai/artifact/KxCiZs1x2Cz31jdJApsmLi) is parked until everything else works.
 - **Session hygiene:** start the dev server only via the browser pane (`.claude/launch.json`, config "dev"); only one session may run it. If something already listens on :3000 (`Get-NetTCPConnection -LocalPort 3000 -State Listen`) it is a leftover `next dev`: confirm it is this repo's and stop it. Stop your own server before reporting done. Don't run `npm run build` while dev runs. Switching seed accounts (`owner@local`, `member@local`, …) is fine on localhost, never on ejam.lumm.eu. Native `confirm()` blocks the browser pane: set `window.confirm = () => true` first.
-
-
-## Waiting on the owner
-
-- `cmv5on08v` (Your own area: one space, like a group): "this is ok, but will still review". Leave open until the owner has looked at R8.
-- `cmv85o4gn` (idea): group discovery results visually by place while no filter is set. Was parked for R10, which is cancelled; parked with it.
-- No owner decision is open: OD-01…OD-27 are decided.
-
-## Open follow-ups not in any release
-
-- Reporting a person (OD-11): later, after R12; needs migration `add_report_target_user`. Until then only "Ziņot par grupu" and event reports exist.
-- Banner picker: one picker (group wizard, group settings, event wizard) replacing the plain URL field in `BasicsSection`: ~6–8 curated Unsplash photos per L1 category (URLs and photographer credit in `lib/constants`) plus "no image" (category-colour tile). "Search for another photo" via a server action needs an Unsplash app and production approval from the owner; follow the Unsplash API rules (hotlink, `download_location`, credit). Mockup and owner OK first.
-
-## Parked ideas
-
-- Event series (recurring events): members-only events only, each date its own event with RSVP per date; public events never recur.
-- Private groups with an invite mechanism (today a private group is link-only, "Tikai biedriem").
-- Owners uploading their own group image (needs storage).
-- Owner-chosen date/number format in settings (today European format, Monday first, 24 h, in both languages).
-- A "town hall" message board for a whole town (the removed `[l1]/messages` placeholder).
 
 ## Product decisions (not recorded in the handbook or build plan)
 

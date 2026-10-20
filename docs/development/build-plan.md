@@ -104,7 +104,7 @@ Action: **keep** (unchanged apart from tokens), **restyle** (same component, new
 
 ## 4. Release order
 
-The owner's order stands. Five parts are split into two because each is more than one build and review session (R1, R2, R3, R5, R9: see the sizes in the cards), so there are 17 releases, plus R13 and R14 added on 20 Oct (built before R12) and R10 cancelled on 19 Oct. **Remaining: R14, then R12.** Two items move:
+The owner's order stands. Five parts are split into two because each is more than one build and review session (R1, R2, R3, R5, R9: see the sizes in the cards), so there are 17 releases, plus R13 and R14 added on 20 Oct (built before R12) and R10 cancelled on 19 Oct. **Cleared 20 Oct:** R12 and R14 are not planned (owner, fresh start); their cards stay for the rule ledger. Two items move:
 
 - **D11 (each group's next meeting) moves from R4 to R3a.** R3a's Informācija gets the "Nākamais pasākums" box (C24), so the query lands with its first user; R5a's card and R6's panel reuse it.
 - **The search word chip lands in R5a, the rest of search in R7.** Discovery's search field lives in today's filter bar, which R5a deletes. To avoid a release without search: R2a's header field is a plain form that opens `/?q=…` (works today), and R5a shows the word as the first chip on the filter line ("“sp” ×", part of AR-43). R7 then adds the instant search overlay, the theme chips and the "Atbilst arī:" line.
@@ -344,7 +344,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** many pages, little logic: the reviewer opens all of them in both locales.
 - **Size:** M/L.
 
-### R12 · Everything else (M)
+### R12 · Everything else (M) — cleared by owner 20 Oct, not planned
 
 - **Goal:** sign in, register, username, the create-group wizard, Par mums, Privātums, page not found, cookie banner, deleting your account.
 - **Rules (owner):** AR-02. Also in: AR-35 (wizard field), AR-66 (404), AR-71.
@@ -363,14 +363,14 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Order:** runs before R12 (R12 then builds its screens on the shared edges).
 - **Spec:** [specs/R13.md](specs/R13.md) (R13-1 style layer, Stils and atoms; R13-2 sweep and docs).
 
-### R14 · Kopā (M/L, two sessions) — owner-approved 20 Oct, built before R12
+### R14 · Kopā (M/L, two sessions) — cleared by owner 20 Oct, not planned
 
 - **Goal:** show who you would go with and what happens now. Shared `Facepile` (up to 3 faces + "+N"; no photo keeps the seeded DiceBear avatar from `lib/avatar.ts`); the event page's "Eju · N" with faces beside it; group cards show faces + count instead of "N biedri"; a "Šonedēļ" strip of 3–5 public events on discovery's Grupas; Informācija reordered (next meetup first on phones, beside the parts on desktop) with a 3:1 picture.
 - **Rules (owner):** none (owner brief, 20 Oct). Also in: AR-10, AR-55, AR-59, AR-24; changes AR-50 (member faces on group cards) and C5 (Informācija picture 3:1).
 - **Privacy (owner):** strangers can't browse faces. Signed out: count only. Signed in: faces on public groups and events; on private groups and members-only events only for the group's members (members keep what they see today). Decided in the service; no per-viewer data in `unstable_cache` entries.
 - **Data:** none (no migration).
 - **Order:** runs before R12.
-- **Spec:** [specs/R14.md](specs/R14.md) (R14a faces; R14b the strip and Informācija).
+- **Spec:** deleted on clearing (in git history, `685b03e`).
 
 ## 6. Cross-cutting
 
@@ -505,5 +505,5 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R10 Citur | cancelled by owner 19 Oct | | |
 | R11 Admin frame | pushed, live (R11a frame, R11b card look) | [specs/R11.md](specs/R11.md) | `402a4ae`..`466714c` (R11a), `2f3785e`..`4b12d6b` (R11b) |
 | R13 Templates (before R12) | pushed, live | [specs/R13.md](specs/R13.md) | `e9a919e`..`33ff35e` |
-| R14 Kopā (before R12) | **next**: spec written, build R14a then R14b | [specs/R14.md](specs/R14.md) | |
-| R12 Everything else | after R14: spec not written | | |
+| R14 Kopā | cleared by owner 20 Oct (spec deleted, history `685b03e`) | | |
+| R12 Everything else | cleared by owner 20 Oct, not planned | | |
