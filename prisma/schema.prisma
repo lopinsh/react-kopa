@@ -547,6 +547,7 @@ model SiteTheme {
   dark        Json
   headingFont String
   bodyFont    String
+  styleKey    String   @default("calm")
   isPublished Boolean  @default(false)
   updatedById String?
   createdAt   DateTime @default(now())

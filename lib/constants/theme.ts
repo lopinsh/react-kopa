@@ -56,18 +56,52 @@ export const THEME_FONTS = [
     { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif' },
     { id: 'lora', label: 'Lora', cssVar: '--font-lora' },
     { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans' },
-] as const;
+    /** Single-weight display face: as a heading it wins over the style's heading weight. */
+    { id: 'archivo-black', label: 'Archivo Black', cssVar: '--font-archivo-black', weight: 400 },
+] as const satisfies readonly { id: string; label: string; cssVar: string; weight?: number }[];
 export type ThemeFontId = (typeof THEME_FONTS)[number]['id'];
 export const THEME_FONT_IDS = THEME_FONTS.map((f) => f.id) as [ThemeFontId, ...ThemeFontId[]];
+
+/** Shape tokens of a template (R13): corners, lines, shadows, press, heading weight. Palette and style are chosen apart. */
+export const THEME_STYLE_KEYS = ['calm', 'bold'] as const;
+export type ThemeStyleKey = (typeof THEME_STYLE_KEYS)[number];
+export const DEFAULT_THEME_STYLE_KEY: ThemeStyleKey = 'calm';
+
+export interface ThemeStyleTokens {
+    /** Corner radii; null = Tailwind defaults from globals.css (calm emits nothing). `menu`/`item` are the two odd radii of menus. */
+    radius: { md: string; lg: string; xl: string; '2xl': string; '3xl': string; pill: string; menu: string; item: string } | null;
+    lineWidth: string;
+    /** Colour of edges and hard shadows: the soft divider colour or the ink. */
+    ink: 'border' | 'foreground';
+    /** Edge on things that have none today. */
+    frameWidth: string;
+    /** Hard shadow offsets (no blur); null = the soft shadows from globals.css. */
+    shadowOffset: { card: string; control: string; premium: string; dialog: string } | null;
+    pressShift: string;
+    /** Room a clipping parent leaves for a hard shadow. */
+    shadowRoom: string;
+    headingWeight: number;
+}
+
+export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
+    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadowOffset: null, pressShift: '0px', shadowRoom: '0px', headingWeight: 600 },
+    bold: {
+        radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', pill: '6px', menu: '6px', item: '5px' },
+        lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
+        shadowOffset: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
+        pressShift: '3px', shadowRoom: '5px', headingWeight: 700,
+    },
+};
 
 export interface ThemeDefinition {
     light: ThemeModeTokens;
     dark: ThemeModeTokens;
     headingFont: ThemeFontId;
     bodyFont: ThemeFontId;
+    styleKey: ThemeStyleKey;
 }
 
-export const THEME_PRESET_KEYS = ['moss', 'sea', 'rye'] as const;
+export const THEME_PRESET_KEYS = ['moss', 'sea', 'rye', 'sun'] as const;
 export type ThemePresetKey = (typeof THEME_PRESET_KEYS)[number];
 /** A saved theme is either one of the presets or edited by hand. */
 export const THEME_KEYS = [...THEME_PRESET_KEYS, 'custom'] as const;
@@ -82,6 +116,7 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
         dark: { primary: '#b5c79e', background: '#161814', surface: '#1e211c', foreground: '#eceee7', surfaceElevated: '#282c25', tint: '#282c25', muted: '#a8ae9f', border: '#353a31' },
         headingFont: 'literata',
         bodyFont: 'commissioner',
+        styleKey: 'calm',
     },
     sea: {
         label: 'Jūra',
@@ -89,6 +124,7 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
         dark: { primary: '#7fb0c8', background: '#0e1316', surface: '#151c20', foreground: '#e8eff2', surfaceElevated: '#1d272c', muted: '#9db0b9', border: '#26343b' },
         headingFont: 'literata',
         bodyFont: 'commissioner',
+        styleKey: 'calm',
     },
     rye: {
         label: 'Rudzu maize',
@@ -96,14 +132,23 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
         dark: { primary: '#c19a76', background: '#151210', surface: '#1e1a16', foreground: '#f0ebe5', surfaceElevated: '#27221d', muted: '#aa9f94', border: '#342d26' },
         headingFont: 'literata',
         bodyFont: 'commissioner',
+        styleKey: 'calm',
+    },
+    sun: {
+        label: 'Saule',
+        light: { primary: '#2B3FD6', background: '#FFF1B8', surface: '#FFFFFF', foreground: '#111111', surfaceElevated: '#FFFFFF', tint: '#FFE27A', muted: '#4A4536', border: '#C9BC8A' },
+        dark: { primary: '#FFD43B', background: '#14130F', surface: '#1E1C16', foreground: '#F6F1DE', surfaceElevated: '#28251D', tint: '#332C12', muted: '#BDB59C', border: '#3A362A' },
+        headingFont: 'archivo-black',
+        bodyFont: 'commissioner',
+        styleKey: 'bold',
     },
 };
 
 /** Colours the custom editor offers, per mode. */
 export const THEME_EDITABLE_TOKENS = ['primary', 'background', 'surface', 'foreground', 'muted', 'border', 'tint'] as const;
 export type ThemeMode = 'light' | 'dark';
-/** The three parts of Admin > Dizains (AR-69), in order. */
-export const DESIGN_PARTS = ['colours', 'categories', 'fonts'] as const;
+/** The four parts of Admin > Dizains (AR-69), in order: palette, then style. */
+export const DESIGN_PARTS = ['colours', 'style', 'categories', 'fonts'] as const;
 export type DesignPart = (typeof DESIGN_PARTS)[number];
 /** Contrast floor (Handbook, design.md): text AA everywhere; a dark-mode tone 7:1 with the dark background. */
 export const THEME_CONTRAST_MIN = 4.5;

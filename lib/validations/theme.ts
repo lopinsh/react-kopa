@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CATEGORY_TONE_SLUGS, THEME_FONT_IDS, THEME_KEYS } from '@/lib/constants';
+import { CATEGORY_TONE_SLUGS, THEME_FONT_IDS, THEME_KEYS, THEME_STYLE_KEYS } from '@/lib/constants';
 
 /** Only 6-digit hex values are accepted, so a stored theme can never carry anything else into the page's CSS. */
 export const hexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/);
@@ -22,5 +22,6 @@ export const themeInputSchema = z.object({
     dark: themeModeTokensSchema,
     headingFont: z.enum(THEME_FONT_IDS),
     bodyFont: z.enum(THEME_FONT_IDS),
+    styleKey: z.enum(THEME_STYLE_KEYS),
 });
 export type ThemeInput = z.infer<typeof themeInputSchema>;

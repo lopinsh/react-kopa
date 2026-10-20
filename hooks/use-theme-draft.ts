@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import {
     THEME_PRESETS,
-    type CategoryToneSlug, type ThemeEditableToken, type ThemeFontId, type ThemeMode, type ThemePresetKey,
+    type CategoryToneSlug, type ThemeEditableToken, type ThemeFontId, type ThemeMode, type ThemePresetKey, type ThemeStyleKey,
 } from '@/lib/constants';
 import { completeModeTokens, themeContrastIssues, type CompleteModeTokens, type ContrastIssue } from '@/lib/theme/contrast';
 import type { ThemeInput } from '@/lib/validations/theme';
@@ -23,7 +23,7 @@ export function useThemeDraft(initial: ThemeInput) {
     /** A ready-made theme: its values, completed; tones go back to the defaults. */
     const choosePreset = (key: ThemePresetKey) => {
         const p = THEME_PRESETS[key];
-        setTheme({ presetKey: key, light: completeModeTokens(p.light), dark: completeModeTokens(p.dark), headingFont: p.headingFont, bodyFont: p.bodyFont });
+        setTheme({ presetKey: key, light: completeModeTokens(p.light), dark: completeModeTokens(p.dark), headingFont: p.headingFont, bodyFont: p.bodyFont, styleKey: p.styleKey });
     };
 
     const setColor = (mode: ThemeMode, token: ThemeEditableToken, hex: string) =>
@@ -35,5 +35,8 @@ export function useThemeDraft(initial: ThemeInput) {
     const setFont = (which: 'headingFont' | 'bodyFont', id: ThemeFontId) =>
         setTheme((prev) => ({ ...prev, presetKey: 'custom', [which]: id }));
 
-    return { theme, issues, tonesEdited, choosePreset, setColor, setTone, setFont };
+    /** The style alone (calm/bold); colours and fonts stay as they are, so a preset keeps its name. */
+    const setStyle = (styleKey: ThemeStyleKey) => setTheme((prev) => ({ ...prev, styleKey }));
+
+    return { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont };
 }

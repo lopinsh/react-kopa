@@ -40,7 +40,7 @@ export default async function AdminDesignPage({
                 key={`${theme.id ?? 'default'}-${theme.presetKey}`}
                 initialPart={initialPart}
                 toneRows={toneRows}
-                initial={{ presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont }}
+                initial={{ presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont, styleKey: theme.styleKey }}
             />
         </div>
     );

@@ -1,3 +1,4 @@
+import { DESIGN_PARTS } from './theme';
 import { AlertTriangle, BookOpen, Brush, EyeOff, Languages, ListChecks, MapPin, MessageSquareText, Network, Palette, UserCog, type LucideIcon } from 'lucide-react';
 
 /** Admin > the five sections and their pages, in menu order (AR-68). One list: the sections bar, the pages list and the phone drawer all read it. */
@@ -13,7 +14,7 @@ export type AdminNavItem = {
     /** Hidden from admins who are not the owner. None today: every page checks its own access. */
     ownerOnly?: true;
     /** Design parts, opened as `?part=`; the Handbook's chapters are dynamic and come from the layout. */
-    parts?: string[];
+    parts?: readonly string[];
 };
 
 export type AdminNavSection = { id: AdminSectionId; items: AdminNavItem[] };
@@ -36,7 +37,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     {
         id: 'site',
         items: [
-            { id: 'design', href: '/admin/design', match: 'prefix', icon: Palette, parts: ['colours', 'categories', 'fonts'] },
+            { id: 'design', href: '/admin/design', match: 'prefix', icon: Palette, parts: DESIGN_PARTS },
             { id: 'translations', href: '/admin/translations', match: 'prefix', icon: Languages, badge: 'suggestions' },
         ],
     },

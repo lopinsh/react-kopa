@@ -3,8 +3,8 @@ import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import type { ErrorCode } from '@/types/actions';
 import {
-    DEFAULT_THEME_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS, THEME_PRESET_KEYS,
-    type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey,
+    DEFAULT_THEME_KEY, DEFAULT_THEME_STYLE_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS, THEME_PRESET_KEYS, THEME_STYLE_KEYS,
+    type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey, type ThemeStyleKey,
 } from '@/lib/constants';
 import { themeContrastIssues } from '@/lib/theme/contrast';
 import { themeInputSchema, type ThemeInput } from '@/lib/validations/theme';
@@ -18,6 +18,7 @@ export interface ThemeContext {
     dark: ThemeModeTokens;
     headingFont: ThemeFontId;
     bodyFont: ThemeFontId;
+    styleKey: ThemeStyleKey;
     /** True when this is an admin's unpublished draft, not the site-wide theme. */
     isPreview: boolean;
 }
@@ -28,21 +29,23 @@ export type ThemeResult<T = void> =
 
 function defaultTheme(): ThemeContext {
     const p = THEME_PRESETS[DEFAULT_THEME_KEY];
-    return { id: null, presetKey: DEFAULT_THEME_KEY, light: p.light, dark: p.dark, headingFont: p.headingFont, bodyFont: p.bodyFont, isPreview: false };
+    return { id: null, presetKey: DEFAULT_THEME_KEY, light: p.light, dark: p.dark, headingFont: p.headingFont, bodyFont: p.bodyFont, styleKey: DEFAULT_THEME_STYLE_KEY, isPreview: false };
 }
 
 /** Rows come from JSON columns; anything that no longer validates falls back to the default look. */
 function toContext(
-    row: { id: string; presetKey: string; light: Prisma.JsonValue; dark: Prisma.JsonValue; headingFont: string; bodyFont: string },
+    row: { id: string; presetKey: string; light: Prisma.JsonValue; dark: Prisma.JsonValue; headingFont: string; bodyFont: string; styleKey?: string | null },
     isPreview: boolean
 ): ThemeContext {
-    const parsed = themeInputSchema.safeParse({ presetKey: row.presetKey, light: row.light, dark: row.dark, headingFont: row.headingFont, bodyFont: row.bodyFont });
+    // An unknown stored style key falls back to calm.
+    const styleKey = (THEME_STYLE_KEYS as readonly string[]).includes(row.styleKey ?? '') ? row.styleKey : DEFAULT_THEME_STYLE_KEY;
+    const parsed = themeInputSchema.safeParse({ presetKey: row.presetKey, light: row.light, dark: row.dark, headingFont: row.headingFont, bodyFont: row.bodyFont, styleKey });
     if (!parsed.success || !THEME_FONT_IDS.includes(parsed.data.headingFont) || !THEME_FONT_IDS.includes(parsed.data.bodyFont)) return defaultTheme();
     const { presetKey } = parsed.data;
-    // Code is the source for presets, so a stored copy of an older preset follows the current values; `custom` keeps its own.
+    // Code is the source for presets' colours and fonts, so a stored copy of an older preset follows the current values; `custom` keeps its own. The style comes from the row.
     if ((THEME_PRESET_KEYS as readonly string[]).includes(presetKey)) {
         const preset = THEME_PRESETS[presetKey as ThemePresetKey];
-        return { id: row.id, presetKey, light: preset.light, dark: preset.dark, headingFont: preset.headingFont, bodyFont: preset.bodyFont, isPreview };
+        return { id: row.id, presetKey, light: preset.light, dark: preset.dark, headingFont: preset.headingFont, bodyFont: preset.bodyFont, styleKey: parsed.data.styleKey, isPreview };
     }
     return { id: row.id, ...parsed.data, isPreview };
 }
@@ -62,7 +65,7 @@ const loadPublished = unstable_cache(
 
 function presetInput(key: typeof DEFAULT_THEME_KEY): ThemeInput {
     const p = THEME_PRESETS[key];
-    return { presetKey: key, light: p.light, dark: p.dark, headingFont: p.headingFont, bodyFont: p.bodyFont };
+    return { presetKey: key, light: p.light, dark: p.dark, headingFont: p.headingFont, bodyFont: p.bodyFont, styleKey: p.styleKey };
 }
 
 export const ThemeService = {
@@ -115,7 +118,7 @@ export const ThemeService = {
     async publishDraft(adminId: string, draftId: string): Promise<ThemeResult> {
         const draft = await ThemeService.getDraft(draftId);
         if (!draft) return { success: false, error: 'NOT_FOUND' };
-        return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont });
+        return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont, styleKey: draft.styleKey });
     },
 
     /** Back to the default preset (Sūna) for everyone. */
