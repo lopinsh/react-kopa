@@ -43,7 +43,7 @@ export default async function MyGroupsSections({ overview }: { overview: MyGroup
                     {body}
                 </section>
             ))}
-            <p className="py-4 text-center text-sm text-foreground-muted">{t('myGroups.end')}</p>
+            <p className="py-4 text-center text-body-sm text-foreground-muted">{t('myGroups.end')}</p>
         </div>
     );
 }

@@ -52,9 +52,9 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
             <FormProvider {...f.form}>
                 <form onSubmit={f.onSubmit} className="p-[18px] md:p-6">
                     <div className="mb-5">
-                        <p className="text-[13px] text-foreground-muted">{t('stepOf', { current: step + 1, total: 2 })}</p>
-                        <h2 className="mt-1 text-[21px]">{[t('step1Title'), t('step2Title')][step]}</h2>
-                        <p className="mt-1 text-sm text-foreground-muted">{[t('step1Desc'), t('step2Desc')][step]}</p>
+                        <p className="text-meta text-foreground-muted">{t('stepOf', { current: step + 1, total: 2 })}</p>
+                        <h2 className="mt-1 text-section">{[t('step1Title'), t('step2Title')][step]}</h2>
+                        <p className="mt-1 text-body-sm text-foreground-muted">{[t('step1Desc'), t('step2Desc')][step]}</p>
                     </div>
 
                     <LanguageEditor
@@ -83,7 +83,7 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
                     />
 
                     {f.serverError && (
-                        <p role="alert" className="mt-4 rounded-xl bg-danger/10 px-3 py-2 text-sm text-danger">{tErrors(f.serverError as 'ACTION_FAILED')}</p>
+                        <p role="alert" className="mt-4 rounded-xl bg-danger/10 px-3 py-2 text-body-sm text-danger">{tErrors(f.serverError as 'ACTION_FAILED')}</p>
                     )}
 
                     <div className="mt-6 flex items-center justify-between gap-3">

@@ -45,7 +45,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
         >
             <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-2xl">
                 <div className="mb-3 flex items-start justify-between gap-3">
-                    <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+                    <div className="flex flex-wrap items-center gap-2 text-tag">
                         <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
                         <span className="rounded-pill bg-surface-elevated px-2.5 py-1 text-foreground-muted">{t(`status.${note.status}`)}</span>
                     </div>
@@ -53,19 +53,19 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
                         <X className="h-4 w-4" />
                     </button>
                 </div>
-                <p className="whitespace-pre-wrap break-words text-sm text-foreground">{note.text}</p>
+                <p className="whitespace-pre-wrap break-words text-body-sm text-foreground">{note.text}</p>
                 {note.component && (
-                    <p className="mt-3 font-mono text-xs font-semibold text-foreground-muted">{t('componentLabel')}: {note.component}</p>
+                    <p className="mt-3 font-mono text-tag text-foreground-muted">{t('componentLabel')}: {note.component}</p>
                 )}
                 {note.elementText && (
-                    <p className="mt-3 truncate rounded-xl bg-surface-elevated px-3 py-2 text-xs text-foreground-muted">{note.elementText}</p>
+                    <p className="mt-3 truncate rounded-xl bg-surface-elevated px-3 py-2 text-meta text-foreground-muted">{note.elementText}</p>
                 )}
                 <FeedbackThread note={note} onChanged={onChanged} />
-                <div className="mt-4 flex items-center justify-between gap-3 text-xs text-foreground-muted">
+                <div className="mt-4 flex items-center justify-between gap-3 text-meta text-foreground-muted">
                     <span>{format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}</span>
                     <div className="flex items-center gap-3">
-                        <FeedbackDeleteButton id={note.id} onDeleted={onDeleted} onConfirmChange={setConfirming} className="flex items-center gap-1 font-semibold text-danger hover:underline disabled:opacity-50" />
-                        <Link href="/admin/feedback" className="font-semibold text-primary hover:underline">{t('openList')}</Link>
+                        <FeedbackDeleteButton id={note.id} onDeleted={onDeleted} onConfirmChange={setConfirming} className="flex items-center gap-1 weight-strong text-danger hover:underline disabled:opacity-50" />
+                        <Link href="/admin/feedback" className="weight-strong text-primary hover:underline">{t('openList')}</Link>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useOAuthProviders } from '@/components/providers/AuthProvidersContext';
 import type { OAuthProviderId } from '@/lib/auth-providers';
 
-const BUTTON = 'flex flex-1 items-center justify-center gap-2 rounded-lg line px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-surface-elevated';
+const BUTTON = 'flex flex-1 items-center justify-center gap-2 rounded-lg line px-4 py-2.5 text-body-sm text-foreground transition-colors hover:bg-surface-elevated';
 
 const ICONS: Record<OAuthProviderId, React.ReactNode> = {
     github: (
@@ -31,7 +31,7 @@ export default function OAuthButtons({ callbackUrl }: { callbackUrl: string }) {
                 <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-border" />
                 </div>
-                <div className="relative flex justify-center text-xs">
+                <div className="relative flex justify-center text-meta">
                     <span className="bg-surface px-2 text-foreground-muted">{t('orContinueWith')}</span>
                 </div>
             </div>

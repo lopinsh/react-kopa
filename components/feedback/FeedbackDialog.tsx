@@ -77,8 +77,8 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
             onMouseDown={(e) => { if (e.target === e.currentTarget && !isPending) requestClose(); }}
         >
             <div role="dialog" aria-modal="true" aria-label={t('newTitle')} className="w-full max-w-md rounded-3xl bg-surface p-5 shadow-2xl">
-                <h2 className="text-lg font-semibold tracking-tight text-foreground">{t('newTitle')}</h2>
-                {target.elementText && <p className="mt-1 truncate text-xs text-foreground-muted">{t('about', { text: target.elementText })}</p>}
+                <h2 className="text-section text-foreground">{t('newTitle')}</h2>
+                {target.elementText && <p className="mt-1 truncate text-meta text-foreground-muted">{t('about', { text: target.elementText })}</p>}
 
                 <div role="radiogroup" aria-label={t('kindLabel')} className="mt-4 flex flex-wrap gap-2">
                     {FEEDBACK_KINDS.map((k) => (
@@ -89,7 +89,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                             aria-checked={kind === k}
                             onClick={() => setKind(k)}
                             className={clsx(
-                                'rounded-pill border px-3 py-1.5 text-xs font-bold transition-colors',
+                                'rounded-pill border px-3 py-1.5 text-tag transition-colors',
                                 kind === k ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground-muted hover:text-foreground'
                             )}
                         >
@@ -106,20 +106,20 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     rows={5}
                     placeholder={t('placeholder')}
                     aria-label={t('textLabel')}
-                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-sm text-foreground outline-none focus:border-primary/50"
+                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-body-sm text-foreground outline-none focus:border-primary/50"
                 />
                 <div className="mt-1 flex items-start gap-2"><TextCounter id="feedback-note-count" length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
-                {error && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{error}</p>}
+                {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}
 
                 <div className="mt-4 flex items-center justify-end gap-3">
-                    <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-2.5 text-sm font-bold text-foreground-muted hover:text-foreground disabled:opacity-50">
+                    <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-2.5 text-button-sm text-foreground-muted hover:text-foreground disabled:opacity-50">
                         {t('cancel')}
                     </button>
                     <button
                         type="button"
                         onClick={handleSave}
                         disabled={isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)}
-                        className="rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="rounded-pill bg-primary px-5 py-2.5 text-button-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}
                     </button>

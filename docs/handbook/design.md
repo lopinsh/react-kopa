@@ -100,16 +100,20 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 
 Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900, except Archivo Black, the Saule heading font: one black weight, the single exception, and headings never get synthetic bold.
 
-| Role | Font | Size / weight | Example |
+| Role (utility) | Font | Size / line / weight | Example |
 |---|---|---|---|
-| Page title | Literata | 28 / 600 | Pasākumi |
-| Section | Literata | 21 / 600 | Par mums |
-| Item title | Literata | 15–17 / 600 | Ķemeru purva taka |
-| Body | Commissioner | 15–16 / 400, line 1.6 | Satiekamies pie stacijas. |
-| Button | Commissioner | 15 / 500 (small 14) | Pievienoties |
-| Small, meta | Commissioner | 13 / 400–500 | Sestdien 10:00 · Ķemeri |
-| Tag | Commissioner | 11 / 600 | Eju |
-| Human note | Commissioner italic | 14 / 400, site colour | Nākamā tikšanās: sestd., 17. okt. |
+| Display `text-display` | Heading | 32–52 fluid / 1.05 / heading weight | Hero lines |
+| Page title `text-title` | Heading | 26–36 fluid / 1.1 / heading weight | Pasākumi |
+| Section `text-section` | Heading | 20–24 fluid / 1.2 / heading weight | Par mums |
+| Item title `text-item` | Heading | 17–19 fluid / 1.3 / heading weight | Ķemeru purva taka |
+| Body `text-body` | Body | 16 / 1.6 / 400 | Satiekamies pie stacijas. |
+| Body small `text-body-sm` | Body | 15 / 1.5 / 400 | Descriptions in dense lists |
+| Button `text-button` (`-sm`) | Body | 15 (14) / 1.2 / 500 | Pievienoties |
+| Meta `text-meta` | Body | 13 / 1.45 / 400 | Sestdien 10:00 · Ķemeri |
+| Tag `text-tag` | Body | 12 / 1.2 / 600, +0.02em | Eju |
+| Human note `human-note` | Body italic | 14 / 400, site colour | Nākamā tikšanās: sestd., 17. okt. |
+
+Pages and components pick a role, never raw sizes: no `text-sm`, `text-[13px]`, `leading-*`, `tracking-*` or `font-medium/semibold/bold` (`npm run type:check` lists them). A role carries size, line, tracking and weight; the heading roles use the heading font and the style's heading weight. Inside a role, a name or count that stands out takes `weight-medium` or `weight-strong` (weight only). Primary text (titles, descriptions) is `text-foreground`; `text-foreground-muted` is for meta. Page titles come from `PageHead` (title, optional lead, actions).
 
 Nothing is smaller than 11 px.
 

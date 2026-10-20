@@ -26,7 +26,7 @@ export default function PartTabs({ title, label, items, active, action, onSelect
     return (
         // `contents`: the tab row sticks within the page, not within this wrapper.
         <div className="contents">
-            {title && <h2 className="font-heading text-xl font-semibold md:sr-only">{title}</h2>}
+            {title && <h2 className="text-section md:sr-only">{title}</h2>}
             {items.length > 0 && (
                 <div data-ui={UI.tabs} className={clsx('sticky top-0 z-10 flex items-end gap-3 border-b border-border bg-background', title && 'mt-2 md:mt-0')}>
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-[18px] overflow-x-auto [scrollbar-width:none]">
@@ -38,8 +38,8 @@ export default function PartTabs({ title, label, items, active, action, onSelect
                                 lang={lang}
                                 aria-current={key === active ? 'page' : undefined}
                                 className={clsx(
-                                    '-mb-px whitespace-nowrap border-b-2 pb-2 pt-1 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-                                    key === active ? 'border-primary font-semibold text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground'
+                                    '-mb-px whitespace-nowrap border-b-2 pb-2 pt-1 text-body-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                                    key === active ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground'
                                 )}
                             >
                                 {text}

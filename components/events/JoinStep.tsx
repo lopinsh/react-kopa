@@ -15,8 +15,8 @@ import GoingButton from './GoingButton';
 
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
 
-const CHIP = 'inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-sm font-semibold';
-const UNDO = 'text-sm font-semibold text-foreground-muted underline decoration-border underline-offset-4 hover:text-foreground disabled:opacity-60';
+const CHIP = 'inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-button-sm';
+const UNDO = 'text-body-sm text-foreground-muted underline decoration-border underline-offset-4 hover:text-foreground disabled:opacity-60';
 type Action = 'go' | 'request' | 'waitlist';
 
 /**
@@ -77,7 +77,7 @@ export default function JoinStep({ join, trailing }: { join: EventJoinView; trai
 
     return (
         <div ref={root} data-ui={UI.joinStep} className="grid gap-2">
-            {note && <p id={noteId} className="text-[13px] text-foreground-muted">{t(note)}</p>}
+            {note && <p id={noteId} className="text-meta text-foreground-muted">{t(note)}</p>}
             {(step.kind !== 'none' || trailing) && (
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
                     {step.kind === 'act' && <GoingButton action={step.action} pending={pending} onPress={() => gateAction(() => press(step.action), 'event_join')} describedBy={note ? noteId : undefined} />}
@@ -103,12 +103,12 @@ export default function JoinStep({ join, trailing }: { join: EventJoinView; trai
                             )}
                         </>
                     )}
-                    {step.kind === 'quiet' && <p className="text-sm font-semibold text-foreground-muted">{t(step.note)}</p>}
+                    {step.kind === 'quiet' && <p className="text-body-sm text-foreground-muted">{t(step.note)}</p>}
                     {trailing}
                 </div>
             )}
             {isModalOpen && <AuthGateModal isOpen onClose={closeModal} reason="join" />}
-            {error && <p role="alert" className="text-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
+            {error && <p role="alert" className="text-body-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
         </div>
     );
 }

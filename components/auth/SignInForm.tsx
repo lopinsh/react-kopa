@@ -66,22 +66,22 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
                     required
                 />
 
-                {error && <p className="text-sm text-danger">{error}</p>}
+                {error && <p className="text-body-sm text-danger">{error}</p>}
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-pill bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                    className="w-full rounded-pill bg-primary px-4 py-2.5 text-button-sm text-primary-foreground shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                 >
                     {loading ? t('signingIn') : t('signInButton')}
                 </button>
             </form>
 
-            <p className="text-center text-sm text-foreground-muted">
+            <p className="text-center text-body-sm text-foreground-muted">
                 {t('noAccount')}{' '}
                 <Link
                     href={{ pathname: '/auth/register', query: { callbackUrl } }}
-                    className="font-medium text-primary hover:underline"
+                    className="weight-medium text-primary hover:underline"
                 >
                     {t('createAccount')}
                 </Link>

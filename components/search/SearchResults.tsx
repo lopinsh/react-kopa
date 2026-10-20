@@ -13,7 +13,7 @@ import { saveRecent } from '@/lib/recent-searches';
 import { UI } from '@/lib/constants';
 import type { SearchModel } from '@/hooks/useSearch';
 
-const HEADING = 'px-0.5 pb-1 pt-3 text-xs font-semibold text-foreground-muted';
+const HEADING = 'px-0.5 pb-1 pt-3 text-tag text-foreground-muted';
 
 type Props = { search: SearchModel; requestClose: () => void };
 
@@ -52,9 +52,9 @@ export default function SearchResults({ search, requestClose }: Props) {
                 <p className="px-0.5 py-4 italic text-primary">{t('nothingFound')}</p>
             )}
             {cities.length > 0 && elsewhere > 0 && (
-                <p className="px-0.5 pt-3 text-[13px] text-foreground-muted">
+                <p className="px-0.5 pt-3 text-meta text-foreground-muted">
                     {tSearch('elsewhere', { count: elsewhere })}{' · '}
-                    <button type="button" onClick={() => setCities([])} className="font-medium text-primary underline-offset-2 hover:underline">{tSearch('everywhere')}</button>
+                    <button type="button" onClick={() => setCities([])} className="weight-medium text-primary underline-offset-2 hover:underline">{tSearch('everywhere')}</button>
                 </p>
             )}
             {found > 0 && (
@@ -66,7 +66,7 @@ export default function SearchResults({ search, requestClose }: Props) {
                         scroll={false}
                         data-search-item
                         onClick={(e) => { if (here) { e.preventDefault(); requestClose(); } }}
-                        className="flex min-h-11 items-center gap-1.5 rounded-lg px-0.5 text-sm font-semibold text-primary hover:underline md:min-h-9"
+                        className="flex min-h-11 items-center gap-1.5 rounded-lg px-0.5 text-body-sm text-primary hover:underline md:min-h-9"
                     >
                         {tSearch('showAllCount', { count: found })}
                         <ArrowRight aria-hidden="true" className="size-4" />

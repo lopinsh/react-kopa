@@ -140,12 +140,12 @@ export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
                 {...register('confirmPassword')}
             />
 
-            {serverError && <p className="text-sm text-danger">{serverError}</p>}
+            {serverError && <p className="text-body-sm text-danger">{serverError}</p>}
 
             <button
                 type="submit"
                 disabled={isPending}
-                className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary px-4 py-2.5 text-button-sm text-primary-foreground shadow-md transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                 {isPending ? t('submitting') : t('submit')}

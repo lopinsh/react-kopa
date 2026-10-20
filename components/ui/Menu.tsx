@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import { UI } from '@/lib/constants';
 export { useMenu } from '@/hooks/useMenu';
 
-const ITEM_BASE = 'flex min-h-10 w-full items-center gap-2.5 rounded-item px-2.5 py-[7px] text-left text-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
+const ITEM_BASE = 'flex min-h-10 w-full items-center gap-2.5 rounded-item px-2.5 py-[7px] text-left text-body-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
 
 type PanelProps = {
     label: string;
@@ -65,7 +65,7 @@ export function MenuItemLink({ href, icon, trailing, locale, hrefLang, current, 
             aria-checked={radio ? current : undefined}
             tabIndex={-1}
             data-ui={UI.menuItem}
-            className={clsx(ITEM_BASE, current && 'font-semibold', className)}
+            className={clsx(ITEM_BASE, current && 'weight-strong', className)}
         >
             {icon}
             {children}
@@ -78,7 +78,7 @@ export function MenuItemLink({ href, icon, trailing, locale, hrefLang, current, 
 export function MenuItemButton({ onSelect, icon, trailing, disabled, current, className, children }: ItemProps & { onSelect: () => void; disabled?: boolean; current?: boolean }) {
     const radio = typeof current === 'boolean';
     return (
-        <button type="button" role={radio ? 'menuitemradio' : 'menuitem'} aria-checked={radio ? current : undefined} tabIndex={-1} data-ui={UI.menuItem} disabled={disabled} onClick={onSelect} className={clsx(ITEM_BASE, current && 'font-semibold', className)}>
+        <button type="button" role={radio ? 'menuitemradio' : 'menuitem'} aria-checked={radio ? current : undefined} tabIndex={-1} data-ui={UI.menuItem} disabled={disabled} onClick={onSelect} className={clsx(ITEM_BASE, current && 'weight-strong', className)}>
             {icon}
             {children}
             {trailing && <span className="sr-only">, </span>}
@@ -94,4 +94,4 @@ export function MenuSeparator() {
 /** The look of a menu row, for items that bring their own markup (the admin mode toggles). */
 export const MENU_ITEM_CLASS = ITEM_BASE;
 /** Trailing text/state slot of a row (read after a comma: "English, empty"). */
-export const MENU_TRAILING_CLASS = 'ml-auto text-xs text-foreground-muted';
+export const MENU_TRAILING_CLASS = 'ml-auto text-meta text-foreground-muted';

@@ -41,14 +41,14 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                         onChange={onTaxChange}
                     />
                     {errors.categoryId && (
-                        <p className="mt-2 text-xs text-danger">{errors.categoryId.message}</p>
+                        <p className="mt-2 text-meta text-danger">{errors.categoryId.message}</p>
                     )}
                 </div>
 
                 {selectedL1 && (
                     <div className="pt-8 border-t border-border">
                         {tagsCleared && noTagsYet && (
-                            <p role="status" className="mb-4 rounded-xl line bg-surface px-3 py-2 text-sm text-foreground-muted">
+                            <p role="status" className="mb-4 rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground-muted">
                                 {t('tagsClearedOnCategoryChange')}
                             </p>
                         )}

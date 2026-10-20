@@ -11,7 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const BASE = process.env.BASE_URL ?? 'http://localhost:3000';
-const OUT = path.resolve('screen-review');
+const OUT = path.resolve(process.env.OUT_DIR ?? 'screen-review');
 
 type Role = 'anon' | 'user' | 'member' | 'owner' | 'admin';
 const ACCOUNTS: Record<Exclude<Role, 'anon'>, { email: string; password: string }> = {
@@ -20,7 +20,7 @@ const ACCOUNTS: Record<Exclude<Role, 'anon'>, { email: string; password: string 
     owner: { email: 'owner@local', password: 'owner' },
     admin: { email: 'admin@local', password: 'admin' },
 };
-const SIZES = { desktop: { width: 1440, height: 900 }, mobile: { width: 390, height: 844 } } as const;
+const SIZES = { desktop: { width: Number(process.env.DESKTOP_W ?? 1440), height: 900 }, mobile: { width: Number(process.env.MOBILE_W ?? 390), height: 844 } } as const;
 type Size = keyof typeof SIZES;
 
 const G = '/lv/religion/group/jelgavas-lugsanu-loks';

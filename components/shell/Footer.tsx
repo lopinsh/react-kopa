@@ -8,7 +8,7 @@ import { UI } from '@/lib/constants';
 import { FOOTER_PATHS } from '@/lib/navigation';
 import { isPanelAddress } from '@/lib/panel-routes';
 
-const FOOTER_LINK = 'font-semibold text-primary underline decoration-border underline-offset-[3px] hover:decoration-primary';
+const FOOTER_LINK = 'weight-strong text-primary underline decoration-border underline-offset-[3px] hover:decoration-primary';
 
 /** The slim footer that ends discovery and reading pages (AR-16); group, own-area and admin pages have none. */
 export function Footer({ always }: { always?: boolean }) {
@@ -24,7 +24,7 @@ export function Footer({ always }: { always?: boolean }) {
     if (!(panel ? pageHasFooter : onPage)) return null;
 
     return (
-        <footer data-ui={UI.footer} className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-t border-border bg-surface px-3 py-3 text-[13px] text-foreground-muted md:px-5 md:py-3.5">
+        <footer data-ui={UI.footer} className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-t border-border bg-surface px-3 py-3 text-meta text-foreground-muted md:px-5 md:py-3.5">
             <Link href="/" aria-label={tCommon('brandName')}>
                 <Logo size="sm" />
             </Link>

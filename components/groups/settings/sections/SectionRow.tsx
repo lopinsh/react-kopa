@@ -39,12 +39,12 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
         >
             <div className="relative flex items-center gap-4 p-4 has-[button[data-row-toggle]:focus-visible]:outline has-[button[data-row-toggle]:focus-visible]:outline-2 has-[button[data-row-toggle]:focus-visible]:-outline-offset-2 has-[button[data-row-toggle]:focus-visible]:outline-primary md:p-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl line bg-surface-elevated text-foreground-muted">
-                    {index === 0 ? <span className="text-xs font-semibold">0</span> : <GripVertical className="h-4 w-4" />}
+                    {index === 0 ? <span className="text-tag">0</span> : <GripVertical className="h-4 w-4" />}
                 </div>
 
                 <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 lang={section.originalLang} className="font-semibold text-foreground">
+                        <h3 lang={section.originalLang} className="text-item text-foreground">
                             {/* The whole row is the button: the stretched overlay opens and closes the section; the move buttons sit above it. */}
                             <button
                                 type="button"
@@ -57,13 +57,13 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
                             </button>
                         </h3>
                         {section.visibility === 'MEMBERS_ONLY' && (
-                            <span className="flex items-center gap-1 rounded-pill bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+                            <span className="flex items-center gap-1 rounded-pill bg-primary/10 px-1.5 py-0.5 text-meta text-primary">
                                 <Lock className="h-2.5 w-2.5" />
                                 {c_common('visibilityMembersOnly')}
                             </span>
                         )}
                     </div>
-                    <p lang={section.originalLang} className="mt-0.5 line-clamp-1 text-xs text-foreground-muted">
+                    <p lang={section.originalLang} className="mt-0.5 line-clamp-1 text-meta text-foreground-muted">
                         {original.content ? stripHtml(original.content) : c_common('emptyContent')}
                     </p>
                 </div>

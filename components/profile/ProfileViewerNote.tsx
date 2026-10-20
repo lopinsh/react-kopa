@@ -6,7 +6,7 @@ import type { PrivacySettings } from '@/lib/types/profile';
 export default async function ProfileViewerNote({ privacy }: { privacy: PrivacySettings }) {
     const t = await getTranslations('profile.view');
     return (
-        <p className="max-w-[680px] text-sm text-foreground-muted">
+        <p className="max-w-[680px] text-body-sm text-foreground-muted">
             {privacy.isProfilePublic
                 ? <>{t('asOthersSee')}{!privacy.showGroupsOnProfile && ` ${t('groupsHidden')}`}</>
                 : t('privateNote')}{' '}

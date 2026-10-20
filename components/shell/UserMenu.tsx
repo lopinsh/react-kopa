@@ -23,7 +23,7 @@ type Props = {
 };
 
 const ICON = 'size-[17px] text-foreground-muted';
-const NEW_COUNT_CLASS = 'ml-auto text-xs font-semibold text-primary';
+const NEW_COUNT_CLASS = 'ml-auto text-tag text-primary';
 
 /** The picture at the end of the header: the profile menu when signed in, the sign-in button when not (AR-14). */
 export default function UserMenu({ user, initialOpen }: Props) {

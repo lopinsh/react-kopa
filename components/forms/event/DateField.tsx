@@ -88,7 +88,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     <Calendar className="h-4 w-4" />
                 </button>
             </div>
-            {badText && <p className="mt-1 text-xs text-danger">{t('invalidDate')}</p>}
+            {badText && <p className="mt-1 text-meta text-danger">{t('invalidDate')}</p>}
             {open && <DatePanel id={calendarId} value={value} onPick={(d) => { onChange(d); setOpen(false); }} onClose={() => setOpen(false)} />}
         </div>
     );

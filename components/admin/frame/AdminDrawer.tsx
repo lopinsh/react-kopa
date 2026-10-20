@@ -42,15 +42,15 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
                 <Menu aria-hidden className="size-5" />
                 {total > 0 && <span aria-hidden className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />}
             </button>
-            <p className="min-w-0 truncate font-heading text-base font-semibold">
+            <p className="min-w-0 truncate text-item">
                 {title}
-                {part && <span className="ml-2 text-xs font-normal text-foreground-muted">{part}</span>}
+                {part && <span className="ml-2 text-meta font-normal text-foreground-muted">{part}</span>}
             </p>
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('drawerTitle')} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
                         <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item"><ShieldCheck aria-hidden className="size-[18px]" /></span>
-                        <p className="font-heading text-base font-semibold">{t('drawerTitle')}</p>
+                        <p className="text-item">{t('drawerTitle')}</p>
                     </div>
                     <ul className="pt-2">
                         {sections.map((s) => {
@@ -58,9 +58,9 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
                             return (
                                 <li key={s.id}>
                                     {on ? (
-                                        <p className="flex items-center px-2.5 py-2 text-sm font-semibold">{t(`sections.${s.id}`)}</p>
+                                        <p className="flex items-center px-2.5 py-2 text-body-sm">{t(`sections.${s.id}`)}</p>
                                     ) : (
-                                        <Link href={s.items[0].href} replace className="flex min-h-10 items-center rounded-xl px-2.5 text-sm text-foreground hover:bg-tint">
+                                        <Link href={s.items[0].href} replace className="flex min-h-10 items-center rounded-xl px-2.5 text-body-sm text-foreground hover:bg-tint">
                                             {t(`sections.${s.id}`)}
                                             <AdminBadge count={sectionBadge(s, counts)} danger={s.items.some((i) => i.badge === 'reports') && counts.reports > 0} />
                                         </Link>

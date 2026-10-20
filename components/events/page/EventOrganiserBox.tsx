@@ -76,10 +76,10 @@ export default function EventOrganiserBox({ event, lists, locale, eventPath }: P
 
     return (
         <div ref={root} data-ui={UI.eventOrganiser} className="mt-3.5 grid gap-2.5 rounded-2xl bg-background p-4">
-            <h2 className="text-[13px] font-semibold text-foreground">{tOrg('title')}</h2>
+            <h2 className="text-section text-foreground">{tOrg('title')}</h2>
             {!past && (
                 <>
-                    <p className="flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-foreground-muted">
+                    <p className="flex flex-wrap gap-x-4 gap-y-1 text-meta text-foreground-muted">
                         {counts.map((c) => (
                             <button
                                 key={c.kind}
@@ -89,7 +89,7 @@ export default function EventOrganiserBox({ event, lists, locale, eventPath }: P
                                 onClick={() => setOpen(open === c.kind ? null : c.kind)}
                                 className="rounded-md py-1 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                             >
-                                {c.label} <strong className="font-semibold text-foreground">{c.count}</strong>
+                                {c.label} <strong className="weight-strong text-foreground">{c.count}</strong>
                             </button>
                         ))}
                     </p>
@@ -105,8 +105,8 @@ export default function EventOrganiserBox({ event, lists, locale, eventPath }: P
                 )}
                 <Button size="sm" variant="quiet" className="text-danger" disabled={busy} onClick={() => setConfirmOpen(true)}>{t('deleteEvent')}</Button>
             </div>
-            {!past && isRequest && !event.isFull && <p className="text-[13px] text-foreground-muted">{t('closeSignupsHint')}</p>}
-            {error && <p role="alert" className="text-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
+            {!past && isRequest && !event.isFull && <p className="text-meta text-foreground-muted">{t('closeSignupsHint')}</p>}
+            {error && <p role="alert" className="text-body-sm text-danger">{tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED')}</p>}
             <ConfirmDialog isOpen={confirmOpen} title={t('deleteEvent')} message={t('deleteConfirm')} confirmLabel={t('deleteEvent')} destructive isPending={busy} onConfirm={remove} onCancel={() => setConfirmOpen(false)} />
         </div>
     );

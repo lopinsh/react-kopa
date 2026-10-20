@@ -14,7 +14,7 @@ import { CHIP, CHOSEN, OPEN } from './chip-styles';
 
 export function Chip({ label, chosen, onClick, muted = false }: { label: string; chosen: boolean; onClick?: () => void; muted?: boolean }) {
     return (
-        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : clsx('shrink-0 bg-surface font-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
+        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : clsx('shrink-0 bg-surface weight-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
             {/* A chosen chip always stays; on a narrow line its name is cut instead. */}
             <span className="min-w-0 truncate">{label}</span>
             {chosen && <X aria-hidden="true" className="size-3 shrink-0" />}
@@ -59,7 +59,7 @@ export default function VeidsChips() {
         pop.setOpen(false);
         pop.host?.querySelector('button')?.focus();
     };
-    const more = <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted')}>+{hidden || 99}</span>;
+    const more = <span className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted')}>+{hidden || 99}</span>;
 
     return (
         <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex min-w-0 items-center gap-1.5">
@@ -68,7 +68,7 @@ export default function VeidsChips() {
             </div>
             {hidden > 0 && (
                 <div ref={bindHost} className="relative shrink-0">
-                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted hover:bg-tint', pop.open && OPEN)}>
+                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted hover:bg-tint', pop.open && OPEN)}>
                         +{hidden}
                     </button>
                     <FilterPopover pop={pop} title={t('veids')} onClose={close}>

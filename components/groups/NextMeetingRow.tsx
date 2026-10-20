@@ -18,12 +18,12 @@ export default function NextMeetingRow({ event, href }: { event: Pick<NextEventV
     ));
     return (
         <Link href={href} className="grid gap-0.5 rounded-xl py-2.5 hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
-            <span className="flex items-baseline gap-2 text-sm">
+            <span className="flex items-baseline gap-2 text-body-sm">
                 <span className="tabular-nums text-foreground-muted">{when}</span>
                 <span aria-hidden className="size-2 shrink-0 translate-y-px rounded-full bg-[var(--accent)]" />
-                <span lang={langAttr(event.titleLang, locale)} className="min-w-0 font-semibold">{event.title}</span>
+                <span lang={langAttr(event.titleLang, locale)} className="min-w-0 weight-strong">{event.title}</span>
             </span>
-            {event.excerpt && <span className="truncate text-[13px] text-foreground-muted">{event.excerpt}</span>}
+            {event.excerpt && <span className="truncate text-meta text-foreground-muted">{event.excerpt}</span>}
         </Link>
     );
 }

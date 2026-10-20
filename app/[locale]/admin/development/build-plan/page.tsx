@@ -26,7 +26,7 @@ export default async function BuildPlanPage({ params }: { params: Promise<{ loca
                 ) : (
                     <HandbookMarkdown markdown={markdown} />
                 )}
-                <p className="mt-12 border-t border-border pt-4 text-xs text-foreground-muted">{t('buildPlanNote')}</p>
+                <p className="mt-12 border-t border-border pt-4 text-meta text-foreground-muted">{t('buildPlanNote')}</p>
             </article>
         </div>
     );

@@ -29,7 +29,7 @@ export default function HiddenGroupBanner({ groupId, reason, canRestore }: Props
     };
 
     return (
-        <div data-ui={UI.banner} className="flex flex-wrap items-center justify-between gap-3 bg-danger px-4 py-3 text-sm font-medium text-danger-foreground">
+        <div data-ui={UI.banner} className="flex flex-wrap items-center justify-between gap-3 bg-danger px-4 py-3 text-body-sm text-danger-foreground">
             <span className="flex items-center gap-2">
                 <EyeOff className="h-4 w-4 shrink-0" />
                 {t(canRestore ? 'hiddenBanner' : 'hiddenBannerOwner', { reason: reason ?? '' })}
@@ -38,7 +38,7 @@ export default function HiddenGroupBanner({ groupId, reason, canRestore }: Props
                 <button
                     onClick={handleRestore}
                     disabled={isPending}
-                    className="rounded-lg bg-danger-foreground px-3 py-1.5 text-xs font-bold text-danger hover:opacity-90 disabled:opacity-50"
+                    className="rounded-lg bg-danger-foreground px-3 py-1.5 text-tag text-danger hover:opacity-90 disabled:opacity-50"
                 >
                     {t('restore')}
                 </button>

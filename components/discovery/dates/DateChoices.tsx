@@ -40,7 +40,7 @@ export default function DateChoices({ className }: { className?: string }) {
                         aria-controls={pop.id}
                         aria-haspopup="true"
                         aria-label={custom ? t('dateChoiceLabel', { when: label }) : t('pickDates')}
-                        className={clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-[13px] after:absolute after:-inset-y-2 after:inset-x-0', custom ? 'pl-2.5 pr-1 font-semibold' : 'px-2.5 text-foreground-muted hover:bg-tint')}
+                        className={clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-meta after:absolute after:-inset-y-2 after:inset-x-0', custom ? 'pl-2.5 pr-1 weight-strong' : 'px-2.5 text-foreground-muted hover:bg-tint')}
                     >
                         <CalendarDays aria-hidden="true" className="size-3.5 shrink-0" />
                         {custom && <span className="min-w-0 truncate">{label}</span>}

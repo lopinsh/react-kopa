@@ -33,12 +33,12 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
         >
             {wildcardMode ? (
                 <div className="p-3">
-                    <p className="mb-2 text-sm text-foreground-muted">{t('confirmCreateSubtopic', { name: query, category: l1.title })}</p>
+                    <p className="mb-2 text-body-sm text-foreground-muted">{t('confirmCreateSubtopic', { name: query, category: l1.title })}</p>
                     <button
                         type="button"
                         onClick={() => createPending(l1.id, query)}
                         disabled={isSubmittingPending}
-                        className="w-full flex items-center justify-between rounded-pill p-2 text-left text-sm transition-colors text-primary-foreground font-bold bg-primary disabled:opacity-60"
+                        className="w-full flex items-center justify-between rounded-pill p-2 text-left text-button-sm transition-colors text-primary-foreground bg-primary disabled:opacity-60"
                     >
                         <span>{t('createSubtopic')}</span>
                         <Check className="h-4 w-4" />
@@ -53,7 +53,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                             <>
                                 {isSearching && (
                                     <div className="p-4 text-center">
-                                        <p className="text-xs text-foreground-muted">{c('loading')}</p>
+                                        <p className="text-meta text-foreground-muted">{c('loading')}</p>
                                     </div>
                                 )}
 
@@ -68,7 +68,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                     </>
                                 ) : (
                                     <div className="p-4 text-center">
-                                        <p className="text-sm text-foreground-muted">{t('noTopicsFound', { category: l1.title })}</p>
+                                        <p className="text-body-sm text-foreground-muted">{t('noTopicsFound', { category: l1.title })}</p>
                                     </div>
                                 )}
                             </>
@@ -83,10 +83,10 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                 className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-secondary"
                             >
                                 <div className="flex flex-col">
-                                    <span className="text-sm font-semibold text-primary">
+                                    <span className="text-body-sm text-primary">
                                         {t('createSubtopic')} &quot;{query}&quot;
                                     </span>
-                                    <span className="text-xs text-foreground-muted">{t('proposeAsNewSubtopic')}</span>
+                                    <span className="text-meta text-foreground-muted">{t('proposeAsNewSubtopic')}</span>
                                 </div>
                                 <Plus className="h-4 w-4 text-primary" />
                             </button>
@@ -101,7 +101,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                 void commitTypedText();
                             }}
                             disabled={isSubmittingPending}
-                            className="w-full rounded-pill bg-primary py-2 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+                            className="w-full rounded-pill bg-primary py-2 text-button-sm text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                         >
                             {c('done')}
                         </button>

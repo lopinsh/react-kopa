@@ -21,7 +21,7 @@ export function StyleDemos() {
                     style={themeSampleVars(PALETTE.light, PALETTE.headingFont, PALETTE.bodyFont, 'light', key) as React.CSSProperties}
                     className="rounded-2xl bg-background p-4 font-sans text-foreground sm:p-5"
                 >
-                    <h3 className="mb-3 text-lg">{t(`styles.${key}`)}</h3>
+                    <h3 className="mb-3 text-item">{t(`styles.${key}`)}</h3>
                     <div className="flex flex-wrap items-center gap-3 pb-1 pr-1">
                         {VARIANTS.map((v) => <button key={v} type="button" tabIndex={-1} className={buttonClass(v, '', 'sm')}>{t(`sample.${v === 'primary' ? 'primaryButton' : 'secondaryButton'}`)}</button>)}
                     </div>
@@ -30,11 +30,11 @@ export function StyleDemos() {
                         <FilterChip active={false} onClick={() => undefined}>{t('sample.link')}</FilterChip>
                         <Badge>{t('sample.badge')}</Badge>
                     </div>
-                    <input readOnly tabIndex={-1} value={t('sample.heading')} className="mt-4 block h-11 w-full rounded-lg line bg-background px-3 text-sm" />
+                    <input readOnly tabIndex={-1} value={t('sample.heading')} className="mt-4 block h-11 w-full rounded-lg line bg-background px-3 text-body-sm" />
                     <div className="mt-4 rounded-2xl bg-surface p-4 shadow-card frame">
-                        <p className="text-sm text-foreground-muted">{t('sample.body')}</p>
+                        <p className="text-body-sm text-foreground-muted">{t('sample.body')}</p>
                     </div>
-                    <ul className="mt-4 w-48 rounded-menu line bg-surface p-1.5 shadow-premium text-sm" role="presentation">
+                    <ul className="mt-4 w-48 rounded-menu line bg-surface p-1.5 shadow-premium text-body-sm" role="presentation">
                         <li className="rounded-item px-2.5 py-1.5 hover:bg-tint">{t('sample.link')}</li>
                         <li className="rounded-item px-2.5 py-1.5 hover:bg-tint">{t('sample.badge')}</li>
                     </ul>

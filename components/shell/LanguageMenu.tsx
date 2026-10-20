@@ -29,7 +29,7 @@ export default function LanguageMenu({ initialOpen }: { initialOpen?: boolean })
                 data-ui={UI.languageSwitch}
                 aria-label={t('languageCurrent', { language: LOCALE_NAMES[locale] })}
                 className={clsx(
-                    'flex h-10 items-center gap-0.5 rounded-pill px-2 text-xs font-semibold text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-[13px]',
+                    'flex h-10 items-center gap-0.5 rounded-pill px-2 text-tag text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-meta',
                     open && 'bg-tint'
                 )}
             >
@@ -46,7 +46,7 @@ export default function LanguageMenu({ initialOpen }: { initialOpen?: boolean })
                             hrefLang={code}
                             current={code === locale}
                             icon={code === locale ? <Check aria-hidden className="size-[17px] text-primary" /> : <span aria-hidden className="size-[17px]" />}
-                            trailing={<span className="ml-auto text-xs text-foreground-muted">{code.toUpperCase()}</span>}
+                            trailing={<span className="ml-auto text-meta text-foreground-muted">{code.toUpperCase()}</span>}
                         >
                             <span lang={code}>{LOCALE_NAMES[code]}</span>
                         </MenuItemLink>

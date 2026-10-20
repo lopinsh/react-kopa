@@ -22,7 +22,7 @@ export default function FacesLine({ going, ended }: { going: EventPanelData['goi
             : t('goingNamed', { name: named?.name ?? '', others });
 
     return (
-        <p data-ui={UI.facesLine} className="flex items-center gap-2 text-sm text-foreground-muted">
+        <p data-ui={UI.facesLine} className="flex items-center gap-2 text-body-sm text-foreground-muted">
             {faces.length > 0 && (
                 <span aria-hidden="true" className="flex shrink-0">
                     {faces.map((f, i) => (

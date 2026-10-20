@@ -16,12 +16,12 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
     return (
         <SettingsSection title={c_common('tabDanger')} description={c_common('tabDangerDescription')}>
             <div className="space-y-3">
-                <p className="max-w-xl text-sm text-foreground-muted">{gt('deleteConfirm')}</p>
+                <p className="max-w-xl text-body-sm text-foreground-muted">{gt('deleteConfirm')}</p>
                 <button
                     type="button"
                     onClick={onDelete}
                     disabled={isPending}
-                    className="flex h-12 items-center gap-3 rounded-pill bg-danger px-8 font-semibold text-danger-foreground transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                    className="flex h-12 items-center gap-3 rounded-pill bg-danger px-8 weight-strong text-danger-foreground transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                 >
                     <Trash2 className="h-5 w-5" />
                     {c_common('deleteGroupTitle')}

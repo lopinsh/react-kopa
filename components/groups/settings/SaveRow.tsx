@@ -18,7 +18,7 @@ export default function SaveRow({ isPending, disabled, serverError }: Props) {
             <button
                 type="submit"
                 disabled={isPending || disabled}
-                className="flex h-14 items-center gap-3 rounded-pill bg-primary px-10 font-semibold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                className="flex h-14 items-center gap-3 rounded-pill bg-primary px-10 weight-strong text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? (
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -31,10 +31,10 @@ export default function SaveRow({ isPending, disabled, serverError }: Props) {
             {serverError ? (
                 <div role="alert" className="flex items-center gap-2 rounded-2xl border border-danger/40 bg-danger/10 p-4 text-danger">
                     <AlertCircle className="h-4 w-4" />
-                    <p className="text-sm font-bold">{serverError}</p>
+                    <p className="text-body-sm">{serverError}</p>
                 </div>
             ) : (
-                <p className="ml-2 text-xs font-medium text-foreground-muted">
+                <p className="ml-2 text-meta text-foreground-muted">
                     {gt('saveChangesDesc')}
                 </p>
             )}

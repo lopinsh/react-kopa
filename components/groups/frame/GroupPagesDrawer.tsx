@@ -47,8 +47,8 @@ export default function GroupPagesDrawer() {
                             <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px]" />
                         </span>
                         <div className="min-w-0">
-                            <p className="truncate font-heading text-base font-semibold leading-tight">{g.name}</p>
-                            <div className="text-xs text-foreground-muted">
+                            <p className="truncate text-item">{g.name}</p>
+                            <div className="text-meta text-foreground-muted">
                                 <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} />
                             </div>
                         </div>

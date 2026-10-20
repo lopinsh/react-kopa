@@ -14,7 +14,7 @@ type Props = {
     className?: string;
 };
 
-const TONE: Record<LimitState, string> = { ok: 'text-foreground-muted', near: 'font-semibold text-warning', over: 'font-semibold text-danger' };
+const TONE: Record<LimitState, string> = { ok: 'text-foreground-muted', near: 'weight-strong text-warning', over: 'weight-strong text-danger' };
 
 /**
  * The count under a limited field, at its right end (AR-71): quiet, then the warning colour in the last tenth, then red with
@@ -37,7 +37,7 @@ export default function TextCounter({ id, length, max, className }: Props) {
 
     return (
         <>
-            <span id={id} data-ui={UI.fieldCounter} className={clsx('ml-auto shrink-0 text-xs tabular-nums', TONE[state], className)}>
+            <span id={id} data-ui={UI.fieldCounter} className={clsx('ml-auto shrink-0 text-meta tabular-nums', TONE[state], className)}>
                 {state === 'over' ? t('counterOver', { count: length, max, over }) : t('counter', { count: length, max })}
             </span>
             <span className="sr-only" aria-live="polite">{spoken}</span>

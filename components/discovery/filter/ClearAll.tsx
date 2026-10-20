@@ -16,7 +16,7 @@ export default function ClearAll({ className }: { className?: string }) {
             type="button"
             data-ui={UI.clearAll}
             onClick={() => go({ q: '', cities: [], category: null, tags: [], date: { kind: 'week' }, day: null })}
-            className={clsx('shrink-0 whitespace-nowrap px-1 py-2 text-xs font-semibold text-primary underline underline-offset-2 hover:opacity-80', className)}
+            className={clsx('shrink-0 whitespace-nowrap px-1 py-2 text-tag text-primary underline underline-offset-2 hover:opacity-80', className)}
         >
             {t('clearAll')}
         </button>

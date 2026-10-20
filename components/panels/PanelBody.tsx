@@ -8,8 +8,8 @@ export default function PanelBody({ children }: { children: ReactNode }) {
 
 /** The panel's name: the dialog's label, and where focus goes when the content changes. */
 export function PanelTitle({ children, lang }: { children: ReactNode; lang?: string }) {
-    return <h2 id={PANEL_TITLE_ID} tabIndex={-1} lang={lang} className="font-heading text-xl font-semibold leading-snug text-foreground outline-none">{children}</h2>;
+    return <h2 id={PANEL_TITLE_ID} tabIndex={-1} lang={lang} className="text-section text-foreground outline-none">{children}</h2>;
 }
 
 /** A panel's quiet text link ("Atvērt grupas lapu", "Visa informācija"): the same look as TextLink, for a plain `<a>`. */
-export const PANEL_LINK = 'text-sm font-semibold text-primary underline decoration-border underline-offset-4 hover:decoration-primary';
+export const PANEL_LINK = 'text-button-sm text-primary underline decoration-border underline-offset-4 hover:decoration-primary';

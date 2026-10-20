@@ -11,7 +11,7 @@ export default async function LatestAnnouncement({ item, allHref }: Props) {
     const t = await getTranslations('group');
     return (
         <section aria-labelledby="latest-announcement" className="mb-4 max-w-[760px]">
-            <h3 id="latest-announcement" className="mb-1.5 font-heading text-base font-semibold">{t('latestAnnouncement')}</h3>
+            <h3 id="latest-announcement" className="mb-1.5 text-item">{t('latestAnnouncement')}</h3>
             <AnnouncementItem item={item} clamp />
             {allHref && <p className="mt-1.5"><Link href={allHref} className={TEXT_LINK_CLASS}>{t('allAnnouncements')} →</Link></p>}
         </section>

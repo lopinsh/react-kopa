@@ -54,9 +54,6 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),
     };
-    // Headings with font-semibold follow the style when it is lighter than semibold; calm and bold leave it unset (the rule falls back to 600).
-    if (weight < 600) vars['--heading-semi'] = String(weight);
-    else if (withDefaults) vars['--heading-semi'] = '600';
     // Tile tone shares; the cat-tile utility mixes them with --c per card (a var(--c) here would resolve at the root).
     if (style.tile === 'solid') {
         vars['--tile-mix'] = '100%';

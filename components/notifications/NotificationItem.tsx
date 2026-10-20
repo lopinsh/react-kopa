@@ -30,25 +30,25 @@ export default function NotificationItem({ n, onRead }: { n: NotificationView; o
         <li data-ui={UI.notificationItem} className={clsx('group relative flex gap-3 px-4 py-3 transition-colors hover:bg-tint/60 has-[.stretch:focus-visible]:outline has-[.stretch:focus-visible]:-outline-offset-2 has-[.stretch:focus-visible]:outline-2 has-[.stretch:focus-visible]:outline-primary', !n.read && 'bg-primary/5')}>
             <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-tint text-foreground-muted">{createElement(notificationIcon(n.type), { className: 'size-4', strokeWidth: 1.8 })}</span>
             <div className="min-w-0 flex-1 pr-7">
-                <p className="text-[13px] leading-snug">
+                <p className="text-meta">
                     {n.link
-                        ? <Link href={n.link} onClick={tap} className={clsx('stretch font-semibold text-foreground', STRETCH)}>{headline}</Link>
-                        : <button type="button" onClick={tap} className={clsx('stretch text-left font-semibold text-foreground', STRETCH)}>{headline}</button>}
+                        ? <Link href={n.link} onClick={tap} className={clsx('stretch weight-strong text-foreground', STRETCH)}>{headline}</Link>
+                        : <button type="button" onClick={tap} className={clsx('stretch text-left weight-strong text-foreground', STRETCH)}>{headline}</button>}
                     {group?.path ? (
-                        <> · <Link href={group.path} className="relative z-[2] font-semibold text-primary hover:underline">{group.name}</Link></>
+                        <> · <Link href={group.path} className="relative z-[2] weight-strong text-primary hover:underline">{group.name}</Link></>
                     ) : groupName ? <span className="text-foreground-muted"> · {groupName}</span> : null}
                 </p>
-                {!n.read && n.moreCount > 0 && <p className="text-[11px] font-semibold text-primary">{t('more', { count: n.moreCount })}</p>}
+                {!n.read && n.moreCount > 0 && <p className="text-tag text-primary">{t('more', { count: n.moreCount })}</p>}
                 {detail !== undefined ? (
-                    <p className="mt-0.5 line-clamp-2 break-words text-xs leading-snug text-foreground-muted">{detail}</p>
+                    <p className="mt-0.5 line-clamp-2 break-words text-meta text-foreground-muted">{detail}</p>
                 ) : group?.categoryTitle && (
-                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-xs text-foreground-muted" style={group.color ? { ['--c' as string]: group.color } : undefined}>
+                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-meta text-foreground-muted" style={group.color ? { ['--c' as string]: group.color } : undefined}>
                         <span aria-hidden className="size-2 shrink-0 rounded-full bg-[var(--c)]" />
                         <span className="truncate"><span className="text-foreground">{group.categoryTitle}</span>{group.subCategory && ` ${group.subCategory}`}</span>
                     </p>
                 )}
             </div>
-            <div className="flex shrink-0 flex-col items-end gap-1.5 text-[11px] text-foreground-muted">
+            <div className="flex shrink-0 flex-col items-end gap-1.5 text-meta text-foreground-muted">
                 <span className="whitespace-nowrap">{relativeTo(format, new Date(n.createdAt), now)}</span>
                 {!n.read && <span role="img" aria-label={t('unread')} className="size-2 rounded-full bg-primary" />}
             </div>

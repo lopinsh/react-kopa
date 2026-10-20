@@ -15,12 +15,12 @@ export default function FontsPart({ theme, disabled, onFont }: Props) {
     return (
         <section aria-labelledby="design-fonts" className="space-y-6">
             <div>
-                <h2 id="design-fonts" className="text-[21px] font-semibold text-foreground">{t('parts.fonts')}</h2>
-                <p className="mt-1 text-sm text-foreground-muted">{t('fonts.lead')}</p>
+                <h2 id="design-fonts" className="text-section text-foreground">{t('parts.fonts')}</h2>
+                <p className="mt-1 text-body-sm text-foreground-muted">{t('fonts.lead')}</p>
             </div>
             {ROLES.map((role) => (
                 <fieldset key={role}>
-                    <legend className="mb-2 text-base font-semibold text-foreground">{t(role)}</legend>
+                    <legend className="mb-2 text-body text-foreground">{t(role)}</legend>
                     <div className="rounded-2xl bg-surface px-4 py-0.5 shadow-card frame">
                         {THEME_FONTS.map((f) => (
                             <label key={f.id} className="flex min-h-11 cursor-pointer items-center gap-3 border-t border-border py-2.5 first:border-t-0">
@@ -33,8 +33,8 @@ export default function FontsPart({ theme, disabled, onFont }: Props) {
                                     onChange={() => onFont(role, f.id)}
                                 />
                                 <span style={{ '--f': `var(${f.cssVar})` } as React.CSSProperties} className="min-w-0">
-                                    <span className="block text-[15px] font-semibold text-foreground [font-family:var(--f)]">{f.label}</span>
-                                    <span className="block text-[13px] text-foreground-muted [font-family:var(--f)]">{t('sample.latvian')}</span>
+                                    <span className="block text-body-sm text-foreground [font-family:var(--f)]">{f.label}</span>
+                                    <span className="block text-meta text-foreground-muted [font-family:var(--f)]">{t('sample.latvian')}</span>
                                 </span>
                             </label>
                         ))}

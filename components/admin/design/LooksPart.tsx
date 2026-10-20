@@ -12,15 +12,15 @@ export default function LooksPart({ theme, disabled, onPreset }: Props) {
     const t = useTranslations('admin.design');
     return (
         <section aria-labelledby="design-looks">
-            <h2 id="design-looks" className="text-[21px] font-semibold text-foreground">{t('parts.looks')}</h2>
-            <p className="mt-1 text-sm text-foreground-muted">{t('looks.lead')}</p>
+            <h2 id="design-looks" className="text-section text-foreground">{t('parts.looks')}</h2>
+            <p className="mt-1 text-body-sm text-foreground-muted">{t('looks.lead')}</p>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                 {THEME_PRESET_KEYS.map((key) => (
                     <ThemePresetCard key={key} presetKey={key} selected={theme.presetKey === key} disabled={disabled} onSelect={() => onPreset(key)} />
                 ))}
             </div>
-            <p className="mt-3 text-[13px] text-foreground-muted">{t('presetResetsTones')}</p>
-            {theme.presetKey === 'custom' && <p className="mt-2 text-sm font-semibold text-primary">{t('customActive')}</p>}
+            <p className="mt-3 text-meta text-foreground-muted">{t('presetResetsTones')}</p>
+            {theme.presetKey === 'custom' && <p className="mt-2 text-body-sm text-primary">{t('customActive')}</p>}
         </section>
     );
 }

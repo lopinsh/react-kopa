@@ -23,8 +23,8 @@ export default function AdminSections() {
                                 href={s.items[0].href}
                                 aria-current={on ? 'page' : undefined}
                                 className={clsx(
-                                    'flex min-h-11 items-center gap-2 border-b-2 px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary',
-                                    on ? 'border-primary font-semibold text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground'
+                                    'flex min-h-11 items-center gap-2 border-b-2 px-3 text-body-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary',
+                                    on ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground'
                                 )}
                             >
                                 {t(`sections.${s.id}`)}

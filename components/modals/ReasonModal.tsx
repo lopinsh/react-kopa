@@ -70,10 +70,10 @@ export default function ReasonModal({
             dirty={reason !== initialReason}
             title={<span className="inline-flex items-center gap-2">{icon}{title}</span>}
         >
-            {subject && <p className="mb-2 text-sm font-semibold text-foreground [overflow-wrap:anywhere]">{subject}</p>}
-            <p className="mb-4 text-sm leading-relaxed text-foreground-muted">{description}</p>
+            {subject && <p className="mb-2 text-body-sm text-foreground [overflow-wrap:anywhere]">{subject}</p>}
+            <p className="mb-4 text-body-sm text-foreground-muted">{description}</p>
 
-            <label className="mb-1 block text-sm font-semibold text-foreground" htmlFor={fieldId}>{reasonLabel}</label>
+            <label className="mb-1 block text-button-sm text-foreground" htmlFor={fieldId}>{reasonLabel}</label>
             <textarea
                 id={fieldId}
                 value={reason}
@@ -81,18 +81,18 @@ export default function ReasonModal({
                 aria-describedby={`${fieldId}-count`}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-danger/40"
+                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-body-sm text-foreground outline-none focus:border-danger/40"
             />
             <div className="mt-1 flex items-start gap-2">
-                <p className="text-xs text-foreground-muted">{hint}</p>
+                <p className="text-meta text-foreground-muted">{hint}</p>
                 <TextCounter id={`${fieldId}-count`} length={reason.length} max={MODERATION_REASON_MAX} />
             </div>
-            {error && <p role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
+            {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}
 
             <div className="mt-6 flex justify-end gap-3">
                 <OverlayCloseButton
                     disabled={isPending}
-                    className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
+                    className="rounded-xl px-5 py-2.5 text-body-sm text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
                 >
                     {cancelLabel}
                 </OverlayCloseButton>
@@ -100,7 +100,7 @@ export default function ReasonModal({
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending || over}
-                    className="flex items-center gap-2 rounded-pill bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-pill bg-danger px-5 py-2.5 text-button-sm text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}
                 </button>

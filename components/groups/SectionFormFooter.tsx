@@ -23,7 +23,7 @@ export default function SectionFormFooter({ canDelete, isPending, saveDisabled, 
                         type="button"
                         onClick={onDelete}
                         disabled={isPending}
-                        className="flex items-center gap-1.5 text-xs font-medium text-danger transition-colors hover:text-danger disabled:opacity-40"
+                        className="flex items-center gap-1.5 text-meta text-danger transition-colors hover:text-danger disabled:opacity-40"
                     >
                         <Trash2 className="h-3.5 w-3.5" />
                         {t('deleteSection')}
@@ -32,7 +32,7 @@ export default function SectionFormFooter({ canDelete, isPending, saveDisabled, 
 
                 <div className="flex items-center gap-3">
                     {justSaved && (
-                        <span className="flex items-center gap-1 text-xs font-semibold text-foreground-muted" role="status">
+                        <span className="flex items-center gap-1 text-tag text-foreground-muted" role="status">
                             <Check className="h-3.5 w-3.5" />
                             {t('sectionSaved')}
                         </span>
@@ -41,7 +41,7 @@ export default function SectionFormFooter({ canDelete, isPending, saveDisabled, 
                         type="button"
                         onClick={onSave}
                         disabled={isPending || saveDisabled}
-                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 font-bold text-primary-foreground transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 weight-strong text-primary-foreground transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                     >
                         <Save className="h-4 w-4" />
                         {t('saveSection')}

@@ -18,8 +18,8 @@ export default function AppearanceSetting() {
     );
 
     return (
-        <fieldset className="grid gap-1.5 rounded-2xl bg-surface px-4 py-3.5 text-sm shadow-card frame">
-            <legend className="float-left mb-1.5 font-heading text-[15px] font-semibold">{t('appearance')}</legend>
+        <fieldset className="grid gap-1.5 rounded-2xl bg-surface px-4 py-3.5 text-body-sm shadow-card frame">
+            <legend className="float-left mb-1.5 text-item">{t('appearance')}</legend>
             {CHOICES.map((choice) => (
                 <label key={choice} className="clear-both flex min-h-10 cursor-pointer items-center gap-2.5">
                     <input

@@ -49,8 +49,8 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
     return (
             <section>
                 <div className="mb-4">
-                    <h3 className="text-lg font-bold">{t('aliases')}</h3>
-                    <p className="text-sm text-foreground-muted mt-1">{t('aliasHelper')}</p>
+                    <h3 className="text-item">{t('aliases')}</h3>
+                    <p className="text-body-sm text-foreground-muted mt-1">{t('aliasHelper')}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -59,8 +59,8 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                             {l1.aliases.map(alias => (
                                 <div key={alias.id} className="flex flex-wrap items-center justify-between p-3 line rounded-lg bg-surface">
                                     <div className="flex items-center gap-3">
-                                        <span className="font-medium text-sm">{alias.value}</span>
-                                        <span className="bg-surface-elevated text-xs px-2 py-0.5 rounded-pill text-foreground-muted">
+                                        <span className="text-body-sm">{alias.value}</span>
+                                        <span className="bg-surface-elevated text-meta px-2 py-0.5 rounded-pill text-foreground-muted">
                                             {alias.locale || tAliases('anyLocaleShort')}
                                         </span>
                                     </div>
@@ -68,7 +68,7 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-xs text-danger font-semibold hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                        className="text-tag text-danger hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
                                     >
                                         {c('delete')}
                                     </button>
@@ -76,7 +76,7 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg line text-center">
+                        <p className="text-body-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg line text-center">
                             {tAliases('empty')}
                         </p>
                     )}
@@ -86,14 +86,14 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-sm"
+                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded px-3 py-2 text-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded px-3 py-2 text-body-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>
@@ -102,7 +102,7 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                             <button
                                 type="submit"
                                 disabled={isPending || !aliasValue.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
+                                className="px-4 py-2 text-button-sm bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
                             >
                                 {t('addAlias')}
                             </button>

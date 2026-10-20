@@ -52,25 +52,25 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
         >
             <div className={`flex min-w-0 flex-col gap-1.5 px-[var(--card-pad)] pt-[var(--card-pad)] ${bottomLine ? "" : "pb-[var(--card-pad)]"}`}>
-                <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">
+                <h3 className="line-clamp-2 min-h-[2lh] text-item text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
                     {fullPage
                         ? <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}`} data-card-link className={NAME_LINK}><Highlight text={group.name} word={highlight} /></a>
                         : <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link data-opens-panel className={NAME_LINK}><Highlight text={group.name} word={highlight} /></Link>}
                 </h3>
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
-                <p className="flex min-w-0 items-center gap-2 text-[13px] text-foreground-muted">
+                <p className="flex min-w-0 items-center gap-2 text-meta text-foreground-muted">
                     <span className="truncate">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
                     {role && <RoleTag role={role} />}
                 </p>
                 {requestCount > 0 ? (
                     // The team's waiting requests take the second tagline line, so every card keeps one height.
-                    <div className="mt-1 min-h-[2lh] text-[13px] leading-snug">
+                    <div className="mt-1 min-h-[2lh] text-meta">
                         <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="line-clamp-1 text-foreground-muted">{group.tagline}</p>
-                        <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`} className="relative z-[2] font-semibold text-primary hover:underline">{tMy('requestCount', { count: requestCount })}</a>
+                        <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`} className="relative z-[2] weight-strong text-primary hover:underline">{tMy('requestCount', { count: requestCount })}</a>
                     </div>
                 ) : (
-                    <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-[13px] leading-snug text-foreground-muted">{group.tagline}</p>
+                    <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-meta text-foreground-muted">{group.tagline}</p>
                 )}
             </div>
             <GroupCardActivity activity={activity} lookingFor={group.lookingFor} />

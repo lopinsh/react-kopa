@@ -31,11 +31,11 @@ export default function AnnouncementItem({ item, clamp, menu }: Props) {
         <article data-ui={UI.announcementItem} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 rounded-2xl bg-surface px-[18px] py-3.5 shadow-card frame">
             <List aria-hidden="true" strokeWidth={1.8} className="mt-0.5 size-[18px] text-foreground-muted" />
             <div className="min-w-0">
-                <h3 className="break-words font-semibold leading-snug text-foreground">{item.title}</h3>
+                <h3 className="break-words text-item text-foreground">{item.title}</h3>
                 {item.content && (
-                    <p className={clsx('mt-1 whitespace-pre-wrap break-words text-[15px] leading-relaxed text-foreground', clamp && 'line-clamp-3')}>{item.content}</p>
+                    <p className={clsx('mt-1 whitespace-pre-wrap break-words text-body-sm text-foreground', clamp && 'line-clamp-3')}>{item.content}</p>
                 )}
-                <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-foreground-muted">
+                <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-meta text-foreground-muted">
                     <span className="min-w-0 break-words">
                         {t('announcementBy', { name: author ?? '', when })}
                     </span>

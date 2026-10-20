@@ -37,11 +37,11 @@ export default function RequestRow({ request }: { request: RequestRowData }) {
         <li data-ui={UI.requestCard} className="flex flex-wrap items-center gap-x-3 gap-y-3 py-4">
             <img src={request.avatar} alt="" className="size-11 shrink-0 self-start rounded-full line bg-surface object-cover" referrerPolicy="no-referrer" />
             <div className="min-w-0 flex-1 basis-48">
-                <p className="truncate font-semibold text-foreground">
+                <p className="truncate weight-strong text-foreground">
                     {name}
                     {request.askedAt && <span className="font-normal text-foreground-muted"> · {format.relativeTime(new Date(request.askedAt), now)}</span>}
                 </p>
-                {request.message && <p className="mt-0.5 line-clamp-3 text-sm italic text-foreground-muted">&ldquo;{request.message}&rdquo;</p>}
+                {request.message && <p className="mt-0.5 line-clamp-3 text-body-sm italic text-foreground-muted">&ldquo;{request.message}&rdquo;</p>}
             </div>
             <div className="flex flex-wrap items-center gap-2">
                 {request.chatId && (

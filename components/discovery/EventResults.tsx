@@ -44,7 +44,7 @@ export default function EventResults({ events, hasMore, window: w, params, zone,
                     showCity={params.cities.length !== 1}
                     columns
                     highlight={params.q}
-                    footer={hasMore ? <p className="text-[13px] text-foreground-muted">{t('eventsCut', { count: DISCOVERY_EVENTS_MAX_LIMIT })}</p> : nextWeek}
+                    footer={hasMore ? <p className="text-meta text-foreground-muted">{t('eventsCut', { count: DISCOVERY_EVENTS_MAX_LIMIT })}</p> : nextWeek}
                 />
             )}
         </>

@@ -26,10 +26,10 @@ export default function AboutField({ lang, onLangChange }: Props) {
 
     return (
         <div>
-            <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+            <label className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
                 <AlignLeft className="h-3.5 w-3.5 text-foreground-muted" />
                 {t('fieldDescription')}
-                <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
+                <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
             </label>
             <LanguageEditor
                 lang={lang}
@@ -55,7 +55,7 @@ export default function AboutField({ lang, onLangChange }: Props) {
                         placeholder={t('fieldDescriptionPlaceholder')}
                     />
                 </div>
-                {errors.about?.[lang] && <p className="mt-1 text-xs text-danger">{t('DESCRIPTION_TOO_LONG')}</p>}
+                {errors.about?.[lang] && <p className="mt-1 text-meta text-danger">{t('DESCRIPTION_TOO_LONG')}</p>}
             </LanguageEditor>
         </div>
     );

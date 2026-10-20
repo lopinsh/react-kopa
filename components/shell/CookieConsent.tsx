@@ -60,23 +60,23 @@ export default function CookieConsent() {
                     </div>
 
                     <div className="flex-1">
-                        <h3 className="text-base font-bold text-foreground">
+                        <h3 className="text-item text-foreground">
                             {t('privacyTitle')}
                         </h3>
-                        <p className="mt-1.5 text-sm leading-relaxed text-foreground-muted">
+                        <p className="mt-1.5 text-body-sm text-foreground-muted">
                             {t('privacyDescription')}
                         </p>
 
                         <div className="mt-4 flex items-center gap-3">
                             <button
                                 onClick={handleAccept}
-                                className="inline-flex h-9 items-center justify-center rounded-lg bg-foreground px-4 text-sm font-semibold text-background transition-colors hover:bg-foreground/90"
+                                className="inline-flex h-9 items-center justify-center rounded-lg bg-foreground px-4 text-button-sm text-background transition-colors hover:bg-foreground/90"
                             >
                                 {t('accept')}
                             </button>
                             <Link
                                 href="/privacy"
-                                className="text-xs font-medium text-foreground-muted hover:text-foreground transition-colors underline underline-offset-4"
+                                className="text-meta text-foreground-muted hover:text-foreground transition-colors underline underline-offset-4"
                             >
                                 {t('learnMore')}
                             </Link>

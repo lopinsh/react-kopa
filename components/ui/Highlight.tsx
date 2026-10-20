@@ -22,7 +22,7 @@ export default function Highlight({ text, word }: { text: string; word?: string 
     return (
         <>
             {text.slice(0, start)}
-            <mark className="bg-transparent font-semibold text-primary">{text.slice(start, end)}</mark>
+            <mark className="bg-transparent weight-strong text-primary">{text.slice(start, end)}</mark>
             {text.slice(end)}
         </>
     );

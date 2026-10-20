@@ -15,7 +15,7 @@ import type { DiscoveryState } from '@/lib/types/discovery';
 
 type Match = DiscoveryState['alsoMatches'][number];
 
-const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] font-medium text-foreground hover:bg-tint';
+const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] weight-medium text-foreground hover:bg-tint';
 
 const Dot = ({ match }: { match: Match }) => (match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null);
 
@@ -24,7 +24,7 @@ function MatchChip({ match, href }: { match: Match; href?: string }) {
         <>
             <Dot match={match} />
             <span className="truncate">{match.title}</span>
-            <span className="hidden text-[11px] text-foreground-muted md:inline">{match.count}</span>
+            <span className="hidden text-meta text-foreground-muted md:inline">{match.count}</span>
         </>
     );
     const style = { ['--c' as string]: match.color };
@@ -59,7 +59,7 @@ export default function AlsoMatchesLine() {
 
     return (
         <div data-ui={UI.alsoMatches} role="group" aria-label={t('alsoMatchesTitle')} className="-mt-1.5 mb-3 flex min-w-0 items-center gap-2 md:-mt-2 md:mb-4">
-            <span className="shrink-0 text-xs text-foreground-muted">{t('alsoMatches')}</span>
+            <span className="shrink-0 text-meta text-foreground-muted">{t('alsoMatches')}</span>
             <div ref={row} className="relative flex min-w-0 flex-1 items-center gap-1.5">
                 <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5 shadow-room">
                     {matches.slice(0, fit).map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} href={hrefOf(m)} />)}
@@ -72,7 +72,7 @@ export default function AlsoMatchesLine() {
                             aria-expanded={pop.open}
                             aria-controls={pop.id}
                             onClick={pop.toggle}
-                            className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted hover:bg-tint', pop.open && OPEN)}
+                            className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted hover:bg-tint', pop.open && OPEN)}
                         >
                             +{hidden}
                         </button>
@@ -89,11 +89,11 @@ export default function AlsoMatchesLine() {
                                         picked.current = hrefOf(m);
                                         window.history.back();
                                     }}
-                                    className="flex min-h-11 items-center gap-2 rounded-xl px-2.5 text-sm hover:bg-tint md:min-h-9"
+                                    className="flex min-h-11 items-center gap-2 rounded-xl px-2.5 text-body-sm hover:bg-tint md:min-h-9"
                                 >
                                     <Dot match={m} />
                                     <span className="min-w-0 flex-1 truncate">{m.title}</span>
-                                    <span className="text-xs text-foreground-muted">{m.count}</span>
+                                    <span className="text-meta text-foreground-muted">{m.count}</span>
                                 </Link>
                             ))}
                         </FilterPopover>
@@ -101,7 +101,7 @@ export default function AlsoMatchesLine() {
                 )}
                 <div ref={probe} inert aria-hidden="true" className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5 whitespace-nowrap">
                     {matches.map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} />)}
-                    <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted')}>+{hidden || 99}</span>
+                    <span className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted')}>+{hidden || 99}</span>
                 </div>
             </div>
         </div>

@@ -48,7 +48,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
             style={{ ['--c' as string]: event.category.color }}
             className="relative grid grid-cols-[2.75rem_0.5rem_minmax(0,1fr)_auto] items-center gap-x-2 break-inside-avoid rounded-lg border-b border-border px-1.5 py-1.5 last:border-b-0 hover:bg-tint"
         >
-            <time dateTime={start.toISOString()} className="text-[13px] tabular-nums text-foreground-muted">
+            <time dateTime={start.toISOString()} className="text-meta tabular-nums text-foreground-muted">
                 {format.dateTime(start, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}
             </time>
             <span aria-hidden="true" className="size-2 rounded-full bg-[var(--c)]" />
@@ -59,11 +59,11 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
                 data-opens-panel={replace ? undefined : true}
                 {...(searchItem ? { 'data-search-item': true } : {})}
                 lang={langAttr(event.titleLang, locale)}
-                className="truncate font-semibold text-foreground after:absolute after:inset-0"
+                className="truncate weight-strong text-foreground after:absolute after:inset-0"
             >
                 <Highlight text={event.title} word={highlight} />
             </Link>
-            <span className="whitespace-nowrap text-[13px] text-foreground-muted">{[place, since, word].filter(Boolean).join(' · ')}</span>
+            <span className="whitespace-nowrap text-meta text-foreground-muted">{[place, since, word].filter(Boolean).join(' · ')}</span>
             {event.tag && (
                 <span className="col-start-1 row-start-2 -ml-2 self-start pt-0.5">
                     {event.tag === 'going'
@@ -72,14 +72,14 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
                 </span>
             )}
             {showGroup && (
-                <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-xs text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} data-opens-panel={replace ? undefined : true} className="relative z-10 min-w-0 shrink truncate font-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted">
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} data-opens-panel={replace ? undefined : true} className="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>
             )}
             {event.excerpt && (
-                <p className={`col-span-2 col-start-3 min-w-0 truncate text-[13px] text-foreground-muted ${showGroup ? 'row-start-3' : 'row-start-2'}`}>{event.excerpt}</p>
+                <p className={`col-span-2 col-start-3 min-w-0 truncate text-meta text-foreground-muted ${showGroup ? 'row-start-3' : 'row-start-2'}`}>{event.excerpt}</p>
             )}
         </article>
     );

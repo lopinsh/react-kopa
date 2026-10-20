@@ -85,7 +85,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
             </select>
 
             {isWaiting && (
-                <p className="mt-1.5 flex items-start gap-1.5 text-xs text-foreground-muted">
+                <p className="mt-1.5 flex items-start gap-1.5 text-meta text-foreground-muted">
                     <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                     <span>{t('citySuggestedHint', { name: valueName })}</span>
                 </p>
@@ -114,7 +114,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                             type="button"
                             onClick={submitSuggestion}
                             disabled={isPending || draft.trim().length < 2}
-                            className="inline-flex h-11 items-center gap-1.5 rounded-pill bg-primary px-4 text-sm font-bold text-primary-foreground transition-opacity disabled:opacity-50"
+                            className="inline-flex h-11 items-center gap-1.5 rounded-pill bg-primary px-4 text-button-sm text-primary-foreground transition-opacity disabled:opacity-50"
                         >
                             <Plus className="h-4 w-4" />
                             {t('citySuggestAdd')}
@@ -122,7 +122,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                         <button
                             type="button"
                             onClick={() => { setOpen(false); setError(null); }}
-                            className="inline-flex h-11 items-center rounded-xl px-3 text-sm font-semibold text-foreground-muted hover:text-foreground"
+                            className="inline-flex h-11 items-center rounded-xl px-3 text-button-sm text-foreground-muted hover:text-foreground"
                         >
                             {t('citySuggestCancel')}
                         </button>
@@ -132,13 +132,13 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="mt-2 text-xs font-semibold text-primary underline-offset-2 hover:underline"
+                    className="mt-2 text-tag text-primary underline-offset-2 hover:underline"
                 >
                     {t('citySuggestOpen')}
                 </button>
             )}
-            {error && <p className="mt-1 text-xs text-danger">{error}</p>}
-            {errors.city?.message && <p className="mt-1 text-xs text-danger">{t(errors.city.message as 'CITY_REQUIRED')}</p>}
+            {error && <p className="mt-1 text-meta text-danger">{error}</p>}
+            {errors.city?.message && <p className="mt-1 text-meta text-danger">{t(errors.city.message as 'CITY_REQUIRED')}</p>}
         </div>
     );
 }

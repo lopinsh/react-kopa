@@ -17,15 +17,15 @@ export default async function HandbookShell({ headings, children, wide = false }
         <div className={toc ? 'xl:grid xl:grid-cols-[minmax(0,70ch)_14rem] xl:gap-10' : undefined}>
             <article className={wide ? 'min-w-0' : 'min-w-0 max-w-[70ch]'}>
                 {children}
-                {!wide && <p className="mt-12 border-t border-border pt-4 text-xs text-foreground-muted">{t('note')}</p>}
+                {!wide && <p className="mt-12 border-t border-border pt-4 text-meta text-foreground-muted">{t('note')}</p>}
             </article>
             {toc && (
                 <nav aria-label={t('onThisPage')} className="sticky top-14 mt-6 self-start xl:mt-0">
-                    <p className="px-2.5 pb-1 text-xs font-semibold text-foreground-muted">{t('onThisPage')}</p>
+                    <p className="px-2.5 pb-1 text-tag text-foreground-muted">{t('onThisPage')}</p>
                     <ul className="space-y-0.5 border-l border-border pl-2">
                         {headings.map((h) => (
                             <li key={h.id}>
-                                <a href={`#${h.id}`} className="block rounded-lg px-2.5 py-1 text-sm text-foreground-muted hover:text-foreground">{h.text}</a>
+                                <a href={`#${h.id}`} className="block rounded-lg px-2.5 py-1 text-body-sm text-foreground-muted hover:text-foreground">{h.text}</a>
                             </li>
                         ))}
                     </ul>

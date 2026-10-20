@@ -27,8 +27,8 @@ export default function CreateCard({ l1Slug, variant }: Props) {
         return (
             <Link href={href} data-ui={UI.createCard} className="flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0">
                 <span className="min-w-0 flex-1">
-                    <span className="block font-heading text-[15px] font-semibold leading-snug text-foreground">{t('createNewGroup')}</span>
-                    <span className="block text-xs text-foreground-muted">{t('inThisCategory')}</span>
+                    <span className="block text-item text-foreground">{t('createNewGroup')}</span>
+                    <span className="block text-meta text-foreground-muted">{t('inThisCategory')}</span>
                 </span>
                 <span className="grid size-10 shrink-0 place-items-center"><Round className="size-8" /></span>
             </Link>
@@ -41,8 +41,8 @@ export default function CreateCard({ l1Slug, variant }: Props) {
             className="flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-border px-4 py-5 text-center transition-colors hover:bg-tint/40"
         >
             <Round className="mb-1 size-[34px]" />
-            <span className="font-heading text-[15px] font-semibold text-foreground">{t('createNewGroup')}</span>
-            <span className="text-[13px] text-foreground-muted">{t('inThisCategory')}</span>
+            <span className="text-item text-foreground">{t('createNewGroup')}</span>
+            <span className="text-meta text-foreground-muted">{t('inThisCategory')}</span>
         </Link>
     );
 }

@@ -32,7 +32,7 @@ export default function DayStrip({ window: w, params, counts }: Props) {
             <div className="mb-1 flex items-center justify-between">
                 {prev ? <Link href={prev} scroll={false} aria-label={t('previousWeek')} className={arrow}><ChevronLeft aria-hidden="true" className="size-4" /></Link>
                     : <span aria-hidden="true" className={clsx(arrow, 'opacity-35')}><ChevronLeft className="size-4" /></span>}
-                <p className="font-heading text-sm font-semibold text-foreground">{month}</p>
+                <p className="text-item text-foreground">{month}</p>
                 <Link href={next} scroll={false} aria-label={t('nextWeek')} className={arrow}><ChevronRight aria-hidden="true" className="size-4" /></Link>
             </div>
             <SwipeWeek prev={prev} next={next}>
@@ -45,8 +45,8 @@ export default function DayStrip({ window: w, params, counts }: Props) {
                         const label = t('dayEvents', { date: format.dateTime(dayNoon(day), { dateStyle: 'full', timeZone: 'UTC' }), count: n });
                         const body = (
                             <>
-                                <span className={clsx('text-[10px] font-semibold', chosen ? 'text-primary-foreground' : 'text-foreground-muted')}>{tDays(KEYS[weekdayIndex(day)])}</span>
-                                <span className={clsx('font-heading text-[17px] font-semibold tabular-nums', !n && !chosen && 'opacity-60')}>{Number(day.slice(8))}</span>
+                                <span className={clsx('text-tag', chosen ? 'text-primary-foreground' : 'text-foreground-muted')}>{tDays(KEYS[weekdayIndex(day)])}</span>
+                                <span className={clsx('text-item tabular-nums', !n && !chosen && 'opacity-60')}>{Number(day.slice(8))}</span>
                                 <span aria-hidden="true" className={clsx('size-[5px] rounded-full', n && !past ? (chosen ? 'bg-primary-foreground' : 'bg-primary') : 'invisible')} />
                             </>
                         );

@@ -43,26 +43,26 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t('searchPlaceholder')}
-                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-sm text-foreground outline-none focus:border-primary/50"
+                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-body-sm text-foreground outline-none focus:border-primary/50"
                     />
                 </div>
                 <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-pill p-2 text-foreground-muted hover:bg-surface-elevated">
                     <X className="h-4 w-4" />
                 </button>
             </div>
-            <p className="mb-2 text-xs text-foreground-muted">{t('searchHint')}</p>
+            <p className="mb-2 text-meta text-foreground-muted">{t('searchHint')}</p>
             <ul className="min-h-0 flex-1 space-y-1 overflow-y-auto">
                 {active && hits.map((hit) => (
                     <li key={hit.key}>
                         <button type="button" onClick={() => onPick(hit.key)} className="w-full rounded-xl px-3 py-2 text-left transition-colors hover:bg-surface-elevated">
-                            <span className="block break-all font-mono text-[11px] text-foreground-muted">{hit.key}</span>
-                            <span className="block truncate text-sm text-foreground">{hit.lv}</span>
-                            <span className="block truncate text-sm text-foreground-muted">{hit.en}</span>
+                            <span className="block break-all font-mono text-meta text-foreground-muted">{hit.key}</span>
+                            <span className="block truncate text-body-sm text-foreground">{hit.lv}</span>
+                            <span className="block truncate text-body-sm text-foreground-muted">{hit.en}</span>
                         </button>
                     </li>
                 ))}
                 {active && searched && hits.length === 0 && (
-                    <li className="px-3 py-2 text-sm text-foreground-muted">{t('noResults')}</li>
+                    <li className="px-3 py-2 text-body-sm text-foreground-muted">{t('noResults')}</li>
                 )}
             </ul>
         </div>

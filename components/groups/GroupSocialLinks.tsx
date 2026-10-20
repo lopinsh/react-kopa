@@ -14,9 +14,9 @@ export default function GroupSocialLinks({ websiteLink, instagramLink, discordLi
     if (links.length === 0) return null;
 
     return (
-        <p data-ui={UI.socialLinks} className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]">
+        <p data-ui={UI.socialLinks} className="flex flex-wrap gap-x-4 gap-y-1 text-meta">
             {links.map(({ href, label }) => (
-                <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline decoration-border underline-offset-[3px]">
+                <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="weight-strong text-primary underline decoration-border underline-offset-[3px]">
                     {label}
                 </a>
             ))}

@@ -8,7 +8,7 @@ import type { NewsGroup, NewsItem as NewsItemData } from '@/lib/types/own-area';
 /** The group's name as a link to a full page of the group (cmv9amjft: your own groups never open as a panel); plain text when it cannot be found any more. */
 function GroupName({ group, page }: { group: NewsGroup; page: 'home' | 'announcements' }) {
     const locale = useLocale();
-    if (!group.path) return <span className="font-semibold">{group.name}</span>;
+    if (!group.path) return <span className="weight-strong">{group.name}</span>;
     return <a href={`/${locale}${group.path}${page === 'announcements' ? '/announcements' : ''}`} className={TEXT_LINK_CLASS}>{group.name}</a>;
 }
 
@@ -23,7 +23,7 @@ export default function NewsItem({ item, now }: { item: NewsItemData; now: Date 
         <article data-ui={UI.newsItem} className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3" style={group.color ? { ['--c' as string]: group.color } : undefined}>
             <Icon aria-hidden="true" strokeWidth={1.8} className="mt-0.5 size-[18px] text-foreground-muted" />
             <div className="min-w-0">
-                <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13px] text-foreground-muted">
+                <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-meta text-foreground-muted">
                     {item.kind === 'post' && <GroupName group={group} page="announcements" />}
                     {item.kind === 'post' && group.categoryTitle && (
                         <span className="inline-flex items-center gap-1.5">
@@ -37,11 +37,11 @@ export default function NewsItem({ item, now }: { item: NewsItemData; now: Date 
                 </p>
                 {item.kind === 'post' ? (
                     <>
-                        <p className="mt-0.5 font-semibold leading-snug text-foreground">{item.title}</p>
-                        {item.excerpt && <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-foreground-muted">{item.excerpt}</p>}
+                        <p className="mt-0.5 weight-strong text-foreground">{item.title}</p>
+                        {item.excerpt && <p className="mt-0.5 line-clamp-2 text-body-sm text-foreground-muted">{item.excerpt}</p>}
                     </>
                 ) : (
-                    <p className="mt-0.5 font-semibold leading-snug text-foreground">
+                    <p className="mt-0.5 weight-strong text-foreground">
                         {t.rich(item.accepted ? 'answerAccepted' : 'answerDeclined', {
                             name: group.name,
                             group: () => <GroupName group={group} page="home" />,

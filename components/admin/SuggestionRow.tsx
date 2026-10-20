@@ -47,27 +47,27 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
     return (
         <li className="rounded-2xl line bg-surface p-4 shadow-card">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="break-all font-mono text-xs">{messageKey}</span>
-                <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{lang}</span>
+                <span className="break-all font-mono text-meta">{messageKey}</span>
+                <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-tag text-primary">{lang}</span>
             </div>
-            <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+            <dl className="mt-3 grid gap-3 text-body-sm sm:grid-cols-2">
                 <div>
-                    <dt className="text-xs font-semibold text-foreground-muted">{t('current')}</dt>
+                    <dt className="text-tag text-foreground-muted">{t('current')}</dt>
                     <dd lang={lang} className="mt-1 break-words">{current}</dd>
                 </div>
                 <div>
-                    <dt className="text-xs font-semibold text-foreground-muted">{t('suggested')}</dt>
-                    <dd lang={lang} className="mt-1 break-words font-medium">{value}</dd>
+                    <dt className="text-tag text-foreground-muted">{t('suggested')}</dt>
+                    <dd lang={lang} className="mt-1 break-words weight-medium">{value}</dd>
                 </div>
             </dl>
-            <p className="mt-3 text-xs text-foreground-muted">{t('suggestedBy', { name: by, when })}</p>
-            {error && <p role="alert" className="mt-2 text-sm font-medium text-danger">{error}</p>}
+            <p className="mt-3 text-meta text-foreground-muted">{t('suggestedBy', { name: by, when })}</p>
+            {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}
             <div className="mt-3 flex flex-wrap justify-end gap-2">
                 <button
                     type="button"
                     onClick={() => run(rejectSuggestion, 'rejected')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl px-4 py-2 text-button-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50"
                 >
                     <X className="h-4 w-4" />
                     {t('reject')}
@@ -76,7 +76,7 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
                     type="button"
                     onClick={() => run(approveSuggestion, 'approved')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     <Check className="h-4 w-4" />
                     {t('approve')}

@@ -23,17 +23,17 @@ export default async function ModerationLog({ entries, locale, formatDate }: Pro
         <>
             <ul className="space-y-3 md:hidden">
                 {entries.map((entry) => (
-                    <li key={entry.id} className="space-y-1 rounded-xl line bg-surface-elevated p-4 text-sm">
-                        <p className="font-medium">{tMod(`action_${entry.action}`)}</p>
+                    <li key={entry.id} className="space-y-1 rounded-xl line bg-surface-elevated p-4 text-body-sm">
+                        <p className="weight-medium">{tMod(`action_${entry.action}`)}</p>
                         <p>{target(entry)}</p>
                         <p className="text-foreground-muted [overflow-wrap:anywhere]">{entry.reason || '—'}</p>
-                        <p className="text-xs text-foreground-muted">{entry.adminName || tInbox('unknown')} · {formatDate(entry.createdAt)}</p>
+                        <p className="text-meta text-foreground-muted">{entry.adminName || tInbox('unknown')} · {formatDate(entry.createdAt)}</p>
                     </li>
                 ))}
             </ul>
             <div className="hidden overflow-x-auto md:block">
-                <table className="w-full text-left text-sm">
-                    <thead className="text-xs text-foreground-muted">
+                <table className="w-full text-left text-body-sm">
+                    <thead className="text-meta text-foreground-muted">
                         <tr>
                             <th className="py-2 pr-4">{tMod('logWhen')}</th>
                             <th className="py-2 pr-4">{tMod('logAdmin')}</th>
@@ -47,7 +47,7 @@ export default async function ModerationLog({ entries, locale, formatDate }: Pro
                             <tr key={entry.id} className="align-top">
                                 <td className="whitespace-nowrap py-3 pr-4 text-foreground-muted">{formatDate(entry.createdAt)}</td>
                                 <td className="py-3 pr-4">{entry.adminName || tInbox('unknown')}</td>
-                                <td className="py-3 pr-4 font-medium">{tMod(`action_${entry.action}`)}</td>
+                                <td className="py-3 pr-4 weight-medium">{tMod(`action_${entry.action}`)}</td>
                                 <td className="py-3 pr-4">{target(entry)}</td>
                                 <td className="max-w-md break-words py-3 text-foreground-muted [overflow-wrap:anywhere]">{entry.reason || '—'}</td>
                             </tr>

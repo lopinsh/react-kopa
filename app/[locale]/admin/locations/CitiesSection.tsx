@@ -14,7 +14,7 @@ import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { cities: CityRow[] };
 
-const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-sm';
+const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body-sm';
 
 /** The approved cities: rename, remove an unused one, add a new one. Pending suggestions are in the "needs review" card above. */
 export default function CitiesSection({ cities }: Props) {
@@ -59,21 +59,21 @@ export default function CitiesSection({ cities }: Props) {
         <div className="mt-3 rounded-lg line bg-surface-elevated p-4">
             <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                    <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameLv')}</label>
+                    <label className="mb-1 block text-tag text-foreground-muted">{tFields('nameLv')}</label>
                     <input type="text" aria-describedby={`${uid}-lv`} value={nameLv} onChange={(e) => setNameLv(e.target.value)} className={INPUT} />
                     <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
-                    <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameEn')}</label>
+                    <label className="mb-1 block text-tag text-foreground-muted">{tFields('nameEn')}</label>
                     <input type="text" aria-describedby={`${uid}-en`} value={nameEn} onChange={(e) => setNameEn(e.target.value)} className={INPUT} />
                     <TextCounter id={`${uid}-en`} length={nameEn.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
             </div>
             <div className="mt-4 flex justify-end gap-2">
-                <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 text-sm font-semibold text-foreground-muted hover:bg-border rounded transition-colors">
+                <button type="button" onClick={() => setEditingId(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
                     {c('cancel')}
                 </button>
-                <button type="button" disabled={isPending || !valid} onClick={onSave} className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50">
+                <button type="button" disabled={isPending || !valid} onClick={onSave} className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50">
                     {c('save')}
                 </button>
             </div>
@@ -83,15 +83,15 @@ export default function CitiesSection({ cities }: Props) {
     return (
         <section className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card" data-ui="cities-section" aria-labelledby="cities-heading">
             <div className="flex items-center justify-between gap-3">
-                <h2 id="cities-heading" className="flex items-center gap-2 text-xl font-bold">
+                <h2 id="cities-heading" className="flex items-center gap-2 text-section">
                     <MapPin className="h-5 w-5 text-foreground-muted" />
                     {t('title')}
-                    <span className="rounded-pill bg-surface-elevated px-2 py-0.5 text-xs font-bold text-foreground-muted">{active.length}</span>
+                    <span className="rounded-pill bg-surface-elevated px-2 py-0.5 text-tag text-foreground-muted">{active.length}</span>
                 </h2>
                 <button
                     type="button"
                     onClick={() => { setEditingId('new'); setNameLv(''); setNameEn(''); }}
-                    className="rounded bg-surface-elevated px-3 py-1.5 text-sm font-semibold transition-colors hover:bg-border"
+                    className="rounded bg-surface-elevated px-3 py-1.5 text-button-sm transition-colors hover:bg-border"
                 >
                     {t('add')}
                 </button>
@@ -104,11 +104,11 @@ export default function CitiesSection({ cities }: Props) {
                     <li key={city.id} className="py-3">
                         <div className="flex items-center justify-between gap-3">
                             <div className="min-w-0">
-                                <p className="truncate font-semibold">
+                                <p className="truncate weight-strong">
                                     {city.nameLv}
                                     {city.nameEn !== city.nameLv && <span className="ml-2 font-normal text-foreground-muted">{city.nameEn}</span>}
                                 </p>
-                                <p className="text-xs text-foreground-muted">{t('groups', { count: city.groupCount })}</p>
+                                <p className="text-meta text-foreground-muted">{t('groups', { count: city.groupCount })}</p>
                             </div>
                             <div className="flex shrink-0 gap-1">
                                 <button type="button" aria-label={t('rename')} title={t('rename')} onClick={() => startEdit(city)} className="rounded p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground">

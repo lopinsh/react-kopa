@@ -77,7 +77,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                 </div>
                 <aside aria-labelledby="design-sample" className="lg:sticky lg:top-24">
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                        <h3 id="design-sample" className="text-base font-semibold text-foreground">{t('sampleTitle')}</h3>
+                        <h3 id="design-sample" className="text-item text-foreground">{t('sampleTitle')}</h3>
                         <div role="group" aria-label={t('sampleMode')} className="flex rounded-pill bg-tint p-0.5">
                             {(['light', 'dark'] as const).map((mode) => (
                                 <button
@@ -85,7 +85,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                                     type="button"
                                     aria-pressed={sampleMode === mode}
                                     onClick={() => setSampleMode(mode)}
-                                    className={clsx('min-h-8 rounded-pill px-3 text-xs font-semibold', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
+                                    className={clsx('min-h-8 rounded-pill px-3 text-tag', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
                                 >
                                     {t(`mode.${mode}`)}
                                 </button>

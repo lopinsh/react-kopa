@@ -44,14 +44,14 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                 <ol className="space-y-2">
                     {note.replies.map((r) => (
                         <li key={r.id} className="rounded-xl border border-primary/30 bg-primary/5 px-3 py-2">
-                            <p className="flex items-center gap-1 text-xs font-bold text-primary">
+                            <p className="flex items-center gap-1 text-tag text-primary">
                                 {r.byAgent && <Bot className="h-3.5 w-3.5" aria-hidden />}
                                 {r.byAgent ? t('threadAgent') : r.authorName ?? t('threadEarlier')}
-                                <span className="font-medium text-foreground-muted">
+                                <span className="weight-medium text-foreground-muted">
                                     · {format.dateTime(r.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
                             </p>
-                            <p className="mt-1 whitespace-pre-wrap break-words text-sm text-foreground">{r.text}</p>
+                            <p className="mt-1 whitespace-pre-wrap break-words text-body-sm text-foreground">{r.text}</p>
                         </li>
                     ))}
                 </ol>
@@ -60,7 +60,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                 <button
                     type="button"
                     onClick={() => setOpen(true)}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-foreground-muted hover:text-primary"
+                    className="flex items-center gap-1.5 text-tag text-foreground-muted hover:text-primary"
                 >
                     <MessageCircle className="h-3.5 w-3.5" aria-hidden />
                     {t('reply')}
@@ -77,7 +77,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                         rows={2}
                         placeholder={t('threadPlaceholder')}
                         aria-label={t('reply')}
-                        className="min-w-0 flex-1 resize-none rounded-xl line bg-surface-elevated px-3 py-2 text-sm text-foreground"
+                        className="min-w-0 flex-1 resize-none rounded-xl line bg-surface-elevated px-3 py-2 text-body-sm text-foreground"
                     />
                     <button
                         type="button"

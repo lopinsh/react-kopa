@@ -14,18 +14,18 @@ export default function AuthTextField({ id, label, hint, error, ...inputProps }:
 
     return (
         <div data-ui={UI.formField} className="space-y-1">
-            <label htmlFor={id} className="block text-sm font-medium text-foreground">
+            <label htmlFor={id} className="block text-button-sm text-foreground">
                 {label}
             </label>
             <input
                 id={id}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={note ? `${id}-note` : undefined}
-                className="block w-full rounded-lg line bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary aria-[invalid=true]:border-danger/40"
+                className="block w-full rounded-lg line bg-background px-3 py-2.5 text-body-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary aria-[invalid=true]:border-danger/40"
                 {...inputProps}
             />
             {note && (
-                <p id={`${id}-note`} className={`text-xs ${error ? 'text-danger' : 'text-foreground-muted'}`}>
+                <p id={`${id}-note`} className={`text-meta ${error ? 'text-danger' : 'text-foreground-muted'}`}>
                     {note}
                 </p>
             )}

@@ -61,8 +61,8 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
     return (
         <div ref={containerRef} className="relative w-full mt-6 space-y-3">
             <div className="flex items-center justify-between">
-                <label className="text-sm font-medium text-foreground">
-                    {allowL3 ? t('tagsAndSubtopics') : t('subtopics')} <span className="text-xs text-danger font-bold">*</span>
+                <label className="text-button-sm text-foreground">
+                    {allowL3 ? t('tagsAndSubtopics') : t('subtopics')} <span className="text-tag text-danger">*</span>
                 </label>
             </div>
 
@@ -79,7 +79,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                     <input
                         ref={inputRef}
                         type="text"
-                        className="flex-1 bg-transparent text-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
+                        className="flex-1 bg-transparent text-body-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
                         placeholder={t('searchTopicsPlaceholder', { category: l1.title })}
                         disabled={limitReached}
                         value={query}
@@ -115,8 +115,8 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                 </div>
             </div>
 
-            {limitReached && !errors.tagIds && <p className="text-xs text-foreground-muted">{t('tagLimitHint', { max: tagLimit })}</p>}
-            {errors.tagIds && <p className="text-xs text-danger font-medium">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
+            {limitReached && !errors.tagIds && <p className="text-meta text-foreground-muted">{t('tagLimitHint', { max: tagLimit })}</p>}
+            {errors.tagIds && <p className="text-meta text-danger">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
 
             {isOpen && !limitReached && (
                 <TagResults l1={l1} allowL3={allowL3} tagIds={tagIds} onToggle={toggleTag} search={search} pending={pending} />

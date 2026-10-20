@@ -9,9 +9,9 @@ export function LogoSamples() {
     const t = useTranslations('admin.handbook.ui');
     return (
         <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
-            <div className="space-y-2"><Logo /><p className="text-[13px] text-foreground-muted">{t('logoDesktop')}</p></div>
-            <div className="space-y-2"><Logo size="sm" /><p className="text-[13px] text-foreground-muted">{t('logoPhone')}</p></div>
-            <div className="space-y-2"><Logo iconOnly /><p className="text-[13px] text-foreground-muted">{t('logoIconOnly')}</p></div>
+            <div className="space-y-2"><Logo /><p className="text-meta text-foreground-muted">{t('logoDesktop')}</p></div>
+            <div className="space-y-2"><Logo size="sm" /><p className="text-meta text-foreground-muted">{t('logoPhone')}</p></div>
+            <div className="space-y-2"><Logo iconOnly /><p className="text-meta text-foreground-muted">{t('logoIconOnly')}</p></div>
         </div>
     );
 }
@@ -30,18 +30,18 @@ export function TypeSamples() {
         note: t('sample.noteText'),
     };
     const cls = {
-        pageTitle: 'font-heading text-[28px] font-semibold leading-tight text-foreground',
-        section: 'font-heading text-[21px] font-semibold text-foreground',
-        item: 'font-heading text-base font-semibold text-foreground',
-        body: 'text-[15px] leading-relaxed text-foreground',
-        small: 'text-[13px] text-foreground-muted',
+        pageTitle: 'text-section text-foreground',
+        section: 'text-item text-foreground',
+        item: 'text-item text-foreground',
+        body: 'text-body-sm text-foreground',
+        small: 'text-meta text-foreground-muted',
         note: 'human-note',
     };
     return (
         <div className="space-y-4">
             {ROLES.map((role) => (
                 <div key={role} className="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-4">
-                    <p className="text-[13px] text-foreground-muted">{t(`typeRoles.${role}`)}</p>
+                    <p className="text-meta text-foreground-muted">{t(`typeRoles.${role}`)}</p>
                     <p className={cls[role]}>{text[role]}</p>
                 </div>
             ))}
@@ -69,16 +69,16 @@ export function ColourSamples() {
         <div className="space-y-6">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
                 {SWATCHES.map(([name, cls]) => (
-                    <div key={name} className={`flex h-16 items-end rounded-xl p-2 text-[13px] font-medium ring-1 ring-inset ring-border ${cls}`}>
+                    <div key={name} className={`flex h-16 items-end rounded-xl p-2 text-[13px] weight-medium ring-1 ring-inset ring-border ${cls}`}>
                         {t(`colourRoles.${name}`)}
                     </div>
                 ))}
             </div>
             <div>
-                <p className="mb-3 text-[13px] font-medium text-foreground">{t('tonesTitle')}</p>
+                <p className="mb-3 text-meta text-foreground">{t('tonesTitle')}</p>
                 <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
                     {CATEGORY_TONE_SLUGS.map((slug) => (
-                        <div key={slug} className="flex items-center gap-2 text-[13px] text-foreground-muted">
+                        <div key={slug} className="flex items-center gap-2 text-meta text-foreground-muted">
                             <CategoryDisc slug={slug} color={categoryColor(slug)} />
                             {slug}
                         </div>

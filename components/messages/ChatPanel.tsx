@@ -95,8 +95,8 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             : <Users className="h-4 w-4 text-foreground-muted" />}
                     </div>
                     <div className="min-w-0">
-                        <span className="block truncate font-bold">{title}</span>
-                        {conversation.group && <GroupLabel group={conversation.group} showName={!conversation.viewerIsContact} className="text-[11px]" />}
+                        <span className="block truncate weight-strong">{title}</span>
+                        {conversation.group && <GroupLabel group={conversation.group} showName={!conversation.viewerIsContact} className="text-meta" />}
                     </div>
                 </div>
 
@@ -113,7 +113,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             <button
                                 {...trigger}
                                 type="button"
-                                className="flex items-center gap-2 rounded-pill bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
+                                className="flex items-center gap-2 rounded-pill bg-surface-elevated px-3 py-1.5 text-tag transition-colors hover:bg-surface-elevated/80"
                             >
                                 <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
                                 {conversation.isBlocked ? t('unblock') : t('block')}
@@ -125,14 +125,14 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
 
             <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto p-4">
                 {originKey && origin && (
-                    <p className="text-center text-xs text-foreground-muted">
+                    <p className="text-center text-meta text-foreground-muted">
                         {origin.groupName
                             ? t.rich(originKey, {
                                 name: origin.groupName,
                                 group: (chunks) => origin.groupHref ? (
-                                    <Link href={origin.groupHref} className="font-bold text-primary hover:underline">{chunks}</Link>
+                                    <Link href={origin.groupHref} className="weight-strong text-primary hover:underline">{chunks}</Link>
                                 ) : (
-                                    <span className="font-bold">{chunks}</span>
+                                    <span className="weight-strong">{chunks}</span>
                                 )
                             })
                             : t(`${originKey}Gone`)}
@@ -147,16 +147,16 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         : null;
                     return (
                         <div key={msg.id} data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start')}>
-                            {speaker && <span className="mb-1 px-1 text-[11px] font-bold text-foreground-muted">{speaker}</span>}
+                            {speaker && <span className="mb-1 px-1 text-tag text-foreground-muted">{speaker}</span>}
                             <div className={clsx(
-                                'whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-relaxed',
+                                'whitespace-pre-wrap break-words rounded-2xl p-3 text-body-sm',
                                 isMe
                                     ? 'rounded-br-none bg-primary text-primary-foreground'
                                     : 'rounded-bl-none line bg-surface-elevated text-foreground shadow-sm'
                             )}>
                                 {msg.content}
                             </div>
-                            <span className="mt-1 px-1 text-[11px] text-foreground-muted">{messageTime(msg.createdAt)}</span>
+                            <span className="mt-1 px-1 text-meta text-foreground-muted">{messageTime(msg.createdAt)}</span>
                         </div>
                     );
                 })}
@@ -164,18 +164,18 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
 
             <div className="border-t border-border bg-surface p-4">
                 {conversation.readOnly ? (
-                    <div className="flex items-center justify-center gap-2 rounded-xl bg-surface-elevated p-3 text-center text-sm text-foreground-muted">
+                    <div className="flex items-center justify-center gap-2 rounded-xl bg-surface-elevated p-3 text-center text-body-sm text-foreground-muted">
                         <AlertCircle className="h-4 w-4" />
                         {t('groupGoneNote')}
                     </div>
                 ) : conversation.isBlocked ? (
-                    <div className="flex items-center justify-center gap-2 rounded-xl bg-danger/10 p-3 text-center text-sm font-bold text-danger">
+                    <div className="flex items-center justify-center gap-2 rounded-xl bg-danger/10 p-3 text-center text-body-sm text-danger">
                         <AlertCircle className="h-4 w-4" />
                         {t('conversationBlocked')}
                     </div>
                 ) : (
                     <>
-                        {sendError && <p role="alert" className="mb-2 text-xs font-bold text-danger">{sendError}</p>}
+                        {sendError && <p role="alert" className="mb-2 text-tag text-danger">{sendError}</p>}
                         <form onSubmit={handleSend} className="flex gap-2">
                             <input
                                 type="text"
@@ -184,13 +184,13 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 aria-describedby={counterId}
                                 placeholder={t('typeMessage')}
                                 aria-label={t('typeMessage')}
-                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-sm focus:border-primary focus:outline-none"
+                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-body-sm focus:border-primary focus:outline-none"
                             />
                             <button
                                 type="submit"
                                 disabled={!messageTextSchema.safeParse(draft).success || isPending || over}
                                 aria-label={t('send')}
-                                className="flex items-center justify-center rounded-pill bg-primary px-5 font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                                className="flex items-center justify-center rounded-pill bg-primary px-5 weight-strong text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
                                 <Send className="h-4 w-4" />
                             </button>

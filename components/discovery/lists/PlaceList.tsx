@@ -40,19 +40,19 @@ export default function PlaceList({ cities, counts, selected, onChange, onPick, 
                         type="button"
                         onClick={() => onChange([])}
                         aria-current={selected.length === 0 ? 'true' : undefined}
-                        className={clsx('mt-1 flex min-h-11 w-full items-center justify-between rounded-xl px-2.5 text-left text-sm md:min-h-9', selected.length === 0 ? 'bg-tint font-semibold' : 'hover:bg-tint')}
+                        className={clsx('mt-1 flex min-h-11 w-full items-center justify-between rounded-xl px-2.5 text-left text-body-sm md:min-h-9', selected.length === 0 ? 'bg-tint weight-strong' : 'hover:bg-tint')}
                     >
                         {t('everywhere')}
-                        <span className="text-xs text-foreground-muted">{counts.anyPlace}</span>
+                        <span className="text-meta text-foreground-muted">{counts.anyPlace}</span>
                     </button>
                     <div className="mx-2.5 my-1 border-t border-border" />
                 </>
             )}
             {rows.map((c) => <CheckRow key={c.slug} name={c.name} count={c.count} checked={selected.includes(c.slug)} faded={c.count === 0} onToggle={() => toggle(c.slug)} onPick={() => onPick(c.slug)} />)}
             {rows.length === 0 && (
-                <div className="px-2.5 py-3 text-sm">
+                <div className="px-2.5 py-3 text-body-sm">
                     <p className="italic text-foreground-muted">{t('nothingFound')}</p>
-                    <p className="mt-1.5 text-xs text-foreground-muted">{t('placeHint')}</p>
+                    <p className="mt-1.5 text-meta text-foreground-muted">{t('placeHint')}</p>
                 </div>
             )}
         </div>

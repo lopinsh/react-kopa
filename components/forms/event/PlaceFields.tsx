@@ -58,7 +58,7 @@ export default function PlaceFields() {
 
             <div>
                 <div className="flex min-h-11 items-center justify-between gap-4">
-                    <span id="event-online-label" className="text-sm font-medium text-foreground">{t('fieldOnline')}</span>
+                    <span id="event-online-label" className="text-body-sm text-foreground">{t('fieldOnline')}</span>
                     <Switch
                         checked={!!isOnline}
                         onChange={(on) => setValue('isOnline', on, { shouldDirty: true })}
@@ -66,7 +66,7 @@ export default function PlaceFields() {
                         describedBy="event-online-hint"
                     />
                 </div>
-                <p id="event-online-hint" className="text-xs text-foreground-muted">{t('fieldOnlineHint')}</p>
+                <p id="event-online-hint" className="text-meta text-foreground-muted">{t('fieldOnlineHint')}</p>
             </div>
 
             <Field

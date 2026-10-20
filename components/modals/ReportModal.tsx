@@ -38,12 +38,12 @@ export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: 
 
     return (
         <Modal onClose={onClose} returnFocusRef={returnFocusRef} locked={isPending} title={t('title')}>
-            <p className="text-sm leading-relaxed text-foreground-muted">{t('description')}</p>
+            <p className="text-body-sm text-foreground-muted">{t('description')}</p>
 
             <fieldset className="mt-3 flex flex-col gap-0.5">
                 <legend className="sr-only">{t('reasonLabel')}</legend>
                 {REPORT_REASONS.map((value) => (
-                    <label key={value} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3 text-sm text-foreground hover:bg-tint">
+                    <label key={value} className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3 text-body-sm text-foreground hover:bg-tint">
                         <input
                             type="radio"
                             name={name}

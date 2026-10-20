@@ -86,7 +86,7 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
                         onClick={() => onOpen(note)}
                         // Placed from the measured bounding box, so the position has to be inline.
                         style={{ left: spot.x, top: spot.y }}
-                        className="pointer-events-auto absolute flex h-6 w-6 items-center justify-center rounded-full border-2 border-surface bg-primary text-[11px] font-semibold text-primary-foreground shadow-premium"
+                        className="pointer-events-auto absolute flex h-6 w-6 items-center justify-center rounded-full border-2 border-surface bg-primary text-tag text-primary-foreground shadow-premium"
                     >
                         {spot.n}
                     </button>

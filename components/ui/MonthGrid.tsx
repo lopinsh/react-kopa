@@ -77,13 +77,13 @@ export default function MonthGrid({ month, onMonth, today, selected, isDisabled,
     return (
         <div onKeyDown={onKeyDown}>
             <div className="mb-1.5 flex items-center justify-center gap-1">
-                <p aria-live="polite" className="font-heading text-[15px] font-semibold text-foreground">{format.dateTime(dayNoon(first), { month: 'long', year: 'numeric', timeZone: 'UTC' })}</p>
+                <p aria-live="polite" className="text-item text-foreground">{format.dateTime(dayNoon(first), { month: 'long', year: 'numeric', timeZone: 'UTC' })}</p>
                 <button type="button" aria-label={labels.prev} disabled={!canMove(addMonths(month, -1))} onClick={() => step(-1)} className={clsx(arrow, 'order-first')}><ChevronLeft aria-hidden="true" className="size-4" /></button>
                 <button type="button" aria-label={labels.next} disabled={!canMove(addMonths(month, 1))} onClick={() => step(1)} className={arrow}><ChevronRight aria-hidden="true" className="size-4" /></button>
             </div>
             <div ref={gridRef} role="grid" className="grid grid-cols-7 text-center">
                 {WEEKDAYS.map((w, i) => (
-                    <span key={w} role="columnheader" className={clsx('py-1 text-[11px] font-semibold', i >= 5 ? 'bg-tint/40 text-foreground' : 'text-foreground-muted')}>{t(w)}</span>
+                    <span key={w} role="columnheader" className={clsx('py-1 text-tag', i >= 5 ? 'bg-tint/40 text-foreground' : 'text-foreground-muted')}>{t(w)}</span>
                 ))}
                 {cells.map((day, i) => {
                     const weekend = i % 7 >= 5;
@@ -103,11 +103,11 @@ export default function MonthGrid({ month, onMonth, today, selected, isDisabled,
                             aria-label={format.dateTime(dayNoon(day), { dateStyle: 'full', timeZone: 'UTC' })}
                             onClick={() => { if (!off) onPick(day); }}
                             className={clsx(
-                                'h-9 text-sm tabular-nums',
-                                start || end ? 'bg-primary font-semibold text-primary-foreground' : between ? BAND : clsx(weekend && 'bg-tint/40', !off && 'hover:bg-surface-elevated'),
+                                'h-9 text-body-sm tabular-nums',
+                                start || end ? 'bg-primary weight-strong text-primary-foreground' : between ? BAND : clsx(weekend && 'bg-tint/40', !off && 'hover:bg-surface-elevated'),
                                 start && end ? 'rounded-lg' : start ? 'rounded-l-lg' : end ? 'rounded-r-lg' : !between && 'rounded-lg',
                                 off && 'cursor-default opacity-55',
-                                day === today && 'font-bold underline underline-offset-4'
+                                day === today && 'weight-strong underline underline-offset-4'
                             )}
                         >
                             {Number(day.slice(8))}

@@ -42,21 +42,21 @@ export default async function ProfileView({ view, viewerId, locale, action, own 
             <header className="flex items-center gap-3.5">
                 <img src={avatarUrl(person)} alt="" className="size-16 shrink-0 rounded-full object-cover md:size-20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                    <h1 className={`truncate font-heading text-xl font-semibold ${own ? 'md:sr-only' : ''}`}>{name}</h1>
-                    {person.username && <p className="truncate text-sm text-foreground-muted">{t('handle', { username: person.username })}</p>}
+                    <h1 className={`truncate text-section ${own ? 'md:sr-only' : ''}`}>{name}</h1>
+                    {person.username && <p className="truncate text-body-sm text-foreground-muted">{t('handle', { username: person.username })}</p>}
                 </div>
             </header>
 
             <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                <p className="text-sm text-foreground-muted">{facts}</p>
+                <p className="text-body-sm text-foreground-muted">{facts}</p>
                 {action}
             </div>
 
             {person.bio ? (
-                <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">{person.bio}</p>
+                <p className="whitespace-pre-wrap text-body-sm text-foreground">{person.bio}</p>
             ) : (
                 own && (
-                    <p className="text-sm italic text-foreground-muted">
+                    <p className="text-body-sm italic text-foreground-muted">
                         {t('noBio')} <TextLink href="/profile/edit">{t('editTitle')}</TextLink>
                     </p>
                 )
@@ -64,7 +64,7 @@ export default async function ProfileView({ view, viewerId, locale, action, own 
 
             {groupsScope !== 'none' && (
                 <section className="grid gap-3">
-                    <h2 className="font-heading text-[17px] font-semibold">{groupsScope === 'all' ? t('groupsHeading') : t('sharedGroups')}</h2>
+                    <h2 className="text-section">{groupsScope === 'all' ? t('groupsHeading') : t('sharedGroups')}</h2>
                     <GroupList groups={groups.map((g) => g.card)} activity={activity} mine={mine} fullPage />
                 </section>
             )}

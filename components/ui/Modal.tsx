@@ -81,7 +81,7 @@ export default function Modal({
         >
             <div className={clsx('flex shrink-0 items-start justify-between gap-3', flush ? 'border-b border-border px-[18px] py-3' : 'mb-2.5')}>
                 <div className="min-w-0">
-                    <h2 id={titleId} className="font-heading text-lg font-semibold text-foreground">{title}</h2>
+                    <h2 id={titleId} className="text-section text-foreground">{title}</h2>
                     {subtitle}
                 </div>
                 {!hideClose && <CloseButton locked={locked} />}

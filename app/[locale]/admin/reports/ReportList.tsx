@@ -81,29 +81,29 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                 />
             )}
             {error && (
-                <p role="alert" className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger">{error}</p>
+                <p role="alert" className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-body-sm text-danger">{error}</p>
             )}
             {reports.map((report) => (
                 <div key={report.id} className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                                <span className="inline-flex items-center gap-1.5 rounded-pill bg-danger/10 px-3 py-1 text-xs font-bold text-danger">
+                                <span className="inline-flex items-center gap-1.5 rounded-pill bg-danger/10 px-3 py-1 text-tag text-danger">
                                     <AlertTriangle className="h-3.5 w-3.5" />
                                     {isStoredReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
-                                <span className="text-sm font-medium text-foreground-muted">
+                                <span className="text-body-sm text-foreground-muted">
                                     {format.dateTime(new Date(report.createdAt), { dateStyle: 'medium', timeStyle: 'short' })}
                                 </span>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-4 rounded-xl bg-surface-elevated p-4 line">
                                 <div>
-                                    <p className="text-xs font-bold text-foreground-muted mb-1">{t('reportedEntity')}</p>
+                                    <p className="text-tag text-foreground-muted mb-1">{t('reportedEntity')}</p>
                                     {report.group && (
                                         <div className="flex items-center gap-2">
                                             <Users className="h-4 w-4 text-primary" />
-                                            <Link href={`/${report.group.l1Slug}/group/${report.group.slug}`} className="text-sm font-semibold text-foreground hover:text-primary transition-colors flex items-center gap-1">
+                                            <Link href={`/${report.group.l1Slug}/group/${report.group.slug}`} className="text-button-sm text-foreground hover:text-primary transition-colors flex items-center gap-1">
                                                 {report.group.name}
                                                 <ExternalLink className="h-3 w-3" />
                                             </Link>
@@ -112,19 +112,19 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {report.event && (
                                         <div className="flex items-center gap-2 mt-1">
                                             <Calendar className="h-4 w-4 text-primary" />
-                                            <span className="text-sm font-medium text-foreground">{report.event.title}</span>
+                                            <span className="text-body-sm text-foreground">{report.event.title}</span>
                                         </div>
                                     )}
                                     {/* The group or event was deleted after the report was filed. */}
                                     {!report.group && !report.event && (
-                                        <span className="text-sm text-foreground-muted">{tMod('deletedTarget')}</span>
+                                        <span className="text-body-sm text-foreground-muted">{tMod('deletedTarget')}</span>
                                     )}
                                 </div>
                                 <div>
-                                    <p className="text-xs font-bold text-foreground-muted mb-1">{t('reportedByLabel')}</p>
+                                    <p className="text-tag text-foreground-muted mb-1">{t('reportedByLabel')}</p>
                                     <div className="flex items-center gap-2">
                                         <img src={avatarUrl(report.reporter)} alt="" className="h-6 w-6 rounded-full object-cover" referrerPolicy="no-referrer" />
-                                        <span className="text-sm font-medium text-foreground">{report.reporter.name || t('anonymousUser')}</span>
+                                        <span className="text-body-sm text-foreground">{report.reporter.name || t('anonymousUser')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +134,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => handleResolve(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-sm font-bold text-background shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-button-sm text-background shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -149,7 +149,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 <button
                                     onClick={() => setHidingReport(report)}
                                     disabled={isPending}
-                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-sm font-bold text-foreground shadow-sm transition-all disabled:opacity-50"
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-button-sm text-foreground shadow-sm transition-all disabled:opacity-50"
                                 >
                                     <EyeOff className="h-4 w-4" />
                                     {tMod('hideGroup')}
@@ -160,7 +160,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => setAskDelete(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-sm font-bold text-danger shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-button-sm text-danger shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-danger/40 border-t-transparent" />

@@ -46,8 +46,8 @@ function Row({ field, label, checked, onSaved, demo }: RowProps) {
     return (
         <div className="flex items-start gap-4 py-2.5">
             <div className="min-w-0 flex-1">
-                <p id={`${id}-l`} className="text-sm font-semibold">{t(label)}</p>
-                <p id={`${id}-d`} className="mt-0.5 text-xs leading-relaxed text-foreground-muted">{t(`${label}Desc`)}</p>
+                <p id={`${id}-l`} className="text-body-sm">{t(label)}</p>
+                <p id={`${id}-d`} className="mt-0.5 text-meta text-foreground-muted">{t(`${label}Desc`)}</p>
             </div>
             <Switch checked={value} onChange={change} labelledBy={`${id}-l`} describedBy={`${id}-d`} disabled={isPending} className="mt-0.5" />
         </div>
@@ -61,8 +61,8 @@ export default function PrivacySettings({ initial, demo = false }: { initial: Pr
     const [savedNote, setSavedNote] = useState(false);
 
     return (
-        <fieldset id="privacy" className="scroll-mt-20 rounded-2xl bg-surface px-4 py-3.5 text-sm shadow-card frame">
-            <legend className="float-left mb-1.5 font-heading text-[15px] font-semibold">{t('privacy.title')}</legend>
+        <fieldset id="privacy" className="scroll-mt-20 rounded-2xl bg-surface px-4 py-3.5 text-body-sm shadow-card frame">
+            <legend className="float-left mb-1.5 text-item">{t('privacy.title')}</legend>
             <div className="clear-both divide-y divide-border">
                 {ROWS.map(({ key, label }) => (
                     <Row key={key} field={key} label={label} checked={initial[key]} onSaved={() => setSavedNote(true)} demo={demo} />

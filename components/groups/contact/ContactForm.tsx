@@ -70,7 +70,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
             title={joining ? t('titleJoin', { name: groupName }) : t('title', { name: groupName })}
         >
             <form onSubmit={handleSubmit} data-ui={UI.contactDialog} className="space-y-4">
-                <p className="text-sm leading-relaxed text-foreground-muted">{joining ? t('descriptionJoin') : t('description')}</p>
+                <p className="text-body-sm text-foreground-muted">{joining ? t('descriptionJoin') : t('description')}</p>
                 <div>
                     <label htmlFor={`${id}-message`} className="sr-only">{t('messageLabel')}</label>
                     <textarea
@@ -80,14 +80,14 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                         aria-describedby={`${id}-count`}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-[15px] outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                     <div className="mt-1 flex"><TextCounter id={`${id}-count`} length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
                 </div>
 
                 {allowJoin && (
                     <div className="flex items-center justify-between gap-4">
-                        <span id={`${id}-join`} className="text-sm font-medium text-foreground">{t('joinSwitch')}</span>
+                        <span id={`${id}-join`} className="text-body-sm text-foreground">{t('joinSwitch')}</span>
                         <Switch checked={wantsToJoin} onChange={setWantsToJoin} labelledBy={`${id}-join`} disabled={isPending} />
                     </div>
                 )}
@@ -99,7 +99,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                         {t('send')}
                     </Button>
                 </div>
-                {error && <p role="alert" className="text-right text-sm font-medium text-danger">{error}</p>}
+                {error && <p role="alert" className="text-right text-body-sm text-danger">{error}</p>}
             </form>
         </Modal>
     );

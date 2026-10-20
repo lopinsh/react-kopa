@@ -37,10 +37,10 @@ export default function FloatingActionBar({
                     title={t('clearSelection')}
                 >
                     <span className="pointer-events-none flex items-center gap-2">
-                        <span className="text-sm font-semibold bg-primary text-primary-foreground w-6 h-6 flex items-center justify-center rounded-full group-hover/clear:bg-primary-hover shadow-sm">
+                        <span className="text-body-sm bg-primary text-primary-foreground w-6 h-6 flex items-center justify-center rounded-full group-hover/clear:bg-primary-hover shadow-sm">
                             {selectedIds.length}
                         </span>
-                        <span className="text-sm font-medium">{t('selected')}</span>
+                        <span className="text-body-sm">{t('selected')}</span>
                         <X className="w-4 h-4 ml-1 text-foreground-muted group-hover/clear:text-foreground transition-colors" />
                     </span>
                 </button>
@@ -51,7 +51,7 @@ export default function FloatingActionBar({
                         <button
                             type="button"
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onApprove(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-success/10 text-success transition-colors cursor-pointer"
+                            className="flex items-center gap-2 px-3 py-1.5 text-button-sm rounded-pill hover:bg-success/10 text-success transition-colors cursor-pointer"
                         >
                             <span className="pointer-events-none flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function FloatingActionBar({
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMerge(); }}
                         disabled={selectedIds.length < 2}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-tint text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-button-sm rounded-pill hover:bg-tint text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         title={selectedIds.length < 2 ? t('mergeRequiresTwo') : ''}
                     >
                         <span className="pointer-events-none flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function FloatingActionBar({
                     <button
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-danger/10 text-danger transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-button-sm rounded-pill hover:bg-danger/10 text-danger transition-colors cursor-pointer"
                     >
                         <span className="pointer-events-none flex items-center gap-2">
                             <Trash2 className="w-4 h-4" />

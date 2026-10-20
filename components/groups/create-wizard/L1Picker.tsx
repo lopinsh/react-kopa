@@ -28,7 +28,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
     if (!explicitlyExpanded && selectedL1) {
         return (
             <div className="space-y-4 animate-in fade-in duration-300">
-                <label className="mb-2 block text-sm font-medium text-foreground">
+                <label className="mb-2 block text-button-sm text-foreground">
                     {t('step1Title')} <span className="text-danger">*</span>
                 </label>
                 <button
@@ -42,10 +42,10 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                             <CategoryIcon slug={selectedL1.slug} className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
                         </div>
                         <div>
-                            <span className="block text-base font-bold text-foreground">
+                            <span className="block text-body text-foreground">
                                 {selectedL1.title}
                             </span>
-                            <span className="text-xs font-semibold text-foreground-muted">
+                            <span className="text-tag text-foreground-muted">
                                 {t('clickToChange')}
                             </span>
                         </div>
@@ -62,13 +62,13 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
 
     return (
         <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
-            <label className="mb-2 flex items-center justify-between text-sm font-medium text-foreground">
+            <label className="mb-2 flex items-center justify-between text-button-sm text-foreground">
                 <span>{t('step1Title')} <span className="text-danger">*</span></span>
                 {value && (
                     <button
                         type="button"
                         onClick={() => setIsExpanded(false)}
-                        className="text-xs font-bold text-foreground-muted hover:text-foreground underline underline-offset-2"
+                        className="text-tag text-foreground-muted hover:text-foreground underline underline-offset-2"
                     >
                         {t('cancel')}
                     </button>
@@ -107,7 +107,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                                 </div>
                             )}
                             <CategoryIcon slug={l1.slug} className="h-6 w-6 stroke-2" style={{ color: l1.color }} />
-                            <span className={clsx("text-sm font-semibold", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
+                            <span className={clsx("text-body-sm", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
                                 {l1.title}
                             </span>
                         </button>

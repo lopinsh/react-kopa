@@ -94,20 +94,20 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
         <div className="rounded-2xl line bg-surface p-5 shadow-card">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
-                    <h3 className="text-xl font-bold cursor-pointer hover:underline break-words" onClick={onSelect}>
+                    <h3 className="text-item cursor-pointer hover:underline break-words" onClick={onSelect}>
                         {item.submittedLabel}
                     </h3>
-                    <p className="text-xs font-semibold text-foreground-muted mt-1">
+                    <p className="text-tag text-foreground-muted mt-1">
                         {t('writtenIn', { lang: item.submittedLang.toUpperCase() })}
                     </p>
-                    <p className="text-sm text-foreground-muted mt-1">
+                    <p className="text-body-sm text-foreground-muted mt-1">
                         {t('submittedBy', { 
                             name: item.submitter?.username || t('unknown'), 
                             date: item.submittedAt ? format.dateTime(new Date(item.submittedAt), { dateStyle: 'medium' }) : '–' 
                         })}
                     </p>
                     {item.parent && (
-                        <p className="text-sm font-medium mt-1">
+                        <p className="text-body-sm mt-1">
                             {t('parentLabel', { title: item.parent.title })}
                         </p>
                     )}
@@ -117,14 +117,14 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'approve' ? null : 'approve')}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded-pill transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-sm weight-strong rounded-pill transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'merge' ? null : 'merge')}
-                        className={`px-3 py-1.5 text-sm font-semibold rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
+                        className={`px-3 py-1.5 text-sm weight-strong rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
                     >
                         {c('merge')}
                     </button>
@@ -132,7 +132,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         type="button"
                         onClick={() => setAskReject(true)}
                         disabled={isPending}
-                        className="px-3 py-1.5 text-sm font-semibold rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
+                        className="px-3 py-1.5 text-button-sm rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
                     >
                         {c('reject')}
                     </button>
@@ -141,13 +141,13 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
             {item.groups.length > 0 && (
                 <div className="mt-4 pt-4 border-t border-border">
-                    <p className="text-xs font-semibold text-foreground-muted mb-2">{t('usedByGroups')}</p>
+                    <p className="text-tag text-foreground-muted mb-2">{t('usedByGroups')}</p>
                     <div className="flex flex-wrap gap-2">
                         {item.groups.map(g => (
                             <Link
                                 key={g.id}
                                 href={`/admin/groups/${g.l1Slug}/${g.slug}/categorization`}
-                                className="text-sm bg-surface-elevated hover:bg-border px-2 py-1 rounded transition-colors"
+                                className="text-body-sm bg-surface-elevated hover:bg-border px-2 py-1 rounded transition-colors"
                             >
                                 {g.name}
                             </Link>
@@ -161,53 +161,53 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                 <div className="mt-4 p-4 bg-surface-elevated rounded-lg line">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
                             <input
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => { setNameEn(e.target.value); setSlugEn(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameLv')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
                             <input
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => { setNameLv(e.target.value); setSlugLv(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('slugEn')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugEn')}</label>
                             <input
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('slugLv')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugLv')}</label>
                             <input
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                         </div>
                     </div>
                     <div className="mt-4 flex justify-end gap-2">
-                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-sm font-semibold text-foreground-muted hover:bg-border rounded transition-colors">
+                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
                             {c('cancel')}
                         </button>
                         <button
                             type="button"
                             onClick={handleApprove}
                             disabled={isPending || !nameEn || !nameLv || !slugEn || !slugLv}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {c('confirm')}
                         </button>
@@ -217,11 +217,11 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
             {activeAction === 'merge' && (
                 <div className="mt-4 p-4 bg-surface-elevated rounded-lg line">
-                    <label className="block text-xs font-semibold text-foreground-muted mb-2">{t('mergeCanonicalTitle')}</label>
+                    <label className="block text-tag text-foreground-muted mb-2">{t('mergeCanonicalTitle')}</label>
                     <select
                         value={mergeIntoId}
                         onChange={e => setMergeIntoId(e.target.value)}
-                        className="w-full bg-surface line rounded px-3 py-2 text-sm mb-4"
+                        className="w-full bg-surface line rounded px-3 py-2 text-body-sm mb-4"
                     >
                         <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (
@@ -233,22 +233,22 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
 
                     {mergeIntoId && (
                         <div className="mb-4">
-                            <p className="text-xs text-foreground-muted mb-1">{t('selectedCanonicalLabel')}</p>
-                            <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-pill text-sm font-medium">
+                            <p className="text-meta text-foreground-muted mb-1">{t('selectedCanonicalLabel')}</p>
+                            <span className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-pill text-button-sm">
                                 {mergeTarget && pickTitle(mergeTarget.translations, 'en', mergeTarget.slug)}
                             </span>
                         </div>
                     )}
 
                     <div className="flex justify-end gap-2">
-                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-sm font-semibold text-foreground-muted hover:bg-border rounded transition-colors">
+                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
                             {c('cancel')}
                         </button>
                         <button
                             type="button"
                             onClick={handleMerge}
                             disabled={isPending || !mergeIntoId}
-                            className="px-4 py-2 text-sm font-semibold bg-warning text-background rounded hover:opacity-90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-warning text-background rounded hover:opacity-90 transition-colors disabled:opacity-50"
                         >
                             {t('mergeAndNotify')}
                         </button>

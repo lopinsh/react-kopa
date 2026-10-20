@@ -37,7 +37,7 @@ export default async function CreateEventPage({
     return (
         <>
             <div className="mb-6">
-                <h1 className="text-[22px] md:text-[28px]">{tw('createTitle')}</h1>
+                <h1 className="text-title">{tw('createTitle')}</h1>
                 <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
             </div>
 

@@ -205,17 +205,17 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 >
                     {/* Step Header */}
                     <div className="mb-8">
-                        <p className="text-xs font-semibold text-primary">
+                        <p className="text-tag text-primary">
                             {t('stepOf', { current: step + 1, total: STEP_COUNT })}
                         </p>
                         <h2
                             ref={titleRef}
                             tabIndex={-1}
-                            className="mt-2 text-3xl font-semibold tracking-tight text-foreground outline-none"
+                            className="mt-2 text-section text-foreground outline-none"
                         >
                             {t(STEP_TITLE_KEYS[step])}
                         </h2>
-                        <p className="mt-1.5 text-base text-foreground-muted">
+                        <p className="mt-1.5 text-body text-foreground-muted">
                             {t(STEP_DESC_KEYS[step])}
                         </p>
                     </div>
@@ -235,7 +235,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                         {serverError && (
                             <p
                                 role="alert"
-                                className="mt-4 rounded-lg bg-danger/10 px-3 py-2 text-sm text-danger border border-danger/40"
+                                className="mt-4 rounded-lg bg-danger/10 px-3 py-2 text-body-sm text-danger border border-danger/40"
                             >
                                 {tErrors(serverError as 'ACTION_FAILED', { max: MAX_GROUP_TAGS })}
                             </p>
@@ -248,7 +248,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="button"
                                 onClick={prevStep}
-                                className="flex h-12 items-center gap-1.5 rounded-xl line px-6 font-medium text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground soft-press"
+                                className="flex h-12 items-center gap-1.5 rounded-xl line px-6 weight-medium text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground soft-press"
                             >
                                 <ChevronLeft className="h-4 w-4" />
                                 {c('back')}
@@ -260,7 +260,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 type="button"
                                 onClick={nextStep}
                                 disabled={textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-50"
+                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-50"
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -269,7 +269,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="submit"
                                 disabled={isPending || textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 font-bold text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
+                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {t('submit')}

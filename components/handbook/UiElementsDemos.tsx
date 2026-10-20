@@ -122,7 +122,7 @@ function LanguageEditorSample({ label, englishText, initialMenuOpen = false, sta
     const [texts, setTexts] = useState<Record<TextLang, string>>({ lv: t('sample.langTextLv'), en: englishText });
     return (
         <div className={initialMenuOpen ? 'min-h-[22rem] [&_[role=menu]]:static!' : undefined}>
-            <p className="mb-2 text-xs font-semibold text-foreground-muted">{label}</p>
+            <p className="mb-2 text-tag text-foreground-muted">{label}</p>
             <LanguageEditor
                 lang={lang}
                 onLangChange={setLang}
@@ -133,14 +133,14 @@ function LanguageEditorSample({ label, englishText, initialMenuOpen = false, sta
                 onClear={(l) => setTexts((prev) => ({ ...prev, [l]: '' }))}
                 initialMenuOpen={initialMenuOpen}
             >
-                <label className="block text-sm font-medium text-foreground">
+                <label className="block text-button-sm text-foreground">
                     {t('sample.langTitle')}
                     <input
                         key={lang}
                         lang={lang}
                         value={texts[lang]}
                         onChange={(e) => setTexts((prev) => ({ ...prev, [lang]: e.target.value }))}
-                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-[15px] md:h-10"
+                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-body-sm md:h-10"
                     />
                 </label>
             </LanguageEditor>

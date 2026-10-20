@@ -44,11 +44,11 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
             <PanelBody>
                 <PanelTitle>{data.name}</PanelTitle>
                 <CategoryLine color={data.category.color} category={data.category.l1Title} subCategories={data.category.subCategories} l1Slug={data.l1Slug} subSlugs={data.category.subCategorySlugs} />
-                <p className="text-sm text-foreground-muted">{cityLabel(tCities, data.city)} · {t('memberCount', { count: data.memberCount })}</p>
-                {data.lookingFor && <p className="text-sm italic leading-snug text-primary">{data.lookingFor}</p>}
-                {shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm font-medium leading-snug text-foreground">{data.tagline}</p>}
+                <p className="text-body-sm text-foreground-muted">{cityLabel(tCities, data.city)} · {t('memberCount', { count: data.memberCount })}</p>
+                {data.lookingFor && <p className="text-body-sm italic text-primary">{data.lookingFor}</p>}
+                {shortText && <p lang={langAttr(data.textLang, locale)} className="text-body-sm text-foreground">{data.tagline}</p>}
                 {nextMeeting && !data.events.some((e) => e.slug === nextMeeting.slug) && (
-                    <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-sm italic text-primary hover:underline">
+                    <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-body-sm italic text-primary hover:underline">
                         <CalendarDays aria-hidden="true" className="mt-[3px] size-4 shrink-0" />
                         <span>{meetingLine(
                             { at: nextMeeting.startDate, until: nextMeeting.running ? nextMeeting.endDate : null }, formatter, zone,
@@ -56,7 +56,7 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                         )}</span>
                     </Link>
                 )}
-                {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-sm leading-relaxed text-foreground">{data.text}</p>}
+                {data.text && !shortText && <p lang={langAttr(data.textLang, locale)} className="text-body-sm text-foreground">{data.text}</p>}
                 {days.length > 0 && <EventDayList days={days} today={dayInZone(new Date(), zone)} showGroup={false} showCity />}
                 {viewer.canContact && <ContactButton groupId={data.id} groupName={data.name} allowJoin={viewer.isAcceptingMembers} />}
                 {pageLink}

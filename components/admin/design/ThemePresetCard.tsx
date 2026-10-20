@@ -34,8 +34,8 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
         >
             {selected && <Check className="absolute right-4 top-4 h-5 w-5 text-primary" aria-hidden="true" />}
             <span>
-                <span className="block text-lg font-bold text-foreground">{t(`presets.${presetKey}`)}</span>
-                <span className="block text-[13px] text-foreground-muted">{t('looks.shape', { shape: t(`styles.${p.styleKey}`) })}</span>
+                <span className="block text-item text-foreground">{t(`presets.${presetKey}`)}</span>
+                <span className="block text-meta text-foreground-muted">{t('looks.shape', { shape: t(`styles.${p.styleKey}`) })}</span>
             </span>
             <span className="flex flex-wrap gap-1.5" aria-hidden="true">
                 {swatches.map((hex, i) => (
@@ -43,7 +43,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
                 ))}
             </span>
             <span className="block">
-                <span className="mb-1.5 block text-[13px] font-semibold text-foreground-muted">{t('looks.tones')}</span>
+                <span className="mb-1.5 block text-meta text-foreground-muted">{t('looks.tones')}</span>
                 {(['light', 'dark'] as const).map((mode) => (
                     <span key={mode} className="mt-1 flex gap-1" aria-hidden="true">
                         {CATEGORY_TONE_SLUGS.map((slug) => (
@@ -53,9 +53,9 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
                 ))}
             </span>
             <span className="block">
-                <span className="block text-2xl font-bold text-foreground [font-family:var(--sample-heading)]">{t('fontSampleHeading')}</span>
-                <span className="mt-1 block text-sm text-foreground-muted [font-family:var(--sample-body)]">{t('fontSampleBody')}</span>
-                <span className="mt-2 block text-[13px] text-foreground-muted">{t('looks.fonts', { heading: heading.label, body: body.label })}</span>
+                <span className="block text-section text-foreground [font-family:var(--sample-heading)]">{t('fontSampleHeading')}</span>
+                <span className="mt-1 block text-body-sm text-foreground-muted [font-family:var(--sample-body)]">{t('fontSampleBody')}</span>
+                <span className="mt-2 block text-meta text-foreground-muted">{t('looks.fonts', { heading: heading.label, body: body.label })}</span>
             </span>
         </button>
     );

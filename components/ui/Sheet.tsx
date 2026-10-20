@@ -34,7 +34,7 @@ export default function Sheet({ title, onClose, locked = false, dirty = false, r
     return (
         <Overlay layout="sheet" onClose={onClose} locked={locked} dirty={dirty} onBlocked={() => setAsking(true)} labelledBy={titleId} dataUi={UI.sheet} returnFocusRef={returnFocusRef}>
             <div className="mb-2.5 flex items-start justify-between gap-3">
-                <h2 id={titleId} className="font-heading text-lg font-semibold text-foreground">{title}</h2>
+                <h2 id={titleId} className="text-section text-foreground">{title}</h2>
                 <CloseButton locked={locked} />
             </div>
             {children}

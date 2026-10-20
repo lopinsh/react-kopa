@@ -23,7 +23,7 @@ export default function ListDrawer({ title, onClose, children }: { title: string
     return (
         <Overlay layout="left" onClose={onClose} labelledBy={titleId} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5">
             <div className="flex shrink-0 items-center justify-between gap-3 border-b border-border px-1 pb-2">
-                <h2 id={titleId} className="font-heading text-lg font-semibold text-foreground">{title}</h2>
+                <h2 id={titleId} className="text-section text-foreground">{title}</h2>
                 <CloseButton />
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto pt-2">{children}</div>

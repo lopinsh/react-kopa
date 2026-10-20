@@ -62,9 +62,9 @@ export default function MonthCalendar({ onClose, onApply }: { onClose: () => voi
                 maxMonth={addMonths(thisMonth, DISCOVERY_CALENDAR_MONTHS_AHEAD)}
                 labels={{ prev: t('previousMonth'), next: t('nextMonth') }}
             />
-            <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-2 text-xs text-foreground-muted">
+            <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-2 text-meta text-foreground-muted">
                 {picked ? <span className="min-w-0">{picked}</span> : (
-                    <button type="button" onClick={() => { go({ date: { kind: 'month', month }, day: null }); onClose(); }} className="font-semibold text-primary underline decoration-border underline-offset-4">{t('wholeMonth')}</button>
+                    <button type="button" onClick={() => { go({ date: { kind: 'month', month }, day: null }); onClose(); }} className="weight-strong text-primary underline decoration-border underline-offset-4">{t('wholeMonth')}</button>
                 )}
                 <Button size="sm" disabled={!range || pending} onClick={apply}>{count === null ? t('show') : t('showCount', { count })}</Button>
             </div>

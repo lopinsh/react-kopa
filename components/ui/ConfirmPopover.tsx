@@ -102,7 +102,7 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
                     style={{ ...pos, width: WIDTH }}
                     className="fixed z-[90] rounded-xl line bg-surface p-3 text-left shadow-premium motion-safe:animate-fade"
                 >
-                    <p className="text-sm font-semibold text-foreground">{message}</p>
+                    <p className="text-body-sm text-foreground">{message}</p>
                     <div className="mt-3 flex items-center justify-end gap-2">
                         <Button variant="secondary" size="sm" data-autofocus onClick={() => onOpenChange(false)} disabled={isPending}>{tCommon('cancel')}</Button>
                         <Button variant={destructive ? 'danger' : 'primary'} size="sm" onClick={onConfirm} disabled={isPending}>

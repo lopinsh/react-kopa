@@ -17,19 +17,19 @@ export default async function AboutPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground">{t('about.title')}</h1>
-            <p className="mt-4 text-xl font-medium text-foreground">{t('about.lead')}</p>
-            <ul className="mt-8 space-y-5 leading-relaxed">
+            <h1 className="text-title text-foreground">{t('about.title')}</h1>
+            <p className="mt-4 text-section text-foreground">{t('about.lead')}</p>
+            <ul className="mt-8 space-y-5">
                 {POINTS.map((key) => (
                     <li key={key}>
-                        <p className="font-semibold text-foreground">{t(`about.points.${key}.title`)}</p>
+                        <p className="weight-strong text-foreground">{t(`about.points.${key}.title`)}</p>
                         <p className="text-foreground-muted">{t(`about.points.${key}.text`)}</p>
                     </li>
                 ))}
             </ul>
             <Link
                 href="/"
-                className="mt-10 inline-flex h-11 items-center rounded-pill bg-primary px-6 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+                className="mt-10 inline-flex h-11 items-center rounded-pill bg-primary px-6 text-button-sm text-primary-foreground transition-opacity hover:opacity-90"
             >
                 {t('about.cta')}
             </Link>

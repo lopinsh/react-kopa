@@ -1,3 +1,4 @@
+import PageHead from '@/components/ui/PageHead';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -25,7 +26,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
     return (
         <div className="grid max-w-xl gap-4">
             {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
-            <h1 className="font-heading text-xl font-semibold md:sr-only">{t('title')}</h1>
+            <PageHead phoneOnly title={t('title')} />
             <PrivacySettings initial={privacy} />
             <AppearanceSetting />
         </div>

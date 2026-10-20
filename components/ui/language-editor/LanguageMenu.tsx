@@ -53,7 +53,7 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
                 disabled={disabled}
                 aria-labelledby={`${labelId} ${triggerId}`}
                 className={clsx(
-                    'inline-flex h-11 items-center gap-2 rounded-pill line bg-surface px-4 text-sm font-medium text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60 md:h-9',
+                    'inline-flex h-11 items-center gap-2 rounded-pill line bg-surface px-4 text-button-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60 md:h-9',
                     open && 'bg-tint'
                 )}
             >
@@ -65,7 +65,7 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
             </button>
             {open && (
                 <MenuPanel label={t('menuLabel')} placement="anchor" align="start" describedBy={noteId} dataUi={UI.languageEditorMenu} {...menuProps}>
-                    <p id={noteId} role="none" className="px-2.5 pb-1.5 pt-1 text-xs text-foreground-muted">{t('menuNote')}</p>
+                    <p id={noteId} role="none" className="px-2.5 pb-1.5 pt-1 text-meta text-foreground-muted">{t('menuNote')}</p>
                     {ordered.map((l) => (
                         <MenuItemButton
                             key={l}

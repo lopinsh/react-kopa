@@ -105,7 +105,7 @@ export default function FeedbackMode() {
 
             <FeedbackPins notes={notes} onOpen={handleOpen} onMissing={setMissing} />
 
-            <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
+            <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-tag text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
                 <MessageSquareText className="h-4 w-4 text-primary" />
                 <span className="mr-1">{paused ? t('barPaused') : t('barLabel')}</span>
                 <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? t('resume') : t('pause')} title={paused ? t('resume') : t('pause')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
@@ -126,7 +126,7 @@ export default function FeedbackMode() {
                     <List className="h-4 w-4" />
                     <span>{notes.length}</span>
                 </button>
-                <FeedbackModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-xs font-semibold text-foreground-muted hover:bg-surface-elevated" />
+                <FeedbackModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-tag text-foreground-muted hover:bg-surface-elevated" />
             </div>
 
             {panelOpen && <FeedbackNotesPanel notes={notes} missing={missing} onOpen={handleOpen} />}

@@ -14,8 +14,8 @@ export default function DiscardGuard({ onKeep }: { onKeep: () => void }) {
     const forceClose = useOverlayForceClose();
     return (
         <Overlay layout="dialog" size="sm" role="alertdialog" labelledBy={titleId} dataUi={UI.confirmDialog} onClose={onKeep} backClose={false} zIndexClassName="z-[60]">
-            <h2 id={titleId} className="font-heading text-lg font-semibold text-foreground">{t('discardTitle')}</h2>
-            <p className="mt-2 text-sm text-foreground-muted">{t('discardText')}</p>
+            <h2 id={titleId} className="text-section text-foreground">{t('discardTitle')}</h2>
+            <p className="mt-2 text-body-sm text-foreground-muted">{t('discardText')}</p>
             <div className="mt-4 flex justify-end gap-2">
                 <Button variant="secondary" size="sm" data-autofocus onClick={onKeep}>{t('keepEditing')}</Button>
                 <Button variant="danger" size="sm" onClick={forceClose}>{t('discard')}</Button>

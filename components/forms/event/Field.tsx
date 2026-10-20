@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { clsx } from 'clsx';
 
 /** The input look of the event form: 12 px radius, 44 px tall on phones, 40 from md. */
-export const FIELD_INPUT = 'block w-full h-11 rounded-xl border bg-background px-3 text-[15px] focus:outline-none md:h-10';
+export const FIELD_INPUT = 'block w-full h-11 rounded-xl border bg-background px-3 text-body-sm focus:outline-none md:h-10';
 
 export function fieldBorder(invalid: boolean): string {
     return invalid ? 'border-danger/60' : 'border-border focus:border-primary';
@@ -28,14 +28,14 @@ export default function Field({ id, label, hint, error, counter, group, children
     return (
         <div role={group ? 'group' : undefined} aria-labelledby={group ? `${id}-label` : undefined}>
             {group ? (
-                <p id={`${id}-label`} className="mb-1.5 text-sm font-medium text-foreground">{label}</p>
+                <p id={`${id}-label`} className="mb-1.5 text-body-sm text-foreground">{label}</p>
             ) : (
-                <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-foreground">{label}</label>
+                <label htmlFor={id} className="mb-1.5 block text-button-sm text-foreground">{label}</label>
             )}
             {children}
             {(text || counter) && (
                 <div className="mt-1 flex items-start gap-2">
-                    {text && <p id={`${id}-hint`} className={clsx('flex-1 text-xs', error ? 'text-danger' : 'text-foreground-muted')}>{text}</p>}
+                    {text && <p id={`${id}-hint`} className={clsx('flex-1 text-meta', error ? 'text-danger' : 'text-foreground-muted')}>{text}</p>}
                     {counter}
                 </div>
             )}

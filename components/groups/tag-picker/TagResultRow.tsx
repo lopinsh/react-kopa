@@ -21,8 +21,8 @@ export default function TagResultRow({ tag, l1Title, selected, onToggle }: Props
             className="group flex w-full items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-secondary"
         >
             <div className="flex flex-col">
-                <span className="text-sm font-semibold text-foreground">{tag.title}</span>
-                <span className="text-xs text-foreground-muted">{tag.level === 3 ? `${l1Title} - ${tag.l2Title}` : l1Title}</span>
+                <span className="text-body-sm text-foreground">{tag.title}</span>
+                <span className="text-meta text-foreground-muted">{tag.level === 3 ? `${l1Title} - ${tag.l2Title}` : l1Title}</span>
             </div>
             <TagCheck selected={selected} />
         </button>

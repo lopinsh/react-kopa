@@ -129,18 +129,18 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
                                 <Bell className="h-5 w-5" />
                             </div>
                             <div className="flex-1 pt-0.5 min-w-0">
-                                <p className="text-sm font-semibold text-foreground line-clamp-2">
+                                <p className="text-body-sm text-foreground line-clamp-2">
                                     {toast.title}
                                 </p>
                                 {toast.message !== '' && (
-                                    <p className="mt-1 text-sm text-foreground-muted line-clamp-2">
+                                    <p className="mt-1 text-body-sm text-foreground-muted line-clamp-2">
                                         {toast.message}
                                     </p>
                                 )}
                                 {toast.link && (
                                     <Link
                                         href={toast.link}
-                                        className="mt-2 text-xs font-semibold text-primary hover:underline inline-block"
+                                        className="mt-2 text-tag text-primary hover:underline inline-block"
                                         onClick={() => setToast(null)}
                                     >
                                         {t('toastOpen')}

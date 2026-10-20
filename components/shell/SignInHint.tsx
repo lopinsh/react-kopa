@@ -12,9 +12,9 @@ export default function SignInHint() {
     const [open, setOpen] = useState(false);
 
     return (
-        <p className="mt-6 text-sm text-foreground-muted">
+        <p className="mt-6 text-body-sm text-foreground-muted">
             {t('signInHint')}{' '}
-            <button type="button" onClick={() => setOpen(true)} className="font-semibold text-primary hover:underline">
+            <button type="button" onClick={() => setOpen(true)} className="weight-strong text-primary hover:underline">
                 {t('signInLink')}
             </button>
             {open && <AuthGateModal isOpen onClose={() => setOpen(false)} />}

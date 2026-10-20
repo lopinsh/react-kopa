@@ -13,13 +13,13 @@ import type { TeamCandidate, TeamMember } from '@/lib/services/team.service';
 
 type Pending = { kind: 'make' | 'remove'; person: TeamCandidate };
 
-const BUTTON = 'flex shrink-0 items-center gap-2 rounded-lg line bg-surface px-3 py-2 text-sm font-medium transition-colors hover:bg-surface-elevated disabled:opacity-50';
+const BUTTON = 'flex shrink-0 items-center gap-2 rounded-lg line bg-surface px-3 py-2 text-body-sm transition-colors hover:bg-surface-elevated disabled:opacity-50';
 
 function Person({ person }: { person: TeamCandidate }) {
     return (
         <div className="min-w-0">
-            <p className="truncate font-semibold text-foreground">{person.name || person.username || person.email}</p>
-            <p className="truncate text-xs text-foreground-muted">
+            <p className="truncate weight-strong text-foreground">{person.name || person.username || person.email}</p>
+            <p className="truncate text-meta text-foreground-muted">
                 {[person.username ? `@${person.username}` : null, person.email].filter(Boolean).join(' · ')}
             </p>
         </div>
@@ -99,14 +99,14 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
     return (
         <div className="space-y-10">
             <section aria-labelledby="team-admins">
-                <h2 id="team-admins" className="mb-3 text-lg font-bold text-foreground">{t('adminsTitle')}</h2>
+                <h2 id="team-admins" className="mb-3 text-section text-foreground">{t('adminsTitle')}</h2>
                 <ul className="divide-y divide-border rounded-2xl line bg-surface shadow-card">
                     {team.map((member) => (
                         <li key={member.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                             <Person person={member} />
                             <div className="flex shrink-0 items-center gap-2">
                                 {member.role === 'OWNER' && (
-                                    <span className="flex shrink-0 items-center gap-1.5 rounded-pill bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                                    <span className="flex shrink-0 items-center gap-1.5 rounded-pill bg-primary/10 px-3 py-1 text-tag text-primary">
                                         <Crown className="h-3.5 w-3.5" />
                                         {t('ownerBadge')}
                                     </span>
@@ -126,7 +126,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
 
             {canManage && (
             <section aria-labelledby="team-add">
-                <h2 id="team-add" className="mb-3 text-lg font-bold text-foreground">{t('addTitle')}</h2>
+                <h2 id="team-add" className="mb-3 text-section text-foreground">{t('addTitle')}</h2>
                 <form onSubmit={handleSearch} className="flex gap-2">
                     <input
                         type="search"
@@ -135,17 +135,17 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                         placeholder={t('searchPlaceholder')}
                         aria-label={t('searchPlaceholder')}
                         maxLength={80}
-                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-sm text-foreground"
+                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground"
                     />
                     <button type="submit" disabled={isPending} className={BUTTON}>
                         <Search className="h-4 w-4" />
                         {t('search')}
                     </button>
                 </form>
-                <p className="mt-2 text-xs text-foreground-muted">{t('searchHint')}</p>
+                <p className="mt-2 text-meta text-foreground-muted">{t('searchHint')}</p>
                 {results && (
                     results.length === 0 ? (
-                        <p className="mt-4 text-sm text-foreground-muted">{t('noResults')}</p>
+                        <p className="mt-4 text-body-sm text-foreground-muted">{t('noResults')}</p>
                     ) : (
                         <ul className="mt-4 divide-y divide-border rounded-2xl line bg-surface shadow-card">
                             {results.map((person) => (

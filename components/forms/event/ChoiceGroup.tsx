@@ -17,7 +17,7 @@ export default function ChoiceGroup<V extends string>({ label, value, options, o
     const id = useId();
     return (
         <div role="radiogroup" aria-labelledby={`${id}-label`} className="space-y-2">
-            <p id={`${id}-label`} className="text-sm font-medium text-foreground">{label}</p>
+            <p id={`${id}-label`} className="text-body-sm text-foreground">{label}</p>
             {options.map((o) => (
                 <label
                     key={o.value}
@@ -31,8 +31,8 @@ export default function ChoiceGroup<V extends string>({ label, value, options, o
                         className="mt-0.5 size-4 shrink-0 accent-primary"
                     />
                     <span className="min-w-0">
-                        <span className="block text-[15px] font-medium text-foreground">{o.title}</span>
-                        <span className="block text-xs text-foreground-muted">{o.description}</span>
+                        <span className="block text-body-sm text-foreground">{o.title}</span>
+                        <span className="block text-meta text-foreground-muted">{o.description}</span>
                     </span>
                 </label>
             ))}

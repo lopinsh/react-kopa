@@ -21,7 +21,7 @@ export default function OrganiserPeople({ id, kind, people, eventId, locale, bus
 }) {
     const t = useTranslations('event');
     if (people.length === 0) {
-        return <p id={id} className="text-[13px] text-foreground-muted">{kind === 'pending' ? t('noRequests') : kind === 'waitlist' ? t('noWaitlist') : t('noOneYet')}</p>;
+        return <p id={id} className="text-meta text-foreground-muted">{kind === 'pending' ? t('noRequests') : kind === 'waitlist' ? t('noWaitlist') : t('noOneYet')}</p>;
     }
     return (
         <ul id={id} className="divide-y divide-border">
@@ -29,7 +29,7 @@ export default function OrganiserPeople({ id, kind, people, eventId, locale, bus
                 const name = p.name || p.username || '?';
                 return (
                     <li key={p.userId} className="flex items-center justify-between gap-3 py-2">
-                        <span className="min-w-0 truncate text-sm font-medium text-foreground">
+                        <span className="min-w-0 truncate text-body-sm text-foreground">
                             {kind === 'waitlist' && <span className="mr-1 tabular-nums text-foreground-muted">{i + 1}.</span>}
                             {p.username ? <Link href={`/profile/${p.username}`} className="hover:underline">{name}</Link> : name}
                         </span>

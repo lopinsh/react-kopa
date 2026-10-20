@@ -23,7 +23,7 @@ export default function UsernameField({
 
     return (
         <div className="space-y-1">
-            <label htmlFor={id} className="block text-sm font-medium text-foreground">
+            <label htmlFor={id} className="block text-button-sm text-foreground">
                 {c('username')}
             </label>
 
@@ -45,7 +45,7 @@ export default function UsernameField({
                     autoFocus={autoFocus}
                     maxLength={30}
                     disabled={disabled}
-                    className="block w-full rounded-lg line bg-background py-2.5 pl-9 pr-10 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"
+                    className="block w-full rounded-lg line bg-background py-2.5 pl-9 pr-10 text-body-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                     {status === 'checking' && <Loader2 className="h-4 w-4 animate-spin text-foreground-muted" />}
@@ -54,11 +54,11 @@ export default function UsernameField({
                 </div>
             </div>
 
-            <div className="min-h-[1.25rem] text-xs">
+            <div className="min-h-[1.25rem] text-meta">
                 {status === 'checking' && <span className="text-foreground-muted">{t('checking')}</span>}
-                {status === 'available' && <span className="font-medium text-success">{t('available')}</span>}
+                {status === 'available' && <span className="weight-medium text-success">{t('available')}</span>}
                 {status === 'taken' && (
-                    <span className="font-medium text-danger">
+                    <span className="weight-medium text-danger">
                         {t('taken')}{' '}
                         {suggestion && (
                             <button

@@ -44,7 +44,7 @@ export default function BellList({ headingId, isAdmin }: { headingId: string; is
     return (
         <BellPanel headingId={headingId} isAdmin={isAdmin} tab={tab} onTab={setTab} counts={counts} onMarkAll={() => markAll(tab)} markAllDisabled={isPending}>
             {loaded === 'failed' ? (
-                <p className="px-4 py-6 text-center text-sm text-foreground-muted">{t('loadFailed')}</p>
+                <p className="px-4 py-6 text-center text-body-sm text-foreground-muted">{t('loadFailed')}</p>
             ) : loaded !== tab ? (
                 <LoadingRegion label={tCommon('loading')}>
                     <div className="px-4 py-2">{Array.from({ length: 3 }, (_, i) => <SkeletonRow key={i} />)}</div>

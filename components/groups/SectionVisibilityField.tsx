@@ -16,7 +16,7 @@ export default function SectionVisibilityField({ value, isFirst, onChange }: Pro
     const t = useTranslations('common');
     return (
         <div>
-            <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldVisibility')}</label>
+            <label className="mb-1.5 block text-tag text-foreground-muted">{t('fieldVisibility')}</label>
             <div className="flex gap-2">
                 {(['PUBLIC', 'MEMBERS_ONLY'] as const).map((v) => {
                     const Icon = v === 'PUBLIC' ? Globe : Lock;
@@ -28,7 +28,7 @@ export default function SectionVisibilityField({ value, isFirst, onChange }: Pro
                             disabled={locked}
                             onClick={() => onChange(v)}
                             className={clsx(
-                                'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-all disabled:opacity-40',
+                                'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-meta transition-all disabled:opacity-40',
                                 value === v ? 'border-primary bg-primary/5 text-primary' : 'border-border bg-surface text-foreground-muted hover:bg-surface-elevated'
                             )}
                         >
@@ -38,7 +38,7 @@ export default function SectionVisibilityField({ value, isFirst, onChange }: Pro
                     );
                 })}
             </div>
-            {isFirst && <span className="mt-1 inline-block text-[11px] text-foreground-muted">{t('homeVisibilityWarning')}</span>}
+            {isFirst && <span className="mt-1 inline-block text-meta text-foreground-muted">{t('homeVisibilityWarning')}</span>}
         </div>
     );
 }

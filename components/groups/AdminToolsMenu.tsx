@@ -60,7 +60,7 @@ export default function AdminToolsMenu({ onHide }: Props) {
 
             {open && (
                 <MenuPanel label={t('label')} placement="anchor" {...menuProps}>
-                    <p role="none" className="px-2.5 pb-1.5 pt-1 text-xs text-foreground-muted">{t('label')}</p>
+                    <p role="none" className="px-2.5 pb-1.5 pt-1 text-meta text-foreground-muted">{t('label')}</p>
 
                     {canHide && (
                         <MenuItemButton icon={<EyeOff aria-hidden className={ICON} />} onSelect={() => onHide(triggerProps.ref.current)}>{tMod('hideGroup')}</MenuItemButton>

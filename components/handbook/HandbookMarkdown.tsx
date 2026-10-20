@@ -34,25 +34,25 @@ function resolveHref(href: string | undefined): { kind: 'internal' | 'anchor' | 
     return { kind: 'none', href };
 }
 
-const linkClass = 'font-medium text-primary underline underline-offset-2 hover:opacity-80';
+const linkClass = 'weight-medium text-primary underline underline-offset-2 hover:opacity-80';
 
 const components: Components = {
-    h1: ({ children }) => <h1 className="mb-6 text-3xl font-bold tracking-tight text-foreground">{children}</h1>,
+    h1: ({ children }) => <h1 className="mb-6 text-title text-foreground">{children}</h1>,
     h2: ({ children }) => (
-        <h2 id={headingId(textOf(children))} className="mb-4 mt-12 scroll-mt-24 border-b border-border pb-2 text-2xl font-bold tracking-tight text-foreground">
+        <h2 id={headingId(textOf(children))} className="mb-4 mt-12 scroll-mt-24 border-b border-border pb-2 text-section text-foreground">
             {children}
         </h2>
     ),
     h3: ({ children }) => (
-        <h3 id={headingId(textOf(children))} className="mb-2 mt-8 scroll-mt-24 text-lg font-semibold text-foreground">
+        <h3 id={headingId(textOf(children))} className="mb-2 mt-8 scroll-mt-24 text-item text-foreground">
             {children}
         </h3>
     ),
-    p: ({ children }) => <p className="my-4 leading-relaxed text-foreground">{children}</p>,
+    p: ({ children }) => <p className="my-4 text-foreground">{children}</p>,
     ul: ({ children }) => <ul className="my-4 list-disc space-y-1.5 pl-6 text-foreground marker:text-foreground-muted">{children}</ul>,
     ol: ({ children }) => <ol className="my-4 list-decimal space-y-1.5 pl-6 text-foreground marker:text-foreground-muted">{children}</ol>,
     li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-    strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+    strong: ({ children }) => <strong className="weight-strong">{children}</strong>,
     del: ({ children }) => <del className="text-foreground-muted">{children}</del>,
     code: ({ children }) => (
         <code className="rounded bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.85em] [overflow-wrap:anywhere]">{children}</code>
@@ -61,15 +61,15 @@ const components: Components = {
         <blockquote className="my-6 rounded-xl line border-l-4 border-l-primary bg-surface px-4 py-1 text-foreground">{children}</blockquote>
     ),
     pre: ({ children }) => (
-        <pre className="my-6 overflow-x-auto rounded-xl line bg-surface p-4 text-sm leading-snug [&>code]:bg-transparent [&>code]:p-0">{children}</pre>
+        <pre className="my-6 overflow-x-auto rounded-xl line bg-surface p-4 text-body-sm [&>code]:bg-transparent [&>code]:p-0">{children}</pre>
     ),
     hr: () => <hr className="my-8 border-border" />,
     table: ({ children }) => (
         <div className="my-6 overflow-x-auto rounded-xl line bg-surface">
-            <table className="w-full text-left text-sm">{children}</table>
+            <table className="w-full text-left text-body-sm">{children}</table>
         </div>
     ),
-    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-xs font-semibold text-foreground-muted">{children}</th>,
+    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-tag text-foreground-muted">{children}</th>,
     td: ({ children }) => <td className="min-w-28 border-b border-border/60 px-4 py-2.5 align-top [tr:last-child_&]:border-0">{children}</td>,
     a: ({ href, children }) => {
         const target = resolveHref(href);

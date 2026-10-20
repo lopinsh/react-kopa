@@ -42,7 +42,7 @@ export default function StyleCard({ styleKey, theme, selected, disabled, onSelec
                 className="block rounded-xl bg-background p-4 font-sans text-foreground"
             >
                 <span className="line block rounded-xl bg-surface p-3 shadow-card">
-                    <span className="block text-base font-bold">{t('styleSample.title')}</span>
+                    <span className="block text-body">{t('styleSample.title')}</span>
                     <span className="mt-3 flex flex-wrap items-center gap-2">
                         <span className="grid size-8 place-items-center rounded-item cat-tile [--c:var(--primary)]"><Users className="size-4" /></span>
                         <span className={buttonClass('primary', '', 'sm')}>{t('styleSample.button')}</span>
@@ -52,8 +52,8 @@ export default function StyleCard({ styleKey, theme, selected, disabled, onSelec
                 </span>
             </span>
             <span className="block">
-                <span className="block text-sm font-bold text-foreground">{t(`styles.${styleKey}`)}</span>
-                <span className="mt-0.5 block text-[13px] text-foreground-muted">{t(`styleHints.${styleKey}`)}</span>
+                <span className="block text-body-sm text-foreground">{t(`styles.${styleKey}`)}</span>
+                <span className="mt-0.5 block text-meta text-foreground-muted">{t(`styleHints.${styleKey}`)}</span>
             </span>
         </button>
     );

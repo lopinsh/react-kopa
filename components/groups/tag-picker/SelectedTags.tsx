@@ -20,7 +20,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
             {tags.map((tag) => (
                 <span
                     key={tag.id}
-                    className="flex items-center gap-1 rounded-pill bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground shadow-card"
+                    className="flex items-center gap-1 rounded-pill bg-primary px-2 py-1 text-tag text-primary-foreground shadow-card"
                 >
                     {tag.title}
                     <button
@@ -38,7 +38,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
             {pending.map((tag) => (
                 <span
                     key={tag.id}
-                    className="flex items-center gap-1 rounded-md border-2 border-dashed border-primary px-2 py-1 text-xs font-semibold text-primary shadow-card"
+                    className="flex items-center gap-1 rounded-md border-2 border-dashed border-primary px-2 py-1 text-tag text-primary shadow-card"
                 >
                     {tag.title} ({t('awaitingApproval')})
                     <button

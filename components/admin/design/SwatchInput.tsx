@@ -5,7 +5,7 @@ type Props = { hex: string; word: string; label: string; disabled: boolean; onCh
 /** A small colour swatch with its word ("Gaišā" / "Tumšā"); the whole label is the tap target on phones. */
 export default function SwatchInput({ hex, word, label, disabled, onChange }: Props) {
     return (
-        <label className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 text-xs text-foreground-muted md:min-h-0">
+        <label className="inline-flex min-h-11 cursor-pointer items-center gap-1.5 text-meta text-foreground-muted md:min-h-0">
             <input
                 type="color"
                 value={hex}

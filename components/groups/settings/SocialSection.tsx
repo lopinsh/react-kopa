@@ -17,7 +17,7 @@ export default function SocialSection() {
         >
             <div className="grid gap-8 md:grid-cols-1 max-w-2xl">
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-tag text-foreground-muted ml-1 flex items-center gap-2">
                         <Globe className="h-3 w-3" />
                         {c_common('social_website')}
                     </label>
@@ -25,7 +25,7 @@ export default function SocialSection() {
                         <input
                             {...register('websiteLink')}
                             placeholder="https://..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <Globe className="h-5 w-5" />
@@ -34,7 +34,7 @@ export default function SocialSection() {
                 </div>
 
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-tag text-foreground-muted ml-1 flex items-center gap-2">
                         <MessageSquare className="h-3 w-3" />
                         {c_common('social_discord')}
                     </label>
@@ -42,7 +42,7 @@ export default function SocialSection() {
                         <input
                             {...register('discordLink')}
                             placeholder="https://discord.gg/..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <MessageSquare className="h-5 w-5" />
@@ -51,7 +51,7 @@ export default function SocialSection() {
                 </div>
 
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-foreground-muted ml-1 flex items-center gap-2">
+                    <label className="text-tag text-foreground-muted ml-1 flex items-center gap-2">
                         <InstagramIcon className="h-3 w-3" />
                         {c_common('social_instagram')}
                     </label>
@@ -59,7 +59,7 @@ export default function SocialSection() {
                         <input
                             {...register('instagramLink')}
                             placeholder="https://instagram.com/..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-medium"
+                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <InstagramIcon className="h-5 w-5" />

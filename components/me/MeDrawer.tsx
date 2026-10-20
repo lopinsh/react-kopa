@@ -32,8 +32,8 @@ export default function MeDrawer({ id, onClose, returnFocusRef }: Props) {
             <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
                 <img src={avatarSrc} alt="" className="size-10 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                    <p className="truncate font-heading text-[16px] font-semibold leading-tight">{name}</p>
-                    {line && <p className="truncate text-xs text-foreground-muted">{line}</p>}
+                    <p className="truncate text-item">{name}</p>
+                    {line && <p className="truncate text-meta text-foreground-muted">{line}</p>}
                 </div>
             </div>
             <MeMenu variant="drawer" />

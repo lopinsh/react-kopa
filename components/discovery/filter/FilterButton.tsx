@@ -33,7 +33,7 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
             {!chosen && onToggle && <ChevronDown aria-hidden="true" className="size-3.5 shrink-0 text-foreground-muted" />}
         </>
     );
-    const bodyClass = clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-[13px] font-medium text-foreground', chosen ? 'pl-2.5' : 'px-2.5');
+    const bodyClass = clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-meta text-foreground', chosen ? 'pl-2.5' : 'px-2.5');
 
     return (
         <div

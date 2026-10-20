@@ -16,8 +16,8 @@ export default function PersonHeader() {
             <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img src={avatarSrc} alt="" className="size-12 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                    <p className="truncate font-heading text-[19px] font-semibold leading-tight">{name}</p>
-                    {line && <p className="truncate text-[13px] text-foreground-muted">{line}</p>}
+                    <p className="truncate text-item">{name}</p>
+                    {line && <p className="truncate text-meta text-foreground-muted">{line}</p>}
                 </div>
             </Link>
             <EditProfileLink />

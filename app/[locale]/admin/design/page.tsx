@@ -35,7 +35,7 @@ export default async function AdminDesignPage({
     return (
         <div className="space-y-6">
             <AdminPageHeader title={t('title')} subtitle={t('subtitle')} />
-            {theme.isPreview && <p className="mb-6 rounded-xl bg-surface px-4 py-3 text-sm font-semibold text-foreground">{t('previewActive')}</p>}
+            {theme.isPreview && <p className="mb-6 rounded-xl bg-surface px-4 py-3 text-body-sm text-foreground">{t('previewActive')}</p>}
             <DesignEditor
                 key={`${theme.id ?? 'default'}-${theme.presetKey}`}
                 initialPart={initialPart}

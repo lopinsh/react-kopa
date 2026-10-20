@@ -100,7 +100,7 @@ export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
         radius: { md: '2px', lg: '3px', xl: '3px', '2xl': '4px', '3xl': '4px', '4xl': '4px', pill: '9999px', menu: '4px', item: '3px' },
         lineWidth: '1px', ink: 'border', frameWidth: '1px',
         shadows: 'none',
-        pressShift: '0px', shadowRoom: '0px', headingWeight: 500, tile: 'solid', cardSpace: '1.75rem',
+        pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'solid', cardSpace: '1.75rem',
     },
 };
 

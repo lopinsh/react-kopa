@@ -37,7 +37,7 @@ export default function EventTimeFields({ onStartChange, onEndChange }: Props) {
                     invalid={!!errors.endDate}
                 />
             </Field>
-            <p className="text-xs text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
+            <p className="text-meta text-foreground-muted">{t('timeZoneHint', { zone: timeZone ?? '' })}</p>
         </div>
     );
 }

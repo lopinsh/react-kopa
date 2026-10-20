@@ -1,3 +1,4 @@
+import PageHead from '@/components/ui/PageHead';
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -37,7 +38,7 @@ export default async function NotificationsPage({ params, searchParams }: {
     return (
         <>
             {/* On desktop the marked menu item already names the page; on phones the name stands over the list. */}
-            <h1 className="font-heading text-xl font-semibold md:sr-only">{t('title')}</h1>
+            <PageHead phoneOnly title={t('title')} />
             <NotificationFeed key={`${tab}-${query.page}`} rows={rows} hasMore={hasMore && query.page < NOTIFICATIONS_MAX_PAGES} tab={tab} isAdmin={isAdmin} page={query.page} />
         </>
     );

@@ -40,7 +40,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
     return (
         <div data-ui={UI.conversationList} className={clsx('w-full flex-col border-border bg-surface sm:w-80 sm:border-r', className)}>
             <div className="border-b border-border p-4">
-                <h1 className="text-lg font-bold">{t('title')}</h1>
+                <h1 className="text-title">{t('title')}</h1>
                 {conversations.length > 0 && (
                     <div className="mt-3 flex gap-2" role="group" aria-label={t('filterLabel')}>
                         {FILTERS.map(({ value, labelKey }) => (
@@ -53,7 +53,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                 {visible.length > 0 ? visible.map(conv => (
                     <ConversationRow key={conv.id} conversation={conv} title={titleOf(conv)} active={activeId === conv.id} onOpen={() => onOpen(conv.id)} />
                 )) : conversations.length > 0 ? (
-                    <p className="p-8 text-center text-sm italic text-foreground-muted">{t('filterEmpty')}</p>
+                    <p className="p-8 text-center text-body-sm italic text-foreground-muted">{t('filterEmpty')}</p>
                 ) : (
                     <EmptyState icon={MessageSquare} title={t('emptyTitle')} description={t('emptyText')} />
                 )}

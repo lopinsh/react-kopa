@@ -21,17 +21,17 @@ export default async function EventTextSection({ heading, html, lang, titleLang,
     const label = langAttr(lang, locale);
     return (
         <section className="grid gap-2">
-            <h2 className="flex flex-wrap items-center gap-2 font-heading text-[17px] font-semibold leading-snug text-foreground">
+            <h2 className="flex flex-wrap items-center gap-2 text-section text-foreground">
                 {heading}
                 {html && label && lang !== titleLang && <FallbackLangLabel lang={label} />}
             </h2>
             {lock && (
-                <p className="flex items-start gap-1.5 text-[13px] text-foreground-muted">
+                <p className="flex items-start gap-1.5 text-meta text-foreground-muted">
                     <Lock aria-hidden="true" className="mt-px size-3.5 shrink-0" />
                     <span>{lock.text}</span>
                 </p>
             )}
-            {html && lock?.kind !== 'locked' && <div lang={label} className="rich-text text-[15px]" dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }} />}
+            {html && lock?.kind !== 'locked' && <div lang={label} className="rich-text text-body-sm" dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }} />}
         </section>
     );
 }

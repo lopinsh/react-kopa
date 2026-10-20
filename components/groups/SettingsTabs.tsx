@@ -34,7 +34,7 @@ export default function SettingsTabs({ active, showOwner }: Props) {
                         href={`${pathname}?tab=${id}`}
                         aria-current={active === id ? 'page' : undefined}
                         className={clsx(
-                            'flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3.5 text-xs font-bold transition-colors',
+                            'flex items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3.5 text-tag transition-colors',
                             active === id
                                 ? 'border-primary text-primary'
                                 : 'border-transparent text-foreground-muted hover:border-border hover:text-foreground'

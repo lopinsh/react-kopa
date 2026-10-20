@@ -22,8 +22,8 @@ export function SwitchDemo() {
     const [off, setOff] = useState(false);
     return (
         <div className="grid max-w-xs gap-3">
-            <div className="flex items-center justify-between gap-4"><span id={id + 'a'} className="text-sm font-medium text-foreground">{t('switchOn')}</span><Switch checked={on} onChange={setOn} labelledBy={id + 'a'} /></div>
-            <div className="flex items-center justify-between gap-4"><span id={id + 'b'} className="text-sm font-medium text-foreground">{t('switchOff')}</span><Switch checked={off} onChange={setOff} labelledBy={id + 'b'} /></div>
+            <div className="flex items-center justify-between gap-4"><span id={id + 'a'} className="text-body-sm text-foreground">{t('switchOn')}</span><Switch checked={on} onChange={setOn} labelledBy={id + 'a'} /></div>
+            <div className="flex items-center justify-between gap-4"><span id={id + 'b'} className="text-body-sm text-foreground">{t('switchOff')}</span><Switch checked={off} onChange={setOff} labelledBy={id + 'b'} /></div>
         </div>
     );
 }
@@ -45,7 +45,7 @@ export function SheetDemo() {
     return (
         <>
             <Button variant="secondary" onClick={() => setOpen(true)}>{t('sample.sheetTitle')}</Button>
-            {open && <Sheet title={t('sample.sheetTitle')} onClose={() => setOpen(false)}><p className="text-sm text-foreground-muted">{t('sample.sheetText')}</p></Sheet>}
+            {open && <Sheet title={t('sample.sheetTitle')} onClose={() => setOpen(false)}><p className="text-body-sm text-foreground-muted">{t('sample.sheetText')}</p></Sheet>}
         </>
     );
 }
@@ -99,8 +99,8 @@ export function CounterDemo() {
     const fill = (percent: number) => setText('x'.repeat(Math.round((SAMPLE_LIMIT * percent) / 100)));
     return (
         <div className="max-w-md">
-            <label htmlFor={id} className="mb-1 block text-sm font-semibold text-foreground">{t('sample.counterLabel')}</label>
-            <textarea id={id} rows={3} value={text} onChange={(e) => setText(e.target.value)} aria-describedby={`${id}-count`} className="w-full resize-none rounded-xl line bg-surface p-3 text-sm" />
+            <label htmlFor={id} className="mb-1 block text-button-sm text-foreground">{t('sample.counterLabel')}</label>
+            <textarea id={id} rows={3} value={text} onChange={(e) => setText(e.target.value)} aria-describedby={`${id}-count`} className="w-full resize-none rounded-xl line bg-surface p-3 text-body-sm" />
             <div className="mt-1 flex items-start gap-2"><TextCounter id={`${id}-count`} length={text.length} max={SAMPLE_LIMIT} /></div>
             <div className="mt-3 flex gap-2">{[50, 95, 101].map((p) => <Button key={p} size="sm" variant="secondary" onClick={() => fill(p)}>{p} %</Button>)}</div>
         </div>

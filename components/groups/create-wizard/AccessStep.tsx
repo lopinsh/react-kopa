@@ -52,13 +52,13 @@ export default function AccessStep() {
                             />
                         </div>
                         <div>
-                            <p className="font-semibold text-foreground text-sm">{t(labelKey)}</p>
-                            <p className="mt-0.5 text-[11px] leading-tight text-foreground-muted">{t(descKey)}</p>
+                            <p className="text-foreground text-body-sm">{t(labelKey)}</p>
+                            <p className="mt-0.5 text-meta text-foreground-muted">{t(descKey)}</p>
                         </div>
                     </button>
                 );
             })}
-            {errors.type && <p className="mt-1 text-xs text-danger sm:col-span-2">{errors.type.message}</p>}
+            {errors.type && <p className="mt-1 text-meta text-danger sm:col-span-2">{errors.type.message}</p>}
 
             <div className="mt-6 space-y-4 border-t border-border pt-6 sm:col-span-2">
                 <label className="flex items-center gap-3 cursor-pointer group">
@@ -72,7 +72,7 @@ export default function AccessStep() {
                         <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4 shadow-sm" />
                     </div>
                     <div className="flex-1">
-                        <span className="text-sm font-bold text-foreground">{t('acceptingMembers')}</span>
+                        <span className="text-body-sm text-foreground">{t('acceptingMembers')}</span>
                     </div>
                     <UserPlus className={clsx(
                         "h-4 w-4 transition-colors",

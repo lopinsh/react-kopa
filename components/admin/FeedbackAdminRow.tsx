@@ -40,10 +40,10 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
 
     return (
         <li className="rounded-2xl line bg-surface px-4 py-3 shadow-card">
-            <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
+            <div className="flex flex-wrap items-center gap-2 text-tag">
                 <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
-                {note.component && <span title={tAdmin('component')} className="rounded-pill bg-surface-elevated px-2.5 py-1 font-mono font-semibold text-foreground-muted">{note.component}</span>}
-                <Link href={note.path} locale={note.locale === 'en' ? 'en' : 'lv'} className="break-all font-mono font-semibold text-foreground-muted hover:text-primary hover:underline">
+                {note.component && <span title={tAdmin('component')} className="rounded-pill bg-surface-elevated px-2.5 py-1 font-mono weight-strong text-foreground-muted">{note.component}</span>}
+                <Link href={note.path} locale={note.locale === 'en' ? 'en' : 'lv'} className="break-all font-mono weight-strong text-foreground-muted hover:text-primary hover:underline">
                     {note.path}
                 </Link>
                 <div className="ml-auto flex items-center gap-1.5">
@@ -52,7 +52,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                         disabled={isPending}
                         onChange={(e) => handleStatus(e.target.value as FeedbackStatusValue)}
                         aria-label={tAdmin('status')}
-                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-tag text-foreground disabled:opacity-50"
                     >
                         {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
                     </select>
@@ -64,9 +64,9 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                     />
                 </div>
             </div>
-            <p className="mt-2 whitespace-pre-wrap break-words text-sm text-foreground">{note.text}</p>
-            {note.elementText && <p className="mt-2 truncate text-xs text-foreground-muted">{tAdmin('element')}: {note.elementText}</p>}
-            <p className="mt-0.5 text-xs text-foreground-muted">
+            <p className="mt-2 whitespace-pre-wrap break-words text-body-sm text-foreground">{note.text}</p>
+            {note.elementText && <p className="mt-2 truncate text-meta text-foreground-muted">{tAdmin('element')}: {note.elementText}</p>}
+            <p className="mt-0.5 text-meta text-foreground-muted">
                 {note.authorName ? `${note.authorName} · ` : ''}
                 {format.dateTime(note.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
                 {` · ${note.locale.toUpperCase()} · ${note.viewportW}×${note.viewportH} · ${note.theme}`}

@@ -12,8 +12,8 @@ export function NextMeetingView({ event, title, allLabel, groupHref }: ViewProps
     return (
         <section data-ui={UI.nextMeeting} className="max-w-[760px] rounded-2xl bg-surface px-3.5 pb-1 pt-2.5 shadow-card frame">
             <div className="flex items-baseline justify-between">
-                <h2 className="font-sans text-[13px] font-semibold text-foreground-muted">{title}</h2>
-                <Link href={`${groupHref}/events`} className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary">
+                <h2 className="font-sans text-section text-foreground-muted">{title}</h2>
+                <Link href={`${groupHref}/events`} className="inline-flex items-center gap-1 text-meta text-primary">
                     {allLabel}
                     <ArrowRight aria-hidden className="size-3.5" />
                 </Link>

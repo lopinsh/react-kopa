@@ -15,7 +15,7 @@ interface Props {
     onCopyFromOriginal: (lang: TextLang) => void;
 }
 
-const BOX = 'mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl bg-tint p-3 text-sm text-foreground-muted';
+const BOX = 'mb-4 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 rounded-xl bg-tint p-3 text-body-sm text-foreground-muted';
 
 /** The one line under the bar: a problem in another language, an empty translation, or an original without text. */
 export default function EditorHint({ lang, original, filled, errorLangs, disabled, onSelect, onCopyFromOriginal }: Props) {

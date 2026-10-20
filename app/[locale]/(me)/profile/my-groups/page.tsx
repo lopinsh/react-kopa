@@ -1,3 +1,4 @@
+import PageHead from '@/components/ui/PageHead';
 import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { UserService } from '@/lib/services/user.service';
@@ -40,7 +41,7 @@ export default async function MyGroupsPage({ params }: { params: Promise<{ local
     return (
         <>
             {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
-            <h1 className="font-heading text-xl font-semibold md:sr-only">{t('myGroups')}</h1>
+            <PageHead phoneOnly title={t('myGroups')} />
             <MyGroupsSections overview={overview} />
             <MarkMyGroupsSeen />
         </>

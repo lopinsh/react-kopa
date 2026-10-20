@@ -31,7 +31,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                         }}
                         className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-secondary/50 group"
                     >
-                        <span className="text-sm font-semibold text-foreground">{l2.title}</span>
+                        <span className="text-body-sm text-foreground">{l2.title}</span>
                         <TagCheck selected={tagIds.includes(l2.id)} />
                     </button>
 
@@ -46,7 +46,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                                     }}
                                     className="flex w-full items-center justify-between rounded-lg px-2 py-1 text-left transition-colors hover:bg-secondary/30 group"
                                 >
-                                    <span className="text-xs font-medium text-foreground-muted group-hover:text-foreground">{tag.title}</span>
+                                    <span className="text-meta text-foreground-muted group-hover:text-foreground">{tag.title}</span>
                                     <TagCheck selected={tagIds.includes(tag.id)} small muted />
                                 </button>
                             ))}
@@ -68,7 +68,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                     <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 line mt-1">
                         <input
                             autoFocus
-                            className="w-full bg-transparent text-sm focus:outline-none font-semibold text-foreground"
+                            className="w-full bg-transparent text-body-sm focus:outline-none text-foreground"
                             placeholder={t('nameOfSubtopicPlaceholder')}
                             value={inlineWildcardText}
                             onChange={(e) => setInlineWildcardText(e.target.value)}
@@ -106,7 +106,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                         <div className="flex h-5 w-5 items-center justify-center rounded bg-secondary text-foreground-muted group-hover:bg-foreground group-hover:text-background transition-colors">
                             <Plus className="h-3.5 w-3.5" />
                         </div>
-                        <span className="text-sm font-semibold text-foreground-muted group-hover:text-foreground">{t('addSubtopic')}</span>
+                        <span className="text-body-sm text-foreground-muted group-hover:text-foreground">{t('addSubtopic')}</span>
                     </button>
                 )}
             </div>

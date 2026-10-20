@@ -24,7 +24,7 @@ export default function SearchPlaceButton({ search }: { search: Pick<SearchModel
         <div ref={bindHost} className="relative min-w-0 shrink">
             <FilterButton
                 icon={<MapPin aria-hidden="true" className="size-3.5 shrink-0" />}
-                label={names.length === 0 ? t('where') : <>{names[0]}{more > 0 && <em className="ml-1 shrink-0 text-xs font-bold not-italic">+{more}</em>}</>}
+                label={names.length === 0 ? t('where') : <>{names[0]}{more > 0 && <em className="ml-1 shrink-0 text-tag not-italic">+{more}</em>}</>}
                 ariaLabel={names.length === 0 ? t('where') : t('placeLabel', { places: names.join(', ') })}
                 chosen={names.length > 0}
                 open={pop.open}

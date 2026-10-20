@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('feedback') };
 }
 
-const FIELD = 'rounded-xl line bg-surface px-3 py-2 text-sm text-foreground';
+const FIELD = 'rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground';
 
 export default async function AdminFeedbackPage({
     params,
@@ -49,7 +49,7 @@ export default async function AdminFeedbackPage({
                         key={id}
                         href={id === 'open' ? '/admin/feedback' : `/admin/feedback?tab=${id}`}
                         aria-current={tab === id ? 'page' : undefined}
-                        className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition-colors ${tab === id ? 'border-primary text-primary' : 'border-transparent text-foreground-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm weight-strong transition-colors ${tab === id ? 'border-primary text-primary' : 'border-transparent text-foreground-muted hover:text-foreground'}`}
                     >
                         {t(`tab.${id}`)}
                         <span className={`rounded-pill px-2 py-0.5 text-xs ${tab === id ? 'bg-primary/10 text-primary' : 'bg-border/50 text-foreground-muted'}`}>{counts[id]}</span>
@@ -65,17 +65,17 @@ export default async function AdminFeedbackPage({
                     {FEEDBACK_KINDS.map((k) => <option key={k} value={k}>{tMode(`kind.${k}`)}</option>)}
                 </select>
                 <input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className={`${FIELD} w-full sm:w-56`} />
-                <button type="submit" className="rounded-pill bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">{t('filter')}</button>
+                <button type="submit" className="rounded-pill bg-primary px-5 py-2 text-button-sm text-primary-foreground hover:opacity-90">{t('filter')}</button>
                 {tab === 'completed' && counts.completed > 0 && (
                     <div className="sm:ml-auto"><FeedbackPurgeButton count={counts.completed} /></div>
                 )}
             </form>
 
             {notes.length === 0 ? (
-                <p className="rounded-2xl line bg-surface p-6 text-sm text-foreground-muted shadow-card">{t('empty')}</p>
+                <p className="rounded-2xl line bg-surface p-6 text-body-sm text-foreground-muted shadow-card">{t('empty')}</p>
             ) : (
                 <>
-                    <p className="mb-3 text-sm font-semibold text-foreground-muted">{t('count', { count: notes.length })}</p>
+                    <p className="mb-3 text-body-sm text-foreground-muted">{t('count', { count: notes.length })}</p>
                     <ul className="space-y-3">
                         {notes.map((note) => <FeedbackAdminRow key={note.id} note={note} />)}
                     </ul>

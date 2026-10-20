@@ -21,7 +21,7 @@ export default function DesignActions({ busy, blockedParts, onPreview, onPublish
     return (
         <div className="mt-8 space-y-3">
             {blocked && (
-                <p role="status" className="text-[13px] text-warning">
+                <p role="status" className="text-meta text-warning">
                     {t('contrast.blocked')}{' '}
                     {blockedParts.map((p, i) => (
                         <Fragment key={p}>
@@ -36,7 +36,7 @@ export default function DesignActions({ busy, blockedParts, onPreview, onPublish
                 <Button disabled={busy || blocked} onClick={onPublish}>{t('publish')}</Button>
                 <Button variant="quiet" className="sm:ml-auto" disabled={busy} onClick={onReset}>{t('reset')}</Button>
             </div>
-            <p className="text-xs text-foreground-muted">{t('previewHint')}</p>
+            <p className="text-meta text-foreground-muted">{t('previewHint')}</p>
         </div>
     );
 }

@@ -20,7 +20,7 @@ export default function RecentSearches({ onPick, inputRef, sample }: Props) {
     const [words, setWords] = useState(() => sample ?? readRecent());
     const titleId = useId();
 
-    if (words.length === 0) return <p className="px-0.5 py-4 text-sm text-foreground-muted">{t('hint')}</p>;
+    if (words.length === 0) return <p className="px-0.5 py-4 text-body-sm text-foreground-muted">{t('hint')}</p>;
 
     const remove = (word: string, index: number, list: HTMLElement) => {
         if (!sample) removeRecent(word);
@@ -32,12 +32,12 @@ export default function RecentSearches({ onPick, inputRef, sample }: Props) {
 
     return (
         <section data-ui={UI.recentSearches} aria-labelledby={titleId}>
-            <h3 id={titleId} className="px-0.5 pb-1 pt-3 text-xs font-semibold text-foreground-muted">{t('recent')}</h3>
+            <h3 id={titleId} className="px-0.5 pb-1 pt-3 text-item text-foreground-muted">{t('recent')}</h3>
             <ul>
                 {words.map((word, index) => (
                     <li key={word} className="flex items-center gap-1 rounded-lg hover:bg-tint">
                         <History aria-hidden="true" className="ml-2 size-4 shrink-0 text-foreground-muted" />
-                        <button type="button" data-search-item onClick={() => onPick(word)} className="min-h-11 min-w-0 flex-1 truncate rounded-lg px-1.5 text-left text-sm text-foreground md:min-h-9">{word}</button>
+                        <button type="button" data-search-item onClick={() => onPick(word)} className="min-h-11 min-w-0 flex-1 truncate rounded-lg px-1.5 text-left text-body-sm text-foreground md:min-h-9">{word}</button>
                         <button type="button" aria-label={t('removeRecent', { word })} onClick={(e) => remove(word, index, e.currentTarget.closest('ul') ?? e.currentTarget)}
                             className="relative mr-1 grid size-7 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2">
                             <X aria-hidden="true" className="size-4" />

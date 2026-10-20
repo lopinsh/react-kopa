@@ -15,7 +15,7 @@ export function GroupMenuDemo({ states, accent }: { states: Record<Viewer, Group
         <AccentScope color={accent} className="grid gap-6 md:grid-cols-3">
             {(Object.keys(states) as Viewer[]).map((viewer) => (
                 <div key={viewer}>
-                    <p className="mb-2 text-sm text-foreground-muted">{t(`menuViewer.${viewer}`)}</p>
+                    <p className="mb-2 text-body-sm text-foreground-muted">{t(`menuViewer.${viewer}`)}</p>
                     <div className="flex h-64 items-start justify-end">
                         <GroupProvider value={states[viewer]}>
                             <GroupMoreMenu initialOpen onReport={nothing} onWriteToTeam={nothing} />

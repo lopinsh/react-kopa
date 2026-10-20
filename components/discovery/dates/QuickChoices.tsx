@@ -29,9 +29,9 @@ export default function QuickChoices({ onPick, variant }: Props) {
                     aria-pressed={i.pressed}
                     onClick={() => onPick(i.value)}
                     className={clsx(
-                        'whitespace-nowrap rounded-pill text-[13px]',
+                        'whitespace-nowrap rounded-pill text-meta',
                         variant === 'sheet' ? 'min-h-11 flex-1 px-2 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]' : 'relative h-[26px] px-3 after:absolute after:-inset-y-2 after:inset-x-0',
-                        i.pressed ? 'bg-tint font-semibold ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : 'font-medium hover:bg-tint'
+                        i.pressed ? 'bg-tint weight-strong ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : 'weight-medium hover:bg-tint'
                     )}
                 >
                     {i.label}

@@ -24,8 +24,8 @@ type Props = {
 export default function PageNavLink({ href, icon: Icon, label, current, badge = 0, badgeDanger = false, replace, full = false }: Props) {
     const locale = useLocale();
     const className = clsx(
-        'flex min-h-10 items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
-        current && 'bg-tint font-semibold'
+        'flex min-h-10 items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-body-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+        current && 'bg-tint weight-strong'
     );
     const Tag = full ? 'a' : Link;
     return (
@@ -38,7 +38,7 @@ export default function PageNavLink({ href, icon: Icon, label, current, badge = 
             <Icon aria-hidden className="size-4 text-foreground-muted" />
             {label}
             {badge > 0 && (
-                <span className={clsx('ml-auto rounded-pill px-2 text-[11px] font-semibold', badgeDanger ? 'bg-danger/10 text-danger' : clsx('text-foreground-muted', current ? 'bg-surface' : 'bg-tint'))}>
+                <span className={clsx('ml-auto rounded-pill px-2 text-tag', badgeDanger ? 'bg-danger/10 text-danger' : clsx('text-foreground-muted', current ? 'bg-surface' : 'bg-tint'))}>
                     {badge > 9 ? '9+' : badge}
                 </span>
             )}

@@ -23,7 +23,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
         <div className="space-y-4">
             {/* Name */}
             <div>
-                <label htmlFor="group-name" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                <label htmlFor="group-name" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
                     <Type className="h-3.5 w-3.5 text-foreground-muted" />
                     {t('fieldName')}
                     <span className="text-danger">*</span>
@@ -36,21 +36,21 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     aria-describedby="group-name-count"
                     placeholder={t('fieldNamePlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.name ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
                 <div className="mt-1 flex items-start gap-2">
-                    {errors.name && <p className="text-xs text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
+                    {errors.name && <p className="text-meta text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
                     <TextCounter id="group-name-count" length={(watch('name') ?? '').length} max={GROUP_NAME_MAX} />
                 </div>
             </div>
 
             {/* Ko meklējam? (AR-35) */}
             <div>
-                <label htmlFor="group-looking-for" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                <label htmlFor="group-looking-for" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
                     {t('fieldLookingFor')}
-                    <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
+                    <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
                 </label>
                 <input
                     id="group-looking-for"
@@ -59,14 +59,14 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     aria-describedby="group-looking-for-count group-looking-for-hint"
                     placeholder={t('fieldLookingForPlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.lookingFor ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
                 <div className="mt-1 flex items-start gap-2">
                     {errors.lookingFor
-                        ? <p id="group-looking-for-hint" className="text-xs text-danger">{t(errors.lookingFor.message as 'LOOKING_FOR_TOO_LONG')}</p>
-                        : <p id="group-looking-for-hint" className="text-[11px] text-foreground-muted">{t('fieldLookingForHint')}</p>}
+                        ? <p id="group-looking-for-hint" className="text-meta text-danger">{t(errors.lookingFor.message as 'LOOKING_FOR_TOO_LONG')}</p>
+                        : <p id="group-looking-for-hint" className="text-meta text-foreground-muted">{t('fieldLookingForHint')}</p>}
                     <TextCounter id="group-looking-for-count" length={(watch('lookingFor') ?? '').length} max={GROUP_LOOKING_FOR_MAX} />
                 </div>
             </div>
@@ -76,10 +76,10 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
 
             {/* Banner Image */}
             <div>
-                <label htmlFor="group-banner" className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-foreground">
+                <label htmlFor="group-banner" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
                     <ImageIcon className="h-3.5 w-3.5 text-foreground-muted" />
                     {t('fieldBannerImage')}
-                    <span className="ml-auto text-xs font-normal text-foreground-muted">{t('optional')}</span>
+                    <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
                 </label>
                 <input
                     id="group-banner"
@@ -87,12 +87,12 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     {...register('bannerImage')}
                     placeholder={t('fieldBannerImagePlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
-                {errors.bannerImage && <p className="mt-1 text-xs text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
-                <p className="mt-1 text-[11px] text-foreground-muted">{t('fieldBannerImageHint')}</p>
+                {errors.bannerImage && <p className="mt-1 text-meta text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
+                <p className="mt-1 text-meta text-foreground-muted">{t('fieldBannerImageHint')}</p>
             </div>
         </div>
     );

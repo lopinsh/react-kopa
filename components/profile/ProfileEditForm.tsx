@@ -66,7 +66,7 @@ export default function ProfileEditForm({ user }: Props) {
     const over = isOverLimit(watchedName, USER_NAME_MAX) || isOverLimit(watchedBio, USER_BIO_MAX);
 
     const fieldError = (message?: string) =>
-        message ? <p className="text-xs text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
+        message ? <p className="text-meta text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
 
     const onSubmit = (data: ProfileFormValues) => {
         if (isPending || over) return;
@@ -97,22 +97,22 @@ export default function ProfileEditForm({ user }: Props) {
             />
 
             <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-bold text-foreground">{t('fieldName')}</label>
+                <label htmlFor="name" className="block text-button-sm text-foreground">{t('fieldName')}</label>
                 <input id="name" {...form.register('name')} aria-describedby="name-count" className={INPUT} />
                 <div className="flex items-start gap-2">{fieldError(errors.name?.message)}<TextCounter id="name-count" length={(watchedName ?? '').length} max={USER_NAME_MAX} /></div>
             </div>
 
             <div className="space-y-2">
-                <label htmlFor="username" className="block text-sm font-bold text-foreground">{tCommon('username')}</label>
+                <label htmlFor="username" className="block text-button-sm text-foreground">{tCommon('username')}</label>
                 <div className="relative">
-                    <span className="absolute left-4 top-3 font-bold text-foreground-muted">@</span>
+                    <span className="absolute left-4 top-3 weight-strong text-foreground-muted">@</span>
                     <input id="username" {...form.register('username')} className={`${INPUT} pl-10`} />
                 </div>
                 {fieldError(errors.username?.message)}
             </div>
 
             <div className="space-y-2">
-                <label htmlFor="bio" className="block text-sm font-bold text-foreground">{t('edit.bio')}</label>
+                <label htmlFor="bio" className="block text-button-sm text-foreground">{t('edit.bio')}</label>
                 <textarea
                     id="bio"
                     {...form.register('bio')}
@@ -125,18 +125,18 @@ export default function ProfileEditForm({ user }: Props) {
             </div>
 
             <div className="space-y-2">
-                <label htmlFor="cities" className="block text-sm font-bold text-foreground">{t('edit.citiesLabel')}</label>
+                <label htmlFor="cities" className="block text-button-sm text-foreground">{t('edit.citiesLabel')}</label>
                 <input id="cities" {...form.register('cities')} placeholder={t('edit.citiesPlaceholder')} className={INPUT} />
             </div>
 
             <div className="space-y-2">
-                <label htmlFor="image" className="block text-sm font-bold text-foreground">{t('fieldImage')}</label>
+                <label htmlFor="image" className="block text-button-sm text-foreground">{t('fieldImage')}</label>
                 <input id="image" {...form.register('image')} placeholder="https://..." className={INPUT} />
                 {fieldError(errors.image?.message)}
             </div>
 
             {errors.root?.message && (
-                <p role="alert" className="text-sm text-danger">{tErrors(errors.root.message as 'ACTION_FAILED')}</p>
+                <p role="alert" className="text-body-sm text-danger">{tErrors(errors.root.message as 'ACTION_FAILED')}</p>
             )}
 
             <div className="flex gap-2">

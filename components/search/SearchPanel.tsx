@@ -52,7 +52,7 @@ export default function SearchPanel({ search, mode, inputRef, requestClose, rece
             <SearchChips search={search} />
             <div className={mode === 'desktop' ? 'min-h-0 flex-1 overflow-y-auto' : undefined}>
                 {error
-                    ? <p className="px-0.5 py-4 text-sm text-foreground-muted">{tErrors('ACTION_FAILED')}</p>
+                    ? <p className="px-0.5 py-4 text-body-sm text-foreground-muted">{tErrors('ACTION_FAILED')}</p>
                     : idle
                         ? <RecentSearches onPick={(w) => { setWord(w, true); inputRef.current?.focus(); }} inputRef={inputRef} sample={recentSample} />
                         : <SearchResults search={search} requestClose={requestClose} />}

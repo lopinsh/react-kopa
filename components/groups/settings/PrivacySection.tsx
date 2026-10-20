@@ -45,9 +45,9 @@ export default function PrivacySection() {
                             )}>
                                 <type.icon className="h-5 w-5" />
                             </div>
-                            <span className="font-semibold text-lg text-foreground tracking-tight">{type.label}</span>
+                            <span className="text-item text-foreground">{type.label}</span>
                         </div>
-                        <p className="text-xs leading-relaxed text-foreground-muted opacity-80 pl-1">{type.desc}</p>
+                        <p className="text-meta text-foreground-muted opacity-80 pl-1">{type.desc}</p>
                     </label>
                 ))}
             </div>

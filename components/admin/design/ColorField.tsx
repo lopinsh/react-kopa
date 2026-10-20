@@ -22,7 +22,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
                 onChange={(e) => { setDraft(null); onChange(e.target.value); }}
                 className="h-10 w-12 shrink-0 cursor-pointer rounded-lg line bg-surface p-1"
             />
-            <label htmlFor={id} className="min-w-0 flex-1 text-sm font-semibold text-foreground">
+            <label htmlFor={id} className="min-w-0 flex-1 text-button-sm text-foreground">
                 {label}
                 <input
                     id={id}

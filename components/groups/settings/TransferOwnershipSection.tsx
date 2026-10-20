@@ -49,11 +49,11 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
         <div id="transfer" className="scroll-mt-24">
             <SettingsSection title={t('transferTitle')} description={t('transferDescription')}>
                 {candidates.length === 0 ? (
-                    <p className="rounded-2xl border border-dashed border-border p-5 text-sm text-foreground-muted">{t('transferNobody')}</p>
+                    <p className="rounded-2xl border border-dashed border-border p-5 text-body-sm text-foreground-muted">{t('transferNobody')}</p>
                 ) : (
                     <div className="max-w-xl space-y-4">
                         <div className="space-y-2">
-                            <label htmlFor="transfer-target" className="ml-1 text-xs font-semibold text-foreground-muted">
+                            <label htmlFor="transfer-target" className="ml-1 text-tag text-foreground-muted">
                                 {t('transferSelectLabel')}
                             </label>
                             <select
@@ -61,7 +61,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 value={targetId}
                                 onChange={(e) => { setTargetId(e.target.value); setConfirming(false); }}
                                 disabled={isPending}
-                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary"
+                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 weight-medium outline-none transition-all focus:border-primary"
                             >
                                 <option value="">{t('transferSelectPlaceholder')}</option>
                                 {candidates.map(c => (
@@ -77,19 +77,19 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 type="button"
                                 disabled={!target || isPending}
                                 onClick={() => setConfirming(true)}
-                                className="flex h-12 items-center gap-2 rounded-2xl line bg-surface px-6 text-sm font-bold text-foreground transition-colors hover:bg-surface-elevated disabled:opacity-50 shadow-card"
+                                className="flex h-12 items-center gap-2 rounded-2xl line bg-surface px-6 text-button-sm text-foreground transition-colors hover:bg-surface-elevated disabled:opacity-50 shadow-card"
                             >
                                 {t('transferButton')}
                             </button>
                         ) : (
                             <div role="alertdialog" className="space-y-3 rounded-2xl border border-primary/40 bg-primary/10 p-4">
-                                <p className="text-sm font-semibold text-foreground">{t('transferConfirm', { name: target?.name ?? '' })}</p>
+                                <p className="text-body-sm text-foreground">{t('transferConfirm', { name: target?.name ?? '' })}</p>
                                 <div className="flex flex-wrap gap-2">
                                     <button
                                         type="button"
                                         onClick={handleTransfer}
                                         disabled={isPending}
-                                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-70"
+                                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground disabled:opacity-70"
                                     >
                                         {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                         {t('transferConfirmYes')}
@@ -98,7 +98,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                         type="button"
                                         onClick={() => setConfirming(false)}
                                         disabled={isPending}
-                                        className="rounded-xl line px-4 py-2 text-sm font-medium text-foreground-muted hover:bg-surface-elevated"
+                                        className="rounded-xl line px-4 py-2 text-button-sm text-foreground-muted hover:bg-surface-elevated"
                                     >
                                         {tc('cancel')}
                                     </button>

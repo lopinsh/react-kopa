@@ -17,7 +17,7 @@ export default function GroupCardActivity({ activity, lookingFor }: { activity?:
     if (!activity && !lookingFor) return null;
 
     return (
-        <div className="col-start-1 row-start-2 mx-5 mt-2 border-t border-border pb-5 pt-2 text-[13px] leading-snug">
+        <div className="col-start-1 row-start-2 mx-5 mt-2 border-t border-border pb-5 pt-2 text-meta">
             {activity?.kind === 'event' ? (
                 <p className="flex min-h-[2lh] items-start gap-1.5 italic text-primary">
                     <CalendarDays aria-hidden="true" className="mt-0.5 size-3.5 shrink-0" />

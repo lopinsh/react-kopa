@@ -26,7 +26,7 @@ function PendingStateView({ chatId }: { chatId: string | null }) {
         <div data-ui={UI.pendingState} className="flex items-center gap-2 max-md:order-last">
             <div className="hidden items-center gap-2 md:flex">
                 {/* A status, not a button: no hover, no press, not focusable. */}
-                <span className={clsx('inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-sm font-semibold', groupChip(false))}>
+                <span className={clsx('inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-button-sm', groupChip(false))}>
                     <Check aria-hidden className="size-4" />
                     {t('pending.sent')}
                 </span>

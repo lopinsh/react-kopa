@@ -18,13 +18,13 @@ export default async function MemberRow({ member, groupId }: Props) {
             <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2">
                     {member.profileHref ? (
-                        <Link href={member.profileHref} className="truncate font-semibold text-foreground hover:text-primary">{name}</Link>
+                        <Link href={member.profileHref} className="truncate weight-strong text-foreground hover:text-primary">{name}</Link>
                     ) : (
-                        <span className="truncate font-semibold text-foreground">{name}</span>
+                        <span className="truncate weight-strong text-foreground">{name}</span>
                     )}
                     <RoleTag role={member.role} />
                 </div>
-                <p className="text-[13px] text-foreground-muted">{t('members.since', { date: format.dateTime(member.since, { month: 'long', year: 'numeric' }) })}</p>
+                <p className="text-meta text-foreground-muted">{t('members.since', { date: format.dateTime(member.since, { month: 'long', year: 'numeric' }) })}</p>
             </div>
             {member.actions.length > 0 && (
                 <MemberRowMenu groupId={groupId} userId={member.userId} name={name} actions={member.actions} profileHref={member.profileHref} />

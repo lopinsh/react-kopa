@@ -54,19 +54,19 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
     return (
         <Modal onClose={onClose} title={t('suggestTitle')} locked={isPending}>
             <form onSubmit={(e) => { e.preventDefault(); submit(); }} className="flex flex-col gap-3">
-                <p className="text-sm text-foreground-muted">{t('suggestText')}</p>
+                <p className="text-body-sm text-foreground-muted">{t('suggestText')}</p>
                 <div>
-                    <label htmlFor="suggest-name" className="mb-1 block text-sm font-medium">{t('suggestName')}</label>
-                    <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <label htmlFor="suggest-name" className="mb-1 block text-button-sm">{t('suggestName')}</label>
+                    <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-body-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary" />
                     <TextCounter id="suggest-count" length={name.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
-                    <label htmlFor="suggest-topic" className="mb-1 block text-sm font-medium">{t('topic')}</label>
-                    <select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary">
+                    <label htmlFor="suggest-topic" className="mb-1 block text-button-sm">{t('topic')}</label>
+                    <select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="h-11 w-full rounded-xl bg-surface px-3 text-body-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary">
                         <option value="">—</option>
                         {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </select>
-                    {invalid && !topicId && <p role="alert" className="mt-1 text-xs text-danger">{t('suggestPickTopic')}</p>}
+                    {invalid && !topicId && <p role="alert" className="mt-1 text-meta text-danger">{t('suggestPickTopic')}</p>}
                 </div>
                 <div className="mt-1 flex justify-end gap-2">
                     <Button type="button" variant="secondary" onClick={onClose} disabled={isPending}>{tCommon('cancel')}</Button>

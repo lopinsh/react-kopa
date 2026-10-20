@@ -68,16 +68,16 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
         <div className="space-y-8 pb-12">
             {/* Header */}
             <div>
-                <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
+                <h3 className="text-item text-foreground-muted mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 line rounded-xl bg-surface-elevated/30">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(shown, 12), color: shown }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold">{l1.title}</h2>
+                        <h2 className="text-section">{l1.title}</h2>
                         <div className="flex items-center gap-2 mt-1">
                             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: shown }} />
-                            <span className="text-sm text-foreground-muted">{l1.slug}</span>
+                            <span className="text-body-sm text-foreground-muted">{l1.slug}</span>
                         </div>
                     </div>
                 </div>
@@ -86,20 +86,20 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             {/* Edit Color */}
             <section>
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold">{tFields('color')}</h3>
+                    <h3 className="text-item">{tFields('color')}</h3>
                     {color !== savedColor && (
-                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-pill font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-meta px-2 py-0.5 rounded-pill">{t('unsavedChanges')}</span>
                     )}
                 </div>
                 {inDesign ? (
-                    <p className="text-sm text-foreground-muted">
+                    <p className="text-body-sm text-foreground-muted">
                         {tFields('colorInDesign')}{' '}
-                        <Link href="/admin/design?part=categories" className="font-semibold text-primary underline underline-offset-4">{tFields('colorInDesignLink')}</Link>
+                        <Link href="/admin/design?part=categories" className="weight-strong text-primary underline underline-offset-4">{tFields('colorInDesignLink')}</Link>
                     </p>
                 ) : (
                     <div className="grid gap-4 bg-surface-elevated/30 p-4 line rounded-xl">
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-2">{tFields('color')}</label>
+                            <label className="block text-tag text-foreground-muted mb-2">{tFields('color')}</label>
                             <div className="flex items-center gap-3">
                                 <input
                                     type="color"
@@ -111,7 +111,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="flex-1 bg-surface line rounded px-3 py-2 text-sm"
+                                    className="flex-1 bg-surface line rounded px-3 py-2 text-body-sm"
                                     pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                                 />
                             </div>
@@ -121,7 +121,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                 type="button"
                                 onClick={handleSaveColor}
                                 disabled={isPending || color === savedColor}
-                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-pill hover:bg-primary/90 transition-colors disabled:opacity-50"
+                                className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded-pill hover:bg-primary/90 transition-colors disabled:opacity-50"
                             >
                                 {t('save')}
                             </button>
@@ -135,7 +135,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             {/* Subcategories View */}
             <section>
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold">{t('subcategories', { count: l1.subcategories.length })}</h3>
+                    <h3 className="text-item">{t('subcategories', { count: l1.subcategories.length })}</h3>
                 </div>
                 <div className="line rounded-xl divide-y divide-border bg-surface mb-6">
                     {l1.subcategories.map(l2 => (
@@ -145,42 +145,42 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             onClick={() => onNodeSelect({ id: l2.id, type: 'l2', l1Id: l1.id })}
                             className="w-full flex items-center justify-between p-3 text-left hover:bg-surface-elevated/50 transition-colors"
                         >
-                            <span className="font-medium text-sm">{l2.title}</span>
+                            <span className="text-body-sm">{l2.title}</span>
                             <div className="flex gap-2">
-                                <span className="text-xs text-foreground-muted bg-surface-elevated px-2 py-0.5 rounded-pill line">
+                                <span className="text-meta text-foreground-muted bg-surface-elevated px-2 py-0.5 rounded-pill line">
                                     {tNode('wildcard', { count: l2.tags.length })}
                                 </span>
                             </div>
                         </button>
                     ))}
                     {l1.subcategories.length === 0 && (
-                        <div className="p-4 text-sm text-foreground-muted text-center">
+                        <div className="p-4 text-body-sm text-foreground-muted text-center">
                             {t('noSubcategories')}
                         </div>
                     )}
                 </div>
 
                 <div className="line rounded-xl bg-surface-elevated/30 p-4">
-                    <h4 className="text-sm font-bold mb-3">{t('createSubcategory')}</h4>
+                    <h4 className="text-item mb-3">{t('createSubcategory')}</h4>
                     <form onSubmit={handleCreateL2} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
+                                <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
                                 <input
                                     type="text"
                                     value={newNameEn}
                                     onChange={e => setNewNameEn(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameLv')}</label>
+                                <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
                                 <input
                                     type="text"
                                     value={newNameLv}
                                     onChange={e => setNewNameLv(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                                     required
                                 />
                             </div>
@@ -189,7 +189,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             <button
                                 type="submit"
                                 disabled={isPending || !newNameEn.trim() || !newNameLv.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-pill disabled:opacity-50"
+                                className="px-4 py-2 text-button-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-pill disabled:opacity-50"
                                 style={{ '--accent': shown } as React.CSSProperties}
                             >
                                 {t('addSubcategory')}

@@ -36,7 +36,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
             />
 
             {errors.categoryId && !taxSelection && (
-                <p className="mt-2 text-xs text-danger font-medium">
+                <p className="mt-2 text-meta text-danger">
                     {t('CATEGORY_REQUIRED')}
                 </p>
             )}
@@ -45,7 +45,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
             {selectedL1 && (
                 <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-8">
                     {tagsCleared && noTagsYet && (
-                        <p role="status" className="rounded-xl line bg-surface px-3 py-2 text-sm text-foreground-muted">
+                        <p role="status" className="rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground-muted">
                             {t('tagsClearedOnCategoryChange')}
                         </p>
                     )}

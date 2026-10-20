@@ -27,8 +27,8 @@ export default function StylePart({ theme, disabled, onStyle }: Props) {
     return (
         <div className="space-y-8">
             <section aria-labelledby="design-style">
-                <h2 id="design-style" className="text-[21px] font-semibold text-foreground">{t('styleTitle')}</h2>
-                <p className="mt-1 text-sm text-foreground-muted">{t('styleNote')}</p>
+                <h2 id="design-style" className="text-section text-foreground">{t('styleTitle')}</h2>
+                <p className="mt-1 text-body-sm text-foreground-muted">{t('styleNote')}</p>
                 <div ref={group} role="radiogroup" aria-labelledby="design-style" className="mt-4 grid gap-3 md:grid-cols-3">
                     {THEME_STYLE_KEYS.map((key) => (
                         <StyleCard key={key} styleKey={key} theme={theme} selected={theme.styleKey === key} disabled={disabled} onSelect={() => onStyle(key)} onKeyDown={move} />

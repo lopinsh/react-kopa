@@ -65,11 +65,11 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
         <HandbookShell headings={[]} wide>
             <div className="mb-8 flex items-start justify-between gap-4">
                 <div>
-                    <h1 className="font-serif text-3xl font-semibold tracking-tight text-foreground">{t('title')}</h1>
+                    <h1 className="text-title text-foreground">{t('title')}</h1>
                     <p className="mt-2 max-w-[70ch] text-foreground-muted">{t('intro')}</p>
-                    <p className="mt-2 max-w-[70ch] text-sm text-foreground-muted">{t('sampleNote')}</p>
+                    <p className="mt-2 max-w-[70ch] text-body-sm text-foreground-muted">{t('sampleNote')}</p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2 rounded-xl line bg-surface px-2 py-1 text-xs text-foreground-muted">
+                <div className="flex shrink-0 items-center gap-2 rounded-xl line bg-surface px-2 py-1 text-meta text-foreground-muted">
                     <span className="hidden sm:inline">{t('theme')}</span>
                     <ThemeToggle />
                 </div>
@@ -345,7 +345,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 </UiSpecimen>
             </div>
 
-            <p className="mt-12 text-xs text-foreground-muted">{t('notShown')}</p>
+            <p className="mt-12 text-meta text-foreground-muted">{t('notShown')}</p>
         </HandbookShell>
     );
 }

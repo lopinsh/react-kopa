@@ -42,22 +42,22 @@ export default function ConversationRow({ conversation: conv, title, active = fa
                     : conv.group ? <CategoryDisc slug={conv.group.l1Slug} color={conv.group.accentColor} size={40} /> : <Users aria-hidden className="size-5 text-foreground-muted" />}
             </span>
             <span className="min-w-0 flex-1">
-                <span className={clsx('block truncate text-sm', conv.unread ? 'font-bold' : 'font-medium')}>{title}</span>
-                {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-[11px]" />}
-                <span className={clsx('block truncate text-xs', conv.unread ? 'font-semibold text-foreground' : 'text-foreground-muted')}>
+                <span className={clsx('block truncate text-body-sm', conv.unread ? 'weight-strong' : 'weight-medium')}>{title}</span>
+                {conv.group && <GroupLabel group={conv.group} showName={!conv.viewerIsContact} className="text-meta" />}
+                <span className={clsx('block truncate text-meta', conv.unread ? 'weight-strong text-foreground' : 'text-foreground-muted')}>
                     {conv.isBlocked
                         ? <span className="inline-flex items-center gap-1 italic text-danger"><Ban aria-hidden className="size-3" /> {t('blocked')}</span>
                         : conv.lastMessage?.content || t('noMessages')}
                 </span>
                 {shared && (
-                    <span className="mt-0.5 flex items-center gap-1 text-[11px] text-foreground-muted">
+                    <span className="mt-0.5 flex items-center gap-1 text-meta text-foreground-muted">
                         <Users aria-hidden className="size-3 shrink-0" />
                         <span className="truncate">{shared}</span>
                     </span>
                 )}
             </span>
             <span className="flex shrink-0 flex-col items-end gap-1.5 self-start pt-0.5">
-                {conv.lastMessage && <span className="whitespace-nowrap text-[11px] text-foreground-muted">{messageTime(conv.lastMessage.createdAt, 'list')}</span>}
+                {conv.lastMessage && <span className="whitespace-nowrap text-meta text-foreground-muted">{messageTime(conv.lastMessage.createdAt, 'list')}</span>}
                 {conv.unread && <span className="size-2.5 rounded-full bg-primary" role="img" aria-label={t('unread')} />}
             </span>
         </>

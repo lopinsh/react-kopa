@@ -25,8 +25,8 @@ export default function CategoryLine({ color, category, subCategories, l1Slug, s
         <Link href={href} className={clsx('hover:underline', aboveCardLink && 'relative z-10')}>{label}</Link>
     );
     return (
-        <p data-ui={UI.categoryLine} className={clsx('flex items-center gap-x-2 gap-y-0.5 text-[13px]', oneLine ? 'min-w-0 flex-nowrap overflow-hidden' : 'flex-wrap')}>
-            <span className={'inline-flex shrink-0 items-center gap-1.5 font-medium text-foreground'}>
+        <p data-ui={UI.categoryLine} className={clsx('flex items-center gap-x-2 gap-y-0.5 text-meta', oneLine ? 'min-w-0 flex-nowrap overflow-hidden' : 'flex-wrap')}>
+            <span className={'inline-flex shrink-0 items-center gap-1.5 weight-medium text-foreground'}>
                 <span aria-hidden="true" className={'h-2 w-2 shrink-0 rounded-full'} style={{ backgroundColor: color }} />
                 {l1Slug ? link(topicHref(l1Slug, undefined, from), category) : category}
             </span>

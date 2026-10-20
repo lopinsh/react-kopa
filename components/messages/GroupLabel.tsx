@@ -13,8 +13,8 @@ export default function GroupLabel({ group, showName = true, className }: { grou
         <span style={vars} className={clsx('flex items-center gap-1.5 truncate', className)}>
             <span className="h-2 w-2 shrink-0 rounded-full bg-[color:var(--group-color)]" aria-hidden="true" />
             <span className="truncate">
-                {showName && <span className="font-bold text-foreground-muted">{group.name} · </span>}
-                <span className="font-bold text-[color:color-mix(in_srgb,var(--group-color)_65%,var(--foreground))]">{group.categoryTitle}</span>
+                {showName && <span className="weight-strong text-foreground-muted">{group.name} · </span>}
+                <span className="weight-strong text-[color:color-mix(in_srgb,var(--group-color)_65%,var(--foreground))]">{group.categoryTitle}</span>
                 {group.subCategories.length > 0 && <span className="font-normal text-foreground-muted"> {group.subCategories.join(', ')}</span>}
             </span>
         </span>

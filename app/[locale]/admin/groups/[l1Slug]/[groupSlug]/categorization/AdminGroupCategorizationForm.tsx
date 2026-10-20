@@ -74,9 +74,9 @@ export default function AdminGroupCategorizationForm({
         <FormProvider {...methods}>
             <form onSubmit={onSubmit} className="space-y-6">
                 <div className="rounded-2xl line bg-surface p-6 shadow-card">
-                    <p className="text-xs font-semibold text-foreground-muted">{t('override.title')}</p>
-                    <h1 className="mt-1 font-serif text-2xl font-semibold text-foreground">{groupName}</h1>
-                    <p className="mt-2 text-sm text-foreground-muted">{selectedL1.title}</p>
+                    <p className="text-tag text-foreground-muted">{t('override.title')}</p>
+                    <h1 className="mt-1 text-title text-foreground">{groupName}</h1>
+                    <p className="mt-2 text-body-sm text-foreground-muted">{selectedL1.title}</p>
 
                     <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>
                         <TagPicker l1={selectedL1} allowL3={false} maxTags={initialTagIds.length} />
@@ -86,7 +86,7 @@ export default function AdminGroupCategorizationForm({
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="rounded-pill bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+                    className="rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground disabled:opacity-50"
                 >
                     {isPending ? c('loading') : c('save')}
                 </button>

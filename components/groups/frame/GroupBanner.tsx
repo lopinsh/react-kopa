@@ -32,15 +32,15 @@ export default function GroupBanner() {
                 </span>
                 <div className="min-w-0 flex-1">
                     <BannerName />
-                    <p className={'flex items-center gap-1.5 text-xs text-foreground-muted md:hidden'}>
+                    <p className={'flex items-center gap-1.5 text-meta text-foreground-muted md:hidden'}>
                         <span aria-hidden className={'size-2 shrink-0 rounded-full bg-[var(--accent)]'} />
                         <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>
                     </p>
                     <div className="hidden max-h-10 flex-wrap items-baseline gap-x-3.5 gap-y-0.5 overflow-hidden px-0.5 -mx-0.5 md:flex">
                         <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} />
-                        <p className={'text-[13px] text-foreground-muted'}>{facts.join(' · ')}</p>
+                        <p className={'text-meta text-foreground-muted'}>{facts.join(' · ')}</p>
                     </div>
-                    {g.lookingFor && <p className={'hidden truncate text-[13px] italic text-primary md:block'}>{g.lookingFor}</p>}
+                    {g.lookingFor && <p className={'hidden truncate text-meta italic text-primary md:block'}>{g.lookingFor}</p>}
                 </div>
                 <GroupActions />
             </div>

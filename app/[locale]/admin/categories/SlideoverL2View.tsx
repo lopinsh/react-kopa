@@ -91,7 +91,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
             {/* Parent Navigation */}
             {parentL1 && (
                 <div>
-                    <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
+                    <h3 className="text-item text-foreground-muted mb-2">{t('l1Title')}</h3>
                     <button
                         type="button"
                         onClick={() => onNodeSelect({ id: parentL1.id, type: 'l1' })}
@@ -102,8 +102,8 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 <CategoryIcon slug={parentL1.slug} className="w-4 h-4" />
                             </div>
                             <div>
-                                <h4 className="font-semibold text-sm">{parentL1.title}</h4>
-                                <span className="text-xs text-foreground-muted">{parentL1.slug}</span>
+                                <h4 className="text-item">{parentL1.title}</h4>
+                                <span className="text-meta text-foreground-muted">{parentL1.slug}</span>
                             </div>
                         </div>
                         <ChevronLeft className="w-4 h-4 text-foreground-muted" />
@@ -114,52 +114,52 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
             {/* L2 Edit Form */}
             <section>
                 <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold">{t('l2Title')}</h3>
+                    <h3 className="text-item">{t('l2Title')}</h3>
                     {(nameEn !== initialEn || nameLv !== initialLv || slugEn !== l2.slug || slugLv !== (l2.slugLv || l2.slug)) && (
-                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-pill font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-meta px-2 py-0.5 rounded-pill">{t('unsavedChanges')}</span>
                     )}
                 </div>
 
                 <div className="grid gap-4 bg-surface-elevated/30 p-4 line rounded-xl">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
                             <input
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameLv')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
                             <input
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('slugEn')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugEn')}</label>
                             <input
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('slugLv')}</label>
+                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugLv')}</label>
                             <input
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             />
                         </div>
                     </div>
@@ -168,7 +168,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="button"
                             onClick={handleSave}
                             disabled={isPending}
-                            className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {t('save')}
                         </button>
@@ -179,8 +179,8 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
             {/* Aliases */}
             <section>
                 <div className="mb-4">
-                    <h3 className="text-lg font-bold">{t('aliases')}</h3>
-                    <p className="text-sm text-foreground-muted mt-1">{t('aliasHelper')}</p>
+                    <h3 className="text-item">{t('aliases')}</h3>
+                    <p className="text-body-sm text-foreground-muted mt-1">{t('aliasHelper')}</p>
                 </div>
 
                 <div className="space-y-4">
@@ -189,8 +189,8 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             {l2.aliases.map(alias => (
                                 <div key={alias.id} className="flex flex-wrap items-center justify-between p-3 line rounded-lg bg-surface">
                                     <div className="flex items-center gap-3">
-                                        <span className="font-medium text-sm">{alias.value}</span>
-                                        <span className="bg-surface-elevated text-xs px-2 py-0.5 rounded-pill text-foreground-muted">
+                                        <span className="text-body-sm">{alias.value}</span>
+                                        <span className="bg-surface-elevated text-meta px-2 py-0.5 rounded-pill text-foreground-muted">
                                             {alias.locale || tAliases('anyLocaleShort')}
                                         </span>
                                     </div>
@@ -198,7 +198,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-xs text-danger font-semibold hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                        className="text-tag text-danger hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
                                     >
                                         {c('delete')}
                                     </button>
@@ -206,7 +206,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg line text-center">
+                        <p className="text-body-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg line text-center">
                             {tAliases('empty')}
                         </p>
                     )}
@@ -216,14 +216,14 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-sm"
+                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded px-3 py-2 text-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded px-3 py-2 text-body-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>
@@ -232,7 +232,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             <button
                                 type="submit"
                                 disabled={isPending || !aliasValue.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
+                                className="px-4 py-2 text-button-sm bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
                             >
                                 {t('addAlias')}
                             </button>

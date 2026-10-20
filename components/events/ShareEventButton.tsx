@@ -13,7 +13,7 @@ export default function ShareEventButton({ title }: { title: string }) {
         <button
             type="button"
             onClick={() => share({ title, url: window.location.href })}
-            className="inline-flex h-11 items-center gap-1.5 rounded-pill text-sm font-semibold text-foreground-muted transition-colors hover:text-foreground md:h-10"
+            className="inline-flex h-11 items-center gap-1.5 rounded-pill text-button-sm text-foreground-muted transition-colors hover:text-foreground md:h-10"
         >
             <Share2 aria-hidden="true" className="size-4" />
             {t('share')}

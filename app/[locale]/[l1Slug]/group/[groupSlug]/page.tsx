@@ -47,7 +47,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
             label: i === 0 ? tCommon('about') : s.title,
             lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
             content: (
-                <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px] shadow-card frame">
+                <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-body-sm shadow-card frame">
                     {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
                     <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(s.content) }} />
                 </article>
@@ -57,7 +57,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     return (
         <>
             <GroupPicture image={group.bannerImage ? getSmartImageUrl(group.bannerImage) : null} l1Slug={group.category.l1Slug} />
-            {group.lookingFor && <p className="mb-3 text-sm italic leading-snug text-primary md:hidden">{group.lookingFor}</p>}
+            {group.lookingFor && <p className="mb-3 text-body-sm italic text-primary md:hidden">{group.lookingFor}</p>}
             {latest && <LatestAnnouncement item={latest} allHref={group.user.isMember ? `${base}/announcements` : undefined} />}
             <InfoSections title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
             <NextMeetingBox groupId={group.id} groupHref={base} viewerId={session?.user?.id} />

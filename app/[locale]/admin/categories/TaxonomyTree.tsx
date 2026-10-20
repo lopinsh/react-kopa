@@ -64,11 +64,11 @@ export default function TaxonomyTree({ tree, pendingTags, selectedNode, onNodeSe
     return (
         <div className="w-full bg-surface line rounded-xl overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-border bg-surface-elevated/30">
-                <h2 className="text-lg font-bold">{t('title')}</h2>
+                <h2 className="text-section">{t('title')}</h2>
                 <button
                     type="button"
                     onClick={toggleExpandAll}
-                    className="text-sm font-semibold text-primary hover:underline"
+                    className="text-button-sm text-primary hover:underline"
                 >
                     {isAllExpanded ? t('collapseAll') : t('expandAll')}
                 </button>

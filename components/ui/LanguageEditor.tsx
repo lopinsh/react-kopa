@@ -85,7 +85,7 @@ export default function LanguageEditor({ lang, onLangChange, originalLang, onOri
         <div data-ui={UI.languageEditor}>
             <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-2 border-b border-border pb-3">
                 <div className="flex flex-nowrap items-center gap-x-3">
-                    <span id={labelId} className="text-[13px] text-foreground-muted">{t('label')}</span>
+                    <span id={labelId} className="text-meta text-foreground-muted">{t('label')}</span>
                     <LanguageMenu
                         menu={menu}
                         labelId={labelId}
@@ -104,15 +104,15 @@ export default function LanguageEditor({ lang, onLangChange, originalLang, onOri
                 </div>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:flex-nowrap md:ms-auto">
                     {others.length > 0 && (
-                        <span className="flex flex-wrap items-center gap-x-1 text-[13px] text-foreground-muted">
+                        <span className="flex flex-wrap items-center gap-x-1 text-meta text-foreground-muted">
                             {t('others')}
                             {others.slice(0, SHOWN_OTHERS).map((l) => (
-                                <button key={l} type="button" lang={l} disabled={disabled} onClick={() => onLangChange(l)} className="min-h-11 rounded-full px-2 font-medium text-primary hover:bg-tint disabled:opacity-60 md:min-h-0 md:py-1">
+                                <button key={l} type="button" lang={l} disabled={disabled} onClick={() => onLangChange(l)} className="min-h-11 rounded-full px-2 weight-medium text-primary hover:bg-tint disabled:opacity-60 md:min-h-0 md:py-1">
                                     {LOCALE_NAMES[l]}
                                 </button>
                             ))}
                             {others.length > SHOWN_OTHERS && (
-                                <button type="button" onClick={() => menu.setOpen(true)} className="min-h-11 rounded-full px-2 font-medium text-primary hover:bg-tint md:min-h-0 md:py-1">
+                                <button type="button" onClick={() => menu.setOpen(true)} className="min-h-11 rounded-full px-2 weight-medium text-primary hover:bg-tint md:min-h-0 md:py-1">
                                     {t('moreCount', { count: others.length - SHOWN_OTHERS })}
                                 </button>
                             )}

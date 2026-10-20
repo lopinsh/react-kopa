@@ -93,7 +93,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                 <div className="space-y-6">
                     <div className="grid gap-6 md:grid-cols-2">
                         <div>
-                            <label htmlFor={titleId} className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldTitle')}</label>
+                            <label htmlFor={titleId} className="mb-1.5 block text-tag text-foreground-muted">{t('fieldTitle')}</label>
                             <input
                                 key={`title-${lang}`}
                                 id={titleId}
@@ -104,10 +104,10 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                                 placeholder={t('fieldTitlePlaceholder')}
                                 aria-describedby={counterId}
                                 aria-invalid={missing || undefined}
-                                className="w-full rounded-lg line bg-surface px-3 py-2 text-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
+                                className="w-full rounded-lg line bg-surface px-3 py-2 text-body-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
                             />
                             <div className="mt-1 flex items-start gap-2">
-                                {missing && <p role="alert" className="text-xs text-danger">{tErrors('TITLE_REQUIRED')}</p>}
+                                {missing && <p role="alert" className="text-meta text-danger">{tErrors('TITLE_REQUIRED')}</p>}
                                 <TextCounter id={counterId} length={text.title.length} max={SECTION_TITLE_MAX} />
                             </div>
                         </div>
@@ -116,7 +116,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                     </div>
 
                     <div className="space-y-2" lang={lang}>
-                        <label className="mb-1.5 block text-xs font-semibold text-foreground-muted">{t('fieldContent')}</label>
+                        <label className="mb-1.5 block text-tag text-foreground-muted">{t('fieldContent')}</label>
                         <RichTextEditor
                             key={`${lang}-${rev}`}
                             value={text.content}

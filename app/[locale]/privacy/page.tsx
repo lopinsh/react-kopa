@@ -21,15 +21,15 @@ export default async function PrivacyPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <p className="mb-6 rounded-xl line bg-surface px-4 py-3 text-sm text-foreground-muted">
+            <p className="mb-6 rounded-xl line bg-surface px-4 py-3 text-body-sm text-foreground-muted">
                 {t('draftNotice')}
             </p>
-            <h1 className="text-4xl font-semibold tracking-tight text-foreground">{t('privacy.title')}</h1>
+            <h1 className="text-title text-foreground">{t('privacy.title')}</h1>
             <p className="mt-4 text-foreground-muted">{t('privacy.intro')}</p>
             {SECTIONS.map((section) => (
                 <section key={section.title} className="mt-10">
-                    <h2 className="text-xl font-bold text-foreground">{t(section.title)}</h2>
-                    <ul className="mt-3 list-disc space-y-3 pl-5 leading-relaxed text-foreground-muted">
+                    <h2 className="text-section text-foreground">{t(section.title)}</h2>
+                    <ul className="mt-3 list-disc space-y-3 pl-5 text-foreground-muted">
                         {section.items.map((key) => (
                             <li key={key}>{t(key)}</li>
                         ))}
@@ -37,7 +37,7 @@ export default async function PrivacyPage() {
                             <li>
                                 {t.rich('privacy.rights2', {
                                     mail: (chunks) => (
-                                        <a href="mailto:ejam@lumm.eu" className="font-semibold text-primary hover:underline">{chunks}</a>
+                                        <a href="mailto:ejam@lumm.eu" className="weight-strong text-primary hover:underline">{chunks}</a>
                                     ),
                                 })}
                             </li>

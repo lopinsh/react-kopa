@@ -45,7 +45,7 @@ export default function BellPanel({ headingId, isAdmin, tab, onTab, counts, onMa
                 id={headingId}
                 title={t('title')}
                 action={unread > 0 && (
-                    <button type="button" disabled={markAllDisabled} onClick={onMarkAll} className="text-xs font-semibold text-primary hover:underline disabled:opacity-50">{t('markAllRead')}</button>
+                    <button type="button" disabled={markAllDisabled} onClick={onMarkAll} className="text-tag text-primary hover:underline disabled:opacity-50">{t('markAllRead')}</button>
                 )}
             />
             {isAdmin && (
@@ -63,7 +63,7 @@ export default function BellPanel({ headingId, isAdmin, tab, onTab, counts, onMa
                                 aria-controls={panelId}
                                 tabIndex={selected ? 0 : -1}
                                 onClick={() => onTab(audience)}
-                                className={clsx('-mb-px border-b-2 pb-2 pt-2.5 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', selected ? 'border-primary font-semibold text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground')}
+                                className={clsx('-mb-px border-b-2 pb-2 pt-2.5 text-body-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary', selected ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground')}
                             >
                                 {t(audience === 'ADMIN' ? 'tabAdmin' : 'tabPersonal')}
                                 {count > 0 && <span className="ml-1 tabular-nums">{count}</span>}

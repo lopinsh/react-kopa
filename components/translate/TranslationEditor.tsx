@@ -90,15 +90,15 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
             panelClassName="flex max-h-[90vh] flex-col"
             title={t('editTitle')}
             subtitle={
-                <p className="mt-1 break-all font-mono text-xs text-foreground-muted">
-                    <span className="font-sans font-semibold">{t('keyLabel')}: </span>{messageKey}
+                <p className="mt-1 break-all font-mono text-meta text-foreground-muted">
+                    <span className="font-sans weight-strong">{t('keyLabel')}: </span>{messageKey}
                 </p>
             }
         >
             {loadError ? (
-                <p className="text-sm font-medium text-danger">{errorText(loadError)}</p>
+                <p className="text-body-sm text-danger">{errorText(loadError)}</p>
             ) : !entry ? (
-                <p className="text-sm text-foreground-muted">{t('loading')}</p>
+                <p className="text-body-sm text-foreground-muted">{t('loading')}</p>
             ) : (
                 <>
                     <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto sm:grid-cols-2">
@@ -106,13 +106,13 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                             const issue = issues[lang];
                             return (
                                 <div key={lang} className="flex flex-col">
-                                    <label htmlFor={`tm-${lang}`} className="mb-1 flex items-center gap-2 text-sm font-semibold text-foreground">
+                                    <label htmlFor={`tm-${lang}`} className="mb-1 flex items-center gap-2 text-button-sm text-foreground">
                                         {t(LANG_LABEL[lang])}
                                         {entry.edited[lang] && (
-                                            <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{t('edited')}</span>
+                                            <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-tag text-primary">{t('edited')}</span>
                                         )}
                                         {entry.pending[lang] !== null && (
-                                            <span className="rounded-pill bg-warning/10 px-2 py-0.5 text-[11px] font-bold text-warning">{t('waiting')}</span>
+                                            <span className="rounded-pill bg-warning/10 px-2 py-0.5 text-tag text-warning">{t('waiting')}</span>
                                         )}
                                     </label>
                                     <textarea
@@ -124,21 +124,21 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                         aria-describedby={`tm-count-${lang}`}
                                         aria-invalid={!!issue}
                                         className={clsx(
-                                            'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-sm text-foreground outline-none focus:border-primary/50',
+                                            'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-body-sm text-foreground outline-none focus:border-primary/50',
                                             issue ? 'border-danger/40' : 'border-border'
                                         )}
                                     />
                                     <div className="mt-1 flex items-start gap-2">
-                                        {issue && <p role="alert" className="text-xs font-medium text-danger">{describe(issue)}</p>}
+                                        {issue && <p role="alert" className="text-meta text-danger">{describe(issue)}</p>}
                                         <TextCounter id={`tm-count-${lang}`} length={values[lang].length} max={MESSAGE_OVERRIDE_MAX} />
                                     </div>
                                     {entry.pending[lang] !== null && (
-                                        <p className="mt-1 text-xs text-foreground-muted">
+                                        <p className="mt-1 text-meta text-foreground-muted">
                                             {t('live')}: <span className="font-mono">{entry[lang]}</span>
                                         </p>
                                     )}
                                     {entry.edited[lang] && (
-                                        <p className="mt-1 text-xs text-foreground-muted">
+                                        <p className="mt-1 text-meta text-foreground-muted">
                                             {t('original')}: <span className="font-mono">{entry.source[lang]}</span>
                                         </p>
                                     )}
@@ -146,14 +146,14 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                             );
                         })}
                     </div>
-                    <p className="mt-3 text-xs text-foreground-muted">{t('suggestHint')}</p>
-                    <p className="mt-1 text-xs text-foreground-muted">{t('syntaxHint')}</p>
-                    {saveError && <p role="alert" className="mt-2 text-sm font-medium text-danger">{saveError}</p>}
+                    <p className="mt-3 text-meta text-foreground-muted">{t('suggestHint')}</p>
+                    <p className="mt-1 text-meta text-foreground-muted">{t('syntaxHint')}</p>
+                    {saveError && <p role="alert" className="mt-2 text-body-sm text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
-                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
+                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-2.5 text-body-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
                         </OverlayCloseButton>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
+                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-2.5 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </button>
                     </div>
