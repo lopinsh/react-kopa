@@ -70,7 +70,7 @@ export default function GroupActions() {
                     type="button"
                     data-ui={UI.joinButton}
                     onClick={openContact}
-                    className="order-last grid size-10 shrink-0 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 md:order-first md:inline-flex md:w-auto md:gap-1.5 md:px-5"
+                    className="order-last grid size-10 shrink-0 place-items-center rounded-pill bg-primary text-sm font-semibold text-primary-foreground hover:opacity-90 md:order-first md:inline-flex md:w-auto md:gap-1.5 md:px-5"
                 >
                     <MessageCircle aria-hidden className="size-5 md:hidden" />
                     <span className="sr-only md:not-sr-only">{c('contact')}</span>

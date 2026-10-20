@@ -95,7 +95,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                     <button
                         type="button"
                         onClick={() => onNodeSelect({ id: parentL1.id, type: 'l1' })}
-                        className="w-full flex items-center justify-between p-3 border border-border rounded-xl bg-surface hover:bg-surface-elevated/50 transition-colors text-left"
+                        className="w-full flex items-center justify-between p-3 line rounded-xl bg-surface hover:bg-surface-elevated/50 transition-colors text-left"
                     >
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: tint(parentL1.color, 12), color: parentL1.color }}>
@@ -116,11 +116,11 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{t('l2Title')}</h3>
                     {(nameEn !== initialEn || nameLv !== initialLv || slugEn !== l2.slug || slugLv !== (l2.slugLv || l2.slug)) && (
-                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-pill font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
 
-                <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
+                <div className="grid gap-4 bg-surface-elevated/30 p-4 line rounded-xl">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-1">{tFields('nameEn')}</label>
@@ -128,7 +128,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
-                                className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -138,7 +138,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
-                                className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -150,7 +150,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
                             />
                         </div>
                         <div>
@@ -159,7 +159,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-sm"
                             />
                         </div>
                     </div>
@@ -187,10 +187,10 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                     {l2.aliases.length > 0 ? (
                         <div className="space-y-2">
                             {l2.aliases.map(alias => (
-                                <div key={alias.id} className="flex flex-wrap items-center justify-between p-3 border border-border rounded-lg bg-surface">
+                                <div key={alias.id} className="flex flex-wrap items-center justify-between p-3 line rounded-lg bg-surface">
                                     <div className="flex items-center gap-3">
                                         <span className="font-medium text-sm">{alias.value}</span>
-                                        <span className="bg-surface-elevated text-xs px-2 py-0.5 rounded-full text-foreground-muted">
+                                        <span className="bg-surface-elevated text-xs px-2 py-0.5 rounded-pill text-foreground-muted">
                                             {alias.locale || tAliases('anyLocaleShort')}
                                         </span>
                                     </div>
@@ -206,7 +206,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             ))}
                         </div>
                     ) : (
-                        <p className="text-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg border border-border text-center">
+                        <p className="text-sm text-foreground-muted italic bg-surface-elevated/30 p-4 rounded-lg line text-center">
                             {tAliases('empty')}
                         </p>
                     )}
@@ -216,14 +216,14 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface border border-border rounded px-3 py-2 text-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded px-3 py-2 text-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>

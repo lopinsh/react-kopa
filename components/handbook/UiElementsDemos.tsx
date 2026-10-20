@@ -24,7 +24,7 @@ export function InboxDemo({ samples }: { samples: UiSamples }) {
     const conversation = samples.conversations[0];
     return (
         <div className="grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]">
-            <div className="flex h-[26rem] overflow-hidden rounded-xl border border-border">
+            <div className="flex h-[26rem] overflow-hidden rounded-xl line">
                 <ConversationList
                     conversations={samples.conversations}
                     activeId={conversation.id}
@@ -33,7 +33,7 @@ export function InboxDemo({ samples }: { samples: UiSamples }) {
                     className="flex !w-full !border-r-0"
                 />
             </div>
-            <div className="flex h-[26rem] flex-col overflow-hidden rounded-xl border border-border bg-background">
+            <div className="flex h-[26rem] flex-col overflow-hidden rounded-xl line bg-background">
                 <ChatPanel
                     conversation={conversation}
                     messages={samples.chatMessages}
@@ -140,7 +140,7 @@ function LanguageEditorSample({ label, englishText, initialMenuOpen = false, sta
                         lang={lang}
                         value={texts[lang]}
                         onChange={(e) => setTexts((prev) => ({ ...prev, [lang]: e.target.value }))}
-                        className="mt-1.5 block h-11 w-full rounded-xl border border-border bg-surface px-3 text-[15px] md:h-10"
+                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-[15px] md:h-10"
                     />
                 </label>
             </LanguageEditor>

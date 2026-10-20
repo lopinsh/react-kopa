@@ -31,7 +31,7 @@ export default function FeedbackPurgeButton({ count }: { count: number }) {
                 type="button"
                 onClick={() => setConfirming(true)}
                 disabled={isPending}
-                className="flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2 text-sm font-bold text-danger hover:bg-danger/10 disabled:opacity-50"
+                className="flex items-center gap-2 rounded-xl line bg-surface px-4 py-2 text-sm font-bold text-danger hover:bg-danger/10 disabled:opacity-50"
             >
                 <Trash2 className="h-4 w-4" />
                 {t('emptyAction')}

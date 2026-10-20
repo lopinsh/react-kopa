@@ -54,7 +54,7 @@ export function AdminPagesDemo({ drawer = false }: { drawer?: boolean }) {
     );
     if (!drawer) return <div className="max-w-64">{list}</div>;
     return (
-        <div className="mx-auto max-w-xs rounded-2xl border border-border bg-surface p-3">
+        <div className="mx-auto max-w-xs rounded-2xl line bg-surface p-3 shadow-card">
             <p className="px-3 pb-2 font-serif text-base font-semibold text-foreground">{t('drawerTitle')}</p>
             {list}
         </div>

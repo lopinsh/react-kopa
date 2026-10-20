@@ -17,7 +17,7 @@ export default function CategoryColorsEditor({ rows, theme, disabled, onTone }: 
         <section aria-labelledby="design-categories">
             <h2 id="design-categories" className="text-[21px] font-semibold text-foreground">{t('parts.categories')}</h2>
             <p className="mb-4 mt-1 text-sm text-foreground-muted">{t('categories.lead')}</p>
-            <div className="rounded-2xl bg-surface px-4 py-0.5">
+            <div className="rounded-2xl bg-surface px-4 py-0.5 shadow-card frame">
                 {ordered.map((r) => (
                     <CategoryColorRow key={r.slug} slug={r.slug} title={r.title} theme={theme} disabled={disabled} onTone={onTone} />
                 ))}

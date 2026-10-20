@@ -5,7 +5,7 @@ import { floorRatio } from '@/lib/theme/contrast';
 
 type Props = { light: number; dark: number; lightOk: boolean; darkOk: boolean };
 
-const PILL = 'whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold';
+const PILL = 'whitespace-nowrap rounded-pill px-2 py-0.5 text-[11px] font-semibold';
 
 /** "AA ✓" when both tones pass; otherwise the first failing tone with its ratio, in the warning colour. */
 export default function ContrastPill({ light, dark, lightOk, darkOk }: Props) {

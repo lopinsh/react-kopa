@@ -39,10 +39,10 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
     if (deleted) return null;
 
     return (
-        <li className="rounded-2xl border border-border bg-surface px-4 py-3">
+        <li className="rounded-2xl line bg-surface px-4 py-3 shadow-card">
             <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
-                <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
-                {note.component && <span title={tAdmin('component')} className="rounded-full bg-surface-elevated px-2.5 py-1 font-mono font-semibold text-foreground-muted">{note.component}</span>}
+                <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
+                {note.component && <span title={tAdmin('component')} className="rounded-pill bg-surface-elevated px-2.5 py-1 font-mono font-semibold text-foreground-muted">{note.component}</span>}
                 <Link href={note.path} locale={note.locale === 'en' ? 'en' : 'lv'} className="break-all font-mono font-semibold text-foreground-muted hover:text-primary hover:underline">
                     {note.path}
                 </Link>
@@ -52,7 +52,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                         disabled={isPending}
                         onChange={(e) => handleStatus(e.target.value as FeedbackStatusValue)}
                         aria-label={tAdmin('status')}
-                        className="rounded-lg border border-border bg-surface-elevated px-2 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
+                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-xs font-semibold text-foreground disabled:opacity-50"
                     >
                         {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
                     </select>

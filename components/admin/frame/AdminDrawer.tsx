@@ -37,7 +37,7 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
                 aria-expanded={open}
                 aria-controls={id}
                 onClick={() => { openedOn.current = pathname; setOpen(true); }}
-                className="relative grid size-10 shrink-0 place-items-center rounded-full hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="relative grid size-10 shrink-0 place-items-center rounded-pill hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
                 <Menu aria-hidden className="size-5" />
                 {total > 0 && <span aria-hidden className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />}
@@ -49,7 +49,7 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('drawerTitle')} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
-                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-[10px]"><ShieldCheck aria-hidden className="size-[18px]" /></span>
+                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item"><ShieldCheck aria-hidden className="size-[18px]" /></span>
                         <p className="font-heading text-base font-semibold">{t('drawerTitle')}</p>
                     </div>
                     <ul className="pt-2">

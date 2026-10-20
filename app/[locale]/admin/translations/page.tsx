@@ -31,7 +31,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                 <a
                     href="/api/admin/translations/export"
                     download
-                    className="flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90"
+                    className="flex items-center gap-2 rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90"
                 >
                     <Download className="h-4 w-4" />
                     {t('export')}
@@ -41,7 +41,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
             <section aria-labelledby="suggestions-heading" className="mb-10">
                 <h2 id="suggestions-heading" className="mb-3 text-xl font-bold text-foreground">{t('suggestionsTitle')}</h2>
                 {suggestions.length === 0 ? (
-                    <p className="rounded-2xl border border-border bg-surface p-6 text-sm text-foreground-muted">{t('suggestionsEmpty')}</p>
+                    <p className="rounded-2xl line bg-surface p-6 text-sm text-foreground-muted shadow-card">{t('suggestionsEmpty')}</p>
                 ) : (
                     <ul className="space-y-3">
                         {suggestions.map((s) => (
@@ -63,11 +63,11 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
             <h2 className="mb-3 text-xl font-bold text-foreground">{t('liveTitle')}</h2>
             {rows.length === 0 ? (
-                <p className="rounded-2xl border border-border bg-surface p-6 text-sm text-foreground-muted">{t('empty')}</p>
+                <p className="rounded-2xl line bg-surface p-6 text-sm text-foreground-muted shadow-card">{t('empty')}</p>
             ) : (
                 <>
                     <p className="mb-3 text-sm font-semibold text-foreground-muted">{t('count', { count: rows.length })}</p>
-                    <div className="overflow-x-auto rounded-2xl border border-border bg-surface">
+                    <div className="overflow-x-auto rounded-2xl line bg-surface shadow-card">
                         <table className="w-full min-w-[40rem] text-left text-sm">
                             <thead className="border-b border-border text-xs text-foreground-muted">
                                 <tr>

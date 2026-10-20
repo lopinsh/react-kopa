@@ -14,7 +14,7 @@ import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { cities: CityRow[] };
 
-const INPUT = 'w-full bg-surface border border-border rounded px-3 py-2 text-sm';
+const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-sm';
 
 /** The approved cities: rename, remove an unused one, add a new one. Pending suggestions are in the "needs review" card above. */
 export default function CitiesSection({ cities }: Props) {
@@ -56,7 +56,7 @@ export default function CitiesSection({ cities }: Props) {
     const valid = nameLv.trim().length >= 2 && nameEn.trim().length >= 2;
 
     const form = (onSave: () => void) => (
-        <div className="mt-3 rounded-lg border border-border bg-surface-elevated p-4">
+        <div className="mt-3 rounded-lg line bg-surface-elevated p-4">
             <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                     <label className="mb-1 block text-xs font-semibold text-foreground-muted">{tFields('nameLv')}</label>
@@ -81,12 +81,12 @@ export default function CitiesSection({ cities }: Props) {
     );
 
     return (
-        <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6" data-ui="cities-section" aria-labelledby="cities-heading">
+        <section className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card" data-ui="cities-section" aria-labelledby="cities-heading">
             <div className="flex items-center justify-between gap-3">
                 <h2 id="cities-heading" className="flex items-center gap-2 text-xl font-bold">
                     <MapPin className="h-5 w-5 text-foreground-muted" />
                     {t('title')}
-                    <span className="rounded-full bg-surface-elevated px-2 py-0.5 text-xs font-bold text-foreground-muted">{active.length}</span>
+                    <span className="rounded-pill bg-surface-elevated px-2 py-0.5 text-xs font-bold text-foreground-muted">{active.length}</span>
                 </h2>
                 <button
                     type="button"

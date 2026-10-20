@@ -14,7 +14,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import type { UiSamples } from '@/lib/handbook/ui-samples';
 
 const noop = () => undefined;
-const PANEL = 'w-[360px] max-w-full overflow-hidden rounded-[14px] border border-border bg-surface shadow-premium';
+const PANEL = 'w-[360px] max-w-full overflow-hidden rounded-menu line bg-surface shadow-premium';
 
 /** Manas grupas' parts: the section menu, a news post and an answer, a request that waits. */
 export function MyGroupsPartsDemo({ samples }: { samples: UiSamples }) {
@@ -26,11 +26,11 @@ export function MyGroupsPartsDemo({ samples }: { samples: UiSamples }) {
             <div className="[&_[data-ui='section-menu']]:static">
                 <SectionMenu sections={[{ key: 'upcoming', label: t('upcoming') }, { key: 'news', label: t('news') }, { key: 'groups', label: t('groups') }, { key: 'requests', label: t('requests') }]} />
             </div>
-            <ul className="rounded-2xl bg-surface px-3.5">
+            <ul className="rounded-2xl bg-surface px-3.5 shadow-card frame">
                 <li className="py-3"><NewsItem item={samples.newsPost} now={now} /></li>
                 <li className="border-t border-border py-3"><NewsItem item={samples.newsAnswer} now={now} /></li>
             </ul>
-            <ul className="rounded-2xl border border-border"><RequestRow request={samples.myRequest} /></ul>
+            <ul className="rounded-2xl line"><RequestRow request={samples.myRequest} /></ul>
         </div>
     );
 }
@@ -63,7 +63,7 @@ export function HeaderListsDemo({ samples }: { samples: UiSamples }) {
                 <EmptyState icon={Bell} title={t('emptyTitle')} description={t('emptyText')} />
                 <EmptyState icon={MessageSquare} title={tMessages('emptyTitle')} description={tMessages('emptyText')} />
             </div>
-            <ul className="w-[360px] max-w-full overflow-hidden rounded-2xl bg-surface">
+            <ul className="w-[360px] max-w-full overflow-hidden rounded-2xl bg-surface shadow-card frame">
                 <NotificationItem n={samples.notifications[0]} onRead={noop} />
             </ul>
         </div>

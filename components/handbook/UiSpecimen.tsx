@@ -21,7 +21,7 @@ export default function UiSpecimen({ id, names, files, children, padding = 'plai
     return (
         <section id={id} className="scroll-mt-24 space-y-3">
             <h2 className="text-lg font-semibold tracking-tight text-foreground">{t(`sections.${id}`)}</h2>
-            <div className={clsx('overflow-hidden rounded-2xl border border-border bg-background', padding === 'plain' && 'p-4 sm:p-6')}>
+            <div className={clsx('overflow-hidden rounded-2xl line bg-background', padding === 'plain' && 'p-4 sm:p-6')}>
                 {children}
             </div>
             <p className="space-y-0.5 font-mono text-xs text-foreground-muted">

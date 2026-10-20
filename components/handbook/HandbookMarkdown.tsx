@@ -58,14 +58,14 @@ const components: Components = {
         <code className="rounded bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.85em] [overflow-wrap:anywhere]">{children}</code>
     ),
     blockquote: ({ children }) => (
-        <blockquote className="my-6 rounded-xl border border-border border-l-4 border-l-primary bg-surface px-4 py-1 text-foreground">{children}</blockquote>
+        <blockquote className="my-6 rounded-xl line border-l-4 border-l-primary bg-surface px-4 py-1 text-foreground">{children}</blockquote>
     ),
     pre: ({ children }) => (
-        <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-4 text-sm leading-snug [&>code]:bg-transparent [&>code]:p-0">{children}</pre>
+        <pre className="my-6 overflow-x-auto rounded-xl line bg-surface p-4 text-sm leading-snug [&>code]:bg-transparent [&>code]:p-0">{children}</pre>
     ),
     hr: () => <hr className="my-8 border-border" />,
     table: ({ children }) => (
-        <div className="my-6 overflow-x-auto rounded-xl border border-border bg-surface">
+        <div className="my-6 overflow-x-auto rounded-xl line bg-surface">
             <table className="w-full text-left text-sm">{children}</table>
         </div>
     ),

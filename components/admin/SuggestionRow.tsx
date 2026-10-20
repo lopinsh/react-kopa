@@ -45,10 +45,10 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
     };
 
     return (
-        <li className="rounded-2xl border border-border bg-surface p-4">
+        <li className="rounded-2xl line bg-surface p-4 shadow-card">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                 <span className="break-all font-mono text-xs">{messageKey}</span>
-                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{lang}</span>
+                <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{lang}</span>
             </div>
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
                 <div>
@@ -76,7 +76,7 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
                     type="button"
                     onClick={() => run(approveSuggestion, 'approved')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     <Check className="h-4 w-4" />
                     {t('approve')}

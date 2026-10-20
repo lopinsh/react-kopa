@@ -105,10 +105,10 @@ export default function FeedbackMode() {
 
             <FeedbackPins notes={notes} onOpen={handleOpen} onMissing={setMissing} />
 
-            <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-full border border-border bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
+            <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
                 <MessageSquareText className="h-4 w-4 text-primary" />
                 <span className="mr-1">{paused ? t('barPaused') : t('barLabel')}</span>
-                <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? t('resume') : t('pause')} title={paused ? t('resume') : t('pause')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
+                <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? t('resume') : t('pause')} title={paused ? t('resume') : t('pause')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
                     {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
                 </button>
                 <button
@@ -117,16 +117,16 @@ export default function FeedbackMode() {
                     aria-pressed={anywhere}
                     aria-label={t('anywhere')}
                     title={t('anywhereHint')}
-                    className={clsx('flex items-center gap-1 rounded-full p-1.5', anywhere ? 'bg-primary text-primary-foreground' : 'text-foreground-muted hover:bg-surface-elevated')}
+                    className={clsx('flex items-center gap-1 rounded-pill p-1.5', anywhere ? 'bg-primary text-primary-foreground' : 'text-foreground-muted hover:bg-surface-elevated')}
                 >
                     <MousePointerClick className="h-4 w-4" />
                     <span className="hidden sm:inline">{t('anywhere')}</span>
                 </button>
-                <button type="button" onClick={() => setPanelOpen((o) => !o)} aria-label={t('notesList', { count: notes.length })} title={t('notesList', { count: notes.length })} className="flex items-center gap-1 rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
+                <button type="button" onClick={() => setPanelOpen((o) => !o)} aria-label={t('notesList', { count: notes.length })} title={t('notesList', { count: notes.length })} className="flex items-center gap-1 rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
                     <List className="h-4 w-4" />
                     <span>{notes.length}</span>
                 </button>
-                <FeedbackModeToggle compact className="flex items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold text-foreground-muted hover:bg-surface-elevated" />
+                <FeedbackModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-xs font-semibold text-foreground-muted hover:bg-surface-elevated" />
             </div>
 
             {panelOpen && <FeedbackNotesPanel notes={notes} missing={missing} onOpen={handleOpen} />}

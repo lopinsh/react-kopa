@@ -23,7 +23,7 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, d
             style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light', styleKey) as React.CSSProperties}
             className={`${dark ? 'dark ' : ''}rounded-2xl bg-background p-4 font-sans text-foreground ring-1 ring-inset ring-border sm:p-6`}
         >
-            <div className="rounded-2xl bg-surface p-4 sm:p-5">
+            <div className="rounded-2xl bg-surface p-4 sm:p-5 shadow-card frame">
                 <h3 className="text-2xl font-bold">{t('heading')}</h3>
                 <p className="mt-2 text-sm text-foreground-muted">{t('body')}</p>
                 <p className="mt-2 text-base">{t('latvian')}</p>

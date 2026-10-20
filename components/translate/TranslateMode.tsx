@@ -49,13 +49,13 @@ export default function TranslateMode() {
                 </button>
             )}
 
-            <div className="fixed bottom-20 left-3 z-[60] md:left-auto md:right-4 flex items-center gap-1 rounded-full border border-border bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-4">
+            <div className="fixed bottom-20 left-3 z-[60] md:left-auto md:right-4 flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-xs font-semibold text-foreground shadow-premium md:bottom-4">
                 <Languages className="h-4 w-4 text-primary" />
                 <span className="mr-1">{t('barLabel')}</span>
-                <button type="button" onClick={() => setSearchOpen((o) => !o)} aria-label={t('searchButton')} title={t('searchButton')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
+                <button type="button" onClick={() => setSearchOpen((o) => !o)} aria-label={t('searchButton')} title={t('searchButton')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
                     <Search className="h-4 w-4" />
                 </button>
-                <TranslateModeToggle compact className="flex items-center gap-1 rounded-full px-2 py-1.5 text-xs font-semibold text-foreground-muted hover:bg-surface-elevated" />
+                <TranslateModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-xs font-semibold text-foreground-muted hover:bg-surface-elevated" />
             </div>
 
             {searchOpen && <TranslateSearch onClose={() => setSearchOpen(false)} onPick={(key) => { setSearchOpen(false); setEditingKey(key); }} />}

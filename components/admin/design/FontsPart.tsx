@@ -21,7 +21,7 @@ export default function FontsPart({ theme, disabled, onFont }: Props) {
             {ROLES.map((role) => (
                 <fieldset key={role}>
                     <legend className="mb-2 text-base font-semibold text-foreground">{t(role)}</legend>
-                    <div className="rounded-2xl bg-surface px-4 py-0.5">
+                    <div className="rounded-2xl bg-surface px-4 py-0.5 shadow-card frame">
                         {THEME_FONTS.map((f) => (
                             <label key={f.id} className="flex min-h-11 cursor-pointer items-center gap-3 border-t border-border py-2.5 first:border-t-0">
                                 <input

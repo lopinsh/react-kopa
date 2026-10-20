@@ -32,7 +32,7 @@ export default function PendingInbox({ pendingTags, categories, onNodeSelect }: 
                         {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
                     </div>
                     <span className="font-bold text-warning">{t('title')}</span>
-                    <span className="bg-warning text-background text-xs font-bold px-2 py-0.5 rounded-full">
+                    <span className="bg-warning text-background text-xs font-bold px-2 py-0.5 rounded-pill">
                         {total}
                     </span>
                 </div>

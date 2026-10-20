@@ -84,11 +84,11 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                 <p role="alert" className="rounded-lg border border-danger/40 bg-danger/10 px-4 py-3 text-sm font-medium text-danger">{error}</p>
             )}
             {reports.map((report) => (
-                <div key={report.id} className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+                <div key={report.id} className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
-                                <span className="inline-flex items-center gap-1.5 rounded-full bg-danger/10 px-3 py-1 text-xs font-bold text-danger">
+                                <span className="inline-flex items-center gap-1.5 rounded-pill bg-danger/10 px-3 py-1 text-xs font-bold text-danger">
                                     <AlertTriangle className="h-3.5 w-3.5" />
                                     {isStoredReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
@@ -97,7 +97,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 </span>
                             </div>
 
-                            <div className="grid sm:grid-cols-2 gap-4 rounded-xl bg-surface-elevated p-4 border border-border">
+                            <div className="grid sm:grid-cols-2 gap-4 rounded-xl bg-surface-elevated p-4 line">
                                 <div>
                                     <p className="text-xs font-bold text-foreground-muted mb-1">{t('reportedEntity')}</p>
                                     {report.group && (
@@ -149,7 +149,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 <button
                                     onClick={() => setHidingReport(report)}
                                     disabled={isPending}
-                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-border bg-surface hover:bg-surface-elevated px-6 py-3 text-sm font-bold text-foreground shadow-sm transition-all disabled:opacity-50"
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-sm font-bold text-foreground shadow-sm transition-all disabled:opacity-50"
                                 >
                                     <EyeOff className="h-4 w-4" />
                                     {tMod('hideGroup')}

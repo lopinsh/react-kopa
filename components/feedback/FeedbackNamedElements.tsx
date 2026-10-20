@@ -169,7 +169,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
                                 isActive ? 'opacity-100' : 'opacity-0 focus-within:opacity-100'
                             )}
                         >
-                            <span className="whitespace-nowrap rounded-full bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-foreground shadow-premium">{entry.name}</span>
+                            <span className="whitespace-nowrap rounded-pill bg-surface px-2 py-0.5 font-mono text-[11px] font-semibold text-foreground shadow-premium">{entry.name}</span>
                             <button
                                 type="button"
                                 data-feedback-comment

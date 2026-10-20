@@ -27,7 +27,7 @@ export default function FloatingActionBar({
 
     return (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-            <div className="flex items-center gap-4 bg-surface-elevated border border-border shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] px-4 py-3 rounded-full pointer-events-auto">
+            <div className="flex items-center gap-4 bg-surface-elevated line shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] px-4 py-3 rounded-pill pointer-events-auto">
 
                 {/* Selection Count & Clear (Clickable area) */}
                 <button
@@ -51,7 +51,7 @@ export default function FloatingActionBar({
                         <button
                             type="button"
                             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onApprove(); }}
-                            className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-success/10 text-success transition-colors cursor-pointer"
+                            className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-success/10 text-success transition-colors cursor-pointer"
                         >
                             <span className="pointer-events-none flex items-center gap-2">
                                 <CheckCircle className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function FloatingActionBar({
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onMerge(); }}
                         disabled={selectedIds.length < 2}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-tint text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-tint text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         title={selectedIds.length < 2 ? t('mergeRequiresTwo') : ''}
                     >
                         <span className="pointer-events-none flex items-center gap-2">
@@ -76,7 +76,7 @@ export default function FloatingActionBar({
                     <button
                         type="button"
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(); }}
-                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-full hover:bg-danger/10 text-danger transition-colors cursor-pointer"
+                        className="flex items-center gap-2 px-3 py-1.5 text-sm font-semibold rounded-pill hover:bg-danger/10 text-danger transition-colors cursor-pointer"
                     >
                         <span className="pointer-events-none flex items-center gap-2">
                             <Trash2 className="w-4 h-4" />

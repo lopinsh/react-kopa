@@ -15,7 +15,7 @@ export default async function PanelLoading() {
                 <SkeletonBlock className="h-3.5 w-2/3" />
                 <SkeletonBlock className="h-3.5 w-full" />
                 <SkeletonBlock className="h-3.5 w-5/6" />
-                <SkeletonBlock className="h-10 w-full rounded-full" />
+                <SkeletonBlock className="h-10 w-full rounded-pill" />
             </div>
         </LoadingRegion>
     );

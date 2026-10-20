@@ -62,7 +62,7 @@ export default function TaxonomyTree({ tree, pendingTags, selectedNode, onNodeSe
 
 
     return (
-        <div className="w-full bg-surface border border-border rounded-xl overflow-hidden">
+        <div className="w-full bg-surface line rounded-xl overflow-hidden">
             <div className="flex items-center justify-between p-4 border-b border-border bg-surface-elevated/30">
                 <h2 className="text-lg font-bold">{t('title')}</h2>
                 <button

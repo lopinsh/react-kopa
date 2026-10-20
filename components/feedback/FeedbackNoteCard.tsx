@@ -46,10 +46,10 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
             <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-2xl">
                 <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="flex flex-wrap items-center gap-2 text-xs font-bold">
-                        <span className="rounded-full bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
-                        <span className="rounded-full bg-surface-elevated px-2.5 py-1 text-foreground-muted">{t(`status.${note.status}`)}</span>
+                        <span className="rounded-pill bg-primary/10 px-2.5 py-1 text-primary">{t(`kind.${note.kind}`)}</span>
+                        <span className="rounded-pill bg-surface-elevated px-2.5 py-1 text-foreground-muted">{t(`status.${note.status}`)}</span>
                     </div>
-                    <button type="button" onClick={() => requestClose()} aria-label={t('close')} className="rounded-full p-1.5 text-foreground-muted hover:bg-surface-elevated">
+                    <button type="button" onClick={() => requestClose()} aria-label={t('close')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
                         <X className="h-4 w-4" />
                     </button>
                 </div>

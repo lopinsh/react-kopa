@@ -23,7 +23,7 @@ export default async function ModerationLog({ entries, locale, formatDate }: Pro
         <>
             <ul className="space-y-3 md:hidden">
                 {entries.map((entry) => (
-                    <li key={entry.id} className="space-y-1 rounded-xl border border-border bg-surface-elevated p-4 text-sm">
+                    <li key={entry.id} className="space-y-1 rounded-xl line bg-surface-elevated p-4 text-sm">
                         <p className="font-medium">{tMod(`action_${entry.action}`)}</p>
                         <p>{target(entry)}</p>
                         <p className="text-foreground-muted [overflow-wrap:anywhere]">{entry.reason || '—'}</p>

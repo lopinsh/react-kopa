@@ -20,7 +20,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
                 value={value}
                 disabled={disabled}
                 onChange={(e) => { setDraft(null); onChange(e.target.value); }}
-                className="h-10 w-12 shrink-0 cursor-pointer rounded-lg border border-border bg-surface p-1"
+                className="h-10 w-12 shrink-0 cursor-pointer rounded-lg line bg-surface p-1"
             />
             <label htmlFor={id} className="min-w-0 flex-1 text-sm font-semibold text-foreground">
                 {label}
@@ -37,7 +37,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
                         if (hexColorSchema.safeParse(next).success) onChange(next.toLowerCase());
                     }}
                     onBlur={() => setDraft(null)}
-                    className="mt-1 block w-full rounded-lg border border-border bg-surface px-3 py-1.5 font-mono text-sm text-foreground aria-[invalid=true]:border-danger/40"
+                    className="mt-1 block w-full rounded-lg line bg-surface px-3 py-1.5 font-mono text-sm text-foreground aria-[invalid=true]:border-danger/40"
                 />
             </label>
         </div>

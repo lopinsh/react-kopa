@@ -21,7 +21,7 @@ export default function AuthTextField({ id, label, hint, error, ...inputProps }:
                 id={id}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={note ? `${id}-note` : undefined}
-                className="block w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary aria-[invalid=true]:border-danger/40"
+                className="block w-full rounded-lg line bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary aria-[invalid=true]:border-danger/40"
                 {...inputProps}
             />
             {note && (

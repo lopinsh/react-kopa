@@ -115,7 +115,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={(e) => setNameEn(e.target.value)}
-                                className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -125,7 +125,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={(e) => setNameLv(e.target.value)}
-                                className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -135,7 +135,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text"
                                 value={slugEn}
                                 onChange={(e) => setSlugEn(e.target.value)}
-                                className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
                             />
                         </div>
                         <div>
@@ -144,7 +144,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text"
                                 value={slugLv}
                                 onChange={(e) => setSlugLv(e.target.value)}
-                                className="w-full bg-surface-elevated border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
                             />
                         </div>
                     </div>
@@ -152,7 +152,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                     <button
                         onClick={handleMerge}
                         disabled={isPending || !nameEn || !nameLv || !slugEn || !slugLv}
-                        className="w-full bg-primary text-primary-foreground font-semibold py-2.5 rounded-full hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
+                        className="w-full bg-primary text-primary-foreground font-semibold py-2.5 rounded-pill hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
                     >
                         {isPending ? (
                             <span className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />

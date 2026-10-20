@@ -7,8 +7,8 @@ import type { EventJoinView, EventPanelData, Face } from '@/lib/services/event-p
 import type { GroupPanelData } from '@/lib/services/group-panel';
 
 /** The computer overlay (560 px) and the phone sheet (360 px). */
-const FRAME = 'w-full max-w-[360px] overflow-hidden rounded-2xl border border-border bg-surface shadow-premium';
-const FRAME_WIDE = 'w-full max-w-[560px] overflow-hidden rounded-2xl border border-border bg-surface shadow-premium';
+const FRAME = 'w-full max-w-[360px] overflow-hidden rounded-2xl line bg-surface shadow-premium';
+const FRAME_WIDE = 'w-full max-w-[560px] overflow-hidden rounded-2xl line bg-surface shadow-premium';
 const JOIN: EventJoinView = { eventId: 'sample', mode: 'OPEN', isFull: false, ended: false, myStatus: null, canManage: false };
 
 /** The group panel and the event panel as bodies in a 360 px column (the real Overlay is not used), plus the four join steps side by side. */

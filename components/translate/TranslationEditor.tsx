@@ -109,10 +109,10 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                     <label htmlFor={`tm-${lang}`} className="mb-1 flex items-center gap-2 text-sm font-semibold text-foreground">
                                         {t(LANG_LABEL[lang])}
                                         {entry.edited[lang] && (
-                                            <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{t('edited')}</span>
+                                            <span className="rounded-pill bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{t('edited')}</span>
                                         )}
                                         {entry.pending[lang] !== null && (
-                                            <span className="rounded-full bg-warning/10 px-2 py-0.5 text-[11px] font-bold text-warning">{t('waiting')}</span>
+                                            <span className="rounded-pill bg-warning/10 px-2 py-0.5 text-[11px] font-bold text-warning">{t('waiting')}</span>
                                         )}
                                     </label>
                                     <textarea
@@ -153,7 +153,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                         <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-2.5 text-sm font-bold text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
                         </OverlayCloseButton>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
+                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </button>
                     </div>

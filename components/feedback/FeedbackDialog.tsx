@@ -89,7 +89,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                             aria-checked={kind === k}
                             onClick={() => setKind(k)}
                             className={clsx(
-                                'rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
+                                'rounded-pill border px-3 py-1.5 text-xs font-bold transition-colors',
                                 kind === k ? 'border-primary bg-primary text-primary-foreground' : 'border-border text-foreground-muted hover:text-foreground'
                             )}
                         >
@@ -106,7 +106,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     rows={5}
                     placeholder={t('placeholder')}
                     aria-label={t('textLabel')}
-                    className="mt-4 w-full resize-none rounded-xl border border-border bg-surface-elevated p-3 text-sm text-foreground outline-none focus:border-primary/50"
+                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-sm text-foreground outline-none focus:border-primary/50"
                 />
                 <div className="mt-1 flex items-start gap-2"><TextCounter id="feedback-note-count" length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 {error && <p role="alert" className="mt-2 text-sm font-semibold text-danger">{error}</p>}
@@ -119,7 +119,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                         type="button"
                         onClick={handleSave}
                         disabled={isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)}
-                        className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="rounded-pill bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}
                     </button>

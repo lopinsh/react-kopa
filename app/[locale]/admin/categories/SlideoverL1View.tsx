@@ -69,7 +69,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
             {/* Header */}
             <div>
                 <h3 className="text-xs font-semibold text-foreground-muted mb-2">{t('l1Title')}</h3>
-                <div className="flex items-center gap-4 p-4 border border-border rounded-xl bg-surface-elevated/30">
+                <div className="flex items-center gap-4 p-4 line rounded-xl bg-surface-elevated/30">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(shown, 12), color: shown }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
                     </div>
@@ -88,7 +88,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-xl font-bold">{tFields('color')}</h3>
                     {color !== savedColor && (
-                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-full font-medium">{t('unsavedChanges')}</span>
+                        <span className="bg-warning/10 text-warning text-xs px-2 py-0.5 rounded-pill font-medium">{t('unsavedChanges')}</span>
                     )}
                 </div>
                 {inDesign ? (
@@ -97,7 +97,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                         <Link href="/admin/design?part=categories" className="font-semibold text-primary underline underline-offset-4">{tFields('colorInDesignLink')}</Link>
                     </p>
                 ) : (
-                    <div className="grid gap-4 bg-surface-elevated/30 p-4 border border-border rounded-xl">
+                    <div className="grid gap-4 bg-surface-elevated/30 p-4 line rounded-xl">
                         <div>
                             <label className="block text-xs font-semibold text-foreground-muted mb-2">{tFields('color')}</label>
                             <div className="flex items-center gap-3">
@@ -111,7 +111,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="flex-1 bg-surface border border-border rounded px-3 py-2 text-sm"
+                                    className="flex-1 bg-surface line rounded px-3 py-2 text-sm"
                                     pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                                 />
                             </div>
@@ -121,7 +121,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                 type="button"
                                 onClick={handleSaveColor}
                                 disabled={isPending || color === savedColor}
-                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
+                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground rounded-pill hover:bg-primary/90 transition-colors disabled:opacity-50"
                             >
                                 {t('save')}
                             </button>
@@ -137,7 +137,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-bold">{t('subcategories', { count: l1.subcategories.length })}</h3>
                 </div>
-                <div className="border border-border rounded-xl divide-y divide-border bg-surface mb-6">
+                <div className="line rounded-xl divide-y divide-border bg-surface mb-6">
                     {l1.subcategories.map(l2 => (
                         <button
                             key={l2.id}
@@ -147,7 +147,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                         >
                             <span className="font-medium text-sm">{l2.title}</span>
                             <div className="flex gap-2">
-                                <span className="text-xs text-foreground-muted bg-surface-elevated px-2 py-0.5 rounded-full border border-border">
+                                <span className="text-xs text-foreground-muted bg-surface-elevated px-2 py-0.5 rounded-pill line">
                                     {tNode('wildcard', { count: l2.tags.length })}
                                 </span>
                             </div>
@@ -160,7 +160,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                     )}
                 </div>
 
-                <div className="border border-border rounded-xl bg-surface-elevated/30 p-4">
+                <div className="line rounded-xl bg-surface-elevated/30 p-4">
                     <h4 className="text-sm font-bold mb-3">{t('createSubcategory')}</h4>
                     <form onSubmit={handleCreateL2} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
@@ -170,7 +170,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameEn}
                                     onChange={e => setNewNameEn(e.target.value)}
-                                    className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-sm"
                                     required
                                 />
                             </div>
@@ -180,7 +180,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameLv}
                                     onChange={e => setNewNameLv(e.target.value)}
-                                    className="w-full bg-surface border border-border rounded px-3 py-2 text-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-sm"
                                     required
                                 />
                             </div>
@@ -189,7 +189,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             <button
                                 type="submit"
                                 disabled={isPending || !newNameEn.trim() || !newNameLv.trim()}
-                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-full disabled:opacity-50"
+                                className="px-4 py-2 text-sm font-semibold bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-pill disabled:opacity-50"
                                 style={{ '--accent': shown } as React.CSSProperties}
                             >
                                 {t('addSubcategory')}

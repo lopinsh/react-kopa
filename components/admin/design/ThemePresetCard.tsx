@@ -25,7 +25,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
             aria-pressed={selected}
             style={{ '--sample-heading': fontVar(p.headingFont), '--sample-body': fontVar(p.bodyFont) } as React.CSSProperties}
             className={clsx(
-                'relative flex flex-col gap-3 rounded-2xl border-2 bg-surface p-4 text-left transition-colors disabled:opacity-60',
+                'relative flex flex-col gap-3 rounded-2xl border-2 bg-surface p-4 text-left transition-colors disabled:opacity-60 shadow-card',
                 selected ? 'border-primary' : 'border-border hover:border-foreground-muted'
             )}
         >
@@ -34,7 +34,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
             <span className="-mt-2 text-[13px] text-foreground-muted">{t(`styles.${p.styleKey}`)}</span>
             <span className="flex gap-1.5" aria-hidden="true">
                 {swatches.map((hex, i) => (
-                    <span key={i} style={{ '--sw': hex } as React.CSSProperties} className="h-7 w-7 rounded-full border border-border bg-[var(--sw)]" />
+                    <span key={i} style={{ '--sw': hex } as React.CSSProperties} className="h-7 w-7 rounded-full line bg-[var(--sw)]" />
                 ))}
             </span>
             <span className="block">

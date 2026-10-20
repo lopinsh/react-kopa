@@ -4,7 +4,7 @@ import { clsx } from 'clsx';
 export default function AdminBadge({ count, danger }: { count: number; danger?: boolean }) {
     if (count <= 0) return null;
     return (
-        <span className={clsx('ml-auto rounded-full px-2 text-[11px] font-semibold', danger ? 'bg-danger/10 text-danger' : 'bg-tint text-foreground-muted')}>
+        <span className={clsx('ml-auto rounded-pill px-2 text-[11px] font-semibold', danger ? 'bg-danger/10 text-danger' : 'bg-tint text-foreground-muted')}>
             {count > 99 ? '99+' : count}
         </span>
     );

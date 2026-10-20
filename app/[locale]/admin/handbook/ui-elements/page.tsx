@@ -68,7 +68,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <p className="mt-2 max-w-[70ch] text-foreground-muted">{t('intro')}</p>
                     <p className="mt-2 max-w-[70ch] text-sm text-foreground-muted">{t('sampleNote')}</p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-surface px-2 py-1 text-xs text-foreground-muted">
+                <div className="flex shrink-0 items-center gap-2 rounded-xl line bg-surface px-2 py-1 text-xs text-foreground-muted">
                     <span className="hidden sm:inline">{t('theme')}</span>
                     <ThemeToggle />
                 </div>
@@ -164,7 +164,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                         <GroupCard group={samples.groupCardBare} />
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>
-                    <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5">
+                    <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5 shadow-card frame">
                         <GroupRow group={samples.groupCard} role="OWNER" requestCount={2} />
                         <CreateCard l1Slug={samples.l1Slug} variant="row" />
                     </div>

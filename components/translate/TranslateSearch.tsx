@@ -34,7 +34,7 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
     const active = query.trim().length >= 2;
 
     return (
-        <div data-translate-ignore className="fixed inset-x-3 bottom-32 z-[65] flex max-h-[60vh] flex-col rounded-2xl border border-border bg-surface p-4 shadow-2xl md:bottom-16 md:left-auto md:right-4 md:w-[28rem]">
+        <div data-translate-ignore className="fixed inset-x-3 bottom-32 z-[65] flex max-h-[60vh] flex-col rounded-2xl line bg-surface p-4 shadow-2xl md:bottom-16 md:left-auto md:right-4 md:w-[28rem]">
             <div className="mb-3 flex items-center gap-2">
                 <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted" />
@@ -43,10 +43,10 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t('searchPlaceholder')}
-                        className="w-full rounded-xl border border-border bg-surface-elevated py-2 pl-9 pr-3 text-sm text-foreground outline-none focus:border-primary/50"
+                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-sm text-foreground outline-none focus:border-primary/50"
                     />
                 </div>
-                <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-full p-2 text-foreground-muted hover:bg-surface-elevated">
+                <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-pill p-2 text-foreground-muted hover:bg-surface-elevated">
                     <X className="h-4 w-4" />
                 </button>
             </div>

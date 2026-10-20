@@ -51,7 +51,7 @@ export default function ColoursPart({ theme, issues, disabled, onPreset, onColor
             <div className="grid gap-4 lg:grid-cols-2">
                 {MODES.map((mode) => (
                     <div key={mode}>
-                        <fieldset className="space-y-3 rounded-2xl bg-surface p-4">
+                        <fieldset className="space-y-3 rounded-2xl bg-surface p-4 shadow-card frame">
                             <legend className="px-2 text-sm font-semibold text-foreground">{t(`mode.${mode}`)}</legend>
                             {THEME_EDITABLE_TOKENS.map((token) => (
                                 <ColorField key={token} label={t(`token.${token}`)} value={theme[mode][token]} disabled={disabled} onChange={(hex) => onColor(mode, token, hex)} />
@@ -69,14 +69,14 @@ export default function ColoursPart({ theme, issues, disabled, onPreset, onColor
             <section aria-labelledby="design-sample">
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                     <h3 id="design-sample" className="text-base font-semibold text-foreground">{t('sampleTitle')}</h3>
-                    <div role="group" aria-label={t('sampleMode')} className="flex rounded-full bg-tint p-0.5">
+                    <div role="group" aria-label={t('sampleMode')} className="flex rounded-pill bg-tint p-0.5">
                         {MODES.map((mode) => (
                             <button
                                 key={mode}
                                 type="button"
                                 aria-pressed={sampleMode === mode}
                                 onClick={() => setSampleMode(mode)}
-                                className={clsx('min-h-8 rounded-full px-3 text-xs font-semibold', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
+                                className={clsx('min-h-8 rounded-pill px-3 text-xs font-semibold', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
                             >
                                 {t(`mode.${mode}`)}
                             </button>

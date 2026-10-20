@@ -13,7 +13,7 @@ import type { TeamCandidate, TeamMember } from '@/lib/services/team.service';
 
 type Pending = { kind: 'make' | 'remove'; person: TeamCandidate };
 
-const BUTTON = 'flex shrink-0 items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium transition-colors hover:bg-surface-elevated disabled:opacity-50';
+const BUTTON = 'flex shrink-0 items-center gap-2 rounded-lg line bg-surface px-3 py-2 text-sm font-medium transition-colors hover:bg-surface-elevated disabled:opacity-50';
 
 function Person({ person }: { person: TeamCandidate }) {
     return (
@@ -100,13 +100,13 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
         <div className="space-y-10">
             <section aria-labelledby="team-admins">
                 <h2 id="team-admins" className="mb-3 text-lg font-bold text-foreground">{t('adminsTitle')}</h2>
-                <ul className="divide-y divide-border rounded-2xl border border-border bg-surface">
+                <ul className="divide-y divide-border rounded-2xl line bg-surface shadow-card">
                     {team.map((member) => (
                         <li key={member.id} className="flex flex-wrap items-center justify-between gap-3 p-4">
                             <Person person={member} />
                             <div className="flex shrink-0 items-center gap-2">
                                 {member.role === 'OWNER' && (
-                                    <span className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
+                                    <span className="flex shrink-0 items-center gap-1.5 rounded-pill bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                                         <Crown className="h-3.5 w-3.5" />
                                         {t('ownerBadge')}
                                     </span>
@@ -135,7 +135,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                         placeholder={t('searchPlaceholder')}
                         aria-label={t('searchPlaceholder')}
                         maxLength={80}
-                        className="min-w-0 flex-1 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground"
+                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-sm text-foreground"
                     />
                     <button type="submit" disabled={isPending} className={BUTTON}>
                         <Search className="h-4 w-4" />
@@ -147,7 +147,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                     results.length === 0 ? (
                         <p className="mt-4 text-sm text-foreground-muted">{t('noResults')}</p>
                     ) : (
-                        <ul className="mt-4 divide-y divide-border rounded-2xl border border-border bg-surface">
+                        <ul className="mt-4 divide-y divide-border rounded-2xl line bg-surface shadow-card">
                             {results.map((person) => (
                                 <li key={person.id} className="flex items-center justify-between gap-3 p-4">
                                     <Person person={person} />

@@ -41,7 +41,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
 
                 <span className="font-semibold">{l1.title}</span>
 
-                <span className="ml-auto text-xs font-semibold bg-surface-elevated text-foreground-muted px-2 py-0.5 rounded-full">
+                <span className="ml-auto text-xs font-semibold bg-surface-elevated text-foreground-muted px-2 py-0.5 rounded-pill">
                     {tNode('children', { count: l1.subcategories.length })}
                 </span>
 
@@ -51,7 +51,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                         e.stopPropagation();
                         onNodeSelect({ type: 'l1', id: l1.id });
                     }}
-                    className="ml-2 text-xs font-semibold bg-surface border border-border px-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
+                    className="ml-2 text-xs font-semibold bg-surface line px-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
                 >
                     {c('edit')}
                 </button>
@@ -156,17 +156,17 @@ function L2Node({
 
             <div className="ml-auto flex gap-2">
                 {missingLangs.map((code) => (
-                    <span key={code} className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-dashed border-border">
+                    <span key={code} className="text-xs text-foreground-muted px-2 py-0.5 rounded-pill border border-dashed border-border">
                         {tNode('missingLang', { lang: code.toUpperCase() })}
                     </span>
                 ))}
                 {tagsCount > 0 && !isPending && (
-                    <span className="text-xs text-foreground-muted px-2 py-0.5 rounded-full border border-border">
+                    <span className="text-xs text-foreground-muted px-2 py-0.5 rounded-pill line">
                         {tNode('wildcard', { count: tagsCount })}
                     </span>
                 )}
                 {groupCount > 0 && (
-                    <span className="text-xs font-semibold bg-surface px-2 py-0.5 rounded-full border border-border">
+                    <span className="text-xs font-semibold bg-surface px-2 py-0.5 rounded-pill line">
                         {tNode('group', { count: groupCount })}
                     </span>
                 )}

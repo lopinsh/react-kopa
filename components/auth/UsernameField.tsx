@@ -45,7 +45,7 @@ export default function UsernameField({
                     autoFocus={autoFocus}
                     maxLength={30}
                     disabled={disabled}
-                    className="block w-full rounded-lg border border-border bg-background py-2.5 pl-9 pr-10 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"
+                    className="block w-full rounded-lg line bg-background py-2.5 pl-9 pr-10 text-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-60"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                     {status === 'checking' && <Loader2 className="h-4 w-4 animate-spin text-foreground-muted" />}

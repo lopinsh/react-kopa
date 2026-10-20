@@ -53,14 +53,14 @@ export default async function AdminDashboardPage({
                 </p>
             )}
 
-            <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+            <section className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card">
                 <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('hiddenGroupsTitle')}</h2>
                 {hiddenGroups.length === 0 ? (
                     <p className="text-foreground-muted text-center py-8">{tMod('hiddenGroupsEmpty')}</p>
                 ) : (
                     <ul className="space-y-3">
                         {hiddenGroups.map(g => (
-                            <li key={g.id} className="flex flex-col gap-3 rounded-xl border border-border bg-surface-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
+                            <li key={g.id} className="flex flex-col gap-3 rounded-xl line bg-surface-elevated p-4 sm:flex-row sm:items-start sm:justify-between">
                                 <div className="min-w-0 space-y-1">
                                     <Link href={`/${locale}${g.href}`} className="font-bold text-primary hover:underline [overflow-wrap:anywhere]">{g.name}</Link>
                                     <p className="text-sm text-foreground-muted">{g.ownerName ? tMod('hiddenOwner', { name: g.ownerName }) : tInbox('unknown')}</p>
@@ -75,7 +75,7 @@ export default async function AdminDashboardPage({
                     </ul>
                 )}
             </section>
-            <section className="rounded-2xl border border-border bg-surface p-5 sm:p-6">
+            <section className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card">
                 <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">{tMod('logTitle')}</h2>
                 {group && (
                     <p className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-foreground-muted">
