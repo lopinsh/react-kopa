@@ -64,7 +64,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                 {group.tagline && <span lang={langAttr(group.taglineLang, locale)} className="mt-0.5 block truncate text-xs text-foreground-muted">{group.tagline}</span>}
             </span>
             {role && <RoleTag role={role} />}
-            <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
+            <span className="grid size-10 shrink-0 place-items-center rounded-item bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
                 <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />
             </span>
         </div>

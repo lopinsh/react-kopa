@@ -108,7 +108,7 @@ export default function HeaderSearchField({ className }: { className?: string })
                         id={panelId}
                         role="dialog"
                         aria-label={t('label')}
-                        className="fixed inset-x-0 top-header mx-auto mt-2.5 flex max-h-[calc(100dvh-var(--spacing-header)-1.5rem)] w-[min(42rem,calc(100vw-2rem))] flex-col rounded-2xl border border-border bg-surface px-3.5 pb-3 shadow-premium"
+                        className="fixed inset-x-0 top-header mx-auto mt-2.5 flex max-h-[calc(100dvh-var(--spacing-header)-1.5rem)] w-[min(42rem,calc(100vw-2rem))] flex-col rounded-2xl line bg-surface px-3.5 pb-3 shadow-premium"
                     >
                         <SearchPanel search={search} mode="desktop" inputRef={inputRef} requestClose={requestClose} />
                     </div>

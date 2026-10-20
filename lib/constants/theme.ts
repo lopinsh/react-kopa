@@ -69,7 +69,7 @@ export const DEFAULT_THEME_STYLE_KEY: ThemeStyleKey = 'calm';
 
 export interface ThemeStyleTokens {
     /** Corner radii; null = Tailwind defaults from globals.css (calm emits nothing). `menu`/`item` are the two odd radii of menus. */
-    radius: { md: string; lg: string; xl: string; '2xl': string; '3xl': string; pill: string; menu: string; item: string } | null;
+    radius: { md: string; lg: string; xl: string; '2xl': string; '3xl': string; '4xl': string; pill: string; menu: string; item: string } | null;
     lineWidth: string;
     /** Colour of edges and hard shadows: the soft divider colour or the ink. */
     ink: 'border' | 'foreground';
@@ -86,7 +86,7 @@ export interface ThemeStyleTokens {
 export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
     calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadowOffset: null, pressShift: '0px', shadowRoom: '0px', headingWeight: 600 },
     bold: {
-        radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', pill: '6px', menu: '6px', item: '5px' },
+        radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', '4xl': '12px', pill: '6px', menu: '6px', item: '5px' },
         lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
         shadowOffset: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
         pressShift: '3px', shadowRoom: '5px', headingWeight: 700,

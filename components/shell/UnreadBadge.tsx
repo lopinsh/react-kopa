@@ -9,7 +9,7 @@ export default function UnreadBadge() {
     return (
         <span
             aria-hidden="true"
-            className="absolute -top-[3px] left-[calc(50%+6px)] flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground"
+            className="absolute -top-[3px] left-[calc(50%+6px)] flex h-4 min-w-4 items-center justify-center rounded-pill bg-primary px-1 text-[10px] font-bold leading-none text-primary-foreground"
         >
             {count > 9 ? '9+' : count}
         </span>

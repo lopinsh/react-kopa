@@ -54,7 +54,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
 
     return (
         <div className="relative shrink-0" ref={rootRef}>
-            <button {...triggerProps} aria-label={t('profileMenu')} className="relative grid size-10 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            <button {...triggerProps} aria-label={t('profileMenu')} className="relative grid size-10 place-items-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img
                     src={avatarSrc}
                     alt=""

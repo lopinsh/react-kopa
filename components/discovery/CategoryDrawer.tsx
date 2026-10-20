@@ -33,7 +33,7 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
                     onClick={fold}
                     aria-expanded={!folded}
                     aria-label={folded ? tSidebar('expand') : tSidebar('collapse')}
-                    className="grid size-7 place-items-center rounded-full ring-1 ring-inset ring-border text-foreground-muted hover:bg-tint hover:text-foreground"
+                    className="grid size-7 place-items-center rounded-pill ring-1 ring-inset ring-border text-foreground-muted hover:bg-tint hover:text-foreground"
                 >
                     {folded ? <ChevronRight aria-hidden="true" className="size-4" /> : <ChevronLeft aria-hidden="true" className="size-4" />}
                 </button>

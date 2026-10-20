@@ -39,7 +39,7 @@ export default function RecentSearches({ onPick, inputRef, sample }: Props) {
                         <History aria-hidden="true" className="ml-2 size-4 shrink-0 text-foreground-muted" />
                         <button type="button" data-search-item onClick={() => onPick(word)} className="min-h-11 min-w-0 flex-1 truncate rounded-lg px-1.5 text-left text-sm text-foreground md:min-h-9">{word}</button>
                         <button type="button" aria-label={t('removeRecent', { word })} onClick={(e) => remove(word, index, e.currentTarget.closest('ul') ?? e.currentTarget)}
-                            className="relative mr-1 grid size-7 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2">
+                            className="relative mr-1 grid size-7 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2">
                             <X aria-hidden="true" className="size-4" />
                         </button>
                     </li>

@@ -29,7 +29,7 @@ export default function LanguageMenu({ initialOpen }: { initialOpen?: boolean })
                 data-ui={UI.languageSwitch}
                 aria-label={t('languageCurrent', { language: LOCALE_NAMES[locale] })}
                 className={clsx(
-                    'flex h-10 items-center gap-0.5 rounded-full px-2 text-xs font-semibold text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-[13px]',
+                    'flex h-10 items-center gap-0.5 rounded-pill px-2 text-xs font-semibold text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary sm:text-[13px]',
                     open && 'bg-tint'
                 )}
             >

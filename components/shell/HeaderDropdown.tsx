@@ -69,7 +69,7 @@ export default function HeaderDropdown({ label, icon, active = false, children }
                     aria-labelledby={headingId}
                     data-ui={UI.headerDropdown}
                     onClick={(e) => { if (e.target instanceof Element && e.target.closest('a')) setOpen(false); }}
-                    className="absolute right-0 top-full z-50 mt-2 w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-[14px] border border-border bg-surface shadow-premium motion-safe:animate-fade"
+                    className="absolute right-0 top-full z-50 mt-2 w-[360px] max-w-[calc(100vw-24px)] overflow-hidden rounded-menu line bg-surface shadow-premium motion-safe:animate-fade"
                 >
                     {children({ headingId, close: () => setOpen(false) })}
                 </div>

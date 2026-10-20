@@ -30,7 +30,7 @@ export default function ThemeChips({ search }: { search: Pick<SearchModel, 'word
                         aria-label={chosen ? t('clearChoice', { what: c.title }) : undefined}
                         onClick={() => toggleTheme(c.slug)}
                         style={{ ['--c' as string]: c.color }}
-                        className={clsx(CHIP, chosen ? CHOSEN : 'bg-surface font-medium text-foreground ring-border hover:bg-tint')}
+                        className={clsx(CHIP, chosen ? CHOSEN : 'bg-surface font-medium text-foreground hover:bg-tint')}
                     >
                         <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" />
                         <span className="truncate">{c.title}</span>
@@ -49,7 +49,7 @@ export default function ThemeChips({ search }: { search: Pick<SearchModel, 'word
                         aria-label={chosen ? t('clearChoice', { what: v.title }) : undefined}
                         onClick={() => toggleVeids(v.slug, v.l1Slug)}
                         style={{ ['--c' as string]: v.color }}
-                        className={clsx(CHIP, chosen ? CHOSEN : 'bg-surface font-medium text-foreground ring-border hover:bg-tint')}
+                        className={clsx(CHIP, chosen ? CHOSEN : 'bg-surface font-medium text-foreground hover:bg-tint')}
                     >
                         <span className="truncate">{v.title}</span>
                         {chosen && <X aria-hidden="true" className="size-3 shrink-0" />}

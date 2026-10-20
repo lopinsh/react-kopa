@@ -15,7 +15,7 @@ import type { DiscoveryState } from '@/lib/types/discovery';
 
 type Match = DiscoveryState['alsoMatches'][number];
 
-const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] font-medium text-foreground ring-border hover:bg-tint';
+const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] font-medium text-foreground hover:bg-tint';
 
 const Dot = ({ match }: { match: Match }) => (match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null);
 
@@ -61,7 +61,7 @@ export default function AlsoMatchesLine() {
         <div data-ui={UI.alsoMatches} role="group" aria-label={t('alsoMatchesTitle')} className="-mt-1.5 mb-3 flex min-w-0 items-center gap-2 md:-mt-2 md:mb-4">
             <span className="shrink-0 text-xs text-foreground-muted">{t('alsoMatches')}</span>
             <div ref={row} className="relative flex min-w-0 flex-1 items-center gap-1.5">
-                <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5">
+                <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5 shadow-room">
                     {matches.slice(0, fit).map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} href={hrefOf(m)} />)}
                 </div>
                 {hidden > 0 && (
@@ -72,7 +72,7 @@ export default function AlsoMatchesLine() {
                             aria-expanded={pop.open}
                             aria-controls={pop.id}
                             onClick={pop.toggle}
-                            className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && OPEN)}
+                            className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted hover:bg-tint', pop.open && OPEN)}
                         >
                             +{hidden}
                         </button>
@@ -101,7 +101,7 @@ export default function AlsoMatchesLine() {
                 )}
                 <div ref={probe} inert aria-hidden="true" className="pointer-events-none invisible absolute left-0 top-0 flex gap-1.5 whitespace-nowrap">
                     {matches.map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} />)}
-                    <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border')}>+{hidden || 99}</span>
+                    <span className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted')}>+{hidden || 99}</span>
                 </div>
             </div>
         </div>

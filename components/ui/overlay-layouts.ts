@@ -15,7 +15,7 @@ export function panelClasses(layout: OverlayLayout, size: OverlaySize, flush: bo
         case 'dialog': return clsx(SHEET, 'sm:max-h-[calc(100dvh-2rem)] sm:rounded-2xl motion-safe:sm:animate-pop', SIZE[size], !flush && PANEL_PAD);
         case 'sheet': return clsx(SHEET, 'sm:max-w-[560px]', !flush && PANEL_PAD);
         case 'panel': return clsx(PANEL, !flush && 'p-[18px]');
-        case 'right': return clsx('flex h-full w-full flex-col overflow-y-auto bg-surface shadow-premium sm:max-w-md sm:border-l sm:border-border motion-safe:animate-from-right', !flush && 'p-[18px]');
+        case 'right': return clsx('flex h-full w-full flex-col overflow-y-auto bg-surface shadow-premium sm:max-w-md sm:border-l-[length:var(--line-width)] sm:border-l-[color:var(--line-color)] motion-safe:animate-from-right', !flush && 'p-[18px]');
         // The phone search (OD-20): the whole screen, no handle, corners or shadow; the scrim is covered.
         case 'screen': return 'flex h-dvh w-full flex-col overflow-hidden bg-surface motion-safe:animate-fade';
         case 'left': return clsx('flex h-full w-4/5 max-w-[320px] flex-col overflow-y-auto bg-surface shadow-premium motion-safe:animate-from-left', !flush && 'p-[18px]');

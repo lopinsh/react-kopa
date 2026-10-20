@@ -25,7 +25,7 @@ const CALM_SHADOWS = {
     dialog: '0 14px 34px rgba(0, 0, 0, 0.25)',
 };
 /** Tailwind's default radii, repeated for the same reason. */
-const CALM_RADII = { md: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', '3xl': '1.5rem', pill: '9999px', menu: '14px', item: '10px' };
+const CALM_RADII = { md: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', '3xl': '1.5rem', '4xl': '2rem', pill: '9999px', menu: '14px', item: '10px' };
 
 /** The ink: the soft divider colour in calm, the foreground (dark mode: 85 % of it) in bold. */
 function inkValue(style: ThemeStyleTokens, mode: 'light' | 'dark'): string {

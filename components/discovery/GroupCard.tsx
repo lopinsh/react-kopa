@@ -49,7 +49,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             data-ui={UI.groupCard}
             data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
-            className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl border border-border bg-surface transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary"
+            className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
         >
             <div className={`flex min-w-0 flex-col gap-[3px] px-3.5 pt-3${bottomLine ? '' : ' pb-3'}`}>
                 <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">

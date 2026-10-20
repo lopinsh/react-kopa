@@ -29,7 +29,7 @@ export default function QuickChoices({ onPick, variant }: Props) {
                     aria-pressed={i.pressed}
                     onClick={() => onPick(i.value)}
                     className={clsx(
-                        'whitespace-nowrap rounded-full text-[13px]',
+                        'whitespace-nowrap rounded-pill text-[13px]',
                         variant === 'sheet' ? 'min-h-11 flex-1 px-2 ring-1 ring-inset ring-border' : 'relative h-[26px] px-3 after:absolute after:-inset-y-2 after:inset-x-0',
                         i.pressed ? 'bg-tint font-semibold ring-[1.5px] ring-inset ring-foreground' : 'font-medium hover:bg-tint'
                     )}

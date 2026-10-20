@@ -33,13 +33,13 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
             {!chosen && onToggle && <ChevronDown aria-hidden="true" className="size-3.5 shrink-0 text-foreground-muted" />}
         </>
     );
-    const bodyClass = clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-full text-[13px] font-medium text-foreground', chosen ? 'pl-2.5' : 'px-2.5');
+    const bodyClass = clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-[13px] font-medium text-foreground', chosen ? 'pl-2.5' : 'px-2.5');
 
     return (
         <div
             data-ui={dataUi}
             className={clsx(
-                'flex h-8 min-w-0 shrink items-center rounded-full ring-inset',
+                'flex h-8 min-w-0 shrink items-center rounded-pill ring-inset',
                 widthClass,
                 open ? 'bg-tint ring-1 ring-primary' : chosen ? 'bg-surface ring-[1.5px] ring-foreground' : 'bg-surface ring-1 ring-border'
             )}
@@ -52,7 +52,7 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
                 <span className={bodyClass} aria-label={ariaLabel} role="group">{body}</span>
             )}
             {chosen && (
-                <button type="button" onClick={onClear} aria-label={clearLabel} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-tint hover:text-foreground after:absolute after:-inset-y-2.5 after:-inset-x-1">
+                <button type="button" onClick={onClear} aria-label={clearLabel} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint hover:text-foreground after:absolute after:-inset-y-2.5 after:-inset-x-1">
                     <X aria-hidden="true" className="size-3.5" />
                 </button>
             )}

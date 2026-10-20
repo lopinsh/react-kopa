@@ -30,7 +30,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
     const tSearch = useTranslations('discovery.search');
     const locale = useLocale();
     const id = useId();
-    const pill = clsx('flex items-center gap-2 rounded-full px-3 text-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', open ? 'bg-surface outline-2 outline-primary' : 'bg-tint', className);
+    const pill = clsx('flex items-center gap-2 rounded-pill px-3 text-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', open ? 'bg-surface outline-2 outline-primary' : 'bg-tint', className);
 
     return (
         <form action={`/${locale}`} role="search" data-ui={UI.searchBar} onSubmit={(e) => { e.preventDefault(); onEnter(); }} className={pill}>
@@ -48,7 +48,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
                     type="button"
                     aria-label={tSearch('clear')}
                     onClick={() => { onChange(''); inputRef.current?.focus(); }}
-                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2.5"
+                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2.5"
                 >
                     <X aria-hidden="true" className="size-4" />
                 </button>

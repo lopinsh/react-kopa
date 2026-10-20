@@ -11,7 +11,7 @@ function CloseButton() {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <button type="button" onClick={() => close()} aria-label={t('close')} className="-mr-1 grid size-10 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-tint">
+        <button type="button" onClick={() => close()} aria-label={t('close')} className="-mr-1 grid size-10 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint">
             <X aria-hidden="true" className="size-5" />
         </button>
     );
