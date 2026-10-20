@@ -120,7 +120,7 @@ R1a ─► R1b
                 └─► R12 (any time after R2b; delete-account needs R2a's Iestatījumi)
 ```
 
-**Hard dependencies.** R1a before everything (AR-01). R2a needs R1a (tokens). R2b needs R2a (frame for toasts above the bottom bar). R3a needs R2b (counter, pop-ups, skeletons). R3b needs R3a. R4 needs nothing new but must be released before R5a. R5a needs R4 (several cities, counts, event place) and R3a (D11). R5b needs R5a. R6 needs R5b (rows) and R3b (Sazināties). R7 needs R5a (place list, filter line chip) and R6 (results open panels). R8 needs R2a and R5b. R9a needs R3a, R4, R6. R9b needs R9a only for order (shared frame pieces). R10 needs R5a. R11 and R12 need R2b.
+**Hard dependencies.** R1a before everything (AR-01). R2a needs R1a (tokens). R2b needs R2a (frame for toasts above the bottom bar). R3a needs R2b (counter, pop-ups, skeletons). R3b needs R3a. R4 needs nothing new but must be released before R5a. R5a needs R4 (several cities, counts, event place) and R3a (D11). R5b needs R5a. R6 needs R5b (rows) and R3b (Sazināties). R7 needs R5a (place list, filter line chip) and R6 (results open panels). R8 needs R2a and R5b. R9a needs R3a, R4, R6. R9b needs R9a only for order (shared frame pieces). R10 needs R5a. R11 and R12 need R2b. R13 (Templates) needs R11b and runs before R12.
 
 **Could run in parallel** (built in separate worktrees, still released one at a time): R4 alongside R3a/R3b (different files except the settings form, which R4 only adds a field to); R11 and R12 alongside anything after R2b; R10 alongside R6–R9. Default: keep the serial order above, because each release is checked by the owner on production.
 
@@ -355,6 +355,14 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Risks:** account deletion when the user owns groups (block with a clear code, `OWNS_GROUPS`, added to the registry in `types/actions.ts`).
 - **Size:** M.
 
+### R13 · Templates (L, two sessions) — owner-approved 20 Oct, built before R12
+
+- **Goal:** a template = palette + style. Admin → Dizains gets a fourth part, Stils: Mierīgs (today, the default, no visual change) and Drosmīgs (neobrutalist: ink lines, hard offset shadows, small corners, buttons that press in), plus the yellow-led Saule palette paired with Drosmīgs.
+- **Rules (owner):** none (owner brief, 20 Oct). Also in: AR-69 (Stils part), AR-08 (Mierīgs keeps it), AR-07 (Archivo Black added as a heading font).
+- **Data:** `SiteTheme.styleKey` (additive, `add_site_theme_style_key`).
+- **Order:** runs before R12 (R12 then builds its screens on the shared edges).
+- **Spec:** [specs/R13.md](specs/R13.md) (R13-1 style layer, Stils and atoms; R13-2 sweep and docs).
+
 ## 6. Cross-cutting
 
 - **Owner decisions 15 Oct (notes batch, all agreed).**
@@ -487,4 +495,5 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R9c Group settings and profiles | built (R9c-1 profiles live, R9c-2 group settings) | [specs/R9c.md](specs/R9c.md) | |
 | R10 Citur | cancelled by owner 19 Oct | | |
 | R11 Admin frame | built (frame, drawer, five dialogs, card look per page, counters on admin name fields, frame specimens in UI elements) | [specs/R11.md](specs/R11.md) | |
+| R13 Templates (before R12) | spec written | [specs/R13.md](specs/R13.md) | |
 | R12 Everything else | not started | | |
