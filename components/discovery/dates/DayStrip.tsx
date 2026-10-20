@@ -28,7 +28,7 @@ export default function DayStrip({ window: w, params, counts }: Props) {
     const arrow = 'grid size-9 place-items-center rounded-pill text-foreground-muted hover:bg-tint';
 
     return (
-        <nav data-ui={UI.dayStrip} aria-label={t('days')} className="mb-3 rounded-2xl bg-surface p-2 pb-1.5 ring-1 ring-inset ring-border shadow-card">
+        <nav data-ui={UI.dayStrip} aria-label={t('days')} className="mb-3 rounded-2xl bg-surface p-2 pb-1.5 line shadow-card">
             <div className="mb-1 flex items-center justify-between">
                 {prev ? <Link href={prev} scroll={false} aria-label={t('previousWeek')} className={arrow}><ChevronLeft aria-hidden="true" className="size-4" /></Link>
                     : <span aria-hidden="true" className={clsx(arrow, 'opacity-35')}><ChevronLeft className="size-4" /></span>}

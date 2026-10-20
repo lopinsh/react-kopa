@@ -78,7 +78,7 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
             onMouseDown={(e) => { if (!(e.target instanceof Element && e.target.closest('input, button, a, select, textarea'))) e.preventDefault(); }}
             onBlur={(e) => { if (e.relatedTarget instanceof Node && !host?.contains(e.relatedTarget)) onClose(); }}
             className={clsx(
-                'absolute z-40 mt-1.5 max-h-[min(60vh,420px)] w-[var(--panel-w)] max-w-[calc(100vw-24px)] overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-premium ring-1 ring-border',
+                'absolute z-40 mt-1.5 max-h-[min(60vh,420px)] w-[var(--panel-w)] max-w-[calc(100vw-24px)] overflow-y-auto rounded-2xl bg-surface p-1.5 shadow-premium line',
                 alignRight ? 'right-0' : 'left-0'
             )}
         >
