@@ -32,7 +32,7 @@ export default function StyleCard({ styleKey, theme, selected, disabled, onSelec
             onKeyDown={onKeyDown}
             className={clsx(
                 'relative flex flex-col gap-3 rounded-2xl bg-surface p-4 text-left ring-inset disabled:opacity-60',
-                selected ? 'ring-2 ring-primary' : 'ring-1 ring-border hover:ring-foreground-muted'
+                selected ? 'ring-2 ring-primary' : 'ring-[length:var(--line-width)] ring-[color:var(--line-color)] hover:ring-foreground-muted'
             )}
         >
             {selected && <Check className="absolute right-3 top-3 h-5 w-5 text-primary" aria-hidden="true" />}

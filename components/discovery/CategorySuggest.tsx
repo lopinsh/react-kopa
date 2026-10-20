@@ -57,12 +57,12 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
                 <p className="text-sm text-foreground-muted">{t('suggestText')}</p>
                 <div>
                     <label htmlFor="suggest-name" className="mb-1 block text-sm font-medium">{t('suggestName')}</label>
-                    <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary" />
                     <TextCounter id="suggest-count" length={name.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
                     <label htmlFor="suggest-topic" className="mb-1 block text-sm font-medium">{t('topic')}</label>
-                    <select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-1 ring-inset ring-border focus:outline-none focus:ring-2 focus:ring-primary">
+                    <select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="h-11 w-full rounded-xl bg-surface px-3 text-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary">
                         <option value="">—</option>
                         {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </select>

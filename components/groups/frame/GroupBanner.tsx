@@ -27,7 +27,7 @@ export default function GroupBanner() {
         <div data-ui={UI.groupBanner} className="banner-tint relative isolate z-10 h-16 border-b border-border text-foreground md:h-24">
             <div className="mx-auto flex h-full max-w-6xl items-center gap-2.5 px-3 md:gap-4 md:px-[22px]">
                 <GroupPagesDrawer />
-                <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item md:size-11 md:rounded-[13px]">
+                <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">
                     <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px] md:size-6" />
                 </span>
                 <div className="min-w-0 flex-1">

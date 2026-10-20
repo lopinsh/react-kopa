@@ -12,7 +12,7 @@ export default function SwatchInput({ hex, word, label, disabled, onChange }: Pr
                 disabled={disabled}
                 aria-label={label}
                 onChange={(e) => onChange(e.target.value)}
-                className="h-[22px] w-[22px] shrink-0 cursor-pointer appearance-none rounded-md border-0 bg-transparent p-0 ring-1 ring-inset ring-border [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-md [&::-webkit-color-swatch]:border-0 [&::-moz-color-swatch]:rounded-md [&::-moz-color-swatch]:border-0"
+                className="h-[22px] w-[22px] shrink-0 cursor-pointer appearance-none rounded-md border-0 bg-transparent p-0 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded-md [&::-webkit-color-swatch]:border-0 [&::-moz-color-swatch]:rounded-md [&::-moz-color-swatch]:border-0"
             />
             {word}
         </label>

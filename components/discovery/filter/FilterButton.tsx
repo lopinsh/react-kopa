@@ -41,7 +41,7 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
             className={clsx(
                 'flex h-8 min-w-0 shrink items-center rounded-pill ring-inset',
                 widthClass,
-                open ? 'bg-tint ring-1 ring-primary' : chosen ? 'bg-surface ring-[1.5px] ring-foreground' : 'bg-surface ring-1 ring-border'
+                open ? 'bg-tint ring-[length:var(--line-width)] ring-[color:var(--line-active,var(--primary))]' : chosen ? 'bg-surface ring-[length:max(1.5px,var(--line-width))] ring-[color:var(--line-active,var(--foreground))]' : 'bg-surface ring-[length:var(--line-width)] ring-[color:var(--line-color)]'
             )}
         >
             {onToggle ? (

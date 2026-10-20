@@ -27,7 +27,7 @@ export default async function Header() {
             </Link>
 
             {/* Fluid: the field grows in the middle up to the reading width, the tools sit at the right edge. */}
-            <div className="mx-2 flex min-w-0 flex-1 justify-center">
+            <div className="flex min-w-0 flex-1 justify-center md:mx-2">
                 <HeaderSearchField className="hidden w-full max-w-2xl md:flex" />
             </div>
 

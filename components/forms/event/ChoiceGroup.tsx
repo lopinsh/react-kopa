@@ -21,7 +21,7 @@ export default function ChoiceGroup<V extends string>({ label, value, options, o
             {options.map((o) => (
                 <label
                     key={o.value}
-                    className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl p-3 ring-1 ring-inset ring-border hover:bg-tint has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-primary has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary"
+                    className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl p-3 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] hover:bg-tint has-[:checked]:bg-primary/10 has-[:checked]:ring-2 has-[:checked]:ring-[color:var(--line-active,var(--primary))] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-primary"
                 >
                     <input
                         type="radio"
