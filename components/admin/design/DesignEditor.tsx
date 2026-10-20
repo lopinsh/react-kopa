@@ -15,16 +15,17 @@ import CategoryColorsEditor, { type ToneRow } from './CategoryColorsEditor';
 import ColoursPart from './ColoursPart';
 import DesignActions from './DesignActions';
 import FontsPart from './FontsPart';
+import StylePart from './StylePart';
 
 type Pending = 'preview' | 'publish' | 'reset' | null;
 
-/** Admin > Dizains: one draft shared by the three parts, previewed for yourself first, then published for everyone. */
+/** Admin > Dizains: one draft shared by the four parts, previewed for yourself first, then published for everyone. */
 export default function DesignEditor({ initial, initialPart, toneRows }: { initial: ThemeInput; initialPart: DesignPart; toneRows: ToneRow[] }) {
     const t = useTranslations('admin.design');
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
-    const { theme, issues, tonesEdited, choosePreset, setColor, setTone, setFont } = useThemeDraft(initial);
+    const { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont } = useThemeDraft(initial);
     const param = useSearchParams().get('part');
     const part: DesignPart = (DESIGN_PARTS as readonly string[]).includes(param ?? '') ? (param as DesignPart) : initialPart;
     const [pending, setPending] = useState<Pending>(null);
@@ -63,6 +64,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
     return (
         <div>
             {part === 'colours' && <ColoursPart theme={theme} issues={issues} disabled={busy} onPreset={askPreset} onColor={setColor} />}
+            {part === 'style' && <StylePart theme={theme} disabled={busy} onStyle={setStyle} />}
             {part === 'categories' && <CategoryColorsEditor rows={toneRows} theme={theme} disabled={busy} onTone={setTone} />}
             {part === 'fonts' && <FontsPart theme={theme} disabled={busy} onFont={setFont} />}
             <DesignActions

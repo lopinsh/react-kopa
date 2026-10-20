@@ -39,7 +39,7 @@ export default function ColoursPart({ theme, issues, disabled, onPreset, onColor
 
             <section aria-labelledby="design-presets">
                 <h3 id="design-presets" className="mb-3 text-base font-semibold text-foreground">{t('presetsTitle')}</h3>
-                <div className="grid gap-3 sm:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                     {THEME_PRESET_KEYS.map((key) => (
                         <ThemePresetCard key={key} presetKey={key} selected={theme.presetKey === key} disabled={disabled} onSelect={() => onPreset(key)} />
                     ))}
@@ -83,7 +83,7 @@ export default function ColoursPart({ theme, issues, disabled, onPreset, onColor
                         ))}
                     </div>
                 </div>
-                <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} dark={sampleMode === 'dark'} />
+                <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} dark={sampleMode === 'dark'} />
             </section>
         </div>
     );

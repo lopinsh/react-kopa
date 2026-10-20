@@ -754,6 +754,7 @@
       "onThisPage": "Šajā lapā",
       "parts": {
         "colours": "Krāsas",
+        "style": "Stils",
         "categories": "Kategoriju krāsas",
         "fonts": "Fonti"
       }
@@ -993,7 +994,8 @@
       "presets": {
         "moss": "Sūna",
         "sea": "Jūra",
-        "rye": "Rudzu maize"
+        "rye": "Rudzu maize",
+        "sun": "Saule"
       },
       "fontSampleHeading": "Ejam kopā",
       "fontSampleBody": "Meklē bundzinieku Jelgavā",
@@ -1044,6 +1046,7 @@
       "parts": {
         "label": "Dizaina daļas",
         "colours": "Krāsas",
+        "style": "Stils",
         "categories": "Kategoriju krāsas",
         "fonts": "Fonti"
       },
@@ -1101,7 +1104,23 @@
       },
       "resetTonesTitle": "Gatavs noskaņojums atjaunos kategoriju krāsas",
       "resetTonesMessage": "Kategoriju krāsas ir mainītas. Izvēloties gatavo noskaņojumu, tās atgriezīsies noklusētajās. Turpināt?",
-      "resetTonesConfirm": "Izvēlēties noskaņojumu"
+      "resetTonesConfirm": "Izvēlēties noskaņojumu",
+      "styleTitle": "Formas un līnijas",
+      "styleNote": "Stils maina stūrus, līnijas un ēnas. Krāsas paliek tās, kas izvēlētas sadaļā Krāsas.",
+      "styles": {
+        "calm": "Mierīgs",
+        "bold": "Drosmīgs"
+      },
+      "styleHints": {
+        "calm": "Mīksti stūri, plānas līnijas, ēna tikai virs lapas.",
+        "bold": "Stingras līnijas, cieta ēna, mazi stūri. Pogas iespiežas."
+      },
+      "styleSample": {
+        "title": "Ejam kopā",
+        "button": "Pievienoties",
+        "chip": "Rīga",
+        "tag": "Jauns"
+      }
     }
   },
   "messages": {

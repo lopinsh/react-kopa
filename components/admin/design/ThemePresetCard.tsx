@@ -31,6 +31,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
         >
             {selected && <Check className="absolute right-3 top-3 h-5 w-5 text-primary" aria-hidden="true" />}
             <span className="text-sm font-bold text-foreground">{t(`presets.${presetKey}`)}</span>
+            <span className="-mt-2 text-[13px] text-foreground-muted">{t(`styles.${p.styleKey}`)}</span>
             <span className="flex gap-1.5" aria-hidden="true">
                 {swatches.map((hex, i) => (
                     <span key={i} style={{ '--sw': hex } as React.CSSProperties} className="h-7 w-7 rounded-full border border-border bg-[var(--sw)]" />

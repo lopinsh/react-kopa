@@ -754,6 +754,7 @@
       "onThisPage": "On this page",
       "parts": {
         "colours": "Colours",
+        "style": "Style",
         "categories": "Category colours",
         "fonts": "Fonts"
       }
@@ -993,7 +994,8 @@
       "presets": {
         "moss": "Moss",
         "sea": "Sea",
-        "rye": "Rye bread"
+        "rye": "Rye bread",
+        "sun": "Sun"
       },
       "fontSampleHeading": "Let's go together",
       "fontSampleBody": "Looking for a drummer in Jelgava",
@@ -1044,6 +1046,7 @@
       "parts": {
         "label": "Design parts",
         "colours": "Colours",
+        "style": "Style",
         "categories": "Category colours",
         "fonts": "Fonts"
       },
@@ -1101,7 +1104,23 @@
       },
       "resetTonesTitle": "This theme will reset the category colours",
       "resetTonesMessage": "You have changed some category colours. Choosing a ready-made theme brings back the default ones. Continue?",
-      "resetTonesConfirm": "Choose theme"
+      "resetTonesConfirm": "Choose theme",
+      "styleTitle": "Shapes and lines",
+      "styleNote": "The style changes corners, lines and shadows. Colours stay as chosen under Colours.",
+      "styles": {
+        "calm": "Calm",
+        "bold": "Bold"
+      },
+      "styleHints": {
+        "calm": "Soft corners, thin lines, shadows only above the page.",
+        "bold": "Strong lines, hard shadows, small corners. Buttons press in."
+      },
+      "styleSample": {
+        "title": "Let's go together",
+        "button": "Join",
+        "chip": "Riga",
+        "tag": "New"
+      }
     }
   },
   "messages": {
