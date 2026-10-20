@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import { UI } from '@/lib/constants';
 export { useMenu } from '@/hooks/useMenu';
 
-const ITEM_BASE = 'flex min-h-10 w-full items-center gap-2.5 rounded-[10px] px-2.5 py-[7px] text-left text-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
+const ITEM_BASE = 'flex min-h-10 w-full items-center gap-2.5 rounded-item px-2.5 py-[7px] text-left text-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
 
 type PanelProps = {
     label: string;
@@ -40,7 +40,7 @@ export function MenuPanel({ label, id, menuRef, onKeyDown, onClick, width = 'md'
             onKeyDown={onKeyDown}
             onClick={onClick}
             className={clsx(
-                'z-50 rounded-[14px] border border-border bg-surface p-1.5 shadow-premium',
+                'z-50 rounded-menu line bg-surface p-1.5 shadow-premium',
                 placement === 'anchor'
                     ? ['absolute top-full mt-2 w-60 max-w-[calc(100vw-24px)]', align === 'start' ? 'left-0' : 'right-0']
                     : ['fixed top-[calc(var(--header-height)+4px)] sm:absolute sm:right-0 sm:top-auto sm:mt-2', width === 'sm' ? 'right-4 w-[200px]' : 'inset-x-4 sm:inset-x-auto sm:w-60'],

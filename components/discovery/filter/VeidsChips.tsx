@@ -10,7 +10,7 @@ import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { useChipFit } from '@/hooks/useChipFit';
 import { UI } from '@/lib/constants';
-import { CHIP, CHOSEN } from './chip-styles';
+import { CHIP, CHOSEN, OPEN } from './chip-styles';
 
 export function Chip({ label, chosen, onClick, muted = false }: { label: string; chosen: boolean; onClick?: () => void; muted?: boolean }) {
     return (
@@ -68,7 +68,7 @@ export default function VeidsChips() {
             </div>
             {hidden > 0 && (
                 <div ref={bindHost} className="relative shrink-0">
-                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && 'ring-primary')}>
+                    <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && OPEN)}>
                         +{hidden}
                     </button>
                     <FilterPopover pop={pop} title={t('veids')} onClose={close}>

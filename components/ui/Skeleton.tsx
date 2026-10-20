@@ -10,7 +10,7 @@ export function SkeletonBlock({ className }: { className?: string }) {
 /** Today's discovery card: image area, title, two text lines. */
 export function SkeletonCard() {
     return (
-        <div className="overflow-hidden rounded-3xl border border-border bg-surface">
+        <div className="overflow-hidden rounded-3xl line bg-surface shadow-card">
             <SkeletonBlock className="aspect-[16/10] rounded-none" />
             <div className="grid gap-2 p-4">
                 <SkeletonBlock className="h-5 w-3/4" />
@@ -37,7 +37,7 @@ export function SkeletonRow() {
 /** A box: a heading line and three lines. */
 export function SkeletonPanel() {
     return (
-        <div className="grid gap-3 rounded-2xl border border-border bg-surface p-4">
+        <div className="grid gap-3 rounded-2xl line bg-surface p-4 shadow-card">
             <SkeletonBlock className="h-5 w-1/3" />
             <SkeletonBlock className="h-3.5 w-full" />
             <SkeletonBlock className="h-3.5 w-full" />

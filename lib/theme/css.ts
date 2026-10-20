@@ -48,6 +48,8 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         '--ink': inkValue(style, mode),
         '--press-shift': style.pressShift,
         '--shadow-room': style.shadowRoom,
+        // Active/open edges (chosen chip, open filter): the ink in bold; calm leaves it unset so each element's own fallback colour applies.
+        ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),
     };
     const radius = style.radius ?? (withDefaults ? CALM_RADII : null);

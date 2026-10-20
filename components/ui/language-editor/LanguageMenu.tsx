@@ -53,7 +53,7 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
                 disabled={disabled}
                 aria-labelledby={`${labelId} ${triggerId}`}
                 className={clsx(
-                    'inline-flex h-11 items-center gap-2 rounded-full border border-border bg-surface px-4 text-sm font-medium text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60 md:h-9',
+                    'inline-flex h-11 items-center gap-2 rounded-pill line bg-surface px-4 text-sm font-medium text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-60 md:h-9',
                     open && 'bg-tint'
                 )}
             >

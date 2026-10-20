@@ -100,7 +100,7 @@ export default function ConfirmPopover({ isOpen, onOpenChange, message, confirmL
                     tabIndex={-1}
                     data-ui={UI.confirmPopover}
                     style={{ ...pos, width: WIDTH }}
-                    className="fixed z-[90] rounded-xl border border-border bg-surface p-3 text-left shadow-premium motion-safe:animate-fade"
+                    className="fixed z-[90] rounded-xl line bg-surface p-3 text-left shadow-premium motion-safe:animate-fade"
                 >
                     <p className="text-sm font-semibold text-foreground">{message}</p>
                     <div className="mt-3 flex items-center justify-end gap-2">

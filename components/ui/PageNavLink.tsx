@@ -38,7 +38,7 @@ export default function PageNavLink({ href, icon: Icon, label, current, badge = 
             <Icon aria-hidden className="size-4 text-foreground-muted" />
             {label}
             {badge > 0 && (
-                <span className={clsx('ml-auto rounded-full px-2 text-[11px] font-semibold', badgeDanger ? 'bg-danger/10 text-danger' : clsx('text-foreground-muted', current ? 'bg-surface' : 'bg-tint'))}>
+                <span className={clsx('ml-auto rounded-pill px-2 text-[11px] font-semibold', badgeDanger ? 'bg-danger/10 text-danger' : clsx('text-foreground-muted', current ? 'bg-surface' : 'bg-tint'))}>
                     {badge > 9 ? '9+' : badge}
                 </span>
             )}

@@ -21,7 +21,7 @@ function CloseButton({ locked }: { locked: boolean }) {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <button type="button" onClick={() => close()} disabled={locked} aria-label={t('close')} className="-mr-2 -mt-2 grid size-10 shrink-0 place-items-center rounded-full text-foreground-muted hover:bg-tint disabled:opacity-50">
+        <button type="button" onClick={() => close()} disabled={locked} aria-label={t('close')} className="-mr-2 -mt-2 grid size-10 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint disabled:opacity-50">
             <X className="size-5" />
         </button>
     );

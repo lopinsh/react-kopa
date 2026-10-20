@@ -5,7 +5,7 @@ import { UI } from '@/lib/constants';
 export type ButtonVariant = 'primary' | 'secondary' | 'quiet' | 'danger';
 export type ButtonSize = 'md' | 'sm';
 
-const BASE = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-full font-medium transition-opacity disabled:opacity-50 [&_svg]:h-4 [&_svg]:w-4';
+const BASE = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill font-medium disabled:opacity-50 [&_svg]:h-4 [&_svg]:w-4';
 
 const SIZES: Record<ButtonSize, string> = {
     md: 'h-11 px-[18px] text-[15px] md:h-10',
@@ -13,10 +13,10 @@ const SIZES: Record<ButtonSize, string> = {
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-    primary: 'bg-primary text-primary-foreground hover:opacity-90',
-    secondary: 'bg-tint text-foreground hover:opacity-80',
-    quiet: 'bg-transparent text-foreground ring-1 ring-inset ring-border hover:bg-tint',
-    danger: 'bg-danger text-danger-foreground hover:opacity-90',
+    primary: 'frame shadow-control press bg-primary text-primary-foreground hover:opacity-90',
+    secondary: 'frame shadow-control press bg-tint text-foreground hover:opacity-80',
+    quiet: 'line shadow-control press bg-transparent text-foreground hover:bg-tint',
+    danger: 'frame shadow-control press bg-danger text-danger-foreground hover:opacity-90',
 };
 
 const NAMES: Record<ButtonVariant, string> = {

@@ -271,7 +271,9 @@ body {
 
 /* press: sinks onto its hard shadow. Uses `translate`, so it never fights soft-press (scale); clearing --tw-shadow keeps rings. */
 @utility press {
-  transition: translate 120ms ease-out;
+  transition-property: translate, opacity, background-color, color;
+  transition-duration: 120ms;
+  transition-timing-function: ease-out;
   &:active:not(:disabled) {
     translate: var(--press-shift) var(--press-shift);
     --tw-shadow: 0 0 #0000;

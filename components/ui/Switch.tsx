@@ -27,14 +27,14 @@ export default function Switch({ checked, onChange, labelledBy, describedBy, dis
             data-ui={UI.switch}
             onClick={() => onChange(!checked)}
             className={clsx(
-                'relative h-6 w-11 shrink-0 rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50',
+                'frame relative h-6 w-11 shrink-0 rounded-pill outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface disabled:opacity-50',
                 checked ? 'bg-primary' : 'bg-border',
                 className,
             )}
         >
             <span
                 aria-hidden
-                className={clsx('absolute left-0.5 top-0.5 size-5 rounded-full bg-surface shadow-sm motion-safe:transition-transform', checked && 'translate-x-5')}
+                className={clsx('absolute left-[calc(2px-var(--frame-width))] top-[calc(2px-var(--frame-width))] size-5 rounded-full bg-surface shadow-sm motion-safe:transition-transform', checked && 'translate-x-5')}
             />
         </button>
     );

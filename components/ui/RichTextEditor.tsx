@@ -165,7 +165,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
     });
 
     return (
-        <div className="w-full overflow-hidden rounded-xl border border-border bg-surface focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
+        <div className="w-full overflow-hidden rounded-xl line bg-surface focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
             <MenuBar editor={editor} />
             <EditorContent
                 editor={editor}

@@ -12,7 +12,7 @@ export default function FallbackLangLabel({ lang, className }: { lang: TextLang;
         <span
             lang={lang}
             className={clsx(
-                'inline-flex shrink-0 items-center rounded-full border border-border bg-surface-elevated px-2 py-0.5 text-[11px] font-semibold normal-case tracking-normal text-foreground-muted',
+                'inline-flex shrink-0 items-center rounded-pill line bg-surface-elevated px-2 py-0.5 text-[11px] font-semibold normal-case tracking-normal text-foreground-muted',
                 className
             )}
         >

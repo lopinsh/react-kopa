@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { Link, useRouter } from '@/i18n/routing';
 import FilterPopover, { usePopover } from '@/components/discovery/lists/FilterPopover';
-import { CHIP } from './chip-styles';
+import { CHIP, OPEN } from './chip-styles';
 import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { useChipFit } from '@/hooks/useChipFit';
@@ -72,7 +72,7 @@ export default function AlsoMatchesLine() {
                             aria-expanded={pop.open}
                             aria-controls={pop.id}
                             onClick={pop.toggle}
-                            className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && 'ring-primary')}
+                            className={clsx(CHIP, 'shrink-0 bg-surface font-semibold text-foreground-muted ring-border hover:bg-tint', pop.open && OPEN)}
                         >
                             +{hidden}
                         </button>
