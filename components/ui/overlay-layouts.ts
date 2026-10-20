@@ -18,6 +18,6 @@ export function panelClasses(layout: OverlayLayout, size: OverlaySize, flush: bo
         case 'right': return clsx('flex h-full w-full flex-col overflow-y-auto bg-surface shadow-premium sm:max-w-md sm:border-l-[length:var(--line-width)] sm:border-l-[color:var(--line-color)] motion-safe:animate-from-right', !flush && 'p-[18px]');
         // The phone search (OD-20): the whole screen, no handle, corners or shadow; the scrim is covered.
         case 'screen': return 'flex h-dvh w-full flex-col overflow-hidden bg-surface motion-safe:animate-fade';
-        case 'left': return clsx('flex h-full w-4/5 max-w-[320px] flex-col overflow-y-auto bg-surface shadow-premium motion-safe:animate-from-left', !flush && 'p-[18px]');
+        case 'left': return clsx('flex h-full w-4/5 max-w-[320px] flex-col overflow-y-auto bg-surface shadow-premium border-r-[length:var(--frame-width)] border-r-[color:var(--line-color)] motion-safe:animate-from-left', !flush && 'p-[18px]');
     }
 }

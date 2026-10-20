@@ -165,6 +165,14 @@ body {
   }
 }
 
+/* Unlayered so it beats the font-semibold utility: headings that say semibold follow a lighter style (airy). */
+h1.font-semibold,
+h2.font-semibold,
+h3.font-semibold,
+h4.font-semibold {
+  font-weight: var(--heading-semi, 600);
+}
+
 /* Human note (AR-07): a line in the site's own voice, in italics and the site colour. */
 @utility human-note {
   font-style: italic;
