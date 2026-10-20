@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { usePathname } from '@/i18n/routing';
 import { resolveAdminLocation, visibleSections, type AdminCounts, type AdminLocation } from '@/lib/admin-nav';
@@ -8,7 +8,7 @@ import type { AdminNavSection } from '@/lib/constants/adminNav';
 
 export type HandbookChapterEntry = { slug: string; title: string };
 
-type Value = { counts: AdminCounts; chapters: HandbookChapterEntry[]; sections: AdminNavSection[]; location: AdminLocation };
+type Value = { counts: AdminCounts; chapters: HandbookChapterEntry[]; sections: AdminNavSection[]; location: AdminLocation; /** Design parts whose draft has contrast issues; set by the Dizains editor, shown as a dot in the pages list. */ flaggedParts: string[]; setFlaggedParts: (parts: string[]) => void };
 
 const AdminFrameContext = createContext<Value | null>(null);
 
@@ -17,8 +17,9 @@ export default function AdminFrameProvider({ counts, chapters, isOwner, children
     const pathname = usePathname();
     const part = useSearchParams().get('part');
     const sections = useMemo(() => visibleSections(isOwner), [isOwner]);
+    const [flaggedParts, setFlaggedParts] = useState<string[]>([]);
     const location = resolveAdminLocation(pathname, part, sections);
-    return <AdminFrameContext.Provider value={{ counts, chapters, sections, location }}>{children}</AdminFrameContext.Provider>;
+    return <AdminFrameContext.Provider value={{ counts, chapters, sections, location, flaggedParts, setFlaggedParts }}>{children}</AdminFrameContext.Provider>;
 }
 
 export function useAdminFrame(): Value {

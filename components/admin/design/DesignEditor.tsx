@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { publishTheme, resetTheme, savePreviewTheme } from '@/actions/theme-actions';
+import { useAdminFrame } from '@/components/admin/frame/AdminFrameProvider';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useToast } from '@/hooks/use-toast';
 import { useThemeDraft } from '@/hooks/use-theme-draft';
@@ -32,6 +33,12 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
     const [isTransition, startTransition] = useTransition();
     const busy = pending !== null || isTransition;
     const blockedParts = DESIGN_PARTS.filter((p) => issues.some((i) => i.part === p));
+    const { setFlaggedParts } = useAdminFrame();
+    const flaggedKey = blockedParts.join(',');
+    useEffect(() => {
+        setFlaggedParts(flaggedKey ? flaggedKey.split(',') : []);
+        return () => setFlaggedParts([]);
+    }, [flaggedKey, setFlaggedParts]);
 
     // A ready-made theme brings back the default tones, so edited tones are only dropped after the admin agrees.
     const askPreset = (key: ThemePresetKey) => (tonesEdited ? setPresetAsked(key) : choosePreset(key));

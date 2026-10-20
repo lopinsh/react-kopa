@@ -12,6 +12,8 @@ type Props = {
     current: boolean;
     /** A count chip at the right end ("9+" above 9); nothing for 0. */
     badge?: number;
+    /** The count in the danger colour (open reports). */
+    badgeDanger?: boolean;
     /** In a drawer the link takes over the drawer's history entry, so Back returns in one step. */
     replace?: boolean;
     /** A plain link that loads the page in full: a group's Informācija, whose address a soft click would open as a panel (R6). */
@@ -19,7 +21,7 @@ type Props = {
 };
 
 /** One entry of a page menu (the own area's, a group's): icon, word, optional count; the open page is tinted. */
-export default function PageNavLink({ href, icon: Icon, label, current, badge = 0, replace, full = false }: Props) {
+export default function PageNavLink({ href, icon: Icon, label, current, badge = 0, badgeDanger = false, replace, full = false }: Props) {
     const locale = useLocale();
     const className = clsx(
         'flex min-h-10 items-center gap-2.5 rounded-xl px-2.5 py-[7px] text-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
@@ -36,7 +38,7 @@ export default function PageNavLink({ href, icon: Icon, label, current, badge = 
             <Icon aria-hidden className="size-4 text-foreground-muted" />
             {label}
             {badge > 0 && (
-                <span className={clsx('ml-auto rounded-full px-2 text-[11px] font-semibold text-foreground-muted', current ? 'bg-surface' : 'bg-tint')}>
+                <span className={clsx('ml-auto rounded-full px-2 text-[11px] font-semibold', badgeDanger ? 'bg-danger/10 text-danger' : clsx('text-foreground-muted', current ? 'bg-surface' : 'bg-tint'))}>
                     {badge > 9 ? '9+' : badge}
                 </span>
             )}
