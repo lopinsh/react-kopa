@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Check } from 'lucide-react';
+import { Check, Users } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { buttonClass } from '@/components/ui/Button';
 import type { ThemeStyleKey } from '@/lib/constants';
@@ -44,6 +44,7 @@ export default function StyleCard({ styleKey, theme, selected, disabled, onSelec
                 <span className="line block rounded-xl bg-surface p-3 shadow-card">
                     <span className="block text-base font-bold">{t('styleSample.title')}</span>
                     <span className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className="grid size-8 place-items-center rounded-item cat-tile [--c:var(--primary)]"><Users className="size-4" /></span>
                         <span className={buttonClass('primary', '', 'sm')}>{t('styleSample.button')}</span>
                         <Badge>{t('styleSample.chip')}</Badge>
                         <Badge>{t('styleSample.tag')}</Badge>
