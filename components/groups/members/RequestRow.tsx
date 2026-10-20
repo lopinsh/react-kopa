@@ -41,7 +41,7 @@ export default function RequestRow({ request }: { request: RequestRowData }) {
                     {name}
                     {request.askedAt && <span className="font-normal text-foreground-muted"> · {format.relativeTime(new Date(request.askedAt), now)}</span>}
                 </p>
-                {request.message && <p className="mt-0.5 line-clamp-3 text-body-sm italic text-foreground-muted">&ldquo;{request.message}&rdquo;</p>}
+                {request.message && <p className="mt-0.5 line-clamp-3 text-body-sm italic text-foreground">&ldquo;{request.message}&rdquo;</p>}
             </div>
             <div className="flex flex-wrap items-center gap-2">
                 {request.chatId && (

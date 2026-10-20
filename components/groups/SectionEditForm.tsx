@@ -104,7 +104,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                                 placeholder={t('fieldTitlePlaceholder')}
                                 aria-describedby={counterId}
                                 aria-invalid={missing || undefined}
-                                className="w-full rounded-lg line bg-surface px-3 py-2 text-body-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
+                                className="w-full rounded-lg line bg-surface px-3 py-2 text-body md:text-body-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
                             />
                             <div className="mt-1 flex items-start gap-2">
                                 {missing && <p role="alert" className="text-meta text-danger">{tErrors('TITLE_REQUIRED')}</p>}

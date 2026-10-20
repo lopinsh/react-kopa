@@ -43,7 +43,7 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t('searchPlaceholder')}
-                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-body-sm text-foreground outline-none focus:border-primary/50"
+                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-body md:text-body-sm text-foreground outline-none focus:border-primary/50"
                     />
                 </div>
                 <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-pill p-2 text-foreground-muted hover:bg-surface-elevated">

@@ -16,7 +16,7 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
     return (
         <SettingsSection title={c_common('tabDanger')} description={c_common('tabDangerDescription')}>
             <div className="space-y-3">
-                <p className="max-w-xl text-body-sm text-foreground-muted">{gt('deleteConfirm')}</p>
+                <p className="max-w-xl text-body-sm text-foreground">{gt('deleteConfirm')}</p>
                 <button
                     type="button"
                     onClick={onDelete}

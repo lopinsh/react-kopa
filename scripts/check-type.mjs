@@ -1,10 +1,10 @@
 // Type-role guard: pages and components use the role utilities (text-display … text-tag), not raw sizes.
 // Bans text-[Npx], text-xs…text-4xl, leading-*, tracking-*, font-bold/medium/semibold under app/ and components/.
-// Warn-only unless TYPE_CHECK_STRICT=1 or --strict is passed. globals.css is exempt (it defines the roles).
+// Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
 
-const strict = process.env.TYPE_CHECK_STRICT === '1' || process.argv.includes('--strict');
+const strict = process.env.TYPE_CHECK_STRICT !== '0' && !process.argv.includes('--warn');
 const ROOTS = ['app', 'components'];
 const BAN = /(?<![\w-])(text-\[\d+(?:\.\d+)?(?:px|rem)\]|text-(?:xs|sm|base|lg|xl|[2-9]xl)|leading-[\w./\[\]-]+|tracking-[\w./\[\]-]+|font-(?:bold|medium|semibold))(?![\w-])/g;
 
@@ -28,5 +28,5 @@ for (const [f, n] of counts) { total += n; byArea.set(area(f), (byArea.get(area(
 if (process.argv.includes('--files')) for (const [f, n] of [...counts].sort((a, b) => b[1] - a[1])) console.log(`${String(n).padStart(4)}  ${f}`);
 console.log('type:check by area');
 for (const [a, n] of [...byArea].sort((a, b) => b[1] - a[1])) console.log(`${String(n).padStart(4)}  ${a}`);
-console.log(`${total} raw type classes in ${counts.size} files${strict ? '' : ' (warn-only; --strict or TYPE_CHECK_STRICT=1 to fail)'}`);
+console.log(`${total} raw type classes in ${counts.size} files${strict ? '' : ' (--warn to report only)'}`);
 if (strict && total) process.exit(1);

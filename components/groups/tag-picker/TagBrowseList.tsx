@@ -68,7 +68,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                     <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 line mt-1">
                         <input
                             autoFocus
-                            className="w-full bg-transparent text-body-sm focus:outline-none text-foreground"
+                            className="w-full bg-transparent text-body md:text-body-sm focus:outline-none text-foreground"
                             placeholder={t('nameOfSubtopicPlaceholder')}
                             value={inlineWildcardText}
                             onChange={(e) => setInlineWildcardText(e.target.value)}

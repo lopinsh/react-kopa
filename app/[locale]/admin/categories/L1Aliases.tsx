@@ -86,14 +86,14 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded px-3 py-2 text-body-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>

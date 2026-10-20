@@ -79,7 +79,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
                 </p>
             )}
             {event.excerpt && (
-                <p className={`col-span-2 col-start-3 min-w-0 truncate text-meta text-foreground-muted ${showGroup ? 'row-start-3' : 'row-start-2'}`}>{event.excerpt}</p>
+                <p className={`col-span-2 col-start-3 min-w-0 truncate text-meta text-foreground ${showGroup ? 'row-start-3' : 'row-start-2'}`}>{event.excerpt}</p>
             )}
         </article>
     );

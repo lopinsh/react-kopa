@@ -79,7 +79,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                     <input
                         ref={inputRef}
                         type="text"
-                        className="flex-1 bg-transparent text-body-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
+                        className="flex-1 bg-transparent text-body md:text-body-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
                         placeholder={t('searchTopicsPlaceholder', { category: l1.title })}
                         disabled={limitReached}
                         value={query}

@@ -52,7 +52,7 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                         disabled={isPending}
                         onChange={(e) => handleStatus(e.target.value as FeedbackStatusValue)}
                         aria-label={tAdmin('status')}
-                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-tag text-foreground disabled:opacity-50"
+                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-body md:text-tag text-foreground disabled:opacity-50"
                     >
                         {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
                     </select>

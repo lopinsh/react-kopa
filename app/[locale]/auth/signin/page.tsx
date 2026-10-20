@@ -32,7 +32,7 @@ export default async function SignInPage({ params, searchParams }: Props) {
             <div className="w-full max-w-md space-y-8 rounded-2xl line bg-surface p-8 shadow-xl">
                 <div className="text-center">
                     <h1 className="text-title text-foreground">{t('signInTitle')}</h1>
-                    <p className="mt-2 text-body-sm text-foreground-muted">{t('signInSubtitle')}</p>
+                    <p className="mt-2 text-body-sm text-foreground">{t('signInSubtitle')}</p>
                 </div>
 
                 <SignInForm callbackUrl={returnTo} />

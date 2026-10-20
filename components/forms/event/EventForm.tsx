@@ -54,7 +54,7 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
                     <div className="mb-5">
                         <p className="text-meta text-foreground-muted">{t('stepOf', { current: step + 1, total: 2 })}</p>
                         <h2 className="mt-1 text-section">{[t('step1Title'), t('step2Title')][step]}</h2>
-                        <p className="mt-1 text-body-sm text-foreground-muted">{[t('step1Desc'), t('step2Desc')][step]}</p>
+                        <p className="mt-1 text-body-sm text-foreground">{[t('step1Desc'), t('step2Desc')][step]}</p>
                     </div>
 
                     <LanguageEditor

@@ -91,7 +91,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
             {/* Parent Navigation */}
             {parentL1 && (
                 <div>
-                    <h3 className="text-item text-foreground-muted mb-2">{t('l1Title')}</h3>
+                    <h3 className="text-item text-foreground mb-2">{t('l1Title')}</h3>
                     <button
                         type="button"
                         onClick={() => onNodeSelect({ id: parentL1.id, type: 'l1' })}
@@ -128,7 +128,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -138,7 +138,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -150,7 +150,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
@@ -159,7 +159,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
@@ -216,14 +216,14 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded px-3 py-2 text-body-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>

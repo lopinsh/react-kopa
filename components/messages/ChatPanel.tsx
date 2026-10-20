@@ -184,7 +184,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 aria-describedby={counterId}
                                 placeholder={t('typeMessage')}
                                 aria-label={t('typeMessage')}
-                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-body-sm focus:border-primary focus:outline-none"
+                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-body md:text-body-sm focus:border-primary focus:outline-none"
                             />
                             <button
                                 type="submit"

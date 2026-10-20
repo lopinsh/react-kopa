@@ -14,7 +14,7 @@ import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { cities: CityRow[] };
 
-const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body-sm';
+const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm';
 
 /** The approved cities: rename, remove an unused one, add a new one. Pending suggestions are in the "needs review" card above. */
 export default function CitiesSection({ cities }: Props) {

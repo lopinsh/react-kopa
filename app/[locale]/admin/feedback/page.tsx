@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('feedback') };
 }
 
-const FIELD = 'rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground';
+const FIELD = 'rounded-xl line bg-surface px-3 py-2 text-body md:text-body-sm text-foreground';
 
 export default async function AdminFeedbackPage({
     params,
@@ -49,10 +49,10 @@ export default async function AdminFeedbackPage({
                         key={id}
                         href={id === 'open' ? '/admin/feedback' : `/admin/feedback?tab=${id}`}
                         aria-current={tab === id ? 'page' : undefined}
-                        className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm weight-strong transition-colors ${tab === id ? 'border-primary text-primary' : 'border-transparent text-foreground-muted hover:text-foreground'}`}
+                        className={`flex items-center gap-2 border-b-2 px-4 py-3 text-button transition-colors ${tab === id ? 'border-primary text-primary' : 'border-transparent text-foreground-muted hover:text-foreground'}`}
                     >
                         {t(`tab.${id}`)}
-                        <span className={`rounded-pill px-2 py-0.5 text-xs ${tab === id ? 'bg-primary/10 text-primary' : 'bg-border/50 text-foreground-muted'}`}>{counts[id]}</span>
+                        <span className={`rounded-pill px-2 py-0.5 text-tag ${tab === id ? 'bg-primary/10 text-primary' : 'bg-border/50 text-foreground-muted'}`}>{counts[id]}</span>
                     </Link>
                 ))}
             </nav>

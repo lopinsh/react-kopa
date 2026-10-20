@@ -140,7 +140,7 @@ function LanguageEditorSample({ label, englishText, initialMenuOpen = false, sta
                         lang={lang}
                         value={texts[lang]}
                         onChange={(e) => setTexts((prev) => ({ ...prev, [lang]: e.target.value }))}
-                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-body-sm md:h-10"
+                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-body md:text-body-sm md:h-10"
                     />
                 </label>
             </LanguageEditor>

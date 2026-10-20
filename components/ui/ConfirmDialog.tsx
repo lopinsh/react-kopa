@@ -37,7 +37,7 @@ export default function ConfirmDialog({ isOpen, title, message, confirmLabel, de
             onClose={onCancel}
             returnFocusRef={returnFocusRef}
         >
-            <p id={messageId} className="text-body-sm text-foreground-muted">{message}</p>
+            <p id={messageId} className="text-body-sm text-foreground">{message}</p>
             <div className="mt-4 flex justify-end gap-2">
                 {/* Focus starts on the safe choice. */}
                 <Button variant="secondary" size="sm" data-autofocus onClick={onCancel} disabled={isPending}>{tCommon('cancel')}</Button>

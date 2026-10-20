@@ -27,7 +27,7 @@ type Props = {
     };
 };
 
-const INPUT = 'w-full rounded-xl line bg-surface px-4 py-3 text-foreground placeholder:text-foreground-muted outline-none transition-all focus:border-primary';
+const INPUT = 'w-full rounded-xl line bg-surface px-4 py-3 text-body text-foreground placeholder:text-foreground-muted outline-none transition-all focus:border-primary';
 
 /** Labot profilu: name, username, picture, about you and places. The privacy switches are in Iestatījumi, not here (OD-26). */
 export default function ProfileEditForm({ user }: Props) {

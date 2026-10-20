@@ -15,7 +15,7 @@ import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { city: CityRow };
 
-const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body-sm';
+const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm';
 
 /** A city suggested by a group creator: approve (names may be corrected) or reject. */
 export default function PendingCityCard({ city }: Props) {
@@ -67,7 +67,7 @@ export default function PendingCityCard({ city }: Props) {
                     <button
                         type="button"
                         onClick={() => setEditing(!editing)}
-                        className={`px-3 py-1.5 text-sm weight-strong rounded-pill transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-button rounded-pill transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>

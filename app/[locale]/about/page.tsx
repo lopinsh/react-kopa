@@ -23,7 +23,7 @@ export default async function AboutPage() {
                 {POINTS.map((key) => (
                     <li key={key}>
                         <p className="weight-strong text-foreground">{t(`about.points.${key}.title`)}</p>
-                        <p className="text-foreground-muted">{t(`about.points.${key}.text`)}</p>
+                        <p className="text-foreground">{t(`about.points.${key}.text`)}</p>
                     </li>
                 ))}
             </ul>

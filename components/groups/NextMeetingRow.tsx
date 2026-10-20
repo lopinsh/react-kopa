@@ -23,7 +23,7 @@ export default function NextMeetingRow({ event, href }: { event: Pick<NextEventV
                 <span aria-hidden className="size-2 shrink-0 translate-y-px rounded-full bg-[var(--accent)]" />
                 <span lang={langAttr(event.titleLang, locale)} className="min-w-0 weight-strong">{event.title}</span>
             </span>
-            {event.excerpt && <span className="truncate text-meta text-foreground-muted">{event.excerpt}</span>}
+            {event.excerpt && <span className="truncate text-meta text-foreground">{event.excerpt}</span>}
         </Link>
     );
 }

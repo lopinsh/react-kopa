@@ -135,7 +135,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                         placeholder={t('searchPlaceholder')}
                         aria-label={t('searchPlaceholder')}
                         maxLength={80}
-                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground"
+                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-body md:text-body-sm text-foreground"
                     />
                     <button type="submit" disabled={isPending} className={BUTTON}>
                         <Search className="h-4 w-4" />

@@ -63,7 +63,7 @@ export default function CookieConsent() {
                         <h3 className="text-item text-foreground">
                             {t('privacyTitle')}
                         </h3>
-                        <p className="mt-1.5 text-body-sm text-foreground-muted">
+                        <p className="mt-1.5 text-body-sm text-foreground">
                             {t('privacyDescription')}
                         </p>
 

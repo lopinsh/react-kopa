@@ -364,3 +364,12 @@ body {
   padding-inline-end: var(--shadow-room);
   padding-block-end: var(--shadow-room);
 }
+
+/* Fields are 16px below md so iOS does not zoom on focus (unlayered on purpose: it also covers fields that carry a smaller role class). */
+@media (max-width: 767.98px) {
+    input:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file'], [type='hidden']),
+    textarea,
+    select {
+        font-size: 16px;
+    }
+}

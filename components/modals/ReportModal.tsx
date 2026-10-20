@@ -38,7 +38,7 @@ export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: 
 
     return (
         <Modal onClose={onClose} returnFocusRef={returnFocusRef} locked={isPending} title={t('title')}>
-            <p className="text-body-sm text-foreground-muted">{t('description')}</p>
+            <p className="text-body-sm text-foreground">{t('description')}</p>
 
             <fieldset className="mt-3 flex flex-col gap-0.5">
                 <legend className="sr-only">{t('reasonLabel')}</legend>

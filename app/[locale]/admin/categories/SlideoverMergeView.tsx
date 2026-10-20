@@ -115,7 +115,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={(e) => setNameEn(e.target.value)}
-                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body md:text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -125,7 +125,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={(e) => setNameLv(e.target.value)}
-                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body md:text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -135,7 +135,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text"
                                 value={slugEn}
                                 onChange={(e) => setSlugEn(e.target.value)}
-                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body md:text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
                             />
                         </div>
                         <div>
@@ -144,7 +144,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                                 type="text"
                                 value={slugLv}
                                 onChange={(e) => setSlugLv(e.target.value)}
-                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
+                                className="w-full bg-surface-elevated line rounded-lg px-3 py-2 text-body md:text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-mono"
                             />
                         </div>
                     </div>

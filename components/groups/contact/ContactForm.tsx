@@ -70,7 +70,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
             title={joining ? t('titleJoin', { name: groupName }) : t('title', { name: groupName })}
         >
             <form onSubmit={handleSubmit} data-ui={UI.contactDialog} className="space-y-4">
-                <p className="text-body-sm text-foreground-muted">{joining ? t('descriptionJoin') : t('description')}</p>
+                <p className="text-body-sm text-foreground">{joining ? t('descriptionJoin') : t('description')}</p>
                 <div>
                     <label htmlFor={`${id}-message`} className="sr-only">{t('messageLabel')}</label>
                     <textarea
@@ -80,7 +80,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                         aria-describedby={`${id}-count`}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-body md:text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                     <div className="mt-1 flex"><TextCounter id={`${id}-count`} length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
                 </div>

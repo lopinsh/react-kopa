@@ -68,7 +68,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
         <div className="space-y-8 pb-12">
             {/* Header */}
             <div>
-                <h3 className="text-item text-foreground-muted mb-2">{t('l1Title')}</h3>
+                <h3 className="text-item text-foreground mb-2">{t('l1Title')}</h3>
                 <div className="flex items-center gap-4 p-4 line rounded-xl bg-surface-elevated/30">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full" style={{ backgroundColor: tint(shown, 12), color: shown }}>
                         <CategoryIcon slug={l1.slug} className="w-6 h-6" />
@@ -111,7 +111,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="flex-1 bg-surface line rounded px-3 py-2 text-body-sm"
+                                    className="flex-1 bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                                     pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                                 />
                             </div>
@@ -170,7 +170,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameEn}
                                     onChange={e => setNewNameEn(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>
@@ -180,7 +180,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameLv}
                                     onChange={e => setNewNameLv(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                    className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>

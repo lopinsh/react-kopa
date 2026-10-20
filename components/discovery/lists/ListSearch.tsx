@@ -25,7 +25,7 @@ export default function ListSearch({ value, onChange, label, autoFocus = false }
                 placeholder={label}
                 autoFocus={autoFocus}
                 autoComplete="off"
-                className="min-w-0 flex-1 bg-transparent text-body-sm text-foreground outline-none placeholder:text-foreground-muted"
+                className="min-w-0 flex-1 bg-transparent text-body md:text-body-sm text-foreground outline-none placeholder:text-foreground-muted"
             />
         </div>
     );

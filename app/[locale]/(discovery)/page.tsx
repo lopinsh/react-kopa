@@ -11,6 +11,7 @@ import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import CategoryDrawer from '@/components/discovery/CategoryDrawer';
+import PageHead from '@/components/ui/PageHead';
 import FilterLine from '@/components/discovery/filter/FilterLine';
 import AlsoMatchesLine from '@/components/discovery/filter/AlsoMatchesLine';
 import GroupResults from '@/components/discovery/GroupResults';
@@ -63,6 +64,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     }
     if (!found) p.category = null;
 
+    const tDiscovery = await getTranslations({ locale, namespace: 'discovery' });
     const session = await auth();
     const viewerId = session?.user?.id;
 
@@ -118,6 +120,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                     <CategoryDrawer folded={cookieStore.get(DISCOVERY_RAIL_COOKIE)?.value === '1'} />
                     <div className="min-w-0 flex-1 pb-20">
                         <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+                            <PageHead className="pt-4 md:pt-6" title={tDiscovery(p.kind === 'events' ? 'eventsPageTitle' : 'groupsPageTitle')} />
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'

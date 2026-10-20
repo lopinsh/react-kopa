@@ -36,7 +36,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
             <div className="mb-6">
                 <h1 className="text-title">{t('editTitle')}</h1>
                 <p className="mt-2"><TextLink href={eventPath}>{event.title}</TextLink></p>
-                <p className="mt-1 text-foreground-muted">{t('editSubtitle')}</p>
+                <p className="mt-1 text-foreground">{t('editSubtitle')}</p>
             </div>
 
             <CitiesProvider cities={cities}>

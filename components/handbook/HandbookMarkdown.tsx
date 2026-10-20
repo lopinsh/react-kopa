@@ -51,7 +51,7 @@ const components: Components = {
     p: ({ children }) => <p className="my-4 text-foreground">{children}</p>,
     ul: ({ children }) => <ul className="my-4 list-disc space-y-1.5 pl-6 text-foreground marker:text-foreground-muted">{children}</ul>,
     ol: ({ children }) => <ol className="my-4 list-decimal space-y-1.5 pl-6 text-foreground marker:text-foreground-muted">{children}</ol>,
-    li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+    li: ({ children }) => <li className="text-body">{children}</li>,
     strong: ({ children }) => <strong className="weight-strong">{children}</strong>,
     del: ({ children }) => <del className="text-foreground-muted">{children}</del>,
     code: ({ children }) => (

@@ -146,7 +146,7 @@ function L2Node({
 
             {isPending && <div className="w-2 h-2 rounded-full bg-warning flex-shrink-0" />}
 
-            <span className={`text-sm ${isPending ? 'text-warning weight-medium' : 'weight-medium'}`}>
+            <span className={`text-body-sm ${isPending ? 'text-warning weight-medium' : 'weight-medium'}`}>
                 {title}
             </span>
 

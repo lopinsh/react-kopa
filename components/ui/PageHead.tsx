@@ -19,7 +19,7 @@ export default function PageHead({ title, lead, actions, phoneOnly, lang, classN
         <header className={clsx('flex flex-wrap items-start justify-between gap-4', phoneOnly && 'md:sr-only', className)}>
             <div className="min-w-0">
                 <h1 lang={lang} className="text-title text-foreground [overflow-wrap:anywhere]">{title}</h1>
-                {lead && <p className="mt-1 max-w-[70ch] text-body text-foreground-muted">{lead}</p>}
+                {lead && <p className="mt-1 max-w-[70ch] text-body text-foreground">{lead}</p>}
             </div>
             {actions}
         </header>

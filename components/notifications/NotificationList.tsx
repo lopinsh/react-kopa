@@ -24,7 +24,7 @@ export default function NotificationList({ rows, onRead }: { rows: NotificationV
         <div>
             {groups.map((g) => (
                 <section key={g.key} aria-labelledby={`nt-${g.key}`}>
-                    <h3 id={`nt-${g.key}`} className="px-4 pb-1 pt-3 text-item text-foreground-muted">{g.title}</h3>
+                    <h3 id={`nt-${g.key}`} className="px-4 pb-1 pt-3 text-item text-foreground">{g.title}</h3>
                     <ul className="divide-y divide-border">
                         {g.rows.map((n) => <NotificationItem key={n.id} n={n} onRead={onRead} />)}
                     </ul>

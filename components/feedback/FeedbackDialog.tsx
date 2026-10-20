@@ -106,7 +106,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     rows={5}
                     placeholder={t('placeholder')}
                     aria-label={t('textLabel')}
-                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-body-sm text-foreground outline-none focus:border-primary/50"
+                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-body md:text-body-sm text-foreground outline-none focus:border-primary/50"
                 />
                 <div className="mt-1 flex items-start gap-2"><TextCounter id="feedback-note-count" length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}

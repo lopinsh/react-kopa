@@ -38,7 +38,7 @@ export default async function CreateEventPage({
         <>
             <div className="mb-6">
                 <h1 className="text-title">{tw('createTitle')}</h1>
-                <p className="mt-2 text-foreground-muted">{t('createSubtitle')}</p>
+                <p className="mt-2 text-foreground">{t('createSubtitle')}</p>
             </div>
 
             <CitiesProvider cities={cities}>

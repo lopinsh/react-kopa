@@ -215,7 +215,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                         >
                             {t(STEP_TITLE_KEYS[step])}
                         </h2>
-                        <p className="mt-1.5 text-body text-foreground-muted">
+                        <p className="mt-1.5 text-body text-foreground">
                             {t(STEP_DESC_KEYS[step])}
                         </p>
                     </div>

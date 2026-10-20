@@ -117,14 +117,14 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'approve' ? null : 'approve')}
-                        className={`px-3 py-1.5 text-sm weight-strong rounded-pill transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
+                        className={`px-3 py-1.5 text-button rounded-pill transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
                     >
                         {c('approve')}
                     </button>
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'merge' ? null : 'merge')}
-                        className={`px-3 py-1.5 text-sm weight-strong rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
+                        className={`px-3 py-1.5 text-button rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
                     >
                         {c('merge')}
                     </button>
@@ -186,7 +186,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
@@ -195,7 +195,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
@@ -221,7 +221,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <select
                         value={mergeIntoId}
                         onChange={e => setMergeIntoId(e.target.value)}
-                        className="w-full bg-surface line rounded px-3 py-2 text-body-sm mb-4"
+                        className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm mb-4"
                     >
                         <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (

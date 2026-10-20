@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 
-const NAME = 'text-item md:text-section';
+const NAME = 'text-item md:text-title';
 
 /**
  * The group's name in the banner. On the event pages (an event, its edit page, the create page) it becomes a breadcrumb,

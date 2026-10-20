@@ -61,7 +61,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                 {requestCount > 0 && (
                     <a href={`/${locale}${path}/members?tab=requests`} className="relative z-[2] mt-0.5 block text-tag text-primary hover:underline">{tMy('requestCount', { count: requestCount })}</a>
                 )}
-                {group.tagline && <span lang={langAttr(group.taglineLang, locale)} className="mt-0.5 block truncate text-meta text-foreground-muted">{group.tagline}</span>}
+                {group.tagline && <span lang={langAttr(group.taglineLang, locale)} className="mt-0.5 block truncate text-meta text-foreground">{group.tagline}</span>}
             </span>
             {role && <RoleTag role={role} />}
             <span className="grid size-10 shrink-0 place-items-center rounded-item cat-tile">

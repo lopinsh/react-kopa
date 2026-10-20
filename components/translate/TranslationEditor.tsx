@@ -124,7 +124,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                         aria-describedby={`tm-count-${lang}`}
                                         aria-invalid={!!issue}
                                         className={clsx(
-                                            'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-body-sm text-foreground outline-none focus:border-primary/50',
+                                            'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-body md:text-body-sm text-foreground outline-none focus:border-primary/50',
                                             issue ? 'border-danger/40' : 'border-border'
                                         )}
                                     />

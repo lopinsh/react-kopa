@@ -14,7 +14,7 @@ type Props = {
     canEditName: boolean;
 };
 
-const INPUT = 'w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 weight-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/5';
+const INPUT = 'w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 text-body weight-medium outline-none transition-all focus:border-primary focus:ring-4 focus:ring-primary/5';
 const LABEL = 'ml-1 text-tag text-foreground-muted';
 
 /** Name, city, "Ko meklējam?" and banner. */

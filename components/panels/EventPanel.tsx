@@ -33,7 +33,7 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
                 <CategoryLine color={event.category.color} category={event.category.l1Title} subCategories={event.subCategories} />
                 <Fact icon={CalendarDays}>{capitalizeFirst(when)}</Fact>
                 {where && <Fact icon={MapPin}>{where}</Fact>}
-                {event.membersOnly && <p className="text-body-sm text-foreground-muted">{t('membersOnly')}</p>}
+                {event.membersOnly && <p className="text-body-sm text-foreground">{t('membersOnly')}</p>}
                 {event.text && <p lang={langAttr(event.textLang, locale)} className="text-body-sm text-foreground">{event.text}</p>}
                 <FacesLine going={event.going} ended={event.join.ended} />
                 <JoinStep join={event.join} trailing={<FullPageLink path={`${groupPath}/events/${event.slug}`} className={PANEL_LINK}>{t('panel.allInfo')}</FullPageLink>} />

@@ -66,11 +66,11 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 {requestCount > 0 ? (
                     // The team's waiting requests take the second tagline line, so every card keeps one height.
                     <div className="mt-1 min-h-[2lh] text-meta">
-                        <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="line-clamp-1 text-foreground-muted">{group.tagline}</p>
+                        <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="line-clamp-1 text-foreground">{group.tagline}</p>
                         <a href={`/${locale}/${group.category.l1Slug}/group/${group.slug}/members?tab=requests`} className="relative z-[2] weight-strong text-primary hover:underline">{tMy('requestCount', { count: requestCount })}</a>
                     </div>
                 ) : (
-                    <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-meta text-foreground-muted">{group.tagline}</p>
+                    <p lang={group.tagline ? langAttr(group.taglineLang, locale) : undefined} className="mt-1 line-clamp-2 min-h-[2lh] text-meta text-foreground">{group.tagline}</p>
                 )}
             </div>
             <GroupCardActivity activity={activity} lookingFor={group.lookingFor} />

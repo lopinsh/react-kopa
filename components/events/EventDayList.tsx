@@ -37,7 +37,7 @@ export default function EventDayList({ days, today, showGroup, showCity, columns
         <div className={flat ? '@container/events' : '@container/events rounded-2xl bg-surface px-3.5 pb-2.5 shadow-card frame'}>
             {days.map(({ day, rows }) => (
                 <section key={day} className="border-t border-border first:border-t-0">
-                    <h3 className="pb-0.5 pt-3 text-item text-foreground-muted">{heading(day)}</h3>
+                    <h3 className="pb-0.5 pt-3 text-item text-foreground">{heading(day)}</h3>
                     <div className={columns ? '@3xl/events:columns-2 @3xl/events:gap-x-6' : undefined}>
                         {rows.map((event) => <EventRow key={event.id} event={event} showGroup={showGroup} showCity={showCity} headingDay={day} highlight={highlight} replace={replace} searchItem={searchItem} />)}
                     </div>

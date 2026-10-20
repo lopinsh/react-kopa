@@ -32,7 +32,7 @@ export default function RecentSearches({ onPick, inputRef, sample }: Props) {
 
     return (
         <section data-ui={UI.recentSearches} aria-labelledby={titleId}>
-            <h3 id={titleId} className="px-0.5 pb-1 pt-3 text-item text-foreground-muted">{t('recent')}</h3>
+            <h3 id={titleId} className="px-0.5 pb-1 pt-3 text-item text-foreground">{t('recent')}</h3>
             <ul>
                 {words.map((word, index) => (
                     <li key={word} className="flex items-center gap-1 rounded-lg hover:bg-tint">

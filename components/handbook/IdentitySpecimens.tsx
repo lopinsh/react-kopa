@@ -69,7 +69,7 @@ export function ColourSamples() {
         <div className="space-y-6">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
                 {SWATCHES.map(([name, cls]) => (
-                    <div key={name} className={`flex h-16 items-end rounded-xl p-2 text-[13px] weight-medium ring-1 ring-inset ring-border ${cls}`}>
+                    <div key={name} className={`flex h-16 items-end rounded-xl p-2 text-body-sm weight-medium ring-1 ring-inset ring-border ${cls}`}>
                         {t(`colourRoles.${name}`)}
                     </div>
                 ))}

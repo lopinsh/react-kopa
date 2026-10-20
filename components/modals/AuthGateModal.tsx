@@ -29,7 +29,7 @@ export default function AuthGateModal({ isOpen, onClose, reason = 'contact' }: P
             size="md"
             title={t('modalTitle')}
         >
-            <p className="mb-6 text-body-sm text-foreground-muted">{t(reason === 'join' ? 'modalDescJoin' : 'modalDesc')}</p>
+            <p className="mb-6 text-body-sm text-foreground">{t(reason === 'join' ? 'modalDescJoin' : 'modalDesc')}</p>
 
             <SignInForm callbackUrl={callbackUrl} />
         </Modal>

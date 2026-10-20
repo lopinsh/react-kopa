@@ -71,7 +71,7 @@ export default function ReasonModal({
             title={<span className="inline-flex items-center gap-2">{icon}{title}</span>}
         >
             {subject && <p className="mb-2 text-body-sm text-foreground [overflow-wrap:anywhere]">{subject}</p>}
-            <p className="mb-4 text-body-sm text-foreground-muted">{description}</p>
+            <p className="mb-4 text-body-sm text-foreground">{description}</p>
 
             <label className="mb-1 block text-button-sm text-foreground" htmlFor={fieldId}>{reasonLabel}</label>
             <textarea
@@ -81,7 +81,7 @@ export default function ReasonModal({
                 aria-describedby={`${fieldId}-count`}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-body-sm text-foreground outline-none focus:border-danger/40"
+                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-body md:text-body-sm text-foreground outline-none focus:border-danger/40"
             />
             <div className="mt-1 flex items-start gap-2">
                 <p className="text-meta text-foreground-muted">{hint}</p>

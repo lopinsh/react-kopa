@@ -38,7 +38,7 @@ export default function NewsItem({ item, now }: { item: NewsItemData; now: Date 
                 {item.kind === 'post' ? (
                     <>
                         <p className="mt-0.5 weight-strong text-foreground">{item.title}</p>
-                        {item.excerpt && <p className="mt-0.5 line-clamp-2 text-body-sm text-foreground-muted">{item.excerpt}</p>}
+                        {item.excerpt && <p className="mt-0.5 line-clamp-2 text-body-sm text-foreground">{item.excerpt}</p>}
                     </>
                 ) : (
                     <p className="mt-0.5 weight-strong text-foreground">
