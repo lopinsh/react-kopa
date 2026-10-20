@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import {
-    THEME_PRESETS,
+    CATEGORY_TONE_SLUGS, THEME_PRESETS,
     type CategoryToneSlug, type ThemeEditableToken, type ThemeFontId, type ThemeMode, type ThemePresetKey, type ThemeStyleKey,
 } from '@/lib/constants';
 import { completeModeTokens, themeContrastIssues, type CompleteModeTokens, type ContrastIssue } from '@/lib/theme/contrast';
@@ -18,7 +18,12 @@ export function useThemeDraft(initial: ThemeInput) {
         dark: completeModeTokens(initial.dark),
     }));
     const issues: ContrastIssue[] = useMemo(() => themeContrastIssues(theme), [theme]);
-    const tonesEdited = Object.keys(theme.light.categories ?? {}).length + Object.keys(theme.dark.categories ?? {}).length > 0;
+    // Tones differ from what the current look brings (a custom look brings none), so switching between unedited looks never asks.
+    const tonesEdited = (['light', 'dark'] as const).some((mode) => {
+        const own = theme[mode].categories ?? {};
+        const base = theme.presetKey === 'custom' ? {} : THEME_PRESETS[theme.presetKey][mode].categories ?? {};
+        return CATEGORY_TONE_SLUGS.some((slug) => (own[slug] ?? '').toLowerCase() !== (base[slug] ?? '').toLowerCase());
+    });
 
     /** A ready-made theme: its values, completed; tones go back to the defaults. */
     const choosePreset = (key: ThemePresetKey) => {

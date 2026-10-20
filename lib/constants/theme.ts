@@ -122,24 +122,24 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
     },
     sea: {
         label: 'Jūra',
-        light: { primary: '#34586A', background: '#edf1f3', surface: '#f8fafb', foreground: '#14232b', muted: '#556872', border: '#d4dde2' },
-        dark: { primary: '#7fb0c8', background: '#0e1316', surface: '#151c20', foreground: '#e8eff2', surfaceElevated: '#1d272c', muted: '#9db0b9', border: '#26343b' },
+        light: { primary: '#34586A', background: '#edf1f3', surface: '#f8fafb', foreground: '#14232b', muted: '#556872', border: '#d4dde2', categories: { travel: '#447141', dancing: '#985113', hobbies: '#916313', community: '#2D664C', politics: '#50483B', pets: '#6E5F41', art: '#6D4B8C', music: '#4E4A8F', religion: '#56616E', social: '#9A4431', games: '#7D4477', sports: '#395593', family: '#326180', wellbeing: '#36666C', education: '#746926' } },
+        dark: { primary: '#7fb0c8', background: '#0e1316', surface: '#151c20', foreground: '#e8eff2', surfaceElevated: '#1d272c', muted: '#9db0b9', border: '#26343b', categories: { travel: '#6EC36C', dancing: '#D8A685', hobbies: '#CDAB6F', community: '#49C28C', politics: '#B6AFA1', pets: '#BBAE92', art: '#C3A5E0', music: '#ADAADE', religion: '#A4AFBB', social: '#DBA197', games: '#D29DCD', sports: '#9BAED9', family: '#86B4D3', wellbeing: '#60BAC4', education: '#BDB156' } },
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',
     },
     rye: {
         label: 'Rudzu maize',
-        light: { primary: '#5E4A38', background: '#f1eeea', surface: '#fbfaf8', foreground: '#231c16', muted: '#6b5f54', border: '#ddd6cd' },
-        dark: { primary: '#c19a76', background: '#151210', surface: '#1e1a16', foreground: '#f0ebe5', surfaceElevated: '#27221d', muted: '#aa9f94', border: '#342d26' },
+        light: { primary: '#5E4A38', background: '#f1eeea', surface: '#fbfaf8', foreground: '#231c16', muted: '#6b5f54', border: '#ddd6cd', categories: { travel: '#56693A', dancing: '#914E3A', hobbies: '#905D34', community: '#406042', politics: '#4E453C', pets: '#6E5A46', art: '#5E5086', music: '#3F4E84', religion: '#535F68', social: '#8E454D', games: '#6E4977', sports: '#2C5884', family: '#316072', wellbeing: '#3C6360', education: '#796131' } },
+        dark: { primary: '#c19a76', background: '#151210', surface: '#1e1a16', foreground: '#f0ebe5', surfaceElevated: '#27221d', muted: '#aa9f94', border: '#342d26', categories: { travel: '#8EB15A', dancing: '#CB9C8E', hobbies: '#C89E78', community: '#72B273', politics: '#AEA59C', pets: '#B5A28F', art: '#ADA1D4', music: '#9BA5CE', religion: '#9BA6AE', social: '#CA999F', games: '#BB9AC6', sports: '#8DA7C7', family: '#7FACBE', wellbeing: '#69AFAB', education: '#C1A15E' } },
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',
     },
     sun: {
         label: 'Saule',
-        light: { primary: '#2B3FD6', background: '#FFF1B8', surface: '#FFFFFF', foreground: '#111111', surfaceElevated: '#FFFFFF', tint: '#FFE27A', muted: '#4A4536', border: '#C9BC8A' },
-        dark: { primary: '#FFD43B', background: '#14130F', surface: '#1E1C16', foreground: '#F6F1DE', surfaceElevated: '#28251D', tint: '#332C12', muted: '#BDB59C', border: '#3A362A' },
+        light: { primary: '#2B3FD6', background: '#FFF1B8', surface: '#FFFFFF', foreground: '#111111', surfaceElevated: '#FFFFFF', tint: '#FFE27A', muted: '#4A4536', border: '#C9BC8A', categories: { travel: '#457607', dancing: '#BA2F00', hobbies: '#A75904', community: '#096E3C', politics: '#5B4837', pets: '#815B30', art: '#8239A0', music: '#593CB0', religion: '#54647A', social: '#B71648', games: '#992C78', sports: '#314FB7', family: '#046595', wellbeing: '#026E74', education: '#876501' } },
+        dark: { primary: '#FFD43B', background: '#14130F', surface: '#1E1C16', foreground: '#F6F1DE', surfaceElevated: '#28251D', tint: '#332C12', muted: '#BDB59C', border: '#3A362A', categories: { travel: '#79D108', dancing: '#FD9F88', hobbies: '#F7A551', community: '#0AD46F', politics: '#C9B6A4', pets: '#D5B28B', art: '#E0A0FB', music: '#BDABFF', religion: '#A9B9CC', social: '#F99BB0', games: '#F695D7', sports: '#9EB4FB', family: '#72C1F2', wellbeing: '#05CBD6', education: '#E4B009' } },
         headingFont: 'archivo-black',
         bodyFont: 'commissioner',
         styleKey: 'bold',
@@ -149,8 +149,8 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
 /** Colours the custom editor offers, per mode. */
 export const THEME_EDITABLE_TOKENS = ['primary', 'background', 'surface', 'foreground', 'muted', 'border', 'tint'] as const;
 export type ThemeMode = 'light' | 'dark';
-/** The four parts of Admin > Dizains (AR-69), in order: palette, then style. */
-export const DESIGN_PARTS = ['colours', 'style', 'categories', 'fonts'] as const;
+/** The five parts of Admin > Dizains (AR-69), in order: looks (ready-made), colours, category colours, shape, fonts. */
+export const DESIGN_PARTS = ['looks', 'colours', 'categories', 'style', 'fonts'] as const;
 export type DesignPart = (typeof DESIGN_PARTS)[number];
 /** Contrast floor (Handbook, design.md): text AA everywhere; a dark-mode tone 7:1 with the dark background. */
 export const THEME_CONTRAST_MIN = 4.5;

@@ -26,7 +26,7 @@ export default async function AdminDesignPage({
     await requireAdminPage(locale, '/admin/design');
 
     const { part } = await searchParams;
-    const initialPart: DesignPart = typeof part === 'string' && (DESIGN_PARTS as readonly string[]).includes(part) ? (part as DesignPart) : 'colours';
+    const initialPart: DesignPart = typeof part === 'string' && (DESIGN_PARTS as readonly string[]).includes(part) ? (part as DesignPart) : 'looks';
 
     // Start from what this admin currently sees: their preview if they have one, otherwise the published theme.
     const [theme, taxonomy] = await Promise.all([getActiveTheme(), TaxonomyService.getTaxonomy(locale)]);

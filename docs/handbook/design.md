@@ -58,7 +58,7 @@ Few values, used everywhere. The tokens live in `app/globals.css`; the site them
 
 ### Templates
 
-A template is a palette plus a style. Mierīgs is the default and what every statement in this chapter describes. Drosmīgs swaps the shape tokens: 2 px ink lines, hard offset shadows without blur (about 4 px), corners of 4–10 px, buttons that press onto their shadow. Palette and style are chosen apart in `/admin/design` (Krāsas, Stils, Kategoriju krāsas, Fonti); the Saule palette selects Drosmīgs.
+A template is a palette plus a style. Mierīgs is the default and what every statement in this chapter describes. Drosmīgs swaps the shape tokens: 2 px ink lines, hard offset shadows without blur (about 4 px), corners of 4–10 px, buttons that press onto their shadow. Palette and style are chosen apart in `/admin/design` (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti); a look (Sūna, Jūra, Rudzu maize, Saule) is a ready-made set of all of them, with its own 15 category tones, and Saule selects Drosmīgs.
 
 ### Colour
 
@@ -82,7 +82,7 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 
 **Colour means category (AR-06).** A category tone appears only on dots, category icons, soft tints (up to 15 %), the group banner and the picture fallback. Every button, link, active tab, toggle, checkbox, focus ring and selected chip uses the site colour. Filled colours carry their own text colour (`text-primary-foreground`, `--on-cat`), never `text-white`, because the dark site colour is light.
 
-**The 15 category tones (AR-05)** each have a light and a dark value; they are listed with names on the [redesign page](/admin/development/redesign#h-id) and shown on UI elements. Category tones are part of the site theme, per mode. Site admins change the site colours, the tones and the fonts in Admin → Dizains (Krāsas, Kategoriju krāsas, Fonti): a preview for yourself first, then publish. The editor checks the contrast floor below as you pick and will not save a colour under it.
+**The 15 category tones (AR-05)** each have a light and a dark value; they are listed with names on the [redesign page](/admin/development/redesign#h-id) and shown on UI elements. Category tones are part of the site theme, per mode. Site admins change the site colours, the tones and the fonts in Admin → Dizains (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti; one shared sample beside the parts): a preview for yourself first, then publish. The editor checks the contrast floor below as you pick and will not save a colour under it.
 
 **Contrast floor.** Text is AA (4.5:1) on every surface in both modes. A tone is at least 4.5:1 with white (light) and 7:1 with near-black (dark). The line colour is a divider, never the only sign of a control.
 

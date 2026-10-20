@@ -1,10 +1,14 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Users } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { buttonClass } from '@/components/ui/Button';
 import type { ThemeFontId, ThemeModeTokens, ThemeStyleKey } from '@/lib/constants';
+import { toneHex } from '@/lib/theme/contrast';
 import { themeSampleVars } from '@/lib/theme/css';
+
+const TILES = [['travel', 'tile1'], ['music', 'tile2'], ['sports', 'tile3']] as const;
 
 type Props = {
     tokens: ThemeModeTokens;
@@ -35,6 +39,16 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, d
                 <p className="mt-4 text-sm">
                     <span className="font-semibold text-primary underline underline-offset-4">{t('link')}</span>
                 </p>
+                <ul className="mt-4 grid gap-2 sm:grid-cols-3">
+                    {TILES.map(([slug, key]) => (
+                        <li key={slug} className="flex items-center gap-2 rounded-xl bg-surface-elevated p-2 shadow-card frame">
+                            <span style={{ '--c': toneHex(tokens, slug, dark ? 'dark' : 'light') } as React.CSSProperties} className="grid size-10 shrink-0 place-items-center rounded-item cat-tile">
+                                <Users className="size-5" aria-hidden="true" />
+                            </span>
+                            <span className="min-w-0 truncate text-sm font-semibold">{t(key)}</span>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </div>
     );

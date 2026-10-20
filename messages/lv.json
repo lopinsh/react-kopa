@@ -753,8 +753,9 @@
       "openMenu": "Atvērt administrēšanas izvēlni",
       "onThisPage": "Šajā lapā",
       "parts": {
+        "looks": "Noskaņojumi",
         "colours": "Krāsas",
-        "style": "Stils",
+        "style": "Forma",
         "categories": "Kategoriju krāsas",
         "fonts": "Fonti"
       }
@@ -897,6 +898,9 @@
           "headerLists": "Galvenes saraksti: zvans (abas cilnes), ziņas, tukšie stāvokļi, paziņojuma rinda"
         },
         "sample": {
+        "tile1": "Pastaigas",
+        "tile2": "Koris",
+        "tile3": "Futbols",
           "profileBio": "Nedēļas nogales pastaigas un galda spēles. Meklēju, ar ko kopā skriet no rīta.",
           "category": "Pārgājieni",
           "parentCategory": "Sports",
@@ -1046,10 +1050,17 @@
       },
       "parts": {
         "label": "Dizaina daļas",
+        "looks": "Noskaņojumi",
         "colours": "Krāsas",
-        "style": "Stils",
+        "style": "Forma",
         "categories": "Kategoriju krāsas",
         "fonts": "Fonti"
+      },
+      "looks": {
+        "shape": "Forma: {shape}",
+        "fonts": "{heading} + {body}",
+        "lead": "Noskaņojums ir gatavs komplekts: krāsas, kategoriju toņi, forma un burti. Izvēlies vienu un precizē to citās daļās.",
+        "tones": "Kategoriju toņi"
       },
       "colours": {
         "lead": "Vietnes krāsa un tai piederīgais fons, līnijas un klusais teksts, gaišajai un tumšajai tēmai."

@@ -753,8 +753,9 @@
       "openMenu": "Open the admin menu",
       "onThisPage": "On this page",
       "parts": {
+        "looks": "Looks",
         "colours": "Colours",
-        "style": "Style",
+        "style": "Shape",
         "categories": "Category colours",
         "fonts": "Fonts"
       }
@@ -897,6 +898,9 @@
           "headerLists": "Header lists: the bell (both tabs), messages, empty states, a notification row"
         },
         "sample": {
+        "tile1": "Walks",
+        "tile2": "Choir",
+        "tile3": "Football",
           "profileBio": "Weekend walks and board games. Looking for people to run with in the mornings.",
           "category": "Hiking",
           "parentCategory": "Sports",
@@ -1046,10 +1050,17 @@
       },
       "parts": {
         "label": "Design parts",
+        "looks": "Looks",
         "colours": "Colours",
-        "style": "Style",
+        "style": "Shape",
         "categories": "Category colours",
         "fonts": "Fonts"
+      },
+      "looks": {
+        "shape": "Shape: {shape}",
+        "fonts": "{heading} + {body}",
+        "lead": "A look is a ready-made set: colours, category tones, shape and fonts. Pick one, then fine-tune it under the other parts.",
+        "tones": "Category tones"
       },
       "colours": {
         "lead": "The site colour and the background, lines and quiet text that go with it, for the light and the dark theme."
