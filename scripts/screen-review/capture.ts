@@ -23,7 +23,7 @@ const ACCOUNTS: Record<Exclude<Role, 'anon'>, { email: string; password: string 
 const SIZES = { desktop: { width: Number(process.env.DESKTOP_W ?? 1440), height: 900 }, mobile: { width: Number(process.env.MOBILE_W ?? 390), height: 844 } } as const;
 type Size = keyof typeof SIZES;
 
-const G = '/lv/religion/group/jelgavas-lugsanu-loks';
+const G = '/lv/travel/group/pargajieni';
 const EV_REQ = `${G}/events/choir-rehearsal-request`;
 const EV_MEM = `${G}/events/test-rehearsal-members`;
 
