@@ -1071,7 +1071,7 @@
       "fonts": {
         "lead": "Burti virsrakstiem un tekstam. Sarakstā ir tikai burti ar visām latviešu zīmēm."
       },
-      "presetResetsTones": "Gatavs noskaņojums atjauno arī noklusētās kategoriju krāsas.",
+      "presetResetsTones": "Katram noskaņojumam ir savas kategoriju krāsas; izvēloties to, tās nomaina pašreizējās.",
       "tones": {
         "swatchLight": "Gaišā",
         "swatchDark": "Tumšā",
@@ -1115,7 +1115,7 @@
         "partHasIssues": "(kontrasts par zemu)"
       },
       "resetTonesTitle": "Gatavs noskaņojums atjaunos kategoriju krāsas",
-      "resetTonesMessage": "Kategoriju krāsas ir mainītas. Izvēloties gatavo noskaņojumu, tās atgriezīsies noklusētajās. Turpināt?",
+      "resetTonesMessage": "Kategoriju krāsas ir mainītas. Izvēloties gatavo noskaņojumu, tās nomainīsies ar šī noskaņojuma krāsām. Turpināt?",
       "resetTonesConfirm": "Izvēlēties noskaņojumu",
       "styleTitle": "Formas un līnijas",
       "styleNote": "Stils maina stūrus, līnijas un ēnas. Krāsas paliek tās, kas izvēlētas sadaļā Krāsas.",

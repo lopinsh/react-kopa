@@ -1071,7 +1071,7 @@
       "fonts": {
         "lead": "Fonts for headings and text. The list only has fonts with every Latvian letter."
       },
-      "presetResetsTones": "A ready-made theme also brings back the default category colours.",
+      "presetResetsTones": "Each look has its own category colours; choosing one replaces the current ones.",
       "tones": {
         "swatchLight": "Light",
         "swatchDark": "Dark",
@@ -1115,7 +1115,7 @@
         "partHasIssues": "(contrast too low)"
       },
       "resetTonesTitle": "This theme will reset the category colours",
-      "resetTonesMessage": "You have changed some category colours. Choosing a ready-made theme brings back the default ones. Continue?",
+      "resetTonesMessage": "You have changed some category colours. Choosing this look replaces them with its own. Continue?",
       "resetTonesConfirm": "Choose theme",
       "styleTitle": "Shapes and lines",
       "styleNote": "The style changes corners, lines and shadows. Colours stay as chosen under Colours.",
