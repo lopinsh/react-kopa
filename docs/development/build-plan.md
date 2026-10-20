@@ -333,7 +333,7 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **i18n:** `discovery`.
 - **Size:** S/M.
 
-### R11 · Admin frame (M/L)
+### R11 · Admin frame (M/L) — R11a live; R11b pending (card look per page, CharCounter on admin fields, frame specimens in UI elements)
 
 - **Goal:** sections across (Moderācija, Struktūra, Vietne, Komanda, Izstrāde, sticky), pages down the left, one drawer on phones; every admin page in the new look.
 - **Rules (owner):** AR-68. Also in: AR-21, AR-69 (Dizains under Vietne), AR-18.
