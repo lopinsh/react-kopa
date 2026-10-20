@@ -68,7 +68,7 @@ export default function AccessStep() {
                             {...register('isAcceptingMembers')}
                             className="peer sr-only"
                         />
-                        <div className="h-5 w-9 rounded-full bg-border transition-colors peer-checked:bg-primary" />
+                        <div className="h-5 w-9 rounded-pill bg-border transition-colors peer-checked:bg-primary" />
                         <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4 shadow-sm" />
                     </div>
                     <div className="flex-1">

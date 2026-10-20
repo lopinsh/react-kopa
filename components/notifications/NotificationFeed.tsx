@@ -25,7 +25,7 @@ export default function NotificationFeed({ rows: initial, hasMore, tab, isAdmin,
     const query = tab === 'admin' ? { tab: 'admin' } : {};
 
     return (
-        <div data-ui={UI.notificationFeed} className="overflow-hidden rounded-2xl bg-surface">
+        <div data-ui={UI.notificationFeed} className="overflow-hidden rounded-2xl bg-surface shadow-card frame">
             <div className="flex items-center justify-between gap-3 border-b border-border px-4 pt-1">
                 {isAdmin ? (
                     <nav aria-label={t('title')} className="flex gap-4">

@@ -36,7 +36,7 @@ export default function ConversationRow({ conversation: conv, title, active = fa
 
     const body: ReactNode = (
         <>
-            <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface">
+            <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-full line bg-surface">
                 {conv.other
                     ? <img src={avatarUrl(conv.other)} alt="" className="size-full object-cover" referrerPolicy="no-referrer" />
                     : conv.group ? <CategoryDisc slug={conv.group.l1Slug} color={conv.group.accentColor} size={40} /> : <Users aria-hidden className="size-5 text-foreground-muted" />}

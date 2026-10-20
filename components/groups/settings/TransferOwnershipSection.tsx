@@ -61,7 +61,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 value={targetId}
                                 onChange={(e) => { setTargetId(e.target.value); setConfirming(false); }}
                                 disabled={isPending}
-                                className="w-full rounded-2xl border border-border bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary"
+                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 font-medium outline-none transition-all focus:border-primary"
                             >
                                 <option value="">{t('transferSelectPlaceholder')}</option>
                                 {candidates.map(c => (
@@ -77,7 +77,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 type="button"
                                 disabled={!target || isPending}
                                 onClick={() => setConfirming(true)}
-                                className="flex h-12 items-center gap-2 rounded-2xl border border-border bg-surface px-6 text-sm font-bold text-foreground transition-colors hover:bg-surface-elevated disabled:opacity-50"
+                                className="flex h-12 items-center gap-2 rounded-2xl line bg-surface px-6 text-sm font-bold text-foreground transition-colors hover:bg-surface-elevated disabled:opacity-50 shadow-card"
                             >
                                 {t('transferButton')}
                             </button>
@@ -89,7 +89,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                         type="button"
                                         onClick={handleTransfer}
                                         disabled={isPending}
-                                        className="flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-70"
+                                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-70"
                                     >
                                         {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                         {t('transferConfirmYes')}
@@ -98,7 +98,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                         type="button"
                                         onClick={() => setConfirming(false)}
                                         disabled={isPending}
-                                        className="rounded-xl border border-border px-4 py-2 text-sm font-medium text-foreground-muted hover:bg-surface-elevated"
+                                        className="rounded-xl line px-4 py-2 text-sm font-medium text-foreground-muted hover:bg-surface-elevated"
                                     >
                                         {tc('cancel')}
                                     </button>

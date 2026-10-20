@@ -12,7 +12,7 @@ export default function AcceptingMembersSection() {
     const { register, watch } = useFormContext<GroupFormValues>();
 
     return (
-        <div className="flex items-center gap-4 rounded-2xl bg-surface px-4 py-3.5">
+        <div className="flex items-center gap-4 rounded-2xl bg-surface px-4 py-3.5 shadow-card frame">
             <div className="relative flex shrink-0 items-center">
                 <input
                     type="checkbox"
@@ -20,7 +20,7 @@ export default function AcceptingMembersSection() {
                     id="isAcceptingMembers"
                     className="peer sr-only"
                 />
-                <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-full bg-border transition-colors peer-checked:bg-primary" />
+                <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-pill bg-border transition-colors peer-checked:bg-primary" />
                 <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
             </div>
             <label htmlFor="isAcceptingMembers" className="min-w-0 flex-1 cursor-pointer">

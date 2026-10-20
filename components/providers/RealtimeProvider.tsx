@@ -119,7 +119,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
             <div className="fixed bottom-20 md:bottom-6 right-4 z-[100] flex flex-col items-end pointer-events-none">
                 <div
                     className={clsx(
-                        'pointer-events-auto flex w-full max-w-sm rounded-xl border border-border bg-surface p-4 shadow-2xl transition-all duration-500 ease-out',
+                        'pointer-events-auto flex w-full max-w-sm rounded-xl line bg-surface p-4 shadow-2xl transition-all duration-500 ease-out',
                         toast ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
                     )}
                 >

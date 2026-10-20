@@ -38,7 +38,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                     style={{ borderColor: selectedL1.color }}
                 >
                     <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm border border-border">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm line">
                             <CategoryIcon slug={selectedL1.slug} className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
                         </div>
                         <div>
@@ -51,7 +51,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                         </div>
                     </div>
 
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-background text-foreground-muted transition-colors hover:bg-border hover:text-foreground">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-pill bg-background text-foreground-muted transition-colors hover:bg-border hover:text-foreground">
                         <ChevronDown className="h-5 w-5" />
                     </div>
                 </button>

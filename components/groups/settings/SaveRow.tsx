@@ -18,7 +18,7 @@ export default function SaveRow({ isPending, disabled, serverError }: Props) {
             <button
                 type="submit"
                 disabled={isPending || disabled}
-                className="flex h-14 items-center gap-3 rounded-full bg-primary px-10 font-semibold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
+                className="flex h-14 items-center gap-3 rounded-pill bg-primary px-10 font-semibold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? (
                     <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />

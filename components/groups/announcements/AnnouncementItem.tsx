@@ -28,7 +28,7 @@ export default function AnnouncementItem({ item, clamp, menu }: Props) {
     const author = item.author.name ?? item.author.username;
 
     return (
-        <article data-ui={UI.announcementItem} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 rounded-2xl bg-surface px-[18px] py-3.5">
+        <article data-ui={UI.announcementItem} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 rounded-2xl bg-surface px-[18px] py-3.5 shadow-card frame">
             <List aria-hidden="true" strokeWidth={1.8} className="mt-0.5 size-[18px] text-foreground-muted" />
             <div className="min-w-0">
                 <h3 className="break-words font-semibold leading-snug text-foreground">{item.title}</h3>

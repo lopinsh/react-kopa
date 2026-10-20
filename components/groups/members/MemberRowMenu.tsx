@@ -61,7 +61,7 @@ export default function MemberRowMenu({ groupId, userId, name, actions, profileH
             <button
                 {...triggerProps}
                 aria-label={`${t('memberActions')}: ${name}`}
-                className="grid size-11 place-items-center rounded-full text-foreground-muted outline-none transition-colors hover:bg-tint focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+                className="grid size-11 place-items-center rounded-pill text-foreground-muted outline-none transition-colors hover:bg-tint focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             >
                 <MoreHorizontal aria-hidden className="size-5" />
             </button>

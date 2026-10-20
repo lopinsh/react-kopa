@@ -36,14 +36,14 @@ export default function GroupPagesDrawer() {
                 aria-expanded={open}
                 aria-controls={id}
                 onClick={() => { openedOn.current = pathname; setOpen(true); }}
-                className={clsx('grid size-10 shrink-0 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden', 'hover:bg-tint')}
+                className={clsx('grid size-10 shrink-0 place-items-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden', 'hover:bg-tint')}
             >
                 <Menu aria-hidden className="size-5" />
             </button>
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('pagesLabel')} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
-                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-[10px]">
+                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item">
                             <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px]" />
                         </span>
                         <div className="min-w-0">

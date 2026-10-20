@@ -48,7 +48,7 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
     const { step, lang, rev, isPending, titleOver } = f;
 
     return (
-        <div className="w-full max-w-[560px] rounded-2xl bg-surface">
+        <div className="w-full max-w-[560px] rounded-2xl bg-surface shadow-card frame">
             <FormProvider {...f.form}>
                 <form onSubmit={f.onSubmit} className="p-[18px] md:p-6">
                     <div className="mb-5">

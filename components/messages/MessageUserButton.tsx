@@ -35,7 +35,7 @@ export default function MessageUserButton({ userId }: { userId: string }) {
                 type="button"
                 onClick={handleClick}
                 disabled={isPending || isOpening}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 md:w-auto"
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-pill bg-primary px-6 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 md:w-auto"
             >
                 {isPending
                     ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

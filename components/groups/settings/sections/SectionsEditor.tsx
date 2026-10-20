@@ -29,7 +29,7 @@ export default function SectionsEditor({ groupId, initialSections, locale }: Pro
         <div className="space-y-8">
             <div className="flex items-center justify-between">
                 <div />
-                <div className="rounded-full border border-border bg-surface-elevated px-3 py-1 text-[11px] font-semibold text-foreground-muted">
+                <div className="rounded-pill line bg-surface-elevated px-3 py-1 text-[11px] font-semibold text-foreground-muted">
                     {t('sections.count', { count: sections.length })}
                 </div>
             </div>
@@ -70,7 +70,7 @@ export default function SectionsEditor({ groupId, initialSections, locale }: Pro
                         onClick={handleAddSection}
                         className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-foreground-muted transition-all hover:border-primary/50 hover:bg-primary/5"
                     >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full line bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
                             <Plus className="h-4 w-4" />
                         </div>
                         <span className="text-xs font-semibold">{t('sections.add')}</span>

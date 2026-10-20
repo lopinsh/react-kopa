@@ -89,7 +89,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     <button type="button" className={clsx('-ml-2 p-2 text-foreground-muted', !alwaysShowBack && 'sm:hidden')} onClick={onBack} aria-label={t('back')}>
                         <ArrowLeft className="h-5 w-5" />
                     </button>
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-surface">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full line bg-surface">
                         {conversation.other
                             ? <img src={avatarUrl(conversation.other)} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                             : <Users className="h-4 w-4 text-foreground-muted" />}
@@ -113,7 +113,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             <button
                                 {...trigger}
                                 type="button"
-                                className="flex items-center gap-2 rounded-full bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
+                                className="flex items-center gap-2 rounded-pill bg-surface-elevated px-3 py-1.5 text-xs font-bold transition-colors hover:bg-surface-elevated/80"
                             >
                                 <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
                                 {conversation.isBlocked ? t('unblock') : t('block')}
@@ -152,7 +152,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 'whitespace-pre-wrap break-words rounded-2xl p-3 text-sm leading-relaxed',
                                 isMe
                                     ? 'rounded-br-none bg-primary text-primary-foreground'
-                                    : 'rounded-bl-none border border-border bg-surface-elevated text-foreground shadow-sm'
+                                    : 'rounded-bl-none line bg-surface-elevated text-foreground shadow-sm'
                             )}>
                                 {msg.content}
                             </div>
@@ -184,13 +184,13 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 aria-describedby={counterId}
                                 placeholder={t('typeMessage')}
                                 aria-label={t('typeMessage')}
-                                className="flex-1 rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm focus:border-primary focus:outline-none"
+                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-sm focus:border-primary focus:outline-none"
                             />
                             <button
                                 type="submit"
                                 disabled={!messageTextSchema.safeParse(draft).success || isPending || over}
                                 aria-label={t('send')}
-                                className="flex items-center justify-center rounded-full bg-primary px-5 font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                                className="flex items-center justify-center rounded-pill bg-primary px-5 font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
                                 <Send className="h-4 w-4" />
                             </button>

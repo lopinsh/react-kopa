@@ -83,7 +83,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     aria-expanded={open}
                     aria-controls={open ? calendarId : undefined}
                     aria-label={t('openCalendar')}
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border text-foreground-muted hover:bg-surface-elevated disabled:opacity-60 md:h-10 md:w-10"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl line text-foreground-muted hover:bg-surface-elevated disabled:opacity-60 md:h-10 md:w-10"
                 >
                     <Calendar className="h-4 w-4" />
                 </button>
@@ -101,7 +101,7 @@ function DatePanel({ id, value, onPick, onClose }: { id: string; value: string; 
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
     const [month, setMonth] = useState(monthOf(isDayKey(value) ? value : today));
     return (
-        <div id={id} role="dialog" aria-label={t('openCalendar')} className="absolute left-0 top-full z-30 mt-1 w-[19rem] max-w-[calc(100vw-3rem)] rounded-2xl border border-border bg-surface p-3 shadow-premium">
+        <div id={id} role="dialog" aria-label={t('openCalendar')} className="absolute left-0 top-full z-30 mt-1 w-[19rem] max-w-[calc(100vw-3rem)] rounded-2xl line bg-surface p-3 shadow-premium">
             <MonthGrid
                 month={month}
                 onMonth={setMonth}

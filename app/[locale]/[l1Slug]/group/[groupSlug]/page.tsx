@@ -47,7 +47,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
             label: i === 0 ? tCommon('about') : s.title,
             lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
             content: (
-                <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px]">
+                <article className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px] shadow-card frame">
                     {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
                     <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(s.content) }} />
                 </article>

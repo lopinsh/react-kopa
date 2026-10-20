@@ -21,7 +21,7 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
                     type="button"
                     onClick={onDelete}
                     disabled={isPending}
-                    className="flex h-12 items-center gap-3 rounded-full bg-danger px-8 font-semibold text-danger-foreground transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                    className="flex h-12 items-center gap-3 rounded-pill bg-danger px-8 font-semibold text-danger-foreground transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                 >
                     <Trash2 className="h-5 w-5" />
                     {c_common('deleteGroupTitle')}

@@ -65,7 +65,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
 
             <div className="mt-1 pt-1 border-t border-border/50">
                 {inlineWildcardParentId === l1.id ? (
-                    <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 border border-border mt-1">
+                    <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 line mt-1">
                         <input
                             autoFocus
                             className="w-full bg-transparent text-sm focus:outline-none font-semibold text-foreground"

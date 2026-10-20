@@ -61,7 +61,7 @@ export default function PrivacySettings({ initial, demo = false }: { initial: Pr
     const [savedNote, setSavedNote] = useState(false);
 
     return (
-        <fieldset id="privacy" className="scroll-mt-20 rounded-2xl bg-surface px-4 py-3.5 text-sm">
+        <fieldset id="privacy" className="scroll-mt-20 rounded-2xl bg-surface px-4 py-3.5 text-sm shadow-card frame">
             <legend className="float-left mb-1.5 font-heading text-[15px] font-semibold">{t('privacy.title')}</legend>
             <div className="clear-both divide-y divide-border">
                 {ROWS.map(({ key, label }) => (

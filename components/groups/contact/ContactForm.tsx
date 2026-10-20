@@ -80,7 +80,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                         aria-describedby={`${id}-count`}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-xl border border-border bg-surface p-3.5 text-[15px] outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-[15px] outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                     <div className="mt-1 flex"><TextCounter id={`${id}-count`} length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
                 </div>

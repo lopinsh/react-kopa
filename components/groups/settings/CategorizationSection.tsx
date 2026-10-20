@@ -48,7 +48,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                 {selectedL1 && (
                     <div className="pt-8 border-t border-border">
                         {tagsCleared && noTagsYet && (
-                            <p role="status" className="mb-4 rounded-xl border border-border bg-surface px-3 py-2 text-sm text-foreground-muted">
+                            <p role="status" className="mb-4 rounded-xl line bg-surface px-3 py-2 text-sm text-foreground-muted">
                                 {t('tagsClearedOnCategoryChange')}
                             </p>
                         )}

@@ -58,7 +58,7 @@ export default function NotificationItem({ n, onRead }: { n: NotificationView; o
                     onClick={tap}
                     title={t('markRead')}
                     aria-label={t('markRead')}
-                    className="absolute bottom-2 right-3 z-[2] grid size-6 place-items-center rounded-full bg-primary/10 text-primary opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
+                    className="absolute bottom-2 right-3 z-[2] grid size-6 place-items-center rounded-pill bg-primary/10 text-primary opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
                 >
                     <Check aria-hidden className="size-3" />
                 </button>

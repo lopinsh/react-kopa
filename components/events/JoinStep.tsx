@@ -15,7 +15,7 @@ import GoingButton from './GoingButton';
 
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
 
-const CHIP = 'inline-flex h-10 items-center gap-1.5 rounded-full px-4 text-sm font-semibold';
+const CHIP = 'inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-sm font-semibold';
 const UNDO = 'text-sm font-semibold text-foreground-muted underline decoration-border underline-offset-4 hover:text-foreground disabled:opacity-60';
 type Action = 'go' | 'request' | 'waitlist';
 
@@ -83,7 +83,7 @@ export default function JoinStep({ join, trailing }: { join: EventJoinView; trai
                     {step.kind === 'act' && <GoingButton action={step.action} pending={pending} onPress={() => gateAction(() => press(step.action), 'event_join')} describedBy={note ? noteId : undefined} />}
                     {step.kind === 'done' && (
                         <>
-                            <span className={clsx(CHIP, step.label === 'going' || step.label === 'approved' ? 'bg-tint text-foreground' : 'text-foreground-muted ring-[1.5px] ring-inset ring-border')}>
+                            <span className={clsx(CHIP, step.label === 'going' || step.label === 'approved' ? 'bg-tint text-foreground' : 'text-foreground-muted')}>
                                 {(step.label === 'going' || step.label === 'approved') && <Check aria-hidden className="size-4" />}
                                 {step.label === 'going' ? tCommon('going') : step.label === 'pending' ? tCommon('pending') : t(step.label === 'approved' ? 'approved' : 'onWaitlist')}
                             </span>

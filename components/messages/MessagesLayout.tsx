@@ -21,7 +21,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
         useMessagesInbox({ initialConversations, currentUserId, locale, initialConversationId });
 
     return (
-        <div className="flex h-[calc(100dvh-var(--header-height)-var(--me-head,0px)-12px-4rem)] overflow-hidden rounded-2xl bg-surface md:h-[calc(100dvh-var(--header-height)-var(--me-head,0px)-18px-24px)]">
+        <div className="flex h-[calc(100dvh-var(--header-height)-var(--me-head,0px)-12px-4rem)] overflow-hidden rounded-2xl bg-surface md:h-[calc(100dvh-var(--header-height)-var(--me-head,0px)-18px-24px)] shadow-card frame">
             <ConversationList
                 conversations={conversations}
                 activeId={activeConversationId}

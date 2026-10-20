@@ -81,7 +81,7 @@ export default function ReasonModal({
                 aria-describedby={`${fieldId}-count`}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full resize-none rounded-xl border border-border bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-danger/40"
+                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-sm text-foreground outline-none focus:border-danger/40"
             />
             <div className="mt-1 flex items-start gap-2">
                 <p className="text-xs text-foreground-muted">{hint}</p>
@@ -100,7 +100,7 @@ export default function ReasonModal({
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending || over}
-                    className="flex items-center gap-2 rounded-full bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-pill bg-danger px-5 py-2.5 text-sm font-bold text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}
                 </button>

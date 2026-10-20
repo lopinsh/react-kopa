@@ -26,7 +26,7 @@ export default function AvatarField({ userId, image, seed, onNewSeed }: Props) {
             <button
                 type="button"
                 onClick={() => onNewSeed(Math.random().toString(36).slice(2, 10))}
-                className="flex min-h-11 items-center gap-1.5 rounded-full px-4 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-tint soft-press"
+                className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-sm font-semibold text-foreground ring-1 ring-inset ring-border hover:bg-tint soft-press"
             >
                 <Dices aria-hidden className="size-4" />
                 {t('newAvatar')}

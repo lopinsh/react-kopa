@@ -38,7 +38,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
             )}
         >
             <div className="relative flex items-center gap-4 p-4 has-[button[data-row-toggle]:focus-visible]:outline has-[button[data-row-toggle]:focus-visible]:outline-2 has-[button[data-row-toggle]:focus-visible]:-outline-offset-2 has-[button[data-row-toggle]:focus-visible]:outline-primary md:p-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-surface-elevated text-foreground-muted">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl line bg-surface-elevated text-foreground-muted">
                     {index === 0 ? <span className="text-xs font-semibold">0</span> : <GripVertical className="h-4 w-4" />}
                 </div>
 
@@ -57,7 +57,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
                             </button>
                         </h3>
                         {section.visibility === 'MEMBERS_ONLY' && (
-                            <span className="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
+                            <span className="flex items-center gap-1 rounded-pill bg-primary/10 px-1.5 py-0.5 text-[11px] font-medium text-primary">
                                 <Lock className="h-2.5 w-2.5" />
                                 {c_common('visibilityMembersOnly')}
                             </span>

@@ -32,7 +32,7 @@ export default async function ProfileEditPage({ params }: { params: Promise<{ lo
                 {t('backToProfile')}
             </Link>
             <h1 className="font-heading text-xl font-semibold md:sr-only">{t('editTitle')}</h1>
-            <div className="rounded-2xl bg-surface px-4 py-5 md:px-5">
+            <div className="rounded-2xl bg-surface px-4 py-5 md:px-5 shadow-card frame">
                 <ProfileEditForm user={user} />
             </div>
         </div>

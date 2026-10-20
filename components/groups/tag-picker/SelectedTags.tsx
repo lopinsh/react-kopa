@@ -20,7 +20,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
             {tags.map((tag) => (
                 <span
                     key={tag.id}
-                    className="flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground shadow-card"
+                    className="flex items-center gap-1 rounded-pill bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground shadow-card"
                 >
                     {tag.title}
                     <button
@@ -29,7 +29,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                             e.preventDefault();
                             onRemove(tag.id);
                         }}
-                        className="ml-0.5 rounded-full hover:bg-black/20 p-0.5 transition-colors"
+                        className="ml-0.5 rounded-pill hover:bg-black/20 p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
@@ -47,7 +47,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                             e.preventDefault();
                             onRemove(tag.id);
                         }}
-                        className="ml-0.5 rounded-full hover:bg-black/10 p-0.5 transition-colors"
+                        className="ml-0.5 rounded-pill hover:bg-black/10 p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>

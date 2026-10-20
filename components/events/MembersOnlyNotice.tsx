@@ -7,7 +7,7 @@ export default async function MembersOnlyNotice({ heading = false }: { heading?:
     // On the event address it is the page's one heading (the banner's group name is a breadcrumb there, not the <h1>).
     const Tag = heading ? 'h1' : 'div';
     return (
-        <Tag data-ui={UI.notice} className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px] text-foreground">
+        <Tag data-ui={UI.notice} className="max-w-[760px] rounded-2xl bg-surface px-[18px] py-3.5 text-[15px] text-foreground shadow-card frame">
             {t('sentence')}
         </Tag>
     );

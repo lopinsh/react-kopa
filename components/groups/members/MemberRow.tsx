@@ -14,7 +14,7 @@ export default async function MemberRow({ member, groupId }: Props) {
     const name = member.name || t('anonymousUser');
     return (
         <li data-ui={UI.memberCard} className="flex items-center gap-3 py-3">
-            <img src={member.avatar} alt="" className="size-11 shrink-0 rounded-full border border-border bg-surface object-cover" referrerPolicy="no-referrer" />
+            <img src={member.avatar} alt="" className="size-11 shrink-0 rounded-full line bg-surface object-cover" referrerPolicy="no-referrer" />
             <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2">
                     {member.profileHref ? (

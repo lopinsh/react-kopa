@@ -29,7 +29,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
     return (
         <div
             id="tag-picker-results"
-            className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl border border-border bg-surface shadow-premium max-h-[300px] overflow-y-auto"
+            className="absolute left-0 right-0 top-full z-50 mt-1.5 rounded-xl line bg-surface shadow-premium max-h-[300px] overflow-y-auto"
         >
             {wildcardMode ? (
                 <div className="p-3">
@@ -38,7 +38,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                         type="button"
                         onClick={() => createPending(l1.id, query)}
                         disabled={isSubmittingPending}
-                        className="w-full flex items-center justify-between rounded-full p-2 text-left text-sm transition-colors text-primary-foreground font-bold bg-primary disabled:opacity-60"
+                        className="w-full flex items-center justify-between rounded-pill p-2 text-left text-sm transition-colors text-primary-foreground font-bold bg-primary disabled:opacity-60"
                     >
                         <span>{t('createSubtopic')}</span>
                         <Check className="h-4 w-4" />
@@ -101,7 +101,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                 void commitTypedText();
                             }}
                             disabled={isSubmittingPending}
-                            className="w-full rounded-full bg-primary py-2 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+                            className="w-full rounded-pill bg-primary py-2 text-sm font-bold text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
                         >
                             {c('done')}
                         </button>

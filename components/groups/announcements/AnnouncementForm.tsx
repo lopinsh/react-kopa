@@ -16,7 +16,7 @@ import { isOverLimit } from '@/lib/text-limit';
 type Visibility = 'PUBLIC' | 'MEMBERS_ONLY';
 type Props = { groupId: string; locale: string; /** The choice is offered in public groups only. */ canChooseVisibility: boolean };
 
-const FIELD = 'w-full rounded-2xl border border-border bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary';
+const FIELD = 'w-full rounded-2xl line bg-surface-elevated p-4 text-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary';
 
 /** "Jauns ieraksts": the button for the team and, once pressed, the pop-up where the post is written. */
 export default function AnnouncementForm({ groupId, locale, canChooseVisibility }: Props) {

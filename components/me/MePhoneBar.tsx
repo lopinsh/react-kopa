@@ -26,7 +26,7 @@ export default function MePhoneBar() {
                 aria-expanded={open}
                 aria-controls={drawerId}
                 onClick={() => setOpen(true)}
-                className="grid size-10 shrink-0 place-items-center rounded-full hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="grid size-10 shrink-0 place-items-center rounded-pill hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
                 <Menu aria-hidden className="size-5" />
             </button>

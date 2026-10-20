@@ -21,7 +21,7 @@ export default async function PrivacyPage() {
 
     return (
         <div className="container mx-auto max-w-2xl px-4 py-12">
-            <p className="mb-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground-muted">
+            <p className="mb-6 rounded-xl line bg-surface px-4 py-3 text-sm text-foreground-muted">
                 {t('draftNotice')}
             </p>
             <h1 className="text-4xl font-semibold tracking-tight text-foreground">{t('privacy.title')}</h1>
