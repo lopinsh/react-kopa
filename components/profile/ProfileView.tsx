@@ -42,7 +42,7 @@ export default async function ProfileView({ view, viewerId, locale, action, own 
             <header className="flex items-center gap-3.5">
                 <img src={avatarUrl(person)} alt="" className="size-16 shrink-0 rounded-full object-cover md:size-20" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
-                    <h1 className={`truncate text-section ${own ? 'md:sr-only' : ''}`}>{name}</h1>
+                    <h1 className={`truncate py-[0.15em] -my-[0.15em] text-section ${own ? 'md:sr-only' : ''}`}>{name}</h1>
                     {person.username && <p className="truncate text-body-sm text-foreground-muted">{t('handle', { username: person.username })}</p>}
                 </div>
             </header>

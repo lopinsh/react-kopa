@@ -137,7 +137,7 @@ Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-l
 ## Identity
 
 - **Logo (AR-03).** "Ejam *kopā*" in Literata, the site colour, with two overlapping circles (the second at 45 %). Phones use the smaller size. The favicon is the two circles. The brand is written "Ejam kopā".
-- **Small tags (AR-09).** 11 px, a pill, sentence case, never clickable, never in a category tone. A tag with a tick says "Eju"; roles say "Īpašnieks", "Mod" and, outlined, "Gaida". A plain member has no tag. Quiet facts ("Tikai biedriem") are grey.
+- **Small tags (AR-09).** `text-tag` (12 px), a pill, sentence case, never clickable, never in a category tone. A tag with a tick says "Eju"; roles say "Īpašnieks", "Mod" and, outlined, "Gaida". A plain member has no tag. Quiet facts ("Tikai biedriem") are grey.
 - **Category line.** The category with a tone dot, then its sub-categories in quiet text, on one wrapping line.
 - **Words and numbers (AR-10).** Sentence case everywhere, table headers included: no capitals, no letter-spacing. Numbers in text are plain digits.
 - **Dates (AR-11).** With the weekday: "Svētd., 18. okt." and "Svētd., 18. okt. 17:00", English "Sun, 18 Oct, 17:00". 24-hour time in the viewer's zone. Latvian weekdays are capitalised at the start of a line.

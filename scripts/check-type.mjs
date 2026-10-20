@@ -1,12 +1,12 @@
 // Type-role guard: pages and components use the role utilities (text-display … text-tag), not raw sizes.
-// Bans text-[Npx], text-xs…text-4xl, leading-*, tracking-*, font-bold/medium/semibold under app/ and components/.
+// Bans text-[Npx|rem|clamp|calc], text-xs…text-9xl, leading-*, tracking-*, font weights other than font-normal (a reset) under app/ and components/.
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
 
 const strict = process.env.TYPE_CHECK_STRICT !== '0' && !process.argv.includes('--warn');
 const ROOTS = ['app', 'components'];
-const BAN = /(?<![\w-])(text-\[\d+(?:\.\d+)?(?:px|rem)\]|text-(?:xs|sm|base|lg|xl|[2-9]xl)|leading-[\w./\[\]-]+|tracking-[\w./\[\]-]+|font-(?:bold|medium|semibold))(?![\w-])/g;
+const BAN = /(?<![\w-])(text-\[(?:\d+(?:\.\d+)?(?:px|rem)|clamp\(|calc\(|length:)[^\]]*\]|text-(?:xs|sm|base|lg|xl|[2-9]xl)|leading-[\w./\[\]-]+|tracking-[\w./\[\]-]+|font-(?:thin|extralight|light|medium|semibold|bold|extrabold|black))(?![\w-])/g;
 
 const counts = new Map();
 const walk = (dir) => {

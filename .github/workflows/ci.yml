@@ -33,5 +33,5 @@ jobs:
       - name: i18n parity
         run: npm run i18n:check
 
-      - name: Type roles (warn-only until pass B)
+      - name: Type roles (strict)
         run: npm run type:check
