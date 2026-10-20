@@ -114,8 +114,10 @@ Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-l
 - 4 px grid. Page sides 16 px (phone), 24–32 px (desktop).
 - Content widths: 760 group pages, 680 reading, 560 focus, 1200 browse.
 - Gaps: 8 inside a row, 12–16 between items, 24–32 between sections.
+- Space inside a card is never more than the space between cards: 20 px inside (padding, 6 px between lines), 20 px visible air between cards in the grid (Drosmīgs adds `--shadow-room` so the hard shadow does not eat it).
 - Cards are flat. The float shadow (`shadow-premium`) is only for things above the page: menus, drop-downs, pop-overs, toasts, drawers. Dialogs use `shadow-dialog`. Shadows are the same in dark mode.
 - Drosmīgs gives cards and controls a hard offset shadow (`shadow-card`, `shadow-control`); `shadow-room` leaves space inside a clipping parent (chip rows) and `press` sinks a filled button onto its shadow (position change kept under reduced motion, transition dropped).
+- Category tiles (card picture, row icon, panel picture) use `cat-tile`: Mierīgs tints the tone (20 % on the surface, tone as glyph), Drosmīgs fills it solid with the on-tone glyph (`--tile-mix`, `--tile-on`; style token `tile`).
 
 ## Identity
 

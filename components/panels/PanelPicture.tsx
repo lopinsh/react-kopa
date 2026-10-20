@@ -12,7 +12,7 @@ export default function PanelPicture({ image, l1Slug }: { image: string | null; 
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <div className="relative h-24 shrink-0 overflow-hidden bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)] md:h-[180px]">
+        <div className="relative h-24 shrink-0 overflow-hidden cat-tile md:h-[180px]">
             {image ? (
                 <Image src={getSmartImageUrl(image)} alt="" fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover" />
             ) : l1Slug ? (

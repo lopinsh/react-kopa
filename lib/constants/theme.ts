@@ -81,15 +81,17 @@ export interface ThemeStyleTokens {
     /** Room a clipping parent leaves for a hard shadow. */
     shadowRoom: string;
     headingWeight: number;
+    /** Category tiles (card picture, row icon): a tint of the category tone or the solid tone. */
+    tile: 'tint' | 'solid';
 }
 
 export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
-    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadowOffset: null, pressShift: '0px', shadowRoom: '0px', headingWeight: 600 },
+    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadowOffset: null, pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint' },
     bold: {
         radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', '4xl': '12px', pill: '6px', menu: '6px', item: '5px' },
         lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
         shadowOffset: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
-        pressShift: '3px', shadowRoom: '5px', headingWeight: 700,
+        pressShift: '3px', shadowRoom: '5px', headingWeight: 700, tile: 'solid',
     },
 };
 

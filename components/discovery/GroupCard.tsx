@@ -51,7 +51,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             style={{ ['--c' as string]: group.category.color }}
             className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
         >
-            <div className={`flex min-w-0 flex-col gap-[3px] px-3.5 pt-3${bottomLine ? '' : ' pb-3'}`}>
+            <div className={`flex min-w-0 flex-col gap-1.5 px-5 pt-5 ${bottomLine ? "" : "pb-5"}`}>
                 <h3 className="line-clamp-2 min-h-[2lh] font-heading text-[15px] font-semibold leading-snug text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
                     {fullPage
@@ -74,7 +74,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 )}
             </div>
             <GroupCardActivity activity={activity} lookingFor={group.lookingFor} />
-            <div className="relative col-start-2 row-span-2 row-start-1 min-h-14 overflow-hidden bg-[color-mix(in_srgb,var(--c)_20%,var(--surface))] text-[var(--c)]">
+            <div className="relative col-start-2 row-span-2 row-start-1 min-h-14 overflow-hidden cat-tile">
                 {group.bannerImage ? (
                     <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="320px" className="object-cover" />
                 ) : (

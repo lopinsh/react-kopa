@@ -52,6 +52,14 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),
     };
+    // Tile tone shares; the cat-tile utility mixes them with --c per card (a var(--c) here would resolve at the root).
+    if (style.tile === 'solid') {
+        vars['--tile-mix'] = '100%';
+        vars['--tile-on'] = '100%';
+    } else if (withDefaults) {
+        vars['--tile-mix'] = '20%';
+        vars['--tile-on'] = '0%';
+    }
     const radius = style.radius ?? (withDefaults ? CALM_RADII : null);
     if (radius) {
         for (const [k, v] of Object.entries(radius)) vars[`--radius-${k}`] = v;

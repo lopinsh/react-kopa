@@ -43,6 +43,9 @@
   --shadow-control: none;
   --press-shift: 0px;
   --shadow-room: 0px;
+  /* Category tiles: share of the tone in the fill and of the on-tone colour in the glyph (plain percentages: var(--c) is set per card). */
+  --tile-mix: 20%;
+  --tile-on: 0%;
   --heading-weight: 600;
 
   /* Pop-up scrim (AR-67) */
@@ -282,6 +285,12 @@ body {
   @media (prefers-reduced-motion: reduce) {
     transition: none;
   }
+}
+
+/* cat-tile: tinted (calm) or solid (bold) tile in the category tone; needs --c on an ancestor. */
+@utility cat-tile {
+  background-color: color-mix(in srgb, var(--c) var(--tile-mix), var(--surface));
+  color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--c));
 }
 
 /* shadow-room: space a clipping parent leaves for a hard shadow (calm: 0). */
