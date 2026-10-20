@@ -120,7 +120,7 @@ R1a ─► R1b
                 └─► R12 (any time after R2b; delete-account needs R2a's Iestatījumi)
 ```
 
-**Hard dependencies.** R1a before everything (AR-01). R2a needs R1a (tokens). R2b needs R2a (frame for toasts above the bottom bar). R3a needs R2b (counter, pop-ups, skeletons). R3b needs R3a. R4 needs nothing new but must be released before R5a. R5a needs R4 (several cities, counts, event place) and R3a (D11). R5b needs R5a. R6 needs R5b (rows) and R3b (Sazināties). R7 needs R5a (place list, filter line chip) and R6 (results open panels). R8 needs R2a and R5b. R9a needs R3a, R4, R6. R9b needs R9a only for order (shared frame pieces). R10 needs R5a. R11 and R12 need R2b. R13 (Templates) needs R11b and runs before R12.
+**Hard dependencies.** R1a before everything (AR-01). R2a needs R1a (tokens). R2b needs R2a (frame for toasts above the bottom bar). R3a needs R2b (counter, pop-ups, skeletons). R3b needs R3a. R4 needs nothing new but must be released before R5a. R5a needs R4 (several cities, counts, event place) and R3a (D11). R5b needs R5a. R6 needs R5b (rows) and R3b (Sazināties). R7 needs R5a (place list, filter line chip) and R6 (results open panels). R8 needs R2a and R5b. R9a needs R3a, R4, R6. R9b needs R9a only for order (shared frame pieces). R10 needs R5a. R11 and R12 need R2b. R13 (Templates) needs R11b and runs before R12. R14 (Kopā) needs R13 and also runs before R12.
 
 **Could run in parallel** (built in separate worktrees, still released one at a time): R4 alongside R3a/R3b (different files except the settings form, which R4 only adds a field to); R11 and R12 alongside anything after R2b; R10 alongside R6–R9. Default: keep the serial order above, because each release is checked by the owner on production.
 
@@ -363,6 +363,15 @@ Common to every card (not repeated): **Acceptance** = Definition of done (AGENTS
 - **Order:** runs before R12 (R12 then builds its screens on the shared edges).
 - **Spec:** [specs/R13.md](specs/R13.md) (R13-1 style layer, Stils and atoms; R13-2 sweep and docs).
 
+### R14 · Kopā (M/L, two sessions) — owner-approved 20 Oct, built before R12
+
+- **Goal:** show who you would go with and what happens now. Shared `Facepile` (up to 3 faces + "+N", initials on the category tone without a photo); the event page's "Eju · N" with faces beside it; group cards show faces + count instead of "N biedri"; a "Šonedēļ" strip of 3–5 public events on discovery's Grupas; Informācija reordered (next meetup first on phones, beside the parts on desktop) with a 3:1 picture.
+- **Rules (owner):** none (owner brief, 20 Oct). Also in: AR-10, AR-55, AR-59, AR-24; changes AR-50 (member faces on group cards) and C5 (Informācija picture 3:1).
+- **Privacy (owner):** faces only for signed-in viewers; visitors, private groups and members-only events get the count only, decided in the service; no per-viewer data in `unstable_cache` entries.
+- **Data:** none (no migration).
+- **Order:** runs before R12.
+- **Spec:** [specs/R14.md](specs/R14.md) (R14a faces; R14b the strip and Informācija).
+
 ## 6. Cross-cutting
 
 - **Owner decisions 15 Oct (notes batch, all agreed).**
@@ -496,4 +505,5 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R10 Citur | cancelled by owner 19 Oct | | |
 | R11 Admin frame | built (frame, drawer, five dialogs, card look per page, counters on admin name fields, frame specimens in UI elements) | [specs/R11.md](specs/R11.md) | |
 | R13 Templates (before R12) | built, awaiting review (R13-1 e9a919e..687a89e, R13-2 sweep + docs) | [specs/R13.md](specs/R13.md) | |
+| R14 Kopā (before R12) | spec written | [specs/R14.md](specs/R14.md) | |
 | R12 Everything else | not started | | |
