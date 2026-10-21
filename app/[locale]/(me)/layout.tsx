@@ -20,7 +20,7 @@ export default async function MeLayout({ children, params }: { children: React.R
     const [ctx, view] = session?.user?.id
         ? await Promise.all([
             UserService.getOwnAreaContext(session.user.id),
-            UserService.getProfileView({ userId: session.user.id }, session.user.id, locale, { asStranger: true }),
+            UserService.getProfileView({ userId: session.user.id }, session.user.id, locale, { asStranger: true, withoutGroups: true }),
         ])
         : [null, null];
     // Signed out there is no frame, but the page still starts at the frame's spacing.

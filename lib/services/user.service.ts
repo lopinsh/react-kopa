@@ -165,13 +165,14 @@ export const UserService = {
      * all public groups only when the person opted in (`showGroupsOnProfile`), signed-out visitors share no group.
      * A private profile (`isProfilePublic = false`) gives any other viewer `isPrivate` with empty person fields and no groups.
      * `asStranger` (Mans profils) builds it as a signed-in person who shares no group would see it, person fields kept.
+     * `withoutGroups` skips the group queries (groups empty, scope 'none'): for callers that only need the person.
      * Never returns the email, password hash or role.
      */
     async getProfileView(
         target: { username: string } | { userId: string },
         viewerId: string | undefined,
         locale: string,
-        opts: { asStranger?: boolean } = {},
+        opts: { asStranger?: boolean; withoutGroups?: boolean } = {},
     ): Promise<ProfileViewContext | null> {
         const lang = locale === 'en' ? 'en' : 'lv';
         const profile = await prisma.user.findUnique({
@@ -187,6 +188,13 @@ export const UserService = {
             return {
                 person: { id: profile.id, name: null, username: null, image: null, avatarSeed: null, bio: null, cities: [], createdAt: profile.createdAt },
                 isOwn, isPrivate: true, groups: [], groupsScope: 'none', canMessage: false,
+            };
+        }
+
+        if (opts.withoutGroups) {
+            return {
+                person: { id: profile.id, name: profile.name, username: profile.username, image: profile.image, avatarSeed: profile.avatarSeed, bio: profile.bio, cities: profile.cities, createdAt: profile.createdAt },
+                isOwn, isPrivate: !profile.isProfilePublic, groups: [], groupsScope: 'none', canMessage: false,
             };
         }
 
