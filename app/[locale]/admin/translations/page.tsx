@@ -31,7 +31,7 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                 <a
                     href="/api/admin/translations/export"
                     download
-                    className="flex items-center gap-2 rounded-pill bg-primary px-5 py-2.5 text-button-sm text-primary-foreground transition-all hover:opacity-90"
+                    className="flex items-center gap-2 rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-all hover:opacity-90"
                 >
                     <Download className="h-4 w-4" />
                     {t('export')}

@@ -65,7 +65,7 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
             </button>
             {open && (
                 <MenuPanel label={t('menuLabel')} placement="anchor" align="start" describedBy={noteId} dataUi={UI.languageEditorMenu} {...menuProps}>
-                    <p id={noteId} role="none" className="px-2.5 pb-1.5 pt-1 text-meta text-foreground-muted">{t('menuNote')}</p>
+                    <p id={noteId} role="none" className="px-3 pb-1.5 pt-1 text-meta text-foreground-muted">{t('menuNote')}</p>
                     {ordered.map((l) => (
                         <MenuItemButton
                             key={l}

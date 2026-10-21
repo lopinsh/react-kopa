@@ -150,10 +150,10 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                     <p className="mt-1 text-meta text-foreground-muted">{t('syntaxHint')}</p>
                     {saveError && <p role="alert" className="mt-2 text-body-sm text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
-                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-2.5 text-body-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
+                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
                         </OverlayCloseButton>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-2.5 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
+                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </button>
                     </div>

@@ -32,7 +32,7 @@ export default function SearchPlaceButton({ search }: { search: Pick<SearchModel
                 controls={pop.id}
                 onClear={() => setCities([])}
                 clearLabel={t('clearChoice', { what: names.join(', ') })}
-                widthClass="max-w-[9.5rem]"
+                widthClass="max-w-38"
             />
             <FilterPopover pop={pop} title={t('where')} onClose={close}>
                 <PlaceList

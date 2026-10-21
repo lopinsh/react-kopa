@@ -29,7 +29,7 @@ export default function CategoryColorRow({ slug, title, theme, disabled, onTone 
     return (
         <div
             style={{ '--tone-l': light, '--tone-d': dark } as React.CSSProperties}
-            className="grid grid-cols-[28px_minmax(0,1fr)_auto_auto_auto] items-center gap-2.5 border-t border-border py-[7px] text-body-sm first:border-t-0 [--row-tone:var(--tone-l)] [.dark_&]:[--row-tone:var(--tone-d)]"
+            className="grid grid-cols-[28px_minmax(0,1fr)_auto_auto_auto] items-center gap-3 border-t border-border py-2 text-body-sm first:border-t-0 [--row-tone:var(--tone-l)] [.dark_&]:[--row-tone:var(--tone-d)]"
         >
             <CategoryDisc slug={slug} color="var(--row-tone)" size={28} />
             <span className="text-foreground">{name}</span>

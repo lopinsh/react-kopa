@@ -69,8 +69,8 @@ const components: Components = {
             <table className="w-full text-left text-body-sm">{children}</table>
         </div>
     ),
-    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-2.5 text-tag text-foreground-muted">{children}</th>,
-    td: ({ children }) => <td className="min-w-28 border-b border-border/60 px-4 py-2.5 align-top [tr:last-child_&]:border-0">{children}</td>,
+    th: ({ children }) => <th className="whitespace-nowrap border-b border-border px-4 py-3 text-tag text-foreground-muted">{children}</th>,
+    td: ({ children }) => <td className="min-w-28 border-b border-border/60 px-4 py-3 align-top [tr:last-child_&]:border-0">{children}</td>,
     a: ({ href, children }) => {
         const target = resolveHref(href);
         if (target.kind === 'internal') return <Link href={target.href} className={linkClass}>{children}</Link>;

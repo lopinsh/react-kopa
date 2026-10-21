@@ -24,7 +24,7 @@ export default async function SettingsPage({ params }: { params: Promise<{ local
     if (!privacy) redirect(`/${locale}`);
 
     return (
-        <div className="grid max-w-xl gap-4">
+        <div className="grid max-w-focus gap-6">
             {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
             <PageHead phoneOnly title={t('title')} />
             <PrivacySettings initial={privacy} />

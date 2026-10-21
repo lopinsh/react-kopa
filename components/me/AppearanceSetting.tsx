@@ -18,10 +18,10 @@ export default function AppearanceSetting() {
     );
 
     return (
-        <fieldset className="grid gap-1.5 rounded-2xl bg-surface px-4 py-3.5 text-body-sm shadow-card frame">
+        <fieldset className="grid gap-1.5 border-t border-border pt-6 text-body-sm">
             <legend className="float-left mb-1.5 text-item">{t('appearance')}</legend>
             {CHOICES.map((choice) => (
-                <label key={choice} className="clear-both flex min-h-10 cursor-pointer items-center gap-2.5">
+                <label key={choice} className="clear-both flex min-h-10 cursor-pointer items-center gap-3">
                     <input
                         type="radio"
                         name="appearance"

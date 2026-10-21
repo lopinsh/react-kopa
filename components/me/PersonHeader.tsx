@@ -12,7 +12,7 @@ export default function PersonHeader() {
     const { name, avatarSrc, line } = useMeContext();
     return (
         <div data-ui={UI.personHeader} className="hidden border-b border-border bg-surface md:block">
-            <div className="mx-auto flex h-[72px] max-w-6xl items-center gap-3 px-[22px]">
+            <div className="mx-auto flex h-[72px] max-w-6xl items-center gap-3 px-6">
             <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img src={avatarSrc} alt="" className="size-12 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">

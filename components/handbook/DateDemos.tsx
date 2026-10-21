@@ -26,7 +26,7 @@ export function DatesDemo({ today }: { today: string }) {
         <DiscoveryProvider state={{ kind: 'events', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: [], dates }}>
             <div className="flex flex-wrap items-start gap-6">
                 <div className="flex flex-col gap-3">
-                    <div className="inline-flex h-8 items-center rounded-pill bg-surface p-[3px] ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]"><QuickChoices variant="line" onPick={NOOP} /></div>
+                    <div className="inline-flex h-8 items-center rounded-pill bg-surface p-1 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]"><QuickChoices variant="line" onPick={NOOP} /></div>
                     <div className="w-72"><QuickChoices variant="sheet" onPick={NOOP} /></div>
                 </div>
                 <div className="w-[300px] rounded-2xl bg-surface p-3 shadow-premium line">{mounted ? <MonthCalendar onClose={NOOP} onApply={NOOP} /> : <div className="h-80" />}</div>

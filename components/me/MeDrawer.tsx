@@ -28,8 +28,8 @@ export default function MeDrawer({ id, onClose, returnFocusRef }: Props) {
     }, [pathname]);
 
     return (
-        <Overlay layout="left" id={id} onClose={onClose} label={t('label')} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5" returnFocusRef={returnFocusRef}>
-            <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
+        <Overlay layout="left" id={id} onClose={onClose} label={t('label')} dataUi={UI.drawer} flush panelClassName="px-3 py-4" returnFocusRef={returnFocusRef}>
+            <div className="flex items-center gap-3 border-b border-border px-1 pb-3">
                 <img src={avatarSrc} alt="" className="size-10 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
                     <p className="truncate text-item">{name}</p>

@@ -35,7 +35,7 @@ function SearchScreen() {
 
     return (
         <>
-            <div className="flex shrink-0 items-center gap-1.5 border-b border-border bg-surface px-2.5 py-2">
+            <div className="flex shrink-0 items-center gap-1.5 border-b border-border bg-surface px-3 py-2">
                 <button type="button" aria-label={t('back')} onClick={() => requestClose()} className={ICON_BUTTON}>
                     <ChevronLeft aria-hidden />
                 </button>

@@ -59,7 +59,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
 
             {/* L2 Children (Active + Pending) */}
             {isExpanded && (
-                <div className="flex flex-col ml-[2.25rem] border-l border-border pb-2">
+                <div className="flex flex-col ml-9 border-l border-border pb-2">
                     {l1.subcategories.map(l2 => (
                         <L2Node
                             key={l2.id}
@@ -119,7 +119,7 @@ function L2Node({
     const missingLangs = (['lv', 'en'] as const).filter((code) => !langs.includes(code));
     return (
         <div
-            className={`group flex items-center gap-3 pl-6 pr-4 py-2 cursor-pointer hover:bg-surface-elevated transition-colors border-l-2 ml-[-1px] ${isPending
+            className={`group flex items-center gap-3 pl-6 pr-4 py-2 cursor-pointer hover:bg-surface-elevated transition-colors border-l-2 -ml-px ${isPending
                 ? 'border-dashed border-warning/40 hover:border-warning/40'
                 : 'border-transparent hover:border-border'
                 } ${isSelected ? 'bg-surface-elevated border-primary' : ''}`}

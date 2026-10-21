@@ -24,7 +24,7 @@ function stub(word: string, theme: string | null, results: SearchResults): Searc
 }
 
 function Frame({ children }: { children: ReactNode }) {
-    return <div className="w-full max-w-[600px] rounded-2xl line bg-surface px-3.5 pb-3 shadow-premium">{children}</div>;
+    return <div className="w-full max-w-focus rounded-2xl line bg-surface px-4 pb-3 shadow-premium">{children}</div>;
 }
 
 function Panel({ search, recent }: { search: SearchModel; recent?: string[] }) {

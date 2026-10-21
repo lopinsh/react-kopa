@@ -57,7 +57,7 @@ export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: 
                 ))}
             </fieldset>
 
-            <div className="mt-4 flex items-center justify-end gap-2.5">
+            <div className="mt-4 flex items-center justify-end gap-3">
                 <OverlayCloseButton disabled={isPending} className={buttonClass('secondary')}>{t('cancel')}</OverlayCloseButton>
                 <Button onClick={handleSubmit} disabled={isPending}>
                     {isPending ? <span aria-hidden className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : null}

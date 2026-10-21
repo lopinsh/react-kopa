@@ -1,7 +1,7 @@
 // UI guard (npm run ui:check; type:check is an alias).
 // Type rule (strict): pages and components use the role utilities (text-display … text-tag), not raw sizes.
 // Bans text-[Npx|rem|clamp|calc], text-xs…text-9xl, leading-*, tracking-*, font weights other than font-normal (a reset) under app/ and components/.
-// Space rules (warn-only for now): no spacing steps 2.5/3.5 (0.5 and 1.5 stay), no [Npx]/[Nrem] spacing, no max-w-[Npx|rem|ch|em]
+// Space rules (strict too): no spacing steps 2.5/3.5 (0.5 and 1.5 stay), no [Npx]/[Nrem] spacing, no max-w-[Npx|rem|ch|em]
 // (use max-w-browse/page/focus/reading; max-w-[calc(...)] and viewport units stay, they size against the screen).
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
@@ -50,8 +50,9 @@ for (const [k, m] of Object.entries(spaceCounts)) {
     let t = 0;
     for (const [f, n] of m) { t += n; areas.set(area(f), (areas.get(area(f)) ?? 0) + n); }
     console.log(`
-warn: ${k}: ${t} in ${m.size} files`);
+${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
     for (const [a, n] of [...areas].sort((a, b) => b[1] - a[1])) console.log(`${String(n).padStart(4)}  ${a}`);
     if (process.argv.includes('--files')) for (const [f, n] of [...m].sort((a, b) => b[1] - a[1])) console.log(`      ${String(n).padStart(3)}  ${f}`);
 }
-if (strict && total) process.exit(1);
+const spaceTotal = Object.values(spaceCounts).reduce((a, m) => a + [...m.values()].reduce((x, y) => x + y, 0), 0);
+if (strict && (total || spaceTotal)) process.exit(1);

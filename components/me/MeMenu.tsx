@@ -19,7 +19,7 @@ export default function MeMenu({ variant }: { variant: 'side' | 'drawer' }) {
     const counts = { messages: unread, myGroups: myGroupsNew, notifications: notifications.user + notifications.admin };
 
     return (
-        <nav data-ui={UI.ownMenu} aria-label={tArea('label')} className={clsx('flex-col gap-0.5', variant === 'side' ? 'sticky top-[18px] hidden self-start md:flex' : 'flex pt-2')}>
+        <nav data-ui={UI.ownMenu} aria-label={tArea('label')} className={clsx('flex-col gap-0.5', variant === 'side' ? 'sticky top-4 hidden self-start md:flex' : 'flex pt-2')}>
             {ME_PAGES.map(({ href, labelKey, icon: Icon, match, badge }) => {
                 const current = match(pathname);
                 const count = badge ? counts[badge] : 0;

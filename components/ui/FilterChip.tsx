@@ -17,7 +17,7 @@ export default function FilterChip({ active, onClick, children }: Props) {
             onClick={onClick}
             aria-pressed={active}
             className={clsx(
-                'inline-flex h-8 shrink-0 items-center gap-[5px] whitespace-nowrap rounded-pill line press px-2.5 text-meta',
+                'inline-flex h-8 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill line press px-3 text-meta',
                 active ? 'bg-primary/15 weight-strong text-foreground [--line-color:var(--line-active,color-mix(in_srgb,var(--primary)_45%,transparent))]' : 'bg-surface text-foreground hover:bg-tint'
             )}
         >

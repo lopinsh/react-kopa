@@ -18,7 +18,7 @@ export default function MePhoneBar() {
     const drawerId = useId();
 
     return (
-        <div data-ui={UI.ownBarPhone} className="flex h-16 items-center gap-2.5 border-b border-border bg-surface px-3 md:hidden">
+        <div data-ui={UI.ownBarPhone} className="flex h-16 items-center gap-3 border-b border-border bg-surface px-3 md:hidden">
             <button
                 ref={buttonRef}
                 type="button"
@@ -30,7 +30,7 @@ export default function MePhoneBar() {
             >
                 <Menu aria-hidden className="size-5" />
             </button>
-            <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-2.5 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img src={avatarSrc} alt="" className="size-8 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
                     <p className="truncate text-item">{name}</p>

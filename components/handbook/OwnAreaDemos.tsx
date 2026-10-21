@@ -26,7 +26,7 @@ export function MyGroupsPartsDemo({ samples }: { samples: UiSamples }) {
             <div className="[&_[data-ui='section-menu']]:static">
                 <SectionMenu sections={[{ key: 'upcoming', label: t('upcoming') }, { key: 'news', label: t('news') }, { key: 'groups', label: t('groups') }, { key: 'requests', label: t('requests') }]} />
             </div>
-            <ul className="rounded-2xl bg-surface px-3.5 shadow-card frame">
+            <ul className="rounded-2xl bg-surface px-4 shadow-card frame">
                 <li className="py-3"><NewsItem item={samples.newsPost} now={now} /></li>
                 <li className="border-t border-border py-3"><NewsItem item={samples.newsAnswer} now={now} /></li>
             </ul>

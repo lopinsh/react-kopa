@@ -44,7 +44,7 @@ function Row({ field, label, checked, onSaved, demo }: RowProps) {
     };
 
     return (
-        <div className="flex items-start gap-4 py-2.5">
+        <div className="flex items-start gap-4 py-3">
             <div className="min-w-0 flex-1">
                 <p id={`${id}-l`} className="text-body-sm">{t(label)}</p>
                 <p id={`${id}-d`} className="mt-0.5 text-meta text-foreground-muted">{t(`${label}Desc`)}</p>
@@ -61,7 +61,7 @@ export default function PrivacySettings({ initial, demo = false }: { initial: Pr
     const [savedNote, setSavedNote] = useState(false);
 
     return (
-        <fieldset id="privacy" className="scroll-mt-20 rounded-2xl bg-surface px-4 py-3.5 text-body-sm shadow-card frame">
+        <fieldset id="privacy" className="scroll-mt-20 text-body-sm">
             <legend className="float-left mb-1.5 text-item">{t('privacy.title')}</legend>
             <div className="clear-both divide-y divide-border">
                 {ROWS.map(({ key, label }) => (

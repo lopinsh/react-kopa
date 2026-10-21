@@ -48,7 +48,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
                     type="button"
                     aria-label={tSearch('clear')}
                     onClick={() => { onChange(''); inputRef.current?.focus(); }}
-                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-2.5"
+                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-3"
                 >
                     <X aria-hidden="true" className="size-4" />
                 </button>

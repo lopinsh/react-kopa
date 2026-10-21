@@ -8,8 +8,8 @@ export type ButtonSize = 'md' | 'sm';
 const BASE = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill disabled:opacity-50 [&_svg]:h-4 [&_svg]:w-4';
 
 const SIZES: Record<ButtonSize, string> = {
-    md: 'h-11 px-[18px] text-button md:h-10',
-    sm: 'h-8 px-3.5 text-button-sm',
+    md: 'h-11 px-4 text-button md:h-10',
+    sm: 'h-8 px-4 text-button-sm',
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {

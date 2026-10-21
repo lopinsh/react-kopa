@@ -21,7 +21,7 @@ export default function Badge({ tone = 'tag', children, className }: Props) {
         <span
             data-ui={UI.badge}
             className={clsx(
-                'inline-flex h-5 shrink-0 items-center gap-[3px] whitespace-nowrap rounded-pill px-2 text-tag [&_svg]:h-[11px] [&_svg]:w-[11px] [&_svg]:stroke-[2.8]',
+                'inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill px-2 text-tag [&_svg]:h-[11px] [&_svg]:w-[11px] [&_svg]:stroke-[2.8]',
                 TONES[tone],
                 className
             )}

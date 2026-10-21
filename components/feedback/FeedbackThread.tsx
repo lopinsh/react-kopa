@@ -85,7 +85,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                         disabled={isPending || !text.trim() || over}
                         aria-label={t('threadSend')}
                         title={t('threadSend')}
-                        className="rounded-pill bg-primary p-2.5 text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="rounded-pill bg-primary p-3 text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         <Send className="h-4 w-4" />
                     </button>

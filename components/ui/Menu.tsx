@@ -6,7 +6,7 @@ import { Link } from '@/i18n/routing';
 import { UI } from '@/lib/constants';
 export { useMenu } from '@/hooks/useMenu';
 
-const ITEM_BASE = 'flex min-h-10 w-full items-center gap-2.5 rounded-item px-2.5 py-[7px] text-left text-body-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
+const ITEM_BASE = 'flex min-h-10 w-full items-center gap-3 rounded-item px-3 py-2 text-left text-body-sm text-foreground hover:bg-tint focus-visible:bg-tint focus-visible:outline-none disabled:opacity-60';
 
 type PanelProps = {
     label: string;

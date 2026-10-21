@@ -48,9 +48,9 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
     const { step, lang, rev, isPending, titleOver } = f;
 
     return (
-        <div className="w-full max-w-[560px] rounded-2xl bg-surface shadow-card frame">
+        <div className="w-full max-w-focus">
             <FormProvider {...f.form}>
-                <form onSubmit={f.onSubmit} className="p-[18px] md:p-6">
+                <form onSubmit={f.onSubmit}>
                     <div className="mb-5">
                         <p className="text-meta text-foreground-muted">{t('stepOf', { current: step + 1, total: 2 })}</p>
                         <h2 className="mt-1 text-section">{[t('step1Title'), t('step2Title')][step]}</h2>

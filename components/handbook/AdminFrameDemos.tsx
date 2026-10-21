@@ -43,7 +43,7 @@ export function AdminPagesDemo({ drawer = false }: { drawer?: boolean }) {
                         {open && (
                             <ul className="my-0.5 ml-5 space-y-0.5 border-l border-border pl-2">
                                 {(item.parts ?? []).map((p, i) => (
-                                    <li key={p} className={clsx('rounded-lg px-2.5 py-1.5 text-body-sm', i === 0 ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted')}>{t(`parts.${p}`)}</li>
+                                    <li key={p} className={clsx('rounded-lg px-3 py-1.5 text-body-sm', i === 0 ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted')}>{t(`parts.${p}`)}</li>
                                 ))}
                             </ul>
                         )}

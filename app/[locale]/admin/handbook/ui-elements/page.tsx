@@ -66,8 +66,8 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
             <div className="mb-8 flex items-start justify-between gap-4">
                 <div>
                     <h1 className="text-title text-foreground">{t('title')}</h1>
-                    <p className="mt-2 max-w-[70ch] text-foreground-muted">{t('intro')}</p>
-                    <p className="mt-2 max-w-[70ch] text-body-sm text-foreground-muted">{t('sampleNote')}</p>
+                    <p className="mt-2 max-w-reading text-foreground-muted">{t('intro')}</p>
+                    <p className="mt-2 max-w-reading text-body-sm text-foreground-muted">{t('sampleNote')}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2 rounded-xl line bg-surface px-2 py-1 text-meta text-foreground-muted">
                     <span className="hidden sm:inline">{t('theme')}</span>
@@ -169,7 +169,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                         <GroupCard group={samples.groupCardBare} />
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>
-                    <div className="mt-4 max-w-sm rounded-2xl bg-surface px-3.5 shadow-card frame">
+                    <div className="mt-4 max-w-sm rounded-2xl bg-surface px-4 shadow-card frame">
                         <GroupRow group={samples.groupCard} role="OWNER" requestCount={2} />
                         <CreateCard l1Slug={samples.l1Slug} variant="row" />
                     </div>
@@ -220,7 +220,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 </UiSpecimen>
 
                 <UiSpecimen id="memberCard" names={[UI.memberCard]} files={['components/groups/members/MemberRow.tsx', 'components/groups/members/MemberRowMenu.tsx']}>
-                    <AccentScope color={samples.accent} className="max-w-[760px]">
+                    <AccentScope color={samples.accent} className="max-w-page">
                         <ul className="divide-y divide-border">
                             {samples.members.map((member) => (
                                 <MemberRow key={member.userId} member={member} groupId={group.id} />
@@ -230,7 +230,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 </UiSpecimen>
 
                 <UiSpecimen id="requestCard" names={[UI.requestCard]} files={['components/groups/members/RequestRow.tsx']}>
-                    <AccentScope color={samples.accent} className="max-w-[760px]">
+                    <AccentScope color={samples.accent} className="max-w-page">
                         <ul>
                             <RequestRow request={samples.request} />
                         </ul>

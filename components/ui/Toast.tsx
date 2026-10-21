@@ -11,7 +11,7 @@ export function Toast({ toast }: { toast: ToastMessage }) {
     return (
         <div
             data-ui={UI.toast}
-            className="pointer-events-auto inline-flex max-w-full items-center gap-2 rounded-xl frame bg-foreground px-4 py-2.5 text-body-sm text-background shadow-premium motion-safe:animate-rise"
+            className="pointer-events-auto inline-flex max-w-full items-center gap-2 rounded-xl frame bg-foreground px-4 py-3 text-body-sm text-background shadow-premium motion-safe:animate-rise"
         >
             <Icon aria-hidden="true" className="size-4 shrink-0" />
             <span>{toast.message}</span>

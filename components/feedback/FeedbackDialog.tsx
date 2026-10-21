@@ -112,14 +112,14 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                 {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}
 
                 <div className="mt-4 flex items-center justify-end gap-3">
-                    <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-2.5 text-button-sm text-foreground-muted hover:text-foreground disabled:opacity-50">
+                    <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-3 text-button-sm text-foreground-muted hover:text-foreground disabled:opacity-50">
                         {t('cancel')}
                     </button>
                     <button
                         type="button"
                         onClick={handleSave}
                         disabled={isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)}
-                        className="rounded-pill bg-primary px-5 py-2.5 text-button-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
+                        className="rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}
                     </button>

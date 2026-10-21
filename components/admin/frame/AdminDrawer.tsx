@@ -47,8 +47,8 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
                 {part && <span className="ml-2 text-meta font-normal text-foreground-muted">{part}</span>}
             </p>
             {open && (
-                <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('drawerTitle')} dataUi={UI.drawer} flush panelClassName="px-2.5 py-3.5" returnFocusRef={buttonRef}>
-                    <div className="flex items-center gap-2.5 border-b border-border px-1 pb-3">
+                <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('drawerTitle')} dataUi={UI.drawer} flush panelClassName="px-3 py-4" returnFocusRef={buttonRef}>
+                    <div className="flex items-center gap-3 border-b border-border px-1 pb-3">
                         <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item"><ShieldCheck aria-hidden className="size-[18px]" /></span>
                         <p className="text-item">{t('drawerTitle')}</p>
                     </div>
@@ -58,9 +58,9 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
                             return (
                                 <li key={s.id}>
                                     {on ? (
-                                        <p className="flex items-center px-2.5 py-2 text-body-sm">{t(`sections.${s.id}`)}</p>
+                                        <p className="flex items-center px-3 py-2 text-body-sm">{t(`sections.${s.id}`)}</p>
                                     ) : (
-                                        <Link href={s.items[0].href} replace className="flex min-h-10 items-center rounded-xl px-2.5 text-body-sm text-foreground hover:bg-tint">
+                                        <Link href={s.items[0].href} replace className="flex min-h-10 items-center rounded-xl px-3 text-body-sm text-foreground hover:bg-tint">
                                             {t(`sections.${s.id}`)}
                                             <AdminBadge count={sectionBadge(s, counts)} danger={s.items.some((i) => i.badge === 'reports') && counts.reports > 0} />
                                         </Link>

@@ -35,8 +35,8 @@ export function StyleDemos() {
                         <p className="text-body-sm text-foreground-muted">{t('sample.body')}</p>
                     </div>
                     <ul className="mt-4 w-48 rounded-menu line bg-surface p-1.5 shadow-premium text-body-sm" role="presentation">
-                        <li className="rounded-item px-2.5 py-1.5 hover:bg-tint">{t('sample.link')}</li>
-                        <li className="rounded-item px-2.5 py-1.5 hover:bg-tint">{t('sample.badge')}</li>
+                        <li className="rounded-item px-3 py-1.5 hover:bg-tint">{t('sample.link')}</li>
+                        <li className="rounded-item px-3 py-1.5 hover:bg-tint">{t('sample.badge')}</li>
                     </ul>
                 </div>
             ))}

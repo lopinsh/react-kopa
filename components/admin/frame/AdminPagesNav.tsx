@@ -38,7 +38,7 @@ function Parts({ item, part, replace }: { item: AdminNavItem; part: string | nul
                         replace={replace}
                         aria-current={p.id === part ? 'page' : undefined}
                         className={clsx(
-                            'block rounded-lg px-2.5 py-1.5 text-body-sm hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+                            'block rounded-lg px-3 py-1.5 text-body-sm hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
                             p.id === part ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted'
                         )}
                     >

@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useOAuthProviders } from '@/components/providers/AuthProvidersContext';
 import type { OAuthProviderId } from '@/lib/auth-providers';
 
-const BUTTON = 'flex flex-1 items-center justify-center gap-2 rounded-lg line px-4 py-2.5 text-body-sm text-foreground transition-colors hover:bg-surface-elevated';
+const BUTTON = 'flex flex-1 items-center justify-center gap-2 rounded-lg line px-4 py-3 text-body-sm text-foreground transition-colors hover:bg-surface-elevated';
 
 const ICONS: Record<OAuthProviderId, React.ReactNode> = {
     github: (

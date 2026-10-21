@@ -25,7 +25,7 @@ export default function NotificationFeed({ rows: initial, hasMore, tab, isAdmin,
     const query = tab === 'admin' ? { tab: 'admin' } : {};
 
     return (
-        <div data-ui={UI.notificationFeed} className="overflow-hidden rounded-2xl bg-surface shadow-card frame">
+        <div data-ui={UI.notificationFeed} className="overflow-hidden">
             <div className="flex items-center justify-between gap-3 border-b border-border px-4 pt-1">
                 {isAdmin ? (
                     <nav aria-label={t('title')} className="flex gap-4">
@@ -35,7 +35,7 @@ export default function NotificationFeed({ rows: initial, hasMore, tab, isAdmin,
                                 href={key === 'admin' ? { pathname: '/notifications', query: { tab: 'admin' } } : '/notifications'}
                                 scroll={false}
                                 aria-current={tab === key ? 'page' : undefined}
-                                className={clsx('-mb-px border-b-2 pb-2 pt-2.5 text-body-sm', tab === key ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground')}
+                                className={clsx('-mb-px border-b-2 pb-2 pt-3 text-body-sm', tab === key ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground')}
                             >
                                 {t(key === 'admin' ? 'tabAdmin' : 'tabPersonal')}
                                 {counts[key] > 0 && <span className="ml-1 tabular-nums">{counts[key]}</span>}
@@ -44,7 +44,7 @@ export default function NotificationFeed({ rows: initial, hasMore, tab, isAdmin,
                     </nav>
                 ) : <span />}
                 {unread > 0 && (
-                    <button type="button" disabled={isPending} onClick={() => markAll(audience)} className="py-2.5 text-tag text-primary hover:underline disabled:opacity-50">{t('markAllRead')}</button>
+                    <button type="button" disabled={isPending} onClick={() => markAll(audience)} className="py-3 text-tag text-primary hover:underline disabled:opacity-50">{t('markAllRead')}</button>
                 )}
             </div>
             <NotificationList rows={rows} onRead={markRead} />

@@ -19,7 +19,7 @@ function Circles({ size }: { size: 'md' | 'sm' }) {
                 'inline-block shrink-0 rounded-full bg-primary',
                 size === 'md'
                     ? 'ml-1.5 mr-2 h-3 w-3 shadow-[8px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)]'
-                    : 'ml-[5px] mr-[7px] h-2.5 w-2.5 shadow-[7px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)]'
+                    : 'ml-1 mr-2 h-2.5 w-2.5 shadow-[7px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)]'
             )}
         />
     );

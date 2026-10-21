@@ -39,7 +39,7 @@ export default function RequestRow({ request }: { request: MyRequest }) {
     };
 
     return (
-        <li data-ui={UI.requestRow} className="flex items-center gap-2 border-t border-border px-3.5 first:border-t-0">
+        <li data-ui={UI.requestRow} className="flex items-center gap-2 border-t border-border px-4 first:border-t-0">
             <div className="min-w-0 flex-1 opacity-75"><GroupRow group={request.card} fullPage role="PENDING" /></div>
             <ConfirmPopover
                 isOpen={open}
