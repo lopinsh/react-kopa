@@ -14,7 +14,7 @@ import type { ProfileViewContext } from '@/lib/types/profile';
 export default async function ProfileCard({ person }: { person: ProfileViewContext['person'] }) {
     const t = await getTranslations('profile');
     return (
-        <AsideSlot label={t('card.label')} showPaths={['/profile/my-groups', '/notifications', '/settings']}>
+        <AsideSlot label={t('card.label')} lgOnly>
             <section className="grid gap-3 rounded-2xl bg-surface p-4 shadow-card frame">
                 <ProfileIdentity person={person} compact />
                 <ProfileFacts person={person} />
