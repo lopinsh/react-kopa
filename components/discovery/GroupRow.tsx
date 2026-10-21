@@ -16,7 +16,7 @@ const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
  * No photo, no note. In Manas grupas it also carries your role before the tone mark and, for the team, the waiting requests as a third line.
  * The name is the stretched link, so the request link can sit above it.
  */
-export default function GroupRow({ group, highlight, replace = false, searchItem = false, fullPage = false, role, requestCount = 0 }: {
+export default function GroupRow({ group, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0 }: {
     group: GroupCardData;
     /** The search word, marked in the name. */
     highlight?: string;
@@ -28,6 +28,8 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
     fullPage?: boolean;
     /** Your role in the group (Manas grupas); a plain member gets no tag. */
     role?: MyRole | 'PENDING';
+    /** Discovery: a plain member gets the quiet member tag too. */
+    showMember?: boolean;
     /** Join requests waiting for the team (Manas grupas, team only). */
     requestCount?: number;
 }) {
@@ -63,7 +65,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
                 )}
                 {group.tagline && <span lang={langAttr(group.taglineLang, locale)} className="mt-0.5 block truncate text-meta text-foreground">{group.tagline}</span>}
             </span>
-            {role && <RoleTag role={role} />}
+            {role && <RoleTag role={role} showMember={showMember} />}
             <span className="grid size-10 shrink-0 place-items-center rounded-item cat-tile">
                 <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />
             </span>

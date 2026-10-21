@@ -25,8 +25,10 @@ type Props = {
     highlight?: string;
     /** A group you belong to or wait for: the name is a plain link, so the full page loads with no panel in between (cmv9amjft). */
     fullPage?: boolean;
-    /** Your role in the group (Manas grupas): the tag ends the place line; a plain member gets none (AR-09). */
-    role?: MyRole;
+    /** Your role in the group (Manas grupas): the tag ends the place line; a plain member gets none (AR-09) except on discovery (`showMember`). */
+    role?: MyRole | 'PENDING';
+    /** Discovery: a plain member gets the quiet member tag too. */
+    showMember?: boolean;
     /** Join requests waiting for the team (Manas grupas, team only): a link to Biedri → Pieteikumi in the tagline's place (OD-21). */
     requestCount?: number;
 };
@@ -37,7 +39,7 @@ const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
  * A group in a grid (AR-34): the photo on top, 16:9 (none: the category tile with its icon), then name, category line, place and members, the tagline; under a thin line the group's
  * latest activity (none: no line). Cards with a bottom line reserve the same lines (name 2, tagline 2, line 2); a grid row keeps one card height.
  */
-export default function GroupCard({ group, activity, filters, highlight, fullPage = false, role, requestCount = 0 }: Props) {
+export default function GroupCard({ group, activity, filters, highlight, fullPage = false, role, showMember = false, requestCount = 0 }: Props) {
     const t = useTranslations('discovery');
     const tMy = useTranslations('profile.myGroups');
     const tCities = useTranslations('cities');
@@ -68,7 +70,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
                 <p className="flex min-w-0 items-center gap-2 text-meta text-foreground-muted">
                     <span className="truncate">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
-                    {role && <RoleTag role={role} />}
+                    {role && <RoleTag role={role} showMember={showMember} />}
                 </p>
                 {requestCount > 0 ? (
                     // The team's waiting requests take the second tagline line, so every card keeps one height.

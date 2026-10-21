@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import type { Prisma } from '@prisma/client';
+import type { MembershipRole, Prisma } from '@prisma/client';
 import type { ActionResponse } from '@/types/actions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
@@ -260,9 +260,9 @@ export const UserService = {
         return markMyGroupsSeen(userId);
     },
 
-    /** Ids of every group the person is in or waits for (PENDING included): lists link those straight to the full page. */
-    async getMyGroupIds(userId: string): Promise<string[]> {
-        const rows = await prisma.membership.findMany({ where: { userId, group: { hiddenAt: null } }, select: { groupId: true } });
-        return rows.map((r) => r.groupId);
+    /** Group id → the person's role in every group they are in or wait for (PENDING included), in one query: lists link those to the full page and tag them. */
+    async getMyGroupRoles(userId: string): Promise<Record<string, MembershipRole>> {
+        const rows = await prisma.membership.findMany({ where: { userId, group: { hiddenAt: null } }, select: { groupId: true, role: true } });
+        return Object.fromEntries(rows.map((r) => [r.groupId, r.role]));
     }
 };

@@ -25,6 +25,7 @@ import { DISCOVERY_RAIL_COOKIE, LOCALES } from '@/lib/constants';
 import { notFound } from 'next/navigation';
 import { dayInZone } from '@/lib/discovery-dates';
 import { eventWindow } from '@/lib/discovery-window';
+import type { MembershipRole } from '@prisma/client';
 import type { DiscoveryState } from '@/lib/types/discovery';
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -93,9 +94,9 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
 
     // Each group's latest activity for the card's bottom line (C2): next meeting, else newest public announcement.
     // A group you belong to or wait for opens as its page, not the panel: those cards link straight to it (cmv9amjft).
-    const [activity, myGroupIds] = await Promise.all([
+    const [activity, myRoles] = await Promise.all([
         cardActivities(groupsRes.groups, locale, viewerId),
-        viewerId && p.kind === 'groups' ? UserService.getMyGroupIds(viewerId) : Promise.resolve([]),
+        viewerId && p.kind === 'groups' ? UserService.getMyGroupRoles(viewerId) : Promise.resolve<Record<string, MembershipRole>>({}),
     ]);
 
     const collator = new Intl.Collator(locale);
@@ -124,7 +125,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'
-                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} params={p} fullPageIds={myGroupIds} />
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} params={p} myRoles={myRoles} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>

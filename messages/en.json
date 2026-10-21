@@ -68,6 +68,7 @@
     },
     "tag": {
       "going": "Going",
+      "member": "Member",
       "mod": "Mod",
       "owner": "Owner",
       "pending": "Pending"
