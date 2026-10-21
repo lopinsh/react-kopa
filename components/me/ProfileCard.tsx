@@ -9,12 +9,12 @@ import type { ProfileViewContext } from '@/lib/types/profile';
 /**
  * The side column of your own area (AR-60): your profile as others see it (the same parts as Mans profils, from the layout's
  * `asStranger` view, so privacy is respected): picture, name, @handle, places, since when, about text and "Labot profilu".
- * Shown on Manas grupas, Paziņojumi and Iestatījumi; Ziņas keeps the full width for the chat.
+ * Shown on every own-area page except Mans profils (/profile), whose main column is the profile itself.
  */
 export default async function ProfileCard({ person }: { person: ProfileViewContext['person'] }) {
     const t = await getTranslations('profile');
     return (
-        <AsideSlot label={t('card.label')} lgOnly>
+        <AsideSlot label={t('card.label')} lgOnly hidePaths={['/profile']}>
             <section className="grid gap-3 rounded-2xl bg-surface p-4 shadow-card frame">
                 <ProfileIdentity person={person} compact />
                 <ProfileFacts person={person} />
