@@ -18,17 +18,19 @@ type Props = {
     action?: ReactNode;
     /** The parts are on the page already: a click shows one without loading (the address follows with `?part=`). */
     onSelect?: (key: string) => void;
+    /** How far the row and its line reach: the page column (default) or the narrower focus column. */
+    width?: 'page' | 'focus';
 };
 
-/** The parts of a page as tabs (AR-21): each tab is its own URL (or, with `onSelect`, a part already on the page); the open one is underlined in the site colour. */
-export default function PartTabs({ title, label, items, active, action, onSelect }: Props) {
+/** The parts of a page as tabs (AR-21): each tab is its own URL (or, with `onSelect`, a part already on the page); the open one is underlined in the site colour. The row and its line end at the content width. */
+export default function PartTabs({ title, label, items, active, action, onSelect, width = 'page' }: Props) {
     const Tag = onSelect ? 'a' : Link;
     return (
         // `contents`: the tab row sticks within the page, not within this wrapper.
         <div className="contents">
             {title && <h2 className="text-section md:sr-only">{title}</h2>}
             {items.length > 0 && (
-                <div data-ui={UI.tabs} className={clsx('sticky top-0 z-10 flex items-end gap-3 border-b border-border bg-background', title && 'mt-2 md:mt-0')}>
+                <div data-ui={UI.tabs} className={clsx('sticky top-0 z-10 flex items-end gap-3 border-b border-border bg-background', width === 'focus' ? 'max-w-focus' : 'max-w-page', title && 'mt-2 md:mt-0')}>
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-4 overflow-x-auto [scrollbar-width:none]">
                         {items.map(({ key, label: text, href, lang, count }) => (
                             <Tag

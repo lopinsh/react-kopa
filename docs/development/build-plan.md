@@ -434,7 +434,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-31 | Veids list | R5a | |
 | AR-32 | Place list | R5a | R7, R10 |
 | AR-33 | No results in a list | R5a | |
-| AR-34 | Group card (desktop) | R5a | R3a |
+| AR-34 | Group card (desktop): photo on top (release 3) | R5a | R3a |
 | AR-35 | "Ko meklējam?" | R4 | R5a, R9b, R12 |
 | AR-36 | Group row (phones) | R5a | R8 |
 | AR-37 | Create card | R5a | |
@@ -505,5 +505,6 @@ Per release: (1) Opus writes `docs/development/specs/R#.md` from the card, the o
 | R10 Citur | cancelled by owner 19 Oct | | |
 | R11 Admin frame | pushed, live (R11a frame, R11b card look) | [specs/R11.md](specs/R11.md) | `402a4ae`..`466714c` (R11a), `2f3785e`..`4b12d6b` (R11b) |
 | R13 Templates (before R12) | pushed, live | [specs/R13.md](specs/R13.md) | `e9a919e`..`33ff35e` |
+| Release 3 Content carries colour | built (card photo on top, banner tone area, tab rows at content width) | [specs/release-3-colour.md](specs/release-3-colour.md) | pass A–C |
 | R14 Kopā | cleared by owner 20 Oct (spec deleted, history `685b03e`) | | |
 | R12 Everything else | cleared by owner 20 Oct, not planned | | |
