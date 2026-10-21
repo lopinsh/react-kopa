@@ -66,8 +66,8 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 {role && !(role === 'MEMBER' && !showMember) && <span className="absolute right-2 top-2"><RoleTag role={role} showMember={showMember} /></span>}
                 {faces.length > 0 && (
                     <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-pill bg-photo-chip py-1 pl-1.5 pr-2 text-tag text-white">
-                        <Faces faces={faces} ring="ring-white" />
-                        {group.memberCount > faces.length && <span>+{group.memberCount - faces.length}</span>}
+                        <Faces faces={faces} size="lg" ring="ring-white" />
+                        {group.memberCount > faces.length && <span className="weight-strong">+{group.memberCount - faces.length}</span>}
                     </span>
                 )}
             </div>
