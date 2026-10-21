@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import type { Metadata } from 'next';
 import { Download } from 'lucide-react';
 import { getTranslations, getLocale, getTimeZone } from 'next-intl/server';
@@ -21,8 +22,8 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
     const { userId } = await requireAdminPage(locale, '/admin/translations');
 
-    const rows = await MessageOverrideService.listOverrides(userId).catch(() => []);
-    const suggestions = await MessageOverrideService.listSuggestions(userId).catch(() => []);
+    const rows = await MessageOverrideService.listOverrides(userId).catch((e: unknown) => { if (e instanceof ActionError) return []; throw e; });
+    const suggestions = await MessageOverrideService.listSuggestions(userId).catch((e: unknown) => { if (e instanceof ActionError) return []; throw e; });
 
     return (
         <div className="space-y-6">

@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
@@ -34,8 +35,8 @@ export default async function AdminFeedbackPage({
 
     const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
     const filter = feedbackFilterSchema.parse({ kind: first(raw.kind), tab: first(raw.tab), page: first(raw.page) });
-    const notes = await FeedbackService.list(userId, filter).catch(() => []);
-    const counts = await FeedbackService.counts(userId).catch(() => ({ open: 0, completed: 0 }));
+    const notes = await FeedbackService.list(userId, filter).catch((e: unknown) => { if (e instanceof ActionError) return []; throw e; });
+    const counts = await FeedbackService.counts(userId).catch((e: unknown) => { if (e instanceof ActionError) return { open: 0, completed: 0 }; throw e; });
     const tab = filter.tab ?? 'open';
 
     return (

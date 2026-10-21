@@ -1,3 +1,4 @@
+import { ActionError } from '@/types/actions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
@@ -19,7 +20,7 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
 
     const { userId, isOwner } = await requireAdminPage(locale, '/admin/team');
 
-    const team = await TeamService.listTeam(userId).catch(() => notFound());
+    const team = await TeamService.listTeam(userId).catch((e: unknown) => { if (e instanceof ActionError) notFound(); throw e; });
 
     return (
         <div className="space-y-6">

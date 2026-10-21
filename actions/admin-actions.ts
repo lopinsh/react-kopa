@@ -1,6 +1,6 @@
 'use server';
 
-import { requireSiteAdmin } from '@/lib/action-utils';
+import { requireSiteAdmin, handleActionError } from '@/lib/action-utils';
 import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService } from '@/lib/services/admin.service';
@@ -37,7 +37,6 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
         revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
         return { success: true };
     } catch (error) {
-        console.error('[suspendReportedGroup] Error:', error);
-        return { success: false, error: 'ACTION_FAILED' };
+        return handleActionError(error, 'ACTION_FAILED');
     }
 }
