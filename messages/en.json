@@ -1290,8 +1290,7 @@
     "editDesc": "Update your public profile information.",
     "editTitle": "Edit Profile",
     "card": {
-      "label": "About you",
-      "view": "View profile"
+      "label": "About you"
     },
     "fieldImage": "Profile Image URL",
     "fieldName": "Name",

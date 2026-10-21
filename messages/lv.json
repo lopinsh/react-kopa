@@ -1290,8 +1290,7 @@
     "editDesc": "Atjaunini savu publisko profila informāciju.",
     "editTitle": "Labot profilu",
     "card": {
-      "label": "Par jums",
-      "view": "Skatīt profilu"
+      "label": "Par jums"
     },
     "fieldImage": "Profila attēla URL",
     "fieldName": "Vārds",

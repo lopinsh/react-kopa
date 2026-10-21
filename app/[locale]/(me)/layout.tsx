@@ -17,9 +17,14 @@ import ProfileCard from '@/components/me/ProfileCard';
 export default async function MeLayout({ children, params }: { children: React.ReactNode; params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const session = await auth();
-    const ctx = session?.user?.id ? await UserService.getOwnAreaContext(session.user.id) : null;
+    const [ctx, view] = session?.user?.id
+        ? await Promise.all([
+            UserService.getOwnAreaContext(session.user.id),
+            UserService.getProfileView({ userId: session.user.id }, session.user.id, locale, { asStranger: true }),
+        ])
+        : [null, null];
     // Signed out there is no frame, but the page still starts at the frame's spacing.
-    if (!ctx) return <div className="mx-auto max-w-browse px-gutter pb-6 pt-3 md:pt-5">{children}</div>;
+    if (!ctx || !view) return <div className="mx-auto max-w-browse px-gutter pb-6 pt-3 md:pt-5">{children}</div>;
 
     const [t, tCities] = await Promise.all([
         getTranslations({ locale, namespace: 'profile' }),
@@ -33,7 +38,7 @@ export default async function MeLayout({ children, params }: { children: React.R
             <MePhoneBar />
             <FrameColumns
                 nav={<MeMenu variant="side" />}
-                aside={<ProfileCard name={ctx.name || t('anonymousUser')} avatarSrc={avatarUrl(ctx)} line={line} bio={ctx.bio} />}
+                aside={<ProfileCard person={view.person} />}
                 className="[--me-head:64px] md:[--me-head:72px]">
                 {children}
             </FrameColumns>
