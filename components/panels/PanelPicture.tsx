@@ -16,7 +16,7 @@ export default function PanelPicture({ image, l1Slug }: { image: string | null; 
             {image ? (
                 <Image src={getSmartImageUrl(image)} alt="" fill sizes="(min-width: 768px) 560px, 100vw" className="object-cover" />
             ) : l1Slug ? (
-                <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={l1Slug} aria-hidden="true" size={28} /></span>
+                <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={l1Slug} aria-hidden="true" size={40} /></span>
             ) : null}
             <button
                 type="button"

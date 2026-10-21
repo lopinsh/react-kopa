@@ -30,7 +30,7 @@ export default function BannerName() {
             <p className={clsx('flex items-center gap-1', CRUMB)}>
                 <Link href={g.href} className="min-w-0 truncate hover:underline">{g.name}</Link>
                 <ChevronRight aria-hidden className="size-3.5 shrink-0" />
-                <Link href={`${g.href}/events`} className={clsx('shrink-0 font-sans font-normal hover:underline', 'text-foreground-muted')}>{tEvent('allEvents')}</Link>
+                <Link href={`${g.href}/events`} className={clsx('shrink-0 font-sans font-normal hover:underline', 'tile-ink-muted')}>{tEvent('allEvents')}</Link>
             </p>
         </nav>
     );

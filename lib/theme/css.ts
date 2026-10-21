@@ -58,9 +58,11 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
     if (style.tile === 'solid') {
         vars['--tile-mix'] = '100%';
         vars['--tile-on'] = '100%';
+        vars['--banner-mix'] = '100%';
     } else if (withDefaults) {
         vars['--tile-mix'] = '20%';
         vars['--tile-on'] = '0%';
+        vars['--banner-mix'] = '12%';
     }
     const radius = style.radius ?? (withDefaults ? CALM_RADII : null);
     if (radius) {

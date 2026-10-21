@@ -48,6 +48,8 @@
   /* Category tiles: share of the tone in the fill and of the on-tone colour in the glyph (plain percentages: var(--c) is set per card). */
   --tile-mix: 20%;
   --tile-on: 0%;
+  /* The banner's tone share: a tint is held at 12% so the muted text keeps 4.5:1 on every tone; a solid look uses the full tone. */
+  --banner-mix: 12%;
   --heading-weight: 600;
 
   /* Pop-up scrim (AR-67) */
@@ -249,6 +251,26 @@ body {
 
 @utility banner-tint {
   background-image: linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), color-mix(in srgb, var(--accent) 7%, var(--surface)));
+}
+
+/* banner-tone: the banner as a full tone area in the look's tile style (tint or solid, from --accent); the ink follows --tile-on. */
+@utility banner-tone {
+  background-color: color-mix(in srgb, var(--accent) var(--banner-mix), var(--surface));
+  color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground));
+}
+
+@utility tile-ink {
+  color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground));
+}
+
+@utility tile-ink-muted {
+  color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground-muted));
+}
+
+/* The banner's icon square: a surface square with the tone glyph reads on both a tint and a solid tone. */
+@utility mark-surface {
+  background-color: var(--surface);
+  color: var(--accent);
 }
 
 @utility mark-tint {

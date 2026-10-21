@@ -14,7 +14,7 @@ import GroupPagesDrawer from './GroupPagesDrawer';
 
 /**
  * The head of every group page (AR-47, AR-48, AR-70): 96 px from `md`, a 64 px bar on phones, one component for both.
- * The category tint and the category mark (C5: no background picture; the group's picture is on Informācija).
+ * The category tone area (tint or solid, as the look's tiles) and the category mark (C5: no background picture; the group's picture is on Informācija).
  */
 export default function GroupBanner() {
     const t = useTranslations('group.frame');
@@ -24,23 +24,23 @@ export default function GroupBanner() {
     const facts = [city, t('members', { count: g.memberCount }), g.isPrivate ? t('membersOnly') : ''].filter(Boolean);
 
     return (
-        <div data-ui={UI.groupBanner} className="banner-tint relative isolate z-10 h-16 border-b border-border text-foreground md:h-24">
+        <div data-ui={UI.groupBanner} className="banner-tone relative isolate z-10 h-16 border-b border-border md:h-24">
             <div className="mx-auto flex h-full max-w-browse items-center gap-3 px-gutter md:gap-4">
                 <GroupPagesDrawer />
-                <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">
+                <span className="mark-surface grid size-[34px] shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">
                     <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px] md:size-6" />
                 </span>
                 <div className="min-w-0 flex-1">
                     <BannerName />
-                    <p className={'flex items-center gap-1.5 text-meta text-foreground-muted md:hidden'}>
-                        <span aria-hidden className={'size-2 shrink-0 rounded-full bg-[var(--accent)]'} />
+                    <p className={'flex items-center gap-1.5 text-meta tile-ink-muted md:hidden'}>
+                        <span aria-hidden className={'size-2 shrink-0 rounded-full bg-current'} />
                         <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>
                     </p>
                     <div className="hidden max-h-10 flex-wrap items-baseline gap-x-4 gap-y-0.5 overflow-hidden px-0.5 -mx-0.5 md:flex">
-                        <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} />
-                        <p className={'text-meta text-foreground-muted'}>{facts.join(' · ')}</p>
+                        <CategoryLine onTone color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} />
+                        <p className={'text-meta tile-ink-muted'}>{facts.join(' · ')}</p>
                     </div>
-                    {g.lookingFor && <p className={'hidden truncate text-meta italic text-primary md:block'}>{g.lookingFor}</p>}
+                    {g.lookingFor && <p className={'hidden truncate text-meta italic tile-ink md:block'}>{g.lookingFor}</p>}
                 </div>
                 <GroupActions />
             </div>
