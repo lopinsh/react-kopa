@@ -20,6 +20,7 @@
     "db:seed": "prisma db seed",
     "feedback": "tsx scripts/feedback.ts",
     "set-owner": "tsx scripts/set-owner.ts",
+    "test:smoke": "playwright test -c playwright.smoke.config.ts",
     "check": "npm run typecheck && npm run lint && npm run i18n:check && npm run ui:check"
   },
   "dependencies": {

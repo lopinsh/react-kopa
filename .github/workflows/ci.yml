@@ -35,3 +35,58 @@ jobs:
 
       - name: Type roles (strict)
         run: npm run ui:check
+
+  build-and-smoke:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: kopa_user
+          POSTGRES_PASSWORD: kopa_password
+          POSTGRES_DB: ejam_kopa
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U kopa_user -d ejam_kopa"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://kopa_user:kopa_password@localhost:5433/ejam_kopa?schema=public
+      AUTH_SECRET: ci-only-secret-not-for-use
+      NEXTAUTH_SECRET: ci-only-secret-not-for-use
+      NEXTAUTH_URL: http://localhost:3000
+      AUTH_TRUST_HOST: "true"
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx prisma generate
+
+      - name: Build
+        run: npm run build
+
+      - name: Migrate and seed
+        run: |
+          npx prisma migrate deploy
+          npm run db:seed
+
+      - name: Start the app
+        run: |
+          nohup npm start > server.log 2>&1 &
+          npx --yes wait-on -t 60000 http://localhost:3000/api/health
+
+      - run: npx playwright install --with-deps chromium
+
+      - name: Smoke test
+        run: npm run test:smoke
+
+      - name: Server log on failure
+        if: failure()
+        run: tail -n 80 server.log
