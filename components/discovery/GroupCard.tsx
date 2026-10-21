@@ -34,8 +34,8 @@ type Props = {
 const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
- * A group in a grid (AR-34): name, category line, place and members, the tagline; under a thin line the group's latest activity (none: no line); the photo (or the tone
- * and icon) at the right. Cards with a bottom line reserve the same lines (name 2, tagline 2, line 2); a grid row keeps one card height.
+ * A group in a grid (AR-34): the photo on top, 16:9 (none: the category tile with its icon), then name, category line, place and members, the tagline; under a thin line the group's
+ * latest activity (none: no line). Cards with a bottom line reserve the same lines (name 2, tagline 2, line 2); a grid row keeps one card height.
  */
 export default function GroupCard({ group, activity, filters, highlight, fullPage = false, role, requestCount = 0 }: Props) {
     const t = useTranslations('discovery');
@@ -49,9 +49,16 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             data-ui={UI.groupCard}
             data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
-            className="relative grid grid-cols-[minmax(0,1fr)_clamp(52px,20%,84px)] grid-rows-[1fr_auto] overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
+            className="relative flex flex-col overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
         >
-            <div className={`flex min-w-0 flex-col gap-1.5 px-[var(--card-pad)] pt-[var(--card-pad)] ${bottomLine ? "" : "pb-[var(--card-pad)]"}`}>
+            <div className="relative aspect-video overflow-hidden cat-tile">
+                {group.bannerImage ? (
+                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="(min-width: 1280px) 480px, (min-width: 768px) 45vw, 100vw" className="object-cover" />
+                ) : (
+                    <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={40} /></span>
+                )}
+            </div>
+            <div className={`flex min-w-0 flex-1 flex-col gap-1.5 px-[var(--card-pad)] pt-[var(--card-pad)] ${bottomLine ? "" : "pb-[var(--card-pad)]"}`}>
                 <h3 className="line-clamp-2 min-h-[2lh] text-item text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}
                     {fullPage
@@ -74,13 +81,6 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 )}
             </div>
             <GroupCardActivity activity={activity} lookingFor={group.lookingFor} />
-            <div className="relative col-start-2 row-span-2 row-start-1 min-h-14 overflow-hidden cat-tile">
-                {group.bannerImage ? (
-                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="320px" className="object-cover" />
-                ) : (
-                    <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={26} /></span>
-                )}
-            </div>
         </div>
     );
 }
