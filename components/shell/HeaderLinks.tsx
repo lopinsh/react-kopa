@@ -8,12 +8,12 @@ import { useBottomTab } from '@/hooks/useBottomTab';
 
 const LINKS = BOTTOM_LINKS.filter((l) => l.tab === 'discover' || l.tab === 'groups');
 
-/** From md: Atklāt and Manas grupas as quiet text links beside the logo. The open one is marked like the phone bar (same logic), in site colour only (AR-06). */
+/** From lg: Atklāt and Manas grupas as quiet text links beside the logo. The open one is marked like the phone bar (same logic), in site colour only (AR-06). */
 export default function HeaderLinks({ initialTab, signedIn }: { initialTab: BottomTab; signedIn: boolean }) {
     const t = useTranslations('nav');
     const marked = useBottomTab(initialTab);
     return (
-        <nav aria-label={t('mobileLabel')} className="hidden shrink-0 items-center gap-0 md:flex lg:gap-1">
+        <nav aria-label={t('mobileLabel')} className="hidden shrink-0 items-center gap-1 lg:flex">
             {LINKS.filter((l) => l.tab === 'discover' || signedIn).map((l) => {
                 const on = marked === l.tab;
                 return (
@@ -21,7 +21,7 @@ export default function HeaderLinks({ initialTab, signedIn }: { initialTab: Bott
                         key={l.tab}
                         href={l.href}
                         aria-current={on ? 'page' : undefined}
-                        className={clsx('rounded-pill px-2 py-2 text-body-sm lg:px-3 outline-none focus-visible:outline-2 focus-visible:outline-primary', on ? 'weight-strong text-foreground' : 'text-foreground-muted hover:text-foreground')}
+                        className={clsx('rounded-pill px-3 py-2 text-body-sm outline-none focus-visible:outline-2 focus-visible:outline-primary', on ? 'weight-strong text-foreground' : 'text-foreground-muted hover:text-foreground')}
                     >
                         {t(l.tab === 'discover' ? 'discover' : 'myGroups')}
                     </Link>
