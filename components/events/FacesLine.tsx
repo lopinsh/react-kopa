@@ -1,4 +1,5 @@
 import { useTranslations } from 'next-intl';
+import Faces from '@/components/ui/Faces';
 import { FACES_MAX, UI } from '@/lib/constants';
 import type { EventPanelData } from '@/lib/services/event-panel';
 
@@ -23,13 +24,7 @@ export default function FacesLine({ going, ended }: { going: EventPanelData['goi
 
     return (
         <p data-ui={UI.facesLine} className="flex items-center gap-2 text-body-sm text-foreground-muted">
-            {faces.length > 0 && (
-                <span aria-hidden="true" className="flex shrink-0">
-                    {faces.map((f, i) => (
-                        <img key={f.id} src={f.image} alt="" referrerPolicy="no-referrer" className={`size-5 rounded-full object-cover ring-2 ring-surface ${i > 0 ? '-ml-1.5' : ''}`} />
-                    ))}
-                </span>
-            )}
+            <Faces faces={faces} />
             <span>{sentence}</span>
         </p>
     );

@@ -6,6 +6,7 @@ import { GroupService } from '@/lib/services/group.service';
 import { UserService } from '@/lib/services/user.service';
 import { DiscoveryService } from '@/lib/services/discovery.service';
 import { cardActivities } from '@/lib/services/card-activity';
+import { cardFaces } from '@/lib/services/card-faces';
 import { CityService } from '@/lib/services/city.service';
 import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
@@ -94,8 +95,9 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
 
     // Each group's latest activity for the card's bottom line (C2): next meeting, else newest public announcement.
     // A group you belong to or wait for opens as its page, not the panel: those cards link straight to it (cmv9amjft).
-    const [activity, myRoles] = await Promise.all([
+    const [activity, faces, myRoles] = await Promise.all([
         cardActivities(groupsRes.groups, locale, viewerId),
+        cardFaces(groupsRes.groups.map((g) => g.id), viewerId),
         viewerId && p.kind === 'groups' ? UserService.getMyGroupRoles(viewerId) : Promise.resolve<Record<string, MembershipRole>>({}),
     ]);
 
@@ -125,7 +127,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'
-                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} params={p} myRoles={myRoles} />
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} faces={faces} params={p} myRoles={myRoles} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>

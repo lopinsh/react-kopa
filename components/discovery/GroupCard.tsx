@@ -5,12 +5,14 @@ import CategoryLine from '@/components/ui/CategoryLine';
 import Highlight from '@/components/ui/Highlight';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import RoleTag from '@/components/ui/RoleTag';
+import Faces from '@/components/ui/Faces';
 import { cityLabel } from '@/lib/city-label';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { langAttr } from '@/lib/translations';
 import GroupCardActivity from './GroupCardActivity';
 import type { GroupCardData } from '@/lib/services/group-card';
 import type { CardActivity } from '@/lib/services/card-activity';
+import type { Face } from '@/lib/services/event-panel';
 import { UI } from '@/lib/constants';
 import type { DiscoveryParams } from '@/lib/discovery-params';
 import type { MyRole } from '@/lib/types/own-area';
@@ -25,7 +27,9 @@ type Props = {
     highlight?: string;
     /** A group you belong to or wait for: the name is a plain link, so the full page loads with no panel in between (cmv9amjft). */
     fullPage?: boolean;
-    /** Your role in the group (Manas grupas): the tag ends the place line; a plain member gets none (AR-09) except on discovery (`showMember`). */
+    /** Members with a public profile, for signed-in viewers: up to three faces and "+N" on the picture's bottom right. */
+    faces?: Face[];
+    /** Your role in the group (Manas grupas): the tag sits on the picture's top right; a plain member gets none (AR-09) except on discovery (`showMember`). */
     role?: MyRole | 'PENDING';
     /** Discovery: a plain member gets the quiet member tag too. */
     showMember?: boolean;
@@ -39,7 +43,7 @@ const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
  * A group in a grid (AR-34): the photo on top, 16:9 (none: the category tile with its icon), then name, category line, place and members, the tagline; under a thin line the group's
  * latest activity (none: no line). Cards with a bottom line reserve the same lines (name 2, tagline 2, line 2); a grid row keeps one card height.
  */
-export default function GroupCard({ group, activity, filters, highlight, fullPage = false, role, showMember = false, requestCount = 0 }: Props) {
+export default function GroupCard({ group, activity, filters, highlight, fullPage = false, faces = [], role, showMember = false, requestCount = 0 }: Props) {
     const t = useTranslations('discovery');
     const tMy = useTranslations('profile.myGroups');
     const tCities = useTranslations('cities');
@@ -59,6 +63,13 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                 ) : (
                     <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={40} /></span>
                 )}
+                {role && !(role === 'MEMBER' && !showMember) && <span className="absolute right-2 top-2"><RoleTag role={role} showMember={showMember} /></span>}
+                {faces.length > 0 && (
+                    <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-pill bg-photo-chip py-1 pl-1.5 pr-2 text-tag text-white">
+                        <Faces faces={faces} ring="ring-white" />
+                        {group.memberCount > faces.length && <span>+{group.memberCount - faces.length}</span>}
+                    </span>
+                )}
             </div>
             <div className={`flex min-w-0 flex-1 flex-col gap-1.5 px-[var(--card-pad)] pt-[var(--card-pad)] ${bottomLine ? "" : "pb-[var(--card-pad)]"}`}>
                 <h3 className="line-clamp-2 min-h-[2lh] text-item text-foreground">
@@ -68,10 +79,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                         : <Link href={`/${group.category.l1Slug}/group/${group.slug}`} scroll={false} data-card-link data-opens-panel className={NAME_LINK}><Highlight text={group.name} word={highlight} /></Link>}
                 </h3>
                 <CategoryLine oneLine aboveCardLink color={group.category.color} category={group.category.l1Title} subCategories={group.subCategories} l1Slug={group.category.l1Slug} subSlugs={group.subCategorySlugs} from={filters} />
-                <p className="flex min-w-0 items-center gap-2 text-meta text-foreground-muted">
-                    <span className="truncate">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>
-                    {role && <RoleTag role={role} showMember={showMember} />}
-                </p>
+                <p className="truncate text-meta text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</p>
                 {requestCount > 0 ? (
                     // The team's waiting requests take the second tagline line, so every card keeps one height.
                     <div className="mt-1 min-h-[2lh] text-meta">

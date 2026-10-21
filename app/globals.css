@@ -23,6 +23,7 @@
   --on-cat: #ffffff;
 
   /* Text and chips on a photo (the group banner): the same in both modes, because the image is shaded the same way */
+  --photo-chip: rgb(0 0 0 / 0.55);
 
   /* Status colours (single variables: one edit changes them everywhere) */
   --danger: #A63A2E;
@@ -140,6 +141,7 @@
   --radius-item: 10px;
 
   --color-scrim: var(--scrim);
+  --color-photo-chip: var(--photo-chip);
 
   --spacing-header: 56px;
   /* Space scale: page sides and the gap between page sections (px-gutter, gap-section, py-section) */

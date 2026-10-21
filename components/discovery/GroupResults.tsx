@@ -10,18 +10,21 @@ import { DISCOVERY_GROUPS_MAX, DISCOVERY_GROUPS_PAGE } from '@/lib/constants';
 import type { MembershipRole } from '@prisma/client';
 import type { GroupCardData } from '@/lib/services/group-card';
 import type { CardActivity } from '@/lib/services/card-activity';
+import type { Face } from '@/lib/services/event-panel';
 
 type Props = {
     groups: GroupCardData[];
     hasMore: boolean;
     activity: Record<string, CardActivity>;
+    /** Group id → faces for the cards' pictures (signed-in viewers only). */
+    faces?: Record<string, Face[]>;
     params: DiscoveryParams;
     /** Group id → the viewer's role in the groups they belong to or wait for: those open as full pages and carry a role tag. */
     myRoles?: Record<string, MembershipRole>;
 };
 
 /** The Grupas list: the cards or rows, "Rādīt vēl" when more are left, the create card at the true end of a chosen category (also when it is empty). */
-export default async function GroupResults({ groups, hasMore, activity, params, myRoles }: Props) {
+export default async function GroupResults({ groups, hasMore, activity, faces, params, myRoles }: Props) {
     const t = await getTranslations('discovery');
     const createFor = params.category && !hasMore ? params.category : null;
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
@@ -36,7 +39,7 @@ export default async function GroupResults({ groups, hasMore, activity, params, 
     }
     return (
         <>
-            <GroupList groups={groups} activity={activity} createFor={createFor} filters={params} highlight={params.q} myRoles={myRoles} />
+            <GroupList groups={groups} activity={activity} faces={faces} createFor={createFor} filters={params} highlight={params.q} myRoles={myRoles} />
             {canAskMore && (
                 <div className="mt-5 flex justify-center">
                     <Link href={discoveryHref(params, { limit: params.limit + DISCOVERY_GROUPS_PAGE })} scroll={false} className={buttonClass('quiet')}>
