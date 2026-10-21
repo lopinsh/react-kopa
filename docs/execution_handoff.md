@@ -14,7 +14,7 @@
 - **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search, space release 2 (spacing scale, measure, fewer boxes; pushed, live), colour release 3 (card photo on top, banner tone area, tab rows at content width; pushed, live), header links Atklāt and Manas grupas from lg, role tags on discovery cards, role colours as theme tokens with tag top-right and member faces bottom-right on the card picture, My groups section headings (pushed, live). New tokens: `--banner-mix`, utilities `banner-tone`, `tile-ink`, `tile-ink-muted`, `mark-surface`.
 - **Cancelled:** R10 Citur and "Kur tu esi?" (owner, 19 Oct). Its rule AR-38 stays unbuilt; discovery keeps starting on "Visur".
 
-- [x] **Theme sweep (R14, 21 Oct):** `ui:check` now fails on colour literals, palette colours, `dark:`, bare `rounded`, raw shadows and non-circle `rounded-full`; danger/success/warning (+ink), scrim and photo chip are look tokens; `globals.css` holds no look values (Sūna + calm are the single defaults); all ~110 leaks swept.
+- [x] **Theme sweep (R14, 21 Oct, pushed, live):** `ui:check` now fails on colour literals, palette colours, `dark:`, bare `rounded`, raw shadows and non-circle `rounded-full`; danger/success/warning (+ink), scrim and photo chip are look tokens; `globals.css` holds no look values (Sūna + calm are the single defaults); all ~110 leaks swept.
 
 ## What's next
 
