@@ -19,7 +19,7 @@ export default function GroupTab(props: GroupSettingsFormProps) {
         <FormProvider {...methods}>
             <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
                 {!canEditOwnerFields && (
-                    <p className="flex items-start gap-3 rounded-2xl bg-surface px-4 py-3.5 text-body-sm text-foreground-muted shadow-card frame">
+                    <p className="flex items-start gap-3 rounded-2xl bg-surface px-4 py-4 text-body-sm text-foreground-muted shadow-card frame">
                         <Info className="mt-0.5 h-4 w-4 shrink-0" />
                         {gs('ownerOnlyNote')}
                     </p>

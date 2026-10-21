@@ -113,7 +113,7 @@ Two families (AR-07): **Literata** for titles, **Commissioner** for everything e
 | Tag `text-tag` | Body | 12 / 1.2 / 600, +0.02em | Eju |
 | Human note `human-note` | Body italic | 14 / 400, site colour | Nākamā tikšanās: sestd., 17. okt. |
 
-Pages and components pick a role, never raw sizes: no `text-sm`, `text-[13px]`, `leading-*`, `tracking-*` or `font-medium/semibold/bold` (`npm run type:check` lists them). A role carries size, line, tracking and weight; the heading roles use the heading font and the style's heading weight. Inside a role, a name or count that stands out takes `weight-medium` or `weight-strong` (weight only). Primary text (titles, descriptions) is `text-foreground`; `text-foreground-muted` is for meta. Page titles come from `PageHead` (title, optional lead, actions).
+Pages and components pick a role, never raw sizes: no `text-sm`, `text-[13px]`, `leading-*`, `tracking-*` or `font-medium/semibold/bold` (`npm run ui:check` lists them). A role carries size, line, tracking and weight; the heading roles use the heading font and the style's heading weight. Inside a role, a name or count that stands out takes `weight-medium` or `weight-strong` (weight only). Primary text (titles, descriptions) is `text-foreground`; `text-foreground-muted` is for meta. Page titles come from `PageHead` (title, optional lead, actions).
 
 Nothing is smaller than 11 px.
 
@@ -125,8 +125,10 @@ Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-l
 
 ### Space and depth
 
-- 4 px grid. Page sides 16 px (phone), 24–32 px (desktop).
-- Content widths: 760 group pages, 680 reading, 560 focus, 1200 browse.
+- 4 px grid; spacing steps 2.5 and 3.5 and arbitrary `[Npx]` spacing are not used (0.5 and 1.5 stay for hairline nudges). A control's padding is 12, a card's 20.
+- Space tokens: `gutter` (page sides, `px-gutter`, 16 px on a phone to 32 px) and `section` (the gap between page sections, `gap-section`, 32 to 64 px).
+- Width tokens: `max-w-browse` 1200 (discovery, frames), `max-w-page` 760 (group and event pages), `max-w-focus` 560 (forms, wizard), `max-w-reading` 66ch (running text: Par mums, custom sections, announcements, event descriptions, rich text). No `max-w-[Npx]`; `calc()` and viewport units are the only arbitrary widths, for sizing against the screen.
+- Fewer boxes: a box is for one thing you act on as a unit (a card in a grid, a dialog, the wizard, the next-meeting box). Group page sections sit on the page under their heading, announcements are rows divided by hairlines.
 - Gaps: 8 inside a row, 12–16 between items, 24–32 between sections.
 - Space inside a card is never more than the space between cards: 20 px inside (padding, 6 px between lines), 20 px visible air between cards in the grid (Drosmīgs adds `--shadow-room` so the hard shadow does not eat it).
 - Cards are flat. The float shadow (`shadow-premium`) is only for things above the page: menus, drop-downs, pop-overs, toasts, drawers. Dialogs use `shadow-dialog`. Shadows are the same in dark mode.

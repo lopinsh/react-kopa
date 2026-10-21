@@ -59,7 +59,7 @@ export default function PlaceButton() {
                 controls={pop.id}
                 onClear={() => go({ cities: [] })}
                 clearLabel={t('clearChoice', { what: names.join(', ') })}
-                widthClass="max-w-[9.5rem]"
+                widthClass="max-w-40"
             />
             <FilterPopover pop={pop} title={t('where')} onClose={close}>
                 <PlaceList

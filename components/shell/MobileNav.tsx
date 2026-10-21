@@ -22,7 +22,7 @@ export function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
     const label = withCount && unread > 0 ? t('messagesUnread', { count: unread }) : undefined;
     return (
         <Link href={link.href} aria-label={label} aria-current={marked ? 'page' : undefined} className={clsx(CELL, marked && 'weight-strong text-foreground')}>
-            <span className={clsx('rounded-pill px-3.5 py-[3px]', marked && 'bg-primary/16')}>
+            <span className={clsx('rounded-pill px-4 py-1', marked && 'bg-primary/16')}>
                 <Icon aria-hidden className="size-5" strokeWidth={marked ? 2.25 : 1.75} />
             </span>
             <span>{t(link.labelKey)}</span>

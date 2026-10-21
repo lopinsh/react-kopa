@@ -73,7 +73,7 @@ export default async function GroupAnnouncementsPage({
                 active={tab}
                 action={page.canManage ? <AnnouncementForm groupId={group.id} locale={locale} canChooseVisibility={group.type === 'PUBLIC'} /> : undefined}
             />
-            <div className="mt-4 grid max-w-[760px] gap-3">
+            <div className="mt-4 max-w-page divide-y divide-border border-y border-border">
                 {page.items.length > 0 ? page.items.map((item) => (
                     <AnnouncementItem key={item.id} item={item} menu={page.canManage ? <AnnouncementItemMenu postId={item.id} title={item.title} archived={item.archivedAt !== null} /> : undefined} />
                 )) : (

@@ -61,7 +61,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                 value={targetId}
                                 onChange={(e) => { setTargetId(e.target.value); setConfirming(false); }}
                                 disabled={isPending}
-                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-3.5 weight-medium outline-none transition-all focus:border-primary"
+                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-4 weight-medium outline-none transition-all focus:border-primary"
                             >
                                 <option value="">{t('transferSelectPlaceholder')}</option>
                                 {candidates.map(c => (

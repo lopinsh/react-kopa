@@ -75,7 +75,7 @@ export default function EventOrganiserBox({ event, lists, locale, eventPath }: P
     ];
 
     return (
-        <div ref={root} data-ui={UI.eventOrganiser} className="mt-3.5 grid gap-2.5 rounded-2xl bg-background p-4">
+        <div ref={root} data-ui={UI.eventOrganiser} className="mt-4 grid gap-3 rounded-2xl bg-background p-4">
             <h2 className="text-section text-foreground">{tOrg('title')}</h2>
             {!past && (
                 <>

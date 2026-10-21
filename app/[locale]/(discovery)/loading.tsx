@@ -9,7 +9,7 @@ export default async function DiscoveryLoading() {
             <div className="flex min-h-full">
                 <div aria-hidden="true" className="hidden h-[calc(100dvh-4rem)] w-[232px] shrink-0 border-r border-border bg-surface lg:block" />
                 <div className="min-w-0 flex-1 pb-20 pt-3 md:pt-4">
-                    <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+                    <div className="mx-auto w-full max-w-browse px-gutter">
                         <div className="mb-3 grid gap-2 md:mb-4 md:flex md:items-center md:justify-between">
                             <SkeletonBlock className="h-8 w-full rounded-pill md:order-2 md:w-48" />
                             <div className="flex gap-1.5"><SkeletonBlock className="h-8 w-20 rounded-pill" /><SkeletonBlock className="h-8 w-24 rounded-pill" /></div>

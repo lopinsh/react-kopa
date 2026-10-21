@@ -85,7 +85,7 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
 
             {open && (
                 <MenuPanel label={c('moreOptions')} placement="anchor" describedBy={role ? roleId : undefined} dataUi={UI.groupMoreMenu} {...menuProps}>
-                    {role && <p id={roleId} role="none" className="px-2.5 pb-1.5 pt-1 text-meta text-foreground-muted">{t(`more.role.${role}`)}</p>}
+                    {role && <p id={roleId} role="none" className="px-3 pb-1.5 pt-1 text-meta text-foreground-muted">{t(`more.role.${role}`)}</p>}
 
                     {role === 'PENDING' && (
                         <>

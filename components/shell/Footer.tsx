@@ -24,7 +24,7 @@ export function Footer({ always }: { always?: boolean }) {
     if (!(panel ? pageHasFooter : onPage)) return null;
 
     return (
-        <footer data-ui={UI.footer} className="flex flex-wrap items-center gap-x-[18px] gap-y-1.5 border-t border-border bg-surface px-3 py-3 text-meta text-foreground-muted md:px-5 md:py-3.5">
+        <footer data-ui={UI.footer} className="flex flex-wrap items-center gap-x-5 gap-y-1.5 border-t border-border bg-surface px-3 py-3 text-meta text-foreground-muted md:px-5 md:py-4">
             <Link href="/" aria-label={tCommon('brandName')}>
                 <Logo size="sm" />
             </Link>

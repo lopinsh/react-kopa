@@ -36,7 +36,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     aria-describedby="group-name-count"
                     placeholder={t('fieldNamePlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.name ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
@@ -59,7 +59,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     aria-describedby="group-looking-for-count group-looking-for-hint"
                     placeholder={t('fieldLookingForPlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.lookingFor ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />
@@ -87,7 +87,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     {...register('bannerImage')}
                     placeholder={t('fieldBannerImagePlaceholder')}
                     className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-2.5 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
+                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
                         errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
                     )}
                 />

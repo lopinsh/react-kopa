@@ -12,7 +12,7 @@ export default function AcceptingMembersSection() {
     const { register, watch } = useFormContext<GroupFormValues>();
 
     return (
-        <div className="flex items-center gap-4 rounded-2xl bg-surface px-4 py-3.5 shadow-card frame">
+        <div className="flex items-center gap-4 rounded-2xl bg-surface px-4 py-4 shadow-card frame">
             <div className="relative flex shrink-0 items-center">
                 <input
                     type="checkbox"

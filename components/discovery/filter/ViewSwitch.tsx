@@ -22,7 +22,7 @@ export default function ViewSwitch({ className }: { className?: string }) {
                     scroll={false}
                     aria-current={params.kind === kind ? 'page' : undefined}
                     className={clsx(
-                        'relative flex flex-1 items-center justify-center rounded-pill px-3.5 text-meta after:absolute after:-inset-y-1.5 after:inset-x-0 md:flex-none',
+                        'relative flex flex-1 items-center justify-center rounded-pill px-4 text-meta after:absolute after:-inset-y-1.5 after:inset-x-0 md:flex-none',
                         params.kind === kind ? 'bg-surface weight-strong text-foreground shadow-sm' : 'weight-medium text-foreground-muted hover:text-foreground'
                     )}
                 >

@@ -8,7 +8,7 @@ import { CategoryIcon } from '@/components/ui/CategoryIcon';
  */
 export default function GroupPicture({ image, l1Slug }: { image: string | null; l1Slug: string }) {
     return (
-        <div className="mb-4 max-w-[760px]">
+        <div className="max-w-page">
             <PictureBox className="">
                 {image ? (
                     <Image src={image} alt="" fill sizes="(min-width: 768px) 760px, 100vw" unoptimized priority className="object-cover" />

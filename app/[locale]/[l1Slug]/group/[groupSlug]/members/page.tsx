@@ -67,7 +67,7 @@ export default async function GroupMembersPage({
                     ...(requests ? [{ key: 'requests', label: tCommon('requestsTab'), href: `${base}/members?tab=requests`, count: requests.length }] : []),
                 ]}
             />
-            <div className="max-w-[760px]">
+            <div className="max-w-page">
                 {currentTab === 'requests' && requests ? (
                     requests.length > 0 ? (
                         <ul className="divide-y divide-border">

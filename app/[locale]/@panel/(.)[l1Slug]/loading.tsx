@@ -8,7 +8,7 @@ export default async function PanelLoading() {
     return (
         <LoadingRegion label={t('loading')}>
             <SkeletonBlock className="h-24 rounded-none md:h-[180px]" />
-            <div className="grid gap-2.5 px-[18px] pb-[18px] pt-3.5">
+            <div className="grid gap-3 px-5 pb-5 pt-4">
                 <h2 id={PANEL_TITLE_ID} tabIndex={-1} className="sr-only outline-none">{t('loading')}</h2>
                 <SkeletonBlock className="h-6 w-3/4" />
                 <SkeletonBlock className="h-3.5 w-1/2" />

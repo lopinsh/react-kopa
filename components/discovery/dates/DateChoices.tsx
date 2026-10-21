@@ -29,7 +29,7 @@ export default function DateChoices({ className }: { className?: string }) {
     const label = dateChoiceLabel(choice, today, format, { week: t('thisWeek'), today: t('today'), weekend: t('weekend') });
 
     return (
-        <div data-ui={UI.dateChoices} className={clsx('h-8 min-w-0 shrink items-center rounded-pill bg-surface p-[3px] ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]', className)}>
+        <div data-ui={UI.dateChoices} className={clsx('h-8 min-w-0 shrink items-center rounded-pill bg-surface p-1 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]', className)}>
             <QuickChoices variant="line" onPick={(date) => go({ date, day: null })} />
             <div ref={bindHost} className="relative ml-0.5 h-[26px] min-w-0 shrink">
                 <span className={clsx('flex h-full min-w-0 items-center rounded-pill', custom ? 'bg-tint ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : pop.open && 'bg-tint')}>
@@ -40,7 +40,7 @@ export default function DateChoices({ className }: { className?: string }) {
                         aria-controls={pop.id}
                         aria-haspopup="true"
                         aria-label={custom ? t('dateChoiceLabel', { when: label }) : t('pickDates')}
-                        className={clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-meta after:absolute after:-inset-y-2 after:inset-x-0', custom ? 'pl-2.5 pr-1 weight-strong' : 'px-2.5 text-foreground-muted hover:bg-tint')}
+                        className={clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-meta after:absolute after:-inset-y-2 after:inset-x-0', custom ? 'pl-3 pr-1 weight-strong' : 'px-3 text-foreground-muted hover:bg-tint')}
                     >
                         <CalendarDays aria-hidden="true" className="size-3.5 shrink-0" />
                         {custom && <span className="min-w-0 truncate">{label}</span>}

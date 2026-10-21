@@ -21,7 +21,7 @@ type Props = {
     autoFocus?: boolean;
 };
 
-const ROW = 'flex min-h-11 w-full items-center gap-2.5 rounded-xl px-2 text-left text-body-sm md:min-h-9';
+const ROW = 'flex min-h-11 w-full items-center gap-3 rounded-xl px-2 text-left text-body-sm md:min-h-9';
 
 /** The categories as links: "Visas", the 15 Tēmas (alphabetical, with counts), and when something is typed, matching Veidi. Used by the drawer and the Tēma drop-down. */
 export default function CategoryList({ folded = false, onChoose, onSuggest, autoFocus = false }: Props) {

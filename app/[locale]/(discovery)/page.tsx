@@ -119,7 +119,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                 <div className="flex min-h-full">
                     <CategoryDrawer folded={cookieStore.get(DISCOVERY_RAIL_COOKIE)?.value === '1'} />
                     <div className="min-w-0 flex-1 pb-20">
-                        <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
+                        <div className="mx-auto w-full max-w-browse px-gutter">
                             <PageHead className="pt-4 md:pt-6" title={tDiscovery(p.kind === 'events' ? 'eventsPageTitle' : 'groupsPageTitle')} />
                             <FilterLine />
                             <AlsoMatchesLine />

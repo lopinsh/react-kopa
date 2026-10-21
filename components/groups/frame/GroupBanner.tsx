@@ -25,7 +25,7 @@ export default function GroupBanner() {
 
     return (
         <div data-ui={UI.groupBanner} className="banner-tint relative isolate z-10 h-16 border-b border-border text-foreground md:h-24">
-            <div className="mx-auto flex h-full max-w-6xl items-center gap-2.5 px-3 md:gap-4 md:px-[22px]">
+            <div className="mx-auto flex h-full max-w-browse items-center gap-3 px-gutter md:gap-4">
                 <GroupPagesDrawer />
                 <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">
                     <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px] md:size-6" />
@@ -36,7 +36,7 @@ export default function GroupBanner() {
                         <span aria-hidden className={'size-2 shrink-0 rounded-full bg-[var(--accent)]'} />
                         <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>
                     </p>
-                    <div className="hidden max-h-10 flex-wrap items-baseline gap-x-3.5 gap-y-0.5 overflow-hidden px-0.5 -mx-0.5 md:flex">
+                    <div className="hidden max-h-10 flex-wrap items-baseline gap-x-4 gap-y-0.5 overflow-hidden px-0.5 -mx-0.5 md:flex">
                         <CategoryLine color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} />
                         <p className={'text-meta text-foreground-muted'}>{facts.join(' · ')}</p>
                     </div>

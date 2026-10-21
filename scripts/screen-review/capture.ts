@@ -40,6 +40,18 @@ interface Shot {
 // tsx wraps functions with __name(); stub it so page.evaluate callbacks run in the browser.
 const INIT = "window.__name = (f) => f; if (!sessionStorage.getItem('fresh')) localStorage.setItem('cookie-consent', 'accepted');";
 
+function findChrome(): string | undefined {
+    const candidates = [
+        process.env.CHROME_PATH,
+        'C:/Program Files/Google/Chrome/Application/chrome.exe',
+        'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+        '/usr/bin/google-chrome',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    ];
+    // Playwright's own browser is used when no system Chrome is found (undefined).
+    return candidates.find((c) => c && fs.existsSync(c));
+}
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function clickFirst(page: Page, ...candidates: (string | RegExp)[]) {
@@ -196,8 +208,8 @@ async function dump(page: Page) {
 async function main() {
     fs.mkdirSync(OUT, { recursive: true });
     const only = process.argv[2];
-    // CHROME_PATH lets the script reuse an already-installed Chromium instead of the version Playwright expects.
-    const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+    // Reuse an installed Chrome when Playwright's own Chromium is missing: CHROME_PATH, else the standard install locations.
+    const browser = await chromium.launch({ executablePath: findChrome() });
     const log: string[] = [];
     const ctxCache = new Map<string, BrowserContext>();
 

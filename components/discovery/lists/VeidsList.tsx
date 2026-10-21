@@ -33,7 +33,7 @@ export default function VeidsList({ l1Slug, selected, onChange, onPick, autoFocu
             <ListSearch value={typed} onChange={setTyped} label={t('searchVeids')} autoFocus={autoFocus} />
             <div className="mt-1">
                 {rows.map((v) => <CheckRow key={v.slug} name={v.title} count={v.count} checked={selected.includes(v.slug)} faded={v.count === 0} onToggle={() => toggle(v.slug)} onPick={() => onPick(v.slug)} />)}
-                {rows.length === 0 && <p className="px-2.5 py-3 text-body-sm italic text-foreground-muted">{t('nothingFound')}</p>}
+                {rows.length === 0 && <p className="px-3 py-3 text-body-sm italic text-foreground-muted">{t('nothingFound')}</p>}
             </div>
         </div>
     );

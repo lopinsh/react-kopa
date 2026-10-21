@@ -34,4 +34,4 @@ jobs:
         run: npm run i18n:check
 
       - name: Type roles (strict)
-        run: npm run type:check
+        run: npm run ui:check

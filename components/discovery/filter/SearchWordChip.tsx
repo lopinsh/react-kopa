@@ -19,7 +19,7 @@ export default function SearchWordChip() {
             chosen
             onClear={() => go({ q: '' })}
             clearLabel={t('clearChoice', { what: params.q })}
-            widthClass="max-w-[7.5rem]"
+            widthClass="max-w-32"
             dataUi={UI.searchWordChip}
         />
     );

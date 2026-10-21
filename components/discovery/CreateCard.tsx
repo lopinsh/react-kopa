@@ -25,7 +25,7 @@ export default function CreateCard({ l1Slug, variant }: Props) {
 
     if (variant === 'row') {
         return (
-            <Link href={href} data-ui={UI.createCard} className="flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0">
+            <Link href={href} data-ui={UI.createCard} className="flex min-h-14 items-center gap-3 border-t border-border py-3 first:border-t-0">
                 <span className="min-w-0 flex-1">
                     <span className="block text-item text-foreground">{t('createNewGroup')}</span>
                     <span className="block text-meta text-foreground-muted">{t('inThisCategory')}</span>

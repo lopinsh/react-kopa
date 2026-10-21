@@ -21,10 +21,10 @@ type Props = {
 export default function CheckRow({ name, count, checked, onToggle, onPick, faded = false }: Props) {
     return (
         <div className={clsx('flex min-h-11 items-center rounded-xl text-body-sm hover:bg-tint md:min-h-9', faded && !checked && 'opacity-45')}>
-            <label className="grid min-h-11 cursor-pointer place-items-center pl-2.5 pr-2 md:min-h-9">
+            <label className="grid min-h-11 cursor-pointer place-items-center pl-3 pr-2 md:min-h-9">
                 <input type="checkbox" checked={checked} onChange={onToggle} aria-label={name} className="size-4 shrink-0 accent-primary" />
             </label>
-            <button type="button" onClick={onPick} className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 rounded-r-xl pl-0.5 pr-2.5 text-left md:min-h-9">
+            <button type="button" onClick={onPick} className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-3 rounded-r-xl pl-0.5 pr-3 text-left md:min-h-9">
                 <span className="min-w-0 flex-1 truncate">{name}</span>
                 <span className="text-meta text-foreground-muted">{count}</span>
             </button>

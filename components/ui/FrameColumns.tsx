@@ -7,9 +7,9 @@ import type { ReactNode } from 'react';
  */
 export default function FrameColumns({ nav, children, className }: { nav: ReactNode; children: ReactNode; className?: string }) {
     return (
-        <div className={`mx-auto max-w-6xl px-3 pb-6 pt-3 md:grid md:grid-cols-[190px_minmax(0,1fr)] md:gap-[22px] md:px-[22px] md:pt-[18px]${className ? ` ${className}` : ''}`}>
+        <div className={`mx-auto max-w-browse px-gutter pb-6 pt-3 md:grid md:grid-cols-[190px_minmax(0,1fr)] md:gap-6 md:pt-5${className ? ` ${className}` : ''}`}>
             {nav}
-            <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-3">{children}</div>
+            <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-6">{children}</div>
         </div>
     );
 }

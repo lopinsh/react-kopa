@@ -31,7 +31,7 @@ export default async function EventTextSection({ heading, html, lang, titleLang,
                     <span>{lock.text}</span>
                 </p>
             )}
-            {html && lock?.kind !== 'locked' && <div lang={label} className="rich-text text-body-sm" dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }} />}
+            {html && lock?.kind !== 'locked' && <div lang={label} className="rich-text max-w-reading text-body-sm" dangerouslySetInnerHTML={{ __html: sanitizeRichText(html) }} />}
         </section>
     );
 }

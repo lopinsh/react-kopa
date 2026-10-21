@@ -89,7 +89,7 @@ export default function AlsoMatchesLine() {
                                         picked.current = hrefOf(m);
                                         window.history.back();
                                     }}
-                                    className="flex min-h-11 items-center gap-2 rounded-xl px-2.5 text-body-sm hover:bg-tint md:min-h-9"
+                                    className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-body-sm hover:bg-tint md:min-h-9"
                                 >
                                     <Dot match={m} />
                                     <span className="min-w-0 flex-1 truncate">{m.title}</span>

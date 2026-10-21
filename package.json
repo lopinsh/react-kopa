@@ -10,7 +10,8 @@
     "docker:start": "npx prisma@6.19.2 migrate deploy && node server.js",
     "typecheck": "tsc --noEmit",
     "i18n:check": "node scripts/check-i18n.mjs",
-    "type:check": "node scripts/check-type.mjs",
+    "ui:check": "node scripts/check-ui.mjs",
+    "type:check": "node scripts/check-ui.mjs",
     "redesign:build": "node scripts/redesign/gen.mjs",
     "plan:check": "node scripts/redesign/check-plan.mjs",
     "db:up": "docker compose up -d db soketi",
@@ -19,7 +20,7 @@
     "db:seed": "prisma db seed",
     "feedback": "tsx scripts/feedback.ts",
     "set-owner": "tsx scripts/set-owner.ts",
-    "check": "npm run typecheck && npm run lint && npm run i18n:check && npm run type:check"
+    "check": "npm run typecheck && npm run lint && npm run i18n:check && npm run ui:check"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

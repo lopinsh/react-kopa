@@ -36,7 +36,7 @@ export default function GroupList({ groups, activity = {}, createFor, filters, h
                 {groups.map((g) => <GroupCard key={g.id} group={g} activity={activity[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={mine?.[g.id]?.role} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>
-            <div className="rounded-2xl bg-surface px-3.5 md:hidden shadow-card frame">
+            <div className="rounded-2xl bg-surface px-4 md:hidden shadow-card frame">
                 {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} role={mine?.[g.id]?.role} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="row" />}
             </div>

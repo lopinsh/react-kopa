@@ -102,7 +102,7 @@ type ActionResponse<T> =
 ## UI & styling
 
 - UI work follows the Design chapter of `docs/handbook/design.md`.
-- Text uses the type roles (`text-title`, `text-body`, `text-meta`, …) from the Type section; no raw `text-sm`, `leading-*`, `font-semibold` (`npm run type:check`).
+- Text uses the type roles (`text-title`, `text-body`, `text-meta`, …) from the Type section; no raw `text-sm`, `leading-*`, `font-semibold` (`npm run ui:check`). Space: scale steps only (no 2.5/3.5 or `[Npx]` spacing), `px-gutter` for page sides, `gap-section` between page sections, `max-w-browse/page/focus/reading` for widths; a box (`bg-surface shadow-card`) is for one thing you act on as a unit, not for every section.
 - Tailwind v4 only — no CSS modules, styled-components, or inline `style` (except setting CSS variables at layout level).
 - Use theme variables (`var(--background)`, `var(--surface)`, `var(--accent)`) and existing utilities (`shadow-premium`, `soft-press`); never hardcode colors, radii, or shadows.
 - Edges use `line`/`frame`, pills `rounded-pill`, card and control shadows `shadow-card`/`shadow-control`, filled buttons `press`: never `border border-border` or `rounded-full` on a control (dividers keep `border-border`).

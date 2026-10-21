@@ -80,7 +80,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                         aria-describedby={`${id}-count`}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-xl line bg-surface p-3.5 text-body md:text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="w-full resize-none rounded-xl line bg-surface p-4 text-body md:text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
                     />
                     <div className="mt-1 flex"><TextCounter id={`${id}-count`} length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
                 </div>
@@ -92,7 +92,7 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                     </div>
                 )}
 
-                <div className="flex items-center justify-end gap-2.5 pt-1">
+                <div className="flex items-center justify-end gap-3 pt-1">
                     <OverlayCloseButton disabled={isPending} className={buttonClass('secondary')}>{tCommon('cancel')}</OverlayCloseButton>
                     <Button type="submit" disabled={!canSubmit}>
                         {isPending ? <span aria-hidden className="size-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : null}

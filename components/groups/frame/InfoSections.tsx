@@ -50,7 +50,7 @@ export default function InfoSections({ title, label, parts, initial }: { title: 
     return (
         <>
             {many && <PartTabs title={title} label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `#${anchor(key)}` }))} active={active} onSelect={select} />}
-            <div ref={wrap} className="mt-4 flex flex-col gap-6">
+            <div ref={wrap} className="flex flex-col gap-section">
                 {parts.map((p) => (
                     <section key={p.key} id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
                         <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className="mb-2 text-section">{p.label}</h2>

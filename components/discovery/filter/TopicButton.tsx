@@ -32,7 +32,7 @@ export default function TopicButton() {
                 controls={pop.id}
                 onClear={() => go({ category: null, tags: [] })}
                 clearLabel={t('clearChoice', { what: chosen?.title ?? '' })}
-                widthClass="max-w-[11rem]"
+                widthClass="max-w-44"
             />
             <FilterPopover pop={pop} phone="drawer" title={t('topic')} onClose={() => pop.setOpen(false)}>
                 <CategoryList onChoose={() => pop.setOpen(false)} onSuggest={setSuggest} autoFocus={pop.desktop} />

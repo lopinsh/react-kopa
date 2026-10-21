@@ -34,7 +34,7 @@ export default function EventDayList({ days, today, showGroup, showCity, columns
         return day === addDays(today, 1) ? t('dayTomorrow', { date }) : capitalizeFirst(date);
     };
     return (
-        <div className={flat ? '@container/events' : '@container/events rounded-2xl bg-surface px-3.5 pb-2.5 shadow-card frame'}>
+        <div className={flat ? '@container/events' : '@container/events rounded-2xl bg-surface px-4 pb-3 shadow-card frame'}>
             {days.map(({ day, rows }) => (
                 <section key={day} className="border-t border-border first:border-t-0">
                     <h3 className="pb-0.5 pt-3 text-item text-foreground">{heading(day)}</h3>

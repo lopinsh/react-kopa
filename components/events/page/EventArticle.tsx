@@ -33,7 +33,7 @@ export default async function EventArticle({ event, organiser }: { event: EventP
         : undefined;
 
     return (
-        <article data-ui={UI.eventPage} style={{ ['--c' as string]: event.category.color }} className="grid max-w-[760px] gap-2.5 rounded-2xl bg-surface p-[18px] [overflow-wrap:anywhere] md:p-6 shadow-card frame">
+        <article data-ui={UI.eventPage} style={{ ['--c' as string]: event.category.color }} className="grid max-w-page gap-3 rounded-2xl bg-surface p-5 [overflow-wrap:anywhere] md:p-6 shadow-card frame">
             <EventPicture image={event.image} />
             <h1 lang={titleLabel} className="text-title text-foreground">{event.title}</h1>
             {titleLabel && <FallbackLangLabel lang={titleLabel} className="justify-self-start" />}
@@ -41,12 +41,12 @@ export default async function EventArticle({ event, organiser }: { event: EventP
             {status && <p className="text-meta text-foreground-muted">{status}</p>}
             <EventFacts event={event} />
             {event.description && (
-                <div className="mt-3.5">
+                <div className="mt-4">
                     <EventTextSection heading={t('aboutEvent')} html={event.description} lang={event.descriptionLang} titleLang={event.titleLang} />
                 </div>
             )}
             {(event.instructions || event.instructionsLocked) && (
-                <div className="mt-3.5">
+                <div className="mt-4">
                     <EventTextSection
                         heading={t('practicalInfo')}
                         html={event.instructions}

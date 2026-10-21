@@ -3,7 +3,7 @@ import { PANEL_TITLE_ID } from '@/lib/constants';
 
 /** The panel's text column: 14/18 px padding, 9 px between its parts, room for the phone's home bar. */
 export default function PanelBody({ children }: { children: ReactNode }) {
-    return <div className="grid gap-2.5 px-[18px] pb-[calc(18px+env(safe-area-inset-bottom))] pt-3.5 md:pb-[18px]">{children}</div>;
+    return <div className="grid gap-3 px-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-4 md:pb-5">{children}</div>;
 }
 
 /** The panel's name: the dialog's label, and where focus goes when the content changes. */

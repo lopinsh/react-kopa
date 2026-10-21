@@ -37,7 +37,7 @@ export default function DateButton({ className }: { className?: string }) {
                 controls={pop.id}
                 onClear={() => go({ date: { kind: 'week' }, day: null })}
                 clearLabel={t('clearChoice', { what: label })}
-                widthClass="max-w-[8rem]"
+                widthClass="max-w-32"
             />
             <FilterPopover pop={pop} title={t('dateLabel')} width={PANEL} onClose={() => pop.setOpen(false)}>
                 <DateSheet onClose={() => pop.setOpen(false)} />

@@ -45,7 +45,7 @@ export default function GroupRow({ group, highlight, replace = false, searchItem
             data-ui={UI.groupRow}
             data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
-            className="relative flex min-h-14 items-center gap-2.5 border-t border-border py-2.5 first:border-t-0 has-[a[data-row-link]:focus-visible]:outline has-[a[data-row-link]:focus-visible]:outline-2 has-[a[data-row-link]:focus-visible]:outline-primary"
+            className="relative flex min-h-14 items-center gap-3 border-t border-border py-3 first:border-t-0 has-[a[data-row-link]:focus-visible]:outline has-[a[data-row-link]:focus-visible]:outline-2 has-[a[data-row-link]:focus-visible]:outline-primary"
         >
             <span className="min-w-0 flex-1">
                 <span className="line-clamp-2 block text-item text-foreground">

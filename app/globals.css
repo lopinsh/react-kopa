@@ -113,6 +113,15 @@
   --color-scrim: var(--scrim);
 
   --spacing-header: 56px;
+  /* Space scale: page sides and the gap between page sections (px-gutter, gap-section, py-section) */
+  --spacing-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --spacing-section: clamp(2rem, 1.5rem + 2vw, 4rem);
+
+  /* Content widths (max-w-browse / page / focus / reading) */
+  --container-browse: 1200px;
+  --container-page: 760px;
+  --container-focus: 560px;
+  --container-reading: 66ch;
 
   /* Motion for pop-ups, toasts and drawers; use only as motion-safe:animate-* */
   --animate-fade: ek-fade 150ms ease-out;

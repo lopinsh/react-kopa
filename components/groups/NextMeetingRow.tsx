@@ -17,7 +17,7 @@ export default function NextMeetingRow({ event, href }: { event: Pick<NextEventV
         { next: (d) => d, running: (until) => t('runningUntil', { until }) }, EVENT_DAY_TIME
     ));
     return (
-        <Link href={href} className="grid gap-0.5 rounded-xl py-2.5 hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+        <Link href={href} className="grid gap-0.5 rounded-xl py-3 hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
             <span className="flex items-baseline gap-2 text-body-sm">
                 <span className="tabular-nums text-foreground-muted">{when}</span>
                 <span aria-hidden className="size-2 shrink-0 translate-y-px rounded-full bg-[var(--accent)]" />

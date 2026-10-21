@@ -49,7 +49,7 @@ export default async function GroupPanel({ data }: { data: GroupPanelData }) {
                 {shortText && <p lang={langAttr(data.textLang, locale)} className="text-body-sm text-foreground">{data.tagline}</p>}
                 {nextMeeting && !data.events.some((e) => e.slug === nextMeeting.slug) && (
                     <Link href={`${base}/events/${nextMeeting.slug}`} scroll={false} className="flex items-start gap-1.5 text-body-sm italic text-primary hover:underline">
-                        <CalendarDays aria-hidden="true" className="mt-[3px] size-4 shrink-0" />
+                        <CalendarDays aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
                         <span>{meetingLine(
                             { at: nextMeeting.startDate, until: nextMeeting.running ? nextMeeting.endDate : null }, formatter, zone,
                             { next: (date) => t('nextMeeting', { date: capitalizeFirst(date) }), running: (until) => tEvent('runningUntil', { until }) }, EVENT_DAY_TIME

@@ -33,7 +33,7 @@ export default async function EventFacts({ event }: { event: EventPageData }) {
     const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
     return (
-        <div className="grid gap-2.5">
+        <div className="grid gap-3">
             <Fact icon={CalendarDays}>
                 {when}{zoneName && ` (${zoneName})`}
                 {event.timing === 'running' && <Badge tone="tag" className="ml-2 align-middle">{t('runningNow')}</Badge>}
