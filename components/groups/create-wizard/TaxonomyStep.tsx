@@ -28,7 +28,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
         : null;
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
+        <div className="space-y-8 motion-safe:animate-fade">
             <L1Picker
                 taxonomy={taxonomy}
                 value={taxSelection}
@@ -43,7 +43,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
 
             {/* Only show Additional Tags if an L1 is chosen */}
             {selectedL1 && (
-                <div className="animate-in slide-in-from-top-4 fade-in duration-300 space-y-8">
+                <div className="motion-safe:animate-pop space-y-8">
                     {tagsCleared && noTagsYet && (
                         <p role="status" className="rounded-xl line bg-surface px-3 py-2 text-body-sm text-foreground-muted">
                             {t('tagsClearedOnCategoryChange')}

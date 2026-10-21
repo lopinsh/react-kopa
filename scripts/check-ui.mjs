@@ -9,6 +9,9 @@
 // and rounded-full only on circles (size-N, equal h-N w-N, aspect-square). A line may opt out with `ui-allow: <reason>` (comment or string), e.g. an OAuth brand colour.
 // Field rule (strict, R15): a text control is Input/Select/Textarea from components/ui/Input; a raw <input|select|textarea> outside components/ui is a failure
 // unless it is a native checkbox/radio/color/hidden/file/range, or the line (or one of the 3 above) says `ui-allow: <reason>`.
+// Button rule (strict, R16a): a pill button or link (rounded-pill with bg-primary/bg-danger/press/frame, or a round icon-only size-N) is Button/buttonClass/IconButton from components/ui/Button.
+// Motion rule (strict): durations and easing are tokens (duration-quick|base|slow, ease-standard); no transition-all, raw duration-N, delay-N, ease-in/out/linear or tw-animate-css (animate-in).
+// Icon rule (strict): lucide icons are sized with size-N classes only (no size={..}, no h-N w-N pair) and carry no strokeWidth prop (the look sets --icon-stroke once).
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -41,6 +44,12 @@ const spaceCounts = Object.fromEntries(Object.keys(SPACE_RULES).map((k) => [k, n
 const counts = new Map();
 const NATIVE = /type=["'](?:checkbox|radio|color|hidden|file|range)["']/;
 const fieldHits = [];
+const buttonHits = [];
+const motionHits = [];
+const iconHits = [];
+const MOTION = /(?<![\w-])transition-all(?![\w-])|(?<![\w-])(?:duration|delay)-(?:\d|\[)|(?<![\w-])ease-(?:in|out|in-out|linear|\[)(?![\w-])|(?<![\w-])animate-in(?![\w-])/;
+const PILL_FILL = /(?<![\w-])(?:bg-(?:primary|danger)(?![\w/-])|soft-press|press|frame)(?![\w-])/;
+const tagText = (src, at) => { const rest = src.slice(at, at + 1500); const m = /(?<![=-])>/.exec(rest); return m ? rest.slice(0, m.index) : rest; };
 const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
         const p = path.join(dir, e.name);
@@ -59,6 +68,29 @@ const walk = (dir) => {
                     if (c) { lookCounts[k].set(f, (lookCounts[k].get(f) ?? 0) + c); lookHits.push(`${f}:${i + 1}  [${k.slice(0, 12)}]  ${line.trim().slice(0, 110)}`); }
                 }
             });
+            const allowed = (idx) => { const ln = src.slice(0, idx).split('\n').length - 1; return lines.slice(Math.max(0, ln - 3), ln + 1).some((l) => l.includes('ui-allow')); };
+            lines.forEach((line, i) => {
+                if (/^\s*(?:\/\/|\*|\/\*)/.test(line) || line.includes('ui-allow') || lines.slice(Math.max(0, i - 3), i).some((l) => l.includes('ui-allow'))) return;
+                if (MOTION.test(line)) motionHits.push(f + ':' + (i + 1) + '  ' + line.trim().slice(0, 100));
+            });
+            if (!f.startsWith('components/ui/')) {
+                for (const m of src.matchAll(/<(?:button|Link|a)\b/g)) {
+                    const tag = tagText(src, m.index);
+                    if (!/(?<![\w-])rounded-pill(?![\w-])/.test(tag)) continue;
+                    const icon = /(?<![\w-])size-\d/.test(tag) && tag.includes('place-items-center');
+                    if ((PILL_FILL.test(tag) || icon) && !allowed(m.index)) buttonHits.push(f + ':' + src.slice(0, m.index).split('\n').length + '  ' + tag.replace(/\s+/g, ' ').slice(0, 100));
+                }
+            }
+            {
+                const names = new Set(['Icon']);
+                for (const m of src.matchAll(/import\s*\{([^}]*)\}\s*from\s*['"]lucide-react['"]/g)) for (const n of m[1].split(',')) { const nm = n.trim().split(/\s+as\s+/).pop(); if (nm) names.add(nm); }
+                const re = new RegExp(String.raw`<(?:${[...names].join('|')})\b`, 'g');
+                for (const m of src.matchAll(re)) {
+                    const tag = tagText(src, m.index);
+                    if (allowed(m.index)) continue;
+                    if (/\bsize=\{|\bstrokeWidth=|\babsoluteStrokeWidth\b|(?<![\w-])h-(\d+(?:\.\d+)?)\s+w-\1(?![\w.])|(?<![\w-])w-(\d+(?:\.\d+)?)\s+h-\2(?![\w.])/.test(tag)) iconHits.push(f + ':' + src.slice(0, m.index).split('\n').length + '  ' + tag.replace(/\s+/g, ' ').slice(0, 100));
+                }
+            }
             if (!f.startsWith('components/ui/')) {
                 for (const m of src.matchAll(/<(?:input|select|textarea)\b/g)) {
                     const tag = src.slice(m.index, m.index + 700).split(/\/>/)[0];
@@ -102,6 +134,10 @@ ${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
 }
 console.log(`\n${fieldHits.length ? 'FAIL' : 'ok'}: raw <input|select|textarea> (use components/ui/Input): ${fieldHits.length}`);
 for (const h of fieldHits) console.log(`      ${h}`);
+for (const [label, hits] of [['pill button/link outside components/ui/Button (use Button, buttonClass or IconButton)', buttonHits], ['motion (use duration-quick|base|slow, ease-standard; no transition-all/animate-in)', motionHits], ['lucide icon size={..}/strokeWidth/h-N w-N (use size-N; stroke is --icon-stroke)', iconHits]]) {
+    console.log('\n' + (hits.length ? 'FAIL' : 'ok') + ': ' + label + ': ' + hits.length);
+    for (const h of hits) console.log('      ' + h);
+}
 if (process.argv.includes('--hits')) for (const h of lookHits) console.log(h);
 const spaceTotal = Object.values(spaceCounts).reduce((a, m) => a + [...m.values()].reduce((x, y) => x + y, 0), 0);
-if (strict && (total || spaceTotal || lookTotal || fieldHits.length)) process.exit(1);
+if (strict && (total || spaceTotal || lookTotal || fieldHits.length || buttonHits.length || motionHits.length || iconHits.length)) process.exit(1);

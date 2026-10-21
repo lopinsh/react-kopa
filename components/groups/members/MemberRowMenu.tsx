@@ -11,6 +11,7 @@ import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { MenuItemButton, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 import type { MemberAction } from '@/lib/services/group-members';
 import type { MemberManageAction } from '@/lib/utils/permissions';
+import { IconButton } from '@/components/ui/Button';
 
 const ICON = 'size-[17px] text-foreground-muted';
 const CONFIRM = { promote: 'confirmPromote', demote: 'confirmDemote', remove: 'confirmKick' } as const;
@@ -58,13 +59,12 @@ export default function MemberRowMenu({ groupId, userId, name, actions, profileH
 
     return (
         <div className="relative flex" ref={rootRef}>
-            <button
+            <IconButton size="lg"
                 {...triggerProps}
                 aria-label={`${t('memberActions')}: ${name}`}
-                className="grid size-11 place-items-center rounded-pill text-foreground-muted outline-none transition-colors hover:bg-tint focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             >
                 <MoreHorizontal aria-hidden className="size-5" />
-            </button>
+            </IconButton>
             {open && (
                 <MenuPanel label={t('memberActions')} placement="anchor" {...menuProps}>
                     {has('message') && <MenuItemButton icon={<MessageSquare aria-hidden className={ICON} />} onSelect={message}>{t('sendMessage')}</MenuItemButton>}

@@ -11,6 +11,7 @@ import { MODERATION_REASON_MAX } from '@/lib/validations/moderation';
 import type { ActionResponse } from '@/types/actions';
 
 import { Textarea } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Props = {
     onClose: () => void;
     icon: ReactNode;
@@ -93,18 +94,17 @@ export default function ReasonModal({
             <div className="mt-6 flex justify-end gap-3">
                 <OverlayCloseButton
                     disabled={isPending}
-                    className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted hover:bg-surface-elevated transition-all disabled:opacity-50"
+                    className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted hover:bg-surface-elevated transition-colors disabled:opacity-50"
                 >
                     {cancelLabel}
                 </OverlayCloseButton>
-                <button
+                <Button variant="danger"
                     type="button"
                     onClick={handleSubmit}
                     disabled={isPending || over}
-                    className="flex items-center gap-2 rounded-pill bg-danger px-5 py-3 text-button-sm text-danger-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
                     {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : confirmLabel}
-                </button>
+                </Button>
             </div>
         </Modal>
     );

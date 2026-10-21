@@ -81,7 +81,7 @@ export default function AnnouncementForm({ groupId, locale, canChooseVisibility 
                                                 aria-checked={visibility === v}
                                                 onClick={() => setVisibility(v)}
                                                 className={clsx(
-                                                    'flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-body-sm transition-all',
+                                                    'flex min-h-11 flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-body-sm transition-colors',
                                                     visibility === v ? 'border-primary bg-primary/5 text-primary' : 'border-border bg-surface text-foreground-muted hover:bg-surface-elevated'
                                                 )}
                                             >
@@ -97,7 +97,7 @@ export default function AnnouncementForm({ groupId, locale, canChooseVisibility 
                         {error && <p role="alert" className="text-body-sm text-danger">{error}</p>}
 
                         <div className="flex items-center justify-end gap-3 pt-2">
-                            <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-tag text-foreground-muted transition-all hover:text-foreground disabled:opacity-50">{tCommon('cancel')}</OverlayCloseButton>
+                            <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-tag text-foreground-muted transition-colors hover:text-foreground disabled:opacity-50">{tCommon('cancel')}</OverlayCloseButton>
                             <Button type="submit" disabled={!canSubmit}>
                                 {isPending ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : <><Send aria-hidden />{t('announcementPublish')}</>}
                             </Button>

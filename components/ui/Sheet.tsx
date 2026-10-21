@@ -4,6 +4,7 @@ import { useId, useState, type ReactNode, type RefObject } from 'react';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 import DiscardGuard from '@/components/ui/DiscardGuard';
+import { IconButton } from '@/components/ui/Button';
 import Overlay from '@/components/ui/Overlay';
 import { useOverlayClose } from '@/components/ui/overlay-support';
 import { UI } from '@/lib/constants';
@@ -21,9 +22,9 @@ function CloseButton({ locked }: { locked: boolean }) {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <button type="button" onClick={() => close()} disabled={locked} aria-label={t('close')} className="-mr-2 -mt-2 grid size-10 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint disabled:opacity-50">
+        <IconButton onClick={() => close()} disabled={locked} aria-label={t('close')} className="-mr-2 -mt-2">
             <X className="size-5" />
-        </button>
+        </IconButton>
     );
 }
 

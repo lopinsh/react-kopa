@@ -6,6 +6,7 @@ import SuggestionRow from '@/components/admin/SuggestionRow';
 import { MessageOverrideService } from '@/lib/services/message-override.service';
 import { createDateFormatter } from '@/lib/date-format';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
+import { buttonClass } from '@/components/ui/Button';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -31,9 +32,9 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
                 <a
                     href="/api/admin/translations/export"
                     download
-                    className="flex items-center gap-2 rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-all hover:opacity-90"
+                    className={buttonClass('primary')}
                 >
-                    <Download className="h-4 w-4" />
+                    <Download className="size-4" />
                     {t('export')}
                 </a>
             } />

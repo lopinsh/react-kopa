@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { auth } from '@/lib/auth';
 import SignInHint from '@/components/shell/SignInHint';
+import { buttonClass } from '@/components/ui/Button';
 
 export default async function NotFound() {
     const t = await getTranslations('pages.notFound');
@@ -14,7 +15,7 @@ export default async function NotFound() {
             <p className="mt-4 text-foreground">{t('body')}</p>
             <Link
                 href="/"
-                className="mt-10 inline-flex h-11 items-center rounded-pill bg-primary px-6 text-button-sm text-primary-foreground transition-opacity hover:opacity-90"
+                className={buttonClass('primary', 'mt-10')}
             >
                 {t('cta')}
             </Link>

@@ -18,7 +18,7 @@ type Props = {
 export default function EmptyState({ icon: Icon, title, description, action, headingLevel: Heading = 'h2', className }: Props) {
     return (
         <div data-ui={UI.emptyState} className={clsx('grid justify-items-center gap-1.5 px-4 pb-7 pt-6 text-center', className)}>
-            <Icon aria-hidden="true" strokeWidth={1.6} className="size-7 text-foreground-muted" />
+            <Icon aria-hidden="true" className="size-7 text-foreground-muted" />
             <Heading className="text-item text-foreground">{title}</Heading>
             {description && <p className="max-w-xs text-meta italic text-primary">{description}</p>}
             {action && <div className="mt-2">{action}</div>}

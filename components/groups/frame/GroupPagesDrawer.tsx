@@ -3,7 +3,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Menu } from 'lucide-react';
-import { clsx } from 'clsx';
 import { usePathname } from '@/i18n/routing';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
@@ -11,6 +10,7 @@ import Overlay from '@/components/ui/Overlay';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import CategoryLine from '@/components/ui/CategoryLine';
 import GroupPagesNav from './GroupPagesNav';
+import { IconButton } from '@/components/ui/Button';
 
 /** ☰ in the phone bar: opens the group's pages from the left over the page, above the bottom bar (AR-48). */
 export default function GroupPagesDrawer() {
@@ -29,17 +29,16 @@ export default function GroupPagesDrawer() {
 
     return (
         <>
-            <button
+            <IconButton
                 ref={buttonRef}
-                type="button"
                 aria-label={t('pagesLabel')}
                 aria-expanded={open}
                 aria-controls={id}
                 onClick={() => { openedOn.current = pathname; setOpen(true); }}
-                className={clsx('grid size-10 shrink-0 place-items-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:hidden', 'hover:bg-tint')}
+                className="md:hidden"
             >
                 <Menu aria-hidden className="size-5" />
-            </button>
+            </IconButton>
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('pagesLabel')} dataUi={UI.drawer} flush panelClassName="px-3 py-4" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-3 border-b border-border px-1 pb-3">

@@ -14,6 +14,7 @@ import { MESSAGE_LANGS, type MessageLang } from '@/lib/translate-mode/messages';
 import { validateMessage, MESSAGE_OVERRIDE_MAX, type MessageIssue } from '@/lib/validations/message-override';
 
 import { Textarea } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Props = {
     messageKey: string;
     onClose: () => void;
@@ -147,12 +148,12 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                     <p className="mt-1 text-meta text-foreground-muted">{t('syntaxHint')}</p>
                     {saveError && <p role="alert" className="mt-2 text-body-sm text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
-                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50">
+                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
                         </OverlayCloseButton>
-                        <button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over} className="rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50">
+                        <Button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over}>
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
-                        </button>
+                        </Button>
                     </div>
                 </>
             )}

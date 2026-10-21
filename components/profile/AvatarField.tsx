@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Dices } from 'lucide-react';
 import { avatarUrl } from '@/lib/avatar';
+import Button from '@/components/ui/Button';
 
 type Props = {
     userId: string;
@@ -23,14 +24,13 @@ export default function AvatarField({ userId, image, seed, onNewSeed }: Props) {
                 className="size-20 shrink-0 rounded-full bg-tint object-cover"
                 referrerPolicy="no-referrer"
             />
-            <button
-                type="button"
+            <Button
+                variant="quiet"
                 onClick={() => onNewSeed(Math.random().toString(36).slice(2, 10))}
-                className="flex min-h-11 items-center gap-1.5 rounded-pill px-4 text-button-sm text-foreground ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] hover:bg-tint soft-press"
             >
                 <Dices aria-hidden className="size-4" />
                 {t('newAvatar')}
-            </button>
+            </Button>
         </div>
     );
 }

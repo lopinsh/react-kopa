@@ -24,7 +24,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
             {/* Name */}
             <div>
                 <label htmlFor="group-name" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
-                    <Type className="h-3.5 w-3.5 text-foreground-muted" />
+                    <Type className="size-3.5 text-foreground-muted" />
                     {t('fieldName')}
                     <span className="text-danger">*</span>
                 </label>
@@ -71,7 +71,7 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
             {/* Banner Image */}
             <div>
                 <label htmlFor="group-banner" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
-                    <ImageIcon className="h-3.5 w-3.5 text-foreground-muted" />
+                    <ImageIcon className="size-3.5 text-foreground-muted" />
                     {t('fieldBannerImage')}
                     <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
                 </label>

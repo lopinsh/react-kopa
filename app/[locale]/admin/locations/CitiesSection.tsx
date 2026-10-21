@@ -84,7 +84,7 @@ export default function CitiesSection({ cities }: Props) {
         <section className="rounded-2xl line bg-surface p-5 sm:p-6 shadow-card" data-ui="cities-section" aria-labelledby="cities-heading">
             <div className="flex items-center justify-between gap-3">
                 <h2 id="cities-heading" className="flex items-center gap-2 text-section">
-                    <MapPin className="h-5 w-5 text-foreground-muted" />
+                    <MapPin className="size-5 text-foreground-muted" />
                     {t('title')}
                     <span className="rounded-pill bg-surface-elevated px-2 py-0.5 text-tag text-foreground-muted">{active.length}</span>
                 </h2>
@@ -112,7 +112,7 @@ export default function CitiesSection({ cities }: Props) {
                             </div>
                             <div className="flex shrink-0 gap-1">
                                 <button type="button" aria-label={t('rename')} title={t('rename')} onClick={() => startEdit(city)} className="rounded-md p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground">
-                                    <Pencil className="h-4 w-4" />
+                                    <Pencil className="size-4" />
                                 </button>
                                 <button
                                     type="button"
@@ -122,7 +122,7 @@ export default function CitiesSection({ cities }: Props) {
                                     onClick={() => setAskDelete(city)}
                                     className="rounded-md p-2 text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
                                 >
-                                    <Trash2 className="h-4 w-4" />
+                                    <Trash2 className="size-4" />
                                 </button>
                             </div>
                         </div>

@@ -80,7 +80,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                         <h3 id="design-sample" className="text-item text-foreground">{t('sampleTitle')}</h3>
                         <div role="group" aria-label={t('sampleMode')} className="flex rounded-pill bg-tint p-0.5">
                             {(['light', 'dark'] as const).map((mode) => (
-                                <button
+                                <button /* ui-allow: segmented option */
                                     key={mode}
                                     type="button"
                                     aria-pressed={sampleMode === mode}

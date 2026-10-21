@@ -53,7 +53,7 @@ export default function NotificationItem({ n, onRead }: { n: NotificationView; o
                 {!n.read && <span role="img" aria-label={t('unread')} className="size-2 rounded-full bg-primary" />}
             </div>
             {!n.read && (
-                <button
+                <button /* ui-allow: hover-reveal mark inside a row */
                     type="button"
                     onClick={tap}
                     title={t('markRead')}

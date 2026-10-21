@@ -107,7 +107,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 <span className="text-meta text-foreground-muted">{parentL1.slug}</span>
                             </div>
                         </div>
-                        <ChevronLeft className="w-4 h-4 text-foreground-muted" />
+                        <ChevronLeft className="size-4 text-foreground-muted" />
                     </button>
                 </div>
             )}

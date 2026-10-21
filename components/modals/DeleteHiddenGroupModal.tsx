@@ -26,7 +26,7 @@ export default function DeleteHiddenGroupModal({ isOpen, onClose, groupId, group
     return (
         <ReasonModal
             onClose={onClose}
-            icon={<Trash2 className="h-5 w-5 shrink-0" />}
+            icon={<Trash2 className="size-5 shrink-0" />}
             title={t('deleteTitle')}
             subject={groupName}
             description={t('deleteDescription')}

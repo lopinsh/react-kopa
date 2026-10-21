@@ -28,7 +28,7 @@ export default function AcceptingMembersSection() {
                 <p className="text-meta text-foreground-muted">{gt('acceptingMembersDesc')}</p>
             </label>
             <UserPlus className={clsx(
-                'hidden h-6 w-6 shrink-0 transition-colors sm:block',
+                'hidden size-6 shrink-0 transition-colors sm:block',
                 watch('isAcceptingMembers') ? 'text-primary' : 'text-foreground-muted'
             )} />
         </div>

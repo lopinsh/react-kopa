@@ -23,7 +23,7 @@ export function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
     return (
         <Link href={link.href} aria-label={label} aria-current={marked ? 'page' : undefined} className={clsx(CELL, marked && 'weight-strong text-foreground')}>
             <span className={clsx('rounded-pill px-4 py-1', marked && 'bg-primary/16')}>
-                <Icon aria-hidden className="size-5" strokeWidth={marked ? 2.25 : 1.75} />
+                <Icon aria-hidden className={clsx('size-5', marked && 'stroke-[2.25]')} />
             </span>
             <span>{t(link.labelKey)}</span>
             {withCount && <UnreadBadge />}
@@ -49,7 +49,7 @@ export default function MobileNav({ initialTab }: { initialTab: BottomTab }) {
             <nav data-ui={UI.mobileNav} className="fixed inset-x-0 bottom-0 z-40 flex h-16 border-t border-border bg-surface md:hidden" aria-label={t('mobileLabel')}>
                 {cells.slice(0, 2)}
                 <div className="flex h-full flex-1 items-center justify-center">
-                    <button
+                    <button /* ui-allow: raised create tab */
                         type="button"
                         onClick={() => gateAction(() => router.push('/create'))}
                         className="grid size-16 place-items-center rounded-pill focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"

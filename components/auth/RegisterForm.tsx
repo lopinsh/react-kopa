@@ -12,6 +12,7 @@ import { usernameFromName } from '@/lib/username';
 import UsernameField from './UsernameField';
 import AuthTextField from './AuthTextField';
 import { useUsernameAvailability } from './useUsernameAvailability';
+import Button from '@/components/ui/Button';
 
 interface RegisterFormProps {
     /** Safe same-origin path to continue to after sign-up. */
@@ -142,14 +143,14 @@ export default function RegisterForm({ callbackUrl }: RegisterFormProps) {
 
             {serverError && <p className="text-body-sm text-danger">{serverError}</p>}
 
-            <button
+            <Button
                 type="submit"
                 disabled={isPending}
-                className="flex w-full items-center justify-center gap-2 rounded-pill bg-primary px-4 py-3 text-button-sm text-primary-foreground shadow-control transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                className="w-full"
             >
-                {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+                {isPending && <Loader2 className="size-4 animate-spin" />}
                 {isPending ? t('submitting') : t('submit')}
-            </button>
+            </Button>
         </form>
     );
 }

@@ -33,7 +33,7 @@ export default function DateChoices({ className }: { className?: string }) {
             <QuickChoices variant="line" onPick={(date) => go({ date, day: null })} />
             <div ref={bindHost} className="relative ml-0.5 h-[26px] min-w-0 shrink">
                 <span className={clsx('flex h-full min-w-0 items-center rounded-pill', custom ? 'bg-tint ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : pop.open && 'bg-tint')}>
-                    <button
+                    <button /* ui-allow: clear mark inside a chip */
                         type="button"
                         onClick={pop.toggle}
                         aria-expanded={pop.open}
@@ -46,7 +46,7 @@ export default function DateChoices({ className }: { className?: string }) {
                         {custom && <span className="min-w-0 truncate">{label}</span>}
                     </button>
                     {custom && (
-                        <button type="button" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-surface hover:text-foreground after:absolute after:-inset-y-2 after:-inset-x-1">
+                        <button /* ui-allow: clear mark inside a chip */ type="button" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-surface hover:text-foreground after:absolute after:-inset-y-2 after:-inset-x-1">
                             <X aria-hidden="true" className="size-3.5" />
                         </button>
                     )}

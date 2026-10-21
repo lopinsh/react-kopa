@@ -53,10 +53,10 @@ export default function CookieConsent() {
 
     return (
         <div ref={bannerRef} className="fixed bottom-4 left-4 right-4 z-[48] md:left-auto md:max-w-md">
-            <div className="overflow-hidden rounded-2xl line bg-surface-elevated p-5 shadow-dialog animate-in fade-in slide-in-from-bottom-5 duration-500">
+            <div className="overflow-hidden rounded-2xl line bg-surface-elevated p-5 shadow-dialog motion-safe:animate-pop">
                 <div className="flex items-start gap-4">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-tint text-primary">
-                        <ShieldCheck className="h-6 w-6" />
+                        <ShieldCheck className="size-6" />
                     </div>
 
                     <div className="flex-1">
@@ -85,9 +85,9 @@ export default function CookieConsent() {
 
                     <button
                         onClick={() => setAccepted(true)}
-                        className="rounded-lg p-1 text-foreground-muted hover:bg-surface hover:text-foreground transition-all"
+                        className="rounded-lg p-1 text-foreground-muted hover:bg-surface hover:text-foreground transition-colors"
                     >
-                        <X className="h-4 w-4" />
+                        <X className="size-4" />
                     </button>
                 </div>
             </div>

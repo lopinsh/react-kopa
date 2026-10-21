@@ -30,9 +30,9 @@ export default function SampleThemeToggle() {
             title={isDark ? t('toggleLight') : t('toggleDark')}
         >
             {isDark ? (
-                <Sun className="h-4.5 w-4.5" strokeWidth={1.75} />
+                <Sun className="size-4.5" />
             ) : (
-                <Moon className="h-4.5 w-4.5" strokeWidth={1.75} />
+                <Moon className="size-4.5" />
             )}
         </button>
     );

@@ -35,7 +35,7 @@ export default function StyleCard({ styleKey, theme, selected, disabled, onSelec
                 selected ? 'ring-2 ring-primary' : 'ring-[length:var(--line-width)] ring-[color:var(--line-color)] hover:ring-foreground-muted'
             )}
         >
-            {selected && <Check className="absolute right-3 top-3 h-5 w-5 text-primary" aria-hidden="true" />}
+            {selected && <Check className="absolute right-3 top-3 size-5 text-primary" aria-hidden="true" />}
             <span
                 aria-hidden="true"
                 style={themeSampleVars(theme.light, theme.headingFont, theme.bodyFont, 'light', styleKey) as React.CSSProperties}

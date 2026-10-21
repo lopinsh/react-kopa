@@ -181,7 +181,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
                                     isActive ? 'pointer-events-auto' : 'pointer-events-none focus:pointer-events-auto'
                                 )}
                             >
-                                <MessageSquarePlus className="h-3.5 w-3.5" />
+                                <MessageSquarePlus className="size-3.5" />
                             </button>
                         </div>
                     </div>

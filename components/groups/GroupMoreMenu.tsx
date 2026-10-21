@@ -74,11 +74,11 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
 
     return (
         <div className="relative flex" ref={rootRef}>
-            <button
+            <button /* ui-allow: group-coloured chip */
                 {...triggerProps}
                 aria-label={c('moreOptions')}
                 data-ui={UI.groupMoreButton}
-                className={clsx('grid size-10 place-items-center rounded-pill outline-none transition-all focus-visible:ring-2 focus-visible:ring-ink active:scale-95', groupChip())}
+                className={clsx('grid size-10 place-items-center rounded-pill outline-none transition focus-visible:ring-2 focus-visible:ring-ink active:scale-95', groupChip())}
             >
                 <MoreHorizontal aria-hidden className="size-5" />
             </button>

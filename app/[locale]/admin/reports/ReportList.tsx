@@ -89,7 +89,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                         <div className="flex-1 space-y-4">
                             <div className="flex items-center gap-3">
                                 <span className="inline-flex items-center gap-1.5 rounded-pill bg-danger/10 px-3 py-1 text-tag text-danger">
-                                    <AlertTriangle className="h-3.5 w-3.5" />
+                                    <AlertTriangle className="size-3.5" />
                                     {isStoredReportReason(report.reason) ? tReason(`reason${report.reason}`) : report.reason}
                                 </span>
                                 <span className="text-body-sm text-foreground-muted">
@@ -102,16 +102,16 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     <p className="text-tag text-foreground-muted mb-1">{t('reportedEntity')}</p>
                                     {report.group && (
                                         <div className="flex items-center gap-2">
-                                            <Users className="h-4 w-4 text-primary" />
+                                            <Users className="size-4 text-primary" />
                                             <Link href={`/${report.group.l1Slug}/group/${report.group.slug}`} className="text-button-sm text-foreground hover:text-primary transition-colors flex items-center gap-1">
                                                 {report.group.name}
-                                                <ExternalLink className="h-3 w-3" />
+                                                <ExternalLink className="size-3" />
                                             </Link>
                                         </div>
                                     )}
                                     {report.event && (
                                         <div className="flex items-center gap-2 mt-1">
-                                            <Calendar className="h-4 w-4 text-primary" />
+                                            <Calendar className="size-4 text-primary" />
                                             <span className="text-body-sm text-foreground">{report.event.title}</span>
                                         </div>
                                     )}
@@ -134,13 +134,13 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => handleResolve(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-button-sm text-success-foreground shadow-control transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-button-sm text-success-foreground shadow-control transition hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-success-foreground border-t-transparent" />
                                 ) : (
                                     <>
-                                        <CheckCircle2 className="h-4 w-4" />
+                                        <CheckCircle2 className="size-4" />
                                         {t('markAsResolved')}
                                     </>
                                 )}
@@ -149,9 +149,9 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 <button
                                     onClick={() => setHidingReport(report)}
                                     disabled={isPending}
-                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-button-sm text-foreground shadow-control transition-all disabled:opacity-50"
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-button-sm text-foreground shadow-control transition disabled:opacity-50"
                                 >
-                                    <EyeOff className="h-4 w-4" />
+                                    <EyeOff className="size-4" />
                                     {tMod('hideGroup')}
                                 </button>
                             )}
@@ -160,13 +160,13 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => setAskDelete(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-button-sm text-danger shadow-control transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-button-sm text-danger shadow-control transition hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-danger/40 border-t-transparent" />
                                 ) : (
                                     <>
-                                        <AlertTriangle className="h-4 w-4" />
+                                        <AlertTriangle className="size-4" />
                                         {t('deleteContent')}
                                     </>
                                 )}

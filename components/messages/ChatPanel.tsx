@@ -18,6 +18,7 @@ import { isOverLimit } from '@/lib/text-limit';
 import { useToast } from '@/hooks/use-toast';
 
 import { Input } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
 
 type Props = {
@@ -88,12 +89,12 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
             <div className="z-10 flex items-center justify-between border-b border-border bg-surface p-4">
                 <div className="flex min-w-0 items-center gap-3">
                     <button type="button" className={clsx('-ml-2 p-2 text-foreground-muted', !alwaysShowBack && 'sm:hidden')} onClick={onBack} aria-label={t('back')}>
-                        <ArrowLeft className="h-5 w-5" />
+                        <ArrowLeft className="size-5" />
                     </button>
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full line bg-surface">
                         {conversation.other
                             ? <img src={avatarUrl(conversation.other)} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
-                            : <Users className="h-4 w-4 text-foreground-muted" />}
+                            : <Users className="size-4 text-foreground-muted" />}
                     </div>
                     <div className="min-w-0">
                         <span className="block truncate weight-strong">{title}</span>
@@ -116,7 +117,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 type="button"
                                 className="flex items-center gap-2 rounded-pill bg-surface-elevated px-3 py-1.5 text-tag transition-colors hover:bg-surface-elevated/80"
                             >
-                                <Ban className={clsx('h-3.5 w-3.5', conversation.isBlocked && 'text-danger')} />
+                                <Ban className={clsx('size-3.5', conversation.isBlocked && 'text-danger')} />
                                 {conversation.isBlocked ? t('unblock') : t('block')}
                             </button>
                         )}
@@ -166,12 +167,12 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
             <div className="border-t border-border bg-surface p-4">
                 {conversation.readOnly ? (
                     <div className="flex items-center justify-center gap-2 rounded-xl bg-surface-elevated p-3 text-center text-body-sm text-foreground-muted">
-                        <AlertCircle className="h-4 w-4" />
+                        <AlertCircle className="size-4" />
                         {t('groupGoneNote')}
                     </div>
                 ) : conversation.isBlocked ? (
                     <div className="flex items-center justify-center gap-2 rounded-xl bg-danger/10 p-3 text-center text-body-sm text-danger">
-                        <AlertCircle className="h-4 w-4" />
+                        <AlertCircle className="size-4" />
                         {t('conversationBlocked')}
                     </div>
                 ) : (
@@ -187,14 +188,13 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 aria-label={t('typeMessage')}
                                 className="flex-1"
                             />
-                            <button
+                            <Button
                                 type="submit"
                                 disabled={!messageTextSchema.safeParse(draft).success || isPending || over}
                                 aria-label={t('send')}
-                                className="flex items-center justify-center rounded-pill bg-primary px-5 weight-strong text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                             >
-                                <Send className="h-4 w-4" />
-                            </button>
+                                <Send className="size-4" />
+                            </Button>
                         </form>
                         <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={draft.length} max={MESSAGE_MAX_LENGTH} /></div>
                     </>

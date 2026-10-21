@@ -33,7 +33,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
             <div className={clsx('flex flex-1 flex-col bg-surface', !activeConversationId && 'hidden items-center justify-center sm:flex')}>
                 {!activeConversation ? (
                     <div className="text-center text-foreground-muted">
-                        <UserIcon className="mx-auto mb-4 h-12 w-12 opacity-20" />
+                        <UserIcon className="mx-auto mb-4 size-12 opacity-20" />
                         <p>{t('selectConversation')}</p>
                     </div>
                 ) : (

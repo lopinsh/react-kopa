@@ -115,7 +115,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                 </div>
 
                 <div className="flex flex-wrap gap-2 shrink-0">
-                    <button
+                    <button /* ui-allow: toggle that shows the chosen action */
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'approve' ? null : 'approve')}
                         className={`px-3 py-1.5 text-button rounded-pill transition-colors ${activeAction === 'approve' ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}

@@ -10,6 +10,7 @@ import { setUsername } from '@/actions/onboarding-actions';
 import { Loader2 } from 'lucide-react';
 import UsernameField from '@/components/auth/UsernameField';
 import { useUsernameAvailability } from '@/components/auth/useUsernameAvailability';
+import Button from '@/components/ui/Button';
 
 interface UsernameFormProps {
     /** Free username derived from the account name (e.g. from Google), or empty. */
@@ -86,20 +87,20 @@ export default function UsernameForm({ suggestedUsername }: UsernameFormProps) {
                 </p>
             )}
 
-            <button
+            <Button
                 type="submit"
                 disabled={!canSubmit}
-                className="flex h-12 w-full items-center justify-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-premium shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+                className="w-full"
             >
                 {isPending ? (
                     <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="size-4 animate-spin" />
                         {c('saving')}
                     </>
                 ) : (
                     t('submit')
                 )}
-            </button>
+            </Button>
         </form>
     );
 }

@@ -27,19 +27,19 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
 
     if (!explicitlyExpanded && selectedL1) {
         return (
-            <div className="space-y-4 animate-in fade-in duration-300">
+            <div className="space-y-4 motion-safe:animate-fade">
                 <label className="mb-2 block text-button-sm text-foreground">
                     {t('step1Title')} <span className="text-danger">*</span>
                 </label>
                 <button
                     type="button"
                     onClick={() => setIsExpanded(true)}
-                    className="relative flex w-full items-center justify-between gap-4 rounded-xl border-2 bg-surface p-4 text-left transition-all hover:scale-[1.01] shadow-control soft-press"
+                    className="relative flex w-full items-center justify-between gap-4 rounded-xl border-2 bg-surface p-4 text-left transition hover:scale-[1.01] shadow-control soft-press"
                     style={{ borderColor: selectedL1.color }}
                 >
                     <div className="flex items-center gap-4">
                         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-control line">
-                            <CategoryIcon slug={selectedL1.slug} className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
+                            <CategoryIcon slug={selectedL1.slug} className="size-6" style={{ color: selectedL1.color }} />
                         </div>
                         <div>
                             <span className="block text-body text-foreground">
@@ -52,7 +52,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                     </div>
 
                     <div className="flex h-8 w-8 items-center justify-center rounded-pill bg-background text-foreground-muted transition-colors hover:bg-border hover:text-foreground">
-                        <ChevronDown className="h-5 w-5" />
+                        <ChevronDown className="size-5" />
                     </div>
                 </button>
 
@@ -61,7 +61,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
     }
 
     return (
-        <div className="space-y-4 animate-in fade-in zoom-in-95 duration-300">
+        <div className="space-y-4 motion-safe:animate-pop">
             <label className="mb-2 flex items-center justify-between text-button-sm text-foreground">
                 <span>{t('step1Title')} <span className="text-danger">*</span></span>
                 {value && (
@@ -91,7 +91,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                                 setIsExpanded(false);
                             }}
                             className={clsx(
-                                'relative flex h-24 flex-col items-center justify-center gap-2 rounded-xl border-2 bg-surface p-3 text-center transition-all hover:scale-[1.02] soft-press',
+                                'relative flex h-24 flex-col items-center justify-center gap-2 rounded-xl border-2 bg-surface p-3 text-center transition hover:scale-[1.02] soft-press',
                                 isSelected ? 'shadow-control' : 'border-border hover:border-foreground/20'
                             )}
                             style={{
@@ -103,10 +103,10 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                                     className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--on-cat)] shadow-control"
                                     style={{ backgroundColor: l1.color }}
                                 >
-                                    <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                                    <Check className="size-3.5 stroke-3" />
                                 </div>
                             )}
-                            <CategoryIcon slug={l1.slug} className="h-6 w-6 stroke-2" style={{ color: l1.color }} />
+                            <CategoryIcon slug={l1.slug} className="size-6" style={{ color: l1.color }} />
                             <span className={clsx("text-body-sm", isSelected ? 'text-foreground' : 'text-foreground-muted')}>
                                 {l1.title}
                             </span>

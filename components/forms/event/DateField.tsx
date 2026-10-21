@@ -82,7 +82,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                     aria-label={t('openCalendar')}
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl line text-foreground-muted hover:bg-surface-elevated disabled:opacity-60 md:h-10 md:w-10"
                 >
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="size-4" />
                 </button>
             </div>
             {badText && <p className="mt-1 text-meta text-danger">{t('invalidDate')}</p>}

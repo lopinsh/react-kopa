@@ -26,7 +26,7 @@ export default function SectionRowActions({ index, isLast, isEditing, isPending,
                         aria-label={t('sections.moveUp')}
                         className="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
                     >
-                        <ArrowUp aria-hidden="true" className="h-4 w-4" />
+                        <ArrowUp aria-hidden="true" className="size-4" />
                     </button>
                     <button
                         type="button"
@@ -35,13 +35,13 @@ export default function SectionRowActions({ index, isLast, isEditing, isPending,
                         aria-label={t('sections.moveDown')}
                         className="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted hover:bg-surface-elevated disabled:opacity-20"
                     >
-                        <ArrowDown aria-hidden="true" className="h-4 w-4" />
+                        <ArrowDown aria-hidden="true" className="size-4" />
                     </button>
                 </>
             )}
 
             <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-lg text-foreground-muted group-hover:text-primary">
-                {isEditing ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                {isEditing ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
             </span>
         </div>
     );

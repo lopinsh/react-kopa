@@ -37,7 +37,7 @@ export default function AccessStep() {
                         type="button"
                         onClick={() => setValue('type', value, { shouldValidate: true })}
                         className={clsx(
-                            'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
+                            'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-colors',
                             isSelected ? 'border-primary bg-[color-mix(in_srgb,var(--primary)_6%,transparent)] shadow-control' : 'border-border hover:border-foreground-muted/40'
                         )}
                         aria-pressed={isSelected}
@@ -47,8 +47,7 @@ export default function AccessStep() {
                             aria-hidden="true"
                         >
                             <Icon
-                                className={clsx('h-4 w-4', isSelected ? 'text-primary-foreground' : 'text-foreground-muted')}
-                                strokeWidth={1.75}
+                                className={clsx('size-4', isSelected ? 'text-primary-foreground' : 'text-foreground-muted')}
                             />
                         </div>
                         <div>
@@ -75,7 +74,7 @@ export default function AccessStep() {
                         <span className="text-body-sm text-foreground">{t('acceptingMembers')}</span>
                     </div>
                     <UserPlus className={clsx(
-                        "h-4 w-4 transition-colors",
+                        "size-4 transition-colors",
                         watch('isAcceptingMembers') ? "text-primary" : "text-foreground-muted"
                     )} />
                 </label>

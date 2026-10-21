@@ -119,14 +119,14 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
             <div className="fixed bottom-20 md:bottom-6 right-4 z-[100] flex flex-col items-end pointer-events-none">
                 <div
                     className={clsx(
-                        'pointer-events-auto flex w-full max-w-sm rounded-xl line bg-surface p-4 shadow-dialog transition-all duration-500 ease-out',
+                        'pointer-events-auto flex w-full max-w-sm rounded-xl line bg-surface p-4 shadow-dialog transition duration-slow ease-standard',
                         toast ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'
                     )}
                 >
                     {toast && (
                         <div className="flex w-full items-start gap-3">
                             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                                <Bell className="h-5 w-5" />
+                                <Bell className="size-5" />
                             </div>
                             <div className="flex-1 pt-0.5 min-w-0">
                                 <p className="text-body-sm text-foreground line-clamp-2">
@@ -151,7 +151,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
                                 onClick={() => setToast(null)}
                                 className="shrink-0 p-1 text-foreground-muted hover:text-foreground transition-colors rounded-lg hover:bg-surface-elevated"
                             >
-                                <X className="h-4 w-4" />
+                                <X className="size-4" />
                             </button>
                         </div>
                     )}

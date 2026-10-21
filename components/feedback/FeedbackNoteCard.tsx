@@ -50,7 +50,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
                         <span className="rounded-pill bg-surface-elevated px-3 py-1 text-foreground-muted">{t(`status.${note.status}`)}</span>
                     </div>
                     <button type="button" onClick={() => requestClose()} aria-label={t('close')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
-                        <X className="h-4 w-4" />
+                        <X className="size-4" />
                     </button>
                 </div>
                 <p className="whitespace-pre-wrap break-words text-body-sm text-foreground">{note.text}</p>

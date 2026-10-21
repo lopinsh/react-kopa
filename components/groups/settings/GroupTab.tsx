@@ -20,7 +20,7 @@ export default function GroupTab(props: GroupSettingsFormProps) {
             <form onSubmit={methods.handleSubmit(onSubmit)} className="max-w-focus space-y-6 [&>*+*]:border-t [&>*+*]:border-border [&>*+*]:pt-6">
                 {!canEditOwnerFields && (
                     <p className="flex items-start gap-3 text-body-sm text-foreground-muted">
-                        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+                        <Info className="mt-0.5 size-4 shrink-0" />
                         {gs('ownerOnlyNote')}
                     </p>
                 )}

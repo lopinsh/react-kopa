@@ -13,6 +13,7 @@ import type { ElementLocator } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 import { Textarea } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 export type FeedbackTarget = { selector: string; elementText: string; component: string | null; locator: ElementLocator };
 
 type Props = {
@@ -83,7 +84,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
 
                 <div role="radiogroup" aria-label={t('kindLabel')} className="mt-4 flex flex-wrap gap-2">
                     {FEEDBACK_KINDS.map((k) => (
-                        <button
+                        <button /* ui-allow: radio chip */
                             key={k}
                             type="button"
                             role="radio"
@@ -116,14 +117,13 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     <button type="button" onClick={() => requestClose()} disabled={isPending} className="rounded-xl px-4 py-3 text-button-sm text-foreground-muted hover:text-foreground disabled:opacity-50">
                         {t('cancel')}
                     </button>
-                    <button
+                    <Button
                         type="button"
                         onClick={handleSave}
                         disabled={isPending || text.trim() === '' || isOverLimit(text, FEEDBACK_TEXT_MAX)}
-                        className="rounded-pill bg-primary px-5 py-3 text-button-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
                         {t('save')}
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

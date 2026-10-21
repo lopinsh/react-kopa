@@ -21,6 +21,7 @@ import { useFocusTrap } from '@/hooks/useFocusTrap';
 import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
 import { categoryColor } from '@/lib/theme/category';
 import { clsx } from 'clsx';
+import Button from '@/components/ui/Button';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -185,7 +186,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                 {Array.from({ length: STEP_COUNT }, (_, i) => (
                     <div
                         key={i}
-                        className={clsx('h-1 flex-1 transition-all duration-500', i <= step && 'bg-primary')}
+                        className={clsx('h-1 flex-1 transition-colors duration-slow', i <= step && 'bg-primary')}
                         aria-hidden="true"
                     />
                 ))}
@@ -250,30 +251,28 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 onClick={prevStep}
                                 className="flex h-12 items-center gap-1.5 rounded-xl line px-6 weight-medium text-foreground-muted transition-colors hover:bg-surface-elevated hover:text-foreground soft-press"
                             >
-                                <ChevronLeft className="h-4 w-4" />
+                                <ChevronLeft className="size-4" />
                                 {c('back')}
                             </button>
                         ) : <div />}
 
                         {step < LAST_STEP ? (
-                            <button
+                            <Button
                                 type="button"
                                 onClick={nextStep}
                                 disabled={textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-control transition-all soft-press disabled:opacity-50"
                             >
                                 {c('next')}
-                                <ChevronRight className="h-4 w-4" />
-                            </button>
+                                <ChevronRight className="size-4" />
+                            </Button>
                         ) : (
-                            <button
+                            <Button
                                 type="submit"
                                 disabled={isPending || textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-control transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
-                                {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+                                {isPending && <Loader2 className="size-4 animate-spin" />}
                                 {t('submit')}
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </form>

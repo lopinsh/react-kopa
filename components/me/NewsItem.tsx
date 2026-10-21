@@ -21,7 +21,7 @@ export default function NewsItem({ item, now }: { item: NewsItemData; now: Date 
 
     return (
         <article data-ui={UI.newsItem} className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3" style={group.color ? { ['--c' as string]: group.color } : undefined}>
-            <Icon aria-hidden="true" strokeWidth={1.8} className="mt-0.5 size-[18px] text-foreground-muted" />
+            <Icon aria-hidden="true" className="mt-0.5 size-[18px] text-foreground-muted" />
             <div className="min-w-0">
                 <p className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-meta text-foreground-muted">
                     {item.kind === 'post' && <GroupName group={group} page="announcements" />}

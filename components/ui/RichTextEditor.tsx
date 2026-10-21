@@ -46,7 +46,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('bold')}
             >
-                <Bold className="h-4 w-4" />
+                <Bold className="size-4" />
             </button>
             <button
                 type="button"
@@ -57,7 +57,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('italic')}
             >
-                <Italic className="h-4 w-4" />
+                <Italic className="size-4" />
             </button>
             <button
                 type="button"
@@ -68,7 +68,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('underline')}
             >
-                <UnderlineIcon className="h-4 w-4" />
+                <UnderlineIcon className="size-4" />
             </button>
             <div className="mx-1 h-4 w-px bg-border" />
             <button
@@ -80,7 +80,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('heading')}
             >
-                <Type className="h-4 w-4" />
+                <Type className="size-4" />
             </button>
             <button
                 type="button"
@@ -91,7 +91,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('bulletList')}
             >
-                <List className="h-4 w-4" />
+                <List className="size-4" />
             </button>
             <button
                 type="button"
@@ -102,7 +102,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('orderedList')}
             >
-                <ListOrdered className="h-4 w-4" />
+                <ListOrdered className="size-4" />
             </button>
             <div className="mx-1 h-4 w-px bg-border" />
             <button
@@ -114,7 +114,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 )}
                 title={t('addLink')}
             >
-                <LinkIcon className="h-4 w-4" />
+                <LinkIcon className="size-4" />
             </button>
             <div className="mx-1 h-4 w-px bg-border" />
             <button
@@ -123,7 +123,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 className="rounded-md p-1.5 text-foreground-muted transition-colors hover:bg-surface"
                 title={t('undo')}
             >
-                <Undo className="h-4 w-4" />
+                <Undo className="size-4" />
             </button>
             <button
                 type="button"
@@ -131,7 +131,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 className="rounded-md p-1.5 text-foreground-muted transition-colors hover:bg-surface"
                 title={t('redo')}
             >
-                <Redo className="h-4 w-4" />
+                <Redo className="size-4" />
             </button>
         </div>
     );
@@ -165,7 +165,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
     });
 
     return (
-        <div className="w-full overflow-hidden rounded-xl line bg-surface focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition-all">
+        <div className="w-full overflow-hidden rounded-xl line bg-surface focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 transition">
             <MenuBar editor={editor} />
             <EditorContent
                 editor={editor}

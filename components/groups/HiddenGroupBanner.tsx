@@ -31,7 +31,7 @@ export default function HiddenGroupBanner({ groupId, reason, canRestore }: Props
     return (
         <div data-ui={UI.banner} className="flex flex-wrap items-center justify-between gap-3 bg-danger px-4 py-3 text-body-sm text-danger-foreground">
             <span className="flex items-center gap-2">
-                <EyeOff className="h-4 w-4 shrink-0" />
+                <EyeOff className="size-4 shrink-0" />
                 {t(canRestore ? 'hiddenBanner' : 'hiddenBannerOwner', { reason: reason ?? '' })}
             </span>
             {canRestore && (

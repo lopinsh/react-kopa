@@ -76,7 +76,7 @@ export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose,
                         onClick={() => requestClose()}
                         className="p-2 hover:bg-border rounded-pill transition-colors text-foreground-muted hover:text-foreground"
                     >
-                        <X className="w-5 h-5" />
+                        <X className="size-5" />
                     </button>
                 </div>
 

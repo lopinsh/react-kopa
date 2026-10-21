@@ -6,6 +6,7 @@ import { Check, X } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
 import { approveSuggestion, rejectSuggestion } from '@/actions/translation-actions';
 import { useToast } from '@/hooks/use-toast';
+import Button from '@/components/ui/Button';
 
 type Props = {
     id: string;
@@ -67,20 +68,19 @@ export default function SuggestionRow({ id, messageKey, lang, current, value, by
                     type="button"
                     onClick={() => run(rejectSuggestion, 'rejected')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-xl px-4 py-2 text-button-sm text-foreground-muted transition-all hover:bg-surface-elevated disabled:opacity-50"
+                    className="flex items-center gap-2 rounded-xl px-4 py-2 text-button-sm text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50"
                 >
-                    <X className="h-4 w-4" />
+                    <X className="size-4" />
                     {t('reject')}
                 </button>
-                <button
+                <Button
                     type="button"
                     onClick={() => run(approveSuggestion, 'approved')}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
                 >
-                    <Check className="h-4 w-4" />
+                    <Check className="size-4" />
                     {t('approve')}
-                </button>
+                </Button>
             </div>
         </li>
     );

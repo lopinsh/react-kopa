@@ -75,7 +75,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                 <SelectedTags tags={selectedTags} pending={pending.selectedPending} onRemove={removeTag} />
 
                 <div className="flex items-center gap-2">
-                    <Search className="h-4 w-4 shrink-0 text-foreground-muted" strokeWidth={1.75} />
+                    <Search className="size-4 shrink-0 text-foreground-muted" />
                     <input /* ui-allow: sits inside the wrapper that carries the edge and ring */
                         ref={inputRef}
                         type="text"
@@ -109,7 +109,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                             }}
                             className="text-foreground-muted hover:text-foreground"
                         >
-                            <X className="h-4 w-4" />
+                            <X className="size-4" />
                         </button>
                     )}
                 </div>

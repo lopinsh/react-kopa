@@ -66,7 +66,7 @@ export default function GroupActions() {
     return (
         <div className="flex shrink-0 items-center gap-2">
             {canContact && (
-                <button
+                <button /* ui-allow: round on phones, labelled pill from md */
                     type="button"
                     data-ui={UI.joinButton}
                     onClick={openContact}

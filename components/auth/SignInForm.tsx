@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import AuthTextField from './AuthTextField';
 import OAuthButtons from './OAuthButtons';
+import Button from '@/components/ui/Button';
 
 interface SignInFormProps {
     /** Safe same-origin path to continue to after signing in (or registering). */
@@ -68,13 +69,13 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
 
                 {error && <p className="text-body-sm text-danger">{error}</p>}
 
-                <button
+                <Button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-pill bg-primary px-4 py-3 text-button-sm text-primary-foreground shadow-control transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
+                    className="w-full"
                 >
                     {loading ? t('signingIn') : t('signInButton')}
-                </button>
+                </Button>
             </form>
 
             <p className="text-center text-body-sm text-foreground-muted">

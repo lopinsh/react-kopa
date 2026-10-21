@@ -8,6 +8,7 @@ import TagBrowseList from './TagBrowseList';
 import TagResultRow from './TagResultRow';
 import type { TagSearch } from './useTagSearch';
 import type { PendingTags } from './usePendingTags';
+import Button from '@/components/ui/Button';
 
 type Props = {
     l1: L1Category;
@@ -34,15 +35,15 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
             {wildcardMode ? (
                 <div className="p-3">
                     <p className="mb-2 text-body-sm text-foreground-muted">{t('confirmCreateSubtopic', { name: query, category: l1.title })}</p>
-                    <button
+                    <Button
                         type="button"
                         onClick={() => createPending(l1.id, query)}
                         disabled={isSubmittingPending}
-                        className="w-full flex items-center justify-between rounded-pill p-2 text-left text-button-sm transition-colors text-primary-foreground bg-primary disabled:opacity-60"
+                        className="w-full justify-between p-2 text-left"
                     >
                         <span>{t('createSubtopic')}</span>
-                        <Check className="h-4 w-4" />
-                    </button>
+                        <Check className="size-4" />
+                    </Button>
                 </div>
             ) : (
                 <>
@@ -88,23 +89,23 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                     </span>
                                     <span className="text-meta text-foreground-muted">{t('proposeAsNewSubtopic')}</span>
                                 </div>
-                                <Plus className="h-4 w-4 text-primary" />
+                                <Plus className="size-4 text-primary" />
                             </button>
                         </div>
                     )}
 
                     <div className="border-t border-border p-2 bg-surface sticky bottom-0">
-                        <button
+                        <Button
                             type="button"
                             onClick={(e) => {
                                 e.preventDefault();
                                 void commitTypedText();
                             }}
                             disabled={isSubmittingPending}
-                            className="w-full rounded-pill bg-primary py-2 text-button-sm text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+                            className="w-full"
                         >
                             {c('done')}
-                        </button>
+                        </Button>
                     </div>
                 </>
             )}

@@ -10,6 +10,7 @@ import { cityLabel } from '@/lib/city-label';
 import { type GroupFormValues } from '@/lib/validations/group';
 
 import { Input, Select } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Props = {
     id: string;
     autoFocus?: boolean;
@@ -82,7 +83,7 @@ export default function CityField({ id, autoFocus }: Props) {
 
             {isWaiting && (
                 <p className="mt-1.5 flex items-start gap-1.5 text-meta text-foreground-muted">
-                    <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    <Clock className="mt-0.5 size-3.5 shrink-0" />
                     <span>{t('citySuggestedHint', { name: valueName })}</span>
                 </p>
             )}
@@ -105,15 +106,14 @@ export default function CityField({ id, autoFocus }: Props) {
                         autoFocus
                     />
                     <div className="flex gap-2">
-                        <button
+                        <Button
                             type="button"
                             onClick={submitSuggestion}
                             disabled={isPending || draft.trim().length < 2}
-                            className="inline-flex h-11 items-center gap-1.5 rounded-pill bg-primary px-4 text-button-sm text-primary-foreground transition-opacity disabled:opacity-50"
                         >
-                            <Plus className="h-4 w-4" />
+                            <Plus className="size-4" />
                             {t('citySuggestAdd')}
-                        </button>
+                        </Button>
                         <button
                             type="button"
                             onClick={() => { setOpen(false); setError(null); }}

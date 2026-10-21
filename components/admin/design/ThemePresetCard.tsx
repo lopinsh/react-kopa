@@ -32,7 +32,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
                 selected ? 'border-primary' : 'border-border hover:border-foreground-muted'
             )}
         >
-            {selected && <Check className="absolute right-4 top-4 h-5 w-5 text-primary" aria-hidden="true" />}
+            {selected && <Check className="absolute right-4 top-4 size-5 text-primary" aria-hidden="true" />}
             <span>
                 <span className="block text-item text-foreground">{t(`presets.${presetKey}`)}</span>
                 <span className="block text-meta text-foreground-muted">{t('looks.shape', { shape: t(`styles.${p.styleKey}`) })}</span>

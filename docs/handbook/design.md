@@ -128,6 +128,12 @@ Pill buttons, chips, tags, avatars and the search field (AR-08). Cards, panels, 
 
 Never a bare `rounded`, `rounded-sm`, `rounded-[…]` or `shadow-sm…2xl` (`ui:check` fails on them, see Colour): corners and depth come from the look. Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-lg … rounded-4xl`, `rounded-menu` and `rounded-item`. Three utilities carry the edge: `line` for the edge of a surface or control (1 px soft border in Mierīgs, 2 px ink in Drosmīgs), `frame` for edges only Drosmīgs draws (0 px in Mierīgs), and dividers stay `border-border` (one-sided rules and `divide-*` never change). Avatars, dots, the switch knob and unread badges stay `rounded-full`.
 
+### Motion and icons
+
+- **Buttons.** A pill button or link is `Button` / `buttonClass` from `components/ui/Button`; a round icon-only control is `IconButton` (`aria-label` required by type; sizes sm 28, md 40, lg 44) or `iconButtonClass` for a Link or menu trigger. Rows, tabs, chips, menu items and cards stay plain. A hand-rolled filled pill fails `ui:check`; a part of a control (clear mark in a chip, toggle in a bar) says `ui-allow: <reason>`.
+- **Motion.** Three durations and one ease in `@theme`: `duration-quick` 120 ms (press, hover), `duration-base` 150 ms (the default), `duration-slow` 240 ms (drawers, toasts), `ease-standard`. Never `transition-all` (name the property: `transition-colors`, `-opacity`, `-transform`), raw `duration-N`, `delay-N`, `ease-*` or `animate-in`. Decorative animation (`animate-fade/pop/rise`) sits behind `motion-safe:`; a spinner may stay.
+- **Icons.** lucide only, sized by `size-N` (never `size={…}` or an `h-N w-N` pair) and never `strokeWidth`: the look sets `--icon-stroke` once on `.lucide` (style token `iconStroke`: 2 in Mierīgs and Drosmīgs, 1.5 in Gaisīgs). A single emphasised icon may use a `stroke-N` class (check marks `stroke-3`).
+
 ### Space and depth
 
 - 4 px grid; spacing steps 2.5 and 3.5 and arbitrary `[Npx]` spacing are not used (0.5 and 1.5 stay for hairline nudges). A control's padding is 12, a card's 20.
@@ -153,7 +159,7 @@ Never a bare `rounded`, `rounded-sm`, `rounded-[…]` or `shadow-sm…2xl` (`ui:
 
 One component per job, in `components/ui/`. Pages use these and don't restyle them.
 
-- **Button.** Pill. Primary (filled, one per area), secondary (tint), quiet (ring), danger. Sizes md (44 px on phones, 40 from `md`) and sm (32 px). Always the site colour, never the group's.
+- **Button.** Pill. Primary (filled, one per area), secondary (tint), quiet (ring), danger. Sizes md (44 px on phones, 40 from `md`) and sm (32 px). Always the site colour, never the group's. Round icon-only: `IconButton` (see Motion and icons).
 - **Badge and RoleTag.** Badge is the small tag: tone `tag`, `outline` or `muted`. Tone `role` is a solid pill in the look's colour for that role. RoleTag shows Īpašnieks, Mod, Gaida (and a quiet Biedrs on discovery) in those colours, and nothing for a member elsewhere; the colour is fixed once there, so every place it appears has it.
 - **FilterChip.** Filters (clickable). Off: surface with a ring. On: site colour tint with a stronger ring.
 - **CategoryIcon, CategoryDisc, CategoryLine.** The icon of a main category; the icon on a tinted disc in the tone; the category line.

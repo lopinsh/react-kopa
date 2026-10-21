@@ -73,7 +73,7 @@ export default function BasicsSection({ canEditName }: Props) {
                         placeholder="https://images.unsplash.com/..."
                         className="pl-12"
                     />
-                    <ImageIcon className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-foreground-muted transition-colors group-focus-within:text-primary" />
+                    <ImageIcon className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-foreground-muted transition-colors group-focus-within:text-primary" />
                 </div>
                 <p className="ml-1 text-meta text-foreground-muted">{gt('bannerImageUrlDesc')}</p>
                 {errors.bannerImage?.message && (

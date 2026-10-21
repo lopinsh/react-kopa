@@ -128,6 +128,8 @@ export interface ThemeStyleTokens {
     /** Room a clipping parent leaves for a hard shadow. */
     shadowRoom: string;
     headingWeight: number;
+    /** Stroke width of every icon (--icon-stroke): airy draws thinner lines. */
+    iconStroke: number;
     /** Category tiles (card picture, row icon): a tint of the category tone or the solid tone. */
     tile: 'tint' | 'solid';
     /** Room in a group card (`--card-pad`) and between cards (`--card-gap`). */
@@ -135,18 +137,18 @@ export interface ThemeStyleTokens {
 }
 
 export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
-    calm: { radius: CALM_RADII, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadows: 'soft', pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint', cardSpace: '1.25rem' },
+    calm: { radius: CALM_RADII, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadows: 'soft', pressShift: '0px', shadowRoom: '0px', headingWeight: 600, iconStroke: 2, tile: 'tint', cardSpace: '1.25rem' },
     bold: {
         radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', '4xl': '12px', pill: '6px', menu: '6px', item: '5px' },
         lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
         shadows: { card: '4px', control: '3px', premium: '5px', dialog: '6px' },
-        pressShift: '3px', shadowRoom: '5px', headingWeight: 700, tile: 'solid', cardSpace: '1.25rem',
+        pressShift: '3px', shadowRoom: '5px', headingWeight: 700, iconStroke: 2, tile: 'solid', cardSpace: '1.25rem',
     },
     airy: {
         radius: { md: '2px', lg: '3px', xl: '3px', '2xl': '4px', '3xl': '4px', '4xl': '4px', pill: '9999px', menu: '4px', item: '3px' },
         lineWidth: '1px', ink: 'border', frameWidth: '1px',
         shadows: 'none',
-        pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'solid', cardSpace: '1.75rem',
+        pressShift: '0px', shadowRoom: '0px', headingWeight: 600, iconStroke: 1.5, tile: 'solid', cardSpace: '1.75rem',
     },
 };
 

@@ -10,6 +10,7 @@ import Overlay from '@/components/ui/Overlay';
 import { useAdminFrame } from './AdminFrameProvider';
 import AdminPagesNav from './AdminPagesNav';
 import AdminBadge from './AdminBadge';
+import { IconButton } from '@/components/ui/Button';
 
 /** Below `lg`: the bar under the header (menu button, page title, part) and the drawer it opens: five sections as rows, the open one expanded (AR-68). */
 export default function AdminDrawer({ title, part }: { title: string; part: string | null }) {
@@ -30,18 +31,18 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
 
     return (
         <div className="flex items-center gap-2 border-b border-border py-2 lg:hidden">
-            <button
+            <IconButton
                 ref={buttonRef}
                 type="button"
                 aria-label={t('openMenu')}
                 aria-expanded={open}
                 aria-controls={id}
                 onClick={() => { openedOn.current = pathname; setOpen(true); }}
-                className="relative grid size-10 shrink-0 place-items-center rounded-pill hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                className="relative"
             >
                 <Menu aria-hidden className="size-5" />
                 {total > 0 && <span aria-hidden className="absolute right-1.5 top-1.5 size-2 rounded-full bg-primary" />}
-            </button>
+            </IconButton>
             <p className="min-w-0 truncate text-item">
                 {title}
                 {part && <span className="ml-2 text-meta font-normal text-foreground-muted">{part}</span>}

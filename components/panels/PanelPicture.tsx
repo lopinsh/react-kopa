@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { useOverlayClose } from '@/components/ui/overlay-support';
 import { getSmartImageUrl } from '@/lib/image-utils';
+import { IconButton } from '@/components/ui/Button';
 
 /** The panel's picture (a phone sheet's is shorter) or, without one, the category's tone with its icon; the round × sits at its top right. */
 export default function PanelPicture({ image, l1Slug }: { image: string | null; l1Slug: string }) {
@@ -18,14 +19,15 @@ export default function PanelPicture({ image, l1Slug }: { image: string | null; 
             ) : l1Slug ? (
                 <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={l1Slug} aria-hidden="true" size={40} /></span>
             ) : null}
-            <button
+            <IconButton
+                variant="overlay"
                 type="button"
                 onClick={() => close()}
                 aria-label={t('close')}
-                className="absolute right-3 top-3 grid size-10 place-items-center rounded-pill bg-surface text-foreground shadow-premium frame hover:bg-tint"
+                className="absolute right-3 top-3"
             >
                 <X aria-hidden="true" className="size-5" />
-            </button>
+            </IconButton>
         </div>
     );
 }

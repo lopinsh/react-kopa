@@ -8,6 +8,7 @@ import { UI } from '@/lib/constants';
 import { Link } from '@/i18n/routing';
 import MeDrawer from './MeDrawer';
 import EditProfileLink from './EditProfileLink';
+import { IconButton } from '@/components/ui/Button';
 
 /** The own area's bar on phones, under the header: ☰ (opens the drawer with the own menu), picture, name and line (AR-60). */
 export default function MePhoneBar() {
@@ -19,17 +20,16 @@ export default function MePhoneBar() {
 
     return (
         <div data-ui={UI.ownBarPhone} className="flex h-16 items-center gap-3 border-b border-border bg-surface px-3 md:hidden">
-            <button
+            <IconButton
                 ref={buttonRef}
                 type="button"
                 aria-label={t('openMenu')}
                 aria-expanded={open}
                 aria-controls={drawerId}
                 onClick={() => setOpen(true)}
-                className="grid size-10 shrink-0 place-items-center rounded-pill hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
             >
                 <Menu aria-hidden className="size-5" />
-            </button>
+            </IconButton>
             <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img src={avatarSrc} alt="" className="size-8 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">

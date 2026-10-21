@@ -10,6 +10,7 @@ import TextCounter from '@/components/ui/TextCounter';
 import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
 import { Input } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Props = {
     selectedIds: string[];
     categories: ActiveL2WithAliases[];
@@ -76,7 +77,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
         <div className="space-y-8">
             <div>
                 <h3 className="text-item flex items-center gap-2">
-                    <Merge className="w-5 h-5 text-primary" />
+                    <Merge className="size-5 text-primary" />
                     {t('title')}
                 </h3>
                 <p className="text-body-sm text-foreground-muted mt-2">
@@ -148,20 +149,20 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                         </div>
                     </div>
 
-                    <button
+                    <Button type="submit"
                         onClick={handleMerge}
                         disabled={isPending || !nameEn || !nameLv || !slugEn || !slugLv}
-                        className="w-full bg-primary text-primary-foreground weight-strong py-3 rounded-pill hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
+                        className="w-full mt-4"
                     >
                         {isPending ? (
                             <span className="w-5 h-5 border-2 border-primary-foreground/20 border-t-primary-foreground rounded-full animate-spin" />
                         ) : (
                             <>
-                                <Merge className="w-4 h-4" />
+                                <Merge className="size-4" />
                                 {t('confirm')}
                             </>
                         )}
-                    </button>
+                    </Button>
                 </div>
             )}
         </div>

@@ -61,12 +61,20 @@
   --container-focus: 560px;
   --container-reading: 66ch;
 
+  /* Motion tokens (R16a): three durations and one ease; components use duration-quick|base|slow and ease-standard, never raw numbers (ui:check). */
+  --transition-duration-quick: 120ms;
+  --transition-duration-base: 150ms;
+  --transition-duration-slow: 240ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-transition-duration: var(--transition-duration-base);
+  --default-transition-timing-function: var(--ease-standard);
+
   /* Motion for pop-ups, toasts and drawers; use only as motion-safe:animate-* */
-  --animate-fade: ek-fade 150ms ease-out;
-  --animate-pop: ek-pop 150ms ease-out;
-  --animate-rise: ek-rise 200ms ease-out;
-  --animate-from-right: ek-from-right 200ms ease-out;
-  --animate-from-left: ek-from-left 200ms ease-out;
+  --animate-fade: ek-fade var(--transition-duration-base) var(--ease-standard);
+  --animate-pop: ek-pop var(--transition-duration-base) var(--ease-standard);
+  --animate-rise: ek-rise var(--transition-duration-slow) var(--ease-standard);
+  --animate-from-right: ek-from-right var(--transition-duration-slow) var(--ease-standard);
+  --animate-from-left: ek-from-left var(--transition-duration-slow) var(--ease-standard);
   @keyframes ek-fade { from { opacity: 0; } to { opacity: 1; } }
   @keyframes ek-pop { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
   @keyframes ek-rise { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -247,13 +255,18 @@ body {
   border-radius: 9999px;
 }
 
+/* Icons: one stroke width for the whole look (--icon-stroke from the style tokens); a class like stroke-3 on a single icon still wins. */
+@layer base {
+  .lucide { stroke-width: var(--icon-stroke, 2); }
+}
+
 @layer utilities {
   .font-heading {
     font-synthesis-weight: none;
   }
 
   .soft-press {
-    @apply transition-transform duration-200 active:scale-95;
+    @apply transition-transform duration-quick ease-standard active:scale-95;
   }
 
   .skeleton {
@@ -314,8 +327,8 @@ body {
 /* press: sinks onto its hard shadow. Uses `translate`, so it never fights soft-press (scale); clearing --tw-shadow keeps rings. */
 @utility press {
   transition-property: translate, opacity, background-color, color;
-  transition-duration: 120ms;
-  transition-timing-function: ease-out;
+  transition-duration: var(--transition-duration-quick);
+  transition-timing-function: var(--ease-standard);
   &:active:not(:disabled) {
     translate: var(--press-shift) var(--press-shift);
     --tw-shadow: 0 0 #0000;

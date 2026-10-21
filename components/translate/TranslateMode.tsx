@@ -45,15 +45,15 @@ export default function TranslateMode() {
                     style={{ left: target.x - 6, top: target.y - 14 }}
                     className="fixed z-[60] flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-premium transition-transform hover:scale-110"
                 >
-                    <Pencil className="h-3 w-3" />
+                    <Pencil className="size-3" />
                 </button>
             )}
 
             <div className="fixed bottom-20 left-3 z-[60] md:left-auto md:right-4 flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-tag text-foreground shadow-premium md:bottom-4">
-                <Languages className="h-4 w-4 text-primary" />
+                <Languages className="size-4 text-primary" />
                 <span className="mr-1">{t('barLabel')}</span>
                 <button type="button" onClick={() => setSearchOpen((o) => !o)} aria-label={t('searchButton')} title={t('searchButton')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
-                    <Search className="h-4 w-4" />
+                    <Search className="size-4" />
                 </button>
                 <TranslateModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-tag text-foreground-muted hover:bg-surface-elevated" />
             </div>

@@ -6,6 +6,7 @@ import { useRouter } from '@/i18n/routing';
 import { Undo2, Trash2 } from 'lucide-react';
 import { restoreGroup } from '@/actions/moderation-actions';
 import DeleteHiddenGroupModal from '@/components/modals/DeleteHiddenGroupModal';
+import Button from '@/components/ui/Button';
 
 type Props = {
     groupId: string;
@@ -44,18 +45,17 @@ export default function HiddenGroupActions({ groupId, groupName, hiddenReason, c
                     disabled={isPending}
                     className="flex items-center gap-2 rounded-lg line bg-surface px-3 py-2 text-button-sm text-foreground transition-colors hover:bg-surface-elevated disabled:opacity-50"
                 >
-                    <Undo2 className="h-4 w-4" />
+                    <Undo2 className="size-4" />
                     {t('restoreShort')}
                 </button>
                 {canDelete && (
-                <button
+                <Button variant="danger" type="submit"
                     onClick={() => setDeleteOpen(true)}
                     disabled={isPending}
-                    className="flex items-center gap-2 rounded-pill bg-danger px-3 py-2 text-button-sm text-danger-foreground transition-colors hover:opacity-90 disabled:opacity-50"
                 >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="size-4" />
                     {t('deleteShort')}
-                </button>
+                </Button>
                 )}
             </div>
             {error && <p role="alert" className="text-meta text-danger">{error}</p>}

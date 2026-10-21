@@ -31,7 +31,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                         }}
                         className="ml-0.5 rounded-pill hover:bg-foreground/20 p-0.5 transition-colors"
                     >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                     </button>
                 </span>
             ))}
@@ -49,7 +49,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                         }}
                         className="ml-0.5 rounded-pill hover:bg-foreground/10 p-0.5 transition-colors"
                     >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                     </button>
                 </span>
             ))}

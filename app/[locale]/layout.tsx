@@ -67,7 +67,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
 
     return (
         <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
-            <a
+            <a /* ui-allow: skip link, visible only on focus */
                 href="#content"
                 className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded-pill focus:bg-primary focus:px-4 focus:py-2 focus:text-button focus:text-primary-foreground"
             >

@@ -12,6 +12,7 @@ import { buildGroupFormSchema, type GroupFormValues } from '@/lib/validations/gr
 import { useToast } from '@/hooks/use-toast';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import { categoryColor } from '@/lib/theme/category';
+import Button from '@/components/ui/Button';
 
 type Props = {
     locale: string;
@@ -83,13 +84,12 @@ export default function AdminGroupCategorizationForm({
                     </div>
                 </div>
 
-                <button
+                <Button
                     type="submit"
                     disabled={isPending}
-                    className="rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground disabled:opacity-50"
                 >
                     {isPending ? c('loading') : c('save')}
-                </button>
+                </Button>
             </form>
         </FormProvider>
     );

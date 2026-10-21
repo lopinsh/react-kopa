@@ -57,7 +57,7 @@ export default function FeedbackDeleteButton({ id, onDeleted, onConfirmChange, c
             onConfirm={handleConfirm}
             renderTrigger={(triggerProps) => (
                 <button type="button" {...triggerProps} disabled={isPending} className={className} aria-label={iconOnly ? t('delete') : undefined} title={iconOnly ? t('delete') : undefined}>
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="size-4" />
                     {!iconOnly && t('delete')}
                 </button>
             )}

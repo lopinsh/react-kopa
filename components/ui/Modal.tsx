@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 import DiscardGuard from '@/components/ui/DiscardGuard';
 import Overlay from '@/components/ui/Overlay';
 import { useOverlayClose } from '@/components/ui/overlay-support';
+import { IconButton } from '@/components/ui/Button';
 import { UI } from '@/lib/constants';
 
 type Props = {
@@ -42,15 +43,15 @@ function CloseButton({ locked }: { locked: boolean }) {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <button
+        <IconButton
             type="button"
             onClick={() => close()}
             disabled={locked}
             aria-label={t('close')}
-            className="-mr-2 -mt-2 grid size-10 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint disabled:opacity-50"
+            className="-mr-2 -mt-2"
         >
             <X className="size-5" />
-        </button>
+        </IconButton>
     );
 }
 

@@ -264,7 +264,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                         icon={Calendar}
                         title={t('sample.emptyTitle')}
                         description={t('sample.emptyDescription')}
-                        action={<Button variant="secondary"><Search className="h-4 w-4" />{t('sample.emptyAction')}</Button>}
+                        action={<Button variant="secondary"><Search className="size-4" />{t('sample.emptyAction')}</Button>}
                     />
                 </UiSpecimen>
 

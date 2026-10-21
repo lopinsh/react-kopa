@@ -6,14 +6,15 @@ import { X } from 'lucide-react';
 import Overlay from '@/components/ui/Overlay';
 import { useOverlayClose } from '@/components/ui/overlay-support';
 import { UI } from '@/lib/constants';
+import { IconButton } from '@/components/ui/Button';
 
 function CloseButton() {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
-        <button type="button" onClick={() => close()} aria-label={t('close')} className="-mr-1 grid size-10 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint">
+        <IconButton type="button" onClick={() => close()} aria-label={t('close')} className="-mr-1">
             <X aria-hidden="true" className="size-5" />
-        </button>
+        </IconButton>
     );
 }
 

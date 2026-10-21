@@ -9,6 +9,7 @@ import { deletePostAction } from '@/actions/group-actions';
 import { useToast } from '@/hooks/use-toast';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MenuItemButton, MenuPanel, useMenu } from '@/components/ui/Menu';
+import { IconButton } from '@/components/ui/Button';
 
 const ICON = 'size-[17px] text-foreground-muted';
 
@@ -38,14 +39,13 @@ export default function AnnouncementItemMenu({ postId, title, archived }: Props)
 
     return (
         <div className="relative flex" ref={rootRef}>
-            <button
+            <IconButton size="lg"
                 {...triggerProps}
                 aria-label={t('announcementActions')}
                 disabled={isPending}
-                className="grid size-11 place-items-center rounded-pill text-foreground-muted outline-none transition-colors hover:bg-tint focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
             >
                 <MoreHorizontal aria-hidden className="size-5" />
-            </button>
+            </IconButton>
             {open && (
                 <MenuPanel label={t('announcementActions')} placement="anchor" {...menuProps}>
                     <MenuItemButton

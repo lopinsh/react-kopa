@@ -12,6 +12,7 @@ import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
 
 import { Textarea } from '@/components/ui/Input';
+import { IconButton } from '@/components/ui/Button';
 /** The replies under a note (oldest first) and an input to add another. The original text lives outside, untouched. */
 export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void }) {
     const t = useTranslations('feedbackMode');
@@ -46,7 +47,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                     {note.replies.map((r) => (
                         <li key={r.id} className="rounded-xl border border-primary/30 bg-primary/5 px-3 py-2">
                             <p className="flex items-center gap-1 text-tag text-primary">
-                                {r.byAgent && <Bot className="h-3.5 w-3.5" aria-hidden />}
+                                {r.byAgent && <Bot className="size-3.5" aria-hidden />}
                                 {r.byAgent ? t('threadAgent') : r.authorName ?? t('threadEarlier')}
                                 <span className="weight-medium text-foreground-muted">
                                     · {format.dateTime(r.createdAt, { dateStyle: 'medium', timeStyle: 'short' })}
@@ -63,7 +64,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                     onClick={() => setOpen(true)}
                     className="flex items-center gap-1.5 text-tag text-foreground-muted hover:text-primary"
                 >
-                    <MessageCircle className="h-3.5 w-3.5" aria-hidden />
+                    <MessageCircle className="size-3.5" aria-hidden />
                     {t('reply')}
                 </button>
             ) : (
@@ -80,16 +81,15 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                         aria-label={t('reply')}
                         className="min-w-0 flex-1 resize-none"
                     />
-                    <button
+                    <IconButton variant="primary" size="lg"
                         type="button"
                         onClick={handleSend}
                         disabled={isPending || !text.trim() || over}
                         aria-label={t('threadSend')}
                         title={t('threadSend')}
-                        className="rounded-pill bg-primary p-3 text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
-                        <Send className="h-4 w-4" />
-                    </button>
+                        <Send className="size-4" />
+                    </IconButton>
                 </div>
                 <div className="mt-1 flex items-start gap-2"><TextCounter id={counterId} length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 </div>

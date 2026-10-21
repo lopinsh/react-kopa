@@ -30,7 +30,7 @@ export default function UsernameField({
 
             <div className="relative">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <AtSign className="h-4 w-4 text-foreground-muted" />
+                    <AtSign className="size-4 text-foreground-muted" />
                 </div>
                 <Input
                     id={id}
@@ -49,9 +49,9 @@ export default function UsernameField({
                     className="pl-9 pr-10 disabled:opacity-60"
                 />
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                    {status === 'checking' && <Loader2 className="h-4 w-4 animate-spin text-foreground-muted" />}
-                    {status === 'available' && <CheckCircle className="h-4 w-4 text-success" />}
-                    {(status === 'taken' || status === 'invalid') && <XCircle className="h-4 w-4 text-danger" />}
+                    {status === 'checking' && <Loader2 className="size-4 animate-spin text-foreground-muted" />}
+                    {status === 'available' && <CheckCircle className="size-4 text-success" />}
+                    {(status === 'taken' || status === 'invalid') && <XCircle className="size-4 text-danger" />}
                 </div>
             </div>
 

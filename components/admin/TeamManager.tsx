@@ -90,7 +90,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
             onConfirm={handleConfirm}
             renderTrigger={(trigger) => (
                 <button {...trigger} type="button" disabled={isPending} className={`${BUTTON} ${kind === 'remove' ? 'text-danger' : 'text-foreground'}`}>
-                    {kind === 'remove' ? <ShieldOff className="h-4 w-4" /> : <ShieldCheck className="h-4 w-4" />}
+                    {kind === 'remove' ? <ShieldOff className="size-4" /> : <ShieldCheck className="size-4" />}
                     {t(kind === 'make' ? 'makeAdmin' : 'removeAdmin')}
                 </button>
             )}
@@ -108,13 +108,13 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                             <div className="flex shrink-0 items-center gap-2">
                                 {member.role === 'OWNER' && (
                                     <span className="flex shrink-0 items-center gap-1.5 rounded-pill bg-primary/10 px-3 py-1 text-tag text-primary">
-                                        <Crown className="h-3.5 w-3.5" />
+                                        <Crown className="size-3.5" />
                                         {t('ownerBadge')}
                                     </span>
                                 )}
                                 {member.id !== viewerId && (
                                     <button type="button" disabled={isPending} onClick={() => handleMessage(member.id)} className={`${BUTTON} text-foreground`}>
-                                        <MessageSquare className="h-4 w-4" />
+                                        <MessageSquare className="size-4" />
                                         {t('message')}
                                     </button>
                                 )}
@@ -139,7 +139,7 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
                         className="min-w-0 flex-1"
                     />
                     <button type="submit" disabled={isPending} className={BUTTON}>
-                        <Search className="h-4 w-4" />
+                        <Search className="size-4" />
                         {t('search')}
                     </button>
                 </form>

@@ -44,7 +44,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
                 className="min-w-0 flex-1 truncate bg-transparent text-foreground placeholder:text-foreground-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
             />
             {value && (
-                <button
+                <button /* ui-allow: clear mark inside the field */
                     type="button"
                     aria-label={tSearch('clear')}
                     onClick={() => { onChange(''); inputRef.current?.focus(); }}

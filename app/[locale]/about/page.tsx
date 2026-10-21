@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
+import { buttonClass } from '@/components/ui/Button';
 
 type Props = { params: Promise<{ locale: string }> };
 
@@ -29,7 +30,7 @@ export default async function AboutPage() {
             </ul>
             <Link
                 href="/"
-                className="mt-10 inline-flex h-11 items-center rounded-pill bg-primary px-6 text-button-sm text-primary-foreground transition-opacity hover:opacity-90"
+                className={buttonClass('primary', 'mt-10')}
             >
                 {t('about.cta')}
             </Link>

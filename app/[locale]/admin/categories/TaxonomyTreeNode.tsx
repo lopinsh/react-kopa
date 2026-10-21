@@ -32,7 +32,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, selectedNode, onNodeS
                 onClick={() => onToggle(!isExpanded)}
             >
                 <div className="p-1 text-foreground-muted">
-                    {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+                    {isExpanded ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                 </div>
 
                 <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: tint(l1.color, 12), color: l1.color }}>

@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Trash2 } from 'lucide-react';
 import SettingsSection from './SettingsSection';
+import Button from '@/components/ui/Button';
 
 type Props = {
     onDelete: () => void;
@@ -17,15 +18,14 @@ export default function DangerZoneSection({ onDelete, isPending }: Props) {
         <SettingsSection title={c_common('tabDanger')} description={c_common('tabDangerDescription')}>
             <div className="space-y-3">
                 <p className="max-w-xl text-body-sm text-foreground">{gt('deleteConfirm')}</p>
-                <button
+                <Button variant="danger"
                     type="button"
                     onClick={onDelete}
                     disabled={isPending}
-                    className="flex h-12 items-center gap-3 rounded-pill bg-danger px-8 weight-strong text-danger-foreground transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50"
                 >
-                    <Trash2 className="h-5 w-5" />
+                    <Trash2 className="size-5" />
                     {c_common('deleteGroupTitle')}
-                </button>
+                </Button>
             </div>
         </SettingsSection>
     );

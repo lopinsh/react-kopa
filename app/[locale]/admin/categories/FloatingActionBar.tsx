@@ -33,7 +33,7 @@ export default function FloatingActionBar({
                 <button
                     type="button"
                     onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClearSelection(); }}
-                    className="flex items-center gap-2 pr-4 border-r border-border group/clear cursor-pointer hover:bg-surface/50 rounded-l-full transition-colors transition-all py-1 -ml-2 pl-3"
+                    className="flex items-center gap-2 pr-4 border-r border-border group/clear cursor-pointer hover:bg-surface/50 rounded-l-full transition-colors transition-colors py-1 -ml-2 pl-3"
                     title={t('clearSelection')}
                 >
                     <span className="pointer-events-none flex items-center gap-2">
@@ -41,7 +41,7 @@ export default function FloatingActionBar({
                             {selectedIds.length}
                         </span>
                         <span className="text-body-sm">{t('selected')}</span>
-                        <X className="w-4 h-4 ml-1 text-foreground-muted group-hover/clear:text-foreground transition-colors" />
+                        <X className="size-4 ml-1 text-foreground-muted group-hover/clear:text-foreground transition-colors" />
                     </span>
                 </button>
 
@@ -54,7 +54,7 @@ export default function FloatingActionBar({
                             className="flex items-center gap-2 px-3 py-1.5 text-button-sm rounded-pill hover:bg-success/10 text-success transition-colors cursor-pointer"
                         >
                             <span className="pointer-events-none flex items-center gap-2">
-                                <CheckCircle className="w-4 h-4" />
+                                <CheckCircle className="size-4" />
                                 {c('approve')}
                             </span>
                         </button>
@@ -68,7 +68,7 @@ export default function FloatingActionBar({
                         title={selectedIds.length < 2 ? t('mergeRequiresTwo') : ''}
                     >
                         <span className="pointer-events-none flex items-center gap-2">
-                            <Merge className="w-4 h-4" />
+                            <Merge className="size-4" />
                             {c('merge')}
                         </span>
                     </button>
@@ -79,7 +79,7 @@ export default function FloatingActionBar({
                         className="flex items-center gap-2 px-3 py-1.5 text-button-sm rounded-pill hover:bg-danger/10 text-danger transition-colors cursor-pointer"
                     >
                         <span className="pointer-events-none flex items-center gap-2">
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="size-4" />
                             {c('delete')}
                         </span>
                     </button>

@@ -27,7 +27,7 @@ export default function AboutField({ lang, onLangChange }: Props) {
     return (
         <div>
             <label className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
-                <AlignLeft className="h-3.5 w-3.5 text-foreground-muted" />
+                <AlignLeft className="size-3.5 text-foreground-muted" />
                 {t('fieldDescription')}
                 <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
             </label>

@@ -38,7 +38,7 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
         <div data-translate-ignore className="fixed inset-x-3 bottom-32 z-[65] flex max-h-[60vh] flex-col rounded-2xl line bg-surface p-4 shadow-dialog md:bottom-16 md:left-auto md:right-4 md:w-[28rem]">
             <div className="mb-3 flex items-center gap-2">
                 <div className="relative flex-1">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted" />
+                    <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-foreground-muted" />
                     <Input
                         autoFocus
                         value={query}
@@ -48,7 +48,7 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
                     />
                 </div>
                 <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-pill p-2 text-foreground-muted hover:bg-surface-elevated">
-                    <X className="h-4 w-4" />
+                    <X className="size-4" />
                 </button>
             </div>
             <p className="mb-2 text-meta text-foreground-muted">{t('searchHint')}</p>

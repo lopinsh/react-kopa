@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { MessageSquare } from 'lucide-react';
 import { useRouter } from '@/i18n/routing';
 import { getOrCreateDirectChat } from '@/actions/message-actions';
+import Button from '@/components/ui/Button';
 
 /** Opens (or starts) the direct chat with a person. Only rendered when the server says the viewer may message them. */
 export default function MessageUserButton({ userId }: { userId: string }) {
@@ -31,17 +32,17 @@ export default function MessageUserButton({ userId }: { userId: string }) {
 
     return (
         <div className="w-full md:w-auto">
-            <button
+            <Button
                 type="button"
                 onClick={handleClick}
                 disabled={isPending || isOpening}
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-pill bg-primary px-6 text-button-sm text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-50 md:w-auto"
+                className="w-full md:w-auto"
             >
                 {isPending
                     ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    : <MessageSquare className="h-4 w-4" />}
+                    : <MessageSquare className="size-4" />}
                 {t('message')}
-            </button>
+            </Button>
             {error && <p role="alert" className="mt-2 text-tag text-danger">{error}</p>}
         </div>
     );

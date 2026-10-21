@@ -15,6 +15,7 @@ import L1Aliases from './L1Aliases';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
 import { Input } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Props = {
     l1: L1Category;
     onNodeSelect: (node: SelectedTaxonomyNode) => void;
@@ -119,14 +120,13 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             </div>
                         </div>
                         <div className="flex justify-end pt-2">
-                            <button
+                            <Button
                                 type="button"
                                 onClick={handleSaveColor}
                                 disabled={isPending || color === savedColor}
-                                className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded-pill hover:bg-primary/90 transition-colors disabled:opacity-50"
                             >
                                 {t('save')}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 )}
@@ -186,14 +186,13 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                             </div>
                         </div>
                         <div className="flex justify-end">
-                            <button
+                            <Button
                                 type="submit"
                                 disabled={isPending || !newNameEn.trim() || !newNameLv.trim()}
-                                className="px-4 py-2 text-button-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity rounded-pill disabled:opacity-50"
                                 style={{ '--accent': shown } as React.CSSProperties}
                             >
                                 {t('addSubcategory')}
-                            </button>
+                            </Button>
                         </div>
                     </form>
                 </div>

@@ -48,6 +48,7 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         // Active/open edges (chosen chip, open filter): the ink in bold; calm leaves it unset so each element's own fallback colour applies.
         ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),
+        '--icon-stroke': String(style.iconStroke),
     };
     // Tile tone shares; the cat-tile utility mixes them with --c per card (a var(--c) here would resolve at the root).
     if (style.tile === 'solid') {

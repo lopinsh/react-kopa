@@ -30,7 +30,7 @@ export default function HideGroupModal({ isOpen, onClose, groupId, reportId, onH
         <ReasonModal
             onClose={onClose}
             returnFocusRef={returnFocusRef}
-            icon={<EyeOff className="h-5 w-5 shrink-0" />}
+            icon={<EyeOff className="size-5 shrink-0" />}
             title={t('hideTitle')}
             description={t('hideDescription')}
             reasonLabel={t('reasonLabel')}

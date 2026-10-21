@@ -31,7 +31,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
     return (
         <div
             className={clsx(
-                'group relative overflow-hidden rounded-2xl border transition-all duration-200',
+                'group relative overflow-hidden rounded-2xl border transition-colors duration-base',
                 isEditing
                     ? 'border-primary bg-surface-elevated ring-4 ring-primary/5'
                     : 'border-border bg-surface hover:border-primary/30'
@@ -39,7 +39,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
         >
             <div className="relative flex items-center gap-4 p-4 has-[button[data-row-toggle]:focus-visible]:outline has-[button[data-row-toggle]:focus-visible]:outline-2 has-[button[data-row-toggle]:focus-visible]:-outline-offset-2 has-[button[data-row-toggle]:focus-visible]:outline-primary md:p-6">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl line bg-surface-elevated text-foreground-muted">
-                    {index === 0 ? <span className="text-tag">0</span> : <GripVertical className="h-4 w-4" />}
+                    {index === 0 ? <span className="text-tag">0</span> : <GripVertical className="size-4" />}
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -58,7 +58,7 @@ export default function SectionRow({ section, index, isLast, isEditing, isPendin
                         </h3>
                         {section.visibility === 'MEMBERS_ONLY' && (
                             <span className="flex items-center gap-1 rounded-pill bg-primary/10 px-1.5 py-0.5 text-meta text-primary">
-                                <Lock className="h-2.5 w-2.5" />
+                                <Lock className="size-2.5" />
                                 {c_common('visibilityMembersOnly')}
                             </span>
                         )}

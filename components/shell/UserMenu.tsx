@@ -12,7 +12,7 @@ import { avatarUrl } from '@/lib/avatar';
 import { signInUrl } from '@/lib/auth-redirect';
 import { UI } from '@/lib/constants';
 import { ME_PAGES } from '@/lib/navigation';
-import { buttonClass } from '@/components/ui/Button';
+import { buttonClass, IconButton } from '@/components/ui/Button';
 import { useOwnCounts } from '@/components/providers/OwnCountsProvider';
 import { ICON_DOT } from './header-styles';
 import { MenuItemButton, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
@@ -54,7 +54,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
 
     return (
         <div className="relative shrink-0" ref={rootRef}>
-            <button {...triggerProps} aria-label={t('profileMenu')} className="relative grid size-10 place-items-center rounded-pill focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            <IconButton {...triggerProps} aria-label={t('profileMenu')}>
                 <img
                     src={avatarSrc}
                     alt=""
@@ -63,7 +63,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
                     onError={() => setImageError(true)}
                 />
                 {myGroupsNew > 0 && <span aria-hidden className={ICON_DOT} />}
-            </button>
+            </IconButton>
             {open && (
                 <MenuPanel label={t('profileMenu')} dataUi={UI.profileMenu} {...menuProps}>
                     <MenuItemLink href="/profile" icon={<User aria-hidden className={ICON} />}>{t('myProfile')}</MenuItemLink>

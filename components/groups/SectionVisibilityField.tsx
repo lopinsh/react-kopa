@@ -28,11 +28,11 @@ export default function SectionVisibilityField({ value, isFirst, onChange }: Pro
                             disabled={locked}
                             onClick={() => onChange(v)}
                             className={clsx(
-                                'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-meta transition-all disabled:opacity-40',
+                                'flex flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-meta transition-colors disabled:opacity-40',
                                 value === v ? 'border-primary bg-primary/5 text-primary' : 'border-border bg-surface text-foreground-muted hover:bg-surface-elevated'
                             )}
                         >
-                            <Icon className="h-3.5 w-3.5" />
+                            <Icon className="size-3.5" />
                             {v === 'PUBLIC' ? t('public') : t('visibilityMembersOnly')}
                         </button>
                     );

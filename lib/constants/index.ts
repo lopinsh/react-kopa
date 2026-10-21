@@ -215,6 +215,7 @@ export const UI = {
     buttonSecondary: 'button-secondary',
     buttonQuiet: 'button-quiet',
     buttonDanger: 'button-danger',
+    iconButton: 'icon-button',
     logo: 'logo',
     categoryLine: 'category-line',
     categoryDisc: 'category-disc',

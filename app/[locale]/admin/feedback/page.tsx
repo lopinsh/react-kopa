@@ -10,6 +10,7 @@ import FeedbackPurgeButton from '@/components/admin/FeedbackPurgeButton';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 import { Input, Select } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'admin.nav' });
@@ -65,7 +66,7 @@ export default async function AdminFeedbackPage({
                     {FEEDBACK_KINDS.map((k) => <option key={k} value={k}>{tMode(`kind.${k}`)}</option>)}
                 </Select>
                 <Input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className="w-full sm:w-56" />
-                <button type="submit" className="rounded-pill bg-primary px-5 py-2 text-button-sm text-primary-foreground hover:opacity-90">{t('filter')}</button>
+                <Button type="submit">{t('filter')}</Button>
                 {tab === 'completed' && counts.completed > 0 && (
                     <div className="sm:ml-auto"><FeedbackPurgeButton count={counts.completed} /></div>
                 )}

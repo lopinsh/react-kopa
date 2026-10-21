@@ -68,10 +68,10 @@ export default function SectionsEditor({ groupId, initialSections, locale }: Pro
                     <button
                         type="button"
                         onClick={handleAddSection}
-                        className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-foreground-muted transition-all hover:border-primary/50 hover:bg-primary/5"
+                        className="group relative flex h-24 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border text-foreground-muted transition-colors hover:border-primary/50 hover:bg-primary/5"
                     >
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full line bg-surface-elevated transition-all group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
-                            <Plus className="h-4 w-4" />
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full line bg-surface-elevated transition group-hover:scale-110 group-hover:bg-primary group-hover:text-primary-foreground">
+                            <Plus className="size-4" />
                         </div>
                         <span className="text-tag">{t('sections.add')}</span>
                     </button>

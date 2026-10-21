@@ -28,7 +28,7 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
         >
             <div className={clsx('mt-4 flex h-8 shrink-0 items-center px-3', folded ? 'justify-center' : 'justify-end')}>
                 <h2 className="sr-only">{t('categories')}</h2>
-                <button
+                <button /* ui-allow: fold control inside the sidebar edge, ring like the filter chips */
                     type="button"
                     onClick={fold}
                     aria-expanded={!folded}

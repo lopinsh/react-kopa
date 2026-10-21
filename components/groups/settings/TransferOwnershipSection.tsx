@@ -9,6 +9,7 @@ import { useToast } from '@/hooks/use-toast';
 import SettingsSection from './SettingsSection';
 
 import { Select } from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
 type Candidate = { userId: string; name: string; role: 'ADMIN' | 'MEMBER' };
 
 type Props = {
@@ -85,15 +86,14 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                             <div role="alertdialog" className="space-y-3 rounded-2xl border border-primary/40 bg-primary/10 p-4">
                                 <p className="text-body-sm text-foreground">{t('transferConfirm', { name: target?.name ?? '' })}</p>
                                 <div className="flex flex-wrap gap-2">
-                                    <button
+                                    <Button
                                         type="button"
                                         onClick={handleTransfer}
                                         disabled={isPending}
-                                        className="flex items-center gap-2 rounded-pill bg-primary px-4 py-2 text-button-sm text-primary-foreground disabled:opacity-70"
                                     >
-                                        {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
+                                        {isPending && <Loader2 className="size-4 animate-spin" />}
                                         {t('transferConfirmYes')}
-                                    </button>
+                                    </Button>
                                     <button
                                         type="button"
                                         onClick={() => setConfirming(false)}

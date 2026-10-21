@@ -52,7 +52,7 @@ export default function PendingCityCard({ city }: Props) {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                 <div className="min-w-0">
                     <h3 className="flex items-center gap-2 text-item break-words">
-                        <MapPin className="h-5 w-5 shrink-0 text-foreground-muted" />
+                        <MapPin className="size-5 shrink-0 text-foreground-muted" />
                         {city.nameLv}
                     </h3>
                     <p className="mt-1 text-body-sm text-foreground-muted">
@@ -64,7 +64,7 @@ export default function PendingCityCard({ city }: Props) {
                     <p className="mt-1 text-body-sm">{t('cityGroups', { count: city.groupCount })}</p>
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-2">
-                    <button
+                    <button /* ui-allow: toggle that shows edit mode */
                         type="button"
                         onClick={() => setEditing(!editing)}
                         className={`px-3 py-1.5 text-button rounded-pill transition-colors ${editing ? 'bg-primary text-primary-foreground' : 'bg-surface-elevated hover:bg-border'}`}
