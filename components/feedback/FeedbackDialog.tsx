@@ -12,6 +12,7 @@ import { FEEDBACK_KINDS, FEEDBACK_TEXT_MAX, type FeedbackKindValue } from '@/lib
 import type { ElementLocator } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
+import { Textarea } from '@/components/ui/Input';
 export type FeedbackTarget = { selector: string; elementText: string; component: string | null; locator: ElementLocator };
 
 type Props = {
@@ -98,7 +99,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     ))}
                 </div>
 
-                <textarea
+                <Textarea
                     autoFocus
                     value={text}
                     onChange={(e) => setText(e.target.value)}
@@ -106,7 +107,7 @@ export default function FeedbackDialog({ target, path, onSaved, onClose }: Props
                     rows={5}
                     placeholder={t('placeholder')}
                     aria-label={t('textLabel')}
-                    className="mt-4 w-full resize-none rounded-xl line bg-surface-elevated p-3 text-body md:text-body-sm text-foreground outline-none focus:border-primary/50"
+                    className="mt-4 resize-none"
                 />
                 <div className="mt-1 flex items-start gap-2"><TextCounter id="feedback-note-count" length={text.length} max={FEEDBACK_TEXT_MAX} /></div>
                 {error && <p role="alert" className="mt-2 text-body-sm text-danger">{error}</p>}

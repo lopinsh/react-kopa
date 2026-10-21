@@ -9,13 +9,13 @@ import FeedbackAdminRow from '@/components/admin/FeedbackAdminRow';
 import FeedbackPurgeButton from '@/components/admin/FeedbackPurgeButton';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
+import { Input, Select } from '@/components/ui/Input';
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
     const t = await getTranslations({ locale, namespace: 'admin.nav' });
     return { title: t('feedback') };
 }
 
-const FIELD = 'rounded-xl line bg-surface px-3 py-2 text-body md:text-body-sm text-foreground';
 
 export default async function AdminFeedbackPage({
     params,
@@ -60,11 +60,11 @@ export default async function AdminFeedbackPage({
             {/* A plain GET form: filters live in the URL, no client code needed. */}
             <form method="get" className="mb-6 flex flex-wrap items-center gap-2">
                 <input type="hidden" name="tab" value={tab} />
-                <select name="kind" defaultValue={filter.kind ?? ''} aria-label={t('filterKind')} className={FIELD}>
+                <Select name="kind" defaultValue={filter.kind ?? ''} aria-label={t('filterKind')}>
                     <option value="">{t('allKinds')}</option>
                     {FEEDBACK_KINDS.map((k) => <option key={k} value={k}>{tMode(`kind.${k}`)}</option>)}
-                </select>
-                <input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className={`${FIELD} w-full sm:w-56`} />
+                </Select>
+                <Input name="page" defaultValue={filter.page ?? ''} placeholder={t('filterPage')} aria-label={t('filterPage')} className="w-full sm:w-56" />
                 <button type="submit" className="rounded-pill bg-primary px-5 py-2 text-button-sm text-primary-foreground hover:opacity-90">{t('filter')}</button>
                 {tab === 'completed' && counts.completed > 0 && (
                     <div className="sm:ml-auto"><FeedbackPurgeButton count={counts.completed} /></div>

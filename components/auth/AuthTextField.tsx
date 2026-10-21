@@ -1,6 +1,7 @@
 import type { ComponentPropsWithRef } from 'react';
 import { UI } from '@/lib/constants';
 
+import { Input } from '@/components/ui/Input';
 interface AuthTextFieldProps extends ComponentPropsWithRef<'input'> {
     id: string;
     label: string;
@@ -17,11 +18,10 @@ export default function AuthTextField({ id, label, hint, error, ...inputProps }:
             <label htmlFor={id} className="block text-button-sm text-foreground">
                 {label}
             </label>
-            <input
+            <Input
                 id={id}
                 aria-invalid={error ? true : undefined}
                 aria-describedby={note ? `${id}-note` : undefined}
-                className="block w-full rounded-lg line bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary aria-[invalid=true]:border-danger/40"
                 {...inputProps}
             />
             {note && (

@@ -13,6 +13,7 @@ import Switch from '@/components/ui/Switch';
 import TextCounter from '@/components/ui/TextCounter';
 import { OverlayCloseButton } from '@/components/ui/overlay-support';
 
+import { Textarea } from '@/components/ui/Input';
 type Props = {
     groupId: string;
     groupName: string;
@@ -73,14 +74,14 @@ export default function ContactForm({ groupId, groupName, allowJoin, onClose, re
                 <p className="text-body-sm text-foreground">{joining ? t('descriptionJoin') : t('description')}</p>
                 <div>
                     <label htmlFor={`${id}-message`} className="sr-only">{t('messageLabel')}</label>
-                    <textarea
+                    <Textarea
                         id={`${id}-message`}
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         aria-describedby={`${id}-count`}
                         rows={5}
                         placeholder={t('placeholder')}
-                        className="w-full resize-none rounded-xl line bg-surface p-4 text-body md:text-body-sm outline-none placeholder:text-foreground-muted/60 focus:border-primary focus:ring-1 focus:ring-primary"
+                        className="resize-none"
                     />
                     <div className="mt-1 flex"><TextCounter id={`${id}-count`} length={message.length} max={MESSAGE_MAX_LENGTH} /></div>
                 </div>

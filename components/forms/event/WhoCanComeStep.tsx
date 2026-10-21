@@ -2,14 +2,14 @@
 
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
 import RichTextEditor from '@/components/ui/RichTextEditor';
-import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
+import Field from '@/components/forms/event/Field';
 import ChoiceGroup from '@/components/forms/event/ChoiceGroup';
 import { EVENT_VISIBILITY, EVENT_JOIN_MODES, type EventVisibility, type EventJoinModeValue } from '@/lib/constants';
 import type { EventFormData } from '@/lib/validations/event';
 import type { TextLang } from '@/lib/translations';
 
+import { Input } from '@/components/ui/Input';
 type Props = { lang: TextLang; rev: number };
 
 /** Step 2: who sees the event, how people join, about how many, practical info. */
@@ -47,7 +47,7 @@ export default function WhoCanComeStep({ lang, rev }: Props) {
                 hint={t('fieldMaxParticipantsHint')}
                 error={errors.maxParticipants ? t(errors.maxParticipants.message as 'MAX_PARTICIPANTS_INVALID') : undefined}
             >
-                <input
+                <Input
                     id="event-max"
                     type="number"
                     inputMode="numeric"
@@ -55,7 +55,6 @@ export default function WhoCanComeStep({ lang, rev }: Props) {
                     placeholder={t('fieldMaxParticipantsPlaceholder')}
                     aria-invalid={errors.maxParticipants ? true : undefined}
                     aria-describedby="event-max-hint"
-                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.maxParticipants))}
                 />
             </Field>
 

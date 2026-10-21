@@ -1,10 +1,9 @@
 'use client';
 
-import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
-import { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import { TIME_OPTIONS } from '@/lib/local-datetime';
 
+import { Select } from '@/components/ui/Input';
 type Props = {
     id?: string;
     /** "HH:mm", or '' when no time is chosen. */
@@ -24,21 +23,19 @@ export default function TimeSelect({ id, value, onChange, invalid, disabled }: P
     const options = value && !TIME_OPTIONS.includes(value) ? [...TIME_OPTIONS, value].sort() : TIME_OPTIONS;
 
     return (
-        <select
+        <Select
             id={id}
             aria-label={t('timeLabel')}
             value={value}
             disabled={disabled}
             aria-invalid={invalid || undefined}
             onChange={(e) => onChange(e.target.value)}
-            className={clsx(
-                FIELD_INPUT, 'tabular-nums disabled:opacity-60', fieldBorder(!!invalid)
-            )}
+            className="tabular-nums"
         >
             {!value && <option value="" />}
             {options.map((o) => (
                 <option key={o} value={o}>{o}</option>
             ))}
-        </select>
+        </Select>
     );
 }

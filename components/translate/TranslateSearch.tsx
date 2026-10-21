@@ -6,6 +6,7 @@ import { Search, X } from 'lucide-react';
 import { searchTranslations } from '@/actions/translation-actions';
 import type { TranslationSearchHit } from '@/lib/services/message-override.service';
 
+import { Input } from '@/components/ui/Input';
 type Props = {
     onPick: (key: string) => void;
     onClose: () => void;
@@ -38,12 +39,12 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
             <div className="mb-3 flex items-center gap-2">
                 <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted" />
-                    <input
+                    <Input
                         autoFocus
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t('searchPlaceholder')}
-                        className="w-full rounded-xl line bg-surface-elevated py-2 pl-9 pr-3 text-body md:text-body-sm text-foreground outline-none focus:border-primary/50"
+                        className="pl-9 pr-3"
                     />
                 </div>
                 <button type="button" onClick={onClose} aria-label={t('cancel')} className="rounded-pill p-2 text-foreground-muted hover:bg-surface-elevated">

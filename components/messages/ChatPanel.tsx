@@ -17,6 +17,7 @@ import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
 import { useToast } from '@/hooks/use-toast';
 
+import { Input } from '@/components/ui/Input';
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
 
 type Props = {
@@ -177,14 +178,14 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     <>
                         {sendError && <p role="alert" className="mb-2 text-tag text-danger">{sendError}</p>}
                         <form onSubmit={handleSend} className="flex gap-2">
-                            <input
+                            <Input
                                 type="text"
                                 value={draft}
                                 onChange={(e) => setDraft(e.target.value)}
                                 aria-describedby={counterId}
                                 placeholder={t('typeMessage')}
                                 aria-label={t('typeMessage')}
-                                className="flex-1 rounded-xl line bg-surface-elevated px-4 py-3 text-body md:text-body-sm focus:border-primary focus:outline-none"
+                                className="flex-1"
                             />
                             <button
                                 type="submit"

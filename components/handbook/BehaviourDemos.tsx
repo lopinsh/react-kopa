@@ -11,6 +11,7 @@ import Switch from '@/components/ui/Switch';
 import TextCounter from '@/components/ui/TextCounter';
 import { useToast, type ToastType } from '@/hooks/use-toast';
 
+import { Textarea } from '@/components/ui/Input';
 const TOAST_TYPES: ToastType[] = ['success', 'error', 'warning', 'info'];
 const SAMPLE_LIMIT = 200;
 
@@ -100,7 +101,7 @@ export function CounterDemo() {
     return (
         <div className="max-w-md">
             <label htmlFor={id} className="mb-1 block text-button-sm text-foreground">{t('sample.counterLabel')}</label>
-            <textarea id={id} rows={3} value={text} onChange={(e) => setText(e.target.value)} aria-describedby={`${id}-count`} className="w-full resize-none rounded-xl line bg-surface p-3 text-body md:text-body-sm" />
+            <Textarea id={id} rows={3} value={text} onChange={(e) => setText(e.target.value)} aria-describedby={`${id}-count`} className="resize-none" />
             <div className="mt-1 flex items-start gap-2"><TextCounter id={`${id}-count`} length={text.length} max={SAMPLE_LIMIT} /></div>
             <div className="mt-3 flex gap-2">{[50, 95, 101].map((p) => <Button key={p} size="sm" variant="secondary" onClick={() => fill(p)}>{p} %</Button>)}</div>
         </div>

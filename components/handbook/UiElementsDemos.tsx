@@ -15,6 +15,7 @@ import { langRecord, type TextLang } from '@/lib/translations';
 import type { UiSamples } from '@/lib/handbook/ui-samples';
 import type { ToastType } from '@/hooks/use-toast';
 
+import { Input } from '@/components/ui/Input';
 const noop = () => undefined;
 const TOAST_TYPES: ToastType[] = ['success', 'error', 'warning', 'info'];
 
@@ -135,12 +136,12 @@ function LanguageEditorSample({ label, englishText, initialMenuOpen = false, sta
             >
                 <label className="block text-button-sm text-foreground">
                     {t('sample.langTitle')}
-                    <input
+                    <Input
                         key={lang}
                         lang={lang}
                         value={texts[lang]}
                         onChange={(e) => setTexts((prev) => ({ ...prev, [lang]: e.target.value }))}
-                        className="mt-1.5 block h-11 w-full rounded-xl line bg-surface px-3 text-body md:text-body-sm md:h-10"
+                        className="mt-1.5"
                     />
                 </label>
             </LanguageEditor>

@@ -11,6 +11,7 @@ import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { useToast } from '@/hooks/use-toast';
 import type { TeamCandidate, TeamMember } from '@/lib/services/team.service';
 
+import { Input } from '@/components/ui/Input';
 type Pending = { kind: 'make' | 'remove'; person: TeamCandidate };
 
 const BUTTON = 'flex shrink-0 items-center gap-2 rounded-lg line bg-surface px-3 py-2 text-body-sm transition-colors hover:bg-surface-elevated disabled:opacity-50';
@@ -128,14 +129,14 @@ export default function TeamManager({ team, canManage, viewerId }: { team: TeamM
             <section aria-labelledby="team-add">
                 <h2 id="team-add" className="mb-3 text-section text-foreground">{t('addTitle')}</h2>
                 <form onSubmit={handleSearch} className="flex gap-2">
-                    <input
+                    <Input
                         type="search"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={t('searchPlaceholder')}
                         aria-label={t('searchPlaceholder')}
                         maxLength={80}
-                        className="min-w-0 flex-1 rounded-xl line bg-surface px-3 py-2 text-body md:text-body-sm text-foreground"
+                        className="min-w-0 flex-1"
                     />
                     <button type="submit" disabled={isPending} className={BUTTON}>
                         <Search className="h-4 w-4" />

@@ -18,6 +18,8 @@
 
 ## What's next
 
+- [x] **Rules that check themselves (R15, 21 Oct, committed, not pushed):** eslint guards Service Law (`@/lib/prisma`, `PrismaClient`), zod-as-value outside `lib/validations`, `no-explicit-any`/`ts-ignore`; CI builds and runs a Playwright smoke test (`npm run test:smoke`) against a seeded Postgres; `components/ui/Input` (Input, Select, Textarea) replaces ~80 hand-rolled controls and `ui:check` fails on raw ones; AGENTS.md Laws 3/7 reworded, `ActionError` named the one service error style, migration naming dropped, 150 lines a hint, "guarded by" per Law. Deferred: buttons onto `Button`, converting Group/Event/Moderation services to `ActionError`.
+
 Nothing planned (cleared 20 Oct for a fresh start; the earlier list, including R14 and R12, is in `docs/archive/execution_handoff_2026-10-20.md`). The owner sets the next work.
 
 ## Standing owner rules

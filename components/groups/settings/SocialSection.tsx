@@ -6,6 +6,7 @@ import { Globe, MessageSquare, Instagram as InstagramIcon } from 'lucide-react';
 import { type GroupFormValues } from '@/lib/validations/group';
 import SettingsSection from './SettingsSection';
 
+import { Input } from '@/components/ui/Input';
 export default function SocialSection() {
   const c_common = useTranslations('common');
     const { register } = useFormContext<GroupFormValues>();
@@ -22,10 +23,10 @@ export default function SocialSection() {
                         {c_common('social_website')}
                     </label>
                     <div className="relative group">
-                        <input
+                        <Input
                             {...register('websiteLink')}
                             placeholder="https://..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
+                            className="pl-12 pr-4"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <Globe className="h-5 w-5" />
@@ -39,10 +40,10 @@ export default function SocialSection() {
                         {c_common('social_discord')}
                     </label>
                     <div className="relative group">
-                        <input
+                        <Input
                             {...register('discordLink')}
                             placeholder="https://discord.gg/..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
+                            className="pl-12 pr-4"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <MessageSquare className="h-5 w-5" />
@@ -56,10 +57,10 @@ export default function SocialSection() {
                         {c_common('social_instagram')}
                     </label>
                     <div className="relative group">
-                        <input
+                        <Input
                             {...register('instagramLink')}
                             placeholder="https://instagram.com/..."
-                            className="w-full rounded-2xl line bg-surface-elevated/20 pl-12 pr-4 py-4 outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all weight-medium"
+                            className="pl-12 pr-4"
                         />
                         <div className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center text-foreground-muted group-focus-within:text-primary transition-colors">
                             <InstagramIcon className="h-5 w-5" />

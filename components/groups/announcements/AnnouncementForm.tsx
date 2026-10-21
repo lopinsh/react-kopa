@@ -13,10 +13,10 @@ import { OverlayCloseButton } from '@/components/ui/overlay-support';
 import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
 
+import { Input, Textarea } from '@/components/ui/Input';
 type Visibility = 'PUBLIC' | 'MEMBERS_ONLY';
 type Props = { groupId: string; locale: string; /** The choice is offered in public groups only. */ canChooseVisibility: boolean };
 
-const FIELD = 'w-full rounded-2xl line bg-surface-elevated p-4 text-body md:text-body-sm outline-none transition-all placeholder:text-foreground-muted/50 focus:border-primary focus:ring-1 focus:ring-primary';
 
 /** "Jauns ieraksts": the button for the team and, once pressed, the pop-up where the post is written. */
 export default function AnnouncementForm({ groupId, locale, canChooseVisibility }: Props) {
@@ -59,12 +59,12 @@ export default function AnnouncementForm({ groupId, locale, canChooseVisibility 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label htmlFor="announcement-title" className="mb-1.5 block text-tag text-foreground">{t('announcementTitleLabel')}</label>
-                            <input id="announcement-title" data-autofocus value={title} onChange={(e) => setTitle(e.target.value)} aria-describedby="announcement-title-count" className={FIELD} placeholder={t('announcementTitlePlaceholder')} />
+                            <Input id="announcement-title" data-autofocus value={title} onChange={(e) => setTitle(e.target.value)} aria-describedby="announcement-title-count" placeholder={t('announcementTitlePlaceholder')} />
                             <div className="mt-1 flex items-start gap-2"><TextCounter id="announcement-title-count" length={title.length} max={ANNOUNCEMENT_TITLE_MAX} /></div>
                         </div>
                         <div>
                             <label htmlFor="announcement-content" className="mb-1.5 block text-tag text-foreground">{t('announcementTextLabel')}</label>
-                            <textarea id="announcement-content" value={content} onChange={(e) => setContent(e.target.value)} aria-describedby="announcement-content-count" rows={7} className={`${FIELD} resize-none`} placeholder={t('announcementPlaceholder')} />
+                            <Textarea id="announcement-content" value={content} onChange={(e) => setContent(e.target.value)} aria-describedby="announcement-content-count" rows={7} className="resize-none" placeholder={t('announcementPlaceholder')} />
                             <div className="mt-1 flex items-start gap-2"><TextCounter id="announcement-content-count" length={content.length} max={ANNOUNCEMENT_MAX_LENGTH} /></div>
                         </div>
                         {canChooseVisibility && (

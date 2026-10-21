@@ -45,9 +45,10 @@ npm run dev                   # http://localhost:3000
 | New migration | `npm run db:migrate -- --name <snake_case_name>` (stop dev server first) |
 | Regenerate client | `npm run db:generate` (after every schema change) |
 | Seed | `npm run db:seed` |
+| Smoke test (built app on :3000, seeded DB; CI runs it) | `npm run test:smoke` |
 | E2E (live site) | `npx playwright test test-live-site.spec.ts` |
 
-There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck, lint and i18n parity.
+There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck, lint (which carries the Service, Zod and Zero-Any guards), i18n parity, `ui:check` (type, space, look and field rules), `next build` and the Playwright smoke test.
 
 ## Definition of done
 
@@ -78,13 +79,13 @@ docs/                execution_handoff.md (plan), handbook/ (values, voice, beha
 
 ## The Laws (non-negotiable)
 
-1. **Service Law** — No Prisma calls outside `lib/services/`. Services accept `locale` and return a typed context object (entity + resolved role/permissions + localized `title`), never a raw Prisma result.
-2. **Context Law** — Layouts fetch context through services; providers (e.g. `GroupProvider`) hydrate client state from it; client components read it via hooks (`useGroupContext()`). Never prop-drill `userRole`, `accentColor`, or `membershipStatus`.
-3. **Taxonomy Law (zero-flicker branding)** — Group colors derive from the L1 category. `--accent` and related CSS variables are set server-side in the layout via a `<style>` block; never resolve accent color on the client.
-4. **Defensive Coding Law** — Every form/mutation has a submission guard (`isPending`/`isSubmitting`). Validation uses shared Zod schemas from `@/lib/validations`; never duplicate schema logic.
-5. **Action Consistency Law** — Every Server Action returns `ActionResponse<T>` from `@/types/actions.ts`. Errors are uppercase codes (`UNAUTHORIZED`, `NOT_FOUND`, `JOIN_FAILED`), never English strings. Actions do auth, `revalidatePath`, and notifications; DB and permission logic live in services.
-6. **Zero-Any Law** — No `any`, `as any`, or `@ts-ignore`. Use Prisma-generated types (`Prisma.GroupGetPayload<…>`), explicit interfaces, or `unknown` + type guards.
-7. **Constants Law** — Static lists live in `@/lib/constants/index.ts`; components and Zod schemas import from there.
+1. **Service Law** — No Prisma calls outside `lib/services/`. Services accept `locale` and return a typed context object (entity + resolved role/permissions + localized `title`), never a raw Prisma result. *Guarded by: eslint `no-restricted-imports` (runtime `@/lib/prisma` / `PrismaClient` only in `lib/services/`, `lib/auth.ts`, `lib/prisma.ts`; `import type` is fine).*
+2. **Context Law** — Layouts fetch context through services; providers (e.g. `GroupProvider`) hydrate client state from it; client components read it via hooks (`useGroupContext()`). Never prop-drill `userRole`, `accentColor`, or `membershipStatus`. *Guarded by: reviewer.*
+3. **Taxonomy Law (zero-flicker branding)** — Group colors derive from the L1 category. the page-level `--accent` and related CSS variables are set server-side in the layout via a `<style>` block, so first paint is already right; never resolve the page accent on the client. A live preview (wizard, admin categorisation, slide-over) may scope `--accent` locally to its own box. *Guarded by: reviewer.*
+4. **Defensive Coding Law** — Every form/mutation has a submission guard (`isPending`/`isSubmitting`). Validation uses shared Zod schemas from `@/lib/validations`; never duplicate schema logic. Zod is imported as a value only in `lib/validations/` (`import type` elsewhere). *Guarded by: eslint `no-restricted-imports` for `zod`; the submission guard itself: reviewer.*
+5. **Action Consistency Law** — Every Server Action returns `ActionResponse<T>` from `@/types/actions.ts`. Errors are uppercase codes (`UNAUTHORIZED`, `NOT_FOUND`, `JOIN_FAILED`), never English strings. Actions do auth, `revalidatePath`, and notifications; DB and permission logic live in services. *Guarded by: the `ErrorCode` type (tsc).*
+6. **Zero-Any Law** — No `any`, `as any`, or `@ts-ignore`. Use Prisma-generated types (`Prisma.GroupGetPayload<…>`), explicit interfaces, or `unknown` + type guards. *Guarded by: eslint `no-explicit-any` and `ban-ts-comment` (errors).*
+7. **Constants Law** — Static lists live under `lib/constants/` (`index.ts` and its sibling files); components and Zod schemas import from there. *Guarded by: reviewer.*
 
 | Responsibility | Action | Service |
 |---|---|---|
@@ -102,13 +103,13 @@ type ActionResponse<T> =
 ## UI & styling
 
 - UI work follows the Design chapter of `docs/handbook/design.md`.
-- Text uses the type roles (`text-title`, `text-body`, `text-meta`, …) from the Type section; no raw `text-sm`, `leading-*`, `font-semibold` (`npm run ui:check`). Space: scale steps only (no 2.5/3.5 or `[Npx]` spacing), `px-gutter` for page sides, `gap-section` between page sections, `max-w-browse/page/focus/reading` for widths; a box (`bg-surface shadow-card`) is for one thing you act on as a unit, not for every section.
+- Text controls are `Input`, `Select`, `Textarea` from `components/ui/Input` (checked by `ui:check`; `ui-allow: <reason>` for the rare exception). Text uses the type roles (`text-title`, `text-body`, `text-meta`, …) from the Type section; no raw `text-sm`, `leading-*`, `font-semibold` (`npm run ui:check`). Space: scale steps only (no 2.5/3.5 or `[Npx]` spacing), `px-gutter` for page sides, `gap-section` between page sections, `max-w-browse/page/focus/reading` for widths; a box (`bg-surface shadow-card`) is for one thing you act on as a unit, not for every section.
 - Tailwind v4 only — no CSS modules, styled-components, or inline `style` (except setting CSS variables at layout level).
 - Use theme variables (`var(--background)`, `var(--surface)`, `var(--accent)`) and existing utilities (`shadow-premium`, `soft-press`); never hardcode colors, radii, or shadows.
 - Edges use `line`/`frame`, pills `rounded-pill`, card and control shadows `shadow-card`/`shadow-control`, filled buttons `press`: never `border border-border` or `rounded-full` on a control (dividers keep `border-border`).
 - Mobile-first. Server Components by default; add `"use client"` only for interactivity.
 - Redesign drawings (docs/development/redesign.html) are illustrations at 375 and 1280 px, not pixel specs: build the intent, fluid between and beyond (bars span the full width, content sits in the shared container, no widths copied from a drawing). Check UI at 360, 768, 1024, 1280, 1440 and 1920 px (rule: Fluid in `docs/handbook/design.md`).
-- Keep components small; consider splitting past ~150 lines.
+- Keep components small; a hint, not a rule: consider splitting when a file grows past ~150 lines and does more than one thing.
 
 ## Localization
 
@@ -118,11 +119,10 @@ type ActionResponse<T> =
 
 ## Conventions
 
-- Service errors: services that can fail with a known cause `throw new ActionError('CODE')` (from `@/types/actions`, code in the registry); actions catch with `handleActionError`. Never `throw new Error('CODE')`. Services that return `{ success, error }` result objects (Group, Event, Moderation) keep doing so; do not mix both in one method.
+- Service errors: services that can fail with a known cause `throw new ActionError('CODE')` (from `@/types/actions`, code in the registry); actions catch with `handleActionError`. Never `throw new Error('CODE')`. `ActionError` is the one error style for services. Group, Event and Moderation still return `{ success, error }` objects; convert a method to `ActionError` when you touch it, and never mix both in one method.
 - Admin guards: actions start with `requireSiteAdmin()` / `requireSiteOwner()` (`@/lib/action-utils`); pages with `requireAdminPage()` / `requireOwnerPage()` (`@/lib/admin-access`). Signed out is `UNAUTHORIZED`, signed in without the role is `FORBIDDEN`.
 - After creating or significantly updating an entity, redirect to its public page.
 - Never derive display titles from slugs in UI; use the service-provided `title`.
-- Migration names: `add_{entity}_{field}`, `remove_{entity}_{field}`, `create_{entity}_table`, `add_{relation}_relation`.
 - Migrations must work with the version still running (expand → contract). The deploy applies `prisma migrate deploy` while the old app is still serving, then swaps to the new one (blue/green, `deploy/server-deploy.sh`, health check `/api/health`). So additive changes (new table, nullable or defaulted column) ship with the code that uses them; drops and renames ship in a later deploy, once no running code reads the column (a rename = add new, copy, switch code, then drop old).
 - Reuse before creating: search `lib/services`, `lib/validations`, `components/ui`, and `messages/` for existing pieces first.
 - Don't create new docs (plans, audits, walkthroughs, reports). The living docs are `docs/execution_handoff.md` and the chapters in `docs/handbook/` (edit those, don't add parallel ones). Finished items from the handoff move to `docs/archive/` (history, not required reading). The one exception is `docs/development/build-plan.md`, the living implementation plan for the redesign releases (R1–R12): edit it, don't add parallel plans. Progress goes into `docs/execution_handoff.md` as ticked items; anything else belongs in the commit message. Screenshots and tool output are git-ignored — don't commit them.

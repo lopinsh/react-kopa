@@ -13,6 +13,7 @@ import type { PendingCategoryWithContext, ActiveL2WithAliases } from '@/lib/serv
 import TextCounter from '@/components/ui/TextCounter';
 import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
+import { Input, Select } from '@/components/ui/Input';
 type Props = {
     item: PendingCategoryWithContext;
     canonicalOptions: ActiveL2WithAliases[];
@@ -162,40 +163,36 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
-                            <input
+                            <Input
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => { setNameEn(e.target.value); setSlugEn(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
-                            <input
+                            <Input
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => { setNameLv(e.target.value); setSlugLv(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('slugEn')}</label>
-                            <input
+                            <Input
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('slugLv')}</label>
-                            <input
+                            <Input
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
@@ -218,10 +215,10 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
             {activeAction === 'merge' && (
                 <div className="mt-4 p-4 bg-surface-elevated rounded-lg line">
                     <label className="block text-tag text-foreground-muted mb-2">{t('mergeCanonicalTitle')}</label>
-                    <select
+                    <Select
                         value={mergeIntoId}
                         onChange={e => setMergeIntoId(e.target.value)}
-                        className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm mb-4"
+                        className="mb-4"
                     >
                         <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (
@@ -229,7 +226,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 {pickTitle(opt.translations, 'en', opt.slug)}
                             </option>
                         ))}
-                    </select>
+                    </Select>
 
                     {mergeIntoId && (
                         <div className="mb-4">

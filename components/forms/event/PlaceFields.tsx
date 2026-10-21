@@ -3,14 +3,14 @@
 import { useMemo, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useLocale, useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
-import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
+import Field from '@/components/forms/event/Field';
 import Switch from '@/components/ui/Switch';
 import { useCities } from '@/components/providers/CitiesContext';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { cityLabel } from '@/lib/city-label';
 import type { EventFormData } from '@/lib/validations/event';
 
+import { Input, Select } from '@/components/ui/Input';
 /**
  * Where an event happens (AR-57): its city (starts as the group's), "Tiešsaistē", and the address,
  * which turns into the meeting link when the event is online.
@@ -45,15 +45,14 @@ export default function PlaceFields() {
                 hint={t('fieldCityHint')}
                 error={errors.city ? t(errors.city.message as 'CITY_REQUIRED') : undefined}
             >
-                <select
+                <Select
                     id="event-city"
                     {...register('city')}
                     aria-describedby="event-city-hint"
-                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.city))}
                 >
                     {!city && <option value="" disabled>{wt('fieldCityPlaceholder')}</option>}
                     {options.map(([slug, name]) => <option key={slug} value={slug}>{name}</option>)}
-                </select>
+                </Select>
             </Field>
 
             <div>
@@ -75,7 +74,7 @@ export default function PlaceFields() {
                 hint={isOnline ? undefined : t('fieldLocationHint')}
                 error={errors.location ? t(errors.location.message as 'LOCATION_REQUIRED') : undefined}
             >
-                <input
+                <Input
                     id="event-location"
                     type="text"
                     inputMode={isOnline ? 'url' : undefined}
@@ -83,7 +82,6 @@ export default function PlaceFields() {
                     placeholder={isOnline ? t('fieldLinkPlaceholder') : t('fieldLocationPlaceholder')}
                     aria-invalid={errors.location ? true : undefined}
                     aria-describedby={errors.location || !isOnline ? 'event-location-hint' : undefined}
-                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.location))}
                 />
             </Field>
         </>

@@ -13,6 +13,7 @@ import { DEFAULT_SECTION_TITLES } from '@/lib/constants';
 import { TEXT_LANGS, langRecord, type TextLang } from '@/lib/translations';
 import type { EditableSection } from '@/lib/services/group.service';
 
+import { Input } from '@/components/ui/Input';
 type SectionText = { title: string; content: string };
 
 /** A section in the editor; `savedTexts` is the last saved text (to find unsaved edits), `isNew` until its first save. */
@@ -94,7 +95,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                     <div className="grid gap-6 md:grid-cols-2">
                         <div>
                             <label htmlFor={titleId} className="mb-1.5 block text-tag text-foreground-muted">{t('fieldTitle')}</label>
-                            <input
+                            <Input
                                 key={`title-${lang}`}
                                 id={titleId}
                                 type="text"
@@ -104,7 +105,7 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                                 placeholder={t('fieldTitlePlaceholder')}
                                 aria-describedby={counterId}
                                 aria-invalid={missing || undefined}
-                                className="w-full rounded-lg line bg-surface px-3 py-2 text-body md:text-body-sm focus:border-primary focus:outline-none aria-[invalid]:border-danger/40"
+                                className="aria-[invalid]:border-danger/40"
                             />
                             <div className="mt-1 flex items-start gap-2">
                                 {missing && <p role="alert" className="text-meta text-danger">{tErrors('TITLE_REQUIRED')}</p>}

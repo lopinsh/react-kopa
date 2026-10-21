@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import L1Aliases from './L1Aliases';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
 
+import { Input } from '@/components/ui/Input';
 type Props = {
     l1: L1Category;
     onNodeSelect: (node: SelectedTaxonomyNode) => void;
@@ -108,11 +109,11 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     onChange={e => setColor(e.target.value)}
                                     className="h-10 w-14 cursor-pointer rounded-md bg-transparent border-0 p-0"
                                 />
-                                <input
+                                <Input
                                     type="text"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="flex-1 bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
+                                    className="flex-1"
                                     pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                                 />
                             </div>
@@ -167,21 +168,19 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
-                                <input
+                                <Input
                                     type="text"
                                     value={newNameEn}
                                     onChange={e => setNewNameEn(e.target.value)}
-                                    className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>
                             <div>
                                 <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
-                                <input
+                                <Input
                                     type="text"
                                     value={newNameLv}
                                     onChange={e => setNewNameLv(e.target.value)}
-                                    className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>

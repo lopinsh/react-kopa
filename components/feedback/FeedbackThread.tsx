@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
 
+import { Textarea } from '@/components/ui/Input';
 /** The replies under a note (oldest first) and an input to add another. The original text lives outside, untouched. */
 export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem; onChanged: (note: FeedbackItem) => void }) {
     const t = useTranslations('feedbackMode');
@@ -68,7 +69,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
             ) : (
                 <div>
                 <div className="flex items-end gap-2">
-                    <textarea
+                    <Textarea
                         autoFocus
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -77,7 +78,7 @@ export default function FeedbackThread({ note, onChanged }: { note: FeedbackItem
                         rows={2}
                         placeholder={t('threadPlaceholder')}
                         aria-label={t('reply')}
-                        className="min-w-0 flex-1 resize-none rounded-xl line bg-surface-elevated px-3 py-2 text-body-sm text-foreground"
+                        className="min-w-0 flex-1 resize-none"
                     />
                     <button
                         type="button"

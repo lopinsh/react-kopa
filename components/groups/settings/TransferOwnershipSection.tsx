@@ -8,6 +8,7 @@ import { useRouter } from '@/i18n/routing';
 import { useToast } from '@/hooks/use-toast';
 import SettingsSection from './SettingsSection';
 
+import { Select } from '@/components/ui/Input';
 type Candidate = { userId: string; name: string; role: 'ADMIN' | 'MEMBER' };
 
 type Props = {
@@ -56,12 +57,11 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                             <label htmlFor="transfer-target" className="ml-1 text-tag text-foreground-muted">
                                 {t('transferSelectLabel')}
                             </label>
-                            <select
+                            <Select
                                 id="transfer-target"
                                 value={targetId}
                                 onChange={(e) => { setTargetId(e.target.value); setConfirming(false); }}
                                 disabled={isPending}
-                                className="w-full rounded-2xl line bg-surface-elevated/20 px-4 py-4 weight-medium outline-none transition-all focus:border-primary"
                             >
                                 <option value="">{t('transferSelectPlaceholder')}</option>
                                 {candidates.map(c => (
@@ -69,7 +69,7 @@ export default function TransferOwnershipSection({ groupId, locale, candidates }
                                         {c.role === 'ADMIN' ? `${c.name} (${tc('role_admin')})` : c.name}
                                     </option>
                                 ))}
-                            </select>
+                            </Select>
                         </div>
 
                         {!confirming ? (

@@ -7,6 +7,7 @@ import type { L1Category } from '@/lib/services/taxonomy.service';
 import { addAlias, deleteAlias } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
 
+import { Input, Select } from '@/components/ui/Input';
 /** The aliases of a top-level category: list, remove, add. */
 export default function L1Aliases({ l1 }: { l1: L1Category }) {
     const t = useTranslations('admin.taxonomy.slideover');
@@ -82,23 +83,23 @@ export default function L1Aliases({ l1 }: { l1: L1Category }) {
                     )}
 
                     <form onSubmit={handleAddAlias} className="flex flex-col sm:flex-row gap-2 mt-4 items-start sm:items-center">
-                        <input
+                        <Input
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
+                            className="flex-1"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
-                            <select
+                            <Select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
+                                className="flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>
                                 <option value="lv">lv</option>
-                            </select>
+                            </Select>
                             <button
                                 type="submit"
                                 disabled={isPending || !aliasValue.trim()}

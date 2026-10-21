@@ -1,13 +1,6 @@
 import type { ReactNode } from 'react';
 import { clsx } from 'clsx';
 
-/** The input look of the event form: 12 px radius, 44 px tall on phones, 40 from md. */
-export const FIELD_INPUT = 'block w-full h-11 rounded-xl border bg-background px-3 text-body md:text-body-sm focus:outline-none md:h-10';
-
-export function fieldBorder(invalid: boolean): string {
-    return invalid ? 'border-danger/60' : 'border-border focus:border-primary';
-}
-
 type Props = {
     /** The id of the input; the help or error line is `${id}-hint` (point aria-describedby at it). */
     id: string;

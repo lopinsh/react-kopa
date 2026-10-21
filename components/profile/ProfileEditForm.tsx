@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { Loader2 } from 'lucide-react';
 
+import { Input, Textarea } from '@/components/ui/Input';
 type Props = {
     user: {
         id: string;
@@ -27,7 +28,6 @@ type Props = {
     };
 };
 
-const INPUT = 'w-full rounded-xl line bg-surface px-4 py-3 text-body text-foreground placeholder:text-foreground-muted outline-none transition-all focus:border-primary';
 
 /** Labot profilu: name, username, picture, about you and places. The privacy switches are in Iestatījumi, not here (OD-26). */
 export default function ProfileEditForm({ user }: Props) {
@@ -98,7 +98,7 @@ export default function ProfileEditForm({ user }: Props) {
 
             <div className="space-y-2">
                 <label htmlFor="name" className="block text-button-sm text-foreground">{t('fieldName')}</label>
-                <input id="name" {...form.register('name')} aria-describedby="name-count" className={INPUT} />
+                <Input id="name" {...form.register('name')} aria-describedby="name-count" />
                 <div className="flex items-start gap-2">{fieldError(errors.name?.message)}<TextCounter id="name-count" length={(watchedName ?? '').length} max={USER_NAME_MAX} /></div>
             </div>
 
@@ -106,32 +106,32 @@ export default function ProfileEditForm({ user }: Props) {
                 <label htmlFor="username" className="block text-button-sm text-foreground">{tCommon('username')}</label>
                 <div className="relative">
                     <span className="absolute left-4 top-3 weight-strong text-foreground-muted">@</span>
-                    <input id="username" {...form.register('username')} className={`${INPUT} pl-10`} />
+                    <Input id="username" {...form.register('username')} className="pl-10" />
                 </div>
                 {fieldError(errors.username?.message)}
             </div>
 
             <div className="space-y-2">
                 <label htmlFor="bio" className="block text-button-sm text-foreground">{t('edit.bio')}</label>
-                <textarea
+                <Textarea
                     id="bio"
                     {...form.register('bio')}
                     aria-describedby="bio-count"
                     placeholder={t('edit.bioPlaceholder')}
                     rows={4}
-                    className={`${INPUT} resize-none`}
+                    className="resize-none"
                 />
                 <div className="flex items-start gap-2">{fieldError(errors.bio?.message)}<TextCounter id="bio-count" length={(watchedBio ?? '').length} max={USER_BIO_MAX} /></div>
             </div>
 
             <div className="space-y-2">
                 <label htmlFor="cities" className="block text-button-sm text-foreground">{t('edit.citiesLabel')}</label>
-                <input id="cities" {...form.register('cities')} placeholder={t('edit.citiesPlaceholder')} className={INPUT} />
+                <Input id="cities" {...form.register('cities')} placeholder={t('edit.citiesPlaceholder')} />
             </div>
 
             <div className="space-y-2">
                 <label htmlFor="image" className="block text-button-sm text-foreground">{t('fieldImage')}</label>
-                <input id="image" {...form.register('image')} placeholder="https://..." className={INPUT} />
+                <Input id="image" {...form.register('image')} placeholder="https://..." />
                 {fieldError(errors.image?.message)}
             </div>
 

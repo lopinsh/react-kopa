@@ -3,19 +3,15 @@
 import { useEffect, useState, useTransition } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
 import { Clock, Plus } from 'lucide-react';
 import { suggestCity } from '@/actions/city-actions';
 import { useCities } from '@/components/providers/CitiesContext';
 import { cityLabel } from '@/lib/city-label';
 import { type GroupFormValues } from '@/lib/validations/group';
 
+import { Input, Select } from '@/components/ui/Input';
 type Props = {
     id: string;
-    /** Classes for the select. */
-    selectClassName: string;
-    /** Classes for the text input (suggestion). */
-    inputClassName: string;
     autoFocus?: boolean;
 };
 
@@ -23,7 +19,7 @@ type Props = {
  * City select for the group wizard and the group settings. Besides the approved cities it lets the person
  * suggest one that is missing: the group is saved with it right away and a site admin approves it later.
  */
-export default function CityField({ id, selectClassName, inputClassName, autoFocus }: Props) {
+export default function CityField({ id, autoFocus }: Props) {
     const t = useTranslations('wizard');
     const tCities = useTranslations('cities');
     const tErrors = useTranslations('errors');
@@ -72,17 +68,17 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
 
     return (
         <div>
-            <select
+            <Select
                 id={id}
                 autoFocus={autoFocus}
                 {...register('city')}
-                className={clsx(selectClassName, errors.city && 'border-danger/40')}
+                aria-invalid={errors.city ? true : undefined}
             >
                 <option value="">{t('fieldCityPlaceholder')}</option>
                 {options.map((c) => (
                     <option key={c.slug} value={c.slug}>{c.name}</option>
                 ))}
-            </select>
+            </Select>
 
             {isWaiting && (
                 <p className="mt-1.5 flex items-start gap-1.5 text-meta text-foreground-muted">
@@ -93,7 +89,7 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
 
             {open ? (
                 <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-                    <input
+                    <Input
                         type="text"
                         value={draft}
                         onChange={(e) => setDraft(e.target.value)}
@@ -107,7 +103,6 @@ export default function CityField({ id, selectClassName, inputClassName, autoFoc
                         aria-label={t('citySuggestPlaceholder')}
                         maxLength={60}
                         autoFocus
-                        className={inputClassName}
                     />
                     <div className="flex gap-2">
                         <button

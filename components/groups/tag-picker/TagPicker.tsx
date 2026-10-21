@@ -76,7 +76,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
 
                 <div className="flex items-center gap-2">
                     <Search className="h-4 w-4 shrink-0 text-foreground-muted" strokeWidth={1.75} />
-                    <input
+                    <input /* ui-allow: sits inside the wrapper that carries the edge and ring */
                         ref={inputRef}
                         type="text"
                         className="flex-1 bg-transparent text-body md:text-body-sm text-foreground placeholder:text-foreground-muted focus:outline-none"

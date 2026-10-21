@@ -2,15 +2,15 @@
 
 import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
 import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
-import Field, { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
+import Field from '@/components/forms/event/Field';
 import EventTimeFields from '@/components/forms/event/EventTimeFields';
 import PlaceFields from '@/components/forms/event/PlaceFields';
 import { EVENT_TITLE_MAX, type EventFormData } from '@/lib/validations/event';
 import type { TextLang } from '@/lib/translations';
 
+import { Input } from '@/components/ui/Input';
 type Props = {
     lang: TextLang;
     /** Bumped when text is copied in, so the editor reloads its value. */
@@ -34,7 +34,7 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
                 error={titleError ? t(titleError.message as 'INVALID_URL') : undefined}
                 counter={<TextCounter id="event-title-count" length={(texts?.[lang]?.title ?? '').length} max={EVENT_TITLE_MAX} />}
             >
-                <input
+                <Input
                     id="event-title"
                     key={`title-${lang}`}
                     type="text"
@@ -43,7 +43,6 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
                     aria-describedby={titleError ? 'event-title-hint event-title-count' : 'event-title-count'}
                     aria-invalid={titleError ? true : undefined}
                     placeholder={t('fieldNamePlaceholder')}
-                    className={clsx(FIELD_INPUT, fieldBorder(!!titleError))}
                 />
             </Field>
 
@@ -59,14 +58,13 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
             </Field>
 
             <Field id="event-banner" label={t('fieldBannerImage')} error={errors.bannerImage ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}>
-                <input
+                <Input
                     id="event-banner"
                     type="text"
                     {...register('bannerImage')}
                     placeholder={t('fieldBannerImagePlaceholder')}
                     aria-invalid={errors.bannerImage ? true : undefined}
                     aria-describedby={errors.bannerImage ? 'event-banner-hint' : undefined}
-                    className={clsx(FIELD_INPUT, fieldBorder(!!errors.bannerImage))}
                 />
             </Field>
 

@@ -2,13 +2,13 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
 import { Type, Image as ImageIcon } from 'lucide-react';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
 import AboutField from '@/components/groups/create-wizard/AboutField';
 import type { TextLang } from '@/lib/translations';
 
+import { Input } from '@/components/ui/Input';
 interface Props {
     /** The language of "Par mums" on screen. */
     lang: TextLang;
@@ -28,17 +28,14 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     {t('fieldName')}
                     <span className="text-danger">*</span>
                 </label>
-                <input
+                <Input
                     id="group-name"
                     type="text"
                     autoFocus
                     {...register('name')}
                     aria-describedby="group-name-count"
                     placeholder={t('fieldNamePlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.name ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    aria-invalid={errors.name ? true : undefined}
                 />
                 <div className="mt-1 flex items-start gap-2">
                     {errors.name && <p className="text-meta text-danger">{t(errors.name.message as 'NAME_TOO_SHORT')}</p>}
@@ -52,16 +49,13 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     {t('fieldLookingFor')}
                     <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
                 </label>
-                <input
+                <Input
                     id="group-looking-for"
                     type="text"
                     {...register('lookingFor')}
                     aria-describedby="group-looking-for-count group-looking-for-hint"
                     placeholder={t('fieldLookingForPlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.lookingFor ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    aria-invalid={errors.lookingFor ? true : undefined}
                 />
                 <div className="mt-1 flex items-start gap-2">
                     {errors.lookingFor
@@ -81,15 +75,12 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
                     {t('fieldBannerImage')}
                     <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
                 </label>
-                <input
+                <Input
                     id="group-banner"
                     type="text"
                     {...register('bannerImage')}
                     placeholder={t('fieldBannerImagePlaceholder')}
-                    className={clsx(
-                        'w-full rounded-xl border bg-background px-3 py-3 text-body md:text-body-sm text-foreground placeholder:text-foreground-muted transition-shadow focus:outline-none',
-                        errors.bannerImage ? 'border-danger/40' : 'border-border focus:border-primary'
-                    )}
+                    aria-invalid={errors.bannerImage ? true : undefined}
                 />
                 {errors.bannerImage && <p className="mt-1 text-meta text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
                 <p className="mt-1 text-meta text-foreground-muted">{t('fieldBannerImageHint')}</p>

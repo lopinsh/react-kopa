@@ -3,6 +3,7 @@
 import { useId, useState } from 'react';
 import { hexColorSchema } from '@/lib/validations/theme';
 
+import { Input } from '@/components/ui/Input';
 type Props = { label: string; value: string; disabled?: boolean; onChange: (hex: string) => void };
 
 /** A colour picker plus a hex field; the hex field accepts typing and only reports valid 6-digit values. */
@@ -24,7 +25,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
             />
             <label htmlFor={id} className="min-w-0 flex-1 text-button-sm text-foreground">
                 {label}
-                <input
+                <Input
                     id={id}
                     type="text"
                     value={text}
@@ -37,7 +38,7 @@ export default function ColorField({ label, value, disabled, onChange }: Props) 
                         if (hexColorSchema.safeParse(next).success) onChange(next.toLowerCase());
                     }}
                     onBlur={() => setDraft(null)}
-                    className="mt-1 block w-full rounded-lg line bg-surface px-3 py-1.5 font-mono text-body md:text-body-sm text-foreground aria-[invalid=true]:border-danger/40"
+                    className="mt-1 py-1.5 font-mono"
                 />
             </label>
         </div>

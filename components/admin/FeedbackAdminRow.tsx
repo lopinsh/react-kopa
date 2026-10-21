@@ -11,6 +11,7 @@ import FeedbackThread from '@/components/feedback/FeedbackThread';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import { useDateFormatter } from '@/lib/date-format';
 
+import { Select } from '@/components/ui/Input';
 /** One note on the admin feedback page: what was said and where, plus status and reply. */
 export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem }) {
     const t = useTranslations('feedbackMode');
@@ -47,15 +48,15 @@ export default function FeedbackAdminRow({ note: initial }: { note: FeedbackItem
                     {note.path}
                 </Link>
                 <div className="ml-auto flex items-center gap-1.5">
-                    <select
+                    <Select
                         value={note.status}
                         disabled={isPending}
                         onChange={(e) => handleStatus(e.target.value as FeedbackStatusValue)}
                         aria-label={tAdmin('status')}
-                        className="rounded-lg line bg-surface-elevated px-2 py-1 text-body md:text-tag text-foreground disabled:opacity-50"
+                        className="md:text-tag disabled:opacity-50"
                     >
                         {FEEDBACK_STATUSES.map((s) => <option key={s} value={s}>{t(`status.${s}`)}</option>)}
-                    </select>
+                    </Select>
                     <FeedbackDeleteButton
                         id={note.id}
                         iconOnly

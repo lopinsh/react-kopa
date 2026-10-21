@@ -6,7 +6,6 @@ import Modal from '@/components/ui/Modal';
 import { OverlayCloseButton } from '@/components/ui/overlay-support';
 import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
-import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { getTranslationEntry, suggestTranslation } from '@/actions/translation-actions';
 import { useToast } from '@/hooks/use-toast';
@@ -14,6 +13,7 @@ import type { TranslationEntry } from '@/lib/services/message-override.service';
 import { MESSAGE_LANGS, type MessageLang } from '@/lib/translate-mode/messages';
 import { validateMessage, MESSAGE_OVERRIDE_MAX, type MessageIssue } from '@/lib/validations/message-override';
 
+import { Textarea } from '@/components/ui/Input';
 type Props = {
     messageKey: string;
     onClose: () => void;
@@ -115,7 +115,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                             <span className="rounded-pill bg-warning/10 px-2 py-0.5 text-tag text-warning">{t('waiting')}</span>
                                         )}
                                     </label>
-                                    <textarea
+                                    <Textarea
                                         id={`tm-${lang}`}
                                         lang={lang}
                                         value={values[lang]}
@@ -123,10 +123,7 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                                         rows={6}
                                         aria-describedby={`tm-count-${lang}`}
                                         aria-invalid={!!issue}
-                                        className={clsx(
-                                            'w-full flex-1 resize-y rounded-xl border bg-surface-elevated px-4 py-3 font-mono text-body md:text-body-sm text-foreground outline-none focus:border-primary/50',
-                                            issue ? 'border-danger/40' : 'border-border'
-                                        )}
+                                        className="flex-1 resize-y font-mono"
                                     />
                                     <div className="mt-1 flex items-start gap-2">
                                         {issue && <p role="alert" className="text-meta text-danger">{describe(issue)}</p>}

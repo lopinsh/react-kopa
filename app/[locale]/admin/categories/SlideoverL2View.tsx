@@ -11,6 +11,7 @@ import type { SelectedTaxonomyNode } from './TaxonomyTree';
 import TextCounter from '@/components/ui/TextCounter';
 import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
+import { Input, Select } from '@/components/ui/Input';
 type Props = {
     l2: ActiveL2WithAliases;
     categories: ActiveL2WithAliases[];
@@ -124,21 +125,19 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
-                            <input
+                            <Input
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
-                            <input
+                            <Input
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -146,20 +145,18 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                     <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('slugEn')}</label>
-                            <input
+                            <Input
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
                             <label className="block text-tag text-foreground-muted mb-1">{tFields('slugLv')}</label>
-                            <input
+                            <Input
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
@@ -212,23 +209,23 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                     )}
 
                     <form onSubmit={handleAddAlias} className="flex flex-col sm:flex-row gap-2 mt-4 items-start sm:items-center">
-                        <input
+                        <Input
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
+                            className="flex-1"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
-                            <select
+                            <Select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
+                                className="flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>
                                 <option value="lv">lv</option>
-                            </select>
+                            </Select>
                             <button
                                 type="submit"
                                 disabled={isPending || !aliasValue.trim()}

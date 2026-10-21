@@ -1,15 +1,14 @@
 'use client';
 
 import { useId, useRef, useState } from 'react';
-import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import { Calendar } from 'lucide-react';
 import { formatDateText, parseDateText } from '@/lib/local-datetime';
-import { FIELD_INPUT, fieldBorder } from '@/components/forms/event/Field';
 import MonthGrid from '@/components/ui/MonthGrid';
 import { isDayKey, monthOf } from '@/lib/discovery-dates';
 import { useClickOutside } from '@/hooks/useClickOutside';
 
+import { Input } from '@/components/ui/Input';
 type Props = {
     id?: string;
     /** "YYYY-MM-DD", or '' when empty. */
@@ -56,7 +55,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
     return (
         <div ref={rootRef} className="relative">
             <div className="flex gap-2">
-                <input
+                <Input
                     id={id}
                     type="text"
                     inputMode="numeric"
@@ -72,9 +71,7 @@ export default function DateField({ id, value, onChange, invalid, disabled }: Pr
                         if (parsed) setText(formatDateText(parsed));
                     }}
                     onKeyDown={(e) => { if (e.key === 'Escape') setOpen(false); }}
-                    className={clsx(
-                        FIELD_INPUT, 'min-w-0 flex-1 tabular-nums disabled:opacity-60', fieldBorder(!!invalid || badText)
-                    )}
+                    className="min-w-0 flex-1 tabular-nums"
                 />
                 <button
                     type="button"

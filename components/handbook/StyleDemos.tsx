@@ -7,6 +7,7 @@ import FilterChip from '@/components/ui/FilterChip';
 import { THEME_PRESETS, THEME_STYLE_KEYS } from '@/lib/constants';
 import { themeSampleVars } from '@/lib/theme/css';
 
+import { Input } from '@/components/ui/Input';
 const VARIANTS: ButtonVariant[] = ['primary', 'secondary', 'quiet', 'danger'];
 const PALETTE = THEME_PRESETS.moss;
 
@@ -30,7 +31,7 @@ export function StyleDemos() {
                         <FilterChip active={false} onClick={() => undefined}>{t('sample.link')}</FilterChip>
                         <Badge>{t('sample.badge')}</Badge>
                     </div>
-                    <input readOnly tabIndex={-1} value={t('sample.heading')} className="mt-4 block h-11 w-full rounded-lg line bg-background px-3 text-body md:text-body-sm" />
+                    <Input readOnly tabIndex={-1} value={t('sample.heading')} className="mt-4" />
                     <div className="mt-4 rounded-2xl bg-surface p-4 shadow-card frame">
                         <p className="text-body-sm text-foreground-muted">{t('sample.body')}</p>
                     </div>

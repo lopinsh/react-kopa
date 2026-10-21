@@ -12,9 +12,9 @@ import type { CityRow } from '@/lib/services/city.service';
 import TextCounter from '@/components/ui/TextCounter';
 import { CITY_NAME_MAX } from '@/lib/validations/city';
 
+import { Input } from '@/components/ui/Input';
 type Props = { cities: CityRow[] };
 
-const INPUT = 'w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm';
 
 /** The approved cities: rename, remove an unused one, add a new one. Pending suggestions are in the "needs review" card above. */
 export default function CitiesSection({ cities }: Props) {
@@ -60,12 +60,12 @@ export default function CitiesSection({ cities }: Props) {
             <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                     <label className="mb-1 block text-tag text-foreground-muted">{tFields('nameLv')}</label>
-                    <input type="text" aria-describedby={`${uid}-lv`} value={nameLv} onChange={(e) => setNameLv(e.target.value)} className={INPUT} />
+                    <Input type="text" aria-describedby={`${uid}-lv`} value={nameLv} onChange={(e) => setNameLv(e.target.value)} />
                     <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
                     <label className="mb-1 block text-tag text-foreground-muted">{tFields('nameEn')}</label>
-                    <input type="text" aria-describedby={`${uid}-en`} value={nameEn} onChange={(e) => setNameEn(e.target.value)} className={INPUT} />
+                    <Input type="text" aria-describedby={`${uid}-en`} value={nameEn} onChange={(e) => setNameEn(e.target.value)} />
                     <TextCounter id={`${uid}-en`} length={nameEn.length} max={CITY_NAME_MAX} className="mt-1 text-right" />
                 </div>
             </div>

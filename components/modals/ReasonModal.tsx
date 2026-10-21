@@ -10,6 +10,7 @@ import { isOverLimit } from '@/lib/text-limit';
 import { MODERATION_REASON_MAX } from '@/lib/validations/moderation';
 import type { ActionResponse } from '@/types/actions';
 
+import { Textarea } from '@/components/ui/Input';
 type Props = {
     onClose: () => void;
     icon: ReactNode;
@@ -74,14 +75,14 @@ export default function ReasonModal({
             <p className="mb-4 text-body-sm text-foreground">{description}</p>
 
             <label className="mb-1 block text-button-sm text-foreground" htmlFor={fieldId}>{reasonLabel}</label>
-            <textarea
+            <Textarea
                 id={fieldId}
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 aria-describedby={`${fieldId}-count`}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full resize-none rounded-xl line bg-surface-elevated px-4 py-3 text-body md:text-body-sm text-foreground outline-none focus:border-danger/40"
+                className="resize-none"
             />
             <div className="mt-1 flex items-start gap-2">
                 <p className="text-meta text-foreground-muted">{hint}</p>

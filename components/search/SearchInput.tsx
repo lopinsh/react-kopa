@@ -36,7 +36,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
         <form action={`/${locale}`} role="search" data-ui={UI.searchBar} onSubmit={(e) => { e.preventDefault(); onEnter(); }} className={pill}>
             <Search aria-hidden className="size-4 shrink-0 text-foreground-muted" />
             <label htmlFor={id} className="sr-only">{t('search')}</label>
-            <input
+            <input /* ui-allow: sits inside the wrapper that carries the edge and ring */
                 ref={inputRef} id={id} type="search" name="q" value={value} maxLength={SEARCH_WORD_MAX} placeholder={t('searchPlaceholder')}
                 onChange={(e) => onChange(e.target.value)} onKeyDown={onKeyDown} onFocus={onFocus} onMouseDown={onMouseDown}
                 enterKeyHint="search" autoComplete="off" autoFocus={autoFocus} data-autofocus={autoFocus ? true : undefined}

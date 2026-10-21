@@ -7,6 +7,8 @@
 // no hex/rgb()/hsl()/oklch() literals, no Tailwind palette colours (bg-red-500, text-white, bg-black/40 ...), no dark: variants (the look sets both modes),
 // no bare rounded / rounded-sm / rounded-[..] (use rounded-md…4xl, rounded-pill, rounded-menu, rounded-item), no raw shadows (shadow-sm…2xl, shadow, shadow-[..]; use shadow-card/control/premium/dialog),
 // and rounded-full only on circles (size-N, equal h-N w-N, aspect-square). A line may opt out with `ui-allow: <reason>` (comment or string), e.g. an OAuth brand colour.
+// Field rule (strict, R15): a text control is Input/Select/Textarea from components/ui/Input; a raw <input|select|textarea> outside components/ui is a failure
+// unless it is a native checkbox/radio/color/hidden/file/range, or the line (or one of the 3 above) says `ui-allow: <reason>`.
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -37,6 +39,8 @@ const lookCounts = Object.fromEntries(Object.keys(LOOK_RULES).map((k) => [k, new
 const lookHits = [];
 const spaceCounts = Object.fromEntries(Object.keys(SPACE_RULES).map((k) => [k, new Map()]));
 const counts = new Map();
+const NATIVE = /type=["'](?:checkbox|radio|color|hidden|file|range)["']/;
+const fieldHits = [];
 const walk = (dir) => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
         const p = path.join(dir, e.name);
@@ -55,6 +59,14 @@ const walk = (dir) => {
                     if (c) { lookCounts[k].set(f, (lookCounts[k].get(f) ?? 0) + c); lookHits.push(`${f}:${i + 1}  [${k.slice(0, 12)}]  ${line.trim().slice(0, 110)}`); }
                 }
             });
+            if (!f.startsWith('components/ui/')) {
+                for (const m of src.matchAll(/<(?:input|select|textarea)\b/g)) {
+                    const tag = src.slice(m.index, m.index + 700).split(/\/>/)[0];
+                    const line = src.slice(0, m.index).split('\n').length - 1;
+                    if (NATIVE.test(tag) || tag.includes('ui-allow') || lines.slice(Math.max(0, line - 3), line + 1).some((l) => l.includes('ui-allow'))) continue;
+                    fieldHits.push(`${f}:${line + 1}  ${lines[line].trim().slice(0, 100)}`);
+                }
+            }
             for (const [k, re] of Object.entries(SPACE_RULES)) {
                 const c = (src.match(re) ?? []).length;
                 if (c) spaceCounts[k].set(f, c);
@@ -88,6 +100,8 @@ for (const [k, m] of Object.entries(lookCounts)) {
     console.log(`
 ${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
 }
+console.log(`\n${fieldHits.length ? 'FAIL' : 'ok'}: raw <input|select|textarea> (use components/ui/Input): ${fieldHits.length}`);
+for (const h of fieldHits) console.log(`      ${h}`);
 if (process.argv.includes('--hits')) for (const h of lookHits) console.log(h);
 const spaceTotal = Object.values(spaceCounts).reduce((a, m) => a + [...m.values()].reduce((x, y) => x + y, 0), 0);
-if (strict && (total || spaceTotal || lookTotal)) process.exit(1);
+if (strict && (total || spaceTotal || lookTotal || fieldHits.length)) process.exit(1);

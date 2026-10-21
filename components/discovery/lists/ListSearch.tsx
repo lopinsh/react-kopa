@@ -17,7 +17,7 @@ export default function ListSearch({ value, onChange, label, autoFocus = false }
         <div className="flex items-center gap-2 border-b border-border px-3 pb-2 pt-1.5">
             <Search aria-hidden="true" className="size-[15px] shrink-0 text-foreground-muted" />
             <label htmlFor={id} className="sr-only">{label}</label>
-            <input
+            <input /* ui-allow: sits inside the wrapper that carries the edge and ring */
                 id={id}
                 type="search"
                 value={value}

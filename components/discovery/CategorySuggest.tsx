@@ -15,6 +15,7 @@ import { submitPendingTagSchema } from '@/lib/validations/taxonomy';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { CATEGORY_NAME_MAX } from '@/lib/constants';
 
+import { Input, Select } from '@/components/ui/Input';
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
 
 /** "Ieteikt jaunu kategoriju": the typed word goes to the admins as a waiting Veids of the chosen Tēma. Signed out: the sign-in pop-up. */
@@ -57,15 +58,15 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
                 <p className="text-body-sm text-foreground-muted">{t('suggestText')}</p>
                 <div>
                     <label htmlFor="suggest-name" className="mb-1 block text-button-sm">{t('suggestName')}</label>
-                    <input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="h-11 w-full rounded-xl bg-surface px-3 text-body md:text-body-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary" />
+                    <Input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]" />
                     <TextCounter id="suggest-count" length={name.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                 </div>
                 <div>
                     <label htmlFor="suggest-topic" className="mb-1 block text-button-sm">{t('topic')}</label>
-                    <select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="h-11 w-full rounded-xl bg-surface px-3 text-body md:text-body-sm ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] focus:outline-none focus:ring-2 focus:ring-primary">
+                    <Select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]">
                         <option value="">—</option>
                         {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
-                    </select>
+                    </Select>
                     {invalid && !topicId && <p role="alert" className="mt-1 text-meta text-danger">{t('suggestPickTopic')}</p>}
                 </div>
                 <div className="mt-1 flex justify-end gap-2">

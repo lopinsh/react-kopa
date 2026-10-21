@@ -66,7 +66,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
             <div className="mt-1 pt-1 border-t border-border/50">
                 {inlineWildcardParentId === l1.id ? (
                     <div className="flex items-center gap-2 rounded-lg bg-surface-elevated p-2 line mt-1">
-                        <input
+                        <input /* ui-allow: sits inside the wrapper that carries the edge and ring */
                             autoFocus
                             className="w-full bg-transparent text-body md:text-body-sm focus:outline-none text-foreground"
                             placeholder={t('nameOfSubtopicPlaceholder')}
