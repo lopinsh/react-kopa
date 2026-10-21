@@ -30,6 +30,17 @@ export const CATEGORY_TONES: Record<CategoryToneSlug, { light: string; dark: str
     education: { light: '#86650E', dark: '#D0A535' },
 };
 
+/** The four role tags (Īpašnieks, Mod, Biedrs, Gaida) get one colour each, taken from the look's own palette (never a category tone). */
+export const ROLE_TONE_KEYS = ['owner', 'mod', 'member', 'pending'] as const;
+export type RoleToneKey = (typeof ROLE_TONE_KEYS)[number];
+export type RoleTones = Record<RoleToneKey, string>;
+
+/** Role tones when a look names none (a stored or custom theme): Sūna's. The tag's ink is derived (best contrast). */
+export const DEFAULT_ROLE_TONES: Record<'light' | 'dark', RoleTones> = {
+    light: { owner: '#4B5E3B', mod: '#2B6489', member: '#DCE9D2', pending: '#F3E1B5' },
+    dark: { owner: '#b5c79e', mod: '#7BB2D6', member: '#2E4A2B', pending: '#5A4310' },
+};
+
 /** Colours of one mode. The ones after `foreground` are optional: when missing they are derived from the others. */
 export interface ThemeModeTokens {
     /** Site colour: buttons, links, active tabs (`--primary`). */
@@ -44,6 +55,8 @@ export interface ThemeModeTokens {
     tint?: string;
     /** Tone per main category; missing ones come from `CATEGORY_TONES`. */
     categories?: Partial<Record<CategoryToneSlug, string>>;
+    /** Tone per role tag; missing ones come from `DEFAULT_ROLE_TONES`. */
+    roles?: Partial<RoleTones>;
 }
 
 /** Fonts with full Latvian (latin-ext) support. `cssVar` is the variable next/font exposes (see lib/theme-fonts.ts). */
@@ -123,40 +136,40 @@ export const DEFAULT_THEME_KEY: ThemePresetKey = 'moss';
 export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: string }> = {
     moss: {
         label: 'Sūna',
-        light: { primary: '#4B5E3B', background: '#f4f4ef', surface: '#fdfdfb', foreground: '#1f221c', surfaceElevated: '#fdfdfb', tint: '#e8eae1', muted: '#5f6558', border: '#dcdfd4' },
-        dark: { primary: '#b5c79e', background: '#161814', surface: '#1e211c', foreground: '#eceee7', surfaceElevated: '#282c25', tint: '#282c25', muted: '#a8ae9f', border: '#353a31' },
+        light: { primary: '#4B5E3B', background: '#f4f4ef', surface: '#fdfdfb', foreground: '#1f221c', surfaceElevated: '#fdfdfb', tint: '#e8eae1', muted: '#5f6558', border: '#dcdfd4', roles: { owner: '#4B5E3B', mod: '#2B6489', member: '#DCE9D2', pending: '#F3E1B5' } },
+        dark: { primary: '#b5c79e', background: '#161814', surface: '#1e211c', foreground: '#eceee7', surfaceElevated: '#282c25', tint: '#282c25', muted: '#a8ae9f', border: '#353a31', roles: { owner: '#b5c79e', mod: '#7BB2D6', member: '#2E4A2B', pending: '#5A4310' } },
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',
     },
     sea: {
         label: 'Jūra',
-        light: { primary: '#34586A', background: '#edf1f3', surface: '#f8fafb', foreground: '#14232b', muted: '#556872', border: '#d4dde2', categories: { travel: '#447141', dancing: '#985113', hobbies: '#916313', community: '#2D664C', politics: '#50483B', pets: '#6E5F41', art: '#6D4B8C', music: '#4E4A8F', religion: '#56616E', social: '#9A4431', games: '#7D4477', sports: '#395593', family: '#326180', wellbeing: '#36666C', education: '#746926' } },
-        dark: { primary: '#7fb0c8', background: '#0e1316', surface: '#151c20', foreground: '#e8eff2', surfaceElevated: '#1d272c', muted: '#9db0b9', border: '#26343b', categories: { travel: '#6EC36C', dancing: '#D8A685', hobbies: '#CDAB6F', community: '#49C28C', politics: '#B6AFA1', pets: '#BBAE92', art: '#C3A5E0', music: '#ADAADE', religion: '#A4AFBB', social: '#DBA197', games: '#D29DCD', sports: '#9BAED9', family: '#86B4D3', wellbeing: '#60BAC4', education: '#BDB156' } },
+        light: { primary: '#34586A', background: '#edf1f3', surface: '#f8fafb', foreground: '#14232b', muted: '#556872', border: '#d4dde2', categories: { travel: '#447141', dancing: '#985113', hobbies: '#916313', community: '#2D664C', politics: '#50483B', pets: '#6E5F41', art: '#6D4B8C', music: '#4E4A8F', religion: '#56616E', social: '#9A4431', games: '#7D4477', sports: '#395593', family: '#326180', wellbeing: '#36666C', education: '#746926' }, roles: { owner: '#34586A', mod: '#985113', member: '#D3E8DE', pending: '#F3E1B5' } },
+        dark: { primary: '#7fb0c8', background: '#0e1316', surface: '#151c20', foreground: '#e8eff2', surfaceElevated: '#1d272c', muted: '#9db0b9', border: '#26343b', categories: { travel: '#6EC36C', dancing: '#D8A685', hobbies: '#CDAB6F', community: '#49C28C', politics: '#B6AFA1', pets: '#BBAE92', art: '#C3A5E0', music: '#ADAADE', religion: '#A4AFBB', social: '#DBA197', games: '#D29DCD', sports: '#9BAED9', family: '#86B4D3', wellbeing: '#60BAC4', education: '#BDB156' }, roles: { owner: '#7fb0c8', mod: '#D8A685', member: '#1F4A3A', pending: '#5A4310' } },
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',
     },
     rye: {
         label: 'Rudzu maize',
-        light: { primary: '#5E4A38', background: '#f1eeea', surface: '#fbfaf8', foreground: '#231c16', muted: '#6b5f54', border: '#ddd6cd', categories: { travel: '#56693A', dancing: '#914E3A', hobbies: '#905D34', community: '#406042', politics: '#4E453C', pets: '#6E5A46', art: '#5E5086', music: '#3F4E84', religion: '#535F68', social: '#8E454D', games: '#6E4977', sports: '#2C5884', family: '#316072', wellbeing: '#3C6360', education: '#796131' } },
-        dark: { primary: '#c19a76', background: '#151210', surface: '#1e1a16', foreground: '#f0ebe5', surfaceElevated: '#27221d', muted: '#aa9f94', border: '#342d26', categories: { travel: '#8EB15A', dancing: '#CB9C8E', hobbies: '#C89E78', community: '#72B273', politics: '#AEA59C', pets: '#B5A28F', art: '#ADA1D4', music: '#9BA5CE', religion: '#9BA6AE', social: '#CA999F', games: '#BB9AC6', sports: '#8DA7C7', family: '#7FACBE', wellbeing: '#69AFAB', education: '#C1A15E' } },
+        light: { primary: '#5E4A38', background: '#f1eeea', surface: '#fbfaf8', foreground: '#231c16', muted: '#6b5f54', border: '#ddd6cd', categories: { travel: '#56693A', dancing: '#914E3A', hobbies: '#905D34', community: '#406042', politics: '#4E453C', pets: '#6E5A46', art: '#5E5086', music: '#3F4E84', religion: '#535F68', social: '#8E454D', games: '#6E4977', sports: '#2C5884', family: '#316072', wellbeing: '#3C6360', education: '#796131' }, roles: { owner: '#5E4A38', mod: '#3F4E84', member: '#DDE8D2', pending: '#F3E1B5' } },
+        dark: { primary: '#c19a76', background: '#151210', surface: '#1e1a16', foreground: '#f0ebe5', surfaceElevated: '#27221d', muted: '#aa9f94', border: '#342d26', categories: { travel: '#8EB15A', dancing: '#CB9C8E', hobbies: '#C89E78', community: '#72B273', politics: '#AEA59C', pets: '#B5A28F', art: '#ADA1D4', music: '#9BA5CE', religion: '#9BA6AE', social: '#CA999F', games: '#BB9AC6', sports: '#8DA7C7', family: '#7FACBE', wellbeing: '#69AFAB', education: '#C1A15E' }, roles: { owner: '#c19a76', mod: '#9BA5CE', member: '#2F4A2C', pending: '#5A4310' } },
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',
     },
     sun: {
         label: 'Saule',
-        light: { primary: '#2B3FD6', background: '#FFF1B8', surface: '#FFFFFF', foreground: '#111111', surfaceElevated: '#FFFFFF', tint: '#FFE27A', muted: '#4A4536', border: '#C9BC8A', categories: { travel: '#457607', dancing: '#BA2F00', hobbies: '#A75904', community: '#096E3C', politics: '#5B4837', pets: '#815B30', art: '#8239A0', music: '#593CB0', religion: '#54647A', social: '#B71648', games: '#992C78', sports: '#314FB7', family: '#046595', wellbeing: '#026E74', education: '#876501' } },
-        dark: { primary: '#FFD43B', background: '#14130F', surface: '#1E1C16', foreground: '#F6F1DE', surfaceElevated: '#28251D', tint: '#332C12', muted: '#BDB59C', border: '#3A362A', categories: { travel: '#79D108', dancing: '#FD9F88', hobbies: '#F7A551', community: '#0AD46F', politics: '#C9B6A4', pets: '#D5B28B', art: '#E0A0FB', music: '#BDABFF', religion: '#A9B9CC', social: '#F99BB0', games: '#F695D7', sports: '#9EB4FB', family: '#72C1F2', wellbeing: '#05CBD6', education: '#E4B009' } },
+        light: { primary: '#2B3FD6', background: '#FFF1B8', surface: '#FFFFFF', foreground: '#111111', surfaceElevated: '#FFFFFF', tint: '#FFE27A', muted: '#4A4536', border: '#C9BC8A', categories: { travel: '#457607', dancing: '#BA2F00', hobbies: '#A75904', community: '#096E3C', politics: '#5B4837', pets: '#815B30', art: '#8239A0', music: '#593CB0', religion: '#54647A', social: '#B71648', games: '#992C78', sports: '#314FB7', family: '#046595', wellbeing: '#026E74', education: '#876501' }, roles: { owner: '#2B3FD6', mod: '#BA2F00', member: '#CFEFD9', pending: '#FFD966' } },
+        dark: { primary: '#FFD43B', background: '#14130F', surface: '#1E1C16', foreground: '#F6F1DE', surfaceElevated: '#28251D', tint: '#332C12', muted: '#BDB59C', border: '#3A362A', categories: { travel: '#79D108', dancing: '#FD9F88', hobbies: '#F7A551', community: '#0AD46F', politics: '#C9B6A4', pets: '#D5B28B', art: '#E0A0FB', music: '#BDABFF', religion: '#A9B9CC', social: '#F99BB0', games: '#F695D7', sports: '#9EB4FB', family: '#72C1F2', wellbeing: '#05CBD6', education: '#E4B009' }, roles: { owner: '#FFD43B', mod: '#FD9F88', member: '#0F5A33', pending: '#7A5200' } },
         headingFont: 'archivo-black',
         bodyFont: 'commissioner',
         styleKey: 'bold',
     },
     air: {
         label: 'Gaiss',
-        light: { primary: '#111111', background: '#F2F3F1', surface: '#FFFFFF', foreground: '#151515', surfaceElevated: '#FFFFFF', tint: '#E8EAE6', muted: '#575C56', border: '#D9DCD6', categories: { travel: '#598101', dancing: '#D34303', hobbies: '#A96605', community: '#018844', politics: '#8F6E65', pets: '#936F44', art: '#A84CCC', music: '#8D57E0', religion: '#5F7892', social: '#D93457', games: '#C23EA5', sports: '#486BED', family: '#04809E', wellbeing: '#018574', education: '#7C7903' } },
-        dark: { primary: '#F2F3F1', background: '#0E0F0E', surface: '#181A18', foreground: '#F2F3F1', surfaceElevated: '#222522', tint: '#242724', muted: '#A3A8A1', border: '#343734', categories: { travel: '#7DAC2D', dancing: '#F57A54', hobbies: '#E28A00', community: '#33B465', politics: '#B9968C', pets: '#BD976B', art: '#C982E8', music: '#B08AF9', religion: '#87A1BC', social: '#F77485', games: '#E279C6', sports: '#789AFF', family: '#06ABD2', wellbeing: '#0DB19C', education: '#A6A209' } },
+        light: { primary: '#111111', background: '#F2F3F1', surface: '#FFFFFF', foreground: '#151515', surfaceElevated: '#FFFFFF', tint: '#E8EAE6', muted: '#575C56', border: '#D9DCD6', categories: { travel: '#598101', dancing: '#D34303', hobbies: '#A96605', community: '#018844', politics: '#8F6E65', pets: '#936F44', art: '#A84CCC', music: '#8D57E0', religion: '#5F7892', social: '#D93457', games: '#C23EA5', sports: '#486BED', family: '#04809E', wellbeing: '#018574', education: '#7C7903' }, roles: { owner: '#111111', mod: '#D34303', member: '#D5ECD9', pending: '#F6E2B0' } },
+        dark: { primary: '#F2F3F1', background: '#0E0F0E', surface: '#181A18', foreground: '#F2F3F1', surfaceElevated: '#222522', tint: '#242724', muted: '#A3A8A1', border: '#343734', categories: { travel: '#7DAC2D', dancing: '#F57A54', hobbies: '#E28A00', community: '#33B465', politics: '#B9968C', pets: '#BD976B', art: '#C982E8', music: '#B08AF9', religion: '#87A1BC', social: '#F77485', games: '#E279C6', sports: '#789AFF', family: '#06ABD2', wellbeing: '#0DB19C', education: '#A6A209' }, roles: { owner: '#F2F3F1', mod: '#F57A54', member: '#1E4A2C', pending: '#5A4310' } },
         headingFont: 'raleway',
         bodyFont: 'commissioner',
         styleKey: 'airy',

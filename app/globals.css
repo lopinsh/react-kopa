@@ -30,6 +30,16 @@
   --success: #3D6B34;
   --warning: #8A5B0B;
 
+  /* Role tags (Owner, Mod, Member, Pending): one tone each from the look's palette, with their ink (lib/constants/theme.ts) */
+  --role-owner: #4B5E3B;
+  --role-owner-ink: #ffffff;
+  --role-mod: #2B6489;
+  --role-mod-ink: #ffffff;
+  --role-member: #DCE9D2;
+  --role-member-ink: #111111;
+  --role-pending: #F3E1B5;
+  --role-pending-ink: #111111;
+
   /* Depth: cards are flat; the float shadow is only for layers above the page (AR-08) */
   --shadow-card: none;
   --shadow-premium: 0 10px 28px rgba(0, 0, 0, 0.12);
@@ -77,6 +87,15 @@
   --danger-foreground: #161814;
   --success: #9CCB8C;
   --warning: #E2B65A;
+
+  --role-owner: #b5c79e;
+  --role-owner-ink: #111111;
+  --role-mod: #7BB2D6;
+  --role-mod-ink: #111111;
+  --role-member: #2E4A2B;
+  --role-member-ink: #ffffff;
+  --role-pending: #5A4310;
+  --role-pending-ink: #ffffff;
   --scrim: rgb(0 0 0 / 0.5);
 }
 
@@ -95,6 +114,14 @@
   --color-danger-foreground: var(--danger-foreground);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --color-role-owner: var(--role-owner);
+  --color-role-owner-ink: var(--role-owner-ink);
+  --color-role-mod: var(--role-mod);
+  --color-role-mod-ink: var(--role-mod-ink);
+  --color-role-member: var(--role-member);
+  --color-role-member-ink: var(--role-member-ink);
+  --color-role-pending: var(--role-pending);
+  --color-role-pending-ink: var(--role-pending-ink);
 
   --shadow-card: var(--shadow-card);
   --shadow-premium: var(--shadow-premium);

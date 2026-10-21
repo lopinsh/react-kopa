@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Users } from 'lucide-react';
 import Badge from '@/components/ui/Badge';
 import { buttonClass } from '@/components/ui/Button';
-import type { ThemeFontId, ThemeModeTokens, ThemeStyleKey } from '@/lib/constants';
+import { ROLE_TONE_KEYS, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey } from '@/lib/constants';
 import { toneHex } from '@/lib/theme/contrast';
 import { themeSampleVars } from '@/lib/theme/css';
 
@@ -22,6 +22,7 @@ type Props = {
 /** Live sample: its own CSS variables are set on this element only, so nothing else on the page changes while editing. */
 export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, dark }: Props) {
     const t = useTranslations('admin.design.sample');
+    const tTag = useTranslations('common.tag');
     return (
         <div
             style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light', styleKey) as React.CSSProperties}
@@ -35,6 +36,7 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, d
                     <button type="button" tabIndex={-1} className={buttonClass('primary', '', 'sm')}>{t('primaryButton')}</button>
                     <button type="button" tabIndex={-1} className={buttonClass('secondary', '', 'sm')}>{t('secondaryButton')}</button>
                     <Badge>{t('badge')}</Badge>
+                    {ROLE_TONE_KEYS.map((k) => <Badge key={k} tone="role" role={k}>{tTag(k)}</Badge>)}
                 </div>
                 <p className="mt-4 text-body-sm">
                     <span className="weight-strong text-primary underline underline-offset-4">{t('link')}</span>

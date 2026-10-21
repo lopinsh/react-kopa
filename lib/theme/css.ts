@@ -1,5 +1,5 @@
 import {
-    CATEGORY_TONES, CATEGORY_TONE_SLUGS, THEME_FONTS, THEME_STYLES,
+    CATEGORY_TONES, CATEGORY_TONE_SLUGS, DEFAULT_ROLE_TONES, ROLE_TONE_KEYS, THEME_FONTS, THEME_STYLES,
     type ThemeDefinition, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey, type ThemeStyleTokens,
 } from '@/lib/constants';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
@@ -8,6 +8,12 @@ import { getLuminance, hexToRgb } from '@/lib/color-utils';
 export function onPrimary(hex: string): string {
     const rgb = hexToRgb(hex);
     return rgb && getLuminance(rgb.r, rgb.g, rgb.b) > 0.22 ? '#111111' : '#ffffff';
+}
+
+/** Ink on a role tone: white or near-black, whichever reads better. */
+export function roleInk(hex: string): string {
+    const rgb = hexToRgb(hex);
+    return rgb && getLuminance(rgb.r, rgb.g, rgb.b) > 0.18 ? '#111111' : '#ffffff';
 }
 
 type Vars = Record<string, string>;
@@ -89,6 +95,12 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
 export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars {
     const tones: Vars = {};
     for (const slug of CATEGORY_TONE_SLUGS) tones[`--cat-${slug}`] = t.categories?.[slug] ?? CATEGORY_TONES[slug][mode];
+    const roles: Vars = {};
+    for (const key of ROLE_TONE_KEYS) {
+        const tone = t.roles?.[key] ?? DEFAULT_ROLE_TONES[mode][key];
+        roles[`--role-${key}`] = tone;
+        roles[`--role-${key}-ink`] = roleInk(tone);
+    }
     return {
         '--primary': t.primary,
         '--primary-foreground': onPrimary(t.primary),
@@ -101,6 +113,7 @@ export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars 
         '--tint': t.tint ?? `color-mix(in srgb, ${t.foreground} 8%, ${t.background})`,
         '--on-cat': mode === 'light' ? '#ffffff' : t.background,
         ...tones,
+        ...roles,
     };
 }
 
@@ -145,6 +158,7 @@ export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontI
         '--color-foreground-muted': v['--foreground-muted'],
         '--color-border': v['--border'],
         '--color-tint': v['--tint'],
+        ...Object.fromEntries(ROLE_TONE_KEYS.flatMap((k) => [[`--color-role-${k}`, v[`--role-${k}`]], [`--color-role-${k}-ink`, v[`--role-${k}-ink`]]])),
         '--font-sans': fontVar(bodyFont),
         '--font-heading': fontVar(headingFont),
     };
