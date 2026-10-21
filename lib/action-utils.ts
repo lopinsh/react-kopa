@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import type { z } from 'zod';
 import { ActionResponse, ErrorCode, isErrorCode } from '@/types/actions';
 import { auth } from '@/lib/auth';
 import { isSiteAdmin, isSiteOwner } from '@/lib/site-role';
