@@ -3,13 +3,12 @@
 import { useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { EyeOff, Eye, History, Pencil, Tags, UserCog } from 'lucide-react';
-import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { useToast } from '@/hooks/use-toast';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import { MenuItemButton, MenuItemLink, MenuPanel, useMenu } from '@/components/ui/Menu';
-import { groupChip } from './frame/chip';
+import { IconButton } from '@/components/ui/Button';
 
 type Props = {
     onHide: (trigger: HTMLElement | null) => void;
@@ -49,14 +48,14 @@ export default function AdminToolsMenu({ onHide }: Props) {
 
     return (
         <div className="relative flex" ref={rootRef}>
-            <button /* ui-allow: group-coloured chip */
+            <IconButton
                 {...triggerProps}
+                variant="accent"
                 aria-label={t('label')}
                 title={t('label')}
-                className={clsx('grid size-10 place-items-center rounded-pill outline-none transition focus-visible:ring-2 focus-visible:ring-ink active:scale-95', groupChip())}
             >
                 <UserCog aria-hidden className="size-5" />
-            </button>
+            </IconButton>
 
             {open && (
                 <MenuPanel label={t('label')} placement="anchor" {...menuProps}>

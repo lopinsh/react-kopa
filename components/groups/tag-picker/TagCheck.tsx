@@ -20,7 +20,7 @@ export default function TagCheck({ selected, small = false, muted = false }: Pro
                     : clsx(muted ? 'border-foreground-muted/50' : 'border-foreground-muted', 'text-transparent group-hover:border-foreground')
             )}
         >
-            <Check className={small ? 'size-3 stroke-3' : 'size-3.5 stroke-3'} />
+            <Check className={small ? 'size-3 icon-stroke-strong' : 'size-3.5 icon-stroke-strong'} />
         </div>
     );
 }

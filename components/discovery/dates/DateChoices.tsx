@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { CalendarDays, X } from 'lucide-react';
+import { IconButton } from '@/components/ui/Button';
 import { clsx } from 'clsx';
 import MonthCalendar from './MonthCalendar';
 import QuickChoices from './QuickChoices';
@@ -33,7 +34,7 @@ export default function DateChoices({ className }: { className?: string }) {
             <QuickChoices variant="line" onPick={(date) => go({ date, day: null })} />
             <div ref={bindHost} className="relative ml-0.5 h-[26px] min-w-0 shrink">
                 <span className={clsx('flex h-full min-w-0 items-center rounded-pill', custom ? 'bg-tint ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : pop.open && 'bg-tint')}>
-                    <button /* ui-allow: clear mark inside a chip */
+                    <button
                         type="button"
                         onClick={pop.toggle}
                         aria-expanded={pop.open}
@@ -46,9 +47,9 @@ export default function DateChoices({ className }: { className?: string }) {
                         {custom && <span className="min-w-0 truncate">{label}</span>}
                     </button>
                     {custom && (
-                        <button /* ui-allow: clear mark inside a chip */ type="button" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-surface hover:text-foreground after:absolute after:-inset-y-2 after:-inset-x-1">
+                        <IconButton size="xs" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="mr-1">
                             <X aria-hidden="true" className="size-3.5" />
-                        </button>
+                        </IconButton>
                     )}
                 </span>
                 <FilterPopover pop={pop} title={t('dateLabel')} width={PANEL} onClose={() => pop.setOpen(false)}>

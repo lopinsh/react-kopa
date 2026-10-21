@@ -255,12 +255,14 @@ body {
   border-radius: 9999px;
 }
 
-/* Icons: one stroke width for the whole look (--icon-stroke from the style tokens); a class like stroke-3 on a single icon still wins. */
+/* Icons: one stroke width for the whole look (--icon-stroke from the style tokens); icon-stroke-strong / icon-stroke-fine scale it for one icon. */
 @layer base {
   .lucide { stroke-width: var(--icon-stroke, 2); }
 }
 
 @layer utilities {
+  .icon-stroke-strong { stroke-width: calc(var(--icon-stroke, 2) * 1.5); }
+  .icon-stroke-fine { stroke-width: calc(var(--icon-stroke, 2) * 0.5); }
   .font-heading {
     font-synthesis-weight: none;
   }

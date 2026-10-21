@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { UI, type UiName } from '@/lib/constants';
+import { IconButton } from '@/components/ui/Button';
 
 type Props = {
     icon: ReactNode;
@@ -52,9 +53,9 @@ export default function FilterButton({ icon, label, ariaLabel, chosen, open = fa
                 <span className={bodyClass} aria-label={ariaLabel} role="group">{body}</span>
             )}
             {chosen && (
-                <button /* ui-allow: clear mark inside a chip */ type="button" onClick={onClear} aria-label={clearLabel} className="relative mr-1 grid size-5 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-tint hover:text-foreground after:absolute after:-inset-y-3 after:-inset-x-1">
+                <IconButton size="xs" onClick={onClear} aria-label={clearLabel} className="mr-1">
                     <X aria-hidden="true" className="size-3.5" />
-                </button>
+                </IconButton>
             )}
         </div>
     );

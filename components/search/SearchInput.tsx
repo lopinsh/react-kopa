@@ -3,6 +3,7 @@
 import { useId, type FocusEvent, type KeyboardEvent, type RefObject } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Search, X } from 'lucide-react';
+import { IconButton } from '@/components/ui/Button';
 import { clsx } from 'clsx';
 import { SEARCH_WORD_MAX, UI } from '@/lib/constants';
 
@@ -44,14 +45,9 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
                 className="min-w-0 flex-1 truncate bg-transparent text-foreground placeholder:text-foreground-muted focus:outline-none [&::-webkit-search-cancel-button]:hidden"
             />
             {value && (
-                <button /* ui-allow: clear mark inside the field */
-                    type="button"
-                    aria-label={tSearch('clear')}
-                    onClick={() => { onChange(''); inputRef.current?.focus(); }}
-                    className="relative -mr-1 grid size-6 shrink-0 place-items-center rounded-pill text-foreground-muted hover:bg-border hover:text-foreground after:absolute after:-inset-3"
-                >
+                <IconButton size="xs" aria-label={tSearch('clear')} onClick={() => { onChange(''); inputRef.current?.focus(); }} className="-mr-1">
                     <X aria-hidden="true" className="size-4" />
-                </button>
+                </IconButton>
             )}
         </form>
     );

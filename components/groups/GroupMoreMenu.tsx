@@ -4,7 +4,6 @@ import { loadFullPage } from '@/lib/full-page';
 import { useId, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Flag, LogOut, MessageCircle, MoreHorizontal, Share2, X } from 'lucide-react';
-import { clsx } from 'clsx';
 import { cancelJoinRequest, leaveGroup } from '@/actions/group-actions';
 import { useToast } from '@/hooks/use-toast';
 import { useShareLink } from '@/hooks/useShareLink';
@@ -12,7 +11,7 @@ import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import { MenuItemButton, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
-import { groupChip } from './frame/chip';
+import { IconButton } from '@/components/ui/Button';
 
 type Props = {
     /** Gets the menu's trigger button so the report pop-up can hand focus back to it. */
@@ -74,14 +73,14 @@ export default function GroupMoreMenu({ onReport, onWriteToTeam, initialOpen }: 
 
     return (
         <div className="relative flex" ref={rootRef}>
-            <button /* ui-allow: group-coloured chip */
+            <IconButton
                 {...triggerProps}
+                variant="accent"
                 aria-label={c('moreOptions')}
                 data-ui={UI.groupMoreButton}
-                className={clsx('grid size-10 place-items-center rounded-pill outline-none transition focus-visible:ring-2 focus-visible:ring-ink active:scale-95', groupChip())}
             >
                 <MoreHorizontal aria-hidden className="size-5" />
-            </button>
+            </IconButton>
 
             {open && (
                 <MenuPanel label={c('moreOptions')} placement="anchor" describedBy={role ? roleId : undefined} dataUi={UI.groupMoreMenu} {...menuProps}>

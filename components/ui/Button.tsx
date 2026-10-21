@@ -36,12 +36,13 @@ export default function Button({ variant = 'primary', size = 'md', className, ty
     return <button type={type} data-ui={NAMES[variant]} className={buttonClass(variant, className, size)} {...props} />;
 }
 
-export type IconButtonSize = 'sm' | 'md' | 'lg';
-export type IconButtonVariant = ButtonVariant | 'ghost' | 'overlay';
+export type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg';
+export type IconButtonVariant = ButtonVariant | 'ghost' | 'overlay' | 'accent';
 
 const ICON_BASE = 'relative inline-flex shrink-0 items-center justify-center rounded-pill outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50';
 
 const ICON_SIZES: Record<IconButtonSize, string> = {
+    xs: 'size-5 after:absolute after:-inset-2',
     sm: 'size-7 after:absolute after:-inset-1',
     md: 'size-10',
     lg: 'size-11',
@@ -51,6 +52,7 @@ const ICON_VARIANTS: Record<IconButtonVariant, string> = {
     ...VARIANTS,
     ghost: 'text-foreground-muted hover:bg-tint hover:text-foreground',
     overlay: 'frame bg-surface text-foreground shadow-premium hover:bg-tint',
+    accent: 'border border-border bg-surface text-foreground-muted hover:bg-tint active:scale-95', // the group chip (groupChip in groups/frame/chip)
 };
 
 /** Class string for a round icon-only control that is not a <button> (a Link, a menu trigger). */

@@ -11,7 +11,7 @@
 // unless it is a native checkbox/radio/color/hidden/file/range, or the line (or one of the 3 above) says `ui-allow: <reason>`.
 // Button rule (strict, R16a): a pill button or link (rounded-pill with bg-primary/bg-danger/press/frame, or a round icon-only size-N) is Button/buttonClass/IconButton from components/ui/Button.
 // Motion rule (strict): durations and easing are tokens (duration-quick|base|slow, ease-standard); no transition-all, raw duration-N, delay-N, ease-in/out/linear or tw-animate-css (animate-in).
-// Icon rule (strict): lucide icons are sized with size-N classes only (no size={..}, no h-N w-N pair) and carry no strokeWidth prop (the look sets --icon-stroke once).
+// Icon rule (strict): lucide icons are sized with size-N classes only (no size={..}, no h-N w-N pair) and carry no strokeWidth prop or stroke-N class (the look sets --icon-stroke once; icon-stroke-strong / icon-stroke-fine scale it).
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -88,7 +88,7 @@ const walk = (dir) => {
                 for (const m of src.matchAll(re)) {
                     const tag = tagText(src, m.index);
                     if (allowed(m.index)) continue;
-                    if (/\bsize=\{|\bstrokeWidth=|\babsoluteStrokeWidth\b|(?<![\w-])h-(\d+(?:\.\d+)?)\s+w-\1(?![\w.])|(?<![\w-])w-(\d+(?:\.\d+)?)\s+h-\2(?![\w.])/.test(tag)) iconHits.push(f + ':' + src.slice(0, m.index).split('\n').length + '  ' + tag.replace(/\s+/g, ' ').slice(0, 100));
+                    if (/(?<![\w-])stroke-\d|\bsize=\{|\bstrokeWidth=|\babsoluteStrokeWidth\b|(?<![\w-])h-(\d+(?:\.\d+)?)\s+w-\1(?![\w.])|(?<![\w-])w-(\d+(?:\.\d+)?)\s+h-\2(?![\w.])/.test(tag)) iconHits.push(f + ':' + src.slice(0, m.index).split('\n').length + '  ' + tag.replace(/\s+/g, ' ').slice(0, 100));
                 }
             }
             if (!f.startsWith('components/ui/')) {
@@ -134,7 +134,7 @@ ${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
 }
 console.log(`\n${fieldHits.length ? 'FAIL' : 'ok'}: raw <input|select|textarea> (use components/ui/Input): ${fieldHits.length}`);
 for (const h of fieldHits) console.log(`      ${h}`);
-for (const [label, hits] of [['pill button/link outside components/ui/Button (use Button, buttonClass or IconButton)', buttonHits], ['motion (use duration-quick|base|slow, ease-standard; no transition-all/animate-in)', motionHits], ['lucide icon size={..}/strokeWidth/h-N w-N (use size-N; stroke is --icon-stroke)', iconHits]]) {
+for (const [label, hits] of [['pill button/link outside components/ui/Button (use Button, buttonClass or IconButton)', buttonHits], ['motion (use duration-quick|base|slow, ease-standard; no transition-all/animate-in)', motionHits], ['lucide icon size={..}/strokeWidth/stroke-N/h-N w-N (use size-N; stroke is --icon-stroke)', iconHits]]) {
     console.log('\n' + (hits.length ? 'FAIL' : 'ok') + ': ' + label + ': ' + hits.length);
     for (const h of hits) console.log('      ' + h);
 }

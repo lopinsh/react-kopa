@@ -103,7 +103,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                                     className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--on-cat)] shadow-control"
                                     style={{ backgroundColor: l1.color }}
                                 >
-                                    <Check className="size-3.5 stroke-3" />
+                                    <Check className="size-3.5 icon-stroke-strong" />
                                 </div>
                             )}
                             <CategoryIcon slug={l1.slug} className="size-6" style={{ color: l1.color }} />
