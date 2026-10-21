@@ -4,7 +4,7 @@ import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
-import { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
@@ -22,18 +22,6 @@ import { eventWhere, clampRange, bucketByDay } from './discovery-query';
 import { matchingEventIds } from './discovery-text';
 import { DEFAULT_TIME_ZONE, isValidTimeZone } from '@/lib/time-zone';
 import type { DayCount, EventDiscoveryFilters } from '@/lib/types/discovery';
-
-export interface EventServiceResponse<T = void> {
-    success: true;
-    data?: T;
-}
-
-export interface EventServiceError {
-    success: false;
-    error: ErrorCode;
-}
-
-export type EventServiceResult<T = void> = EventServiceResponse<T> | EventServiceError;
 
 /** What the current viewer may see and do with one event. */
 export interface EventViewer {
@@ -179,12 +167,12 @@ export class EventService {
     }
 
     /** Loads the event and checks that the actor is an organiser. */
-    private static async loadForOrganiser(eventId: string, actorId: string) {
+    private static async loadForOrganiser(eventId: string, actorId: string): Promise<EventWithGroup> {
         const event = await EventService.loadEventForAction(eventId);
-        if (!event) return { event: null, error: 'EVENT_NOT_FOUND' as const };
+        if (!event) throw new ActionError('EVENT_NOT_FOUND');
         const access = await EventService.getAccess(event.groupId, actorId);
-        if (event.creatorId !== actorId && !access.isGroupAdmin) return { event: null, error: 'FORBIDDEN' as const };
-        return { event, error: undefined };
+        if (event.creatorId !== actorId && !access.isGroupAdmin) throw new ActionError('FORBIDDEN');
+        return event;
     }
 
     /**
@@ -444,7 +432,7 @@ export class EventService {
     /**
      * Create a new event within a group.
      */
-    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<EventServiceResult<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }>> {
+    static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }> {
         const membership = await prisma.membership.findUnique({
             where: {
                 userId_groupId: {
@@ -455,13 +443,13 @@ export class EventService {
         });
 
         if (!membership || !hasAdminRights(membership.role)) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         // The event's place starts as the group's city; the organiser may pick another approved city (AR-57).
         const group = await prisma.group.findUnique({ where: { id: groupId }, select: { city: true } });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
-        if (!(await CityService.isUsableForEvent(data.city, [group.city]))) return { success: false, error: 'VALIDATION_FAILED' };
+        if (!group) throw new ActionError('NOT_FOUND');
+        if (!(await CityService.isUsableForEvent(data.city, [group.city]))) throw new ActionError('VALIDATION_FAILED');
 
         // The organiser's own language is the event's original language (and the slug comes from its title).
         const originalTitle = data.texts[data.originalLang].title.trim();
@@ -512,15 +500,12 @@ export class EventService {
         const resolved = TaxonomyResolver.resolve(event.group.category);
 
         return {
-            success: true,
-            data: {
-                event,
-                eventTitle: originalTitle,
-                membersToNotify,
-                groupName: event.group.name,
-                groupSlug: event.group.slug,
-                l1Slug: resolved.l1Slug
-            }
+            event,
+            eventTitle: originalTitle,
+            membersToNotify,
+            groupName: event.group.name,
+            groupSlug: event.group.slug,
+            l1Slug: resolved.l1Slug
         };
     }
 
@@ -537,11 +522,10 @@ export class EventService {
         data: EventFormValues,
         userId: string,
         confirmOpenWaiting = false
-    ): Promise<EventServiceResult<EventActionContext & { convertedUserIds: string[] }>> {
-        const { event, error } = await EventService.loadForOrganiser(eventId, userId);
-        if (!event) return { success: false, error };
-        if (isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
-        if (!(await CityService.isUsableForEvent(data.city, [event.group.city, event.city]))) return { success: false, error: 'VALIDATION_FAILED' };
+    ): Promise<EventActionContext & { convertedUserIds: string[] }> {
+        const event = await EventService.loadForOrganiser(eventId, userId);
+        if (isEventPast(event)) throw new ActionError('EVENT_PAST');
+        if (!(await CityService.isUsableForEvent(data.city, [event.group.city, event.city]))) throw new ActionError('VALIDATION_FAILED');
 
         const opening = event.joinMode === 'REQUEST' && data.joinMode === 'OPEN';
 
@@ -594,20 +578,19 @@ export class EventService {
             return converted;
         });
 
-        if (convertedUserIds === null) return { success: false, error: 'CONFIRMATION_REQUIRED' };
+        if (convertedUserIds === null) throw new ActionError('CONFIRMATION_REQUIRED');
 
         // The context carries the title the notification should show (the new one).
         const context = await EventService.buildContext(event, data.texts[data.originalLang].title.trim());
-        return { success: true, data: { ...context, convertedUserIds: convertedUserIds.filter(id => id !== userId) } };
+        return { ...context, convertedUserIds: convertedUserIds.filter(id => id !== userId) };
     }
 
     /**
      * Delete an event (organisers only). Returns who has to be told: everyone who was going,
      * waiting for approval or on the waitlist (not people who were declined).
      */
-    static async deleteEvent(eventId: string, userId: string): Promise<EventServiceResult<EventActionContext & { attendeeIds: string[] }>> {
-        const { event, error } = await EventService.loadForOrganiser(eventId, userId);
-        if (!event) return { success: false, error };
+    static async deleteEvent(eventId: string, userId: string): Promise<EventActionContext & { attendeeIds: string[] }> {
+        const event = await EventService.loadForOrganiser(eventId, userId);
 
         const context = await EventService.buildContext(event);
         const attendees = await prisma.attendance.findMany({
@@ -621,10 +604,7 @@ export class EventService {
             prisma.event.delete({ where: { id: eventId } })
         ]);
 
-        return {
-            success: true,
-            data: { ...context, attendeeIds: attendees.map(a => a.userId).filter(id => id !== userId) }
-        };
+        return { ...context, attendeeIds: attendees.map(a => a.userId).filter(id => id !== userId) };
     }
 
     /**
@@ -743,13 +723,13 @@ export class EventService {
     }
 
     /** Checks that the event exists, its group is visible and the user may see it. */
-    private static async loadForParticipant(eventId: string, userId: string) {
+    private static async loadForParticipant(eventId: string, userId: string): Promise<EventWithGroup> {
         const event = await EventService.loadEventForAction(eventId);
-        if (!event) return { event: null, error: 'EVENT_NOT_FOUND' as const };
+        if (!event) throw new ActionError('EVENT_NOT_FOUND');
         if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(event.groupId, userId))) {
-            return { event: null, error: 'MEMBERS_ONLY' as const };
+            throw new ActionError('MEMBERS_ONLY');
         }
-        return { event, error: undefined };
+        return event;
     }
 
     /**
@@ -759,12 +739,10 @@ export class EventService {
         eventId: string,
         userId: string,
         status: 'GOING' | 'NONE'
-    ): Promise<EventServiceResult<EventActionContext>> {
-        const loaded = await EventService.loadForParticipant(eventId, userId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
-        if (event.joinMode !== 'OPEN') return { success: false, error: 'EVENT_MODE_MISMATCH' };
-        if (status === 'GOING' && isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
+    ): Promise<EventActionContext> {
+        const event = await EventService.loadForParticipant(eventId, userId);
+        if (event.joinMode !== 'OPEN') throw new ActionError('EVENT_MODE_MISMATCH');
+        if (status === 'GOING' && isEventPast(event)) throw new ActionError('EVENT_PAST');
 
         if (status === 'NONE') {
             await prisma.attendance.deleteMany({ where: { eventId, userId } });
@@ -775,7 +753,7 @@ export class EventService {
                 create: { userId, eventId, status: 'GOING' }
             });
         }
-        return { success: true, data: await EventService.buildContext(event) };
+        return await EventService.buildContext(event);
     }
 
     /**
@@ -786,12 +764,10 @@ export class EventService {
         eventId: string,
         userId: string,
         allowWaitlist: boolean
-    ): Promise<EventServiceResult<EventActionContext & { status: AttendanceStatus; created: boolean }>> {
-        const loaded = await EventService.loadForParticipant(eventId, userId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
-        if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
-        if (isEventPast(event)) return { success: false, error: 'EVENT_PAST' };
+    ): Promise<EventActionContext & { status: AttendanceStatus; created: boolean }> {
+        const event = await EventService.loadForParticipant(eventId, userId);
+        if (event.joinMode !== 'REQUEST') throw new ActionError('EVENT_MODE_MISMATCH');
+        if (isEventPast(event)) throw new ActionError('EVENT_PAST');
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
         const context = await EventService.buildContext(event);
@@ -799,10 +775,10 @@ export class EventService {
         // Already in, waiting or declined: nothing changes (a declined request stays declined).
         // A waitlisted person may ask again once the event is no longer Full.
         if (current && (current.status !== 'WAITLISTED' || event.isFull)) {
-            return { success: true, data: { ...context, status: current.status, created: false } };
+            return { ...context, status: current.status, created: false };
         }
 
-        if (event.isFull && !allowWaitlist) return { success: false, error: 'EVENT_FULL' };
+        if (event.isFull && !allowWaitlist) throw new ActionError('EVENT_FULL');
 
         const status: AttendanceStatus = event.isFull ? 'WAITLISTED' : 'PENDING';
         await prisma.attendance.upsert({
@@ -810,7 +786,7 @@ export class EventService {
             update: { status, joinedAt: new Date() },
             create: { userId, eventId, status }
         });
-        return { success: true, data: { ...context, status, created: true } };
+        return { ...context, status, created: true };
     }
 
     /**
@@ -819,23 +795,18 @@ export class EventService {
     static async cancel(
         eventId: string,
         userId: string
-    ): Promise<EventServiceResult<EventActionContext & { wasGoing: boolean; isFull: boolean; waitlistCount: number }>> {
-        const loaded = await EventService.loadForParticipant(eventId, userId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
+    ): Promise<EventActionContext & { wasGoing: boolean; isFull: boolean; waitlistCount: number }> {
+        const event = await EventService.loadForParticipant(eventId, userId);
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId } } });
         await prisma.attendance.deleteMany({ where: { eventId, userId } });
         const waitlistCount = await prisma.attendance.count({ where: { eventId, status: 'WAITLISTED' } });
 
         return {
-            success: true,
-            data: {
-                ...(await EventService.buildContext(event)),
-                wasGoing: current?.status === 'GOING',
-                isFull: event.isFull,
-                waitlistCount
-            }
+            ...(await EventService.buildContext(event)),
+            wasGoing: current?.status === 'GOING',
+            isFull: event.isFull,
+            waitlistCount
         };
     }
 
@@ -847,21 +818,19 @@ export class EventService {
         targetUserId: string,
         actorId: string,
         decision: 'approve' | 'decline'
-    ): Promise<EventServiceResult<EventActionContext>> {
-        const loaded = await EventService.loadForOrganiser(eventId, actorId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
+    ): Promise<EventActionContext> {
+        const event = await EventService.loadForOrganiser(eventId, actorId);
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId: targetUserId, eventId } } });
         if (!current || (current.status !== 'PENDING' && current.status !== 'WAITLISTED')) {
-            return { success: false, error: 'NOT_FOUND' };
+            throw new ActionError('NOT_FOUND');
         }
 
         await prisma.attendance.update({
             where: { userId_eventId: { userId: targetUserId, eventId } },
             data: { status: decision === 'approve' ? 'GOING' : 'DECLINED' }
         });
-        return { success: true, data: await EventService.buildContext(event) };
+        return await EventService.buildContext(event);
     }
 
     /**
@@ -871,19 +840,17 @@ export class EventService {
         eventId: string,
         targetUserId: string,
         actorId: string
-    ): Promise<EventServiceResult<EventActionContext>> {
-        const loaded = await EventService.loadForOrganiser(eventId, actorId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
+    ): Promise<EventActionContext> {
+        const event = await EventService.loadForOrganiser(eventId, actorId);
 
         const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId: targetUserId, eventId } } });
-        if (!current || current.status !== 'WAITLISTED') return { success: false, error: 'NOT_FOUND' };
+        if (!current || current.status !== 'WAITLISTED') throw new ActionError('NOT_FOUND');
 
         await prisma.attendance.update({
             where: { userId_eventId: { userId: targetUserId, eventId } },
             data: { status: 'GOING' }
         });
-        return { success: true, data: await EventService.buildContext(event) };
+        return await EventService.buildContext(event);
     }
 
     /**
@@ -894,11 +861,9 @@ export class EventService {
         eventId: string,
         actorId: string,
         isFull: boolean
-    ): Promise<EventServiceResult<EventActionContext & { waitlistedUserIds: string[] }>> {
-        const loaded = await EventService.loadForOrganiser(eventId, actorId);
-        if (!loaded.event) return { success: false, error: loaded.error };
-        const { event } = loaded;
-        if (event.joinMode !== 'REQUEST') return { success: false, error: 'EVENT_MODE_MISMATCH' };
+    ): Promise<EventActionContext & { waitlistedUserIds: string[] }> {
+        const event = await EventService.loadForOrganiser(eventId, actorId);
+        if (event.joinMode !== 'REQUEST') throw new ActionError('EVENT_MODE_MISMATCH');
 
         await prisma.event.update({ where: { id: eventId }, data: { isFull } });
 
@@ -910,10 +875,7 @@ export class EventService {
                 select: { userId: true }
             });
 
-        return {
-            success: true,
-            data: { ...(await EventService.buildContext(event)), waitlistedUserIds: waitlisted.map(w => w.userId) }
-        };
+        return { ...(await EventService.buildContext(event)), waitlistedUserIds: waitlisted.map(w => w.userId) };
     }
 
     /**

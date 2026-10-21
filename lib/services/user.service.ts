@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import type { MembershipRole, Prisma } from '@prisma/client';
-import type { ActionResponse } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { GROUP_CARD_RELATIONS, toGroupCard } from './group-card';
 import { getMyGroupsOverview } from './my-groups';
@@ -52,7 +52,7 @@ export const UserService = {
     },
 
     /** Saves only the switches given (Prisma ignores `undefined`); never touches name, bio, places or picture. */
-    async updatePrivacy(userId: string, data: Partial<PrivacySettings>): Promise<ActionResponse> {
+    async updatePrivacy(userId: string, data: Partial<PrivacySettings>): Promise<void> {
         try {
             await prisma.user.update({
                 where: { id: userId },
@@ -62,10 +62,11 @@ export const UserService = {
                     showGroupsOnProfile: data.showGroupsOnProfile,
                 },
             });
-            return { success: true };
+            return;
         } catch (error) {
+            if (error instanceof ActionError) throw error;
             console.error('[UserService.updatePrivacy] Error:', error);
-            return { success: false, error: 'UPDATE_FAILED' };
+            throw new ActionError('UPDATE_FAILED');
         }
     },
 
@@ -101,16 +102,16 @@ export const UserService = {
     },
 
     /** Creates an email + password account. Email and username are unique regardless of case. */
-    async createCredentialsUser(data: RegisterValues): Promise<ActionResponse> {
+    async createCredentialsUser(data: RegisterValues): Promise<void> {
         try {
             const emailTaken = await prisma.user.findFirst({
                 where: { email: { equals: data.email, mode: 'insensitive' } },
                 select: { id: true },
             });
-            if (emailTaken) return { success: false, error: 'EMAIL_TAKEN' };
+            if (emailTaken) throw new ActionError('EMAIL_TAKEN');
 
             if (!(await this.checkUsernameAvailability(data.username))) {
-                return { success: false, error: 'USERNAME_TAKEN' };
+                throw new ActionError('USERNAME_TAKEN');
             }
 
             await prisma.user.create({
@@ -121,10 +122,11 @@ export const UserService = {
                     password: await bcrypt.hash(data.password, 10),
                 },
             });
-            return { success: true };
+            return;
         } catch (error) {
+            if (error instanceof ActionError) throw error;
             console.error('[UserService.createCredentialsUser] Error:', error);
-            return { success: false, error: 'CREATE_FAILED' };
+            throw new ActionError('CREATE_FAILED');
         }
     },
 
@@ -136,11 +138,11 @@ export const UserService = {
         bio?: string;
         cities?: string[];
         avatarSeed?: string;
-    }): Promise<ActionResponse> {
+    }): Promise<void> {
         try {
             // Username uniqueness check — only when a username is being set
             if (data.username && !(await this.checkUsernameAvailability(data.username, userId))) {
-                return { success: false, error: 'USERNAME_TAKEN' };
+                throw new ActionError('USERNAME_TAKEN');
             }
 
             await prisma.user.update({
@@ -148,10 +150,11 @@ export const UserService = {
                 data
             });
 
-            return { success: true };
+            return;
         } catch (error) {
+            if (error instanceof ActionError) throw error;
             console.error('[UserService.updateProfile] Error:', error);
-            return { success: false, error: 'UPDATE_FAILED' };
+            throw new ActionError('UPDATE_FAILED');
         }
     },
 

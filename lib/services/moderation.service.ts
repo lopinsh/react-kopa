@@ -4,14 +4,10 @@ import { hideGroupSchema, deleteGroupSchema } from '@/lib/validations/moderation
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { NotificationService } from './notification.service';
 import { GroupService } from './group.service';
-import type { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { isSiteAdminUser, isSiteOwnerUser } from './site-role.service';
 
 export type AdminActionType = 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
-
-export type ModerationResult<T = void> =
-    | { success: true; data?: T }
-    | { success: false; error: ErrorCode };
 
 export interface AdminActionEntry {
     id: string;
@@ -49,11 +45,11 @@ export const ModerationService = {
     /**
      * Hides a group from everyone but site admins. Restorable; never deletes data.
      */
-    async hideGroup(groupId: string, adminId: string, reason: string, reportId?: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async hideGroup(groupId: string, adminId: string, reason: string, reportId?: string): Promise<{ slug: string; l1Slug: string }> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
 
         const parsed = hideGroupSchema.safeParse({ reason });
-        if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
@@ -62,7 +58,7 @@ export const ModerationService = {
                 members: { where: { role: 'OWNER' }, select: { userId: true } }
             }
         });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (!group) throw new ActionError('NOT_FOUND');
 
         // updateMany: the group may have been deleted since the read above (no P2025 thrown).
         const updated = await prisma.$transaction(async (tx) => {
@@ -76,7 +72,7 @@ export const ModerationService = {
             if (reportId) await tx.report.update({ where: { id: reportId }, data: { status: 'ACTION_TAKEN' } });
             return true;
         });
-        if (!updated) return { success: false, error: 'NOT_FOUND' };
+        if (!updated) throw new ActionError('NOT_FOUND');
 
         await Promise.all(group.members.map(m =>
             NotificationService.createNotification({
@@ -95,17 +91,17 @@ export const ModerationService = {
         });
 
         const resolved = TaxonomyResolver.resolve(group.category);
-        return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
-    async restoreGroup(groupId: string, adminId: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async restoreGroup(groupId: string, adminId: string): Promise<{ slug: string; l1Slug: string }> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
             include: { category: { include: TaxonomyResolver.getInclude('lv') } }
         });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (!group) throw new ActionError('NOT_FOUND');
 
         const updated = await prisma.$transaction(async (tx) => {
             const { count } = await tx.group.updateMany({
@@ -116,10 +112,10 @@ export const ModerationService = {
             await this.logAction(adminId, 'GROUP_RESTORE', 'GROUP', groupId, undefined, tx);
             return true;
         });
-        if (!updated) return { success: false, error: 'NOT_FOUND' };
+        if (!updated) throw new ActionError('NOT_FOUND');
 
         const resolved = TaxonomyResolver.resolve(group.category);
-        return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
     /**
@@ -127,12 +123,12 @@ export const ModerationService = {
      * Uses the same deletion as the owner's delete. The log row and the owner's notification
      * have no relation to the group, so they outlive it; the name is kept on the log row.
      */
-    async deleteHiddenGroup(groupId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
-        if (!(await isSiteOwnerUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async deleteHiddenGroup(groupId: string, adminId: string, reason: string): Promise<{ slug: string; l1Slug: string }> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
+        if (!(await isSiteOwnerUser(adminId))) throw new ActionError('FORBIDDEN');
 
         const parsed = deleteGroupSchema.safeParse({ reason });
-        if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
 
         const group = await prisma.group.findUnique({
             where: { id: groupId },
@@ -141,8 +137,8 @@ export const ModerationService = {
                 members: { where: { role: 'OWNER' }, select: { userId: true } }
             }
         });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
-        if (!group.hiddenAt) return { success: false, error: 'GROUP_NOT_HIDDEN' };
+        if (!group) throw new ActionError('NOT_FOUND');
+        if (!group.hiddenAt) throw new ActionError('GROUP_NOT_HIDDEN');
 
         // Re-checked inside the delete: a restore or another admin's delete may have landed since the read above.
         const deleted = await prisma.$transaction(async (tx) => {
@@ -152,7 +148,7 @@ export const ModerationService = {
         });
         if (!deleted) {
             const stillThere = await prisma.group.findUnique({ where: { id: groupId }, select: { id: true } });
-            return { success: false, error: stillThere ? 'GROUP_NOT_HIDDEN' : 'NOT_FOUND' };
+            throw new ActionError(stillThere ? 'GROUP_NOT_HIDDEN' : 'NOT_FOUND');
         }
 
         await Promise.all(group.members.map(m =>
@@ -165,7 +161,7 @@ export const ModerationService = {
         ));
 
         const resolved = TaxonomyResolver.resolve(group.category);
-        return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
     /** Groups currently hidden by moderation, newest first. */

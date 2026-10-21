@@ -9,7 +9,7 @@ import { GroupService } from '@/lib/services/group.service';
 import { PostService } from '@/lib/services/post.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { CITIES_TAG } from '@/lib/services/city.service';
-import { ActionResponse } from '@/types/actions';
+import { ActionError, ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 import { messageTextSchema } from '@/lib/validations/message';
 
@@ -25,9 +25,8 @@ export async function createGroup(data: GroupCreateValues, locale: string): Prom
         if (!validation.success) return validation;
 
         const result = await GroupService.createGroup(validation.data, session.user.id, locale);
-        if (!result.success) return result as ActionResponse<{ slug: string; l1Slug: string }>;
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
 
         revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}`, 'page');
@@ -51,13 +50,8 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
 
     try {
         const result = await GroupService.joinGroup(groupId, session.user.id, message);
-        if (!result.success) {
-            // A stale tab catches up to the pending state.
-            if (result.error === 'ALREADY_REQUESTED') revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
-            return result as ActionResponse<{ pending: boolean; conversationId: string }>;
-        }
 
-        const { slugs, groupName, adminIds, conversationId } = result.data!;
+        const { slugs, groupName, adminIds, conversationId } = result;
         // The frame (banner, pages, member count) lives in the layout.
         revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
 
@@ -71,6 +65,8 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
 
         return { success: true, data: { pending: true, conversationId } };
     } catch (error) {
+        // A stale tab catches up to the pending state.
+        if (error instanceof ActionError && error.code === 'ALREADY_REQUESTED') revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
         return handleActionError(error, 'JOIN_FAILED');
     }
 }
@@ -83,8 +79,7 @@ export async function cancelJoinRequest(groupId: string): Promise<ActionResponse
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.cancelJoinRequest(groupId, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        await GroupService.cancelJoinRequest(groupId, session.user.id);
 
         revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
         revalidatePath('/[locale]/profile/my-groups', 'page');
@@ -104,9 +99,8 @@ export async function sendInquiry(groupId: string, message: string): Promise<Act
 
     try {
         const result = await GroupService.sendInquiry(groupId, session.user.id, message);
-        if (!result.success) return result as ActionResponse<{ conversationId: string }>;
 
-        const { conversationId, teamIds, groupName } = result.data!;
+        const { conversationId, teamIds, groupName } = result;
 
         // Owner and admins can all answer the group chat, so all of them hear about it.
         await Promise.all(teamIds.map(teamUserId => NotificationService.notify({
@@ -131,8 +125,7 @@ export async function leaveGroup(groupId: string): Promise<ActionResponse> {
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.leaveGroup(groupId, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        await GroupService.leaveGroup(groupId, session.user.id);
 
         updateTag('groups');
         revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
@@ -154,9 +147,8 @@ export async function manageMembership(
 
     try {
         const result = await GroupService.manageMembership(membershipId, action, session.user.id);
-        if (!result.success) return result as ActionResponse;
 
-        const { targetUserId, groupName, groupSlug, l1Slug } = result.data!;
+        const { targetUserId, groupName, groupSlug, l1Slug } = result;
 
         if (action === 'APPROVE') {
             await NotificationService.notify({
@@ -200,9 +192,8 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
         if (!validation.success) return validation;
 
         const result = await GroupService.updateGroup(groupId, validation.data, session.user.id);
-        if (!result.success) return result as ActionResponse<{ slug: string; l1Slug: string }>;
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
@@ -225,8 +216,7 @@ export async function deleteGroup(groupId: string, locale: string): Promise<Acti
     if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
 
     try {
-        const result = await GroupService.deleteGroup(groupId, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        await GroupService.deleteGroup(groupId, session.user.id);
 
         // Discovery caches groups and events by tag; without this the deleted group stays listed (and 404s) until the cache expires.
         updateTag('groups');
@@ -256,9 +246,9 @@ export async function upsertSectionAction(
         if (!validation.success) return validation;
 
         const result = await GroupService.upsertSection(groupId, validation.data, session.user.id);
-        if (!result.success) return result as ActionResponse<{ sectionId: string }>;
+        if (!result) throw new ActionError('NOT_FOUND'); // the group vanished while saving
 
-        const { slug, l1Slug, sectionId } = result.data!;
+        const { slug, l1Slug, sectionId } = result;
 
         updateTag('groups');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
@@ -280,12 +270,12 @@ export async function reorderSectionsAction(
 
     try {
         const result = await GroupService.reorderSections(groupId, sectionIds, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        if (!result) throw new ActionError('NOT_FOUND'); // the group vanished while saving
 
         // The home section feeds the group card's tagline.
         updateTag('groups');
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
@@ -305,12 +295,12 @@ export async function deleteSectionAction(
 
     try {
         const result = await GroupService.deleteSection(sectionId, session.user.id);
-        if (!result.success) return result as ActionResponse;
+        if (!result) throw new ActionError('NOT_FOUND'); // the group vanished while saving
 
         // The home section feeds the group card's tagline.
         updateTag('groups');
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
 
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
@@ -331,9 +321,8 @@ export async function promoteMember(groupId: string, targetUserId: string, local
 
     try {
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'ADMIN', session.user.id);
-        if (!result.success) return result as ActionResponse;
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
@@ -351,9 +340,8 @@ export async function demoteMember(groupId: string, targetUserId: string, locale
 
     try {
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'MEMBER', session.user.id);
-        if (!result.success) return result as ActionResponse;
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
@@ -371,10 +359,9 @@ export async function kickMember(groupId: string, targetUserId: string, locale: 
 
     try {
         const result = await GroupService.removeMember(groupId, targetUserId, session.user.id);
-        if (!result.success) return result as ActionResponse;
         updateTag('groups');
 
-        const { slug, l1Slug } = result.data!;
+        const { slug, l1Slug } = result;
         revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
 
         return { success: true };
@@ -411,9 +398,8 @@ export async function transferOwnership(groupId: string, targetUserId: string, l
 
     try {
         const result = await GroupService.transferOwnership(groupId, targetUserId, session.user.id);
-        if (!result.success) return result as ActionResponse;
 
-        const { groupName, groupSlug, l1Slug } = result.data!;
+        const { groupName, groupSlug, l1Slug } = result;
 
         await NotificationService.notify({
             userId: targetUserId,

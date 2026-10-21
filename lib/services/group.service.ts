@@ -3,7 +3,7 @@ import { CityService } from './city.service';
 import { cache } from 'react';
 import { MembershipRole } from '@prisma/client';
 import { GroupFormValues, GroupCreateValues } from '@/lib/validations/group';
-import { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights, allowedMemberActions } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
@@ -132,18 +132,6 @@ export interface GroupContext {
         hidden: { reason: string | null; at: Date } | null;
     };
 }
-
-export interface GroupServiceResponse<T = void> {
-    success: true;
-    data?: T;
-}
-
-export interface GroupServiceError {
-    success: false;
-    error: ErrorCode;
-}
-
-export type GroupServiceResult<T = void> = GroupServiceResponse<T> | GroupServiceError;
 
 /**
  * Service to handle business logic and data fetching for Groups.
@@ -413,7 +401,7 @@ export const GroupService = {
         });
     },
 
-    async createGroup(data: GroupCreateValues, userId: string, locale: string): Promise<GroupServiceResult<{ slug: string; id: string; l1Slug: string }>> {
+    async createGroup(data: GroupCreateValues, userId: string, locale: string): Promise<{ slug: string; id: string; l1Slug: string }> {
         const lang = toTextLang(locale);
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
@@ -428,12 +416,12 @@ export const GroupService = {
         }
 
         const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], targetCategoryId);
-        if (tagError) return { success: false, error: tagError };
+        if (tagError) throw new ActionError(tagError);
         if (!(await TaxonomyService.isValidPrimaryCategory(targetCategoryId))) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
         if (!(await CityService.isUsableBy(data.city, userId))) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
         const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
 
@@ -443,7 +431,7 @@ export const GroupService = {
             include: TaxonomyResolver.getInclude('lv')
         });
 
-        if (!category) return { success: false, error: 'NOT_FOUND' };
+        if (!category) throw new ActionError('NOT_FOUND');
 
         const resolved = TaxonomyResolver.resolve(category);
 
@@ -489,48 +477,45 @@ export const GroupService = {
             }
         });
 
-        return { success: true, data: { slug: group.slug, id: group.id, l1Slug: resolved.l1Slug } };
+        return { slug: group.slug, id: group.id, l1Slug: resolved.l1Slug };
     },
 
     /**
      * Sends a message from someone outside the team to a group: it goes into their group chat, which the
      * owner and all admins can answer. Returns the team to notify.
      */
-    async sendInquiry(groupId: string, userId: string, message: string): Promise<GroupServiceResult<{ conversationId: string; teamIds: string[]; groupName: string }>> {
+    async sendInquiry(groupId: string, userId: string, message: string): Promise<{ conversationId: string; teamIds: string[]; groupName: string }> {
         const group = await prisma.group.findFirst({
             where: { id: groupId, hiddenAt: null },
             select: { name: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
         });
 
-        if (!group) return { success: false, error: 'NOT_FOUND' };
-        if (group.members.some((m) => m.userId === userId)) return { success: false, error: 'FORBIDDEN' };
+        if (!group) throw new ActionError('NOT_FOUND');
+        if (group.members.some((m) => m.userId === userId)) throw new ActionError('FORBIDDEN');
 
         const chat = await MessageService.getOrCreateGroupChat(groupId, userId, 'GROUP_CONTACT');
         await MessageService.sendMessage(chat.id, userId, message);
 
-        return {
-            success: true,
-            data: { conversationId: chat.id, teamIds: group.members.map((m) => m.userId), groupName: group.name }
-        };
+        return { conversationId: chat.id, teamIds: group.members.map((m) => m.userId), groupName: group.name };
     },
 
-    async joinGroup(groupId: string, userId: string, message?: string): Promise<GroupServiceResult<{ pending: boolean; conversationId: string; slugs: { slug: string; l1Slug: string } | null; groupName: string; adminIds: string[] }>> {
+    async joinGroup(groupId: string, userId: string, message?: string): Promise<{ pending: boolean; conversationId: string; slugs: { slug: string; l1Slug: string } | null; groupName: string; adminIds: string[] }> {
         const existing = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
 
-        if (existing) return { success: false, error: existing.role === 'PENDING' ? 'ALREADY_REQUESTED' : 'JOIN_FAILED' };
+        if (existing) throw new ActionError(existing.role === 'PENDING' ? 'ALREADY_REQUESTED' : 'JOIN_FAILED');
 
         if (!message?.trim()) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         const group = await prisma.group.findFirst({
             where: { id: groupId, hiddenAt: null },
             select: { name: true, isAcceptingMembers: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
         });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
-        if (!group.isAcceptingMembers) return { success: false, error: 'NOT_ACCEPTING_MEMBERS' };
+        if (!group) throw new ActionError('NOT_FOUND');
+        if (!group.isAcceptingMembers) throw new ActionError('NOT_ACCEPTING_MEMBERS');
 
         const slugs = await this.getGroupSlugs(groupId);
 
@@ -545,7 +530,7 @@ export const GroupService = {
         } catch (error) {
             // A second request from the same person landed first (double click, two tabs).
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                return { success: false, error: 'ALREADY_REQUESTED' };
+                throw new ActionError('ALREADY_REQUESTED');
             }
             throw error;
         }
@@ -562,28 +547,28 @@ export const GroupService = {
             throw error;
         }
 
-        return { success: true, data: { pending: true, conversationId, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) } };
+        return { pending: true, conversationId, slugs, groupName: group.name, adminIds: group.members.map(m => m.userId) };
     },
 
-    async leaveGroup(groupId: string, userId: string): Promise<GroupServiceResult> {
+    async leaveGroup(groupId: string, userId: string): Promise<void> {
         const membership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
-        if (!membership) return { success: false, error: 'NOT_FOUND' };
+        if (!membership) throw new ActionError('NOT_FOUND');
         // A group always has one owner: they hand it over (or delete the group) before leaving.
-        if (membership.role === 'OWNER') return { success: false, error: 'OWNER_MUST_TRANSFER' };
+        if (membership.role === 'OWNER') throw new ActionError('OWNER_MUST_TRANSFER');
 
         await prisma.membership.delete({ where: { id: membership.id } });
-        return { success: true };
+        return;
     },
 
-    async cancelJoinRequest(groupId: string, userId: string): Promise<GroupServiceResult<{ slugs: { slug: string; l1Slug: string } | null }>> {
+    async cancelJoinRequest(groupId: string, userId: string): Promise<{ slugs: { slug: string; l1Slug: string } | null }> {
         const membership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId, groupId } },
         });
 
         if (!membership || membership.role !== 'PENDING') {
-            return { success: false, error: 'NOT_FOUND' };
+            throw new ActionError('NOT_FOUND');
         }
 
         const slugs = await this.getGroupSlugs(groupId);
@@ -594,18 +579,18 @@ export const GroupService = {
 
         // The group chat stays: it is a conversation, not part of the request.
 
-        return { success: true, data: { slugs } };
+        return { slugs };
     },
 
-    async deleteGroup(groupId: string, userId: string): Promise<GroupServiceResult> {
+    async deleteGroup(groupId: string, userId: string): Promise<void> {
         const isOwner = await prisma.membership.findFirst({
             where: { groupId, userId, role: 'OWNER' }
         });
 
-        if (!isOwner) return { success: false, error: 'FORBIDDEN' };
+        if (!isOwner) throw new ActionError('FORBIDDEN');
 
         const deleted = await this.deleteGroupRecord(groupId);
-        return deleted ? { success: true } : { success: false, error: 'NOT_FOUND' };
+        if (!deleted) throw new ActionError('NOT_FOUND');
     },
 
     /**
@@ -627,7 +612,7 @@ export const GroupService = {
      * The link name (slug) and accent colour are never changed here: the slug would break shared links
      * and the colour comes from the category.
      */
-    async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+    async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<{ slug: string; l1Slug: string }> {
         const [membership, actor, current] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId } }),
             getSiteRole(userId),
@@ -640,13 +625,13 @@ export const GroupService = {
         const role = membership?.role;
         const isAppAdmin = isSiteAdminRole(actor);
         if (!hasAdminRights(role) && !isAppAdmin) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
-        if (!current) return { success: false, error: 'NOT_FOUND' };
+        if (!current) throw new ActionError('NOT_FOUND');
 
         // A new city must exist and be approved (or be this person's own pending suggestion); the group's current one always stays valid.
         if (!(await CityService.isUsableBy(data.city, userId, current.city))) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         const canEditOwnerFields = role === 'OWNER' || isAppAdmin;
@@ -661,7 +646,7 @@ export const GroupService = {
                 data.categoryId !== current.categoryId ||
                 sentTags !== currentTags
             ) {
-                return { success: false, error: 'FORBIDDEN' };
+                throw new ActionError('FORBIDDEN');
             }
         }
 
@@ -682,9 +667,9 @@ export const GroupService = {
                 currentTagIds: current.tags.map((t) => t.id),
                 currentCategoryId: current.categoryId,
             });
-            if (tagError) return { success: false, error: tagError };
+            if (tagError) throw new ActionError(tagError);
             if (!(await TaxonomyService.isValidPrimaryCategory(data.categoryId, current.categoryId))) {
-                return { success: false, error: 'VALIDATION_FAILED' };
+                throw new ActionError('VALIDATION_FAILED');
             }
             updateData.name = data.name;
             updateData.type = data.type;
@@ -712,7 +697,7 @@ export const GroupService = {
 
         const resolved = TaxonomyResolver.resolve(group.category);
 
-        return { success: true, data: { slug: group.slug, l1Slug: resolved.l1Slug } };
+        return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
     /**
@@ -811,9 +796,9 @@ export const GroupService = {
      * which row visitors fall back to, so that language must already have a title.
      * New sections get the saved language as their original language.
      */
-    async upsertSection(groupId: string, data: SectionSaveValues, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string; sectionId: string }>> {
+    async upsertSection(groupId: string, data: SectionSaveValues, userId: string): Promise<{ slug: string; l1Slug: string; sectionId: string } | undefined> {
         const access = await this.getManagerAccess(groupId, userId);
-        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
+        if (!access.allowed) throw new ActionError('FORBIDDEN');
 
         const { lang } = data;
         const title = data.title.trim();
@@ -827,7 +812,7 @@ export const GroupService = {
                 data = { ...data, id: first.id };
             } else {
                 const group = await prisma.group.findUnique({ where: { id: groupId }, select: { description: true } });
-                if (!group) return { success: false, error: 'NOT_FOUND' };
+                if (!group) throw new ActionError('NOT_FOUND');
                 const created = await prisma.groupSection.create({
                     data: { groupId, visibility: 'PUBLIC', order: 0, originalLang: 'lv', translations: { create: defaultSectionRows('about', { lv: group.description ?? '' }) } },
                     select: { id: true }
@@ -842,14 +827,14 @@ export const GroupService = {
                 where: { id: data.id, groupId },
                 select: { id: true, order: true, originalLang: true, translations: { select: { lang: true, title: true } } }
             });
-            if (!owned) return { success: false, error: 'NOT_FOUND' };
+            if (!owned) throw new ActionError('NOT_FOUND');
             sectionId = owned.id;
 
             const originalLang = data.originalLang ?? toTextLang(owned.originalLang);
             if (lang === originalLang) {
-                if (!title) return { success: false, error: 'TITLE_REQUIRED' };
+                if (!title) throw new ActionError('TITLE_REQUIRED');
             } else if (!owned.translations.some((t) => t.lang === originalLang && t.title.trim())) {
-                return { success: false, error: 'ORIGINAL_LANG_EMPTY' };
+                throw new ActionError('ORIGINAL_LANG_EMPTY');
             }
             const removeRow = lang !== originalLang && !title && !hasText(data.content);
 
@@ -894,9 +879,9 @@ export const GroupService = {
                 if (original) await prisma.group.update({ where: { id: groupId }, data: { description: original.content } });
             }
         } else {
-            if (!title) return { success: false, error: 'TITLE_REQUIRED' };
+            if (!title) throw new ActionError('TITLE_REQUIRED');
             if ((await prisma.groupSection.count({ where: { groupId } })) >= MAX_SECTIONS) {
-                return { success: false, error: 'VALIDATION_FAILED' };
+                throw new ActionError('VALIDATION_FAILED');
             }
             // New sections go last (orders may have gaps after a delete); the first section is always public.
             const last = await prisma.groupSection.aggregate({ where: { groupId }, _max: { order: true } });
@@ -917,12 +902,12 @@ export const GroupService = {
         if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
 
         const slugs = await this.getGroupSlugs(groupId);
-        return { success: true, data: slugs ? { ...slugs, sectionId } : undefined };
+        return slugs ? { ...slugs, sectionId } : undefined;
     },
 
-    async reorderSections(groupId: string, sectionIds: string[], userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+    async reorderSections(groupId: string, sectionIds: string[], userId: string): Promise<{ slug: string; l1Slug: string } | undefined> {
         const access = await this.getManagerAccess(groupId, userId);
-        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
+        if (!access.allowed) throw new ActionError('FORBIDDEN');
 
         // Only sections of this group can be reordered.
         await prisma.$transaction(
@@ -936,54 +921,54 @@ export const GroupService = {
         if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
 
         const slugs = await this.getGroupSlugs(groupId);
-        return { success: true, data: slugs ?? undefined };
+        return slugs ?? undefined;
     },
 
-    async deleteSection(sectionId: string, userId: string): Promise<GroupServiceResult<{ slug: string; l1Slug: string }>> {
+    async deleteSection(sectionId: string, userId: string): Promise<{ slug: string; l1Slug: string } | undefined> {
         const section = await prisma.groupSection.findUnique({
             where: { id: sectionId }
         });
 
-        if (!section) return { success: false, error: 'NOT_FOUND' };
+        if (!section) throw new ActionError('NOT_FOUND');
 
         const access = await this.getManagerAccess(section.groupId, userId);
-        if (!access.allowed) return { success: false, error: 'FORBIDDEN' };
+        if (!access.allowed) throw new ActionError('FORBIDDEN');
 
         // Guard: Prevent deleting Section 1 (order 0)
         if (section.order === 0) {
-            return { success: false, error: 'DELETE_FAILED' };
+            throw new ActionError('DELETE_FAILED');
         }
 
         const slugs = await this.getGroupSlugs(section.groupId);
         await prisma.groupSection.delete({ where: { id: sectionId } });
         if (access.bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', section.groupId);
-        return { success: true, data: slugs ?? undefined };
+        return slugs ?? undefined;
     },
 
     /**
      * Makes a member a moderator (ADMIN) or takes the moderator role away (back to MEMBER).
      * Owner only. OWNER is never set here: ownership only moves through `transferOwnership`.
      */
-    async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupServiceResult<GroupSlugs>> {
+    async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupSlugs> {
         const actorMembership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId: actorId, groupId } },
             include: { group: { select: GROUP_SLUG_SELECT } }
         });
 
         if (!actorMembership || actorMembership.role !== 'OWNER') {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         // The owner keeps their own role.
         if (targetUserId === actorId) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         // The same rule the member menu shows.
         const target = await prisma.membership.findUnique({ where: { userId_groupId: { userId: targetUserId, groupId } }, select: { role: true } });
-        if (!target) return { success: false, error: 'NOT_FOUND' };
+        if (!target) throw new ActionError('NOT_FOUND');
         if (!allowedMemberActions(actorMembership.role, target.role).includes(newRole === 'ADMIN' ? 'promote' : 'demote')) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         // Promote a member, or demote a moderator: nothing else.
@@ -992,9 +977,9 @@ export const GroupService = {
             where: { groupId, userId: targetUserId, role: expectedCurrent },
             data: { role: newRole }
         });
-        if (updated.count !== 1) return { success: false, error: 'VALIDATION_FAILED' };
+        if (updated.count !== 1) throw new ActionError('VALIDATION_FAILED');
 
-        return { success: true, data: { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug } };
+        return { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug };
     },
 
     /**
@@ -1002,14 +987,14 @@ export const GroupService = {
      * becomes a moderator, the chosen person becomes the one owner. Demoting first keeps the
      * "one owner per group" index satisfied at every step.
      */
-    async transferOwnership(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult<{ groupName: string; groupSlug: string; l1Slug: string }>> {
-        if (targetUserId === actorId) return { success: false, error: 'VALIDATION_FAILED' };
+    async transferOwnership(groupId: string, targetUserId: string, actorId: string): Promise<{ groupName: string; groupSlug: string; l1Slug: string }> {
+        if (targetUserId === actorId) throw new ActionError('VALIDATION_FAILED');
 
         const group = await prisma.group.findFirst({
             where: { id: groupId, hiddenAt: null },
             include: { category: { include: TaxonomyResolver.getInclude('lv') } }
         });
-        if (!group) return { success: false, error: 'NOT_FOUND' };
+        if (!group) throw new ActionError('NOT_FOUND');
 
         const outcome = await prisma.$transaction(async (tx) => {
             const demoted = await tx.membership.updateMany({
@@ -1030,24 +1015,21 @@ export const GroupService = {
             throw e;
         });
 
-        if (outcome !== 'OK') return { success: false, error: outcome };
+        if (outcome !== 'OK') throw new ActionError(outcome);
 
-        return {
-            success: true,
-            data: { groupName: group.name, groupSlug: group.slug, l1Slug: TaxonomyResolver.resolve(group.category).l1Slug }
-        };
+        return { groupName: group.name, groupSlug: group.slug, l1Slug: TaxonomyResolver.resolve(group.category).l1Slug };
     },
 
     /**
      * Approve or decline a membership request.
      */
-    async manageMembership(membershipId: string, action: 'APPROVE' | 'DECLINE', actorId: string): Promise<GroupServiceResult<{ targetUserId: string; groupName: string; groupSlug: string; l1Slug: string }>> {
+    async manageMembership(membershipId: string, action: 'APPROVE' | 'DECLINE', actorId: string): Promise<{ targetUserId: string; groupName: string; groupSlug: string; l1Slug: string }> {
         const membershipToManage = await prisma.membership.findUnique({
             where: { id: membershipId },
             include: { group: { include: { category: { include: TaxonomyResolver.getInclude('lv') } } } }
         });
 
-        if (!membershipToManage) return { success: false, error: 'NOT_FOUND' };
+        if (!membershipToManage) throw new ActionError('NOT_FOUND');
 
         const requesterMembership = await prisma.membership.findUnique({
             where: {
@@ -1059,12 +1041,12 @@ export const GroupService = {
         });
 
         if (!requesterMembership || !hasAdminRights(requesterMembership.role)) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         // Only open requests can be approved or declined (never an existing member, moderator or owner).
         if (membershipToManage.role !== 'PENDING') {
-            return { success: false, error: 'NOT_FOUND' };
+            throw new ActionError('NOT_FOUND');
         }
 
         if (action === 'APPROVE') {
@@ -1079,13 +1061,10 @@ export const GroupService = {
         }
 
         return {
-            success: true,
-            data: {
-                targetUserId: membershipToManage.userId,
-                groupName: membershipToManage.group.name,
-                groupSlug: membershipToManage.group.slug,
-                l1Slug: TaxonomyResolver.resolve(membershipToManage.group.category).l1Slug
-            }
+            targetUserId: membershipToManage.userId,
+            groupName: membershipToManage.group.name,
+            groupSlug: membershipToManage.group.slug,
+            l1Slug: TaxonomyResolver.resolve(membershipToManage.group.category).l1Slug
         };
     },
 
@@ -1094,36 +1073,36 @@ export const GroupService = {
      * The owner can remove moderators, members and requests. Moderators can remove members and requests,
      * but never the owner or another moderator. Nobody removes the owner.
      */
-    async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupServiceResult<GroupSlugs>> {
+    async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupSlugs> {
         const actorMembership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId: actorId, groupId } },
             include: { group: { select: GROUP_SLUG_SELECT } }
         });
 
         if (!actorMembership || !hasAdminRights(actorMembership.role)) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         const targetMembership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        if (!targetMembership) return { success: false, error: 'NOT_FOUND' };
+        if (!targetMembership) throw new ActionError('NOT_FOUND');
 
         // Prevent self-removal here (use leaveGroup for that)
         if (targetUserId === actorId) {
-            return { success: false, error: 'VALIDATION_FAILED' };
+            throw new ActionError('VALIDATION_FAILED');
         }
 
         // The same rule the member menu shows.
         if (!allowedMemberActions(actorMembership.role, targetMembership.role).includes('remove')) {
-            return { success: false, error: 'FORBIDDEN' };
+            throw new ActionError('FORBIDDEN');
         }
 
         await prisma.membership.delete({
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        return { success: true, data: { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug } };
+        return { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug };
     }
 };

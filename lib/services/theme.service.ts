@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import type { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import {
     DEFAULT_THEME_KEY, DEFAULT_THEME_STYLE_KEY, THEME_CACHE_TAG, THEME_FONT_IDS, THEME_PRESETS, THEME_PRESET_KEYS, THEME_STYLE_KEYS,
     type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey, type ThemeStyleKey,
@@ -22,10 +22,6 @@ export interface ThemeContext {
     /** True when this is an admin's unpublished draft, not the site-wide theme. */
     isPreview: boolean;
 }
-
-export type ThemeResult<T = void> =
-    | { success: true; data?: T }
-    | { success: false; error: ErrorCode };
 
 function defaultTheme(): ThemeContext {
     const p = THEME_PRESETS[DEFAULT_THEME_KEY];
@@ -91,38 +87,38 @@ export const ThemeService = {
     },
 
     /** Saves the admin's preview. Each admin keeps one draft at a time. */
-    async saveDraft(adminId: string, input: ThemeInput): Promise<ThemeResult<{ id: string }>> {
+    async saveDraft(adminId: string, input: ThemeInput): Promise<{ id: string }> {
         const parsed = themeInputSchema.safeParse(input);
-        if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
-        if (themeContrastIssues(parsed.data).length > 0) return { success: false, error: 'CONTRAST_TOO_LOW' };
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
+        if (themeContrastIssues(parsed.data).length > 0) throw new ActionError('CONTRAST_TOO_LOW');
         const created = await prisma.$transaction(async (tx) => {
             await tx.siteTheme.deleteMany({ where: { isPublished: false, updatedById: adminId } });
             return tx.siteTheme.create({ data: { ...parsed.data, isPublished: false, updatedById: adminId } });
         });
-        return { success: true, data: { id: created.id } };
+        return { id: created.id };
     },
 
     /** Makes the given values the site-wide theme and drops the admin's draft. */
-    async publish(adminId: string, input: ThemeInput): Promise<ThemeResult> {
+    async publish(adminId: string, input: ThemeInput): Promise<void> {
         const parsed = themeInputSchema.safeParse(input);
-        if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
-        if (themeContrastIssues(parsed.data).length > 0) return { success: false, error: 'CONTRAST_TOO_LOW' };
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
+        if (themeContrastIssues(parsed.data).length > 0) throw new ActionError('CONTRAST_TOO_LOW');
         await prisma.$transaction([
             prisma.siteTheme.deleteMany({ where: { OR: [{ isPublished: true }, { isPublished: false, updatedById: adminId }] } }),
             prisma.siteTheme.create({ data: { ...parsed.data, isPublished: true, updatedById: adminId } }),
         ]);
-        return { success: true };
+        return;
     },
 
     /** Publishes the admin's saved draft. */
-    async publishDraft(adminId: string, draftId: string): Promise<ThemeResult> {
+    async publishDraft(adminId: string, draftId: string): Promise<void> {
         const draft = await ThemeService.getDraft(draftId);
-        if (!draft) return { success: false, error: 'NOT_FOUND' };
+        if (!draft) throw new ActionError('NOT_FOUND');
         return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont, styleKey: draft.styleKey });
     },
 
     /** Back to the default preset (Sūna) for everyone. */
-    async reset(adminId: string): Promise<ThemeResult> {
+    async reset(adminId: string): Promise<void> {
         return ThemeService.publish(adminId, presetInput(DEFAULT_THEME_KEY));
     },
 

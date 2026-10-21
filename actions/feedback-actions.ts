@@ -35,7 +35,6 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Action
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.create(check.userId, input);
-        if (!result.success) return result;
         await NotificationService.notifyAdmins({
             type: 'ADMIN_FEEDBACK',
             args: { excerpt: input.text },
@@ -43,7 +42,7 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Action
             exceptUserId: check.userId,
         });
         revalidatePath('/[locale]/admin/feedback', 'page');
-        return { success: true, data: result.data };
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'CREATE_FAILED');
     }
@@ -55,7 +54,7 @@ export async function getPageFeedback(path: string): Promise<ActionResponse<Feed
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.listForPath(check.userId, path);
-        return result.success ? { success: true, data: result.data } : result;
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }
@@ -66,9 +65,8 @@ export async function updateFeedback(id: string, input: UpdateFeedbackInput): Pr
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.update(check.userId, id, input);
-        if (!result.success) return result;
         revalidatePath('/[locale]/admin/feedback', 'page');
-        return { success: true, data: result.data };
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
     }
@@ -80,9 +78,8 @@ export async function replyToFeedback(id: string, input: ReplyFeedbackInput): Pr
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.reply(check.userId, id, input);
-        if (!result.success) return result;
         revalidatePath('/[locale]/admin/feedback', 'page');
-        return { success: true, data: result.data };
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');
     }
@@ -92,8 +89,7 @@ export async function deleteFeedback(id: string): Promise<ActionResponse> {
     const check = await requireSiteAdmin();
     if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await FeedbackService.remove(check.userId, id);
-        if (!result.success) return result;
+        await FeedbackService.remove(check.userId, id);
         revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true };
     } catch (error) {
@@ -107,9 +103,8 @@ export async function purgeCompletedFeedback(): Promise<ActionResponse<{ count: 
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await FeedbackService.purgeClosed(check.userId);
-        if (!result.success) return result;
         revalidatePath('/[locale]/admin/feedback', 'page');
-        return { success: true, data: result.data };
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }

@@ -5,6 +5,7 @@ import { UserService } from '@/lib/services/user.service';
 import { revalidateTag, revalidatePath } from 'next/cache';
 import { profileSchema, privacySchema } from '@/lib/validations/user';
 import type { ActionResponse } from '@/types/actions';
+import { handleActionError } from '@/lib/action-utils';
 import type { OwnCounts } from '@/lib/types/own-area';
 
 export async function updateProfile(formData: unknown): Promise<ActionResponse> {
@@ -21,20 +22,21 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
         ? data.cities.split(',').map(c => c.trim()).filter(Boolean)
         : [];
 
-    const result = await UserService.updateProfile(userId, {
-        name: data.name,
-        image: data.image || undefined,
-        username: data.username || undefined,
-        bio: data.bio || undefined,
-        cities: citiesArray,
-        avatarSeed: data.avatarSeed || undefined,
-    });
-
-    if (!result.success) return { success: false, error: result.error };
-
-    revalidateTag('groups', 'max');
-    revalidatePath('/', 'layout');
-    return { success: true };
+    try {
+        await UserService.updateProfile(userId, {
+            name: data.name,
+            image: data.image || undefined,
+            username: data.username || undefined,
+            bio: data.bio || undefined,
+            cities: citiesArray,
+            avatarSeed: data.avatarSeed || undefined,
+        });
+        revalidateTag('groups', 'max');
+        revalidatePath('/', 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'UPDATE_FAILED');
+    }
 }
 
 /** One or more privacy switches from Iestatījumi. Never touches name, bio, places or picture. */
@@ -45,12 +47,14 @@ export async function updatePrivacy(input: unknown): Promise<ActionResponse> {
     const parsed = privacySchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
-    const result = await UserService.updatePrivacy(session.user.id, parsed.data);
-    if (!result.success) return { success: false, error: result.error };
-
-    revalidateTag('groups', 'max');
-    revalidatePath('/', 'layout');
-    return { success: true };
+    try {
+        await UserService.updatePrivacy(session.user.id, parsed.data);
+        revalidateTag('groups', 'max');
+        revalidatePath('/', 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'UPDATE_FAILED');
+    }
 }
 
 /** The numbers in the menus (own counts); the client asks on load, on focus and after anything that changes them. */

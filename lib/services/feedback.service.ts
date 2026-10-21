@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import type { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { FEEDBACK_TAB_STATUSES, type FeedbackKindValue, type FeedbackStatusValue, type FeedbackTab } from '@/lib/constants';
 import { createFeedbackSchema, updateFeedbackSchema, replyFeedbackSchema, type FeedbackFilter } from '@/lib/validations/feedback';
 import { isSiteAdminUser } from './site-role.service';
@@ -40,10 +40,6 @@ export interface FeedbackItem {
     createdAt: Date;
     authorName: string | null;
 }
-
-export type FeedbackResult<T = void> =
-    | { success: true; data?: T }
-    | { success: false; error: ErrorCode };
 
 const itemArgs = {
     include: {
@@ -93,11 +89,11 @@ function resolvedAtFor(status: FeedbackStatusValue): Date | null {
 }
 
 /** Status change; a non-empty `reply` is appended to the thread (never replaces anything). `authorId` null means the agent. */
-async function updateNote(id: string, authorId: string | null, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
+async function updateNote(id: string, authorId: string | null, input: unknown): Promise<FeedbackItem> {
     const parsed = updateFeedbackSchema.safeParse(input);
-    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+    if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
     const existing = await prisma.feedback.findUnique({ where: { id }, select: { status: true } });
-    if (!existing) return { success: false, error: 'NOT_FOUND' };
+    if (!existing) throw new ActionError('NOT_FOUND');
 
     const row = await prisma.feedback.update({
         where: { id },
@@ -109,14 +105,14 @@ async function updateNote(id: string, authorId: string | null, input: unknown): 
         },
         ...itemArgs,
     });
-    return { success: true, data: toItem(row) };
+    return toItem(row);
 }
 
-async function addReply(id: string, authorId: string | null, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
+async function addReply(id: string, authorId: string | null, input: unknown): Promise<FeedbackItem> {
     const parsed = replyFeedbackSchema.safeParse(input);
-    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+    if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
     const existing = await prisma.feedback.findUnique({ where: { id }, select: { status: true } });
-    if (!existing) return { success: false, error: 'NOT_FOUND' };
+    if (!existing) throw new ActionError('NOT_FOUND');
     // An admin answering a closed note means it needs action again; the agent's own reply never reopens.
     const reopen = authorId !== null && (existing.status === 'DONE' || existing.status === 'WONT_DO');
     const row = await prisma.feedback.update({
@@ -127,38 +123,38 @@ async function addReply(id: string, authorId: string | null, input: unknown): Pr
         },
         ...itemArgs,
     });
-    return { success: true, data: toItem(row) };
+    return toItem(row);
 }
 
 /** Hard delete. `deleteMany` so a note that is already gone is NOT_FOUND instead of a thrown error. */
-async function deleteNote(id: string): Promise<FeedbackResult> {
+async function deleteNote(id: string): Promise<void> {
     const { count } = await prisma.feedback.deleteMany({ where: { id } });
-    return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
+    if (count === 0) throw new ActionError('NOT_FOUND');
 }
 
 export const FeedbackService = {
-    async create(adminId: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async create(adminId: string, input: unknown): Promise<FeedbackItem> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const parsed = createFeedbackSchema.safeParse(input);
-        if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
 
         const row = await prisma.feedback.create({ data: { ...parsed.data, authorId: adminId }, ...itemArgs });
-        return { success: true, data: toItem(row) };
+        return toItem(row);
     },
 
     /** Notes for one page. A path without a query also matches the same page with any query. */
-    async listForPath(adminId: string, path: string): Promise<FeedbackResult<FeedbackItem[]>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async listForPath(adminId: string, path: string): Promise<FeedbackItem[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const rows = await prisma.feedback.findMany({
             where: { OR: [{ path }, { path: { startsWith: `${path}?` } }] },
             orderBy: { createdAt: 'asc' },
             ...itemArgs,
         });
-        return { success: true, data: rows.map(toItem) };
+        return rows.map(toItem);
     },
 
-    async list(adminId: string, filter: FeedbackFilter): Promise<FeedbackResult<FeedbackItem[]>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async list(adminId: string, filter: FeedbackFilter): Promise<FeedbackItem[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const rows = await prisma.feedback.findMany({
             where: {
                 kind: filter.kind,
@@ -169,33 +165,33 @@ export const FeedbackService = {
             take: 200,
             ...itemArgs,
         });
-        return { success: true, data: rows.map(toItem) };
+        return rows.map(toItem);
     },
 
     /** Note counts per tab (ignores the kind/page filters, so the tab labels stay stable). */
-    async counts(adminId: string): Promise<FeedbackResult<Record<FeedbackTab, number>>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async counts(adminId: string): Promise<Record<FeedbackTab, number>> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const [open, completed] = await Promise.all([
             prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.open] } } }),
             prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } }),
         ]);
-        return { success: true, data: { open, completed } };
+        return { open, completed };
     },
 
     /** Deletes every DONE / WONT_DO note (replies cascade) and returns how many went. Open notes are untouched. */
-    async purgeClosed(adminId: string): Promise<FeedbackResult<{ count: number }>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async purgeClosed(adminId: string): Promise<{ count: number }> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const { count } = await prisma.feedback.deleteMany({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.completed] } } });
-        return { success: true, data: { count } };
+        return { count };
     },
 
-    async update(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async update(adminId: string, id: string, input: unknown): Promise<FeedbackItem> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         return updateNote(id, adminId, input);
     },
 
-    async remove(adminId: string, id: string): Promise<FeedbackResult> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async remove(adminId: string, id: string): Promise<void> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         return deleteNote(id);
     },
 
@@ -205,8 +201,8 @@ export const FeedbackService = {
         return rows.map(toItem);
     },
 
-    async reply(adminId: string, id: string, input: unknown): Promise<FeedbackResult<FeedbackItem>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async reply(adminId: string, id: string, input: unknown): Promise<FeedbackItem> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         return addReply(id, adminId, input);
     },
 

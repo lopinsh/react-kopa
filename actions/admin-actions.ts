@@ -29,13 +29,12 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
 
     try {
         const result = await AdminService.suspendReportedGroup(groupId, reportId, admin.userId, reason);
-        if (!result.success) return result;
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath('/[locale]/admin/reports', 'page');
-        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
+        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
         return { success: true };
     } catch (error) {
         console.error('[suspendReportedGroup] Error:', error);

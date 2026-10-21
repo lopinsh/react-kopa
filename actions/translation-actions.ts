@@ -39,7 +39,7 @@ export async function getTranslationEntry(key: string): Promise<ActionResponse<T
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await MessageOverrideService.getEntry(check.userId, key);
-        return result.success ? { success: true, data: result.data } : result;
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }
@@ -50,7 +50,7 @@ export async function searchTranslations(query: string): Promise<ActionResponse<
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await MessageOverrideService.search(check.userId, query);
-        return result.success ? { success: true, data: result.data } : result;
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }
@@ -62,10 +62,9 @@ export async function suggestTranslation(input: { key: string; lv: string; en: s
     if (!check.success) return { success: false, error: check.error };
     try {
         const result = await MessageOverrideService.suggestEntry(check.userId, input);
-        if (!result.success) return result;
 
         // Saving the live text only withdraws a suggestion: nothing new for the other admins.
-        if (result.data?.suggested) {
+        if (result?.suggested) {
             await NotificationService.notifyAdmins({
                 type: 'ADMIN_SUGGESTION',
                 args: { title: input.key },
@@ -86,8 +85,7 @@ export async function approveSuggestion(id: string, value: string): Promise<Acti
     const check = await requireSiteAdmin();
     if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.approveSuggestion(check.userId, id, value);
-        if (!result.success) return result;
+        await MessageOverrideService.approveSuggestion(check.userId, id, value);
 
         updateTag(MESSAGE_OVERRIDES_TAG);
         revalidatePath('/', 'layout');
@@ -101,8 +99,7 @@ export async function rejectSuggestion(id: string, value: string): Promise<Actio
     const check = await requireSiteAdmin();
     if (!check.success) return { success: false, error: check.error };
     try {
-        const result = await MessageOverrideService.rejectSuggestion(check.userId, id, value);
-        if (!result.success) return result;
+        await MessageOverrideService.rejectSuggestion(check.userId, id, value);
 
         revalidatePath('/', 'layout');
         return { success: true };

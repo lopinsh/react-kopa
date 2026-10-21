@@ -23,9 +23,8 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
         if (!validation.success) return validation;
 
         const result = await EventService.createEvent(groupId, validation.data, session.user.id);
-        if (!result.success) return result as ActionResponse<{ event: EventModel }>;
 
-        const { event, eventTitle, membersToNotify, groupName, groupSlug, l1Slug } = result.data!;
+        const { event, eventTitle, membersToNotify, groupName, groupSlug, l1Slug } = result;
 
         if (membersToNotify.length > 0) {
             await Promise.all(membersToNotify.map(m =>
@@ -91,8 +90,7 @@ export async function setAttendance(eventId: string, status: 'GOING' | 'NONE', l
 
     try {
         const result = await EventService.setAttendance(eventId, session.user.id, status);
-        if (!result.success) return result;
-        revalidateEventPaths(locale, result.data!);
+        revalidateEventPaths(locale, result);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'TOGGLE_FAILED');
@@ -108,8 +106,7 @@ export async function requestToJoin(eventId: string, allowWaitlist: boolean, loc
 
     try {
         const result = await EventService.requestToJoin(eventId, session.user.id, allowWaitlist);
-        if (!result.success) return result;
-        const ctx = result.data!;
+        const ctx = result;
         if (ctx.created && ctx.status === 'PENDING') {
             const authorName = session.user.name || session.user.username || '';
             await Promise.all(ctx.organiserIds
@@ -132,8 +129,7 @@ export async function cancelAttendance(eventId: string, locale: string): Promise
 
     try {
         const result = await EventService.cancel(eventId, session.user.id);
-        if (!result.success) return result;
-        const ctx = result.data!;
+        const ctx = result;
         // An approved person left a Full event: the organisers decide whether to let someone in.
         if (ctx.wasGoing && ctx.isFull) {
             const authorName = session.user.name || session.user.username || '';
@@ -157,9 +153,8 @@ export async function decideAttendance(eventId: string, targetUserId: string, de
 
     try {
         const result = await EventService.decide(eventId, targetUserId, session.user.id, decision);
-        if (!result.success) return result;
-        await notifyEvent(targetUserId, decision === 'approve' ? 'EVENT_APPROVED' : 'EVENT_DECLINED', result.data!);
-        revalidateEventPaths(locale, result.data!);
+        await notifyEvent(targetUserId, decision === 'approve' ? 'EVENT_APPROVED' : 'EVENT_DECLINED', result);
+        revalidateEventPaths(locale, result);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
@@ -175,9 +170,8 @@ export async function letInFromWaitlist(eventId: string, targetUserId: string, l
 
     try {
         const result = await EventService.letInFromWaitlist(eventId, targetUserId, session.user.id);
-        if (!result.success) return result;
-        await notifyEvent(targetUserId, 'EVENT_LET_IN', result.data!);
-        revalidateEventPaths(locale, result.data!);
+        await notifyEvent(targetUserId, 'EVENT_LET_IN', result);
+        revalidateEventPaths(locale, result);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
@@ -193,9 +187,8 @@ export async function setEventFull(eventId: string, isFull: boolean, locale: str
 
     try {
         const result = await EventService.setFull(eventId, session.user.id, isFull);
-        if (!result.success) return result;
-        await Promise.all(result.data!.waitlistedUserIds.map(id => notifyEvent(id, 'EVENT_ROOM_AGAIN', result.data!)));
-        revalidateEventPaths(locale, result.data!);
+        await Promise.all(result.waitlistedUserIds.map(id => notifyEvent(id, 'EVENT_ROOM_AGAIN', result)));
+        revalidateEventPaths(locale, result);
         updateTag('events');
         return { success: true };
     } catch (error) {
@@ -221,9 +214,8 @@ export async function updateEvent(
         if (!validation.success) return validation;
 
         const result = await EventService.updateEvent(eventId, validation.data, session.user.id, confirmOpenWaiting === true);
-        if (!result.success) return result;
 
-        const ctx = result.data!;
+        const ctx = result;
         // Everyone who was waiting got in when the event opened up: tell them once.
         await Promise.all(ctx.convertedUserIds.map(id => notifyEvent(id, 'EVENT_NOW_OPEN', ctx)));
         revalidateEventPaths(locale, ctx);
@@ -245,8 +237,7 @@ export async function deleteEvent(eventId: string, locale: string): Promise<Acti
     let listPath: string;
     try {
         const result = await EventService.deleteEvent(eventId, session.user.id);
-        if (!result.success) return result;
-        const ctx = result.data!;
+        const ctx = result;
         await Promise.all(ctx.attendeeIds.map(id => NotificationService.notify({
             userId: id,
             type: 'EVENT_CANCELLED',

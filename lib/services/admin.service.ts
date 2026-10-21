@@ -1,6 +1,6 @@
 import { ActionError } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
-import { ModerationService, type ModerationResult } from './moderation.service';
+import { ModerationService } from './moderation.service';
 import { GroupService } from './group.service';
 
 export class AdminService {
@@ -51,18 +51,18 @@ export class AdminService {
     /**
      * Take action on a report: hide the reported group (restorable) with the reason the admin wrote.
      */
-    static async suspendReportedGroup(groupId: string, reportId: string, adminId: string, reason: string): Promise<ModerationResult<{ slug: string; l1Slug: string }>> {
+    static async suspendReportedGroup(groupId: string, reportId: string, adminId: string, reason: string): Promise<{ slug: string; l1Slug: string }> {
         // The report must be about this group, or an admin could hide any group through any report.
         const report = await prisma.report.findUnique({ where: { id: reportId }, select: { targetGroupId: true } });
-        if (!report || report.targetGroupId !== groupId) return { success: false, error: 'NOT_FOUND' };
+        if (!report || report.targetGroupId !== groupId) throw new ActionError('NOT_FOUND');
 
         // Already hidden (by another admin or another report): nothing to hide, just close this report.
         const group = await prisma.group.findUnique({ where: { id: groupId }, select: { hiddenAt: true } });
         if (group?.hiddenAt) {
             const slugs = await GroupService.getGroupSlugs(groupId);
-            if (!slugs) return { success: false, error: 'NOT_FOUND' };
+            if (!slugs) throw new ActionError('NOT_FOUND');
             await prisma.report.update({ where: { id: reportId }, data: { status: 'ACTION_TAKEN' } });
-            return { success: true, data: slugs };
+            return slugs;
         }
 
         // Hiding and closing the report are one transaction inside hideGroup.

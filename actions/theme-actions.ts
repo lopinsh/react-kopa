@@ -26,9 +26,8 @@ export async function savePreviewTheme(input: ThemeInput): Promise<ActionRespons
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
     try {
         const res = await ThemeService.saveDraft(check.userId, parsed.data);
-        if (!res.success) return res;
-        if (!res.data) return { success: false, error: 'SAVE_FAILED' };
-        (await cookies()).set(THEME_PREVIEW_COOKIE, res.data.id, {
+        if (!res) return { success: false, error: 'SAVE_FAILED' };
+        (await cookies()).set(THEME_PREVIEW_COOKIE, res.id, {
             httpOnly: true,
             sameSite: 'lax',
             secure: process.env.NODE_ENV === 'production',
@@ -48,8 +47,7 @@ export async function publishTheme(input: ThemeInput): Promise<ActionResponse> {
     const parsed = themeInputSchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
     try {
-        const res = await ThemeService.publish(check.userId, parsed.data);
-        if (!res.success) return res;
+        await ThemeService.publish(check.userId, parsed.data);
         await clearPreviewCookie();
         themeChanged();
         return { success: true };
@@ -65,8 +63,7 @@ export async function publishPreviewTheme(): Promise<ActionResponse> {
     const draftId = (await cookies()).get(THEME_PREVIEW_COOKIE)?.value;
     if (!draftId) return { success: false, error: 'NOT_FOUND' };
     try {
-        const res = await ThemeService.publishDraft(check.userId, draftId);
-        if (!res.success) return res;
+        await ThemeService.publishDraft(check.userId, draftId);
         await clearPreviewCookie();
         themeChanged();
         return { success: true };
@@ -94,8 +91,7 @@ export async function resetTheme(): Promise<ActionResponse> {
     const check = await requireSiteAdmin();
     if (!check.success) return { success: false, error: check.error };
     try {
-        const res = await ThemeService.reset(check.userId);
-        if (!res.success) return res;
+        await ThemeService.reset(check.userId);
         await clearPreviewCookie();
         themeChanged();
         return { success: true };

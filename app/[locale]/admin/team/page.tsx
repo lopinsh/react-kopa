@@ -19,13 +19,12 @@ export default async function AdminTeamPage({ params }: { params: Promise<{ loca
 
     const { userId, isOwner } = await requireAdminPage(locale, '/admin/team');
 
-    const result = await TeamService.listTeam(userId);
-    if (!result.success) notFound();
+    const team = await TeamService.listTeam(userId).catch(() => notFound());
 
     return (
         <div className="space-y-6">
             <AdminPageHeader title={t('title')} subtitle={t(isOwner ? 'subtitle' : 'subtitleReadOnly')} />
-            <TeamManager team={result.data ?? []} canManage={isOwner} viewerId={userId} />
+            <TeamManager team={team} canManage={isOwner} viewerId={userId} />
         </div>
     );
 }

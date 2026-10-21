@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "i18n:check": "node scripts/check-i18n.mjs",
     "ui:check": "node scripts/check-ui.mjs",
+    "services:check": "node scripts/check-services.mjs",
     "type:check": "node scripts/check-ui.mjs",
     "redesign:build": "node scripts/redesign/gen.mjs",
     "plan:check": "node scripts/redesign/check-plan.mjs",
@@ -21,7 +22,7 @@
     "feedback": "tsx scripts/feedback.ts",
     "set-owner": "tsx scripts/set-owner.ts",
     "test:smoke": "playwright test -c playwright.smoke.config.ts",
-    "check": "npm run typecheck && npm run lint && npm run i18n:check && npm run ui:check"
+    "check": "npm run typecheck && npm run lint && npm run i18n:check && npm run ui:check && npm run services:check"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",

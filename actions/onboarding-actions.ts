@@ -44,13 +44,14 @@ export async function setUsername(username: string): Promise<ActionResponse> {
     const parsed = usernameOnboardingSchema.safeParse({ username });
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
 
-    const result = await UserService.updateProfile(session.user.id, {
-        username: parsed.data.username,
-    });
-
-    if (!result.success) return { success: false, error: result.error };
-
-    revalidateTag('groups', 'max');
-    revalidatePath('/', 'layout');
-    return { success: true };
+    try {
+        await UserService.updateProfile(session.user.id, {
+            username: parsed.data.username,
+        });
+        revalidateTag('groups', 'max');
+        revalidatePath('/', 'layout');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'UPDATE_FAILED');
+    }
 }

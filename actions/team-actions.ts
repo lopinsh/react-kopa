@@ -10,7 +10,7 @@ export async function searchTeamCandidates(query: string): Promise<ActionRespons
     if (!actor.success) return actor;
     try {
         const result = await TeamService.searchUsers(actor.userId, query);
-        return result.success ? { success: true, data: result.data ?? [] } : result;
+        return { success: true, data: result };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }
@@ -20,8 +20,7 @@ export async function makeAdmin(userId: string, locale: string): Promise<ActionR
     const actor = await requireSiteOwner();
     if (!actor.success) return actor;
     try {
-        const result = await TeamService.makeAdmin(actor.userId, userId);
-        if (!result.success) return result;
+        await TeamService.makeAdmin(actor.userId, userId);
         revalidatePath(`/${locale}/admin/team`, 'page');
         return { success: true };
     } catch (error) {
@@ -33,8 +32,7 @@ export async function removeAdmin(userId: string, locale: string): Promise<Actio
     const actor = await requireSiteOwner();
     if (!actor.success) return actor;
     try {
-        const result = await TeamService.removeAdmin(actor.userId, userId);
-        if (!result.success) return result;
+        await TeamService.removeAdmin(actor.userId, userId);
         revalidatePath(`/${locale}/admin/team`, 'page');
         return { success: true };
     } catch (error) {

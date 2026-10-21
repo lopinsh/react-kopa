@@ -34,10 +34,8 @@ export default async function AdminFeedbackPage({
 
     const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
     const filter = feedbackFilterSchema.parse({ kind: first(raw.kind), tab: first(raw.tab), page: first(raw.page) });
-    const result = await FeedbackService.list(userId, filter);
-    const notes = result.success ? result.data ?? [] : [];
-    const countsResult = await FeedbackService.counts(userId);
-    const counts = countsResult.success && countsResult.data ? countsResult.data : { open: 0, completed: 0 };
+    const notes = await FeedbackService.list(userId, filter).catch(() => []);
+    const counts = await FeedbackService.counts(userId).catch(() => ({ open: 0, completed: 0 }));
     const tab = filter.tab ?? 'open';
 
     return (

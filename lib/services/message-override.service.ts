@@ -1,6 +1,6 @@
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
-import type { ErrorCode } from '@/types/actions';
+import { ActionError } from '@/types/actions';
 import { isSiteAdminUser } from './site-role.service';
 import { saveMessageOverrideSchema, validateMessage } from '@/lib/validations/message-override';
 import { stripMarkers, type MessageTree } from '@/lib/translate-mode/marker';
@@ -41,10 +41,6 @@ export interface TranslationSearchHit {
     lv: string;
     en: string;
 }
-
-export type OverrideResult<T = void> =
-    | { success: true; data?: T }
-    | { success: false; error: ErrorCode };
 
 const flatCache = new WeakMap<MessageTree, Record<string, string>>();
 
@@ -119,33 +115,30 @@ export const MessageOverrideService = {
         }
     },
 
-    async getEntry(adminId: string, key: string): Promise<OverrideResult<TranslationEntry>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async getEntry(adminId: string, key: string): Promise<TranslationEntry> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
-        if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        if (!isKnownKey(key, lvBase, enBase)) throw new ActionError('MESSAGE_KEY_UNKNOWN');
         const pendingRows = await prisma.messageSuggestion.findMany({ where: { key }, select: { lang: true, value: true } });
         const pending: Record<MessageLang, string | null> = { lv: null, en: null };
         for (const row of pendingRows) {
             if (row.lang === 'lv' || row.lang === 'en') pending[row.lang] = row.value;
         }
         return {
-            success: true,
-            data: {
-                key,
-                pending,
-                lv: overrides.lv[key] ?? lvBase[key] ?? '',
-                en: overrides.en[key] ?? enBase[key] ?? '',
-                source: { lv: lvBase[key] ?? '', en: enBase[key] ?? '' },
-                edited: { lv: Object.hasOwn(overrides.lv, key), en: Object.hasOwn(overrides.en, key) },
-            },
+            key,
+            pending,
+            lv: overrides.lv[key] ?? lvBase[key] ?? '',
+            en: overrides.en[key] ?? enBase[key] ?? '',
+            source: { lv: lvBase[key] ?? '', en: enBase[key] ?? '' },
+            edited: { lv: Object.hasOwn(overrides.lv, key), en: Object.hasOwn(overrides.en, key) },
         };
     },
 
     /** Finds texts by key or content in either language (also the ones that can't be clicked on the page). */
-    async search(adminId: string, query: string): Promise<OverrideResult<TranslationSearchHit[]>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async search(adminId: string, query: string): Promise<TranslationSearchHit[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const needle = query.trim().toLowerCase();
-        if (needle.length < 2) return { success: true, data: [] };
+        if (needle.length < 2) return [];
 
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
         const keys = new Set([...Object.keys(enBase), ...Object.keys(lvBase)]);
@@ -158,7 +151,7 @@ export const MessageOverrideService = {
                 if (hits.length >= 40) break;
             }
         }
-        return { success: true, data: hits };
+        return hits;
     },
 
     /**
@@ -166,8 +159,8 @@ export const MessageOverrideService = {
      * suggestion (replacing an older one for the same key and language). A language left as it is clears its pending one.
      */
     /** `data.suggested` is false when every language equals the live text (the suggestion was only withdrawn). */
-    async suggestEntry(adminId: string, input: unknown): Promise<OverrideResult<{ suggested: boolean }>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async suggestEntry(adminId: string, input: unknown): Promise<{ suggested: boolean }> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
 
         const raw = typeof input === 'object' && input !== null ? (input as Record<string, unknown>) : {};
         const parsed = saveMessageOverrideSchema.safeParse({
@@ -175,15 +168,15 @@ export const MessageOverrideService = {
             lv: typeof raw.lv === 'string' ? stripMarkers(raw.lv) : raw.lv,
             en: typeof raw.en === 'string' ? stripMarkers(raw.en) : raw.en,
         });
-        if (!parsed.success) return { success: false, error: 'MESSAGE_INVALID' };
+        if (!parsed.success) throw new ActionError('MESSAGE_INVALID');
         const { key } = parsed.data;
 
         const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
         const bases: Record<MessageLang, Record<string, string>> = { lv: lvBase, en: enBase };
-        if (!isKnownKey(key, lvBase, enBase)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
+        if (!isKnownKey(key, lvBase, enBase)) throw new ActionError('MESSAGE_KEY_UNKNOWN');
 
         for (const lang of MESSAGE_LANGS) {
-            if (validateMessage(parsed.data[lang], bases[lang][key])) return { success: false, error: 'MESSAGE_INVALID' };
+            if (validateMessage(parsed.data[lang], bases[lang][key])) throw new ActionError('MESSAGE_INVALID');
         }
 
         await prisma.$transaction(
@@ -199,11 +192,11 @@ export const MessageOverrideService = {
             })
         );
         const suggested = MESSAGE_LANGS.some((lang) => parsed.data[lang] !== (overrides[lang][key] ?? bases[lang][key]));
-        return { success: true, data: { suggested } };
+        return { suggested };
     },
 
-    async listSuggestions(adminId: string): Promise<OverrideResult<SuggestionRow[]>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async listSuggestions(adminId: string): Promise<SuggestionRow[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const [lvBase, enBase, overrides, rows] = await Promise.all([
             loadFlatBase('lv'),
             loadFlatBase('en'),
@@ -227,7 +220,7 @@ export const MessageOverrideService = {
                 createdBy: row.createdBy?.name ?? null,
             });
         }
-        return { success: true, data };
+        return data;
     },
 
     /**
@@ -235,16 +228,16 @@ export const MessageOverrideService = {
      * `expectedValue` is the text the admin saw: a suggestion replaced since then (same id, new text) or already
      * approved/rejected by someone else is NOT_FOUND, so nobody approves a text they never read.
      */
-    async approveSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async approveSuggestion(adminId: string, id: string, expectedValue: string): Promise<void> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const row = await prisma.messageSuggestion.findUnique({ where: { id } });
-        if (!row || row.value !== expectedValue) return { success: false, error: 'NOT_FOUND' };
-        if (row.lang !== 'lv' && row.lang !== 'en') return { success: false, error: 'MESSAGE_INVALID' };
+        if (!row || row.value !== expectedValue) throw new ActionError('NOT_FOUND');
+        if (row.lang !== 'lv' && row.lang !== 'en') throw new ActionError('MESSAGE_INVALID');
         const lang: MessageLang = row.lang;
 
         const base = await loadFlatBase(lang);
-        if (!isKnownKey(row.key, base)) return { success: false, error: 'MESSAGE_KEY_UNKNOWN' };
-        if (validateMessage(row.value, base[row.key])) return { success: false, error: 'MESSAGE_INVALID' };
+        if (!isKnownKey(row.key, base)) throw new ActionError('MESSAGE_KEY_UNKNOWN');
+        if (validateMessage(row.value, base[row.key])) throw new ActionError('MESSAGE_INVALID');
 
         const { key, value } = row;
         // Claim the suggestion first: only the request that deletes it writes the override (no double approve,
@@ -263,32 +256,29 @@ export const MessageOverrideService = {
             }
             return true;
         });
-        return claimed ? { success: true } : { success: false, error: 'NOT_FOUND' };
+        if (!claimed) throw new ActionError('NOT_FOUND');
     },
 
     /** Like approve, `expectedValue` keeps a replaced suggestion (same id, new text) from being rejected unseen. */
-    async rejectSuggestion(adminId: string, id: string, expectedValue: string): Promise<OverrideResult> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async rejectSuggestion(adminId: string, id: string, expectedValue: string): Promise<void> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const { count } = await prisma.messageSuggestion.deleteMany({ where: { id, value: expectedValue } });
-        return count === 0 ? { success: false, error: 'NOT_FOUND' } : { success: true };
+        if (count === 0) throw new ActionError('NOT_FOUND');
     },
 
-    async listOverrides(adminId: string): Promise<OverrideResult<{ key: string; lang: string; value: string; updatedAt: Date; updatedBy: string | null }[]>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async listOverrides(adminId: string): Promise<{ key: string; lang: string; value: string; updatedAt: Date; updatedBy: string | null }[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const rows = await prisma.messageOverride.findMany({
             orderBy: [{ key: 'asc' }, { lang: 'asc' }],
             include: { updatedBy: { select: { name: true } } },
         });
-        return {
-            success: true,
-            data: rows.map((r) => ({ key: r.key, lang: r.lang, value: r.value, updatedAt: r.updatedAt, updatedBy: r.updatedBy?.name ?? null })),
-        };
+        return rows.map((r) => ({ key: r.key, lang: r.lang, value: r.value, updatedAt: r.updatedAt, updatedBy: r.updatedBy?.name ?? null }));
     },
 
     /** All overrides in the nested messages structure: `{ lv: {...}, en: {...} }`, ready to merge into messages/*.json. */
-    async exportNested(adminId: string): Promise<OverrideResult<Record<MessageLang, MessageTree>>> {
-        if (!(await isSiteAdminUser(adminId))) return { success: false, error: 'FORBIDDEN' };
+    async exportNested(adminId: string): Promise<Record<MessageLang, MessageTree>> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const overrides = await loadOverrides();
-        return { success: true, data: { lv: nestMessages(overrides.lv), en: nestMessages(overrides.en) } };
+        return { lv: nestMessages(overrides.lv), en: nestMessages(overrides.en) };
     },
 };

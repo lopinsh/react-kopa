@@ -9,10 +9,10 @@ export async function GET() {
         return new Response('Not found', { status: 404 });
     }
 
-    const result = await MessageOverrideService.exportNested(session.user.id);
-    if (!result.success) return new Response('Not found', { status: 404 });
+    const result = await MessageOverrideService.exportNested(session.user.id).catch(() => null);
+    if (!result) return new Response('Not found', { status: 404 });
 
-    return new Response(JSON.stringify(result.data, null, 2) + '\n', {
+    return new Response(JSON.stringify(result, null, 2) + '\n', {
         headers: {
             'Content-Type': 'application/json; charset=utf-8',
             'Content-Disposition': 'attachment; filename="message-overrides.json"',

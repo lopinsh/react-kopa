@@ -21,10 +21,8 @@ export default async function AdminTranslationsPage({ params }: { params: Promis
 
     const { userId } = await requireAdminPage(locale, '/admin/translations');
 
-    const result = await MessageOverrideService.listOverrides(userId);
-    const rows = result.success ? result.data ?? [] : [];
-    const suggestionsResult = await MessageOverrideService.listSuggestions(userId);
-    const suggestions = suggestionsResult.success ? suggestionsResult.data ?? [] : [];
+    const rows = await MessageOverrideService.listOverrides(userId).catch(() => []);
+    const suggestions = await MessageOverrideService.listSuggestions(userId).catch(() => []);
 
     return (
         <div className="space-y-6">

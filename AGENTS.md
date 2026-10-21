@@ -119,7 +119,7 @@ type ActionResponse<T> =
 
 ## Conventions
 
-- Service errors: services that can fail with a known cause `throw new ActionError('CODE')` (from `@/types/actions`, code in the registry); actions catch with `handleActionError`. Never `throw new Error('CODE')`. `ActionError` is the one error style for services. Group, Event and Moderation still return `{ success, error }` objects; convert a method to `ActionError` when you touch it, and never mix both in one method.
+- Service errors: services that can fail with a known cause `throw new ActionError('CODE')` (from `@/types/actions`, code in the registry); actions catch with `handleActionError`. Never `throw new Error('CODE')`. `ActionError` is the one error style for services. A service returns its value directly; `npm run services:check` fails on a `{ success }` result object in `lib/services`.
 - Admin guards: actions start with `requireSiteAdmin()` / `requireSiteOwner()` (`@/lib/action-utils`); pages with `requireAdminPage()` / `requireOwnerPage()` (`@/lib/admin-access`). Signed out is `UNAUTHORIZED`, signed in without the role is `FORBIDDEN`.
 - After creating or significantly updating an entity, redirect to its public page.
 - Never derive display titles from slugs in UI; use the service-provided `title`.

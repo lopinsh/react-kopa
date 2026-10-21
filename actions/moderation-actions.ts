@@ -11,13 +11,12 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
 
     try {
         const result = await ModerationService.hideGroup(groupId, admin.userId, reason);
-        if (!result.success) return result;
 
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
+        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -30,13 +29,12 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
 
     try {
         const result = await ModerationService.restoreGroup(groupId, admin.userId);
-        if (!result.success) return result;
 
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
+        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -49,13 +47,12 @@ export async function deleteHiddenGroup(groupId: string, reason: string, locale:
 
     try {
         const result = await ModerationService.deleteHiddenGroup(groupId, admin.userId, reason);
-        if (!result.success) return result;
 
         updateTag('groups');
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.data!.l1Slug}/group/${result.data!.slug}`, 'layout');
+        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
