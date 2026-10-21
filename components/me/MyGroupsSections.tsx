@@ -39,7 +39,7 @@ export default async function MyGroupsSections({ overview }: { overview: MyGroup
             <SectionMenu sections={sections.map(({ key, label }) => ({ key, label }))} />
             {sections.map(({ key, label, body }) => (
                 <section key={key} id={key} aria-labelledby={`${key}-title`} className="scroll-mt-10 border-t border-border pt-4 first-of-type:border-t-0 first-of-type:pt-0">
-                    <h2 id={`${key}-title`} className="sr-only">{label}</h2>
+                    <h2 id={`${key}-title`} className="mb-3 text-section text-foreground">{label}</h2>
                     {body}
                 </section>
             ))}
