@@ -407,7 +407,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-06 | Colour means category | R1a | R3a |
 | AR-07 | Fonts | R1a | R1b |
 | AR-08 | Shapes and labels | R1a | |
-| AR-09 | Small tags | R1a | R5b, R9b |
+| AR-09 | Small tags (21 Oct: role tags coloured per role from the look; tag top-right and faces bottom-right on the card picture) | R1a | R5b, R9b |
 | AR-10 | Words and numbers | R1a | R5b, R6 |
 | AR-11 | Dates | R1a | R5b |
 | AR-12 | Desktop header | R2a | R7 |
