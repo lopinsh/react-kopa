@@ -15,7 +15,7 @@ export default function AsideSlot({ children, label, hideSegments, showPaths }: 
     if (segment && hideSegments?.includes(segment)) return null;
     if (showPaths && !showPaths.some((p) => pathname === p || pathname.startsWith(`${p}/`))) return null;
     return (
-        <aside data-aside aria-label={label} className="mt-6 grid min-w-0 content-start gap-4 md:col-start-2 md:mt-0 lg:col-start-3 lg:row-start-1 lg:w-aside lg:sticky lg:top-5 lg:self-start">
+        <aside data-aside aria-label={label} className="mt-6 grid min-w-0 content-start gap-4 md:col-start-2 md:mt-0 lg:col-start-3 lg:row-start-1 lg:w-aside lg:sticky lg:top-[calc(var(--spacing-header)+1.25rem)] lg:self-start">
             {children}
         </aside>
     );
