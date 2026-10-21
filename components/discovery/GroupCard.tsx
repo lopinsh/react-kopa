@@ -40,7 +40,7 @@ type Props = {
 const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
- * A group in a grid (AR-34): the photo on top, 16:9 (none: the category tile with its icon), then name, category line, place and members, the tagline; under a thin line the group's
+ * A group in a grid (AR-34): a short photo band on top, 5:2 (none: a slim category strip with icon and name), then name, category line, place and members, the tagline; under a thin line the group's
  * latest activity (none: no line). Cards with a bottom line reserve the same lines (name 2, tagline 2, line 2); a grid row keeps one card height.
  */
 export default function GroupCard({ group, activity, filters, highlight, fullPage = false, faces = [], role, showMember = false, requestCount = 0 }: Props) {
@@ -49,28 +49,35 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
     const tCities = useTranslations('cities');
     const locale = useLocale();
     const bottomLine = !!activity || !!group.lookingFor;
+    const hasTag = !!role && !(role === 'MEMBER' && !showMember);
+    const tagEl = (cls: string) => hasTag && role && <span className={`absolute right-2 ${cls}`}><RoleTag role={role} showMember={showMember} /></span>;
+    const chip = faces.length > 0 && (
+        <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-pill bg-photo-chip py-1 pl-1.5 pr-2 text-tag text-photo-ink">
+            <Faces faces={faces} size="lg" ring="ring-photo-ink" />
+            {group.memberCount > faces.length && <span className="weight-strong">+{group.memberCount - faces.length}</span>}
+        </span>
+    );
 
     return (
         <div
             data-ui={UI.groupCard}
             data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
-            className="relative flex flex-col overflow-hidden rounded-2xl line bg-surface shadow-card transition-colors hover:bg-tint/40 has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
+            className="relative flex flex-col overflow-hidden rounded-2xl line bg-surface shadow-card has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary shadow-card"
         >
-            <div className="relative aspect-video overflow-hidden cat-tile">
-                {group.bannerImage ? (
-                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="(min-width: 1280px) 480px, (min-width: 768px) 45vw, 100vw" className="object-cover" />
-                ) : (
-                    <span className="absolute inset-0 grid place-items-center"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={40} /></span>
-                )}
-                {role && !(role === 'MEMBER' && !showMember) && <span className="absolute right-2 top-2"><RoleTag role={role} showMember={showMember} /></span>}
-                {faces.length > 0 && (
-                    <span className="absolute bottom-2 right-2 flex items-center gap-1.5 rounded-pill bg-photo-chip py-1 pl-1.5 pr-2 text-tag text-photo-ink">
-                        <Faces faces={faces} size="lg" ring="ring-photo-ink" />
-                        {group.memberCount > faces.length && <span className="weight-strong">+{group.memberCount - faces.length}</span>}
-                    </span>
-                )}
-            </div>
+            {group.bannerImage ? (
+                <div className="relative aspect-[5/2] overflow-hidden cat-tile">
+                    <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 100vw" className="object-cover" />
+                    {tagEl('top-2')}
+                    {chip}
+                </div>
+            ) : (
+                <div className="relative flex min-h-10 items-center gap-2 overflow-hidden cat-tile px-[var(--card-pad)] py-2 pr-24">
+                    <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={20} />
+                    <span className="truncate text-meta weight-strong">{group.category.l1Title}</span>
+                    {tagEl('top-1/2 -translate-y-1/2')}
+                </div>
+            )}
             <div className={`flex min-w-0 flex-1 flex-col gap-1.5 px-[var(--card-pad)] pt-[var(--card-pad)] ${bottomLine ? "" : "pb-[var(--card-pad)]"}`}>
                 <h3 className="line-clamp-2 min-h-[2lh] text-item text-foreground">
                     {/* The stretched link: its ::after covers the card; the category links sit above it. */}

@@ -37,7 +37,7 @@ export default function GroupList({ groups, activity = {}, faces = {}, createFor
     const roleOf = (id: string) => mine?.[id]?.role ?? myRoles?.[id];
     return (
         <>
-            <div className="hidden gap-[calc(var(--card-gap)+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+            <div className="hidden gap-[calc(var(--card-gap)+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))]">
                 {groups.map((g) => <GroupCard key={g.id} group={g} activity={activity[g.id]} faces={faces[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" />}
             </div>

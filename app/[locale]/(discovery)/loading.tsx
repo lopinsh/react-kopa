@@ -14,7 +14,7 @@ export default async function DiscoveryLoading() {
                             <SkeletonBlock className="h-8 w-full rounded-pill md:order-2 md:w-48" />
                             <div className="flex gap-1.5"><SkeletonBlock className="h-8 w-20 rounded-pill" /><SkeletonBlock className="h-8 w-24 rounded-pill" /></div>
                         </div>
-                        <div className="hidden gap-3 md:grid md:grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+                        <div className="hidden gap-3 md:grid md:grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))]">
                             {Array.from({ length: 6 }, (_, i) => <SkeletonBlock key={i} className="h-32 rounded-2xl" />)}
                         </div>
                         <div className="grid gap-2 md:hidden">

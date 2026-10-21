@@ -162,7 +162,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 </UiSpecimen>
 
                 <UiSpecimen id="groupCard" names={[UI.groupCard, UI.groupRow, UI.createCard]} files={['components/discovery/GroupCard.tsx', 'components/discovery/GroupCardActivity.tsx', 'components/discovery/GroupRow.tsx', 'components/discovery/CreateCard.tsx']}>
-                    <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))]">
+                    <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(min(100%,16rem),1fr))]">
                         <GroupCard group={samples.groupCardNote} role="OWNER" requestCount={2} />
                         <GroupCard group={samples.groupCard} activity={samples.cardEvent} role="ADMIN" />
                         <GroupCard group={samples.groupCard} activity={samples.cardAnnouncement} />
