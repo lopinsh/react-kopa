@@ -8,6 +8,7 @@ import PersonHeader from '@/components/me/PersonHeader';
 import MeMenu from '@/components/me/MeMenu';
 import MePhoneBar from '@/components/me/MePhoneBar';
 import FrameColumns from '@/components/ui/FrameColumns';
+import ProfileCard from '@/components/me/ProfileCard';
 
 /**
  * The frame of your own area (AR-60): a person header and the pages down the left on desktop, a bar with a ☰ drawer on phones.
@@ -30,7 +31,10 @@ export default async function MeLayout({ children, params }: { children: React.R
         <MeProvider value={{ name: ctx.name || t('anonymousUser'), avatarSrc: avatarUrl(ctx), line }}>
             <PersonHeader />
             <MePhoneBar />
-            <FrameColumns nav={<MeMenu variant="side" />} className="[--me-head:64px] md:[--me-head:72px]">
+            <FrameColumns
+                nav={<MeMenu variant="side" />}
+                aside={<ProfileCard name={ctx.name || t('anonymousUser')} avatarSrc={avatarUrl(ctx)} line={line} bio={ctx.bio} />}
+                className="[--me-head:64px] md:[--me-head:72px]">
                 {children}
             </FrameColumns>
         </MeProvider>

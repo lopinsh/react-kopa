@@ -47,7 +47,7 @@ export default function CategoryList({ folded = false, onChoose, onSuggest, auto
                 {!word && (
                     <li>
                         <Link href={discoveryHref(params, { category: null, tags: [] })} scroll={false} onClick={onChoose} aria-current={allCurrent ? 'true' : undefined} title={folded ? `${t('allCategories')} · ${counts.anyTopic}` : undefined} aria-label={folded ? t('allCategories') : undefined} className={clsx(row(allCurrent), folded && 'size-9 min-h-0 justify-center px-0')}>
-                            <span className="grid size-[26px] shrink-0 place-items-center rounded-full bg-tint text-foreground-muted"><LayoutGrid aria-hidden="true" className="size-3.5" /></span>
+                            <span className="grid size-6 shrink-0 place-items-center rounded-full bg-tint text-foreground-muted"><LayoutGrid aria-hidden="true" className="size-3.5" /></span>
                             {!folded && <><span className="min-w-0 flex-1 truncate">{t('allCategories')}</span><span className="text-meta text-foreground-muted">{counts.anyTopic}</span></>}
                         </Link>
                     </li>

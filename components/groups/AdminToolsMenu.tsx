@@ -14,7 +14,7 @@ type Props = {
     onHide: (trigger: HTMLElement | null) => void;
 };
 
-const ICON = 'size-[17px] text-foreground-muted';
+const ICON = 'size-4 text-foreground-muted';
 
 /**
  * Site-admin tools for one group, kept apart from the "…" menu everybody sees (the same menu, anchored to its own chip).

@@ -42,8 +42,8 @@ export default function GroupPagesDrawer() {
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('pagesLabel')} dataUi={UI.drawer} flush panelClassName="px-3 py-4" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-3 border-b border-border px-1 pb-3">
-                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item">
-                            <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-[18px]" />
+                        <span className="mark-tint grid size-9 shrink-0 place-items-center rounded-item">
+                            <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-5" />
                         </span>
                         <div className="min-w-0">
                             <p className="truncate text-item">{g.name}</p>

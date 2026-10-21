@@ -30,6 +30,7 @@ export type OwnAreaContext = {
     username: string | null;
     image: string | null;
     avatarSeed: string | null;
+    bio: string | null;
     firstCity: string | null;
     groupCount: number;
 };
@@ -239,7 +240,7 @@ export const UserService = {
         const user = await prisma.user.findUnique({
             where: { id: userId },
             select: {
-                id: true, name: true, username: true, image: true, avatarSeed: true, cities: true,
+                id: true, name: true, username: true, image: true, avatarSeed: true, bio: true, cities: true,
                 _count: { select: { memberships: { where: { role: { not: 'PENDING' }, group: { hiddenAt: null } } } } },
             },
         });

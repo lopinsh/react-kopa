@@ -24,7 +24,7 @@ export default function AdminMenu({ initialOpen }: { initialOpen?: boolean }) {
                     <FeedbackModeToggle className={MENU_ITEM_CLASS} onToggle={close} />
                     <TranslateModeToggle className={MENU_ITEM_CLASS} onToggle={close} />
                     <MenuSeparator />
-                    <MenuItemLink href="/admin" icon={<LayoutDashboard aria-hidden className="size-[17px] text-foreground-muted" />} trailing={<ArrowRight aria-hidden className="ml-auto size-4 text-foreground-muted" />}>
+                    <MenuItemLink href="/admin" icon={<LayoutDashboard aria-hidden className="size-4 text-foreground-muted" />} trailing={<ArrowRight aria-hidden className="ml-auto size-4 text-foreground-muted" />}>
                         {t('adminPanel')}
                     </MenuItemLink>
                 </MenuPanel>

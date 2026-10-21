@@ -47,12 +47,12 @@ export default function DayStrip({ window: w, params, counts }: Props) {
                             <>
                                 <span className={clsx('text-tag', chosen ? 'text-primary-foreground' : 'text-foreground-muted')}>{tDays(KEYS[weekdayIndex(day)])}</span>
                                 <span className={clsx('text-item tabular-nums', !n && !chosen && 'opacity-60')}>{Number(day.slice(8))}</span>
-                                <span aria-hidden="true" className={clsx('size-[5px] rounded-full', n && !past ? (chosen ? 'bg-primary-foreground' : 'bg-primary') : 'invisible')} />
+                                <span aria-hidden="true" className={clsx('size-1.5 rounded-full', n && !past ? (chosen ? 'bg-primary-foreground' : 'bg-primary') : 'invisible')} />
                             </>
                         );
                         const look = clsx(
                             'flex min-h-11 flex-col items-center justify-center rounded-xl py-1',
-                            chosen ? 'bg-primary text-primary-foreground' : clsx(weekdayIndex(day) >= 5 && 'bg-tint/40', day === w.today && 'bg-background ring-[1.5px] ring-inset ring-border')
+                            chosen ? 'bg-primary text-primary-foreground' : clsx(weekdayIndex(day) >= 5 && 'bg-tint/40', day === w.today && 'bg-background ring-2 ring-inset ring-border')
                         );
                         if (past) return <span key={day} aria-disabled="true" aria-label={label} className={clsx(look, 'opacity-45')}>{body}</span>;
                         const href = inChoice

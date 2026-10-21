@@ -41,7 +41,7 @@ export default function CreateCard({ l1Slug, variant }: Props) {
             data-ui={UI.createCard}
             className="flex min-h-24 flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-dashed border-border px-4 py-5 text-center transition-colors hover:bg-tint/40"
         >
-            <Round className="mb-1 size-[34px]" />
+            <Round className="mb-1 size-9" />
             <span className="text-item text-foreground">{t('createNewGroup')}</span>
             <span className="text-meta text-foreground-muted">{t('inThisCategory')}</span>
         </Link>

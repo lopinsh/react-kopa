@@ -41,16 +41,15 @@ export const BOTTOM_LINKS: BottomLink[] = [
 
 export type MePage = {
     href: string;
-    labelKey: 'myProfile' | 'myGroups' | 'messages' | 'notifications' | 'settings';
+    labelKey: 'myGroups' | 'messages' | 'notifications' | 'settings';
     icon: LucideIcon;
     match: (pathname: string) => boolean;
     /** Which count the menu shows at the end of the entry (`useOwnCounts`, `useUnreadMessages`). */
     badge?: 'messages' | 'myGroups' | 'notifications';
 };
 
-/** The pages of the own area, in menu order (AR-60: Paziņojumi sits between Ziņas and Iestatījumi, which stays last, OD-03). */
+/** The pages of the own area, in menu order (AR-60, R17: Mans profils is the profile card, not a page here; Paziņojumi sits between Ziņas and Iestatījumi, which stays last, OD-03). */
 export const ME_PAGES: MePage[] = [
-    { href: '/profile', labelKey: 'myProfile', icon: User, match: (p) => p === '/profile' || p === '/profile/edit' },
     { href: '/profile/my-groups', labelKey: 'myGroups', icon: Users, match: (p) => under(p, '/profile/my-groups'), badge: 'myGroups' },
     { href: '/messages', labelKey: 'messages', icon: MessageSquare, match: (p) => under(p, '/messages'), badge: 'messages' },
     { href: '/notifications', labelKey: 'notifications', icon: Bell, match: (p) => under(p, '/notifications'), badge: 'notifications' },

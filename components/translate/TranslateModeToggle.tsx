@@ -50,7 +50,7 @@ export default function TranslateModeToggle({ className, compact, onToggle }: Pr
                 <span>{t('turnOff')}</span>
             ) : (
                 <>
-                    <Globe aria-hidden className="size-[17px] text-foreground-muted" />
+                    <Globe aria-hidden className="size-4 text-foreground-muted" />
                     <span className="flex-1 text-left">{t('label')}</span>
                     <span className="text-meta text-foreground-muted">{active ? tNav('modeOn') : tNav('modeOff')}</span>
                 </>

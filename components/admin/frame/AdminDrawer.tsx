@@ -50,7 +50,7 @@ export default function AdminDrawer({ title, part }: { title: string; part: stri
             {open && (
                 <Overlay layout="left" id={id} onClose={() => setOpen(false)} label={t('drawerTitle')} dataUi={UI.drawer} flush panelClassName="px-3 py-4" returnFocusRef={buttonRef}>
                     <div className="flex items-center gap-3 border-b border-border px-1 pb-3">
-                        <span className="mark-tint grid size-[34px] shrink-0 place-items-center rounded-item"><ShieldCheck aria-hidden className="size-[18px]" /></span>
+                        <span className="mark-tint grid size-9 shrink-0 place-items-center rounded-item"><ShieldCheck aria-hidden className="size-5" /></span>
                         <p className="text-item">{t('drawerTitle')}</p>
                     </div>
                     <ul className="pt-2">

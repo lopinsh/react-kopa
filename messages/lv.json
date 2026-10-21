@@ -567,7 +567,8 @@
       "breadcrumb": "Ceļš",
       "partsLabel": "Lapas daļas",
       "members": "{count, plural, zero {# biedru} one {# biedrs} other {# biedri}}",
-      "membersOnly": "Tikai biedriem"
+      "membersOnly": "Tikai biedriem",
+      "aboutLabel": "Par šo grupu"
     },
     "nextMeeting": {
       "title": "Nākamais pasākums",
@@ -1288,6 +1289,10 @@
     },
     "editDesc": "Atjaunini savu publisko profila informāciju.",
     "editTitle": "Labot profilu",
+    "card": {
+      "label": "Par jums",
+      "view": "Skatīt profilu"
+    },
     "fieldImage": "Profila attēla URL",
     "fieldName": "Vārds",
     "handle": "@{username}",

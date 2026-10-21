@@ -61,7 +61,7 @@ export function BottomBarDemo() {
                 <div key={mark ?? 'none'} className="flex h-16 border-t border-border bg-surface">
                     {BOTTOM_LINKS.slice(0, 2).map((link) => <Cell key={link.tab} link={link} marked={mark === link.tab} />)}
                     <span className="grid flex-1 place-items-center" aria-label={tCommon('createGroup')}>
-                        <span className="grid size-[34px] place-items-center rounded-full text-foreground ring-[1.5px] ring-border"><Plus aria-hidden className="size-5" /></span>
+                        <span className="grid size-9 place-items-center rounded-full text-foreground ring-2 ring-border"><Plus aria-hidden className="size-5" /></span>
                     </span>
                     {BOTTOM_LINKS.slice(2).map((link) => <Cell key={link.tab} link={link} marked={mark === link.tab} />)}
                 </div>

@@ -52,6 +52,7 @@
 
   --spacing-header: 56px;
   /* Space scale: page sides and the gap between page sections (px-gutter, gap-section, py-section) */
+  --spacing-aside: 17.5rem;
   --spacing-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
   --spacing-section: clamp(2rem, 1.5rem + 2vw, 4rem);
 

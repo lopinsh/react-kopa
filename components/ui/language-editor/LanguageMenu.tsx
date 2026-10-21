@@ -71,7 +71,7 @@ export default function LanguageMenu({ menu, labelId, lang, original, versions, 
                             key={l}
                             current={l === lang}
                             onSelect={() => onSelect(l)}
-                            icon={l === lang ? <Check aria-hidden className="size-[17px] text-primary" /> : <span aria-hidden className="size-[17px]" />}
+                            icon={l === lang ? <Check aria-hidden className="size-4 text-primary" /> : <span aria-hidden className="size-4" />}
                             trailing={<span className={clsx(MENU_TRAILING_CLASS, errorLangs.includes(l) && 'text-danger')}>{t(state(l))}</span>}
                         >
                             <span lang={l}>{LOCALE_NAMES[l]}</span>

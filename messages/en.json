@@ -567,7 +567,8 @@
       "breadcrumb": "Breadcrumb",
       "partsLabel": "Page parts",
       "members": "{count, plural, one {# member} other {# members}}",
-      "membersOnly": "Members only"
+      "membersOnly": "Members only",
+      "aboutLabel": "About this group"
     },
     "nextMeeting": {
       "title": "Next event",
@@ -1288,6 +1289,10 @@
     },
     "editDesc": "Update your public profile information.",
     "editTitle": "Edit Profile",
+    "card": {
+      "label": "About you",
+      "view": "View profile"
+    },
     "fieldImage": "Profile Image URL",
     "fieldName": "Name",
     "handle": "@{username}",

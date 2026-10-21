@@ -50,7 +50,7 @@ export default function FeedbackModeToggle({ className, compact, onToggle }: Pro
                 <span>{t('turnOff')}</span>
             ) : (
                 <>
-                    <StickyNote aria-hidden className="size-[17px] text-foreground-muted" />
+                    <StickyNote aria-hidden className="size-4 text-foreground-muted" />
                     <span className="flex-1 text-left">{t('label')}</span>
                     <span className="text-meta text-foreground-muted">{active ? tNav('modeOn') : tNav('modeOff')}</span>
                 </>

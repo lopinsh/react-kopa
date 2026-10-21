@@ -418,7 +418,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-17 | Light and dark | R2a | |
 | AR-18 | Admin shield menu | R2a | R11 |
 | AR-19 | Bottom bar (phones) | R2a | |
-| AR-20 | Where Grupas and Es lead | R2a | R3a |
+| AR-20 | Where Grupas and Es lead | R2a | R3a, R17 |
 | AR-21 | Navigation rule | R2a | R3a, R11 |
 | AR-22 | The page | R5a | |
 | AR-23 | Filter line, desktop | R5a | R5b |
@@ -452,7 +452,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-45 | Sazināties | R3b | R6, R9b |
 | AR-46 | Pending | R3b | R8 |
 | AP-05 | "Pieteikums nosūtīts" + "Atvērt sarunu" | R3b | |
-| AR-47 | Group page, desktop | R3a | |
+| AR-47 | Group page, desktop | R3a | R17 |
 | AR-48 | Group page, phones | R3a | |
 | AP-08 | Icon-only "Sazināties" on the phone bar | R3a | R3b |
 | AR-49 | Visitors | R3a | R9a, R9b |
@@ -466,7 +466,7 @@ Every AR and AP has exactly one owner. Checked by `npm run plan:check` (reads th
 | AR-57 | Events away from home | R4 | R5a, R9a |
 | AR-58 | A group's Pasākumi | R3a | R5b |
 | AR-59 | Event page | R9a | |
-| AR-60 | Own area | R2a | R8 |
+| AR-60 | Own area | R2a | R8, R17 |
 | AR-61 | Manas grupas | R8 | |
 | AR-62 | The team's waiting requests | R8 | |
 | AR-63 | Mans profils | R9c | R2a |

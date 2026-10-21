@@ -24,6 +24,7 @@ const SP = '(?:-?(?:p[xytblrse]?|m[xytblrse]?|gap(?:-[xy])?|space-[xy]|inset(?:-
 const SPACE_RULES = {
     'spacing step 2.5/3.5': new RegExp(String.raw`(?<![\w-])${SP}-(?:2\.5|3\.5)(?![\w.-])`, 'g'),
     'arbitrary [Npx]/[Nrem] spacing': new RegExp(String.raw`(?<![\w-])${SP}-\[-?\d+(?:\.\d+)?(?:px|rem)\](?![\w-])`, 'g'),
+    'arbitrary size-[Npx] / ring-[Npx] (use the size-N scale and ring-N)': new RegExp(String.raw`(?<![\w-])(?:size|ring)-\[-?\d+(?:\.\d+)?(?:px|rem)\](?![\w-])`, 'g'),
     'max-w-[Npx|rem|ch|em]': /(?<![\w-])max-w-\[\d+(?:\.\d+)?(?:px|rem|ch|em)\]/g,
 };
 const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';

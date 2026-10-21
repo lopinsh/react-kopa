@@ -45,7 +45,7 @@ export default function LanguageMenu({ initialOpen }: { initialOpen?: boolean })
                             locale={code}
                             hrefLang={code}
                             current={code === locale}
-                            icon={code === locale ? <Check aria-hidden className="size-[17px] text-primary" /> : <span aria-hidden className="size-[17px]" />}
+                            icon={code === locale ? <Check aria-hidden className="size-4 text-primary" /> : <span aria-hidden className="size-4" />}
                             trailing={<span className="ml-auto text-meta text-foreground-muted">{code.toUpperCase()}</span>}
                         >
                             <span lang={code}>{LOCALE_NAMES[code]}</span>

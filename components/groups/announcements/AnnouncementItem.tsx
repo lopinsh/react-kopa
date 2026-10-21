@@ -29,7 +29,7 @@ export default function AnnouncementItem({ item, clamp, menu }: Props) {
 
     return (
         <article data-ui={UI.announcementItem} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 py-4">
-            <List aria-hidden="true" className="mt-0.5 size-[18px] text-foreground-muted" />
+            <List aria-hidden="true" className="mt-0.5 size-5 text-foreground-muted" />
             <div className="min-w-0">
                 <h3 className="break-words text-item text-foreground">{item.title}</h3>
                 {item.content && (

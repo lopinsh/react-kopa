@@ -11,7 +11,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { MenuItemButton, MenuPanel, useMenu } from '@/components/ui/Menu';
 import { IconButton } from '@/components/ui/Button';
 
-const ICON = 'size-[17px] text-foreground-muted';
+const ICON = 'size-4 text-foreground-muted';
 
 type Props = { postId: string; title: string; archived: boolean };
 

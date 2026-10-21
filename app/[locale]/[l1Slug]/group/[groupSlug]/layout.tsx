@@ -5,12 +5,13 @@ import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import GroupBanner from '@/components/groups/frame/GroupBanner';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
 import FrameColumns from '@/components/ui/FrameColumns';
+import GroupAside from '@/components/groups/frame/GroupAside';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { toGroupState } from '@/components/providers/to-group-state';
 
 /**
  * The frame of a group (AR-47): the banner, the pages down the left (a ☰ drawer on phones) and the page beside them.
- * Same container and grid as the own area's, so header, banner, pages column and page line up at every width.
+ * The side column holds the picture, members, next meeting and links. Same container and grid as the own area's, so header, banner, pages column and page line up at every width.
  */
 export default async function GroupLayout({
     children,
@@ -35,7 +36,12 @@ export default async function GroupLayout({
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
             <GroupBanner />
-            <FrameColumns nav={<GroupPagesNav variant="side" />}>{children}</FrameColumns>
+            <FrameColumns
+                nav={<GroupPagesNav variant="side" />}
+                aside={<GroupAside group={{ id: group.id, memberCount: group.stats.memberCount, bannerImage: group.bannerImage, l1Slug: group.category.l1Slug, base: `/${l1Slug}/group/${group.slug}`, socialLinks: group.socialLinks }} viewerId={session?.user?.id} />}
+            >
+                {children}
+            </FrameColumns>
         </GroupProvider>
     );
 }

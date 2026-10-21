@@ -22,7 +22,7 @@ type Props = {
     user: { id: string; avatarSeed?: string | null; name?: string | null; image?: string | null } | null;
 };
 
-const ICON = 'size-[17px] text-foreground-muted';
+const ICON = 'size-4 text-foreground-muted';
 const NEW_COUNT_CLASS = 'ml-auto text-tag text-primary';
 
 /** The picture at the end of the header: the profile menu when signed in, the sign-in button when not (AR-14). */
@@ -50,7 +50,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
 
     // A broken photo URL falls back to the generated avatar.
     const avatarSrc = avatarUrl(imageError ? { id: user.id, avatarSeed: user.avatarSeed } : user);
-    const ownArea = !pathname.startsWith('/messages') && !pathname.startsWith('/notifications') && ME_PAGES.some((p) => p.match(pathname));
+    const ownArea = !pathname.startsWith('/messages') && !pathname.startsWith('/notifications') && (ME_PAGES.some((p) => p.match(pathname)) || pathname === '/profile' || pathname === '/profile/edit');
 
     return (
         <div className="relative shrink-0" ref={rootRef}>
@@ -58,7 +58,7 @@ export default function UserMenu({ user, initialOpen }: Props) {
                 <img
                     src={avatarSrc}
                     alt=""
-                    className={clsx('size-[30px] rounded-full object-cover md:size-8', (open || ownArea) && 'ring-2 ring-primary ring-offset-2 ring-offset-surface')}
+                    className={clsx('size-8 rounded-full object-cover', (open || ownArea) && 'ring-2 ring-primary ring-offset-2 ring-offset-surface')}
                     referrerPolicy="no-referrer"
                     onError={() => setImageError(true)}
                 />

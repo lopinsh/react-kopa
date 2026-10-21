@@ -23,7 +23,7 @@ export function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
     return (
         <Link href={link.href} aria-label={label} aria-current={marked ? 'page' : undefined} className={clsx(CELL, marked && 'weight-strong text-foreground')}>
             <span className={clsx('rounded-pill px-4 py-1', marked && 'bg-primary/16')}>
-                <Icon aria-hidden className={clsx('size-5', marked && 'stroke-[2.25]')} />
+                <Icon aria-hidden className={clsx('size-5', marked && 'icon-stroke-strong')} />
             </span>
             <span>{t(link.labelKey)}</span>
             {withCount && <UnreadBadge />}
@@ -55,7 +55,7 @@ export default function MobileNav({ initialTab }: { initialTab: BottomTab }) {
                         className="grid size-16 place-items-center rounded-pill focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
                         aria-label={tCommon('createGroup')}
                     >
-                        <span className="grid size-[34px] place-items-center rounded-full text-foreground ring-[1.5px] ring-border">
+                        <span className="grid size-9 place-items-center rounded-full text-foreground ring-2 ring-border">
                             <Plus aria-hidden className="size-5" />
                         </span>
                     </button>

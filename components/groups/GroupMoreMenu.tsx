@@ -22,7 +22,7 @@ type Props = {
     initialOpen?: boolean;
 };
 
-const ICON = 'size-[17px] text-foreground-muted';
+const ICON = 'size-4 text-foreground-muted';
 
 /**
  * The one "…" menu of the group page (AR-51), in the banner's action cluster: the viewer's role as a quiet first line, then what

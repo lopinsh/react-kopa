@@ -13,7 +13,7 @@ import type { MemberAction } from '@/lib/services/group-members';
 import type { MemberManageAction } from '@/lib/utils/permissions';
 import { IconButton } from '@/components/ui/Button';
 
-const ICON = 'size-[17px] text-foreground-muted';
+const ICON = 'size-4 text-foreground-muted';
 const CONFIRM = { promote: 'confirmPromote', demote: 'confirmDemote', remove: 'confirmKick' } as const;
 const LABEL = { promote: 'promote', demote: 'demote', remove: 'kick' } as const;
 
