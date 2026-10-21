@@ -263,6 +263,11 @@ body {
   color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground));
 }
 
+/* The focus ring on a tone area: the area's ink, so it shows on a tint and on a solid tone alike (the site colour can sit close to the tone). */
+@utility ring-ink {
+  --tw-ring-color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground));
+}
+
 @utility tile-ink-muted {
   color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground-muted));
 }

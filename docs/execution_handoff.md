@@ -11,7 +11,7 @@
 ## Current state
 
 - Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.2`), built release by release.
-- **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search, space release 2 (spacing scale, measure, fewer boxes; pushed, live), colour release 3 (card photo on top, banner tone area, tab rows at content width; built, awaiting push). New tokens: `--banner-mix`, utilities `banner-tone`, `tile-ink`, `tile-ink-muted`, `mark-surface`.
+- **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search, space release 2 (spacing scale, measure, fewer boxes; pushed, live), colour release 3 (card photo on top, banner tone area, tab rows at content width; pushed, live). New tokens: `--banner-mix`, utilities `banner-tone`, `tile-ink`, `tile-ink-muted`, `mark-surface`.
 - **Cancelled:** R10 Citur and "Kur tu esi?" (owner, 19 Oct). Its rule AR-38 stays unbuilt; discovery keeps starting on "Visur".
 
 ## What's next
