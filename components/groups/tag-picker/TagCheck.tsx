@@ -13,7 +13,7 @@ export default function TagCheck({ selected, small = false, muted = false }: Pro
     return (
         <div
             className={clsx(
-                'flex items-center justify-center rounded border',
+                'flex items-center justify-center rounded-md border',
                 small ? 'h-4 w-4' : 'h-5 w-5',
                 selected
                     ? 'border-transparent bg-primary text-primary-foreground'

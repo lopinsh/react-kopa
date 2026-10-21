@@ -57,7 +57,7 @@ export default async function UsernameOnboardingPage({
             <div className="w-full max-w-md">
                 {/* App identity */}
                 <div className="mb-10 text-center">
-                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-section text-primary-foreground shadow-xl shadow-primary/30">
+                    <div className="mb-4 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-primary text-section text-primary-foreground shadow-premium shadow-primary/30">
                         EK
                     </div>
                     <p className="text-body-sm text-foreground-muted">

@@ -4,7 +4,7 @@
 > Release work follows `docs/development/build-plan.md` section 8 ("Process and status"): specs in `docs/development/specs/`, status table there. Tick or update items here in the same commit as the work.
 > Finished work is not kept here: it moves to `docs/archive/` (latest: `execution_handoff_2026-10-20.md`: the 15 Oct notes batch, R9a–R11b, quick batches 2–3, and the plan cleared on 20 Oct).
 
-**Last updated:** 2026-10-20 (everything up to R13 live; plans cleared for a fresh start; R10 cancelled).
+**Last updated:** 2026-10-20 (everything up to R13 live; theme sweep built, not yet pushed; R10 cancelled).
 
 ---
 
@@ -13,6 +13,8 @@
 - Redesign signed off 13 Oct 2026 (tag `redesign-v9.8.2`), built release by release.
 - **Live:** R1a–R9c, R6b, C2, C4, R11 (a + b), R13 Templates, quick batches 1–3, accent-insensitive search, space release 2 (spacing scale, measure, fewer boxes; pushed, live), colour release 3 (card photo on top, banner tone area, tab rows at content width; pushed, live), header links Atklāt and Manas grupas from lg, role tags on discovery cards, role colours as theme tokens with tag top-right and member faces bottom-right on the card picture, My groups section headings (pushed, live). New tokens: `--banner-mix`, utilities `banner-tone`, `tile-ink`, `tile-ink-muted`, `mark-surface`.
 - **Cancelled:** R10 Citur and "Kur tu esi?" (owner, 19 Oct). Its rule AR-38 stays unbuilt; discovery keeps starting on "Visur".
+
+- [x] **Theme sweep (R14, 21 Oct):** `ui:check` now fails on colour literals, palette colours, `dark:`, bare `rounded`, raw shadows and non-circle `rounded-full`; danger/success/warning (+ink), scrim and photo chip are look tokens; `globals.css` holds no look values (Sūna + calm are the single defaults); all ~110 leaks swept.
 
 ## What's next
 

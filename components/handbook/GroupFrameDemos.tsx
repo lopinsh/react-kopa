@@ -13,7 +13,7 @@ import { NextMeetingView } from '@/components/groups/NextMeetingBox';
 import { buttonClass } from '@/components/ui/Button';
 import { Link } from '@/i18n/routing';
 
-/** A plain picture for the sample banner (no network): a soft landscape in two greys. */
+/** A plain picture for the sample banner (no network): a soft landscape in two greys. ui-allow: illustration image, not UI colour */
 export const SAMPLE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd6c4"/><stop offset="1" stop-color="#8f9a82"/></linearGradient></defs><rect width="1600" height="400" fill="url(#g)"/><circle cx="1250" cy="120" r="70" fill="#f1f3ec"/></svg>')}`;
 
 export type Viewer = 'visitor' | 'pending' | 'member' | 'team';

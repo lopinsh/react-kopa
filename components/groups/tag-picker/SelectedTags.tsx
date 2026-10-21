@@ -29,7 +29,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                             e.preventDefault();
                             onRemove(tag.id);
                         }}
-                        className="ml-0.5 rounded-pill hover:bg-black/20 p-0.5 transition-colors"
+                        className="ml-0.5 rounded-pill hover:bg-foreground/20 p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>
@@ -47,7 +47,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                             e.preventDefault();
                             onRemove(tag.id);
                         }}
-                        className="ml-0.5 rounded-pill hover:bg-black/10 p-0.5 transition-colors"
+                        className="ml-0.5 rounded-pill hover:bg-foreground/10 p-0.5 transition-colors"
                     >
                         <X className="h-3 w-3" />
                     </button>

@@ -35,12 +35,6 @@ export const ROLE_TONE_KEYS = ['owner', 'mod', 'member', 'pending'] as const;
 export type RoleToneKey = (typeof ROLE_TONE_KEYS)[number];
 export type RoleTones = Record<RoleToneKey, string>;
 
-/** Role tones when a look names none (a stored or custom theme): Sūna's. The tag's ink is derived (best contrast). */
-export const DEFAULT_ROLE_TONES: Record<'light' | 'dark', RoleTones> = {
-    light: { owner: '#4B5E3B', mod: '#2B6489', member: '#DCE9D2', pending: '#F3E1B5' },
-    dark: { owner: '#b5c79e', mod: '#7BB2D6', member: '#2E4A2B', pending: '#5A4310' },
-};
-
 /** Colours of one mode. The ones after `foreground` are optional: when missing they are derived from the others. */
 export interface ThemeModeTokens {
     /** Site colour: buttons, links, active tabs (`--primary`). */
@@ -57,7 +51,46 @@ export interface ThemeModeTokens {
     categories?: Partial<Record<CategoryToneSlug, string>>;
     /** Tone per role tag; missing ones come from `DEFAULT_ROLE_TONES`. */
     roles?: Partial<RoleTones>;
+    /** Status colours (errors, done, caution). Missing ones fall back to Sūna's (`DEFAULT_STATUS_TONES`); their ink is derived for contrast. */
+    danger?: string;
+    success?: string;
+    warning?: string;
+    /** Pop-up backdrop and the chip on a photo (#RRGGBB or #RRGGBBAA). Missing: `DEFAULT_OVERLAYS`. */
+    scrim?: string;
+    photoChip?: string;
 }
+
+type WithRoles = ThemeModeTokens & { roles: RoleTones };
+/** Sūna, the default look: the single source of the fallbacks (role tones, status colours) when a look names none. */
+const MOSS: Record<'light' | 'dark', WithRoles & { danger: string; success: string; warning: string }> = {
+    light: { primary: '#4B5E3B', background: '#f4f4ef', surface: '#fdfdfb', foreground: '#1f221c', surfaceElevated: '#fdfdfb', tint: '#e8eae1', muted: '#5f6558', border: '#dcdfd4', danger: '#A63A2E', success: '#3D6B34', warning: '#8A5B0B', roles: { owner: '#4B5E3B', mod: '#2B6489', member: '#DCE9D2', pending: '#F3E1B5' } },
+    dark: { primary: '#b5c79e', background: '#161814', surface: '#1e211c', foreground: '#eceee7', surfaceElevated: '#282c25', tint: '#282c25', muted: '#a8ae9f', border: '#353a31', danger: '#EE9A8E', success: '#9CCB8C', warning: '#E2B65A', roles: { owner: '#b5c79e', mod: '#7BB2D6', member: '#2E4A2B', pending: '#5A4310' } },
+};
+
+/** Role tones when a look names none (a stored or custom theme): Sūna's. The tag's ink is derived (best contrast). */
+export const DEFAULT_ROLE_TONES: Record<'light' | 'dark', RoleTones> = { light: MOSS.light.roles, dark: MOSS.dark.roles };
+/** Status colours when a look names none: Sūna's. */
+export const DEFAULT_STATUS_TONES: Record<'light' | 'dark', { danger: string; success: string; warning: string }> = {
+    light: { danger: MOSS.light.danger, success: MOSS.light.success, warning: MOSS.light.warning },
+    dark: { danger: MOSS.dark.danger, success: MOSS.dark.success, warning: MOSS.dark.warning },
+};
+/** Pop-up scrim and photo chip when a look names none (black washes; the chip is the same in both modes, the image is shaded the same way). */
+export const DEFAULT_OVERLAYS: Record<'light' | 'dark', { scrim: string; photoChip: string }> = {
+    light: { scrim: 'rgb(0 0 0 / 0.3)', photoChip: 'rgb(0 0 0 / 0.55)' },
+    dark: { scrim: 'rgb(0 0 0 / 0.5)', photoChip: 'rgb(0 0 0 / 0.55)' },
+};
+/** Text and rings on a photo (the group card's chip): white, the same in both modes. */
+export const PHOTO_INK = '#ffffff';
+
+/** Tailwind's own corner radii and the two odd ones of menus: the radii of calm, written out so a style that changes some can be swapped in whole. */
+export const CALM_RADII = { md: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', '3xl': '1.5rem', '4xl': '2rem', pill: '9999px', menu: '14px', item: '10px' };
+/** The soft shadows of calm (`shadows: 'soft'`). */
+export const SOFT_SHADOWS = {
+    card: 'none',
+    control: 'none',
+    premium: '0 10px 28px rgba(0, 0, 0, 0.12)',
+    dialog: '0 14px 34px rgba(0, 0, 0, 0.25)',
+};
 
 /** Fonts with full Latvian (latin-ext) support. `cssVar` is the variable next/font exposes (see lib/theme-fonts.ts). */
 export const THEME_FONTS = [
@@ -82,14 +115,14 @@ export type ThemeStyleKey = (typeof THEME_STYLE_KEYS)[number];
 export const DEFAULT_THEME_STYLE_KEY: ThemeStyleKey = 'calm';
 
 export interface ThemeStyleTokens {
-    /** Corner radii; null = Tailwind defaults from globals.css (calm emits nothing). `menu`/`item` are the two odd radii of menus. */
-    radius: { md: string; lg: string; xl: string; '2xl': string; '3xl': string; '4xl': string; pill: string; menu: string; item: string } | null;
+    /** Corner radii. `menu`/`item` are the two odd radii of menus. */
+    radius: { md: string; lg: string; xl: string; '2xl': string; '3xl': string; '4xl': string; pill: string; menu: string; item: string };
     lineWidth: string;
     /** Colour of edges and hard shadows: the soft divider colour or the ink. */
     ink: 'border' | 'foreground';
     /** Edge on things that have none today. */
     frameWidth: string;
-    /** Shadows: `soft` = the ones in globals.css, `none` = every shadow token off, or hard offsets without blur. */
+    /** Shadows: `soft` = `SOFT_SHADOWS`, `none` = every shadow token off, or hard offsets without blur. */
     shadows: 'soft' | 'none' | { card: string; control: string; premium: string; dialog: string };
     pressShift: string;
     /** Room a clipping parent leaves for a hard shadow. */
@@ -102,7 +135,7 @@ export interface ThemeStyleTokens {
 }
 
 export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
-    calm: { radius: null, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadows: 'soft', pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint', cardSpace: '1.25rem' },
+    calm: { radius: CALM_RADII, lineWidth: '1px', ink: 'border', frameWidth: '0px', shadows: 'soft', pressShift: '0px', shadowRoom: '0px', headingWeight: 600, tile: 'tint', cardSpace: '1.25rem' },
     bold: {
         radius: { md: '4px', lg: '5px', xl: '6px', '2xl': '8px', '3xl': '10px', '4xl': '12px', pill: '6px', menu: '6px', item: '5px' },
         lineWidth: '2px', ink: 'foreground', frameWidth: '2px',
@@ -136,8 +169,8 @@ export const DEFAULT_THEME_KEY: ThemePresetKey = 'moss';
 export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: string }> = {
     moss: {
         label: 'Sūna',
-        light: { primary: '#4B5E3B', background: '#f4f4ef', surface: '#fdfdfb', foreground: '#1f221c', surfaceElevated: '#fdfdfb', tint: '#e8eae1', muted: '#5f6558', border: '#dcdfd4', roles: { owner: '#4B5E3B', mod: '#2B6489', member: '#DCE9D2', pending: '#F3E1B5' } },
-        dark: { primary: '#b5c79e', background: '#161814', surface: '#1e211c', foreground: '#eceee7', surfaceElevated: '#282c25', tint: '#282c25', muted: '#a8ae9f', border: '#353a31', roles: { owner: '#b5c79e', mod: '#7BB2D6', member: '#2E4A2B', pending: '#5A4310' } },
+        light: MOSS.light,
+        dark: MOSS.dark,
         headingFont: 'literata',
         bodyFont: 'commissioner',
         styleKey: 'calm',

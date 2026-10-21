@@ -124,7 +124,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <button
                         type="button"
                         onClick={() => setActiveAction(activeAction === 'merge' ? null : 'merge')}
-                        className={`px-3 py-1.5 text-button rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-background' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
+                        className={`px-3 py-1.5 text-button rounded-pill transition-colors ${activeAction === 'merge' ? 'bg-warning text-warning-foreground' : 'bg-warning/10 hover:bg-warning/10 text-warning '}`}
                     >
                         {c('merge')}
                     </button>
@@ -132,7 +132,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                         type="button"
                         onClick={() => setAskReject(true)}
                         disabled={isPending}
-                        className="px-3 py-1.5 text-button-sm rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
+                        className="px-3 py-1.5 text-button-sm rounded-md text-danger bg-danger/10 hover:bg-danger/10 transition-colors"
                     >
                         {c('reject')}
                     </button>
@@ -147,7 +147,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                             <Link
                                 key={g.id}
                                 href={`/admin/groups/${g.l1Slug}/${g.slug}/categorization`}
-                                className="text-body-sm bg-surface-elevated hover:bg-border px-2 py-1 rounded transition-colors"
+                                className="text-body-sm bg-surface-elevated hover:bg-border px-2 py-1 rounded-md transition-colors"
                             >
                                 {g.name}
                             </Link>
@@ -166,7 +166,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => { setNameEn(e.target.value); setSlugEn(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -176,7 +176,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => { setNameLv(e.target.value); setSlugLv(slugify(e.target.value)); }}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -186,7 +186,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
@@ -195,19 +195,19 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
                     <div className="mt-4 flex justify-end gap-2">
-                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
+                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded-md transition-colors">
                             {c('cancel')}
                         </button>
                         <button
                             type="button"
                             onClick={handleApprove}
                             disabled={isPending || !nameEn || !nameLv || !slugEn || !slugLv}
-                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {c('confirm')}
                         </button>
@@ -221,7 +221,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     <select
                         value={mergeIntoId}
                         onChange={e => setMergeIntoId(e.target.value)}
-                        className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm mb-4"
+                        className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm mb-4"
                     >
                         <option value="">{t('selectCategoryPlaceholder')}</option>
                         {canonicalOptions.map(opt => (
@@ -241,14 +241,14 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     )}
 
                     <div className="flex justify-end gap-2">
-                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
+                        <button type="button" onClick={() => setActiveAction(null)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded-md transition-colors">
                             {c('cancel')}
                         </button>
                         <button
                             type="button"
                             onClick={handleMerge}
                             disabled={isPending || !mergeIntoId}
-                            className="px-4 py-2 text-button-sm bg-warning text-background rounded hover:opacity-90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-warning text-warning-foreground rounded-md hover:opacity-90 transition-colors disabled:opacity-50"
                         >
                             {t('mergeAndNotify')}
                         </button>

@@ -136,7 +136,7 @@ function L2Node({
                     type="checkbox"
                     checked={isChecked}
                     readOnly
-                    className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 bg-surface cursor-pointer pointer-events-none"
+                    className="w-4 h-4 rounded-md border-border text-primary focus:ring-primary/20 bg-surface cursor-pointer pointer-events-none"
                 />
             </div>
 

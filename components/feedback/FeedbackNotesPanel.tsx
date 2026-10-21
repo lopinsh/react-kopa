@@ -16,7 +16,7 @@ export default function FeedbackNotesPanel({ notes, missing, onOpen }: Props) {
     const t = useTranslations('feedbackMode');
 
     return (
-        <div data-feedback-ignore className="fixed inset-x-3 bottom-44 z-[65] max-h-[50vh] overflow-y-auto rounded-2xl line bg-surface p-3 shadow-2xl md:inset-x-auto md:bottom-28 md:right-4 md:w-80">
+        <div data-feedback-ignore className="fixed inset-x-3 bottom-44 z-[65] max-h-[50vh] overflow-y-auto rounded-2xl line bg-surface p-3 shadow-dialog md:inset-x-auto md:bottom-28 md:right-4 md:w-80">
             {notes.length === 0 ? (
                 <p className="px-2 py-1 text-body-sm text-foreground-muted">{t('noNotes')}</p>
             ) : (

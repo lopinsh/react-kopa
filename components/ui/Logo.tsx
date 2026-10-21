@@ -16,6 +16,7 @@ function Circles({ size }: { size: 'md' | 'sm' }) {
         <span
             aria-hidden="true"
             className={clsx(
+                // ui-allow: the logo dot is a circle by design
                 'inline-block shrink-0 rounded-full bg-primary',
                 size === 'md'
                     ? 'ml-1.5 mr-2 h-3 w-3 shadow-[8px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)]'

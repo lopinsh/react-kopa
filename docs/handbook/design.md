@@ -66,7 +66,7 @@ A template is a palette plus a style. Mierīgs is the default and what every sta
 | Lines | 1 px soft border | 2 px ink | 1 px soft border, `frame` 1 px |
 | Shadows | none on cards, soft float above the page | hard offset, no blur (3–6 px) | none at all (`--shadow-*: none`); the edge is the line |
 | Press | scale | sinks 3 px onto its shadow | scale |
-| Headings | 600 | 700 | 500 |
+| Headings | 600 | 700 | 600 |
 | Category tiles | tint | solid | solid |
 | Card space (`--card-pad`, `--card-gap`) | 20 px | 20 px | 28 px |
 
@@ -89,6 +89,11 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 | Danger | `--danger` | `#A63A2E` | `#EE9A8E` |
 | Success | `--success` | `#3D6B34` | `#9CCB8C` |
 | Warning | `--warning` | `#8A5B0B` | `#E2B65A` |
+| Text on danger / success / warning | `--danger-foreground`, `--success-foreground`, `--warning-foreground` | derived (white or near-black, whichever reads better) | derived |
+| Pop-up scrim | `--scrim` | black 30 % | black 50 % |
+| Chip on a photo, text and rings on it | `--photo-chip`, `--photo-ink` | black 55 %, white | the same |
+
+**Everything is a token, and the check enforces it.** The status colours, their inks, the scrim and the photo chip are part of the look (optional `danger`, `success`, `warning`, `scrim`, `photoChip` in a look's mode tokens; a look that names none gets Sūna's, the ink is derived). Sūna is the single source of the defaults (`lib/constants/theme.ts`); `app/globals.css` holds no look values. `npm run ui:check` fails on a hex/rgb/hsl/oklch literal, a Tailwind palette colour (`bg-red-500`, `text-white`, `bg-black/40`), a `dark:` variant, a bare `rounded`/`rounded-sm`/`rounded-[…]`, a raw `shadow-sm…2xl`/`shadow-[…]` and a `rounded-full` that is not a circle (`size-N`, equal `h-N w-N`). Such a line may carry `ui-allow: <reason>` (the OAuth brand colours, the logo dot, a size-by-prop disc). So a new look in `THEME_PRESETS` + `THEME_STYLES` changes every surface.
 
 **Colour means category (AR-06).** A category tone appears only on dots, category icons, soft tints (up to 15 %), the group banner and the picture fallback. The banner is a tone area (a 12 % tint in Mierīgs, solid in Drosmīgs); its text takes the area's ink (`tile-ink`, `tile-ink-muted`, from `--tile-on`), at least 4.5:1 on every tone, look and mode. Every button, link, active tab, toggle, checkbox, focus ring and selected chip uses the site colour. Filled colours carry their own text colour (`text-primary-foreground`, `--on-cat`), never `text-white`, because the dark site colour is light.
 
@@ -121,7 +126,7 @@ Nothing is smaller than 11 px.
 
 Pill buttons, chips, tags, avatars and the search field (AR-08). Cards, panels, pop-ups and boxes 16 px. Inputs, menu items and toasts 12 px; an event row's hover 8 px. Group cards carry a thin 1 px border (`border-border`) so they do not blend into the background; panels and pop-ups have none. Thin lines divide rows (the phone group row is a divided row, not a card).
 
-Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-lg … rounded-4xl`, `rounded-menu` and `rounded-item`. Three utilities carry the edge: `line` for the edge of a surface or control (1 px soft border in Mierīgs, 2 px ink in Drosmīgs), `frame` for edges only Drosmīgs draws (0 px in Mierīgs), and dividers stay `border-border` (one-sided rules and `divide-*` never change). Avatars, dots, the switch knob and unread badges stay `rounded-full`.
+Never a bare `rounded`, `rounded-sm`, `rounded-[…]` or `shadow-sm…2xl` (`ui:check` fails on them, see Colour): corners and depth come from the look. Tokens: `rounded-pill` for pills (full in Mierīgs), the radius scale `rounded-lg … rounded-4xl`, `rounded-menu` and `rounded-item`. Three utilities carry the edge: `line` for the edge of a surface or control (1 px soft border in Mierīgs, 2 px ink in Drosmīgs), `frame` for edges only Drosmīgs draws (0 px in Mierīgs), and dividers stay `border-border` (one-sided rules and `divide-*` never change). Avatars, dots, the switch knob and unread badges stay `rounded-full`.
 
 ### Space and depth
 

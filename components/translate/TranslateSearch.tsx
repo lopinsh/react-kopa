@@ -34,7 +34,7 @@ export default function TranslateSearch({ onPick, onClose }: Props) {
     const active = query.trim().length >= 2;
 
     return (
-        <div data-translate-ignore className="fixed inset-x-3 bottom-32 z-[65] flex max-h-[60vh] flex-col rounded-2xl line bg-surface p-4 shadow-2xl md:bottom-16 md:left-auto md:right-4 md:w-[28rem]">
+        <div data-translate-ignore className="fixed inset-x-3 bottom-32 z-[65] flex max-h-[60vh] flex-col rounded-2xl line bg-surface p-4 shadow-dialog md:bottom-16 md:left-auto md:right-4 md:w-[28rem]">
             <div className="mb-3 flex items-center gap-2">
                 <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted" />

@@ -128,7 +128,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-en`}
                                 value={nameEn}
                                 onChange={e => setNameEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -138,7 +138,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text" aria-describedby={`${uid}-lv`}
                                 value={nameLv}
                                 onChange={e => setNameLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                             <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                         </div>
@@ -150,7 +150,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugEn}
                                 onChange={e => setSlugEn(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                         <div>
@@ -159,7 +159,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                 type="text"
                                 value={slugLv}
                                 onChange={e => setSlugLv(e.target.value)}
-                                className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             />
                         </div>
                     </div>
@@ -168,7 +168,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="button"
                             onClick={handleSave}
                             disabled={isPending}
-                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {t('save')}
                         </button>
@@ -198,7 +198,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                                         type="button"
                                         disabled={isPending}
                                         onClick={() => handleDeleteAlias(alias.id)}
-                                        className="text-tag text-danger hover:bg-danger/10 px-2 py-1 rounded transition-colors disabled:opacity-50"
+                                        className="text-tag text-danger hover:bg-danger/10 px-2 py-1 rounded-md transition-colors disabled:opacity-50"
                                     >
                                         {c('delete')}
                                     </button>
@@ -216,14 +216,14 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             type="text"
                             value={aliasValue}
                             onChange={e => setAliasValue(e.target.value)}
-                            className="flex-1 w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                            className="flex-1 w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                             placeholder={tAliases('valuePlaceholder')}
                         />
                         <div className="flex gap-2 w-full sm:w-auto">
                             <select
                                 value={aliasLocale}
                                 onChange={e => setAliasLocale(e.target.value)}
-                                className="bg-surface line rounded px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
+                                className="bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm flex-1 sm:w-auto"
                             >
                                 <option value="">{tAliases('anyLocale')}</option>
                                 <option value="en">en</option>
@@ -232,7 +232,7 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                             <button
                                 type="submit"
                                 disabled={isPending || !aliasValue.trim()}
-                                className="px-4 py-2 text-button-sm bg-surface-elevated hover:bg-border transition-colors rounded disabled:opacity-50"
+                                className="px-4 py-2 text-button-sm bg-surface-elevated hover:bg-border transition-colors rounded-md disabled:opacity-50"
                             >
                                 {t('addAlias')}
                             </button>

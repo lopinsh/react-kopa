@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { tint } from '@/lib/color-utils';
 import { Link } from '@/i18n/routing';
+import { CATEGORY_TONES } from '@/lib/constants';
 import { isCategoryToneSlug } from '@/lib/theme/category';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { updateL1, createL2 } from '@/actions/taxonomy-actions';
@@ -27,7 +28,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const savedColor = l1.storedColor || '#586474';
+    const savedColor = l1.storedColor || CATEGORY_TONES.religion.light;
     const [color, setColor] = useState(savedColor);
     // The 15 designed categories take their colour from the site theme (Dizains); only added ones keep the stored colour here.
     const inDesign = isCategoryToneSlug(l1.slug);
@@ -105,13 +106,13 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="color"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="h-10 w-14 cursor-pointer rounded bg-transparent border-0 p-0"
+                                    className="h-10 w-14 cursor-pointer rounded-md bg-transparent border-0 p-0"
                                 />
                                 <input
                                     type="text"
                                     value={color}
                                     onChange={e => setColor(e.target.value)}
-                                    className="flex-1 bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                    className="flex-1 bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                                     pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
                                 />
                             </div>
@@ -170,7 +171,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameEn}
                                     onChange={e => setNewNameEn(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                    className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>
@@ -180,7 +181,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
                                     type="text"
                                     value={newNameLv}
                                     onChange={e => setNewNameLv(e.target.value)}
-                                    className="w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm"
+                                    className="w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm"
                                     required
                                 />
                             </div>

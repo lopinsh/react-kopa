@@ -1,5 +1,5 @@
 import {
-    CATEGORY_TONES, CATEGORY_TONE_SLUGS, DEFAULT_ROLE_TONES, ROLE_TONE_KEYS, THEME_FONTS, THEME_STYLES,
+    CATEGORY_TONES, CATEGORY_TONE_SLUGS, DEFAULT_OVERLAYS, DEFAULT_ROLE_TONES, DEFAULT_STATUS_TONES, PHOTO_INK, ROLE_TONE_KEYS, SOFT_SHADOWS, THEME_FONTS, THEME_STYLES,
     type ThemeDefinition, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey, type ThemeStyleTokens,
 } from '@/lib/constants';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
@@ -23,16 +23,6 @@ function fontVar(id: ThemeFontId): string {
     return `var(${font.cssVar})`;
 }
 
-/** Soft shadows of calm (globals.css), repeated where a sample must not inherit the root's style. */
-const CALM_SHADOWS = {
-    card: 'none',
-    control: 'none',
-    premium: '0 10px 28px rgba(0, 0, 0, 0.12)',
-    dialog: '0 14px 34px rgba(0, 0, 0, 0.25)',
-};
-/** Tailwind's default radii, repeated for the same reason. */
-const CALM_RADII = { md: '0.375rem', lg: '0.5rem', xl: '0.75rem', '2xl': '1rem', '3xl': '1.5rem', '4xl': '2rem', pill: '9999px', menu: '14px', item: '10px' };
-
 /** The ink: the soft divider colour in calm, the foreground (dark mode: 85 % of it) in bold. */
 function inkValue(style: ThemeStyleTokens, mode: 'light' | 'dark'): string {
     if (style.ink === 'border') return 'var(--border)';
@@ -40,9 +30,8 @@ function inkValue(style: ThemeStyleTokens, mode: 'light' | 'dark'): string {
 }
 
 /**
- * The style tokens as CSS variables (R13). Calm (`radius` null, `shadows` soft) emits no radii and shadows: those stay at the
- * globals.css values, which is what keeps it identical to the site before styles existed.
- * `withDefaults` also writes the calm radii and shadows (for the editor's sample, which must not inherit the root's style).
+ * The style tokens as CSS variables (R13). Every style writes all of them (calm's radii and soft shadows too): globals.css holds no look values.
+ * `withDefaults` also resets the active edge (for the editor's sample, which must not inherit the root's style).
  */
 export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId, mode: 'light' | 'dark' = 'light', withDefaults = false): Vars {
     const font = THEME_FONTS.find((f) => f.id === headingFont);
@@ -65,15 +54,12 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         vars['--tile-mix'] = '100%';
         vars['--tile-on'] = '100%';
         vars['--banner-mix'] = '100%';
-    } else if (withDefaults) {
+    } else {
         vars['--tile-mix'] = '20%';
         vars['--tile-on'] = '0%';
         vars['--banner-mix'] = '12%';
     }
-    const radius = style.radius ?? (withDefaults ? CALM_RADII : null);
-    if (radius) {
-        for (const [k, v] of Object.entries(radius)) vars[`--radius-${k}`] = v;
-    }
+    for (const [k, v] of Object.entries(style.radius)) vars[`--radius-${k}`] = v;
     const sh = style.shadows;
     if (sh === 'none') {
         for (const k of ['card', 'control', 'premium', 'dialog']) vars[`--shadow-${k}`] = 'none';
@@ -82,11 +68,8 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         vars['--shadow-control'] = `${sh.control} ${sh.control} 0 0 var(--ink)`;
         vars['--shadow-premium'] = `${sh.premium} ${sh.premium} 0 0 var(--ink)`;
         vars['--shadow-dialog'] = `${sh.dialog} ${sh.dialog} 0 0 var(--ink)`;
-    } else if (withDefaults) {
-        vars['--shadow-card'] = CALM_SHADOWS.card;
-        vars['--shadow-control'] = CALM_SHADOWS.control;
-        vars['--shadow-premium'] = CALM_SHADOWS.premium;
-        vars['--shadow-dialog'] = CALM_SHADOWS.dialog;
+    } else {
+        for (const k of ['card', 'control', 'premium', 'dialog'] as const) vars[`--shadow-${k}`] = SOFT_SHADOWS[k];
     }
     return vars;
 }
@@ -101,6 +84,11 @@ export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars 
         roles[`--role-${key}`] = tone;
         roles[`--role-${key}-ink`] = roleInk(tone);
     }
+    const status = {
+        danger: t.danger ?? DEFAULT_STATUS_TONES[mode].danger,
+        success: t.success ?? DEFAULT_STATUS_TONES[mode].success,
+        warning: t.warning ?? DEFAULT_STATUS_TONES[mode].warning,
+    };
     return {
         '--primary': t.primary,
         '--primary-foreground': onPrimary(t.primary),
@@ -112,6 +100,15 @@ export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars 
         '--border': t.border ?? `color-mix(in srgb, ${t.foreground} 12%, ${t.background})`,
         '--tint': t.tint ?? `color-mix(in srgb, ${t.foreground} 8%, ${t.background})`,
         '--on-cat': mode === 'light' ? '#ffffff' : t.background,
+        '--danger': status.danger,
+        '--danger-foreground': roleInk(status.danger),
+        '--success': status.success,
+        '--success-foreground': roleInk(status.success),
+        '--warning': status.warning,
+        '--warning-foreground': roleInk(status.warning),
+        '--scrim': t.scrim ?? DEFAULT_OVERLAYS[mode].scrim,
+        '--photo-chip': t.photoChip ?? DEFAULT_OVERLAYS[mode].photoChip,
+        '--photo-ink': PHOTO_INK,
         ...tones,
         ...roles,
     };
@@ -158,6 +155,10 @@ export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontI
         '--color-foreground-muted': v['--foreground-muted'],
         '--color-border': v['--border'],
         '--color-tint': v['--tint'],
+        ...Object.fromEntries(['danger', 'success', 'warning'].flatMap((k) => [[`--color-${k}`, v[`--${k}`]], [`--color-${k}-foreground`, v[`--${k}-foreground`]]])),
+        '--color-scrim': v['--scrim'],
+        '--color-photo-chip': v['--photo-chip'],
+        '--color-photo-ink': v['--photo-ink'],
         ...Object.fromEntries(ROLE_TONE_KEYS.flatMap((k) => [[`--color-role-${k}`, v[`--role-${k}`]], [`--color-role-${k}-ink`, v[`--role-${k}-ink`]]])),
         '--font-sans': fontVar(bodyFont),
         '--font-heading': fontVar(headingFont),

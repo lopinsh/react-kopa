@@ -43,7 +43,7 @@ export default function FeedbackNoteCard({ note, onClose, onDeleted, onChanged }
             className="fixed inset-0 z-[70] flex items-end justify-center bg-scrim p-4 sm:items-center sm:backdrop-blur-[1.5px]"
             onMouseDown={(e) => { if (e.target === e.currentTarget) requestClose(); }}
         >
-            <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-2xl">
+            <div role="dialog" aria-modal="true" aria-label={t('noteTitle')} className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl bg-surface p-5 shadow-dialog">
                 <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="flex flex-wrap items-center gap-2 text-tag">
                         <span className="rounded-pill bg-primary/10 px-3 py-1 text-primary">{t(`kind.${note.kind}`)}</span>

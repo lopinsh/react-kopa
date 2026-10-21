@@ -21,7 +21,7 @@ export default function SaveRow({ isPending, disabled, serverError }: Props) {
                 className="flex h-14 items-center gap-3 rounded-pill bg-primary px-10 weight-strong text-primary-foreground transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-50"
             >
                 {isPending ? (
-                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />
                 ) : (
                     <Save className="h-5 w-5" />
                 )}

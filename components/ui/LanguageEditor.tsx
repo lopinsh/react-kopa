@@ -107,12 +107,12 @@ export default function LanguageEditor({ lang, onLangChange, originalLang, onOri
                         <span className="flex flex-wrap items-center gap-x-1 text-meta text-foreground-muted">
                             {t('others')}
                             {others.slice(0, SHOWN_OTHERS).map((l) => (
-                                <button key={l} type="button" lang={l} disabled={disabled} onClick={() => onLangChange(l)} className="min-h-11 rounded-full px-2 weight-medium text-primary hover:bg-tint disabled:opacity-60 md:min-h-0 md:py-1">
+                                <button key={l} type="button" lang={l} disabled={disabled} onClick={() => onLangChange(l)} className="min-h-11 rounded-pill px-2 weight-medium text-primary hover:bg-tint disabled:opacity-60 md:min-h-0 md:py-1">
                                     {LOCALE_NAMES[l]}
                                 </button>
                             ))}
                             {others.length > SHOWN_OTHERS && (
-                                <button type="button" onClick={() => menu.setOpen(true)} className="min-h-11 rounded-full px-2 weight-medium text-primary hover:bg-tint md:min-h-0 md:py-1">
+                                <button type="button" onClick={() => menu.setOpen(true)} className="min-h-11 rounded-pill px-2 weight-medium text-primary hover:bg-tint md:min-h-0 md:py-1">
                                     {t('moreCount', { count: others.length - SHOWN_OTHERS })}
                                 </button>
                             )}

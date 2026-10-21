@@ -152,7 +152,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                                 'whitespace-pre-wrap break-words rounded-2xl p-3 text-body-sm',
                                 isMe
                                     ? 'rounded-br-none bg-primary text-primary-foreground'
-                                    : 'rounded-bl-none line bg-surface-elevated text-foreground shadow-sm'
+                                    : 'rounded-bl-none line bg-surface-elevated text-foreground shadow-control'
                             )}>
                                 {msg.content}
                             </div>

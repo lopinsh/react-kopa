@@ -16,6 +16,7 @@ export function CategoryDisc({ slug, color, size = 26 }: { slug: string; color: 
     return (
         <span
             data-ui={UI.categoryDisc}
+            // ui-allow: a disc whose size comes from the size prop
             className="inline-flex shrink-0 items-center justify-center rounded-full"
             style={{ width: size, height: size, backgroundColor: tint(color, 18), color }}
         >

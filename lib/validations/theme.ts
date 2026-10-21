@@ -4,6 +4,9 @@ import { CATEGORY_TONE_SLUGS, ROLE_TONE_KEYS, THEME_FONT_IDS, THEME_KEYS, THEME_
 /** Only 6-digit hex values are accepted, so a stored theme can never carry anything else into the page's CSS. */
 export const hexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/);
 
+/** #RRGGBB or #RRGGBBAA (overlays carry an alpha). */
+const overlayColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}(?:[0-9a-fA-F]{2})?$/);
+
 export const themeModeTokensSchema = z.object({
     primary: hexColorSchema,
     background: hexColorSchema,
@@ -15,6 +18,11 @@ export const themeModeTokensSchema = z.object({
     tint: hexColorSchema.optional(),
     categories: z.partialRecord(z.enum(CATEGORY_TONE_SLUGS), hexColorSchema).optional(),
     roles: z.partialRecord(z.enum(ROLE_TONE_KEYS), hexColorSchema).optional(),
+    danger: hexColorSchema.optional(),
+    success: hexColorSchema.optional(),
+    warning: hexColorSchema.optional(),
+    scrim: overlayColorSchema.optional(),
+    photoChip: overlayColorSchema.optional(),
 });
 
 export const themeInputSchema = z.object({

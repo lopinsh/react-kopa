@@ -26,7 +26,7 @@ export default function PrivacySection() {
                         className={clsx(
                             "relative flex cursor-pointer flex-col rounded-2xl border-2 p-4 transition-all text-left group",
                             watch('type') === type.id
-                                ? "border-primary bg-primary/5 shadow-lg ring-4 ring-primary/5"
+                                ? "border-primary bg-primary/5 shadow-premium ring-4 ring-primary/5"
                                 : "border-border bg-surface hover:border-primary/50 hover:bg-surface-elevated/5"
                         )}
                     >
@@ -38,9 +38,9 @@ export default function PrivacySection() {
                         />
                         <div className="flex items-center gap-4 mb-3">
                             <div className={clsx(
-                                "flex h-10 w-10 items-center justify-center rounded-xl transition-all border shadow-sm",
+                                "flex h-10 w-10 items-center justify-center rounded-xl transition-all border shadow-control",
                                 watch('type') === type.id
-                                    ? "bg-primary text-primary-foreground border-transparent scale-110 shadow-primary/20 shadow-md"
+                                    ? "bg-primary text-primary-foreground border-transparent scale-110 shadow-primary/20 shadow-control"
                                     : "bg-surface-elevated text-foreground-muted border-border group-hover:text-foreground group-hover:border-primary/30"
                             )}>
                                 <type.icon className="h-5 w-5" />

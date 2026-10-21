@@ -21,7 +21,7 @@ export default function AcceptingMembersSection() {
                     className="peer sr-only"
                 />
                 <label htmlFor="isAcceptingMembers" className="h-6 w-11 cursor-pointer rounded-pill bg-border transition-colors peer-checked:bg-primary" />
-                <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-white shadow-sm transition-transform peer-checked:translate-x-5" />
+                <div className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-full bg-surface shadow-control transition-transform peer-checked:translate-x-5" />
             </div>
             <label htmlFor="isAcceptingMembers" className="min-w-0 flex-1 cursor-pointer">
                 <span className="text-body-sm text-foreground">{gt('acceptingMembersLabel')}</span>

@@ -3,6 +3,10 @@
 // Bans text-[Npx|rem|clamp|calc], text-xs…text-9xl, leading-*, tracking-*, font weights other than font-normal (a reset) under app/ and components/.
 // Space rules (strict too): no spacing steps 2.5/3.5 (0.5 and 1.5 stay), no [Npx]/[Nrem] spacing, no max-w-[Npx|rem|ch|em]
 // (use max-w-browse/page/focus/reading; max-w-[calc(...)] and viewport units stay, they size against the screen).
+// Look rules (strict, R14): a look (THEME_PRESETS + THEME_STYLES) must change every surface, so components carry no colour, corner or depth of their own:
+// no hex/rgb()/hsl()/oklch() literals, no Tailwind palette colours (bg-red-500, text-white, bg-black/40 ...), no dark: variants (the look sets both modes),
+// no bare rounded / rounded-sm / rounded-[..] (use rounded-md…4xl, rounded-pill, rounded-menu, rounded-item), no raw shadows (shadow-sm…2xl, shadow, shadow-[..]; use shadow-card/control/premium/dialog),
+// and rounded-full only on circles (size-N, equal h-N w-N, aspect-square). A line may opt out with `ui-allow: <reason>` (comment or string), e.g. an OAuth brand colour.
 // Strict by default (fails on any raw class); --warn or TYPE_CHECK_STRICT=0 only reports.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,6 +21,20 @@ const SPACE_RULES = {
     'arbitrary [Npx]/[Nrem] spacing': new RegExp(String.raw`(?<![\w-])${SP}-\[-?\d+(?:\.\d+)?(?:px|rem)\](?![\w-])`, 'g'),
     'max-w-[Npx|rem|ch|em]': /(?<![\w-])max-w-\[\d+(?:\.\d+)?(?:px|rem|ch|em)\]/g,
 };
+const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+const CPFX = '(?:bg|text|ring|ring-offset|border|shadow|fill|stroke|from|to|via|outline|divide|decoration|accent|caret|placeholder)';
+const SIDE = '(?:-(?:t|r|b|l|s|e|tl|tr|bl|br|ss|se|es|ee))?';
+const LOOK_RULES = {
+    'hex/rgb/hsl/oklch colour literal': /(?<![\w&])#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})(?![\w-])|\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\(/g,
+    'Tailwind palette colour (use theme tokens)': new RegExp(String.raw`(?<![\w-])${CPFX}-(?:(?:${PALETTE})-\d{2,3}|white|black)(?![\w-])`, 'g'),
+    'dark: variant (the look sets both modes)': /(?<![\w-])dark:[a-z!\[-]/g,
+    'bare rounded / rounded-sm / rounded-[..] (use the radius scale)': new RegExp(String.raw`(?<![\w-])rounded${SIDE}(?:-sm)?(?![\w-])|(?<![\w-])rounded${SIDE}-\[(?!(?:calc\()?var\(--radius)`, 'g'),
+    'raw shadow (use shadow-card/control/premium/dialog)': /(?<![\w-])shadow(?:-(?:xs|sm|md|lg|xl|2xl|inner))?(?![\w-])|(?<![\w-])shadow-\[(?![^\]]*var\(--)/g,
+    'rounded-full on a non-circle (use rounded-pill)': /(?<![\w-])rounded-full(?![\w-])/g,
+};
+const CIRCLE = /(?<![\w-])size-(?:\d|\[)|(?<![\w-])aspect-square|(?<![\w-])h-(\d+(?:\.\d+)?)\s+w-\1(?![\w.])|(?<![\w-])w-(\d+(?:\.\d+)?)\s+h-\2(?![\w.])/;
+const lookCounts = Object.fromEntries(Object.keys(LOOK_RULES).map((k) => [k, new Map()]));
+const lookHits = [];
 const spaceCounts = Object.fromEntries(Object.keys(SPACE_RULES).map((k) => [k, new Map()]));
 const counts = new Map();
 const walk = (dir) => {
@@ -28,6 +46,15 @@ const walk = (dir) => {
             const f = p.split(path.sep).join('/');
             const n = (src.match(BAN) ?? []).length;
             if (n) counts.set(f, n);
+            const lines = src.split(/\r?\n/);
+            lines.forEach((line, i) => {
+                if (line.includes('ui-allow') || lines.slice(Math.max(0, i - 3), i).some((l) => l.includes('ui-allow')) || /^\s*(?:\/\/|\*|\/\*)/.test(line)) return;
+                for (const [k, re] of Object.entries(LOOK_RULES)) {
+                    if (k.startsWith('rounded-full') && CIRCLE.test(line)) continue;
+                    const c = (line.match(re) ?? []).length;
+                    if (c) { lookCounts[k].set(f, (lookCounts[k].get(f) ?? 0) + c); lookHits.push(`${f}:${i + 1}  [${k.slice(0, 12)}]  ${line.trim().slice(0, 110)}`); }
+                }
+            });
             for (const [k, re] of Object.entries(SPACE_RULES)) {
                 const c = (src.match(re) ?? []).length;
                 if (c) spaceCounts[k].set(f, c);
@@ -54,5 +81,13 @@ ${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
     for (const [a, n] of [...areas].sort((a, b) => b[1] - a[1])) console.log(`${String(n).padStart(4)}  ${a}`);
     if (process.argv.includes('--files')) for (const [f, n] of [...m].sort((a, b) => b[1] - a[1])) console.log(`      ${String(n).padStart(3)}  ${f}`);
 }
+let lookTotal = 0;
+for (const [k, m] of Object.entries(lookCounts)) {
+    const t = [...m.values()].reduce((x, y) => x + y, 0);
+    lookTotal += t;
+    console.log(`
+${t ? 'FAIL' : 'ok'}: ${k}: ${t} in ${m.size} files`);
+}
+if (process.argv.includes('--hits')) for (const h of lookHits) console.log(h);
 const spaceTotal = Object.values(spaceCounts).reduce((a, m) => a + [...m.values()].reduce((x, y) => x + y, 0), 0);
-if (strict && (total || spaceTotal)) process.exit(1);
+if (strict && (total || spaceTotal || lookTotal)) process.exit(1);

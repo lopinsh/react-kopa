@@ -177,7 +177,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     return (
         <div
             ref={containerRef}
-            className="mx-auto w-full max-w-lg rounded-2xl line bg-surface shadow-lg"
+            className="mx-auto w-full max-w-lg rounded-2xl line bg-surface shadow-premium"
             style={accentStyle}
         >
             {/* Progress Bar */}
@@ -260,7 +260,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 type="button"
                                 onClick={nextStep}
                                 disabled={textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-50"
+                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-control transition-all soft-press disabled:opacity-50"
                             >
                                 {c('next')}
                                 <ChevronRight className="h-4 w-4" />
@@ -269,7 +269,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                             <button
                                 type="submit"
                                 disabled={isPending || textOver}
-                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-[0_4px_14px_0_color-mix(in_srgb,var(--primary)_25%,transparent)] transition-all soft-press disabled:opacity-70 disabled:scale-100"
+                                className="flex h-12 items-center gap-2 rounded-pill bg-primary px-8 weight-strong text-primary-foreground shadow-control transition-all soft-press disabled:opacity-70 disabled:scale-100"
                             >
                                 {isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                                 {t('submit')}

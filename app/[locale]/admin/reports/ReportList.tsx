@@ -134,10 +134,10 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => handleResolve(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-button-sm text-background shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl bg-success hover:opacity-90 px-6 py-3 text-button-sm text-success-foreground shadow-control transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
-                                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-success-foreground border-t-transparent" />
                                 ) : (
                                     <>
                                         <CheckCircle2 className="h-4 w-4" />
@@ -149,7 +149,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                 <button
                                     onClick={() => setHidingReport(report)}
                                     disabled={isPending}
-                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-button-sm text-foreground shadow-sm transition-all disabled:opacity-50"
+                                    className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl line bg-surface hover:bg-surface-elevated px-6 py-3 text-button-sm text-foreground shadow-control transition-all disabled:opacity-50"
                                 >
                                     <EyeOff className="h-4 w-4" />
                                     {tMod('hideGroup')}
@@ -160,7 +160,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                             <button
                                 onClick={() => setAskDelete(report.id)}
                                 disabled={isPending}
-                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-button-sm text-danger shadow-sm transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
+                                className="w-full md:w-auto flex items-center justify-center gap-2 rounded-xl border border-danger/40 bg-danger/10 hover:bg-danger/10 px-6 py-3 text-button-sm text-danger shadow-control transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50"
                             >
                                 {isPending ? (
                                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-danger/40 border-t-transparent" />

@@ -24,7 +24,7 @@ export default async function RegisterPage({ params, searchParams }: Props) {
 
     return (
         <div className="flex min-h-[60vh] items-center justify-center px-4 py-8">
-            <div className="w-full max-w-md space-y-8 rounded-2xl line bg-surface p-8 shadow-xl">
+            <div className="w-full max-w-md space-y-8 rounded-2xl line bg-surface p-8 shadow-premium">
                 <div className="text-center">
                     <h1 className="text-title text-foreground">{t('title')}</h1>
                     <p className="mt-2 text-body-sm text-foreground">{t('subtitle')}</p>

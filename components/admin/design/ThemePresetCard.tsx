@@ -47,7 +47,7 @@ export default function ThemePresetCard({ presetKey, selected, disabled, onSelec
                 {(['light', 'dark'] as const).map((mode) => (
                     <span key={mode} className="mt-1 flex gap-1" aria-hidden="true">
                         {CATEGORY_TONE_SLUGS.map((slug) => (
-                            <span key={slug} style={{ '--sw': toneHex(p[mode], slug, mode) } as React.CSSProperties} className="h-3 min-w-0 flex-1 rounded-sm bg-[var(--sw)]" />
+                            <span key={slug} style={{ '--sw': toneHex(p[mode], slug, mode) } as React.CSSProperties} className="h-3 min-w-0 flex-1 rounded-md bg-[var(--sw)]" />
                         ))}
                     </span>
                 ))}

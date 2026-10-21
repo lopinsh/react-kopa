@@ -103,7 +103,7 @@ export default function TagBrowseList({ l1, allowL3, tagIds, onToggle, pending }
                         }}
                         className="flex w-full items-center gap-2 rounded-lg py-1.5 text-left transition-colors group"
                     >
-                        <div className="flex h-5 w-5 items-center justify-center rounded bg-secondary text-foreground-muted group-hover:bg-foreground group-hover:text-background transition-colors">
+                        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-secondary text-foreground-muted group-hover:bg-foreground group-hover:text-background transition-colors">
                             <Plus className="h-3.5 w-3.5" />
                         </div>
                         <span className="text-body-sm text-foreground-muted group-hover:text-foreground">{t('addSubtopic')}</span>

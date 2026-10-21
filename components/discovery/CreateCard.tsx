@@ -11,6 +11,7 @@ type Props = {
 
 /** The round outlined + (the bottom bar's icon). */
 function Round({ className }: { className: string }) {
+    // ui-allow: a circle sized by the caller's className
     return (
         <span className={clsx('grid shrink-0 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground', className)}>
             <Plus aria-hidden="true" className="size-4" />

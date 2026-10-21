@@ -38,7 +38,7 @@ export default function AccessStep() {
                         onClick={() => setValue('type', value, { shouldValidate: true })}
                         className={clsx(
                             'flex w-full items-start gap-3 rounded-xl border-2 p-3 text-left transition-all',
-                            isSelected ? 'border-primary bg-[color-mix(in_srgb,var(--primary)_6%,transparent)] shadow-sm' : 'border-border hover:border-foreground-muted/40'
+                            isSelected ? 'border-primary bg-[color-mix(in_srgb,var(--primary)_6%,transparent)] shadow-control' : 'border-border hover:border-foreground-muted/40'
                         )}
                         aria-pressed={isSelected}
                     >
@@ -69,7 +69,7 @@ export default function AccessStep() {
                             className="peer sr-only"
                         />
                         <div className="h-5 w-9 rounded-pill bg-border transition-colors peer-checked:bg-primary" />
-                        <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-white transition-transform peer-checked:translate-x-4 shadow-sm" />
+                        <div className="absolute left-0.5 top-0.5 h-4 w-4 rounded-full bg-surface transition-transform peer-checked:translate-x-4 shadow-control" />
                     </div>
                     <div className="flex-1">
                         <span className="text-body-sm text-foreground">{t('acceptingMembers')}</span>

@@ -15,7 +15,7 @@ import { CITY_NAME_MAX } from '@/lib/validations/city';
 
 type Props = { city: CityRow };
 
-const INPUT = 'w-full bg-surface line rounded px-3 py-2 text-body md:text-body-sm';
+const INPUT = 'w-full bg-surface line rounded-md px-3 py-2 text-body md:text-body-sm';
 
 /** A city suggested by a group creator: approve (names may be corrected) or reject. */
 export default function PendingCityCard({ city }: Props) {
@@ -75,7 +75,7 @@ export default function PendingCityCard({ city }: Props) {
                         type="button"
                         disabled={isPending}
                         onClick={() => setAskReject(true)}
-                        className="px-3 py-1.5 text-button-sm rounded text-danger bg-danger/10 hover:bg-danger/10 transition-colors disabled:opacity-50"
+                        className="px-3 py-1.5 text-button-sm rounded-md text-danger bg-danger/10 hover:bg-danger/10 transition-colors disabled:opacity-50"
                     >
                         {c('reject')}
                     </button>
@@ -97,14 +97,14 @@ export default function PendingCityCard({ city }: Props) {
                         </div>
                     </div>
                     <div className="mt-4 flex justify-end gap-2">
-                        <button type="button" onClick={() => setEditing(false)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded transition-colors">
+                        <button type="button" onClick={() => setEditing(false)} className="px-4 py-2 text-button-sm text-foreground-muted hover:bg-border rounded-md transition-colors">
                             {c('cancel')}
                         </button>
                         <button
                             type="button"
                             disabled={isPending || nameLv.trim().length < 2 || nameEn.trim().length < 2}
                             onClick={() => run(() => approveCity(city.id, { nameLv, nameEn }), c('approve') + ' - ' + c('success'))}
-                            className="px-4 py-2 text-body-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors disabled:opacity-50"
+                            className="px-4 py-2 text-body-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
                             {c('confirm')}
                         </button>

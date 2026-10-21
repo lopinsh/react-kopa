@@ -155,7 +155,7 @@ export default function SlideoverMergeView({ selectedIds, categories, pendingTag
                         className="w-full bg-primary text-primary-foreground weight-strong py-3 rounded-pill hover:bg-primary-hover transition-colors disabled:opacity-50 flex items-center justify-center gap-2 mt-4"
                     >
                         {isPending ? (
-                            <span className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                            <span className="w-5 h-5 border-2 border-primary-foreground/20 border-t-primary-foreground rounded-full animate-spin" />
                         ) : (
                             <>
                                 <Merge className="w-4 h-4" />

@@ -34,11 +34,11 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                 <button
                     type="button"
                     onClick={() => setIsExpanded(true)}
-                    className="relative flex w-full items-center justify-between gap-4 rounded-xl border-2 bg-surface p-4 text-left transition-all hover:scale-[1.01] shadow-sm soft-press"
+                    className="relative flex w-full items-center justify-between gap-4 rounded-xl border-2 bg-surface p-4 text-left transition-all hover:scale-[1.01] shadow-control soft-press"
                     style={{ borderColor: selectedL1.color }}
                 >
                     <div className="flex items-center gap-4">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-sm line">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background shadow-control line">
                             <CategoryIcon slug={selectedL1.slug} className="h-6 w-6 stroke-2" style={{ color: selectedL1.color }} />
                         </div>
                         <div>
@@ -92,7 +92,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                             }}
                             className={clsx(
                                 'relative flex h-24 flex-col items-center justify-center gap-2 rounded-xl border-2 bg-surface p-3 text-center transition-all hover:scale-[1.02] soft-press',
-                                isSelected ? 'shadow-md' : 'border-border hover:border-foreground/20'
+                                isSelected ? 'shadow-control' : 'border-border hover:border-foreground/20'
                             )}
                             style={{
                                 borderColor: isSelected ? l1.color : undefined,
@@ -100,7 +100,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
                         >
                             {isSelected && (
                                 <div
-                                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--on-cat)] shadow-sm"
+                                    className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full text-[var(--on-cat)] shadow-control"
                                     style={{ backgroundColor: l1.color }}
                                 >
                                     <Check className="h-3.5 w-3.5" strokeWidth={3} />

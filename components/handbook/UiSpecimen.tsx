@@ -26,7 +26,7 @@ export default function UiSpecimen({ id, names, files, children, padding = 'plai
             </div>
             <p className="space-y-0.5 font-mono text-meta text-foreground-muted">
                 <span className="block">
-                    {t('names')}: {names.map((name) => <code key={name} className="mr-1.5 rounded bg-surface-elevated px-1.5 py-0.5 text-foreground">{name}</code>)}
+                    {t('names')}: {names.map((name) => <code key={name} className="mr-1.5 rounded-md bg-surface-elevated px-1.5 py-0.5 text-foreground">{name}</code>)}
                 </span>
                 {files.map((file) => <span key={file} className="block break-all">{t('file')}: {file}</span>)}
             </p>

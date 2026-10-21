@@ -97,7 +97,7 @@ export default function FeedbackMode() {
                     aria-hidden
                     // Follows the hovered element's bounding box.
                     style={{ left: hover.left, top: hover.top, width: hover.width, height: hover.height }}
-                    className="pointer-events-none fixed z-[54] rounded-sm outline outline-2 -outline-offset-2 outline-primary bg-primary/10"
+                    className="pointer-events-none fixed z-[54] rounded-md outline outline-2 -outline-offset-2 outline-primary bg-primary/10"
                 />
             )}
 

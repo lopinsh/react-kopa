@@ -27,7 +27,7 @@ export default function FloatingActionBar({
 
     return (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-            <div className="flex items-center gap-4 bg-surface-elevated line shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.4)] px-4 py-3 rounded-pill pointer-events-auto">
+            <div className="flex items-center gap-4 bg-surface-elevated line shadow-premium px-4 py-3 rounded-pill pointer-events-auto">
 
                 {/* Selection Count & Clear (Clickable area) */}
                 <button
@@ -37,7 +37,7 @@ export default function FloatingActionBar({
                     title={t('clearSelection')}
                 >
                     <span className="pointer-events-none flex items-center gap-2">
-                        <span className="text-body-sm bg-primary text-primary-foreground w-6 h-6 flex items-center justify-center rounded-full group-hover/clear:bg-primary-hover shadow-sm">
+                        <span className="text-body-sm bg-primary text-primary-foreground w-6 h-6 flex items-center justify-center rounded-full group-hover/clear:bg-primary-hover shadow-control">
                             {selectedIds.length}
                         </span>
                         <span className="text-body-sm">{t('selected')}</span>

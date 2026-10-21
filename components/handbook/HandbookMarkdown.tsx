@@ -55,7 +55,7 @@ const components: Components = {
     strong: ({ children }) => <strong className="weight-strong">{children}</strong>,
     del: ({ children }) => <del className="text-foreground-muted">{children}</del>,
     code: ({ children }) => (
-        <code className="rounded bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.85em] [overflow-wrap:anywhere]">{children}</code>
+        <code className="rounded-md bg-surface-elevated px-1.5 py-0.5 font-mono text-[0.85em] [overflow-wrap:anywhere]">{children}</code>
     ),
     blockquote: ({ children }) => (
         <blockquote className="my-6 rounded-xl line border-l-4 border-l-primary bg-surface px-4 py-1 text-foreground">{children}</blockquote>

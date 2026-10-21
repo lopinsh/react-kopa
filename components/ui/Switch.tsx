@@ -34,7 +34,7 @@ export default function Switch({ checked, onChange, labelledBy, describedBy, dis
         >
             <span
                 aria-hidden
-                className={clsx('absolute left-[calc(2px-var(--frame-width))] top-[calc(2px-var(--frame-width))] size-5 rounded-full bg-surface shadow-sm motion-safe:transition-transform', checked && 'translate-x-5')}
+                className={clsx('absolute left-[calc(2px-var(--frame-width))] top-[calc(2px-var(--frame-width))] size-5 rounded-full bg-surface shadow-control motion-safe:transition-transform', checked && 'translate-x-5')}
             />
         </button>
     );

@@ -114,7 +114,7 @@ export default function Overlay({
                     data-ui={dataUi}
                     className={clsx('relative outline-none', panelClasses(layout, size, flush), panelClassName)}
                 >
-                    {grab && <div aria-hidden="true" className={clsx('mx-auto mb-2 h-1 w-10 shrink-0 rounded-full bg-border', layout === 'panel' ? 'md:hidden' : 'sm:hidden', flush && 'mt-2')} />}
+                    {grab && <div aria-hidden="true" className={clsx('mx-auto mb-2 h-1 w-10 shrink-0 rounded-pill bg-border', layout === 'panel' ? 'md:hidden' : 'sm:hidden', flush && 'mt-2')} />}
                     {children}
                 </div>
             </div>
