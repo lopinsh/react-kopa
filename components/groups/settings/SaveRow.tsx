@@ -34,7 +34,7 @@ export default function SaveRow({ isPending, disabled, serverError }: Props) {
                     <p className="text-body-sm">{serverError}</p>
                 </div>
             ) : (
-                <p className="ml-2 text-meta text-foreground-muted">
+                <p className="text-meta text-foreground-muted">
                     {gt('saveChangesDesc')}
                 </p>
             )}
