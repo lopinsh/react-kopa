@@ -18,7 +18,13 @@
 - [x] **R19 Tēmu rādītājs** (spec `docs/development/specs/R19.md`, drawing `docs/development/r19-category-sidebar.html`): the category drawer and the Tēma drop-down as a quiet index (neutral icons, tone only on hover icon and the selected row, tint + dot, quiet search with Veidi, empty shows "0"); one session R19-1, no DB change; reviewed, pushed, live.
 - [x] **R20 Dēļa galva** (spec `docs/development/specs/R20.md`, drawing `docs/development/r20-board-heading.html`): the title is the Grupas | Pasākumi switch with filter-following counts, one 28 px chip row, the column flush left and the board to the right gutter on shared row lines, header field over the title from 1024; sessions R20-1 (grid, title, counts, header) and R20-2 (chips, sticky veil, skeleton); no DB change; reviewed, pushed, live.
 
-Nothing else planned. The owner sets the next goals; each new release gets a short explanation and the owner's OK before any spec or build.
+Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a short plan and the owner's OK before spec/build):
+
+- [ ] **R21-0 Screenshot baseline:** Playwright `toHaveScreenshot` of the key screens at 360/768/1280/1920, light + dark, `lv`, seeded DB, frozen clock. Every later release lists the screens it means to change; any other diff blocks it.
+- [ ] **A Phone pass:** footer gap, header search shape, group and event slide-over, Tēma and date chip drop-downs, Ziņas layout (fix as a class, handbook rule).
+- [ ] **B Board rows:** event row leads with the event name ("Notiek tagad" a small badge), titles up to 2 lines on phone, one status marker (badge, not badge + icon).
+- [ ] **D + E Wizard and admin:** wizard Basics first, Tēma second; terms sweep ("Kategorizēšana"/"kategorija" → Tēma); admin build-plan page cleared (ledger file kept), Design + Pārveide merged into one design handbook page.
+- [ ] **C Es / Jaunumi:** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
 
 ## Standing owner rules
 
@@ -43,6 +49,7 @@ Nothing else planned. The owner sets the next goals; each new release gets a sho
 - **City suggestions:** a suggested city is usable at once, shown as typed everywhere, and a site admin approves or rejects it.
 - **Notification layout:** one compact layout for all types: group · time, one headline naming the person (`notifications.headline.<TYPE>`), then the content itself (message, post excerpt, event title, hide reason) in the `excerpt` arg (trimmed to 160). New types follow this. Admin notices live in the bell's "Administrācija" tab; the admin who causes an event is not notified of it.
 - **Footer links lead somewhere real** (no `#`), and no half-built features behind links: hide until they exist.
+- **Create-group wizard order (22 Oct):** step 1 Basics (name, tagline, description, place), step 2 Tēma, step 3 as now. The same wizard from the + button and from "add a group here"; from inside a category the Tēma step is pre-filled (selected, "Mainīt"), never skipped.
 - **Sign-in:** a pop-up for actions inside the site (with a "Create account" link; registration returns the person to where they were), the sign-in page for direct visits and protected URLs; both share one form and wording.
 
 ## Known code debt (fix when touching nearby code, not as a project)
