@@ -735,7 +735,7 @@
       "translations": "Tulkojumi",
       "feedback": "Atsauksmes",
       "handbook": "Rokasgrāmata",
-      "redesign": "Pārveide",
+      "redesign": "Dizaina grāmata",
       "buildPlan": "Būvplāns",
       "design": "Dizains",
       "team": "Komanda",
@@ -749,7 +749,7 @@
         "handbook": "Vērtības, balss un dizaina noteikumi",
         "team": "Vietnes administratori un īpašnieks",
         "feedback": "Administratoru atstātās piezīmes",
-        "redesign": "Apstiprinātais dizains, ko būvē pēc būvplāna",
+        "redesign": "Apstiprinātie zīmējumi: ziņojumu dēlis, tēmu rādītājs, dēļa galva",
         "buildPlan": "Pārveides izlaidumu īstenošanas plāns",
         "overview": "Paslēptās grupas un noņemtais saturs"
       },
@@ -776,13 +776,8 @@
       }
     },
     "development": {
-      "version": "Versija {version}",
-      "updated": "atjaunināta {date}",
-      "changesTitle": "Kas mainījies",
-      "markAll": "Atzīmēt visu kā pārskatītu",
-      "badgeNew": "Jauns",
-      "badgeUpdated": "Atjaunināts",
-      "badgeHint": "Klikšķini, lai atzīmētu kā pārskatītu",
+      "bookTitle": "Dizaina grāmata",
+      "drawings": { "r18": "Ziņojumu dēlis", "r19": "Tēmu rādītājs", "r20": "Dēļa galva" },
       "buildPlanMissing": "Būvplāns vēl nav uzrakstīts.",
       "buildPlanNote": "Iekšējs dokuments, tikai angļu valodā. Avots: docs/development/build-plan.md repozitorijā."
     },

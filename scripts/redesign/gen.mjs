@@ -6,7 +6,7 @@ import * as P from './parts.mjs';
 import { liveSection } from './live.mjs';
 const { I, G, st, cat, catLine, catName, catIco, cv, pill, biedri } = P;
 
-// The admin page parses the meta with redesignMetaSchema (lib/validations/development.ts) and fails on a breach: check its limits here.
+// The meta limits (kept from the retired admin review page) are still checked here.
 const META = JSON.parse(readFileSync(new URL('../../docs/development/redesign.meta.json', import.meta.url), 'utf8'));
 const metaErr = [META.changes.length > 30 && `changes has ${META.changes.length} items (max 30)`, ...META.changes.map((c, i) => c.length > 300 && `changes[${i}] has ${c.length} characters (max 300)`)].filter(Boolean);
 if (metaErr.length) { console.error(`redesign.meta.json breaks the page's schema:\n  ${metaErr.join('\n  ')}`); process.exit(1); }

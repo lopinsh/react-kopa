@@ -735,7 +735,7 @@
       "translations": "Translations",
       "feedback": "Feedback",
       "handbook": "Handbook",
-      "redesign": "Redesign",
+      "redesign": "Design book",
       "buildPlan": "Build plan",
       "design": "Design",
       "team": "Team",
@@ -749,7 +749,7 @@
         "handbook": "Values, voice and design rules",
         "team": "Site admins and owner",
         "feedback": "Notes left by the site admins",
-        "redesign": "The signed-off design the build plan builds",
+        "redesign": "The approved drawings: message board, topic index, board heading",
         "buildPlan": "Implementation plan for the redesign releases",
         "overview": "Hidden groups and content taken down"
       },
@@ -776,13 +776,8 @@
       }
     },
     "development": {
-      "version": "Version {version}",
-      "updated": "updated {date}",
-      "changesTitle": "What changed",
-      "markAll": "Mark all as reviewed",
-      "badgeNew": "New",
-      "badgeUpdated": "Updated",
-      "badgeHint": "Click to mark as reviewed",
+      "bookTitle": "Design book",
+      "drawings": { "r18": "Message board", "r19": "Topic index", "r20": "Board heading" },
       "buildPlanMissing": "The build plan has not been written yet.",
       "buildPlanNote": "Internal document, English only. Source: docs/development/build-plan.md in the repository."
     },

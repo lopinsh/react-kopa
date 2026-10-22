@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import { getLocale, getTimeZone, getTranslations } from 'next-intl/server';
+import { getTranslations } from 'next-intl/server';
 import { requireAdminPage } from '@/lib/admin-access';
-import { createDateFormatter } from '@/lib/date-format';
-import { decorateRedesign } from '@/lib/development/redesign-html';
-import { DevelopmentService } from '@/lib/services/development.service';
-import RedesignReview from '@/components/development/RedesignReview';
+import { Link } from '@/i18n/routing';
+import { buttonClass } from '@/components/ui/Button';
+import { DESIGN_DRAWINGS, DevelopmentService, type DesignDrawingId } from '@/lib/services/development.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -12,32 +11,38 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('redesign') };
 }
 
+function isDrawing(value: string | undefined): value is DesignDrawingId {
+    return DESIGN_DRAWINGS.some((id) => id === value);
+}
+
 /**
- * The redesign discussion (discussion only, nothing is built from it). It compares looks, so it carries its own
- * colours and fonts (scoped under `.rd`) and does not follow the site theme chosen in Admin > Design.
+ * The Design book: the approved drawings, each a complete page with its own colours, fonts and script, so it runs in an
+ * isolated frame and does not follow the site theme. The tab is in the URL (`?d=r18|r19|r20`).
  */
-export default async function RedesignPage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function DesignBookPage({ params, searchParams }: { params: Promise<{ locale: string }>; searchParams: Promise<{ d?: string }> }) {
     const { locale } = await params;
+    const { d } = await searchParams;
     await requireAdminPage(locale, '/admin/development/redesign');
 
     const t = await getTranslations('admin.development');
-    const format = createDateFormatter(await getLocale(), await getTimeZone());
-    const { html, meta } = await DevelopmentService.getRedesign();
-
-    const decorated = decorateRedesign(html, meta, {
-        version: t('version', { version: meta.version }),
-        updated: t('updated', { date: format.dateTime(new Date(meta.updated), { dateStyle: 'medium', timeStyle: 'short' }) }),
-        changesTitle: t('changesTitle'),
-        markAll: t('markAll'),
-        badgeNew: t('badgeNew'),
-        badgeUpdated: t('badgeUpdated'),
-        badgeHint: t('badgeHint'),
-    });
-    const sections = Object.entries(meta.sections).map(([id, s]) => ({ id, version: s.version }));
+    const current: DesignDrawingId = isDrawing(d) ? d : 'r18';
+    const html = await DevelopmentService.getDrawing(current);
 
     return (
-        <RedesignReview sections={sections}>
-            <div dangerouslySetInnerHTML={{ __html: decorated }} />
-        </RedesignReview>
+        <div className="flex h-[calc(100dvh-7rem)] min-h-96 flex-col">
+            <nav aria-label={t('bookTitle')} className="flex gap-1 overflow-x-auto bg-surface px-gutter py-2">
+                {DESIGN_DRAWINGS.map((id) => (
+                    <Link
+                        key={id}
+                        href={`/admin/development/redesign?d=${id}`}
+                        aria-current={id === current ? 'page' : undefined}
+                        className={buttonClass(id === current ? 'primary' : 'quiet', 'shrink-0', 'sm')}
+                    >
+                        {t(`drawings.${id}`)}
+                    </Link>
+                ))}
+            </nav>
+            <iframe key={current} title={t(`drawings.${current}`)} srcDoc={html} className="min-h-0 w-full flex-1 border-0 bg-background" />
+        </div>
     );
 }
