@@ -67,7 +67,7 @@ export default function CategoryRow({ href, title, count, slug, color, current =
             {all ? (
                 <LayoutGrid aria-hidden="true" className="size-4 shrink-0 text-foreground-muted" />
             ) : (
-                <CategoryIcon slug={slug} aria-hidden="true" className={clsx('size-4 shrink-0 transition-colors duration-quick', current ? 'text-[var(--c)]' : 'text-foreground-muted group-hover/row:text-[var(--c)]')} />
+                <CategoryIcon slug={slug} aria-hidden="true" className="size-4 shrink-0 text-[var(--c)]" />
             )}
             {!folded && (
                 <>
