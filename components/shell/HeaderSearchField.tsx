@@ -17,8 +17,8 @@ import { saveRecent } from '@/lib/recent-searches';
 import { SEARCH_MIN_CHARS } from '@/lib/constants';
 
 /**
- * The desktop header's search (AR-12, AR-41): a click, a tap, keyboard focus, ↓ or the first letter opens it; the panel hangs under the
- * header over the dimmed page. Esc, a click outside, the scrim and Back close it, the word stays; Enter is "Rādīt visus rezultātus".
+ * The desktop header's search (AR-12, AR-41): a click, a tap, keyboard focus, ↓ or the first letter opens it; the panel grows out of the field (same edges, joined, the field is its top row)
+ * over the dimmed page. Esc, a click outside, the scrim and Back close it, the word stays; Enter is "Rādīt visus rezultātus".
  */
 export default function HeaderSearchField({ className }: { className?: string }) {
     const t = useTranslations('discovery.search');
@@ -86,7 +86,7 @@ export default function HeaderSearchField({ className }: { className?: string })
     };
 
     return (
-        <div ref={wrapRef} className={className ?? 'flex'}>
+        <div ref={wrapRef} className={`relative ${className ?? 'flex'}`}>
             <SearchInput
                 value={search.word}
                 onChange={(word) => { search.setWord(word); if (word) openIt(); }}
@@ -108,7 +108,7 @@ export default function HeaderSearchField({ className }: { className?: string })
                         id={panelId}
                         role="dialog"
                         aria-label={t('label')}
-                        className="fixed inset-x-0 top-header mx-auto mt-3 flex max-h-[calc(100dvh-var(--spacing-header)-1.5rem)] w-[min(42rem,calc(100vw-2rem))] flex-col rounded-2xl line bg-surface px-4 pb-3 shadow-premium"
+                        className="absolute -inset-x-0.5 top-full flex max-h-[calc(100dvh-var(--spacing-header)-1.5rem)] flex-col rounded-b-2xl border-x-2 border-b-2 border-primary bg-surface px-4 pb-3 shadow-premium"
                     >
                         <SearchPanel search={search} mode="desktop" inputRef={inputRef} requestClose={requestClose} />
                     </div>

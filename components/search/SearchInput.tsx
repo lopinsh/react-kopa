@@ -31,7 +31,7 @@ export default function SearchInput({ value, onChange, onEnter, inputRef, open, 
     const tSearch = useTranslations('discovery.search');
     const locale = useLocale();
     const id = useId();
-    const pill = clsx('flex items-center gap-2 rounded-pill px-3 text-body-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', open ? 'bg-surface outline-2 outline-primary' : 'bg-tint', className);
+    const pill = clsx('flex items-center gap-2 rounded-pill px-3 text-body-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', open ? 'bg-surface outline-2 outline-primary rounded-b-none!' : 'bg-tint', className);
 
     return (
         <form action={`/${locale}`} role="search" data-ui={UI.searchBar} onSubmit={(e) => { e.preventDefault(); onEnter(); }} className={pill}>

@@ -31,8 +31,10 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
             )}
         >
             <div className={clsx('mt-4 flex h-10 shrink-0 items-baseline gap-2', folded ? 'justify-center' : 'justify-between pl-2')}>
-                <span aria-hidden="true" className="w-0 overflow-hidden text-title">&#8203;</span>
-                <h2 id={headingId} className={clsx('text-section', folded && 'sr-only')}>{tIndex('heading')}</h2>
+                <div className="flex items-baseline">
+                    <span aria-hidden="true" className="w-0 overflow-hidden text-title">&#8203;</span>
+                    <h2 id={headingId} className={clsx('text-section', folded && 'sr-only')}>{tIndex('heading')}</h2>
+                </div>
                 <button /* ui-allow: fold control inside the sidebar edge, ring like the filter chips */
                     type="button"
                     onClick={fold}

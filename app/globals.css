@@ -54,7 +54,7 @@
   /* Space scale: page sides and the gap between page sections (px-gutter, gap-section, py-section) */
   --spacing-aside: 17.5rem;
   --spacing-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
-  --spacing-board-col: calc(var(--spacing-gutter) + 13.25rem); /* discovery column: gutter + 212 (240 at 1024, 244 from 1280) */
+  --spacing-board-col: calc(var(--spacing-gutter) + 14.25rem); /* discovery column: gutter + 228 (256 at 1024, 260 from 1280) */
   --spacing-board-pad: calc(var(--spacing-gutter) - 0.5rem); /* its inner left, so the row icons (8 inset) sit under the logo */
   --spacing-section: clamp(2rem, 1.5rem + 2vw, 4rem);
 

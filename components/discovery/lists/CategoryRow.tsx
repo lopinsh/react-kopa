@@ -59,7 +59,7 @@ export default function CategoryRow({ href, title, count, slug, color, current =
             aria-label={folded ? title : undefined}
             style={color ? { ['--c' as string]: color } : undefined}
             className={clsx(
-                'relative group/row flex items-center gap-3 rounded-item px-2 text-body-sm weight-medium text-foreground transition-colors duration-quick hover:bg-tint focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary',
+                'relative group/row flex items-center gap-2 rounded-item px-2 text-body-sm weight-medium text-foreground transition-colors duration-quick hover:bg-tint focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary',
                 folded ? 'size-10 min-h-0 justify-center px-0' : 'min-h-11 md:min-h-[var(--list-row)]',
                 current && (all ? 'bg-tint weight-strong' : 'topic-chosen weight-strong'),
             )}
