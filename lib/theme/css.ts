@@ -55,10 +55,12 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         vars['--tile-mix'] = '100%';
         vars['--tile-on'] = '100%';
         vars['--banner-mix'] = '100%';
+        vars['--band-mix'] = '100%';
     } else {
         vars['--tile-mix'] = '20%';
         vars['--tile-on'] = '0%';
         vars['--banner-mix'] = '12%';
+        if (withDefaults) vars['--band-mix'] = 'initial';
     }
     for (const [k, v] of Object.entries(style.radius)) vars[`--radius-${k}`] = v;
     const sh = style.shadows;
