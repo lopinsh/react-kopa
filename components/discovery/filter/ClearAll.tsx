@@ -5,8 +5,9 @@ import { clsx } from 'clsx';
 import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { chosenCount } from '@/lib/discovery-params';
 import { UI } from '@/lib/constants';
+import { CHIP } from './chip-styles';
 
-/** "Notīrīt visu": clears the word, the place, the Tēma, the Veidi and the date; keeps the switch side. Only from two chosen things. */
+/** "Notīrīt visu": a chip with moss text. Clears the word, the place, the Tēma, the Veidi and the date; keeps the switch side. Only from two chosen things. */
 export default function ClearAll({ className }: { className?: string }) {
     const t = useTranslations('discovery');
     const { params, go } = useDiscoveryNav();
@@ -16,7 +17,7 @@ export default function ClearAll({ className }: { className?: string }) {
             type="button"
             data-ui={UI.clearAll}
             onClick={() => go({ q: '', cities: [], category: null, tags: [], date: { kind: 'week' }, day: null })}
-            className={clsx('shrink-0 whitespace-nowrap px-1 py-2 text-tag text-primary underline underline-offset-2 hover:opacity-80', className)}
+            className={clsx(CHIP, 'shrink-0 bg-surface text-primary weight-strong hover:bg-tint', className)}
         >
             {t('clearAll')}
         </button>

@@ -138,7 +138,6 @@ body {
   letter-spacing: -0.015em;
   text-wrap-style: balance; /* style only: text-wrap would reset the wrap mode and undo truncate */
 }
-/* The title-switch's divider: 1 px, cap height (about 0.7 em where `cap` is not known); needs the title font on the element. */
 /* Discovery, column open, from lg: the header field starts over the title (its magnifier on the "G" of "Grupas"): brand = column - 1.75rem (field icon inset 0.75rem + header gap 0.5rem + slot margin 0.5rem). */
 @media (min-width: 64rem) {
   html:has([data-board-col="open"]) [data-header-brand] {
@@ -148,6 +147,7 @@ body {
     justify-content: flex-start;
   }
 }
+/* The title-switch's divider: 1 px, cap height (about 0.7 em where `cap` is not known); needs the title font on the element. */
 @utility title-rule {
   font: inherit;
   width: 1px;
@@ -156,6 +156,19 @@ body {
   background: color-mix(in oklab, var(--foreground-muted) 55%, var(--background));
   @supports (height: 1cap) {
     height: 1cap;
+  }
+}
+/* board-veil (R20): the sticky chip row's veil: --background at 95 % from 8 px above (the stick gap) to 16 px below the chips, then clear. Always on: at rest it lies on --background over empty space. The chips keep their own surface. */
+@utility board-veil {
+  &::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    top: -0.5rem;
+    bottom: -1rem;
+    inset-inline: calc(-1 * var(--spacing-gutter));
+    background: linear-gradient(to bottom, color-mix(in oklab, var(--background) 95%, transparent) 0 1.5rem, transparent);
   }
 }
 @utility text-section {

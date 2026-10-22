@@ -13,7 +13,7 @@ export default function SearchWordChip() {
     if (!params.q) return null;
     return (
         <FilterButton
-            icon={<Search aria-hidden="true" className="size-3.5 shrink-0" />}
+            icon={<Search aria-hidden="true" className="size-3 shrink-0" />}
             label={t('searchWord', { word: params.q })}
             ariaLabel={t('searchWordLabel', { word: params.q })}
             chosen

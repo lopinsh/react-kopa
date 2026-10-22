@@ -26,9 +26,9 @@ export default function DateButton({ className }: { className?: string }) {
     const chosen = !isThisWeek(choice, today);
 
     return (
-        <div ref={bindHost} data-ui={UI.datePhone} className={clsx('relative min-w-0 shrink-0', className)}>
+        <div ref={bindHost} data-ui={UI.datePhone} className={clsx('relative shrink-0', className)}>
             <FilterButton
-                icon={<CalendarDays aria-hidden="true" className="size-3.5 shrink-0" />}
+                icon={<CalendarDays aria-hidden="true" className="size-3 shrink-0" />}
                 label={label}
                 ariaLabel={t('dateChoiceLabel', { when: label })}
                 chosen={chosen}

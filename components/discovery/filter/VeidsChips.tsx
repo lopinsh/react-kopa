@@ -14,10 +14,10 @@ import { CHIP, CHOSEN, OPEN } from './chip-styles';
 
 export function Chip({ label, chosen, onClick, muted = false }: { label: string; chosen: boolean; onClick?: () => void; muted?: boolean }) {
     return (
-        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink') : clsx('shrink-0 bg-surface weight-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
+        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, chosen ? clsx(CHOSEN, 'min-w-0 shrink-0') : clsx('shrink-0 bg-surface weight-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
             {/* A chosen chip always stays; on a narrow line its name is cut instead. */}
             <span className="min-w-0 truncate">{label}</span>
-            {chosen && <X aria-hidden="true" className="size-3 shrink-0" />}
+            {chosen && <span aria-hidden="true" className="grid size-5 shrink-0 place-items-center"><X className="size-3" /></span>}
         </button>
     );
 }
@@ -62,8 +62,8 @@ export default function VeidsChips() {
     const more = <span className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted')}>+{hidden || 99}</span>;
 
     return (
-        <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex min-w-0 items-center gap-1.5">
-            <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5 shadow-room">
+        <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex items-center gap-1.5 md:min-w-0">
+            <div className="flex items-center gap-1.5 pt-[calc(0.25rem+var(--shadow-room))] pb-[calc(0.25rem+var(--shadow-room))] pr-[var(--shadow-room)] md:min-w-0 md:overflow-hidden">
                 {chips.slice(0, fit).map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} muted={v.count === 0} onClick={() => toggle(v.slug)} />)}
             </div>
             {hidden > 0 && (

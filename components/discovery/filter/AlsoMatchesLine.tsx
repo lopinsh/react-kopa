@@ -15,7 +15,7 @@ import type { DiscoveryState } from '@/lib/types/discovery';
 
 type Match = DiscoveryState['alsoMatches'][number];
 
-const QUIET = 'bg-[color-mix(in_srgb,var(--c)_12%,var(--surface))] weight-medium text-foreground hover:bg-tint';
+const QUIET = 'tab-tint weight-medium text-foreground shadow-none [--line-color:transparent] hover:bg-tint';
 
 const Dot = ({ match }: { match: Match }) => (match.kind === 'theme' ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" /> : null);
 
@@ -58,10 +58,10 @@ export default function AlsoMatchesLine() {
     };
 
     return (
-        <div data-ui={UI.alsoMatches} role="group" aria-label={t('alsoMatchesTitle')} className="-mt-1.5 mb-3 flex min-w-0 items-center gap-2 md:-mt-2 md:mb-4">
+        <div data-ui={UI.alsoMatches} role="group" aria-label={t('alsoMatchesTitle')} className="-mt-1.5 mb-4 flex min-w-0 items-center gap-2 md:-mt-2">
             <span className="shrink-0 text-meta text-foreground-muted">{t('alsoMatches')}</span>
             <div ref={row} className="relative flex min-w-0 flex-1 items-center gap-1.5">
-                <div className="flex min-w-0 items-center gap-1.5 overflow-hidden py-0.5 shadow-room">
+                <div className="flex min-w-0 items-center gap-1.5 overflow-hidden pt-[calc(0.25rem+var(--shadow-room))] pb-[calc(0.25rem+var(--shadow-room))] pr-[var(--shadow-room)]">
                     {matches.slice(0, fit).map((m) => <MatchChip key={`${m.kind}-${m.slug}`} match={m} href={hrefOf(m)} />)}
                 </div>
                 {hidden > 0 && (

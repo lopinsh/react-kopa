@@ -18,12 +18,12 @@ export default function TopicButton() {
     const { bindHost, ...pop } = usePopover();
     const [suggest, setSuggest] = useState<string | null>(null);
     const chosen = categories.find((c) => c.slug === params.category);
-    const dot = chosen && <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" style={{ ['--c' as string]: chosen.color }} />;
+    const dot = chosen && <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" />;
 
     return (
-        <div ref={bindHost} className="relative min-w-0 shrink">
+        <div ref={bindHost} className="relative shrink-0 lg:hidden">
             <FilterButton
-                icon={dot || <LayoutGrid aria-hidden="true" className="size-3.5 shrink-0" />}
+                icon={dot || <LayoutGrid aria-hidden="true" className="size-3 shrink-0" />}
                 label={chosen?.title ?? t('topic')}
                 ariaLabel={chosen ? t('topicLabel', { topic: chosen.title }) : t('topic')}
                 chosen={!!chosen}
@@ -33,6 +33,7 @@ export default function TopicButton() {
                 onClear={() => go({ category: null, tags: [] })}
                 clearLabel={t('clearChoice', { what: chosen?.title ?? '' })}
                 widthClass="max-w-44"
+                tone={chosen?.color}
             />
             <FilterPopover pop={pop} phone="drawer" title={t('topic')} onClose={() => pop.setOpen(false)}>
                 <CategoryList onChoose={() => pop.setOpen(false)} onSuggest={setSuggest} autoFocus={pop.desktop} />

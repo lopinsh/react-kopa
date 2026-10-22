@@ -11,29 +11,34 @@ import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { UI } from '@/lib/constants';
 
 /**
- * The filter line (AR-23, AR-27). One tree, ordered by breakpoint. From `md`: line 1 holds the word, Kur, Tēma and "Notīrīt visu" (the switch is now the title, `TitleSwitch`, R20-1; R20-2 makes this one chip row); line 2 the Veids chips. On Pasākumi the date part follows Tēma: the four segments where the line is wide
- * (container query, 56 rem), else one date button (phones always, AR-27). Phones: Kur and Tēma, then the
- * Veids line with "Notīrīt visu" at its end.
+ * The filter row (AR-23, AR-27, R20): one row of 28 px chips under the title switch, sticky 8 px under the header on a `board-veil`.
+ * Order: word, Kur, Tēma (below 1024 only, the column shows it from there), dates (Pasākumi: four segments where the row is wide,
+ * container query 56 rem, else one date chip), the Veids rule and Veidi ("+N" from `md`), then "Notīrīt visu" at the end.
+ * Phones: the same row scrolls sideways, every chip in full.
  */
 export default function FilterLine() {
     const { params, pending } = useDiscoveryNav();
     return (
-        <>
-        <div data-ui={UI.filterLine} aria-busy={pending} className="@container/filter sticky top-0 z-20 mb-1 flex flex-wrap items-center gap-x-1.5 gap-y-2 bg-background pb-2 pt-2 md:pt-4">
-            <div className="order-2 flex w-full min-w-0 items-center gap-1.5 md:order-1 md:w-auto md:flex-1">
+        <div data-ui={UI.filterLine} aria-busy={pending} className="@container/filter board-veil sticky top-2 z-20 mb-4 mt-3 h-9">
+            <div className="flex h-full items-center gap-1.5 max-md:-mx-gutter max-md:overflow-x-auto max-md:px-gutter max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden">
                 <SearchWordChip />
                 <PlaceButton />
                 <TopicButton />
                 {params.kind === 'events' && (
                     <>
-                        <DateChoices className="hidden @4xl/filter:flex" />
+                        <div className="hidden shrink-0 @4xl/filter:flex"><DateChoices /></div>
                         <DateButton className="@4xl/filter:hidden" />
                     </>
                 )}
+                {params.category && (
+                    <>
+                        <span aria-hidden="true" className="mx-0.5 h-4 w-px shrink-0 bg-border" />
+                        <div className="max-md:shrink-0 md:min-w-0 md:flex-1"><VeidsChips /></div>
+                    </>
+                )}
+                <ClearAll className="ml-auto" />
+                <span aria-hidden="true" className="w-0.5 shrink-0 md:hidden" />
             </div>
-            {params.category && <div className="order-3 min-w-0 flex-1 md:order-4 md:w-full md:flex-none"><VeidsChips /></div>}
-            <ClearAll className="order-4 ml-auto md:order-2 md:ml-0" />
         </div>
-        </>
     );
 }

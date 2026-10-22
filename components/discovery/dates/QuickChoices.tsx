@@ -30,8 +30,8 @@ export default function QuickChoices({ onPick, variant }: Props) {
                     onClick={() => onPick(i.value)}
                     className={clsx(
                         'whitespace-nowrap rounded-pill text-meta',
-                        variant === 'sheet' ? 'min-h-11 flex-1 px-2 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]' : 'relative h-[26px] px-3 after:absolute after:-inset-y-2 after:inset-x-0',
-                        i.pressed ? 'bg-tint weight-strong ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : 'weight-medium hover:bg-tint'
+                        variant === 'sheet' ? 'min-h-11 flex-1 px-2 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]' : 'relative h-6 px-3 after:absolute after:-inset-y-1 after:inset-x-0',
+                        i.pressed ? (variant === 'sheet' ? 'bg-tint weight-strong ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : 'tab-tint weight-strong') : 'weight-medium text-foreground-muted hover:bg-tint hover:text-foreground'
                     )}
                 >
                     {i.label}

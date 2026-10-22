@@ -1,6 +1,10 @@
-/** One look for every choice chip (the Veids line, the search's theme chips, "Atbilst arī"): 28 px pill, the hit area grows by the `after:` trick. */
-export const CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press px-3 text-meta after:absolute after:-inset-y-2 after:inset-x-0';
-/** A chosen chip: the tone at 15 % as tint with a 45 % edge (`--c` is the tone, set by the chip or its row); the text stays foreground. */
-export const CHOSEN = 'bg-[color-mix(in_srgb,var(--c)_15%,var(--surface))] weight-strong text-foreground [--line-color:var(--line-active,color-mix(in_srgb,var(--c)_45%,transparent))]';
-/** An open chip (its popover is showing): the site-colour edge, the ink in bold. */
+/** The frame of every filter chip (R20): 28 px pill, `line` edge, control shadow. A wrapper chip (a button plus its ×) uses the frame alone. */
+export const CHIP_FRAME = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press text-meta';
+/** A single-element chip: the frame with 10 px sides; the hit area grows by the `after:` trick (44 on touch). */
+export const CHIP = `${CHIP_FRAME} px-3 after:absolute after:-inset-y-2 after:inset-x-0`;
+/** A chosen chip: the tone's tint (12 % light, 16 % dark) with a 45 % edge; `--c` is the tone (a Tēma / Veids tone, or `MOSS`). The × follows with 4 px on the right. */
+export const CHOSEN = 'tab-tint weight-strong text-foreground pr-1 [--line-color:var(--line-active,color-mix(in_srgb,var(--c)_45%,transparent))]';
+/** The tone of every chip that is not a theme: the site's moss. */
+export const MOSS = '[--c:var(--primary)]';
+/** An open chip (its popover is showing): the site-colour edge. */
 export const OPEN = '[--line-color:var(--line-active,var(--primary))]';

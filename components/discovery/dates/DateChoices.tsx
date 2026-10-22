@@ -13,6 +13,7 @@ import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { useDateFormatter } from '@/lib/date-format';
 import { isThisWeek } from '@/lib/discovery-dates';
 import { UI } from '@/lib/constants';
+import { CHIP_FRAME, MOSS } from '@/components/discovery/filter/chip-styles';
 
 const PANEL = 300;
 
@@ -30,10 +31,10 @@ export default function DateChoices({ className }: { className?: string }) {
     const label = dateChoiceLabel(choice, today, format, { week: t('thisWeek'), today: t('today'), weekend: t('weekend') });
 
     return (
-        <div data-ui={UI.dateChoices} className={clsx('h-8 min-w-0 shrink items-center rounded-pill bg-surface p-1 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]', className)}>
+        <div data-ui={UI.dateChoices} className={clsx(CHIP_FRAME, MOSS, 'shrink-0 gap-0.5 bg-surface p-px weight-medium', className)}>
             <QuickChoices variant="line" onPick={(date) => go({ date, day: null })} />
-            <div ref={bindHost} className="relative ml-0.5 h-[26px] min-w-0 shrink">
-                <span className={clsx('flex h-full min-w-0 items-center rounded-pill', custom ? 'bg-tint ring-[length:max(1.5px,var(--line-width))] ring-inset ring-[color:var(--line-active,var(--foreground))]' : pop.open && 'bg-tint')}>
+            <div ref={bindHost} className="relative h-6 min-w-0 shrink-0">
+                <span className={clsx('flex h-full min-w-0 items-center rounded-pill', custom ? 'tab-tint' : pop.open && 'bg-tint')}>
                     <button
                         type="button"
                         onClick={pop.toggle}
@@ -41,14 +42,14 @@ export default function DateChoices({ className }: { className?: string }) {
                         aria-controls={pop.id}
                         aria-haspopup="true"
                         aria-label={custom ? t('dateChoiceLabel', { when: label }) : t('pickDates')}
-                        className={clsx('relative flex h-full min-w-0 items-center gap-1.5 rounded-pill text-meta after:absolute after:-inset-y-2 after:inset-x-0', custom ? 'pl-3 pr-1 weight-strong' : 'px-3 text-foreground-muted hover:bg-tint')}
+                        className={clsx('relative flex h-full min-w-0 items-center gap-1 rounded-pill text-meta after:absolute after:-inset-y-1 after:inset-x-0', custom ? 'pl-3 pr-1 weight-strong' : 'px-3 text-foreground-muted hover:bg-tint')}
                     >
-                        <CalendarDays aria-hidden="true" className="size-3.5 shrink-0" />
+                        <CalendarDays aria-hidden="true" className="size-3 shrink-0" />
                         {custom && <span className="min-w-0 truncate">{label}</span>}
                     </button>
                     {custom && (
-                        <IconButton size="xs" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="mr-1">
-                            <X aria-hidden="true" className="size-3.5" />
+                        <IconButton size="xs" onClick={() => go({ date: { kind: 'week' }, day: null })} aria-label={t('clearChoice', { what: label })} className="mr-0.5">
+                            <X aria-hidden="true" className="size-3" />
                         </IconButton>
                     )}
                 </span>
