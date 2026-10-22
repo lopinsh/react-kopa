@@ -152,7 +152,7 @@ export const THEME_STYLES: Record<ThemeStyleKey, ThemeStyleTokens> = {
         radius: { md: '2px', lg: '3px', xl: '3px', '2xl': '4px', '3xl': '4px', '4xl': '4px', pill: '9999px', menu: '4px', item: '3px' },
         lineWidth: '1px', ink: 'border', frameWidth: '1px',
         shadows: 'none',
-        pressShift: '0px', shadowRoom: '0px', headingWeight: 600, iconStroke: 1.5, tile: 'solid', cardSpace: '1.75rem', listRow: '2.5rem', listPad: '1rem', searchEdge: '1px',
+        pressShift: '0px', shadowRoom: '0px', headingWeight: 600, iconStroke: 1.5, tile: 'solid', cardSpace: '1.75rem', listRow: '2.5rem', listPad: '0.75rem', searchEdge: '1px',
     },
 };
 

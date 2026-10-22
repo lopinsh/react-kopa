@@ -41,7 +41,7 @@ export default function CategoryList({ folded = false, place = 'menu', onChoose,
     return (
         <nav aria-label={tIndex('heading')}>
             {!folded && <ListSearch variant={place === 'drawer' ? 'quiet' : 'field'} value={typed} onChange={setTyped} label={tIndex('search')} autoFocus={autoFocus} />}
-            <ul className={clsx(folded ? 'mt-2 flex flex-col items-center gap-1' : 'mb-1')}>
+            <ul className={clsx(folded ? 'mt-2 flex flex-col items-start gap-1' : 'mb-1')}>
                 {!word && (
                     <>
                         <li>
