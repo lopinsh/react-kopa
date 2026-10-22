@@ -1,5 +1,7 @@
 # Build plan: the redesign, R1–R14
 
+> **Closed 22 Oct 2026.** Every release is live, cancelled or cleared (section 8). Kept as history and as the rule ledger (section 7, `npm run plan:check`); not required reading. New work is listed in `docs/execution_handoff.md`.
+
 The plan for building the signed-off redesign (git tag `redesign-v9.8.2`) into the live site, one release at a time. Shown to admins at `/admin/development/build-plan`.
 
 ## 1. Purpose and how to use this plan
