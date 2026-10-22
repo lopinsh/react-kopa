@@ -51,8 +51,8 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
     const locale = useLocale();
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
     const tagEl = (cls: string) => hasTag && role && <span className={`absolute right-2 ${cls}`}><RoleTag role={role} showMember={showMember} /></span>;
-    // No role: the viewer is not in the group, so the seat is open to them; a waiting request gets the clock; members get none.
-    const seat = role === undefined ? 'open' : role === 'PENDING' ? 'pending' : 'none';
+    // No role: the viewer is not in the group, so the seat is open to them; a member or a waiting request already has a tag, so no seat.
+    const seat = role === undefined ? 'open' : 'none';
     const place = `${cityLabel(tCities, group.city)} · ${t('memberCount', { count: group.memberCount })}`;
 
     return (

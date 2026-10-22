@@ -16,8 +16,8 @@ import { UI } from '@/lib/constants';
 const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
- * A group on a phone (R18, AR-36): a 56 px thumb (the picture, else the category tile), the name on one line, the category line, and a mini tab chip with the note, else
- * city · members (no tagline, no faces). At the right edge the empty seat (a clock while your request waits) or, in Manas grupas, your role tag; the team's waiting
+ * A group on a phone (R18, AR-36): a 56 px thumb (the picture, else the category tile), the name on up to two lines, the category line, and a mini tab chip with the note, else
+ * city · members (no tagline, no faces). At the right edge the empty seat or, in Manas grupas, your role tag (Gaida for a waiting request: one marker, no seat); the team's waiting
  * requests are a link under the chip. The name is the stretched link, so the request link can sit above it.
  */
 export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0, noSeat = false }: {
@@ -46,7 +46,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     const tCities = useTranslations('cities');
     const locale = useLocale();
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
-    const seat = noSeat ? 'none' : role === undefined ? 'open' : role === 'PENDING' ? 'pending' : 'none';
+    const seat = noSeat ? 'none' : role === undefined ? 'open' : 'none';
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
     const hasNote = activity?.kind === 'event' || activity?.kind === 'announcement' || !!group.lookingFor;
     const path = `/${group.category.l1Slug}/group/${group.slug}`;
@@ -67,7 +67,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
                     : <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={24} />}
             </span>
             <span className="min-w-0 flex-1">
-                <span className="block truncate text-item text-foreground">
+                <span className="line-clamp-2 text-item text-foreground">
                     {fullPage
                         ? <a href={`/${locale}${path}`} data-row-link className={NAME_LINK} {...searchAttr}>{name}</a>
                         : <Link href={path} scroll={false} replace={replace} data-row-link data-opens-panel={replace ? undefined : true} className={NAME_LINK} {...searchAttr}>{name}</Link>}
@@ -86,7 +86,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
                 )}
             </span>
             {hasTag && role && <RoleTag role={role} showMember={showMember} />}
-            {seat !== 'none' && <Seat pending={seat === 'pending'} label={seat === 'pending' ? t('seatPending') : t('seatOpen')} />}
+            {seat !== 'none' && <Seat label={t('seatOpen')} />}
         </div>
     );
 }

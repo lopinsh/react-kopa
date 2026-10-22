@@ -1,4 +1,4 @@
-import { Clock, Plus, Scissors } from 'lucide-react';
+import { Plus, Scissors } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ActivityNote from './ActivityNote';
 import Faces from '@/components/ui/Faces';
@@ -12,16 +12,16 @@ type Props = {
     memberCount: number;
     /** City and member count, already worded ("Rīga · 12 biedri"). */
     place: string;
-    /** The empty seat: open for a viewer who is not in the group, a clock while their request waits, none for members. */
-    seat: 'open' | 'pending' | 'none';
+    /** The empty seat: open for a viewer who is not in the group, none otherwise (a waiting request shows its Gaida tag instead, one marker). */
+    seat: 'open' | 'none';
 };
 
-/** A neutral tag-sized dashed ring for the seat. */
-export function Seat({ pending, label }: { pending: boolean; label: string }) {
+/** A neutral tag-sized dashed ring for the open seat. */
+export function Seat({ label }: { label: string }) {
     // ui-allow: a 28 px dashed circle, the empty seat
     return (
         <span role="img" aria-label={label} className="grid size-7 shrink-0 place-items-center rounded-full border-[1.5px] border-dashed border-foreground-muted/50 text-foreground-muted/80">
-            {pending ? <Clock aria-hidden="true" className="size-3.5" /> : <Plus aria-hidden="true" className="size-3.5" />}
+            <Plus aria-hidden="true" className="size-3.5" />
         </span>
     );
 }
@@ -43,7 +43,7 @@ export default function GroupCardActivity({ activity, lookingFor, faces = [], me
             <div className="flex min-w-0 items-center gap-2">
                 <Faces faces={faces} size="lg" />
                 {faces.length > 0 && more > 0 && <span className="shrink-0 weight-strong">+{more}</span>}
-                {seat !== 'none' && <Seat pending={seat === 'pending'} label={seat === 'pending' ? t('seatPending') : t('seatOpen')} />}
+                {seat !== 'none' && <Seat label={t('seatOpen')} />}
                 {/* Place and "View" share one cell: hover or keyboard focus on the card swaps them by visibility, so nothing moves. */}
                 <span className="ml-auto grid min-w-0 justify-items-end">
                     <span className="col-start-1 row-start-1 max-w-full truncate text-foreground-muted group-hover/card:invisible group-has-[a[data-card-link]:focus-visible]/card:invisible">{place}</span>
