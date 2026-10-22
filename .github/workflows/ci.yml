@@ -90,3 +90,67 @@ jobs:
       - name: Server log on failure
         if: failure()
         run: tail -n 80 server.log
+
+  # Screenshot baseline (tests/visual): fails when a screen changes that the release did not mean to change.
+  # Runs in the same Playwright image the baselines were rendered in (keep the tag equal to @playwright/test in package.json).
+  visual:
+    needs: build-and-smoke
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.60.0-noble
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: kopa_user
+          POSTGRES_PASSWORD: kopa_password
+          POSTGRES_DB: ejam_kopa
+        options: >-
+          --health-cmd "pg_isready -U kopa_user -d ejam_kopa"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://kopa_user:kopa_password@postgres:5432/ejam_kopa?schema=public
+      AUTH_SECRET: ci-only-secret-not-for-use
+      NEXTAUTH_SECRET: ci-only-secret-not-for-use
+      NEXTAUTH_URL: http://localhost:3000
+      AUTH_TRUST_HOST: "true"
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      ALLOW_DEV_PASSWORDS: "true"
+      TZ: Europe/Riga
+      NODE_OPTIONS: --require ./tests/visual/freeze-time.cjs
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: npm ci
+
+      - run: npx prisma generate
+
+      - name: Build
+        run: npm run build
+
+      - name: Migrate and seed (frozen clock)
+        run: |
+          npx prisma migrate deploy
+          npm run db:seed
+          npx prisma db execute --file tests/visual/pin-dates.sql --schema prisma/schema.prisma
+
+      - name: Start the app
+        run: |
+          nohup npm start > server.log 2>&1 &
+          npx --yes wait-on -t 60000 http://localhost:3000/api/health
+
+      - name: Visual baseline
+        run: npm run test:visual
+
+      - name: Diff report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+      - name: Server log on failure
+        if: failure()
+        run: tail -n 80 server.log

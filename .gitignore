@@ -66,3 +66,4 @@ test.ts
 
 # screen review captures (scripts/screen-review)
 /screen-review/
+/tests/visual/.auth.json

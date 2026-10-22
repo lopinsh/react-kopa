@@ -46,6 +46,7 @@ npm run dev                   # http://localhost:3000
 | Regenerate client | `npm run db:generate` (after every schema change) |
 | Seed | `npm run db:seed` |
 | Smoke test (built app on :3000, seeded DB; CI runs it) | `npm run test:smoke` |
+| Visual baseline (screenshots of 12 screens x 4 widths x light/dark; CI runs it; locally `scripts/visual-docker.sh`, `--update` rewrites baselines) | `npm run test:visual` |
 | E2E (live site) | `npx playwright test test-live-site.spec.ts` |
 
 There is no unit-test suite yet. CI (`.github/workflows/ci.yml`) blocks on typecheck, lint (which carries the Service, Zod and Zero-Any guards), i18n parity, `ui:check` (type, space, look and field rules), `next build` and the Playwright smoke test.
@@ -58,6 +59,10 @@ Before reporting a task complete:
 3. `npm run i18n:check` reports no new drift (both `messages/en.json` and `messages/lv.json` updated together).
 4. UI changes verified in a running app (both locales, mobile and desktop widths).
 5. Schema changes ship with a named migration in `prisma/migrations/`.
+
+## Visual baseline
+
+`tests/visual/` holds Playwright `toHaveScreenshot` baselines (Linux renders in `tests/visual/__screenshots__/`) of the key screens in `lv`: boards, open chips, search, group page, slide-overs, Ziņas, profile, wizard step 1. Server and seed run on a frozen clock (`tests/visual/freeze-time.cjs`, plus `tests/visual/pin-dates.sql` after the seed) and a throwaway DB; the CI job `visual` fails on any diff and uploads the report. A release's spec lists the screens it means to change; after the build, review every diff, and only baselines for listed screens may be updated (`scripts/visual-docker.sh --update`, in the Playwright Docker image, never from Windows/macOS). Commit updated PNGs with the change that caused them; an unlisted diff is a bug to fix, not a baseline to accept. A new screen gets added to `tests/visual/screens.visual.spec.ts` in the release that introduces it.
 
 ## Directory map
 

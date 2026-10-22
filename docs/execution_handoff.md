@@ -20,7 +20,7 @@
 
 Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a short plan and the owner's OK before spec/build):
 
-- [ ] **R21-0 Screenshot baseline:** Playwright `toHaveScreenshot` of the key screens at 360/768/1280/1920, light + dark, `lv`, seeded DB, frozen clock. Every later release lists the screens it means to change; any other diff blocks it.
+- [x] **R21-0 Screenshot baseline** (`tests/visual/`, `npm run test:visual`, CI job `visual`, rule in AGENTS.md "Visual baseline"): Playwright `toHaveScreenshot` of the key screens at 360/768/1280/1920, light + dark, `lv`, seeded DB, frozen clock. Every later release lists the screens it means to change; any other diff blocks it.
 - [ ] **A Phone pass:** footer gap, header search shape, group and event slide-over, Tēma and date chip drop-downs, Ziņas layout (fix as a class, handbook rule).
 - [ ] **B Board rows:** event row leads with the event name ("Notiek tagad" a small badge), titles up to 2 lines on phone, one status marker (badge, not badge + icon).
 - [ ] **D + E Wizard and admin:** wizard Basics first, Tēma second; terms sweep ("Kategorizēšana"/"kategorija" → Tēma); admin build-plan page cleared (ledger file kept), Design + Pārveide merged into one design handbook page.
