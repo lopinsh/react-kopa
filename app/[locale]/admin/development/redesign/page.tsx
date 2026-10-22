@@ -29,7 +29,7 @@ export default async function DesignBookPage({ params, searchParams }: { params:
     const html = await DevelopmentService.getDrawing(current);
 
     return (
-        <div className="flex h-[calc(100dvh-7rem)] min-h-96 flex-col">
+        <div className="flex h-[calc(100dvh-7.0625rem)] md:h-[calc(100dvh-9.875rem)] lg:h-[calc(100dvh-6.3125rem)] min-h-96 flex-col">
             <nav aria-label={t('bookTitle')} className="flex gap-1 overflow-x-auto bg-surface px-gutter py-2">
                 {DESIGN_DRAWINGS.map((id) => (
                     <Link
