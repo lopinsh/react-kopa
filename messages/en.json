@@ -289,6 +289,7 @@
     "eventsPageTitle": "Events",
     "inCity": "in",
     "inThisCategory": "in this category",
+    "cardOpen": "View",
     "memberCount": "{count, plural, one {# member} other {# members}}",
     "seatOpen": "A seat for you",
     "seatPending": "Your request is waiting",

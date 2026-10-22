@@ -20,7 +20,7 @@ type Props = {
 export function Seat({ pending, label }: { pending: boolean; label: string }) {
     // ui-allow: a 28 px dashed circle, the empty seat
     return (
-        <span role="img" aria-label={label} className="grid size-7 shrink-0 place-items-center rounded-full border-[1.5px] border-dashed border-foreground-muted/60 text-foreground-muted">
+        <span role="img" aria-label={label} className="grid size-7 shrink-0 place-items-center rounded-full border-[1.5px] border-dashed border-foreground-muted/50 text-foreground-muted/80">
             {pending ? <Clock aria-hidden="true" className="size-3.5" /> : <Plus aria-hidden="true" className="size-3.5" />}
         </span>
     );
@@ -44,7 +44,11 @@ export default function GroupCardActivity({ activity, lookingFor, faces = [], me
                 <Faces faces={faces} size="lg" />
                 {faces.length > 0 && more > 0 && <span className="shrink-0 weight-strong">+{more}</span>}
                 {seat !== 'none' && <Seat pending={seat === 'pending'} label={seat === 'pending' ? t('seatPending') : t('seatOpen')} />}
-                <span className="ml-auto min-w-0 truncate text-foreground-muted">{place}</span>
+                {/* Place and "View" share one cell: hover or keyboard focus on the card swaps them by visibility, so nothing moves. */}
+                <span className="ml-auto grid min-w-0 justify-items-end">
+                    <span className="col-start-1 row-start-1 max-w-full truncate text-foreground-muted group-hover/card:invisible group-has-[a[data-card-link]:focus-visible]/card:invisible">{place}</span>
+                    <span aria-hidden="true" className="invisible col-start-1 row-start-1 whitespace-nowrap text-meta weight-strong text-primary group-hover/card:visible group-has-[a[data-card-link]:focus-visible]/card:visible">{t('cardOpen')} →</span>
+                </span>
             </div>
         </div>
     );

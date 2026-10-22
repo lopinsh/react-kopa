@@ -60,7 +60,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             data-ui={UI.groupCard}
             data-panel-origin={group.id}
             style={{ ['--c' as string]: group.category.color }}
-            className="relative flex flex-col rounded-2xl line bg-surface shadow-card has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary"
+            className="group/card card-note relative flex flex-col rounded-2xl line bg-surface shadow-card has-[a[data-card-link]:focus-visible]:outline has-[a[data-card-link]:focus-visible]:outline-2 has-[a[data-card-link]:focus-visible]:outline-primary"
         >
             {group.bannerImage ? (
                 <div className="relative">
@@ -71,9 +71,8 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                     <Link
                         href={topicHref(group.category.l1Slug, undefined, filters)}
                         aria-label={t('stickerLabel', { category: group.category.l1Title })}
-                        className="absolute -bottom-3 left-4 z-[2] flex max-w-[60%] items-center gap-1.5 rounded-pill line bg-surface px-3 py-1 text-tag weight-strong text-foreground shadow-control sticker"
+                        className="absolute -bottom-3 left-4 z-[2] flex max-w-[60%] items-center gap-1.5 rounded-pill line px-3 py-1 text-tag weight-strong shadow-control sticker"
                     >
-                        <span aria-hidden="true" className="size-2 shrink-0 rounded-full" style={{ backgroundColor: group.category.color }} />
                         <span className="truncate">{group.category.l1Title}</span>
                     </Link>
                 </div>

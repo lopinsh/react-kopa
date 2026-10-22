@@ -48,7 +48,7 @@ export default function CreateCard({ l1Slug, variant, color }: Props) {
             href={href}
             data-ui={UI.createCard}
             style={tone}
-            className="flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center transition-colors hover:bg-tint/40"
+            className="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center transition-colors hover:bg-tint/40 hover:border-[color-mix(in_srgb,var(--c)_60%,var(--border))] focus-visible:border-[color-mix(in_srgb,var(--c)_60%,var(--border))]"
         >
             <span className="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5">
                 <Round className="mb-1 size-9" />
