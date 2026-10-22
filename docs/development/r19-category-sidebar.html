@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tēmu rādītājs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&display=swap" rel="stylesheet">
+<style>
+/* ======================================================
+   TOKENS — the same as r18-group-cards.html, plus the 15 category tones of Sūna (lib/constants/theme.ts)
+   ====================================================== */
+:root,.lt{
+  --bg:#f4f4ef;--surface:#fdfdfb;--tint:#e8eae1;--border:#dcdfd4;--text:#1f221c;--muted:#5f6558;
+  --moss:#4B5E3B;--warn:#8A5B0B;--on-moss:#fdfdfb;
+  --c-travel:#4F7330;--c-dancing:#A9452C;--c-hobbies:#A55A12;--c-community:#2F6A45;--c-politics:#57493D;
+  --c-pets:#7A5E40;--c-art:#7A4790;--c-music:#57479A;--c-religion:#586474;--c-social:#A53A50;
+  --c-games:#8C3F72;--c-sports:#3B55A0;--c-family:#2B6489;--c-wellbeing:#2E6B6F;--c-education:#86650E;
+  --stub-mix:12%;
+  --float:0 1px 2px rgba(31,34,28,.06),0 18px 40px -18px rgba(31,34,28,.38);
+  --lift:0 1px 2px rgba(31,34,28,.05),0 14px 32px -20px rgba(31,34,28,.35);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --edge:color-mix(in oklab,var(--text) 30%,var(--surface));
+  --serif:"Literata",Georgia,serif;--sans:"Commissioner",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--text:#eceee7;--muted:#a8ae9f;
+    --moss:#b5c79e;--warn:#E2B65A;--on-moss:#161814;
+    --c-travel:#7BBF40;--c-dancing:#E09B8A;--c-hobbies:#DB9F66;--c-community:#44C172;--c-politics:#B8AA9D;
+    --c-pets:#C1A78B;--c-art:#CA9CDE;--c-music:#AFA3E0;--c-religion:#A0ACBA;--c-social:#DD98A6;
+    --c-games:#DB94C3;--c-sports:#98A9DD;--c-family:#7BB2D6;--c-wellbeing:#47BAC2;--c-education:#D0A535;
+    --stub-mix:16%;--float:0 1px 2px rgba(0,0,0,.3),0 18px 40px -16px rgba(0,0,0,.75);--lift:0 1px 2px rgba(0,0,0,.3),0 16px 36px -18px rgba(0,0,0,.7);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"],.dk{
+  --bg:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--text:#eceee7;--muted:#a8ae9f;
+  --moss:#b5c79e;--warn:#E2B65A;--on-moss:#161814;
+  --c-travel:#7BBF40;--c-dancing:#E09B8A;--c-hobbies:#DB9F66;--c-community:#44C172;--c-politics:#B8AA9D;
+  --c-pets:#C1A78B;--c-art:#CA9CDE;--c-music:#AFA3E0;--c-religion:#A0ACBA;--c-social:#DD98A6;
+  --c-games:#DB94C3;--c-sports:#98A9DD;--c-family:#7BB2D6;--c-wellbeing:#47BAC2;--c-education:#D0A535;
+  --stub-mix:16%;--float:0 1px 2px rgba(0,0,0,.3),0 18px 40px -16px rgba(0,0,0,.75);--lift:0 1px 2px rgba(0,0,0,.3),0 16px 36px -18px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+.lt{color-scheme:light}
+
+/* the three templates (design.md → Templates). Put the look class on the same element as .lt/.dk */
+:root,.lk-calm{--r-item:10px;--r-ctl:999px;--r-menu:14px;--r-card:16px;--lw:1px;--lc:var(--border);--hw:600;--stroke:2;--row-h:36px;--px:12px;--sel-ring:0 0 0 0 transparent;--ctl-shadow:none}
+.lk-bold{--r-item:4px;--r-ctl:6px;--r-menu:10px;--r-card:12px;--lw:2px;--lc:var(--text);--hw:700;--stroke:2;--row-h:36px;--px:12px;--sel-ring:inset 0 0 0 2px var(--text),3px 3px 0 var(--text);--ctl-shadow:3px 3px 0 var(--text)}
+.lk-airy{--r-item:3px;--r-ctl:999px;--r-menu:4px;--r-card:4px;--lw:1px;--lc:var(--border);--hw:600;--stroke:1.5;--row-h:40px;--px:16px;--sel-ring:0 0 0 0 transparent;--ctl-shadow:none}
+
+.t-all{--tone:var(--moss)}
+.t-travel{--tone:var(--c-travel)}.t-dancing{--tone:var(--c-dancing)}.t-hobbies{--tone:var(--c-hobbies)}.t-community{--tone:var(--c-community)}.t-politics{--tone:var(--c-politics)}
+.t-pets{--tone:var(--c-pets)}.t-art{--tone:var(--c-art)}.t-music{--tone:var(--c-music)}.t-religion{--tone:var(--c-religion)}.t-social{--tone:var(--c-social)}
+.t-games{--tone:var(--c-games)}.t-sports{--tone:var(--c-sports)}.t-family{--tone:var(--c-family)}.t-wellbeing{--tone:var(--c-wellbeing)}.t-education{--tone:var(--c-education)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4,p{margin:0}
+a{color:inherit}
+ul{list-style:none;margin:0;padding:0}
+.ic{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:var(--stroke,2);stroke-linecap:round;stroke-linejoin:round}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+@media (max-width:640px){.wrap{padding:0 16px}}
+
+/* ---------- page bar + sections (from r18) ---------- */
+.bar{position:sticky;top:0;z-index:40;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.bar .wrap{display:flex;align-items:center;gap:24px;height:56px}
+.brand{font-family:var(--serif);font-weight:600;font-size:17px;white-space:nowrap}
+.brand span{color:var(--muted);font-family:var(--sans);font-weight:500;font-size:13px;margin-left:8px}
+.nav{display:flex;gap:4px;margin-left:auto;overflow:hidden}
+.nav a{font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:999px;white-space:nowrap}
+.nav a:hover{background:var(--tint);color:var(--text)}
+.toggle{flex:none;display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 13px var(--sans);cursor:pointer}
+.toggle:hover{border-color:var(--muted)}
+@media (max-width:900px){.nav{display:none}.toggle{margin-left:auto}}
+@media (max-width:480px){.brand span{display:none}}
+section{padding:96px 0;border-top:1px solid var(--border)}
+section.intro{border-top:0;padding:64px 0 72px}
+@media (max-width:640px){section{padding:64px 0}section.intro{padding:40px 0 48px}}
+.sh{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;margin-bottom:48px;max-width:760px}
+.sl{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--text);color:var(--bg);font:600 18px var(--serif)}
+.sh h2{font:600 clamp(28px,4vw,40px)/1.1 var(--serif);letter-spacing:-.015em}
+.sh p{color:var(--muted);margin-top:10px;max-width:62ch}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.intro h1{font:600 clamp(44px,7vw,92px)/.96 var(--serif);letter-spacing:-.03em;margin:16px 0 24px}
+.intro h1 em{font-style:normal;color:var(--moss)}
+.intro .lead{font:600 clamp(19px,2.2vw,24px)/1.32 var(--serif);max-width:34ch;margin-bottom:16px}
+.intro .philo{color:color-mix(in oklab,var(--text) 82%,var(--bg));max-width:64ch;font-size:16.5px}
+.sub-h{display:flex;align-items:baseline;gap:14px;margin:72px 0 24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sub-h h3{font:600 22px/1.2 var(--serif)}
+.sub-h span{font-size:13px;color:var(--muted)}
+
+/* ======================================================
+   AFTER — the quiet index (rādītājs)
+   ====================================================== */
+.sb{position:relative;display:flex;flex-direction:column;width:232px;flex:none;background:var(--surface);box-shadow:inset calc(-1 * var(--lw)) 0 0 var(--lc);padding:16px var(--px) 16px;font-family:var(--sans);color:var(--text);overflow:hidden;transition:width 240ms var(--ease),padding 240ms var(--ease)}
+.sb.tall{min-height:100%}
+.sb-head{display:flex;align-items:center;justify-content:space-between;gap:8px;height:40px;padding:0 0 0 8px;flex:none}
+.sb-head h3{font:var(--hw) 16px/24px var(--serif);letter-spacing:-.005em;white-space:nowrap;transition:opacity 120ms var(--ease)}
+.fold{flex:none;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:var(--r-ctl);background:transparent;color:var(--muted);box-shadow:inset 0 0 0 var(--lw) var(--lc);cursor:pointer;padding:0;transition:background-color 120ms var(--ease),color 120ms var(--ease)}
+.fold:hover,.fold.is-hover{background:var(--tint);color:var(--text)}
+.fold:focus-visible{outline:2px solid var(--moss);outline-offset:2px}
+.sb-search{display:flex;align-items:center;gap:8px;height:32px;margin:4px 0 8px;padding:0 8px;border-radius:var(--r-item);color:var(--muted);flex:none;transition:background-color 120ms var(--ease),box-shadow 120ms var(--ease)}
+.lk-airy .sb-search,.lk-airy.sb-search{box-shadow:inset 0 0 0 1px var(--border)}
+.sb-search:hover{background:color-mix(in oklab,var(--tint) 60%,var(--surface))}
+.sb-search:focus-within,.sb-search.is-focus{background:var(--surface);box-shadow:0 0 0 2px var(--moss)}
+.sb-search .ic{width:14px;height:14px}
+.sb-search input{all:unset;min-width:0;flex:1;font:400 13.5px/20px var(--sans);color:var(--text)}
+.sb-search input::placeholder{color:var(--muted)}
+.sb-search .clr{all:unset;cursor:pointer;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;color:var(--muted)}
+.sb-search .clr .ic{width:12px;height:12px}
+.sb-list{display:flex;flex-direction:column;min-height:0}
+.row{position:relative;display:flex;align-items:center;gap:12px;height:var(--row-h);padding:0 8px;border-radius:var(--r-item);font-size:14px;line-height:20px;font-weight:500;color:var(--text);text-decoration:none;cursor:pointer;transition:background-color 120ms var(--ease),color 120ms var(--ease)}
+.row .ic{color:var(--muted);transition:color 120ms var(--ease)}
+.row .lbl{min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:opacity 120ms var(--ease)}
+.row .n{flex:none;font-size:12.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums;transition:opacity 120ms var(--ease)}
+.row .dot{display:none}
+.row:hover,.row.is-hover{background:var(--tint)}
+.row:hover .ic,.row.is-hover .ic{color:var(--tone)}
+.row:focus-visible,.row.is-focus{outline:2px solid var(--moss);outline-offset:-2px}
+.row.sel{background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface));font-weight:600;box-shadow:var(--sel-ring)}
+.row.sel .ic{color:var(--tone)}
+.row.sel .dot{display:block}
+.row.sel.t-all{background:var(--tint)}
+.row.empty .lbl{color:var(--muted)}
+.row mark{background:none;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
+.row .path{color:var(--muted);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--tone);flex:none}
+.sep{height:1px;margin:4px 8px;border-top:1px dashed var(--border)}
+.grp{padding:12px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.none{padding:8px 8px 4px;font-size:13.5px;color:var(--muted)}
+.row.sug{color:var(--moss);font-weight:600;height:auto;min-height:var(--row-h);padding-top:8px;padding-bottom:8px;align-items:flex-start}
+.row.sug .ic{color:var(--moss);margin-top:2px}
+.row.sug .lbl{white-space:normal}
+.row.sug:hover .ic{color:var(--moss)}
+/* folded rail */
+.sb.folded{width:56px;padding-left:8px;padding-right:8px}
+.sb.folded .sb-head{justify-content:center;padding:0}
+.sb.folded .sb-head h3,.sb.folded .sb-search,.sb.folded .row .lbl,.sb.folded .row .n,.sb.folded .grp{display:none}
+.sb.folded .sep{margin:4px 4px}
+.sb.folded .sb-list{gap:4px;margin-top:8px}
+.sb.folded .sep{margin:0 4px}
+.sb.folded .row{width:40px;height:40px;padding:0;justify-content:center;gap:0}
+.sb.folded .row.sel .dot{position:absolute;top:4px;right:4px;width:6px;height:6px}
+.tip{position:absolute;left:52px;z-index:5;white-space:nowrap;height:28px;display:flex;align-items:center;gap:6px;padding:0 10px;border-radius:var(--r-item);background:var(--text);color:var(--bg);font-size:12.5px;font-weight:600;pointer-events:none}
+.tip b{font-weight:500;opacity:.7}
+/* phone drop-down variant */
+.sb.phone{width:auto;box-shadow:none;padding:8px;background:transparent}
+.sb.phone .sb-head{display:none}
+.sb.phone{--row-h:44px}
+.sb.phone .sb-search{height:40px;margin:0 0 4px;box-shadow:inset 0 0 0 1px var(--border)}
+.sb.phone .sb-search input{font-size:16px}
+
+/* ======================================================
+   BEFORE — today's CategoryDrawer, drawn faithfully
+   ====================================================== */
+.old{position:relative;width:232px;flex:none;background:var(--surface);border-right:1px solid var(--border);padding:0 0 16px;font-family:var(--sans)}
+.old .o-top{margin-top:16px;height:32px;display:flex;align-items:center;justify-content:flex-end;padding:0 12px}
+.old .o-fold{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;color:var(--muted);box-shadow:inset 0 0 0 1px var(--border)}
+.old .o-list{padding:0 6px}
+.old .o-search{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);padding:6px 12px 8px;color:var(--muted);font-size:14px}
+.old ul{margin-top:4px}
+.old .o-row{display:flex;align-items:center;gap:12px;min-height:36px;padding:0 8px;border-radius:12px;font-size:14px;line-height:20px}
+.old .o-row.sel{background:var(--tint);font-weight:600}
+.old .o-row.dim{opacity:.45}
+.old .o-row .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.old .o-row .n{font-size:12.5px;color:var(--muted)}
+.disc{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;flex:none;background:color-mix(in oklab,var(--tone) 18%,var(--surface));color:var(--tone)}
+.disc .ic{width:15px;height:15px}
+.disc.all{width:24px;height:24px;background:var(--tint);color:var(--muted)}
+.disc.all .ic{width:14px;height:14px}
+
+/* ---------- before / after ---------- */
+.ba{display:grid;grid-template-columns:repeat(2,max-content);gap:20px 72px;justify-content:start}
+.ba .lbl-h{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600}
+.ba .lbl-h i{font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--tint);color:var(--muted)}
+.ba .lbl-h.after i{background:var(--moss);color:var(--on-moss)}
+.stage{background:var(--bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;display:flex;width:max-content}
+.stage .ghost{width:120px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.ghost i{display:block;height:40px;border-radius:999px;background:repeating-linear-gradient(-45deg,var(--tint) 0 2px,transparent 2px 9px);border:1px dashed var(--border)}
+.ghost i.c{height:150px;border-radius:16px}
+.notes{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px;max-width:352px}
+.notes li{display:grid;grid-template-columns:20px 1fr;gap:8px;color:color-mix(in oklab,var(--text) 82%,var(--bg))}
+.notes .ic{margin-top:3px}
+.notes.bad .ic{color:var(--muted)}
+.notes.good .ic{color:var(--moss)}
+@media (max-width:760px){
+  .ba{grid-template-columns:minmax(0,1fr)}
+  .ba > :nth-child(1){order:1}.ba > :nth-child(3){order:2}.ba > :nth-child(5){order:3}
+  .ba > :nth-child(2){order:4;margin-top:32px}.ba > :nth-child(4){order:5}.ba > :nth-child(6){order:6}
+  .stage .ghost{display:none}
+}
+
+/* ======================================================
+   CONTEXT FRAMES (1280 / 1024) — scaled to fit, no page scroll
+   ====================================================== */
+.fw{width:100%;overflow:hidden;border-radius:14px;border:1px solid var(--border);background:var(--bg)}
+.frame{transform-origin:0 0;background:var(--bg);display:flex;flex-direction:column}
+.fcap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.fcap b{color:var(--text);font-weight:600}
+.f-head{height:56px;display:flex;align-items:center;gap:24px;padding:0 32px;background:var(--surface);border-bottom:var(--lw) solid var(--lc)}
+.logo{display:flex;align-items:center;gap:8px;font:600 19px var(--serif);color:var(--moss);white-space:nowrap}
+.logo em{font-style:italic}
+.logo i{position:relative;width:22px;height:14px;display:block}
+.logo i::before,.logo i::after{content:"";position:absolute;top:0;width:14px;height:14px;border-radius:50%;background:var(--moss)}
+.logo i::after{left:8px;opacity:.45}
+.f-search{flex:1;max-width:480px;height:40px;border-radius:999px;background:var(--tint);display:flex;align-items:center;gap:10px;padding:0 16px;color:var(--muted);font-size:14px}
+.f-right{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600}
+.f-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(140deg,#93ad7c,#5f7a4b)}
+.f-body{display:flex;min-height:760px}
+.f-main{flex:1;min-width:0;padding:16px 32px 32px}
+.fl{display:flex;align-items:center;gap:8px;height:40px}
+.chip{flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:var(--r-ctl);background:var(--surface);box-shadow:inset 0 0 0 var(--lw) var(--lc);font:500 13.5px var(--sans);color:var(--text);white-space:nowrap}
+.chip .ic{width:14px;height:14px;color:var(--muted)}
+.chip.val{font-weight:600}
+.chip.v{height:32px;font-size:13px;color:var(--muted)}
+.chip.v.on{background:var(--moss);color:var(--on-moss);box-shadow:none}
+.vline{width:1px;height:20px;background:var(--border);margin:0 4px}
+.switch{margin-left:auto;display:flex;padding:3px;border-radius:var(--r-ctl);background:var(--surface);box-shadow:inset 0 0 0 var(--lw) var(--lc)}
+.switch span{height:30px;padding:0 14px;display:flex;align-items:center;border-radius:var(--r-ctl);font-size:13px;font-weight:600;color:var(--muted)}
+.switch span.on{background:var(--text);color:var(--bg)}
+.f-count{margin:24px 0 16px;font-size:13px;color:var(--muted)}
+.f-count b{color:var(--text);font-weight:600}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(16rem,1fr));gap:20px}
+.f-empty{padding:48px 0;color:var(--muted);font-size:14px}
+/* mini flyer (r18) */
+.mc{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);overflow:visible}
+.mc .ph{position:relative;aspect-ratio:5/2;border-radius:calc(var(--r-card) - 1px) calc(var(--r-card) - 1px) 0 0;background:linear-gradient(135deg,color-mix(in oklab,var(--tone) 55%,#000) 0%,var(--tone) 55%,color-mix(in oklab,var(--tone) 45%,#fff) 100%)}
+.mc .ph::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 75% 35%,rgba(255,255,255,.28),transparent 40%)}
+.mc .stk{position:absolute;left:16px;bottom:-13px;z-index:2;display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 11px 0 9px;border-radius:999px;background:var(--surface);font-size:12px;font-weight:600;box-shadow:0 0 0 1px var(--edge),0 6px 14px -6px rgba(0,0,0,.5);transform:rotate(-2deg);transform-origin:left center}
+.mc .bd{padding:26px 20px 16px}
+.mc h4{font:600 1.1875rem/1.26 var(--serif);letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc .sbt{margin-top:4px;font-size:13px;font-weight:500;color:var(--muted)}
+.mc .tab{margin-top:auto;position:relative;height:72px;padding:14px 20px;border-radius:0 0 calc(var(--r-card) - 1px) calc(var(--r-card) - 1px);background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface));display:flex;flex-direction:column;justify-content:center;gap:8px}
+.mc .tab::before{content:"";position:absolute;left:0;right:0;top:-1px;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%)}
+.mc .when{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600}
+.mc .when .ic{color:var(--tone)}
+.mc .when.q{color:var(--muted);font-weight:500}
+.mc .ppl{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.mc .fc{display:flex}.mc .fc i{width:22px;height:22px;border-radius:50%;margin-left:-6px;box-shadow:0 0 0 2px color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface))}
+.mc .fc i:first-child{margin-left:0}
+.f1{background:linear-gradient(140deg,#d09a78,#a5674a)}.f2{background:linear-gradient(140deg,#93ad7c,#5f7a4b)}.f3{background:linear-gradient(140deg,#9c8cc8,#6b5a9e)}.f4{background:linear-gradient(140deg,#7fa8c6,#4d7594)}
+
+/* ---------- phone ---------- */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center}
+@media (max-width:900px){.split{grid-template-columns:minmax(0,1fr);gap:40px}}
+.phone{width:min(375px,100%);margin:0 auto;padding:10px;border-radius:46px;background:#141612;box-shadow:inset 0 0 0 1px #3a3f35,var(--lift)}
+.screen{position:relative;border-radius:36px;overflow:hidden;background:var(--bg);height:760px}
+.status{display:flex;justify-content:space-between;padding:14px 26px 6px;font-size:12px;font-weight:600}
+.p-head{display:flex;align-items:center;justify-content:space-between;padding:6px 16px 10px}
+.p-head .logo{font-size:17px}
+.p-fl{display:flex;gap:8px;padding:0 16px 12px;overflow:hidden}
+.p-fl .chip{height:36px;font-size:13px}
+.p-fl .chip.open{box-shadow:0 0 0 2px var(--moss)}
+.pop{position:absolute;left:12px;right:12px;top:142px;z-index:3;background:var(--surface);border-radius:var(--r-menu);box-shadow:var(--float),inset 0 0 0 var(--lw) var(--lc);max-height:540px;overflow:auto}
+.p-dim{position:absolute;inset:132px 0 0;background:var(--bg)}
+.p-dim .row-ghost{height:72px;margin:0 16px;border-bottom:1px dashed var(--border)}
+.spec{display:flex;flex-direction:column;gap:20px}
+.spec dl{margin:0;display:grid;grid-template-columns:max-content 1fr;gap:10px 20px;font-size:14px}
+.spec dt{font-weight:600}
+.spec dd{margin:0;color:color-mix(in oklab,var(--text) 80%,var(--bg))}
+
+/* ---------- anatomy ---------- */
+.anat{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:72px;align-items:start}
+@media (max-width:900px){.anat{grid-template-columns:minmax(0,1fr);gap:40px}}
+.anat-box{position:relative;padding:12px 40px 12px 40px;display:flex}
+.anat-box .sb{overflow:visible;border-radius:0;box-shadow:inset -1px 0 0 var(--border),var(--lift)}
+.pin{position:absolute;z-index:6;width:20px;height:20px;border-radius:50%;background:var(--text);color:var(--bg);font:700 10.5px/20px var(--sans);text-align:center;box-shadow:0 0 0 3px var(--bg);pointer-events:none;left:-30px;top:50%;margin-top:-10px}
+.pin.r{left:auto;right:-30px}
+.guide{position:absolute;left:0;right:0;border-top:1px dashed var(--moss);opacity:.7;pointer-events:none}
+.callouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 32px}
+@media (max-width:640px){.callouts{grid-template-columns:minmax(0,1fr);gap:22px}}
+.callouts li{display:grid;grid-template-columns:28px 1fr;gap:12px}
+.callouts .n{width:24px;height:24px;border-radius:50%;background:var(--text);color:var(--bg);font:700 11px/24px var(--sans);text-align:center}
+.callouts h4{font-size:15px;font-weight:600;line-height:1.35}
+.callouts h4 small{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--moss);margin-left:6px}
+.callouts p{font-size:13.5px;color:var(--muted);margin-top:3px}
+
+/* ---------- states ---------- */
+.states{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:32px 24px}
+.st{margin:0;display:flex;flex-direction:column;gap:12px;min-width:0}
+.st .box{position:relative;display:flex;background:var(--bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;height:356px}
+.st .box.short{height:auto}
+.st figcaption{font-size:13px;color:var(--muted)}
+.st figcaption b{display:block;color:var(--text);font-weight:600;font-size:14px}
+.st .clip{position:absolute;left:0;right:0;bottom:0;height:48px;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+
+/* ---------- looks ---------- */
+.looks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:1000px){.looks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.looks{grid-template-columns:minmax(0,1fr)}}
+.look{border-radius:16px;overflow:hidden;background:var(--bg);color:var(--text);border:1px solid var(--border)}
+.look .lh{display:flex;justify-content:space-between;align-items:baseline;padding:12px 16px;font-size:13px;font-weight:600;border-bottom:1px solid var(--border)}
+.look .lh span{font-weight:500;color:var(--muted);font-size:12px}
+.look .lb{display:flex;flex-wrap:wrap;align-items:flex-start}
+.look .lb .sb{height:420px}
+.look .pair{flex:1 1 128px;min-width:128px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.look .pair .pn{font-size:11.5px;color:var(--muted);line-height:1.4}
+.mini{position:relative;padding-top:13px}
+.stk2{position:absolute;left:8px;top:0;z-index:2;display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px 0 8px;border-radius:999px;background:var(--surface);font-size:11.5px;font-weight:600;box-shadow:0 0 0 1px var(--edge),0 6px 14px -6px rgba(0,0,0,.5);transform:rotate(-2deg);transform-origin:left center}
+.stub2{display:flex;align-items:center;gap:6px;height:56px;padding:12px 10px 0;border-radius:var(--r-item);background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface));font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%)}
+.stub2 .ic{color:var(--tone);width:14px;height:14px}
+.lk-bold .stub2{box-shadow:inset 0 0 0 2px var(--text)}
+.mini .row{cursor:default}
+.lk-bold .mc{border:2px solid var(--text);box-shadow:4px 4px 0 var(--text)}
+.lk-airy .mc{box-shadow:none}
+
+/* ---------- style book (r18) ---------- */
+.sb-block{margin-top:72px}
+.sb-block:first-of-type{margin-top:0}
+.sb-h{display:flex;align-items:baseline;gap:14px;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.sb-h h3{font:600 22px/1.2 var(--serif)}
+.sb-h span{font-size:13px;color:var(--muted)}
+.principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+@media (max-width:900px){.principles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.principles{grid-template-columns:minmax(0,1fr)}}
+.principles article{background:var(--surface);padding:24px;display:flex;flex-direction:column;gap:8px}
+.principles .num{font:600 13px var(--serif);color:var(--moss)}
+.principles h4{font:600 19px/1.25 var(--serif)}
+.principles p{font-size:14px;color:color-mix(in oklab,var(--text) 78%,var(--surface))}
+.typescale{display:flex;flex-direction:column}
+.ts{display:grid;grid-template-columns:180px minmax(0,1fr) 240px;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px dashed var(--border)}
+.ts .k{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ts .v{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media (max-width:760px){.ts{grid-template-columns:minmax(0,1fr);gap:6px}}
+.budget{margin-top:20px;font-size:14px;color:color-mix(in oklab,var(--text) 80%,var(--bg));max-width:72ch}
+.tones{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(272px,100%),1fr));gap:8px 16px}
+.tones .row{cursor:default;background:var(--surface)}
+.tones .row.sel{background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface))}
+.tones .hex{font:500 11px var(--sans);color:var(--muted);margin-left:6px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+.tbl table{min-width:560px}
+th,td{text-align:left;padding:12px 12px 12px 0;border-bottom:1px solid var(--border);vertical-align:top}
+th{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td:first-child{font-weight:600;white-space:nowrap}
+td code{font:500 12.5px var(--sans);background:var(--tint);padding:1px 6px;border-radius:6px;white-space:nowrap}
+.spacing{display:grid;grid-template-columns:auto minmax(0,1fr);gap:48px;align-items:start}
+@media (max-width:860px){.spacing{grid-template-columns:minmax(0,1fr)}}
+.measure{position:relative;display:flex;background:var(--bg);border:1px solid var(--border);border-radius:16px;overflow:hidden;width:max-content;max-width:100%}
+.measure .tag{position:absolute;white-space:nowrap;z-index:4;font-size:10.5px;font-weight:700;color:var(--moss);background:var(--surface);padding:0 4px;border-radius:4px;box-shadow:0 0 0 1px color-mix(in oklab,var(--moss) 40%,transparent)}
+.measure .box4{position:absolute;z-index:3;outline:1px dashed color-mix(in oklab,var(--moss) 70%,transparent);pointer-events:none}
+.dd{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.dd{grid-template-columns:minmax(0,1fr)}}
+.pairdd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--surface)}
+.pairdd > div{padding:16px 18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.pairdd > div + div{border-left:1px dashed var(--border);background:color-mix(in oklab,var(--tint) 45%,var(--surface))}
+.pairdd .h{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.pairdd .do .h{color:var(--moss)}
+.pairdd .dont .h{color:var(--c-dancing)}
+footer{padding:48px 0 64px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar"><div class="wrap">
+  <div class="brand">Ejam kopā<span>Rādītājs · tēmu sānjosla · R19</span></div>
+  <nav class="nav" aria-label="Sadaļas">
+    <a href="#pirms-pec">Pirms un pēc</a><a href="#anatomija">Anatomija</a><a href="#stavokli">Stāvokļi</a><a href="#izskati">Izskati</a><a href="#stilu-gramata">Stilu grāmata</a>
+  </nav>
+  <button class="toggle" id="theme" type="button" aria-label="Pārslēgt gaišo vai tumšo režīmu"></button>
+</div></div>
+
+<section class="intro"><div class="wrap">
+  <p class="eyebrow">Dizaina priekšlikums · atklāšanas sānjosla · R19</p>
+  <h1>Rādītājs<em>.</em></h1>
+  <p class="lead">Dēlis klusē, lapiņa runā — un sānjosla ir dēļa klusais satura rādītājs.</p>
+  <p class="philo">Piecpadsmit tēmas ar piecpadsmit krāsainiem apļiem kliedz skaļāk par pašām kartītēm. Jaunajā rādītājā ikonas miera stāvoklī ir neitrālas, un tonis parādās tikai tur, kur tu norādi (virs rindas), un tur, kur tu esi (izvēlētā tēma). Izvēlētā rinda nes to pašu pāri, ko kartīte: maigs tēmas tonējums un toņa punkts — tāpat kā noplēšamā mēlīte un uzlīme. Izvēlies „Dejas“, un sānjosla un kartītes runā vienā tonī. Lapa ir zīmējums, nevis kods; abi režīmi ar pogu augšā.</p>
+</div></section>
+
+<!-- A. BEFORE / AFTER + IN PLACE -->
+<section id="pirms-pec"><div class="wrap">
+  <header class="sh"><span class="sl">A</span><div><h2>Pirms un pēc</h2><p>Tie paši dati: 15 tēmas, „Visas“ 27, „Dejas“ izvēlēta, „Reliģija un garīgums“ 0. Pa kreisi — šodienas CategoryDrawer, pa labi — rādītājs. Blakus pelēkais siluets ir filtru rinda un kartītes.</p></div></header>
+  <div class="ba">
+    <div class="lbl-h"><i>Pirms</i>šodien · CategoryDrawer</div>
+    <div class="lbl-h after"><i>Pēc</i>rādītājs</div>
+    <div class="stage"><div id="before"></div><div class="ghost"><i></i><i class="c"></i><i class="c"></i></div></div>
+    <div class="stage"><div id="after"></div><div class="ghost"><i></i><i class="c"></i><i class="c"></i></div></div>
+    <ul class="notes bad" id="bad"></ul>
+    <ul class="notes good" id="good"></ul>
+  </div>
+
+  <div class="sub-h"><h3>Lapā: 1280 px</h3><span>kolonna 232 px, „Dejas“ izvēlēta — klikšķini rindas, raksti meklēšanā, saloki</span></div>
+  <div class="fcap"><span><b>1280 px</b> · trīs kartīšu kolonnas</span><span>virsraksts „Tēmas“ un filtru rinda vienā augstumā (40 px)</span></div>
+  <div class="fw" data-w="1280"><div class="frame" id="f1280"></div></div>
+
+  <div class="sub-h"><h3>Lapā: 1024 px</h3><span>mazākais platums ar kolonnu; zem tā — Tēma izvēlne</span></div>
+  <div class="fcap"><span><b>1024 px</b> · divas kolonnas, vai saloki uz joslu un iegūsti trešo</span><span>saloksts tiek atcerēts (sīkdatne, kā šodien)</span></div>
+  <div class="fw" data-w="1024"><div class="frame" id="f1024"></div></div>
+
+  <div class="sub-h"><h3>Telefons: Tēma izvēlne</h3><span>tas pats saraksts, tās pašas rindas, 44 px augstas</span></div>
+  <div class="split">
+    <div class="phone"><div class="screen" id="phone"></div></div>
+    <div class="spec">
+      <p style="font:600 22px/1.3 var(--serif);max-width:26ch">Viens saraksts, divas vietas.</p>
+      <p style="color:var(--muted);max-width:52ch;font-size:15px">Zem 1024 px kolonnas nav; filtru rindas čips „Tēma“ atver to pašu sarakstu kā izvēlni. Tās pašas klusās ikonas, tas pats tonējums ar punktu izvēlētajai rindai, tā pati meklēšana ar Veidiem. Izvēle aizver izvēlni.</p>
+      <dl>
+        <dt>Rinda</dt><dd>44 px (pieskāriena mērķis), ikona 16, atstarpe 12</dd>
+        <dt>Meklēšana</dt><dd>40 px, 1 px mala, teksts 16 px (lai iOS netuvina)</dd>
+        <dt>Izvēlne</dt><dd>rādiuss 14, peldoša ēna, augstums līdz 540 px, ritinās iekšā</dd>
+        <dt>Čips</dt><dd>atvērts — 2 px vietnes krāsas gredzens; izvēlēts — „Tēma: Dejas“</dd>
+        <dt>Virsraksts</dt><dd>nav — čips jau saka „Tēma“; locīšanas poga nav vajadzīga</dd>
+      </dl>
+    </div>
+  </div>
+</div></section>
+
+<!-- B. ANATOMY -->
+<section id="anatomija"><div class="wrap">
+  <header class="sh"><span class="sl">B</span><div><h2>Anatomija</h2><p>Vienpadsmit daļas. Tonis tikai trīs no tām — un tikai tad, kad tu norādi vai esi izvēlējies.</p></div></header>
+  <div class="anat">
+    <div class="anat-box" id="anat"></div>
+    <ol class="callouts" id="callouts" style="list-style:none;padding:0;margin:0"></ol>
+  </div>
+</div></section>
+
+<!-- C. STATES -->
+<section id="stavokli"><div class="wrap">
+  <header class="sh"><span class="sl">C</span><div><h2>Stāvokļi</h2><p>Katrs stāvoklis ir tā pati kolonna. Hover un fokuss šeit ir uzzīmēti; augšējās lapas kolonnas strādā īstajā.</p></div></header>
+  <div class="states" id="states"></div>
+</div></section>
+
+<!-- D. LOOKS -->
+<section id="izskati"><div class="wrap">
+  <header class="sh"><span class="sl">D</span><div><h2>Trīs izskati × gaišs un tumšs</h2><p>Mierīgs, Drosmīgs un Gaisīgs maina tikai formas tokenus: stūrus, līnijas, ēnas, līnijas biezumu. Krāsas likums nemainās: neitrāls miera stāvoklī, tonis norādot un izvēlētajam. Blakus — kartīte tajā pašā tonī, lai redzams pāris.</p></div></header>
+  <div class="looks" id="looks"></div>
+</div></section>
+
+<!-- E. STYLE BOOK -->
+<section id="stilu-gramata"><div class="wrap">
+  <header class="sh"><span class="sl">E</span><div><h2>Stilu grāmata</h2><p>Principi, tips, krāsa, atstarpes un kustība. Ja kāda detaļa šeit nav aprakstīta, jautā: vai rādītājs paliek klusāks par lapiņām?</p></div></header>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Seši principi</h3><span>īsi</span></div>
+    <div class="principles">
+      <article><span class="num">01</span><h4>Rādītājs, ne afiša</h4><p>Sānjosla uzskaita, dēlis rāda. Kolonna nekad nav skaļāka par vienu kartīti — tāpēc ikonas miera stāvoklī ir neitrālas un bez apļiem.</p></article>
+      <article><span class="num">02</span><h4>Tonis atbild, nesauc</h4><p>Tēmas tonis parādās tikai, kad tu norādi (ikona virs rindas) vai kur tu esi (izvēlētā rinda). Pārējā laikā kolonna ir viena krāsa.</p></article>
+      <article><span class="num">03</span><h4>Viens pāris visur</h4><p>Izvēlētā rinda = maigs tonējums + toņa punkts. Tieši tas pats pāris, ko kartītes mēlīte un uzlīme. Izvēlies „Dejas“ — kolonna un kartītes runā vienā tonī.</p></article>
+      <article><span class="num">04</span><h4>Tukšs nav sliktāks</h4><p>„0“ pasaka godīgi, bez izbalēšanas. Rinda paliek lasāma un klikšķināma — tukša tēma ir vieta, kur sākt pirmo grupu.</p></article>
+      <article><span class="num">05</span><h4>Vienā līnijā</h4><p>„Tēmas“ stāv filtru rindas augstumā, locīšanas poga — tās iekšā. Viss uz 4 px soļa, kolonnas un kartīšu augšmala sakrīt.</p></article>
+      <article><span class="num">06</span><h4>Saloks, ne pazūd</h4><p>Josla patur ikonas un izvēlētās tēmas toni. Saloktā kolonna vēl joprojām pasaka, kur tu esi.</p></article>
+    </div>
+  </div>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Tipa skala</h3><span>Literata + Commissioner, nekas cits</span></div>
+    <div class="typescale">
+      <div class="ts"><span class="k">Virsraksts</span><span style="font:600 16px/24px var(--serif)">Tēmas</span><span class="v">Literata 600 (Drosmīgs 700) · 16/24 · text-section</span></div>
+      <div class="ts"><span class="k">Rinda</span><span style="font-size:14px;font-weight:500">Ceļošana un daba</span><span class="v">Commissioner 500 · 14/20 · text · text-body-sm</span></div>
+      <div class="ts"><span class="k">Izvēlētā rinda</span><span style="font-size:14px;font-weight:600">Dejas</span><span class="v">Commissioner 600 · 14/20 · text (ne tonis)</span></div>
+      <div class="ts"><span class="k">Skaits</span><span style="font-size:12.5px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums">27 · 4 · 0</span><span class="v">Commissioner 500 · 12,5 · muted · tabular · text-meta</span></div>
+      <div class="ts"><span class="k">Meklēšana</span><span style="font-size:13.5px;color:var(--muted)">Meklēt tēmu</span><span class="v">Commissioner 400 · 13,5/20 · muted vietturis (telefonā 16)</span></div>
+      <div class="ts"><span class="k">Grupas zīme</span><span style="font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Veidi</span><span class="v">Commissioner 600 · 11 · +10 % · muted · text-eyebrow</span></div>
+    </div>
+    <p class="budget">Divas teksta krāsas, ne trīs: <b>teksts</b> (tēmas nosaukums, arī izvēlētais) un <b>muted</b> (skaits, tukšas tēmas nosaukums, vietturis, „Veidi“). Izvēli nes svars 600 un tonējums, nevis krāsains teksts.</p>
+  </div>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Krāsa un toņa budžets</h3><span>15 tēmu toņi, Sūna · izvēlētās rindas paraugs katram</span></div>
+    <div class="tones" id="tones"></div>
+    <p class="budget"><b>Toņa budžets kolonnā:</b> ikona virs rindas (hover), izvēlētās rindas ikona, izvēlētās rindas tonējums (12 % gaišajā, 16 % tumšajā — tas pats <code>--stub-mix</code> kā kartītes mēlītei) un 8 px punkts. Viss pārējais ir neitrāls: nosaukumi, skaitļi, kolonnas mala, meklēšana, „Visas“. Hover fons ir neitrālais <b>tint</b>, ne tonis — norādīšana nav izvēle. Fokusa gredzens un „Ieteikt jaunu tēmu“ ir vietnes krāsa (sūna), kā katra vadīkla. „Visas“ izvēlēta = tint + sūnas punkts. Teksts uz 16 % tonējuma ≥ 4,5:1 visiem 15 toņiem abos režīmos.</p>
+  </div>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Atstarpes</h3><span>4 px solis</span></div>
+    <div class="spacing">
+      <div class="measure" id="measure"></div>
+      <div class="tbl"><table>
+        <thead><tr><th>Elements</th><th>Vērtība</th></tr></thead>
+        <tbody>
+          <tr><td>Kolonna</td><td>platums <code>232</code>, josla <code>56</code>; iekšpuse augšā <code>16</code>, sānos <code>12</code> (Gaisīgs <code>16</code>); mala labajā pusē <code>line</code></td></tr>
+          <tr><td>Virsraksts</td><td>augstums <code>40</code> = filtru rinda; teksts no kreisās <code>8</code> (pret rindu ikonām); poga <code>28</code> labajā malā</td></tr>
+          <tr><td>Meklēšana</td><td>augstums <code>32</code>, augšā <code>4</code>, apakšā <code>8</code>; ikona <code>14</code>, atstarpe <code>8</code>; bez līnijas apakšā</td></tr>
+          <tr><td>Rinda</td><td>augstums <code>36</code> (Gaisīgs <code>40</code>, telefons <code>44</code>), iekšpuse <code>8</code>, ikona <code>16</code>, ikona→nosaukums <code>12</code>, skaits→punkts <code>12</code></td></tr>
+          <tr><td>Atdalītājs</td><td>„Visas“ un tēmas: <code>4</code> + 1 px pārtraukta līnija + <code>4</code></td></tr>
+          <tr><td>Punkts</td><td><code>8</code> (joslā <code>6</code>, stūrī <code>4</code> no malas)</td></tr>
+          <tr><td>Josla</td><td>mērķis <code>40 × 40</code>, atstarpe <code>4</code>, sānos <code>8</code>; padoms pa labi, <code>28</code> augsts</td></tr>
+          <tr><td>Stūri</td><td>rinda <code>rounded-item</code> (10 · 4 · 3), poga <code>rounded-pill</code>, izvēlne <code>rounded-menu</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Kustība</h3><span>ease-standard · duration-quick / slow</span></div>
+    <div class="tbl"><table>
+      <thead><tr><th>Elements</th><th>Kas notiek</th><th>Ilgums</th></tr></thead>
+      <tbody>
+        <tr><td>Hover</td><td>fons → <code>tint</code>, ikona muted → tonis; rinda nekustas</td><td>120 ms</td></tr>
+        <tr><td>Izvēle</td><td>tonējums un punkts parādās; iepriekšējā rinda atgriežas klusumā</td><td>120 ms</td></tr>
+        <tr><td>Meklēšana</td><td>fokusā virsma + 2 px sūnas gredzens; saraksts filtrējas uzreiz, bez animācijas</td><td>120 ms / 0</td></tr>
+        <tr><td>Locīšana</td><td>platums <code>232 ↔ 56</code>; nosaukumi un skaitļi izgaist pirms platums sarūk; ikonas paliek vietā</td><td>240 ms</td></tr>
+        <tr><td>Joslas padoms</td><td>„Dejas · 4“ parādās pa labi no ikonas (title + aria-label)</td><td>0</td></tr>
+        <tr><td>Samazināta kustība</td><td><code>prefers-reduced-motion</code>: locīšana uzreiz, bez izgaišanas; krāsu maiņa paliek (atgriezeniskā saite nav kustība)</td><td>0</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="sb-block">
+    <div class="sb-h"><h3>Dari un nedari</h3><span>pāri</span></div>
+    <div class="dd" id="dd"></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">Ejam kopā · R19 „Rādītājs“ tēmu sānjoslas priekšlikums · skaitļi un grupas ir paraugs · makets, nevis lietotnes kods.</div></footer>
+
+<script>
+(function(){
+const ICON={
+ travel:'<path d="m17 14 3 3.3a1 1 0 0 1-.7 1.7H4.7a1 1 0 0 1-.7-1.7L7 14h-.3a1 1 0 0 1-.7-1.7L9 9h-.2A1 1 0 0 1 8 7.3L12 3l4 4.3a1 1 0 0 1-.8 1.7H15l3 3.3a1 1 0 0 1-.7 1.7H17Z"/><path d="M12 22v-3"/>',
+ dancing:'<path d="M7 3.5c5-2 7 2.5 3 4C1.5 10 2 15 5 16c5 2 9-10 14-7s.5 13.5-4 12c-5-2.5.5-11 6-2"/>',
+ hobbies:'<path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/>',
+ community:'<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+ politics:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.510 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>',
+ pets:'<path d="M11.25 16.25h1.5L12 17z"/><path d="M16 14v.5"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309"/><path d="M8 14v.5"/><path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5"/>',
+ art:'<path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z"/><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>',
+ music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+ religion:'<path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>',
+ social:'<path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/>',
+ games:'<line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/>',
+ sports:'<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>',
+ family:'<circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/>',
+ wellbeing:'<path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>',
+ education:'<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+ grid:'<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
+ search:'<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
+ chevL:'<path d="m15 18-6-6 6-6"/>',chevR:'<path d="m9 18 6-6-6-6"/>',chevD:'<path d="m6 9 6 6 6-6"/>',
+ plus:'<path d="M5 12h14"/><path d="M12 5v14"/>',x:'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',check:'<path d="M20 6 9 17l-5-5"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+ moon:'<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>',
+ pin:'<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+ cal:'<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/>',
+ tag:'<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/>'
+};
+const ic=(n,c='ic')=>`<svg class="${c}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n]}</svg>`;
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* the 15 L1 categories, alphabetical as in the app; icons from lib/icons.ts; counts sum to 27 */
+const C=[
+ ['travel','Ceļošana un daba',3],['dancing','Dejas',4],['hobbies','Hobiji un aizraušanās',2],['community','Kopiena un vide',2],
+ ['politics','Kustības un politika',1],['pets','Mājdzīvnieki',1],['art','Māksla un kultūra',2],['music','Mūzika',3],
+ ['religion','Reliģija un garīgums',0],['social','Sociālās aktivitātes',2],['games','Spēles',2],['sports','Sports un fitness',2],
+ ['family','Vecāki un ģimene',1],['wellbeing','Veselība un labsajūta',1],['education','Zinātne un izglītība',1]
+].map(([s,t,n])=>({s,t,n}));
+const ALL=27;
+const TITLE=Object.fromEntries(C.map(c=>[c.s,c.t]));
+const V=[['dancing','Salsa',2],['dancing','Tautas dejas',1],['music','Kori',2],['music','Rokmūzikas skola',1],['travel','Pārgājieni',2],['travel','Kempings',1],['games','Galda spēles',2],['sports','Skriešana',1],['wellbeing','Joga',1],['art','Gleznošana',1],['hobbies','Fotogrāfija',1],['education','Valodas',1]].map(([p,t,n])=>({p,t,n}));
+const HEX={travel:['#4F7330','#7BBF40'],dancing:['#A9452C','#E09B8A'],hobbies:['#A55A12','#DB9F66'],community:['#2F6A45','#44C172'],politics:['#57493D','#B8AA9D'],pets:['#7A5E40','#C1A78B'],art:['#7A4790','#CA9CDE'],music:['#57479A','#AFA3E0'],religion:['#586474','#A0ACBA'],social:['#A53A50','#DD98A6'],games:['#8C3F72','#DB94C3'],sports:['#3B55A0','#98A9DD'],family:['#2B6489','#7BB2D6'],wellbeing:['#2E6B6F','#47BAC2'],education:['#86650E','#D0A535']};
+
+/* per-char fold keeps length, so a match index maps back onto the original */
+const fold=s=>[...s].map(ch=>ch.normalize('NFD').replace(/\p{M}/gu,'')).join('').toLowerCase();
+const hl=(t,q)=>{if(!q)return esc(t);const i=fold(t).indexOf(q);if(i<0)return esc(t);return esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'+esc(t.slice(i+q.length))};
+
+/* ---------- AFTER: one renderer for every after-sidebar ---------- */
+function rowHTML(o,{s,t,n,all,path,q}){
+  const cls=['row','t-'+(all?'all':s)];
+  if(o.sel===(all?'all':s)&&!path)cls.push('sel');
+  if(o.hover===(all?'all':s)&&!path)cls.push('is-hover');
+  if(o.focus===(all?'all':s))cls.push('is-focus');
+  if(n===0)cls.push('empty');
+  const lbl=path?`<span class="path">${esc(TITLE[s])} → </span>${hl(t,q)}`:hl(t,q);
+  const tipTxt=`${esc(all?'Visas':t)} · ${n}`;
+  return `<li><a class="${cls.join(' ')}" href="#" data-s="${all?'all':s}"${path?` data-v="${esc(t)}"`:''} title="${tipTxt}"${o.sel===(all?'all':s)&&!path?' aria-current="true"':''}>${ic(all?'grid':s)}<span class="lbl">${lbl}</span><span class="n">${n}</span><i class="dot"></i></a></li>`;
+}
+function listHTML(o){
+  const q=o.folded?'':fold((o.q||'').trim());
+  if(!q) return rowHTML(o,{all:1,t:'Visas',n:ALL})+'<li class="sep" role="presentation"></li>'+(o.skip?'<li class="grp" aria-hidden="true">· · ·</li>':'')+C.slice(o.skip||0).map(c=>rowHTML(o,c)).join('');
+  const cs=C.filter(c=>fold(c.t).includes(q)), vs=V.filter(v=>fold(v.t).includes(q));
+  if(!cs.length&&!vs.length) return `<li class="none">Nekas nav atrasts.</li><li><a class="row sug" href="#" data-sug="1">${ic('plus')}<span class="lbl">Ieteikt jaunu tēmu: „${esc(o.q.trim())}”</span></a></li>`;
+  return cs.map(c=>rowHTML(o,{...c,q})).join('')+(vs.length?'<li class="grp">Veidi</li>'+vs.map(v=>rowHTML(o,{s:v.p,t:v.t,n:v.n,path:1,q})).join(''):'');
+}
+function sbHTML(o){
+  const cls=['sb',o.look||'',o.folded?'folded':'',o.phone?'phone':'',o.tall?'tall':''].join(' ');
+  const fold=`<button class="fold${o.foldHover?' is-hover':''}" type="button" aria-expanded="${!o.folded}" aria-label="${o.folded?'Izvērst tēmas':'Salocīt tēmas'}">${ic(o.folded?'chevR':'chevL')}</button>`;
+  const search=`<label class="sb-search${o.searchFocus?' is-focus':''}">${ic('search')}<input type="search" placeholder="Meklēt tēmu" value="${esc(o.q||'')}" aria-label="Meklēt tēmu" autocomplete="off">${o.q?`<button class="clr" type="button" aria-label="Notīrīt">${ic('x')}</button>`:''}</label>`;
+  return `<aside class="${cls}" ${o.id?`data-live="${o.id}"`:''} aria-label="Tēmas"${o.style?` style="${o.style}"`:''}><div class="sb-head"><h3>Tēmas</h3>${fold}</div>${search}<nav aria-label="Tēmas"><ul class="sb-list">${listHTML(o)}</ul></nav>${o.tip?`<span class="tip" style="top:${o.tip[1]}px">${esc(o.tip[0])} <b>· ${o.tip[2]}</b></span>`:''}</aside>`;
+}
+
+/* ---------- BEFORE: today's CategoryDrawer ---------- */
+function oldHTML(sel){
+  const r=c=>`<li><div class="o-row${sel===c.s?' sel':''}${c.n===0&&sel!==c.s?' dim':''}"><span class="disc t-${c.s}">${ic(c.s)}</span><span class="lbl">${esc(c.t)}</span><span class="n">${c.n}</span></div></li>`;
+  return `<div class="old"><div class="o-top"><span class="o-fold">${ic('chevL')}</span></div><div class="o-list"><div class="o-search">${ic('search')}<span>Meklēt kategoriju</span></div><ul><li><div class="o-row${sel==='all'?' sel':''}"><span class="disc all">${ic('grid')}</span><span class="lbl">Visas</span><span class="n">${ALL}</span></div></li>${C.map(r).join('')}</ul></div></div>`;
+}
+$('before').innerHTML=oldHTML('dancing');
+$('after').innerHTML=sbHTML({sel:'dancing'});
+$('bad').innerHTML=[
+ 'Piecpadsmit krāsaini apļi miera stāvoklī — kolonna skaļāka par kartītēm.',
+ 'Izvēlētā rinda ir pelēka; tēmas tonis neatkārtojas, lai gan kartītes ir tonī.',
+ 'Nav virsraksta; locīšanas poga stāv viena pati virs meklēšanas.',
+ 'Meklēšanai ir sava līnija apakšā — vēl viena horizontāle.',
+ 'Tukša tēma izbalē līdz 45 %: izskatās atslēgta, lai gan strādā.'
+].map(t=>`<li>${ic('x')}<span>${t}</span></li>`).join('');
+$('good').innerHTML=[
+ 'Ikonas neitrālas, bez apļiem; tonis parādās, kad norādi.',
+ 'Izvēlētā rinda: tonējums + punkts — tas pats pāris, ko kartītes mēlīte un uzlīme.',
+ '„Tēmas“ filtru rindas augstumā; poga ir virsraksta rindā.',
+ 'Klusa meklēšana: ikona un vietturis, bez līnijas; fokusā — gredzens.',
+ 'Tukša tēma: pelēks nosaukums un „0“, pilnā necaurredzamībā.'
+].map(t=>`<li>${ic('check')}<span>${t}</span></li>`).join('');
+
+/* ---------- context frames ---------- */
+const CARDS=[
+ {s:'dancing',t:'Salsas vakari Rīgā',sub:'Salsa · Rīga · 12 biedri',w:'Ceturtd., 22. okt. · 19:00',f:['f1','f2','f3']},
+ {s:'dancing',t:'Laikmetīgās dejas piekritēji no Cēsīm',sub:'Laikmetīgā deja · Cēsis · 7 biedri',w:'Sestd., 24. okt. · 18:00',f:['f3','f4']},
+ {s:'dancing',t:'Tautas deju kolektīvs „Rasa“',sub:'Tautas dejas · Valmiera · 24 biedri',w:'Otrd., 27. okt. · 18:30',f:['f2','f4','f1']},
+ {s:'dancing',t:'Lindihops iesācējiem',sub:'Lindihops · Liepāja · 9 biedri',w:'',f:['f4']},
+ {s:'music',t:'Kora dziedātāji Jelgavā',sub:'Kori · Jelgava · 31 biedrs',w:'Pirmd., 26. okt. · 19:00',f:['f1','f3']},
+ {s:'travel',t:'Pārgājieni pa Gaujas krastiem',sub:'Pārgājieni · Sigulda · 18 biedri',w:'Svētd., 25. okt. · 10:00',f:['f2','f1']},
+ {s:'games',t:'Galda spēļu vakari',sub:'Galda spēles · Rīga · 15 biedri',w:'Piektd., 23. okt. · 18:00',f:['f3','f2','f4']},
+ {s:'sports',t:'Rīta skrējēji Mežaparkā',sub:'Skriešana · Rīga · 22 biedri',w:'Katru dienu · 7:00',f:['f4','f1']}
+];
+const cardHTML=c=>`<article class="mc t-${c.s}"><div class="ph"><span class="stk"><i class="dot"></i>${esc(TITLE[c.s])}</span></div><div class="bd"><h4>${esc(c.t)}</h4><p class="sbt">${esc(c.sub)}</p></div><div class="tab">${c.w?`<div class="when">${ic('cal')}<span>${esc(c.w)}</span></div>`:'<div class="when q"><span>Nākamā tikšanās vēl nav</span></div>'}<div class="ppl"><span class="fc">${c.f.map(x=>`<i class="${x}"></i>`).join('')}</span><span>un vēl</span></div></div></article>`;
+const STATE={};
+function mainHTML(o){
+  const cs=CARDS.filter(c=>o.sel==='all'||c.s===o.sel);
+  const n=o.sel==='all'?ALL:(C.find(c=>c.s===o.sel)||{n:0}).n;
+  const topic=o.sel==='all'?'Tēma':'Tēma: '+TITLE[o.sel];
+  const veidi=o.sel==='dancing'?`<span class="vline"></span><span class="chip v">Salsa</span><span class="chip v">Tautas dejas</span><span class="chip v">Laikmetīgā deja</span>`:'';
+  return `<div class="fl"><span class="chip">${ic('pin')}Kur${ic('chevD')}</span><span class="chip${o.sel!=='all'?' val':''}">${esc(topic)}${ic('chevD')}</span>${veidi}<span class="switch"><span class="on">Grupas</span><span>Pasākumi</span></span></div><p class="f-count"><b>${n}</b> ${n===1?'grupa':'grupas'} · visā Latvijā</p>${cs.length?`<div class="cgrid">${cs.map(cardHTML).join('')}</div>`:'<p class="f-empty">Šajā tēmā vēl nav grupu. Sāc pirmo!</p>'}`;
+}
+function frame(id,w){
+  STATE[id]={id,sel:'dancing',q:'',folded:false,tall:true};
+  $(id).style.width=w+'px';
+  $(id).innerHTML=`<div class="f-head"><span class="logo"><i></i>Ejam <em>kopā</em></span><span class="f-search">${ic('search')}Meklēt grupas, pasākumus, cilvēkus</span><span class="f-right">LV ${ic('chevD')}<span class="f-av"></span></span></div><div class="f-body"><div class="f-side">${sbHTML(STATE[id])}</div><main class="f-main">${mainHTML(STATE[id])}</main></div>`;
+}
+frame('f1280',1280);frame('f1024',1024);
+document.querySelectorAll('.f-side').forEach(e=>{e.style.display='flex'});
+
+/* live interaction for frames + phone */
+function reList(id){const o=STATE[id];const el=document.querySelector(`[data-live="${id}"]`);el.querySelector('.sb-list').innerHTML=listHTML(o);
+  const clr=el.querySelector('.clr');if(o.q&&!clr)el.querySelector('.sb-search').insertAdjacentHTML('beforeend',`<button class="clr" type="button" aria-label="Notīrīt">${ic('x')}</button>`);if(!o.q&&clr)clr.remove();}
+function reMain(id){const m=document.querySelector(`[data-live="${id}"]`).closest('.f-body,.screen');if(!m)return;const main=m.querySelector('.f-main');if(main)main.innerHTML=mainHTML(STATE[id]);const chip=m.querySelector('.p-topic');if(chip)chip.innerHTML=(STATE[id].sel==='all'?'Tēma':'Tēma: '+esc(TITLE[STATE[id].sel]))+ic('chevD');}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a.row,a[href="#"]');if(a)e.preventDefault();
+  const live=e.target.closest('[data-live]');if(!live)return;const id=live.dataset.live,o=STATE[id];
+  if(e.target.closest('.fold')){o.folded=!o.folded;live.classList.toggle('folded',o.folded);const b=live.querySelector('.fold');b.innerHTML=ic(o.folded?'chevR':'chevL');b.setAttribute('aria-expanded',!o.folded);reList(id);return}
+  if(e.target.closest('.clr')){o.q='';live.querySelector('input').value='';reList(id);return}
+  if(a&&a.dataset.s){o.sel=a.dataset.s;o.q='';live.querySelector('input').value='';reList(id);reMain(id)}
+});
+document.addEventListener('input',e=>{const live=e.target.closest('[data-live]');if(!live||e.target.type!=='search')return;STATE[live.dataset.live].q=e.target.value;reList(live.dataset.live)});
+
+/* scale frames to their wrapper */
+const fit=()=>document.querySelectorAll('.fw').forEach(w=>{const f=w.firstElementChild,W=+w.dataset.w,s=Math.min(1,w.clientWidth/W);f.style.transform=`scale(${s})`;w.style.height=(f.offsetHeight*s)+'px'});
+new ResizeObserver(fit).observe(document.body);fit();
+
+/* phone */
+STATE.phone={id:'phone',sel:'dancing',q:'',phone:true};
+$('phone').innerHTML=`<div class="status"><span>9:41</span><span>●●● ▮</span></div><div class="p-head"><span class="logo"><i></i>Ejam <em>kopā</em></span>${ic('search')}</div><div class="p-fl"><span class="chip">${ic('pin')}Kur${ic('chevD')}</span><span class="chip val open p-topic">Tēma: Dejas${ic('chevD')}</span><span class="chip">Grupas${ic('chevD')}</span></div><div class="p-dim">${'<div class="row-ghost"></div>'.repeat(8)}</div><div class="pop">${sbHTML(STATE.phone)}</div>`;
+
+/* ---------- B. anatomy ---------- */
+$('anat').innerHTML=sbHTML({sel:'dancing',hover:'music'});
+(function(){
+  const box=$('anat'),sb=box.querySelector('.sb');
+  const rowOf=s=>sb.querySelector(`.row[data-s="${s}"]`);
+  const P=[[sb.querySelector('.sb-head h3'),1],[sb.querySelector('.fold'),2,'r'],[sb.querySelector('.sb-search'),3],[rowOf('all'),4],[rowOf('travel').querySelector('.ic'),5],[rowOf('music'),6],[rowOf('dancing'),7],[rowOf('dancing').querySelector('.dot'),8,'r'],[rowOf('travel').querySelector('.n'),9,'r'],[rowOf('religion'),10],[sb,11,'r']];
+  const bb=box.getBoundingClientRect();
+  P.forEach(([el,n,side])=>{const r=el.getBoundingClientRect();const y=r.top-bb.top+r.height/2;
+    box.insertAdjacentHTML('beforeend',`<b class="pin" style="top:${y}px;${side==='r'?'left:auto;right:6px':'left:6px'};margin-top:-10px">${n}</b>`)});
+  const fl=sb.querySelector('.sb-head').getBoundingClientRect();
+  box.insertAdjacentHTML('beforeend',`<i class="guide" style="top:${fl.top-bb.top}px"></i><i class="guide" style="top:${fl.bottom-bb.top}px"></i>`);
+})();
+$('callouts').innerHTML=[
+ ['Virsraksts „Tēmas“','filtru rindas augstumā','Literata 16/24, 40 px rinda — tā pati līnija kā Kur / Tēma / Veids (zaļās svītras).'],
+ ['Locīšanas poga','iekš virsraksta','28 px apaļa, līnija kā filtru čipiem; ← saloka, → izvērš. Tiek atcerēta.'],
+ ['Klusā meklēšana','bez līnijas','Ikona 14 + „Meklēt tēmu“; fons tikai hover, fokusā virsma + sūnas gredzens. Atrod arī Veidus.'],
+ ['„Visas“','neitrāla','Režģa ikona, kopskaits 27. Izvēlēta — tint + sūnas punkts, bez tēmas toņa.'],
+ ['Ikona miera stāvoklī','muted','16 px lucide, bez apļa; viena krāsa visām 15 tēmām.'],
+ ['Hover','tonis norāda','Fons tint, ikona pāriet tēmas tonī. Tikai ikona — nosaukums paliek teksta krāsā.'],
+ ['Izvēlētā rinda','tonējums','Tēmas tonis 12 % / 16 % virsmā, nosaukums 600, ikona tonī.'],
+ ['Toņa punkts','kā uzlīmē','8 px, rindas labajā malā aiz skaita — pāris ar tonējumu, kā kartītes mēlīte + uzlīme.'],
+ ['Skaits','muted','12,5 tabulāri cipari, labajā malā; nekad tonī.'],
+ ['Tukša tēma','„0“, bez izbalēšanas','Nosaukums muted, „0“; hover un klikšķis strādā kā citām.'],
+ ['Kolonnas mala','line','1 px border (Drosmīgs 2 px ink) labajā malā; kolonna ir virsma, dēlis — fons.']
+].map(([h,s,p],i)=>`<li><span class="n">${i+1}</span><div><h4>${h}<small>${s}</small></h4><p>${p}</p></div></li>`).join('');
+
+/* ---------- C. states ---------- */
+const S=[
+ ['Miera stāvoklis','„Visas“ izvēlēta, nekas nav norādīts. Viena krāsa, tikai sūnas punkts.',{sel:'all'}],
+ ['Hover','Norādīts uz „Kopiena un vide“: tint fons, ikona tonī.',{sel:'all',hover:'community'}],
+ ['Izvēlēta tēma','„Dejas“: tonējums + punkts, nosaukums 600.',{sel:'dancing'}],
+ ['Tukša tēma','„Reliģija un garīgums“ ar „0“ — pelēks nosaukums, pilnā necaurredzamībā; arī hover.',{sel:'dancing',hover:'religion',skip:5}],
+ ['Fokuss (tastatūra)','Tab uz „Kopiena un vide“: 2 px sūnas gredzens iekšpusē.',{sel:'dancing',focus:'community'}],
+ ['Meklēšana: Veids','„sal“ — nav tēmas ar šādu vārdu, toties Veids „Dejas → Salsa“. Atbilstība pasvītrota.',{sel:'dancing',q:'sal',searchFocus:true}],
+ ['Meklēšana: tēma','„dej“ — tēma „Dejas“ un tās Veids „Tautas dejas“ zem „Veidi“.',{sel:'all',q:'dej',searchFocus:true}],
+ ['Nekas nav atrasts','„jāšana“ — klusa rinda un ieteikums vietnes krāsā.',{sel:'dancing',q:'jāšana',searchFocus:true}],
+ ['Saloksta josla','56 px: neitrālas ikonas, izvēlētā tonī + 6 px punkts; hover parāda padomu.',{sel:'dancing',folded:true,hover:'hobbies',tip:['Hobiji un aizraušanās',0,2]}],
+ ['Locīšanas poga: hover','Poga tint fonā; virsraksts paliek.',{sel:'dancing',foldHover:true}]
+];
+$('states').innerHTML=S.map(([h,p,o],i)=>`<figure class="st"><div class="box" id="st${i}">${sbHTML(o)}<span class="clip"></span></div><figcaption><b>${h}</b>${p}</figcaption></figure>`).join('');
+/* place the rail tooltip next to the hovered icon */
+(function(){const i=S.findIndex(x=>x[2].folded);const box=$('st'+i),r=box.querySelector('.row.is-hover'),t=box.querySelector('.tip');
+ const rr=r.getBoundingClientRect(),bb=box.querySelector('.sb').getBoundingClientRect();t.style.top=(rr.top-bb.top+6)+'px';box.querySelector('.sb').style.overflow='visible'})();
+
+/* ---------- D. looks ---------- */
+const LOOKS=[['lk-calm','Mierīgs','1 px līnija · stūri 10'],['lk-bold','Drosmīgs','2 px tinte · cieta ēna'],['lk-airy','Gaisīgs','1,5 vilciens · rinda 40']];
+$('looks').innerHTML=['lt','dk'].flatMap(m=>LOOKS.map(([k,n,d])=>`<div class="look ${m} ${k}"><div class="lh">${n} · ${m==='lt'?'gaišs':'tumšs'}<span>${d}</span></div><div class="lb">${sbHTML({sel:'dancing',hover:'hobbies'})}<div class="pair"><div class="mini t-dancing"><span class="stk2"><i class="dot"></i>Dejas</span><div class="stub2">${ic('cal')}<span>Ceturtd. · 19:00</span></div></div><div class="mini t-dancing"><div class="row sel t-dancing" style="padding:0 8px">${ic('dancing')}<span class="lbl">Dejas</span><i class="dot"></i></div></div><p class="pn">Izvēlētās rindas tonējums = mēlītes tonējums; punkts = uzlīmes punkts.</p></div></div></div>`)).join('');
+
+/* ---------- E. tones ---------- */
+const dark=()=>document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+const paintTones=()=>{$('tones').innerHTML=C.map(c=>`<a class="row sel t-${c.s}">${ic(c.s)}<span class="lbl">${esc(c.t)}<span class="hex">${HEX[c.s][dark()?1:0]}</span></span><i class="dot"></i></a>`).join('')};
+paintTones();
+
+/* ---------- E. spacing measure ---------- */
+$('measure').innerHTML=sbHTML({sel:'dancing'});
+(function(){const m=$('measure'),sb=m.querySelector('.sb');sb.style.height='360px';m.style.paddingRight='176px';
+ const mb=m.getBoundingClientRect(),R=el=>{const r=el.getBoundingClientRect();return{x:r.left-mb.left,y:r.top-mb.top,w:r.width,h:r.height}};
+ const sbr=R(sb),tx=sbr.x+sbr.w+12;
+ const mark=(el,l)=>{const r=R(el);m.insertAdjacentHTML('beforeend',`<i class="box4" style="left:${r.x}px;top:${r.y}px;width:${r.w}px;height:${r.h}px"></i><span class="tag" style="left:${tx}px;top:${r.y+r.h/2-8}px">${l}</span>`)};
+ const row=sb.querySelector('.row[data-s="travel"]'),sel=sb.querySelector('.row.sel');
+ mark(sb.querySelector('.sb-head'),'galva 40');mark(sb.querySelector('.sb-search'),'meklēšana 32');mark(row,'rinda 36 · ikona 16 · 12');mark(sel.querySelector('.dot'),'punkts 8');
+ m.insertAdjacentHTML('beforeend',`<span class="tag" style="left:${sbr.x+sbr.w/2-8}px;top:2px">16</span><span class="tag" style="left:2px;top:${R(row).y+10}px">12</span>`);
+})();
+
+/* ---------- do / don't ---------- */
+const DD=[
+ ['Neitrālas ikonas miera stāvoklī; tonis norādot.','Piecpadsmit krāsaini apļi, kas spīd visu laiku.'],
+ ['Izvēlētā rinda: tonējums + punkts, kā kartītes mēlīte + uzlīme.','Izvēlētā rinda pilnā tonī vai ar krāsainu tekstu.'],
+ ['Hover fons — neitrālais tint.','Hover fons tēmas tonī — tad norādīšana izskatās pēc izvēles.'],
+ ['Tukšai tēmai „0“ un pelēks nosaukums.','Izbalēšana (opacity), kas izskatās atslēgta.'],
+ ['„Tēmas“ un poga vienā rindā ar filtriem.','Atsevišķa poga, kas karājas virs saraksta.'],
+ ['Meklēšana bez līnijas, gredzens fokusā.','Vēl viena horizontāla līnija zem meklēšanas.'],
+ ['Joslā izvēlētā ikona tonī ar mazu punktu.','Josla, kurā nevar redzēt, kur tu esi.'],
+ ['Skaitļi muted, tabulāri, labajā malā.','Skaitļi kā krāsainas birkas vai pills.']
+];
+$('dd').innerHTML=DD.map(([d,n])=>`<div class="pairdd"><div class="do"><span class="h">${ic('check')}Dari</span>${d}</div><div class="dont"><span class="h">${ic('x')}Nedari</span>${n}</div></div>`).join('');
+
+/* theme toggle */
+const root=document.documentElement,btn=$('theme'),mq=matchMedia('(prefers-color-scheme: dark)');
+const isDark=()=>root.dataset.theme?root.dataset.theme==='dark':mq.matches;
+const paint=()=>{const d=isDark();btn.innerHTML=(d?ic('sun'):ic('moon'))+(d?'Gaišs':'Tumšs');paintTones()};
+btn.addEventListener('click',()=>{root.dataset.theme=isDark()?'light':'dark';paint()});
+mq.addEventListener('change',paint);paint();
+})();
+</script>
+</body>
+</html>
