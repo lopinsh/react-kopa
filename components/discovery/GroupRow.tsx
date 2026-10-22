@@ -20,7 +20,7 @@ const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
  * city · members (no tagline, no faces). At the right edge the empty seat (a clock while your request waits) or, in Manas grupas, your role tag; the team's waiting
  * requests are a link under the chip. The name is the stretched link, so the request link can sit above it.
  */
-export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0 }: {
+export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0, noSeat = false }: {
     group: GroupCardData;
     /** The group's latest activity for the chip's note. */
     activity?: CardActivity;
@@ -38,13 +38,15 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     showMember?: boolean;
     /** Join requests waiting for the team (Manas grupas, team only). */
     requestCount?: number;
+    /** Search results: the viewer's membership is unknown there, so no seat. */
+    noSeat?: boolean;
 }) {
     const t = useTranslations('discovery');
     const tMy = useTranslations('profile.myGroups');
     const tCities = useTranslations('cities');
     const locale = useLocale();
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
-    const seat = role === undefined ? 'open' : role === 'PENDING' ? 'pending' : 'none';
+    const seat = noSeat ? 'none' : role === undefined ? 'open' : role === 'PENDING' ? 'pending' : 'none';
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
     const hasNote = activity?.kind === 'event' || activity?.kind === 'announcement' || !!group.lookingFor;
     const path = `/${group.category.l1Slug}/group/${group.slug}`;

@@ -39,7 +39,7 @@ export default function SearchResults({ search, requestClose }: Props) {
             {groups.length > 0 && (
                 <section>
                     <h3 className={HEADING}>{heading(t('groups'))}</h3>
-                    {groups.map((g) => <GroupRow key={g.id} group={g} highlight={marked} replace searchItem />)}
+                    {groups.map((g) => <GroupRow key={g.id} group={g} highlight={marked} replace searchItem noSeat />)}
                 </section>
             )}
             {events.length > 0 && (

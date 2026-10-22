@@ -14,7 +14,7 @@
 
 ## What's next
 
-- [x] **R18 Ziņojumu dēlis** (spec `docs/development/specs/R18.md`): card, create card, phone row, handbook, ledger text built; browser review (3 looks, 360–1920) and the owner's look at it still open.
+- [x] **R18 Ziņojumu dēlis** (spec `docs/development/specs/R18.md`): card, create card, phone row, handbook, ledger text built; reviewed, pushed, live; the owner's look at it still open.
 
 Nothing else planned. The owner sets the next goals; each new release gets a short explanation and the owner's OK before any spec or build.
 
