@@ -16,7 +16,7 @@
 
 - [x] **R18 Ziņojumu dēlis** (spec `docs/development/specs/R18.md`): card, create card, phone row, handbook, ledger text built; reviewed, pushed, live; the owner's look at it still open.
 - [x] **R19 Tēmu rādītājs** (spec `docs/development/specs/R19.md`, drawing `docs/development/r19-category-sidebar.html`): the category drawer and the Tēma drop-down as a quiet index (neutral icons, tone only on hover icon and the selected row, tint + dot, quiet search with Veidi, empty shows "0"); one session R19-1, no DB change; reviewed, pushed, live.
-- [x] **R20 Dēļa galva** (spec `docs/development/specs/R20.md`, drawing `docs/development/r20-board-heading.html`): the title is the Grupas | Pasākumi switch with filter-following counts, one 28 px chip row, the column flush left and the board to the right gutter on shared row lines, header field over the title from 1024; sessions R20-1 (grid, title, counts, header) and R20-2 (chips, sticky veil, skeleton); no DB change.
+- [x] **R20 Dēļa galva** (spec `docs/development/specs/R20.md`, drawing `docs/development/r20-board-heading.html`): the title is the Grupas | Pasākumi switch with filter-following counts, one 28 px chip row, the column flush left and the board to the right gutter on shared row lines, header field over the title from 1024; sessions R20-1 (grid, title, counts, header) and R20-2 (chips, sticky veil, skeleton); no DB change; reviewed, pushed, live.
 
 Nothing else planned. The owner sets the next goals; each new release gets a short explanation and the owner's OK before any spec or build.
 
