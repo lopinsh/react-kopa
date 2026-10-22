@@ -82,7 +82,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
                         : <span className="min-w-0 truncate text-foreground-muted">{cityLabel(tCities, group.city)} · {t('memberCount', { count: group.memberCount })}</span>}
                 </span>
                 {requestCount > 0 && (
-                    <a href={`/${locale}${path}/members?tab=requests`} className="relative z-[2] mt-0.5 block text-tag text-primary hover:underline">{tMy('requestCount', { count: requestCount })}</a>
+                    <a href={`/${locale}${path}/members?tab=requests`} className="relative z-[2] mt-0.5 block text-tag text-primary hover:underline after:absolute after:-inset-y-3 after:inset-x-0">{tMy('requestCount', { count: requestCount })}</a>
                 )}
             </span>
             {hasTag && role && <RoleTag role={role} showMember={showMember} />}
