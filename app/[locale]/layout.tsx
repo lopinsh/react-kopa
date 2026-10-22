@@ -81,7 +81,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
                 <div className="flex flex-1 overflow-hidden">
                     {/* The scroll container; the page's main element and the slim footer sit inside it. Positioned, so a visually hidden heading far down a page stays inside it instead of stretching the document. */}
                     <div
-                        className="relative flex flex-1 flex-col overflow-y-auto pb-[calc(5rem+var(--cookie-banner-h,0px))] [scrollbar-gutter:stable] md:pb-0"
+                        className="relative flex flex-1 flex-col overflow-y-auto pb-[calc(4rem+var(--cookie-banner-h,0px))] [scrollbar-gutter:stable] md:pb-0"
                         id="main-content"
                     >
                         <main id="content" tabIndex={-1} className="flex-1 focus:outline-none">

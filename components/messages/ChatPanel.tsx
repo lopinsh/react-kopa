@@ -86,9 +86,9 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
 
     return (
         <>
-            <div className="z-10 flex items-center justify-between border-b border-border bg-surface p-4">
+            <div className="z-10 flex items-center justify-between border-b border-border bg-surface p-4 max-md:pt-[calc(1rem+env(safe-area-inset-top))]">
                 <div className="flex min-w-0 items-center gap-3">
-                    <button type="button" className={clsx('-ml-2 p-2 text-foreground-muted', !alwaysShowBack && 'sm:hidden')} onClick={onBack} aria-label={t('back')}>
+                    <button type="button" className={clsx('-ml-2 p-2 text-foreground-muted', !alwaysShowBack && 'md:hidden')} onClick={onBack} aria-label={t('back')}>
                         <ArrowLeft className="size-5" />
                     </button>
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full line bg-surface">
@@ -164,7 +164,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                 })}
             </div>
 
-            <div className="border-t border-border bg-surface p-4">
+            <div className="border-t border-border bg-surface p-4 max-md:pb-[calc(1rem+env(safe-area-inset-bottom))]">
                 {conversation.readOnly ? (
                     <div className="flex items-center justify-center gap-2 rounded-xl bg-surface-elevated p-3 text-center text-body-sm text-foreground-muted">
                         <AlertCircle className="size-4" />

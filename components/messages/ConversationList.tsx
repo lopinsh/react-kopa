@@ -38,7 +38,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
     );
 
     return (
-        <div data-ui={UI.conversationList} className={clsx('w-full flex-col border-border bg-surface sm:w-80 sm:border-r', className)}>
+        <div data-ui={UI.conversationList} className={clsx('w-full flex-col border-border bg-surface md:w-80 md:border-r', className)}>
             <div className="border-b border-border p-4">
                 <h1 className="text-title">{t('title')}</h1>
                 {conversations.length > 0 && (

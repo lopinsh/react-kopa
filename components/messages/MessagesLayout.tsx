@@ -27,10 +27,11 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                 activeId={activeConversationId}
                 onOpen={openConversation}
                 titleOf={titleOf}
-                className={activeConversationId ? 'hidden sm:flex' : 'flex'}
+                className={activeConversationId ? 'hidden md:flex' : 'flex'}
             />
 
-            <div className={clsx('flex flex-1 flex-col bg-surface', !activeConversationId && 'hidden items-center justify-center sm:flex')}>
+            {/* Below md one column: the list, and a chat that takes the whole screen (back arrow in its bar). */}
+            <div className={clsx('flex flex-1 flex-col bg-surface', activeConversationId ? 'max-md:fixed max-md:inset-0 max-md:z-50 max-md:h-dvh' : 'hidden items-center justify-center md:flex')}>
                 {!activeConversation ? (
                     <div className="text-center text-foreground-muted">
                         <UserIcon className="mx-auto mb-4 size-12 opacity-20" />

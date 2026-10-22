@@ -21,17 +21,19 @@ type Props = {
     onMouseDown?: () => void;
     /** The phone bar: 36 px, focused at once. */
     compact?: boolean;
+    /** The panel hangs right under the field (desktop): the field's bottom corners square off while open. Off on the phone, where the results are a screen of their own. Default: `open`. */
+    joined?: boolean;
     autoFocus?: boolean;
     className?: string;
 };
 
 /** The field of the header and of the phone bar (AR-41): a quiet tint pill while idle, a surface with a site-colour outline while open. */
-export default function SearchInput({ value, onChange, onEnter, inputRef, open, controls, onKeyDown, onFocus, onMouseDown, compact = false, autoFocus = false, className }: Props) {
+export default function SearchInput({ value, onChange, onEnter, inputRef, open, controls, onKeyDown, onFocus, onMouseDown, compact = false, joined = open, autoFocus = false, className }: Props) {
     const t = useTranslations('shell.header');
     const tSearch = useTranslations('discovery.search');
     const locale = useLocale();
     const id = useId();
-    const pill = clsx('flex items-center gap-2 rounded-pill px-3 text-body-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', 'motion-safe:transition-[border-radius] motion-safe:duration-base', open ? 'bg-surface outline-2 outline-primary rounded-t-menu rounded-b-none' : 'bg-tint', className);
+    const pill = clsx('flex items-center gap-2 rounded-pill px-3 text-body-sm focus-within:bg-surface focus-within:outline-2 focus-within:outline-primary', compact ? 'h-9' : 'h-[38px]', 'motion-safe:transition-[border-radius] motion-safe:duration-base', open ? 'bg-surface outline-2 outline-primary' : 'bg-tint', joined && 'rounded-t-menu rounded-b-none', className);
 
     return (
         <form action={`/${locale}`} role="search" data-ui={UI.searchBar} onSubmit={(e) => { e.preventDefault(); onEnter(); }} className={pill}>

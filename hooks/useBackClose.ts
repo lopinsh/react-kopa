@@ -87,3 +87,27 @@ export function useBackClose(open: boolean, onClose: () => void, locked = false,
         else close();
     }, [key]);
 }
+
+/**
+ * A navigation started from inside a pop-up that closes with it (a filter choice in a sheet): the pop-up's own
+ * `history.back()` on unmount would swallow a push that is still on its way, so the navigation waits until the
+ * pop-up's entry is gone. With no pop-up open it runs at once; if the pop-up stays open it runs after a short delay.
+ */
+export function afterOverlayClose(navigate: () => void) {
+    if (typeof window === 'undefined' || !topKey()) {
+        navigate();
+        return;
+    }
+    let timer = 0;
+    const run = () => {
+        window.removeEventListener('popstate', onPop);
+        window.clearTimeout(timer);
+        window.setTimeout(navigate, 0);
+    };
+    const onPop = () => { if (!topKey()) run(); };
+    window.addEventListener('popstate', onPop);
+    timer = window.setTimeout(run, 400);
+}
+
+/** True while a pop-up's history entry is on top. */
+export const hasOverlayEntry = () => typeof window !== 'undefined' && !!topKey();

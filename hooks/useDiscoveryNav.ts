@@ -2,6 +2,7 @@
 
 import { useCallback, useTransition } from 'react';
 import { useRouter } from '@/i18n/routing';
+import { afterOverlayClose } from '@/hooks/useBackClose';
 import { discoveryHref, type DiscoveryParams } from '@/lib/discovery-params';
 import { useDiscovery } from '@/components/providers/DiscoveryProvider';
 
@@ -13,10 +14,11 @@ export function useDiscoveryNav() {
 
     const go = useCallback((change: Partial<DiscoveryParams>, options?: { replace?: boolean }) => {
         const href = discoveryHref(params, change);
-        startTransition(() => {
+        // From a sheet the choice waits for the sheet's own Back, which would otherwise swallow the push.
+        afterOverlayClose(() => startTransition(() => {
             if (options?.replace) router.replace(href, { scroll: false });
             else router.push(href, { scroll: false });
-        });
+        }));
     }, [params, router]);
 
     return { params, go, pending };

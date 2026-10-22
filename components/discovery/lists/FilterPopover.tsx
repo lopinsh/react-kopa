@@ -3,7 +3,6 @@
 import { useEffect, useId, useState, type ReactNode } from 'react';
 import { clsx } from 'clsx';
 import Sheet from '@/components/ui/Sheet';
-import ListDrawer from './ListDrawer';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { inFeedbackLayer } from '@/lib/feedback/capture';
 import { useFeedbackMode } from '@/components/providers/FeedbackModeContext';
@@ -34,12 +33,10 @@ type Props = {
     children: ReactNode;
     /** Panel width in px for the drop-down (the same number given to `usePopover`). */
     width?: number;
-    /** Below md: a bottom sheet (default) or a side drawer from the left. */
-    phone?: 'sheet' | 'drawer';
 };
 
-/** A filter list: an anchored panel under its button from `md`, a bottom sheet on phones (dim only) or, for the category tree, a left side drawer. The host element must be `relative` and hold the button. */
-export default function FilterPopover({ pop, title, onClose, children, width = DEFAULT_WIDTH, phone = 'sheet' }: Props) {
+/** A filter list: an anchored panel under its button from `md`, a bottom sheet below (dim only). The host element must be `relative` and hold the button. */
+export default function FilterPopover({ pop, title, onClose, children, width = DEFAULT_WIDTH }: Props) {
     const { host, id, open, desktop, alignRight } = pop;
     const feedbackMode = useFeedbackMode();
 
@@ -66,7 +63,6 @@ export default function FilterPopover({ pop, title, onClose, children, width = D
     }, [open, desktop, onClose, host, feedbackMode]);
 
     if (!open) return null;
-    if (!desktop && phone === 'drawer') return <ListDrawer title={title} onClose={onClose}><div id={id}>{children}</div></ListDrawer>;
     // The list scrolls inside the sheet, so its title and × stay in reach.
     if (!desktop) return <Sheet title={title} onClose={onClose}><div id={id} className="max-h-[calc(90dvh-7rem)] overflow-y-auto">{children}</div></Sheet>;
     return (

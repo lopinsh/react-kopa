@@ -39,7 +39,7 @@ function SearchScreen() {
                 <button type="button" aria-label={t('back')} onClick={() => requestClose()} className={ICON_BUTTON}>
                     <ChevronLeft aria-hidden />
                 </button>
-                <SearchInput value={search.word} onChange={(w) => search.setWord(w)} onEnter={onEnter} inputRef={inputRef} open compact autoFocus className="flex-1" />
+                <SearchInput value={search.word} onChange={(w) => search.setWord(w)} onEnter={onEnter} inputRef={inputRef} open joined={false} compact autoFocus className="flex-1" />
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-[var(--search-pb)] [--search-pb:calc(1rem+env(safe-area-inset-bottom))]">
                 <SearchPanel search={search} mode="phone" inputRef={inputRef} requestClose={() => requestClose()} />

@@ -1,6 +1,8 @@
+import type { MouseEvent } from 'react';
 import { LayoutGrid } from 'lucide-react';
 import { clsx } from 'clsx';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
+import { afterOverlayClose, hasOverlayEntry } from '@/hooks/useBackClose';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { foldText } from '@/lib/text-fold';
 
@@ -46,6 +48,15 @@ function Match({ text, needle }: { text: string; needle?: string }) {
 /** One row of the category index (R19): icon, name, count; the chosen row carries a tone tint and a dot. Tone only through --c on the row. */
 export default function CategoryRow({ href, title, count, slug, color, current = false, folded = false, parentTitle, needle, onChoose }: Props) {
     const all = !slug;
+    const router = useRouter();
+    // Inside a sheet the sheet's Back must finish before the link's push (see afterOverlayClose).
+    const choose = (e: MouseEvent<HTMLAnchorElement>) => {
+        if (hasOverlayEntry() && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey && e.button === 0) {
+            e.preventDefault();
+            afterOverlayClose(() => router.push(href, { scroll: false }));
+        }
+        onChoose?.();
+    };
     const dot = current && (
         <span aria-hidden="true" className={clsx('shrink-0 rounded-full', all ? 'bg-primary' : 'bg-[var(--c)]', folded ? 'absolute right-1 top-1 size-1.5' : 'size-2')} />
     );
@@ -53,7 +64,7 @@ export default function CategoryRow({ href, title, count, slug, color, current =
         <Link
             href={href}
             scroll={false}
-            onClick={onChoose}
+            onClick={choose}
             aria-current={current ? 'true' : undefined}
             title={folded ? `${title} · ${count}` : undefined}
             aria-label={folded ? title : undefined}
