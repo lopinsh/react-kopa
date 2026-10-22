@@ -170,7 +170,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                         <CreateCard l1Slug={samples.l1Slug} variant="card" />
                     </div>
                     <div className="mt-4 max-w-sm rounded-2xl bg-surface px-4 shadow-card frame">
-                        <GroupRow group={samples.groupCard} role="OWNER" requestCount={2} />
+                        <GroupRow group={samples.groupCardNote} role="OWNER" requestCount={2} />
+                        <GroupRow group={samples.groupCard} activity={samples.cardEvent} />
+                        <GroupRow group={samples.groupCard} activity={samples.cardAnnouncement} role="PENDING" />
+                        <GroupRow group={samples.groupCardBare} role="MEMBER" />
                         <CreateCard l1Slug={samples.l1Slug} variant="row" />
                     </div>
                 </UiSpecimen>

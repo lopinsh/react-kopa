@@ -32,13 +32,14 @@ export default function CreateCard({ l1Slug, variant, color }: Props) {
 
     if (variant === 'row') {
         return (
-            <Link href={href} data-ui={UI.createCard} className="flex min-h-14 items-center gap-3 border-t border-border py-3 first:border-t-0">
+            <Link href={href} data-ui={UI.createCard} style={tone} className="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0">
                 {/* ui-allow: the thumb's place, a 56 px dashed tile */}
                 <span className="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border"><Plus aria-hidden="true" className="size-5 text-foreground-muted" /></span>
                 <span className="min-w-0 flex-1">
-                    <span className="block text-item text-foreground">{t('createNewGroup')}</span>
-                    <span className="block text-meta text-foreground-muted">{t('inThisCategory')}</span>
+                    <span className="block truncate text-item text-foreground">{t('createNewGroup')}</span>
+                    <span className="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted"><span className="truncate">{t('inThisCategory')}</span></span>
                 </span>
+                <Round className="size-7" />
             </Link>
         );
     }

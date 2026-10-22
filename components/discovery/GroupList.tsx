@@ -42,7 +42,7 @@ export default function GroupList({ groups, activity = {}, faces = {}, createFor
                 {createFor && <CreateCard l1Slug={createFor} variant="card" color={groups[0]?.category.color} />}
             </div>
             <div className="rounded-2xl bg-surface px-4 md:hidden shadow-card frame">
-                {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
+                {groups.map((g) => <GroupRow key={g.id} group={g} activity={activity[g.id]} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="row" color={groups[0]?.category.color} />}
             </div>
         </>
