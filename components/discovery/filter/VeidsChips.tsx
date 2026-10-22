@@ -64,10 +64,14 @@ export default function VeidsChips() {
     return (
         <div ref={row} role="group" aria-label={t('veids')} data-ui={UI.veidsLine} style={{ ['--c' as string]: categories.find((c) => c.slug === params.category)?.color }} className="relative flex items-center gap-1.5 md:min-w-0">
             <div className="flex items-center gap-1.5 pt-[calc(0.25rem+var(--shadow-room))] pb-[calc(0.25rem+var(--shadow-room))] pr-[var(--shadow-room)] md:min-w-0 md:overflow-hidden">
-                {chips.slice(0, fit).map((v) => <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} muted={v.count === 0} onClick={() => toggle(v.slug)} />)}
+                {/* On a phone every Veids shows and the line scrolls sideways (no "+N"); from md up the ones that don't fit sit behind "+N". */}
+                {chips.map((v, i) => {
+                    const chip = <Chip key={v.slug} label={v.title} chosen={params.tags.includes(v.slug)} muted={v.count === 0} onClick={() => toggle(v.slug)} />;
+                    return i < fit ? chip : <span key={v.slug} className="contents md:hidden">{chip}</span>;
+                })}
             </div>
             {hidden > 0 && (
-                <div ref={bindHost} className="relative shrink-0">
+                <div ref={bindHost} className="relative shrink-0 max-md:hidden">
                     <button type="button" aria-label={t('moreVeidi', { count: hidden })} aria-expanded={pop.open} aria-controls={pop.id} onClick={() => { setDraft(params.tags); pop.toggle(); }} className={clsx(CHIP, 'shrink-0 bg-surface weight-strong text-foreground-muted hover:bg-tint', pop.open && OPEN)}>
                         +{hidden}
                     </button>
