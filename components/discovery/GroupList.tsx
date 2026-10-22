@@ -39,11 +39,11 @@ export default function GroupList({ groups, activity = {}, faces = {}, createFor
         <>
             <div className="hidden gap-[calc(var(--card-gap)+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(min(100%,16rem),1fr))]">
                 {groups.map((g) => <GroupCard key={g.id} group={g} activity={activity[g.id]} faces={faces[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
-                {createFor && <CreateCard l1Slug={createFor} variant="card" />}
+                {createFor && <CreateCard l1Slug={createFor} variant="card" color={groups[0]?.category.color} />}
             </div>
             <div className="rounded-2xl bg-surface px-4 md:hidden shadow-card frame">
                 {groups.map((g) => <GroupRow key={g.id} group={g} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
-                {createFor && <CreateCard l1Slug={createFor} variant="row" />}
+                {createFor && <CreateCard l1Slug={createFor} variant="row" color={groups[0]?.category.color} />}
             </div>
         </>
     );
