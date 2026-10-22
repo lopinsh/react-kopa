@@ -116,7 +116,6 @@ jobs:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       ALLOW_DEV_PASSWORDS: "true"
       TZ: Europe/Riga
-      NODE_OPTIONS: --require ./tests/visual/freeze-time.cjs
     steps:
       - uses: actions/checkout@v4
 
@@ -126,14 +125,20 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NODE_OPTIONS: --require ./tests/visual/freeze-time.cjs
 
       - name: Migrate and seed (frozen clock)
+        env:
+          NODE_OPTIONS: --require ./tests/visual/freeze-time.cjs
         run: |
           npx prisma migrate deploy
           npm run db:seed
           npx prisma db execute --file tests/visual/pin-dates.sql --schema prisma/schema.prisma
 
-      - name: Start the app
+      - name: Start the app (frozen clock)
+        env:
+          NODE_OPTIONS: --require ./tests/visual/freeze-time.cjs
         run: |
           nohup npm start > server.log 2>&1 &
           npx --yes wait-on -t 60000 http://localhost:3000/api/health
