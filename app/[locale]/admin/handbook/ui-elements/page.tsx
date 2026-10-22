@@ -153,7 +153,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="filterLine" names={[UI.filterLine, UI.filterButton, UI.veidsLine, UI.viewSwitch, UI.clearAll, UI.filterList]} files={['components/discovery/filter/FilterLine.tsx', 'components/discovery/filter/FilterButton.tsx', 'components/discovery/filter/VeidsChips.tsx', 'components/discovery/filter/ViewSwitch.tsx']}>
+                <UiSpecimen id="filterLine" names={[UI.filterLine, UI.filterButton, UI.veidsLine, UI.viewSwitch, UI.clearAll, UI.filterList]} files={['components/discovery/filter/FilterLine.tsx', 'components/discovery/filter/FilterButton.tsx', 'components/discovery/filter/VeidsChips.tsx', 'components/discovery/filter/TitleSwitch.tsx']}>
                     <FilterLineDemo accent={samples.accent} />
                 </UiSpecimen>
 

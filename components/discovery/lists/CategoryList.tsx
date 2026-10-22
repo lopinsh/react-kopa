@@ -40,7 +40,9 @@ export default function CategoryList({ folded = false, place = 'menu', onChoose,
 
     return (
         <nav aria-label={tIndex('heading')}>
-            {!folded && <ListSearch variant={place === 'drawer' ? 'quiet' : 'field'} value={typed} onChange={setTyped} label={tIndex('search')} autoFocus={autoFocus} />}
+            {!folded && (place === 'drawer'
+                ? <div className="mb-4 mt-3 flex h-9 items-center"><ListSearch variant="quiet" value={typed} onChange={setTyped} label={tIndex('search')} autoFocus={autoFocus} /></div>
+                : <ListSearch variant="field" value={typed} onChange={setTyped} label={tIndex('search')} autoFocus={autoFocus} />)}
             <ul className={clsx(folded ? 'mt-2 flex flex-col items-start gap-1' : 'mb-1')}>
                 {!word && (
                     <>

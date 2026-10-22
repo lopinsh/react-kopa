@@ -24,24 +24,26 @@ export default async function Header() {
     const navCookie = (await cookies()).get(NAV_TAB_COOKIE)?.value;
 
     return (
-        <header data-ui={UI.header} className="sticky top-0 z-50 flex h-header items-center gap-0.5 border-b border-border bg-surface px-3 md:gap-2 md:px-4">
-            <Link href="/" aria-label={t('logoText')} className="flex min-h-10 shrink-0 items-center">
+        <header data-ui={UI.header} className="sticky top-0 z-50 flex h-header items-center gap-0.5 border-b border-border bg-surface px-3 md:gap-2 md:px-gutter">
+            <Link href="/" data-header-brand aria-label={t('logoText')} className="order-1 flex min-h-10 shrink-0 items-center">
                 <span className="md:hidden"><Logo size="sm" /></span>
                 <span className="hidden md:inline-flex"><Logo /></span>
             </Link>
-            <HeaderLinks initialTab={isBottomTab(navCookie) ? navCookie : 'discover'} signedIn={!!user} />
 
-            {/* Fluid: the field grows in the middle up to the reading width, the tools sit at the right edge. */}
-            <div className="flex min-w-0 flex-1 justify-center md:mx-2">
+            {/* Fluid: the field grows in the middle up to the reading width, the tools sit at the right edge. From lg the links follow the field (visual order by `order`, DOM order = tab order). */}
+            <div data-header-slot className="order-3 flex min-w-0 flex-1 justify-center md:mx-2">
                 <HeaderSearchField className="hidden w-full max-w-2xl md:flex" />
             </div>
+            <HeaderLinks initialTab={isBottomTab(navCookie) ? navCookie : 'discover'} signedIn={!!user} />
 
-            <LanguageMenu />
-            <PhoneSearchButton />
-            {user && admin && <AdminMenu />}
-            {user && <HeaderMessages />}
-            {user && <BellButton isAdmin={admin} />}
-            <UserMenu user={user} />
+            <div className="order-5 flex items-center gap-0.5 md:gap-2">
+                <LanguageMenu />
+                <PhoneSearchButton />
+                {user && admin && <AdminMenu />}
+                {user && <HeaderMessages />}
+                {user && <BellButton isAdmin={admin} />}
+                <UserMenu user={user} />
+            </div>
         </header>
     );
 }

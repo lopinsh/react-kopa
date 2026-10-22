@@ -4,7 +4,6 @@ import SearchWordChip from './SearchWordChip';
 import PlaceButton from './PlaceButton';
 import TopicButton from './TopicButton';
 import VeidsChips from './VeidsChips';
-import ViewSwitch from './ViewSwitch';
 import ClearAll from './ClearAll';
 import DateButton from '@/components/discovery/dates/DateButton';
 import DateChoices from '@/components/discovery/dates/DateChoices';
@@ -12,19 +11,15 @@ import { useDiscoveryNav } from '@/hooks/useDiscoveryNav';
 import { UI } from '@/lib/constants';
 
 /**
- * The filter line (AR-23, AR-27). One tree, ordered by breakpoint. From `md`: line 1 holds the word, Kur, Tēma, "Notīrīt visu" and the
- * switch at the right end; line 2 the Veids chips. On Pasākumi the date part follows Tēma: the four segments where the line is wide
- * (container query, 56 rem), else one date button (phones always, AR-27). Phones: the switch on its own full-width line above (not sticky), Kur and Tēma under it, then the
+ * The filter line (AR-23, AR-27). One tree, ordered by breakpoint. From `md`: line 1 holds the word, Kur, Tēma and "Notīrīt visu" (the switch is now the title, `TitleSwitch`, R20-1; R20-2 makes this one chip row); line 2 the Veids chips. On Pasākumi the date part follows Tēma: the four segments where the line is wide
+ * (container query, 56 rem), else one date button (phones always, AR-27). Phones: Kur and Tēma, then the
  * Veids line with "Notīrīt visu" at its end.
  */
 export default function FilterLine() {
     const { params, pending } = useDiscoveryNav();
     return (
         <>
-        {/* Phones: the switch scrolls away, only the filters stick (keeps the stuck line short). */}
-        <ViewSwitch className="mt-3 w-full md:hidden" />
         <div data-ui={UI.filterLine} aria-busy={pending} className="@container/filter sticky top-0 z-20 mb-1 flex flex-wrap items-center gap-x-1.5 gap-y-2 bg-background pb-2 pt-2 md:pt-4">
-            <ViewSwitch className="max-md:hidden md:order-3 md:w-auto" />
             <div className="order-2 flex w-full min-w-0 items-center gap-1.5 md:order-1 md:w-auto md:flex-1">
                 <SearchWordChip />
                 <PlaceButton />

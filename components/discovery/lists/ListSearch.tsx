@@ -16,7 +16,7 @@ type Props = {
 
 const BOX: Record<NonNullable<Props['variant']>, string> = {
     line: 'flex items-center gap-2 border-b border-border px-3 pb-2 pt-1.5',
-    quiet: 'mb-2 mt-1 flex h-8 items-center gap-2 rounded-item px-2 text-foreground-muted shadow-[inset_0_0_0_var(--search-edge)_var(--border)] transition-colors duration-quick hover:bg-tint/60 focus-within:bg-surface focus-within:ring-2 focus-within:ring-primary',
+    quiet: 'flex h-8 w-full items-center gap-2 rounded-item px-2 text-foreground-muted shadow-[inset_0_0_0_var(--search-edge)_var(--border)] transition-colors duration-quick hover:bg-tint/60 focus-within:bg-surface focus-within:ring-2 focus-within:ring-primary',
     field: 'mb-1 flex h-10 items-center gap-2 rounded-item px-2 line focus-within:ring-2 focus-within:ring-primary',
 };
 

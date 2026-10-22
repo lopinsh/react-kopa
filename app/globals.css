@@ -54,6 +54,8 @@
   /* Space scale: page sides and the gap between page sections (px-gutter, gap-section, py-section) */
   --spacing-aside: 17.5rem;
   --spacing-gutter: clamp(1rem, 0.5rem + 2vw, 2rem);
+  --spacing-board-col: calc(var(--spacing-gutter) + 13.25rem); /* discovery column: gutter + 212 (240 at 1024, 244 from 1280) */
+  --spacing-board-pad: calc(var(--spacing-gutter) - 0.5rem); /* its inner left, so the row icons (8 inset) sit under the logo */
   --spacing-section: clamp(2rem, 1.5rem + 2vw, 4rem);
 
   /* Content widths (max-w-browse / page / focus / reading) */
@@ -135,6 +137,26 @@ body {
   line-height: 1.1;
   letter-spacing: -0.015em;
   text-wrap-style: balance; /* style only: text-wrap would reset the wrap mode and undo truncate */
+}
+/* The title-switch's divider: 1 px, cap height (about 0.7 em where `cap` is not known); needs the title font on the element. */
+/* Discovery, column open, from lg: the header field starts over the title (its magnifier on the "G" of "Grupas"): brand = column - 1.75rem (field icon inset 0.75rem + header gap 0.5rem + slot margin 0.5rem). */
+@media (min-width: 64rem) {
+  html:has([data-board-col="open"]) [data-header-brand] {
+    min-width: calc(var(--spacing-board-col) - 1.75rem);
+  }
+  html:has([data-board-col="open"]) [data-header-slot] {
+    justify-content: flex-start;
+  }
+}
+@utility title-rule {
+  font: inherit;
+  width: 1px;
+  height: 0.7em;
+  align-self: baseline;
+  background: color-mix(in oklab, var(--foreground-muted) 55%, var(--background));
+  @supports (height: 1cap) {
+    height: 1cap;
+  }
 }
 @utility text-section {
   font-family: var(--font-heading), system-ui, sans-serif;

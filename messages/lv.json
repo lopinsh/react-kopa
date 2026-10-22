@@ -306,6 +306,8 @@
     "viewLabel": "Ko rādīt",
     "groups": "Grupas",
     "events": "Pasākumi",
+    "groupsTab": "Grupas, {count, plural, zero {# grupu} one {# grupa} other {# grupas}}",
+    "eventsTab": "Pasākumi, {count, plural, zero {# pasākumu} one {# pasākums} other {# pasākumi}}",
     "veids": "Veids",
     "moreVeidi": "{count, plural, zero {Vēl # veidi} one {Vēl # veids} other {Vēl # veidi}}",
     "searchPlace": "Meklēt pilsētu",

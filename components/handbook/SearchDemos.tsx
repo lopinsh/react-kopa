@@ -55,7 +55,7 @@ export function SearchDemo({ groups, event }: { groups: GroupCardData[]; event: 
                 <Panel search={stub('vak', 'games', chosen)} />
                 <Panel search={stub('', null, idle)} recent={['sp', 'galda spēles', 'jelgava']} />
             </div>
-            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({ q: 'sp' }), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: matches }}>
+            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({ q: 'sp' }), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, kindTotals: { groups: 0, events: 0 }, alsoMatches: matches }}>
                 <div className="max-w-2xl"><AlsoMatchesLine /></div>
             </DiscoveryProvider>
         </div>

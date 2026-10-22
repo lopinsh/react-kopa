@@ -5,7 +5,7 @@ import { LayoutGrid, MapPin } from 'lucide-react';
 import FilterButton from '@/components/discovery/filter/FilterButton';
 import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import { parseDiscoveryParams } from '@/lib/discovery-params';
-import ViewSwitch from '@/components/discovery/filter/ViewSwitch';
+import TitleSwitch from '@/components/discovery/filter/TitleSwitch';
 import { Chip } from '@/components/discovery/filter/VeidsChips';
 
 const NOOP = () => undefined;
@@ -24,8 +24,8 @@ export function FilterLineDemo({ accent }: { accent: string }) {
                 <Chip label={t('veids')} chosen onClick={NOOP} />
                 <Chip label={t('veids')} chosen={false} onClick={NOOP} />
             </div>
-            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: [] }}>
-                <ViewSwitch className="self-start" />
+            <DiscoveryProvider state={{ kind: 'groups', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, kindTotals: { groups: 27, events: 5 }, alsoMatches: [] }}>
+                <TitleSwitch className="self-start" />
             </DiscoveryProvider>
         </div>
     );

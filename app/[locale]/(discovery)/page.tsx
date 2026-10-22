@@ -12,7 +12,7 @@ import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import CategoryDrawer from '@/components/discovery/CategoryDrawer';
-import PageHead from '@/components/ui/PageHead';
+import TitleSwitch from '@/components/discovery/filter/TitleSwitch';
 import FilterLine from '@/components/discovery/filter/FilterLine';
 import AlsoMatchesLine from '@/components/discovery/filter/AlsoMatchesLine';
 import GroupResults from '@/components/discovery/GroupResults';
@@ -75,11 +75,14 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
     const w = eventWindow(p, dayInZone(new Date(), zone), zone);
     if (p.kind === 'events' && w.expired) redirect({ href: discoveryHref(p, { date: { kind: 'week' }, day: null }), locale });
 
-    const [categories, tree, cities, counts, plain, groupsRes, events, cookieStore] = await Promise.all([
+    const other = p.kind === 'groups' ? 'events' : 'groups';
+    const [categories, tree, cities, counts, otherCounts, plain, groupsRes, events, cookieStore] = await Promise.all([
         DiscoveryService.getDiscoveryCategories(locale),
         TaxonomyService.getTaxonomy(locale),
         CityService.listActive(locale),
         DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined, ...(p.kind === 'events' ? w.bounds : {}) }, locale),
+        // The other list's total under the same filters: the title's second count (Pasākumi's from Grupas = this week).
+        DiscoveryService.getCounts({ kind: other, cities: p.cities, l1Slug: p.category ?? undefined, tags: p.tags, query: p.q || undefined, ...(other === 'events' ? w.bounds : {}) }, locale),
         // The same list without the word (cached): what choosing a theme or Veids "in place of the word" gives.
         wantsAlsoMatches(p.q, p.category)
             ? DiscoveryService.getCounts({ kind: p.kind, cities: p.cities, ...(p.kind === 'events' ? w.bounds : {}) }, locale)
@@ -112,6 +115,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0
         }))),
         counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online },
+        kindTotals: p.kind === 'groups' ? { groups: counts.total, events: otherCounts.total } : { groups: otherCounts.total, events: counts.total },
         alsoMatches: buildAlsoMatches(p.q, plain, tree, categories),
         dates: events ? { today: w.today, choice: w.choice, period: w.period, listFrom: w.listFrom, week: w.week, weekCounts: events.weekCounts, calendar: w.calendar, calendarCounts: events.calendarCounts } : undefined
     };
@@ -121,9 +125,10 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             <DiscoveryProvider state={state}>
                 <div className="flex min-h-full">
                     <CategoryDrawer folded={cookieStore.get(DISCOVERY_RAIL_COOKIE)?.value === '1'} />
-                    <div className="min-w-0 flex-1 pb-20">
-                        <div className="mx-auto w-full max-w-browse px-gutter">
-                            <PageHead className="pt-4 md:pt-6" title={tDiscovery(p.kind === 'events' ? 'eventsPageTitle' : 'groupsPageTitle')} />
+                    <div className="min-w-0 flex-1 px-gutter pb-20 pt-4">
+                        <div>
+                            <h1 className="sr-only">{tDiscovery(p.kind === 'events' ? 'eventsPageTitle' : 'groupsPageTitle')}</h1>
+                            <TitleSwitch />
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'

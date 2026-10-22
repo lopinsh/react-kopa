@@ -23,7 +23,7 @@ export function DatesDemo({ today }: { today: string }) {
         calendar: { from: today, to: addDays(today, 39) }, calendarCounts
     };
     return (
-        <DiscoveryProvider state={{ kind: 'events', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, alsoMatches: [], dates }}>
+        <DiscoveryProvider state={{ kind: 'events', params: parseDiscoveryParams({}), categories: [], veidi: [], counts: { total: 0, anyTopic: 0, anyPlace: 0, byCity: {}, online: 0 }, kindTotals: { groups: 0, events: 0 }, alsoMatches: [], dates }}>
             <div className="flex flex-wrap items-start gap-6">
                 <div className="flex flex-col gap-3">
                     <div className="inline-flex h-8 items-center rounded-pill bg-surface p-1 ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]"><QuickChoices variant="line" onPick={NOOP} /></div>

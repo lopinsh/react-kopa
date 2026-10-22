@@ -306,6 +306,8 @@
     "viewLabel": "What to show",
     "groups": "Groups",
     "events": "Events",
+    "groupsTab": "Groups, {count, plural, one {# group} other {# groups}}",
+    "eventsTab": "Events, {count, plural, one {# event} other {# events}}",
     "veids": "Type",
     "moreVeidi": "{count, plural, one {# more type} other {# more types}}",
     "searchPlace": "Search for a city",

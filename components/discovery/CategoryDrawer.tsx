@@ -24,19 +24,21 @@ export default function CategoryDrawer({ folded: initiallyFolded }: { folded: bo
         <aside
             data-ui={UI.categoryDrawer}
             aria-labelledby={headingId}
+            data-board-col={folded ? 'folded' : 'open'}
             className={clsx(
                 'sticky top-0 hidden h-[calc(100dvh-var(--spacing-header))] shrink-0 flex-col overflow-y-auto overflow-x-hidden border-r-[length:var(--line-width)] border-[color:var(--line-color)] bg-surface motion-safe:transition-[width] motion-safe:duration-slow lg:flex',
-                folded ? 'w-14 px-2' : 'w-[232px] px-[var(--list-pad)] pb-4',
+                folded ? 'w-14 px-2' : 'w-board-col pl-board-pad pr-[var(--list-pad)] pb-4',
             )}
         >
-            <div className={clsx('mt-3 flex h-10 shrink-0 items-center gap-2', folded ? 'justify-center' : 'justify-between pl-2')}>
+            <div className={clsx('mt-4 flex h-10 shrink-0 items-baseline gap-2', folded ? 'justify-center' : 'justify-between pl-2')}>
+                <span aria-hidden="true" className="w-0 overflow-hidden text-title">&#8203;</span>
                 <h2 id={headingId} className={clsx('text-section', folded && 'sr-only')}>{tIndex('heading')}</h2>
                 <button /* ui-allow: fold control inside the sidebar edge, ring like the filter chips */
                     type="button"
                     onClick={fold}
                     aria-expanded={!folded}
                     aria-label={folded ? tIndex('unfold') : tIndex('fold')}
-                    className="grid size-7 shrink-0 place-items-center rounded-pill ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] text-foreground-muted transition-colors duration-quick hover:bg-tint hover:text-foreground"
+                    className="grid size-7 shrink-0 self-center place-items-center rounded-pill ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] text-foreground-muted transition-colors duration-quick hover:bg-tint hover:text-foreground"
                 >
                     {folded ? <ChevronRight aria-hidden="true" className="size-4" /> : <ChevronLeft aria-hidden="true" className="size-4" />}
                 </button>

@@ -94,6 +94,8 @@ export interface DiscoveryState {
     /** Active level-2 sub-categories of every main category ("Veidi"). */
     veidi: Array<{ slug: string; title: string; l1Slug: string; count: number }>;
     counts: Pick<DiscoveryCounts, 'total' | 'anyTopic' | 'anyPlace' | 'byCity' | 'online'>;
+    /** Both lists' totals under the same filters (the title's counts). Pasākumi's follow the dates; from Grupas they are this week's. */
+    kindTotals: Record<DiscoveryKind, number>;
     /** Pasākumi only. */
     dates?: DiscoveryDates;
     /**

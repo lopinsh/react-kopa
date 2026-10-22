@@ -6,17 +6,17 @@ import { Link } from '@/i18n/routing';
 import { BOTTOM_LINKS, type BottomTab } from '@/lib/navigation';
 import { useBottomTab } from '@/hooks/useBottomTab';
 
-const LINKS = BOTTOM_LINKS.filter((l) => l.tab === 'discover' || l.tab === 'groups');
+const LINKS = BOTTOM_LINKS.filter((l) => l.tab === 'groups');
 
-/** From md: Atklāt and Manas grupas beside the logo, as icons at 768-1023 px (the search keeps its room) and quiet text links from lg. The open one is marked like the phone bar (same logic), in site colour only (AR-06). */
+/** From md, signed in only: Manas grupas (the logo is the way to Atklāt; the phone bar keeps its Atklāt tab), as an icon beside the logo at 768-1023 px (the search keeps its room) and quiet text links to the right of the search from lg (R20). The open one is marked like the phone bar (same logic), in site colour only (AR-06). */
 export default function HeaderLinks({ initialTab, signedIn }: { initialTab: BottomTab; signedIn: boolean }) {
     const t = useTranslations('nav');
     const marked = useBottomTab(initialTab);
     return (
-        <nav aria-label={t('mobileLabel')} className="hidden shrink-0 items-center gap-1 md:flex">
-            {LINKS.filter((l) => l.tab === 'discover' || signedIn).map((l) => {
+        <nav aria-label={t('mobileLabel')} className="hidden shrink-0 items-center gap-1 md:order-2 md:flex lg:order-4">
+            {signedIn && LINKS.map((l) => {
                 const on = marked === l.tab;
-                const label = t(l.tab === 'discover' ? 'discover' : 'myGroups');
+                const label = t('myGroups');
                 const Icon = l.icon;
                 return (
                     // ui-allow: icon at md, text link from lg
