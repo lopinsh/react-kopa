@@ -12,8 +12,8 @@ import { UI } from '@/lib/constants';
 
 /**
  * The filter row (AR-23, AR-27, R20): one row of 28 px chips under the title switch, sticky 8 px under the header on a `board-veil`.
- * Order: Kur (always first), the chosen Tēma (the picker shows below 1024 only), the word, dates (Pasākumi: four segments where the row is wide,
- * container query 56 rem, else one date chip), the Veids rule and Veidi ("+N" from `md`), then "Notīrīt visu" at the end.
+ * Order: Kur (always first), the chosen Tēma (the picker shows below 1024 only), dates (Pasākumi: four segments where the row is wide,
+ * container query 56 rem, else one date chip), the Veids rule and Veidi ("+N" from `md`), the word, then "Notīrīt visu" at the end. The word and "Notīrīt visu" never hide; Veidi collapse into "+N" first.
  * Phones: the same row scrolls sideways, every chip in full.
  */
 export default function FilterLine() {
@@ -23,7 +23,6 @@ export default function FilterLine() {
             <div className="flex h-full items-center gap-1.5 max-md:-mx-gutter max-md:overflow-x-auto max-md:px-gutter max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden">
                 <PlaceButton />
                 <TopicButton />
-                <SearchWordChip />
                 {params.kind === 'events' && (
                     <>
                         <div className="hidden shrink-0 @4xl/filter:flex"><DateChoices /></div>
@@ -36,6 +35,7 @@ export default function FilterLine() {
                         <div className="max-md:shrink-0 md:min-w-0 md:flex-1"><VeidsChips /></div>
                     </>
                 )}
+                <SearchWordChip />
                 <ClearAll className="ml-auto" />
                 <span aria-hidden="true" className="w-0.5 shrink-0 md:hidden" />
             </div>
