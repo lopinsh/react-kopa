@@ -26,6 +26,14 @@ const settle = async (page: Page) => {
   await page.waitForTimeout(400);
 };
 
+// The panel's shell mounts while its content still loads (a skeleton), so wait until the skeleton is gone and the title is real.
+const waitForPanel = async (page: Page) => {
+  const panel = page.locator('[data-ui="panel"]').first();
+  await panel.waitFor();
+  await expect(panel.locator('[aria-busy="true"]')).toHaveCount(0);
+  await expect(panel.locator('h2').first()).toBeVisible();
+};
+
 const SCREENS: Screen[] = [
   { name: 'board-groups', run: async (p) => { await p.goto('/lv'); } },
   { name: 'board-events', run: async (p) => { await p.goto('/lv?tab=events'); } },
@@ -68,7 +76,7 @@ const SCREENS: Screen[] = [
       await p.goto('/lv');
       await p.locator(`a[href="${GROUP}"]:visible`).first().click();
       await p.waitForURL(`**${GROUP}`);
-      await p.locator('[data-ui="panel"]').first().waitFor();
+      await waitForPanel(p);
     },
   },
   {
@@ -77,7 +85,7 @@ const SCREENS: Screen[] = [
       await p.goto('/lv?tab=events');
       await p.locator('a[href*="/events/"]').first().click();
       await p.waitForURL('**/events/**');
-      await p.locator('[data-ui="panel"]').first().waitFor();
+      await waitForPanel(p);
     },
   },
   { name: 'messages', signedIn: true, run: async (p) => { await p.goto('/lv/messages'); } },
