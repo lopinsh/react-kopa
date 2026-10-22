@@ -116,6 +116,14 @@ jobs:
       NEXT_PUBLIC_APP_URL: http://localhost:3000
       ALLOW_DEV_PASSWORDS: "true"
       TZ: Europe/Riga
+      # Signed-in screens mount the Pusher client, which throws without a key (baked in at build). No Soketi runs here; it just fails to connect.
+      PUSHER_APP_ID: app-id
+      PUSHER_SECRET: app-secret
+      NEXT_PUBLIC_PUSHER_KEY: app-key
+      NEXT_PUBLIC_PUSHER_CLUSTER: mt1
+      NEXT_PUBLIC_PUSHER_HOST: localhost
+      NEXT_PUBLIC_PUSHER_PORT: "6001"
+      NEXT_PUBLIC_PUSHER_TLS: "false"
     steps:
       - uses: actions/checkout@v4
 
