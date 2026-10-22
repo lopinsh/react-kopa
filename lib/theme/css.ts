@@ -45,6 +45,9 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
         '--shadow-room': style.shadowRoom,
         '--card-pad': style.cardSpace,
         '--card-gap': style.cardSpace,
+        '--list-row': style.listRow,
+        '--list-pad': style.listPad,
+        '--search-edge': style.searchEdge,
         // Active/open edges (chosen chip, open filter): the ink in bold; calm leaves it unset so each element's own fallback colour applies.
         ...(style.ink === 'foreground' ? { '--line-active': 'var(--ink)' } : withDefaults ? { '--line-active': 'initial' } : {}),
         '--heading-weight': String(weight),

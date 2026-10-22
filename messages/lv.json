@@ -310,12 +310,19 @@
     "moreVeidi": "{count, plural, zero {Vēl # veidi} one {Vēl # veids} other {Vēl # veidi}}",
     "searchPlace": "Meklēt pilsētu",
     "searchVeids": "Meklēt veidu",
-    "searchCategory": "Meklēt kategoriju",
     "nothingFound": "Nekas nav atrasts.",
     "placeHint": "Jaunu vietu var ieteikt, veidojot grupu; to apstiprina administratori.",
     "categories": "Kategorijas",
     "allCategories": "Visas",
-    "suggestCategory": "Ieteikt jaunu kategoriju: „{word}”",
+    "topicIndex": {
+      "heading": "Tēmas",
+      "search": "Meklēt tēmu",
+      "clear": "Notīrīt",
+      "veidi": "Veidi",
+      "suggest": "Ieteikt jaunu tēmu: „{word}”",
+      "fold": "Salocīt tēmas",
+      "unfold": "Izvērst tēmas"
+    },
     "suggestTitle": "Ieteikt jaunu kategoriju",
     "suggestText": "Administratori to izskatīs. Izvēlies tēmu, kurai tā pieder.",
     "suggestName": "Nosaukums",
@@ -1376,11 +1383,6 @@
       "messages": "Ziņas",
       "search": "Meklēt",
       "searchPlaceholder": "Meklē grupu vai nodarbi…"
-    },
-    "sidebar": {
-      "collapse": "Sakļaut sānu joslu",
-      "expand": "Izvērst sānu joslu",
-      "categoriesNav": "Kategorijas"
     },
     "skipToContent": "Pāriet uz saturu"
   },

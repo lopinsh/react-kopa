@@ -310,12 +310,19 @@
     "moreVeidi": "{count, plural, one {# more type} other {# more types}}",
     "searchPlace": "Search for a city",
     "searchVeids": "Search for a type",
-    "searchCategory": "Search for a category",
     "nothingFound": "Nothing found.",
     "placeHint": "You can suggest a new place when you create a group; the admins approve it.",
     "categories": "Categories",
     "allCategories": "All",
-    "suggestCategory": "Suggest a new category: “{word}”",
+    "topicIndex": {
+      "heading": "Topics",
+      "search": "Search topics",
+      "clear": "Clear",
+      "veidi": "Types",
+      "suggest": "Suggest a new topic: “{word}”",
+      "fold": "Collapse topics",
+      "unfold": "Expand topics"
+    },
     "suggestTitle": "Suggest a new category",
     "suggestText": "The admins will look at it. Choose the topic it belongs to.",
     "suggestName": "Name",
@@ -1376,11 +1383,6 @@
       "messages": "Messages",
       "search": "Search",
       "searchPlaceholder": "Search for a group or an activity…"
-    },
-    "sidebar": {
-      "collapse": "Collapse sidebar",
-      "expand": "Expand sidebar",
-      "categoriesNav": "Categories"
     },
     "skipToContent": "Skip to content"
   },

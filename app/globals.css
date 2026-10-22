@@ -360,6 +360,12 @@ body {
   background-color: color-mix(in srgb, var(--c) var(--tab-mix), var(--surface));
 }
 
+/* topic-chosen (R19): the chosen category row: the tab's soft tint, plus the look's ink frame and hard shadow where the look has an active ink (Drosmigs); needs --c on the row. */
+@utility topic-chosen {
+  background-color: color-mix(in srgb, var(--c) var(--tab-mix), var(--surface));
+  box-shadow: inset 0 0 0 var(--line-width) var(--line-active, transparent), var(--press-shift) var(--press-shift) 0 0 var(--line-active, transparent);
+}
+
 /* band-tint (R18): the no-photo band, 24 / 30 % tone (solid in Drosmigs); the ink is the tone darkened (calm, airy) or the look's tile ink (bold). */
 @utility band-tint {
   background-color: color-mix(in srgb, var(--c) var(--band-mix, var(--band-mix-base)), var(--surface));
