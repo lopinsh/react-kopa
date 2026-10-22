@@ -16,9 +16,9 @@ import { UI } from '@/lib/constants';
 const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
- * A group on a phone (AR-36): name up to two lines, one quiet line (sub-categories give way first), the tagline, the tone mark at the right.
- * No photo, no note. In Manas grupas it also carries your role before the tone mark and, for the team, the waiting requests as a third line.
- * The name is the stretched link, so the request link can sit above it.
+ * A group on a phone (R18, AR-36): a 56 px thumb (the picture, else the category tile), the name on one line, the category line, and a mini tab chip with the note, else
+ * city · members (no tagline, no faces). At the right edge the empty seat (a clock while your request waits) or, in Manas grupas, your role tag; the team's waiting
+ * requests are a link under the chip. The name is the stretched link, so the request link can sit above it.
  */
 export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0 }: {
     group: GroupCardData;
