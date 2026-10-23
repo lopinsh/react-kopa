@@ -185,8 +185,8 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="panels" names={[UI.panel, UI.groupPanel, UI.eventPanel, UI.facesLine, UI.joinStep, UI.goingButton]} files={['components/panels/GroupPanel.tsx', 'components/panels/EventPanel.tsx', 'components/panels/PanelShell.tsx', 'components/events/FacesLine.tsx', 'components/events/JoinStep.tsx', 'components/events/GoingButton.tsx']}>
-                    <PanelDemos group={samples.groupCard} row={samples.eventDays[0].rows[0]} text={t('sample.eventExcerpt')} />
+                <UiSpecimen id="panels" names={[UI.panel, UI.eventPanel, UI.facesLine, UI.joinStep, UI.goingButton]} files={['components/panels/EventPanel.tsx', 'components/panels/PanelShell.tsx', 'components/events/FacesLine.tsx', 'components/events/JoinStep.tsx', 'components/events/GoingButton.tsx']}>
+                    <PanelDemos row={samples.eventDays[0].rows[0]} text={t('sample.eventExcerpt')} />
                 </UiSpecimen>
 
                 <UiSpecimen id="eventPage" names={[UI.eventPage, UI.eventOrganiser]} files={['app/[locale]/[l1Slug]/group/[groupSlug]/events/[eventSlug]/page.tsx', 'components/events/page/EventArticle.tsx', 'components/events/page/EventFacts.tsx', 'components/events/page/EventTextSection.tsx', 'components/events/page/EventOrganiserBox.tsx', 'components/events/page/OrganiserPeople.tsx']}>

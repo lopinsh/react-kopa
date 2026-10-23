@@ -92,6 +92,9 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 | Text on danger / success / warning | `--danger-foreground`, `--success-foreground`, `--warning-foreground` | derived (white or near-black, whichever reads better) | derived |
 | Pop-up scrim | `--scrim` | black 30 % | black 50 % |
 | Chip on a photo, text and rings on it | `--photo-chip`, `--photo-ink` | black 55 %, white | the same |
+| Viewer's status on a group card or row (exception, R21-G) | `--role-live`, `--role-live-ink` | `#1DB954`, `#0B2414` | `#1ED760`, `#0B2414` |
+
+**Two colour exceptions (owner's call 23 Oct, R21-G).** The status of the viewer on group cards and rows (Dalībnieks, Īpašnieks, Organizators, Gaida: every role the same) is one bright green with dark text (`--role-live`), a colour outside the palette; `MemberRow` keeps the role colours. The card's "Sazināties" button takes the group's Tēma colour (dashed outline at rest, filled on hover), not the site colour.
 
 **Everything is a token, and the check enforces it.** The status colours, their inks, the scrim and the photo chip are part of the look (optional `danger`, `success`, `warning`, `scrim`, `photoChip` in a look's mode tokens; a look that names none gets Sūna's, the ink is derived). Sūna is the single source of the defaults (`lib/constants/theme.ts`); `app/globals.css` holds no look values. `npm run ui:check` fails on a hex/rgb/hsl/oklch literal, a Tailwind palette colour (`bg-red-500`, `text-white`, `bg-black/40`), a `dark:` variant, a bare `rounded`/`rounded-sm`/`rounded-[…]`, a raw `shadow-sm…2xl`/`shadow-[…]` and a `rounded-full` that is not a circle (`size-N`, equal `h-N w-N`). Such a line may carry `ui-allow: <reason>` (the OAuth brand colours, the logo dot, a size-by-prop disc). So a new look in `THEME_PRESETS` + `THEME_STYLES` changes every surface.
 

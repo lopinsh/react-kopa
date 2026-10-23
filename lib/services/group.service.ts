@@ -7,7 +7,7 @@ import { ActionError } from '@/types/actions';
 import { Prisma } from '@prisma/client';
 import { hasAdminRights, allowedMemberActions } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
-import { MAX_SECTIONS, PANEL_EVENTS_MAX, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
+import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, TEXT_LANGS, langRecord, toTextLang, hasText, type TextLang } from '@/lib/translations';
 import type { SectionSaveValues } from '@/lib/validations/section';
 import { slugify } from '@/lib/slug';
@@ -19,8 +19,6 @@ import { MessageService } from './message.service';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
-import { EventService } from './event.service';
-import { toGroupPanel, type GroupPanelData } from './group-panel';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -344,20 +342,6 @@ export const GroupService = {
         if (!viewerId) return null;
         const m = await prisma.membership.findFirst({ where: { userId: viewerId, group: findGroupByPath(groupSlug, l1Slug) }, select: { role: true } });
         return m?.role ?? null;
-    },
-
-    /**
-     * The opened group card (R6): the group as this viewer may see it, narrowed to the panel's own shape. One call returns the
-     * whole panel context; null when the group is missing or hidden from this viewer.
-     */
-    async getGroupPanel(groupSlug: string, l1Slug: string, locale: string, viewerId?: string): Promise<GroupPanelData | null> {
-        const g = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, viewerId);
-        if (!g) return null;
-        const [next, events] = await Promise.all([
-            EventService.getNextVisibleEvent(g.id, locale, viewerId),
-            EventService.getPanelEventRows(g.id, locale, viewerId, PANEL_EVENTS_MAX)
-        ]);
-        return toGroupPanel(g, next, events);
     },
 
     /**

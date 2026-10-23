@@ -7,7 +7,6 @@ import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { cityLabel } from '@/lib/city-label';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import ActivityNote from './ActivityNote';
-import { Seat } from './GroupCardActivity';
 import type { GroupCardData } from '@/lib/services/group-card';
 import type { CardActivity } from '@/lib/services/card-activity';
 import type { MyRole } from '@/lib/types/own-area';
@@ -17,10 +16,10 @@ const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
 /**
  * A group on a phone (R18, AR-36): a 56 px thumb (the picture, else the category tile), the name on up to two lines, the category line, and a mini tab chip with the note, else
- * city · members (no tagline, no faces). At the right edge the empty seat or, in Manas grupas, your role tag (Gaida for a waiting request: one marker, no seat); the team's waiting
+ * city · members (no tagline, no faces). At the right edge, in Manas grupas, your role tag (Gaida for a waiting request); the team's waiting
  * requests are a link under the chip. The name is the stretched link, so the request link can sit above it.
  */
-export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0, noSeat = false }: {
+export default function GroupRow({ group, activity, highlight, replace = false, searchItem = false, fullPage = false, role, showMember = false, requestCount = 0 }: {
     group: GroupCardData;
     /** The group's latest activity for the chip's note. */
     activity?: CardActivity;
@@ -30,7 +29,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     replace?: boolean;
     /** Marks the link for the search's arrow keys. */
     searchItem?: boolean;
-    /** A group you belong to or wait for: a plain link to its full page, no panel (cmv9amjft). */
+    /** A group you belong to or wait for: a plain link to its full page (cmv9amjft). */
     fullPage?: boolean;
     /** Your role in the group (Manas grupas); a plain member gets no tag. */
     role?: MyRole | 'PENDING';
@@ -38,17 +37,14 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     showMember?: boolean;
     /** Join requests waiting for the team (Manas grupas, team only). */
     requestCount?: number;
-    /** Search results: the viewer's membership is unknown there, so no seat. */
-    noSeat?: boolean;
 }) {
     const t = useTranslations('discovery');
     const tMy = useTranslations('profile.myGroups');
     const tCities = useTranslations('cities');
     const locale = useLocale();
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
-    const seat = noSeat ? 'none' : role === undefined ? 'open' : 'none';
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
-    const hasNote = activity?.kind === 'event' || activity?.kind === 'announcement' || !!group.lookingFor;
+    const hasNote = !!activity?.event || !!activity?.announcement || !!group.lookingFor;
     const path = `/${group.category.l1Slug}/group/${group.slug}`;
     const name = <Highlight text={group.name} word={highlight} />;
     const searchAttr = searchItem ? { 'data-search-item': true } : {};
@@ -56,8 +52,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     return (
         <div
             data-ui={UI.groupRow}
-            data-panel-origin={group.id}
-            style={{ ['--c' as string]: group.category.color }}
+                        style={{ ['--c' as string]: group.category.color }}
             className="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0 has-[a[data-row-link]:focus-visible]:outline has-[a[data-row-link]:focus-visible]:outline-2 has-[a[data-row-link]:focus-visible]:outline-primary"
         >
             {/* ui-allow: the 56 px thumb, a rounded picture or the category tile */}
@@ -70,7 +65,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
                 <span className="line-clamp-2 text-item text-foreground">
                     {fullPage
                         ? <a href={`/${locale}${path}`} data-row-link className={NAME_LINK} {...searchAttr}>{name}</a>
-                        : <Link href={path} scroll={false} replace={replace} data-row-link data-opens-panel={replace ? undefined : true} className={NAME_LINK} {...searchAttr}>{name}</Link>}
+                        : <Link href={path} replace={replace} data-row-link className={NAME_LINK} {...searchAttr}>{name}</Link>}
                 </span>
                 <span className="mt-0.5 flex items-center text-meta text-foreground-muted">
                     <span aria-hidden="true" className="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]" />
@@ -85,8 +80,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
                     <a href={`/${locale}${path}/members?tab=requests`} className="relative z-[2] mt-0.5 block text-tag text-primary hover:underline after:absolute after:-inset-y-3 after:inset-x-0">{tMy('requestCount', { count: requestCount })}</a>
                 )}
             </span>
-            {hasTag && role && <RoleTag role={role} showMember={showMember} />}
-            {seat !== 'none' && <Seat label={t('seatOpen')} />}
+            {hasTag && role && <RoleTag role={role} showMember={showMember} bright />}
         </div>
     );
 }

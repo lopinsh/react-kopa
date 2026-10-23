@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { canGrow, growFrom, isBusy } from '@/lib/panel-origin';
 
 /**
- * R6b: a plain click on a link marked `data-opens-panel` inside a card marked `data-panel-origin` opens its panel with a grow out of the card.
+ * R6b (events only since R21-G; group links open the group page): a plain click on a link marked `data-opens-panel` inside a card marked `data-panel-origin` opens its panel with a grow out of the card.
  * Anything else (modified clicks, phones, reduced motion, no View Transitions, links inside a dialog) is left to Next's `Link`.
  * Links that replace the history entry (the search's results) are never marked: the grow always pushes.
  */

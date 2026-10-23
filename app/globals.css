@@ -35,6 +35,8 @@
   --color-role-member-ink: var(--role-member-ink);
   --color-role-pending: var(--role-pending);
   --color-role-pending-ink: var(--role-pending-ink);
+  --color-role-live: var(--role-live);
+  --color-role-live-ink: var(--role-live-ink);
 
   --shadow-card: var(--shadow-card);
   --shadow-premium: var(--shadow-premium);
@@ -101,6 +103,9 @@ html {
   --tab-mix: 12%;
   --tab-mix-hover: 20%;
   --band-mix-base: 24%;
+  /* The one bright green of the viewer's status on group cards and rows (R21-G, owner's call 23 Oct): outside the palette, see design.md Colour. */
+  --role-live: #1DB954;
+  --role-live-ink: #0B2414;
 }
 
 html.dark {
@@ -108,6 +113,7 @@ html.dark {
   --tab-mix: 16%;
   --tab-mix-hover: 24%;
   --band-mix-base: 30%;
+  --role-live: #1ED760;
 }
 
 body {
@@ -487,4 +493,12 @@ body {
     select {
         font-size: 16px;
     }
+}
+
+/* live (R21-G): inside a `group/card`, the card's hover state (hover devices only) and keyboard focus anywhere in it. Touch devices keep the rest state. */
+@custom-variant live {
+  @media (hover: hover) {
+    &:where(.group\/card:hover *) { @slot; }
+  }
+  &:where(.group\/card:has(:focus-visible) *) { @slot; }
 }

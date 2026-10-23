@@ -73,15 +73,6 @@ const SCREENS: Screen[] = [
   },
   { name: 'group-page', run: async (p) => { await p.goto(GROUP); } },
   {
-    name: 'group-slide-over',
-    run: async (p) => {
-      await p.goto('/lv');
-      await p.locator(`a[href="${GROUP}"]:visible`).first().click();
-      await p.waitForURL(`**${GROUP}`);
-      await waitForPanel(p);
-    },
-  },
-  {
     name: 'event-slide-over',
     run: async (p) => {
       await p.goto('/lv?tab=events');

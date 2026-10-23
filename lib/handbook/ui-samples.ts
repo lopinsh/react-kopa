@@ -46,6 +46,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         slug: 'sample-group',
         city: 'Jelgava',
         lookingFor: null,
+        isAcceptingMembers: true,
         tagline: s('groupTagline'),
         taglineLang: lang,
         bannerImage: null,
@@ -57,8 +58,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
     const groupCardNote = { ...groupCard, id: 'sample-group-note', lookingFor: s('lookingFor') };
     const groupCardBare = { ...groupCard, id: 'sample-group-bare', tagline: null };
     const nextMeeting = inDays(3, 10);
-    const cardEvent: CardActivity = { kind: 'event', at: nextMeeting, until: null, title: 'Skriešanas rīts' };
-    const cardAnnouncement: CardActivity = { kind: 'announcement', at: ago(5 * HOUR), title: s('announcementTitle') };
+    const cardEvent: CardActivity = { event: { at: nextMeeting, until: null, title: 'Skriešanas rīts' }, moreEvents: 2, announcement: { at: ago(5 * HOUR), title: s('announcementTitle') } };
+    const cardAnnouncement: CardActivity = { moreEvents: 0, announcement: { at: ago(5 * HOUR), title: s('announcementTitle') } };
 
     const group: GroupContext = {
         id: 'sample-group',

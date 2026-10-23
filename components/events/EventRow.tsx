@@ -73,7 +73,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
             )}
             {showGroup && (
                 <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} scroll={false} replace={replace} data-opens-panel={replace ? undefined : true} className="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} replace={replace} className="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>

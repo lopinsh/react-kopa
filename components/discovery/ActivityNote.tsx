@@ -14,20 +14,21 @@ export default function ActivityNote({ activity, lookingFor }: { activity?: Card
     const zone = useTimeZone() ?? DEFAULT_TIME_ZONE;
     const formatter = useDateFormatter();
 
-    if (activity?.kind === 'event') {
-        const running = !!activity.until;
-        const when = meetingLine(activity, formatter, zone, { next: (date) => date, running: (until) => t('noteRunning', { until }) });
+    const ev = activity?.event;
+    if (ev) {
+        const running = !!ev.until;
+        const when = meetingLine(ev, formatter, zone, { next: (date) => date, running: (until) => t('noteRunning', { until }) });
         return (
             <p className="flex min-w-0 items-center gap-1.5">
                 {running
                     ? <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-primary motion-safe:animate-pulse" />
                     : <CalendarDays aria-hidden="true" className="size-3.5 shrink-0 text-foreground-muted" />}
-                <span className="min-w-0 truncate">{activity.title}</span>
+                <span className="min-w-0 truncate">{ev.title}</span>
                 <span className="shrink-0">· {when}</span>
             </p>
         );
     }
-    const text = activity?.kind === 'announcement' ? t('latestAnnouncement', { title: activity.title }) : lookingFor;
+    const text = activity?.announcement ? t('latestAnnouncement', { title: activity.announcement.title }) : lookingFor;
     if (!text) return null;
     return (
         <p className="flex min-w-0 items-center gap-1.5">

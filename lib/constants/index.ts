@@ -29,14 +29,12 @@ export const DISCOVERY_EVENTS_MAX_LIMIT = 200;
 export const DISCOVERY_DAY_RANGE_MAX = 62;
 /** Months ahead (after this one) the discovery calendar offers. */
 export const DISCOVERY_CALENDAR_MONTHS_AHEAD = 12;
-/** Longest group tagline (first words of the public home section), characters. */
-export const GROUP_TAGLINE_MAX = 160;
+/** Longest card description (first words of the public home section), characters; room for the 7 hover lines of a card (R21-G). */
+export const GROUP_TAGLINE_MAX = 320;
 /** Longest event excerpt on a row, characters. */
 export const EVENT_EXCERPT_MAX = 140;
 /** Longest text in a group or event panel, characters. */
 export const PANEL_TEXT_MAX = 400;
-/** Upcoming public events listed in the group panel. */
-export const PANEL_EVENTS_MAX = 3;
 /** Most faces the "who is going" line shows. */
 export const FACES_MAX = 3;
 /** id of a panel's title element (only one panel exists at a time): focus goes there when the content changes. */
@@ -248,7 +246,6 @@ export const UI = {
     notificationFeed: 'notification-feed',
     ownBarPhone: 'own-bar-phone',
     panel: 'panel',
-    groupPanel: 'group-panel',
     eventPanel: 'event-panel',
     eventPage: 'event-page',
     eventOrganiser: 'event-organiser',

@@ -31,6 +31,7 @@ export const GROUP_CARD_SELECT = (lang: string) => ({
     slug: true,
     city: true,
     lookingFor: true,
+    isAcceptingMembers: true,
     description: true,
     bannerImage: true,
     createdAt: true,
@@ -45,6 +46,7 @@ export interface GroupCardSource {
     slug: string;
     city: string;
     lookingFor: string | null;
+    isAcceptingMembers: boolean;
     /** Read only for old groups without section rows (the tagline's fallback). */
     description: string | null;
     bannerImage: string | null;
@@ -67,7 +69,7 @@ export function subCategorySlugs(tags: CardTag[]): string[] {
 }
 
 /**
- * The card's short idea of the group: the first words of the PUBLIC home section in the viewer's language (the written language
+ * The card's description: the first words of the PUBLIC home section in the viewer's language (the written language
  * when there is no translation), plain text. A members-only home section gives none; `description` only when the group has no sections.
  */
 function taglineOf(group: GroupCardSource, lang: string): { tagline: string | null; taglineLang: TextLang } {
@@ -89,6 +91,7 @@ export function toGroupCard(group: GroupCardSource, lang: string) {
         slug: group.slug,
         city: group.city,
         lookingFor: group.lookingFor,
+        isAcceptingMembers: group.isAcceptingMembers,
         ...taglineOf(group, lang),
         bannerImage: group.bannerImage,
         memberCount: group._count.members,

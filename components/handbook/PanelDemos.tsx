@@ -1,25 +1,15 @@
-import GroupPanel from '@/components/panels/GroupPanel';
 import EventPanel from '@/components/panels/EventPanel';
 import JoinStep from '@/components/events/JoinStep';
-import type { GroupCardData } from '@/lib/services/group-card';
 import type { EventRowData } from '@/lib/services/event-row';
 import type { EventJoinView, EventPanelData, Face } from '@/lib/services/event-panel';
-import type { GroupPanelData } from '@/lib/services/group-panel';
 
 /** The computer overlay (560 px) and the phone sheet (360 px). */
 const FRAME = 'w-full max-w-sm overflow-hidden rounded-2xl line bg-surface shadow-premium';
 const FRAME_WIDE = 'w-full max-w-focus overflow-hidden rounded-2xl line bg-surface shadow-premium';
 const JOIN: EventJoinView = { eventId: 'sample', mode: 'OPEN', isFull: false, ended: false, myStatus: null, canManage: false };
 
-/** The group panel and the event panel as bodies in a 360 px column (the real Overlay is not used), plus the four join steps side by side. */
-export default async function PanelDemos({ group, row, text }: { group: GroupCardData; row: EventRowData; text: string }) {
-    const groupData = (image: string | null): GroupPanelData => ({
-        id: group.id, name: group.name, slug: group.slug, l1Slug: group.category.l1Slug,
-        category: { l1Title: group.category.l1Title, color: group.category.color, subCategories: group.subCategories, subCategorySlugs: group.subCategorySlugs },
-        city: group.city, lookingFor: group.lookingFor, memberCount: group.memberCount, image, text, tagline: group.tagline, events: [row],
-        textLang: 'lv', nextMeeting: { slug: row.slug, title: row.title, titleLang: row.titleLang, startDate: row.startDate, endDate: row.endDate, running: false },
-        viewer: { canContact: true, isAcceptingMembers: true },
-    });
+/** The event panel as bodies in a 360 px column (the real Overlay is not used), plus the four join steps side by side. */
+export default async function PanelDemos({ row, text }: { row: EventRowData; text: string }) {
     const faces: Face[] = ['anna', 'janis', 'marta'].map((seed) => ({ id: seed, name: seed, image: `https://api.dicebear.com/10.x/clay/svg?seed=${seed}` }));
     const eventData = (people: Face[] | null, image: string | null): EventPanelData => ({
         id: row.id, slug: row.slug, title: row.title, titleLang: row.titleLang, text, textLang: 'lv',
@@ -31,8 +21,6 @@ export default async function PanelDemos({ group, row, text }: { group: GroupCar
     return (
         <div className="grid gap-6">
             <div className="flex flex-wrap items-start gap-4">
-                <div className={FRAME_WIDE}><GroupPanel data={groupData('https://picsum.photos/seed/panel/800/400')} /></div>
-                <div className={FRAME}><GroupPanel data={groupData(null)} /></div>
                 <div className={FRAME_WIDE}><EventPanel event={eventData(faces, 'https://picsum.photos/seed/panel2/800/400')} l1Slug={row.category.l1Slug} /></div>
                 <div className={FRAME}><EventPanel event={eventData(null, null)} l1Slug={row.category.l1Slug} /></div>
             </div>
