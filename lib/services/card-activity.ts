@@ -26,19 +26,15 @@ function publicAnnouncements(): Prisma.PostWhereInput {
 
 /**
  * Group id → card activity for the groups that have any: the next visible meeting, the count of further public meetings and the
- * newest public announcement. A group with none of them is left out. Three batched queries, none per group.
+ * newest public announcement. A group with none of them is left out. Batched queries (the next meetings, the announcements, one count), none per group.
  */
 export async function cardActivities(groups: Array<{ id: string }>, locale: string, viewerId?: string): Promise<Record<string, CardActivity>> {
     const ids = groups.map((g) => g.id);
     if (ids.length === 0) return {};
-    const today = startOfTodayInRiga();
-    const [next, counts, posts] = await Promise.all([
+    const now = new Date();
+    const today = startOfTodayInRiga(now);
+    const [next, posts] = await Promise.all([
         EventService.getNextVisibleEvents(ids, locale, viewerId),
-        prisma.event.groupBy({
-            by: ['groupId'],
-            where: { groupId: { in: ids }, visibility: 'PUBLIC', group: { type: 'PUBLIC', hiddenAt: null }, OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
-            _count: { _all: true },
-        }),
         prisma.post.findMany({
             where: { AND: [{ groupId: { in: ids } }, publicAnnouncements()] },
             orderBy: { createdAt: 'desc' },
@@ -46,12 +42,29 @@ export async function cardActivities(groups: Array<{ id: string }>, locale: stri
             select: { groupId: true, title: true, content: true, createdAt: true },
         }),
     ]);
+    // "+N pasākumi": the group's other public meetings that have not ended (the same window as the shown one), never the shown one itself,
+    // which may be members-only for a member. One grouped count for all cards.
+    const withEvent = [...next.keys()];
+    const counts = withEvent.length === 0 ? [] : await prisma.event.groupBy({
+        by: ['groupId'],
+        where: {
+            groupId: { in: withEvent },
+            id: { notIn: [...next.values()].map((e) => e.id) },
+            visibility: 'PUBLIC',
+            group: { type: 'PUBLIC', hiddenAt: null },
+            AND: [
+                { OR: [{ endDate: null }, { endDate: { gt: now } }] },
+                { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
+            ],
+        },
+        _count: { _all: true },
+    });
     const result: Record<string, CardActivity> = {};
     const get = (id: string): CardActivity => (result[id] ??= { moreEvents: 0 });
     for (const [id, e] of next) get(id).event = { at: e.startDate, until: e.running ? e.endDate : null, title: e.title };
     for (const c of counts) {
         const entry = result[c.groupId];
-        if (entry?.event) entry.moreEvents = Math.max(0, c._count._all - 1);
+        if (entry?.event) entry.moreEvents = c._count._all;
     }
     for (const p of posts) get(p.groupId).announcement = { at: p.createdAt, title: p.title ?? legacyTitle(p.content).title };
     return result;

@@ -332,7 +332,6 @@
     "suggestSend": "Suggest",
     "suggestSent": "Suggestion sent",
     "showMore": "Show more",
-    "nextMeeting": "Next meeting: {date}",
     "noteRunning": "now, until {until}",
     "metaDescription": "Find people to do sports, play, sing and do other things with in your town.",
     "dateLabel": "Date",
@@ -358,10 +357,6 @@
     "noEventsInPeriod": "No events at this time",
     "eventsCut": "Showing the first {count}. Pick a shorter time or a place.",
     "latestAnnouncement": "News: {title}",
-    "panel": {
-      "openPage": "Open the group's page",
-      "groupGone": "This group is no longer available."
-    },
     "search": {
       "label": "Search",
       "back": "Back",

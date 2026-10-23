@@ -15,6 +15,6 @@ export default async function EventPanelPage({ params }: Props) {
     if (wantsFullPage((await headers()).get('next-url'), { locale, l1Slug, groupSlug, eventSlug })) return <FullPageInstead />;
     const session = await auth();
     const result = await EventService.getEventPanel(eventSlug, groupSlug, l1Slug, locale, session?.user?.id);
-    if (!result) return <PanelGone kind="event" />;
+    if (!result) return <PanelGone />;
     return result.kind === 'event' ? <EventPanel event={result.event} l1Slug={l1Slug} /> : <EventGatePanel group={result.group} />;
 }

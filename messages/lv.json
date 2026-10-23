@@ -332,7 +332,6 @@
     "suggestSend": "Ieteikt",
     "suggestSent": "Ieteikums nosūtīts",
     "showMore": "Rādīt vēl",
-    "nextMeeting": "Nākamā tikšanās: {date}",
     "noteRunning": "tagad, līdz {until}",
     "metaDescription": "Atrodi cilvēkus, ar ko kopā sportot, spēlēt, dziedāt un darīt citas lietas savā pilsētā.",
     "dateLabel": "Datums",
@@ -358,10 +357,6 @@
     "noEventsInPeriod": "Šajā laikā pasākumu nav",
     "eventsCut": "Rādīti pirmie {count}. Izvēlies īsāku laiku vai vietu.",
     "latestAnnouncement": "Jaunums: {title}",
-    "panel": {
-      "openPage": "Atvērt grupas lapu",
-      "groupGone": "Šī grupa vairs nav pieejama."
-    },
     "search": {
       "label": "Meklēšana",
       "back": "Atpakaļ",

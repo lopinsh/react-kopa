@@ -52,7 +52,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     return (
         <div
             data-ui={UI.groupRow}
-                        style={{ ['--c' as string]: group.category.color }}
+            style={{ ['--c' as string]: group.category.color }}
             className="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0 has-[a[data-row-link]:focus-visible]:outline has-[a[data-row-link]:focus-visible]:outline-2 has-[a[data-row-link]:focus-visible]:outline-primary"
         >
             {/* ui-allow: the 56 px thumb, a rounded picture or the category tile */}

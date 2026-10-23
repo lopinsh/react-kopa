@@ -25,7 +25,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **B Board rows (R21-B, spec R21.md):** event row leads with the event name ("Notiek tagad" a small badge), titles up to 2 lines on phone, one status marker (badge, not badge + icon).
 - [x] **D + E Wizard and admin (R21-DE, spec R21.md):** wizard Basics first, Tēma second; terms sweep ("Kategorizēšana"/"kategorija" → Tēma); admin build-plan page cleared (ledger file kept), Design + Pārveide merged into one design handbook page. Reviewed, pushed, live.
 - [x] **F + H Group page and board switch (R21-FH, spec R21.md):** tagline in the banner, no phone "Informācija" heading, phone sticky ☰ bar, board view switch with accent underline. Reviewed, pushed, live.
-- [x] **G Group card (R21-G, spec R21.md, drawing `docs/development/r21-group-card.html`):** built 23 Oct, no group slide-over, event pop-ups stay; visual baselines `board-groups`, `search`, `profile` to regenerate in Docker, `group-slide-over` removed.
+- [x] **G Group card (R21-G, spec R21.md, drawing `docs/development/r21-group-card.html`):** built 23 Oct, no group slide-over, event pop-ups stay; visual baselines `board-groups`, `search`, `profile` to regenerate in Docker, `group-slide-over` removed (and its PNGs). Reviewed, pushed, live.
 - [ ] **C Es / Jaunumi:** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
 
 ## Standing owner rules
