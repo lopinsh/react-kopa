@@ -298,7 +298,7 @@
     "topic": "Topic",
     "everywhere": "Everywhere",
     "placeLabel": "Place: {places}",
-    "topicLabel": "Topic: {category}",
+    "topicLabel": "Topic: {topic}",
     "clearChoice": "Clear: {what}",
     "searchWord": "“{word}”",
     "searchWordLabel": "Search word: {word}",
