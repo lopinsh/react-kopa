@@ -81,6 +81,7 @@ export function themeTypeRules(type: ThemeType | undefined, headingFont: ThemeFo
         if (r.id === 'human-note' && o.weight !== undefined) decls.push(`font-weight:${snapWeight(o.font === 'heading' ? headingFont : bodyFont, o.weight)}`);
         if (decls.length) rules.push(`.${r.utility}{${decls.join(';')}}`);
     }
-    if (type.tagCase === 'upper') rules.push('.text-tag{text-transform:uppercase}');
+    // An explicit case utility on the element (FallbackLangLabel's normal-case) still wins: this rule is unlayered, so it would beat any utility.
+    if (type.tagCase === 'upper') rules.push('.text-tag:not(.normal-case,.lowercase,.capitalize){text-transform:uppercase}');
     return rules.join('\n');
 }
