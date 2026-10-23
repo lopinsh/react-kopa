@@ -73,10 +73,14 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
                         {hasTag && role && <span className="absolute right-2 top-2 transition-[top] motion-reduce:transition-none live:top-1"><RoleTag role={role} showMember={showMember} bright /></span>}
                     </div>
                 ) : (
-                    // No picture: the Tēma-colour area with the diamond pattern and the Tēma icon centred and large; on hover it shrinks and slides to the left of the strip (the edge pill names the Tēma).
+                    // No picture: the Tēma-colour area with the diamond pattern and the Tēma icon centred and large; on hover it fades into a small icon at the
+                    // strip's right, left of the status tag (the left of the strip belongs to the edge pills).
                     <div className={`${area} band-tint glyph-pattern`}>
-                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 origin-left transition-[left,translate,scale] duration-slow ease-standard motion-reduce:transition-none live:left-[var(--card-pad)] live:translate-x-0 live:scale-[0.4]"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={44} /></span>
-                        {hasTag && role && <span className="absolute right-2 top-2 transition-[top] motion-reduce:transition-none live:top-1"><RoleTag role={role} showMember={showMember} bright /></span>}
+                        <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[scale,opacity] duration-slow ease-standard motion-reduce:transition-none live:scale-[0.4] live:opacity-0"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={44} /></span>
+                        <span className="absolute right-2 top-2 flex items-center gap-1.5 transition-[top] motion-reduce:transition-none live:top-1">
+                            <span className="opacity-0 transition-opacity duration-slow ease-standard motion-reduce:transition-none live:opacity-100"><CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={18} /></span>
+                            {hasTag && role && <RoleTag role={role} showMember={showMember} bright />}
+                        </span>
                     </div>
                 )}
                 <div className="absolute inset-x-4 -bottom-3 z-[2] flex min-w-0 gap-1.5">
