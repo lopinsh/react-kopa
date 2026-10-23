@@ -23,7 +23,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **R21-0 Screenshot baseline** (`tests/visual/`, `npm run test:visual`, CI job `visual`, rule in AGENTS.md "Visual baseline"): Playwright `toHaveScreenshot` of the key screens at 360/768/1280/1920, light + dark, `lv`, seeded DB, frozen clock. Every later release lists the screens it means to change; any other diff blocks it.
 - [x] **A Phone pass (R21-A, spec R21.md):** footer gap, header search shape, group and event slide-over, Tēma and date chip drop-downs, Ziņas layout (fix as a class, handbook rule).
 - [x] **B Board rows (R21-B, spec R21.md):** event row leads with the event name ("Notiek tagad" a small badge), titles up to 2 lines on phone, one status marker (badge, not badge + icon).
-- [ ] **D + E Wizard and admin:** wizard Basics first, Tēma second; terms sweep ("Kategorizēšana"/"kategorija" → Tēma); admin build-plan page cleared (ledger file kept), Design + Pārveide merged into one design handbook page.
+- [x] **D + E Wizard and admin (R21-DE, spec R21.md):** wizard Basics first, Tēma second; terms sweep ("Kategorizēšana"/"kategorija" → Tēma); admin build-plan page cleared (ledger file kept), Design + Pārveide merged into one design handbook page.
 - [ ] **C Es / Jaunumi:** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
 
 ## Standing owner rules

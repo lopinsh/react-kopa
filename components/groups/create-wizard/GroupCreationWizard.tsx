@@ -126,8 +126,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['categoryId', 'tagIds', 'city']); // Taxonomy + City
-        if (s === 1) return trigger(['name', 'lookingFor', ...TEXT_LANGS.map((l) => `about.${l}` as const), 'bannerImage']); // Basic Info
+        if (s === 0) return trigger(['name', 'lookingFor', ...TEXT_LANGS.map((l) => `about.${l}` as const), 'bannerImage', 'city']); // Basics + place
+        if (s === 1) return trigger(['categoryId', 'tagIds']); // Tēma
         if (s === 2) return trigger(['type']); // Access
         return true;
     }
@@ -139,7 +139,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
     async function nextStep() {
         const valid = await validateStep(step);
         if (valid) setStep((s) => Math.min(s + 1, LAST_STEP) as StepIndex);
-        else if (step === 1) showAboutProblem();
+        else if (step === 0) showAboutProblem();
     }
 
     /** A problem in a "Par mums" language that is not on screen is shown (the original first). */
@@ -222,7 +222,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                     </div>
 
                     <div className="flex-1">
-                        {step === 0 && (
+                        {step === 0 && <BasicInfoStep lang={aboutLang} onLangChange={setAboutLang} />}
+                        {step === 1 && (
                             <TaxonomyStep
                                 taxonomy={taxonomy}
                                 taxSelection={taxSelection}
@@ -230,7 +231,6 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 tagsCleared={tagsCleared}
                             />
                         )}
-                        {step === 1 && <BasicInfoStep lang={aboutLang} onLangChange={setAboutLang} />}
                         {step === 2 && <AccessStep />}
 
                         {serverError && (

@@ -1,6 +1,6 @@
 # Design
 
-UI work follows this chapter. A new screen picks one of the page layouts and uses the components below; it does not invent its own. The drawings are on the [redesign page](/admin/development/redesign); a rule id like `AR-06` points to its entry there. The real components are on [UI elements](/admin/handbook/ui-elements).
+UI work follows this chapter. A new screen picks one of the page layouts and uses the components below; it does not invent its own. The approved drawings are the last section of this page ([drawings](#drawings)). The real components are on [UI elements](/admin/handbook/ui-elements).
 
 ## Page layouts
 
@@ -97,7 +97,7 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 
 **Colour means category (AR-06).** A category tone appears only on dots, category icons, soft tints (up to 15 %; the group card's tab is one, 12 % in light and 16 % in dark; the exception is the group card's no-photo band, 24 % in light and 30 % in dark, solid in Drosmīgs), the group banner and the picture fallback. The banner is a tone area (a 12 % tint in Mierīgs, solid in Drosmīgs); its text takes the area's ink (`tile-ink`, `tile-ink-muted`, from `--tile-on`), at least 4.5:1 on every tone, look and mode. Every button, link, active tab, toggle, checkbox, focus ring and selected chip uses the site colour. Filled colours carry their own text colour (`text-primary-foreground`, `--on-cat`), never `text-white`, because the dark site colour is light.
 
-**The 15 category tones (AR-05)** each have a light and a dark value; they are listed with names on the [redesign page](/admin/development/redesign#h-id) and shown on UI elements. Category tones are part of the site theme, per mode. Site admins change the site colours, the tones and the fonts in Admin → Dizains (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti; one shared sample beside the parts): a preview for yourself first, then publish. The editor checks the contrast floor below as you pick and will not save a colour under it.
+**The 15 category tones (AR-05)** each have a light and a dark value; they are listed with names on the [approved drawings](#drawings) and shown on UI elements. Category tones are part of the site theme, per mode. Site admins change the site colours, the tones and the fonts in Admin → Dizains (Noskaņojumi, Krāsas, Kategoriju krāsas, Forma, Fonti; one shared sample beside the parts): a preview for yourself first, then publish. The editor checks the contrast floor below as you pick and will not save a colour under it.
 
 **Contrast floor.** Text is AA (4.5:1) on every surface in both modes. A tone is at least 4.5:1 with white (light) and 7:1 with near-black (dark). The line colour is a divider, never the only sign of a control.
 

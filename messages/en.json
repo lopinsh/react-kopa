@@ -50,7 +50,7 @@
     "accept": "Understood",
     "add": "Add alias",
     "addAlias": "Add",
-    "addSubcategory": "Add Subcategory",
+    "addSubcategory": "Add Type",
     "added": "Alias added.",
     "aliases": "Aliases",
     "all": "All",
@@ -84,7 +84,7 @@
     "confirm_3": "Confirm Merge",
     "copyLink": "Copy Link",
     "createGroup": "Create group",
-    "createSubcategory": "Create Subcategory",
+    "createSubcategory": "Create Type",
     "decline": "Decline",
     "delete": "Delete",
     "deleteContent": "Delete Content",
@@ -126,7 +126,7 @@
     "inquirySentDesc": "The group moderators have received your inquiry.",
     "joinGroup": "Ask to join",
     "kick": "Remove",
-    "l1Title": "Category Details",
+    "l1Title": "Topic Details",
     "l2Title": "Tag Details",
     "languageLabel": "Language",
     "learnMore": "Privacy Policy",
@@ -185,12 +185,12 @@
     "saveChanges": "Save Changes",
     "saveSection": "Save Section",
     "saved": "Saved",
-    "saved_1": "Category saved.",
+    "saved_1": "Topic saved.",
     "saved_2": "Group tags updated.",
     "saving": "Saving...",
     "search": "Search",
     "selectCanonical": "Select Primary Tag",
-    "selectCategoryPlaceholder": "Select an active category...",
+    "selectCategoryPlaceholder": "Select an active topic...",
     "selected": "selected",
     "selectedCanonicalLabel": "Selected canonical:",
     "sendApplication": "Send Application",
@@ -201,7 +201,7 @@
     "social_discord": "Discord",
     "social_instagram": "Instagram",
     "social_website": "Website",
-    "subcategoryCreated": "Subcategory created successfully",
+    "subcategoryCreated": "Type created successfully",
     "submit": "Set username",
     "submittedBy": "Submitted by",
     "submitting": "Saving...",
@@ -209,7 +209,7 @@
     "success": "Success",
     "support": "Support",
     "suspendGroup": "Suspend Group",
-    "tabCategorization": "Category",
+    "tabCategorization": "Topic",
     "tabDanger": "Danger Zone",
     "tabDangerDescription": "These actions can't be undone.",
     "tabPrivacy": "Privacy & Access",
@@ -288,7 +288,7 @@
     "groupsPageTitle": "Groups",
     "eventsPageTitle": "Events",
     "inCity": "in",
-    "inThisCategory": "in this category",
+    "inThisCategory": "in this topic",
     "cardOpen": "View",
     "memberCount": "{count, plural, one {# member} other {# members}}",
     "seatOpen": "A seat for you",
@@ -298,7 +298,7 @@
     "topic": "Topic",
     "everywhere": "Everywhere",
     "placeLabel": "Place: {places}",
-    "topicLabel": "Topic: {topic}",
+    "topicLabel": "Topic: {category}",
     "clearChoice": "Clear: {what}",
     "searchWord": "“{word}”",
     "searchWordLabel": "Search word: {word}",
@@ -313,7 +313,7 @@
     "searchVeids": "Search for a type",
     "nothingFound": "Nothing found.",
     "placeHint": "You can suggest a new place when you create a group; the admins approve it.",
-    "categories": "Categories",
+    "categories": "Topics",
     "allCategories": "All",
     "topicIndex": {
       "heading": "Topics",
@@ -324,7 +324,7 @@
       "fold": "Collapse topics",
       "unfold": "Expand topics"
     },
-    "suggestTitle": "Suggest a new category",
+    "suggestTitle": "Suggest a new topic",
     "suggestText": "The admins will look at it. Choose the topic it belongs to.",
     "suggestName": "Name",
     "suggestPickTopic": "Choose a topic.",
@@ -424,7 +424,7 @@
   "errors": {
     "ACTION_FAILED": "The action could not be completed.",
     "ALIAS_CONFLICT": "This alias already exists for the selected locale.",
-    "CATEGORY_IN_USE": "This category is in use and cannot be removed.",
+    "CATEGORY_IN_USE": "This topic is in use and cannot be removed.",
     "DB_MIGRATION_REQUIRED": "A database schema update is required to support this feature. Please contact the administrator.",
     "CONTRAST_TOO_LOW": "Some colours are too low in contrast to read. Check them in Design.",
     "CREATE_FAILED": "Failed to create resource.",
@@ -443,7 +443,7 @@
     "POST_FAILED": "Failed to save the announcement.",
     "NOT_FOUND": "The requested resource was not found.",
     "TAG_NOT_FOUND": "Tag was not found.",
-    "TAG_CATEGORY_MISMATCH": "Sub-topics must belong to the group's main category.",
+    "TAG_CATEGORY_MISMATCH": "Sub-topics must belong to the group's main topic.",
     "TAG_LIMIT_REACHED": "A group can have at most {max, plural, one {# sub-topic} other {# sub-topics}}.",
     "UNAUTHORIZED": "Unauthorized access. Please log in.",
     "UPDATE_FAILED": "Failed to update resource.",
@@ -553,7 +553,7 @@
     },
     "sendMessage": "Send Message",
     "specialInstructions": "Special Instructions",
-    "tabCategorizationDescription": "People find the group by its category and topics.",
+    "tabCategorizationDescription": "People find the group by its topic and type.",
     "tabProfileDescription": "Name, city, image and whether the group takes new members.",
     "nav": {
       "discover": "Discover",
@@ -608,9 +608,9 @@
         "unknown": "Unknown",
         "submittedBy": "Submitted by {name} on {date}",
         "writtenIn": "Written in {lang} - fill in the other language to approve",
-        "parentLabel": "Suggested Category: {title}",
+        "parentLabel": "Suggested Topic: {title}",
         "mergeCanonicalTitle": "Merge into Active Canonical Tag",
-        "selectCategoryPlaceholder": "Select an active category...",
+        "selectCategoryPlaceholder": "Select an active topic...",
         "selectedCanonicalLabel": "Selected canonical:",
         "mergeAndNotify": "Merge and notify group owners",
         "usedByGroups": "Used by groups:",
@@ -626,31 +626,31 @@
         "nameLv": "Name LV",
         "slugEn": "Slug EN",
         "slugLv": "Slug LV",
-        "colorInDesign": "A main category's colour for the light and dark theme is set in Design.",
-        "colorInDesignLink": "Open category colours"
+        "colorInDesign": "A main topic's colour for the light and dark theme is set in Design.",
+        "colorInDesignLink": "Open topic colours"
       },
       "bulk": {
-        "confirmDelete": "Are you sure you want to delete the selected categories? This will permanently remove them from all groups.",
+        "confirmDelete": "Are you sure you want to delete the selected topics? This will permanently remove them from all groups.",
         "selected": "selected",
         "clearSelection": "Clear selection",
         "mergeRequiresTwo": "Select at least 2 tags to merge",
-        "deleteTitle": "Delete categories?",
+        "deleteTitle": "Delete topics?",
         "deleteConfirm": "Delete"
       },
       "slideover": {
         "addAlias": "Add alias",
-        "addSubcategory": "Add subcategory",
-        "aliasHelper": "Alternative names people may search for. Searching an alias finds this category.",
+        "addSubcategory": "Add type",
+        "aliasHelper": "Alternative names people may search for. Searching an alias finds this topic.",
         "aliases": "Aliases",
-        "createSubcategory": "Create subcategory",
+        "createSubcategory": "Create type",
         "details": "Details",
-        "l1Title": "Category",
-        "l2Title": "Subcategory",
-        "noSubcategories": "No subcategories found.",
+        "l1Title": "Topic",
+        "l2Title": "Type",
+        "noSubcategories": "No types found.",
         "pendingTitle": "Pending Tag Details",
         "save": "Save",
-        "subcategories": "Subcategories ({count})",
-        "subcategoryCreated": "Subcategory created",
+        "subcategories": "Types ({count})",
+        "subcategoryCreated": "Type created",
         "unsavedChanges": "Unsaved changes"
       },
       "node": {
@@ -661,8 +661,8 @@
         "group": "{count} {count, plural, one {group} other {groups}}"
       },
       "override": {
-        "saved": "Categories updated",
-        "title": "Edit categories for group"
+        "saved": "Topics updated",
+        "title": "Edit topics for group"
       },
       "aliases": {
         "added": "Alias added",
@@ -730,27 +730,25 @@
     },
     "nav": {
       "reports": "Reports",
-      "categories": "Categories",
+      "categories": "Topics",
       "locations": "Locations",
       "translations": "Translations",
       "feedback": "Feedback",
       "handbook": "Handbook",
-      "redesign": "Design book",
       "buildPlan": "Build plan",
       "design": "Design",
       "team": "Team",
       "menu": "Admin",
       "desc": {
         "reports": "Reports from members to review",
-        "categories": "Categories, subcategories and new tags to review",
+        "categories": "Topics, types and new tags to review",
         "locations": "Cities and new cities to review",
         "translations": "Edit and approve site texts",
         "design": "Colors and look of the site",
-        "handbook": "Values, voice and design rules",
+        "handbook": "Values, voice, design rules and approved drawings",
         "team": "Site admins and owner",
         "feedback": "Notes left by the site admins",
-        "redesign": "The approved drawings: message board, topic index, board heading",
-        "buildPlan": "Implementation plan for the redesign releases",
+        "buildPlan": "The plan for the next release",
         "overview": "Hidden groups and content taken down"
       },
       "sections": {
@@ -771,15 +769,15 @@
         "looks": "Looks",
         "colours": "Colours",
         "style": "Shape",
-        "categories": "Category colours",
+        "categories": "Topic colours",
         "fonts": "Fonts"
       }
     },
     "development": {
-      "bookTitle": "Design book",
+      "bookTitle": "Approved drawings",
       "drawings": { "r18": "Message board", "r19": "Topic index", "r20": "Board heading" },
-      "buildPlanMissing": "The build plan has not been written yet.",
-      "buildPlanNote": "Internal document, English only. Source: docs/development/build-plan.md in the repository."
+      "buildPlanEmptyTitle": "No plan in progress",
+      "buildPlanEmptyHint": "The next release plan will appear here once it is written."
     },
     "handbook": {
       "chapters": "Chapters",
@@ -806,7 +804,7 @@
         "logoDesktop": "Desktop",
         "logoPhone": "Phone",
         "logoIconOnly": "Circles only",
-        "tonesTitle": "Category tones",
+        "tonesTitle": "Topic tones",
         "typeRoles": {
           "pageTitle": "Page title",
           "section": "Section",
@@ -862,7 +860,7 @@
           "type": "Type",
           "colours": "Colours",
           "tags": "Small tags",
-          "categoryLine": "Category line",
+          "categoryLine": "Topic line",
           "chips": "Chips",
           "styles": "Styles",
           "fields": "Form fields",
@@ -1003,7 +1001,7 @@
     },
     "design": {
       "title": "Design",
-      "subtitle": "The site's colours, category colours and fonts. Preview them yourself first, then publish for everyone.",
+      "subtitle": "The site's colours, topic colours and fonts. Preview them yourself first, then publish for everyone.",
       "previewActive": "You have a saved preview. Only you see it until you publish or discard it.",
       "presetsTitle": "Ready-made themes",
       "presets": {
@@ -1064,25 +1062,25 @@
         "looks": "Looks",
         "colours": "Colours",
         "style": "Shape",
-        "categories": "Category colours",
+        "categories": "Topic colours",
         "fonts": "Fonts"
       },
       "looks": {
         "shape": "Shape: {shape}",
         "fonts": "{heading} + {body}",
-        "lead": "A look is a ready-made set: colours, category tones, shape and fonts. Pick one, then fine-tune it under the other parts.",
-        "tones": "Category tones"
+        "lead": "A look is a ready-made set: colours, topic tones, shape and fonts. Pick one, then fine-tune it under the other parts.",
+        "tones": "Topic tones"
       },
       "colours": {
         "lead": "The site colour and the background, lines and quiet text that go with it, for the light and the dark theme."
       },
       "categories": {
-        "lead": "Each category has two tones, one for the light theme and one for the dark. The check shows as soon as you pick a colour."
+        "lead": "Each topic has two tones, one for the light theme and one for the dark. The check shows as soon as you pick a colour."
       },
       "fonts": {
         "lead": "Fonts for headings and text. The list only has fonts with every Latvian letter."
       },
-      "presetResetsTones": "Each look has its own category colours; choosing one replaces the current ones.",
+      "presetResetsTones": "Each look has its own topic colours; choosing one replaces the current ones.",
       "tones": {
         "swatchLight": "Light",
         "swatchDark": "Dark",
@@ -1125,8 +1123,8 @@
         "blocked": "Some colours fail the contrast check, so this can't be saved yet. See:",
         "partHasIssues": "(contrast too low)"
       },
-      "resetTonesTitle": "This theme will reset the category colours",
-      "resetTonesMessage": "You have changed some category colours. Choosing this look replaces them with its own. Continue?",
+      "resetTonesTitle": "This theme will reset the topic colours",
+      "resetTonesMessage": "You have changed some topic colours. Choosing this look replaces them with its own. Continue?",
       "resetTonesConfirm": "Choose theme",
       "styleTitle": "Shapes and lines",
       "styleNote": "The style changes corners, lines and shadows. Colours stay as chosen under Colours.",
@@ -1239,7 +1237,7 @@
       "ADMIN_GRANTED": "The site owner made you an admin",
       "ADMIN_REVOKED": "You are no longer a site admin",
       "ADMIN_REPORT": "New report",
-      "ADMIN_TAG_PENDING": "New sub-category suggested",
+      "ADMIN_TAG_PENDING": "New type suggested",
       "ADMIN_SUGGESTION": "New translation suggestion",
       "ADMIN_FEEDBACK": "New feedback note",
       "ADMIN_GROUP_HIDDEN": "A group was hidden",
@@ -1391,7 +1389,7 @@
     "CITY_REQUIRED": "Please select a city.",
     "INVALID_URL": "Please enter a valid URL (starting with https://).",
     "DESCRIPTION_TOO_LONG": "Description is too long.",
-    "CATEGORY_REQUIRED": "Please select a category.",
+    "CATEGORY_REQUIRED": "Please select a topic.",
     "NAME_TOO_LONG": "Name cannot exceed 80 characters.",
     "NAME_TOO_SHORT": "Name must be at least 3 characters long.",
     "TOPIC_REQUIRED": "Please select at least one sub-topic.",
@@ -1400,8 +1398,8 @@
     "addSubtopic": "Add a sub-topic",
     "back": "Back",
     "cancel": "Cancel",
-    "browseCategories": "Browse Categories",
-    "clickToChange": "Click to change category",
+    "browseCategories": "Browse Topics",
+    "clickToChange": "Change",
     "confirmCreateSubtopic": "Create the sub-topic \"{name}\" under {category}? It will wait for approval.",
     "createSubtopic": "Create sub-topic",
     "done": "Done",
@@ -1416,6 +1414,7 @@
     "fieldInstructionsPlaceholder": "Member-only instructions (e.g. meeting point details)...",
     "fieldName": "Group Name",
     "fieldNamePlaceholder": "e.g. Riga Runners",
+    "fieldTopic": "Topic",
     "nameOfSubtopicPlaceholder": "Name of sub-topic...",
     "next": "Next",
     "noMatch": "No matches found for",
@@ -1423,15 +1422,15 @@
     "optional": "Optional",
     "pendingReview": "Pending Review",
     "awaitingApproval": "awaiting approval",
-    "tagsClearedOnCategoryChange": "You changed the main category, so the sub-topics you had chosen were removed. Pick sub-topics from the new category.",
-    "pickerPlaceholder": "Search categories or interests...",
+    "tagsClearedOnCategoryChange": "You changed the main topic, so the sub-topics you had chosen were removed. Pick sub-topics from the new topic.",
+    "pickerPlaceholder": "Search topics or interests...",
     "proposeAsNewSubtopic": "Propose as a new sub-topic",
     "searchTopicsPlaceholder": "Search topics in {category}...",
     "tagLimitHint": "You can choose up to {max, plural, one {# sub-topic} other {# sub-topics}}.",
-    "step1Desc": "Choose how your group will be categorized.",
-    "step1Title": "Categorization",
-    "step2Desc": "Tell us about your group's name and mission.",
-    "step2Title": "Basic Info",
+    "step1Desc": "Name, description and place.",
+    "step1Title": "Basics",
+    "step2Desc": "Choose the topic people will find your group by.",
+    "step2Title": "Topic",
     "step3Desc": "Who can join your group?",
     "step3Title": "Access",
     "stepOf": "Step {current} of {total}",
@@ -1468,7 +1467,7 @@
         },
         "glance": {
           "title": "Clear at a glance",
-          "text": "Colour shows the category, and you see the city and the number of members right away."
+          "text": "Colour shows the topic, and you see the city and the number of members right away."
         },
         "calm": {
           "title": "Calm",
@@ -1661,7 +1660,7 @@
     "tabOwner": "Owner",
     "pageTitle": "Settings · {name}",
     "basicsTitle": "The basics",
-    "ownerOnlyNote": "Only the group owner can change the name, category and topics.",
+    "ownerOnlyNote": "Only the group owner can change the name, topic and types.",
     "transferTitle": "Hand the group over",
     "transferDescription": "Pick a member to become the owner. You stay on as a moderator.",
     "transferNobody": "There's nobody to hand the group to yet: the group has no other members.",
@@ -1674,7 +1673,7 @@
   },
   "adminTools": {
     "label": "Admin tools",
-    "fixCategorization": "Fix categorization",
+    "fixCategorization": "Fix topic",
     "editGroup": "Edit group",
     "moderationLog": "Moderation log for this group"
   },

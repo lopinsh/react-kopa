@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Type, Image as ImageIcon } from 'lucide-react';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
+import LocationStep from '@/components/groups/create-wizard/LocationStep';
 import AboutField from '@/components/groups/create-wizard/AboutField';
 import type { TextLang } from '@/lib/translations';
 
@@ -67,6 +68,9 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
 
             {/* Par mums: one language at a time */}
             <AboutField lang={lang} onLangChange={onLangChange} />
+
+            {/* Place */}
+            <LocationStep />
 
             {/* Banner Image */}
             <div>

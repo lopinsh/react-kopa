@@ -24,7 +24,7 @@ function resolveHref(href: string | undefined): { kind: 'internal' | 'anchor' | 
     if (href.startsWith('#')) return { kind: 'anchor', href };
     // The build plan (docs/development/) links rules on the redesign page as `redesign.html#AR-23`.
     const redesign = /^redesign\.html(#[\w-]+)?$/.exec(href);
-    if (redesign) return { kind: 'internal', href: `/admin/development/redesign${redesign[1] ?? ''}` };
+    if (redesign) return { kind: 'internal', href: '/admin/handbook/design#drawings' };
     const match = /^([A-Za-z]+)\.md(#.*)?$/.exec(href);
     if (match) {
         const [, name, hash = ''] = match;

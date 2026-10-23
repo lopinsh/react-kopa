@@ -29,7 +29,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
         return (
             <div className="space-y-4 motion-safe:animate-fade">
                 <label className="mb-2 block text-button-sm text-foreground">
-                    {t('step1Title')} <span className="text-danger">*</span>
+                    {t('fieldTopic')} <span className="text-danger">*</span>
                 </label>
                 <button
                     type="button"
@@ -63,7 +63,7 @@ export default function L1Picker({ taxonomy, value, onChange }: Props) {
     return (
         <div className="space-y-4 motion-safe:animate-pop">
             <label className="mb-2 flex items-center justify-between text-button-sm text-foreground">
-                <span>{t('step1Title')} <span className="text-danger">*</span></span>
+                <span>{t('fieldTopic')} <span className="text-danger">*</span></span>
                 {value && (
                     <button
                         type="button"

@@ -10,8 +10,7 @@ const nextConfig: NextConfig = {
   // The Handbook pages read markdown from disk at request time; the standalone trace can't see that.
   outputFileTracingIncludes: {
     '/[locale]/admin/handbook': ['./docs/handbook/**/*'],
-    '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*'],
-    '/[locale]/admin/development/redesign': ['./docs/development/**/*'],
+    '/[locale]/admin/handbook/[chapter]': ['./docs/handbook/**/*', './docs/development/*.html'],
     '/[locale]/admin/development/build-plan': ['./docs/development/**/*'],
   },
   images: {
@@ -54,15 +53,25 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      // The redesign page moved out of the Handbook into Admin > Development.
+      // The redesign page is the design handbook page (rules, then the approved drawings).
       {
         source: '/:locale(lv|en)/admin/handbook/redesign',
-        destination: '/:locale/admin/development/redesign',
+        destination: '/:locale/admin/handbook/design#drawings',
+        permanent: false,
+      },
+      {
+        source: '/:locale(lv|en)/admin/development/redesign',
+        destination: '/:locale/admin/handbook/design#drawings',
+        permanent: false,
+      },
+      {
+        source: '/admin/development/redesign',
+        destination: '/admin/handbook/design#drawings',
         permanent: false,
       },
       {
         source: '/admin/handbook/redesign',
-        destination: '/admin/development/redesign',
+        destination: '/admin/handbook/design#drawings',
         permanent: false,
       },
       // The Taxonomy page was split into Categories and Locations.

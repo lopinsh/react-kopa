@@ -17,18 +17,17 @@ function PhoneBar() {
 
 /**
  * Admin frame (AR-68): sections across (sticky), the open section's pages down the left from `lg`, the page on the right.
- * A section with one page (Komanda) has no left column and the page uses the full width; the redesign page (the owner's review page) stays full-bleed under the bars.
+ * A section with one page (Komanda) has no left column and the page uses the full width.
  */
 export default function AdminFrame({ children }: { children: React.ReactNode }) {
     const { location } = useAdminFrame();
-    const bleed = location.item?.id === 'redesign';
     const single = (location.section?.items.length ?? 0) <= 1;
     return (
         <>
             <AdminSections />
             <div className="container mx-auto px-4">
                 <PhoneBar />
-                {bleed ? null : single ? (
+                {single ? (
                     <div className="py-6">{children}</div>
                 ) : (
                     <div className="lg:grid lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
@@ -37,7 +36,6 @@ export default function AdminFrame({ children }: { children: React.ReactNode }) 
                     </div>
                 )}
             </div>
-            {bleed && children}
         </>
     );
 }

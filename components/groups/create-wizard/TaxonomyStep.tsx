@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import type { TaxonomySelection } from '@/lib/types/taxonomy';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
 import TagPicker from '@/components/groups/tag-picker/TagPicker';
-import LocationStep from '@/components/groups/create-wizard/LocationStep';
 
 type Props = {
     taxonomy: TaxonomyTree;
@@ -50,9 +49,6 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
                         </p>
                     )}
                     <TagPicker l1={selectedL1} allowL3={false} />
-                    <div className="pt-2 border-t border-border/50">
-                        <LocationStep />
-                    </div>
                 </div>
             )}
         </div>

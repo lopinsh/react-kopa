@@ -15,7 +15,6 @@ export default function LocationStep() {
             </label>
             <CityField
                 id="group-city"
-                autoFocus
             />
         </div>
     );

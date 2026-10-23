@@ -13,19 +13,8 @@ const DRAWING_FILES: Record<DesignDrawingId, string> = {
 };
 
 export const DevelopmentService = {
-    /** One approved drawing of the Design book: a complete HTML document with its own CSS and script, kept in `docs/development/`. */
+    /** One approved drawing of the design handbook page: a complete HTML document with its own CSS and script, kept in `docs/development/`. */
     async getDrawing(id: DesignDrawingId): Promise<string> {
         return fs.readFile(path.join(DEVELOPMENT_DIR, DRAWING_FILES[id]), 'utf8');
-    },
-
-    /** The living build plan (`docs/development/build-plan.md`); `null` when the file is missing. */
-    async getBuildPlan(): Promise<string | null> {
-        try {
-            const raw = await fs.readFile(path.join(DEVELOPMENT_DIR, 'build-plan.md'), 'utf8');
-            return raw.split(String.fromCharCode(13)).join('');
-        } catch (error) {
-            if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
-            throw error;
-        }
     },
 };
