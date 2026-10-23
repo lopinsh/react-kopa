@@ -13,7 +13,7 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list'], ['html', { open: 'never' }]],
   expect: {
-    toHaveScreenshot: { maxDiffPixelRatio: 0.002, animations: 'disabled', caret: 'hide' },
+    toHaveScreenshot: { maxDiffPixels: 0, animations: 'disabled', caret: 'hide' },
   },
   use: {
     baseURL: process.env.VISUAL_URL ?? 'http://localhost:3000',
