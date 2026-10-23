@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>R23 Admin panel — drawing</title>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Commissioner:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Drawing only: intent, not pixel spec. One admin tool panel, three modes, one at a time. */
+:root{--bg:#f6f3ee;--surface:#fff;--fg:#1f1d1a;--muted:#6b665e;--line:#e4dfd6;--accent:#2f6d5a;--accent-soft:#e3efe9;--warn:#a5520f;--warn-soft:#fbeedd;--tone:#c8643b;--tone-soft:#f6e3d8;
+  --font-heading:'Literata';--font-body:'Commissioner';--heading-weight:600}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 'Commissioner',sans-serif;overflow-x:hidden}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.note{font:11px/1.35 ui-monospace,monospace;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:6px 8px;margin:0 0 12px}
+/* ---- the site: real type-role classes, read from vars ---- */
+.site{transition:margin-right .25s ease;padding:0 0 80px}
+@media(min-width:1280px){body.open.docked .site{margin-right:380px}}
+.hdr{display:flex;gap:12px;align-items:center;padding:12px 20px;background:var(--surface);box-shadow:0 1px 0 var(--line)}
+.brand{font:600 22px 'Literata'}
+.field{flex:1;max-width:420px;border-radius:999px;background:var(--bg);box-shadow:0 0 0 1px var(--line);padding:7px 14px;color:var(--muted);font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:20px}
+.text-title,.text-item{font-family:var(--title-f,var(--font-heading));font-weight:var(--heading-weight);margin:0}
+.text-title{font-size:var(--title-s,30px);line-height:1.1;margin-bottom:14px}
+.text-item{font-family:var(--item-f,var(--font-heading));font-size:var(--item-s,18px);line-height:1.3}
+.text-meta{font-family:var(--meta-f,var(--font-body));font-size:var(--meta-s,13px);font-weight:var(--meta-w,400);line-height:1.45;margin:0}
+.text-body{font-family:var(--body-f,var(--font-body));font-size:var(--body-s,16px);font-weight:var(--body-w,400);line-height:1.6;margin:0}
+.weight-strong{font-weight:600}.mut{color:var(--muted)}
+.cards{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.gcard{display:block;color:inherit;text-decoration:none;background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--line);overflow:hidden}
+.gpic{aspect-ratio:7/2;background:linear-gradient(135deg,var(--tone-soft),var(--tone))}
+.gbody{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.bnav{display:none}
+/* design mode: outline the text under the pointer and the picked role */
+body.m-design:not(.paused) .site [class*="text-"]{cursor:pointer}
+body.m-design:not(.paused) .site [class*="text-"]:hover,body.m-design .site .hi{outline:2px dashed var(--accent);outline-offset:2px;border-radius:3px}
+.chip{position:fixed;z-index:80;pointer-events:none;font:600 10px 'Commissioner';background:var(--accent);color:#fff;padding:2px 6px;border-radius:4px;display:none}
+/* feedback + translate marks */
+.pin{display:none;position:absolute;width:22px;height:22px;border-radius:50% 50% 50% 0;background:var(--warn);color:#fff;font:600 11px/22px 'Commissioner';text-align:center;transform:translate(-4px,-26px)}
+body.m-feedback .pin{display:block}
+body.m-translate [data-t]{background:var(--accent-soft);border-radius:3px;cursor:text}
+/* ---- handle (closed): one tab per mode on desktop, one button on phone ---- */
+.handle{position:fixed;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:2px;background:var(--surface);border-radius:12px 0 0 12px;box-shadow:-2px 0 12px rgba(0,0,0,.1),0 0 0 1px var(--line);padding:6px 4px;z-index:60}
+body.open .handle{display:none}
+.handle button{border:0;background:none;width:36px;height:36px;border-radius:9px;cursor:pointer;font-size:14px;font-weight:600;position:relative}
+.handle button:hover{background:var(--accent-soft)}
+.handle .cnt{position:absolute;top:2px;right:2px;font:600 9px/14px 'Commissioner';min-width:14px;border-radius:9px;background:var(--warn);color:#fff}
+.handle .one{display:none}
+/* ---- panel ---- */
+.panel{position:fixed;left:var(--x,calc(100vw - 364px));top:var(--y,80px);width:340px;max-height:75vh;background:var(--surface);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.18),0 0 0 1px var(--line);z-index:70;display:none;flex-direction:column;font-size:13px}
+body.open .panel{display:flex}
+body.docked .panel{left:auto;right:0;top:0;bottom:0;width:380px;max-height:none;border-radius:0;box-shadow:-8px 0 30px rgba(0,0,0,.12),0 0 0 1px var(--line)}
+body.dragging .panel{box-shadow:0 20px 60px rgba(0,0,0,.25),0 0 0 2px var(--accent);user-select:none}
+.ptop{display:flex;align-items:center;gap:4px;padding:10px 8px 0 4px;cursor:grab;touch-action:none}
+body.docked .ptop{cursor:grab}
+.grip{width:14px;align-self:stretch;background:radial-gradient(circle,var(--muted) 1px,transparent 1.5px) 0 0/5px 5px;opacity:.5;margin-right:2px}
+.x{border:0;background:none;width:28px;height:28px;border-radius:7px;cursor:pointer;color:var(--muted);flex:0 0 auto}
+.x:hover{background:var(--bg);color:var(--fg)}
+.dockzone{position:fixed;top:0;right:0;bottom:0;width:380px;background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent);opacity:0;pointer-events:none;transition:opacity .15s;z-index:65}
+body.near .dockzone{opacity:.7}
+[role=tablist]{display:flex;gap:2px;background:var(--bg);border-radius:10px;padding:3px;flex:1}
+[role=tab]{flex:1;border:0;background:none;padding:6px 4px;border-radius:8px;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap}
+[role=tab][aria-selected=true]{background:var(--surface);color:var(--fg);font-weight:600;box-shadow:0 0 0 1px var(--line)}
+.psub{padding:6px 14px 10px;color:var(--muted);font-size:12px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center}
+.psub span{flex:1}
+.pause{border:0;background:var(--bg);border-radius:999px;padding:3px 9px;font-size:11px;cursor:pointer;white-space:nowrap}
+.pause[aria-pressed=true]{background:var(--warn-soft);color:var(--warn);font-weight:600}
+.pbody{flex:1;overflow:auto;padding:12px 14px}
+.pfoot{border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:6px;align-items:center}
+.pfoot .c{color:var(--muted);font-size:12px;margin-right:auto}
+.b{border:0;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);box-shadow:0 0 0 1px var(--line)}
+.b.p{background:var(--accent);color:#fff;box-shadow:none}
+[role=tabpanel][hidden]{display:none}
+h4{font:600 11px 'Commissioner';text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:14px 0 6px}
+h4:first-child{margin-top:0}
+.fnote{border-top:1px solid var(--line);padding:8px 0}.fnote:first-of-type{border-top:0}
+.list div{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--line)}
+.list i{font-style:normal;color:var(--warn)}
+.srch,textarea,select{width:100%;border:0;box-shadow:0 0 0 1px var(--line);border-radius:8px;padding:6px 8px;font-size:13px;background:var(--bg)}
+.srch{border-radius:999px;padding:7px 12px}
+.k{display:grid;grid-template-columns:62px 1fr;gap:6px;align-items:center;min-height:32px}
+/* RoleEditor: the same component as on the Burti page */
+.re{background:var(--accent-soft);border-radius:12px;padding:10px 12px}
+.re .nm{font:600 16px 'Literata';display:flex;align-items:center;gap:6px}
+.dot{width:7px;height:7px;border-radius:9px;background:var(--warn)}
+.gl{font-size:12px;color:var(--muted);margin:4px 0}.gl b{color:var(--fg)}
+.variant{font-size:12px;background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:6px 8px;margin:8px 0 0}
+.step{display:inline-flex;align-items:center;gap:3px;margin-right:6px}
+.step button{border:0;background:var(--surface);box-shadow:0 0 0 1px var(--line);width:26px;height:26px;border-radius:6px;cursor:pointer}
+.step span{font:12px ui-monospace,monospace;min-width:40px;text-align:center}
+.step small{color:var(--muted);font-size:11px}
+.seg{display:flex;background:var(--line);border-radius:7px;padding:2px;gap:2px}
+.seg button{flex:1;border:0;background:none;font-size:12px;padding:3px 6px;border-radius:5px;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--fg)}
+.lnk{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;padding:0;text-decoration:none}
+.empty{color:var(--muted);text-align:center;padding:18px 6px 8px;font-size:13px}
+/* ---- phone: bottom sheet bar · half · full, one handle button above the bottom nav ---- */
+.grab{display:none}
+@media(max-width:767px){
+  .bnav{display:flex;justify-content:space-around;position:fixed;left:0;right:0;bottom:0;height:calc(60px + env(safe-area-inset-bottom));background:var(--surface);box-shadow:0 -1px 0 var(--line);font-size:11px;padding-top:8px;z-index:50}
+  .handle{top:auto;bottom:calc(72px + env(safe-area-inset-bottom));transform:none;padding:4px;border-radius:999px 0 0 999px}
+  .handle .mode{display:none}.handle .one{display:block}
+  .panel,body.docked .panel{left:0;right:0;top:auto;bottom:0;width:100%;max-height:none;height:var(--sh);border-radius:16px 16px 0 0;transition:height .2s ease;box-shadow:0 -8px 30px rgba(0,0,0,.15),0 0 0 1px var(--line)}
+  body.dragging .panel{transition:none}
+  .panel[data-h=bar]{--sh:calc(100px + env(safe-area-inset-bottom))}.panel[data-h=half]{--sh:50vh}.panel[data-h=full]{--sh:92vh}
+  .panel[data-h=bar] .psub,.panel[data-h=bar] .pbody,.panel[data-h=bar] .pfoot{display:none}
+  .grab{display:block;border:0;background:none;width:100%;padding:8px 0 2px;cursor:grab;touch-action:none}.grab i{display:block;width:40px;height:4px;border-radius:4px;background:var(--line);margin:0 auto}
+  .ptop{cursor:default}.grip,#dock,.dockzone{display:none!important}
+  body.open .site{padding-bottom:50vh}
+}
+</style>
+</head>
+<body>
+<div class="site">
+  <header class="hdr"><span class="brand">Ejam kopā</span><span class="field">Meklēt grupas, pasākumus…</span></header>
+  <div class="wrap">
+    <div class="note">Drawing R23 (after review 2): one admin panel replaces the feedback and translation pills. From 768: floats; drag its top bar, drag to the right edge (or ⇥) to dock as a drawer (from 1280 the page moves aside), drag the docked bar to pull it loose. Phones: bottom sheet bar / half / full, one handle above the bottom nav. Design mode: a click on a text picks its role from its class (registry in lib/constants), links do not open; "Pauze" gives clicks back to the site. Every change goes straight into the draft theme, so it survives moving between pages.</div>
+    <h1 class="text-title" data-t="discovery.groups">Grupas</h1>
+    <div class="cards">
+      <a class="gcard" href="#purvs"><div class="gpic"></div><div class="gbody"><span class="pin">1</span>
+        <h3 class="text-item">Purva brienēji</h3><p class="text-meta mut">Pārgājieni · Daba</p>
+        <p class="text-meta weight-strong">Meklējam: kādu ar auto uz Ķemeriem</p>
+        <p class="text-meta">Reizi mēnesī ejam pa purviem un jūrmalu.</p></div></a>
+      <a class="gcard" href="#koris"><div class="gpic" style="background:linear-gradient(135deg,var(--accent-soft),var(--accent))"></div><div class="gbody">
+        <h3 class="text-item">Koris „Ķīši”</h3><p class="text-meta mut">Mūzika · Koris</p>
+        <p class="text-meta">Ceturtdienu vakaros Ģertrūdes baznīcā.</p></div></a>
+      <a class="gcard" href="#speles"><div class="gpic" style="background:linear-gradient(135deg,#ece6f6,#7a5fb0)"></div><div class="gbody"><span class="pin">2</span>
+        <h3 class="text-item">Galda spēļu vakari</h3><p class="text-meta mut">Spēles</p>
+        <p class="text-meta" data-t="group.card.empty">Katan, Ķēniņš un viss, ko kāds atnes.</p></div></a>
+    </div>
+    <p class="text-body" style="margin-top:20px;max-width:60ch">Ejam kopā palīdz atrast cilvēkus, ar ko kopā iet pārgājienos, dziedāt, spēlēt vai vienkārši satikties.</p>
+  </div>
+  <nav class="bnav" aria-label="Galvenā"><span>Atrast</span><span>Jaunumi</span><span>＋</span><span>Ziņas</span><span>Es</span></nav>
+</div>
+
+<span class="chip" id="chip"></span>
+<div class="dockzone"></div>
+
+<!-- closed: handle -->
+<div class="handle" id="handle">
+  <button class="mode" data-open="feedback" aria-label="Atsauksmes, 2 šajā lapā">✎<span class="cnt" aria-hidden="true">2</span></button>
+  <button class="mode" data-open="translate" aria-label="Tulkot">文</button>
+  <button class="mode" data-open="design" aria-label="Dizains">Aa</button>
+  <button class="one" data-open="last" aria-label="Administratora rīki">⚙<span class="cnt" aria-hidden="true">2</span></button>
+</div>
+
+<!-- open: panel -->
+<section class="panel" id="panel" role="dialog" aria-modal="false" aria-label="Administratora rīki" data-h="half">
+  <button class="grab" id="grab" aria-label="Mainīt augstumu"><i></i></button>
+  <div class="ptop" id="ptop">
+    <span class="grip" aria-hidden="true" title="Velc, lai pārvietotu"></span>
+    <div role="tablist" aria-label="Režīms" id="tabs">
+      <button role="tab" id="t-feedback" aria-controls="p-feedback" data-m="feedback">Atsauksmes</button>
+      <button role="tab" id="t-translate" aria-controls="p-translate" data-m="translate">Tulkot</button>
+      <button role="tab" id="t-design" aria-controls="p-design" data-m="design">Dizains</button>
+    </div>
+    <button class="x" id="dock" aria-label="Piestiprināt labajā malā">⇥</button>
+    <button class="x" id="close" aria-label="Aizvērt (Esc)">✕</button>
+  </div>
+  <div class="psub"><span id="sub"></span><button class="pause" id="pause" aria-pressed="false">Pauze</button></div>
+
+  <div class="pbody">
+    <div role="tabpanel" id="p-feedback" aria-labelledby="t-feedback">
+      <h4>Šajā lapā · 2</h4>
+      <div class="fnote"><b>1</b> · Oskars, vakar<br>Kartītē „Meklējam” par blīvu pie nosaukuma.</div>
+      <div class="fnote"><b>2</b> · Līga, pirms 3 d.<br>Apraksts Liepājai nav saprotams.</div>
+      <h4>Citās lapās · 5</h4>
+      <div class="list"><div>Grupas lapa · Par mums <i>2</i></div><div>Ziņas <i>3</i></div></div>
+    </div>
+    <div role="tabpanel" id="p-translate" aria-labelledby="t-translate">
+      <input class="srch" placeholder="Meklēt tekstu vai atslēgu…" aria-label="Meklēt tekstu vai atslēgu">
+      <h4>Izvēlēts</h4>
+      <div class="gl"><b>discovery.groups</b></div>
+      <div class="k"><label for="lv">LV</label><textarea id="lv" rows="1">Grupas</textarea></div>
+      <div class="k"><label for="en">EN</label><textarea id="en" rows="1">Groups</textarea></div>
+      <h4>Šajā lapā trūkst · 1</h4>
+      <div class="list"><div>group.card.empty <i>EN</i></div></div>
+    </div>
+    <div role="tabpanel" id="p-design" aria-labelledby="t-design">
+      <div class="k" style="grid-template-columns:42px 1fr"><label for="pick">Loma</label><select id="pick"><option value="">Izvēlies vai noklikšķini lapā…</option></select></div>
+      <div id="noRole" class="empty">Noklikšķini uz teksta lapā vai izvēlies lomu.</div>
+      <div id="editor" hidden></div>
+      <p style="margin:12px 0 0"><a class="lnk" href="r22-type-system.html">Visi burti un sistēma →</a></p>
+    </div>
+  </div>
+  <div class="pfoot" id="foot"></div>
+</section>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],B=document.body,R=document.documentElement;
+/* Registry (lib/constants in the build): type-role class → role. The same list feeds the Burti page. */
+const FONTS={'Literata':[400,500,600,700],'Commissioner':[400,500,600,700]};
+const g={fh:'Literata',fb:'Commissioner',hw:600};
+const ROLES={
+ title:{cls:'text-title',lv:'Lapas virsraksts',h:1,min:26,max:36,rule:'Viens lapā (PageHead), grupas un pasākuma nosaukums savā lapā.',v:[]},
+ item:{cls:'text-item',lv:'Nosaukums',h:1,min:17,max:19,rule:'Kartītes, rindas, dienas virsraksts. Max 2 rindas.',v:[]},
+ body:{cls:'text-body',lv:'Teksts',px:16,w:400,rule:'Lasāms teksts: apraksti, sadaļas.',v:[]},
+ meta:{cls:'text-meta',lv:'Sīkdati',px:13,w:400,rule:'Laiks, vieta, skaits; kartītē arī sauklis.',v:[['weight-strong','izcelts'],['mut','pelēks']]},
+};
+const own={};let mode=null,role=null,lastMode='design',saved=0,opener=null,variantHit=null;
+const roleOf=el=>{for(const [id,r] of Object.entries(ROLES))if(el.classList.contains(r.cls))return id;return null};
+const fname=id=>{const o=own[id]||{},r=ROLES[id];return (o.f??(r.h?'h':'b'))==='h'?g.fh:g.fb};
+const ends=id=>{const r=ROLES[id],o=own[id]||{};return r.h?[o.min??r.min,o.max??r.max]:[o.min??r.px,o.min??r.px]};
+const weight=id=>{const r=ROLES[id];return r.h?g.hw:((own[id]||{}).w??r.w)};
+const SUB={feedback:'Noklikšķini lapā, lai pievienotu piezīmi.',translate:'Iezīmētie teksti ir tulkojami.',design:'Noklikšķini uz teksta, lai mainītu tā lomu.'};
+
+function setMode(m){
+  if(m&&!mode)opener=document.activeElement;
+  mode=m;if(m)lastMode=m;B.classList.toggle('open',!!m);B.classList.remove('paused');$('#pause').setAttribute('aria-pressed','false');
+  ['feedback','translate','design'].forEach(x=>{B.classList.toggle('m-'+x,x===m);const t=$('#t-'+x);t.setAttribute('aria-selected',x===m);t.tabIndex=x===m?0:-1;$('#p-'+x).hidden=x!==m});
+  $('#sub').textContent=m?SUB[m]:'';$('#pause').hidden=m==='translate';foot();
+  if(m)$('#t-'+m).focus();else{(opener&&opener.isConnected&&opener!==B?opener:$$('#handle button').find(b=>b.offsetParent)).focus();opener=null}
+  place()}
+function foot(){$('#foot').innerHTML=mode==='design'?`<span class="c">${saved?saved+' izmaiņas melnrakstā':'Nav izmaiņu'}</span><button class="b">Skatīt pašam</button><button class="b p" id="pub">Publicēt</button>`
+  :mode==='feedback'?`<span class="c">2 šajā lapā</span><button class="b">Visas piezīmes</button>`:mode==='translate'?`<span class="c">1 trūkst</span><button class="b p">Saglabāt</button>`:'';
+  const p=$('#pub');if(p)p.onclick=()=>{const w=order();alert(w?'Brīdinājums: '+w+'\n\nPublicēt tik un tā?':'Publicēt '+saved+' izmaiņas visiem?')}}
+function order(){const s=['title','item'].map(id=>ends(id)[1]);return s[1]>=s[0]?'Nosaukums ir lielāks par lapas virsrakstu.':''}
+
+/* ---- RoleEditor (shared with Burti) ---- */
+function pick(id){role=id||null;$('#pick').value=role||'';$('#noRole').hidden=!!role;$('#editor').hidden=!role;
+  $$('.site .hi').forEach(e=>e.classList.remove('hi'));if(role)$$('.site .'+ROLES[role].cls).forEach(e=>e.classList.add('hi'));editor()}
+function editor(){if(!role)return;const r=ROLES[role],o=own[role],[a,b]=ends(role),fw=FONTS[fname(role)];
+  const n=$$('.site .'+r.cls).length;
+  $('#editor').innerHTML=`<div class="re"><div class="nm">${r.lv}${o?'<span class="dot" title="pielāgots"></span>':''}</div>
+    <div class="gl"><b>Kad lietot.</b> ${r.rule}</div>${r.v.length?`<div class="gl"><b>Varianti.</b> ${r.v.map(v=>v[1]).join(', ')}</div>`:''}<div class="gl"><b>Šajā lapā.</b> ${n} vietās</div>
+    ${variantHit?`<div class="variant">Tu noklikšķināji uz varianta „${variantHit}”. Tu maini lomu ${r.lv}; variants seko tai.</div>`:''}</div>
+    <h4>Loma</h4>
+    <div class="k"><span>Izmērs</span><span>${r.h?stp('min','tālr.',a)+stp('max','dators',b):stp('min','',a)}</span></div>
+    ${r.h?'':`<div class="k"><span>Biezums</span><div class="seg" id="w">${fw.map(x=>`<button aria-pressed="${x===weight(role)}" data-v="${x}">${x}</button>`).join('')}</div></div>`}
+    <div class="k"><span>Fonts</span><div class="seg" id="f"><button aria-pressed="${fname(role)===g.fh}" data-v="h">Virsraksti</button><button aria-pressed="${fname(role)===g.fb}" data-v="b">Teksts</button></div></div>
+    ${o?`<p class="gl">Pielāgota: sistēmas slīdņi šo lomu vairs neietekmē. <button class="lnk" id="reset">Atjaunot</button></p>`:''}
+    <p class="gl">Mainās visur, kur lieto šo lomu. Redzi tikai tu, līdz publicē.</p>`;
+  $$('#editor .step button').forEach(btn=>btn.onclick=()=>{const [k,d]=btn.dataset.k.split(':'),cur=own[role]||{},[mn,mx]=ends(role);
+    const nv={...cur,min:cur.min??mn,max:cur.max??mx};nv[k]=Math.max(11,+(nv[k]+ +d).toFixed(1));own[role]=nv;change()});
+  const w=$('#w');if(w)w.onclick=e=>{const b=e.target.closest('button');if(b){own[role]={...(own[role]||{}),w:+b.dataset.v};change()}};
+  $('#f').onclick=e=>{const b=e.target.closest('button');if(!b)return;const cur={...(own[role]||{})},def=r.h?'h':'b';if(b.dataset.v===def)delete cur.f;else cur.f=b.dataset.v;
+    if(Object.keys(cur).length)own[role]=cur;else delete own[role];change()};
+  const rs=$('#reset');if(rs)rs.onclick=()=>{delete own[role];change()}}
+function stp(k,lbl,v){return `<span class="step">${lbl?`<small>${lbl}</small>`:''}<button data-k="${k}:-0.5" aria-label="Mazāk">−</button><span>${v}</span><button data-k="${k}:0.5" aria-label="Vairāk">+</button></span>`}
+function change(){saved++;apply();editor();foot()}   // each step is saved to the draft theme at once
+function apply(){const w=innerWidth,t=Math.min(1,Math.max(0,(w-360)/920));
+  for(const id in ROLES){const [a,b]=ends(id);R.style.setProperty(`--${id}-s`,(a+(b-a)*t)+'px');R.style.setProperty(`--${id}-w`,weight(id));R.style.setProperty(`--${id}-f`,`'${fname(id)}'`)}}
+
+/* ---- design clicks: capture phase so links do not open; Pauze gives clicks back ---- */
+document.addEventListener('click',e=>{if(mode!=='design'||B.classList.contains('paused'))return;const el=e.target.closest('.site [class*="text-"]');if(!el)return;
+  const id=roleOf(el);if(!id)return;e.preventDefault();e.stopPropagation();
+  const v=ROLES[id].v.find(([c])=>el.classList.contains(c));variantHit=v?v[1]:null;pick(id);
+  if(innerWidth<768){if($('#panel').dataset.h!=='half'){$('#panel').dataset.h='half'}setTimeout(()=>{const top=el.getBoundingClientRect().top+scrollY-H()*.2;scrollTo({top,behavior:'smooth'})},220)}},true);
+document.addEventListener('pointerover',e=>{const el=mode==='design'&&!B.classList.contains('paused')&&e.target.closest('.site [class*="text-"]');const c=$('#chip');
+  if(!el||!roleOf(el)){c.style.display='none';return}const r=el.getBoundingClientRect();c.textContent=ROLES[roleOf(el)].lv;c.style.display='block';c.style.left=r.left+'px';c.style.top=Math.max(0,r.top-18)+'px'});
+$('#pause').onclick=()=>{const on=!B.classList.contains('paused');B.classList.toggle('paused',on);$('#pause').setAttribute('aria-pressed',on);$('#pause').textContent=on?'Pauzē: klikšķi strādā':'Pauze'};
+$('#pick').append(...Object.entries(ROLES).map(([id,r])=>new Option(r.lv,id)));$('#pick').onchange=e=>{variantHit=null;pick(e.target.value)};
+
+/* ---- open / close / tabs / Esc (layered: first leave a field, then close) ---- */
+$$('[data-open]').forEach(b=>b.onclick=()=>setMode(b.dataset.open==='last'?lastMode:b.dataset.open));
+$('#tabs').onclick=e=>{const b=e.target.closest('[role=tab]');if(b)setMode(b.dataset.m)};
+$('#tabs').onkeydown=e=>{const t=$$('[role=tab]'),i=t.indexOf(document.activeElement);if(i<0)return;
+  if(e.key==='ArrowRight'||e.key==='ArrowLeft'){const n=t[(i+(e.key==='ArrowRight'?1:t.length-1))%t.length];setMode(n.dataset.m);e.preventDefault()}};
+$('#close').onclick=()=>setMode(null);
+document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!mode)return;const a=document.activeElement;
+  if(a&&a.matches('input,textarea,select')){a.blur();$('#t-'+mode).focus();return}
+  if(role){pick(null);return}setMode(null)});
+
+/* ---- light floating: drag, dock by dragging to the edge or ⇥ (from 768) ---- */
+const P=$('#panel'),T=$('#ptop'),W=()=>innerWidth,H=()=>innerHeight,phone=()=>W()<768;
+const st={x:null,y:80,docked:false};
+function place(){B.classList.toggle('docked',st.docked&&!phone());
+  if(!st.docked&&!phone()){const w=P.offsetWidth||340,h=P.offsetHeight||200;st.x=Math.min(Math.max(8,st.x??W()-w-24),W()-w-8);st.y=Math.min(Math.max(8,st.y),Math.max(8,H()-h-8));
+    P.style.setProperty('--x',st.x+'px');P.style.setProperty('--y',st.y+'px')}
+  $('#dock').textContent=st.docked?'⇤':'⇥';$('#dock').setAttribute('aria-label',st.docked?'Atbrīvot':'Piestiprināt labajā malā');apply()}
+T.addEventListener('pointerdown',e=>{if(phone()||e.target.closest('button'))return;
+  const r0=P.getBoundingClientRect();let dx=e.clientX-r0.left,dy=e.clientY-r0.top;
+  if(st.docked){st.docked=false;dx=170;dy=20;st.x=e.clientX-dx;st.y=e.clientY-dy;place()}
+  B.classList.add('dragging');T.setPointerCapture(e.pointerId);
+  const mv=ev=>{st.x=ev.clientX-dx;st.y=ev.clientY-dy;B.classList.toggle('near',ev.clientX>W()-40);place()};
+  const up=()=>{B.classList.remove('dragging');if(B.classList.contains('near'))st.docked=true;B.classList.remove('near');place();T.removeEventListener('pointermove',mv);T.removeEventListener('pointerup',up)};
+  T.addEventListener('pointermove',mv);T.addEventListener('pointerup',up)});
+$('#dock').onclick=()=>{st.docked=!st.docked;place()};
+
+/* ---- phone sheet: tap the handle = bar ↔ half, drag = nearest of bar · half · full ---- */
+const G=$('#grab');
+G.addEventListener('pointerdown',e=>{const y0=e.clientY,h0=P.offsetHeight;let moved=false;B.classList.add('dragging');G.setPointerCapture(e.pointerId);
+  const mv=ev=>{if(Math.abs(ev.clientY-y0)>6)moved=true;if(moved)P.style.setProperty('--sh',Math.max(100,h0+(y0-ev.clientY))+'px')};
+  const up=()=>{B.classList.remove('dragging');const h=P.offsetHeight;P.style.removeProperty('--sh');
+    P.dataset.h=!moved?(P.dataset.h==='bar'?'half':'bar'):[[100,'bar'],[H()*.5,'half'],[H()*.92,'full']].reduce((a,c)=>Math.abs(c[0]-h)<Math.abs(a[0]-h)?c:a)[1];
+    G.removeEventListener('pointermove',mv);G.removeEventListener('pointerup',up)};
+  G.addEventListener('pointermove',mv);G.addEventListener('pointerup',up)});
+addEventListener('resize',place);
+setMode('design');
+</script>
+</body>
+</html>

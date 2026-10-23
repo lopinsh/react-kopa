@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>R22 Burti — drawing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,500;7..72,600;7..72,700&family=Commissioner:wght@400;500;600;700&family=Atkinson+Hyperlegible:wght@400;700&family=Lora:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Nunito+Sans:wght@400;600;700&family=Raleway:wght@400;500;600;700&family=Alegreya+Sans:wght@400;500;700&family=Archivo+Black&family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Drawing only: intent, not pixel spec. Admin chrome is calm look; the preview frame takes the type settings. */
+:root{--bg:#f6f3ee;--surface:#fff;--fg:#1f1d1a;--muted:#6b665e;--line:#e4dfd6;--accent:#2f6d5a;--accent-soft:#e3efe9;--warn:#a5520f;--warn-soft:#fbeedd;--tone:#c8643b;--tone-soft:#f6e3d8;
+  --font-heading:'Literata';--font-body:'Commissioner';--heading-weight:600}
+:root[data-mode=dark]{--bg:#161513;--surface:#211f1c;--fg:#f1ede6;--muted:#a59f95;--line:#34312c;--accent:#7cc3a8;--accent-soft:#1f3a31;--warn:#f0a35c;--warn-soft:#3a2a18;--tone:#e48a62;--tone-soft:#3b261c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 'Commissioner',sans-serif}
+button{font:inherit;color:inherit}
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+@media(max-width:820px){.app{grid-template-columns:1fr}.panel{max-height:none!important;border-right:0!important;border-bottom:1px solid var(--line)}}
+/* ---------- control panel: dense ---------- */
+.panel{padding:14px 14px 0;border-right:1px solid var(--line);overflow:auto;max-height:100vh;position:sticky;top:0}
+.head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.head h1{font:600 20px/1.1 'Literata';margin:0}
+.lnk{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;padding:0}
+h2{font:600 11px/1 'Commissioner';text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:14px 0 6px}
+.pairs{display:flex;gap:4px;flex-wrap:wrap}
+.pairs button{border:0;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:8px;padding:4px 8px;cursor:pointer;text-align:left;line-height:1.1}
+.pairs button b{display:block;font-size:14px}
+.pairs button span{font-size:10px;color:var(--muted)}
+.pairs button.on{box-shadow:0 0 0 2px var(--accent)}
+.fonts{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;align-items:center;margin-top:6px;font-size:12px;color:var(--muted)}
+select{font:13px 'Commissioner';padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--fg);width:100%}
+.k{display:grid;grid-template-columns:96px 1fr 44px;gap:6px;align-items:center;min-height:30px;font-size:13px}
+.k output{font:11px ui-monospace,monospace;color:var(--muted);text-align:right}
+.k input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.seg{display:flex;background:var(--line);border-radius:7px;padding:2px;gap:2px;grid-column:2/4}
+.seg button{flex:1;border:0;background:none;font-size:12px;padding:2px 4px;border-radius:5px;color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--surface);color:var(--fg)}
+.seg button:disabled{opacity:.35;cursor:default}
+/* role table */
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-weight:400;color:var(--muted);text-align:left;padding:2px 4px}
+td{padding:3px 4px;border-top:1px solid var(--line);white-space:nowrap}
+tr.r{cursor:pointer}
+tr.r:hover td{background:var(--accent-soft)}
+tr.sel td{background:var(--accent-soft);font-weight:600}
+tr.r:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rd{display:inline-block;width:12px;height:12px;border-radius:50%;box-shadow:inset 0 0 0 1.5px var(--muted);vertical-align:middle}
+tr[aria-checked=true] .rd{box-shadow:inset 0 0 0 1.5px var(--accent),inset 0 0 0 4px var(--surface);background:var(--accent)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+tr.r td:first-child{max-width:110px;overflow:hidden;text-overflow:ellipsis}
+td.num{font:11px ui-monospace,monospace;text-align:right;color:var(--muted)}
+td .own{color:var(--warn)}
+.dot{display:inline-block;width:6px;height:6px;border-radius:9px;background:var(--warn);margin-left:4px;vertical-align:middle}
+tr.ed td{background:var(--accent-soft);padding:4px 6px 8px}
+.step{display:inline-flex;align-items:center;gap:2px;margin-right:8px}
+.step button{border:0;background:var(--surface);box-shadow:0 0 0 1px var(--line);width:20px;height:20px;border-radius:5px;cursor:pointer;line-height:1}
+.step span{font:11px ui-monospace,monospace;min-width:34px;text-align:center}
+.step small{color:var(--muted);margin-right:2px}
+.warn{font-size:11px;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:4px 7px;margin:8px 0 0;display:none}
+.bar{position:sticky;bottom:0;background:var(--bg);padding:10px 0;margin-top:12px;display:flex;gap:6px;border-top:1px solid var(--line)}
+.bar button{border:0;border-radius:999px;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);box-shadow:0 0 0 1px var(--line)}
+.bar .p{background:var(--accent);color:#fff;box-shadow:none}
+.gl{font-size:11px;line-height:1.35;color:var(--muted);margin:0 0 5px}.gl b{color:var(--fg);font-weight:600}
+.note{font:11px/1.35 ui-monospace,monospace;color:var(--warn);margin:6px 0 0}
+/* ---------- preview ---------- */
+.pv{padding:14px 18px;min-width:0}
+.ptop{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.ptop .seg{grid-column:auto;flex:0 0 auto}
+.tabs{display:flex;gap:2px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:5px 10px;border-radius:999px;font-size:13px;color:var(--muted);cursor:pointer}
+.tabs button.on{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.hint{font-size:12px;color:var(--muted);margin-left:auto}
+.frame{margin:0 auto;background:var(--bg);border-radius:14px;box-shadow:0 0 0 1px var(--line);overflow:hidden;transition:width .2s}
+.site{font-family:var(--font-body);color:var(--fg);font-optical-sizing:auto}
+.site [data-r]{cursor:help;border-radius:3px}
+.site [data-r]:hover,.site [data-r].hi{outline:2px dashed var(--warn);outline-offset:2px}
+.screen{display:none;padding:16px}
+.screen.on{display:block}
+/* type roles, read from vars on .site */
+.R-display,.R-title,.R-section,.R-item{font-weight:var(--heading-weight);font-synthesis-weight:none;margin:0}
+.R-display{font-size:var(--display-s);line-height:var(--display-l);letter-spacing:calc(-0.02em + var(--ht))}
+.R-title{font-size:var(--title-s);line-height:var(--title-l);letter-spacing:calc(-0.015em + var(--ht))}
+.R-section{font-size:var(--section-s);line-height:var(--section-l);letter-spacing:calc(-0.01em + var(--ht))}
+.R-item{font-size:var(--item-s);line-height:var(--item-l);letter-spacing:var(--ht)}
+.R-body{font-size:var(--body-s);line-height:var(--body-l);font-weight:var(--body-w);margin:0}
+.R-body-sm{font-size:var(--body-sm-s);line-height:var(--body-sm-l);font-weight:var(--body-sm-w);margin:0}
+.R-button{font-size:var(--button-s);line-height:var(--button-l);font-weight:var(--button-w)}
+.R-button-sm{font-size:var(--button-sm-s);line-height:var(--button-sm-l);font-weight:var(--button-sm-w)}
+.R-meta{font-size:var(--meta-s);line-height:var(--meta-l);font-weight:var(--meta-w);margin:0}
+.R-tag{font-size:var(--tag-s);line-height:var(--tag-l);font-weight:var(--tag-w);letter-spacing:var(--tag-t);text-transform:var(--tag-case)}
+.R-display{font-family:var(--display-f)}.R-title{font-family:var(--title-f)}.R-section{font-family:var(--section-f)}.R-item{font-family:var(--item-f)}.R-body{font-family:var(--body-f)}.R-body-sm{font-family:var(--body-sm-f)}.R-button{font-family:var(--button-f)}.R-button-sm{font-family:var(--button-sm-f)}.R-meta{font-family:var(--meta-f)}.R-tag{font-family:var(--tag-f)}.R-note{font-family:var(--body-f)}
+.R-note{font-size:var(--note-s);font-style:italic;color:var(--accent);margin:0}
+.strong{font-weight:600}.medium{font-weight:500}
+.mut{color:var(--muted)}
+.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;background:var(--surface);box-shadow:0 0 0 1px var(--line)}
+.pill.on{background:var(--fg);color:var(--bg);box-shadow:none}
+.btn{display:inline-flex;align-items:center;border-radius:999px;padding:9px 16px;background:var(--accent);color:#fff}
+.btn.sm{padding:6px 12px}
+.btn.ghost{background:var(--surface);color:var(--fg);box-shadow:0 0 0 1px var(--line)}
+.sec{margin:20px 0 10px}
+/* header + menus */
+.hdr{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);box-shadow:0 1px 0 var(--line);margin:-16px -16px 16px}
+.brand{font-family:var(--font-heading);font-weight:var(--heading-weight);font-size:var(--section-s);letter-spacing:var(--ht)}
+.field{flex:1;min-width:0;border-radius:999px;background:var(--bg);box-shadow:0 0 0 1px var(--line);padding:7px 12px;color:var(--muted)}
+.nav{display:flex;gap:14px}
+.menus{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.menu{width:250px;background:var(--surface);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12),0 0 0 1px var(--line);padding:6px}
+.menu .mh{padding:6px 10px 4px}
+.menu .mi{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:8px}
+.menu .mi.on{background:var(--tone-soft)}
+.notif{padding:8px 10px;border-top:1px solid var(--line)}
+.bnav{display:flex;justify-content:space-around;background:var(--surface);box-shadow:0 -1px 0 var(--line);padding:8px 0 10px;margin:20px -16px -16px;text-align:center}
+.bnav div{display:flex;flex-direction:column;align-items:center;gap:3px}
+.ic{width:20px;height:20px;border-radius:6px;background:var(--line)}
+/* cards */
+.cards{display:grid;gap:14px}
+.wide .cards{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.gcard{background:var(--surface);border-radius:16px;box-shadow:0 0 0 1px var(--line);overflow:hidden;display:flex;flex-direction:column}
+.gpic{aspect-ratio:7/2;background:linear-gradient(135deg,var(--tone-soft),var(--tone));position:relative;padding:8px;display:flex;justify-content:space-between;align-items:flex-start}
+.gpic .pill{padding:3px 8px}
+.st{background:#d9f0e3;color:#1f6b45;box-shadow:none}
+.gbody{padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.tear{border-top:1px dashed var(--line);padding:8px 14px;display:flex;flex-direction:column;gap:4px}
+.grow{display:grid;grid-template-columns:40px 1fr;gap:4px 10px;padding:10px 0;border-top:1px solid var(--line)}
+.grow .ic{width:40px;height:40px;border-radius:10px;background:var(--tone-soft);grid-row:span 3}
+/* group page */
+.banner{background:linear-gradient(135deg,var(--tone),#8a3d1f);color:#fff;border-radius:14px;padding:20px 16px;display:flex;flex-direction:column;gap:6px}
+.banner .mut{color:rgba(255,255,255,.8)}
+.gtabs{display:flex;gap:16px;border-bottom:1px solid var(--line);margin:14px 0;padding-bottom:8px;overflow:hidden}
+.gtabs .on{box-shadow:0 10px 0 -8px var(--tone)}
+.gp{display:grid;gap:16px}
+.wide .gp{grid-template-columns:1fr 260px}
+.side{background:var(--surface);border-radius:14px;box-shadow:0 0 0 1px var(--line);padding:14px;display:flex;flex-direction:column;gap:8px;align-self:start}
+/* events */
+.bhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.chips{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
+.erow{display:grid;grid-template-columns:52px 1fr;gap:2px 10px;padding:10px 0;border-top:1px solid var(--line)}
+.erow time{grid-row:span 3;font-variant-numeric:tabular-nums}
+.badge{display:inline-block;background:var(--tone-soft);color:var(--tone);border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:2px}
+.epage{background:var(--surface);border-radius:14px;box-shadow:0 0 0 1px var(--line);padding:16px;margin-top:18px;display:flex;flex-direction:column;gap:8px}
+.wide .ev{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+/* all roles */
+.spec{display:grid;grid-template-columns:110px 1fr;gap:6px 14px;align-items:baseline}
+.spec>span:nth-child(odd){font:11px ui-monospace,monospace;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app">
+<!-- ================= CONTROLS ================= -->
+<aside class="panel">
+  <div class="head"><h1>Burti</h1><button class="lnk" id="resetAll">Atjaunot visu</button></div>
+
+  <h2>Fonti</h2>
+  <div class="pairs" id="pairs"></div>
+  <div class="fonts"><span>Virsraksti</span><select id="fh"></select><span>Teksts</span><select id="fb"></select></div>
+
+  <h2>Sistēma</h2>
+  <div class="k"><span>Teksta izmērs</span><input type="range" id="base" min="15" max="17" step="0.5"><output id="o-base"></output></div>
+  <div class="k"><span>Virsrakstu kontrasts</span><input type="range" id="ratio" min="0.8" max="1.25" step="0.05"><output id="o-ratio"></output></div>
+  <div class="k"><span>Biezums</span><div class="seg" id="hw"></div></div>
+  <div class="k"><span>Rindstarpa</span><div class="seg" id="lh"><button data-v="0.93">Blīvi</button><button data-v="1">Parasti</button><button data-v="1.07">Plaši</button></div></div>
+  <div class="k"><span>Birkas</span><div class="seg" id="tc"><button data-v="none">Aa</button><button data-v="uppercase">AA</button></div></div>
+
+  <h2 style="display:flex;justify-content:space-between">Lomas <span style="text-transform:none;letter-spacing:0;font-weight:400">tālr. → dators</span></h2>
+  <table><thead><tr><th style="width:18px"><span class="sr">Izvēlēta</span></th><th>Loma</th><th style="text-align:right">px</th><th style="text-align:right">biez.</th></tr></thead><tbody id="roles" role="radiogroup" aria-label="Lomas"></tbody></table>
+  <div class="warn" id="warn"></div>
+  <p class="note">Reuse: the 10 roles are the only text styles. Variants (weight, muted, italic) are listed per role with when to use them; a new look is a new variant in the handbook, never a one-off size. Admin tunes the roles; every place that uses one follows.</p>
+  <p class="note">Hover a text in the preview → its role lights up here; click a role → every text using it is outlined. The opened role is the shared RoleEditor, the same one the Dizains panel (R23) shows; both write the same draft. "Lietots" counts come from a build-time scan of the role classes (here: the drawing's screens).</p>
+
+  <div class="bar"><button>Skatīt pašam</button><button class="p" id="publish">Publicēt</button><button>Atcelt</button></div>
+</aside>
+
+<!-- ================= PREVIEW ================= -->
+<section class="pv">
+  <div class="ptop">
+    <div class="tabs" id="tabs">
+      <button data-v="shell" class="on">Galvene un izvēlnes</button><button data-v="cards">Grupu kartītes</button><button data-v="group">Grupas lapa</button><button data-v="events">Pasākumi</button><button data-v="all">Visas lomas</button>
+    </div>
+    <div class="seg" id="w"><button data-v="360">360</button><button data-v="768">768</button><button data-v="1280">1280</button></div>
+    <div class="seg" id="mode"><button data-v="light" aria-label="Gaišs">☀</button><button data-v="dark" aria-label="Tumšs">☾</button></div>
+    <a class="hint" href="r23-admin-drawer.html" style="color:var(--accent);text-decoration:none">Skatīt vietnē →</a>
+  </div>
+  <div class="frame" id="frame"><div class="site" id="site">
+
+  <!-- Galvene un izvēlnes -->
+  <div class="screen" data-s="shell">
+    <div class="hdr"><span class="brand" data-r="section">Ejam kopā</span><span class="field R-body-sm" data-r="body-sm">Meklēt grupas, pasākumus…</span>
+      <span class="nav wideonly"><span class="R-button-sm" data-r="button-sm">Grupas</span><span class="R-button-sm" data-r="button-sm">Pasākumi</span><span class="R-button-sm" data-r="button-sm">Ziņas</span></span></div>
+    <div class="menus">
+      <div class="menu">
+        <div class="mh R-tag mut" data-r="tag">Tēma</div>
+        <div class="mi on"><span class="R-body-sm medium" data-r="body-sm">Daba un pārgājieni</span><span class="R-meta mut" data-r="meta">24</span></div>
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Mūzika un dziedāšana</span><span class="R-meta mut" data-r="meta">11</span></div>
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Galda spēles</span><span class="R-meta mut" data-r="meta">7</span></div>
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Ģimenes ar bērniem</span><span class="R-meta mut" data-r="meta">0</span></div>
+      </div>
+      <div class="menu">
+        <div class="mh"><span class="R-item" data-r="item">Jaunumi</span></div>
+        <div class="notif"><p class="R-meta mut" data-r="meta">Purva brienēji · pirms 5 min</p><p class="R-body-sm" data-r="body-sm"><span class="strong">Līga Ozoliņa</span> pieteicās grupai</p></div>
+        <div class="notif"><p class="R-meta mut" data-r="meta">Koris „Ķīši” · vakar</p><p class="R-body-sm" data-r="body-sm"><span class="strong">Jānis</span> ielika jaunu pasākumu</p><p class="R-meta mut clamp2" data-r="meta">Mēģinājums Ģertrūdes baznīcā, ņemiet notis.</p></div>
+      </div>
+      <div class="menu">
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Manas grupas</span></div>
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Labot profilu</span></div>
+        <div class="mi"><span class="R-body-sm" data-r="body-sm">Administrācija</span><span class="R-tag pill" data-r="tag" style="padding:1px 6px">3</span></div>
+        <div class="mi"><span class="R-body-sm mut" data-r="body-sm">Iziet</span></div>
+      </div>
+    </div>
+    <div class="bnav"><div><span class="ic"></span><span class="R-tag" data-r="tag">Atrast</span></div><div><span class="ic"></span><span class="R-tag" data-r="tag">Jaunumi</span></div><div><span class="ic" style="background:var(--accent)"></span><span class="R-tag" data-r="tag">&nbsp;</span></div><div><span class="ic"></span><span class="R-tag" data-r="tag">Ziņas</span></div><div><span class="ic"></span><span class="R-tag" data-r="tag">Es</span></div></div>
+  </div>
+
+  <!-- Grupu kartītes -->
+  <div class="screen" data-s="cards">
+    <div class="bhead"><span class="R-title" data-r="title">Grupas</span><span class="R-title mut" data-r="title">Pasākumi</span></div>
+    <div class="chips"><span class="pill on R-button-sm" data-r="button-sm">Rīga</span><span class="pill R-button-sm" data-r="button-sm">Tēma</span><span class="pill R-button-sm" data-r="button-sm">Šonedēļ</span></div>
+    <div class="cards" style="margin-top:12px">
+      <article class="gcard"><div class="gpic"><span class="pill R-tag strong" data-r="tag">Ķemeri</span><span class="pill st R-tag strong" data-r="tag">Biedrs</span></div>
+        <div class="gbody"><h3 class="R-item clamp2" data-r="item">Purva brienēji</h3><p class="R-meta mut" data-r="meta">Pārgājieni · Daba</p>
+          <p class="R-meta strong" data-r="meta">Meklējam: kādu ar auto uz Ķemeriem</p><p class="R-meta" data-r="meta">Reizi mēnesī ejam pa purviem un jūrmalu, lēnā solī un ar termosu.</p></div>
+        <div class="tear"><p class="R-meta" data-r="meta"><span class="strong">Sestd. 10:00</span> · Ķemeru purva taka</p><p class="R-meta mut" data-r="meta">12 biedri · 3 iet</p></div></article>
+      <article class="gcard"><div class="gpic" style="background:linear-gradient(135deg,var(--accent-soft),var(--accent))"><span class="pill R-tag strong" data-r="tag">Rīga</span><span class="pill R-tag strong" data-r="tag">Atvērta</span></div>
+        <div class="gbody"><h3 class="R-item clamp2" data-r="item">Koris „Ķīši” — dziedam vecās latviešu dziesmas un jaunas arī</h3><p class="R-meta mut" data-r="meta">Mūzika · Koris</p>
+          <p class="R-meta" data-r="meta">Ceturtdienu vakaros Ģertrūdes baznīcā. Nošu lasīt nevajag.</p></div>
+        <div class="tear"><p class="R-meta" data-r="meta"><span class="strong">Ceturtd. 19:00</span> · Mēģinājums</p><p class="R-meta" data-r="meta">📣 Jūnijā koncerts Doma laukumā</p></div></article>
+      <article class="gcard"><div class="gpic" style="background:linear-gradient(135deg,#ece6f6,#7a5fb0)"><span class="pill R-tag strong" data-r="tag">Liepāja</span></div>
+        <div class="gbody"><h3 class="R-item clamp2" data-r="item">Galda spēļu vakari</h3><p class="R-meta mut" data-r="meta">Spēles</p>
+          <p class="R-meta" data-r="meta">Katan, Ķēniņš un viss, ko kāds atnes.</p></div></article>
+    </div>
+    <div class="sec R-section" data-r="section">Sarakstā</div>
+    <div class="grow"><span class="ic"></span><span class="R-item" data-r="item">Purva brienēji</span><span class="R-meta mut" data-r="meta">Ķemeri · 12 biedri</span><span><span class="R-tag pill" data-r="tag" style="padding:1px 7px">Biedrs</span></span></div>
+    <div class="grow"><span class="ic"></span><span class="R-item" data-r="item">Galda spēļu vakari</span><span class="R-meta mut" data-r="meta">Liepāja · 5 biedri</span></div>
+  </div>
+
+  <!-- Grupas lapa -->
+  <div class="screen" data-s="group">
+    <div class="banner"><span class="R-tag" data-r="tag">Pārgājieni · Daba</span><h1 class="R-title" data-r="title">Purva brienēji</h1>
+      <p class="R-body" data-r="body">Lēnā solī pa Latvijas purviem un jūrmalu</p>
+      <p class="R-meta" data-r="meta" style="font-style:italic">Meklējam: kādu ar auto uz Ķemeriem</p><p class="R-meta mut" data-r="meta">Ķemeri · 12 biedri · kopš 2024</p></div>
+    <div class="gtabs"><span class="R-button-sm on" data-r="button-sm">Par mums</span><span class="R-button-sm mut" data-r="button-sm">Pasākumi</span><span class="R-button-sm mut" data-r="button-sm">Biedri</span><span class="R-button-sm mut" data-r="button-sm">Praktiski</span></div>
+    <div class="gp">
+      <div><h2 class="R-section" data-r="section">Par mums</h2>
+        <p class="R-body" data-r="body" style="margin:8px 0">Mēs esam neliela pārgājienu grupa. Reizi mēnesī dodamies uz kādu purvu vai jūrmalu — Ķemeri, Ķeņģeraga taka, Cenas tīrelis. Ejam lēni, runājam daudz, ēdam zupu no termosa.</p>
+        <p class="R-body" data-r="body" style="margin:8px 0">Jauni cilvēki vienmēr laipni gaidīti. Ja nav apavu, kas der purvam, pajautā — kāds aizdos.</p>
+        <p class="R-note" data-r="note">Nākamā tikšanās: sestd., 17. okt.</p></div>
+      <aside class="side"><span class="R-item" data-r="item">Pievienojies</span><p class="R-body-sm mut" data-r="body-sm">Komanda apstiprina katru pieteikumu.</p><span class="btn R-button" data-r="button">Pieteikties</span><span class="R-meta mut" data-r="meta">Atbild parasti dienas laikā</span></aside>
+    </div>
+  </div>
+
+  <!-- Pasākumi -->
+  <div class="screen" data-s="events">
+    <div class="bhead"><span class="R-title mut" data-r="title">Grupas</span><span class="R-title" data-r="title">Pasākumi</span><span class="R-meta mut" data-r="meta">38</span></div>
+    <div class="chips"><span class="pill R-button-sm" data-r="button-sm">Šodien</span><span class="pill on R-button-sm" data-r="button-sm">Šonedēļ</span><span class="pill R-button-sm" data-r="button-sm">Tēma</span></div>
+    <div class="ev">
+      <div>
+        <h3 class="R-item sec" data-r="item">Sestdiena, 17. oktobris</h3>
+        <div class="erow"><time class="R-meta mut" data-r="meta">10:00</time><span class="R-body-sm medium clamp2" data-r="body-sm">Ķemeru purva taka rītausmā<span class="badge R-tag" data-r="tag">Notiek tagad</span></span><span class="R-meta mut" data-r="meta">Ķemeri · Purva brienēji · 12 iet</span></div>
+        <div class="erow"><time class="R-meta mut" data-r="meta">19:00</time><span class="R-body-sm medium clamp2" data-r="body-sm">Koncerts Doma laukumā: dziedam kopā ar visiem, kas atnāk, arī bez notīm un mēģinājumiem</span><span class="R-meta mut" data-r="meta">Rīga · Koris „Ķīši”</span></div>
+        <h3 class="R-item sec" data-r="item">Svētdiena, 18. oktobris</h3>
+        <div class="erow"><time class="R-meta mut" data-r="meta">14:30</time><span class="R-body-sm medium" data-r="body-sm">Galda spēļu pēcpusdiena</span><span class="R-meta mut" data-r="meta">Liepāja · 4 iet</span></div>
+      </div>
+      <article class="epage"><span class="R-tag mut" data-r="tag">Purva brienēji</span><h1 class="R-title" data-r="title">Ķemeru purva taka rītausmā</h1>
+        <p class="R-meta mut" data-r="meta">Sestdien, 17. okt. 10:00–14:00 · Ķemeru stacija</p>
+        <p class="R-body" data-r="body">Satiekamies pie stacijas. Ņem siltas zeķes, termosu un kaut ko ēdamu. Ejam apmēram 8 km.</p>
+        <div><span class="btn R-button" data-r="button">Eju</span> <span class="R-meta mut" data-r="meta" style="margin-left:8px"><span class="strong">12</span> iet</span></div></article>
+    </div>
+  </div>
+
+  <!-- Visas lomas -->
+  <div class="screen" data-s="all"><div class="spec" id="spec"></div></div>
+  </div></div>
+</section>
+</div>
+
+<script>
+const PANG='Glāžšķūņu rūķīši dzērumā čiepj Baha koncertflīģeļu vākus';
+// Font list = THEME_FONTS + the weights each font really has (new field).
+const FONTS={'Literata':[400,500,600,700],'Commissioner':[400,500,600,700],'Geist':[400,500,600,700],'Atkinson Hyperlegible':[400,700],'Alegreya Sans':[400,500,700],'Source Serif 4':[400,500,600,700],'Lora':[400,500,600,700],'Nunito Sans':[400,600,700],'Raleway':[400,500,600,700],'Archivo Black':[400]};
+const PAIRS=[['Ejam','Literata','Commissioner'],['Tīrs','Geist','Geist'],['Saule','Archivo Black','Commissioner'],['Lasāms','Source Serif 4','Atkinson Hyperlegible'],['Silts','Lora','Nunito Sans']];
+// Today's roles. Headings: real clamp (min rem, preferred rem + vw, max rem). Text: fixed px.
+const ROLES=[
+ {id:'display',lv:'Lielais',c:[2,1.55,2,3.25],l:1.05,h:1,rule:'Tikai sākumlapas lielā rinda. Vienreiz lapā.',v:[]},
+ {id:'title',lv:'Lapas virsraksts',c:[1.625,1.4,1,2.25],l:1.1,h:1,rule:'Viens lapā (PageHead), grupas un pasākuma nosaukums savā lapā.',v:['pelēks: neaktīvā puse slēdzim']},
+ {id:'section',lv:'Sadaļa',c:[1.25,1.15,.45,1.5],l:1.2,h:1,rule:'Lapas sadaļas virsraksts. Ne kartītēs.',v:[]},
+ {id:'item',lv:'Nosaukums',c:[1.0625,1,.2,1.1875],l:1.3,h:1,rule:'Kartītes, rindas, dienas virsraksts. Max 2 rindas.',v:[]},
+ {id:'body',lv:'Teksts',px:16,l:1.6,w:400,rule:'Lasāms teksts: apraksti, sadaļas. Platums max-w-reading.',v:['Piezīme (slīpraksts, vietnes krāsa)']},
+ {id:'body-sm',lv:'Teksts, mazs',px:15,l:1.5,w:400,rule:'Blīvi saraksti, izvēlnes, laukā ievadītais.',v:['vidējs: pasākuma nosaukums rindā','izcelts: vārds paziņojumā']},
+ {id:'button',lv:'Poga',px:15,l:1.2,w:500,rule:'Galvenā darbība (pildīta poga).',v:[]},
+ {id:'button-sm',lv:'Poga, maza',px:14,l:1.2,w:500,rule:'Čipi, cilnes, navigācija.',v:[]},
+ {id:'meta',lv:'Sīkdati',px:13,l:1.45,w:400,rule:'Laiks, vieta, skaits; kartītē arī sauklis.',v:['pelēks','izcelts: „Meklējam”, laiks','slīpraksts: banerī „Meklējam”']},
+ {id:'tag',lv:'Birka',px:12,l:1.2,w:600,rule:'Īsi statusi un uzlīmes (1–2 vārdi). Nekad teikums.',v:['apakšjoslas nosaukumi']},
+ {id:'note',lv:'Piezīme',px:14,l:1.5,w:400,tie:'body'},
+];
+const TABN={shell:'Galvene',cards:'Kartītes',group:'Grupas lapa',events:'Pasākumi'};
+const DEF={base:16,ratio:1,hw:'style',lh:1,tc:'none',fh:'Literata',fb:'Commissioner'};
+let g={...DEF},own={},width=360,mode='light',screen='shell',sel=null,ed=null;
+const STYLE_HW=600; // the chosen style's heading weight (calm)
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+
+// today's size at a viewport width, then the system knobs on top; an own value replaces it (linear 360→1280)
+function today(r,w){if(r.px)return r.px;const [mn,a,b,mx]=r.c;return Math.min(mx*16,Math.max(mn*16,a*16+b*w/100))}
+function size(r,w){const o=own[r.id];
+  if(o&&o.min!=null){const t=Math.min(1,Math.max(0,(w-360)/920));return o.min+(o.max-o.min)*t}
+  let s=today(r,w)*g.base/16;if(r.h)s=g.base+(s-g.base)*g.ratio;return Math.max(11,s)}
+const ends=r=>[size(r,360),size(r,1280)].map(x=>+x.toFixed(1));
+const fkind=r=>(own[r.id]||{}).f??(r.h?'h':'b'),fname=r=>fkind(r)==='h'?g.fh:g.fb;
+const weight=r=>{const fw=FONTS[fname(r)];let w=r.h?(g.hw==='style'?STYLE_HW:g.hw):((own[r.id]||{}).w??r.w);
+  return fw.reduce((a,b)=>Math.abs(b-w)<Math.abs(a-w)?b:a)};   // nearest weight the font has
+const lead=r=>r.h?r.l:+(r.l*g.lh).toFixed(2);                 // spacing knob: text only; headings keep ≥1.05
+
+function apply(){
+  document.documentElement.dataset.mode=mode;
+  const site=$('#site'),S=site.style;
+  S.setProperty('--font-heading',`'${g.fh}'`);S.setProperty('--font-body',`'${g.fb}'`);
+  const single=FONTS[g.fh].length===1;S.setProperty('--heading-weight',weight(ROLES[0]));
+  S.setProperty('--ht',g.fh==='Archivo Black'?'0.01em':'0em'); // per-font tracking nudge lives in THEME_FONTS, no knob
+  for(const r of ROLES){S.setProperty(`--${r.id}-s`,size(r,width)+'px');S.setProperty(`--${r.id}-l`,lead(r));S.setProperty(`--${r.id}-w`,weight(r));S.setProperty(`--${r.id}-f`,`'${fname(r)}'`)}
+  S.setProperty('--tag-case',g.tc);S.setProperty('--tag-t',g.tc==='uppercase'?'0.06em':'0.02em');
+  $('#frame').style.width=Math.min(width,($('.pv').clientWidth-36))+'px';$('#frame').classList.toggle('wide',width>=768);
+  $$('.wideonly').forEach(e=>e.style.display=width>=768?'':'none');$('.bnav').style.display=width<768?'':'none';
+  $('#o-base').textContent=g.base+' px';$('#o-ratio').textContent=Math.round(g.ratio*100)+'%';
+  // heading-weight segment: "Stils" + the heading font's weights only
+  $('#hw').innerHTML=['style',...FONTS[g.fh]].map(v=>`<button data-v="${v}" class="${String(g.hw)===String(v)?'on':''}" ${single&&v!=='style'?'disabled':''}>${v==='style'?'Pēc stila':v}</button>`).join('');
+  for(const [id,k] of [['lh','lh'],['tc','tc']])$$('#'+id+' button').forEach(b=>b.classList.toggle('on',b.dataset.v==String(g[k])));
+  $$('#w button').forEach(b=>b.classList.toggle('on',+b.dataset.v===width));$$('#mode button').forEach(b=>b.classList.toggle('on',b.dataset.v===mode));
+  $$('#pairs button').forEach(b=>b.classList.toggle('on',b.dataset.h===g.fh&&b.dataset.b===g.fb));
+  $('#fh').value=g.fh;$('#fb').value=g.fb;$('#base').value=g.base;$('#ratio').value=g.ratio;
+  table();spec();outline();
+  const hs=ROLES.filter(r=>r.h).map(r=>size(r,width)),warn=[];
+  if(hs.some((s,i)=>i&&s>=hs[i-1]))warn.push('Virsrakstu secība sajaukta: zemāka loma ir lielāka par augstāku.');
+  if(single)warn.push(g.fh+' ir viens biezums.');
+  const miss=ROLES.filter(r=>!r.h&&!r.tie&&weight(r)!==((own[r.id]||{}).w??r.w)).map(r=>r.lv);
+  if(miss.length)warn.push(g.fb+' nav vajadzīgā biezuma: '+miss.join(', ')+' rāda tuvāko.');
+  $('#warn').style.display=warn.length?'block':'none';$('#warn').textContent=warn.join(' ');
+}
+function table(){const tb=$('#roles');tb.innerHTML='';
+  for(const r of ROLES){if(r.tie)continue;const [a,b]=ends(r),o=own[r.id],tr=document.createElement('tr');tr.className='r'+(sel===r.id?' sel':'');tr.dataset.id=r.id;
+    tr.setAttribute('role','radio');tr.setAttribute('aria-checked',sel===r.id);tr.tabIndex=(sel?sel===r.id:r.id===ROLES[0].id)?0:-1;tr.setAttribute('aria-label',r.lv+(o?', pielāgota':''));
+    tr.innerHTML=`<td><span class="rd" aria-hidden="true"></span></td><td style="font-family:'${fname(r)}';font-weight:${weight(r)}">${r.lv}${o?'<span class="dot" title="pielāgots"></span>':''}</td><td class="num">${a===b?a:a+'→'+b}</td><td class="num">${weight(r)}</td>`;
+    tr.onclick=()=>{ed=sel===r.id&&ed===r.id?null:r.id;sel=r.id;apply();focusSel()};
+    tr.onkeydown=ev=>{const rows=$$('#roles tr.r'),i=rows.indexOf(tr);
+      if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){const n=rows[(i+(ev.key==='ArrowDown'?1:rows.length-1))%rows.length];sel=ed=n.dataset.id;apply();focusSel();ev.preventDefault()}
+      if(ev.key==='Enter'||ev.key===' '){tr.click();ev.preventDefault()}};tb.append(tr);
+    if(ed===r.id){const e=document.createElement('tr');e.className='ed';const fixed=!r.h;
+      const used=Object.entries($$('.screen').reduce((m,sc)=>{const n=sc.querySelectorAll(`[data-r="${r.id}"]`).length;if(n&&sc.dataset.s!=='all')m[TABN[sc.dataset.s]]=n;return m},{})).map(([k,n])=>k+' '+n).join(' · ');
+      e.innerHTML=`<td colspan="4" style="white-space:normal"><div class="gl"><b>Kad lietot.</b> ${r.rule}</div>${r.v.length?`<div class="gl"><b>Varianti.</b> ${r.v.join('; ')}</div>`:''}<div class="gl"><b>Lietots.</b> ${used||'—'}</div><div class="k" style="grid-template-columns:44px 1fr;min-height:26px"><span style="font-size:12px">Fonts</span><div class="seg" data-f style="grid-column:2"><button data-v="h" class="${fkind(r)==='h'?'on':''}">Virsraksti · ${g.fh.split(' ')[0]}</button><button data-v="b" class="${fkind(r)==='b'?'on':''}">Teksts · ${g.fb.split(' ')[0]}</button></div></div>${fixed?stp(r,'min','px',.5):stp(r,'min','tālr.',.5)+stp(r,'max','dators',.5)}${fixed?stp(r,'w','',100):''}${o?'<div class="gl" style="margin-top:6px">Pielāgota: sistēmas slīdņi šo lomu vairs neietekmē. <button class="lnk" data-reset>Atjaunot</button></div>':''}</td>`;tb.append(e);
+      e.querySelectorAll('[data-k]').forEach(btn=>btn.onclick=ev=>{ev.stopPropagation();const [k,d]=btn.dataset.k.split(':');const cur=own[r.id]||{};const [mn,mx]=ends(r);
+        const n={min:cur.min??mn,max:cur.max??mx,w:cur.w,f:cur.f};
+        if(k==='w'){const ws=FONTS[fname(r)],i=ws.indexOf(weight(r));n.w=ws[Math.min(ws.length-1,Math.max(0,i+ +d))]}
+        else{n[k]=Math.max(11,+(n[k]+ +d).toFixed(1));if(fixed)n.max=n.min}
+        own[r.id]=n;apply()});
+      e.querySelector('[data-f]').onclick=ev=>{ev.stopPropagation();const b=ev.target.closest('button');if(!b)return;const def=r.h?'h':'b',cur={...(own[r.id]||{})};
+        if(b.dataset.v===def)delete cur.f;else cur.f=b.dataset.v;if(Object.values(cur).some(v=>v!=null))own[r.id]=cur;else delete own[r.id];apply()};
+      const rb=e.querySelector('[data-reset]');if(rb)rb.onclick=ev=>{ev.stopPropagation();delete own[r.id];apply()}}}}
+function stp(r,k,lbl,st){const [mn,mx]=ends(r);const v=k==='w'?weight(r):k==='min'?mn:mx;
+  return `<span class="step"><small>${lbl}</small><button data-k="${k}:-${k==='w'?1:st}">−</button><span>${v}</span><button data-k="${k}:${k==='w'?1:st}">+</button></span>`}
+function spec(){$('#spec').innerHTML=ROLES.map(r=>{const [a,b]=ends(r);const cls=r.id==='note'?'R-note':'R-'+r.id;
+  return `<span>${r.lv}<br>${a===b?a:a+'→'+b}px · ${weight(r)}</span><span class="${cls}" data-r="${r.id}">${r.h?PANG:PANG+'. '+PANG.toUpperCase()}</span>`}).join('')+
+  `<span>Skaitļi</span><span class="R-body" data-r="body" style="font-variant-numeric:tabular-nums">0123456789 · 12 iet · 10:00–14:30</span>`;bind()}
+function outline(){$$('.site [data-r]').forEach(e=>e.classList.toggle('hi',!!sel&&(e.dataset.r===sel||(sel==='body'&&e.dataset.r==='note'))))}
+function bind(){$$('.site [data-r]').forEach(e=>{e.onmouseenter=()=>$$('#roles tr.r').forEach(t=>t.classList.toggle('sel',t.dataset.id===(e.dataset.r==='note'?'body':e.dataset.r)));
+  e.onmouseleave=()=>$$('#roles tr.r').forEach(t=>t.classList.toggle('sel',t.dataset.id===sel));
+  e.onclick=()=>{sel=ed=e.dataset.r==='note'?'body':e.dataset.r;apply()}})}
+
+// wiring
+for(const id of ['fh','fb']){const s=$('#'+id);Object.keys(FONTS).forEach(n=>{const o=new Option(n,n);o.style.fontFamily=`'${n}'`;s.add(o)});s.onchange=()=>{g[id]=s.value;if(id==='fh')g.hw='style';apply()}}
+$('#pairs').innerHTML=PAIRS.map(([n,h,b])=>`<button data-h="${h}" data-b="${b}"><b style="font-family:'${h}';font-weight:${FONTS[h].includes(600)?600:400}">${n}</b><span style="font-family:'${b}'">${h.split(' ')[0]} + ${b.split(' ')[0]}</span></button>`).join('');
+$('#pairs').onclick=e=>{const b=e.target.closest('button');if(!b)return;g.fh=b.dataset.h;g.fb=b.dataset.b;g.hw='style';apply()};
+for(const id of ['base','ratio'])$('#'+id).oninput=e=>{g[id]=+e.target.value;apply()};
+const seg=(id,f)=>$('#'+id).onclick=e=>{const b=e.target.closest('button');if(b&&!b.disabled){f(b.dataset.v);apply()}};
+seg('hw',v=>g.hw=v==='style'?'style':+v);seg('lh',v=>g.lh=+v);seg('tc',v=>g.tc=v);seg('w',v=>width=+v);seg('mode',v=>mode=v);
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;screen=b.dataset.v;$$('#tabs button').forEach(x=>x.classList.toggle('on',x===b));$$('.screen').forEach(s=>s.classList.toggle('on',s.dataset.s===screen))};
+function focusSel(){const t=$('#roles tr[tabindex="0"]');if(t)t.focus()}
+$('#publish').onclick=()=>{const hs=ROLES.filter(r=>r.h).map(r=>size(r,1280)),hp=ROLES.filter(r=>r.h).map(r=>size(r,360));
+  const bad=hs.some((v,i)=>i&&v>=hs[i-1])||hp.some((v,i)=>i&&v>=hp[i-1]);const n=Object.keys(own).length;
+  alert((bad?'Brīdinājums: virsrakstu secība sajaukta (zemāka loma lielāka par augstāku).\n\n':'')+'Publicēt visiem? Pielāgotas lomas: '+n+'.')};
+$('#resetAll').onclick=()=>{g={...DEF};own={};sel=ed=null;apply()};
+window.onresize=apply;
+$$('.screen').forEach(s=>s.classList.toggle('on',s.dataset.s===screen));apply();bind();
+</script>
+</body>
+</html>
