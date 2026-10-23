@@ -8,6 +8,8 @@ export interface MeContextValue {
     avatarSrc: string;
     /** "Jelgava · 3 grupas"; either part may be missing. */
     line: string;
+    /** The public handle, if the person has one (the link to the public profile). */
+    username: string | null;
 }
 
 const MeContext = createContext<MeContextValue | undefined>(undefined);

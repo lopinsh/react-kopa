@@ -4,7 +4,11 @@ import { useUnreadMessages } from '@/components/providers/UnreadMessagesProvider
 
 /** Count bubble on the bottom bar's Ziņas cell (the cell's own name carries the count); renders nothing when everything is read. */
 export default function UnreadBadge() {
-    const count = useUnreadMessages();
+    return <CountBadge count={useUnreadMessages()} />;
+}
+
+/** The bubble itself, for any bottom-bar cell with a count. */
+export function CountBadge({ count }: { count: number }) {
     if (count <= 0) return null;
     return (
         <span

@@ -33,7 +33,7 @@ export default async function MeLayout({ children, params }: { children: React.R
     const line = [cityLabel(tCities, ctx.firstCity), t('area.groupCount', { count: ctx.groupCount })].filter(Boolean).join(' · ');
 
     return (
-        <MeProvider value={{ name: ctx.name || t('anonymousUser'), avatarSrc: avatarUrl(ctx), line }}>
+        <MeProvider value={{ name: ctx.name || t('anonymousUser'), avatarSrc: avatarUrl(ctx), line, username: view.person.username }}>
             <PersonHeader />
             <MePhoneBar />
             <FrameColumns

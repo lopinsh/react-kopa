@@ -1,4 +1,3 @@
-import PageHead from '@/components/ui/PageHead';
 import type { Metadata } from 'next';
 import { auth } from '@/lib/auth';
 import { UserService } from '@/lib/services/user.service';
@@ -8,6 +7,7 @@ import { signInUrl } from '@/lib/auth-redirect';
 import EmptyState from '@/components/ui/EmptyState';
 import { buttonClass } from '@/components/ui/Button';
 import MyGroupsSections from '@/components/me/MyGroupsSections';
+import MyProfileCard from '@/components/me/MyProfileCard';
 import MarkMyGroupsSeen from '@/components/me/MarkMyGroupsSeen';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -33,15 +33,12 @@ export default async function MyGroupsPage({ params }: { params: Promise<{ local
         );
     }
 
-    const [t, overview] = await Promise.all([
-        getTranslations('nav'),
-        UserService.getMyGroupsOverview(session.user.id, locale, await getTimeZone()),
-    ]);
+    const overview = await UserService.getMyGroupsOverview(session.user.id, locale, await getTimeZone());
 
     return (
         <>
-            {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
-            <PageHead phoneOnly title={t('myGroups')} />
+            {/* Phones start with the profile card (desktop has it in the side column); the sections carry the page's names. */}
+            <MyProfileCard />
             <MyGroupsSections overview={overview} />
             <MarkMyGroupsSeen />
         </>

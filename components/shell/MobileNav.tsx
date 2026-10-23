@@ -8,7 +8,8 @@ import { clsx } from 'clsx';
 import { useAuthGate } from '@/lib/useAuthGate';
 import { useBottomTab } from '@/hooks/useBottomTab';
 import { useUnreadMessages } from '@/components/providers/UnreadMessagesProvider';
-import UnreadBadge from './UnreadBadge';
+import UnreadBadge, { CountBadge } from './UnreadBadge';
+import { useOwnCounts } from '@/components/providers/OwnCountsProvider';
 import AuthGateModal from '@/components/modals/AuthGateModal';
 import { UI } from '@/lib/constants';
 
@@ -18,20 +19,22 @@ export function Cell({ link, marked }: { link: BottomLink; marked: boolean }) {
     const t = useTranslations('nav');
     const unread = useUnreadMessages();
     const Icon = link.icon;
-    const withCount = link.tab === 'messages';
-    const label = withCount && unread > 0 ? t('messagesUnread', { count: unread }) : undefined;
+    const { notifications } = useOwnCounts();
+    const news = notifications.user + notifications.admin;
+    const label = link.tab === 'messages' && unread > 0 ? t('messagesUnread', { count: unread }) : link.tab === 'news' && news > 0 ? t('newsUnread', { count: news }) : undefined;
     return (
         <Link href={link.href} aria-label={label} aria-current={marked ? 'page' : undefined} className={clsx(CELL, marked && 'weight-strong text-foreground')}>
             <span className={clsx('rounded-pill px-4 py-1', marked && 'bg-primary/16')}>
                 <Icon aria-hidden className={clsx('size-5', marked && 'icon-stroke-strong')} />
             </span>
             <span>{t(link.labelKey)}</span>
-            {withCount && <UnreadBadge />}
+            {link.tab === 'messages' && <UnreadBadge />}
+            {link.tab === 'news' && <CountBadge count={news} />}
         </Link>
     );
 }
 
-/** The phone bottom bar (AR-19): Atklāt, Grupas, +, Ziņas, Es. `initialTab` is the cookie value the server read. */
+/** The phone bottom bar (AR-19): Atklāt, Jaunumi, +, Ziņas, Es. `initialTab` is the cookie value the server read. */
 export default function MobileNav({ initialTab }: { initialTab: BottomTab }) {
     const t = useTranslations('nav');
     const tCommon = useTranslations('common');

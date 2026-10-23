@@ -595,7 +595,7 @@
       "subtitle": "Paslēptās grupas un moderācijas žurnāls."
     },
     "taxonomy": {
-      "title": "Taksonomija",
+      "title": "Tēmas",
       "tree": {
         "title": "Struktūra",
         "expandAll": "Izvērst visus",
@@ -1192,7 +1192,7 @@
     "mobileLabel": "Galvenā navigācija",
     "languageLabel": "Valoda",
     "myProfile": "Mans profils",
-    "groups": "Grupas",
+    "news": "Jaunumi",
     "me": "Es",
     "profileMenu": "Profila izvēlne",
     "languageCurrent": "Valoda: {language}",
@@ -1201,7 +1201,8 @@
     "modeOff": "Izslēgts",
     "notifications": "Paziņojumi",
     "myGroupsNew": "{count, plural, zero {Manas grupas, # jaunu} one {Manas grupas, # jauns} other {Manas grupas, # jauni}}",
-    "notificationsUnread": "{count, plural, zero {Paziņojumi, # nelasītu} one {Paziņojumi, # nelasīts} other {Paziņojumi, # nelasīti}}"
+    "notificationsUnread": "{count, plural, zero {Paziņojumi, # nelasītu} one {Paziņojumi, # nelasīts} other {Paziņojumi, # nelasīti}}",
+    "newsUnread": "{count, plural, zero {Jaunumi, # nelasītu} one {Jaunumi, # nelasīts} other {Jaunumi, # nelasīti}}"
   },
   "notifications": {
     "title": "Paziņojumi",
@@ -1313,7 +1314,8 @@
       "label": "Tava vieta",
       "openMenu": "Tavas vietas lapas",
       "groupCount": "{count, plural, zero {# grupu} one {# grupa} other {# grupas}}",
-      "viewProfile": "skatīt profilu"
+      "viewProfile": "skatīt profilu",
+      "publicProfileLink": "Publiskais profils"
     },
     "settings": {
       "title": "Iestatījumi",
@@ -1336,8 +1338,8 @@
       "menuLabel": "Manas grupas sadaļas",
       "upcoming": "Tuvākie pasākumi",
       "news": "Jaunumi",
-      "groups": "Tavas grupas",
-      "requests": "Tavi pieteikumi",
+      "groups": "Manas grupas",
+      "requests": "Pieteikumi",
       "requestCount": "{count, plural, zero {# pieteikumu} one {# pieteikums} other {# pieteikumi}}",
       "since": "kopš {date}",
       "new": "Jauns",

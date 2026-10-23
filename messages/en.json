@@ -595,7 +595,7 @@
       "subtitle": "See what has been hidden and moderated."
     },
     "taxonomy": {
-      "title": "Taxonomy Management",
+      "title": "Topics",
       "tree": {
         "title": "Taxonomy Tree",
         "expandAll": "Expand All",
@@ -1192,7 +1192,7 @@
     "mobileLabel": "Main navigation",
     "languageLabel": "Language",
     "myProfile": "My profile",
-    "groups": "My groups",
+    "news": "News",
     "me": "Me",
     "profileMenu": "Profile menu",
     "languageCurrent": "Language: {language}",
@@ -1201,7 +1201,8 @@
     "modeOff": "Off",
     "notifications": "Notifications",
     "myGroupsNew": "{count, plural, one {My groups, # new} other {My groups, # new}}",
-    "notificationsUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}"
+    "notificationsUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}",
+    "newsUnread": "{count, plural, one {News, # unread} other {News, # unread}}"
   },
   "notifications": {
     "title": "Notifications",
@@ -1313,7 +1314,8 @@
       "label": "Your space",
       "openMenu": "Your space's pages",
       "groupCount": "{count, plural, one {# group} other {# groups}}",
-      "viewProfile": "view profile"
+      "viewProfile": "view profile",
+      "publicProfileLink": "Public profile"
     },
     "settings": {
       "title": "Settings",
@@ -1336,8 +1338,8 @@
       "menuLabel": "My groups sections",
       "upcoming": "Coming up",
       "news": "News",
-      "groups": "Your groups",
-      "requests": "Your requests",
+      "groups": "My groups",
+      "requests": "Requests",
       "requestCount": "{count, plural, one {# request} other {# requests}}",
       "since": "since {date}",
       "new": "New",

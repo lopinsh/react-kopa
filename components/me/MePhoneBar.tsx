@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Menu } from 'lucide-react';
 import { useMeContext } from '@/components/providers/MeProvider';
 import { UI } from '@/lib/constants';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import MeDrawer from './MeDrawer';
 import EditProfileLink from './EditProfileLink';
 import { IconButton } from '@/components/ui/Button';
@@ -17,6 +17,8 @@ export default function MePhoneBar() {
     const [open, setOpen] = useState(false);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const drawerId = useId();
+    // On Manas grupas the profile card right below carries the person; the bar keeps only the menu.
+    const cardBelow = usePathname() === '/profile/my-groups';
 
     return (
         <div data-ui={UI.ownBarPhone} className="flex h-16 items-center gap-3 border-b border-border bg-surface px-3 md:hidden">
@@ -30,14 +32,14 @@ export default function MePhoneBar() {
             >
                 <Menu aria-hidden className="size-5" />
             </IconButton>
-            <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+            {!cardBelow && <Link href="/profile" aria-label={`${name}, ${t('viewProfile')}`} className="flex min-w-0 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
                 <img src={avatarSrc} alt="" className="size-8 shrink-0 rounded-full object-cover" referrerPolicy="no-referrer" />
                 <div className="min-w-0">
                     <p className="truncate text-item">{name}</p>
                     {line && <p className="truncate text-meta text-foreground-muted">{line}</p>}
                 </div>
-            </Link>
-            <EditProfileLink />
+            </Link>}
+            {!cardBelow && <EditProfileLink />}
             {open && <MeDrawer id={drawerId} onClose={() => setOpen(false)} returnFocusRef={buttonRef} />}
         </div>
     );

@@ -2,20 +2,21 @@
 
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Link } from '@/i18n/routing';
-import { BOTTOM_LINKS, type BottomTab } from '@/lib/navigation';
+import { Link, usePathname } from '@/i18n/routing';
+import { HEADER_LINK, type BottomTab } from '@/lib/navigation';
 import { useBottomTab } from '@/hooks/useBottomTab';
 
-const LINKS = BOTTOM_LINKS.filter((l) => l.tab === 'groups');
+const LINKS = [HEADER_LINK];
 
 /** From md, signed in only: Manas grupas (the logo is the way to Atklāt; the phone bar keeps its Atklāt tab), as an icon beside the logo at 768-1023 px (the search keeps its room) and quiet text links to the right of the search from lg (R20). The open one is marked like the phone bar (same logic), in site colour only (AR-06). */
 export default function HeaderLinks({ initialTab, signedIn }: { initialTab: BottomTab; signedIn: boolean }) {
     const t = useTranslations('nav');
     const marked = useBottomTab(initialTab);
+    const pathname = usePathname();
     return (
         <nav aria-label={t('mobileLabel')} className="hidden shrink-0 items-center gap-1 md:order-2 md:flex lg:order-4">
             {signedIn && LINKS.map((l) => {
-                const on = marked === l.tab;
+                const on = marked === l.tab && pathname.startsWith(l.href); // the phone's Es covers more pages; this link marks only Manas grupas
                 const label = t('myGroups');
                 const Icon = l.icon;
                 return (

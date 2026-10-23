@@ -77,7 +77,7 @@ export function FooterDemo() {
 /** The own area's head and menu, and the Izskats setting. */
 export function OwnAreaDemo() {
     const t = useTranslations('profile.area');
-    const sample = { name: 'Ilze', avatarSrc: 'https://api.dicebear.com/10.x/clay/svg?seed=ilze', line: t('groupCount', { count: 3 }) };
+    const sample = { name: 'Ilze', avatarSrc: 'https://api.dicebear.com/10.x/clay/svg?seed=ilze', line: t('groupCount', { count: 3 }), username: 'ilze' };
     return (
         <MeProvider value={sample}>
             <PersonHeader />
