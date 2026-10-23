@@ -548,6 +548,7 @@ model SiteTheme {
   headingFont String
   bodyFont    String
   styleKey    String   @default("calm")
+  type        Json?
   isPublished Boolean  @default(false)
   updatedById String?
   createdAt   DateTime @default(now())
