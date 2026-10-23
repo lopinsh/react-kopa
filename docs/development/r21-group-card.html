@@ -57,6 +57,7 @@ h2{font:600 clamp(24px,3.4vw,32px)/1.15 var(--serif);margin-bottom:8px}
 .gc{--tone:var(--c-dancing);position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;min-width:0;--stub:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface))}
 .gc.t2{--tone:var(--c-sports)}.gc.t3{--tone:var(--c-art)}
 .gtop{position:relative;flex:none;border-radius:15px 15px 0 0;background:linear-gradient(135deg,color-mix(in oklab,var(--tone) 40%,var(--surface)),color-mix(in oklab,var(--tone) 14%,var(--surface)));aspect-ratio:5/2;transition:height .35s var(--ease)}
+.gc:not(.old) .gtop{aspect-ratio:3/1}
 .gtop svg.wave{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;opacity:.35}
 .gtop svg.wave path{stroke:var(--tone);fill:none;stroke-width:1.4}
 .gtop.area{background:color-mix(in oklab,var(--tone) 22%,var(--surface));display:grid;place-items:center;color:color-mix(in oklab,var(--tone) 75%,var(--text))}
@@ -99,7 +100,7 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
 .cell .place{color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis}
 .cell .go{visibility:hidden;font-weight:600;color:var(--moss)}
 /* desktop: fixed card size (the rest height of today's card); hover shrinks the top area, the white body takes the freed space */
-.gc.d{height:384px}
+.gc.d{height:362px}
 .gc.d .h{display:none}
 .gc.d:hover .gtop,.gc.d.is-hover .gtop{aspect-ratio:auto;height:36px}
 .gc.d:hover .gtop.area .big,.gc.d.is-hover .gtop.area .big{width:18px;height:18px}
@@ -187,7 +188,7 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
 <section id="bezbildes">
   <span class="lbl new">Jaunā</span>
   <h2>Bez bildes un ar bildi blakus</h2>
-  <p class="sub-p">Bez bildes: Tēmas krāsas laukums ar Tēmas ikonu tajā pašā 5:2 augstumā kā bilde (aizstāj šodienas šauro joslu). Hoverī abi sarūk uz to pašu šauro joslu, ikona samazinās.</p>
+  <p class="sub-p">Bez bildes: Tēmas krāsas laukums ar Tēmas ikonu tajā pašā 3:1 augstumā kā bilde (aizstāj šodienas šauro joslu). Hoverī abi sarūk uz to pašu šauro joslu, ikona samazinās.</p>
   <div class="row">
 <div class="fig w-d"><span class="cap">Bez bildes · miera stāvoklī</span><div class="gc t2 d nophoto"><div class="gtop area"><svg class="big" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Skrējēji no Pārdaugavas</h3><p class="gveidi"><a>Skriešana</a><a>Parkrun</a></p><p class="gtag">Skrienam lēnāk, nekā domā: tempu izvēlas lēnākais, pēc skrējiena tēja</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Rīta skrējiens 5 km</span><small>Svētdien, 09:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauns starts: Uzvaras parka ieeja</span><small>21. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 41 dalībnieks</span><span class="go">Sazināties →</span></span></div></div></div></div>
 <div class="fig w-d"><span class="cap">Bez bildes · hover</span><div class="gc t2 d is-hover nophoto"><div class="gtop area"><svg class="big" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Skrējēji no Pārdaugavas</h3><p class="gveidi"><a>Skriešana</a><a>Parkrun</a></p><p class="gtag">Skrienam lēnāk, nekā domā: tempu izvēlas lēnākais, pēc skrējiena tēja</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Rīta skrējiens 5 km</span><small>Svētdien, 09:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauns starts: Uzvaras parka ieeja</span><small>21. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 41 dalībnieks</span><span class="go">Sazināties →</span></span></div></div></div></div>
