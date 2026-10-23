@@ -52,56 +52,75 @@ h2{font:600 clamp(24px,3.4vw,32px)/1.15 var(--serif);margin-bottom:8px}
 .lbl{display:inline-block;margin:0 0 6px;padding:2px 8px;border-radius:999px;background:var(--tint);font-size:11.5px;font-weight:600}
 .lbl.new{background:var(--moss);color:var(--on-moss)}
 
-/* the card, both generations */
-.card{--tone:var(--c-dancing);position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;width:100%}
-.card.t2{--tone:var(--c-sports)}
-.photo{position:relative;flex:none;background:linear-gradient(135deg,color-mix(in oklab,var(--tone) 38%,var(--surface)),color-mix(in oklab,var(--tone) 12%,var(--surface)));transition:height .35s var(--ease)}
-.photo svg{position:absolute;inset:0;width:100%;height:100%;opacity:.35}
-.photo path{stroke:var(--tone);fill:none;stroke-width:1.4}
-.role{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--surface);color:var(--moss);font-size:11.5px;font-weight:600;box-shadow:0 0 0 1px var(--border);transition:top .35s var(--ease)}
-.band{flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;background:color-mix(in oklab,var(--tone) 12%,var(--surface));color:color-mix(in oklab,var(--tone) 70%,var(--text));font-size:13px;font-weight:600}
-.band .role{position:static;margin-left:auto}
-.body{display:flex;flex-direction:column;padding:16px 18px 0;flex:1;min-height:0}
-.title{font:600 1.1875rem/1.26 var(--serif);letter-spacing:-.01em;text-wrap:balance}
-.tag{margin-top:6px;font-size:14px;line-height:1.48;color:color-mix(in oklab,var(--text) 84%,var(--surface))}
-.ev{margin-top:10px;display:flex;align-items:flex-start;gap:8px;font-size:13.5px;line-height:1.4;font-weight:600}
-.ev .ic{color:var(--tone);margin-top:2px}
-.ev small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
-.meta{margin-top:10px;font-size:13px;color:var(--muted);font-weight:500}
 
-/* today */
-.old .photo{aspect-ratio:5/2}
-.old .tag,.old .title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.old .body{padding-bottom:0}
-.stub{margin:14px -18px 0;background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface));padding:14px 18px;height:93px;display:flex;flex-direction:column;justify-content:center;gap:10px;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%)}
-.stub .ev{margin:0}
-.seats{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:500}
-.faces{display:flex}.faces i{width:26px;height:26px;border-radius:50%;margin-left:-8px;box-shadow:0 0 0 2px var(--surface);background:linear-gradient(140deg,#93ad7c,#5f7a4b)}
+/* ---------- the card: today's look (R18) kept; R21-G changes the content and the hover ---------- */
+.gc{--tone:var(--c-dancing);position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;min-width:0;--stub:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface))}
+.gc.t2{--tone:var(--c-sports)}.gc.t3{--tone:var(--c-art)}
+.gtop{position:relative;flex:none;border-radius:15px 15px 0 0;background:linear-gradient(135deg,color-mix(in oklab,var(--tone) 40%,var(--surface)),color-mix(in oklab,var(--tone) 14%,var(--surface)));aspect-ratio:5/2;transition:height .35s var(--ease)}
+.gtop svg.wave{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;opacity:.35}
+.gtop svg.wave path{stroke:var(--tone);fill:none;stroke-width:1.4}
+.gtop.area{background:color-mix(in oklab,var(--tone) 22%,var(--surface));display:grid;place-items:center;color:color-mix(in oklab,var(--tone) 75%,var(--text))}
+.gtop.area .big{width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:width .35s var(--ease),height .35s var(--ease)}
+.grole{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--surface);color:var(--moss);font-size:11.5px;font-weight:600;box-shadow:0 0 0 1px var(--edge,var(--border)),0 3px 10px -3px rgba(0,0,0,.45);transition:top .35s var(--ease)}
+.grole.wait{background:color-mix(in oklab,var(--warn) 20%,var(--surface));color:var(--warn)}
+.gpill{position:absolute;left:16px;bottom:-13px;z-index:2;display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;background:var(--tone);color:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;max-width:calc(100% - 32px);box-shadow:0 0 0 1px var(--edge,var(--border)),0 6px 14px -6px rgba(0,0,0,.5);text-decoration:none}
+.gbody{padding:24px 18px 14px;display:flex;flex-direction:column;gap:6px;flex:none}
+.gname{font:600 1.1875rem/1.26 var(--serif);letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
+.gveidi{display:flex;gap:0 8px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden}
+.gveidi a+a::before{content:"· ";margin-right:2px}
+.gtag{font-size:14px;line-height:1.48;color:color-mix(in oklab,var(--text) 84%,var(--surface));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+mark{background:none;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
+/* the tear-off: tab tint, dashed perforation, scissors; it takes all the slack, so a card never shows blank lines in the body */
+.stub{position:relative;flex:1;background:var(--stub);border-radius:0 0 15px 15px;padding:16px 18px 12px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-height:0}
+.stub::before{content:"";position:absolute;left:0;right:0;top:-1px;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%);pointer-events:none}
+.snip{position:absolute;left:12px;top:-12px;width:24px;height:24px;color:color-mix(in oklab,var(--muted) 70%,transparent);display:grid;place-items:center}
+.snip .ic{width:16px;height:16px}
+.notes{display:flex;flex-direction:column;gap:8px;min-width:0}
+.n{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;line-height:1.35;font-weight:600;min-width:0}
+.n .ic{color:var(--tone);margin-top:2px}
+.n>span:last-child{min-width:0}
+.n .nm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.n small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.n.an .nm,.n.lk .nm{font-weight:500}
+.n.lk small{margin:0}
+.n.req{color:var(--moss)}.n.req .nm{text-decoration:underline;text-underline-offset:3px}
+.n.mo{font-weight:500;color:var(--muted);padding-left:23px}
+.pulse{position:relative;width:8px;height:8px;margin:6px 5px 0 3px;border-radius:50%;background:var(--moss);flex:none}
+.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;animation:pulse 1.8s var(--ease) infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--moss) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+@media (prefers-reduced-motion: reduce){.pulse::after{animation:none}.gtop,.gtop .big,.grole{transition:none}}
+.bot{display:flex;align-items:center;gap:8px;min-width:0}
+.faces{display:flex}.faces i{width:28px;height:28px;border-radius:50%;margin-left:-8px;box-shadow:0 0 0 2px var(--stub);background:linear-gradient(140deg,#93ad7c,#5f7a4b)}
 .faces i:first-child{margin-left:0}.faces i:nth-child(2){background:linear-gradient(140deg,#d09a78,#a5674a)}.faces i:nth-child(3){background:linear-gradient(140deg,#9c8cc8,#6b5a9e)}
-
-/* new, desktop: fixed card height; hover shrinks the picture, the text takes the space */
-.d.card{height:424px}
-.d .photo{height:148px}
-.d .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.d.card:hover .photo,.d.card.is-hover .photo{height:36px}
-.d.card:hover .tag,.d.card.is-hover .tag{display:block}
-.d.card:hover .role,.d.card.is-hover .role{top:7px}
-.d.card.nophoto:hover .tag,.d.card.nophoto.is-hover .tag{display:-webkit-box}
-.foot{margin-top:auto;padding:12px 0 14px;display:flex}
-.btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border:0;border-radius:999px;background:var(--moss);color:var(--on-moss);font:600 14px var(--sans);cursor:pointer}
-.btn .ic{width:16px;height:16px}
-.btn:hover{filter:brightness(1.08)}
-@media (prefers-reduced-motion: reduce){.photo,.role{transition:none}}
-/* new, phone: no hover; a thin picture strip, all the text */
-.p .photo{height:56px}
-.p .tag{display:block}
-.p.card.nophoto .band{height:36px}
-
+.mo2{font-size:12.5px;font-weight:600}
+.seatc{width:28px;height:28px;border-radius:50%;border:1.5px dashed color-mix(in oklab,var(--tone) 75%,transparent);color:var(--tone);display:grid;place-items:center;font-size:15px;line-height:1;flex:none}
+.cell{margin-left:auto;display:grid;justify-items:end;min-width:0;font-size:13px}
+.cell>*{grid-area:1/1;white-space:nowrap;max-width:100%}
+.cell .place{color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.cell .go{visibility:hidden;font-weight:600;color:var(--moss)}
+/* desktop: fixed card size; hover shrinks the top area, the tear-off grows upward */
+.gc.d{height:424px}
+.gc.d .h{display:none}
+.gc.d:hover .gtop,.gc.d.is-hover .gtop{aspect-ratio:auto;height:36px}
+.gc.d:hover .gtop.area .big,.gc.d.is-hover .gtop.area .big{width:18px;height:18px}
+.gc.d:hover .grole,.gc.d.is-hover .grole{top:7px}
+.gc.d:hover .gtag,.gc.d.is-hover .gtag{display:block}
+.gc.d:hover .h,.gc.d.is-hover .h{display:flex}
+.gc.d:hover .cell .place,.gc.d.is-hover .cell .place{visibility:hidden}
+.gc.d:hover .cell .go,.gc.d.is-hover .cell .go{visibility:visible}
+/* phone: rest only */
+.gc.p .h,.gc.p .cell .go{display:none}
+/* today */
+.old .gname{-webkit-line-clamp:2}
+.old .stub{flex:none;height:93px;justify-content:center;gap:12px}
+.old .n.one{white-space:nowrap}
+.old .n.one span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rowitem{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px}
 .rowitem .th{width:56px;height:56px;border-radius:10px;flex:none;background:linear-gradient(135deg,color-mix(in oklab,var(--c-dancing) 38%,var(--surface)),color-mix(in oklab,var(--c-dancing) 12%,var(--surface)))}
-.rowitem .title{font-size:16px}
-.rowitem .tag{font-size:13.5px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-
+.rowitem .gname{font-size:16px}.rowitem .gtag{font-size:13.5px;margin-top:3px}
+#darbvirsma .row,#bezbildes .row{align-items:stretch}
+.fig{min-width:0}
+#darbvirsma .fig,#bezbildes .fig{display:flex;flex-direction:column}
 .anno{display:grid;gap:10px;margin-top:28px;max-width:70ch}
 .anno li{list-style:none;display:flex;gap:10px;font-size:14px}
 .anno b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--text);color:var(--bg);font-size:12px;display:grid;place-items:center}
@@ -110,97 +129,15 @@ h2{font:600 clamp(24px,3.4vw,32px)/1.15 var(--serif);margin-bottom:8px}
 .dd{padding:12px 14px;border-radius:12px;font-size:14px;border:1px solid var(--border);background:var(--surface)}
 .dd b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
 .dd.do b{color:var(--moss)}.dd.dont b{color:var(--warn)}
-
-/* R21-G revision: Tēma line, one-line tagline, three activity variants */
-.tema{margin-top:4px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--muted)}
-.tema .dot{width:8px;height:8px;border-radius:50%;background:var(--tone);flex:none}
-.d .tag,.d .tag{margin-top:6px}
-.d .tag{-webkit-line-clamp:1}
-.d.card:hover .tag,.d.card.is-hover .tag{-webkit-line-clamp:unset;display:block}
-.d.card.nophoto:hover .tag,.d.card.nophoto.is-hover .tag{display:block}
-.act{margin-top:10px;display:flex;align-items:flex-start;gap:8px;font-size:13.5px;line-height:1.4;font-weight:600}
-.act .ic{color:var(--tone);margin-top:2px}
-.act small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
-.act .atl{min-width:0}
-.act.an .atl,.act.lk .atl{font-weight:500}
-.d .act.an .atl,.d .act.lk .atl{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
-.d.card:hover .act .atl,.d.card.is-hover .act .atl{display:block}
-.pulse{position:relative;width:8px;height:8px;margin:6px 5px 0 3px;border-radius:50%;background:var(--moss);flex:none}
-.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;animation:pulse 1.8s var(--ease) infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in oklab,var(--moss) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
-@media (prefers-reduced-motion: reduce){.pulse::after{animation:none}}
-.d.card{height:400px}
-
-/* Tēma = sticker on the picture / band without one; Veidi = muted links under the name, as GroupCard today */
-.sticker{position:absolute;left:16px;bottom:-13px;z-index:2;display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:999px;background:var(--surface);color:var(--text);font-size:12px;font-weight:600;box-shadow:0 0 0 1px var(--border),0 4px 10px -4px rgba(0,0,0,.35);transition:bottom .35s var(--ease)}
-.d.card:hover .sticker,.d.card.is-hover .sticker{bottom:-13px}
-.photo{overflow:visible}
-.card{overflow:visible}
-.photo{border-radius:15px 15px 0 0}
-.card.old .photo{overflow:hidden}
-.card:has(.sticker) .body{padding-top:22px}
-.veidi{margin-top:2px;display:flex;gap:4px 8px;flex-wrap:wrap;font-size:13px;font-weight:500;color:var(--muted)}
-.veidi a+a::before{content:"·";margin-right:8px}
-
-.band{min-height:44px;height:auto;padding:6px 16px;flex-wrap:nowrap}
-.band .tn{flex:none}
-.band .vd{min-width:0;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:500;color:var(--muted)}
-.band .vd::before{content:"· ";}
-.card:has(.sticker) .body{padding-top:16px}
-.p.card.nophoto .band{height:44px}
-
-/* Tēma = pill chip in the category colour (as the sticker today); Veidi follow quietly */
-.band .tn{display:inline-flex;align-items:center;height:26px;padding:0 11px;border-radius:999px;background:color-mix(in oklab,var(--tone) 16%,var(--surface));color:color-mix(in oklab,var(--tone) 75%,var(--text));box-shadow:0 0 0 1px color-mix(in oklab,var(--tone) 55%,var(--surface));font-size:12px;font-weight:600}
-.band{background:var(--surface);border-bottom:1px solid var(--border)}
-.band .ic{display:none}
-.swap{display:grid;margin-top:auto}
-.swap>*{grid-area:1/1}
-.swap .meta{margin:0;align-self:end;padding:0 0 14px}
-.swap .foot{margin:0;padding:0 0 14px;opacity:0;visibility:hidden}
-.d.card:hover .swap .meta,.d.card.is-hover .swap .meta,.d.card:focus-within .swap .meta{visibility:hidden}
-.d.card:hover .swap .foot,.d.card.is-hover .swap .foot,.d.card:focus-within .swap .foot{opacity:1;visibility:visible}
-.pm{margin:10px 0 16px}
-.d.card{height:360px}
-
-/* R21-G rev: flexible text block, bottom row at the bottom, no reserved blank lines */
-.swap{display:none}
-#darbvirsma .row{align-items:stretch}
-#darbvirsma .fig{display:flex;flex-direction:column}
-#darbvirsma .card.d{height:auto;flex:1}
-.body{padding-bottom:0}
-.meta{margin-top:10px;margin-bottom:0}
-.bot{margin-top:auto;padding:12px 0 14px;display:flex;align-items:center;gap:8px;min-height:60px}
-.meta+.bot{margin-top:auto}
-.bot .faces i{margin-left:-8px;box-shadow:0 0 0 2px var(--surface)}
-.bot .faces i:first-child{margin-left:0}
-.bot .more{font-size:12.5px;font-weight:600}
-.seatc{width:26px;height:26px;border-radius:50%;border:1.5px dashed color-mix(in oklab,var(--muted) 60%,transparent);color:var(--muted);display:grid;place-items:center;font-size:15px;line-height:1}
-.bot .btn{flex:none;margin-left:auto;height:34px;padding:0 14px;opacity:0;visibility:hidden}
-.d.card:hover .bot .btn,.d.card.is-hover .bot .btn,.d.card:focus-within .bot .btn{opacity:1;visibility:visible}
-mark{background:none;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
-.role.wait{background:color-mix(in oklab,var(--warn) 20%,var(--surface));color:var(--warn)}
-.req{margin-top:6px;display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--moss);text-decoration:underline;text-underline-offset:3px}
-.band .tn,.band .vd a{text-decoration:none}
-.band .vd a+a::before{content:" · "}
-.band .vd::before{content:"· "}
-.act{align-items:flex-start}
-.act>span:last-child{min-width:0}
-.act .an-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}
-.act .an-t.atl{font-weight:500}
-.d.card:hover .act .an-t,.d.card.is-hover .act .an-t{display:block}
-.act small{display:block;margin-top:1px}
-.act small.q{margin:0 0 1px}
-.pulse{margin-top:6px}
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
-  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
   <symbol id="i-mega" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
   <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
-  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+  <symbol id="i-scis" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></symbol>
 </defs></svg>
 
 <div class="bar"><div class="wrap"><div class="brand">Ejam kopā<span>Grupas kartīte · R21-G</span></div><button class="toggle" id="theme" type="button" aria-label="Pārslēgt gaišo vai tumšo režīmu">Tumšs</button></div></div>
@@ -210,28 +147,23 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
   <p class="eyebrow">Dizaina priekšlikums · grupas kartīte · R21-G</p>
   <h1>Grupas kartīte<em>.</em></h1>
   <p class="lead">Kartīte stāsta, kas grupa ir un kas tai drīz notiek, un ļauj uzrakstīt organizatoriem. Bez uznirstošā loga.</p>
-  <p class="philo">Šodien bilde aizņem gandrīz pusi kartītes, apakšā ir augsta atrāvuma josla, apakšā ir augsta atrāvuma josla, un klikšķis atver slīdošu paneli. Jaunā kartīte atver grupas lapu, rāda pilnu tekstu un apakšā liek lielu „Sazināties“.</p>
+  <p class="philo">Kartīte paliek tā, kā to pazīst: Tēmas kapsula uz bildes malas un atrāvuma daļa apakšā. Mainās saturs un hover: pilni apraksti, pasākuma nosaukums savā rindā, „Sazināties →“ hoverī, klikšķis atver grupas lapu.</p>
 </div>
 
 <section id="sodien">
   <span class="lbl">Šodien</span>
   <h2>Pašreizējā kartīte</h2>
-  <p class="sub-p">Bilde 5:2 ir ap 40 % kartītes, apraksts nogriezts, apakšā 93 px josla ar laiku un cilvēkiem. Klikšķis atver grupas paneli.</p>
+  <p class="sub-p">Bilde 5:2, uzlīme uz bildes malas, atrāvuma daļa apakšā. Vienā rindā: pasākums ar laiku, kas nogriež nosaukumu („Rudens Dej…“). Hover nomaina vietu ar „Atvērt →“, klikšķis atver slīdošu paneli.</p>
   <div class="row">
-    <div class="fig w-d"><span class="cap">1280 · miera stāvoklī</span>
-      <div class="card old">
-        <div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="role">Dalībnieks</span></div>
-        <div class="body">
-          <h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3>
-          <p class="tag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p>
-          <div class="stub"><div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Ceturtdien, 19:00</span></div><div class="seats"><span class="faces"><i></i><i></i><i></i></span><span>128 dalībnieki</span></div></div>
-        </div>
+    <div class="fig w-d"><span class="cap">1280 · šodien</span>
+      <div class="gc old d0">
+        <div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div>
+        <div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div>
+        <div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="n one"><span class="pulse"></span><span>Rudens Dej… · tagad, līdz piektd., 30. okt.</span></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span></span></div></div>
       </div>
-      <p class="note">Pasākumam nav nosaukuma, tikai laiks. Apraksts beidzas ar „…“.</p>
     </div>
     <div class="fig w-p"><span class="cap">375 · rinda uz telefona</span>
-      <div class="rowitem"><div class="th"></div><div><h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3><p class="tag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p><p class="meta">Rīga · 128 dalībnieki</p></div></div>
-      <p class="note">Arī rinda atver slīdošo paneli; apraksts nogriezts, sazināties nevar.</p>
+      <div class="rowitem"><div class="th"></div><div><h3 class="gname">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3><p class="gtag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p></div></div>
     </div>
   </div>
 </section>
@@ -239,33 +171,49 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
 <section id="darbvirsma">
   <span class="lbl new">Jaunā</span>
   <h2>1280 · miera stāvoklis un hover</h2>
-  <p class="sub-p">Kartītes izmērs nemainās (400 px). Uzvedot peli, bilde sarūk līdz 36 px joslai un teksts izmanto atbrīvoto vietu: apraksts atveras pilnībā. Kārtība: josla Tēma · Veidi, nosaukums, īsais apraksts (<code>tagline</code>), aktivitātes rinda, pilsēta · dalībnieki, „Sazināties“. Hover atver pilnu aprakstu un pilnu paziņojuma virsrakstu.</p>
+  <p class="sub-p">Kartītes izmērs nemainās. Uzvedot peli, bilde (vai krāsas laukums) sarūk līdz 36 px joslai, uzlīme brauc līdzi, apraksts atveras pilnībā un atrāvuma daļa aug uz augšu. Pilsēta · dalībnieki nomainās ar „Sazināties →“ tajā pašā vietā.</p>
   <div class="row">
-<div class="fig w-d"><span class="cap">Īss nosaukums un apraksts · notiek tagad</span><div class="card d"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Dejas</a><span class="vd"><a>Laikmetīgā deja</a></span><span class="role ">Īpašnieks</span></div><div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg></div><div class="body"><h3 class="title">Neteikšu kā sauc!</h3><p class="tag">Es varu paskatīties internetā!</p><div class="act"><span class="pulse"></span><span><span class="an-t">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><p class="meta">Rīga · 9 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+6</span><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div></div></div></div>
-<div class="fig w-d"><span class="cap">Garš nosaukums · pasākums · meklēts „tango“</span><div class="card d"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Dejas</a><span class="vd"><a>Tango</a><a>Milonga</a></span><span class="role ">Dalībnieks</span></div><div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg></div><div class="body"><h3 class="title">Rīgas <mark>Tango</mark> Biedrība „Tango bez robežām“ un draugi</h3><p class="tag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p><div class="act"><svg class="ic"><use href="#i-cal"/></svg><span><span class="an-t">Milonga Vecrīgā</span><small>Sestd., 24. okt., 18:00</small></span></div><p class="meta">Rīga · 128 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+125</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div></div></div></div>
-<div class="fig w-d"><span class="cap">Paziņojums · hover (pilns virsraksts)</span><div class="card d is-hover t2"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Sports</a><span class="vd"><a>Slēpošana</a><a>Slidošana</a></span><span class="role ">Dalībnieks</span></div><div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg></div><div class="body"><h3 class="title">Sniegavīru ielas ziemas kluba biedrība</h3><p class="tag">Mēs vismaz neslēpjam, ka patīk sniedziņš</p><div class="act"><svg class="ic"><use href="#i-mega"/></svg><span><span class="an-t atl">Jauna vieta: no nākamās nedēļas satiekamies Kuģu ielas zālē, ieeja no pagalma</span><small>Paziņojums · 22. okt.</small></span></div><p class="meta">Cēsis · 23 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+20</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div></div></div></div>
-<div class="fig w-d"><span class="cap">Ko meklējam? · bez bildes · hover · Manas grupas</span><div class="card d is-hover t2 nophoto"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Sports</a><span class="vd"><a>Skriešana</a><a>Parkrun</a></span><span class="role ">Organizators</span></div><div class="body"><h3 class="title">Skrējēji no Pārdaugavas</h3><a class="req"><svg class="ic"><use href="#i-users"/></svg>2 pieteikumi</a><div class="act"><svg class="ic"><use href="#i-search"/></svg><span><small class="q">Ko meklējam?</small><span class="an-t atl">Skrējējus ar tempu 6 min/km un lēnāk</span></span></div><p class="meta">Rīga · 41 dalībnieks</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+38</span><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div></div></div></div>
-</div>
+<div class="fig w-d"><span class="cap">Neteikšu kā sauc! · miera stāvoklī</span><div class="gc d"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><span class="pulse"></span><span><span class="nm">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Mēģinājumi pārcelti uz zāli Kr. Barona ielā</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Hover</span><div class="gc d is-hover"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><span class="pulse"></span><span><span class="nm">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Mēģinājumi pārcelti uz zāli Kr. Barona ielā</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Gaida · miera stāvoklī</span><div class="gc t2 d"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole wait">Gaida</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Sporta zāles apmeklējums Jelgavā</h3><p class="gveidi"><a>Kultūrisms</a><a>Svarcelšana</a></p><p class="gtag">Kopā iet vieglāk, nekā stāvēt pie spoguļa vienam</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n lk r"><svg class="ic"><use href="#i-search"/></svg><span><small>Ko meklējam?</small><span class="nm">Treniņu partneri darba dienu vakaros</span></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+11</span><span class="cell"><span class="place">Jelgava · 14 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Hover</span><div class="gc t2 d is-hover"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole wait">Gaida</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Sporta zāles apmeklējums Jelgavā</h3><p class="gveidi"><a>Kultūrisms</a><a>Svarcelšana</a></p><p class="gtag">Kopā iet vieglāk, nekā stāvēt pie spoguļa vienam</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n lk r"><svg class="ic"><use href="#i-search"/></svg><span><small>Ko meklējam?</small><span class="nm">Treniņu partneri darba dienu vakaros</span></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+11</span><span class="cell"><span class="place">Jelgava · 14 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+  </div>
   <ul class="anno">
-    <li><b>1</b><span>Klikšķis jebkur uz kartītes atver grupas lapu (ne paneli). „Sazināties“ ir atsevišķa poga, kas parādās tikai hoverī un tastatūras fokusā, tajā pašā vietā, kur miera stāvoklī ir „pilsēta · dalībnieki“. Telefonā pogas nav, sazinās no grupas lapas. Atver ziņu organizatoriem sadaļā Ziņas; ja nav pieteicies, pieteikšanās logs; organizatoriem pašiem pogas nav.</span></li>
-    <li><b>2</b><span>Hover: bilde 148 → 36 px, īsais apraksts (<code>tagline</code>) un paziņojuma virsraksts atveras pilnībā, kartīte tā pati. Tēmas josla paliek. Ar samazinātu kustību bez animācijas.</span></li>
-    <li><b>3</b><span>Aktivitātes rinda ir viena no četrām: notiek tagad (pulsējošs punkts), nākamais pasākums (nosaukums + laiks, R21-B), jaunākais paziņojums (megafons + virsraksts) vai „Ko meklējam?“. Nav neviena, rinda izkrīt.</span></li>
-    <li><b>4</b><span>Tēma · Veidi ir augšējā joslā uz visām kartītēm (ar bildi josla ir tieši virs bildes): Tēma ir kapsulas čips kategorijas krāsā, Veidi (te divi: Tango · Milonga) aiz tā klusināti. Citur kartītē Tēma neatkārtojas.</span></li>
-    <li><b>5</b><span>Aktivitātes rinda: pasākuma vai paziņojuma nosaukums savā rindā (līdz 2 rindām, hoverī pilns), laiks zem tā mazāk izceltā rindā. Kartītes augstums nāk no satura: teksta bloks aug, apakšējā rinda stāv apakšā, tukšu rezervētu rindu nav; rindā kartītes ir vienādi augstas.</span></li>
-    <li><b>6</b><span>Kartīte ir viena izstiepta saite uz grupas lapu ar fokusa kontūru; Tēma, Veidi un pieteikumu saite stāv virs tās. Tēma saglabā filtrus (<code>topicHref</code>), tagline saglabā <code>lang</code>, meklētais vārds nosaukumā pasvītrots.</span></li>
-    <li><b>7</b><span>Apakšā: sejas (līdz 3, pieteicies, publiski profili) + N un tukšā vieta tiem, kas nav grupā; „Gaida“ ir vienīgā gaidīšanas zīme. Hoverī labajā pusē parādās „Sazināties“ (vieta rezervēta, nekas nelec); „pilsēta · dalībnieki“ paliek rindā virs sejām. Manas grupas komandai „N pieteikumi“ (saite uz Biedri → Pieteikumi) ieņem apraksta vietu.</span></li>
+    <li><b>1</b><span>Miera stāvoklī atrāvuma daļā ir tikai viena rinda: notiekošs pasākums (pulss, nosaukums, „līdz …“), citādi nākamais pasākums, citādi jaunākais paziņojums, citādi „Ko meklējam?“. Nosaukums savā rindā (līdz 2), laiks zem tā.</span></li>
+    <li><b>2</b><span>Hoverī: pasākums, „+2 pasākumi“ aiz nākamā pasākuma, jaunākais paziņojums kā otrā rinda. Apraksts miera stāvoklī vienmēr ≤ 2 rindas, hoverī pilns.</span></li>
+    <li><b>3</b><span>Apakšā: sejas + N un brīvā vieta (raustīts aplis, tikai tiem, kas nav grupā) pa kreisi; pilsēta · dalībnieki pa labi, hoverī „Sazināties →“ (tāpat kā šodienas „Apskatīt →“). Gaida ir vienīgā gaidīšanas zīme, brīvās vietas tad nav.</span></li>
   </ul>
+</section>
+<section id="bezbildes">
+  <span class="lbl new">Jaunā</span>
+  <h2>Bez bildes un ar bildi blakus</h2>
+  <p class="sub-p">Bez bildes: Tēmas krāsas laukums ar Tēmas ikonu tajā pašā 5:2 augstumā kā bilde (aizstāj šodienas šauro joslu). Hoverī abi sarūk uz to pašu šauro joslu, ikona samazinās.</p>
+  <div class="row">
+<div class="fig w-d"><span class="cap">Bez bildes · miera stāvoklī</span><div class="gc t2 d nophoto"><div class="gtop area"><svg class="big" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Skrējēji no Pārdaugavas</h3><p class="gveidi"><a>Skriešana</a><a>Parkrun</a></p><p class="gtag">Skrienam lēnāk, nekā domā: tempu izvēlas lēnākais, pēc skrējiena tēja</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Rīta skrējiens 5 km</span><small>Svētdien, 09:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauns starts: Uzvaras parka ieeja</span><small>21. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 41 dalībnieks</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Bez bildes · hover</span><div class="gc t2 d is-hover nophoto"><div class="gtop area"><svg class="big" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Skrējēji no Pārdaugavas</h3><p class="gveidi"><a>Skriešana</a><a>Parkrun</a></p><p class="gtag">Skrienam lēnāk, nekā domā: tempu izvēlas lēnākais, pēc skrējiena tēja</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Rīta skrējiens 5 km</span><small>Svētdien, 09:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauns starts: Uzvaras parka ieeja</span><small>21. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 41 dalībnieks</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Ar bildi · miera stāvoklī</span><div class="gc d"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Rīgas <mark>Tango</mark> Biedrība „Tango bez robežām“ un draugi</h3><p class="gveidi"><a>Tango</a><a>Milonga</a></p><p class="gtag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Milonga Vecrīgā</span><small>Ceturtdien, 19:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauna vieta: Kuģu ielas zāle</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+125</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 128 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Ar bildi · hover</span><div class="gc d is-hover"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Rīgas <mark>Tango</mark> Biedrība „Tango bez robežām“ un draugi</h3><p class="gveidi"><a>Tango</a><a>Milonga</a></p><p class="gtag">Tango bez steigas, bez kurpju prasībām un ar Vecrīgas bruģi zem kājām</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Milonga Vecrīgā</span><small>Ceturtdien, 19:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauna vieta: Kuģu ielas zāle</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+125</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 128 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+  </div>
+</section>
+<section id="komanda">
+  <span class="lbl new">Jaunā</span>
+  <h2>Organizators: pieteikumi</h2>
+  <p class="sub-p">Tikai komandai (Manas grupas): saite „2 pieteikumi“ atrāvuma daļā, vienā rindā ar pasākumu; hoverī blakus parādās jaunākā pieteicēja vārds („Jānis un vēl 1“). Pogas „Sazināties“ komandai nav.</p>
+  <div class="row">
+<div class="fig w-d"><span class="cap">Organizators · miera stāvoklī</span><div class="gc t3 d"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Organizators</span><a class="gpill">Māksla</a></div><div class="gbody"><h3 class="gname">Akvareļu darbnīca „Slapjš uz slapja“</h3><p class="gveidi"><a>Zīmēšana</a><a>Akvarelis</a></p><p class="gtag">Katru otrdienu krāsojam vecpilsētas pagalmus</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n req r"><svg class="ic"><use href="#i-users"/></svg><span><span class="nm">2 pieteikumi</span></span></div><div class="n mo h"><span>Jānis un vēl 1</span></div><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Plenērs Doma laukumā</span><small>Sestd., 24. okt., 11:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+17</span><span class="cell"><span class="place">Rīga · 20 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-d"><span class="cap">Hover</span><div class="gc t3 d is-hover"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Organizators</span><a class="gpill">Māksla</a></div><div class="gbody"><h3 class="gname">Akvareļu darbnīca „Slapjš uz slapja“</h3><p class="gveidi"><a>Zīmēšana</a><a>Akvarelis</a></p><p class="gtag">Katru otrdienu krāsojam vecpilsētas pagalmus</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n req r"><svg class="ic"><use href="#i-users"/></svg><span><span class="nm">2 pieteikumi</span></span></div><div class="n mo h"><span>Jānis un vēl 1</span></div><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Plenērs Doma laukumā</span><small>Sestd., 24. okt., 11:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+17</span><span class="cell"><span class="place">Rīga · 20 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+  </div>
 </section>
 
 <section id="telefons">
   <span class="lbl new">Jaunā</span>
   <h2>375 · telefons (nav hover)</h2>
-  <p class="sub-p">Bilde ir pastāvīga 56 px josla zem Tēmas joslas, viss teksts un visa aktivitātes rinda redzami, kartīte aug pēc satura. Pogas „Sazināties“ nav: sazinās no grupas lapas, uz kuru kartīte un rinda ved.</p>
+  <p class="sub-p">Tikai miera stāvoklis: tā pati kartīte, bez „Sazināties“ (sazinās no grupas lapas, uz kuru kartīte ved).</p>
   <div class="row">
-<div class="fig w-p"><span class="cap">Īss nosaukums · notiek tagad · bez bildes</span><div class="card p nophoto"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Dejas</a><span class="vd"><a>Laikmetīgā deja</a></span><span class="role ">Īpašnieks</span></div><div class="body"><h3 class="title">Neteikšu kā sauc!</h3><p class="tag">Es varu paskatīties internetā!</p><div class="act"><span class="pulse"></span><span><span class="an-t">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><p class="meta">Rīga · 9 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+6</span></div></div></div></div>
-<div class="fig w-p"><span class="cap">Pasākums · ar bildi · angļu apraksts</span><div class="card p"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Dejas</a><span class="vd"><a>Tango</a><a>Milonga</a></span><span class="role ">Dalībnieks</span></div><div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg></div><div class="body"><h3 class="title">Rīgas <mark>Tango</mark> Biedrība „Tango bez robežām“ un draugi</h3><p class="tag" lang="en">Tango without hurry, no shoe rules, Old Town cobbles underfoot</p><div class="act"><svg class="ic"><use href="#i-cal"/></svg><span><span class="an-t">Milonga Vecrīgā</span><small>Sestd., 24. okt., 18:00</small></span></div><p class="meta">Rīga · 128 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+125</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span></div></div></div></div>
-<div class="fig w-p"><span class="cap">Paziņojums · Gaida · bez bildes</span><div class="card p t2 nophoto"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Sports</a><span class="vd"><a>Slēpošana</a><a>Slidošana</a></span><span class="role wait">Gaida</span></div><div class="body"><h3 class="title">Sniegavīru ielas ziemas kluba biedrība</h3><p class="tag">Mēs vismaz neslēpjam, ka patīk sniedziņš</p><div class="act"><svg class="ic"><use href="#i-mega"/></svg><span><span class="an-t atl">Jauna vieta: no nākamās nedēļas satiekamies Kuģu ielas zālē, ieeja no pagalma</span><small>Paziņojums · 22. okt.</small></span></div><p class="meta">Cēsis · 23 dalībnieki</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+20</span></div></div></div></div>
-<div class="fig w-p"><span class="cap">Ko meklējam? · ar bildi</span><div class="card p t2"><div class="band"><svg class="ic"><use href="#i-dot"/></svg><a class="tn">Sports</a><span class="vd"><a>Skriešana</a><a>Parkrun</a></span><span class="role ">Dalībnieks</span></div><div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg></div><div class="body"><h3 class="title">Skrējēji no Pārdaugavas</h3><p class="tag">Skrienam lēnāk, nekā domā</p><div class="act"><svg class="ic"><use href="#i-search"/></svg><span><small class="q">Ko meklējam?</small><span class="an-t atl">Skrējējus ar tempu 6 min/km un lēnāk</span></span></div><p class="meta">Rīga · 41 dalībnieks</p><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="more">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span></div></div></div></div>
+<div class="fig w-p"><span class="cap">Ar bildi · notiek tagad</span><div class="gc p"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><span class="pulse"></span><span><span class="nm">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Mēģinājumi pārcelti uz zāli Kr. Barona ielā</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-p"><span class="cap">Bez bildes · nākamais pasākums</span><div class="gc t2 p nophoto"><div class="gtop area"><svg class="big" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="grole">Dalībnieks</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Skrējēji no Pārdaugavas</h3><p class="gveidi"><a>Skriešana</a><a>Parkrun</a></p><p class="gtag">Skrienam lēnāk, nekā domā: tempu izvēlas lēnākais, pēc skrējiena tēja</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Rīta skrējiens 5 km</span><small>Svētdien, 09:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Jauns starts: Uzvaras parka ieeja</span><small>21. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+38</span><span class="seatc" role="img" aria-label="Brīva vieta">+</span><span class="cell"><span class="place">Rīga · 41 dalībnieks</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-p"><span class="cap">Gaida · Ko meklējam?</span><div class="gc t2 p"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole wait">Gaida</span><a class="gpill">Sports</a></div><div class="gbody"><h3 class="gname">Sporta zāles apmeklējums Jelgavā</h3><p class="gveidi"><a>Kultūrisms</a><a>Svarcelšana</a></p><p class="gtag">Kopā iet vieglāk, nekā stāvēt pie spoguļa vienam</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n lk r"><svg class="ic"><use href="#i-search"/></svg><span><small>Ko meklējam?</small><span class="nm">Treniņu partneri darba dienu vakaros</span></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+11</span><span class="cell"><span class="place">Jelgava · 14 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
+<div class="fig w-p"><span class="cap">Organizators · pieteikumi</span><div class="gc t3 p"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Organizators</span><a class="gpill">Māksla</a></div><div class="gbody"><h3 class="gname">Akvareļu darbnīca „Slapjš uz slapja“</h3><p class="gveidi"><a>Zīmēšana</a><a>Akvarelis</a></p><p class="gtag">Katru otrdienu krāsojam vecpilsētas pagalmus</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n req r"><svg class="ic"><use href="#i-users"/></svg><span><span class="nm">2 pieteikumi</span></span></div><div class="n mo h"><span>Jānis un vēl 1</span></div><div class="n r"><svg class="ic"><use href="#i-cal"/></svg><span><span class="nm">Plenērs Doma laukumā</span><small>Sestd., 24. okt., 11:00</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+17</span><span class="cell"><span class="place">Rīga · 20 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
   </div>
 </section>
 
@@ -273,8 +221,8 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
   <h2>Dari un nedari</h2>
   <div class="grid2">
     <div class="dd do"><b>Dari</b>Klikšķis atver grupas lapu; logi paliek tikai pasākumiem.</div><div class="dd dont"><b>Nedari</b>Grupas slīdošais panelis virs saraksta.</div>
-    <div class="dd do"><b>Dari</b>Hoverī bilde sarūk, kartīte nemainās, saraksts nelec.</div><div class="dd dont"><b>Nedari</b>Kartīte aug hoverī un pārbīda kaimiņus.</div>
-    <div class="dd do"><b>Dari</b>Viena izcelta poga „Sazināties“ hoverī, vietā, kur miera stāvoklī ir „pilsēta · dalībnieki“.</div><div class="dd dont"><b>Nedari</b>Divas pogas vai saite „Sazināties“ blakus dalībnieku skaitam.</div>
+    <div class="dd do"><b>Dari</b>Hoverī bilde sarūk, kartīte nemainās, atrāvuma daļa aug uz augšu.</div><div class="dd dont"><b>Nedari</b>Rezervētas tukšas rindas tekstā vai kartīte, kas aug un pārbīda kaimiņus.</div>
+    <div class="dd do"><b>Dari</b>Pasākuma nosaukums savā rindā, laiks zem tā.</div><div class="dd dont"><b>Nedari</b>Nosaukumu un laiku vienā rindā, kur laiks apēd nosaukumu.</div>
   </div>
 </section>
 </div>
