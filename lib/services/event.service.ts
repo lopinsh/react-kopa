@@ -870,7 +870,7 @@ export class EventService {
         const lang = toTextLang(locale);
         const withIds = async () => ({ ...where, searchIds: where.search ? await matchingEventIds(where.search) : undefined });
         const include = EVENT_ROW_INCLUDE(lang);
-        const orderBy = { startDate: 'asc' } as const;
+        const orderBy: Prisma.EventOrderByWithRelationInput[] = [{ startDate: 'asc' }, { id: 'asc' }];
 
         // The cache holds the narrow row shape (an excerpt, not whole descriptions).
         const loadPublic = unstable_cache(
@@ -911,7 +911,7 @@ export class EventService {
         // Cached rows come back with dates as strings; revive them before sorting.
         const merged = [...publicRows, ...memberRows]
             .map((e) => ({ ...e, startDate: new Date(e.startDate), endDate: e.endDate ? new Date(e.endDate) : null }))
-            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime() || (a.id < b.id ? -1 : 1))
             .slice(0, limit + 1);
         const shown = merged.slice(0, limit);
         const mine = await EventService.myTags(shown.map((e) => e.id), userId);

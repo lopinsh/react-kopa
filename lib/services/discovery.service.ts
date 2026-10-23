@@ -45,7 +45,7 @@ export const DiscoveryService = {
                     take: reqTake + 1,
                     skip: reqSkip,
                     select: GROUP_CARD_SELECT(reqLang),
-                    orderBy: { createdAt: 'desc' },
+                    orderBy: [{ createdAt: 'desc' }, { id: 'asc' }],
                 });
 
                 const hasMore = results.length > reqTake;
