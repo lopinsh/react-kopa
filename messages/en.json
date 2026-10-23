@@ -775,7 +775,7 @@
     },
     "development": {
       "bookTitle": "Approved drawings",
-      "drawings": { "r18": "Message board", "r19": "Topic index", "r20": "Board heading" },
+      "drawings": { "r18": "Message board", "r19": "Topic index", "r20": "Board heading", "r21": "Group card" },
       "buildPlanEmptyTitle": "No plan in progress",
       "buildPlanEmptyHint": "The next release plan will appear here once it is written."
     },

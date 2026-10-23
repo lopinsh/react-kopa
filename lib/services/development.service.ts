@@ -3,13 +3,14 @@ import path from 'path';
 
 const DEVELOPMENT_DIR = path.join(process.cwd(), 'docs', 'development');
 
-export const DESIGN_DRAWINGS = ['r18', 'r19', 'r20'] as const;
+export const DESIGN_DRAWINGS = ['r18', 'r19', 'r20', 'r21'] as const;
 export type DesignDrawingId = (typeof DESIGN_DRAWINGS)[number];
 
 const DRAWING_FILES: Record<DesignDrawingId, string> = {
     r18: 'r18-group-cards.html',
     r19: 'r19-category-sidebar.html',
     r20: 'r20-board-heading.html',
+    r21: 'r21-group-card.html',
 };
 
 export const DevelopmentService = {

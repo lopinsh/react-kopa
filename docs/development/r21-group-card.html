@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grupas kartīte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Literata:opsz,wght@7..72,600;7..72,700&display=swap" rel="stylesheet">
+<style>
+/* tokens: the same as r18/r20 (Sūna) */
+:root{
+  --bg:#f4f4ef;--surface:#fdfdfb;--tint:#e8eae1;--border:#dcdfd4;--text:#1f221c;--muted:#5f6558;
+  --moss:#4B5E3B;--warn:#8A5B0B;--on-moss:#fdfdfb;--c-dancing:#A9452C;--c-sports:#3B55A0;
+  --stub-mix:12%;--ease:cubic-bezier(.2,.7,.2,1);
+  --serif:"Literata",Georgia,serif;--sans:"Commissioner",system-ui,sans-serif;color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--text:#eceee7;--muted:#a8ae9f;
+  --moss:#b5c79e;--warn:#E2B65A;--on-moss:#161814;--c-dancing:#E09B8A;--c-sports:#98A9DD;--stub-mix:16%;color-scheme:dark;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--text:#eceee7;--muted:#a8ae9f;
+  --moss:#b5c79e;--warn:#E2B65A;--on-moss:#161814;--c-dancing:#E09B8A;--c-sports:#98A9DD;--stub-mix:16%;color-scheme:dark;}}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p{margin:0}
+ul{margin:0;padding:0}
+.wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+@media (max-width:640px){.wrap{padding:0 16px}}
+.ic{width:15px;height:15px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bar{position:sticky;top:0;z-index:40;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.bar .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.brand{font:600 17px var(--serif)}.brand span{color:var(--muted);font:500 13px var(--sans);margin-left:8px}
+@media (max-width:480px){.brand span{display:none}}
+.toggle{margin-left:auto;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 13px var(--sans);cursor:pointer}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.intro{padding:48px 0 32px}
+.intro h1{font:600 clamp(36px,6vw,64px)/1 var(--serif);letter-spacing:-.025em;margin:12px 0 16px}
+.intro h1 em{font-style:normal;color:var(--moss)}
+.intro .lead{font:600 clamp(18px,2vw,22px)/1.32 var(--serif);max-width:40ch}
+.intro .philo{color:var(--muted);max-width:66ch;margin-top:12px}
+section{padding:56px 0;border-top:1px solid var(--border)}
+h2{font:600 clamp(24px,3.4vw,32px)/1.15 var(--serif);margin-bottom:8px}
+.sub-p{color:var(--muted);max-width:66ch;margin-bottom:28px}
+.row{display:flex;flex-wrap:wrap;gap:32px 40px;align-items:flex-start}
+.fig{display:flex;flex-direction:column;gap:10px;min-width:0}
+.cap{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.note{font-size:13px;color:var(--muted);max-width:38ch}
+.w-d{width:340px}.w-p{width:343px}
+@media (max-width:420px){.w-d,.w-p{width:100%}}
+.lbl{display:inline-block;margin:0 0 6px;padding:2px 8px;border-radius:999px;background:var(--tint);font-size:11.5px;font-weight:600}
+.lbl.new{background:var(--moss);color:var(--on-moss)}
+
+/* the card, both generations */
+.card{--tone:var(--c-dancing);position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden;width:100%}
+.card.t2{--tone:var(--c-sports)}
+.photo{position:relative;flex:none;background:linear-gradient(135deg,color-mix(in oklab,var(--tone) 38%,var(--surface)),color-mix(in oklab,var(--tone) 12%,var(--surface)));transition:height .35s var(--ease)}
+.photo svg{position:absolute;inset:0;width:100%;height:100%;opacity:.35}
+.photo path{stroke:var(--tone);fill:none;stroke-width:1.4}
+.role{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--surface);color:var(--moss);font-size:11.5px;font-weight:600;box-shadow:0 0 0 1px var(--border);transition:top .35s var(--ease)}
+.band{flex:none;height:44px;display:flex;align-items:center;gap:8px;padding:0 16px;background:color-mix(in oklab,var(--tone) 12%,var(--surface));color:color-mix(in oklab,var(--tone) 70%,var(--text));font-size:13px;font-weight:600}
+.band .role{position:static;margin-left:auto}
+.body{display:flex;flex-direction:column;padding:16px 18px 0;flex:1;min-height:0}
+.title{font:600 1.1875rem/1.26 var(--serif);letter-spacing:-.01em;text-wrap:balance}
+.tag{margin-top:6px;font-size:14px;line-height:1.48;color:color-mix(in oklab,var(--text) 84%,var(--surface))}
+.ev{margin-top:10px;display:flex;align-items:flex-start;gap:8px;font-size:13.5px;line-height:1.4;font-weight:600}
+.ev .ic{color:var(--tone);margin-top:2px}
+.ev small{display:block;font-weight:500;color:var(--muted);font-size:12.5px}
+.meta{margin-top:10px;font-size:13px;color:var(--muted);font-weight:500}
+
+/* today */
+.old .photo{aspect-ratio:5/2}
+.old .tag,.old .title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.old .body{padding-bottom:0}
+.stub{margin:14px -18px 0;background:color-mix(in oklab,var(--tone) var(--stub-mix),var(--surface));padding:14px 18px;height:93px;display:flex;flex-direction:column;justify-content:center;gap:10px;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%)}
+.stub .ev{margin:0}
+.seats{display:flex;align-items:center;justify-content:space-between;font-size:12.5px;color:var(--muted);font-weight:500}
+.faces{display:flex}.faces i{width:26px;height:26px;border-radius:50%;margin-left:-8px;box-shadow:0 0 0 2px var(--surface);background:linear-gradient(140deg,#93ad7c,#5f7a4b)}
+.faces i:first-child{margin-left:0}.faces i:nth-child(2){background:linear-gradient(140deg,#d09a78,#a5674a)}.faces i:nth-child(3){background:linear-gradient(140deg,#9c8cc8,#6b5a9e)}
+
+/* new, desktop: fixed card height; hover shrinks the picture, the text takes the space */
+.d.card{height:424px}
+.d .photo{height:148px}
+.d .tag{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.d.card:hover .photo,.d.card.is-hover .photo{height:36px}
+.d.card:hover .tag,.d.card.is-hover .tag{display:block}
+.d.card:hover .role,.d.card.is-hover .role{top:7px}
+.d.card.nophoto:hover .tag,.d.card.nophoto.is-hover .tag{display:-webkit-box}
+.foot{margin-top:auto;padding:12px 0 14px;display:flex}
+.btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border:0;border-radius:999px;background:var(--moss);color:var(--on-moss);font:600 14px var(--sans);cursor:pointer}
+.btn .ic{width:16px;height:16px}
+.btn:hover{filter:brightness(1.08)}
+@media (prefers-reduced-motion: reduce){.photo,.role{transition:none}}
+/* new, phone: no hover; a thin picture strip, all the text */
+.p .photo{height:56px}
+.p .tag{display:block}
+.p.card.nophoto .band{height:36px}
+
+.rowitem{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px}
+.rowitem .th{width:56px;height:56px;border-radius:10px;flex:none;background:linear-gradient(135deg,color-mix(in oklab,var(--c-dancing) 38%,var(--surface)),color-mix(in oklab,var(--c-dancing) 12%,var(--surface)))}
+.rowitem .title{font-size:16px}
+.rowitem .tag{font-size:13.5px;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+.anno{display:grid;gap:10px;margin-top:28px;max-width:70ch}
+.anno li{list-style:none;display:flex;gap:10px;font-size:14px}
+.anno b{flex:none;width:22px;height:22px;border-radius:50%;background:var(--text);color:var(--bg);font-size:12px;display:grid;place-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:760px}
+@media (max-width:640px){.grid2{grid-template-columns:1fr}}
+.dd{padding:12px 14px;border-radius:12px;font-size:14px;border:1px solid var(--border);background:var(--surface)}
+.dd b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.dd.do b{color:var(--moss)}.dd.dont b{color:var(--warn)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></symbol>
+</defs></svg>
+
+<div class="bar"><div class="wrap"><div class="brand">Ejam kopā<span>Grupas kartīte · R21-G</span></div><button class="toggle" id="theme" type="button" aria-label="Pārslēgt gaišo vai tumšo režīmu">Tumšs</button></div></div>
+
+<div class="wrap">
+<div class="intro">
+  <p class="eyebrow">Dizaina priekšlikums · grupas kartīte · R21-G</p>
+  <h1>Grupas kartīte<em>.</em></h1>
+  <p class="lead">Kartīte stāsta, kas grupa ir un kas tai drīz notiek, un ļauj uzrakstīt organizatoriem. Bez uznirstošā loga.</p>
+  <p class="philo">Šodien bilde aizņem gandrīz pusi kartītes, apraksts ir nogriezts pie divām rindām, apakšā ir augsta atrāvuma josla, un klikšķis atver slīdošu paneli. Jaunā kartīte atver grupas lapu, rāda pilnu tekstu un apakšā liek lielu „Sazināties“.</p>
+</div>
+
+<section id="sodien">
+  <span class="lbl">Šodien</span>
+  <h2>Pašreizējā kartīte</h2>
+  <p class="sub-p">Bilde 5:2 ir ap 40 % kartītes, apraksts nogriezts, apakšā 93 px josla ar laiku un cilvēkiem. Klikšķis atver grupas paneli.</p>
+  <div class="row">
+    <div class="fig w-d"><span class="cap">1280 · miera stāvoklī</span>
+      <div class="card old">
+        <div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3>
+          <p class="tag">Katru nedēļu satiekamies Vecrīgā, lai kopā dejotu argentīnas tango iesācējiem un pieredzējušiem, ar mūziku no vinila ierakstiem.</p>
+          <div class="stub"><div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Ceturtdien, 19:00</span></div><div class="seats"><span class="faces"><i></i><i></i><i></i></span><span>128 dalībnieki</span></div></div>
+        </div>
+      </div>
+      <p class="note">Pasākumam nav nosaukuma, tikai laiks. Apraksts beidzas ar „…“.</p>
+    </div>
+    <div class="fig w-p"><span class="cap">375 · rinda uz telefona</span>
+      <div class="rowitem"><div class="th"></div><div><h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3><p class="tag">Katru nedēļu satiekamies Vecrīgā, lai kopā dejotu argentīnas tango iesācējiem un pieredzējušiem, ar mūziku no vinila ierakstiem.</p><p class="meta">Rīga · 128 dalībnieki</p></div></div>
+      <p class="note">Arī rinda atver slīdošo paneli; apraksts nogriezts, sazināties nevar.</p>
+    </div>
+  </div>
+</section>
+
+<section id="darbvirsma">
+  <span class="lbl new">Jaunā</span>
+  <h2>1280 · miera stāvoklis un hover</h2>
+  <p class="sub-p">Kartītes izmērs nemainās (424 px). Uzvedot peli, bilde sarūk līdz 36 px joslai un teksts izmanto atbrīvoto vietu: apraksts atveras pilnībā. Kārtība: nosaukums, apraksts, tuvākais pasākums, pilsēta · dalībnieki, „Sazināties“.</p>
+  <div class="row">
+    <div class="fig w-d"><span class="cap">Miera stāvoklī</span>
+      <div class="card d">
+        <div class="photo"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3>
+          <p class="tag">Katru nedēļu satiekamies Vecrīgā, lai kopā dejotu argentīnas tango iesācējiem un pieredzējušiem, ar mūziku no vinila ierakstiem. Pirmā reize bez maksas, kurpes nav obligātas, nāc ar draugu.</p>
+          <div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Milonga Vecrīgā<small>Ceturtdien, 19:00</small></span></div>
+          <p class="meta">Rīga · 128 dalībnieki</p>
+          <div class="foot"><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="fig w-d"><span class="cap">Hover</span>
+      <div class="card d is-hover">
+        <div class="photo"><span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3>
+          <p class="tag">Katru nedēļu satiekamies Vecrīgā, lai kopā dejotu argentīnas tango iesācējiem un pieredzējušiem, ar mūziku no vinila ierakstiem. Pirmā reize bez maksas, kurpes nav obligātas, nāc ar draugu.</p>
+          <div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Milonga Vecrīgā<small>Ceturtdien, 19:00</small></span></div>
+          <p class="meta">Rīga · 128 dalībnieki</p>
+          <div class="foot"><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="fig w-d"><span class="cap">Bez bildes</span>
+      <div class="card d t2 nophoto">
+        <div class="band"><svg class="ic"><use href="#i-dot"/></svg>Sports · Skriešana<span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Skrējēji no Pārdaugavas</h3>
+          <p class="tag">Skrienam trīs reizes nedēļā pa Uzvaras parka un Kalnciema ielas apli, tempu izvēlas pēc lēnākā. Pēc skrējiena tējas.</p>
+          <div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Rīta skrējiens 5 km<small>Svētdien, 09:00</small></span></div>
+          <p class="meta">Rīga · 41 dalībnieks</p>
+          <div class="foot"><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="anno">
+    <li><b>1</b><span>Klikšķis jebkur uz kartītes atver grupas lapu (ne paneli). „Sazināties“ ir atsevišķa poga, tā neatver lapu.</span></li>
+    <li><b>2</b><span>Hover: bilde 148 → 36 px, apraksts bez nogriešanas, kartīte tā pati. Tastatūras fokuss dara to pašu. Ar samazinātu kustību bez animācijas.</span></li>
+    <li><b>3</b><span>Pasākuma rinda ir nosaukta piezīme no R21-B: nosaukums, zem tā laiks. Nav pasākuma, rinda izkrīt.</span></li>
+    <li><b>4</b><span>Bez bildes: 44 px kategorijas josla, apraksts paliek divās rindās, jo nav ko samazināt.</span></li>
+  </ul>
+</section>
+
+<section id="telefons">
+  <span class="lbl new">Jaunā</span>
+  <h2>375 · telefons (nav hover)</h2>
+  <p class="sub-p">Bilde ir pastāvīga 56 px josla, viss teksts redzams, kartīte aug pēc satura. Rinda dēļa sarakstā paliek kā ir, tikai atver grupas lapu.</p>
+  <div class="row">
+    <div class="fig w-p"><span class="cap">Ar bildi</span>
+      <div class="card p">
+        <div class="photo"><svg viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 8 Q25 2 50 6 T100 3"/></svg><span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Rīgas Tango Biedrība „Tango bez robežām“ un draugi</h3>
+          <p class="tag">Katru nedēļu satiekamies Vecrīgā, lai kopā dejotu argentīnas tango iesācējiem un pieredzējušiem, ar mūziku no vinila ierakstiem. Pirmā reize bez maksas, kurpes nav obligātas, nāc ar draugu.</p>
+          <div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Milonga Vecrīgā<small>Ceturtdien, 19:00</small></span></div>
+          <p class="meta">Rīga · 128 dalībnieki</p>
+          <div class="foot"><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="fig w-p"><span class="cap">Bez bildes</span>
+      <div class="card p t2 nophoto">
+        <div class="band"><svg class="ic"><use href="#i-dot"/></svg>Sports · Skriešana<span class="role">Dalībnieks</span></div>
+        <div class="body">
+          <h3 class="title">Skrējēji no Pārdaugavas</h3>
+          <p class="tag">Skrienam trīs reizes nedēļā pa Uzvaras parka un Kalnciema ielas apli, tempu izvēlas pēc lēnākā. Pēc skrējiena tējas.</p>
+          <div class="ev"><svg class="ic"><use href="#i-cal"/></svg><span>Rīta skrējiens 5 km<small>Svētdien, 09:00</small></span></div>
+          <p class="meta">Rīga · 41 dalībnieks</p>
+          <div class="foot"><button class="btn" type="button"><svg class="ic"><use href="#i-msg"/></svg>Sazināties</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="anno">
+    <li><b>5</b><span>„Sazināties“ atver ziņu organizatoriem sadaļā Ziņas. Ja nav pieteicies, atveras pieteikšanās logs. Organizatoriem pašiem pogas nav.</span></li>
+    <li><b>6</b><span>Apakšējā josla ir 66 px (šodien 93 px) un bez atrāvuma līnijas: vietu skaits pārcelts uz „pilsēta · dalībnieki“.</span></li>
+  </ul>
+</section>
+
+<section id="noteikumi">
+  <h2>Dari un nedari</h2>
+  <div class="grid2">
+    <div class="dd do"><b>Dari</b>Klikšķis atver grupas lapu; logi paliek tikai pasākumiem.</div><div class="dd dont"><b>Nedari</b>Grupas slīdošais panelis virs saraksta.</div>
+    <div class="dd do"><b>Dari</b>Hoverī bilde sarūk, kartīte nemainās, saraksts nelec.</div><div class="dd dont"><b>Nedari</b>Kartīte aug hoverī un pārbīda kaimiņus.</div>
+    <div class="dd do"><b>Dari</b>Viena izcelta poga „Sazināties“ apakšā.</div><div class="dd dont"><b>Nedari</b>Divas pogas vai saite „Sazināties“ blakus dalībnieku skaitam.</div>
+  </div>
+</section>
+</div>
+<script>
+const root=document.documentElement,b=document.getElementById('theme'),mq=matchMedia('(prefers-color-scheme: dark)');
+const dark=()=>root.dataset.theme?root.dataset.theme==='dark':mq.matches;
+const paint=()=>{b.textContent=dark()?'Gaišs':'Tumšs'};
+b.addEventListener('click',()=>{root.dataset.theme=dark()?'light':'dark';paint()});paint();
+</script>
+</body>
+</html>

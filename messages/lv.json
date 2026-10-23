@@ -775,7 +775,7 @@
     },
     "development": {
       "bookTitle": "Apstiprinātie zīmējumi",
-      "drawings": { "r18": "Ziņojumu dēlis", "r19": "Tēmu rādītājs", "r20": "Dēļa galva" },
+      "drawings": { "r18": "Ziņojumu dēlis", "r19": "Tēmu rādītājs", "r20": "Dēļa galva", "r21": "Grupas kartīte" },
       "buildPlanEmptyTitle": "Pašlaik nav neviena plāna",
       "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts."
     },

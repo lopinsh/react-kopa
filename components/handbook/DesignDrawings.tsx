@@ -9,7 +9,7 @@ export function isDrawing(value: string | undefined): value is DesignDrawingId {
 
 /**
  * The approved drawings, the last section of the Design chapter. Each drawing is a complete page with its own colours,
- * fonts and script, so it runs in an isolated frame and does not follow the site theme. The tab is in the URL (`?d=r18|r19|r20`).
+ * fonts and script, so it runs in an isolated frame and does not follow the site theme. The tab is in the URL (`?d=r18|r19|r20|r21`).
  */
 export default async function DesignDrawings({ current }: { current: DesignDrawingId }) {
     const t = await getTranslations('admin.development');
