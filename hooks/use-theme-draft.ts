@@ -6,7 +6,7 @@ import {
     type CategoryToneSlug, type ThemeEditableToken, type ThemeFontId, type ThemeMode, type ThemePresetKey, type ThemeStyleKey,
 } from '@/lib/constants';
 import { completeModeTokens, themeContrastIssues, type CompleteModeTokens, type ContrastIssue } from '@/lib/theme/contrast';
-import type { ThemeInput } from '@/lib/validations/theme';
+import type { ThemeInput, ThemeType } from '@/lib/validations/theme';
 
 export type DraftTheme = Omit<ThemeInput, 'light' | 'dark'> & { light: CompleteModeTokens; dark: CompleteModeTokens };
 
@@ -28,7 +28,8 @@ export function useThemeDraft(initial: ThemeInput) {
     /** A ready-made theme: its values, completed; tones go back to the defaults. */
     const choosePreset = (key: ThemePresetKey) => {
         const p = THEME_PRESETS[key];
-        setTheme({ presetKey: key, light: completeModeTokens(p.light), dark: completeModeTokens(p.dark), headingFont: p.headingFont, bodyFont: p.bodyFont, styleKey: p.styleKey });
+        // A look is colour, font and shape; the type tuning is separate and stays (only the site-wide reset clears it).
+        setTheme((prev) => ({ type: prev.type, presetKey: key, light: completeModeTokens(p.light), dark: completeModeTokens(p.dark), headingFont: p.headingFont, bodyFont: p.bodyFont, styleKey: p.styleKey }));
     };
 
     const setColor = (mode: ThemeMode, token: ThemeEditableToken, hex: string) =>
@@ -43,5 +44,8 @@ export function useThemeDraft(initial: ThemeInput) {
     /** The style alone (calm/bold); colours and fonts stay as they are, so a preset keeps its name. */
     const setStyle = (styleKey: ThemeStyleKey) => setTheme((prev) => ({ ...prev, styleKey }));
 
-    return { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont };
+    /** The type tuning (R22-2's Burti page); does not touch the look's name. */
+    const setType = (type: ThemeType | undefined) => setTheme((prev) => ({ ...prev, type }));
+
+    return { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont, setType };
 }

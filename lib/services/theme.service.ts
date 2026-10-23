@@ -1,5 +1,5 @@
 import { unstable_cache } from 'next/cache';
-import type { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import {
@@ -7,7 +7,7 @@ import {
     type ThemeFontId, type ThemeKey, type ThemeModeTokens, type ThemePresetKey, type ThemeStyleKey,
 } from '@/lib/constants';
 import { themeContrastIssues } from '@/lib/theme/contrast';
-import { themeInputSchema, type ThemeInput } from '@/lib/validations/theme';
+import { themeInputSchema, themeTypeSchema, type ThemeInput, type ThemeType } from '@/lib/validations/theme';
 
 /** A resolved theme, ready for the layout and the Design page. */
 export interface ThemeContext {
@@ -19,6 +19,8 @@ export interface ThemeContext {
     headingFont: ThemeFontId;
     bodyFont: ThemeFontId;
     styleKey: ThemeStyleKey;
+    /** The site's type tuning (R22); absent = today's type. Optional so a theme cached before it existed still renders. */
+    type?: ThemeType;
     /** True when this is an admin's unpublished draft, not the site-wide theme. */
     isPreview: boolean;
 }
@@ -30,20 +32,23 @@ function defaultTheme(): ThemeContext {
 
 /** Rows come from JSON columns; anything that no longer validates falls back to the default look. */
 function toContext(
-    row: { id: string; presetKey: string; light: Prisma.JsonValue; dark: Prisma.JsonValue; headingFont: string; bodyFont: string; styleKey?: string | null },
+    row: { id: string; presetKey: string; light: Prisma.JsonValue; dark: Prisma.JsonValue; headingFont: string; bodyFont: string; styleKey?: string | null; type?: Prisma.JsonValue | null },
     isPreview: boolean
 ): ThemeContext {
     // An unknown stored style key falls back to calm.
     const styleKey = (THEME_STYLE_KEYS as readonly string[]).includes(row.styleKey ?? '') ? row.styleKey : DEFAULT_THEME_STYLE_KEY;
     const parsed = themeInputSchema.safeParse({ presetKey: row.presetKey, light: row.light, dark: row.dark, headingFont: row.headingFont, bodyFont: row.bodyFont, styleKey });
+    // A type value that no longer validates is dropped on its own; it never costs the whole theme its look.
+    const typeParsed = themeTypeSchema.safeParse(row.type);
+    const type = typeParsed.success ? typeParsed.data : undefined;
     if (!parsed.success || !THEME_FONT_IDS.includes(parsed.data.headingFont) || !THEME_FONT_IDS.includes(parsed.data.bodyFont)) return defaultTheme();
     const { presetKey } = parsed.data;
     // Code is the source for presets' colours and fonts, so a stored copy of an older preset follows the current values; `custom` keeps its own. The style comes from the row.
     if ((THEME_PRESET_KEYS as readonly string[]).includes(presetKey)) {
         const preset = THEME_PRESETS[presetKey as ThemePresetKey];
-        return { id: row.id, presetKey, light: preset.light, dark: preset.dark, headingFont: preset.headingFont, bodyFont: preset.bodyFont, styleKey: parsed.data.styleKey, isPreview };
+        return { id: row.id, presetKey, light: preset.light, dark: preset.dark, headingFont: preset.headingFont, bodyFont: preset.bodyFont, styleKey: parsed.data.styleKey, type, isPreview };
     }
-    return { id: row.id, ...parsed.data, isPreview };
+    return { id: row.id, ...parsed.data, type, isPreview };
 }
 
 /**
@@ -93,7 +98,7 @@ export const ThemeService = {
         if (themeContrastIssues(parsed.data).length > 0) throw new ActionError('CONTRAST_TOO_LOW');
         const created = await prisma.$transaction(async (tx) => {
             await tx.siteTheme.deleteMany({ where: { isPublished: false, updatedById: adminId } });
-            return tx.siteTheme.create({ data: { ...parsed.data, isPublished: false, updatedById: adminId } });
+            return tx.siteTheme.create({ data: { ...parsed.data, type: parsed.data.type ?? Prisma.JsonNull, isPublished: false, updatedById: adminId } });
         });
         return { id: created.id };
     },
@@ -105,7 +110,7 @@ export const ThemeService = {
         if (themeContrastIssues(parsed.data).length > 0) throw new ActionError('CONTRAST_TOO_LOW');
         await prisma.$transaction([
             prisma.siteTheme.deleteMany({ where: { OR: [{ isPublished: true }, { isPublished: false, updatedById: adminId }] } }),
-            prisma.siteTheme.create({ data: { ...parsed.data, isPublished: true, updatedById: adminId } }),
+            prisma.siteTheme.create({ data: { ...parsed.data, type: parsed.data.type ?? Prisma.JsonNull, isPublished: true, updatedById: adminId } }),
         ]);
         return;
     },
@@ -114,7 +119,7 @@ export const ThemeService = {
     async publishDraft(adminId: string, draftId: string): Promise<void> {
         const draft = await ThemeService.getDraft(draftId);
         if (!draft) throw new ActionError('NOT_FOUND');
-        return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont, styleKey: draft.styleKey });
+        return ThemeService.publish(adminId, { presetKey: draft.presetKey, light: draft.light, dark: draft.dark, headingFont: draft.headingFont, bodyFont: draft.bodyFont, styleKey: draft.styleKey, type: draft.type });
     },
 
     /** Back to the default preset (Sūna) for everyone. */
