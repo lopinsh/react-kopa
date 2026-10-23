@@ -11,6 +11,10 @@ export default async function globalSetup(config: FullConfig) {
   await page.locator('input[type="password"]').fill('oskars');
   await page.locator('form button[type="submit"]').first().click();
   await page.waitForURL((url) => !url.pathname.includes('/auth/'));
+  // Opening Manas grupas stores "seen" on the user, which clears the avatar's new-dot. Do it once here so every screen starts from that
+  // state, whatever order the workers run in (otherwise the first signed-in screens render the dot and later ones do not).
+  await page.goto('/lv/profile/my-groups');
+  await page.waitForLoadState('networkidle');
   const state = await page.context().storageState();
   // The server's clock is frozen in 2026, so cookie expiry dates may already be past for the real browser: make them session cookies.
   for (const c of state.cookies) c.expires = -1;

@@ -23,6 +23,8 @@ const settle = async (page: Page) => {
     document.querySelectorAll('img[loading="lazy"]').forEach((i) => ((i as HTMLImageElement).loading = 'eager'));
     return [...document.images].every((i) => i.complete);
   }, undefined, { timeout: 15_000 });
+  // Signed-in headers fetch the unread count (a server action) after hydration; its dot/badge must be in before the capture.
+  await page.waitForLoadState('networkidle');
   await page.waitForTimeout(400);
 };
 
