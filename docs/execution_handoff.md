@@ -52,7 +52,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - **Create-group wizard order (22 Oct):** step 1 Basics (name, tagline, description, place), step 2 Tēma, step 3 as now. The same wizard from the + button and from "add a group here"; from inside a category the Tēma step is pre-filled (selected, "Mainīt"), never skipped.
 - **Sign-in:** a pop-up for actions inside the site (with a "Create account" link; registration returns the person to where they were), the sign-in page for direct visits and protected URLs; both share one form and wording.
 
-- **Bottom bar (23 Oct, R21-C):** Atrast · Jaunumi · + · Ziņas · Es. Jaunumi opens the notifications list (bell count); Es opens Manas grupas, which starts with the profile card (picture, name, round pencil to Labot profilu, quiet link to the public profile) on phones. Desktop header unchanged.
+- **Bottom bar (23 Oct, R21-C, pushed, live):** Atrast · Jaunumi · + · Ziņas · Es. Jaunumi opens the notifications list (bell count); Es opens Manas grupas, which starts with the profile card (picture, name, round pencil to Labot profilu, quiet link to the public profile) on phones. Desktop header unchanged.
 
 ## Known code debt (fix when touching nearby code, not as a project)
 
