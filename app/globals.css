@@ -147,17 +147,6 @@ body {
     justify-content: flex-start;
   }
 }
-/* The title-switch's divider: 1 px, cap height (about 0.7 em where `cap` is not known); needs the title font on the element. */
-@utility title-rule {
-  font: inherit;
-  width: 1px;
-  height: 0.7em;
-  align-self: baseline;
-  background: color-mix(in oklab, var(--foreground-muted) 55%, var(--background));
-  @supports (height: 1cap) {
-    height: 1cap;
-  }
-}
 /* board-veil (R20): the sticky chip row's veil: --background at 95 % from 8 px above (the stick gap) to 16 px below the chips, then clear. Always on: at rest it lies on --background over empty space. The chips keep their own surface. */
 @utility board-veil {
   &::before {

@@ -182,6 +182,7 @@ export const UI = {
     datePicker: 'date-picker',
     textLink: 'text-link',
     groupBanner: 'group-banner',
+    groupStickyBar: 'group-sticky-bar',
     groupMenu: 'group-menu',
     socialLinks: 'social-links',
     nextMeeting: 'next-meeting',

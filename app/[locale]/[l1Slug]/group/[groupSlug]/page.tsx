@@ -28,8 +28,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
     if (!group) notFound();
 
-    const [t, tFrame, tCommon] = await Promise.all([
-        getTranslations('group'),
+    const [tFrame, tCommon] = await Promise.all([
         getTranslations('group.frame'),
         getTranslations('common'),
     ]);
@@ -52,9 +51,8 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
-            {group.lookingFor && <p className="mb-3 text-body-sm italic text-primary md:hidden">{group.lookingFor}</p>}
             {latest && <LatestAnnouncement item={latest} allHref={group.user.isMember ? `${base}/announcements` : undefined} />}
-            <InfoSections title={t('pages.info')} label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
+            <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
         </>
     );
 }

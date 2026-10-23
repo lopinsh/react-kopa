@@ -14,7 +14,7 @@ const anchor = (key: string) => `part-${key}`;
  * scroll and write `#part-{id}` with replaceState (no navigation inside the group's address, R6) and follow the scrolling (scroll-spy).
  * `initial` is an old `?part=` link: scrolled to once and rewritten to the hash.
  */
-export default function InfoSections({ title, label, parts, initial }: { title: string; label: string; parts: Part[]; initial: string }) {
+export default function InfoSections({ label, parts, initial }: { label: string; parts: Part[]; initial: string }) {
     const wrap = useRef<HTMLDivElement>(null);
     const tabs = useRef<HTMLElement | null>(null);
     const { active, activate } = useScrollSpy(parts.map((p) => p.key), wrap, tabs, parts[0]?.key ?? '');
@@ -49,11 +49,11 @@ export default function InfoSections({ title, label, parts, initial }: { title: 
 
     return (
         <>
-            {many && <PartTabs title={title} label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `#${anchor(key)}` }))} active={active} onSelect={select} />}
+            {many && <PartTabs label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `#${anchor(key)}` }))} active={active} onSelect={select} />}
             <div ref={wrap} className="flex flex-col gap-section">
-                {parts.map((p) => (
+                {parts.map((p, i) => (
                     <section key={p.key} id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
-                        <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className="mb-2 text-section">{p.label}</h2>
+                        <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className={i === 0 ? 'mb-2 text-section max-md:sr-only' : 'mb-2 text-section'}>{p.label}</h2>
                         {p.content}
                     </section>
                 ))}

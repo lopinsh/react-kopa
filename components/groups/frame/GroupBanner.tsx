@@ -24,7 +24,7 @@ export default function GroupBanner() {
     const facts = [city, t('members', { count: g.memberCount }), g.isPrivate ? t('membersOnly') : ''].filter(Boolean);
 
     return (
-        <div data-ui={UI.groupBanner} className="banner-tone relative isolate z-10 h-16 border-b border-border md:h-24">
+        <div data-ui={UI.groupBanner} className="banner-tone relative isolate z-10 min-h-16 border-b border-border py-2 md:h-24 md:py-0">
             <div className="mx-auto flex h-full max-w-browse items-center gap-3 px-gutter md:gap-4">
                 <GroupPagesDrawer />
                 <span className="mark-surface grid size-9 shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">
@@ -32,6 +32,7 @@ export default function GroupBanner() {
                 </span>
                 <div className="min-w-0 flex-1">
                     <BannerName />
+                    {g.lookingFor && <p className="truncate text-meta italic tile-ink">{g.lookingFor}</p>}
                     <p className={'flex items-center gap-1.5 text-meta tile-ink-muted md:hidden'}>
                         <span aria-hidden className={'size-2 shrink-0 rounded-full bg-current'} />
                         <span className="truncate"><Link href={topicHref(g.category.l1Slug)} className="hover:underline">{g.category.l1Title}</Link>{facts.map((f) => ` · ${f}`).join('')}</span>
@@ -40,7 +41,6 @@ export default function GroupBanner() {
                         <CategoryLine onTone color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} />
                         <p className={'text-meta tile-ink-muted'}>{facts.join(' · ')}</p>
                     </div>
-                    {g.lookingFor && <p className={'hidden truncate text-meta italic tile-ink md:block'}>{g.lookingFor}</p>}
                 </div>
                 <GroupActions />
             </div>

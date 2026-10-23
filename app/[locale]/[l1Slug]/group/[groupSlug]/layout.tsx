@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import GroupBanner from '@/components/groups/frame/GroupBanner';
+import GroupStickyBar from '@/components/groups/frame/GroupStickyBar';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
 import FrameColumns from '@/components/ui/FrameColumns';
 import GroupAside from '@/components/groups/frame/GroupAside';
@@ -31,10 +32,11 @@ export default async function GroupLayout({
     return (
         <GroupProvider value={toGroupState(group)}>
             {/* var(--cat-<l1Slug>) or a validated hex from TaxonomyResolver: safe inside <style>. Light/dark come from the site theme. The picture is an element in the banner, never a URL here. */}
-            <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${group.theme.accentColor};--accent-foreground:var(--on-cat)}` }} />
+            <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${group.theme.accentColor};--accent-foreground:var(--on-cat)}@media(max-width:767px){:root{--sticky-bar:2.5rem}}` }} />
             {group.moderation.hidden && (
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
+            <GroupStickyBar />
             <GroupBanner />
             <FrameColumns
                 nav={<GroupPagesNav variant="side" />}
