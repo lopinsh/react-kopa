@@ -52,18 +52,35 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
         // Leading: text roles with a line of their own; buttons are single-line controls.
         if (!r.heading && r.line !== null && !r.id.startsWith('button') && leading && leading !== 'normal') vars[`--type-${r.id}-line`] = num(r.line * LEADING[leading], 3);
 
-        if (o?.weight !== undefined) {
+        if (o?.weight !== undefined && r.id !== 'human-note') {
             const useHeading = o.font ? o.font === 'heading' : r.heading;
             vars[`--type-${r.id}-weight`] = String(snapWeight(useHeading ? headingFont : bodyFont, o.weight));
         }
-        if (o?.font) vars[`--type-${r.id}-font`] = o.font === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)';
+        if (o?.font && r.heading) vars[`--type-${r.id}-font`] = o.font === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)';
     }
 
     const fixed = THEME_FONTS.find((f) => f.id === headingFont);
     if (headingWeight !== undefined && !(fixed && 'weight' in fixed)) vars['--heading-weight'] = String(snapWeight(headingFont, headingWeight));
-    if (tagCase === 'upper') {
-        vars['--type-tag-transform'] = 'uppercase';
-        if (roles?.tag?.size === undefined) vars['--type-tag-tracking'] = '0.06em';
-    }
+    // Uppercase letters need room (the one coupled default); a chosen tag size keeps the usual tracking.
+    if (tagCase === 'upper' && roles?.tag?.size === undefined) vars['--type-tag-tracking'] = '0.06em';
     return vars;
+}
+
+/**
+ * Declarations a role never had in globals.css (a text role's font, the tag's case, the note's weight), as rules that exist only when set:
+ * an unset theme adds nothing, so nothing shifts. Same validated enums and numbers as the variables.
+ */
+export function themeTypeRules(type: ThemeType | undefined, headingFont: ThemeFontId, bodyFont: ThemeFontId): string {
+    if (!type) return '';
+    const rules: string[] = [];
+    for (const r of TYPE_ROLES) {
+        const o = type.roles?.[r.id];
+        if (!o) continue;
+        const decls: string[] = [];
+        if (!r.heading && o.font) decls.push(`font-family:${o.font === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)'}`);
+        if (r.id === 'human-note' && o.weight !== undefined) decls.push(`font-weight:${snapWeight(o.font === 'heading' ? headingFont : bodyFont, o.weight)}`);
+        if (decls.length) rules.push(`.${r.utility}{${decls.join(';')}}`);
+    }
+    if (type.tagCase === 'upper') rules.push('.text-tag{text-transform:uppercase}');
+    return rules.join('\n');
 }

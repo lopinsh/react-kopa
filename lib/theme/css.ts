@@ -2,7 +2,7 @@ import {
     CATEGORY_TONES, CATEGORY_TONE_SLUGS, DEFAULT_OVERLAYS, DEFAULT_ROLE_TONES, DEFAULT_STATUS_TONES, PHOTO_INK, ROLE_TONE_KEYS, SOFT_SHADOWS, THEME_FONTS, THEME_STYLES,
     type ThemeDefinition, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey, type ThemeStyleTokens,
 } from '@/lib/constants';
-import { themeTypeVars } from '@/lib/theme/type-vars';
+import { themeTypeRules, themeTypeVars } from '@/lib/theme/type-vars';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
 
 /** White text unless the colour is clearly light (Sūna's light primary keeps white, its light-sage dark primary gets near-black). */
@@ -142,7 +142,8 @@ export function themeCss(def: ThemeDefinition): string {
             ...themeTypeVars(def.type, def.headingFont, def.bodyFont),
         }),
         block('html.dark:root', { ...themeModeVars(def.dark, 'dark'), ...(style.ink === 'foreground' ? { '--ink': inkValue(style, 'dark') } : {}) }),
-    ].join('\n');
+        themeTypeRules(def.type, def.headingFont, def.bodyFont),
+    ].filter(Boolean).join('\n');
 }
 
 /**

@@ -149,7 +149,8 @@ body {
 
 /* Type roles (design.md, Type): every piece of text picks a role; size, line, tracking and weight come with it.
    Headings use the heading font and the style's heading weight; the rest use the body font.
-   Roles read `--type-<role>-*` (set by the theme, lib/theme/type-vars.ts), falling back to the literals here (keep lib/constants/type-roles.ts equal). */
+   Roles read `--type-<role>-*` (set by the theme, lib/theme/type-vars.ts), falling back to the literals here (keep lib/constants/type-roles.ts equal).
+   A property a role never had (a text role's font, the tag's case) is not declared here: the theme adds a rule for it only when set (themeTypeRules), so unset changes nothing. */
 @utility text-display {
   font-family: var(--type-display-font, var(--font-heading)), system-ui, sans-serif;
   font-weight: var(--type-display-weight, var(--heading-weight));
@@ -183,51 +184,38 @@ body {
   font-synthesis-weight: none;
   font-size: var(--type-item-size, clamp(1.0625rem, 1rem + 0.2vw, 1.1875rem));
   line-height: var(--type-item-line, 1.3);
-  letter-spacing: var(--type-item-tracking, inherit);
   text-wrap-style: balance; /* style only: text-wrap would reset the wrap mode and undo truncate */
 }
 @utility text-body {
-  font-family: var(--type-body-font, inherit);
   font-size: var(--type-body-size, 1rem);
   line-height: var(--type-body-line, 1.6);
   font-weight: var(--type-body-weight, 400);
-  letter-spacing: var(--type-body-tracking, inherit);
 }
 @utility text-body-sm {
-  font-family: var(--type-body-sm-font, inherit);
   font-size: var(--type-body-sm-size, 0.9375rem);
   line-height: var(--type-body-sm-line, 1.5);
   font-weight: var(--type-body-sm-weight, 400);
-  letter-spacing: var(--type-body-sm-tracking, inherit);
 }
 @utility text-button {
-  font-family: var(--type-button-font, inherit);
   font-size: var(--type-button-size, 0.9375rem);
   line-height: var(--type-button-line, 1.2);
   font-weight: var(--type-button-weight, 500);
-  letter-spacing: var(--type-button-tracking, inherit);
 }
 @utility text-button-sm {
-  font-family: var(--type-button-sm-font, inherit);
   font-size: var(--type-button-sm-size, 0.875rem);
   line-height: var(--type-button-sm-line, 1.2);
   font-weight: var(--type-button-sm-weight, 500);
-  letter-spacing: var(--type-button-sm-tracking, inherit);
 }
 @utility text-meta {
-  font-family: var(--type-meta-font, inherit);
   font-size: var(--type-meta-size, 0.8125rem);
   line-height: var(--type-meta-line, 1.45);
   font-weight: var(--type-meta-weight, 400);
-  letter-spacing: var(--type-meta-tracking, inherit);
 }
 @utility text-tag {
-  font-family: var(--type-tag-font, inherit);
   font-size: var(--type-tag-size, 0.75rem);
   line-height: var(--type-tag-line, 1.2);
   font-weight: var(--type-tag-weight, 600);
   letter-spacing: var(--type-tag-tracking, 0.02em);
-  text-transform: var(--type-tag-transform, inherit);
 }
 
 /* Emphasis inside a role: a name, a count or a link that stands out from the line around it (no size, only weight). */
@@ -241,11 +229,7 @@ body {
 /* Human note (AR-07): a line in the site's own voice, in italics and the site colour. */
 @utility human-note {
   font-style: italic;
-  font-family: var(--type-human-note-font, inherit);
   font-size: var(--type-human-note-size, 0.875rem);
-  line-height: var(--type-human-note-line, inherit);
-  font-weight: var(--type-human-note-weight, inherit);
-  letter-spacing: var(--type-human-note-tracking, inherit);
   color: var(--primary);
 }
 
