@@ -4,6 +4,8 @@
  * Category colours (`--cat-*`) are part of a theme, per mode; missing ones come from `CATEGORY_TONES`.
  */
 
+import type { ThemeType } from '@/lib/validations/theme';
+
 /** The 15 main categories that have a designed tone (AR-05), in display order. */
 export const CATEGORY_TONE_SLUGS = [
     'travel', 'dancing', 'hobbies', 'community', 'politics', 'pets', 'art', 'music',
@@ -94,19 +96,27 @@ export const SOFT_SHADOWS = {
 
 /** Fonts with full Latvian (latin-ext) support. `cssVar` is the variable next/font exposes (see lib/theme-fonts.ts). */
 export const THEME_FONTS = [
-    { id: 'geist', label: 'Geist', cssVar: '--font-geist-sans' },
-    { id: 'literata', label: 'Literata', cssVar: '--font-literata' },
-    { id: 'commissioner', label: 'Commissioner', cssVar: '--font-commissioner' },
-    { id: 'atkinson', label: 'Atkinson Hyperlegible', cssVar: '--font-atkinson' },
-    { id: 'alegreya-sans', label: 'Alegreya Sans', cssVar: '--font-alegreya-sans' },
-    { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif' },
-    { id: 'lora', label: 'Lora', cssVar: '--font-lora' },
-    { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans' },
-    { id: 'raleway', label: 'Raleway', cssVar: '--font-raleway' },
+    { id: 'geist', label: 'Geist', cssVar: '--font-geist-sans', weights: [400, 500, 600, 700] },
+    { id: 'literata', label: 'Literata', cssVar: '--font-literata', weights: [400, 500, 600, 700] },
+    { id: 'commissioner', label: 'Commissioner', cssVar: '--font-commissioner', weights: [400, 500, 600, 700] },
+    { id: 'atkinson', label: 'Atkinson Hyperlegible', cssVar: '--font-atkinson', weights: [400, 700] },
+    { id: 'alegreya-sans', label: 'Alegreya Sans', cssVar: '--font-alegreya-sans', weights: [400, 500, 700, 800] },
+    { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif', weights: [400, 500, 600, 700] },
+    { id: 'lora', label: 'Lora', cssVar: '--font-lora', weights: [400, 500, 600, 700] },
+    { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans', weights: [400, 500, 600, 700] },
+    { id: 'raleway', label: 'Raleway', cssVar: '--font-raleway', weights: [400, 500, 600, 700] },
     /** Single-weight display face: as a heading it wins over the style's heading weight. */
-    { id: 'archivo-black', label: 'Archivo Black', cssVar: '--font-archivo-black', weight: 400 },
-] as const satisfies readonly { id: string; label: string; cssVar: string; weight?: number }[];
+    { id: 'archivo-black', label: 'Archivo Black', cssVar: '--font-archivo-black', weight: 400, weights: [400] },
+] as const satisfies readonly { id: string; label: string; cssVar: string; weight?: number; weights: readonly number[] }[];
 export type ThemeFontId = (typeof THEME_FONTS)[number]['id'];
+/** The weight the font has that is nearest to `weight` (ties go up). Variable fonts take any 400-700 in CSS, but the picker has these steps. */
+export function snapWeight(fontId: ThemeFontId, weight: number): number {
+    const weights: readonly number[] = (THEME_FONTS.find((f) => f.id === fontId) ?? THEME_FONTS[0]).weights;
+    return weights.reduce((best, w) => {
+        const d = Math.abs(w - weight), bd = Math.abs(best - weight);
+        return d < bd || (d === bd && w > best) ? w : best;
+    });
+}
 export const THEME_FONT_IDS = THEME_FONTS.map((f) => f.id) as [ThemeFontId, ...ThemeFontId[]];
 
 /** Shape tokens of a template (R13): corners, lines, shadows, press, heading weight. Palette and style are chosen apart. */
@@ -162,6 +172,8 @@ export interface ThemeDefinition {
     headingFont: ThemeFontId;
     bodyFont: ThemeFontId;
     styleKey: ThemeStyleKey;
+    /** The site's type tuning (R22); unset = the literals in globals.css. */
+    type?: ThemeType;
 }
 
 export const THEME_PRESET_KEYS = ['moss', 'sea', 'rye', 'sun', 'air'] as const;

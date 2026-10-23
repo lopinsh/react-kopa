@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { CATEGORY_TONE_SLUGS, ROLE_TONE_KEYS, THEME_FONT_IDS, THEME_KEYS, THEME_STYLE_KEYS } from '@/lib/constants';
+import { CATEGORY_TONE_SLUGS, ROLE_TONE_KEYS, THEME_FONT_IDS, THEME_KEYS, THEME_STYLE_KEYS, TYPE_ROLE_IDS } from '@/lib/constants';
 
 /** Only 6-digit hex values are accepted, so a stored theme can never carry anything else into the page's CSS. */
 export const hexColorSchema = z.string().regex(/^#[0-9a-fA-F]{6}$/);
@@ -25,6 +25,27 @@ export const themeModeTokensSchema = z.object({
     photoChip: overlayColorSchema.optional(),
 });
 
+/**
+ * The site's type tuning (R22): sparse and versioned; unset keys mean today's values (globals.css). Unknown keys are stripped.
+ * Weights 400-700 only (handbook: no 800/900); the heading font's own weights decide at render (`snapWeight`).
+ */
+export const themeTypeSchema = z.object({
+    v: z.literal(1),
+    base: z.number().min(15).max(17).multipleOf(0.5).optional(),
+    contrast: z.number().min(0.8).max(1.25).optional(),
+    headingWeight: z.number().int().min(400).max(700).optional(),
+    leading: z.enum(['compact', 'normal', 'airy']).optional(),
+    tagCase: z.enum(['none', 'upper']).optional(),
+    roles: z.partialRecord(z.enum(TYPE_ROLE_IDS), z.object({
+        min: z.number().min(11).max(80).optional(),
+        max: z.number().min(11).max(80).optional(),
+        size: z.number().min(11).max(80).optional(),
+        weight: z.number().int().min(400).max(700).optional(),
+        font: z.enum(['heading', 'body']).optional(),
+    }).refine((r) => r.min === undefined || r.max === undefined || r.min <= r.max)).optional(),
+});
+export type ThemeType = z.infer<typeof themeTypeSchema>;
+
 export const themeInputSchema = z.object({
     presetKey: z.enum(THEME_KEYS),
     light: themeModeTokensSchema,
@@ -32,5 +53,6 @@ export const themeInputSchema = z.object({
     headingFont: z.enum(THEME_FONT_IDS),
     bodyFont: z.enum(THEME_FONT_IDS),
     styleKey: z.enum(THEME_STYLE_KEYS),
+    type: themeTypeSchema.optional(),
 });
 export type ThemeInput = z.infer<typeof themeInputSchema>;
