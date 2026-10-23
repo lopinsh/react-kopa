@@ -64,14 +64,14 @@ h2{font:600 clamp(24px,3.4vw,32px)/1.15 var(--serif);margin-bottom:8px}
 .grole{position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--surface);color:var(--moss);font-size:11.5px;font-weight:600;box-shadow:0 0 0 1px var(--edge,var(--border)),0 3px 10px -3px rgba(0,0,0,.45);transition:top .35s var(--ease)}
 .grole.wait{background:color-mix(in oklab,var(--warn) 20%,var(--surface));color:var(--warn)}
 .gpill{position:absolute;left:16px;bottom:-13px;z-index:2;display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:999px;background:var(--tone);color:var(--surface);font-size:12px;font-weight:600;white-space:nowrap;max-width:calc(100% - 32px);box-shadow:0 0 0 1px var(--edge,var(--border)),0 6px 14px -6px rgba(0,0,0,.5);text-decoration:none}
-.gbody{padding:24px 18px 14px;display:flex;flex-direction:column;gap:6px;flex:none}
+.gbody{padding:24px 18px 14px;display:flex;flex-direction:column;gap:6px;flex:1;min-height:0}
 .gname{font:600 1.1875rem/1.26 var(--serif);letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-wrap:balance}
 .gveidi{display:flex;gap:0 8px;font-size:13px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden}
 .gveidi a+a::before{content:"· ";margin-right:2px}
 .gtag{font-size:14px;line-height:1.48;color:color-mix(in oklab,var(--text) 84%,var(--surface));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 mark{background:none;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--muted);text-underline-offset:3px}
-/* the tear-off: tab tint, dashed perforation, scissors; it takes all the slack, so a card never shows blank lines in the body */
-.stub{position:relative;flex:1;background:var(--stub);border-radius:0 0 15px 15px;padding:16px 18px 12px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-height:0}
+/* the tear-off: tab tint, dashed perforation, scissors; it is as tall as its rows, the white body above takes the slack */
+.stub{position:relative;flex:none;background:var(--stub);border-radius:0 0 15px 15px;padding:14px 18px 12px;display:flex;flex-direction:column;gap:12px}
 .stub::before{content:"";position:absolute;left:0;right:0;top:-1px;border-top:2px dashed color-mix(in oklab,var(--border),var(--muted) 30%);pointer-events:none}
 .snip{position:absolute;left:12px;top:-12px;width:24px;height:24px;color:color-mix(in oklab,var(--muted) 70%,transparent);display:grid;place-items:center}
 .snip .ic{width:16px;height:16px}
@@ -98,8 +98,8 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
 .cell>*{grid-area:1/1;white-space:nowrap;max-width:100%}
 .cell .place{color:var(--muted);font-weight:500;overflow:hidden;text-overflow:ellipsis}
 .cell .go{visibility:hidden;font-weight:600;color:var(--moss)}
-/* desktop: fixed card size; hover shrinks the top area, the tear-off grows upward */
-.gc.d{height:424px}
+/* desktop: fixed card size (the rest height of today's card); hover shrinks the top area, the white body takes the freed space */
+.gc.d{height:384px}
 .gc.d .h{display:none}
 .gc.d:hover .gtop,.gc.d.is-hover .gtop{aspect-ratio:auto;height:36px}
 .gc.d:hover .gtop.area .big,.gc.d.is-hover .gtop.area .big{width:18px;height:18px}
@@ -171,7 +171,7 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
 <section id="darbvirsma">
   <span class="lbl new">Jaunā</span>
   <h2>1280 · miera stāvoklis un hover</h2>
-  <p class="sub-p">Kartītes izmērs nemainās. Uzvedot peli, bilde (vai krāsas laukums) sarūk līdz 36 px joslai, uzlīme brauc līdzi, apraksts atveras pilnībā un atrāvuma daļa aug uz augšu. Pilsēta · dalībnieki nomainās ar „Sazināties →“ tajā pašā vietā.</p>
+  <p class="sub-p">Kartītes izmērs nemainās. Uzvedot peli, bilde (vai krāsas laukums) sarūk līdz 36 px joslai, uzlīme brauc līdzi, apraksts atveras pilnībā, baltā daļa izplešas un atrāvuma daļa pieaug tikai par jaunajām rindām. Miera stāvoklī atrāvuma daļa ir tikpat zema kā šodien. Pilsēta · dalībnieki nomainās ar „Sazināties →“ tajā pašā vietā.</p>
   <div class="row">
 <div class="fig w-d"><span class="cap">Neteikšu kā sauc! · miera stāvoklī</span><div class="gc d"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><span class="pulse"></span><span><span class="nm">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Mēģinājumi pārcelti uz zāli Kr. Barona ielā</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
 <div class="fig w-d"><span class="cap">Hover</span><div class="gc d is-hover"><div class="gtop"><svg class="wave" viewBox="0 0 100 40" preserveAspectRatio="none"><path d="M0 30 Q25 10 50 25 T100 15"/><path d="M0 36 Q25 18 50 31 T100 21"/></svg><span class="grole">Īpašnieks</span><a class="gpill">Dejas</a></div><div class="gbody"><h3 class="gname">Neteikšu kā sauc!</h3><p class="gveidi"><a>Laikmetīgā deja</a></p><p class="gtag">Es varu paskatīties internetā!</p></div><div class="stub"><span class="snip" aria-hidden="true"><svg class="ic"><use href="#i-scis"/></svg></span><div class="notes"><div class="n r"><span class="pulse"></span><span><span class="nm">Rudens Deju koncerts</span><small>Notiek tagad · līdz 30. okt.</small></span></div><div class="n mo h"><span>+2 pasākumi</span></div><div class="n an h"><svg class="ic"><use href="#i-mega"/></svg><span><span class="nm">Mēģinājumi pārcelti uz zāli Kr. Barona ielā</span><small>22. okt.</small></span></div></div><div class="bot"><span class="faces"><i></i><i></i><i></i></span><span class="mo2">+6</span><span class="cell"><span class="place">Rīga · 9 dalībnieki</span><span class="go">Sazināties →</span></span></div></div></div></div>
@@ -221,7 +221,7 @@ mark{background:none;color:inherit;font-weight:700;text-decoration:underline;tex
   <h2>Dari un nedari</h2>
   <div class="grid2">
     <div class="dd do"><b>Dari</b>Klikšķis atver grupas lapu; logi paliek tikai pasākumiem.</div><div class="dd dont"><b>Nedari</b>Grupas slīdošais panelis virs saraksta.</div>
-    <div class="dd do"><b>Dari</b>Hoverī bilde sarūk, kartīte nemainās, atrāvuma daļa aug uz augšu.</div><div class="dd dont"><b>Nedari</b>Rezervētas tukšas rindas tekstā vai kartīte, kas aug un pārbīda kaimiņus.</div>
+    <div class="dd do"><b>Dari</b>Hoverī bilde sarūk, kartīte nemainās, atbrīvoto vietu aizņem baltā daļa.</div><div class="dd dont"><b>Nedari</b>Rezervētas tukšas rindas tekstā vai kartīte, kas aug un pārbīda kaimiņus.</div>
     <div class="dd do"><b>Dari</b>Pasākuma nosaukums savā rindā, laiks zem tā.</div><div class="dd dont"><b>Nedari</b>Nosaukumu un laiku vienā rindā, kur laiks apēd nosaukumu.</div>
   </div>
 </section>
