@@ -3,7 +3,7 @@
 > The living "what's next" list. Read `AGENTS.md` first, then this file, then run `npm run feedback` (open notes from the site admins). Product/UI questions: `docs/handbook/README.md`.
 > Tick or update items here in the same commit as the work. Finished work is not kept here: it moves to `docs/archive/` (history, not required reading; latest: `execution_handoff_2026-10-22.md`, R14 theme sweep to R17).
 
-**Last updated:** 2026-10-22 (redesign agenda closed and archived; fresh start).
+**Last updated:** 2026-10-24 (R21-C ticked; R22-2 and R23 listed next).
 
 ---
 
@@ -28,7 +28,9 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **G Group card (R21-G, spec R21.md, drawing `docs/development/r21-group-card.html`):** built 23 Oct, no group slide-over, event pop-ups stay; visual baselines `board-groups`, `search`, `profile` to regenerate in Docker, `group-slide-over` removed (and its PNGs). Reviewed, pushed, live.
 - [x] **R22-1 Type storage and CSS (spec `docs/development/specs/R22.md`):** built 23 Oct; `SiteTheme.type` (nullable JSON, migration `site_theme_type`), `themeTypeSchema` (weights 400-700), `TYPE_ROLES`, font `weights` + `snapWeight`, `lib/theme/type-vars.ts` (`--type-<role>-*` vars + rules only when set), type utilities read the vars with today's literals as fallback, service/draft hook carry `type` (look choice keeps it, site Reset clears it). No admin UI (R22-2). Unset = byte-identical `themeCss` (5 presets x 3 styles + Archivo/Atkinson, also `{v:1}`); visual: no new diff vs e5e545f. Review: Design page now carries `type` into the editor; upper-case tag rule yields to explicit case utilities. Open: board-groups (all widths) and board-behind 768/1280/1920 baselines still predate the R21-G card (CI visual red since e5e545f), and 768 board screens render nondeterministically (a few px between identical runs). Pushed, live.
 - [x] **Visual CI green:** board lists had no tie-break (events with equal start date, groups with equal createdAt came back in arbitrary order: the 768 flake); now `id` breaks ties (event.service, discovery.service, discovery-search). Baselines regenerated for board-groups (R21-G card), board-events, date-chip-open, event-slide-over, header-search-open, topic-chip-open (new stable order / board behind). Two full Docker runs identical, final run 84 passed.
-- [ ] **C Es / Jaunumi:** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
+- [x] **C Es / Jaunumi (R21-C, c9577e0, pushed, live):** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
+- [ ] **R22-2 Burti page** (spec `docs/development/specs/R22.md` sessions table, drawing `docs/development/r22-type-system.html`): Admin > Dizains type tuning (base, contrast, heading weight, leading, tag case, per-role overrides, live sample) on the R22-1 storage.
+- [ ] **R23 Admin tool panel** (drawing `docs/development/r23-admin-drawer.html`).
 
 ## Standing owner rules
 
