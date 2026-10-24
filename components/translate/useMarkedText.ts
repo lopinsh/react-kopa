@@ -42,6 +42,11 @@ function scan(): Segment[] {
     return segments;
 }
 
+/** The message keys of the marked texts on this page (panel text is skipped by `scan`), each once. */
+export function markedKeysOnPage(): string[] {
+    return Array.from(new Set(scan().map((segment) => segment.key)));
+}
+
 function rangeOf(segment: Segment): Range | null {
     if (!segment.node.isConnected || segment.end > (segment.node.nodeValue ?? '').length) return null;
     const range = document.createRange();

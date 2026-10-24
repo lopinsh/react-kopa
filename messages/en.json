@@ -1244,7 +1244,8 @@
         "selected": "Selected",
         "pickHint": "Click a marked text or search.",
         "missing": "Missing on this page · {count}",
-        "noneMissing": "Everything on this page is translated."
+        "noneMissing": "Everything on this page is translated.",
+        "missingFooter": "{count} missing"
       }
     }
   },

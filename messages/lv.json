@@ -1244,7 +1244,8 @@
         "selected": "Izvēlēts",
         "pickHint": "Noklikšķini uz iezīmēta teksta vai meklē.",
         "missing": "Šajā lapā trūkst · {count}",
-        "noneMissing": "Šajā lapā viss ir iztulkots."
+        "noneMissing": "Šajā lapā viss ir iztulkots.",
+        "missingFooter": "{count} trūkst"
       }
     }
   },

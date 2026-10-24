@@ -2,6 +2,7 @@
 
 import type { AdminPanelTab } from '@/lib/constants';
 import FeedbackTab from './FeedbackTab';
+import TranslateTab from './TranslateTab';
 
 export type PanelTabProps = {
     /** Pause (Atsauksmes, Dizains): page clicks work normally. */
@@ -14,5 +15,6 @@ export type PanelTabProps = {
 /** The body of the open tab. */
 export default function PanelTabBody({ tab, ...props }: PanelTabProps & { tab: AdminPanelTab }) {
     if (tab === 'feedback') return <FeedbackTab {...props} />;
+    if (tab === 'translate') return <TranslateTab {...props} />;
     return <div data-tab={tab} className="min-h-0 flex-1" />;
 }

@@ -2,8 +2,6 @@
 
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import Modal from '@/components/ui/Modal';
-import { OverlayCloseButton } from '@/components/ui/overlay-support';
 import TextCounter from '@/components/ui/TextCounter';
 import { isOverLimit } from '@/lib/text-limit';
 import { useRouter } from '@/i18n/routing';
@@ -17,13 +15,14 @@ import { Textarea } from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 type Props = {
     messageKey: string;
+    /** Called after a saved suggestion or Cancel; the tab clears its selection. */
     onClose: () => void;
 };
 
 const LANG_LABEL: Record<MessageLang, 'langLv' | 'langEn'> = { lv: 'langLv', en: 'langEn' };
 
-/** Pop-up with the key and both languages side by side. Validates like the server before saving. */
-export default function TranslationEditor({ messageKey, onClose }: Props) {
+/** The key's two languages as an inline form (the Tulkot tab). Validates like the server before saving. */
+export default function TranslationForm({ messageKey, onClose }: Props) {
     const t = useTranslations('translateMode');
     const tErrors = useTranslations('errors');
     const router = useRouter();
@@ -81,28 +80,14 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
     };
 
     return (
-        <Modal
-            onClose={onClose}
-            locked={isPending}
-            dirty={!!entry && (values.lv !== (entry.pending.lv ?? entry.lv) || values.en !== (entry.pending.en ?? entry.en))}
-            size="4xl"
-            translateIgnore
-            zIndexClassName="z-[70]"
-            panelClassName="flex max-h-[90vh] flex-col"
-            title={t('editTitle')}
-            subtitle={
-                <p className="mt-1 break-all font-mono text-meta text-foreground-muted">
-                    <span className="font-sans weight-strong">{t('keyLabel')}: </span>{messageKey}
-                </p>
-            }
-        >
+        <div className="space-y-3">
             {loadError ? (
                 <p className="text-body-sm text-danger">{errorText(loadError)}</p>
             ) : !entry ? (
                 <p className="text-body-sm text-foreground-muted">{t('loading')}</p>
             ) : (
                 <>
-                    <div className="grid min-h-0 flex-1 gap-4 overflow-y-auto sm:grid-cols-2">
+                    <div className="space-y-4">
                         {MESSAGE_LANGS.map((lang) => {
                             const issue = issues[lang];
                             return (
@@ -148,15 +133,15 @@ export default function TranslationEditor({ messageKey, onClose }: Props) {
                     <p className="mt-1 text-meta text-foreground-muted">{t('syntaxHint')}</p>
                     {saveError && <p role="alert" className="mt-2 text-body-sm text-danger">{saveError}</p>}
                     <div className="mt-4 flex justify-end gap-3">
-                        <OverlayCloseButton disabled={isPending} className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50">
+                        <button type="button" onClick={onClose} disabled={isPending} className="rounded-xl px-5 py-3 text-body-sm text-foreground-muted transition-colors hover:bg-surface-elevated disabled:opacity-50">
                             {t('cancel')}
-                        </OverlayCloseButton>
+                        </button>
                         <Button type="button" onClick={handleSave} disabled={isPending || hasIssue || isEmpty || over}>
                             {isPending ? <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" /> : t('suggest')}
                         </Button>
                     </div>
                 </>
             )}
-        </Modal>
+        </div>
     );
 }

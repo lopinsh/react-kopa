@@ -10,8 +10,6 @@ import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
 import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
-import { isTranslateModeActive } from '@/lib/translate-mode/server';
-import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
 import { getAdminPanelTab } from '@/lib/admin-panel/server';
 import AdminPanelLoader from '@/components/admin-panel/AdminPanelLoader';
 import { getActiveTheme } from '@/lib/theme/server';
@@ -48,13 +46,11 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     const initialTab = isBottomTab(navCookie) ? navCookie : 'discover';
     const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
 
-    const [allMessages, timeZone, panelTab, translateMode, theme] = await Promise.all([
+    const [allMessages, timeZone, panelTab, theme] = await Promise.all([
         getMessages(),
         getTimeZone(),
         // Only a signed-in site admin with the tool panel open gets a tab; everyone else gets the page unchanged.
         getAdminPanelTab(),
-        // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
-        isTranslateModeActive(),
         getActiveTheme(),
     ]);
     // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
@@ -104,7 +100,6 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             <TimeZoneSync />
 
             {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} />}
-            {translateMode && <TranslateModeLoader />}
             {themePreview && !panelTab && <ThemePreviewBar />}
         </Providers>
     );
