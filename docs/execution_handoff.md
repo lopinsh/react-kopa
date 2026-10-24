@@ -32,7 +32,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **R22-2 Burti page** (spec `docs/development/specs/R22.md` sessions table, drawing `docs/development/r22-type-system.html`): Admin > Dizains type tuning (base, contrast, heading weight, leading, tag case, per-role overrides, live sample) on the R22-1 storage. Built 24 Oct (`?part=type`): Sistēma controls, Lomas list with role editor (1 px steps), role-ladder sample scoped to `#design-sample-box` (typeDefaultVars + scoped rules, no leak from the published type). Fonti stays its own part. Reviewed 24 Oct: visual baseline 84 passed, 0 px (the local login failure was an unseeded DB); Lomas names follow the draft fonts; walked 768-1920, dark, en+lv. Pushed, live.
 - [ ] **R23 Admin tool panel** (spec `docs/development/specs/R23.md`, drawing `docs/development/r23-admin-drawer.html`).
   - [x] **R23-1 Panel** (built 24 Oct): one shield item "Rīku panelis", floating/docked/sheet panel, tabs Atsauksmes and Tulkot, cookie `admin_panel`; old pills, toggles, loaders and setters removed. Reviewed 24 Oct (submission guard on tab switch/close added), pushed, live.
-  - [ ] **R23-2 Dizains tab.**
+  - [x] **R23-2 Dizains tab** (built 24 Oct): click a text to pick its type role (capture-phase, Pauze gives clicks back), edit it with the Burti role editor, debounced save to the draft then refresh, outline of the role's texts, hover chip, count, Publicēt/Atmest footer. Awaiting review.
 
 ## Standing owner rules
 
