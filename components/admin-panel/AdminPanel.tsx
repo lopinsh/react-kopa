@@ -48,14 +48,22 @@ export default function AdminPanel({ tab: serverTab, draftActive }: Props) {
 
     const showError = useCallback((code: string) => toastError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED')), [tErrors, toastError]);
 
+    // Submission guard: a second tab click or close while the cookie is being set is ignored.
+    const pending = useRef(false);
     const choose = useCallback(async (next: AdminPanelTab | null) => {
-        const res = await setAdminPanel(next);
-        if (res.success) router.refresh();
-        else showError(res.error);
+        if (pending.current) return;
+        pending.current = true;
+        try {
+            const res = await setAdminPanel(next);
+            if (res.success) router.refresh();
+            else showError(res.error);
+        } finally {
+            pending.current = false;
+        }
     }, [router, showError]);
 
     const selectTab = (next: AdminPanelTab) => {
-        if (next === tab) return;
+        if (next === tab || pending.current) return;
         setTab(next);
         setSelection(null);
         writeLastTab(next);
