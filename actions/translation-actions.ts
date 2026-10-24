@@ -9,14 +9,8 @@ import {
     type TranslationEntry,
     type TranslationSearchHit,
 } from '@/lib/services/message-override.service';
-import { setAdminPanel } from './admin-panel-actions';
 import type { MessageLang } from '@/lib/translate-mode/messages';
 import { NotificationService } from '@/lib/services/notification.service';
-
-/** Superseded by setAdminPanel; removed with the old toggles in the last R23-1 commit. */
-export async function setTranslateMode(enabled: boolean): Promise<ActionResponse> {
-    return setAdminPanel(enabled ? 'translate' : null);
-}
 
 export async function getTranslationEntry(key: string): Promise<ActionResponse<TranslationEntry>> {
     const check = await requireSiteAdmin();

@@ -31,6 +31,7 @@ The same situation behaves the same way on every screen.
 - A form with typed input asks "Atmest izmaiņas?" first; keeping on editing is the default.
 - On phones a dialog opens as a sheet from the bottom.
 - A panel has its own address: Back closes it; a reload or a shared link opens the full page.
+- The admin tool panel is a tool, not a pop-up: no dimming, no focus trap, a click outside keeps it; Esc inside it first leaves a field, then a selection, then closes it.
 
 ## Text limits
 

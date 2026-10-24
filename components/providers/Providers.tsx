@@ -10,7 +10,6 @@ import { OwnCountsProvider } from './OwnCountsProvider';
 import { ToastProvider } from '@/hooks/use-toast';
 import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
-import { TranslateModeProvider } from './TranslateModeContext';
 import { FeedbackModeProvider } from './FeedbackModeContext';
 import { AdminPanelProvider } from './AdminPanelContext';
 import type { AdminPanelTab } from '@/lib/constants';
@@ -34,7 +33,6 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                 <ToastProvider>
                   <AuthProvidersProvider value={oauthProviders}>
                    <AdminPanelProvider value={panelTab}>
-                   <TranslateModeProvider value={panelTab === 'translate'}>
                    <FeedbackModeProvider value={panelTab === 'feedback'}>
                     <RealtimeProvider>
                       <UnreadMessagesProvider>
@@ -52,7 +50,6 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                     </RealtimeProvider>
                     <ToastContainer />
                    </FeedbackModeProvider>
-                   </TranslateModeProvider>
                    </AdminPanelProvider>
                   </AuthProvidersProvider>
                 </ToastProvider>

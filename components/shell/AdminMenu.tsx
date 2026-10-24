@@ -4,8 +4,7 @@ import { useTranslations } from 'next-intl';
 import { ArrowRight, LayoutDashboard, ShieldCheck } from 'lucide-react';
 import { clsx } from 'clsx';
 import { UI } from '@/lib/constants';
-import TranslateModeToggle from '@/components/translate/TranslateModeToggle';
-import FeedbackModeToggle from '@/components/feedback/FeedbackModeToggle';
+import AdminPanelToggle from '@/components/admin-panel/AdminPanelToggle';
 import { MENU_ITEM_CLASS, MenuItemLink, MenuPanel, MenuSeparator, useMenu } from '@/components/ui/Menu';
 import { ICON_BUTTON } from './header-styles';
 
@@ -21,8 +20,7 @@ export default function AdminMenu({ initialOpen }: { initialOpen?: boolean }) {
             </button>
             {open && (
                 <MenuPanel label={t('adminMenu')} dataUi={UI.shieldMenu} {...menuProps}>
-                    <FeedbackModeToggle className={MENU_ITEM_CLASS} onToggle={close} />
-                    <TranslateModeToggle className={MENU_ITEM_CLASS} onToggle={close} />
+                    <AdminPanelToggle className={MENU_ITEM_CLASS} onToggle={close} />
                     <MenuSeparator />
                     <MenuItemLink href="/admin" icon={<LayoutDashboard aria-hidden className="size-4 text-foreground-muted" />} trailing={<ArrowRight aria-hidden className="ml-auto size-4 text-foreground-muted" />}>
                         {t('adminPanel')}

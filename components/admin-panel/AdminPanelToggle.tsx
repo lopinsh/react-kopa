@@ -2,27 +2,25 @@
 
 import { useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Globe } from 'lucide-react';
+import { PanelRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
-import { setTranslateMode } from '@/actions/translation-actions';
-import { useTranslateMode } from '@/components/providers/TranslateModeContext';
+import { setAdminPanel } from '@/actions/admin-panel-actions';
+import { useAdminPanelTab } from '@/components/providers/AdminPanelContext';
 import { useToast } from '@/hooks/use-toast';
+import { readLastTab } from './panel-storage';
 
 type Props = {
     className?: string;
-    /** Bare "turn off" text, for the floating bar. */
-    compact?: boolean;
     /** Called right after the click, e.g. to close the menu the toggle sits in. */
     onToggle?: () => void;
 };
 
-/** Switches translation mode on or off for the signed-in site admin. Render it for site admins only. */
-export default function TranslateModeToggle({ className, compact, onToggle }: Props) {
+/** Opens the admin tool panel on the last tab used, or closes it. Render it for site admins only. */
+export default function AdminPanelToggle({ className, onToggle }: Props) {
     const tNav = useTranslations('nav');
-    const t = useTranslations('translateMode');
     const tErrors = useTranslations('errors');
-    const active = useTranslateMode();
+    const active = useAdminPanelTab() !== null;
     const router = useRouter();
     const { error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
@@ -31,7 +29,7 @@ export default function TranslateModeToggle({ className, compact, onToggle }: Pr
         if (isPending) return;
         onToggle?.();
         startTransition(async () => {
-            const res = await setTranslateMode(!active);
+            const res = await setAdminPanel(active ? null : readLastTab());
             if (res.success) router.refresh();
             else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });
@@ -46,15 +44,9 @@ export default function TranslateModeToggle({ className, compact, onToggle }: Pr
             disabled={isPending}
             className={clsx('disabled:opacity-60', className)}
         >
-            {compact ? (
-                <span>{t('turnOff')}</span>
-            ) : (
-                <>
-                    <Globe aria-hidden className="size-4 text-foreground-muted" />
-                    <span className="flex-1 text-left">{t('label')}</span>
-                    <span className="text-meta text-foreground-muted">{active ? tNav('modeOn') : tNav('modeOff')}</span>
-                </>
-            )}
+            <PanelRight aria-hidden className="size-4 text-foreground-muted" />
+            <span className="flex-1 text-left">{tNav('toolPanel')}</span>
+            <span className="text-meta text-foreground-muted">{active ? tNav('modeOn') : tNav('modeOff')}</span>
         </button>
     );
 }

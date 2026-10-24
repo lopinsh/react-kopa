@@ -4,14 +4,8 @@ import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { FeedbackService, type FeedbackItem } from '@/lib/services/feedback.service';
-import { setAdminPanel } from './admin-panel-actions';
 import type { CreateFeedbackInput, ReplyFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
 import { NotificationService } from '@/lib/services/notification.service';
-
-/** Superseded by setAdminPanel; removed with the old toggles in the last R23-1 commit. */
-export async function setFeedbackMode(enabled: boolean): Promise<ActionResponse> {
-    return setAdminPanel(enabled ? 'feedback' : null);
-}
 
 export async function createFeedback(input: CreateFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
     const check = await requireSiteAdmin();
