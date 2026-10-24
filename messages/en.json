@@ -772,7 +772,12 @@
     },
     "development": {
       "bookTitle": "Approved drawings",
-      "drawings": { "r18": "Message board", "r19": "Topic index", "r20": "Board heading", "r21": "Group card" },
+      "drawings": {
+        "r18": "Message board",
+        "r19": "Topic index",
+        "r20": "Board heading",
+        "r21": "Group card"
+      },
       "buildPlanEmptyTitle": "No plan in progress",
       "buildPlanEmptyHint": "The next release plan will appear here once it is written."
     },
@@ -903,9 +908,9 @@
           "headerLists": "Header lists: the bell (both tabs), messages, empty states, a notification row"
         },
         "sample": {
-        "tile1": "Walks",
-        "tile2": "Choir",
-        "tile3": "Football",
+          "tile1": "Walks",
+          "tile2": "Choir",
+          "tile3": "Football",
           "profileBio": "Weekend walks and board games. Looking for people to run with in the mornings.",
           "category": "Hiking",
           "parentCategory": "Sports",
@@ -1208,6 +1213,38 @@
         "chip": "Riga",
         "tag": "New"
       }
+    },
+    "panel": {
+      "label": "Admin tools",
+      "tabs": {
+        "feedback": "Feedback",
+        "translate": "Translate",
+        "design": "Design"
+      },
+      "hint": {
+        "feedback": "Click the page to add a note.",
+        "translate": "Marked texts can be translated.",
+        "design": "Click a text to change its role."
+      },
+      "pause": "Pause",
+      "paused": "Paused: clicks work",
+      "dock": "Dock to the right",
+      "undock": "Undock",
+      "close": "Close",
+      "resize": "Change the panel height",
+      "draftActive": "Draft active",
+      "feedback": {
+        "thisPage": "On this page · {count}",
+        "otherPages": "On other pages · {count}",
+        "noOther": "No open notes on other pages.",
+        "all": "All notes"
+      },
+      "translate": {
+        "selected": "Selected",
+        "pickHint": "Click a marked text or search.",
+        "missing": "Missing on this page · {count}",
+        "noneMissing": "Everything on this page is translated."
+      }
     }
   },
   "messages": {
@@ -1266,7 +1303,8 @@
     "notifications": "Notifications",
     "myGroupsNew": "{count, plural, one {My groups, # new} other {My groups, # new}}",
     "notificationsUnread": "{count, plural, one {Notifications, # unread} other {Notifications, # unread}}",
-    "newsUnread": "{count, plural, one {News, # unread} other {News, # unread}}"
+    "newsUnread": "{count, plural, one {News, # unread} other {News, # unread}}",
+    "toolPanel": "Tool panel"
   },
   "notifications": {
     "title": "Notifications",

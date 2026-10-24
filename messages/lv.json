@@ -772,7 +772,12 @@
     },
     "development": {
       "bookTitle": "Apstiprinātie zīmējumi",
-      "drawings": { "r18": "Ziņojumu dēlis", "r19": "Tēmu rādītājs", "r20": "Dēļa galva", "r21": "Grupas kartīte" },
+      "drawings": {
+        "r18": "Ziņojumu dēlis",
+        "r19": "Tēmu rādītājs",
+        "r20": "Dēļa galva",
+        "r21": "Grupas kartīte"
+      },
       "buildPlanEmptyTitle": "Pašlaik nav neviena plāna",
       "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts."
     },
@@ -903,9 +908,9 @@
           "headerLists": "Galvenes saraksti: zvans (abas cilnes), ziņas, tukšie stāvokļi, paziņojuma rinda"
         },
         "sample": {
-        "tile1": "Pastaigas",
-        "tile2": "Koris",
-        "tile3": "Futbols",
+          "tile1": "Pastaigas",
+          "tile2": "Koris",
+          "tile3": "Futbols",
           "profileBio": "Nedēļas nogales pastaigas un galda spēles. Meklēju, ar ko kopā skriet no rīta.",
           "category": "Pārgājieni",
           "parentCategory": "Sports",
@@ -1208,6 +1213,38 @@
         "chip": "Rīga",
         "tag": "Jauns"
       }
+    },
+    "panel": {
+      "label": "Administratora rīki",
+      "tabs": {
+        "feedback": "Atsauksmes",
+        "translate": "Tulkot",
+        "design": "Dizains"
+      },
+      "hint": {
+        "feedback": "Noklikšķini lapā, lai pievienotu piezīmi.",
+        "translate": "Iezīmētie teksti ir tulkojami.",
+        "design": "Noklikšķini uz teksta, lai mainītu tā lomu."
+      },
+      "pause": "Pauze",
+      "paused": "Pauzē: klikšķi strādā",
+      "dock": "Piestiprināt labajā malā",
+      "undock": "Atbrīvot",
+      "close": "Aizvērt",
+      "resize": "Mainīt paneļa augstumu",
+      "draftActive": "Melnraksts aktīvs",
+      "feedback": {
+        "thisPage": "Šajā lapā · {count}",
+        "otherPages": "Citās lapās · {count}",
+        "noOther": "Citās lapās atvērtu piezīmju nav.",
+        "all": "Visas piezīmes"
+      },
+      "translate": {
+        "selected": "Izvēlēts",
+        "pickHint": "Noklikšķini uz iezīmēta teksta vai meklē.",
+        "missing": "Šajā lapā trūkst · {count}",
+        "noneMissing": "Šajā lapā viss ir iztulkots."
+      }
     }
   },
   "messages": {
@@ -1266,7 +1303,8 @@
     "notifications": "Paziņojumi",
     "myGroupsNew": "{count, plural, zero {Manas grupas, # jaunu} one {Manas grupas, # jauns} other {Manas grupas, # jauni}}",
     "notificationsUnread": "{count, plural, zero {Paziņojumi, # nelasītu} one {Paziņojumi, # nelasīts} other {Paziņojumi, # nelasīti}}",
-    "newsUnread": "{count, plural, zero {Jaunumi, # nelasītu} one {Jaunumi, # nelasīts} other {Jaunumi, # nelasīti}}"
+    "newsUnread": "{count, plural, zero {Jaunumi, # nelasītu} one {Jaunumi, # nelasīts} other {Jaunumi, # nelasīti}}",
+    "toolPanel": "Rīku panelis"
   },
   "notifications": {
     "title": "Paziņojumi",

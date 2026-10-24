@@ -505,3 +505,15 @@ body {
   }
   &:where(.group\/card:has(:focus-visible) *) { @slot; }
 }
+
+/* Admin tool panel (R23): a docked drawer pushes the shell aside from 1280 px; the phone sheet leaves room under the page. */
+@media (min-width: 80rem) {
+  html[data-admin-dock] [data-shell] {
+    padding-right: 22rem;
+  }
+}
+@media (max-width: 47.99rem) {
+  html[data-admin-sheet] #main-content {
+    padding-bottom: calc(4rem + var(--cookie-banner-h, 0px) + var(--admin-sheet-h, 0px));
+  }
+}

@@ -16,7 +16,7 @@ export default function AdminMenu({ initialOpen }: { initialOpen?: boolean }) {
 
     return (
         <div className="relative shrink-0" ref={rootRef}>
-            <button {...triggerProps} aria-label={t('adminMenu')} title={t('adminMenu')} className={clsx(ICON_BUTTON, open && 'bg-tint')}>
+            <button {...triggerProps} data-admin-shield aria-label={t('adminMenu')} title={t('adminMenu')} className={clsx(ICON_BUTTON, open && 'bg-tint')}>
                 <ShieldCheck aria-hidden />
             </button>
             {open && (

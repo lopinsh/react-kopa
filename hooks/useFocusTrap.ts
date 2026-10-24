@@ -24,6 +24,8 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean): RefObjec
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key !== 'Tab') return;
+            // The admin tool panel sits above slide-overs and keeps its own Tab order.
+            if (document.activeElement?.closest('[data-admin-panel]')) return;
             const elements = getFocusable();
             if (elements.length === 0) {
                 e.preventDefault();

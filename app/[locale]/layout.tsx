@@ -12,6 +12,8 @@ import { Footer } from '@/components/shell/Footer';
 import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
 import { isTranslateModeActive } from '@/lib/translate-mode/server';
 import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
+import { getAdminPanelTab } from '@/lib/admin-panel/server';
+import AdminPanelLoader from '@/components/admin-panel/AdminPanelLoader';
 import { isFeedbackModeActive } from '@/lib/feedback/server';
 import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 import { getActiveTheme } from '@/lib/theme/server';
@@ -48,9 +50,11 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     const initialTab = isBottomTab(navCookie) ? navCookie : 'discover';
     const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
 
-    const [allMessages, timeZone, translateMode, feedbackMode, theme] = await Promise.all([
+    const [allMessages, timeZone, panelTab, translateMode, feedbackMode, theme] = await Promise.all([
         getMessages(),
         getTimeZone(),
+        // Only a signed-in site admin with the tool panel open gets a tab; everyone else gets the page unchanged.
+        getAdminPanelTab(),
         // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
         isTranslateModeActive(),
         // Same for feedback mode: only a site admin who switched it on gets the code.
@@ -63,10 +67,11 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     // design preview bar, which a site admin sees on every page while a preview is saved.
     const { admin, ...messages } = allMessages;
     const design = typeof admin === 'object' ? admin.design : undefined;
-    if (themePreview && typeof design === 'object') messages.admin = { design: { bar: design.bar } };
+    if (typeof admin === 'object' && panelTab) messages.admin = { panel: admin.panel, ...(typeof design === 'object' ? { design: { bar: design.bar } } : {}) };
+    else if (themePreview && typeof design === 'object') messages.admin = { design: { bar: design.bar } };
 
     return (
-        <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} translateMode={translateMode} feedbackMode={feedbackMode}>
+        <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} panelTab={panelTab}>
             <a /* ui-allow: skip link, visible only on focus */
                 href="#content"
                 className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[60] focus:rounded-pill focus:bg-primary focus:px-4 focus:py-2 focus:text-button focus:text-primary-foreground"
@@ -75,7 +80,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             </a>
 
             {/* App Shell */}
-            <div className="flex h-dvh flex-col">
+            <div data-shell className="flex h-dvh flex-col">
                 <Header />
 
                 <div className="flex flex-1 overflow-hidden">
@@ -102,8 +107,9 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             <CookieConsent />
             <TimeZoneSync />
 
+            {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} />}
             {translateMode && <TranslateModeLoader />}
-            {themePreview && <ThemePreviewBar />}
+            {themePreview && !panelTab && <ThemePreviewBar />}
             {feedbackMode && <FeedbackModeLoader />}
         </Providers>
     );

@@ -12,6 +12,8 @@ import { ToastContainer } from '../ui/ToastContainer';
 import { AuthProvidersProvider } from './AuthProvidersContext';
 import { TranslateModeProvider } from './TranslateModeContext';
 import { FeedbackModeProvider } from './FeedbackModeContext';
+import { AdminPanelProvider } from './AdminPanelContext';
+import type { AdminPanelTab } from '@/lib/constants';
 import type { OAuthProviderId } from '@/lib/auth-providers';
 
 type ProvidersProps = {
@@ -20,19 +22,20 @@ type ProvidersProps = {
     timeZone: string;
     messages: AbstractIntlMessages;
     oauthProviders: OAuthProviderId[];
-    translateMode: boolean;
-    feedbackMode: boolean;
+    /** The admin tool panel's open tab (site admins only); the translate and feedback flags derive from it. */
+    panelTab: AdminPanelTab | null;
     children: React.ReactNode;
 };
 
-export default function Providers({ locale, timeZone, messages, oauthProviders, translateMode, feedbackMode, children }: ProvidersProps) {
+export default function Providers({ locale, timeZone, messages, oauthProviders, panelTab, children }: ProvidersProps) {
     return (
         <SessionProvider>
             <NextIntlClientProvider locale={locale} messages={messages} timeZone={timeZone}>
                 <ToastProvider>
                   <AuthProvidersProvider value={oauthProviders}>
-                   <TranslateModeProvider value={translateMode}>
-                   <FeedbackModeProvider value={feedbackMode}>
+                   <AdminPanelProvider value={panelTab}>
+                   <TranslateModeProvider value={panelTab === 'translate'}>
+                   <FeedbackModeProvider value={panelTab === 'feedback'}>
                     <RealtimeProvider>
                       <UnreadMessagesProvider>
                        <OwnCountsProvider>
@@ -50,6 +53,7 @@ export default function Providers({ locale, timeZone, messages, oauthProviders, 
                     <ToastContainer />
                    </FeedbackModeProvider>
                    </TranslateModeProvider>
+                   </AdminPanelProvider>
                   </AuthProvidersProvider>
                 </ToastProvider>
             </NextIntlClientProvider>
