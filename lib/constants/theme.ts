@@ -231,7 +231,7 @@ export const THEME_PRESETS: Record<ThemePresetKey, ThemeDefinition & { label: st
 export const THEME_EDITABLE_TOKENS = ['primary', 'background', 'surface', 'foreground', 'muted', 'border', 'tint'] as const;
 export type ThemeMode = 'light' | 'dark';
 /** The five parts of Admin > Dizains (AR-69), in order: looks (ready-made), colours, category colours, shape, fonts. */
-export const DESIGN_PARTS = ['looks', 'colours', 'categories', 'style', 'fonts'] as const;
+export const DESIGN_PARTS = ['looks', 'colours', 'categories', 'style', 'fonts', 'type'] as const;
 export type DesignPart = (typeof DESIGN_PARTS)[number];
 /** Contrast floor (Handbook, design.md): text AA everywhere; a dark-mode tone 7:1 with the dark background. */
 export const THEME_CONTRAST_MIN = 4.5;

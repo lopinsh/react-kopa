@@ -766,7 +766,8 @@
         "colours": "Krāsas",
         "style": "Forma",
         "categories": "Tēmu krāsas",
-        "fonts": "Fonti"
+        "fonts": "Fonti",
+        "type": "Burti"
       }
     },
     "development": {
@@ -1059,7 +1060,8 @@
         "colours": "Krāsas",
         "style": "Forma",
         "categories": "Tēmu krāsas",
-        "fonts": "Fonti"
+        "fonts": "Fonti",
+        "type": "Burti"
       },
       "looks": {
         "shape": "Forma: {shape}",
@@ -1075,6 +1077,72 @@
       },
       "fonts": {
         "lead": "Burti virsrakstiem un tekstam. Sarakstā ir tikai burti ar visām latviešu zīmēm."
+      },
+      "type": {
+        "lead": "Teksta izmērs, virsrakstu spēks un katra loma. Izmaiņas redzi paraugā uzreiz.",
+        "resetType": "Atjaunot burtus",
+        "fontsLine": "Virsraksti: {heading} · Teksts: {body}",
+        "changeFonts": "Mainīt fontus",
+        "systemTitle": "Sistēma",
+        "rolesTitle": "Lomas",
+        "base": "Teksta izmērs",
+        "contrast": "Virsrakstu kontrasts",
+        "headingWeight": "Virsrakstu biezums",
+        "leading": "Rindstarpa",
+        "tagCase": {
+          "label": "Birkas",
+          "none": "Parastie burti",
+          "upper": "Lielie burti"
+        },
+        "px": "{value} px",
+        "styleWeight": "Kā formai",
+        "weightFixed": "Šim fontam ir viens biezums.",
+        "leadingOptions": {
+          "compact": "Blīvi",
+          "normal": "Parasti",
+          "airy": "Plaši"
+        },
+        "overridden": "pielāgota",
+        "phone": "tālrunī",
+        "desktop": "datorā",
+        "size": "izmērs",
+        "weight": "biezums",
+        "font": "fonts",
+        "fontHeading": "Virsraksti · {font}",
+        "fontBody": "Teksts · {font}",
+        "less": "Mazāk: {field}",
+        "more": "Vairāk: {field}",
+        "resetRole": "Atjaunot lomu",
+        "roleSummary": "{min}→{max} px · {weight}",
+        "sampleHeading": "Ķemeru purva taka rītausmā",
+        "sampleLine": "Satiekamies pie stacijas, ņemiet ūdeni un siltu jaku.",
+        "sampleNumbers": "0123456789 · 12 iet · 10:00–14:30",
+        "roles": {
+          "display": "Lielais virsraksts",
+          "title": "Lapas virsraksts",
+          "section": "Sadaļa",
+          "item": "Vienuma virsraksts",
+          "body": "Teksts",
+          "body-sm": "Mazs teksts",
+          "button": "Poga",
+          "button-sm": "Maza poga",
+          "meta": "Detaļas",
+          "tag": "Birka",
+          "human-note": "Piezīme"
+        },
+        "roleHints": {
+          "display": "Lielās ievada rindas, piemēram, sākumlapā.",
+          "title": "Lapas galvenais virsraksts, piemēram, Pasākumi.",
+          "section": "Sadaļas virsraksts, piemēram, Par mums.",
+          "item": "Kartītes vai saraksta vienuma nosaukums.",
+          "body": "Pamata teksts: apraksti un sarunas.",
+          "body-sm": "Mazāks teksts blīvos sarakstos.",
+          "button": "Pogas uzraksts, piemēram, Pievienoties.",
+          "button-sm": "Mazas pogas uzraksts.",
+          "meta": "Papildu detaļas: laiks, vieta, skaits.",
+          "tag": "Īsa birka, piemēram, Eju.",
+          "human-note": "Vietnes balss rinda, piemēram, par nākamo tikšanos."
+        }
       },
       "presetResetsTones": "Katram noskaņojumam ir savas tēmu krāsas; izvēloties to, tās nomaina pašreizējās.",
       "tones": {

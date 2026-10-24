@@ -3,13 +3,13 @@
 import { useEffect, useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { clsx } from 'clsx';
 import { publishTheme, resetTheme, savePreviewTheme } from '@/actions/theme-actions';
 import { useAdminFrame } from '@/components/admin/frame/AdminFrameProvider';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useToast } from '@/hooks/use-toast';
 import { useThemeDraft } from '@/hooks/use-theme-draft';
 import { DEFAULT_THEME_KEY, DESIGN_PARTS, type DesignPart, type ThemeMode, type ThemePresetKey } from '@/lib/constants';
+import { resolveTypeRoles } from '@/lib/theme/type-edit';
 import type { ThemeInput } from '@/lib/validations/theme';
 import type { ActionResponse } from '@/types/actions';
 import CategoryColorsEditor, { type ToneRow } from './CategoryColorsEditor';
@@ -17,8 +17,11 @@ import ColoursPart from './ColoursPart';
 import DesignActions from './DesignActions';
 import FontsPart from './FontsPart';
 import LooksPart from './LooksPart';
+import SegmentedField from './SegmentedField';
 import StylePart from './StylePart';
 import ThemeSample from './ThemeSample';
+import TypePart from './TypePart';
+import TypeSample from './TypeSample';
 
 type Pending = 'preview' | 'publish' | 'reset' | null;
 
@@ -28,7 +31,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
     const tErrors = useTranslations('errors');
     const router = useRouter();
     const { success: toastSuccess, error: toastError } = useToast();
-    const { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont } = useThemeDraft(initial);
+    const { theme, issues, tonesEdited, choosePreset, setStyle, setColor, setTone, setFont, setType } = useThemeDraft(initial);
     const param = useSearchParams().get('part');
     const part: DesignPart = (DESIGN_PARTS as readonly string[]).includes(param ?? '') ? (param as DesignPart) : initialPart;
     const [pending, setPending] = useState<Pending>(null);
@@ -74,25 +77,16 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                     {part === 'style' && <StylePart theme={theme} disabled={busy} onStyle={setStyle} />}
                     {part === 'categories' && <CategoryColorsEditor rows={toneRows} theme={theme} disabled={busy} onTone={setTone} />}
                     {part === 'fonts' && <FontsPart theme={theme} disabled={busy} onFont={setFont} />}
+                    {part === 'type' && <TypePart theme={theme} disabled={busy} onType={setType} />}
                 </div>
                 <aside aria-labelledby="design-sample" className="lg:sticky lg:top-24">
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                         <h3 id="design-sample" className="text-item text-foreground">{t('sampleTitle')}</h3>
-                        <div role="group" aria-label={t('sampleMode')} className="flex rounded-pill bg-tint p-0.5">
-                            {(['light', 'dark'] as const).map((mode) => (
-                                <button /* ui-allow: segmented option */
-                                    key={mode}
-                                    type="button"
-                                    aria-pressed={sampleMode === mode}
-                                    onClick={() => setSampleMode(mode)}
-                                    className={clsx('min-h-8 rounded-pill px-3 text-tag', sampleMode === mode ? 'bg-primary text-primary-foreground' : 'text-foreground-muted')}
-                                >
-                                    {t(`mode.${mode}`)}
-                                </button>
-                            ))}
-                        </div>
+                        <SegmentedField label={t('sampleMode')} value={sampleMode} options={(['light', 'dark'] as const).map((m) => ({ value: m, label: t(`mode.${m}`) }))} onChange={setSampleMode} />
                     </div>
-                    <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} type={theme.type} dark={sampleMode === 'dark'} />
+                    <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} type={theme.type} dark={sampleMode === 'dark'}>
+                        {part === 'type' ? <TypeSample roles={resolveTypeRoles(theme.type, theme.headingFont, theme.bodyFont, theme.styleKey)} /> : undefined}
+                    </ThemeSample>
                 </aside>
             </div>
             <DesignActions

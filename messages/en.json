@@ -766,7 +766,8 @@
         "colours": "Colours",
         "style": "Shape",
         "categories": "Topic colours",
-        "fonts": "Fonts"
+        "fonts": "Fonts",
+        "type": "Type"
       }
     },
     "development": {
@@ -1059,7 +1060,8 @@
         "colours": "Colours",
         "style": "Shape",
         "categories": "Topic colours",
-        "fonts": "Fonts"
+        "fonts": "Fonts",
+        "type": "Type"
       },
       "looks": {
         "shape": "Shape: {shape}",
@@ -1075,6 +1077,72 @@
       },
       "fonts": {
         "lead": "Fonts for headings and text. The list only has fonts with every Latvian letter."
+      },
+      "type": {
+        "lead": "Text size, heading strength and every role. The sample shows each change at once.",
+        "resetType": "Reset type",
+        "fontsLine": "Headings: {heading} · Text: {body}",
+        "changeFonts": "Change fonts",
+        "systemTitle": "System",
+        "rolesTitle": "Roles",
+        "base": "Text size",
+        "contrast": "Heading contrast",
+        "headingWeight": "Heading weight",
+        "leading": "Line spacing",
+        "tagCase": {
+          "label": "Tags",
+          "none": "Normal case",
+          "upper": "Upper case"
+        },
+        "px": "{value} px",
+        "styleWeight": "Shape's default",
+        "weightFixed": "This font has one weight.",
+        "leadingOptions": {
+          "compact": "Compact",
+          "normal": "Normal",
+          "airy": "Airy"
+        },
+        "overridden": "adjusted",
+        "phone": "on phones",
+        "desktop": "on desktop",
+        "size": "size",
+        "weight": "weight",
+        "font": "font",
+        "fontHeading": "Headings · {font}",
+        "fontBody": "Text · {font}",
+        "less": "Less: {field}",
+        "more": "More: {field}",
+        "resetRole": "Reset role",
+        "roleSummary": "{min}→{max} px · {weight}",
+        "sampleHeading": "Ķemeri bog trail at dawn",
+        "sampleLine": "We meet at the station; bring water and a warm jacket.",
+        "sampleNumbers": "0123456789 · 12 going · 10:00–14:30",
+        "roles": {
+          "display": "Display",
+          "title": "Page title",
+          "section": "Section",
+          "item": "Item title",
+          "body": "Body",
+          "body-sm": "Body small",
+          "button": "Button",
+          "button-sm": "Small button",
+          "meta": "Meta",
+          "tag": "Tag",
+          "human-note": "Human note"
+        },
+        "roleHints": {
+          "display": "The big opening lines, such as on the home page.",
+          "title": "The main heading of a page, such as Events.",
+          "section": "A section heading, such as About us.",
+          "item": "The name of a card or list item.",
+          "body": "The main text: descriptions and conversations.",
+          "body-sm": "Smaller text in dense lists.",
+          "button": "A button label, such as Join.",
+          "button-sm": "A small button label.",
+          "meta": "Extra details: time, place, count.",
+          "tag": "A short tag, such as Going.",
+          "human-note": "A line in the site's own voice, such as about the next meeting."
+        }
       },
       "presetResetsTones": "Each look has its own topic colours; choosing one replaces the current ones.",
       "tones": {
