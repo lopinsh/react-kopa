@@ -6,8 +6,6 @@ import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import InfoSections from '@/components/groups/frame/InfoSections';
-import LatestAnnouncement from '@/components/groups/announcements/LatestAnnouncement';
-import { getLatestForInfo } from '@/lib/services/announcements-page';
 import { langAttr } from '@/lib/translations';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
@@ -32,8 +30,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         getTranslations('group.frame'),
         getTranslations('common'),
     ]);
-    const base = `/${l1Slug}/group/${group.slug}`;
-    const latest = await getLatestForInfo(group.id, { isMember: group.user.isMember });
     const open = group.sections.find((s) => s.id === part);
     const parts = group.sections.map((s, i) => {
         const contentLang = langAttr(s.contentLang, locale);
@@ -51,7 +47,6 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
-            {latest && <LatestAnnouncement item={latest} allHref={group.user.isMember ? `${base}/announcements` : undefined} />}
             <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
         </>
     );

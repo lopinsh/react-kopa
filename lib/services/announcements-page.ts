@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { ANNOUNCEMENTS_LIMIT } from '@/lib/constants';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
-import { ActionError } from '@/types/actions';
 import { AUTHOR_SELECT, getRole, toRow, type PostWithAuthor } from './post.service';
 
 /** One announcement as the pages show it: `title` is always filled (old posts: their first line). */
@@ -34,10 +33,20 @@ function toItem(post: PostWithAuthor): AnnouncementItemData {
     };
 }
 
-/** The group's announcements for its members (`FORBIDDEN` otherwise): the current or the archived ones, with both counts. */
-export async function getAnnouncementsPage(groupId: string, viewerId: string, tab: 'current' | 'archive'): Promise<AnnouncementsPage> {
-    const role = await getRole(groupId, viewerId);
-    if (!isAtLeastMember(role)) throw new ActionError('FORBIDDEN');
+/**
+ * The group's announcements: members get the current or the archived ones, with both counts. Everyone else (signed out, pending, not a member) gets only
+ * the public, not archived ones of a visible public group; their archive is empty.
+ */
+export async function getAnnouncementsPage(groupId: string, viewerId: string | null, tab: 'current' | 'archive'): Promise<AnnouncementsPage> {
+    const role = viewerId ? await getRole(groupId, viewerId) : null;
+    if (!isAtLeastMember(role)) {
+        const where = { groupId, archivedAt: null, visibility: 'PUBLIC' as const, group: { type: 'PUBLIC' as const, hiddenAt: null } };
+        const [posts, current] = await Promise.all([
+            tab === 'archive' ? Promise.resolve([]) : prisma.post.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: ANNOUNCEMENTS_LIMIT, include: { author: { select: AUTHOR_SELECT } } }),
+            prisma.post.count({ where }),
+        ]);
+        return { items: posts.map(toItem), counts: { current, archive: 0 }, canManage: false };
+    }
 
     const [posts, current, archive] = await Promise.all([
         prisma.post.findMany({

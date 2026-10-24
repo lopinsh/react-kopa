@@ -14,11 +14,11 @@ const SEGMENT: Record<GroupPageKey, string> = { info: '', announcements: '/annou
  * The pages a viewer sees in a group's frame, in the fixed order (C9). Pages they may not open are
  * left out, not greyed (AR-49).
  */
-export function groupPages(o: { base: string; isMember: boolean; isTeam: boolean; pendingCount: number }): GroupPageLink[] {
+export function groupPages(o: { base: string; isMember: boolean; isPrivate?: boolean; isTeam: boolean; pendingCount: number }): GroupPageLink[] {
     const visible: Record<GroupPageKey, boolean> = {
         info: true,
         events: true,
-        announcements: o.isMember,
+        announcements: o.isMember || !o.isPrivate,
         members: o.isMember,
         settings: o.isTeam
     };

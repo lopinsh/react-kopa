@@ -1,5 +1,5 @@
 import { GroupService } from '@/lib/services/group.service';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { MessageSquareText } from 'lucide-react';
 import AnnouncementForm from '@/components/groups/announcements/AnnouncementForm';
 import AnnouncementItem from '@/components/groups/announcements/AnnouncementItem';
@@ -46,22 +46,14 @@ export default async function GroupAnnouncementsPage({
         notFound();
     }
 
-    // Gated for members only
-    const userId = session?.user?.id;
-    if (!group.user.isMember || !userId) {
-        redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
-    }
-
     const [t, tFrame, page] = await Promise.all([
         getTranslations('group'),
         getTranslations('group.frame'),
-        getAnnouncementsPage(group.id, userId, tab),
+        getAnnouncementsPage(group.id, session?.user?.id ?? null, tab),
     ]);
     const base = `/${l1Slug}/group/${groupSlug}/announcements`;
-    const tabs = [
-        { key: 'current', label: t('announcementsTabCurrent'), href: base, count: page.counts.current },
-        { key: 'archive', label: t('announcementsTabArchive'), href: `${base}?tab=archive`, count: page.counts.archive },
-    ];
+    const current = { key: 'current', label: t('announcementsTabCurrent'), href: base, count: page.counts.current };
+    const tabs = group.user.isMember ? [current, { key: 'archive', label: t('announcementsTabArchive'), href: `${base}?tab=archive`, count: page.counts.archive }] : [current];
 
     return (
         <>
@@ -70,7 +62,7 @@ export default async function GroupAnnouncementsPage({
                 title={t('pages.announcements')}
                 label={tFrame('partsLabel')}
                 items={tabs}
-                active={tab}
+                active={group.user.isMember ? tab : 'current'}
                 action={page.canManage ? <AnnouncementForm groupId={group.id} locale={locale} canChooseVisibility={group.type === 'PUBLIC'} /> : undefined}
             />
             <div className="mt-4 max-w-page divide-y divide-border border-y border-border">

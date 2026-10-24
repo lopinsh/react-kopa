@@ -308,7 +308,7 @@ export const GroupService = {
                 accentColor,
             },
             sections,
-            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isTeam: isAdmin, pendingCount }),
+            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isPrivate: g.type === 'PRIVATE', isTeam: isAdmin, pendingCount }),
             category: {
                 id: resolved.categoryId,
                 title: categoryTitle,

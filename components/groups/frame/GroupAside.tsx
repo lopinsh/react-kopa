@@ -7,6 +7,8 @@ import AsideSlot from '@/components/ui/AsideSlot';
 import GroupPicture from './GroupPicture';
 import NextMeetingBox from '@/components/groups/NextMeetingBox';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
+import LatestAnnouncement from '@/components/groups/announcements/LatestAnnouncement';
+import { getLatestForInfo } from '@/lib/services/announcements-page';
 
 type Group = {
     id: string;
@@ -14,6 +16,7 @@ type Group = {
     bannerImage: string | null;
     l1Slug: string;
     base: string;
+    isMember: boolean;
     socialLinks: { website?: string | null; instagram?: string | null; discord?: string | null };
 };
 
@@ -22,7 +25,7 @@ type Group = {
  * the next meeting and the links. Not on settings and create-event, which are focus pages.
  */
 export default async function GroupAside({ group, viewerId }: { group: Group; viewerId?: string }) {
-    const [t, faces] = await Promise.all([getTranslations('group.frame'), cardFaces([group.id], viewerId)]);
+    const [t, faces, latest] = await Promise.all([getTranslations('group.frame'), cardFaces([group.id], viewerId), getLatestForInfo(group.id, { isMember: group.isMember })]);
     const shown = faces[group.id] ?? [];
     return (
         <AsideSlot label={t('aboutLabel')} hideSegments={['settings', 'create-event']}>
@@ -32,6 +35,7 @@ export default async function GroupAside({ group, viewerId }: { group: Group; vi
                 <span className="text-body-sm">{t('members', { count: group.memberCount })}</span>
             </Link>
             <NextMeetingBox groupId={group.id} groupHref={group.base} viewerId={viewerId} />
+            {latest && <LatestAnnouncement item={latest} allHref={`${group.base}/announcements`} />}
             <GroupSocialLinks websiteLink={group.socialLinks.website} instagramLink={group.socialLinks.instagram} discordLink={group.socialLinks.discord} />
         </AsideSlot>
     );
