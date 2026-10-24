@@ -8,6 +8,7 @@ import { patchType } from '@/lib/theme/type-edit';
 import type { DraftTheme } from '@/hooks/use-theme-draft';
 import type { ThemeType } from '@/lib/validations/theme';
 import SegmentedField from './SegmentedField';
+import TypeRolesPart from './TypeRolesPart';
 
 type Props = { theme: DraftTheme; disabled: boolean; onType: (type: ThemeType | undefined) => void };
 
@@ -100,6 +101,7 @@ export default function TypePart({ theme, disabled, onType }: Props) {
                     </div>
                 </div>
             </div>
+            <TypeRolesPart theme={theme} disabled={disabled} onType={onType} />
         </section>
     );
 }
