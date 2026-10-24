@@ -517,3 +517,19 @@ body {
     padding-bottom: calc(4rem + var(--cookie-banner-h, 0px) + var(--admin-sheet-h, 0px));
   }
 }
+
+/* Admin panel, Dizains tab (R23-2): outline every text that uses the picked role. Outlines never change layout. One rule per role. */
+html[data-admin-role="display"] .text-display,
+html[data-admin-role="title"] .text-title,
+html[data-admin-role="section"] .text-section,
+html[data-admin-role="item"] .text-item,
+html[data-admin-role="body"] .text-body,
+html[data-admin-role="body-sm"] .text-body-sm,
+html[data-admin-role="button"] .text-button,
+html[data-admin-role="button-sm"] .text-button-sm,
+html[data-admin-role="meta"] .text-meta,
+html[data-admin-role="tag"] .text-tag,
+html[data-admin-role="human-note"] .human-note {
+  outline: 1px dashed var(--primary);
+  outline-offset: 2px;
+}
