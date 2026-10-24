@@ -1,20 +1,25 @@
 'use client';
 
 import type { AdminPanelTab } from '@/lib/constants';
+import type { ThemeInput } from '@/lib/validations/theme';
+import DesignTab from './DesignTab';
 import FeedbackTab from './FeedbackTab';
 import TranslateTab from './TranslateTab';
 
 export type PanelTabProps = {
     /** Pause (Atsauksmes, Dizains): page clicks work normally. */
     paused: boolean;
-    /** What the tab has selected (Tulkot: a message key); Escape clears it before closing the panel. */
+    /** What the tab has selected (Tulkot: a message key, Dizains: a type role); Escape clears it before closing the panel. */
     selection: string | null;
     onSelect: (selection: string | null) => void;
+    /** Dizains: a text was picked on the page; a phone sheet drops to half and shows it. */
+    onPicked: (el: Element) => void;
 };
 
 /** The body of the open tab. */
-export default function PanelTabBody({ tab, ...props }: PanelTabProps & { tab: AdminPanelTab }) {
+export default function PanelTabBody({ tab, designTheme, ...props }: PanelTabProps & { tab: AdminPanelTab; designTheme: ThemeInput | null }) {
     if (tab === 'feedback') return <FeedbackTab {...props} />;
     if (tab === 'translate') return <TranslateTab {...props} />;
+    if (tab === 'design' && designTheme) return <DesignTab {...props} designTheme={designTheme} />;
     return <div data-tab={tab} className="min-h-0 flex-1" />;
 }

@@ -59,7 +59,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     // design preview bar, which a site admin sees on every page while a preview is saved.
     const { admin, ...messages } = allMessages;
     const design = typeof admin === 'object' ? admin.design : undefined;
-    if (typeof admin === 'object' && panelTab) messages.admin = { panel: admin.panel, ...(typeof design === 'object' ? { design: { bar: design.bar } } : {}) };
+    if (typeof admin === 'object' && panelTab) messages.admin = { panel: admin.panel, ...(typeof design === 'object' ? { design: panelTab === 'design' ? { bar: design.bar, type: design.type } : { bar: design.bar } } : {}) };
     else if (themePreview && typeof design === 'object') messages.admin = { design: { bar: design.bar } };
 
     return (
@@ -99,7 +99,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             <CookieConsent />
             <TimeZoneSync />
 
-            {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} />}
+            {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} designTheme={panelTab === 'design' ? { presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont, styleKey: theme.styleKey, type: theme.type } : null} />}
             {themePreview && !panelTab && <ThemePreviewBar />}
         </Providers>
     );

@@ -7,6 +7,7 @@ import { useRouter } from '@/i18n/routing';
 import { setAdminPanel } from '@/actions/admin-panel-actions';
 import { useToast } from '@/hooks/use-toast';
 import { type AdminPanelTab } from '@/lib/constants';
+import type { ThemeInput } from '@/lib/validations/theme';
 import PanelTopBar from './PanelTopBar';
 import PanelTabs from './PanelTabs';
 import PanelDraftNote from './PanelDraftNote';
@@ -22,13 +23,12 @@ import { writeLastTab } from './panel-storage';
  * It sits above slide-overs (an admin annotates inside them) and below the dialogs it opens.
  */
 
-/** Tabs the panel offers. Dizains arrives with R23-2. */
-const TABS: readonly AdminPanelTab[] = ['feedback', 'translate'];
+const TABS: readonly AdminPanelTab[] = ['feedback', 'translate', 'design'];
 
-type Props = { tab: AdminPanelTab; draftActive: boolean };
+type Props = { tab: AdminPanelTab; draftActive: boolean; designTheme: ThemeInput | null };
 
 /** The admin tool panel: floats and docks from 768 px, a bottom sheet on phones. A tool, not a pop-up: no scrim, no focus trap. */
-export default function AdminPanel({ tab: serverTab, draftActive }: Props) {
+export default function AdminPanel({ tab: serverTab, draftActive, designTheme }: Props) {
     const t = useTranslations('admin.panel');
     const tErrors = useTranslations('errors');
     const router = useRouter();
@@ -68,6 +68,16 @@ export default function AdminPanel({ tab: serverTab, draftActive }: Props) {
         setSelection(null);
         writeLastTab(next);
         void choose(next);
+    };
+
+    // Dizains pick on a phone: the sheet drops to half and the text scrolls to 20 % from the top of the page.
+    const onPicked = (el: Element) => {
+        if (!phone) return;
+        if (sheet.size === 'full') sheet.commit('half');
+        const main = document.getElementById('main-content');
+        if (!main) return;
+        const top = main.scrollTop + el.getBoundingClientRect().top - main.getBoundingClientRect().top - main.clientHeight * 0.2;
+        main.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     };
 
     const handleEscape = usePanelEscape({ rootRef, hasSelection: selection !== null, clearSelection: () => setSelection(null), close: () => void choose(null) });
@@ -138,9 +148,9 @@ export default function AdminPanel({ tab: serverTab, draftActive }: Props) {
                 <PanelTabs tabs={TABS} value={tab} onChange={selectTab} />
                 <p className="px-4 pt-2 text-meta text-foreground-muted">{t(`hint.${tab}`)}</p>
                 <div role="tabpanel" id={`admin-panel-body-${tab}`} aria-labelledby={`admin-panel-tab-${tab}`} className="flex min-h-0 flex-1 flex-col">
-                    <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} />
+                    <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} />
                 </div>
-                {draftActive && <PanelDraftNote />}
+                {draftActive && tab !== 'design' && <PanelDraftNote />}
             </section>
         </>
     );

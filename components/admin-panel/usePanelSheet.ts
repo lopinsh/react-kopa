@@ -75,6 +75,7 @@ export function usePanelSheet() {
 
     return {
         size,
+        commit,
         height: drag ?? heightOf(size),
         dragging: drag !== null,
         handleProps: { onPointerDown, onPointerMove, onPointerUp: onPointerEnd, onPointerCancel: onPointerEnd, onKeyDown },

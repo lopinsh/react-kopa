@@ -1246,6 +1246,23 @@
         "missing": "Missing on this page · {count}",
         "noneMissing": "Everything on this page is translated.",
         "missingFooter": "{count} missing"
+      },
+      "design": {
+        "role": "Role",
+        "pickPlaceholder": "Choose or click on the page…",
+        "noRole": "Click a text on the page or choose a role.",
+        "onPage": "On this page: {count} places",
+        "variant": "You clicked the “{name}” variant; it follows the role.",
+        "variants": {
+          "strong": "strong",
+          "muted": "muted"
+        },
+        "everywhere": "Changes everywhere this role is used. Only you see it until you publish.",
+        "changes": "{count, plural, =0 {No changes} one {# change in the draft} other {# changes in the draft}}",
+        "publish": "Publish",
+        "discard": "Discard",
+        "orderWarning": "Item titles are larger than the page title. Publish anyway?",
+        "allType": "All type and system"
       }
     }
   },
