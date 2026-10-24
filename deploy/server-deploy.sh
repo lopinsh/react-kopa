@@ -9,7 +9,8 @@
 #   4. let in-flight requests on the old colour finish, then stop it
 #
 # If the new colour never turns healthy it is stopped and the old one keeps serving.
-# Nothing is deleted: the pre-blue/green container is stopped and renamed.
+# The pre-blue/green container is stopped and renamed, not deleted. App images no
+# container uses are removed at the end: blue and green keep the live and previous one.
 set -euo pipefail
 
 cd "$(dirname "$0")"
@@ -97,3 +98,12 @@ if running "ejam-kopa-app-$OLD"; then
   $COMPOSE stop -t 30 "app-$OLD"
 fi
 log "done: app-$NEW live"
+
+# Old app images: `docker rmi` without -f refuses any image a container (blue or green) still uses.
+repo="$(docker inspect -f '{{.Config.Image}}' "ejam-kopa-app-$NEW")"
+repo="${repo%:*}"
+removed=0
+for id in $(docker images "$repo" -q | sort -u); do
+  docker rmi "$id" >/dev/null 2>&1 && removed=$((removed + 1))
+done
+log "removed $removed old $repo image(s)"
