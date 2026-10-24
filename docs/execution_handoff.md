@@ -31,7 +31,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **C Es / Jaunumi (R21-C, c9577e0, pushed, live):** Es opens Manas grupas (public profile reachable from there), one title, pencil round button for Labot profilu; second bottom-nav slot becomes Jaunumi (news feed, own release).
 - [x] **R22-2 Burti page** (spec `docs/development/specs/R22.md` sessions table, drawing `docs/development/r22-type-system.html`): Admin > Dizains type tuning (base, contrast, heading weight, leading, tag case, per-role overrides, live sample) on the R22-1 storage. Built 24 Oct (`?part=type`): Sistēma controls, Lomas list with role editor (1 px steps), role-ladder sample scoped to `#design-sample-box` (typeDefaultVars + scoped rules, no leak from the published type). Fonti stays its own part. Reviewed 24 Oct: visual baseline 84 passed, 0 px (the local login failure was an unseeded DB); Lomas names follow the draft fonts; walked 768-1920, dark, en+lv. Pushed, live.
 - [ ] **R23 Admin tool panel** (spec `docs/development/specs/R23.md`, drawing `docs/development/r23-admin-drawer.html`).
-  - [x] **R23-1 Panel** (built 24 Oct): one shield item "Rīku panelis", floating/docked/sheet panel, tabs Atsauksmes and Tulkot, cookie `admin_panel`; old pills, toggles, loaders and setters removed. Awaits review.
+  - [x] **R23-1 Panel** (built 24 Oct): one shield item "Rīku panelis", floating/docked/sheet panel, tabs Atsauksmes and Tulkot, cookie `admin_panel`; old pills, toggles, loaders and setters removed. Reviewed 24 Oct (submission guard on tab switch/close added), pushed, live.
   - [ ] **R23-2 Dizains tab.**
 
 ## Standing owner rules
