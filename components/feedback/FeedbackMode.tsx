@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { usePathname } from '@/i18n/routing';
 import { getPageFeedback } from '@/actions/feedback-actions';
 import { buildSelector, componentOf, locate, visibleText } from '@/lib/feedback/capture';
@@ -33,6 +34,7 @@ type Props = {
  */
 export default function FeedbackMode({ paused, anywhere, children }: Props) {
     const pathname = usePathname();
+    const mounted = useSyncExternalStore(() => () => { }, () => true, () => false);
     const [notes, setNotes] = useState<FeedbackItem[]>([]);
     const [missing, setMissing] = useState<string[]>([]);
     const [draft, setDraft] = useState<FeedbackTarget | null>(null);
@@ -76,6 +78,7 @@ export default function FeedbackMode({ paused, anywhere, children }: Props) {
 
     return (
         <>
+            {mounted && createPortal(
             <div data-feedback-ignore>
                 {hover && !busy && (
                     <div
@@ -92,7 +95,9 @@ export default function FeedbackMode({ paused, anywhere, children }: Props) {
 
                 {draft && <FeedbackDialog target={draft} path={draftPath} onSaved={handleSaved} onClose={() => setDraft(null)} />}
                 {openNote && <FeedbackNoteCard note={openNote} onClose={() => setOpenNote(null)} onDeleted={handleDeleted} onChanged={handleChanged} />}
-            </div>
+            </div>,
+            document.body
+            )}
             {children({ notes, missing, onOpen: handleOpen })}
         </>
     );

@@ -1824,7 +1824,8 @@
     "delete": "Delete",
     "deleteTitle": "Delete this note?",
     "deleted": "Note deleted",
-    "pinLabel": "Note {n}",
+    "pinLabelNew": "Note {n} (new)",
+    "pinLabelAnswered": "Note {n} (answered)",
     "kind": {
       "BUG": "Bug",
       "IDEA": "Idea",

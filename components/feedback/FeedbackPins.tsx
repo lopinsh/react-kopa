@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { clsx } from 'clsx';
+import { FEEDBACK_TAB_STATUSES } from '@/lib/constants';
 import { findNoteElement, isCovered } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
@@ -78,15 +80,19 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
             {spots.map((spot) => {
                 const note = notes.find((n) => n.id === spot.id);
                 if (!note) return null;
+                const answered = (FEEDBACK_TAB_STATUSES.completed as readonly string[]).includes(note.status);
                 return (
                     <button
                         key={spot.id}
                         type="button"
-                        aria-label={t('pinLabel', { n: spot.n })}
+                        aria-label={t(answered ? 'pinLabelAnswered' : 'pinLabelNew', { n: spot.n })}
                         onClick={() => onOpen(note)}
                         // Placed from the measured bounding box, so the position has to be inline.
                         style={{ left: spot.x, top: spot.y }}
-                        className="pointer-events-auto absolute flex h-6 w-6 items-center justify-center rounded-full border-2 border-surface bg-primary text-tag text-primary-foreground shadow-premium"
+                        className={clsx(
+                            'pointer-events-auto absolute flex h-6 w-6 items-center justify-center rounded-full border-2 border-surface text-tag shadow-premium',
+                            answered ? 'bg-tool-answered text-tool-answered-ink' : 'bg-tool-new text-tool-new-ink',
+                        )}
                     >
                         {spot.n}
                     </button>

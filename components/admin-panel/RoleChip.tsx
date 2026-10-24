@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 import { typeRoleOfElement, type TypeRoleId } from '@/lib/constants';
 
@@ -10,6 +11,7 @@ type Spot = { role: TypeRoleId; x: number; y: number };
 export default function RoleChip({ active }: { active: boolean }) {
     const t = useTranslations('admin.design.type.roles');
     const [spot, setSpot] = useState<Spot | null>(null);
+    const mounted = useSyncExternalStore(() => () => { }, () => true, () => false);
 
     useEffect(() => {
         if (!active) return;
@@ -29,8 +31,8 @@ export default function RoleChip({ active }: { active: boolean }) {
         };
     }, [active]);
 
-    if (!active || !spot) return null;
-    return (
+    if (!active || !spot || !mounted) return null;
+    return createPortal(
         <span
             aria-hidden
             data-admin-panel
@@ -38,6 +40,7 @@ export default function RoleChip({ active }: { active: boolean }) {
             className="pointer-events-none fixed left-[var(--chip-x)] top-[var(--chip-y)] z-[57] rounded-pill bg-primary px-2 text-tag text-primary-foreground"
         >
             {t(spot.role)}
-        </span>
+        </span>,
+        document.body
     );
 }

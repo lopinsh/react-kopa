@@ -8,6 +8,11 @@
   --header-height: var(--spacing-header);
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 68px;
+  /* Admin tool pins: deliberately off-theme, the same in light and dark. */
+  --tool-new: #FF2D78;
+  --tool-answered: #1DB954;
+  --tool-new-ink: #FFFFFF;
+  --tool-answered-ink: #000000;
 }
 
 /* ─── Tailwind v4 Theme Extension ───────────────── */
@@ -21,6 +26,10 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-tool-new: var(--tool-new);
+  --color-tool-answered: var(--tool-answered);
+  --color-tool-new-ink: var(--tool-new-ink);
+  --color-tool-answered-ink: var(--tool-answered-ink);
   --color-danger: var(--danger);
   --color-danger-foreground: var(--danger-foreground);
   --color-success: var(--success);

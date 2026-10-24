@@ -1824,7 +1824,8 @@
     "delete": "Dzēst",
     "deleteTitle": "Dzēst šo piezīmi?",
     "deleted": "Piezīme dzēsta",
-    "pinLabel": "Piezīme {n}",
+    "pinLabelNew": "Piezīme {n} (jauna)",
+    "pinLabelAnswered": "Piezīme {n} (atbildēta)",
     "kind": {
       "BUG": "Kļūda",
       "IDEA": "Ideja",
