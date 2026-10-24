@@ -153,6 +153,22 @@ export const FeedbackService = {
         return rows.map(toItem);
     },
 
+    /** Open notes per page path (query stripped, so `/x?a=1` and `/x` count together), most first. */
+    async openCountsByPath(adminId: string): Promise<{ path: string; count: number }[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
+        const groups = await prisma.feedback.groupBy({
+            by: ['path'],
+            where: { status: { in: [...FEEDBACK_TAB_STATUSES.open] } },
+            _count: { _all: true },
+        });
+        const merged = new Map<string, number>();
+        for (const g of groups) {
+            const path = g.path.split('?')[0] || '/';
+            merged.set(path, (merged.get(path) ?? 0) + g._count._all);
+        }
+        return [...merged].map(([path, count]) => ({ path, count })).sort((a, b) => b.count - a.count || a.path.localeCompare(b.path));
+    },
+
     async list(adminId: string, filter: FeedbackFilter): Promise<FeedbackItem[]> {
         if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const rows = await prisma.feedback.findMany({

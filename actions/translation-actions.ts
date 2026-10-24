@@ -1,6 +1,5 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { revalidatePath, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
@@ -10,28 +9,13 @@ import {
     type TranslationEntry,
     type TranslationSearchHit,
 } from '@/lib/services/message-override.service';
-import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
-import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
+import { setAdminPanel } from './admin-panel-actions';
+import type { MessageLang } from '@/lib/translate-mode/messages';
 import { NotificationService } from '@/lib/services/notification.service';
 
+/** Superseded by setAdminPanel; removed with the old toggles in the last R23-1 commit. */
 export async function setTranslateMode(enabled: boolean): Promise<ActionResponse> {
-    const check = await requireSiteAdmin();
-    if (!check.success) return { success: false, error: check.error };
-
-    const cookieStore = await cookies();
-    if (enabled) {
-        cookieStore.set(TRANSLATE_COOKIE, '1', {
-            httpOnly: true,
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-            path: '/',
-        });
-        // Both modes capture clicks on the page, so only one runs at a time.
-        cookieStore.delete(FEEDBACK_COOKIE);
-    } else {
-        cookieStore.delete(TRANSLATE_COOKIE);
-    }
-    return { success: true };
+    return setAdminPanel(enabled ? 'translate' : null);
 }
 
 export async function getTranslationEntry(key: string): Promise<ActionResponse<TranslationEntry>> {
@@ -105,5 +89,16 @@ export async function rejectSuggestion(id: string, value: string): Promise<Actio
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'SAVE_FAILED');
+    }
+}
+
+/** Which of these keys (the marked texts on the page) still lack a language, for the Tulkot tab. */
+export async function getMissingTranslations(keys: string[]): Promise<ActionResponse<{ key: string; langs: MessageLang[] }[]>> {
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
+    try {
+        return { success: true, data: await MessageOverrideService.missingAmong(check.userId, keys) };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
     }
 }

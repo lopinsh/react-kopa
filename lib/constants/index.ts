@@ -3,6 +3,8 @@
  * Used across components, schemas, and services to ensure consistency.
  */
 
+export * from './admin-panel';
+
 /** Accent when no category is chosen: quiet text colour. The site colour is for buttons only (AR-06). */
 export const NEUTRAL_ACCENT = 'var(--foreground-muted)';
 

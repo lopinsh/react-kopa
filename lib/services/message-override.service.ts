@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import { isSiteAdminUser } from './site-role.service';
-import { saveMessageOverrideSchema, validateMessage } from '@/lib/validations/message-override';
+import { messageKeyListSchema, saveMessageOverrideSchema, validateMessage } from '@/lib/validations/message-override';
 import { stripMarkers, type MessageTree } from '@/lib/translate-mode/marker';
 import {
     MESSAGE_LANGS,
@@ -132,6 +132,25 @@ export const MessageOverrideService = {
             source: { lv: lvBase[key] ?? '', en: enBase[key] ?? '' },
             edited: { lv: Object.hasOwn(overrides.lv, key), en: Object.hasOwn(overrides.en, key) },
         };
+    },
+
+    /** Of the given keys, those whose live text is empty or still a `[LV: …]` / `[EN: …]` placeholder, with the languages affected. Unknown keys are skipped. */
+    async missingAmong(adminId: string, keys: unknown): Promise<{ key: string; langs: MessageLang[] }[]> {
+        if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
+        const parsed = messageKeyListSchema.safeParse(keys);
+        if (!parsed.success) throw new ActionError('VALIDATION_FAILED');
+        const [lvBase, enBase, overrides] = await Promise.all([loadFlatBase('lv'), loadFlatBase('en'), loadOverrides()]);
+        const result: { key: string; langs: MessageLang[] }[] = [];
+        for (const key of new Set(parsed.data)) {
+            if (!isKnownKey(key, lvBase, enBase)) continue;
+            const values = { lv: overrides.lv[key] ?? lvBase[key] ?? '', en: overrides.en[key] ?? enBase[key] ?? '' };
+            const langs = MESSAGE_LANGS.filter((lang) => {
+                const value = values[lang].trim();
+                return value === '' || /^\[(LV|EN):/.test(value);
+            });
+            if (langs.length > 0) result.push({ key, langs: [...langs] });
+        }
+        return result;
     },
 
     /** Finds texts by key or content in either language (also the ones that can't be clicked on the page). */

@@ -1,33 +1,16 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { FeedbackService, type FeedbackItem } from '@/lib/services/feedback.service';
-import { FEEDBACK_COOKIE } from '@/lib/feedback/server';
-import { TRANSLATE_COOKIE } from '@/lib/translate-mode/marker';
+import { setAdminPanel } from './admin-panel-actions';
 import type { CreateFeedbackInput, ReplyFeedbackInput, UpdateFeedbackInput } from '@/lib/validations/feedback';
 import { NotificationService } from '@/lib/services/notification.service';
 
-/** Switches feedback mode on or off. Turning it on turns translation mode off: both capture clicks on the page. */
+/** Superseded by setAdminPanel; removed with the old toggles in the last R23-1 commit. */
 export async function setFeedbackMode(enabled: boolean): Promise<ActionResponse> {
-    const check = await requireSiteAdmin();
-    if (!check.success) return { success: false, error: check.error };
-
-    const cookieStore = await cookies();
-    if (enabled) {
-        cookieStore.set(FEEDBACK_COOKIE, '1', {
-            httpOnly: true,
-            sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production',
-            path: '/',
-        });
-        cookieStore.delete(TRANSLATE_COOKIE);
-    } else {
-        cookieStore.delete(FEEDBACK_COOKIE);
-    }
-    return { success: true };
+    return setAdminPanel(enabled ? 'feedback' : null);
 }
 
 export async function createFeedback(input: CreateFeedbackInput): Promise<ActionResponse<FeedbackItem>> {
@@ -105,6 +88,17 @@ export async function purgeCompletedFeedback(): Promise<ActionResponse<{ count: 
         const result = await FeedbackService.purgeClosed(check.userId);
         revalidatePath('/[locale]/admin/feedback', 'page');
         return { success: true, data: result };
+    } catch (error) {
+        return handleActionError(error, 'ACTION_FAILED');
+    }
+}
+
+/** Open notes per page, for the panel's "Citās lapās" list. */
+export async function getFeedbackPages(): Promise<ActionResponse<{ path: string; count: number }[]>> {
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
+    try {
+        return { success: true, data: await FeedbackService.openCountsByPath(check.userId) };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
     }

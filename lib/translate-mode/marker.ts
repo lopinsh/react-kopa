@@ -4,8 +4,6 @@
  * The marker sits outside any ICU argument, so formatting of the original text is unaffected.
  */
 
-export const TRANSLATE_COOKIE = 'translate_mode';
-
 // Written as escapes: the characters themselves are invisible in an editor.
 export const MARKER_START = '\u2063'; // INVISIBLE SEPARATOR
 export const MARKER_END = '\u2064'; // INVISIBLE PLUS

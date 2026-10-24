@@ -102,3 +102,6 @@ export const saveMessageOverrideSchema = z.object({
 });
 
 export type SaveMessageOverrideValues = z.infer<typeof saveMessageOverrideSchema>;
+
+/** Keys the Tulkot tab asks about (the marked texts on the page). */
+export const messageKeyListSchema = z.array(z.string().min(1).max(200)).max(500);
