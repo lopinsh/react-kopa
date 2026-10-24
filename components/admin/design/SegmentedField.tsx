@@ -17,7 +17,7 @@ export default function SegmentedField<V extends string | number>({ label, optio
                     aria-label={o.ariaLabel}
                     disabled={disabled}
                     onClick={() => onChange(o.value)}
-                    className={clsx('min-h-8 rounded-pill px-3 text-tag disabled:opacity-60', value === o.value ? 'bg-primary text-primary-foreground' : 'text-foreground-muted', o.className)}
+                    className={clsx('min-h-8 rounded-pill px-3 text-tag normal-case disabled:opacity-60', value === o.value ? 'bg-primary text-primary-foreground' : 'text-foreground-muted', o.className)}
                 >
                     {o.label}
                 </button>
