@@ -7,6 +7,7 @@ import { clsx } from 'clsx';
 import type { DraftTheme } from '@/hooks/use-theme-draft';
 import { TYPE_ROLES, type ThemeFontId, type TypeRoleId } from '@/lib/constants';
 import { resolveTypeRoles } from '@/lib/theme/type-edit';
+import { roleFontId } from '@/lib/theme/type-vars';
 import type { ThemeType } from '@/lib/validations/theme';
 import TypeRoleEditor from './TypeRoleEditor';
 
@@ -20,7 +21,7 @@ const FACE: Record<ThemeFontId, string> = {
     'archivo-black': '[font-family:var(--font-archivo-black)]',
 };
 
-const WEIGHT: Record<number, string> = { 400: '[font-weight:400]', 500: '[font-weight:500]', 600: '[font-weight:600]', 700: '[font-weight:700]', 800: '[font-weight:800]' };
+const WEIGHT: Record<number, string> = { 100: '[font-weight:100]', 200: '[font-weight:200]', 300: '[font-weight:300]', 400: '[font-weight:400]', 500: '[font-weight:500]', 600: '[font-weight:600]', 700: '[font-weight:700]', 800: '[font-weight:800]', 900: '[font-weight:900]', 1000: '[font-weight:1000]' };
 
 /** Lomas: the 11 roles as a list, each showing what it resolves to; one opens at a time into its editor. */
 export default function TypeRolesPart({ theme, disabled, onType }: Props) {
@@ -44,7 +45,7 @@ export default function TypeRolesPart({ theme, disabled, onType }: Props) {
                                 onClick={() => setOpen(isOpen ? null : r.id)}
                                 className="flex min-h-11 w-full items-center justify-between gap-3 py-2 text-left"
                             >
-                                <span className={clsx('flex min-w-0 items-center gap-2 text-body text-foreground', FACE[res.font === 'heading' ? theme.headingFont : theme.bodyFont], WEIGHT[res.weight])}>
+                                <span className={clsx('flex min-w-0 items-center gap-2 text-body text-foreground', FACE[roleFontId(res.font, theme.headingFont, theme.bodyFont)], WEIGHT[res.weight])}>
                                     <span className="truncate">{t(`roles.${r.id}`)}</span>
                                     {res.overridden && <><span className="size-2 shrink-0 rounded-pill bg-primary" aria-hidden="true" /><span className="sr-only">{t('overridden')}</span></>}
                                 </span>

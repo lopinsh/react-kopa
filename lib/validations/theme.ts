@@ -27,21 +27,21 @@ export const themeModeTokensSchema = z.object({
 
 /**
  * The site's type tuning (R22): sparse and versioned; unset keys mean today's values (globals.css). Unknown keys are stripped.
- * Weights 400-700 only (handbook: no 800/900); the heading font's own weights decide at render (`snapWeight`).
+ * Weights 100-1000 (the admin editor is an experiment tool; handbook defaults stay 400-600); the font's own weights decide at render (`snapWeight`). Sizes 8-120 px.
  */
 export const themeTypeSchema = z.object({
     v: z.literal(1),
     base: z.number().min(15).max(17).multipleOf(0.5).optional(),
     contrast: z.number().min(0.8).max(1.25).optional(),
-    headingWeight: z.number().int().min(400).max(700).optional(),
+    headingWeight: z.number().int().min(100).max(1000).optional(),
     leading: z.enum(['compact', 'normal', 'airy']).optional(),
     tagCase: z.enum(['none', 'upper']).optional(),
     roles: z.partialRecord(z.enum(TYPE_ROLE_IDS), z.object({
-        min: z.number().min(11).max(80).optional(),
-        max: z.number().min(11).max(80).optional(),
-        size: z.number().min(11).max(80).optional(),
-        weight: z.number().int().min(400).max(700).optional(),
-        font: z.enum(['heading', 'body']).optional(),
+        min: z.number().min(8).max(120).optional(),
+        max: z.number().min(8).max(120).optional(),
+        size: z.number().min(8).max(120).optional(),
+        weight: z.number().int().min(100).max(1000).optional(),
+        font: z.enum(['heading', 'body', ...THEME_FONT_IDS]).optional(),
     }).refine((r) => r.min === undefined || r.max === undefined || r.min <= r.max)).optional(),
 });
 export type ThemeType = z.infer<typeof themeTypeSchema>;

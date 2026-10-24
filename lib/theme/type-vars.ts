@@ -4,7 +4,18 @@ import type { ThemeType } from '@/lib/validations/theme';
 type Vars = Record<string, string>;
 type Role = (typeof TYPE_ROLES)[number];
 
-const MIN_PX = 11;
+/** A role's font choice: the legacy 'heading' / 'body' or a font id. Returns the font id it stands for. */
+export function roleFontId(font: 'heading' | 'body' | ThemeFontId, headingFont: ThemeFontId, bodyFont: ThemeFontId): ThemeFontId {
+    return font === 'heading' ? headingFont : font === 'body' ? bodyFont : font;
+}
+/** CSS value for a role's font choice. */
+export function roleFontVar(font: 'heading' | 'body' | ThemeFontId): string {
+    if (font === 'heading') return 'var(--font-heading)';
+    if (font === 'body') return 'var(--font-sans)';
+    return `var(${(THEME_FONTS.find((f) => f.id === font) ?? THEME_FONTS[0]).cssVar})`;
+}
+
+const MIN_PX = 8;
 const MIN_REM = MIN_PX / 16;
 const LEADING = { compact: 0.9, normal: 1, airy: 1.1 } as const;
 
@@ -41,7 +52,7 @@ export function typeDefaultVars(): Vars {
 /**
  * The site's type tuning (R22) as `--type-<role>-*` variables, which the type utilities in globals.css read.
  * Only keys derived from set values are returned: unset (or `{v:1}`) gives `{}` and the page stays as the literals in globals.css.
- * Every value here is a number or enum checked by `themeTypeSchema`; sizes never go under 11 px.
+ * Every value here is a number or enum checked by `themeTypeSchema`; sizes never go under 8 px.
  */
 export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFontId, bodyFont: ThemeFontId): Vars {
     if (!type) return {};
@@ -69,10 +80,10 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
         if (!r.heading && r.line !== null && !r.id.startsWith('button') && leading && leading !== 'normal') vars[`--type-${r.id}-line`] = num(r.line * LEADING[leading], 3);
 
         if (o?.weight !== undefined && r.id !== 'human-note') {
-            const useHeading = o.font ? o.font === 'heading' : r.heading;
-            vars[`--type-${r.id}-weight`] = String(snapWeight(useHeading ? headingFont : bodyFont, o.weight));
+            const face = o.font ? roleFontId(o.font, headingFont, bodyFont) : r.heading ? headingFont : bodyFont;
+            vars[`--type-${r.id}-weight`] = String(snapWeight(face, o.weight));
         }
-        if (o?.font && r.heading) vars[`--type-${r.id}-font`] = o.font === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)';
+        if (o?.font && r.heading) vars[`--type-${r.id}-font`] = roleFontVar(o.font);
     }
 
     const fixed = THEME_FONTS.find((f) => f.id === headingFont);
@@ -89,14 +100,13 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
 export function themeTypeRules(type: ThemeType | undefined, headingFont: ThemeFontId, bodyFont: ThemeFontId, scope?: string): string {
     if (!type && !scope) return '';
     const pre = scope ? `${scope} ` : '';
-    const face = (f: 'heading' | 'body') => (f === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)');
     const rules: string[] = [];
     for (const r of TYPE_ROLES) {
         const o = type?.roles?.[r.id];
         if (!o && !scope) continue;
         const decls: string[] = [];
-        if (!r.heading && (o?.font || scope)) decls.push(`font-family:${o?.font ? face(o.font) : 'inherit'}`);
-        if (r.id === 'human-note' && (o?.weight !== undefined || scope)) decls.push(`font-weight:${o?.weight !== undefined ? snapWeight(o.font === 'heading' ? headingFont : bodyFont, o.weight) : 'inherit'}`);
+        if (!r.heading && (o?.font || scope)) decls.push(`font-family:${o?.font ? roleFontVar(o.font) : 'inherit'}`);
+        if (r.id === 'human-note' && (o?.weight !== undefined || scope)) decls.push(`font-weight:${o?.weight !== undefined ? snapWeight(o.font ? roleFontId(o.font, headingFont, bodyFont) : bodyFont, o.weight) : 'inherit'}`);
         if (decls.length) rules.push(`${pre}.${r.utility}{${decls.join(';')}}`);
     }
     // An explicit case utility on the element (FallbackLangLabel's normal-case) still wins: this rule is unlayered, so it would beat any utility.

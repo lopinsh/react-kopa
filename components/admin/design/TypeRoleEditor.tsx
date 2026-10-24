@@ -3,10 +3,11 @@
 import { useTranslations } from 'next-intl';
 import { Minus, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { Select } from '@/components/ui/Input';
 import { THEME_FONTS, TYPE_ROLES, type ThemeFontId, type ThemeStyleKey, type TypeRoleId } from '@/lib/constants';
 import { patchType, resolveTypeRoles } from '@/lib/theme/type-edit';
+import { roleFontId } from '@/lib/theme/type-vars';
 import type { ThemeType } from '@/lib/validations/theme';
-import SegmentedField from './SegmentedField';
 
 type Props = { roleId: TypeRoleId; type: ThemeType | undefined; headingFont: ThemeFontId; bodyFont: ThemeFontId; styleKey: ThemeStyleKey; disabled: boolean; onType: (type: ThemeType | undefined) => void };
 type Override = NonNullable<NonNullable<ThemeType['roles']>[TypeRoleId]>;
@@ -31,7 +32,8 @@ export default function TypeRoleEditor({ roleId, type, headingFont, bodyFont, st
     const role = TYPE_ROLES.find((r) => r.id === roleId) ?? TYPE_ROLES[0];
     const res = resolveTypeRoles(type, headingFont, bodyFont, styleKey).find((r) => r.id === roleId) ?? resolveTypeRoles(type, headingFont, bodyFont, styleKey)[0];
     const fluid = 'fluid' in role.size;
-    const faceId = res.font === 'heading' ? headingFont : bodyFont;
+    const faceId = roleFontId(res.font, headingFont, bodyFont);
+    const labelOf = (id: ThemeFontId) => THEME_FONTS.find((f) => f.id === id)?.label ?? '';
     const face = THEME_FONTS.find((f) => f.id === faceId) ?? THEME_FONTS[0];
     const weights: readonly number[] = face.weights;
     const wi = Math.max(0, weights.indexOf(res.weight));
@@ -41,7 +43,7 @@ export default function TypeRoleEditor({ roleId, type, headingFont, bodyFont, st
         onType(patchType(type, { roles: Object.keys(roles).length ? roles : undefined }, { headingFont, bodyFont, styleKey }));
     };
     const cur = type?.roles?.[roleId] ?? {};
-    const clampPx = (n: number) => Math.min(80, Math.max(11, n));
+    const clampPx = (n: number) => Math.min(120, Math.max(8, n));
     const sizeStep = (k: 'min' | 'max' | 'size', dir: -1 | 1) => {
         const v = clampPx(Math.round(k === 'max' ? res.maxPx : res.minPx) + dir);
         const next: Override = { ...cur, [k]: v };
@@ -51,23 +53,21 @@ export default function TypeRoleEditor({ roleId, type, headingFont, bodyFont, st
     };
     const row = (k: 'min' | 'max' | 'size', label: string) => {
         const v = Math.round(k === 'max' ? res.maxPx : res.minPx);
-        return <Stepper key={k} label={label} value={t('px', { value: v })} display={t('px', { value: v })} canLess={v > 11} canMore={v < 80} disabled={disabled} onStep={(d) => sizeStep(k, d)} />;
+        return <Stepper key={k} label={label} value={t('px', { value: v })} display={t('px', { value: v })} canLess={v > 8} canMore={v < 120} disabled={disabled} onStep={(d) => sizeStep(k, d)} />;
     };
-    const hideWeight = roleId === 'human-note' && res.font === 'body' && weights.length < 2;
+    const hideWeight = roleId === 'human-note' && weights.length < 2;
 
     return (
         <div className="space-y-1 border-t border-border py-3">
             <p className="text-meta text-foreground-muted">{t(`roleHints.${roleId}`)}</p>
-            <SegmentedField
-                label={t('font')}
-                disabled={disabled}
-                value={res.font}
-                options={[
-                    { value: 'heading' as const, label: t('fontHeading', { font: THEME_FONTS.find((f) => f.id === headingFont)?.label ?? '' }) },
-                    { value: 'body' as const, label: t('fontBody', { font: THEME_FONTS.find((f) => f.id === bodyFont)?.label ?? '' }) },
-                ]}
-                onChange={(font) => write({ ...cur, font })}
-            />
+            <div className="flex min-h-11 items-center justify-between gap-3">
+                <label htmlFor={`type-font-${roleId}`} className="text-body text-foreground">{t('font')}</label>
+                <Select id={`type-font-${roleId}`} className="w-auto max-w-[60%]" disabled={disabled} value={res.font} onChange={(e) => write({ ...cur, font: e.target.value as NonNullable<Override['font']> })}>
+                    <option value="heading">{t('fontHeading', { font: labelOf(headingFont) })}</option>
+                    <option value="body">{t('fontBody', { font: labelOf(bodyFont) })}</option>
+                    {THEME_FONTS.map((f) => <option key={f.id} value={f.id}>{f.label}</option>)}
+                </Select>
+            </div>
             {fluid ? [row('min', `${t('size')} ${t('phone')}`), row('max', `${t('size')} ${t('desktop')}`)] : row('size', t('size'))}
             {!hideWeight && (
                 <Stepper label={t('weight')} value={String(res.weight)} display={String(res.weight)} canLess={wi > 0} canMore={wi < weights.length - 1} disabled={disabled} onStep={(d) => write({ ...cur, weight: weights[wi + d] })} />

@@ -106,7 +106,7 @@ Neutrals carry the page. Colour means something (AR-04, AR-06): the **site colou
 
 ### Type
 
-Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900, except Archivo Black, the Saule heading font: one black weight, the single exception, and headings never get synthetic bold.
+Two families (AR-07): **Literata** for titles, **Commissioner** for everything else. Weights 400, 500, 600; 700 only for counts in chips. No 800 or 900, except Archivo Black, the Saule heading font: one black weight, the single exception, and headings never get synthetic bold. The Admin > Dizains editor is an experiment tool and may go outside these limits (weights 100–1000, sizes 8–120 px); the defaults follow the table.
 
 | Role (utility) | Font | Size / line / weight | Example |
 |---|---|---|---|

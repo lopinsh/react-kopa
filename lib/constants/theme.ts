@@ -96,15 +96,15 @@ export const SOFT_SHADOWS = {
 
 /** Fonts with full Latvian (latin-ext) support. `cssVar` is the variable next/font exposes (see lib/theme-fonts.ts). */
 export const THEME_FONTS = [
-    { id: 'geist', label: 'Geist', cssVar: '--font-geist-sans', weights: [400, 500, 600, 700] },
-    { id: 'literata', label: 'Literata', cssVar: '--font-literata', weights: [400, 500, 600, 700] },
-    { id: 'commissioner', label: 'Commissioner', cssVar: '--font-commissioner', weights: [400, 500, 600, 700] },
+    { id: 'geist', label: 'Geist', cssVar: '--font-geist-sans', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
+    { id: 'literata', label: 'Literata', cssVar: '--font-literata', weights: [200, 300, 400, 500, 600, 700, 800, 900] },
+    { id: 'commissioner', label: 'Commissioner', cssVar: '--font-commissioner', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
     { id: 'atkinson', label: 'Atkinson Hyperlegible', cssVar: '--font-atkinson', weights: [400, 700] },
     { id: 'alegreya-sans', label: 'Alegreya Sans', cssVar: '--font-alegreya-sans', weights: [400, 500, 700, 800] },
-    { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif', weights: [400, 500, 600, 700] },
+    { id: 'source-serif', label: 'Source Serif 4', cssVar: '--font-source-serif', weights: [200, 300, 400, 500, 600, 700, 800, 900] },
     { id: 'lora', label: 'Lora', cssVar: '--font-lora', weights: [400, 500, 600, 700] },
-    { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans', weights: [400, 500, 600, 700] },
-    { id: 'raleway', label: 'Raleway', cssVar: '--font-raleway', weights: [400, 500, 600, 700] },
+    { id: 'nunito-sans', label: 'Nunito Sans', cssVar: '--font-nunito-sans', weights: [200, 300, 400, 500, 600, 700, 800, 900, 1000] },
+    { id: 'raleway', label: 'Raleway', cssVar: '--font-raleway', weights: [100, 200, 300, 400, 500, 600, 700, 800, 900] },
     /** Single-weight display face: as a heading it wins over the style's heading weight. */
     { id: 'archivo-black', label: 'Archivo Black', cssVar: '--font-archivo-black', weight: 400, weights: [400] },
 ] as const satisfies readonly { id: string; label: string; cssVar: string; weight?: number; weights: readonly number[] }[];

@@ -1,11 +1,11 @@
 import { THEME_FONTS, THEME_STYLES, TYPE_ROLES, snapWeight, type ThemeFontId, type ThemeStyleKey, type TypeRoleId } from '@/lib/constants';
-import { typeRoleParts } from '@/lib/theme/type-vars';
+import { roleFontId, typeRoleParts } from '@/lib/theme/type-vars';
 import type { ThemeType } from '@/lib/validations/theme';
 
 type Role = (typeof TYPE_ROLES)[number];
 type RoleOverride = NonNullable<NonNullable<ThemeType['roles']>[TypeRoleId]>;
 export type FontCtx = { headingFont: ThemeFontId; bodyFont: ThemeFontId; styleKey: ThemeStyleKey };
-export interface ResolvedRole { id: TypeRoleId; heading: boolean; minPx: number; maxPx: number; weight: number; font: 'heading' | 'body'; overridden: boolean }
+export interface ResolvedRole { id: TypeRoleId; heading: boolean; minPx: number; maxPx: number; weight: number; font: 'heading' | 'body' | ThemeFontId; overridden: boolean }
 
 const half = (n: number) => Math.round(n * 2) / 2;
 const own = (r: Role): 'heading' | 'body' => (r.heading ? 'heading' : 'body');
@@ -20,7 +20,7 @@ function resolveRole(type: ThemeType | undefined, r: Role, { headingFont, bodyFo
     if (o?.min !== undefined) minPx = o.min;
     if (o?.max !== undefined) maxPx = o.max;
     const font = o?.font ?? own(r);
-    const face = font === 'heading' ? headingFont : bodyFont;
+    const face = roleFontId(font, headingFont, bodyFont);
     const fixed = THEME_FONTS.find((f) => f.id === headingFont);
     let weight: number;
     if (r.id === 'human-note') weight = o?.weight !== undefined ? snapWeight(face, o.weight) : 400;
@@ -28,7 +28,7 @@ function resolveRole(type: ThemeType | undefined, r: Role, { headingFont, bodyFo
     else if (!r.heading) weight = r.weight ?? 400;
     else if (fixed && 'weight' in fixed) weight = fixed.weight;
     else weight = snapWeight(headingFont, type?.headingWeight ?? THEME_STYLES[styleKey].headingWeight);
-    return { id: r.id, heading: r.heading, minPx: half(Math.max(minPx, 11)), maxPx: half(Math.max(maxPx, 11)), weight, font, overridden: !!o && Object.keys(o).length > 0 };
+    return { id: r.id, heading: r.heading, minPx: half(Math.max(minPx, 8)), maxPx: half(Math.max(maxPx, 8)), weight, font, overridden: !!o && Object.keys(o).length > 0 };
 }
 
 /** What each role shows after the stored type (same maths as the CSS), for the Burti list and the sample labels. */
