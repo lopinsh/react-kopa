@@ -67,21 +67,21 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
                 ],
             },
             include: { ...EVENT_ROW_INCLUDE(lang), attendees: { where: { userId, status: GOING }, select: { status: true } } },
-            orderBy: { startDate: 'asc' },
+            orderBy: [{ startDate: 'asc' }, { id: 'asc' }],
             take: MY_UPCOMING_MAX,
         }),
         memberIds.length > 0
             ? prisma.post.findMany({
                 ...JOIN,
                 where: { groupId: { in: memberIds }, archivedAt: null, createdAt: { gte: new Date(now.getTime() - MY_NEWS_DAYS * DAY_MS) } },
-                orderBy: { createdAt: 'desc' },
+                orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
                 take: MY_NEWS_MAX,
                 select: { id: true, title: true, content: true, createdAt: true, authorId: true, group: { select: NEWS_GROUP_SELECT(lang) } },
             })
             : [],
         prisma.notification.findMany({
             where: { userId, audience: 'USER', type: { in: ANSWER_TYPES }, createdAt: { gt: since } },
-            orderBy: { createdAt: 'desc' },
+            orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
             take: 10,
             select: { id: true, type: true, link: true, message: true, createdAt: true },
         }),

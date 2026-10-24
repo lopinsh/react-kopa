@@ -42,7 +42,7 @@ export async function getAnnouncementsPage(groupId: string, viewerId: string, ta
     const [posts, current, archive] = await Promise.all([
         prisma.post.findMany({
             where: { groupId, archivedAt: tab === 'archive' ? { not: null } : null },
-            orderBy: tab === 'archive' ? { archivedAt: 'desc' } : { createdAt: 'desc' },
+            orderBy: [tab === 'archive' ? { archivedAt: 'desc' } : { createdAt: 'desc' }, { id: 'desc' }],
             take: ANNOUNCEMENTS_LIMIT,
             include: { author: { select: AUTHOR_SELECT } },
         }),
@@ -61,7 +61,7 @@ export async function getLatestForInfo(groupId: string, viewer: { isMember: bool
         where: viewer.isMember
             ? { groupId, archivedAt: null }
             : { groupId, archivedAt: null, visibility: 'PUBLIC', group: { type: 'PUBLIC', hiddenAt: null } },
-        orderBy: { createdAt: 'desc' },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
         include: { author: { select: AUTHOR_SELECT } },
     });
     return post ? toItem(post) : null;
