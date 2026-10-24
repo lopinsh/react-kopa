@@ -1237,7 +1237,8 @@
         "thisPage": "Šajā lapā · {count}",
         "otherPages": "Citās lapās · {count}",
         "noOther": "Citās lapās atvērtu piezīmju nav.",
-        "all": "Visas piezīmes"
+        "all": "Visas piezīmes",
+        "onThisPage": "{count} šajā lapā"
       },
       "translate": {
         "selected": "Izvēlēts",

@@ -1237,7 +1237,8 @@
         "thisPage": "On this page · {count}",
         "otherPages": "On other pages · {count}",
         "noOther": "No open notes on other pages.",
-        "all": "All notes"
+        "all": "All notes",
+        "onThisPage": "{count} on this page"
       },
       "translate": {
         "selected": "Selected",

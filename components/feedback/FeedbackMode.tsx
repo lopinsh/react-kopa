@@ -1,39 +1,43 @@
 'use client';
 
-import { useCallback, useEffect, useState, useTransition } from 'react';
-import { useTranslations } from 'next-intl';
-import { List, MessageSquareText, MousePointerClick, Pause, Play } from 'lucide-react';
-import { clsx } from 'clsx';
-import { useRouter, usePathname } from '@/i18n/routing';
-import { getPageFeedback, setFeedbackMode } from '@/actions/feedback-actions';
+import { useCallback, useEffect, useState, type ReactNode } from 'react';
+import { usePathname } from '@/i18n/routing';
+import { getPageFeedback } from '@/actions/feedback-actions';
 import { buildSelector, componentOf, locate, visibleText } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 import FeedbackDialog, { type FeedbackTarget } from './FeedbackDialog';
 import FeedbackNoteCard from './FeedbackNoteCard';
-import FeedbackNotesPanel from './FeedbackNotesPanel';
 import FeedbackPins from './FeedbackPins';
 import FeedbackNamedElements from './FeedbackNamedElements';
-import FeedbackModeToggle from './FeedbackModeToggle';
 import { useElementPicker } from './useElementPicker';
 
+export interface FeedbackListContext {
+    notes: FeedbackItem[];
+    /** Ids of notes whose element is no longer on the page. */
+    missing: string[];
+    onOpen: (note: FeedbackItem) => void;
+}
+
+type Props = {
+    /** Pause: the page works normally, no picking. */
+    paused: boolean;
+    /** Pick any element, also ones without a name. */
+    anywhere: boolean;
+    /** The panel's notes list, rendered by the Atsauksmes tab from this mode's notes. */
+    children: (list: FeedbackListContext) => ReactNode;
+};
+
 /**
- * Everything feedback mode adds to a page. Mounted by the locale layout only when the server has
- * verified a site admin with the mode switched on, so other visitors never load any of this.
+ * Everything the Atsauksmes tab adds to a page: pins, named elements, the picker, the note dialog and card. Mounted
+ * (inside the admin panel) only when the server has verified a site admin with that tab open.
  */
-export default function FeedbackMode() {
-    const t = useTranslations('feedbackMode');
-    const router = useRouter();
+export default function FeedbackMode({ paused, anywhere, children }: Props) {
     const pathname = usePathname();
-    const [, startTransition] = useTransition();
     const [notes, setNotes] = useState<FeedbackItem[]>([]);
     const [missing, setMissing] = useState<string[]>([]);
     const [draft, setDraft] = useState<FeedbackTarget | null>(null);
     const [draftPath, setDraftPath] = useState('');
     const [openNote, setOpenNote] = useState<FeedbackItem | null>(null);
-    const [panelOpen, setPanelOpen] = useState(false);
-    const [paused, setPaused] = useState(false);
-    // Default: notes go on named components. "Comment anywhere" is the fallback for anything without a name.
-    const [anywhere, setAnywhere] = useState(false);
 
     useEffect(() => {
         let cancelled = false;
@@ -46,29 +50,12 @@ export default function FeedbackMode() {
     const busy = !!draft || !!openNote;
 
     const handlePick = useCallback((el: Element) => {
-        setPanelOpen(false);
         // The schema caps the path at 500 characters; a very long query would otherwise fail to save.
         setDraftPath(`${pathname}${window.location.search}`.slice(0, 500));
         setDraft({ selector: buildSelector(el), elementText: visibleText(el), component: componentOf(el), locator: locate(el) });
     }, [pathname]);
 
     const hover = useElementPicker(anywhere && !paused && !busy, handlePick);
-
-    // Escape closes what is open first; with nothing open it leaves the mode. While paused the page is
-    // used normally, so Escape belongs to the page (closing its menus and pop-ups), not to feedback mode.
-    useEffect(() => {
-        const onKey = (e: KeyboardEvent) => {
-            if (e.key !== 'Escape' || busy) return;
-            if (panelOpen) { setPanelOpen(false); return; }
-            if (paused) return;
-            startTransition(async () => {
-                const res = await setFeedbackMode(false);
-                if (res.success) router.refresh();
-            });
-        };
-        window.addEventListener('keydown', onKey);
-        return () => window.removeEventListener('keydown', onKey);
-    }, [busy, panelOpen, paused, router]);
 
     const handleSaved = (note: FeedbackItem) => {
         setNotes((prev) => [...prev, note]);
@@ -85,53 +72,28 @@ export default function FeedbackMode() {
         setOpenNote(note);
     };
 
-    const handleOpen = (note: FeedbackItem) => {
-        setPanelOpen(false);
-        setOpenNote(note);
-    };
+    const handleOpen = (note: FeedbackItem) => setOpenNote(note);
 
     return (
-        <div data-feedback-ignore>
-            {hover && !busy && (
-                <div
-                    aria-hidden
-                    // Follows the hovered element's bounding box.
-                    style={{ left: hover.left, top: hover.top, width: hover.width, height: hover.height }}
-                    className="pointer-events-none fixed z-[54] rounded-md outline outline-2 -outline-offset-2 outline-primary bg-primary/10"
-                />
-            )}
+        <>
+            <div data-feedback-ignore>
+                {hover && !busy && (
+                    <div
+                        aria-hidden
+                        // Follows the hovered element's bounding box.
+                        style={{ left: hover.left, top: hover.top, width: hover.width, height: hover.height }}
+                        className="pointer-events-none fixed z-[54] rounded-md outline outline-2 -outline-offset-2 outline-primary bg-primary/10"
+                    />
+                )}
 
-            <FeedbackNamedElements enabled={!anywhere && !paused && !busy} onPick={handlePick} />
+                <FeedbackNamedElements enabled={!anywhere && !paused && !busy} onPick={handlePick} />
 
-            <FeedbackPins notes={notes} onOpen={handleOpen} onMissing={setMissing} />
+                <FeedbackPins notes={notes} onOpen={handleOpen} onMissing={setMissing} />
 
-            <div className="fixed bottom-32 left-3 z-[60] flex items-center gap-1 rounded-pill line bg-surface py-1 pl-3 pr-1 text-tag text-foreground shadow-premium md:bottom-16 md:left-auto md:right-4">
-                <MessageSquareText className="size-4 text-primary" />
-                <span className="mr-1">{paused ? t('barPaused') : t('barLabel')}</span>
-                <button type="button" onClick={() => setPaused((p) => !p)} aria-label={paused ? t('resume') : t('pause')} title={paused ? t('resume') : t('pause')} className="rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
-                    {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
-                </button>
-                <button /* ui-allow: toggle inside the feedback bar */
-                    type="button"
-                    onClick={() => setAnywhere((a) => !a)}
-                    aria-pressed={anywhere}
-                    aria-label={t('anywhere')}
-                    title={t('anywhereHint')}
-                    className={clsx('flex items-center gap-1 rounded-pill p-1.5', anywhere ? 'bg-primary text-primary-foreground' : 'text-foreground-muted hover:bg-surface-elevated')}
-                >
-                    <MousePointerClick className="size-4" />
-                    <span className="hidden sm:inline">{t('anywhere')}</span>
-                </button>
-                <button type="button" onClick={() => setPanelOpen((o) => !o)} aria-label={t('notesList', { count: notes.length })} title={t('notesList', { count: notes.length })} className="flex items-center gap-1 rounded-pill p-1.5 text-foreground-muted hover:bg-surface-elevated">
-                    <List className="size-4" />
-                    <span>{notes.length}</span>
-                </button>
-                <FeedbackModeToggle compact className="flex items-center gap-1 rounded-pill px-2 py-1.5 text-tag text-foreground-muted hover:bg-surface-elevated" />
+                {draft && <FeedbackDialog target={draft} path={draftPath} onSaved={handleSaved} onClose={() => setDraft(null)} />}
+                {openNote && <FeedbackNoteCard note={openNote} onClose={() => setOpenNote(null)} onDeleted={handleDeleted} onChanged={handleChanged} />}
             </div>
-
-            {panelOpen && <FeedbackNotesPanel notes={notes} missing={missing} onOpen={handleOpen} />}
-            {draft && <FeedbackDialog target={draft} path={draftPath} onSaved={handleSaved} onClose={() => setDraft(null)} />}
-            {openNote && <FeedbackNoteCard note={openNote} onClose={() => setOpenNote(null)} onDeleted={handleDeleted} onChanged={handleChanged} />}
-        </div>
+            {children({ notes, missing, onOpen: handleOpen })}
+        </>
     );
 }

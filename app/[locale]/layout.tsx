@@ -14,8 +14,6 @@ import { isTranslateModeActive } from '@/lib/translate-mode/server';
 import TranslateModeLoader from '@/components/translate/TranslateModeLoader';
 import { getAdminPanelTab } from '@/lib/admin-panel/server';
 import AdminPanelLoader from '@/components/admin-panel/AdminPanelLoader';
-import { isFeedbackModeActive } from '@/lib/feedback/server';
-import FeedbackModeLoader from '@/components/feedback/FeedbackModeLoader';
 import { getActiveTheme } from '@/lib/theme/server';
 import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
 import TimeZoneSync from '@/components/shell/TimeZoneSync';
@@ -50,15 +48,13 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     const initialTab = isBottomTab(navCookie) ? navCookie : 'discover';
     const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
 
-    const [allMessages, timeZone, panelTab, translateMode, feedbackMode, theme] = await Promise.all([
+    const [allMessages, timeZone, panelTab, translateMode, theme] = await Promise.all([
         getMessages(),
         getTimeZone(),
         // Only a signed-in site admin with the tool panel open gets a tab; everyone else gets the page unchanged.
         getAdminPanelTab(),
         // Only true for a signed-in site admin who switched translation mode on; everyone else gets the page unchanged.
         isTranslateModeActive(),
-        // Same for feedback mode: only a site admin who switched it on gets the code.
-        isFeedbackModeActive(),
         getActiveTheme(),
     ]);
     // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
@@ -110,7 +106,6 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} />}
             {translateMode && <TranslateModeLoader />}
             {themePreview && !panelTab && <ThemePreviewBar />}
-            {feedbackMode && <FeedbackModeLoader />}
         </Providers>
     );
 }
