@@ -92,7 +92,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                             ))}
                         </div>
                     </div>
-                    <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} dark={sampleMode === 'dark'} />
+                    <ThemeSample tokens={theme[sampleMode]} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} type={theme.type} dark={sampleMode === 'dark'} />
                 </aside>
             </div>
             <DesignActions

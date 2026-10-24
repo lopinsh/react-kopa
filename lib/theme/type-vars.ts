@@ -12,6 +12,32 @@ const num = (n: number, digits = 4) => String(Number(n.toFixed(digits)));
 const rem = (n: number) => `${num(Math.max(n, MIN_REM))}rem`;
 const step = (n: number) => Math.round(n * 16) / 16; // 1 px steps
 
+/** Size parts of a role (rem) after base and contrast: min, max and, for a fluid role, its middle. Shared by the CSS and the admin's role list. */
+export function typeRoleParts(type: ThemeType | undefined, r: Role) {
+    const body = TYPE_ROLES.find((x) => x.id === 'body')?.size.min ?? 1;
+    const k = type?.base === undefined ? 1 : type.base / 16;
+    const c = type?.contrast ?? 1;
+    const bodySize = body * k;
+    const grow = (x: number) => (r.heading ? bodySize + (x * k - bodySize) * c : x * k);
+    const fl = 'fluid' in r.size ? r.size.fluid : undefined;
+    return { min: grow(r.size.min), max: grow(r.size.max), fluid: fl ? { rem: grow(fl.rem), vw: fl.vw * (r.heading ? c : 1) } : undefined };
+}
+
+/** Every `--type-*` variable at its globals.css fallback, so a sample box shows today's values whatever the root holds. */
+export function typeDefaultVars(): Vars {
+    const vars: Vars = {};
+    for (const r of TYPE_ROLES) {
+        const fl = 'fluid' in r.size ? r.size.fluid : undefined;
+        vars[`--type-${r.id}-size`] = fl ? `clamp(${num(r.size.min)}rem, ${num(fl.rem)}rem + ${num(fl.vw)}vw, ${num(r.size.max)}rem)` : `${num(r.size.min)}rem`;
+        vars[`--type-${r.id}-line`] = r.line === null ? 'inherit' : String(r.line);
+        vars[`--type-${r.id}-weight`] = r.heading ? 'var(--heading-weight)' : r.weight === null ? 'inherit' : String(r.weight);
+        vars[`--type-${r.id}-tracking`] = r.tracking === null ? 'normal' : `${r.tracking}em`;
+        if (r.heading) vars[`--type-${r.id}-font`] = 'var(--font-heading)';
+    }
+    vars['--type-tag-tracking'] = '0.02em';
+    return vars;
+}
+
 /**
  * The site's type tuning (R22) as `--type-<role>-*` variables, which the type utilities in globals.css read.
  * Only keys derived from set values are returned: unset (or `{v:1}`) gives `{}` and the page stays as the literals in globals.css.
@@ -21,17 +47,7 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
     if (!type) return {};
     const vars: Vars = {};
     const { base, contrast, leading, headingWeight, tagCase, roles } = type;
-    const body = TYPE_ROLES.find((r) => r.id === 'body')?.size.min ?? 1;
-    const k = base === undefined ? 1 : base / 16;
-    const bodySize = body * k;
-    const c = contrast ?? 1;
-
-    // Size parts of a role (rem) after base and contrast: min, max and, for a fluid role, its middle.
-    const parts = (r: Role) => {
-        const grow = (x: number) => (r.heading ? bodySize + (x * k - bodySize) * c : x * k);
-        const fl = 'fluid' in r.size ? r.size.fluid : undefined;
-        return { min: grow(r.size.min), max: grow(r.size.max), fluid: fl ? { rem: grow(fl.rem), vw: fl.vw * (r.heading ? c : 1) } : undefined };
-    };
+    const parts = (r: Role) => typeRoleParts(type, r);
     const clampOf = (min: number, max: number, fl: { rem: number; vw: number }) => {
         const lo = Math.max(min, MIN_REM);
         return `clamp(${num(lo)}rem, ${num(fl.rem)}rem + ${num(fl.vw)}vw, ${num(Math.max(max, lo))}rem)`;
@@ -70,18 +86,21 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
  * Declarations a role never had in globals.css (a text role's font, the tag's case, the note's weight), as rules that exist only when set:
  * an unset theme adds nothing, so nothing shifts. Same validated enums and numbers as the variables.
  */
-export function themeTypeRules(type: ThemeType | undefined, headingFont: ThemeFontId, bodyFont: ThemeFontId): string {
-    if (!type) return '';
+export function themeTypeRules(type: ThemeType | undefined, headingFont: ThemeFontId, bodyFont: ThemeFontId, scope?: string): string {
+    if (!type && !scope) return '';
+    const pre = scope ? `${scope} ` : '';
+    const face = (f: 'heading' | 'body') => (f === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)');
     const rules: string[] = [];
     for (const r of TYPE_ROLES) {
-        const o = type.roles?.[r.id];
-        if (!o) continue;
+        const o = type?.roles?.[r.id];
+        if (!o && !scope) continue;
         const decls: string[] = [];
-        if (!r.heading && o.font) decls.push(`font-family:${o.font === 'heading' ? 'var(--font-heading)' : 'var(--font-sans)'}`);
-        if (r.id === 'human-note' && o.weight !== undefined) decls.push(`font-weight:${snapWeight(o.font === 'heading' ? headingFont : bodyFont, o.weight)}`);
-        if (decls.length) rules.push(`.${r.utility}{${decls.join(';')}}`);
+        if (!r.heading && (o?.font || scope)) decls.push(`font-family:${o?.font ? face(o.font) : 'inherit'}`);
+        if (r.id === 'human-note' && (o?.weight !== undefined || scope)) decls.push(`font-weight:${o?.weight !== undefined ? snapWeight(o.font === 'heading' ? headingFont : bodyFont, o.weight) : 'inherit'}`);
+        if (decls.length) rules.push(`${pre}.${r.utility}{${decls.join(';')}}`);
     }
     // An explicit case utility on the element (FallbackLangLabel's normal-case) still wins: this rule is unlayered, so it would beat any utility.
-    if (type.tagCase === 'upper') rules.push('.text-tag:not(.normal-case,.lowercase,.capitalize){text-transform:uppercase}');
+    if (type?.tagCase === 'upper') rules.push(`${pre}.text-tag:not(.normal-case,.lowercase,.capitalize){text-transform:uppercase}`);
+    else if (scope) rules.push(`${pre}.text-tag:not(.normal-case,.lowercase,.capitalize){text-transform:none}`);
     return rules.join('\n');
 }

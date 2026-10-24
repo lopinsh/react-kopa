@@ -2,7 +2,8 @@ import {
     CATEGORY_TONES, CATEGORY_TONE_SLUGS, DEFAULT_OVERLAYS, DEFAULT_ROLE_TONES, DEFAULT_STATUS_TONES, PHOTO_INK, ROLE_TONE_KEYS, SOFT_SHADOWS, THEME_FONTS, THEME_STYLES,
     type ThemeDefinition, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey, type ThemeStyleTokens,
 } from '@/lib/constants';
-import { themeTypeRules, themeTypeVars } from '@/lib/theme/type-vars';
+import { themeTypeRules, themeTypeVars, typeDefaultVars } from '@/lib/theme/type-vars';
+import type { ThemeType } from '@/lib/validations/theme';
 import { getLuminance, hexToRgb } from '@/lib/color-utils';
 
 /** White text unless the colour is clearly light (Sūna's light primary keeps white, its light-sage dark primary gets near-black). */
@@ -147,10 +148,10 @@ export function themeCss(def: ThemeDefinition): string {
 }
 
 /**
- * Variables for the live sample in the editor. It does not take `type` yet (R22-2 adds it). Tailwind's `--color-*` tokens are resolved at the root,
+ * Variables for the live sample in the editor. It carries a complete set of type variables, so the published root values never show through. Tailwind's `--color-*` tokens are resolved at the root,
  * so they are set again here for the sample area to follow its own colours.
  */
-export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontId, bodyFont: ThemeFontId, mode: 'light' | 'dark', styleKey: ThemeStyleKey = 'calm'): Vars {
+export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontId, bodyFont: ThemeFontId, mode: 'light' | 'dark', styleKey: ThemeStyleKey = 'calm', type?: ThemeType): Vars {
     const v = themeModeVars(tokens, mode);
     return {
         ...v,
@@ -172,5 +173,7 @@ export function themeSampleVars(tokens: ThemeModeTokens, headingFont: ThemeFontI
         ...Object.fromEntries(ROLE_TONE_KEYS.flatMap((k) => [[`--color-role-${k}`, v[`--role-${k}`]], [`--color-role-${k}-ink`, v[`--role-${k}-ink`]]])),
         '--font-sans': fontVar(bodyFont),
         '--font-heading': fontVar(headingFont),
+        ...typeDefaultVars(),
+        ...themeTypeVars(type, headingFont, bodyFont),
     };
 }

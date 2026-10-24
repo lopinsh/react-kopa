@@ -7,6 +7,8 @@ import { buttonClass } from '@/components/ui/Button';
 import { ROLE_TONE_KEYS, type ThemeFontId, type ThemeModeTokens, type ThemeStyleKey } from '@/lib/constants';
 import { toneHex } from '@/lib/theme/contrast';
 import { themeSampleVars } from '@/lib/theme/css';
+import { themeTypeRules } from '@/lib/theme/type-vars';
+import type { ThemeType } from '@/lib/validations/theme';
 
 const TILES = [['travel', 'tile1'], ['music', 'tile2'], ['sports', 'tile3']] as const;
 
@@ -17,18 +19,25 @@ type Props = {
     styleKey: ThemeStyleKey;
     /** Adds the `dark` class so shadows follow dark mode inside the sample. */
     dark: boolean;
+    /** The draft's type tuning; the sample never reads the published one. */
+    type?: ThemeType;
+    /** Replaces the default sample (the Burti part's role ladder), inside the same scoped variables. */
+    children?: React.ReactNode;
 };
 
 /** Live sample: its own CSS variables are set on this element only, so nothing else on the page changes while editing. */
-export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, dark }: Props) {
+export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, dark, type, children }: Props) {
     const t = useTranslations('admin.design.sample');
     const tTag = useTranslations('common.tag');
     return (
         <div
-            style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light', styleKey) as React.CSSProperties}
+            id="design-sample-box"
+            style={themeSampleVars(tokens, headingFont, bodyFont, dark ? 'dark' : 'light', styleKey, type) as React.CSSProperties}
             className={`${dark ? 'dark ' : ''}rounded-2xl bg-background p-4 font-sans text-foreground ring-1 ring-inset ring-border sm:p-6`}
         >
-            <div className="rounded-2xl bg-surface p-4 sm:p-5 shadow-card frame">
+            {/* The one sanctioned inline <style> besides the layout's: only schema-validated enums and numbers; the id outranks the root rules. */}
+            <style>{themeTypeRules(type, headingFont, bodyFont, '#design-sample-box')}</style>
+            {children ?? <div className="rounded-2xl bg-surface p-4 sm:p-5 shadow-card frame">
                 <h3 className="text-item">{t('heading')}</h3>
                 <p className="mt-2 text-body-sm text-foreground-muted">{t('body')}</p>
                 <p className="mt-2 text-body">{t('latvian')}</p>
@@ -51,7 +60,7 @@ export default function ThemeSample({ tokens, headingFont, bodyFont, styleKey, d
                         </li>
                     ))}
                 </ul>
-            </div>
+            </div>}
         </div>
     );
 }
