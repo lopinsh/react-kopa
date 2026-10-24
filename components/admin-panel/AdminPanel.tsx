@@ -111,7 +111,7 @@ export default function AdminPanel({ tab: serverTab, draftActive }: Props) {
                 style={style}
                 className={clsx(
                     'fixed z-[58] flex flex-col bg-surface shadow-premium',
-                    phone && 'inset-x-0 bottom-[calc(4rem+var(--cookie-banner-h,0px))] h-[var(--panel-h)] rounded-t-2xl frame motion-safe:transition-[height] motion-safe:duration-slow motion-safe:ease-standard data-[dragging]:transition-none',
+                    phone && 'inset-x-0 bottom-[calc(4rem+var(--cookie-banner-h,0px))] h-[var(--panel-h)] max-h-[calc(100dvh-4rem-var(--cookie-banner-h,0px))] rounded-t-2xl frame motion-safe:transition-[height] motion-safe:duration-slow motion-safe:ease-standard data-[dragging]:transition-none', // ui-allow: sheet stays on screen above the cookie banner
                     !phone && docked && 'inset-y-0 right-0 w-88 max-w-[calc(100vw-1rem)] shadow-[inset_1px_0_0_var(--border)]', // ui-allow: panel cap
                     !phone && !docked && 'left-[var(--panel-x)] top-[var(--panel-y)] max-h-[calc(100dvh-6rem)] w-88 max-w-[calc(100vw-1rem)] rounded-2xl frame', // ui-allow: panel cap
                 )}
