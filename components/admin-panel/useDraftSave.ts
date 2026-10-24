@@ -1,5 +1,6 @@
 'use client';
 
+import { flushSync } from 'react-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
@@ -53,8 +54,8 @@ export function useDraftSave(server: ThemeInput) {
     const editType = useCallback((type: ThemeType | undefined) => {
         const next = { ...latest.current, type };
         latest.current = next;
-        setTheme(next);
-        setBusy(true);
+        // Rendered at once so a second click in the same tick steps from this value, not a stale one.
+        flushSync(() => { setTheme(next); setBusy(true); });
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => void flush(), SAVE_DELAY_MS);
     }, [flush]);
