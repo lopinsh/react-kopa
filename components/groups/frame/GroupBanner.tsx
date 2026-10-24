@@ -24,7 +24,7 @@ export default function GroupBanner() {
     const facts = [city, t('members', { count: g.memberCount }), g.isPrivate ? t('membersOnly') : ''].filter(Boolean);
 
     return (
-        <div data-ui={UI.groupBanner} className="banner-tone relative isolate z-10 min-h-16 border-b border-border py-2 md:h-24 md:py-0">
+        <div data-ui={UI.groupBanner} className="banner-tone relative isolate z-10 min-h-16 border-b border-border py-2 md:min-h-24">
             <div className="mx-auto flex h-full max-w-browse items-center gap-3 px-gutter md:gap-4">
                 <GroupPagesDrawer />
                 <span className="mark-surface grid size-9 shrink-0 place-items-center rounded-item md:size-11 md:rounded-[calc(var(--radius-item)+3px)]">

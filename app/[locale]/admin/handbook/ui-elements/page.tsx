@@ -218,7 +218,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     <GroupPagesDemo samples={samples} />
                 </UiSpecimen>
 
-                <UiSpecimen id="moreMenu" names={[UI.groupMoreMenu, UI.pendingState]} files={['components/groups/GroupMoreMenu.tsx', 'components/groups/AdminToolsMenu.tsx', 'components/groups/contact/PendingState.tsx', 'components/ui/Menu.tsx']}>
+                <UiSpecimen id="moreMenu" names={[UI.groupMoreMenu, UI.pendingState]} files={['components/groups/frame/GroupMenuActions.tsx', 'components/groups/frame/GroupDialogs.tsx', 'components/groups/contact/PendingState.tsx', 'components/ui/Menu.tsx']}>
                     <GroupMenuDemo accent={SAMPLE_ACCENT} states={{ member: sampleState(group, 'member'), pending: sampleState(group, 'pending'), visitor: sampleState(group, 'visitor') }} />
                 </UiSpecimen>
 

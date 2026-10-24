@@ -20,11 +20,14 @@ type Props = {
     full?: boolean;
 };
 
+/** The look of one row of a page menu: also the group menu's action rows. */
+export const NAV_ROW = 'flex min-h-10 items-center gap-3 rounded-xl px-3 py-2 text-body-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
+
 /** One entry of a page menu (the own area's, a group's): icon, word, optional count; the open page is tinted. */
 export default function PageNavLink({ href, icon: Icon, label, current, badge = 0, badgeDanger = false, replace, full = false }: Props) {
     const locale = useLocale();
     const className = clsx(
-        'flex min-h-10 items-center gap-3 rounded-xl px-3 py-2 text-body-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary',
+        NAV_ROW,
         current && 'bg-tint weight-strong'
     );
     const Tag = full ? 'a' : Link;

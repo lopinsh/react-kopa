@@ -8,6 +8,7 @@ import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
 import FrameColumns from '@/components/ui/FrameColumns';
 import GroupAside from '@/components/groups/frame/GroupAside';
 import { GroupProvider } from '@/components/providers/GroupProvider';
+import { GroupDialogsProvider } from '@/components/groups/frame/GroupDialogs';
 import { toGroupState } from '@/components/providers/to-group-state';
 
 /**
@@ -36,6 +37,7 @@ export default async function GroupLayout({
             {group.moderation.hidden && (
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
+            <GroupDialogsProvider>
             <GroupStickyBar />
             <GroupBanner />
             <FrameColumns
@@ -44,6 +46,7 @@ export default async function GroupLayout({
             >
                 {children}
             </FrameColumns>
+            </GroupDialogsProvider>
         </GroupProvider>
     );
 }
