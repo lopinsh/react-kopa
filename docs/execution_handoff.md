@@ -34,6 +34,9 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [ ] **R23 Admin tool panel** (spec `docs/development/specs/R23.md`, drawing `docs/development/r23-admin-drawer.html`).
   - [x] **R23-1 Panel** (built 24 Oct): one shield item "Rīku panelis", floating/docked/sheet panel, tabs Atsauksmes and Tulkot, cookie `admin_panel`; old pills, toggles, loaders and setters removed. Reviewed 24 Oct (submission guard on tab switch/close added), pushed, live.
   - [x] **R23-2 Dizains tab** (built 24 Oct): click a text to pick its type role (capture-phase, Pauze gives clicks back), edit it with the Burti role editor, debounced save to the draft then refresh, outline of the role's texts, hover chip, count, Publicēt/Atmest footer. Reviewed 24 Oct, pushed, live.
+- [ ] **Home page weight** (load test 25 Oct on the live site: `/lv` tops out at ~12 req/s, a group page ~39, health ~750; CPU-bound on the single Node process, the page is 618 KB HTML / 67 KB gzipped; each group renders twice (card grid + phone rows, CSS hides one) and every `<img>` srcset repeats the long banner URL 10-18 times). Owner approved A then C; B (merge card and row) dropped, it would change the signed-off design.
+  - [ ] **A Image sizes:** `deviceSizes` [640, 828, 1200, 1920] and the 56 px row thumb fixed `width/height` instead of `fill` (committed, not pushed, not verified in a running app: local DB was down; CI visual should show no diff). Still open: GroupCard `sizes` says 33vw from 768 but the grid has 2 columns until 1024 (soft pictures on tablets): make it 50vw below 1024, a listed 768 board baseline change. Then re-run the load test (autocannon 15 s steps, c=1..50).
+  - [ ] **C Rādīt vairāk:** loads only the next 24 and appends them instead of re-rendering the page with `limit` up to 480 (own small spec).
 
 ## Standing owner rules
 

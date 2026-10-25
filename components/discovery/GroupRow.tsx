@@ -58,7 +58,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
             {/* ui-allow: the 56 px thumb, a rounded picture or the category tile */}
             <span className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-item cat-tile">
                 {group.bannerImage
-                    ? <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="56px" className="object-cover" />
+                    ? <Image src={getSmartImageUrl(group.bannerImage)} alt="" width={56} height={56} className="size-full object-cover" />
                     : <CategoryIcon slug={group.category.l1Slug} aria-hidden="true" size={24} />}
             </span>
             <span className="min-w-0 flex-1">

@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
     '/[locale]/admin/development/build-plan': ['./docs/development/**/*'],
   },
   images: {
+    // 640 for 1x, 828 a 2x phone or card, 1200 a 3x phone, 1920 the group banner at 2x: every srcset lists these, so no more.
+    deviceSizes: [640, 828, 1200, 1920],
     remotePatterns: [
       {
         protocol: "https",
