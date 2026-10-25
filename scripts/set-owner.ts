@@ -5,8 +5,8 @@
  *   npm run set-owner -- you@example.com --force    the old owner becomes ADMIN
  *
  * In production the same file is compiled into the image (see Dockerfile):
- *   cd /root/ejam-kopa && docker-compose -f docker-compose.server.yml exec app node scripts/set-owner.js you@example.com
- *   (the server has Compose v1; or: docker exec ejam-kopa-app node scripts/set-owner.js you@example.com)
+ *   docker exec ejam-kopa-app-blue node scripts/set-owner.js you@example.com
+ *   (blue/green: use whichever of ejam-kopa-app-blue / -green is running)
  */
 import { PrismaClient } from '@prisma/client';
 

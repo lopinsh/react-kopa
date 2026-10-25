@@ -14,7 +14,12 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
-COMPOSE="docker-compose -f docker-compose.server.yml"
+# Compose v2 (`docker compose`) when installed; v1 `docker-compose` breaks on recreate with Docker 25+.
+if docker compose version >/dev/null 2>&1; then
+  COMPOSE="docker compose -f docker-compose.server.yml"
+else
+  COMPOSE="docker-compose -f docker-compose.server.yml"
+fi
 HEALTH_TIMEOUT=180   # seconds to wait for the new colour
 DRAIN_SECONDS=10     # in-flight requests on the old colour after the switch
 
