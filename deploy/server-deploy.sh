@@ -129,8 +129,10 @@ if [ -n "$old_ctrs" ]; then
   sleep "$DRAIN_SECONDS"
   docker stop -t 30 $old_ctrs >/dev/null
 fi
-# Pre-P1 single container: remove it so compose does not report an orphan.
-if exists "ejam-kopa-app-$OLD"; then docker rm "ejam-kopa-app-$OLD" >/dev/null || true; fi
+# Pre-P1 single containers (both colours, stopped by now): remove them so compose does not report orphans.
+for c in ejam-kopa-app-blue ejam-kopa-app-green; do
+  if exists "$c" && ! running "$c"; then docker rm "$c" >/dev/null || true; fi
+done
 log "done: $NEW live"
 
 # Old app images: `docker rmi` without -f refuses any image a container (blue or green) still uses.
