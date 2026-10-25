@@ -69,7 +69,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
             <div className="relative shrink-0 [container-type:inline-size]">
                 {group.bannerImage ? (
                     <div className={`${area} cat-tile`}>
-                        <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="(min-width: 1280px) 400px, (min-width: 768px) 33vw, 100vw" className="object-cover" />
+                        <Image src={getSmartImageUrl(group.bannerImage)} alt="" fill sizes="(min-width: 1024px) 400px, (min-width: 768px) 50vw, 100vw" className="object-cover" />
                         {hasTag && role && <span className="absolute right-2 top-2 transition-[top] motion-reduce:transition-none live:top-1"><RoleTag role={role} showMember={showMember} bright /></span>}
                     </div>
                 ) : (
