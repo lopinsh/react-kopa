@@ -240,7 +240,7 @@ export const TaxonomyService = {
             },
             [`taxonomy-${lang}`],
             {
-                revalidate: 3600,
+                revalidate: 300,
                 tags: ['categories'],
             }
         )();

@@ -27,14 +27,19 @@ services:
     ports:
       - "6001:6001"
 
-  # Blue/green app: deploy/server-deploy.sh starts the idle colour, waits for its
-  # health check, points the proxy at it and stops the other. Neither colour
+  # Blue/green app, 3 processes per colour: one Node process uses about one core, the
+  # box has 4, so three app processes use ~3 and leave one for Postgres, Soketi, Caddy
+  # and Jellyfin. deploy/server-deploy.sh starts the idle colour (all 3), waits for their
+  # health checks, points the proxy at them and stops the other colour. Explicit
+  # services, not replicas: Caddy needs one stable DNS name per upstream. No colour
   # publishes a port; the host's reverse proxy reaches them through "proxy" on :3000.
   # unless-stopped: a colour stopped by a deploy (old code) stays down after a reboot.
-  app-blue: &app
+  # mem_limit keeps 6 containers (mid-swap) from starving the host; no CPU limit.
+  app-blue-1: &app
     image: ghcr.io/lopinsh/react-kopa:latest
-    container_name: ejam-kopa-app-blue
+    container_name: ejam-kopa-app-blue-1
     restart: unless-stopped
+    mem_limit: 768m
     healthcheck:
       test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1:3000/api/health || exit 1"]
       interval: 3s
@@ -42,6 +47,7 @@ services:
       retries: 3
       start_period: 20s
     environment:
+      NODE_OPTIONS: "--max-old-space-size=512"
       DATABASE_URL: "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}?schema=public"
       NEXTAUTH_URL: "https://ejam.lumm.eu"
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
@@ -66,9 +72,25 @@ services:
       soketi:
         condition: service_started
 
-  app-green:
+  app-blue-2:
     <<: *app
-    container_name: ejam-kopa-app-green
+    container_name: ejam-kopa-app-blue-2
+
+  app-blue-3:
+    <<: *app
+    container_name: ejam-kopa-app-blue-3
+
+  app-green-1:
+    <<: *app
+    container_name: ejam-kopa-app-green-1
+
+  app-green-2:
+    <<: *app
+    container_name: ejam-kopa-app-green-2
+
+  app-green-3:
+    <<: *app
+    container_name: ejam-kopa-app-green-3
 
   # Stable front door on host :3000 (where the host's reverse proxy points).
   # Config: deploy/Caddyfile.template, rendered into ./caddy/Caddyfile by the deploy script.

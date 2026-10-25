@@ -125,7 +125,7 @@ export const DiscoveryService = {
             },
             [`discovery-categories-${lang}`],
             {
-                revalidate: 3600, // Revalidate every hour
+                revalidate: 300,
                 tags: ['categories']
             }
         )();
