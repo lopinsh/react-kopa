@@ -43,7 +43,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [ ] **R25 Group menu, Grupa tab, shield menu** (spec `docs/development/specs/R25.md`)
   - [x] **R25-1 Left menu** (Dalīties, Tava dalība, quiet Ziņot).
   - [x] **R25-2 Grupa tab** (bridge and context, `getGroupPanelData`, the Grupa tab with hide/restore; the site-admin rows and the hide dialog left the group menu).
-  - [ ] **R25-3 Shield menu**
+  - [x] **R25-3 Shield menu** (queues with counts read on open, "Šī grupa" section; no baseline changed).
 - [x] **R24 Izcēlums** (spec `docs/development/specs/R24.md`): Dizains panel explains a clicked text (role weight, emphasis step and computed weight, pelēks, izvēlēts/nospiests); emphasis steps vidēji +100 / izcelts +200 become a theme setting (Burti > Izcēlums, also in the panel). No migration, defaults give 0 px diff. Pushed, live.
   - [x] **R24-1 Explain line** (read-only).
   - [x] **R24-2 Emphasis steps** (`themeTypeSchema.emphasis`, `--emph-*`).
