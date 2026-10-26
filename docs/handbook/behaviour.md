@@ -78,6 +78,7 @@ The same situation behaves the same way on every screen.
 - Esc or a click outside closes the search and keeps the word; Back closes it.
 - A result opens its panel; Back returns to the page you were on.
 - Recent searches stay on this device and can be removed one by one.
+- The picture picker's Unsplash search is the exception: it runs on Meklēt or Enter, not as you type, because the photo service limits requests.
 
 ## Notifications
 

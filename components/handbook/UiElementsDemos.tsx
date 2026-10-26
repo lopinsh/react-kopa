@@ -11,6 +11,8 @@ import LanguageEditor from '@/components/ui/LanguageEditor';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import FilterChip from '@/components/ui/FilterChip';
 import { Toast } from '@/components/ui/Toast';
+import BannerCredit from '@/components/forms/banner/BannerCredit';
+import BannerPicker, { type BannerValue } from '@/components/forms/banner/BannerPicker';
 import { langRecord, type TextLang } from '@/lib/translations';
 import type { UiSamples } from '@/lib/handbook/ui-samples';
 import type { ToastType } from '@/hooks/use-toast';
@@ -156,6 +158,17 @@ export function LanguageEditorDemo() {
             <LanguageEditorSample label={t('sample.langClosed')} englishText={t('sample.langTextEn')} />
             <LanguageEditorSample label={t('sample.langMenu')} englishText={t('sample.langTextEn')} initialMenuOpen />
             <LanguageEditorSample label={t('sample.langEmpty')} englishText="" startLang="en" />
+        </div>
+    );
+}
+
+/** The picture field with curated photos only (search off, no raw address); the credit line as it reads under a picture. */
+export function BannerPickerDemo() {
+    const [value, setValue] = useState<BannerValue>({ url: null, credit: null });
+    return (
+        <div className="mx-auto max-w-focus space-y-4">
+            <BannerPicker id="sample-banner" kind="group" value={value} onChange={setValue} l1Slug="hobbies" searchEnabled={false} canEditUrl={false} />
+            <BannerCredit credit={{ name: 'Jorge Franganillo', username: 'franganillo' }} />
         </div>
     );
 }

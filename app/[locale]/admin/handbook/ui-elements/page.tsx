@@ -7,7 +7,7 @@ import HandbookShell from '@/components/handbook/HandbookShell';
 import { BottomBarDemo, FooterDemo, HeaderDemo, MenusDemo, OwnAreaDemo } from '@/components/handbook/ShellDemos';
 import { FilterLineDemo } from '@/components/handbook/DiscoveryDemos';
 import { SearchDemo } from '@/components/handbook/SearchDemos';
-import { AnnouncementDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
+import { AnnouncementDemo, BannerPickerDemo, ChipDemo, InboxDemo, LanguageEditorDemo, PopupDemo, ToastDemo } from '@/components/handbook/UiElementsDemos';
 import { StyleDemos } from '@/components/handbook/StyleDemos';
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
@@ -286,6 +286,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 <UiSpecimen id="toast" names={[UI.toast]} files={['components/ui/Toast.tsx', 'components/ui/ToastContainer.tsx', 'hooks/use-toast.tsx']}>
                     <ToastDemo />
                     <div className="mt-4"><ToastButtons /></div>
+                </UiSpecimen>
+
+                <UiSpecimen id="bannerPicker" names={[]} files={['components/forms/banner/BannerPicker.tsx', 'components/forms/banner/BannerCredit.tsx']}>
+                    <BannerPickerDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="errorState" names={[UI.errorState]} files={['components/ui/ErrorState.tsx']}>
