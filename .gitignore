@@ -71,3 +71,4 @@ test.ts
 # compiled demo script (Dockerfile builder only)
 /prisma/demo.js
 /prisma/demo-data/*.js
+scripts/.unsplash-cache/
