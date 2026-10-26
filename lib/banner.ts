@@ -29,7 +29,7 @@ export function isUnsplashImageUrl(url: string | null | undefined): boolean {
     if (!url) return false;
     try {
         const u = new URL(url);
-        return u.protocol === 'https:' && u.hostname === UNSPLASH_IMAGE_HOST;
+        return u.protocol === 'https:' && u.hostname === UNSPLASH_IMAGE_HOST && !u.port && !u.username && !u.password;
     } catch {
         return false;
     }
@@ -45,6 +45,11 @@ export function assertBannerAllowed(
 ): void {
     if (!next || opts.isSiteAdmin || next === opts.current || isUnsplashImageUrl(next)) return;
     throw new ActionError('BANNER_URL_NOT_ALLOWED');
+}
+
+/** The stored form of a banner: a removed one ('' from the form) is null; undefined (not sent) stays undefined. */
+export function storedBanner<T extends string | null | undefined>(url: T): T | null {
+    return url === '' ? null : url;
 }
 
 /** The two credit columns for a banner write: kept only for an Unsplash image, otherwise both null (invariant 4). */

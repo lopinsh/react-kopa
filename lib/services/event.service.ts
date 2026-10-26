@@ -5,7 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ActionError } from '@/types/actions';
-import { assertBannerAllowed, bannerCreditColumns } from '@/lib/banner';
+import { assertBannerAllowed, bannerCreditColumns, storedBanner } from '@/lib/banner';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
@@ -471,7 +471,7 @@ export class EventService {
                 joinMode: data.joinMode,
                 isRecurring: data.isRecurring,
                 recurrencePattern: data.recurrencePattern,
-                bannerImage: data.bannerImage,
+                bannerImage: storedBanner(data.bannerImage),
                 ...bannerCreditColumns(data.bannerImage, data.bannerCredit),
                 groupId: groupId,
                 creatorId: userId,
@@ -577,7 +577,7 @@ export class EventService {
                     ...(opening && { isFull: false }),
                     isRecurring: data.isRecurring,
                     recurrencePattern: data.recurrencePattern,
-                    bannerImage: data.bannerImage,
+                    bannerImage: storedBanner(data.bannerImage),
                     ...(data.bannerImage !== undefined && bannerCreditColumns(data.bannerImage, data.bannerCredit)),
                 }
             });

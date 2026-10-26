@@ -21,8 +21,8 @@ export default function BannerPickerDialog({ kind, l1Slug, searchEnabled, select
     const t = useTranslations('banner');
     const curated = l1Slug ? getCurated(l1Slug) : [];
     return (
-        <Modal onClose={onClose} title={t('dialogTitle')} size="2xl">
-            <div className="min-h-0 space-y-4 overflow-y-auto">
+        <Modal onClose={onClose} title={t('dialogTitle')} size="2xl" panelClassName="flex flex-col">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
                     <PhotoTile label={kind === 'event' ? t('noneEvent') : t('none')} sub={t('noneHint')} selected={!selectedUrl} onPick={() => onPick(null)}>
                         {l1Slug && <PictureFallback l1Slug={l1Slug} />}

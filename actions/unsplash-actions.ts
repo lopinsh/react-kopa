@@ -30,6 +30,6 @@ export async function trackUnsplashPick(photoId: string): Promise<ActionResponse
     const validation = await validateActionData(unsplashPhotoIdSchema, photoId);
     if (!validation.success) return validation;
 
-    await trackDownload(validation.data);
+    await trackDownload(validation.data, session.user.id);
     return { success: true };
 }

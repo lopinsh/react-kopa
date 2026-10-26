@@ -10,6 +10,8 @@ const cache = new Map<string, { at: number; value: SearchResult }>();
 const requestTimes: number[] = [];
 const userSearches = new Map<string, number[]>();
 const pings = new Map<string, number>();
+const userPings = new Map<string, number[]>();
+const inFlight = new Map<string, Promise<SearchResult>>();
 let lastRemaining: { value: number; at: number } | null = null;
 
 export interface SearchResult {
@@ -32,6 +34,12 @@ function accessKey(): string | undefined {
 
 export function isUnsplashSearchEnabled(): boolean {
     return Boolean(accessKey());
+}
+
+/** Drops entries older than the window so the per-process maps stay small. */
+function prune<V>(map: Map<string, V>, at: (v: V) => number, windowMs: number, now: number): void {
+    if (map.size < 500) return;
+    for (const [k, v] of map) if (now - at(v) >= windowMs) map.delete(k);
 }
 
 function recent(times: number[], windowMs: number, now: number): number {
@@ -75,6 +83,8 @@ export async function searchPhotos(input: { query: string; page: number }, local
         cache.set(cacheKey, hit); // LRU: most recently used last
         return hit.value;
     }
+    const pending = inFlight.get(cacheKey);
+    if (pending) return pending; // the same search already on its way costs nothing more
 
     const mine = userSearches.get(userId) ?? [];
     if (recent(mine, L.userWindowMs, now) >= L.userSearches) throw new ActionError('SEARCH_RATE_LIMITED');
@@ -82,8 +92,19 @@ export async function searchPhotos(input: { query: string; page: number }, local
     if (lastRemaining && lastRemaining.value <= L.remainingFloor && now - lastRemaining.at < L.windowMs) throw new ActionError('SEARCH_UNAVAILABLE');
 
     mine.push(now);
+    prune(userSearches, (t) => t[t.length - 1] ?? 0, L.userWindowMs, now);
     userSearches.set(userId, mine);
-    const params = new URLSearchParams({ query, page: String(input.page), per_page: String(L.perPage), orientation: 'landscape', content_filter: 'high' });
+    const request = fetchSearch(input.page, query, cacheKey, locale, key, now);
+    inFlight.set(cacheKey, request);
+    try {
+        return await request;
+    } finally {
+        inFlight.delete(cacheKey);
+    }
+}
+
+async function fetchSearch(page: number, query: string, cacheKey: string, locale: string, key: string, now: number): Promise<SearchResult> {
+    const params = new URLSearchParams({ query, page: String(page), per_page: String(L.perPage), orientation: 'landscape', content_filter: 'high' });
     if (locale === 'lv') params.set('lang', 'lv');
     let res: Response;
     try {
@@ -94,22 +115,29 @@ export async function searchPhotos(input: { query: string; page: number }, local
     if (!res.ok) throw new ActionError('SEARCH_UNAVAILABLE');
     const body = (await res.json()) as { total_pages?: number; results?: RawPhoto[] };
     const photos = (body.results ?? []).map(toPick).filter((p): p is UnsplashPick => p !== null);
-    const value: SearchResult = { photos, hasMore: input.page < L.maxPage && input.page < (body.total_pages ?? 0) };
+    const value: SearchResult = { photos, hasMore: page < L.maxPage && page < (body.total_pages ?? 0) };
     cache.set(cacheKey, { at: now, value });
     if (cache.size > L.cacheEntries) cache.delete(cache.keys().next().value as string);
     return value;
 }
 
 /** Unsplash asks for a ping when a photo is picked. Never blocks a pick: failures are swallowed. */
-export async function trackDownload(photoId: string): Promise<void> {
+export async function trackDownload(photoId: string, userId: string): Promise<void> {
     const key = accessKey();
     if (!key) return;
     const now = Date.now();
+    // A few per user (another process may have shown the photo, so the id itself is not checked).
+    const mine = userPings.get(userId) ?? [];
+    if (recent(mine, L.userWindowMs, now) >= L.userSearches) return;
     const last = pings.get(photoId);
     if (last !== undefined && now - last < L.windowMs) return;
     if (recent(requestTimes, L.windowMs, now) >= L.processBudget) return;
     if (lastRemaining && lastRemaining.value <= L.trackReserve && now - lastRemaining.at < L.windowMs) return;
     pings.set(photoId, now);
+    prune(pings, (t) => t, L.windowMs, now);
+    mine.push(now);
+    userPings.set(userId, mine);
+    prune(userPings, (t) => t[t.length - 1] ?? 0, L.userWindowMs, now);
     try {
         const res = await call(`/photos/${encodeURIComponent(photoId)}/download`, key);
         if (!res.ok) console.warn(`Unsplash download ping failed: ${res.status}`);

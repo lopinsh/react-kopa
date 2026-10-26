@@ -19,7 +19,7 @@ import { MessageService } from './message.service';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import type { BannerCredit } from '@/lib/validations/banner';
-import { assertBannerAllowed, bannerCreditColumns, toBannerCredit } from '@/lib/banner';
+import { assertBannerAllowed, bannerCreditColumns, storedBanner, toBannerCredit } from '@/lib/banner';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
@@ -435,7 +435,7 @@ export const GroupService = {
                 city: data.city,
                 type: data.type,
                 categoryId: targetCategoryId,
-                bannerImage: data.bannerImage,
+                bannerImage: storedBanner(data.bannerImage),
                 ...bannerCreditColumns(data.bannerImage, data.bannerCredit),
                 discordLink: data.discordLink,
                 websiteLink: data.websiteLink,
@@ -646,7 +646,7 @@ export const GroupService = {
             description: data.description,
             lookingFor: data.lookingFor,
             city: data.city,
-            bannerImage: data.bannerImage,
+            bannerImage: storedBanner(data.bannerImage),
             // The credit follows the URL; an unchanged Unsplash banner keeps the credit the form sent back.
             ...(data.bannerImage !== undefined && bannerCreditColumns(data.bannerImage, data.bannerCredit)),
             discordLink: data.discordLink,
