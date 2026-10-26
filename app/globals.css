@@ -199,40 +199,47 @@ body {
   font-size: var(--type-body-size, 1rem);
   line-height: var(--type-body-line, 1.6);
   font-weight: var(--type-body-weight, 400);
+  --role-weight: var(--type-body-weight, 400);
 }
 @utility text-body-sm {
   font-size: var(--type-body-sm-size, 0.9375rem);
   line-height: var(--type-body-sm-line, 1.5);
   font-weight: var(--type-body-sm-weight, 400);
+  --role-weight: var(--type-body-sm-weight, 400);
 }
 @utility text-button {
   font-size: var(--type-button-size, 0.9375rem);
   line-height: var(--type-button-line, 1.2);
   font-weight: var(--type-button-weight, 500);
+  --role-weight: calc(var(--type-button-weight, 500) - 100);
 }
 @utility text-button-sm {
   font-size: var(--type-button-sm-size, 0.875rem);
   line-height: var(--type-button-sm-line, 1.2);
   font-weight: var(--type-button-sm-weight, 500);
+  --role-weight: calc(var(--type-button-sm-weight, 500) - 100);
 }
 @utility text-meta {
   font-size: var(--type-meta-size, 0.8125rem);
   line-height: var(--type-meta-line, 1.45);
   font-weight: var(--type-meta-weight, 400);
+  --role-weight: var(--type-meta-weight, 400);
 }
 @utility text-tag {
   font-size: var(--type-tag-size, 0.75rem);
   line-height: var(--type-tag-line, 1.2);
   font-weight: var(--type-tag-weight, 600);
+  --role-weight: calc(var(--type-tag-weight, 600) - 200);
   letter-spacing: var(--type-tag-tracking, 0.02em);
 }
 
-/* Emphasis inside a role: a name, a count or a link that stands out from the line around it (no size, only weight). */
+/* Emphasis inside a role: a name, a count or a link that stands out from the line around it (no size, only weight).
+   --role-weight is the role weight relative to its default (a default panel gives 400, so today's 500/600; a heavier role lifts its emphasis too). */
 @utility weight-medium {
-  font-weight: 500;
+  font-weight: min(calc(var(--role-weight, 400) + 100), 1000);
 }
 @utility weight-strong {
-  font-weight: 600;
+  font-weight: min(calc(var(--role-weight, 400) + 200), 1000);
 }
 
 /* Human note (AR-07): a line in the site's own voice, in italics and the site colour. */
