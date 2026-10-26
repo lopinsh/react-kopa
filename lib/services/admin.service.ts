@@ -2,18 +2,39 @@ import { ActionError } from '@/types/actions';
 import { prisma } from '@/lib/prisma';
 import { ModerationService } from './moderation.service';
 import { GroupService } from './group.service';
+import { FEEDBACK_TAB_STATUSES } from '@/lib/constants';
+import { isSiteAdmin } from '@/lib/site-role';
+
+export type ShieldCounts = { reports: number; feedback: number; themes: number; cities: number };
+
+const PENDING_THEME_WHERE = { isWildcard: true, status: 'PENDING_REVIEW' } as const;
+const PENDING_CITY_WHERE = { status: 'PENDING_REVIEW' } as const;
+const PENDING_REPORT_WHERE = { status: 'PENDING' } as const;
 
 export class AdminService {
     /** What waits for an admin: shown as badges in the admin navigation. */
     static async getPendingCounts(): Promise<{ tags: number; cities: number; reports: number; suggestions: number }> {
         const [tagCount, cityCount, reports, suggestions] = await Promise.all([
-            prisma.category.count({ where: { isWildcard: true, status: 'PENDING_REVIEW' } }),
-            prisma.city.count({ where: { status: 'PENDING_REVIEW' } }),
-            prisma.report.count({ where: { status: 'PENDING' } }),
+            prisma.category.count({ where: PENDING_THEME_WHERE }),
+            prisma.city.count({ where: PENDING_CITY_WHERE }),
+            prisma.report.count({ where: PENDING_REPORT_WHERE }),
             prisma.messageSuggestion.count()
         ]);
         // New sub-categories wait on the Categories page, new cities on the Locations page.
         return { tags: tagCount, cities: cityCount, reports, suggestions };
+    }
+
+    /** What waits, for the shield menu (read when it opens). Site admins only. */
+    static async getShieldCounts(adminId: string): Promise<ShieldCounts> {
+        const user = await prisma.user.findUnique({ where: { id: adminId }, select: { role: true } });
+        if (!user || !isSiteAdmin(user.role)) throw new ActionError('FORBIDDEN');
+        const [reports, feedback, themes, cities] = await Promise.all([
+            prisma.report.count({ where: PENDING_REPORT_WHERE }),
+            prisma.feedback.count({ where: { status: { in: [...FEEDBACK_TAB_STATUSES.open] } } }),
+            prisma.category.count({ where: PENDING_THEME_WHERE }),
+            prisma.city.count({ where: PENDING_CITY_WHERE })
+        ]);
+        return { reports, feedback, themes, cities };
     }
 
     /**
