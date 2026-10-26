@@ -1,4 +1,4 @@
-import { THEME_FONTS, TYPE_ROLES, snapWeight, type ThemeFontId } from '@/lib/constants';
+import { THEME_FONTS, TYPE_EMPHASIS, TYPE_ROLES, snapWeight, type ThemeFontId } from '@/lib/constants';
 import type { ThemeType } from '@/lib/validations/theme';
 
 type Vars = Record<string, string>;
@@ -46,6 +46,7 @@ export function typeDefaultVars(): Vars {
         if (r.heading) vars[`--type-${r.id}-font`] = 'var(--font-heading)';
     }
     vars['--type-tag-tracking'] = '0.02em';
+    for (const e of TYPE_EMPHASIS) vars[e.cssVar] = String(e.step);
     return vars;
 }
 
@@ -84,6 +85,11 @@ export function themeTypeVars(type: ThemeType | undefined, headingFont: ThemeFon
             vars[`--type-${r.id}-weight`] = String(snapWeight(face, o.weight));
         }
         if (o?.font && r.heading) vars[`--type-${r.id}-font`] = roleFontVar(o.font);
+    }
+
+    for (const e of TYPE_EMPHASIS) {
+        const v = type.emphasis?.[e.key];
+        if (v !== undefined && v !== e.step) vars[e.cssVar] = String(v);
     }
 
     const fixed = THEME_FONTS.find((f) => f.id === headingFont);

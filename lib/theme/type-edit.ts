@@ -47,6 +47,12 @@ export function patchType(prev: ThemeType | undefined, patch: Partial<Omit<Theme
     if (m.headingWeight === undefined) delete m.headingWeight;
     if (m.leading === 'normal' || m.leading === undefined) delete m.leading;
     if (m.tagCase === 'none' || m.tagCase === undefined) delete m.tagCase;
+    if (m.emphasis) {
+        const em: NonNullable<ThemeType['emphasis']> = {};
+        for (const e of TYPE_EMPHASIS) if (m.emphasis[e.key] !== undefined && m.emphasis[e.key] !== e.step) em[e.key] = m.emphasis[e.key];
+        if (Object.keys(em).length) m.emphasis = em;
+        else delete m.emphasis;
+    }
     if (m.roles) {
         const roles: NonNullable<ThemeType['roles']> = {};
         const bare: ThemeType = { ...m, roles: undefined };
@@ -70,7 +76,7 @@ export function patchType(prev: ThemeType | undefined, patch: Partial<Omit<Theme
     return Object.keys(m).length === 1 ? undefined : m;
 }
 
-/** The emphasis step over the role weight (the default until the theme sets it). */
-export function emphasisStep(_type: ThemeType | undefined, key: TypeEmphasis): number {
-    return TYPE_EMPHASIS.find((e) => e.key === key)?.step ?? 0;
+/** The emphasis step over the role weight (the theme's, else the default). */
+export function emphasisStep(type: ThemeType | undefined, key: TypeEmphasis): number {
+    return type?.emphasis?.[key] ?? TYPE_EMPHASIS.find((e) => e.key === key)?.step ?? 0;
 }

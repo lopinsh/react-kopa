@@ -42,6 +42,8 @@ export const TYPE_EMPHASIS = [
     { key: 'strong', cls: 'weight-strong', cssVar: '--emph-strong', step: 200 },
 ] as const;
 export type TypeEmphasis = (typeof TYPE_EMPHASIS)[number]['key'];
+/** The emphasis steps over the role weight are a theme setting within these limits (multiples of `step`). */
+export const TYPE_EMPHASIS_LIMITS = { min: 0, max: 400, step: 100 } as const;
 export const TYPE_MUTED_CLASS = 'text-foreground-muted';
 
 /**

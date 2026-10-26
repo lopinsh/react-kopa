@@ -234,12 +234,13 @@ body {
 }
 
 /* Emphasis inside a role: a name, a count or a link that stands out from the line around it (no size, only weight).
+   The steps are a theme setting (Burti > Izcēlums); the literals equal TYPE_EMPHASIS.
    --role-weight is the role weight relative to its default (a default panel gives 400, so today's 500/600; a heavier role lifts its emphasis too). */
 @utility weight-medium {
-  font-weight: min(calc(var(--role-weight, 400) + 100), 1000);
+  font-weight: min(calc(var(--role-weight, 400) + var(--emph-medium, 100)), 1000);
 }
 @utility weight-strong {
-  font-weight: min(calc(var(--role-weight, 400) + 200), 1000);
+  font-weight: min(calc(var(--role-weight, 400) + var(--emph-strong, 200)), 1000);
 }
 
 /* Human note (AR-07): a line in the site's own voice, in italics and the site colour. */
