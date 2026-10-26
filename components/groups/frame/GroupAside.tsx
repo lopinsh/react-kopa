@@ -10,10 +10,13 @@ import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import LatestAnnouncement from '@/components/groups/announcements/LatestAnnouncement';
 import { getLatestForInfo } from '@/lib/services/announcements-page';
 
+import type { BannerCredit } from '@/lib/validations/banner';
+
 type Group = {
     id: string;
     memberCount: number;
     bannerImage: string | null;
+    bannerCredit: BannerCredit;
     l1Slug: string;
     base: string;
     isMember: boolean;
@@ -29,7 +32,7 @@ export default async function GroupAside({ group, viewerId }: { group: Group; vi
     const shown = faces[group.id] ?? [];
     return (
         <AsideSlot label={t('aboutLabel')} hideSegments={['settings', 'create-event']}>
-            <GroupPicture image={group.bannerImage ? getSmartImageUrl(group.bannerImage) : null} l1Slug={group.l1Slug} />
+            <GroupPicture image={group.bannerImage ? getSmartImageUrl(group.bannerImage) : null} l1Slug={group.l1Slug} credit={group.bannerCredit} />
             <Link href={`${group.base}/members`} className="flex items-center gap-3 rounded-2xl bg-surface p-3 shadow-card frame">
                 <Faces faces={shown} size="lg" />
                 <span className="text-body-sm">{t('members', { count: group.memberCount })}</span>

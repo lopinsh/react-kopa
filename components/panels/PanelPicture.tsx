@@ -7,9 +7,11 @@ import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { useOverlayClose } from '@/components/ui/overlay-support';
 import { getSmartImageUrl } from '@/lib/image-utils';
 import { IconButton } from '@/components/ui/Button';
+import BannerCredit from '@/components/forms/banner/BannerCredit';
+import type { BannerCredit as Credit } from '@/lib/validations/banner';
 
 /** The panel's picture (a phone sheet's is shorter, under its close bar) or, without one, the category's tone with its icon; the round × sits at its top right from md. */
-export default function PanelPicture({ image, l1Slug }: { image: string | null; l1Slug: string }) {
+export default function PanelPicture({ image, l1Slug, credit }: { image: string | null; l1Slug: string; credit?: Credit }) {
     const t = useTranslations('common');
     const close = useOverlayClose();
     return (
@@ -32,6 +34,7 @@ export default function PanelPicture({ image, l1Slug }: { image: string | null; 
                     </IconButton>
                 </div>
             </div>
+            {image && <BannerCredit credit={credit} className="px-4 pt-1" />}
         </>
     );
 }

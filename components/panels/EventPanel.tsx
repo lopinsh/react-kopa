@@ -27,7 +27,7 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
 
     return (
         <div data-ui={UI.eventPanel} style={{ ['--c' as string]: event.category.color }}>
-            <PanelPicture image={event.image} l1Slug={event.category.l1Slug} />
+            <PanelPicture image={event.image} l1Slug={event.category.l1Slug} credit={event.imageCredit} />
             <PanelBody>
                 <PanelTitle lang={langAttr(event.titleLang, locale)}>{event.title}</PanelTitle>
                 <CategoryLine color={event.category.color} category={event.category.l1Title} subCategories={event.subCategories} />

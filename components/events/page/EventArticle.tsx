@@ -34,7 +34,7 @@ export default async function EventArticle({ event, organiser }: { event: EventP
 
     return (
         <article data-ui={UI.eventPage} style={{ ['--c' as string]: event.category.color }} className="grid max-w-page gap-3 rounded-2xl bg-surface p-5 [overflow-wrap:anywhere] md:p-6 shadow-card frame">
-            <EventPicture image={event.image} />
+            <EventPicture image={event.image} credit={event.imageCredit} />
             <h1 lang={titleLabel} className="text-title text-foreground">{event.title}</h1>
             {titleLabel && <FallbackLangLabel lang={titleLabel} className="justify-self-start" />}
             <CategoryLine color={event.category.color} category={event.category.l1Title} subCategories={event.subCategories} />
