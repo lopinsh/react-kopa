@@ -123,7 +123,7 @@ Two families (AR-07): **Literata** for titles, **Commissioner** for everything e
 
 Pages and components pick a role, never raw sizes: no `text-sm`, `text-[13px]`, `leading-*`, `tracking-*` or `font-medium/semibold/bold` (`npm run ui:check` lists them). A role carries size, line, tracking and weight; the heading roles use the heading font and the style's heading weight. Inside a role, a name or count that stands out takes `weight-medium` or `weight-strong` (weight only). Primary text (titles, descriptions) is `text-foreground`; `text-foreground-muted` is for meta. Page titles come from `PageHead` (title, optional lead, actions).
 
-An admin edits a role without leaving the page: the Dizains tab of the admin tool panel (R23-2) picks the role of a clicked text and saves each change to the draft theme, which the server renders on every page until published.
+An admin edits a role without leaving the page: the Dizains tab of the admin tool panel (R23-2) picks the role of a clicked text and saves each change to the draft theme, which the server renders on every page until published. A clicked text also shows why it looks so: its role and weight, the emphasis and what it adds, pelēks, and a selected or pressed state.
 
 Nothing is smaller than 11 px. The admin can tune the type system (base size, contrast, heading weight, leading, per-role overrides) in Admin > Dizains; the roles read `--type-<role>-*` variables set by the theme, and the table above is what applies when nothing is set.
 

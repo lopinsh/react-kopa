@@ -41,7 +41,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
   - [ ] **Caching for signed-out visitors:** the only lever for first-visit throughput; the page reads cookies (rail), sign-in and filters, so it needs a split of the per-viewer parts first.
 - [x] **D1 Demo content** (spec `docs/development/specs/D1.md`, `npm run db:demo`, workflow *Demo content*): 55 imaginary groups across every sub-theme, 15 demo users, 20 new sub-themes; sub-themes the data does not name (admin-made) get a generic fallback group at run time. Built 26 Oct (D1-1 e66b9b6, D1-2 b55dff7, D1-3); double run gives identical totals, real members and attendance on demo groups survive a re-run. Review 0b74c5e: equivalent sub-themes are reused, not duplicated; weekday-named events land on their day. Pushed, live.
 - [ ] **R24 Izcēlums** (spec `docs/development/specs/R24.md`): Dizains panel explains a clicked text (role weight, emphasis step and computed weight, pelēks, izvēlēts/nospiests); emphasis steps vidēji +100 / izcelts +200 become a theme setting (Burti > Izcēlums, also in the panel). No migration, defaults give 0 px diff.
-  - [ ] **R24-1 Explain line** (read-only).
+  - [x] **R24-1 Explain line** (read-only).
   - [ ] **R24-2 Emphasis steps** (`themeTypeSchema.emphasis`, `--emph-*`).
 
 ## Standing owner rules

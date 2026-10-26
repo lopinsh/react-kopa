@@ -9,12 +9,14 @@ import { Select } from '@/components/ui/Input';
 import { TEXT_LINK_CLASS } from '@/components/ui/TextLink';
 import TypeRoleEditor from '@/components/admin/design/TypeRoleEditor';
 import { useDraftActions } from '@/components/admin/design/useDraftActions';
-import { TYPE_ROLES, type TypeRoleId, type TypeVariant } from '@/lib/constants';
+import { TYPE_ROLES, type TypeRoleId } from '@/lib/constants';
 import { resolveTypeRoles } from '@/lib/theme/type-edit';
 import type { ThemeInput } from '@/lib/validations/theme';
 import type { PanelTabProps } from './PanelTabBody';
 import RoleChip from './RoleChip';
 import { useDraftSave } from './useDraftSave';
+import TextExplain from './TextExplain';
+import { explainText, type TextExplanation } from './explainText';
 import { useRolePicker } from './useRolePicker';
 
 const isRoleId = (v: string | null): v is TypeRoleId => TYPE_ROLES.some((r) => r.id === v);
@@ -26,14 +28,15 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
     const pathname = usePathname();
     const { theme, busy, saves, resetSaves, editType } = useDraftSave(designTheme);
     const { isPending, publish, discard } = useDraftActions();
-    const [variant, setVariant] = useState<TypeVariant | null>(null);
+    const [picked, setPicked] = useState<{ target: Element; el: Element; utility: string } | null>(null);
+    const [explained, setExplained] = useState<TextExplanation | null>(null);
     const [count, setCount] = useState(0);
     const [warn, setWarn] = useState(false);
     const role = isRoleId(selection) ? selection : null;
 
-    useRolePicker(!paused, ({ role: picked, variant: v, el }) => {
-        onSelect(picked);
-        setVariant(v);
+    useRolePicker(!paused, ({ role: r, el, utility, target }) => {
+        onSelect(r);
+        setPicked({ target, el, utility });
         onPicked(el);
     });
 
@@ -48,6 +51,12 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
         const id = window.setTimeout(() => setCount(utility ? document.querySelectorAll(`#content .${utility}`).length : 0), 150);
         return () => window.clearTimeout(id);
     }, [role, pathname]);
+
+    // The explain line is read again when the refreshed theme commits; a replaced node drops it.
+    useEffect(() => {
+        const id = window.requestAnimationFrame(() => setExplained(picked?.target.isConnected ? explainText(picked.target, picked.el, picked.utility) : null));
+        return () => window.cancelAnimationFrame(id);
+    },[picked, designTheme]);
 
     // The draft is gone (published or discarded): the counter starts again.
     useEffect(() => { if (!draftActive) resetSaves(); }, [draftActive, resetSaves]);
@@ -64,7 +73,7 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
             <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-3">
                 <label className="block space-y-1">
                     <span className="text-meta text-foreground-muted">{t('role')}</span>
-                    <Select value={role ?? ''} onChange={(e) => { setVariant(null); onSelect(e.target.value || null); }}>
+                    <Select value={role ?? ''} onChange={(e) => { setPicked(null); onSelect(e.target.value || null); }}>
                         <option value="">{t('pickPlaceholder')}</option>
                         {TYPE_ROLES.map((r) => <option key={r.id} value={r.id}>{tRoles(r.id)}</option>)}
                     </Select>
@@ -72,8 +81,8 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
                 {role ? (
                     <div className="space-y-1">
                         <p className="text-item text-foreground">{tRoles(role)}</p>
+                        {explained && <TextExplain role={role} explained={explained} type={theme.type} />}
                         <p className="text-meta text-foreground-muted">{t('onPage', { count })}</p>
-                        {variant && <p className="text-meta text-foreground-muted">{t('variant', { name: t(`variants.${variant}`) })}</p>}
                         <TypeRoleEditor roleId={role} type={theme.type} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} disabled={false} onType={editType} />
                         <p className="text-meta text-foreground-muted">{t('everywhere')}</p>
                     </div>

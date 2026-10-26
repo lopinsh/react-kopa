@@ -1237,32 +1237,13 @@
         "thisPage": "Šajā lapā · {count}",
         "otherPages": "Citās lapās · {count}",
         "noOther": "Citās lapās atvērtu piezīmju nav.",
-        "all": "Visas piezīmes",
-        "onThisPage": "{count} šajā lapā"
+        "all": "Visas piezīmes"
       },
       "translate": {
         "selected": "Izvēlēts",
         "pickHint": "Noklikšķini uz iezīmēta teksta vai meklē.",
         "missing": "Šajā lapā trūkst · {count}",
-        "noneMissing": "Šajā lapā viss ir iztulkots.",
-        "missingFooter": "{count} trūkst"
-      },
-      "design": {
-        "role": "Loma",
-        "pickPlaceholder": "Izvēlies vai noklikšķini lapā…",
-        "noRole": "Noklikšķini uz teksta lapā vai izvēlies lomu.",
-        "onPage": "Šajā lapā: {count} vietās",
-        "variant": "Tu noklikšķināji uz varianta „{name}”; tas seko lomai.",
-        "variants": {
-          "strong": "izcelts",
-          "muted": "pelēks"
-        },
-        "everywhere": "Mainās visur, kur lieto šo lomu. Redzi tikai tu, līdz publicē.",
-        "changes": "{count, plural, =0 {Nav izmaiņu} one {# izmaiņa melnrakstā} other {# izmaiņas melnrakstā}}",
-        "publish": "Publicēt",
-        "discard": "Atmest",
-        "orderWarning": "Nosaukums ir lielāks par lapas virsrakstu. Publicēt tik un tā?",
-        "allType": "Visi burti un sistēma"
+        "noneMissing": "Šajā lapā viss ir iztulkots."
       }
     }
   },

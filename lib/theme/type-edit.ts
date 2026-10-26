@@ -1,4 +1,4 @@
-import { THEME_FONTS, THEME_STYLES, TYPE_ROLES, snapWeight, type ThemeFontId, type ThemeStyleKey, type TypeRoleId } from '@/lib/constants';
+import { THEME_FONTS, THEME_STYLES, TYPE_EMPHASIS, TYPE_ROLES, snapWeight, type ThemeFontId, type ThemeStyleKey, type TypeEmphasis, type TypeRoleId } from '@/lib/constants';
 import { roleFontId, typeRoleParts } from '@/lib/theme/type-vars';
 import type { ThemeType } from '@/lib/validations/theme';
 
@@ -68,4 +68,9 @@ export function patchType(prev: ThemeType | undefined, patch: Partial<Omit<Theme
         else delete m.roles;
     }
     return Object.keys(m).length === 1 ? undefined : m;
+}
+
+/** The emphasis step over the role weight (the default until the theme sets it). */
+export function emphasisStep(_type: ThemeType | undefined, key: TypeEmphasis): number {
+    return TYPE_EMPHASIS.find((e) => e.key === key)?.step ?? 0;
 }

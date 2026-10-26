@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { typeRoleOfElement, type TypeRoleId, type TypeVariant } from '@/lib/constants';
+import { typeRoleOfElement, type TypeRoleId } from '@/lib/constants';
 
-type Picked = { role: TypeRoleId; variant: TypeVariant | null; el: Element };
+type Picked = { role: TypeRoleId; el: Element; utility: string; target: Element };
 
 /**
  * While the Dizains tab is open and not paused, a click on a text with a type role picks that role instead of doing
@@ -24,7 +24,7 @@ export function useRolePicker(active: boolean, onPick: (picked: Picked) => void)
             if (!found) return;
             e.preventDefault();
             e.stopPropagation();
-            pick.current(found);
+            pick.current({ ...found, target: e.target as Element });
         };
         const stop = (e: Event) => {
             if (!hit(e)) return;

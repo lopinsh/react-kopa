@@ -36,26 +36,25 @@ export const TYPE_ROLE_IDS = TYPE_ROLES.map((r) => r.id) as [TypeRoleId, ...Type
 /** utility class -> role id, for the admin panel's "click a text" picker. */
 export const TYPE_ROLE_BY_UTILITY: ReadonlyMap<string, TypeRoleId> = new Map(TYPE_ROLES.map((r) => [r.utility, r.id]));
 
-/** Classes that tweak a role's look without being a role (they follow the role's size and font). Only classes that exist in `globals.css`. */
-export const TYPE_VARIANTS = [
-    { cls: 'weight-strong', key: 'strong' },
-    { cls: 'text-foreground-muted', key: 'muted' },
+/** Emphasis classes inside a role (they follow the role's size and font; `step` is the default over the role weight, `globals.css` repeats it). */
+export const TYPE_EMPHASIS = [
+    { key: 'medium', cls: 'weight-medium', cssVar: '--emph-medium', step: 100 },
+    { key: 'strong', cls: 'weight-strong', cssVar: '--emph-strong', step: 200 },
 ] as const;
-export type TypeVariant = (typeof TYPE_VARIANTS)[number]['key'];
+export type TypeEmphasis = (typeof TYPE_EMPHASIS)[number]['key'];
+export const TYPE_MUTED_CLASS = 'text-foreground-muted';
 
 /**
  * The role of the text under `el`: the nearest ancestor (up to the body (header included)) whose classes hold a role utility.
- * Null inside the admin panel or when no ancestor has a role. `variant` is a variant class seen on the way up.
+ * Null inside the admin panel or when no ancestor has a role.
  */
-export function typeRoleOfElement(el: Element): { role: TypeRoleId; variant: TypeVariant | null; el: Element } | null {
+export function typeRoleOfElement(el: Element): { role: TypeRoleId; el: Element; utility: string } | null {
     if (el.closest('[data-admin-panel]')) return null;
-    let variant: TypeVariant | null = null;
     for (let cur: Element | null = el; cur; cur = cur.parentElement) {
         if (cur === document.body) return null;
-        for (const v of TYPE_VARIANTS) if (!variant && cur.classList.contains(v.cls)) variant = v.key;
         for (const cls of cur.classList) {
             const role = TYPE_ROLE_BY_UTILITY.get(cls);
-            if (role) return { role, variant, el: cur };
+            if (role) return { role, el: cur, utility: cls };
         }
     }
     return null;
