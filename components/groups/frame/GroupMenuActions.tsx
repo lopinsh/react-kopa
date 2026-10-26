@@ -3,7 +3,7 @@
 import { useId, useRef, useState, useTransition, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { Eye, EyeOff, Flag, History, LogOut, MessageCircle, Pencil, Share2, Tags, UserCog, X } from 'lucide-react';
+import { Eye, EyeOff, History, LogOut, MessageCircle, Pencil, Share2, Tags, UserCog, X } from 'lucide-react';
 import { cancelJoinRequest, leaveGroup } from '@/actions/group-actions';
 import { restoreGroup } from '@/actions/moderation-actions';
 import { loadFullPage } from '@/lib/full-page';
@@ -28,7 +28,7 @@ function Row({ icon, onClick, disabled, children }: { icon: ReactNode; onClick: 
 
 /**
  * What a viewer can do with the group besides its pages (AR-51), as rows under the pages in the left menu (desktop column and phone drawer):
- * the viewer's role as a quiet line, then share, write to the team, report, leave or withdraw, and for site admins their tools.
+ * share, then "Tava dalība" (role line, write to the team, withdraw, leave), report as a quiet link last, and for site admins their tools (until R25-2).
  * Rows are hidden, never greyed. An undoable step (withdraw, leave) asks once in a pop-over at its row.
  */
 export default function GroupMenuActions() {
@@ -72,12 +72,19 @@ export default function GroupMenuActions() {
 
     return (
         <div data-ui={UI.groupMoreMenu} role="group" aria-label={c('moreOptions')} aria-describedby={role ? roleId : undefined} className="mt-3 flex flex-col gap-0.5 border-t border-border pt-3">
-            {role && <p id={roleId} className="px-3 pb-1 text-meta text-foreground-muted">{t(`more.role.${role}`)}</p>}
-            {role === 'PENDING' && <Row icon={<X aria-hidden className={ICON} />} onClick={(el) => ask('withdraw', el)}>{t('withdrawRequest')}</Row>}
-            {role === 'MEMBER' && <Row icon={<MessageCircle aria-hidden className={ICON} />} onClick={openWriteToTeam}>{t('writeToTeam')}</Row>}
             <Row icon={<Share2 aria-hidden className={ICON} />} onClick={() => void share({ title: g.name, url: `${window.location.origin}/${locale}${g.href}` })}>{c('shareGroup')}</Row>
-            {!isTeam && <Row icon={<Flag aria-hidden className={ICON} />} onClick={openReport}>{c('reportGroup')}</Row>}
-            {canLeave && <Row icon={<LogOut aria-hidden className={ICON} />} onClick={(el) => ask('leave', el)}>{c('leaveGroup')}</Row>}
+            {role && (
+                <div role="group" aria-label={t('more.yourMembership')} className="flex flex-col gap-0.5">
+                    <p className="px-3 pb-1 pt-3 text-meta text-foreground-muted">{t('more.yourMembership')}</p>
+                    <p id={roleId} className="px-3 pb-1 text-meta text-foreground-muted">{t(`more.role.${role}`)}</p>
+                    {role === 'MEMBER' && <Row icon={<MessageCircle aria-hidden className={ICON} />} onClick={openWriteToTeam}>{t('writeToTeam')}</Row>}
+                    {role === 'PENDING' && <Row icon={<X aria-hidden className={ICON} />} onClick={(el) => ask('withdraw', el)}>{t('withdrawRequest')}</Row>}
+                    {canLeave && <Row icon={<LogOut aria-hidden className={ICON} />} onClick={(el) => ask('leave', el)}>{c('leaveGroup')}</Row>}
+                </div>
+            )}
+            {!isTeam && (
+                <button type="button" onClick={(e) => openReport(e.currentTarget)} className="mt-2 min-h-10 px-3 text-left text-meta text-foreground-muted hover:text-foreground hover:underline">{c('reportGroup')}</button>
+            )}
 
             {isSiteAdmin && (
                 <>

@@ -489,6 +489,7 @@
       "sent": "Request sent"
     },
     "more": {
+      "yourMembership": "Your membership",
       "role": {
         "OWNER": "You own this group",
         "ADMIN": "You're a moderator of this group",

@@ -489,6 +489,7 @@
       "sent": "Pieteikums nosūtīts"
     },
     "more": {
+      "yourMembership": "Tava dalība",
       "role": {
         "OWNER": "Tu esi šīs grupas īpašnieks",
         "ADMIN": "Tu esi šīs grupas moderators",
