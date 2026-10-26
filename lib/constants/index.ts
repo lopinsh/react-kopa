@@ -275,3 +275,24 @@ export const DEFAULT_LOCALE: Locale = 'lv';
 export const LOCALE_NAMES: Record<Locale, string> = { lv: 'Latviešu', en: 'English' };
 export * from './adminNav';
 export * from './type-roles';
+
+/** Unsplash API rules: the `utm_source` of every link to Unsplash, and the crop of a stored banner (16:9). */
+export const UNSPLASH_UTM = 'ejam_kopa';
+export const BANNER_IMG_PARAMS = 'w=1600&h=900&fit=crop&crop=entropy&auto=format&q=75';
+export const BANNER_THUMB_PARAMS = 'w=400&h=225&fit=crop&crop=entropy&auto=format&q=60';
+
+/** Unsplash demo key = 50 requests/hour for the whole site; these keep every process well under it (R26). */
+export const UNSPLASH_LIMITS = {
+    cacheMs: 24 * 60 * 60 * 1000,
+    cacheEntries: 200,
+    windowMs: 60 * 60 * 1000,
+    /** Outgoing requests per rolling hour per process; the last `trackReserve` are kept for download pings. */
+    processBudget: 12,
+    trackReserve: 2,
+    /** Refuse new searches while Unsplash's own remaining count (seen on any response) is at or below this. */
+    remainingFloor: 8,
+    userSearches: 6,
+    userWindowMs: 10 * 60 * 1000,
+    maxPage: 3,
+    perPage: 8,
+} as const;

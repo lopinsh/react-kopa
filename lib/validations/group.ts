@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 import { GROUP_TYPES, MAX_GROUP_TAGS } from '@/lib/constants';
 import { TEXT_LANGS } from '@/lib/translations';
+import { bannerCreditSchema } from '@/lib/validations/banner';
 
 
 // Step 1: Categorization
@@ -42,6 +43,8 @@ export const step2Schema = z.object({
     /** "Ko meklējam?" (AR-35): optional, trimmed; empty → null. */
     lookingFor: z.string().trim().max(GROUP_LOOKING_FOR_MAX, 'LOOKING_FOR_TOO_LONG').nullish().transform((v) => v || null),
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
+    /** Photographer credit of an Unsplash banner; the server drops it for any other URL. */
+    bannerCredit: bannerCreditSchema.optional(),
     /** The city's stored value (`City.slug`). The server checks that it exists and may be used. */
     city: z.string().min(1, 'CITY_REQUIRED').max(80, 'CITY_REQUIRED'),
     discordLink: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),

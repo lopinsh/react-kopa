@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { TEXT_LANGS, hasText, type TextLang } from '@/lib/translations';
+import { bannerCreditSchema, type BannerCredit } from '@/lib/validations/banner';
 
 export const EVENT_TITLE_MAX = 120;
 
@@ -29,6 +30,7 @@ export const eventSchema = z.object({
     isOnline: z.boolean().default(false),
     location: z.string().min(2, 'LOCATION_REQUIRED'),
     bannerImage: z.string().url('INVALID_URL').or(z.literal('')).optional().nullable(),
+    bannerCredit: bannerCreditSchema.optional(),
     maxParticipants: z.number('MAX_PARTICIPANTS_INVALID').int('MAX_PARTICIPANTS_INVALID').positive('MAX_PARTICIPANTS_INVALID').nullable().optional(),
     visibility: z.enum(['PUBLIC', 'MEMBERS_ONLY']).default('PUBLIC'),
     joinMode: z.enum(['OPEN', 'REQUEST']).default('OPEN'),
@@ -62,6 +64,7 @@ export type EventFormData = {
     isOnline: boolean;
     location: string;
     bannerImage?: string | null;
+    bannerCredit?: BannerCredit;
     maxParticipants?: number | null;
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
     joinMode: 'OPEN' | 'REQUEST';

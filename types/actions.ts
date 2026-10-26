@@ -55,6 +55,9 @@ export const ERROR_CODES = [
     'CITY_IN_USE',
     'DB_MIGRATION_REQUIRED',
     'CONTRAST_TOO_LOW',
+    'SEARCH_UNAVAILABLE',
+    'SEARCH_RATE_LIMITED',
+    'BANNER_URL_NOT_ALLOWED',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];

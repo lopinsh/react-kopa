@@ -146,6 +146,8 @@ model Group {
   isAcceptingMembers Boolean        @default(true)
   websiteLink        String?
   bannerImage        String?
+  bannerCreditName   String?
+  bannerCreditUser   String?
   hiddenAt           DateTime?
   hiddenReason       String?
   hiddenById         String?
@@ -267,6 +269,8 @@ model Event {
   isRecurring       Boolean            @default(false)
   recurrencePattern String?
   bannerImage       String?
+  bannerCreditName  String?
+  bannerCreditUser  String?
   endDate           DateTime?
   slug              String
   /// Language the organiser wrote the event in (`lv` | `en`); the slug is generated from this title.
