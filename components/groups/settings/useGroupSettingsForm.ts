@@ -40,6 +40,10 @@ export type GroupSettingsFormProps = {
     activeTab: SettingsTab;
     /** Owner (and site admins): name, category, topics and access. Moderators get the rest. */
     canEditOwnerFields: boolean;
+    /** The picker's Unsplash search is on (the key is set). */
+    searchEnabled: boolean;
+    /** Site admins: the raw image address under "Papildu". */
+    canEditUrl: boolean;
     initialTaxonomy: {
         initialTaxSelection: TaxonomySelection | null;
         initialTagIds: string[];

@@ -3,25 +3,28 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import CityField from '@/components/groups/CityField';
-import { ImageIcon } from 'lucide-react';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
 import SettingsSection from './SettingsSection';
+import BannerPicker from '@/components/forms/banner/BannerPicker';
 
 import { Input } from '@/components/ui/Input';
 type Props = {
     /** The group name is changed by the owner only. */
     canEditName: boolean;
+    l1Slug: string;
+    searchEnabled: boolean;
+    canEditUrl: boolean;
 };
 
 const LABEL = 'ml-1 text-tag text-foreground-muted';
 
 /** Name, city, "Ko meklējam?" and banner. */
-export default function BasicsSection({ canEditName }: Props) {
+export default function BasicsSection({ canEditName, l1Slug, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('wizard');
     const gt = useTranslations('group');
     const gs = useTranslations('groupSettings');
-    const { register, watch, formState: { errors } } = useFormContext<GroupFormValues>();
+    const { register, watch, setValue, formState: { errors } } = useFormContext<GroupFormValues>();
 
     return (
         <SettingsSection
@@ -64,22 +67,19 @@ export default function BasicsSection({ canEditName }: Props) {
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <label htmlFor="group-banner" className={LABEL}>{gt('bannerImageUrlLabel')}</label>
-                <div className="group relative">
-                    <Input
-                        id="group-banner"
-                        {...register('bannerImage')}
-                        placeholder="https://images.unsplash.com/..."
-                        className="pl-12"
-                    />
-                    <ImageIcon className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-foreground-muted transition-colors group-focus-within:text-primary" />
-                </div>
-                <p className="ml-1 text-meta text-foreground-muted">{gt('bannerImageUrlDesc')}</p>
-                {errors.bannerImage?.message && (
-                    <p className="ml-1 text-meta text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>
-                )}
-            </div>
+            <BannerPicker
+                id="group-banner"
+                kind="group"
+                value={{ url: watch('bannerImage') || null, credit: watch('bannerCredit') ?? null }}
+                onChange={(v) => {
+                    setValue('bannerImage', v.url ?? '', { shouldDirty: true });
+                    setValue('bannerCredit', v.credit, { shouldDirty: true });
+                }}
+                l1Slug={l1Slug}
+                searchEnabled={searchEnabled}
+                canEditUrl={canEditUrl}
+                error={errors.bannerImage?.message ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}
+            />
         </SettingsSection>
     );
 }

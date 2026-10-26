@@ -40,10 +40,14 @@ type Props = {
     event?: EventToEdit;
     /** Edit only: people waiting for a decision (pending + waitlisted). */
     waitingCount?: number;
+    /** The picker's Unsplash search is on (the key is set). */
+    searchEnabled: boolean;
+    /** Site admins: the raw image address under "Papildu". */
+    canEditUrl: boolean;
 };
 
 /** The event form, create and edit: two steps, the owner text in every language. */
-export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCount = 0 }: Props) {
+export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCount = 0, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('eventWizard');
     const tErrors = useTranslations('errors');
     const f = useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount });
@@ -70,7 +74,7 @@ export default function EventForm({ groupId, groupSlug, l1Slug, event, waitingCo
                         onClear={f.clearText}
                         disabled={isPending}
                     >
-                        {step === 0 && <WhatWhenStep lang={lang} rev={rev} onStartChange={f.changeStart} onEndChange={f.changeEnd} />}
+                        {step === 0 && <WhatWhenStep lang={lang} rev={rev} l1Slug={l1Slug} searchEnabled={searchEnabled} canEditUrl={canEditUrl} onStartChange={f.changeStart} onEndChange={f.changeEnd} />}
                         {step === 1 && <WhoCanComeStep lang={lang} rev={rev} />}
                     </LanguageEditor>
 

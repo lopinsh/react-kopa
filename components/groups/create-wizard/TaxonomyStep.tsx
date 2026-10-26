@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import type { TaxonomySelection } from '@/lib/types/taxonomy';
 import L1Picker from '@/components/groups/create-wizard/L1Picker';
 import TagPicker from '@/components/groups/tag-picker/TagPicker';
+import BannerPicker from '@/components/forms/banner/BannerPicker';
 
 type Props = {
     taxonomy: TaxonomyTree;
@@ -14,11 +15,13 @@ type Props = {
     handleTaxChange: (sel: TaxonomySelection | null) => void;
     /** Changing the main category just removed the sub-topics that were chosen. */
     tagsCleared?: boolean;
+    searchEnabled: boolean;
+    canEditUrl: boolean;
 };
 
-export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, tagsCleared = false }: Props) {
+export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, tagsCleared = false, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('wizard');
-    const { watch, formState: { errors } } = useFormContext<GroupFormValues>();
+    const { watch, setValue, formState: { errors } } = useFormContext<GroupFormValues>();
     const noTagsYet = (watch('tagIds') ?? []).length === 0;
 
     // Derive the currently selected L1 object to pass to the L2L3 picker
@@ -50,6 +53,23 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
                     )}
                     <TagPicker l1={selectedL1} allowL3={false} />
                 </div>
+            )}
+
+            {/* The picture comes after the main category: its curated photos depend on it. A proposed category has none. */}
+            {taxSelection && (
+                <BannerPicker
+                    id="group-banner"
+                    kind="group"
+                    value={{ url: watch('bannerImage') || null, credit: watch('bannerCredit') ?? null }}
+                    onChange={(v) => {
+                        setValue('bannerImage', v.url ?? '', { shouldDirty: true, shouldValidate: true });
+                        setValue('bannerCredit', v.credit, { shouldDirty: true });
+                    }}
+                    l1Slug={selectedL1?.slug ?? null}
+                    searchEnabled={searchEnabled}
+                    canEditUrl={canEditUrl}
+                    error={errors.bannerImage?.message ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}
+                />
             )}
         </div>
     );

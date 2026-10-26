@@ -6,6 +6,8 @@ import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { EventService } from '@/lib/services/event.service';
 import { toBannerCredit } from '@/lib/banner';
+import { isSiteAdmin } from '@/lib/site-role';
+import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 import { isEventPast } from '@/lib/event-dates';
 import { toTextLang } from '@/lib/translations';
 import EventForm from '@/components/forms/event/EventForm';
@@ -43,6 +45,8 @@ export default async function EditEventPage({ params }: { params: Promise<Params
             <CitiesProvider cities={cities}>
                 <EventForm
                     groupId={event.groupId}
+                    searchEnabled={isUnsplashSearchEnabled()}
+                    canEditUrl={isSiteAdmin(session.user.role)}
                     groupSlug={groupSlug}
                     l1Slug={l1Slug}
                     waitingCount={event.viewer.pendingCount + event.viewer.waitlistCount}

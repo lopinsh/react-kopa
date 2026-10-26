@@ -2,7 +2,7 @@
 
 import { useFormContext } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { Type, Image as ImageIcon } from 'lucide-react';
+import { Type } from 'lucide-react';
 import { GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
 import TextCounter from '@/components/ui/TextCounter';
 import LocationStep from '@/components/groups/create-wizard/LocationStep';
@@ -71,24 +71,6 @@ export default function BasicInfoStep({ lang, onLangChange }: Props) {
 
             {/* Place */}
             <LocationStep />
-
-            {/* Banner Image */}
-            <div>
-                <label htmlFor="group-banner" className="mb-1.5 flex items-center gap-1.5 text-button-sm text-foreground">
-                    <ImageIcon className="size-3.5 text-foreground-muted" />
-                    {t('fieldBannerImage')}
-                    <span className="ml-auto text-meta font-normal text-foreground-muted">{t('optional')}</span>
-                </label>
-                <Input
-                    id="group-banner"
-                    type="text"
-                    {...register('bannerImage')}
-                    placeholder={t('fieldBannerImagePlaceholder')}
-                    aria-invalid={errors.bannerImage ? true : undefined}
-                />
-                {errors.bannerImage && <p className="mt-1 text-meta text-danger">{t(errors.bannerImage.message as 'INVALID_URL')}</p>}
-                <p className="mt-1 text-meta text-foreground-muted">{t('fieldBannerImageHint')}</p>
-            </div>
         </div>
     );
 }

@@ -11,8 +11,13 @@ import { EVENT_TITLE_MAX, type EventFormData } from '@/lib/validations/event';
 import type { TextLang } from '@/lib/translations';
 
 import { Input } from '@/components/ui/Input';
+import BannerPicker from '@/components/forms/banner/BannerPicker';
+
 type Props = {
     lang: TextLang;
+    l1Slug: string;
+    searchEnabled: boolean;
+    canEditUrl: boolean;
     /** Bumped when text is copied in, so the editor reloads its value. */
     rev: number;
     onStartChange: (value: string) => void;
@@ -20,10 +25,12 @@ type Props = {
 };
 
 /** Step 1: name, description, picture, time and place. */
-export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: Props) {
+export default function WhatWhenStep({ lang, rev, l1Slug, searchEnabled, canEditUrl, onStartChange, onEndChange }: Props) {
     const t = useTranslations('eventWizard');
     const { register, setValue, control, formState: { errors } } = useFormContext<EventFormData>();
     const texts = useWatch({ control, name: 'texts' });
+    const bannerImage = useWatch({ control, name: 'bannerImage' });
+    const bannerCredit = useWatch({ control, name: 'bannerCredit' });
     const titleError = errors.texts?.[lang]?.title;
 
     return (
@@ -57,16 +64,19 @@ export default function WhatWhenStep({ lang, rev, onStartChange, onEndChange }: 
                 </div>
             </Field>
 
-            <Field id="event-banner" label={t('fieldBannerImage')} error={errors.bannerImage ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}>
-                <Input
-                    id="event-banner"
-                    type="text"
-                    {...register('bannerImage')}
-                    placeholder={t('fieldBannerImagePlaceholder')}
-                    aria-invalid={errors.bannerImage ? true : undefined}
-                    aria-describedby={errors.bannerImage ? 'event-banner-hint' : undefined}
-                />
-            </Field>
+            <BannerPicker
+                id="event-banner"
+                kind="event"
+                value={{ url: bannerImage || null, credit: bannerCredit ?? null }}
+                onChange={(v) => {
+                    setValue('bannerImage', v.url ?? '', { shouldDirty: true });
+                    setValue('bannerCredit', v.credit, { shouldDirty: true });
+                }}
+                l1Slug={l1Slug}
+                searchEnabled={searchEnabled}
+                canEditUrl={canEditUrl}
+                error={errors.bannerImage ? t(errors.bannerImage.message as 'INVALID_URL') : undefined}
+            />
 
             <EventTimeFields onStartChange={onStartChange} onEndChange={onEndChange} />
             <PlaceFields />

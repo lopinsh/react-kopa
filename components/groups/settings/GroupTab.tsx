@@ -13,7 +13,7 @@ import { useGroupSettingsForm, type GroupSettingsFormProps } from './useGroupSet
 export default function GroupTab(props: GroupSettingsFormProps) {
     const gs = useTranslations('groupSettings');
     const { methods, onSubmit, isPending, serverError, saveBlocked, taxSelection, selectedL1, tagsCleared, handleTaxChange } = useGroupSettingsForm(props);
-    const { canEditOwnerFields, taxonomy, initialTaxonomy } = props;
+    const { canEditOwnerFields, taxonomy, initialTaxonomy, searchEnabled, canEditUrl, group } = props;
 
     return (
         <FormProvider {...methods}>
@@ -25,7 +25,7 @@ export default function GroupTab(props: GroupSettingsFormProps) {
                     </p>
                 )}
 
-                <BasicsSection canEditName={canEditOwnerFields} />
+                <BasicsSection canEditName={canEditOwnerFields} l1Slug={group.l1Slug} searchEnabled={searchEnabled} canEditUrl={canEditUrl} />
 
                 {canEditOwnerFields && (
                     <div id="category" className="scroll-mt-24">

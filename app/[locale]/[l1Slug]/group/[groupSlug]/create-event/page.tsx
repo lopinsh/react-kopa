@@ -6,6 +6,8 @@ import { CityService } from '@/lib/services/city.service';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { getTranslations } from 'next-intl/server';
+import { isSiteAdmin } from '@/lib/site-role';
+import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 
 export default async function CreateEventPage({
     params,
@@ -42,7 +44,7 @@ export default async function CreateEventPage({
             </div>
 
             <CitiesProvider cities={cities}>
-                <EventForm groupId={group.id} groupSlug={groupSlug} l1Slug={l1Slug} />
+                <EventForm groupId={group.id} groupSlug={groupSlug} l1Slug={l1Slug} searchEnabled={isUnsplashSearchEnabled()} canEditUrl={isSiteAdmin(session.user.role)} />
             </CitiesProvider>
         </>
     );

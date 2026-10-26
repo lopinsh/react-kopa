@@ -7,6 +7,8 @@ import { CityService } from '@/lib/services/city.service';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { redirect } from 'next/navigation';
 import { signInUrl } from '@/lib/auth-redirect';
+import { isSiteAdmin } from '@/lib/site-role';
+import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -35,7 +37,7 @@ export default async function CreateGroupPage({
     return (
         <div className="container mx-auto max-w-4xl px-4 py-8">
             <CitiesProvider cities={cities}>
-                <GroupCreationWizard taxonomy={taxonomy} initialL1Slug={category} />
+                <GroupCreationWizard taxonomy={taxonomy} initialL1Slug={category} searchEnabled={isUnsplashSearchEnabled()} canEditUrl={isSiteAdmin(session.user.role)} />
             </CitiesProvider>
         </div>
     );

@@ -36,9 +36,13 @@ const STEP_DESC_KEYS = ['step1Desc', 'step2Desc', 'step3Desc'] as const;
 type Props = {
     taxonomy: TaxonomyTree;
     initialL1Slug?: string;
+    /** The picker's Unsplash search is on (the key is set). */
+    searchEnabled: boolean;
+    /** Site admins: the raw image address under "Papildu". */
+    canEditUrl: boolean;
 };
 
-export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) {
+export default function GroupCreationWizard({ taxonomy, initialL1Slug, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -97,6 +101,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
             originalLang: toTextLang(locale),
             about: langRecord(() => ''),
             lookingFor: null,
+            bannerImage: '',
+            bannerCredit: null,
             city: undefined,
             tagIds: [],
             type: 'PUBLIC',
@@ -126,8 +132,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
 
     // Per-step field validation before advancing
     async function validateStep(s: StepIndex): Promise<boolean> {
-        if (s === 0) return trigger(['name', 'lookingFor', ...TEXT_LANGS.map((l) => `about.${l}` as const), 'bannerImage', 'city']); // Basics + place
-        if (s === 1) return trigger(['categoryId', 'tagIds']); // Tēma
+        if (s === 0) return trigger(['name', 'lookingFor', ...TEXT_LANGS.map((l) => `about.${l}` as const), 'city']); // Basics + place
+        if (s === 1) return trigger(['categoryId', 'tagIds', 'bannerImage']); // Tēma
         if (s === 2) return trigger(['type']); // Access
         return true;
     }
@@ -229,6 +235,8 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug }: Props) 
                                 taxSelection={taxSelection}
                                 handleTaxChange={handleTaxChange}
                                 tagsCleared={tagsCleared}
+                                searchEnabled={searchEnabled}
+                                canEditUrl={canEditUrl}
                             />
                         )}
                         {step === 2 && <AccessStep />}
