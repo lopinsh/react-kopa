@@ -91,6 +91,16 @@ export function MenuSeparator() {
     return <div role="separator" className="mx-2 my-1 h-px bg-border" />;
 }
 
+/** A labelled section of rows; the label names the group and arrow keys skip it (it is not a menu item). */
+export function MenuGroup({ label, title, children }: { label: string; title?: string; children: ReactNode }) {
+    return (
+        <div role="group" aria-label={label}>
+            <p aria-hidden title={title} className="truncate px-3 pb-1 pt-2 text-meta text-foreground-muted">{label}</p>
+            {children}
+        </div>
+    );
+}
+
 /** The look of a menu row, for items that bring their own markup (the admin mode toggles). */
 export const MENU_ITEM_CLASS = ITEM_BASE;
 /** Trailing text/state slot of a row (read after a comma: "English, empty"). */
