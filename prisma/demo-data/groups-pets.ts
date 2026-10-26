@@ -35,7 +35,7 @@ export const PETS_GROUPS: DemoGroup[] = [
           en: 'An hour in the park with dogs catching up on news. The humans do the same.',
         },
         location: 'Parka ieeja pie lielā koka',
-        inDays: 4, hour: 10, hours: 2,
+        weekday: 6, inDays: 4, hour: 10, hours: 2,
         going: u('vetras_edgars', 'saules_ilze', 'mezu_dace'),
       },
       {

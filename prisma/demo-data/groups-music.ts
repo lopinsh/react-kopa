@@ -157,7 +157,7 @@ export const MUSIC_GROUPS: DemoGroup[] = [
           en: 'A longer rehearsal on Sunday morning, with pancakes afterwards.',
         },
         location: 'Kāda mājas virtuve, Cēsis',
-        inDays: 16, hour: 9, hours: 2,
+        weekday: 7, inDays: 16, hour: 9, hours: 2,
         going: u('vetras_edgars', 'mezu_dace'),
       },
     ],

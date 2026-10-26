@@ -148,7 +148,7 @@ export const GAMES_GROUPS: DemoGroup[] = [
           en: 'Card games and biscuits on a Sunday afternoon.',
         },
         location: 'Kāda mājas dzīvojamā istaba, Liepāja',
-        inDays: 22, hour: 15, hours: 3,
+        weekday: 7, inDays: 22, hour: 15, hours: 3,
         going: u('ledus_toms', 'tintes_karlis'),
       },
     ],

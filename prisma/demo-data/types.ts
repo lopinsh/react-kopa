@@ -25,6 +25,8 @@ export interface DemoEvent {
   isOnline?: boolean;
   /** Days from the run date (2-40). */
   inDays: number;
+  /** When the text names a day (1 = Monday … 7 = Sunday): the date moves forward from inDays to that weekday. */
+  weekday?: number;
   /** Riga local hour. */
   hour: number;
   /** Duration in hours (default 2). */

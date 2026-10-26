@@ -87,7 +87,7 @@ export const SOCIAL_GROUPS: DemoGroup[] = [
           en: 'One classic black-and-white film and tea with honey. Discussion afterwards.',
         },
         location: 'Kāda dzīvokļa viesistaba, Majori',
-        inDays: 4, hour: 19, hours: 3,
+        weekday: 5, inDays: 4, hour: 19, hours: 3,
         going: u('kapteinis_mencis', 'migla_ruta', 'burbulu_santa'),
       },
       {
@@ -97,7 +97,7 @@ export const SOCIAL_GROUPS: DemoGroup[] = [
           en: 'Two films back to back, with lunch in between.',
         },
         location: 'Kāda dzīvokļa viesistaba, Dubulti',
-        inDays: 17, hour: 14, hours: 5,
+        weekday: 7, inDays: 17, hour: 14, hours: 5,
         going: u('mezu_dace', 'migla_ruta'),
       },
       {

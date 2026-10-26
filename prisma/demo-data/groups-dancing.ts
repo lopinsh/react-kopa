@@ -45,7 +45,7 @@ export const DANCING_GROUPS: DemoGroup[] = [
           en: 'A calmer dance with tea and light snacks.',
         },
         location: 'Deju zāle kādā pagalmā, Centrs',
-        inDays: 18, hour: 15, hours: 3,
+        weekday: 7, inDays: 18, hour: 15, hours: 3,
         going: u('kapteinis_mencis', 'vetras_edgars'),
       },
       {

@@ -96,7 +96,7 @@ export const FAMILY_GROUPS: DemoGroup[] = [
           en: 'Blankets on the meadow, baskets in the middle and games for the kids. Everyone brings something tasty.',
         },
         location: 'Pļava Mežaparkā',
-        inDays: 10, hour: 11, hours: 4,
+        weekday: 6, inDays: 10, hour: 11, hours: 4,
         going: u('kapteinis_mencis', 'saules_ilze', 'dzirkstele_janis', 'lapsu_anna'),
       },
       {

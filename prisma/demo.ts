@@ -28,11 +28,13 @@ function slugify(text: string): string {
     .replace(/-{2,}/g, '-');
 }
 
-/** Riga wall-clock `hour:00`, `inDays` from today, as a UTC Date (the container runs in UTC). */
-function rigaDate(inDays: number, hour: number): Date {
+/** Riga wall-clock `hour:00`, `inDays` from today (then forward to `weekday`, 1 = Monday, if given), as a UTC Date (the container runs in UTC). */
+function rigaDate(inDays: number, hour: number, weekday?: number): Date {
   const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Riga', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
   const [y, m, d] = parts.split('-').map(Number);
-  const wall = Date.UTC(y, m - 1, d + inDays, hour, 0, 0);
+  let day = d + inDays;
+  if (weekday) day += (weekday % 7 - new Date(Date.UTC(y, m - 1, day)).getUTCDay() + 7) % 7;
+  const wall = Date.UTC(y, m - 1, day, hour, 0, 0);
   const offsetMs = (instant: number): number => {
     const label = new Intl.DateTimeFormat('en', { timeZone: 'Europe/Riga', timeZoneName: 'shortOffset' })
       .formatToParts(new Date(instant)).find((p) => p.type === 'timeZoneName')?.value ?? 'GMT+2';
@@ -57,6 +59,7 @@ function validate(): void {
     if (g.lookingFor.length > LOOKING_FOR_MAX) throw new Error(`${where}: lookingFor over ${LOOKING_FOR_MAX}`);
     if (g.tagline.lv.length > TAGLINE_MAX || g.tagline.en.length > TAGLINE_MAX) throw new Error(`${where}: tagline over ${TAGLINE_MAX}`);
     if (g.events.length < 2 || g.events.length > 3) throw new Error(`${where}: needs 2-3 events`);
+    if (g.events.some((e) => e.weekday !== undefined && (e.weekday < 1 || e.weekday > 7))) throw new Error(`${where}: weekday is 1-7`);
     if (g.posts.length !== 2) throw new Error(`${where}: needs 2 posts`);
     const keys = [g.owner, ...g.members, ...g.events.flatMap((e) => e.going)];
     for (const k of keys) if (!userKeys.has(k)) throw new Error(`${where}: unknown user ${k}`);
@@ -79,16 +82,62 @@ async function removeAll(): Promise<void> {
   console.log(`Removed ${groups.count} demo groups and ${users.count} demo users (the new sub-themes stay).`);
 }
 
-async function upsertTaxonomy(): Promise<void> {
+interface LiveL2 {
+  id: string;
+  slug: string;
+  parentId: string | null;
+  status: string;
+  keys: Set<string>;
+}
+
+/** Every name a sub-theme goes by (slug, slugLv, lv/en titles), folded with slugify: case and diacritics don't count. */
+function l2Keys(c: { slug: string; slugLv: string | null; titles: { title: string }[] }): Set<string> {
+  return new Set([c.slug, c.slugLv ?? '', ...c.titles.map((t) => t.title)].map(slugify).filter(Boolean));
+}
+
+async function liveL2s(): Promise<LiveL2[]> {
+  const rows = await prisma.category.findMany({
+    where: { level: 2 },
+    select: { id: true, slug: true, slugLv: true, parentId: true, status: true, titles: { select: { title: true } } },
+    orderBy: { slug: 'asc' },
+  });
+  return rows.map((c) => ({ id: c.id, slug: c.slug, parentId: c.parentId, status: c.status, keys: l2Keys(c) }));
+}
+
+/** An existing sub-theme of the same theme that goes by one of the same names; ACTIVE ones first. */
+function findEquivalent(all: LiveL2[], parentId: string, keys: Set<string>, exceptId?: string): LiveL2 | undefined {
+  const same = all.filter((c) => c.parentId === parentId && c.id !== exceptId && [...keys].some((k) => c.keys.has(k)));
+  return same.find((c) => c.status === 'ACTIVE') ?? same[0];
+}
+
+/**
+ * Makes sure each data sub-theme exists and returns data slug -> live category id.
+ * A sub-theme already there under the same theme with an equivalent name (an admin's "peldesana" for "swimming") is reused, never duplicated.
+ */
+async function upsertTaxonomy(): Promise<Map<string, string>> {
+  const resolved = new Map<string, string>();
   let created = 0;
+  let reused = 0;
+  const all = await liveL2s();
   for (const l2 of DEMO_L2S) {
     const parent = await prisma.category.findUnique({ where: { slug: l2.l1 }, select: { id: true } });
     if (!parent) {
       console.warn(`  ! theme "${l2.l1}" not found, skipping sub-theme "${l2.slug}"`);
       continue;
     }
-    const before = await prisma.category.findUnique({ where: { slug: l2.slug }, select: { id: true } });
-    await prisma.category.upsert({
+    const exact = all.find((c) => c.slug === l2.slug);
+    if (exact) {
+      resolved.set(l2.slug, exact.id);
+      continue;
+    }
+    const twin = findEquivalent(all, parent.id, l2Keys({ slug: l2.slug, slugLv: slugify(l2.lv), titles: [{ title: l2.lv }, { title: l2.en }] }));
+    if (twin) {
+      console.log(`  reused  "${twin.slug}" for sub-theme "${l2.slug}"`);
+      resolved.set(l2.slug, twin.id);
+      reused++;
+      continue;
+    }
+    const row = await prisma.category.upsert({
       where: { slug: l2.slug },
       update: {},
       create: {
@@ -100,9 +149,11 @@ async function upsertTaxonomy(): Promise<void> {
         titles: { create: [{ lang: 'lv', title: l2.lv }, { lang: 'en', title: l2.en }] },
       },
     });
-    if (!before) created++;
+    resolved.set(l2.slug, row.id);
+    created++;
   }
-  console.log(`Sub-themes: ${DEMO_L2S.length} checked, ${created} created.`);
+  console.log(`Sub-themes: ${DEMO_L2S.length} checked, ${created} created, ${reused} reused.`);
+  return resolved;
 }
 
 async function upsertUsers(): Promise<Map<string, string>> {
@@ -189,6 +240,11 @@ async function syncGroup(g: DemoGroup, l1Id: string, l2Id: string, ctx: Ctx): Pr
     // Memberships: owner + listed members; other demo memberships go, real ones stay.
     const wanted = [g.owner, ...g.members].map((k) => ctx.userId.get(k) as string);
     await tx.membership.deleteMany({ where: { groupId: group.id, userId: { in: ctx.allDemoIds.filter((id) => !wanted.includes(id)) } } });
+    // One OWNER per group (partial unique index): demote a previous demo owner before the new one takes over.
+    await tx.membership.updateMany({
+      where: { groupId: group.id, role: 'OWNER', userId: { in: ctx.allDemoIds.filter((id) => id !== ownerId) } },
+      data: { role: 'MEMBER' },
+    });
     await tx.membership.upsert({
       where: { userId_groupId: { userId: ownerId, groupId: group.id } }, update: { role: 'OWNER' }, create: { userId: ownerId, groupId: group.id, role: 'OWNER' },
     });
@@ -204,7 +260,7 @@ async function syncGroup(g: DemoGroup, l1Id: string, l2Id: string, ctx: Ctx): Pr
     await tx.event.deleteMany({ where: { groupId: group.id, creatorId: { in: ctx.allDemoIds }, slug: { notIn: slugs } } });
     for (const e of g.events) {
       const slug = slugify(e.title.lv);
-      const startDate = rigaDate(e.inDays, e.hour);
+      const startDate = rigaDate(e.inDays, e.hour, e.weekday);
       const endDate = new Date(startDate.getTime() + (e.hours ?? 2) * 3600_000);
       const fields = {
         location: e.location, city: ctx.cityOk(e.city ?? g.city), isOnline: e.isOnline ?? false,
@@ -247,7 +303,7 @@ async function syncGroup(g: DemoGroup, l1Id: string, l2Id: string, ctx: Ctx): Pr
 
 async function apply(): Promise<void> {
   validate();
-  await upsertTaxonomy();
+  const resolvedL2 = await upsertTaxonomy();
   const userId = await upsertUsers();
   const allDemoIds = [...userId.values()];
 
@@ -261,8 +317,10 @@ async function apply(): Promise<void> {
   };
 
   const counts = { created: 0, updated: 0, skipped: 0 };
+  const covered = new Set<string>();
   for (const g of DEMO_GROUPS) {
-    const l2 = await prisma.category.findUnique({ where: { slug: g.l2 }, select: { id: true, parentId: true, status: true } });
+    const id = resolvedL2.get(g.l2);
+    const l2 = await prisma.category.findUnique({ where: id ? { id } : { slug: g.l2 }, select: { id: true, parentId: true, status: true } });
     if (!l2 || l2.status !== 'ACTIVE' || !l2.parentId) {
       console.warn(`  ! sub-theme "${g.l2}" missing or not active, skipped "${g.slug}"`);
       counts.skipped++;
@@ -270,25 +328,36 @@ async function apply(): Promise<void> {
     }
     const result = await syncGroup(g, l2.parentId, l2.id, { userId, allDemoIds, cityOk });
     counts[result]++;
+    if (result !== 'skipped') covered.add(l2.id);
     console.log(`  ${result.padEnd(7)} ${g.slug}`);
   }
-  // Admin-made ACTIVE sub-themes the data does not name get one generic demo group each.
-  const named = new Set(DEMO_GROUPS.map((g) => g.l2));
-  const unnamed = await prisma.category.findMany({
-    where: { level: 2, status: 'ACTIVE', parentId: { not: null }, slug: { notIn: [...named] } },
-    select: { id: true, slug: true, parentId: true, titles: { select: { lang: true, title: true } } },
-    orderBy: { slug: 'asc' },
-  });
+  // Admin-made ACTIVE sub-themes the data does not cover get one generic demo group each,
+  // unless they only duplicate a covered one of the same theme (that is a merge for an admin, not a gap).
+  const all = await liveL2s();
+  const coveredRows = all.filter((c) => covered.has(c.id));
+  const duplicates: string[] = [];
+  const duplicateIds = new Set<string>();
   const extra: DemoGroup[] = [];
-  for (const [i, c] of unnamed.entries()) {
+  const uncovered = all.filter((c) => c.status === 'ACTIVE' && c.parentId && !covered.has(c.id));
+  const titles = await prisma.categoryTranslation.findMany({ where: { categoryId: { in: uncovered.map((c) => c.id) } }, select: { categoryId: true, lang: true, title: true } });
+  for (const c of uncovered) {
     if (!c.parentId) continue;
-    const title = (lang: string): string => c.titles.find((t) => t.lang === lang)?.title ?? c.slug;
-    const g = fallbackGroup({ slug: c.slug, title: { lv: title('lv'), en: title('en') } }, DEMO_USERS, i, slugify);
+    const twin = coveredRows.find((d) => d.parentId === c.parentId && [...c.keys].some((k) => d.keys.has(k)));
+    if (twin) {
+      duplicateIds.add(c.id);
+      duplicates.push(`${c.slug} (= ${twin.slug})`);
+      continue;
+    }
+    const own = titles.filter((t) => t.categoryId === c.id);
+    const lv = own.find((t) => t.lang === 'lv')?.title ?? own.find((t) => t.lang === 'en')?.title ?? c.slug;
+    const en = own.find((t) => t.lang === 'en')?.title ?? lv;
+    const g = fallbackGroup({ slug: c.slug, title: { lv, en } }, DEMO_USERS, extra.length, slugify);
     const result = await syncGroup(g, c.parentId, c.id, { userId, allDemoIds, cityOk });
     counts[result]++;
     extra.push(g);
     console.log(`  ${result.padEnd(7)} ${g.slug} (fallback for an unnamed sub-theme)`);
   }
+  if (duplicates.length) console.warn(`  ! duplicate sub-themes, no fallback (merge them in admin): ${duplicates.join(', ')}`);
   console.log(`Groups: ${counts.created} created, ${counts.updated} updated, ${counts.skipped} skipped.`);
 
   const stale = await prisma.group.deleteMany({
@@ -304,7 +373,7 @@ async function apply(): Promise<void> {
   const perL2 = new Map<string, number>();
   for (const dg of demoGroups) for (const t of dg.tags) perL2.set(t.id, (perL2.get(t.id) ?? 0) + 1);
   const activeL2 = await prisma.category.findMany({ where: { level: 2, status: 'ACTIVE' }, select: { id: true, slug: true } });
-  const missing = activeL2.filter((c) => !perL2.has(c.id)).map((c) => c.slug);
+  const missing = activeL2.filter((c) => !perL2.has(c.id) && !duplicateIds.has(c.id)).map((c) => c.slug);
   if (missing.length) console.warn(`No demo group: ${missing.join(', ')}`);
   else console.log('Coverage: every active sub-theme has a demo group.');
 

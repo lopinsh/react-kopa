@@ -106,7 +106,7 @@ export const SPORTS_GROUPS: DemoGroup[] = [
           en: 'Twelve kilometres, water along the way and coffee at the end.',
         },
         location: 'Mežaparka estrāde',
-        inDays: 15, hour: 8, hours: 2,
+        weekday: 7, inDays: 15, hour: 8, hours: 2,
         going: u('ledus_toms', 'zeltainais_gatis', 'zvaigznu_marite'),
       },
     ],
@@ -310,7 +310,7 @@ export const SPORTS_GROUPS: DemoGroup[] = [
           en: 'The usual weekly game in two teams. A group photo at the end.',
         },
         location: 'Kāda skolas sporta zāle, Valmieras centrs',
-        inDays: 3, hour: 19,
+        weekday: 3, inDays: 3, hour: 19,
         going: u('mezu_dace', 'lapsu_anna', 'dzirkstele_janis', 'rozes_arturs'),
       },
       {
