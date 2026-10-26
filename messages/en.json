@@ -1094,6 +1094,11 @@
         "contrast": "Heading contrast",
         "headingWeight": "Heading weight",
         "leading": "Line spacing",
+        "emphasis": "Emphasis",
+        "emphasisMedium": "Medium",
+        "emphasisStrong": "Strong",
+        "emphasisStep": "+{value}",
+        "emphasisHint": "How much heavier than its role an emphasised name or count is.",
         "tagCase": {
           "label": "Tags",
           "none": "Normal case",

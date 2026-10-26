@@ -1,30 +1,16 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Minus, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { Select } from '@/components/ui/Input';
 import { THEME_FONTS, TYPE_ROLES, type ThemeFontId, type ThemeStyleKey, type TypeRoleId } from '@/lib/constants';
+import Stepper from './Stepper';
 import { patchType, resolveTypeRoles } from '@/lib/theme/type-edit';
 import { roleFontId } from '@/lib/theme/type-vars';
 import type { ThemeType } from '@/lib/validations/theme';
 
 type Props = { roleId: TypeRoleId; type: ThemeType | undefined; headingFont: ThemeFontId; bodyFont: ThemeFontId; styleKey: ThemeStyleKey; disabled: boolean; onType: (type: ThemeType | undefined) => void };
 type Override = NonNullable<NonNullable<ThemeType['roles']>[TypeRoleId]>;
-
-function Stepper({ label, value, display, canLess, canMore, disabled, onStep }: { label: string; value: string; display: string; canLess: boolean; canMore: boolean; disabled: boolean; onStep: (dir: -1 | 1) => void }) {
-    const t = useTranslations('admin.design.type');
-    return (
-        <div className="flex min-h-11 items-center justify-between gap-3">
-            <span className="text-body text-foreground">{label}</span>
-            <div className="flex items-center gap-2">
-                <Button type="button" variant="secondary" size="sm" aria-label={t('less', { field: label })} disabled={disabled || !canLess} onClick={() => onStep(-1)}><Minus className="size-4" aria-hidden="true" /></Button>
-                <span className="min-w-16 text-center text-body tabular-nums" aria-live="polite" aria-label={display}>{value}</span>
-                <Button type="button" variant="secondary" size="sm" aria-label={t('more', { field: label })} disabled={disabled || !canMore} onClick={() => onStep(1)}><Plus className="size-4" aria-hidden="true" /></Button>
-            </div>
-        </div>
-    );
-}
 
 /** Edits one role: font, size (phone and desktop for fluid roles), weight, reset. Props carry no page state, so the R23 drawer can reuse it. */
 export default function TypeRoleEditor({ roleId, type, headingFont, bodyFont, styleKey, disabled, onType }: Props) {

@@ -7,6 +7,7 @@ import { THEME_FONTS } from '@/lib/constants';
 import { patchType } from '@/lib/theme/type-edit';
 import type { DraftTheme } from '@/hooks/use-theme-draft';
 import type { ThemeType } from '@/lib/validations/theme';
+import EmphasisField from './EmphasisField';
 import SegmentedField from './SegmentedField';
 import TypeRolesPart from './TypeRolesPart';
 
@@ -88,6 +89,10 @@ export default function TypePart({ theme, disabled, onType }: Props) {
                             options={(['compact', 'normal', 'airy'] as const).map((v) => ({ value: v, label: t(`leadingOptions.${v}`) }))}
                             onChange={(v) => patch({ leading: v })}
                         />
+                    </div>
+                    <div className={row}>
+                        <span className="text-body text-foreground">{t('emphasis')}</span>
+                        <EmphasisField type={type} disabled={disabled} onType={onType} />
                     </div>
                     <div className={row}>
                         <span className="text-body text-foreground">{t('tagCase.label')}</span>

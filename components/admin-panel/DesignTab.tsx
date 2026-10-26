@@ -81,7 +81,7 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
                 {role ? (
                     <div className="space-y-1">
                         <p className="text-item text-foreground">{tRoles(role)}</p>
-                        {explained && <TextExplain role={role} explained={explained} type={theme.type} />}
+                        {explained && <TextExplain role={role} explained={explained} type={theme.type} onType={editType} />}
                         <p className="text-meta text-foreground-muted">{t('onPage', { count })}</p>
                         <TypeRoleEditor roleId={role} type={theme.type} headingFont={theme.headingFont} bodyFont={theme.bodyFont} styleKey={theme.styleKey} disabled={false} onType={editType} />
                         <p className="text-meta text-foreground-muted">{t('everywhere')}</p>

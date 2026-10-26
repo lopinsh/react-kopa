@@ -1094,6 +1094,11 @@
         "contrast": "Virsrakstu kontrasts",
         "headingWeight": "Virsrakstu biezums",
         "leading": "Rindstarpa",
+        "emphasis": "Izcēlums",
+        "emphasisMedium": "Vidēji",
+        "emphasisStrong": "Izcelts",
+        "emphasisStep": "+{value}",
+        "emphasisHint": "Par cik treknāks par lomas burtiem ir izcelts vārds vai skaitlis.",
         "tagCase": {
           "label": "Birkas",
           "none": "Parastie burti",
