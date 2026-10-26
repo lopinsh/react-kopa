@@ -48,7 +48,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
   - [x] **R24-1 Explain line** (read-only).
   - [x] **R24-2 Emphasis steps** (`themeTypeSchema.emphasis`, `--emph-*`).
 - [ ] **R26 Unsplash banner picker** (spec `docs/development/specs/R26.md`): one picker in the group wizard (moves to Tēma), settings and event form; curated photos per main category + no image + Unsplash search (server key `UNSPLASH_ACCESS_KEY`), credit under the big pictures, raw URL only for site admins.
-  - [ ] **R26-1 Data and server** (credit columns, Unsplash service and actions, curated list, URL rule).
+  - [x] **R26-1 Data and server** (credit columns, Unsplash service and actions, curated list, URL rule). Built; awaiting review. 7 of 120 draft photos matched, 113 filled from top results: owner reviews the curated list in the picker (R26-2).
   - [ ] **R26-2 Picker and credits** (picker, three forms, credit lines, handbook, `create-wizard-1` baseline).
 
 ## Standing owner rules
