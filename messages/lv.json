@@ -1937,5 +1937,27 @@
     "undo": "Atsaukt",
     "redo": "Atkārtot",
     "placeholder": "Uzraksti kaut ko..."
+  },
+  "banner": {
+    "label": "Attēls",
+    "choose": "Izvēlēties attēlu",
+    "change": "Mainīt",
+    "remove": "Noņemt",
+    "dialogTitle": "Izvēlies attēlu",
+    "none": "Bez attēla",
+    "noneEvent": "Bez sava attēla",
+    "noneHint": "Tēmas krāsa un zīme",
+    "searchHeading": "Meklēt Unsplash",
+    "searchPlaceholder": "Piem., kalni, šahs, koris",
+    "searchButton": "Meklēt",
+    "more": "Rādīt vairāk",
+    "empty": "Nekas neatradās. Pamēģini citu vārdu.",
+    "tileCredit": "Foto: {name}",
+    "credit": "Foto: <who>{name}</who>, <unsplash>Unsplash</unsplash>",
+    "advanced": "Papildu: attēla adrese",
+    "advancedHint": "Ielīmē attēla saiti. Ieteicamais izmērs: 1200 × 400 px.",
+    "eventHint": "Bez sava attēla pasākuma lapā nav attēla; kartītē rādās grupas attēls.",
+    "curatedHeading": "Piedāvātie foto",
+    "urlPlaceholder": "https://images.unsplash.com/..."
   }
 }

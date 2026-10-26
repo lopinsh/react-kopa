@@ -1,6 +1,5 @@
 import 'server-only';
 import { BANNER_IMG_PARAMS, BANNER_THUMB_PARAMS, UNSPLASH_LIMITS as L } from '@/lib/constants';
-import { UNSPLASH_CURATED } from '@/lib/constants/unsplash-curated';
 import { isUnsplashImageUrl, unsplashImageUrl, type UnsplashPick } from '@/lib/banner';
 import { ActionError } from '@/types/actions';
 
@@ -117,15 +116,4 @@ export async function trackDownload(photoId: string): Promise<void> {
     } catch (e) {
         console.warn('Unsplash download ping failed', e);
     }
-}
-
-export function getCurated(l1Slug: string): UnsplashPick[] {
-    if (!Object.hasOwn(UNSPLASH_CURATED, l1Slug)) return [];
-    return UNSPLASH_CURATED[l1Slug as keyof typeof UNSPLASH_CURATED].map((c) => ({
-        id: c.id,
-        url: unsplashImageUrl(c.path, BANNER_IMG_PARAMS),
-        thumb: unsplashImageUrl(c.path, BANNER_THUMB_PARAMS),
-        alt: '',
-        credit: { name: c.name, username: c.username },
-    }));
 }

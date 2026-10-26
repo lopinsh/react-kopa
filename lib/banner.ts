@@ -1,4 +1,5 @@
-import { UNSPLASH_UTM } from '@/lib/constants';
+import { BANNER_IMG_PARAMS, BANNER_THUMB_PARAMS, UNSPLASH_UTM } from '@/lib/constants';
+import { UNSPLASH_CURATED } from '@/lib/constants/unsplash-curated';
 import { ActionError } from '@/types/actions';
 import type { BannerCredit } from '@/lib/validations/banner';
 
@@ -57,4 +58,16 @@ export function bannerCreditColumns(
 
 export function toBannerCredit(name: string | null, user: string | null): BannerCredit {
     return name && user ? { name, username: user } : null;
+}
+
+/** The curated photos of a main category, in the form the picker shows; [] for an unknown slug. */
+export function getCurated(l1Slug: string): UnsplashPick[] {
+    if (!Object.hasOwn(UNSPLASH_CURATED, l1Slug)) return [];
+    return UNSPLASH_CURATED[l1Slug as keyof typeof UNSPLASH_CURATED].map((c) => ({
+        id: c.id,
+        url: unsplashImageUrl(c.path, BANNER_IMG_PARAMS),
+        thumb: unsplashImageUrl(c.path, BANNER_THUMB_PARAMS),
+        alt: '',
+        credit: { name: c.name, username: c.username },
+    }));
 }

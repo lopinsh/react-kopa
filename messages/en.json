@@ -1937,5 +1937,27 @@
     "undo": "Undo",
     "redo": "Redo",
     "placeholder": "Write something..."
+  },
+  "banner": {
+    "label": "Picture",
+    "choose": "Choose a picture",
+    "change": "Change",
+    "remove": "Remove",
+    "dialogTitle": "Choose a picture",
+    "none": "No picture",
+    "noneEvent": "No picture of its own",
+    "noneHint": "The topic's colour and mark",
+    "searchHeading": "Search Unsplash",
+    "searchPlaceholder": "E.g. mountains, chess, choir",
+    "searchButton": "Search",
+    "more": "Show more",
+    "empty": "Nothing found. Try another word.",
+    "tileCredit": "Photo: {name}",
+    "credit": "Photo by <who>{name}</who> on <unsplash>Unsplash</unsplash>",
+    "advanced": "Advanced: image address",
+    "advancedHint": "Paste an image link. Recommended size: 1200 × 400 px.",
+    "eventHint": "Without its own picture the event page shows none; the panel shows the group's.",
+    "curatedHeading": "Suggested photos",
+    "urlPlaceholder": "https://images.unsplash.com/..."
   }
 }
