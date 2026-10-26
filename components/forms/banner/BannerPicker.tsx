@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
@@ -34,6 +34,13 @@ export default function BannerPicker({ id, kind, value, onChange, l1Slug, search
     const [, startTransition] = useTransition();
     const opener = useRef<HTMLButtonElement>(null);
     const hasImage = Boolean(value.url);
+    const wasOpen = useRef(false);
+
+    // Focus returns to the button that opened the dialog, whichever way it closed.
+    useEffect(() => {
+        if (wasOpen.current && !open) opener.current?.focus();
+        wasOpen.current = open;
+    }, [open]);
 
     const pick = (photo: UnsplashPick | null) => {
         setOpen(false);
@@ -56,7 +63,7 @@ export default function BannerPicker({ id, kind, value, onChange, l1Slug, search
             {kind === 'event' && <p className="mt-1 text-meta text-foreground-muted">{t('eventHint')}</p>}
             {!canEditUrl && error && <p className="mt-1 text-meta text-danger">{error}</p>}
             {canEditUrl && <AdvancedUrlField id={`${id}-url`} value={value.url ?? ''} onChange={(url) => onChange({ url: url || null, credit: null })} error={error} />}
-            {open && <BannerPickerDialog kind={kind} l1Slug={l1Slug} searchEnabled={searchEnabled} selectedUrl={value.url} onPick={pick} onClose={() => { setOpen(false); opener.current?.focus(); }} />}
+            {open && <BannerPickerDialog kind={kind} l1Slug={l1Slug} searchEnabled={searchEnabled} selectedUrl={value.url} onPick={pick} onClose={() => setOpen(false)} />}
         </div>
     );
 }
