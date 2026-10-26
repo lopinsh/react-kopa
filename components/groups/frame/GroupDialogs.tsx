@@ -8,26 +8,24 @@ import { useGroupContext } from '@/components/providers/GroupProvider';
 
 const ContactForm = dynamic(() => import('@/components/groups/contact/ContactForm'), { ssr: false });
 const ReportModal = dynamic(() => import('@/components/modals/ReportModal'), { ssr: false });
-const HideGroupModal = dynamic(() => import('@/components/modals/HideGroupModal'), { ssr: false });
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
 
-type Dialog = 'join' | 'team' | 'report' | 'hide' | null;
+type Dialog = 'join' | 'team' | 'report' | null;
 
 interface GroupDialogs {
     openContact: () => void;
     /** The trigger button of the row that opened a pop-up gets focus back when it closes. */
-    openHide: (trigger: HTMLElement | null) => void;
     openReport: (trigger: HTMLElement | null) => void;
     openWriteToTeam: (trigger: HTMLElement | null) => void;
 }
 
 const noop = () => undefined;
-const GroupDialogsContext = createContext<GroupDialogs>({ openContact: noop, openHide: noop, openReport: noop, openWriteToTeam: noop });
+const GroupDialogsContext = createContext<GroupDialogs>({ openContact: noop, openReport: noop, openWriteToTeam: noop });
 
 export const useGroupDialogs = () => useContext(GroupDialogsContext);
 
 /**
- * Owns the group page's pop-ups (contact, write to the team, report, hide) and the sign-in resume (`join_group`, `report_group`) once, so the
+ * Owns the group page's pop-ups (contact, write to the team, report) and the sign-in resume (`join_group`, `report_group`) once, so the
  * banner's "Sazināties" and the rows in the left menu (desktop column and phone drawer) open the same ones.
  */
 export function GroupDialogsProvider({ children }: { children: ReactNode }) {
@@ -60,7 +58,6 @@ export function GroupDialogsProvider({ children }: { children: ReactNode }) {
 
     const value = useMemo<GroupDialogs>(() => ({
         openContact,
-        openHide: (trigger) => { returnRef.current = trigger; setDialog('hide'); },
         openReport: (trigger) => { returnRef.current = trigger; gateAction(() => setDialog('report'), 'report_group'); },
         openWriteToTeam: (trigger) => { returnRef.current = trigger; setDialog('team'); },
     }), [openContact, gateAction]);
@@ -72,7 +69,6 @@ export function GroupDialogsProvider({ children }: { children: ReactNode }) {
             {(dialog === 'join' || dialog === 'team') && (
                 <ContactForm onClose={close} groupId={g.id} groupName={g.name} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? returnRef : undefined} />
             )}
-            {dialog === 'hide' && <HideGroupModal isOpen onClose={close} groupId={g.id} returnFocusRef={returnRef} />}
             {dialog === 'report' && <ReportModal onClose={close} targetGroupId={g.id} returnFocusRef={returnRef} />}
             {isModalOpen && <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />}
         </GroupDialogsContext.Provider>

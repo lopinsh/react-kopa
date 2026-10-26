@@ -1841,10 +1841,8 @@
     "transferDone": "Done — {name} is the new owner."
   },
   "adminTools": {
-    "label": "Admin tools",
     "fixCategorization": "Fix topic",
-    "editGroup": "Edit group",
-    "moderationLog": "Moderation log for this group"
+    "editGroup": "Edit group"
   },
   "feedbackMode": {
     "noNotes": "No notes on this page yet. Use the comment button on an outlined element to add one.",

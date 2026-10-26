@@ -1841,10 +1841,8 @@
     "transferDone": "Grupa nodota — {name} ir jaunais īpašnieks."
   },
   "adminTools": {
-    "label": "Administratora rīki",
     "fixCategorization": "Labot tēmu",
-    "editGroup": "Labot grupu",
-    "moderationLog": "Šīs grupas moderācijas žurnāls"
+    "editGroup": "Labot grupu"
   },
   "feedbackMode": {
     "noNotes": "Šajā lapā vēl nav piezīmju. Lai pievienotu, izmanto komentāra pogu pie iezīmēta elementa.",
