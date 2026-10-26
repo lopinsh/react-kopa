@@ -20,11 +20,11 @@ import { useRolePicker } from './useRolePicker';
 const isRoleId = (v: string | null): v is TypeRoleId => TYPE_ROLES.some((r) => r.id === v);
 
 /** Dizains: click a text on the page (or choose a role) and edit that type role in the draft theme. */
-export default function DesignTab({ paused, selection, onSelect, onPicked, designTheme }: PanelTabProps & { designTheme: ThemeInput }) {
+export default function DesignTab({ paused, selection, onSelect, onPicked, designTheme, draftActive }: PanelTabProps & { designTheme: ThemeInput; draftActive: boolean }) {
     const t = useTranslations('admin.panel.design');
     const tRoles = useTranslations('admin.design.type.roles');
     const pathname = usePathname();
-    const { theme, busy, saves, editType } = useDraftSave(designTheme);
+    const { theme, busy, saves, resetSaves, editType } = useDraftSave(designTheme);
     const { isPending, publish, discard } = useDraftActions();
     const [variant, setVariant] = useState<TypeVariant | null>(null);
     const [count, setCount] = useState(0);
@@ -48,6 +48,9 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
         const id = window.setTimeout(() => setCount(utility ? document.querySelectorAll(`#content .${utility}`).length : 0), 150);
         return () => window.clearTimeout(id);
     }, [role, pathname]);
+
+    // The draft is gone (published or discarded): the counter starts again.
+    useEffect(() => { if (!draftActive) resetSaves(); }, [draftActive, resetSaves]);
 
     const tryPublish = () => {
         const sizes = resolveTypeRoles(theme.type, theme.headingFont, theme.bodyFont, theme.styleKey);
@@ -80,9 +83,9 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
                 <Link href="/admin/design?part=type" className={TEXT_LINK_CLASS}>{t('allType')} →</Link>
             </div>
             <div className="flex items-center gap-2 border-t border-border px-4 py-2 text-body-sm">
-                <span className="min-w-0 flex-1 truncate text-foreground-muted" aria-live="polite">{t('changes', { count: saves })}</span>
-                <button type="button" disabled={isPending || busy} onClick={tryPublish} className={buttonClass('primary', '', 'sm')}>{t('publish')}</button>
-                <button type="button" disabled={isPending || busy} onClick={discard} className={buttonClass('quiet', '', 'sm')}>{t('discard')}</button>
+                <span className="min-w-0 flex-1 truncate text-foreground-muted" aria-live="polite">{t('changes', { count: draftActive ? saves : 0 })}</span>
+                <button type="button" disabled={!draftActive || isPending || busy} onClick={tryPublish} className={buttonClass('primary', '', 'sm')}>{t('publish')}</button>
+                <button type="button" disabled={!draftActive || isPending || busy} onClick={discard} className={buttonClass('quiet', '', 'sm')}>{t('discard')}</button>
             </div>
             <ConfirmDialog
                 isOpen={warn}

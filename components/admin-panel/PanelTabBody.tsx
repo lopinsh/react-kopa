@@ -17,9 +17,9 @@ export type PanelTabProps = {
 };
 
 /** The body of the open tab. */
-export default function PanelTabBody({ tab, designTheme, ...props }: PanelTabProps & { tab: AdminPanelTab; designTheme: ThemeInput | null }) {
+export default function PanelTabBody({ tab, designTheme, draftActive, ...props }: PanelTabProps & { tab: AdminPanelTab; designTheme: ThemeInput | null; draftActive: boolean }) {
     if (tab === 'feedback') return <FeedbackTab {...props} />;
     if (tab === 'translate') return <TranslateTab {...props} />;
-    if (tab === 'design' && designTheme) return <DesignTab {...props} designTheme={designTheme} />;
+    if (tab === 'design' && designTheme) return <DesignTab {...props} designTheme={designTheme} draftActive={draftActive} />;
     return <div data-tab={tab} className="min-h-0 flex-1" />;
 }

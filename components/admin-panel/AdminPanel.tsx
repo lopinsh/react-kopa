@@ -148,7 +148,7 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
                 <PanelTabs tabs={TABS} value={tab} onChange={selectTab} />
                 <p className="px-4 pt-2 text-meta text-foreground-muted">{t(`hint.${tab}`)}</p>
                 <div role="tabpanel" id={`admin-panel-body-${tab}`} aria-labelledby={`admin-panel-tab-${tab}`} className="flex min-h-0 flex-1 flex-col">
-                    <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} />
+                    <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} draftActive={draftActive} />
                 </div>
                 {draftActive && tab !== 'design' && <PanelDraftNote />}
             </section>

@@ -62,5 +62,7 @@ export function useDraftSave(server: ThemeInput) {
 
     useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-    return { theme, busy, saves, editType };
+    const resetSaves = useCallback(() => setSaves(0), []);
+
+    return { theme, busy, saves, resetSaves, editType };
 }

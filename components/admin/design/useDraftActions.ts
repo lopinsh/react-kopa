@@ -1,6 +1,6 @@
 'use client';
 
-import { useTransition } from 'react';
+import { useRef, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { discardPreviewTheme, publishPreviewTheme } from '@/actions/theme-actions';
@@ -14,13 +14,19 @@ export function useDraftActions() {
     const { success: toastSuccess, error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
 
+    const busy = useRef(false);
+
     const run = (action: typeof publishPreviewTheme, doneKey: 'published' | 'discarded') => {
-        if (isPending) return;
+        if (isPending || busy.current) return;
+        busy.current = true;
         startTransition(async () => {
-            const res = await action();
+            let res: Awaited<ReturnType<typeof action>>;
+            try { res = await action(); } finally { busy.current = false; }
             if (res.success) {
                 toastSuccess(t(doneKey));
                 router.refresh();
+            } else if (res.error === 'NOT_FOUND') {
+                router.refresh(); // the draft is already gone: show the current state, no error
             } else {
                 toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
             }
