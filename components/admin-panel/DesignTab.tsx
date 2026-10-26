@@ -54,8 +54,8 @@ export default function DesignTab({ paused, selection, onSelect, onPicked, desig
 
     // The explain line is read again when the refreshed theme commits; a replaced node drops it.
     useEffect(() => {
-        const id = window.requestAnimationFrame(() => setExplained(picked?.target.isConnected ? explainText(picked.target, picked.el, picked.utility) : null));
-        return () => window.cancelAnimationFrame(id);
+        const id = window.setTimeout(() => setExplained(picked?.target.isConnected ? explainText(picked.target, picked.el, picked.utility) : null), 0);
+        return () => window.clearTimeout(id);
     },[picked, designTheme]);
 
     // The draft is gone (published or discarded): the counter starts again.
