@@ -67,3 +67,7 @@ test.ts
 # screen review captures (scripts/screen-review)
 /screen-review/
 /tests/visual/.auth.json
+
+# compiled demo script (Dockerfile builder only)
+/prisma/demo.js
+/prisma/demo-data/*.js

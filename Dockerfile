@@ -21,6 +21,9 @@ RUN npx prisma generate
 # Compile seed script for production
 RUN npx tsc prisma/seed.ts --esModuleInterop --target ES2022 --module CommonJS
 
+# Compile the demo-content script (run by hand through the Demo content workflow)
+RUN npx tsc prisma/demo.ts --esModuleInterop --target ES2022 --module CommonJS
+
 # Compile the set-owner script (run once by hand after deploy, see docs/execution_handoff.md)
 RUN npx tsc scripts/set-owner.ts --esModuleInterop --target ES2022 --module CommonJS --outDir /app/dist-scripts
 

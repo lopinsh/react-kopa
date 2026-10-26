@@ -19,6 +19,7 @@
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",
+    "db:demo": "tsx prisma/demo.ts",
     "feedback": "tsx scripts/feedback.ts",
     "set-owner": "tsx scripts/set-owner.ts",
     "test:smoke": "playwright test -c playwright.smoke.config.ts",

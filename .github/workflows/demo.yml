@@ -1,0 +1,37 @@
+name: Demo content
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'apply adds or refreshes the demo groups; remove deletes them all'
+        type: choice
+        options:
+          - apply
+          - remove
+        default: apply
+
+jobs:
+  demo:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Run demo script
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          ARGS=""
+          if [ "$MODE" = "remove" ]; then ARGS="--remove"; fi
+          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "c=\$(docker ps --filter 'name=^ejam-kopa-app-' --format '{{.Names}}' | head -n1); test -n \"\$c\" && docker exec \"\$c\" node prisma/demo.js $ARGS"
