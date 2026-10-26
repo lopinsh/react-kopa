@@ -40,7 +40,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
   - [ ] **C Rādīt vairāk:** loads only the next 24 and appends them instead of re-rendering the page with `limit` up to 480 (own small spec).
   - [ ] **Caching for signed-out visitors:** the only lever for first-visit throughput; the page reads cookies (rail), sign-in and filters, so it needs a split of the per-viewer parts first.
 - [x] **D1 Demo content** (spec `docs/development/specs/D1.md`, `npm run db:demo`, workflow *Demo content*): 55 imaginary groups across every sub-theme, 15 demo users, 20 new sub-themes; sub-themes the data does not name (admin-made) get a generic fallback group at run time. Built 26 Oct (D1-1 e66b9b6, D1-2 b55dff7, D1-3); double run gives identical totals, real members and attendance on demo groups survive a re-run. Review 0b74c5e: equivalent sub-themes are reused, not duplicated; weekday-named events land on their day. Pushed, live.
-- [ ] **R25 Group menu, Grupa tab, shield menu** (spec `docs/development/specs/R25.md`)
+- [x] **R25 Group menu, Grupa tab, shield menu** (spec `docs/development/specs/R25.md`): reviewed, pushed, live.
   - [x] **R25-1 Left menu** (Dalīties, Tava dalība, quiet Ziņot).
   - [x] **R25-2 Grupa tab** (bridge and context, `getGroupPanelData`, the Grupa tab with hide/restore; the site-admin rows and the hide dialog left the group menu).
   - [x] **R25-3 Shield menu** (queues with counts read on open, "Šī grupa" section; no baseline changed).

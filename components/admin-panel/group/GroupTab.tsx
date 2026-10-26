@@ -18,7 +18,8 @@ export default function GroupTab() {
     const locale = useLocale();
     const group = useAdminGroup();
     const [data, setData] = useState<GroupPanelData | null>(null);
-    const [failed, setFailed] = useState(false);
+    // The id whose read failed: a failure for one group never shows on the next.
+    const [failedId, setFailedId] = useState<string | null>(null);
     const [attempt, setAttempt] = useState(0);
     const reasonRef = useRef<HTMLTextAreaElement>(null);
     const restoreRef = useRef<HTMLButtonElement>(null);
@@ -31,7 +32,7 @@ export default function GroupTab() {
         let stale = false;
         void getGroupPanelData(groupId, locale).then((res) => {
             if (stale) return;
-            setFailed(!res.success);
+            setFailedId(res.success ? null : groupId);
             if (res.success && res.data) setData(res.data);
         });
         return () => { stale = true; };
@@ -53,7 +54,7 @@ export default function GroupTab() {
     }, [current, focusRequested]);
 
     if (!group) return <p className="px-4 py-3 text-meta text-foreground-muted">{t('none')}</p>;
-    if (failed && !current) {
+    if (failedId === groupId && !current) {
         return (
             <div className="flex flex-col items-start gap-2 px-4 py-3">
                 <p className="text-meta text-foreground-muted">{t('loadFailed')}</p>
