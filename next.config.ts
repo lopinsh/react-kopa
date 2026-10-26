@@ -55,6 +55,8 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // Browsers ask for /favicon.ico by habit; the one icon is app/icon.svg.
+      { source: '/favicon.ico', destination: '/icon.svg', permanent: true },
       // The redesign page is the design handbook page (rules, then the approved drawings).
       {
         source: '/:locale(lv|en)/admin/handbook/redesign',
