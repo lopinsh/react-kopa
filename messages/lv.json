@@ -388,6 +388,8 @@
     "cancel": "Atcelt",
     "hiddenBanner": "Paslēpta no publiskas piekļuves: {reason}",
     "restore": "Atjaunot grupu",
+    "hiddenToast": "Grupa paslēpta",
+    "restoredToast": "Grupa atjaunota",
     "logTitle": "Moderācijas žurnāls",
     "logEmpty": "Administratoru darbību vēl nav.",
     "logWhen": "Kad",
@@ -1225,12 +1227,40 @@
       "tabs": {
         "feedback": "Atsauksmes",
         "translate": "Tulkot",
-        "design": "Dizains"
+        "design": "Dizains",
+        "group": "Grupa"
       },
       "hint": {
         "feedback": "Noklikšķini lapā, lai pievienotu piezīmi.",
         "translate": "Iezīmētie teksti ir tulkojami.",
-        "design": "Noklikšķini uz teksta, lai mainītu tā lomu."
+        "design": "Noklikšķini uz teksta, lai mainītu tā lomu.",
+        "group": "Šīs grupas stāvoklis un moderācija."
+      },
+      "group": {
+        "none": "Atver grupas lapu, lai redzētu tās rīkus.",
+        "visible": "Redzama",
+        "hidden": "Paslēpta",
+        "hiddenMeta": "{who} · {when}",
+        "unknownAdmin": "nezināms administrators",
+        "facts": {
+          "owner": "Īpašnieks",
+          "created": "Izveidota",
+          "members": "Biedri",
+          "access": "Piekļuve",
+          "openReports": "Atvērti ziņojumi",
+          "public": "Publiska",
+          "private": "Tikai biedriem"
+        },
+        "hideNote": "Īpašnieks saņems paziņojumu ar iemeslu. Grupu vēlāk var atjaunot.",
+        "ownGroup": "Šī ir tava grupa: to paslēpt nevar.",
+        "deleteWhere": "Dzēst var Administrēšanā > Moderācija.",
+        "reportsTitle": "Ziņojumi par šo grupu",
+        "reportsNone": "Atvērtu ziņojumu nav.",
+        "reportsAll": "Visi ziņojumi",
+        "logNone": "Ierakstu vēl nav.",
+        "logAll": "Viss žurnāls",
+        "loadFailed": "Neizdevās ielādēt.",
+        "retry": "Mēģināt vēlreiz"
       },
       "pause": "Pauze",
       "paused": "Pauzē: klikšķi strādā",

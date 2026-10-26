@@ -6,6 +6,7 @@ import { PanelRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { setAdminPanel } from '@/actions/admin-panel-actions';
+import { useAdminGroup } from '@/components/providers/AdminGroupContext';
 import { useAdminPanelTab } from '@/components/providers/AdminPanelContext';
 import { useToast } from '@/hooks/use-toast';
 import { readLastTab } from './panel-storage';
@@ -21,15 +22,19 @@ export default function AdminPanelToggle({ className, onToggle }: Props) {
     const tNav = useTranslations('nav');
     const tErrors = useTranslations('errors');
     const active = useAdminPanelTab() !== null;
+    const onGroupPage = useAdminGroup() !== null;
     const router = useRouter();
     const { error: toastError } = useToast();
     const [isPending, startTransition] = useTransition();
+
+    // The Grupa tab only makes sense on a group page: elsewhere the panel opens on Atsauksmes.
+    const lastTab = () => { const last = readLastTab(); return last === 'group' && !onGroupPage ? 'feedback' : last; };
 
     const handleClick = () => {
         if (isPending) return;
         onToggle?.();
         startTransition(async () => {
-            const res = await setAdminPanel(active ? null : readLastTab());
+            const res = await setAdminPanel(active ? null : lastTab());
             if (res.success) router.refresh();
             else toastError(tErrors.has(res.error) ? tErrors(res.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
         });

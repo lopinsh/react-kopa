@@ -5,6 +5,7 @@ import type { ThemeInput } from '@/lib/validations/theme';
 import DesignTab from './DesignTab';
 import FeedbackTab from './FeedbackTab';
 import TranslateTab from './TranslateTab';
+import GroupTab from './group/GroupTab';
 
 export type PanelTabProps = {
     /** Pause (Atsauksmes, Dizains): page clicks work normally. */
@@ -20,6 +21,7 @@ export type PanelTabProps = {
 export default function PanelTabBody({ tab, designTheme, draftActive, ...props }: PanelTabProps & { tab: AdminPanelTab; designTheme: ThemeInput | null; draftActive: boolean }) {
     if (tab === 'feedback') return <FeedbackTab {...props} />;
     if (tab === 'translate') return <TranslateTab {...props} />;
+    if (tab === 'group') return <GroupTab />;
     if (tab === 'design' && designTheme) return <DesignTab {...props} designTheme={designTheme} draftActive={draftActive} />;
     return <div data-tab={tab} className="min-h-0 flex-1" />;
 }

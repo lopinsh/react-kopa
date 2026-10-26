@@ -388,6 +388,8 @@
     "cancel": "Cancel",
     "hiddenBanner": "Hidden from the public: {reason}",
     "restore": "Restore group",
+    "hiddenToast": "Group hidden",
+    "restoredToast": "Group restored",
     "logTitle": "Moderation log",
     "logEmpty": "No admin actions yet.",
     "logWhen": "When",
@@ -1225,12 +1227,40 @@
       "tabs": {
         "feedback": "Feedback",
         "translate": "Translate",
-        "design": "Design"
+        "design": "Design",
+        "group": "Group"
       },
       "hint": {
         "feedback": "Click the page to add a note.",
         "translate": "Marked texts can be translated.",
-        "design": "Click a text to change its role."
+        "design": "Click a text to change its role.",
+        "group": "This group's status and moderation."
+      },
+      "group": {
+        "none": "Open a group page to see its tools.",
+        "visible": "Visible",
+        "hidden": "Hidden",
+        "hiddenMeta": "{who} · {when}",
+        "unknownAdmin": "unknown admin",
+        "facts": {
+          "owner": "Owner",
+          "created": "Created",
+          "members": "Members",
+          "access": "Access",
+          "openReports": "Open reports",
+          "public": "Public",
+          "private": "Members only"
+        },
+        "hideNote": "The owner gets a notification with the reason. The group can be restored later.",
+        "ownGroup": "This is your group: you can't hide it.",
+        "deleteWhere": "Deleting is in Admin > Moderation.",
+        "reportsTitle": "Reports on this group",
+        "reportsNone": "No open reports.",
+        "reportsAll": "All reports",
+        "logNone": "No entries yet.",
+        "logAll": "Full log",
+        "loadFailed": "Couldn't load.",
+        "retry": "Try again"
       },
       "pause": "Pause",
       "paused": "Paused: clicks work",

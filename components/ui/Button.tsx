@@ -1,4 +1,4 @@
-import type { ComponentProps, ComponentPropsWithoutRef } from 'react';
+import type { ComponentProps, ComponentPropsWithRef } from 'react';
 import { clsx } from 'clsx';
 import { UI } from '@/lib/constants';
 
@@ -32,7 +32,7 @@ export function buttonClass(variant: ButtonVariant = 'primary', className?: stri
 }
 
 /** The site's standard button (pill): one primary action in the site colour, quieter secondary and quiet, red for things that can't be undone. */
-export default function Button({ variant = 'primary', size = 'md', className, type = 'button', ...props }: ComponentPropsWithoutRef<'button'> & { variant?: ButtonVariant; size?: ButtonSize }) {
+export default function Button({ variant = 'primary', size = 'md', className, type = 'button', ...props }: ComponentPropsWithRef<'button'> & { variant?: ButtonVariant; size?: ButtonSize }) {
     return <button type={type} data-ui={NAMES[variant]} className={buttonClass(variant, className, size)} {...props} />;
 }
 

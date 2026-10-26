@@ -1,4 +1,4 @@
-import { ADMIN_PANEL_STORAGE, isAdminPanelTab, type AdminPanelTab } from '@/lib/constants';
+import { ADMIN_PANEL_STORAGE, isAdminPanelFocus, isAdminPanelTab, type AdminPanelFocus, type AdminPanelTab } from '@/lib/constants';
 
 export interface PanelPlace {
     x: number;
@@ -52,3 +52,32 @@ export function readLastTab(): AdminPanelTab {
 }
 
 export const writeLastTab = (tab: AdminPanelTab): void => write(ADMIN_PANEL_STORAGE.lastTab, tab);
+
+/** Asks the Grupa tab to focus something when it shows (a one-shot in sessionStorage, plus an event for a tab that is already open). */
+export function requestPanelFocus(target: AdminPanelFocus): void {
+    try {
+        window.sessionStorage.setItem(ADMIN_PANEL_STORAGE.focus, target);
+    } catch {
+        // Blocked site data: the tab simply opens without a focus request.
+    }
+    window.dispatchEvent(new Event('ek:admin-panel-focus'));
+}
+
+export function takePanelFocus(): AdminPanelFocus | null {
+    try {
+        const v = window.sessionStorage.getItem(ADMIN_PANEL_STORAGE.focus);
+        window.sessionStorage.removeItem(ADMIN_PANEL_STORAGE.focus);
+        return isAdminPanelFocus(v) ? v : null;
+    } catch {
+        return null;
+    }
+}
+
+/** True while a focus request waits (read without taking it). */
+export function hasPanelFocus(): boolean {
+    try {
+        return isAdminPanelFocus(window.sessionStorage.getItem(ADMIN_PANEL_STORAGE.focus));
+    } catch {
+        return false;
+    }
+}

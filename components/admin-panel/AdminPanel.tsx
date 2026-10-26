@@ -6,7 +6,8 @@ import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { setAdminPanel } from '@/actions/admin-panel-actions';
 import { useToast } from '@/hooks/use-toast';
-import { type AdminPanelTab } from '@/lib/constants';
+import { ADMIN_PANEL_TABS, type AdminPanelTab } from '@/lib/constants';
+import { useAdminGroup } from '@/components/providers/AdminGroupContext';
 import type { ThemeInput } from '@/lib/validations/theme';
 import PanelTopBar from './PanelTopBar';
 import PanelTabs from './PanelTabs';
@@ -16,14 +17,13 @@ import { usePanelPlace } from './usePanelPlace';
 import { useIsPhone, usePanelSheet } from './usePanelSheet';
 import { usePanelEscape } from './usePanelEscape';
 import { writeLastTab } from './panel-storage';
+import { useSheetOnFocusRequest } from './useSheetOnFocusRequest';
 
 /*
  * Layers (z): bottom nav 40, Overlay (slide-overs, dialogs) 50, header and menus 50, element picker 54, pins 55,
  * THIS PANEL 58, search overlay and DiscardGuard 60, feedback dialog / note card / translation editor 70, toasts 100.
  * It sits above slide-overs (an admin annotates inside them) and below the dialogs it opens.
  */
-
-const TABS: readonly AdminPanelTab[] = ['feedback', 'translate', 'design'];
 
 type Props = { tab: AdminPanelTab; draftActive: boolean; designTheme: ThemeInput | null };
 
@@ -37,6 +37,7 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
     const phone = useIsPhone();
     const { place, dragging, edgeHint, setDocked, barProps } = usePanelPlace();
     const sheet = usePanelSheet();
+    const inGroup = useAdminGroup() !== null;
     const [tab, setTab] = useState(serverTab);
     const [paused, setPaused] = useState(false);
     const [selection, setSelection] = useState<string | null>(null);
@@ -45,6 +46,9 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
         setPrevServerTab(serverTab);
         setTab(serverTab);
     }
+
+    // Grupa is listed on group pages, and off them only while it is the open tab (the selection never vanishes under the admin).
+    const tabs: readonly AdminPanelTab[] = inGroup || tab === 'group' ? ADMIN_PANEL_TABS : ADMIN_PANEL_TABS.filter((x) => x !== 'group');
 
     const showError = useCallback((code: string) => toastError(tErrors.has(code) ? tErrors(code as 'ACTION_FAILED') : tErrors('ACTION_FAILED')), [tErrors, toastError]);
 
@@ -79,6 +83,8 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
         const top = main.scrollTop + el.getBoundingClientRect().top - main.getBoundingClientRect().top - main.clientHeight * 0.2;
         main.scrollTo({ top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     };
+
+    useSheetOnFocusRequest(phone && tab === 'group', sheet.size, sheet.commit);
 
     const handleEscape = usePanelEscape({ rootRef, hasSelection: selection !== null, clearSelection: () => setSelection(null), close: () => void choose(null) });
 
@@ -137,7 +143,7 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
                 <PanelTopBar
                     phone={phone}
                     docked={docked}
-                    showPause={tab !== 'translate'}
+                    showPause={tab !== 'translate' && tab !== 'group'}
                     paused={paused}
                     onPause={() => setPaused((p) => !p)}
                     onDockToggle={() => setDocked(!place.docked)}
@@ -145,7 +151,7 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
                     dragProps={barProps}
                     handleProps={sheet.handleProps}
                 />
-                <PanelTabs tabs={TABS} value={tab} onChange={selectTab} />
+                <PanelTabs tabs={tabs} value={tab} onChange={selectTab} />
                 <p className="px-4 pt-2 text-meta text-foreground-muted">{t(`hint.${tab}`)}</p>
                 <div role="tabpanel" id={`admin-panel-body-${tab}`} aria-labelledby={`admin-panel-tab-${tab}`} className="flex min-h-0 flex-1 flex-col">
                     <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} draftActive={draftActive} />
