@@ -9,6 +9,7 @@
  */
 import { PrismaClient } from '@prisma/client';
 import { ABOUT_TITLE, DEMO_CREATE_PARAGRAPH, DEMO_EMAIL_DOMAIN, DEMO_GROUPS, DEMO_L2S, DEMO_NOTICE, DEMO_USERS } from './demo-data';
+import { fallbackGroup } from './demo-data/fallback';
 import type { DemoGroup, DemoUser } from './demo-data';
 
 const prisma = new PrismaClient();
@@ -271,10 +272,27 @@ async function apply(): Promise<void> {
     counts[result]++;
     console.log(`  ${result.padEnd(7)} ${g.slug}`);
   }
+  // Admin-made ACTIVE sub-themes the data does not name get one generic demo group each.
+  const named = new Set(DEMO_GROUPS.map((g) => g.l2));
+  const unnamed = await prisma.category.findMany({
+    where: { level: 2, status: 'ACTIVE', parentId: { not: null }, slug: { notIn: [...named] } },
+    select: { id: true, slug: true, parentId: true, titles: { select: { lang: true, title: true } } },
+    orderBy: { slug: 'asc' },
+  });
+  const extra: DemoGroup[] = [];
+  for (const [i, c] of unnamed.entries()) {
+    if (!c.parentId) continue;
+    const title = (lang: string): string => c.titles.find((t) => t.lang === lang)?.title ?? c.slug;
+    const g = fallbackGroup({ slug: c.slug, title: { lv: title('lv'), en: title('en') } }, DEMO_USERS, i, slugify);
+    const result = await syncGroup(g, c.parentId, c.id, { userId, allDemoIds, cityOk });
+    counts[result]++;
+    extra.push(g);
+    console.log(`  ${result.padEnd(7)} ${g.slug} (fallback for an unnamed sub-theme)`);
+  }
   console.log(`Groups: ${counts.created} created, ${counts.updated} updated, ${counts.skipped} skipped.`);
 
   const stale = await prisma.group.deleteMany({
-    where: { members: { some: { role: 'OWNER', userId: { in: allDemoIds } } }, slug: { notIn: DEMO_GROUPS.map((g) => g.slug) } },
+    where: { members: { some: { role: 'OWNER', userId: { in: allDemoIds } } }, slug: { notIn: [...DEMO_GROUPS, ...extra].map((g) => g.slug) } },
   });
   if (stale.count) console.log(`Removed ${stale.count} demo groups no longer in the data.`);
 
