@@ -45,6 +45,7 @@ export function useEventForm({ groupId, groupSlug, l1Slug, event, waitingCount }
             isRecurring: false,
             recurrencePattern: null,
             bannerImage: event?.bannerImage ?? '',
+            bannerCredit: event?.bannerCredit ?? null,
         },
         mode: 'onChange',
     });

@@ -102,6 +102,7 @@ export default async function GroupSettingsPage(props: {
             websiteLink: group.socialLinks.website,
             instagramLink: group.socialLinks.instagram,
             bannerImage: group.bannerImage,
+            bannerCredit: group.bannerCredit,
             tags: group.tags || [],
             slug: group.slug,
             l1Slug: group.category.l1Slug,

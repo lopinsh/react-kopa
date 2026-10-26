@@ -12,6 +12,7 @@ import { useEventForm } from '@/components/forms/event/useEventForm';
 import { langRecord, type TextLang } from '@/lib/translations';
 import { isEventTextFilled, type EventFormData } from '@/lib/validations/event';
 import type { EventVisibility, EventJoinModeValue } from '@/lib/constants';
+import type { BannerCredit } from '@/lib/validations/banner';
 
 /** An existing event, for the edit page. Dates are ISO strings (they cross the server/client border). */
 export type EventToEdit = {
@@ -28,6 +29,7 @@ export type EventToEdit = {
     visibility: EventVisibility;
     joinMode: EventJoinModeValue;
     bannerImage: string | null;
+    bannerCredit: BannerCredit;
 };
 
 type Props = {

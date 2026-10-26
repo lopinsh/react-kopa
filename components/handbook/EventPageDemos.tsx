@@ -16,7 +16,7 @@ export default function EventPageDemos({ row, text }: { row: EventRowData; text:
         id: 'sample-event', slug: row.slug, title: row.title, titleLang: row.titleLang,
         description: `<p>${text}</p>`, descriptionLang: 'lv', instructions: '<p>Tiekamies pie ieejas.</p>', instructionsLang: 'lv', instructionsLocked: false,
         startDate: row.startDate, endDate: new Date(row.startDate.getTime() + 2 * 3600_000), timing: 'upcoming',
-        city: row.city, isOnline: false, location: 'Rožu iela 5', onlineLinkLocked: false, image: 'https://picsum.photos/seed/event-page/1200/675',
+        city: row.city, isOnline: false, location: 'Rožu iela 5', onlineLinkLocked: false, image: 'https://picsum.photos/seed/event-page/1200/675', imageCredit: null,
         membersOnly: false, joinMode: 'OPEN', isFull: false, maxParticipants: 20,
         category: row.category, subCategories: row.subCategories, group: { ...row.group, city: row.city },
         join: { eventId: 'sample-event', mode: 'OPEN', isFull: false, ended: false, myStatus: null, canManage: false },

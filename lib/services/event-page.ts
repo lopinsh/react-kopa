@@ -6,6 +6,8 @@ import { resolveEventText, type TextLang } from '@/lib/translations';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { subCategoryTitles } from './group-card';
 import { EVENT_ROW_INCLUDE } from './event-row';
+import { toBannerCredit } from '@/lib/banner';
+import type { BannerCredit } from '@/lib/validations/banner';
 import type { EventJoinView, Face } from './event-panel';
 
 /** A person on the organiser's lists. */
@@ -34,6 +36,7 @@ export interface EventPageData {
     onlineLinkLocked: boolean;
     /** The event's own image only; the group's image is in the banner. */
     image: string | null;
+    imageCredit: BannerCredit;
     membersOnly: boolean;
     joinMode: EventJoinModeValue;
     isFull: boolean;
@@ -99,6 +102,7 @@ export function toEventPage(e: EventPageSource, lang: TextLang, viewer: EventPag
         location: onlineLinkLocked ? null : e.location,
         onlineLinkLocked,
         image: e.bannerImage,
+        imageCredit: toBannerCredit(e.bannerCreditName, e.bannerCreditUser),
         membersOnly: e.visibility === 'MEMBERS_ONLY',
         joinMode: e.joinMode,
         isFull: e.isFull,

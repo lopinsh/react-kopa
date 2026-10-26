@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@prisma/client';
 import { EventFormValues } from '@/lib/validations/event';
 import { ActionError } from '@/types/actions';
+import { assertBannerAllowed, bannerCreditColumns } from '@/lib/banner';
 import { hasAdminRights } from '@/lib/utils/permissions';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
@@ -446,6 +447,8 @@ export class EventService {
             throw new ActionError('FORBIDDEN');
         }
 
+        assertBannerAllowed(data.bannerImage, { current: null, isSiteAdmin: isSiteAdminRole(await getSiteRole(userId)) });
+
         // The event's place starts as the group's city; the organiser may pick another approved city (AR-57).
         const group = await prisma.group.findUnique({ where: { id: groupId }, select: { city: true } });
         if (!group) throw new ActionError('NOT_FOUND');
@@ -469,6 +472,7 @@ export class EventService {
                 isRecurring: data.isRecurring,
                 recurrencePattern: data.recurrencePattern,
                 bannerImage: data.bannerImage,
+                ...bannerCreditColumns(data.bannerImage, data.bannerCredit),
                 groupId: groupId,
                 creatorId: userId,
             },
@@ -525,6 +529,7 @@ export class EventService {
     ): Promise<EventActionContext & { convertedUserIds: string[] }> {
         const event = await EventService.loadForOrganiser(eventId, userId);
         if (isEventPast(event)) throw new ActionError('EVENT_PAST');
+        assertBannerAllowed(data.bannerImage, { current: event.bannerImage, isSiteAdmin: isSiteAdminRole(await getSiteRole(userId)) });
         if (!(await CityService.isUsableForEvent(data.city, [event.group.city, event.city]))) throw new ActionError('VALIDATION_FAILED');
 
         const opening = event.joinMode === 'REQUEST' && data.joinMode === 'OPEN';
@@ -573,6 +578,7 @@ export class EventService {
                     isRecurring: data.isRecurring,
                     recurrencePattern: data.recurrencePattern,
                     bannerImage: data.bannerImage,
+                    ...(data.bannerImage !== undefined && bannerCreditColumns(data.bannerImage, data.bannerCredit)),
                 }
             });
             return converted;

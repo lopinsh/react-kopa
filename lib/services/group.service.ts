@@ -18,6 +18,8 @@ import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import type { BannerCredit } from '@/lib/validations/banner';
+import { assertBannerAllowed, bannerCreditColumns, toBannerCredit } from '@/lib/banner';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
@@ -80,6 +82,8 @@ export interface GroupContext {
     type: 'PUBLIC' | 'PRIVATE';
     categoryId: string;
     bannerImage: string | null;
+    /** Photographer of an Unsplash banner; null for any other image. */
+    bannerCredit: BannerCredit;
     isAcceptingMembers: boolean;
     socialLinks: {
         discord: string | null;
@@ -288,6 +292,7 @@ export const GroupService = {
             type: g.type as 'PUBLIC' | 'PRIVATE',
             categoryId: g.categoryId,
             bannerImage: g.bannerImage,
+            bannerCredit: toBannerCredit(g.bannerCreditName, g.bannerCreditUser),
             isAcceptingMembers: g.isAcceptingMembers,
             socialLinks: {
                 discord: g.discordLink,
@@ -387,6 +392,7 @@ export const GroupService = {
 
     async createGroup(data: GroupCreateValues, userId: string, locale: string): Promise<{ slug: string; id: string; l1Slug: string }> {
         const lang = toTextLang(locale);
+        assertBannerAllowed(data.bannerImage, { current: null, isSiteAdmin: isSiteAdminRole(await getSiteRole(userId)) });
         const baseSlug = slugify(data.name);
         const targetCategoryId = data.categoryId;
 
@@ -430,6 +436,7 @@ export const GroupService = {
                 type: data.type,
                 categoryId: targetCategoryId,
                 bannerImage: data.bannerImage,
+                ...bannerCreditColumns(data.bannerImage, data.bannerCredit),
                 discordLink: data.discordLink,
                 websiteLink: data.websiteLink,
                 instagramLink: data.instagramLink,
@@ -602,7 +609,7 @@ export const GroupService = {
             getSiteRole(userId),
             prisma.group.findUnique({
                 where: { id: groupId },
-                select: { name: true, city: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
+                select: { name: true, city: true, bannerImage: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
             })
         ]);
 
@@ -612,6 +619,7 @@ export const GroupService = {
             throw new ActionError('FORBIDDEN');
         }
         if (!current) throw new ActionError('NOT_FOUND');
+        assertBannerAllowed(data.bannerImage, { current: current.bannerImage, isSiteAdmin: isAppAdmin });
 
         // A new city must exist and be approved (or be this person's own pending suggestion); the group's current one always stays valid.
         if (!(await CityService.isUsableBy(data.city, userId, current.city))) {
@@ -639,6 +647,8 @@ export const GroupService = {
             lookingFor: data.lookingFor,
             city: data.city,
             bannerImage: data.bannerImage,
+            // The credit follows the URL; an unchanged Unsplash banner keeps the credit the form sent back.
+            ...(data.bannerImage !== undefined && bannerCreditColumns(data.bannerImage, data.bannerCredit)),
             discordLink: data.discordLink,
             websiteLink: data.websiteLink,
             instagramLink: data.instagramLink,

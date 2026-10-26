@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/routing';
 import { isOverLimit } from '@/lib/text-limit';
 import { buildGroupFormSchema, GROUP_NAME_MAX, GROUP_LOOKING_FOR_MAX, type GroupFormValues } from '@/lib/validations/group';
+import type { BannerCredit } from '@/lib/validations/banner';
 import { updateGroup } from '@/actions/group-actions';
 import type { TaxonomyTree } from '@/lib/services/taxonomy.service';
 import type { TaxonomySelection } from '@/lib/types/taxonomy';
@@ -26,6 +27,7 @@ export type GroupSettingsGroup = {
     websiteLink: string | null;
     instagramLink: string | null;
     bannerImage: string | null;
+    bannerCredit: BannerCredit;
     tags: Array<{ id: string; title: string; slug: string; level: number }>;
     slug: string;
     l1Slug: string;
@@ -87,6 +89,7 @@ export function useGroupSettingsForm({ group, taxonomy, locale, activeTab, canEd
             websiteLink: group.websiteLink || '',
             instagramLink: group.instagramLink || '',
             bannerImage: group.bannerImage || '',
+            bannerCredit: group.bannerCredit,
         },
     });
 

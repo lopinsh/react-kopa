@@ -71,6 +71,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         type: 'PUBLIC',
         categoryId: 'sample-category',
         bannerImage: null,
+        bannerCredit: null,
         isAcceptingMembers: true,
         socialLinks: { discord: null, website: 'https://example.org', instagram: null },
         stats: { memberCount: 23, pendingCount: 0 },

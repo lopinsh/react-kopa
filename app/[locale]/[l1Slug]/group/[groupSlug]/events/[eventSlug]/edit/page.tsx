@@ -5,6 +5,7 @@ import TextLink from '@/components/ui/TextLink';
 import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import { EventService } from '@/lib/services/event.service';
+import { toBannerCredit } from '@/lib/banner';
 import { isEventPast } from '@/lib/event-dates';
 import { toTextLang } from '@/lib/translations';
 import EventForm from '@/components/forms/event/EventForm';
@@ -59,6 +60,7 @@ export default async function EditEventPage({ params }: { params: Promise<Params
                         visibility: event.visibility,
                         joinMode: event.joinMode,
                         bannerImage: event.bannerImage,
+                        bannerCredit: toBannerCredit(event.bannerCreditName, event.bannerCreditUser),
                     }}
                 />
             </CitiesProvider>

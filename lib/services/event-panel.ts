@@ -3,6 +3,8 @@ import { PANEL_TEXT_MAX, type EventJoinModeValue } from '@/lib/constants';
 import { resolveEventText, type TextLang } from '@/lib/translations';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { avatarUrl } from '@/lib/avatar';
+import { toBannerCredit } from '@/lib/banner';
+import type { BannerCredit } from '@/lib/validations/banner';
 import { isEventPast } from '@/lib/event-dates';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { subCategoryTitles } from './group-card';
@@ -37,6 +39,8 @@ export interface EventPanelData {
     location: string | null;
     /** The event's own image, else the group's. */
     image: string | null;
+    /** Credit of `image`: the event's own, else the group's. */
+    imageCredit: BannerCredit;
     membersOnly: boolean;
     category: { l1Slug: string; l1Title: string; color: string };
     subCategories: string[];
@@ -55,6 +59,8 @@ export const EVENT_PANEL_INCLUDE = (lang: TextLang) => ({
             id: true,
             city: true,
             bannerImage: true,
+            bannerCreditName: true,
+            bannerCreditUser: true,
             isAcceptingMembers: true
         }
     },
@@ -91,6 +97,7 @@ export function toEventPanel(
         isOnline: online,
         location: online ? null : e.location,
         image: e.bannerImage ?? e.group.bannerImage,
+        imageCredit: e.bannerImage ? toBannerCredit(e.bannerCreditName, e.bannerCreditUser) : toBannerCredit(e.group.bannerCreditName, e.group.bannerCreditUser),
         membersOnly: e.visibility === 'MEMBERS_ONLY',
         category: { l1Slug: resolved.l1Slug, l1Title: resolved.l1Title, color: resolved.accentColor },
         subCategories: subCategoryTitles(e.group.tags, lang),
