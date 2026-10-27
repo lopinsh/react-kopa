@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import InfoSections from '@/components/groups/frame/InfoSections';
+import NextMeetingBox from '@/components/groups/NextMeetingBox';
 import { langAttr } from '@/lib/translations';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
@@ -47,7 +48,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
-            <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} />
+            <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} afterFirst={<div className="lg:hidden"><NextMeetingBox groupId={group.id} groupHref={`/${l1Slug}/group/${group.slug}`} viewerId={session?.user?.id} /></div>} />
         </>
     );
 }

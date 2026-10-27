@@ -7,8 +7,8 @@ import { useGroupContext } from '@/components/providers/GroupProvider';
 import GroupPagesDrawer from './GroupPagesDrawer';
 
 /**
- * Phones: once the banner has scrolled away, a thin bar sticks under the header with the ☰ pages button and the group's name.
- * The wrapper has no height (the bar hangs from it), so showing or hiding it never moves the page. Hidden from `md`, where the pages column stays in view.
+ * Below 1024: once the banner has scrolled away, a thin bar sticks under the header with the ☰ pages button and the group's name.
+ * The wrapper has no height (the bar hangs from it), so showing or hiding it never moves the page. Hidden from `lg`, where the pages column stays in view.
  */
 export default function GroupStickyBar() {
     const g = useGroupContext();
@@ -30,7 +30,7 @@ export default function GroupStickyBar() {
     }, []);
 
     return (
-        <div className="sticky top-0 z-20 h-0 md:hidden">
+        <div className="sticky top-0 z-20 h-0 lg:hidden">
             <div
                 data-ui={UI.groupStickyBar}
                 aria-hidden={!shown}

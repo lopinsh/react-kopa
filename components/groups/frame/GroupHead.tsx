@@ -30,7 +30,7 @@ export default function GroupHead({ picture, variant }: { picture?: ReactNode; v
     const hasAction = segment !== 'settings' && (isAdmin || role === 'PENDING' || (!isMember && !g.moderation.hidden));
 
     const mark = (
-        <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item md:col-start-1 md:row-start-1 md:size-12">
+        <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item lg:col-start-1 lg:row-start-1 md:size-12">
             <CategoryIcon slug={g.category.l1Slug} aria-hidden className="size-5 md:size-6" />
         </span>
     );
@@ -51,23 +51,23 @@ export default function GroupHead({ picture, variant }: { picture?: ReactNode; v
                 data-ui={UI.groupBanner}
                 className={clsx(
                     'tone-fill frame relative grid min-w-0 rounded-2xl p-4 md:gap-x-4',
-                    full ? 'grid-cols-[auto_auto_1fr] items-center gap-y-3 md:grid-cols-[auto_1fr] md:items-start md:p-6 lg:p-7' : 'grid-cols-[auto_auto_1fr] items-center gap-y-2 md:grid-cols-[auto_1fr_auto] md:px-6 md:py-5',
+                    full ? 'grid-cols-[auto_auto_1fr] items-center gap-y-3 md:p-6 lg:grid-cols-[auto_1fr] lg:items-start lg:p-7' : 'grid-cols-[auto_auto_1fr] items-center gap-y-2 md:px-6 md:py-5 lg:grid-cols-[auto_1fr_auto]',
                     withPicture && 'lg:col-span-2',
                 )}
             >
                 <GroupPagesDrawer onTone />
                 {mark}
-                <div className="col-span-3 min-w-0 md:col-span-1 md:col-start-2 md:row-start-1">
+                <div className="col-span-3 min-w-0 lg:col-span-1 lg:col-start-2 lg:row-start-1">
                     <BannerName compact={!full} />
                     {meta}
                 </div>
                 {!full && hasAction && (
-                    <div className="col-start-3 row-start-1 justify-self-end md:col-start-3 md:self-center">
+                    <div className="col-start-3 row-start-1 justify-self-end lg:col-start-3 lg:self-center">
                         <GroupActions phone="round" />
                     </div>
                 )}
                 {full && (g.lookingFor || hasAction) && (
-                    <div className="col-span-3 flex min-w-0 flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between md:gap-4 md:border-t md:border-[color-mix(in_srgb,var(--on-cat)_30%,transparent)] md:pt-4">
+                    <div className="col-span-3 flex min-w-0 flex-col gap-3 lg:col-span-2 md:flex-row md:items-center md:justify-between md:gap-4 md:border-t md:border-[color-mix(in_srgb,var(--on-cat)_30%,transparent)] md:pt-4">
                         {g.lookingFor && <p className="min-w-0 text-body-sm md:text-body">{g.lookingFor}</p>}
                         {hasAction && <div className="max-md:w-full md:ml-auto md:shrink-0"><GroupActions phone="full" /></div>}
                     </div>

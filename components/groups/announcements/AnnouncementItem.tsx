@@ -10,7 +10,7 @@ const WEEK = 7 * 24 * 60 * 60 * 1000;
 
 type Props = {
     item: AnnouncementItemData;
-    /** Informācija shows three lines; Jaunumi the whole text. */
+    /** The side column shows one line; Jaunumi the whole text. */
     clamp?: boolean;
     /** The team's "…" menu (Jaunumi only). */
     menu?: ReactNode;
@@ -33,7 +33,7 @@ export default function AnnouncementItem({ item, clamp, menu }: Props) {
             <div className="min-w-0">
                 <h3 className="break-words text-item text-foreground">{item.title}</h3>
                 {item.content && (
-                    <p className={clsx('mt-1 max-w-reading whitespace-pre-wrap break-words text-body-sm text-foreground', clamp && 'line-clamp-3')}>{item.content}</p>
+                    <p className={clsx('mt-1 max-w-reading whitespace-pre-wrap break-words text-body-sm text-foreground', clamp && 'line-clamp-1')}>{item.content}</p>
                 )}
                 <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-meta text-foreground-muted">
                     <span className="min-w-0 break-words">

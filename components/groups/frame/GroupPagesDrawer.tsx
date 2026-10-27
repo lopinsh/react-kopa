@@ -36,7 +36,7 @@ export default function GroupPagesDrawer({ onTone = false }: { onTone?: boolean 
                 aria-expanded={open}
                 aria-controls={id}
                 onClick={() => { openedOn.current = pathname; setOpen(true); }}
-                className="md:hidden"
+                className="lg:hidden"
             >
                 <Menu aria-hidden className="size-5" />
             </IconButton>

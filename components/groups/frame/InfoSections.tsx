@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, type ReactNode } from 'react';
 import PartTabs from '@/components/ui/PartTabs';
 import { UI } from '@/lib/constants';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
@@ -14,7 +14,7 @@ const anchor = (key: string) => `part-${key}`;
  * scroll and write `#part-{id}` with replaceState (no navigation inside the group's address, R6) and follow the scrolling (scroll-spy).
  * `initial` is an old `?part=` link: scrolled to once and rewritten to the hash.
  */
-export default function InfoSections({ label, parts, initial }: { label: string; parts: Part[]; initial: string }) {
+export default function InfoSections({ label, parts, initial, afterFirst }: { label: string; parts: Part[]; initial: string; /** Shown after the first section (below 1024: the next meeting). */ afterFirst?: ReactNode }) {
     const wrap = useRef<HTMLDivElement>(null);
     const tabs = useRef<HTMLElement | null>(null);
     const { active, activate } = useScrollSpy(parts.map((p) => p.key), wrap, tabs, parts[0]?.key ?? '');
@@ -52,10 +52,13 @@ export default function InfoSections({ label, parts, initial }: { label: string;
             {many && <PartTabs label={label} items={parts.map(({ key, label: text, lang }) => ({ key, label: text, lang, href: `#${anchor(key)}` }))} active={active} onSelect={select} />}
             <div ref={wrap} className="flex flex-col gap-section">
                 {parts.map((p, i) => (
-                    <section key={p.key} id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
-                        <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className={i === 0 ? 'mb-2 text-section max-md:sr-only' : 'mb-2 text-section'}>{p.label}</h2>
+                    <Fragment key={p.key}>
+                    <section id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
+                        <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className={i === 0 && many ? 'mb-2 text-section sr-only' : 'mb-2 text-section'}>{p.label}</h2>
                         {p.content}
                     </section>
+                    {i === 0 && afterFirst}
+                    </Fragment>
                 ))}
             </div>
         </>

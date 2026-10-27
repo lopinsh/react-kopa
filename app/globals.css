@@ -6,6 +6,8 @@
 :root {
   /* Shell Dimensions */
   --header-height: var(--spacing-header);
+  /* Height of the sticky PartTabs row; the group aside is lowered by it (+ the 1.5rem column gap) to sit level with the first section text. */
+  --part-tabs-h: 2.5rem;
   --sidebar-width: 240px;
   --sidebar-collapsed-width: 68px;
   /* Admin tool pins: deliberately off-theme, the same in light and dark. */

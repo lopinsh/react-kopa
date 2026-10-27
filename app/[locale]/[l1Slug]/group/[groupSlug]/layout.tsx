@@ -34,7 +34,7 @@ export default async function GroupLayout({
     return (
         <GroupProvider value={toGroupState(group)}>
             {/* var(--cat-<l1Slug>) or a validated hex from TaxonomyResolver: safe inside <style>. Light/dark come from the site theme. The picture is an element in the head, never a URL here. */}
-            <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${group.theme.accentColor};--accent-foreground:var(--on-cat)}@media(max-width:767px){:root{--sticky-bar:2.5rem}}` }} />
+            <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${group.theme.accentColor};--accent-foreground:var(--on-cat)}@media(max-width:1023px){:root{--sticky-bar:2.5rem}}` }} />
             {group.moderation.hidden && (
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
@@ -43,8 +43,9 @@ export default async function GroupLayout({
             <GroupStickyBar />
             <GroupHeadRow image={group.bannerImage} credit={group.bannerCredit} />
             <FrameColumns
+                navFrom="lg"
                 nav={<GroupPagesNav variant="side" />}
-                aside={<GroupAside group={{ id: group.id, memberCount: group.stats.memberCount, base: `/${l1Slug}/group/${group.slug}`, isMember: group.user.isMember, socialLinks: group.socialLinks }} viewerId={session?.user?.id} />}
+                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: `/${l1Slug}/group/${group.slug}`, isMember: group.user.isMember, socialLinks: group.socialLinks }} viewerId={session?.user?.id} />}
             >
                 {children}
             </FrameColumns>

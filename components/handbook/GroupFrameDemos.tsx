@@ -65,7 +65,7 @@ export async function GroupPagesDemo({ samples }: { samples: UiSamples }) {
     return (
         <AccentScope color={SAMPLE_ACCENT}>
             <GroupProvider value={sampleState(samples.group, 'team')}>
-                <div className="grid gap-6 md:grid-cols-[190px_minmax(0,1fr)]">
+                <div className="grid gap-6 lg:grid-cols-[190px_minmax(0,1fr)]">
                     <GroupPagesNav variant="side" active="events" />
                     <div className="grid min-w-0 content-start gap-3">
                         <PartTabs

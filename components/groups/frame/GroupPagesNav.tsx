@@ -12,7 +12,7 @@ import GroupMenuActions from './GroupMenuActions';
 const ICONS: Record<GroupPageKey, LucideIcon> = { info: FileText, announcements: List, events: CalendarDays, members: Users, settings: Settings };
 
 /**
- * A group's pages (AR-47): down the left from `md` (`side`, sticky like the own area's), in the ☰ drawer on phones (`drawer`).
+ * A group's pages (AR-47): down the left from `lg` (1024) (`side`, sticky like the own area's), in the ☰ drawer below that (`drawer`).
  * The list comes from the service through the context; hidden pages are not in it. `active` is for the UI-elements demo.
  */
 export default function GroupPagesNav({ variant, active }: { variant: 'side' | 'drawer'; active?: GroupPageKey }) {
@@ -22,7 +22,7 @@ export default function GroupPagesNav({ variant, active }: { variant: 'side' | '
     const current = active ?? pageForSegment(segment);
 
     return (
-        <div className={variant === 'side' ? 'sticky top-5 hidden self-start md:block' : 'pt-2'}>
+        <div className={variant === 'side' ? 'sticky top-5 hidden self-start lg:block' : 'pt-2'}>
         <nav data-ui={UI.groupMenu} aria-label={t('frame.pagesLabel')} className="flex flex-col gap-0.5">
             {pages.map(({ key, href, badge }) => (
                 <PageNavLink key={key} href={href} icon={ICONS[key]} label={t(`pages.${key}`)} current={current === key} badge={badge} replace={variant === 'drawer'} full={key === 'info'} />

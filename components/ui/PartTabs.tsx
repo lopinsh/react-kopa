@@ -30,7 +30,7 @@ export default function PartTabs({ title, label, items, active, action, onSelect
         <div className="contents">
             {title && <h2 className="text-section md:sr-only">{title}</h2>}
             {items.length > 0 && (
-                <div data-ui={UI.tabs} className={clsx('sticky top-[var(--sticky-bar,0px)] z-10 flex items-end gap-3 border-b border-border bg-background', width === 'focus' ? 'max-w-focus' : 'max-w-page', title && 'mt-2 md:mt-0')}>
+                <div data-ui={UI.tabs} className={clsx('sticky top-[var(--sticky-bar,0px)] z-10 flex min-h-[var(--part-tabs-h)] items-end gap-3 border-b border-border bg-background', width === 'focus' ? 'max-w-focus' : 'max-w-page', title && 'mt-2 md:mt-0')}>
                     <nav aria-label={label} className="flex min-w-0 flex-1 gap-4 overflow-x-auto [scrollbar-width:none]">
                         {items.map(({ key, label: text, href, lang, count }) => (
                             <Tag
