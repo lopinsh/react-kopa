@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
+import { useEffect, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { ImagePlus } from 'lucide-react';
 import Button from '@/components/ui/Button';
@@ -22,12 +22,19 @@ export default function AddSectionPictures({ sectionId, count, l1Slug, searchEna
     const [open, setOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const opener = useRef<HTMLButtonElement>(null);
+    const refocus = useRef(false);
+    // Focus goes back to the button once the dialog is closed and a save has finished (the button is disabled while saving).
+    useEffect(() => {
+        if (open || isPending || !refocus.current) return;
+        refocus.current = false;
+        opener.current?.focus();
+    }, [open, isPending]);
     if (!g.user.isAdmin) return null;
     if (count >= MAX_SECTION_PICTURES) return <p className="text-meta text-foreground-muted">{t('limit')}</p>;
 
     const close = () => {
+        refocus.current = true;
         setOpen(false);
-        requestAnimationFrame(() => opener.current?.focus());
     };
     const pick = (photo: UnsplashPick | null) => {
         close();
