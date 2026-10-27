@@ -49,6 +49,7 @@ export function assertBannerAllowed(
 
 /** A section picture is never empty: the same rule as a banner, with nothing stored yet. */
 export function assertPictureUrlAllowed(url: string, isSiteAdmin: boolean): void {
+    if (!url) throw new ActionError('BANNER_URL_NOT_ALLOWED');
     assertBannerAllowed(url, { current: null, isSiteAdmin });
 }
 

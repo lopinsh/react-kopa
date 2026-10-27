@@ -790,12 +790,13 @@ export const GroupService = {
         return { slug: group.slug, l1Slug: resolved.l1Slug };
     },
 
+    /** The real first section (the virtual 'about' made real). Callers check `getManagerAccess` first. */
+    ensureFirstSection: (groupId: string): Promise<string> => materialiseAboutSection(groupId),
+
     /**
      * Who may manage a group's content: the owner, moderators and site admins.
      * A site admin without a role in the group is logged (GROUP_EDIT) by the caller.
      */
-    ensureFirstSection: (groupId: string): Promise<string> => materialiseAboutSection(groupId),
-
     async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
         const [membership, actor] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId }, select: { role: true } }),

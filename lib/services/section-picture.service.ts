@@ -8,13 +8,14 @@ import { GroupService } from './group.service';
 import { ModerationService } from './moderation.service';
 import { getSiteRole } from './site-role.service';
 
-/** Manager check for the group that owns the content; logs a site admin's edit. Returns the slugs for revalidation. */
+/** Manager check for the group that owns the content: FORBIDDEN unless allowed. */
 async function requireManager(groupId: string, userId: string): Promise<{ bySiteAdminOnly: boolean }> {
     const access = await GroupService.getManagerAccess(groupId, userId);
     if (!access.allowed) throw new ActionError('FORBIDDEN');
     return { bySiteAdminOnly: access.bySiteAdminOnly };
 }
 
+/** After a successful write: logs a site admin's edit (invariant 10), returns the slugs for revalidation. */
 async function finish(groupId: string, userId: string, bySiteAdminOnly: boolean): Promise<{ slug: string; l1Slug: string }> {
     if (bySiteAdminOnly) await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
     const slugs = await GroupService.getGroupSlugs(groupId);
