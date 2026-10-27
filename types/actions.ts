@@ -58,6 +58,8 @@ export const ERROR_CODES = [
     'SEARCH_UNAVAILABLE',
     'SEARCH_RATE_LIMITED',
     'BANNER_URL_NOT_ALLOWED',
+    'SECTION_PICTURE_LIMIT',
+    'SECTION_NOT_FOUND',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];

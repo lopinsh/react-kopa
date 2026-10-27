@@ -471,7 +471,9 @@
     "GROUP_NOT_HIDDEN": "Only a hidden group can be deleted. Hide it first.",
     "CITY_NAME_INVALID": "Enter a city name (2 to 60 letters).",
     "CITY_EXISTS": "A city with this name already exists.",
-    "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted."
+    "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted.",
+    "SECTION_PICTURE_LIMIT": "This section already has 8 pictures.",
+    "SECTION_NOT_FOUND": "This section no longer exists."
   },
   "group": {
     "members": {
@@ -591,7 +593,18 @@
       "title": "Next event",
       "all": "All"
     },
-    "writeToTeam": "Write to the team"
+    "writeToTeam": "Write to the team",
+    "pictures": {
+      "add": "Add pictures",
+      "remove": "Remove picture",
+      "removeConfirm": "Remove this picture from the section?",
+      "more": "{n} more pictures, open the gallery",
+      "open": "Open picture {n}",
+      "alt": "{title}, picture {n}",
+      "limit": "A section can have up to 8 pictures.",
+      "moveEarlier": "Move earlier",
+      "moveLater": "Move later"
+    }
   },
   "admin": {
     "dashboard": {
@@ -1955,6 +1968,13 @@
     "advancedHint": "Paste an image link. Recommended size: 1200 × 400 px.",
     "eventHint": "Without its own picture the event page shows none; the panel shows the group's.",
     "curatedHeading": "Suggested photos",
-    "urlPlaceholder": "https://images.unsplash.com/..."
+    "urlPlaceholder": "https://images.unsplash.com/...",
+    "dialogTitleSection": "Add a picture to the section"
+  },
+  "gallery": {
+    "prev": "Previous picture",
+    "next": "Next picture",
+    "counter": "{n} / {total}",
+    "close": "Close the gallery"
   }
 }

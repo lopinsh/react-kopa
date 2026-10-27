@@ -47,6 +47,11 @@ export function assertBannerAllowed(
     throw new ActionError('BANNER_URL_NOT_ALLOWED');
 }
 
+/** A section picture is never empty: the same rule as a banner, with nothing stored yet. */
+export function assertPictureUrlAllowed(url: string, isSiteAdmin: boolean): void {
+    assertBannerAllowed(url, { current: null, isSiteAdmin });
+}
+
 /** The stored form of a banner: a removed one ('' from the form) is null; undefined (not sent) stays undefined. */
 export function storedBanner<T extends string | null | undefined>(url: T): T | null {
     return url === '' ? null : url;

@@ -35,6 +35,7 @@ export interface SectionView {
     fallbackLang: TextLang | null;
     order: number;
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
+    pictures: { id: string; url: string; credit: BannerCredit }[];
 }
 
 /** A section as the owner edits it: the text of every language (a missing row is empty text). Managers only. */
@@ -44,14 +45,15 @@ export interface EditableSection {
     visibility: 'PUBLIC' | 'MEMBERS_ONLY';
     originalLang: TextLang;
     texts: Record<TextLang, { title: string; content: string }>;
+    pictures: { id: string; url: string }[];
 }
 
-function toEditableSection(s: { id: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY'; originalLang: string; translations: { lang: string; title: string; content: string }[] }): EditableSection {
+function toEditableSection(s: { id: string; order: number; visibility: 'PUBLIC' | 'MEMBERS_ONLY'; originalLang: string; translations: { lang: string; title: string; content: string }[]; pictures: { id: string; url: string }[] }): EditableSection {
     const text = (lang: TextLang) => {
         const row = s.translations.find((t) => t.lang === lang);
         return { title: row?.title ?? '', content: row?.content ?? '' };
     };
-    return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: langRecord(text) };
+    return { id: s.id, order: s.order, visibility: s.visibility, originalLang: toTextLang(s.originalLang), texts: langRecord(text), pictures: s.pictures.map((p) => ({ id: p.id, url: p.url })) };
 }
 
 /** One row of a group's member list (see `GroupService.getMembers`). */
@@ -142,6 +144,19 @@ export interface GroupContext {
 /** Id of the virtual first section shown for groups that have no section rows yet. */
 const VIRTUAL_ABOUT_ID = 'about';
 
+/** The real first section of a group: the existing one, or order 0 created from the description. Callers check manager access first. */
+async function materialiseAboutSection(groupId: string): Promise<string> {
+    const first = await prisma.groupSection.findFirst({ where: { groupId }, orderBy: { order: 'asc' }, select: { id: true } });
+    if (first) return first.id;
+    const group = await prisma.group.findUnique({ where: { id: groupId }, select: { description: true } });
+    if (!group) throw new ActionError('NOT_FOUND');
+    const created = await prisma.groupSection.create({
+        data: { groupId, visibility: 'PUBLIC', order: 0, originalLang: 'lv', translations: { create: defaultSectionRows('about', { lv: group.description ?? '' }) } },
+        select: { id: true }
+    });
+    return created.id;
+}
+
 /** Translation rows of a default section: title in both languages, text only in the creator's language. */
 function defaultSectionRows(key: keyof typeof DEFAULT_SECTION_TITLES, content: Partial<Record<TextLang, string>>) {
     return TEXT_LANGS.map((lang) => ({
@@ -212,7 +227,8 @@ export const GroupService = {
                     order: true,
                     visibility: true,
                     originalLang: true,
-                    translations: { select: { lang: true, title: true, content: true } }
+                    translations: { select: { lang: true, title: true, content: true } },
+                    pictures: { orderBy: { order: 'asc' } as const, select: { id: true, url: true, creditName: true, creditUser: true } }
                 }
             },
             _count: {
@@ -277,7 +293,8 @@ export const GroupService = {
                     contentLang: text.contentLang,
                     fallbackLang: text.fallbackLang,
                     order: s.order,
-                    visibility: s.visibility
+                    visibility: s.visibility,
+                    pictures: s.pictures.map((p) => ({ id: p.id, url: p.url, credit: toBannerCredit(p.creditName, p.creditUser) }))
                 };
             })
             : GroupService.getVirtualSections(group, lang);
@@ -708,7 +725,10 @@ export const GroupService = {
         const sections = await prisma.groupSection.findMany({
             where: { groupId },
             orderBy: { order: 'asc' },
-            include: { translations: { select: { lang: true, title: true, content: true } } }
+            include: {
+                translations: { select: { lang: true, title: true, content: true } },
+                pictures: { orderBy: { order: 'asc' }, select: { id: true, url: true } }
+            }
         });
 
         if (sections.length === 0) {
@@ -721,7 +741,8 @@ export const GroupService = {
                 translations: [
                     { lang: 'lv', title: DEFAULT_SECTION_TITLES.about.lv, content: group?.description ?? '' },
                     { lang: 'en', title: DEFAULT_SECTION_TITLES.about.en, content: '' }
-                ]
+                ],
+                pictures: []
             })];
         }
 
@@ -740,7 +761,8 @@ export const GroupService = {
             contentLang: lang,
             fallbackLang: null,
             order: 0,
-            visibility: 'PUBLIC'
+            visibility: 'PUBLIC',
+            pictures: []
         }];
     },
 
@@ -772,6 +794,8 @@ export const GroupService = {
      * Who may manage a group's content: the owner, moderators and site admins.
      * A site admin without a role in the group is logged (GROUP_EDIT) by the caller.
      */
+    ensureFirstSection: (groupId: string): Promise<string> => materialiseAboutSection(groupId),
+
     async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
         const [membership, actor] = await Promise.all([
             prisma.membership.findFirst({ where: { groupId, userId }, select: { role: true } }),
@@ -801,18 +825,7 @@ export const GroupService = {
         // Old groups without section rows show a virtual "about" section (id 'about'): the first
         // save turns it into a real one (the description as its Latvian text), then saves into it.
         if (data.id === VIRTUAL_ABOUT_ID) {
-            const first = await prisma.groupSection.findFirst({ where: { groupId }, orderBy: { order: 'asc' }, select: { id: true } });
-            if (first) {
-                data = { ...data, id: first.id };
-            } else {
-                const group = await prisma.group.findUnique({ where: { id: groupId }, select: { description: true } });
-                if (!group) throw new ActionError('NOT_FOUND');
-                const created = await prisma.groupSection.create({
-                    data: { groupId, visibility: 'PUBLIC', order: 0, originalLang: 'lv', translations: { create: defaultSectionRows('about', { lv: group.description ?? '' }) } },
-                    select: { id: true }
-                });
-                data = { ...data, id: created.id };
-            }
+            data = { ...data, id: await materialiseAboutSection(groupId) };
         }
 
         if (data.id) {

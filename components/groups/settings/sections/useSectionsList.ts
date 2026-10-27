@@ -82,6 +82,7 @@ export function useSectionsList(groupId: string, initialSections: EditableSectio
             originalLang: lang,
             texts: langRecord((l) => (l === lang ? { title: c_common('newSection'), content: '' } : empty)),
             savedTexts: langRecord(() => empty),
+            pictures: [],
             isNew: true
         };
         setSections([...sections, newSection]);

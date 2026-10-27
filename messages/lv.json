@@ -471,7 +471,9 @@
     "GROUP_NOT_HIDDEN": "Dzēst var tikai paslēptu grupu. Vispirms paslēp to.",
     "CITY_NAME_INVALID": "Ievadi pilsētas nosaukumu (no 2 līdz 60 simboliem).",
     "CITY_EXISTS": "Pilsēta ar šādu nosaukumu jau ir.",
-    "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst."
+    "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst.",
+    "SECTION_PICTURE_LIMIT": "Sadaļā jau ir 8 attēli.",
+    "SECTION_NOT_FOUND": "Šī sadaļa vairs nav atrodama."
   },
   "group": {
     "members": {
@@ -591,7 +593,18 @@
       "title": "Nākamais pasākums",
       "all": "Visi"
     },
-    "writeToTeam": "Rakstīt komandai"
+    "writeToTeam": "Rakstīt komandai",
+    "pictures": {
+      "add": "Pievienot attēlus",
+      "remove": "Noņemt attēlu",
+      "removeConfirm": "Noņemt šo attēlu no sadaļas?",
+      "more": "Vēl {n} attēli, atvērt galeriju",
+      "open": "Atvērt attēlu {n}",
+      "alt": "{title}, attēls {n}",
+      "limit": "Sadaļā var būt līdz 8 attēliem.",
+      "moveEarlier": "Pārvietot uz priekšu",
+      "moveLater": "Pārvietot atpakaļ"
+    }
   },
   "admin": {
     "dashboard": {
@@ -1955,6 +1968,13 @@
     "advancedHint": "Ielīmē attēla saiti. Ieteicamais izmērs: 1200 × 400 px.",
     "eventHint": "Bez sava attēla pasākuma lapā nav attēla; kartītē rādās grupas attēls.",
     "curatedHeading": "Piedāvātie foto",
-    "urlPlaceholder": "https://images.unsplash.com/..."
+    "urlPlaceholder": "https://images.unsplash.com/...",
+    "dialogTitleSection": "Pievieno attēlu sadaļai"
+  },
+  "gallery": {
+    "prev": "Iepriekšējais attēls",
+    "next": "Nākamais attēls",
+    "counter": "{n} / {total}",
+    "close": "Aizvērt galeriju"
   }
 }
