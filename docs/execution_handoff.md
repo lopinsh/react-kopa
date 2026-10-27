@@ -50,6 +50,8 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
 - [x] **R26 Unsplash banner picker** (reviewed, pushed, live; search stays hidden on ejam.lumm.eu until the owner sets `UNSPLASH_ACCESS_KEY`) (spec `docs/development/specs/R26.md`): one picker in the group wizard (moves to Tēma), settings and event form; curated photos per main category + no image + Unsplash search (server key `UNSPLASH_ACCESS_KEY`), credit under the big pictures, raw URL only for site admins.
   - [x] **R26-1 Data and server** (credit columns, Unsplash service and actions, curated list, URL rule). Reviewed, pushed, live. 7 of 120 draft photos matched, 113 filled from top results: owner reviews the curated list in the picker (R26-2).
   - [x] **R26-2 Picker and credits**: picker, three forms, credit lines, handbook bullets and ui-elements sample (commits "R26-2"). Browser-checked (lv/en, 360 to 1920, dark dialog, budget 0 shows the unavailable line, repeated query is a cache hit). Reviewed (Opus): phone sheet keeps title and × in place, removed banner stored as null, page cap 3 in the schema, same in-flight search shares one request, per-user ping limit; pushed, live. Owner still reviews the curated photos in the picker.
+- [ ] **R27 Group head and layout** (spec `docs/development/specs/R27.md`)
+  - [x] **R27-1 Head** (commits "R27-1"): tone tokens, `Button` `onTone`, `GroupHead`/`HeadPicture`/`GroupHeadRow`, i18n, handbook, `group-page` and new `group-events` baselines. Browser-checked (lv/en, 360 to 1920, dark, roles). `group-page-nophoto` dropped: all 20 seeded groups show on the boards, so no group is off every other screen; no-photo checked by hand. Awaiting review; R27-2 next, then R28 Section pictures.
 
 ## Standing owner rules
 

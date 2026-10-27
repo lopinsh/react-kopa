@@ -72,6 +72,7 @@ const SCREENS: Screen[] = [
     },
   },
   { name: 'group-page', run: async (p) => { await p.goto(GROUP); } },
+  { name: 'group-events', run: async (p) => { await p.goto(`${GROUP}/events`); } },
   {
     name: 'event-slide-over',
     run: async (p) => {

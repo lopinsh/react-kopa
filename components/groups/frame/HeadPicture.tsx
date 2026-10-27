@@ -37,7 +37,7 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
     const label = phone ? t(expanded ? 'hidePicture' : 'showPicture') : t('openPicture');
     const Icon = phone && expanded ? Minimize2 : Maximize2;
     return (
-        <div className="grid min-w-0 content-start gap-1 md:col-start-2 md:row-start-1 lg:col-start-3">
+        <div className="grid min-w-0 md:col-start-2 md:row-start-1 md:grid-rows-[1fr_auto] lg:col-start-3">
             <button
                 ref={buttonRef}
                 type="button"
@@ -48,8 +48,8 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
                 onClick={() => (phone ? setExpanded((v) => !v) : setOpen(true))}
                 onKeyDown={(e) => { if (e.key === 'Escape' && phone && expanded) setExpanded(false); }}
                 className={clsx(
-                    'relative block w-full overflow-hidden rounded-2xl frame bg-tint max-md:aspect-[3/1] md:h-full md:min-h-40',
-                    expanded && 'max-md:aspect-video',
+                    'relative block w-full overflow-hidden rounded-2xl frame bg-tint md:h-full md:min-h-40',
+                    expanded ? 'max-md:aspect-[16/9]' : 'max-md:aspect-[3/1]',
                     'motion-safe:max-md:transition-[aspect-ratio] motion-safe:max-md:duration-base',
                     phone && expanded ? 'cursor-zoom-out' : 'cursor-zoom-in',
                 )}
@@ -59,7 +59,7 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
                     <Icon className="size-4" />
                 </span>
             </button>
-            <BannerCredit credit={credit} className="max-md:text-right" />
+            <BannerCredit credit={credit} className="mt-1 max-md:text-right" />
             {open && (
                 <Modal onClose={() => setOpen(false)} title={g.name} size="4xl" returnFocusRef={buttonRef}>
                     <div className="grid gap-2">
