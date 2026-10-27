@@ -28,7 +28,7 @@ import PanelDemos from '@/components/handbook/PanelDemos';
 import EventPageDemos from '@/components/handbook/EventPageDemos';
 import { DatesDemo } from '@/components/handbook/DateDemos';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
-import { GroupHeadDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
+import { GroupHeadDemo, GroupPagesDemo, PhotoRowDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
 import { GroupMenuDemo } from '@/components/handbook/GroupMenuDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import MemberRow from '@/components/groups/members/MemberRow';
@@ -280,6 +280,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="bannerPicker" names={[]} files={['components/forms/banner/BannerPicker.tsx', 'components/forms/banner/BannerCredit.tsx']}>
                     <BannerPickerDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="sectionPictures" names={[]} files={['components/groups/frame/PhotoRow.tsx', 'components/ui/Gallery.tsx']}>
+                    <PhotoRowDemo samples={samples} />
                 </UiSpecimen>
 
                 <UiSpecimen id="errorState" names={[UI.errorState]} files={['components/ui/ErrorState.tsx']}>

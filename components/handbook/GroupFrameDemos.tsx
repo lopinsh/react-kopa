@@ -6,6 +6,8 @@ import { GroupProvider } from '@/components/providers/GroupProvider';
 import { toGroupState } from '@/components/providers/to-group-state';
 import AccentScope from '@/components/handbook/AccentScope';
 import GroupHead from '@/components/groups/frame/GroupHead';
+import PhotoRow from '@/components/groups/frame/PhotoRow';
+import { getCurated } from '@/lib/banner';
 import HeadPicture from '@/components/groups/frame/HeadPicture';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
 import PartTabs from '@/components/ui/PartTabs';
@@ -84,5 +86,32 @@ export async function GroupPagesDemo({ samples }: { samples: UiSamples }) {
                 </div>
             </GroupProvider>
         </AccentScope>
+    );
+}
+
+/** The photo row (and, opened from it, the gallery): first section and later section, 1, 3 and 8 pictures; the visitor's row and the team's. */
+export function PhotoRowDemo({ samples }: { samples: UiSamples }) {
+    const photos = getCurated('hobbies');
+    const pics = (n: number) => Array.from({ length: n }, (_, i) => {
+        const p = photos[i % photos.length];
+        return { id: `${p.id}-${i}`, url: p.url, credit: p.credit };
+    });
+    const cases: Array<{ viewer: Viewer; first: boolean; n: number }> = [
+        { viewer: 'visitor', first: true, n: 1 },
+        { viewer: 'visitor', first: true, n: 3 },
+        { viewer: 'visitor', first: false, n: 3 },
+        { viewer: 'visitor', first: true, n: 8 },
+        { viewer: 'team', first: true, n: 8 },
+    ];
+    return (
+        <div className="grid gap-8">
+            {cases.map(({ viewer, first, n }) => (
+                <AccentScope key={`${viewer}-${first}-${n}`} color={SAMPLE_ACCENT}>
+                    <GroupProvider value={sampleState(samples.group, viewer)}>
+                        <PhotoRow title={samples.group.name} pictures={pics(n)} first={first} />
+                    </GroupProvider>
+                </AccentScope>
+            ))}
+        </div>
     );
 }
