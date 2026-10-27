@@ -72,6 +72,7 @@ const SCREENS: Screen[] = [
     },
   },
   { name: 'group-page', run: async (p) => { await p.goto(GROUP); } },
+  { name: 'group-gallery-open', run: async (p) => { await p.goto(GROUP); await p.getByRole('button', { name: /^Vēl 3 attēli/ }).click(); await p.getByRole('dialog').waitFor(); } },
   { name: 'group-events', run: async (p) => { await p.goto(`${GROUP}/events`); } },
   {
     name: 'event-slide-over',
@@ -118,7 +119,7 @@ for (const theme of THEMES) {
             const local = url.origin === new URL(baseURL ?? 'http://localhost:3000').origin;
             if (local && !url.pathname.startsWith('/_next/image')) return route.continue();
             if (url.pathname.endsWith('.svg') || url.hostname.includes('dicebear')) return route.fulfill({ contentType: 'image/svg+xml', body: GREY_SVG });
-            if (/\.(png|jpe?g|webp|avif)$/.test(url.pathname) || url.pathname.startsWith('/_next/image') || url.hostname.includes('picsum')) {
+            if (/\.(png|jpe?g|webp|avif)$/.test(url.pathname) || url.pathname.startsWith('/_next/image') || url.hostname.includes('picsum') || url.hostname === 'images.unsplash.com') {
               return route.fulfill({ contentType: 'image/png', body: GREY_PNG });
             }
             return route.abort();
