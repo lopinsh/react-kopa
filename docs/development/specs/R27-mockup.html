@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Group page final</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@400;500;600;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap" rel="stylesheet">
+<style>
+/* Sūna / Mierīgs tokens as resolved on the live group page. --accent / --tone-ink come from the tone switcher (CATEGORY_TONES). */
+:root{
+  --background:#f4f4ef; --surface:#fdfdfb; --tint:#e8eae1; --border:#dcdfd4;
+  --foreground:#1f221c; --foreground-muted:#5f6558; --primary:#4B5E3B; --primary-foreground:#fff;
+  --accent:#3B55A0; --tone-ink:#fff; --photo-chip:rgb(0 0 0 / .55); --photo-ink:#fff;
+  --font-sans:"Commissioner",system-ui,sans-serif; --font-heading:"Literata",Georgia,serif;
+  --r:16px; --pill:9999px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--background:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--foreground:#eceee7;--foreground-muted:#a8ae9f;--primary:#b5c79e;--primary-foreground:#111}}
+:root[data-theme="dark"]{--background:#161814;--surface:#1e211c;--tint:#282c25;--border:#353a31;--foreground:#eceee7;--foreground-muted:#a8ae9f;--primary:#b5c79e;--primary-foreground:#111}
+*{box-sizing:border-box;margin:0}
+body{background:var(--tint);color:var(--foreground);font-family:var(--font-sans);font-size:16px;line-height:1.6}
+.jump{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--border);padding:8px 16px;display:flex;gap:6px;align-items:center;font-size:13px;overflow-x:auto}
+.jump b{font:600 15px/1 var(--font-heading);margin-right:8px;white-space:nowrap}
+.jump a{color:var(--foreground);text-decoration:none;padding:6px 10px;border-radius:var(--pill);box-shadow:inset 0 0 0 1px var(--border);white-space:nowrap}
+.doc{max-width:1500px;margin:0 auto;padding:24px 16px 64px}
+.doc>header h1{font:600 clamp(26px,3vw,36px)/1.1 var(--font-heading)}
+.decide{background:var(--surface);border-radius:var(--r);padding:16px 20px;margin-top:12px;font-size:14px;line-height:1.5;max-width:900px}
+.decide ul{padding-left:18px;margin-top:4px}
+.tools{display:flex;flex-direction:column;gap:8px;margin-top:16px;font-size:13px;color:var(--foreground-muted)}
+.tools .grp{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tools .lbl{min-width:76px}
+.tools button{font:500 13px/1 var(--font-sans);padding:8px 10px;border-radius:var(--pill);border:1px solid var(--border);background:var(--surface);color:var(--foreground);cursor:pointer;display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.tools button[aria-pressed="true"]{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.tools i{width:10px;height:10px;border-radius:50%;display:inline-block}
+#contrast{margin-top:4px;font-size:13px;color:var(--foreground-muted);overflow-x:auto;max-width:100%}
+#contrast summary{cursor:pointer}
+.ct{border-collapse:collapse;margin-top:8px;font-size:13px;color:var(--foreground)}
+.ct th,.ct td{text-align:left;padding:4px 12px 4px 0;border-bottom:1px solid var(--border);white-space:nowrap}
+.ct th{font-weight:600;white-space:normal}
+.ct i{width:12px;height:12px;border-radius:4px;display:inline-block;margin-right:6px;vertical-align:-1px}
+section.sec{margin-top:40px;scroll-margin-top:64px}
+.shd{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:baseline;margin-bottom:12px}
+.shd h2{font:600 clamp(20px,2vw,24px)/1.2 var(--font-heading)}
+.shd p{font-size:14px;color:var(--foreground-muted);flex:1 1 320px}
+.row{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.dw{flex:1 1 560px;min-width:0}
+.tw{flex:1 1 420px;min-width:0;max-width:768px}
+.cap{font-size:12px;color:var(--foreground-muted);margin-bottom:6px}
+.frame{zoom:var(--z,.6);border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border)}
+.desk{width:1280px}.tab{width:768px}
+.pw{flex:0 0 auto;max-width:100%}
+.phone{width:375px;max-width:100%;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px var(--border)}
+/* app */
+.app{background:var(--background);color:var(--foreground);--g:32px;min-height:480px}
+.tab .app{--g:24px}
+.phone .app{--g:16px;min-height:640px}
+.ico{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.hdr{height:56px;display:flex;align-items:center;gap:16px;padding:0 var(--g);background:var(--surface);border-bottom:1px solid var(--border)}
+.logo{font:400 22px/1 var(--font-heading);color:var(--primary);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.logo i{font-style:italic}.logo s{display:inline-flex}.logo s:before,.logo s:after{content:"";width:10px;height:10px;border-radius:50%;background:var(--primary)}.logo s:after{margin-left:-4px;opacity:.45}
+.search{flex:1;max-width:672px;margin:0 auto;height:36px;border-radius:var(--pill);background:var(--tint);display:flex;align-items:center;gap:8px;padding:0 14px;color:var(--foreground-muted);font-size:14px}
+.grow{flex:1;min-width:0}
+.btn{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:var(--pill);background:var(--primary);color:var(--primary-foreground);font:500 14px/1 var(--font-sans);white-space:nowrap;border:0}
+.btn.lg{height:44px;padding:0 20px;font-size:15px}
+.btn.quiet{background:transparent;color:var(--primary);box-shadow:inset 0 0 0 1px var(--border);height:32px;padding:0 12px;font-size:13px}
+.iconbtn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:var(--primary-foreground);flex:none}
+/* light pill with dark text in both modes, subtle edge so it holds on the light dark-mode tones */
+.btn.oncat,.iconbtn.oncat{background:#fdfdfb;color:#1f221c;box-shadow:inset 0 0 0 1px rgb(0 0 0 / .14)}
+/* pending state on a tone (today's PendingState): quiet, not a button */
+.pending{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border-radius:var(--pill);background:color-mix(in srgb,var(--tone-ink) 16%,transparent);color:var(--tone-ink);font:500 15px/1 var(--font-sans);white-space:nowrap}
+.pending.sm{height:32px;padding:0 12px;font-size:13px}
+.c{max-width:1200px;margin:0 auto;padding:0 var(--g)}
+.t-title{font:600 36px/1.1 var(--font-heading)}.phone .t-title{font-size:26px}
+.t-section{font:600 24px/1.2 var(--font-heading)}.phone .t-section{font-size:20px}
+.t-item{font:600 18px/1.3 var(--font-heading)}
+.t-body{font-size:16px;line-height:1.6}.t-bsm{font-size:15px;line-height:1.5}
+.t-meta{font-size:13px;line-height:1.45;color:var(--foreground-muted)}
+.note{font-style:italic;font-size:14px;color:var(--primary)}
+.strong{font-weight:600;color:var(--foreground)}
+.muted{color:var(--foreground-muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);display:inline-block;flex:none}
+.catline,.facts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px}
+.facts span{display:inline-flex;align-items:center;gap:6px}.facts .ico{width:16px;height:16px}
+.cols{display:grid;grid-template-columns:190px minmax(0,1fr) 280px;gap:32px;padding-top:18px;padding-bottom:40px}
+.cols.noaside main{grid-column:2/4}
+.nav a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:12px;font-size:14px;color:var(--foreground)}
+.nav a.on{background:var(--tint);font-weight:600}
+.nav a.sub{padding:2px 10px 8px 38px;font-size:13px;color:var(--primary)}
+.nav hr{border:0;border-top:1px solid var(--border);margin:10px 0}
+.nav small{display:block;padding:8px 10px;font-size:12px;color:var(--foreground-muted)}
+.badge{margin-left:auto;font:700 11px/1 var(--font-sans);background:var(--primary);color:var(--primary-foreground);border-radius:var(--pill);padding:3px 6px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);font-size:14px;overflow:hidden}
+.tabs span{padding:10px 12px;white-space:nowrap;color:var(--foreground-muted)}
+.tabs .on{box-shadow:inset 0 -2px 0 var(--primary);color:var(--foreground);font-weight:600}
+.stack>*+*{margin-top:16px}
+.box{background:var(--surface);border-radius:var(--r);padding:20px}
+.hair>*+*{border-top:1px solid var(--border);padding-top:12px;margin-top:12px}
+.hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.lnk{color:var(--primary);font-size:14px;font-weight:500;white-space:nowrap}
+.faces{display:flex}
+.faces span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:600 12px/1 var(--font-sans);background:var(--tint);color:var(--foreground);box-shadow:0 0 0 2px var(--surface)}
+.faces span+span{margin-left:-8px}.faces span:nth-child(2){background:var(--border)}.faces span:nth-child(3){background:color-mix(in srgb,var(--foreground) 14%,var(--surface))}
+.prose{max-width:66ch}.prose p+p{margin-top:12px}
+.pbody{padding:12px var(--g) 24px}
+.tabbar{display:flex;justify-content:space-around;border-top:1px solid var(--border);background:var(--surface);padding:8px 0 10px;font-size:11px;color:var(--foreground-muted)}
+.tabbar span{display:flex;flex-direction:column;align-items:center;gap:2px}
+.credit{font-size:12px;color:var(--foreground-muted);margin-top:6px}
+/* pictures (drawn placeholders) */
+.ph{display:block;position:relative;overflow:hidden;border-radius:var(--r);border:0;padding:0;width:100%;cursor:zoom-in;color:inherit;font:inherit;
+  background:radial-gradient(circle at 26% 62%,#1b1b1d 0 10%,#3a3a3e 10.5% 12%,transparent 12.5%),radial-gradient(circle at 74% 62%,#1b1b1d 0 10%,#3a3a3e 10.5% 12%,transparent 12.5%),linear-gradient(180deg,transparent 60.5%,#b9bcc2 60.5% 63.5%,transparent 63.5%),linear-gradient(180deg,transparent 78%,#5a4a3b 78%),radial-gradient(ellipse at 50% 0%,#f3d9a8 0,transparent 45%),linear-gradient(160deg,#8a7461,#3a2f27 75%)}
+.ph.p2{background:radial-gradient(circle at 35% 38%,#e8c7a5 0 7%,transparent 7.5%),radial-gradient(ellipse at 35% 75%,#2f4d7a 0 20%,transparent 20.5%),radial-gradient(circle at 66% 42%,#c99c7b 0 6.5%,transparent 7%),radial-gradient(ellipse at 66% 78%,#7a3b2f 0 19%,transparent 19.5%),linear-gradient(180deg,transparent 85%,#4b3f35 85%),linear-gradient(170deg,#a99a86,#5b4c40)}
+.ph.p3{background:linear-gradient(180deg,transparent 48%,#c2c5ca 48% 51%,transparent 51%),radial-gradient(circle at 14% 50%,#c0392b 0 14%,transparent 14.5%),radial-gradient(circle at 86% 50%,#c0392b 0 14%,transparent 14.5%),linear-gradient(180deg,#d8d2c6,#9a9184)}
+.ph.p4{background:radial-gradient(circle at 50% 30%,#d9b28f 0 9%,transparent 9.5%),radial-gradient(ellipse at 50% 80%,#3b55a0 0 24%,transparent 24.5%),linear-gradient(180deg,transparent 40%,#c9ccd1 40% 43%,transparent 43%),linear-gradient(180deg,#5c6b62,#2d332f)}
+.ph.p5{background:repeating-linear-gradient(90deg,#2b2b2e 0 18px,#3a3a3e 18px 22px),linear-gradient(180deg,#444,#222)}
+.ph:focus-visible{outline:2px solid var(--primary);outline-offset:3px}
+.ph .chip{position:absolute;right:10px;top:10px;z-index:3;background:var(--photo-chip);color:var(--photo-ink);border-radius:var(--pill);height:30px;min-width:30px;padding:0 8px;display:flex;gap:6px;align-items:center;justify-content:center;font:500 13px/1 var(--font-sans)}
+.ph .chip .ico{width:15px;height:15px}
+.ph .more{position:absolute;inset:0;display:grid;place-items:center;background:rgb(0 0 0 / .55);color:#fff;font:600 20px/1 var(--font-heading)}
+/* head on the page grid */
+.bento{display:grid;grid-template-columns:190px minmax(0,1fr) 280px;column-gap:32px;margin-top:18px}
+.bento .info{grid-column:1/3}.bento .pic{grid-column:3}
+.bento.solo .info{grid-column:1/-1}
+.bento.creditrow{margin-top:0}
+.tab .bento{grid-template-columns:minmax(0,1fr) 30%;column-gap:20px}
+.tab .bento .info{grid-column:1}.tab .bento .pic{grid-column:2}
+.tab .bento.solo .info{grid-column:1/-1}
+.info{background:var(--accent);color:var(--tone-ink);border-radius:24px;padding:24px 28px;display:flex;flex-direction:column;gap:10px}
+.desk .info,.tab .info{gap:20px}
+.info .t-meta,.info .strong,.info .t-title{color:var(--tone-ink)}
+.info .dot{background:var(--tone-ink)}
+.info .itop{display:flex;gap:16px;align-items:flex-start}
+.ctile{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;flex:none;background:color-mix(in srgb,var(--tone-ink) 16%,transparent);color:var(--tone-ink)}
+.ctile .ico{width:26px;height:26px}
+.info .tagline{font-size:18px;line-height:1.45;max-width:46ch}
+.info .foot{margin-top:auto;border-top:1px solid color-mix(in srgb,var(--tone-ink) 30%,transparent);padding-top:16px;display:flex;gap:16px;align-items:center;justify-content:space-between;min-height:61px}
+.info .ibtn{margin-top:auto;padding-top:10px}
+.info.compact{flex-direction:row;align-items:center;gap:20px;padding:20px 24px}
+.crumb{font-size:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.crumbsep{opacity:.7;padding:0 6px}
+.tab .info .t-title{font-size:28px;white-space:nowrap}
+.tab .info .tagline{font-size:16px;text-wrap:balance}
+.bento .pic .ph{height:100%;min-height:200px;border-radius:24px}
+.phone .info{border-radius:20px;padding:16px;margin:12px 16px 0;gap:8px}
+.phone .ctile{width:40px;height:40px;border-radius:12px}.phone .ctile .ico{width:22px;height:22px}
+.phone .info .tagline{font-size:15px;line-height:1.5}
+.menurow{display:flex;align-items:center;gap:12px}
+.strip{aspect-ratio:3/1}
+.strip[aria-expanded="true"]{aspect-ratio:16/9;cursor:zoom-out}
+.prow{display:grid;grid-auto-flow:column;grid-auto-columns:168px;gap:12px;margin-top:16px;justify-content:start}
+.prow .ph{height:112px}
+.phone .prow{grid-auto-columns:1fr;gap:8px}
+.phone .prow .ph{height:88px}
+.phone .prow.two{grid-template-columns:repeat(2,1fr);grid-auto-flow:row}
+.shead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.stack>.sr-only+*{margin-top:0}
+.undertabs{padding-top:63px} /* tabs row (43) + gap (20): first box level with the first text */
+.single .undertabs{padding-top:0}
+.clamp1{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+/* drawn avatar faces (placeholders for member photos) */
+.faces span.av{background:radial-gradient(circle at 50% 38%,var(--skin) 0 22%,transparent 23%),radial-gradient(ellipse at 50% 100%,var(--shirt) 0 42%,transparent 43%),var(--bgc)}
+.av1{--skin:#e9c4a1;--shirt:#3b5b8c;--bgc:#cfd8e3}.av2{--skin:#c99a74;--shirt:#8a4b3c;--bgc:#ead9c6}.av3{--skin:#f1d3b8;--shirt:#4f6b3a;--bgc:#d8e2cf}.av4{--skin:#a8785a;--shirt:#6a4b86;--bgc:#e2d6ea}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.ann>*+*{border-top:1px solid var(--border);padding-top:16px;margin-top:16px}
+.tabaside{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+/* sticky bar (GroupStickyBar), phones and 768 */
+.sbar{height:48px;display:flex;align-items:center;gap:10px;padding:0 var(--g);background:var(--surface);border-bottom:1px solid var(--border);font-size:14px}
+.sbar .sdot{width:24px;height:24px;border-radius:8px;background:var(--accent);color:var(--tone-ink);display:grid;place-items:center}
+.sbar .sdot .ico{width:14px;height:14px}
+.sbar .btn,.sbar .pending{height:32px;font-size:13px;padding:0 12px}
+.sbar .pending{background:var(--tint);color:var(--foreground)}
+.fade{opacity:.35}
+/* settings cards */
+.scard{background:var(--surface);border-radius:var(--r);padding:20px;box-shadow:0 0 0 1px var(--border)}
+.field{height:40px;border-radius:12px;background:var(--background);box-shadow:inset 0 0 0 1px var(--border);margin-top:6px;padding:0 12px;display:flex;align-items:center;font-size:14px}
+/* lightbox gallery */
+dialog#lb{border:0;border-radius:20px;padding:0;background:var(--surface);color:var(--foreground);width:min(92vw,960px);box-shadow:0 20px 60px rgb(0 0 0 / .35)}
+dialog#lb::backdrop{background:rgb(0 0 0 / .5)}
+#lb .ph{border-radius:0;aspect-ratio:3/2;cursor:default}
+#lb .bar{display:flex;align-items:center;padding:12px 16px;gap:8px;flex-wrap:wrap}
+#lb button{font:500 14px/1 var(--font-sans);padding:10px 14px;border-radius:var(--pill);border:1px solid var(--border);background:var(--surface);color:var(--foreground);cursor:pointer}
+#lb [hidden]{display:none}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="db" viewBox="0 0 24 24"><path d="M14.4 14.4 9.6 9.6"/><path d="M18.66 21.49a2 2 0 1 1-2.83-2.83l-1.77 1.77a2 2 0 1 1-2.83-2.83l6.36-6.36a2 2 0 1 1 2.83 2.83l-1.77 1.77a2 2 0 1 1 2.83 2.83z"/><path d="m21.5 21.5-1.4-1.4M3.9 3.9 2.5 2.5"/><path d="M6.4 12.77a2 2 0 1 1-2.83-2.83l1.77-1.77a2 2 0 1 1-2.83-2.83l2.83-2.83a2 2 0 1 1 2.83 2.83l1.77-1.77a2 2 0 1 1 2.83 2.83z"/></symbol>
+  <symbol id="chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="file" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4M16 13H8M16 17H8"/></symbol>
+  <symbol id="list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+  <symbol id="cal" viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/></symbol>
+  <symbol id="share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></symbol>
+  <symbol id="users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+  <symbol id="pin" viewBox="0 0 24 24"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+  <symbol id="menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+  <symbol id="search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+  <symbol id="max" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+  <symbol id="img" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.1-3.1a2 2 0 0 0-2.8 0L6 21"/></symbol>
+  <symbol id="gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></symbol>
+</svg>
+
+<nav class="jump" aria-label="Sadaļas"><b>Grupas lapa</b>
+  <a href="#info">Informācija</a><a href="#sticky">768 ritinot</a><a href="#strip">Josla atvērta</a><a href="#news">Jaunumi</a><a href="#event">Pasākums</a><a href="#settings">Iestatījumi</a>
+</nav>
+<div class="doc">
+<header>
+  <h1>Grupas lapa: gala skice</h1>
+  <div class="decide"><b>Decisions</b>
+    <ul>
+      <li>Head on the page grid: info tile in the category tone over menu + content, group picture over the side column (phones: a 3:1 strip that expands). No picture: the tile spans the full width, phones show no strip.</li>
+      <li>Other pages use the same tile, compact (event pages with the breadcrumb); settings and create-event: compact tile, full width, no side column.</li>
+      <li>Tile button by role: visitor Sazināties, pending "Pieteikums nosūtīts" (withdraw in the menu), member none, team Labot grupu. Light pill with dark text in both modes.</li>
+      <li>Side column: next meeting, latest news (Informācija only), then members with the group's links (a link for members and team only). On Informācija it starts right under the picture credit.</li>
+      <li>Section pictures (R28): light photo row, gallery, team adds them with "Pievienot attēlus" (opens the existing picker). No captions.</li>
+      <li>Tones: CATEGORY_TONES light with white text, dark with near-black; all 15 pass 4.5:1 for title and 13 px meta.</li>
+    </ul></div>
+  <div class="tools" role="group" aria-label="Skata iestatījumi">
+    <div class="grp"><span class="lbl">Loma:</span><span id="roles"></span></div>
+    <div class="grp"><span class="lbl">Grupa:</span><button type="button" data-flag="priv" aria-pressed="false">Privāta</button><button type="button" data-flag="single" aria-pressed="false">Viena sadaļa</button><button type="button" data-flag="nophoto" aria-pressed="false">Bez attēla</button><button type="button" id="mode" aria-pressed="false">Tumšais režīms</button></div>
+    <div class="grp"><span class="lbl">Tonis:</span><span id="tones" style="display:contents"></span></div>
+  </div>
+  <details id="contrast"><summary>Kontrasts: 15 toņi, abi režīmi</summary></details>
+</header>
+<div id="out"></div>
+</div>
+
+<dialog id="lb" aria-label="Attēli">
+  <div class="ph" id="lbpic"></div>
+  <div class="bar"><span class="t-meta grow" id="lbcap"></span><button type="button" id="lbprev" aria-label="Iepriekšējais">←</button><span class="t-meta" id="lbn"></span><button type="button" id="lbnext" aria-label="Nākamais">→</button><button type="button" id="lbclose">Aizvērt</button></div>
+</dialog>
+
+<script>
+(function(){
+const I=(id)=>`<svg class="ico"><use href="#${id}"/></svg>`;
+const G={name:'Rīgas Svarcēlāju klubs',cat:'Sports',subs:'Svarcelšana · Spēka sports',city:'Rīga',members:'24 biedri',next:'Atklātais treniņš iesācējiem',when:'Otrd., 3. nov. 19:00'};
+const TAG='Olimpiskā svarcelšana iesācējiem un turpinātājiem';
+const CREDIT='Foto: A. Kalniņa / Unsplash';
+const GAL={group:[{p:''}],about:[{p:''},{p:'p2'},{p:'p3'},{p:'p4'},{p:'p5'}],train:[{p:'p4'},{p:'p3'},{p:'p2'}]};
+const ST={role:'visitor',priv:false,single:false,nophoto:false,dark:false,tone:11};
+const ROLES=[['visitor','Viesis'],['pending','Gaida'],['member','Biedrs'],['team','Komanda']];
+
+/* tones: lib/constants/theme.ts CATEGORY_TONES; text = white or near-black, whichever reads better */
+const TONES=[['Ceļošana','#4F7330','#7BBF40'],['Dejas','#A9452C','#E09B8A'],['Hobiji','#A55A12','#DB9F66'],['Kopiena','#2F6A45','#44C172'],['Politika','#57493D','#B8AA9D'],['Mājdzīvnieki','#7A5E40','#C1A78B'],['Māksla','#7A4790','#CA9CDE'],['Mūzika','#57479A','#AFA3E0'],['Reliģija','#586474','#A0ACBA'],['Sabiedrība','#A53A50','#DD98A6'],['Spēles','#8C3F72','#DB94C3'],['Sports','#3B55A0','#98A9DD'],['Ģimene','#2B6489','#7BB2D6'],['Labsajūta','#2E6B6F','#47BAC2'],['Izglītība','#86650E','#D0A535']];
+const hex2=(h)=>[1,3,5].map(i=>parseInt(h.substr(i,2),16));
+const lum=(h)=>{const c=hex2(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2];};
+const ratio=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+const W='#ffffff',K='#161814';const ink=(bg)=>ratio(bg,W)>=ratio(bg,K)?W:K;
+const cell=(bg)=>{const k=ink(bg),r=ratio(bg,k);return `<td><i style="background:${bg}"></i>${k===W?'balts':'melns'} ${r.toFixed(1)}${r<4.5?' ✗':''}</td>`;};
+document.getElementById('contrast').insertAdjacentHTML('beforeend',`<table class="ct"><thead><tr><th>Tonis</th><th>Gaišais: virsraksts un 13 px meta</th><th>Tumšais: virsraksts un 13 px meta</th></tr></thead><tbody>${TONES.map(t=>`<tr><td>${t[0]}</td>${cell(t[1])}${cell(t[2])}</tr>`).join('')}</tbody></table>`);
+document.getElementById('tones').innerHTML=TONES.map((t,i)=>`<button type="button" data-t="${i}"><i style="background:${t[1]}"></i>${t[0]}</button>`).join('');
+document.getElementById('roles').innerHTML=ROLES.map(r=>`<button type="button" data-role="${r[0]}">${r[1]}</button>`).join(' ');
+
+const isIn=()=>ST.role==='member'||ST.role==='team';
+const hdr=(v)=>v==='p'?`<div class="hdr"><span class="logo">Ejam <i>kopā</i><s></s></span><span class="grow"></span>${I('search')}${ST.role==='visitor'?'<span class="btn">Ienākt</span>':'<span class="faces"><span>JS</span></span>'}</div>`
+ :`<div class="hdr"><span class="logo">Ejam <i>kopā</i><s></s></span><span class="search">${I('search')}Meklē grupu vai nodarbi…</span><span class="t-meta">LV</span>${ST.role==='visitor'?'<span class="btn">Ienākt</span>':'<span class="faces"><span>JS</span></span>'}</div>`;
+const nav=(page)=>{const team=ST.role==='team',inn=isIn()||ST.role==='pending';return `<nav class="nav"><a class="${page==='info'?'on':''}">${I('file')}Informācija</a><a class="${page==='news'?'on':''}">${I('list')}Jaunumi</a><a class="${page==='events'?'on':''}">${I('cal')}Pasākumi</a>${isIn()?`<a>${I('users')}Biedri${team?'<span class="badge" title="Gaidošie pieteikumi">3</span>':''}</a>`:''}${team?`<a class="${page==='settings'?'on':''}">${I('gear')}Iestatījumi</a>`:''}<hr><a>${I('share')}Dalīties</a>${inn?`<a>${I('user')}Tava dalība</a>${ST.role==='pending'?'<a class="sub">Atsaukt pieteikumu</a>':''}`:''}<small>Ziņot par grupu</small></nav>`;};
+const tabs=`<div class="tabs"><span class="on">Par mums</span><span>Treniņi</span><span>Ko ņemt līdzi</span></div>`;
+const tileBtn=(gal,i,more)=>{const it=GAL[gal][i];return `<button type="button" class="ph ${it.p}" data-gal="${gal}" data-i="${i}" aria-label="${more?`Vēl ${more} attēli, atvērt galeriju`:`Atvērt attēlu ${i+1}`}">${more?`<span class="more">+${more}</span>`:''}</button>`;};
+const photoRow=(gal,max)=>{const n=GAL[gal].length,k=Math.min(n,max);return `<div class="prow${max===2?' two':''}">${Array.from({length:k},(_,i)=>tileBtn(gal,i,(i===k-1&&n>k)?n-k+1:0)).join('')}</div>`;};
+const addCtl=`<span class="btn quiet" title="Atver attēlu izvēli">${I('img')}Pievienot attēlus</span>`;
+const secHead=(t)=>`<div class="shead"><div class="t-section">${t}</div>${ST.role==='team'?addCtl:''}</div>`;
+/* first part under the tabs: its heading only for screen readers (the active tab already says it) */
+const firstHead=(t)=>ST.role==='team'?`<div class="shead"><h2 class="sr-only">${t}</h2><span class="grow"></span>${addCtl}</div>`:`<h2 class="sr-only">${t}</h2>`;
+const sections=(p,after)=>`${ST.single?'':tabs}<div class="stack" style="margin-top:${ST.single?0:20}px">
+  ${ST.single?secHead('Par mums'):firstHead('Par mums')}<div class="prose t-body"><p>Trenējamies olimpiskajā svarcelšanā: raušana un grūšana. Treneris palīdz ar tehniku, svarus izvēlies pats.</p>${p?'':'<p class="muted">Nāc arī tad, ja stieni nekad neesi turējis: sākam ar tukšo stieni un koka nūju.</p>'}</div>
+  ${photoRow('about',3)}${after?`<div style="margin-top:24px">${after}</div>`:''}
+  ${ST.single?'':`<div style="margin-top:28px">${secHead('Treniņi')}</div><div class="prose t-body muted"><p>Otrdienās un ceturtdienās 19:00, sestdienās 10:00. Pirmā reize bez maksas.</p></div>${photoRow('train',2)}`}
+  ${ST.single||ST.role!=='team'?'':`<div style="margin-top:28px">${secHead('Ko ņemt līdzi')}</div><div class="prose t-body muted"><p>Sporta apavi ar cietu zoli, ūdens pudele.</p></div>`}
+</div>`;
+const avatars=(n)=>`<span class="faces">${['av1','av2','av3','av4'].slice(0,n||4).map(c=>`<span class="av ${c}"></span>`).join('')}</span>`;
+const who=(p)=>{const link=isIn();return `<div class="box hair"><div><div class="hd"><span class="t-meta">Biedri</span>${link?'<span class="lnk">Visi</span>':''}</div><div style="display:flex;gap:12px;align-items:center;margin-top:8px">${avatars()}<span class="t-bsm strong">${G.members}</span></div></div><div class="t-meta">Mājaslapa · Instagram · Discord</div></div>`;};
+const nextBox=`<div class="box"><div class="hd"><span class="t-meta">Nākamais pasākums</span><span class="lnk">Visi</span></div><div class="t-bsm strong" style="margin-top:4px">${G.next}</div><div class="note">${G.when}</div><p class="t-meta clamp1" style="margin-top:4px">Iepazīstamies un izlemjam, ko darīsim kopā</p></div>`;
+const newsRow=`<div class="box"><div class="hd"><span class="t-meta">Jaunākais</span><span class="lnk">Visi jaunumi</span></div><div class="t-bsm strong" style="margin-top:4px">Sestdien zāle atvērta no 9:00</div><p class="t-bsm muted clamp1">Sacensību dēļ sākam stundu agrāk, atnāciet laicīgi.</p><div class="t-meta" style="margin-top:4px">Dzirksteļu Jānis · pirms 4 dienām</div></div>`;
+const tabbar=`<div class="tabbar"><span>${I('search')}Atklāt</span><span>${I('list')}Jaunumi</span><span>${I('plus')}</span><span>${I('chat')}Ziņas</span><span>${I('user')}Es</span></div>`;
+const gpic=()=>ST.nophoto?'':`<div class="pic"><button type="button" class="ph" data-gal="group" data-i="0" aria-label="Atvērt grupas attēlu"><span class="chip">${I('max')}</span></button></div>`;
+const creditRow=()=>ST.nophoto?'':`<div class="bento creditrow"><div class="pic"><div class="credit">${CREDIT}</div></div></div>`;
+const strip=(open)=>ST.nophoto?'':`<button type="button" class="ph strip" data-strip aria-expanded="${open?'true':'false'}" aria-label="${open?'Sakļaut attēlu':'Rādīt visu attēlu'}"><span class="chip">${open?'Sakļaut':I('max')}</span></button><div class="credit" style="text-align:right">${CREDIT}</div>`;
+const ctile=`<span class="ctile">${I('db')}</span>`;
+const meta=()=>`<div class="catline t-meta"><span class="dot"></span><span class="strong">${G.cat}</span><span>${G.subs}</span></div><div class="facts t-meta"><span>${I('pin')}${G.city}</span><span>${I('users')}<span class="strong">${G.members}</span></span>${ST.priv?`<span>${I('lock')}Tikai biedriem</span>`:''}</div>`;
+/* the role's control on the tile */
+const action=(size)=>{const r=ST.role;
+  if(r==='member')return '';
+  if(r==='pending')return size==='round'?`<span class="pending sm">${I('clock')}Gaida</span>`:`<span class="pending"${size==='full'?' style="width:100%;justify-content:center"':''}>${I('clock')}Pieteikums nosūtīts</span>`;
+  const label=r==='team'?'Labot grupu':'Sazināties';
+  if(size==='round')return `<span class="iconbtn oncat" aria-label="${label}">${I(r==='team'?'pen':'chat')}</span>`;
+  return `<span class="btn lg oncat"${size==='full'?' style="width:100%;justify-content:center"':''}>${label}</span>`;};
+const nameHtml=(crumb)=>crumb?`<span class="crumb">${G.name}</span><span class="crumbsep">›</span>${crumb}`:G.name;
+/* v: 'd' desktop, 't' tablet, 'p' phone */
+const infoTile=(v,compact,crumb,noAct)=>{
+  if(noAct) return `<div class="info compact">${ctile}<div class="grow"><div class="t-title" style="font-size:28px">${G.name}</div>${meta()}</div></div>`;
+  const menu=v!=='d'?`<span>${I('menu')}</span>`:'';
+  if(v==='p') return compact
+    ?`<div class="info"><div class="menurow">${menu}${ctile}<span class="grow"></span>${action('round')}</div><div class="t-title"${crumb?' style="font-size:20px"':''}>${nameHtml(crumb)}</div>${meta()}</div>`
+    :`<div class="info"><div class="menurow">${menu}${ctile}</div><div class="t-title">${G.name}</div>${meta()}<p class="tagline">${TAG}</p>${action()?`<div class="ibtn">${action('full')}</div>`:''}</div>`;
+  if(compact) return `<div class="info compact">${menu}${ctile}<div class="grow"><div class="t-title" style="font-size:${v==='t'?24:28}px">${nameHtml(crumb)}</div>${meta()}</div>${action()}</div>`;
+  const foot=`<div class="foot"><p class="tagline">${TAG}</p>${action()}</div>`;
+  if(v==='t') return `<div class="info"><div class="menurow">${menu}${ctile}</div><div><div class="t-title">${G.name}</div><div style="margin-top:6px">${meta()}</div></div>${foot}</div>`;
+  return `<div class="info"><div class="itop">${ctile}<div class="grow"><div class="t-title">${G.name}</div><div style="margin-top:6px">${meta()}</div></div></div>${foot}</div>`;};
+const bentoCls=()=>ST.nophoto?'bento solo':'bento';
+
+const F={};
+F.infoDesk=()=>`<div class="frame desk${ST.single?' single':''}"><div class="app">${hdr()}
+  <div class="c"><div class="${bentoCls()}">${infoTile('d')}${gpic()}</div>${creditRow()}</div>
+  <div class="c cols">${nav('info')}<main>${sections(0)}</main><aside class="stack undertabs">${nextBox}${newsRow}${who()}</aside></div></div></div>`;
+F.infoTab=()=>`<div class="frame tab"><div class="app">${hdr()}
+  <div class="c"><div class="${bentoCls()}">${infoTile('t')}${gpic()}</div>${creditRow()}</div>
+  <div class="c" style="padding-top:12px;padding-bottom:32px"><main>${sections(0,nextBox)}</main><div class="tabaside" style="margin-top:28px">${newsRow}${who()}</div></div></div></div>`;
+F.infoPhone=(open)=>`<div class="phone"><div class="app">${hdr('p')}${infoTile('p')}<div class="pbody stack">${strip(open)}${sections(1,nextBox)}${newsRow}${who(1)}</div>${tabbar}</div></div>`;
+const sbarAction=()=>{const r=ST.role;if(r==='member')return '';if(r==='pending')return `<span class="pending">${I('clock')}Gaida</span>`;return `<span class="btn">${r==='team'?'Labot':'Sazināties'}</span>`;};
+F.sticky=()=>`<div class="frame tab"><div class="app">${hdr()}<div class="sbar">${I('menu')}<span class="sdot">${I('db')}</span><span class="strong grow" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${G.name}</span>${sbarAction()}</div>
+  <div class="c" style="padding-top:0">${ST.single?'':`<div style="background:var(--background)">${tabs.replace('class="on">Par mums','>Par mums').replace('<span>Treniņi','<span class="on">Treniņi')}</div>`}
+  <div class="stack" style="margin-top:20px;padding-bottom:32px"><div class="fade">${photoRow('about',3)}</div>${secHead('Treniņi')}<div class="prose t-body muted"><p>Otrdienās un ceturtdienās 19:00, sestdienās 10:00. Pirmā reize bez maksas.</p></div>${photoRow('train',2)}<div class="tabaside" style="margin-top:12px">${newsRow}${who()}</div></div></div></div></div>`;
+const anns=`<div class="ann">
+ <div><div class="t-item">Sestdien zāle atvērta no 9:00</div><div class="t-meta">Pirmd., 26. okt. · Liene B.</div><p class="t-bsm" style="margin-top:6px">Sacensību dēļ sākam stundu agrāk. Atnāciet laicīgi.</p></div>
+ <div><div class="t-item">Jauni svari zālē</div><div class="t-meta">Ceturtd., 22. okt. · Kārlis Z.</div><p class="t-bsm" style="margin-top:6px">Klubam ir divi jauni 20 kg stieņi un diski.</p></div>
+ <div><div class="t-item">Sezonas sākums</div><div class="t-meta">Pirmd., 5. okt. · Liene B.</div><p class="t-bsm" style="margin-top:6px">Treniņi atsākas, iesācēji laipni gaidīti.</p></div></div>`;
+F.newsDesk=()=>`<div class="frame desk"><div class="app">${hdr()}<div class="c"><div class="bento solo">${infoTile('d',true)}</div></div><div class="c cols">${nav('news')}<main><div class="t-title" style="margin-bottom:16px">Jaunumi</div>${anns}</main><aside class="stack">${nextBox}${who()}</aside></div></div></div>`;
+F.newsPhone=()=>`<div class="phone"><div class="app">${hdr('p')}${infoTile('p',true)}<div class="pbody stack"><div class="t-title">Jaunumi</div>${nextBox}${anns}${who(1)}</div>${tabbar}</div></div>`;
+const evBody=(p)=>`<button type="button" class="ph p3" data-gal="group" data-i="0" style="aspect-ratio:16/9" aria-label="Atvērt pasākuma attēlu"></button>
+  <div class="t-title" style="margin-top:16px;font-size:${p?24:32}px">${G.next}</div>
+  <div class="catline t-meta" style="margin-top:6px"><span class="dot"></span><span class="strong">${G.cat}</span><span>Svarcelšana</span></div>
+  <div class="stack" style="margin-top:16px"><div class="t-bsm"><span class="strong">Otrd., 3. nov. 19:00</span> · <span class="lnk">Pievienot kalendāram</span></div><div class="t-bsm"><span class="strong">Sporta zāle, Brīvības iela 99</span> · <span class="lnk">Atvērt kartē</span></div>
+  <div class="t-section" style="margin-top:12px">Par pasākumu</div><p class="prose t-body">Atvērtais treniņš tiem, kas grib pamēģināt. Paņem sporta apavus.</p>
+  <div style="display:flex;gap:12px;align-items:center"><span class="btn lg">Eju</span>${avatars(3)}<span class="t-meta">8 iet</span></div></div>`;
+F.eventDesk=()=>`<div class="frame desk"><div class="app">${hdr()}<div class="c"><div class="bento solo">${infoTile('d',true,'Visi pasākumi')}</div></div><div class="c cols">${nav('events')}<main>${evBody()}</main><aside class="stack">${nextBox}${who()}</aside></div></div></div>`;
+F.eventPhone=()=>`<div class="phone"><div class="app">${hdr('p')}${infoTile('p',true,'Visi pasākumi')}<div class="pbody">${evBody(1)}</div>${tabbar}</div></div>`;
+F.settings=()=>`<div class="frame desk"><div class="app">${hdr()}<div class="c"><div class="bento solo">${infoTile('d',true,null,true)}</div></div><div class="c cols noaside">${nav('settings')}<main class="stack"><div class="t-title">Iestatījumi</div>
+  <div class="scard"><div class="t-item">Pamatinformācija</div><div class="t-meta" style="margin-top:12px">Nosaukums</div><div class="field">${G.name}</div><div class="t-meta" style="margin-top:12px">Īss apraksts</div><div class="field">${TAG}</div></div>
+  <div class="scard"><div class="t-item">Redzamība</div><div class="t-meta" style="margin-top:8px">${ST.priv?'Privāta: saturu redz tikai biedri.':'Atvērta: saturu redz visi.'}</div></div></main></div></div></div>`;
+
+const S=(id,title,desc,body)=>`<section class="sec" id="${id}"><div class="shd"><h2>${title}</h2><p>${desc}</p></div>${body}</section>`;
+const pair=(d,p)=>`<div class="row"><div class="dw"><div class="cap">1280 px</div>${d}</div><div class="pw"><div class="cap">375 px</div>${p}</div></div>`;
+function render(){
+  document.getElementById('out').innerHTML=
+   S('info','Informācija','Info tile over the menu and content, picture over the side column; divider row with tagline left and the role\'s button right. Side column starts right under the picture credit. With tabs the heading of the first part is for screen readers only (the tab says it).',pair(F.infoDesk(),F.infoPhone(false))+`<div class="row" style="margin-top:24px"><div class="tw"><div class="cap">768 px</div>${F.infoTab()}</div></div>`)+
+   S('sticky','768, ritinot','After the head scrolls away the sticky bar (as on phones) keeps the name and the role\'s action, the part tabs stay under it.',`<div class="row"><div class="tw"><div class="cap">768 px, scrolled</div>${F.sticky()}</div></div>`)+
+   S('strip','Josla telefonā atvērta','The strip is a button (aria-expanded): tap opens it to 16:9 in place, tap again or Esc folds it.',`<div class="row"><div class="pw"><div class="cap">375 px, expanded</div>${F.infoPhone(true)}</div></div>`)+
+   S('news','Jaunumi (and Pasākumi, Biedri)','Compact tile, no picture; phones use the round button. Side column: next meeting, then members.',pair(F.newsDesk(),F.newsPhone()))+
+   S('event','Pasākuma lapa','Compact tile with the breadcrumb back to the group\'s events.',pair(F.eventDesk(),F.eventPhone()))+
+   S('settings','Iestatījumi un jauns pasākums','Compact tile full width, no side column; no tile button here (you are already editing).',`<div class="row"><div class="dw"><div class="cap">1280 px</div>${F.settings()}</div></div>`);
+  fit();}
+function apply(){const bg=ST.dark?TONES[ST.tone][2]:TONES[ST.tone][1];const r=document.documentElement;
+  r.style.setProperty('--accent',bg);r.style.setProperty('--tone-ink',ink(bg));r.dataset.theme=ST.dark?'dark':'light';
+  document.querySelectorAll('[data-t]').forEach((b,i)=>b.setAttribute('aria-pressed',i===ST.tone));
+  document.querySelectorAll('[data-role]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.role===ST.role));
+  document.querySelectorAll('[data-flag]').forEach(b=>b.setAttribute('aria-pressed',!!ST[b.dataset.flag]));
+  document.getElementById('mode').setAttribute('aria-pressed',ST.dark);}
+document.querySelector('.tools').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.t!==undefined)ST.tone=+b.dataset.t;else if(b.dataset.role)ST.role=b.dataset.role;else if(b.dataset.flag)ST[b.dataset.flag]=!ST[b.dataset.flag];else if(b.id==='mode')ST.dark=!ST.dark;
+  apply();if(b.dataset.t===undefined&&b.id!=='mode')render();});
+
+/* gallery + strip */
+const lb=document.getElementById('lb'),lp=document.getElementById('lbpic'),cap=document.getElementById('lbcap'),n=document.getElementById('lbn'),prev=document.getElementById('lbprev'),next=document.getElementById('lbnext');
+let opener=null,gal=null,idx=0;
+function show(){const it=GAL[gal][idx];lp.className='ph '+it.p;cap.textContent=gal==='group'?CREDIT:'';const many=GAL[gal].length>1;prev.hidden=next.hidden=n.hidden=!many;n.textContent=(idx+1)+' / '+GAL[gal].length;}
+document.addEventListener('click',e=>{
+  const s=e.target.closest('[data-strip]');
+  if(s){const o=s.getAttribute('aria-expanded')!=='true';s.setAttribute('aria-expanded',o);s.setAttribute('aria-label',o?'Sakļaut attēlu':'Rādīt visu attēlu');s.querySelector('.chip').innerHTML=o?'Sakļaut':I('max');return;}
+  const b=e.target.closest('[data-gal]');if(!b)return;
+  opener=b;gal=b.dataset.gal;idx=+b.dataset.i;show();lb.showModal();document.getElementById('lbclose').focus();});
+document.addEventListener('keydown',e=>{const s=e.target.closest&&e.target.closest('[data-strip]');if(s&&e.key==='Escape'&&s.getAttribute('aria-expanded')==='true')s.click();});
+prev.addEventListener('click',()=>{idx=(idx-1+GAL[gal].length)%GAL[gal].length;show();});
+next.addEventListener('click',()=>{idx=(idx+1)%GAL[gal].length;show();});
+lb.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')prev.click();if(e.key==='ArrowRight')next.click();});
+document.getElementById('lbclose').addEventListener('click',()=>lb.close());
+lb.addEventListener('click',e=>{if(e.target===lb)lb.close();});
+lb.addEventListener('close',()=>{if(opener&&document.body.contains(opener))opener.focus();});
+function fit(){document.querySelectorAll('.frame').forEach(f=>{const w=f.classList.contains('tab')?768:1280;f.style.setProperty('--z',Math.min(1,f.parentElement.clientWidth/w).toFixed(3));});}
+addEventListener('resize',fit);
+apply();render();
+})();
+</script>
+</body>
+</html>
