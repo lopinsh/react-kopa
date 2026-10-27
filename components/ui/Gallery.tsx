@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type KeyboardEvent, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -39,17 +39,25 @@ export default function Gallery({ title, items, start, onClose, returnFocusRef }
         }
     }, [idx, many, items, total]);
 
+    // ←/→ on the dialog panel (not window), so the page behind and the phone strip never see them.
+    const panel = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        const dialog = panel.current?.closest<HTMLElement>('[role="dialog"]');
+        if (!many || !dialog) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.defaultPrevented || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+            e.preventDefault();
+            setIdx((i) => (i + (e.key === 'ArrowLeft' ? -1 : 1) + total) % total);
+        };
+        dialog.addEventListener('keydown', onKeyDown);
+        return () => dialog.removeEventListener('keydown', onKeyDown);
+    }, [many, total]);
     const go = (step: number) => setIdx((i) => (i + step + total) % total);
-    const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-        if (!many || e.defaultPrevented) return;
-        if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
-    };
     if (!item) return null;
 
     return (
         <Modal onClose={onClose} title={title} size="4xl" returnFocusRef={returnFocusRef}>
-            <div className="grid gap-2" onKeyDown={onKeyDown}>
+            <div ref={panel} className="grid gap-2">
                 <Image src={item.url} alt={item.alt} width={1600} height={1200} sizes="100vw" unoptimized className="h-auto max-h-[75vh] w-full rounded-2xl object-contain" />
                 <BannerCredit credit={item.credit} />
                 {many && (
