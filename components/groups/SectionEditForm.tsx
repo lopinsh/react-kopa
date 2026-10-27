@@ -6,6 +6,7 @@ import RichTextEditor from '@/components/ui/RichTextEditor';
 import TextCounter from '@/components/ui/TextCounter';
 import LanguageEditor from '@/components/ui/LanguageEditor';
 import SectionFormFooter from '@/components/groups/SectionFormFooter';
+import SectionPicturesOrder from '@/components/groups/settings/sections/SectionPicturesOrder';
 import SectionVisibilityField from '@/components/groups/SectionVisibilityField';
 import { isOverLimit } from '@/lib/text-limit';
 import { SECTION_TITLE_MAX, isSectionTextFilled } from '@/lib/validations/section';
@@ -125,6 +126,8 @@ export default function SectionEditForm({ section, isPending, canDelete, justSav
                             placeholder={t('fieldContentPlaceholder')}
                         />
                     </div>
+
+                    {!section.isNew && section.id !== 'about' && <SectionPicturesOrder sectionId={section.id} pictures={section.pictures} />}
                 </div>
             </LanguageEditor>
 
