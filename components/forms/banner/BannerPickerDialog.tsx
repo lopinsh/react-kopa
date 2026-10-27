@@ -8,10 +8,11 @@ import UnsplashSearch from '@/components/forms/banner/UnsplashSearch';
 import { getCurated, type UnsplashPick } from '@/lib/banner';
 
 type Props = {
-    kind: 'group' | 'event';
+    kind: 'group' | 'event' | 'section';
     l1Slug: string | null;
     searchEnabled: boolean;
     selectedUrl: string | null;
+    /** `null` (no image) never comes from kind 'section'. */
     onPick: (photo: UnsplashPick | null) => void;
     onClose: () => void;
 };
@@ -21,12 +22,14 @@ export default function BannerPickerDialog({ kind, l1Slug, searchEnabled, select
     const t = useTranslations('banner');
     const curated = l1Slug ? getCurated(l1Slug) : [];
     return (
-        <Modal onClose={onClose} title={t('dialogTitle')} size="2xl" panelClassName="flex flex-col">
+        <Modal onClose={onClose} title={t(kind === 'section' ? 'dialogTitleSection' : 'dialogTitle')} size="2xl" panelClassName="flex flex-col">
             <div className="min-h-0 flex-1 space-y-4 overflow-y-auto">
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                    <PhotoTile label={kind === 'event' ? t('noneEvent') : t('none')} sub={t('noneHint')} selected={!selectedUrl} onPick={() => onPick(null)}>
-                        {l1Slug && <PictureFallback l1Slug={l1Slug} />}
-                    </PhotoTile>
+                    {kind !== 'section' && (
+                        <PhotoTile label={kind === 'event' ? t('noneEvent') : t('none')} sub={t('noneHint')} selected={!selectedUrl} onPick={() => onPick(null)}>
+                            {l1Slug && <PictureFallback l1Slug={l1Slug} />}
+                        </PhotoTile>
+                    )}
                     {curated.map((p) => (
                         <PhotoTile key={p.id} thumb={p.thumb} alt={p.alt} label={p.credit.name} selected={selectedUrl === p.url} onPick={() => onPick(p)} />
                     ))}

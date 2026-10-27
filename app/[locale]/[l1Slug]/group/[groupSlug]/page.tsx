@@ -7,6 +7,9 @@ import { sanitizeRichText } from '@/lib/sanitize';
 import FallbackLangLabel from '@/components/ui/FallbackLangLabel';
 import InfoSections from '@/components/groups/frame/InfoSections';
 import NextMeetingBox from '@/components/groups/NextMeetingBox';
+import PhotoRow from '@/components/groups/frame/PhotoRow';
+import AddSectionPictures from '@/components/groups/frame/AddSectionPictures';
+import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 import { langAttr } from '@/lib/translations';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
@@ -32,16 +35,19 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
         getTranslations('common'),
     ]);
     const open = group.sections.find((s) => s.id === part);
+    const searchEnabled = isUnsplashSearchEnabled();
     const parts = group.sections.map((s, i) => {
         const contentLang = langAttr(s.contentLang, locale);
         return {
             key: s.id,
             label: i === 0 ? tCommon('about') : s.title,
             lang: i === 0 ? undefined : langAttr(s.titleLang, locale),
+            action: <AddSectionPictures sectionId={s.id} count={s.pictures.length} l1Slug={l1Slug} searchEnabled={searchEnabled} />,
             content: (
                 <article className="max-w-reading text-body-sm">
                     {contentLang && <FallbackLangLabel lang={contentLang} className="mb-3" />}
                     <div lang={contentLang} className="rich-text" dangerouslySetInnerHTML={{ __html: sanitizeRichText(s.content) }} />
+                    <PhotoRow title={s.title} pictures={s.pictures} first={i === 0} />
                 </article>
             ),
         };

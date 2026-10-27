@@ -5,7 +5,7 @@ import PartTabs from '@/components/ui/PartTabs';
 import { UI } from '@/lib/constants';
 import { useScrollSpy } from '@/hooks/useScrollSpy';
 
-type Part = { key: string; label: string; lang?: string; content: ReactNode };
+type Part = { key: string; label: string; lang?: string; content: ReactNode; /** Right-aligned in the section head (the team's add-pictures button); the first section's heading is sr-only, so it gets a row of its own. */ action?: ReactNode };
 
 const anchor = (key: string) => `part-${key}`;
 
@@ -54,7 +54,17 @@ export default function InfoSections({ label, parts, initial, afterFirst }: { la
                 {parts.map((p, i) => (
                     <Fragment key={p.key}>
                     <section id={anchor(p.key)} aria-labelledby={`${anchor(p.key)}-h`} className="scroll-mt-[var(--part-top,0px)]">
-                        <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className={i === 0 && many ? 'mb-2 text-section sr-only' : 'mb-2 text-section'}>{p.label}</h2>
+                        {i === 0 && many ? (
+                            <>
+                                <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className="text-section sr-only">{p.label}</h2>
+                                <div className="mb-2 flex max-w-reading justify-end empty:hidden">{p.action}</div>
+                            </>
+                        ) : (
+                            <div className="mb-2 flex max-w-reading items-start justify-between gap-3">
+                                <h2 id={`${anchor(p.key)}-h`} lang={p.lang} className="min-w-0 text-section">{p.label}</h2>
+                                <div className="empty:hidden">{p.action}</div>
+                            </div>
+                        )}
                         {p.content}
                     </section>
                     {i === 0 && afterFirst}
