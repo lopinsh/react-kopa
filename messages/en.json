@@ -581,6 +581,10 @@
       "partsLabel": "Page parts",
       "members": "{count, plural, one {# member} other {# members}}",
       "membersOnly": "Members only",
+      "showPicture": "Show the whole picture",
+      "hidePicture": "Collapse the picture",
+      "openPicture": "Open the group's picture",
+      "editGroup": "Edit group",
       "aboutLabel": "About this group"
     },
     "nextMeeting": {
@@ -873,8 +877,7 @@
           "filterLine": "Filter line",
           "groupCard": "Group card and row",
           "eventRow": "Event row and day list",
-          "header": "Group banner and phone bar, for a visitor, a waiting request and the team",
-          "groupPicture": "Group picture on Informācija, with and without an image; the jump links are the part tabs above",
+          "header": "Group head tile (full with the picture, compact, without a picture), for a visitor, a waiting request and the team",
           "memberCard": "Member card",
           "requestCard": "Request card",
           "announcement": "Announcement card",

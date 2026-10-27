@@ -17,7 +17,7 @@ type Props = {
     oneLine?: boolean;
     /** Inside a stretched card link: the links sit above it so the rest of the card stays one big link. */
     aboveCardLink?: boolean;
-    /** On a tone area (the group banner): text and dot take the area's ink instead of the site colours, so they read on a solid tone. */
+    /** On a tone area (the group head tile): text and dot inherit the tile's ink (--on-cat) instead of the site colours, so they read on a solid tone. */
     onTone?: boolean;
     /** Only the sub-categories: the main category is named elsewhere (the card's sticker or band). */
     subOnly?: boolean;
@@ -30,12 +30,12 @@ export default function CategoryLine({ color, category, subCategories, l1Slug, s
     );
     return (
         <p data-ui={UI.categoryLine} className={clsx('flex items-center gap-x-2 gap-y-0.5 text-meta', oneLine ? 'min-w-0 flex-nowrap overflow-hidden' : 'flex-wrap')}>
-            {!subOnly && <span className={clsx('inline-flex shrink-0 items-center gap-1.5 weight-medium', onTone ? 'tile-ink' : 'text-foreground')}>
+            {!subOnly && <span className={clsx('inline-flex shrink-0 items-center gap-1.5 weight-medium', !onTone && 'text-foreground')}>
                 <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full" style={{ backgroundColor: onTone ? 'currentColor' : color }} />
                 {l1Slug ? link(topicHref(l1Slug, undefined, from), category) : category}
             </span>}
             {subCategories.length > 0 && (
-                <span className={clsx(oneLine && 'min-w-0 truncate', onTone ? 'tile-ink-muted' : 'text-foreground-muted')}>
+                <span className={clsx(oneLine && 'min-w-0 truncate', !onTone && 'text-foreground-muted')}>
                     {subCategories.map((title, i) => (
                         <span key={subSlugs[i] ?? title}>
                             {i > 0 && ', '}

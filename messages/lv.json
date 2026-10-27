@@ -581,6 +581,10 @@
       "partsLabel": "Lapas daļas",
       "members": "{count, plural, zero {# biedru} one {# biedrs} other {# biedri}}",
       "membersOnly": "Tikai biedriem",
+      "showPicture": "Rādīt visu attēlu",
+      "hidePicture": "Sakļaut attēlu",
+      "openPicture": "Atvērt grupas attēlu",
+      "editGroup": "Labot grupu",
       "aboutLabel": "Par šo grupu"
     },
     "nextMeeting": {
@@ -873,8 +877,7 @@
           "filterLine": "Filtru josla",
           "groupCard": "Grupas kartīte un rinda",
           "eventRow": "Pasākuma rinda un dienu saraksts",
-          "header": "Grupas josla un tālruņa josla: apmeklētājam, gaidošam pieteikumam un komandai",
-          "groupPicture": "Grupas attēls Informācijā: ar attēlu un bez; lēkšanas saites ir daļu cilnes augšā",
+          "header": "Grupas galvas lauks (pilns ar attēlu, kompakts, bez attēla): apmeklētājam, gaidošam pieteikumam un komandai",
           "memberCard": "Biedra kartīte",
           "requestCard": "Pieteikuma kartīte",
           "announcement": "Jaunuma kartīte",

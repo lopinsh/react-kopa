@@ -5,7 +5,8 @@ import { SAMPLE_ACCENT, type UiSamples } from '@/lib/handbook/ui-samples';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { toGroupState } from '@/components/providers/to-group-state';
 import AccentScope from '@/components/handbook/AccentScope';
-import GroupBanner from '@/components/groups/frame/GroupBanner';
+import GroupHead from '@/components/groups/frame/GroupHead';
+import HeadPicture from '@/components/groups/frame/HeadPicture';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
 import PartTabs from '@/components/ui/PartTabs';
 import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
@@ -35,20 +36,20 @@ export function sampleState(group: GroupContext, viewer: Viewer, o: { isPrivate?
     });
 }
 
-/** The banner (96 px from `md`, a 64 px bar on phones): for a visitor, a pending request, a member and the team. */
-export function GroupBannerDemo({ samples }: { samples: UiSamples }) {
-    const cases: Array<{ viewer: Viewer; isPrivate?: boolean }> = [
-        { viewer: 'visitor' },
-        { viewer: 'visitor', isPrivate: true },
-        { viewer: 'pending' },
-        { viewer: 'team' },
+/** The head: the full tile with the picture, the compact tile, and the full tile without a picture; for a visitor, a pending request and the team. */
+export function GroupHeadDemo({ samples }: { samples: UiSamples }) {
+    const cases: Array<{ viewer: Viewer; variant: 'full' | 'compact'; photo?: boolean; isPrivate?: boolean }> = [
+        { viewer: 'visitor', variant: 'full', photo: true },
+        { viewer: 'team', variant: 'compact' },
+        { viewer: 'pending', variant: 'full' },
+        { viewer: 'visitor', variant: 'compact', isPrivate: true },
     ];
     return (
         <div className="grid gap-4">
-            {cases.map(({ viewer, isPrivate }, i) => (
+            {cases.map(({ viewer, variant, photo, isPrivate }, i) => (
                 <AccentScope key={`${viewer}-${i}`} color={SAMPLE_ACCENT}>
                     <GroupProvider value={sampleState(samples.group, viewer, { isPrivate })}>
-                        <GroupBanner />
+                        <GroupHead variant={variant} picture={photo ? <HeadPicture image={SAMPLE_IMAGE} /> : undefined} />
                     </GroupProvider>
                 </AccentScope>
             ))}

@@ -10,37 +10,38 @@ import { buttonClass } from '@/components/ui/Button';
 import { groupChip } from '@/components/groups/frame/chip';
 
 /**
- * While a join request waits (AR-46): "Pieteikums nosūtīts" as a status chip and the quiet "Atvērt sarunu" (from `md`);
- * on phones one round chat chip at the bar's right end. The viewer's own chat id comes from the group context.
+ * While a join request waits (AR-46): "Pieteikums nosūtīts" as a status chip and "Atvērt sarunu" next to it; on phones
+ * (`phone="round"`) one round chat chip. `onTone` is the group head tile: the chip and the link take the tile's ink and the light pill.
+ * `phone="full"` keeps the chip and the link on phones too, full width. The viewer's own chat id comes from the group context.
  */
-export default function PendingState() {
+export default function PendingState({ onTone = false, phone = 'round' }: { onTone?: boolean; phone?: 'full' | 'round' }) {
     const g = useGroupContext();
-    return <PendingStateView chatId={g.user.chatId} />;
-}
-
-function PendingStateView({ chatId }: { chatId: string | null }) {
     const t = useTranslations('group');
+    const chatId = g.user.chatId;
     const href = chatId ? `/messages?c=${chatId}` : '/messages';
+    const full = phone === 'full';
 
     return (
-        <div data-ui={UI.pendingState} className="flex items-center gap-2 max-md:order-last">
-            <div className="hidden items-center gap-2 md:flex">
+        <div data-ui={UI.pendingState} className={clsx('items-center gap-2', full ? 'flex max-md:w-full max-md:flex-col max-md:items-stretch' : 'flex')}>
+            <div className={clsx('items-center gap-2', full ? 'flex max-md:flex-col max-md:items-stretch' : 'hidden md:flex')}>
                 {/* A status, not a button: no hover, no press, not focusable. */}
-                <span className={clsx('inline-flex h-10 items-center gap-1.5 rounded-pill px-4 text-button-sm', groupChip(false))}>
+                <span className={clsx('inline-flex h-10 items-center justify-center gap-1.5 rounded-pill px-4 text-button-sm', onTone ? 'mark-on-tone' : groupChip(false))}>
                     <Check aria-hidden className="size-4" />
                     {t('pending.sent')}
                 </span>
-                <Link href={href} className={buttonClass('quiet')}>
+                <Link href={href} className={buttonClass(onTone ? 'onTone' : 'quiet')}>
                     {t('openChat')}
                 </Link>
             </div>
-            <Link
-                href={href}
-                aria-label={t('openChat')}
-                className={clsx('grid size-10 place-items-center rounded-full md:hidden', groupChip())}
-            >
-                <MessageCircle aria-hidden className="size-5" />
-            </Link>
+            {!full && (
+                <Link
+                    href={href}
+                    aria-label={t('openChat')}
+                    className={onTone ? buttonClass('onTone', 'size-10 px-0 md:hidden') : clsx('grid size-10 place-items-center rounded-full md:hidden', groupChip())}
+                >
+                    <MessageCircle aria-hidden className="size-5" />
+                </Link>
+            )}
         </div>
     );
 }

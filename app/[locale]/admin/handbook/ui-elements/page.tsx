@@ -28,8 +28,7 @@ import PanelDemos from '@/components/handbook/PanelDemos';
 import EventPageDemos from '@/components/handbook/EventPageDemos';
 import { DatesDemo } from '@/components/handbook/DateDemos';
 import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
-import GroupPicture from '@/components/groups/frame/GroupPicture';
-import { GroupBannerDemo, GroupPagesDemo, SAMPLE_IMAGE, sampleState } from '@/components/handbook/GroupFrameDemos';
+import { GroupHeadDemo, GroupPagesDemo, sampleState } from '@/components/handbook/GroupFrameDemos';
 import { GroupMenuDemo } from '@/components/handbook/GroupMenuDemos';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
 import MemberRow from '@/components/groups/members/MemberRow';
@@ -201,17 +200,8 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                     </div>
                 </UiSpecimen>
 
-                <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupBanner.tsx', 'components/groups/frame/GroupActions.tsx', 'components/groups/frame/GroupPagesDrawer.tsx']} padding="bleed">
-                    <div className="p-4"><GroupBannerDemo samples={samples} /></div>
-                </UiSpecimen>
-
-                <UiSpecimen id="groupPicture" names={[]} files={['components/groups/frame/GroupPicture.tsx', 'components/ui/PictureBox.tsx', 'components/groups/frame/InfoSections.tsx']}>
-                    <AccentScope color={SAMPLE_ACCENT}>
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <GroupPicture image={SAMPLE_IMAGE} l1Slug={group.category.l1Slug} />
-                            <GroupPicture image={null} l1Slug={group.category.l1Slug} />
-                        </div>
-                    </AccentScope>
+                <UiSpecimen id="header" names={[UI.groupBanner, UI.joinButton]} files={['components/groups/frame/GroupHead.tsx', 'components/groups/frame/HeadPicture.tsx', 'components/groups/frame/GroupActions.tsx', 'components/groups/frame/GroupPagesDrawer.tsx']} padding="bleed">
+                    <div className="p-4"><GroupHeadDemo samples={samples} /></div>
                 </UiSpecimen>
 
                 <UiSpecimen id="groupPages" names={[UI.groupMenu, UI.tabs, UI.nextMeeting, UI.socialLinks]} files={['components/groups/frame/GroupPagesNav.tsx', 'components/ui/PageNavLink.tsx', 'components/ui/PartTabs.tsx', 'components/groups/NextMeetingBox.tsx', 'components/groups/GroupSocialLinks.tsx']}>

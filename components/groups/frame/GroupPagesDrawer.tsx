@@ -12,8 +12,8 @@ import CategoryLine from '@/components/ui/CategoryLine';
 import GroupPagesNav from './GroupPagesNav';
 import { IconButton } from '@/components/ui/Button';
 
-/** ☰ in the phone bar: opens the group's pages from the left over the page, above the bottom bar (AR-48). */
-export default function GroupPagesDrawer() {
+/** ☰ in the phone bar or the head tile (`onTone`): opens the group's pages from the left over the page, above the bottom bar (AR-48). */
+export default function GroupPagesDrawer({ onTone = false }: { onTone?: boolean }) {
     const t = useTranslations('group.frame');
     const g = useGroupContext();
     const [open, setOpen] = useState(false);
@@ -31,6 +31,7 @@ export default function GroupPagesDrawer() {
         <>
             <IconButton
                 ref={buttonRef}
+                variant={onTone ? 'onToneGhost' : 'ghost'}
                 aria-label={t('pagesLabel')}
                 aria-expanded={open}
                 aria-controls={id}
