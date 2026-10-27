@@ -236,8 +236,22 @@ model GroupSection {
   updatedAt    DateTime                  @updatedAt
   group        Group                     @relation(fields: [groupId], references: [id], onDelete: Cascade)
   translations GroupSectionTranslation[]
+  pictures     GroupSectionPicture[]
 
   @@index([groupId, order])
+}
+
+model GroupSectionPicture {
+  id         String       @id @default(cuid())
+  sectionId  String
+  order      Int
+  url        String
+  creditName String?
+  creditUser String?
+  createdAt  DateTime     @default(now())
+  section    GroupSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  @@index([sectionId, order])
 }
 
 model GroupSectionTranslation {

@@ -73,6 +73,9 @@ export const SHARED_GROUPS_SHOWN = 2;
 /** Most sections (About, Practical info, …) one group can have. */
 export const MAX_SECTIONS = 6;
 
+/** Most pictures one group section can have. */
+export const MAX_SECTION_PICTURES = 8;
+
 /**
  * Group visibility and lifecycle types.
  */
