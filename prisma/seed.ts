@@ -397,6 +397,18 @@ async function main() {
     }
   ];
 
+  // Curated "games" photos (lib/constants/unsplash-curated.ts), the form the picker stores.
+  const SECTION_PHOTOS = [
+    { path: 'photo-1629760946220-5693ee4c46ac', name: 'Nik Korba', username: 'goodfindsvolusia' },
+    { path: 'photo-1677188010559-0667a1ed33a0', name: '2H Media', username: '2hmedia' },
+    { path: 'photo-1611891487122-207579d67d98', name: 'Christopher Paul High', username: 'christopherphigh' },
+    { path: 'photo-1500995617113-cf789362a3e1', name: 'Hannah Rodrigo', username: 'hannahrodrigo' },
+    { path: 'photo-1677248245752-f45092b09e5a', name: '2H Media', username: '2hmedia' },
+    { path: 'photo-1732132966168-34cf0a39b840', name: 'Parinaz Mirhosseini', username: 'parinaz_mhs' },
+    { path: 'photo-1677094365560-9f88ce594e7c', name: '2H Media', username: '2hmedia' },
+    { path: 'photo-1676385816437-51db716d18b2', name: '2H Media', username: '2hmedia' },
+  ];
+
   const groupIdBySlug: Record<string, string> = {};
   const groupCityBySlug: Record<string, string> = {};
 
@@ -449,6 +461,21 @@ async function main() {
         },
       },
     });
+    // Pictures for the visual-test group only: 5 on "Par mums", 3 on the members-only section (R28).
+    if (g.slug === 'boardgames-riga') {
+      const sections = await prisma.groupSection.findMany({ where: { groupId: group.id }, orderBy: { order: 'asc' }, select: { id: true } });
+      const perSection = [SECTION_PHOTOS.slice(0, 5), SECTION_PHOTOS.slice(5)];
+      for (const [i, photos] of perSection.entries()) {
+        if (!sections[i]) continue;
+        await prisma.groupSectionPicture.createMany({
+          data: photos.map((p, order) => ({
+            sectionId: sections[i].id, order,
+            url: `https://images.unsplash.com/${p.path}?w=1600&h=900&fit=crop&crop=entropy&auto=format&q=75`,
+            creditName: p.name, creditUser: p.username,
+          })),
+        });
+      }
+    }
     // A join request with a message lives in the group chat (as `requestToJoin` writes it).
     for (const m of g.members) {
       if (m.role !== 'PENDING' || !m.message) continue;
