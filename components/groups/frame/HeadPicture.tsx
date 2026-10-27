@@ -7,7 +7,7 @@ import { Maximize2, Minimize2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
-import Modal from '@/components/ui/Modal';
+import Gallery from '@/components/ui/Gallery';
 import BannerCredit from '@/components/forms/banner/BannerCredit';
 import type { BannerCredit as Credit } from '@/lib/validations/banner';
 
@@ -15,8 +15,8 @@ const SIZES = '(min-width: 1024px) 17.5rem, (min-width: 768px) 30vw, 100vw';
 
 /**
  * The group's picture on Informācija (C5), one image for both widths. From 768 a tile beside the head that fills the head's height and opens
- * the whole picture in a dialog; on phones a 3:1 strip under the head that expands to 16:9 in place (`aria-expanded`, Esc folds it).
- * The credit sits under it. The gallery is R28.
+ * the gallery with this one picture; on phones a 3:1 strip under the head that expands to 16:9 in place (`aria-expanded`, Esc folds it).
+ * The credit sits under it.
  */
 export default function HeadPicture({ image, credit }: { image: string; credit?: Credit }) {
     const t = useTranslations('group.frame');
@@ -60,15 +60,7 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
                 </span>
             </button>
             <BannerCredit credit={credit} className="mt-1 max-md:text-right" />
-            {open && (
-                <Modal onClose={() => setOpen(false)} title={g.name} size="4xl" returnFocusRef={buttonRef}>
-                    <div className="grid gap-2">
-                        {/* The whole picture at its natural ratio. */}
-                        <Image src={image} alt="" width={1600} height={1200} sizes="100vw" unoptimized className="h-auto max-h-[75vh] w-full rounded-2xl object-contain" />
-                        <BannerCredit credit={credit} />
-                    </div>
-                </Modal>
-            )}
+            {open && <Gallery title={g.name} items={[{ url: image, alt: '', credit: credit ?? null }]} start={0} onClose={() => setOpen(false)} returnFocusRef={buttonRef} />}
         </div>
     );
 }
