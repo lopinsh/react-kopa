@@ -2,7 +2,7 @@ import type { ComponentProps, ComponentPropsWithRef } from 'react';
 import { clsx } from 'clsx';
 import { UI } from '@/lib/constants';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'quiet' | 'danger';
+export type ButtonVariant = 'primary' | 'secondary' | 'quiet' | 'danger' | 'onTone';
 export type ButtonSize = 'md' | 'sm';
 
 const BASE = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill disabled:opacity-50 [&_svg]:size-4';
@@ -17,6 +17,8 @@ const VARIANTS: Record<ButtonVariant, string> = {
     secondary: 'frame shadow-control press bg-tint text-foreground hover:opacity-80',
     quiet: 'line shadow-control press bg-transparent text-foreground hover:bg-tint',
     danger: 'frame shadow-control press bg-danger text-danger-foreground hover:opacity-90',
+    /** Only on the group head tile: a light pill with dark text in both modes (--tone-btn). */
+    onTone: 'frame press bg-[var(--tone-btn)] text-[var(--tone-btn-ink)] hover:opacity-90',
 };
 
 const NAMES: Record<ButtonVariant, string> = {
@@ -24,6 +26,7 @@ const NAMES: Record<ButtonVariant, string> = {
     secondary: UI.buttonSecondary,
     quiet: UI.buttonQuiet,
     danger: UI.buttonDanger,
+    onTone: UI.buttonOnTone,
 };
 
 /** Class string for a button-looking link (`<Link className={buttonClass('primary')}>`). */
@@ -37,7 +40,7 @@ export default function Button({ variant = 'primary', size = 'md', className, ty
 }
 
 export type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg';
-export type IconButtonVariant = ButtonVariant | 'ghost' | 'overlay' | 'accent';
+export type IconButtonVariant = ButtonVariant | 'ghost' | 'onToneGhost' | 'overlay' | 'accent';
 
 const ICON_BASE = 'relative inline-flex shrink-0 items-center justify-center rounded-pill outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50';
 
@@ -51,6 +54,7 @@ const ICON_SIZES: Record<IconButtonSize, string> = {
 const ICON_VARIANTS: Record<IconButtonVariant, string> = {
     ...VARIANTS,
     ghost: 'text-foreground-muted hover:bg-tint hover:text-foreground',
+    onToneGhost: 'text-[var(--on-cat)] hover:bg-[color-mix(in_srgb,var(--on-cat)_15%,transparent)]', // the ☰ on the group head tile
     overlay: 'frame bg-surface text-foreground shadow-premium hover:bg-tint',
     accent: 'border border-border bg-surface text-foreground-muted hover:bg-tint active:scale-95', // the group chip (groupChip in groups/frame/chip)
 };

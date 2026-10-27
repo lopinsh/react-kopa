@@ -59,12 +59,10 @@ export function themeStyleVars(style: ThemeStyleTokens, headingFont: ThemeFontId
     if (style.tile === 'solid') {
         vars['--tile-mix'] = '100%';
         vars['--tile-on'] = '100%';
-        vars['--banner-mix'] = '100%';
         vars['--band-mix'] = '100%';
     } else {
         vars['--tile-mix'] = '20%';
         vars['--tile-on'] = '0%';
-        vars['--banner-mix'] = '12%';
         if (withDefaults) vars['--band-mix'] = 'initial';
     }
     for (const [k, v] of Object.entries(style.radius)) vars[`--radius-${k}`] = v;
@@ -108,6 +106,9 @@ export function themeModeVars(t: ThemeModeTokens, mode: 'light' | 'dark'): Vars 
         '--border': t.border ?? `color-mix(in srgb, ${t.foreground} 12%, ${t.background})`,
         '--tint': t.tint ?? `color-mix(in srgb, ${t.foreground} 8%, ${t.background})`,
         '--on-cat': mode === 'light' ? '#ffffff' : t.background,
+        // The group head tile's button: a light pill with dark text in both modes (a site-colour button on a category tone fails contrast).
+        '--tone-btn': mode === 'light' ? 'var(--surface)' : 'var(--foreground)',
+        '--tone-btn-ink': mode === 'light' ? 'var(--foreground)' : 'var(--background)',
         '--danger': status.danger,
         '--danger-foreground': roleInk(status.danger),
         '--success': status.success,

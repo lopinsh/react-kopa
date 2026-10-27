@@ -256,10 +256,16 @@ body {
   background-image: linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), color-mix(in srgb, var(--accent) 7%, var(--surface)));
 }
 
-/* banner-tone: the banner as a full tone area in the look's tile style (tint or solid, from --accent); the ink follows --tile-on. */
-@utility banner-tone {
-  background-color: color-mix(in srgb, var(--accent) var(--banner-mix), var(--surface));
-  color: color-mix(in srgb, var(--on-cat) var(--tile-on), var(--foreground));
+/* tone-fill: the group head tile, a solid category tone in every look; the text is always --on-cat (no muted ink). */
+@utility tone-fill {
+  background-color: var(--accent);
+  color: var(--on-cat);
+}
+
+/* mark-on-tone: the category icon square on the head tile (the tile's ink at 15 %). */
+@utility mark-on-tone {
+  background-color: color-mix(in srgb, var(--on-cat) 15%, transparent);
+  color: var(--on-cat);
 }
 
 @utility tile-ink {
