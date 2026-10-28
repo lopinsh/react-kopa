@@ -46,13 +46,13 @@ export default function GroupHead({ picture, variant }: { picture?: ReactNode; v
     );
 
     return (
-        <div className={clsx('mx-auto grid max-w-browse gap-3 px-gutter pt-3 md:gap-x-6 md:pt-5', withPicture && 'md:grid-cols-[minmax(0,1fr)_30%] lg:grid-cols-[190px_minmax(0,1fr)_var(--spacing-aside)]')}>
+        <div className={clsx('mx-auto grid max-w-browse gap-3 px-gutter pt-3 md:pt-5', withPicture ? 'md:gap-x-0' : 'md:gap-x-6', withPicture && 'md:grid-cols-[minmax(0,1fr)_30%] lg:grid-cols-[190px_minmax(0,1fr)_var(--spacing-aside)]')}>
             <div
                 data-ui={UI.groupBanner}
                 className={clsx(
                     'tone-fill frame relative grid min-w-0 rounded-2xl p-4 md:gap-x-4',
                     full ? 'grid-cols-[auto_auto_1fr] items-center gap-y-3 md:p-6 lg:grid-cols-[auto_1fr] lg:items-start lg:p-7' : 'grid-cols-[auto_auto_1fr] items-center gap-y-2 md:px-6 md:py-5 lg:grid-cols-[auto_1fr_auto]',
-                    withPicture && 'lg:col-span-2',
+                    withPicture && 'md:rounded-r-none lg:col-span-2',
                 )}
             >
                 <GroupPagesDrawer onTone />

@@ -16,7 +16,7 @@ const SIZES = '(min-width: 1024px) 17.5rem, (min-width: 768px) 30vw, 100vw';
 /**
  * The group's picture on Informācija (C5), one image for both widths. From 768 a tile beside the head that fills the head's height and opens
  * the gallery with this one picture; on phones a 3:1 strip under the head that expands to 16:9 in place (`aria-expanded`, Esc folds it).
- * The credit sits under it.
+ * The credit is a chip on the picture, bottom-left, outside the button so its links stay clickable. From 768 it joins the head tile as one card (no gap, inner corners squared).
  */
 export default function HeadPicture({ image, credit }: { image: string; credit?: Credit }) {
     const t = useTranslations('group.frame');
@@ -37,7 +37,7 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
     const label = phone ? t(expanded ? 'hidePicture' : 'showPicture') : t('openPicture');
     const Icon = phone && expanded ? Minimize2 : Maximize2;
     return (
-        <div className="grid min-w-0 md:col-start-2 md:row-start-1 md:grid-rows-[1fr_auto] lg:col-start-3">
+        <div className="relative min-w-0 md:col-start-2 md:row-start-1 lg:col-start-3">
             <button
                 ref={buttonRef}
                 type="button"
@@ -48,7 +48,7 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
                 onClick={() => (phone ? setExpanded((v) => !v) : setOpen(true))}
                 onKeyDown={(e) => { if (e.key === 'Escape' && phone && expanded) setExpanded(false); }}
                 className={clsx(
-                    'relative block w-full overflow-hidden rounded-2xl frame bg-tint md:h-full md:min-h-40',
+                    'relative block w-full overflow-hidden rounded-2xl frame bg-tint md:h-full md:rounded-l-none md:min-h-40',
                     expanded ? 'max-md:aspect-[16/9]' : 'max-md:aspect-[3/1]',
                     'motion-safe:max-md:transition-[aspect-ratio] motion-safe:max-md:duration-base',
                     phone && expanded ? 'cursor-zoom-out' : 'cursor-zoom-in',
@@ -59,7 +59,11 @@ export default function HeadPicture({ image, credit }: { image: string; credit?:
                     <Icon className="size-4" />
                 </span>
             </button>
-            <BannerCredit credit={credit} className="mt-1 max-md:text-right" />
+            {credit && (
+                <div className="absolute bottom-2 left-2 max-w-[calc(100%-1rem)] rounded-pill bg-[var(--photo-chip)] px-3 py-1 [&_a]:text-inherit [&_p]:text-[var(--photo-ink)]">
+                    <BannerCredit credit={credit} />
+                </div>
+            )}
             {open && <Gallery title={g.name} items={[{ url: image, alt: '', credit: credit ?? null }]} start={0} onClose={() => setOpen(false)} returnFocusRef={buttonRef} />}
         </div>
     );
