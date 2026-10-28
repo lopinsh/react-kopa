@@ -61,5 +61,6 @@ export const config = {
     // - _next internals
     // - Static files (svg, png, jpg, etc.)
     // - favicon.ico
-    matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+    // - /most/* (static side-project mockups in public/most)
+    matcher: ['/((?!api|_next|_vercel|most(?:/|$)|.*\\..*).*)'],
 };

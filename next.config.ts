@@ -53,6 +53,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // /most is a static side-project mockup (public/most); /most/ is redirected to /most by Next.
+  async rewrites() {
+    return { beforeFiles: [{ source: '/most', destination: '/most/index.html' }] };
+  },
   async redirects() {
     return [
       // Browsers ask for /favicon.ico by habit; the one icon is app/icon.svg.
