@@ -40,6 +40,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
     const tErrors = useTranslations('errors');
     const { time, dayKey, dayLabel } = useChatTimeline();
     const inputRef = useRef<HTMLInputElement>(null);
+    const caretAfterEmoji = useRef<number | null>(null);
     const [draft, setDraft] = useState('');
     const counterId = useId();
     const [sendError, setSendError] = useState<string | null>(null);
@@ -78,12 +79,17 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
         const start = el?.selectionStart ?? draft.length;
         const end = el?.selectionEnd ?? draft.length;
         setDraft(draft.slice(0, start) + emoji + draft.slice(end));
-        const caret = start + emoji.length;
-        requestAnimationFrame(() => {
-            el?.focus();
-            el?.setSelectionRange(caret, caret);
-        });
+        caretAfterEmoji.current = start + emoji.length;
     };
+
+    // Once the new text is in the field: focus it and put the caret after the emoji.
+    useEffect(() => {
+        const caret = caretAfterEmoji.current;
+        if (caret === null) return;
+        caretAfterEmoji.current = null;
+        inputRef.current?.focus();
+        inputRef.current?.setSelectionRange(caret, caret);
+    }, [draft]);
 
     const handleBlock = () => {
         if (isPending) return;

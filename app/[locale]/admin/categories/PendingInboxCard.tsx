@@ -67,7 +67,7 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                 success(t('approve') + ' - ' + c('success'));
                 router.refresh();
             } else {
-                error(c('error'));
+                error(res.error === 'TAG_ALREADY_EXISTS' ? tErrors('TAG_ALREADY_EXISTS') : c('error'));
             }
         });
     };

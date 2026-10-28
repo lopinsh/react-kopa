@@ -420,6 +420,7 @@
     "confirmDelete": "Delete permanently"
   },
   "errors": {
+    "TAG_ALREADY_EXISTS": "A tag with this name already exists.",
     "ACTION_FAILED": "The action could not be completed.",
     "ALIAS_CONFLICT": "This alias already exists for the selected locale.",
     "CATEGORY_IN_USE": "This topic is in use and cannot be removed.",

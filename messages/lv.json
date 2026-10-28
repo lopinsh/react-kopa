@@ -420,6 +420,7 @@
     "confirmDelete": "Dzēst uz visiem laikiem"
   },
   "errors": {
+    "TAG_ALREADY_EXISTS": "Birka ar šādu nosaukumu jau pastāv.",
     "ACTION_FAILED": "Darbību neizdevās pabeigt.",
     "ALIAS_CONFLICT": "Šāds aizstājvārds izvēlētajai valodai jau pastāv.",
     "CATEGORY_IN_USE": "Šī tēma tiek izmantota un to nevar dzēst.",

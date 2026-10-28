@@ -421,6 +421,13 @@ export const TaxonomyService = {
             throw new ActionError('TAG_NOT_FOUND');
         }
 
+        // Slugs follow the names, so two names can land on one slug: say so instead of failing on the unique index.
+        const clash = await prisma.category.findFirst({
+            where: { id: { not: id }, OR: [{ slug: params.slugEn }, { slugLv: params.slugLv }] },
+            select: { id: true },
+        });
+        if (clash) throw new ActionError('TAG_ALREADY_EXISTS');
+
         return prisma.$transaction(async (tx) => {
             const updated = await tx.category.update({
                 where: { id },
