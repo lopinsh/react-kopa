@@ -1,6 +1,6 @@
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { capitalizeFirst, EVENT_DAY_TIME, useDateFormatter } from '@/lib/date-format';
+import { capitalizeFirst, EVENT_DATE_TIME, useDateFormatter } from '@/lib/date-format';
 import { meetingLine } from '@/lib/event-when';
 import { DEFAULT_TIME_ZONE } from '@/lib/time-zone';
 import { langAttr } from '@/lib/translations';
@@ -14,7 +14,7 @@ export default function NextMeetingRow({ event, href }: { event: Pick<NextEventV
     const formatter = useDateFormatter();
     const when = capitalizeFirst(meetingLine(
         { at: event.startDate, until: event.running ? event.endDate : null }, formatter, zone,
-        { next: (d) => d, running: (until) => t('runningUntil', { until }) }, EVENT_DAY_TIME
+        { next: (d) => d, running: (until) => t('runningUntil', { until }) }, EVENT_DATE_TIME
     ));
     return (
         <Link href={href} className="grid gap-0.5 rounded-xl py-3 hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">

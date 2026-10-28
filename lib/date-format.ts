@@ -19,6 +19,8 @@ export function createDateFormatter(locale: string, timeZone: string | undefined
 export const EVENT_DAY = { weekday: 'short', day: 'numeric', month: 'short' } as const;
 /** "Svētd., 18. okt. 17:00" / "Sun, 18 Oct, 17:00": 24-hour time in the viewer's zone. */
 export const EVENT_DAY_TIME = { ...EVENT_DAY, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const;
+/** "3. nov. 18:00" / "3 Nov, 18:00": date and time without the weekday (the next-meeting chip). */
+export const EVENT_DATE_TIME = { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const;
 /** "Svētd., 17:00": weekday and time, next to a date tile. */
 export const EVENT_WEEKDAY_TIME = { weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' } as const;
 

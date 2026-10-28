@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { clsx } from 'clsx';
-import { List, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 import { useFormatter, useTranslations } from 'next-intl';
 import Badge from '@/components/ui/Badge';
 import { UI } from '@/lib/constants';
@@ -16,7 +16,7 @@ type Props = {
     menu?: ReactNode;
 };
 
-/** One announcement (AR-53) in the look of Manas grupas' items: icon, title, text, then who wrote it and when. Members-only items say so quietly. */
+/** One announcement (AR-53) in the look of Manas grupas' items: title, text, then who wrote it and when. Members-only items say so quietly. */
 export default function AnnouncementItem({ item, clamp, menu }: Props) {
     const t = useTranslations('group');
     const format = useFormatter();
@@ -28,8 +28,7 @@ export default function AnnouncementItem({ item, clamp, menu }: Props) {
     const author = item.author.name ?? item.author.username;
 
     return (
-        <article data-ui={UI.announcementItem} className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-x-3 py-4">
-            <List aria-hidden="true" className="mt-0.5 size-5 text-foreground-muted" />
+        <article data-ui={UI.announcementItem} className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 py-4">
             <div className="min-w-0">
                 <h3 className="break-words text-item text-foreground">{item.title}</h3>
                 {item.content && (

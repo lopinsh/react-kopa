@@ -269,6 +269,7 @@ export const UI = {
 } as const;
 export type UiName = (typeof UI)[keyof typeof UI];
 
+export * from './emoji';
 export * from './theme';
 
 /** The site's languages: the single list routing, owner-written text, message overrides and the proxy share. */

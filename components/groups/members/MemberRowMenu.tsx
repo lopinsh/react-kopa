@@ -19,7 +19,7 @@ const LABEL = { promote: 'promote', demote: 'demote', remove: 'kick' } as const;
 
 type Props = { groupId: string; userId: string; name: string; actions: MemberAction[]; profileHref: string | null };
 
-/** The "…" of one member. The items come from the server (`actions`, one rule shared with the services, which still check every call); changes ask at the button. */
+/** The message button and the "…" of one member. The items come from the server (`actions`, one rule shared with the services, which still check every call); changes ask at the button. */
 export default function MemberRowMenu({ groupId, userId, name, actions, profileHref }: Props) {
     const t = useTranslations('group');
     const c = useTranslations('common');
@@ -31,6 +31,7 @@ export default function MemberRowMenu({ groupId, userId, name, actions, profileH
     const [asking, setAsking] = useState<MemberManageAction | null>(null);
     const [isPending, startTransition] = useTransition();
     const has = (a: MemberAction) => actions.includes(a);
+    const showProfile = has('profile') && profileHref !== null;
     const manage = (['promote', 'demote', 'remove'] as const).filter(has);
     const fail = (error: string) => toastError(tErrors.has(error) ? tErrors(error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
 
@@ -58,18 +59,24 @@ export default function MemberRowMenu({ groupId, userId, name, actions, profileH
     };
 
     return (
-        <div className="relative flex" ref={rootRef}>
-            <IconButton size="lg"
-                {...triggerProps}
-                aria-label={`${t('memberActions')}: ${name}`}
-            >
-                <MoreHorizontal aria-hidden className="size-5" />
-            </IconButton>
+        <div className="relative flex items-center" ref={rootRef}>
+            {has('message') && (
+                <IconButton size="lg" disabled={isPending} onClick={message} aria-label={`${t('sendMessage')}: ${name}`}>
+                    <MessageSquare aria-hidden className="size-5" />
+                </IconButton>
+            )}
+            {(showProfile || manage.length > 0) && (
+                <IconButton size="lg"
+                    {...triggerProps}
+                    aria-label={`${t('memberActions')}: ${name}`}
+                >
+                    <MoreHorizontal aria-hidden className="size-5" />
+                </IconButton>
+            )}
             {open && (
                 <MenuPanel label={t('memberActions')} placement="anchor" {...menuProps}>
-                    {has('message') && <MenuItemButton icon={<MessageSquare aria-hidden className={ICON} />} onSelect={message}>{t('sendMessage')}</MenuItemButton>}
-                    {has('profile') && profileHref && <MenuItemLink href={profileHref} icon={<ExternalLink aria-hidden className={ICON} />}>{c('viewProfile')}</MenuItemLink>}
-                    {manage.length > 0 && (has('message') || has('profile')) && <MenuSeparator />}
+                    {showProfile && profileHref && <MenuItemLink href={profileHref} icon={<ExternalLink aria-hidden className={ICON} />}>{c('viewProfile')}</MenuItemLink>}
+                    {manage.length > 0 && showProfile && <MenuSeparator />}
                     {manage.map((a) => (
                         <MenuItemButton
                             key={a}

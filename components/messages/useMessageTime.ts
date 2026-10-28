@@ -26,3 +26,16 @@ export function useMessageTime() {
         return style === 'list' ? day : `${day}, ${time(date)}`;
     };
 }
+
+/** The pieces of a chat's timeline: the time inside a bubble, a key that changes with the day, and the label of the day divider. */
+export function useChatTimeline() {
+    const format = useDateFormatter();
+    const time = (value: Date | string) => format.dateTime(new Date(value), { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+    const dayKey = (value: Date | string) => format.dateTime(new Date(value), { year: 'numeric', month: 'numeric', day: 'numeric' });
+    const dayLabel = (value: Date | string) => {
+        const date = new Date(value);
+        const sameYear = format.dateTime(date, { year: 'numeric' }) === format.dateTime(new Date(), { year: 'numeric' });
+        return format.dateTime(date, { day: 'numeric', month: 'long', ...(sameYear ? {} : { year: 'numeric' as const }) });
+    };
+    return { time, dayKey, dayLabel };
+}

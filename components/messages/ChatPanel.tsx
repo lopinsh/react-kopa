@@ -10,7 +10,8 @@ import { Link } from '@/i18n/routing';
 import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message';
 import type { InboxRow, MessageView } from '@/lib/services/message.service';
 import GroupLabel from './GroupLabel';
-import { useMessageTime } from './useMessageTime';
+import { useChatTimeline } from './useMessageTime';
+import EmojiPicker from './EmojiPicker';
 import { UI } from '@/lib/constants';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
 import TextCounter from '@/components/ui/TextCounter';
@@ -37,7 +38,8 @@ type Props = {
 export default function ChatPanel({ conversation, messages, currentUserId, title, unknownName, onBack, onSent, onBlockedChange, alwaysShowBack = false }: Props) {
     const t = useTranslations('messages');
     const tErrors = useTranslations('errors');
-    const messageTime = useMessageTime();
+    const { time, dayKey, dayLabel } = useChatTimeline();
+    const inputRef = useRef<HTMLInputElement>(null);
     const [draft, setDraft] = useState('');
     const counterId = useId();
     const [sendError, setSendError] = useState<string | null>(null);
@@ -67,6 +69,19 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
             } else if (!result.success) {
                 setSendError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
             }
+        });
+    };
+
+    // Emoji go in at the caret (or the end when the field never had focus) and the caret stays after them.
+    const insertEmoji = (emoji: string) => {
+        const el = inputRef.current;
+        const start = el?.selectionStart ?? draft.length;
+        const end = el?.selectionEnd ?? draft.length;
+        setDraft(draft.slice(0, start) + emoji + draft.slice(end));
+        const caret = start + emoji.length;
+        requestAnimationFrame(() => {
+            el?.focus();
+            el?.setSelectionRange(caret, caret);
         });
     };
 
@@ -125,7 +140,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                 )}
             </div>
 
-            <div ref={listRef} className="flex-1 space-y-4 overflow-y-auto p-4">
+            <div ref={listRef} className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-4">
                 {originKey && origin && (
                     <p className="text-center text-meta text-foreground-muted">
                         {origin.groupName
@@ -140,25 +155,36 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             : t(`${originKey}Gone`)}
                     </p>
                 )}
-                {messages.map(msg => {
+                {messages.map((msg, i) => {
+                    const prev = messages[i - 1];
+                    const next = messages[i + 1];
                     const isMe = msg.senderId === currentUserId;
-                    // In a group chat, say who is speaking: the person, or a team member for the group.
+                    const newDay = !prev || dayKey(prev.createdAt) !== dayKey(msg.createdAt);
+                    const first = newDay || prev.senderId !== msg.senderId;
+                    const last = !next || next.senderId !== msg.senderId || dayKey(next.createdAt) !== dayKey(msg.createdAt);
+                    // In a group chat, say who is speaking once per run: the person, or a team member for the group.
                     const senderName = msg.sender.name || unknownName;
-                    const speaker = !isMe && conversation.kind === 'GROUP'
+                    const speaker = first && !isMe && conversation.kind === 'GROUP'
                         ? (conversation.viewerIsContact && conversation.group ? `${senderName} · ${conversation.group.name}` : senderName)
                         : null;
                     return (
-                        <div key={msg.id} data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start')}>
-                            {speaker && <span className="mb-1 px-1 text-tag text-foreground-muted">{speaker}</span>}
-                            <div className={clsx(
-                                'whitespace-pre-wrap break-words rounded-2xl p-3 text-body-sm',
-                                isMe
-                                    ? 'rounded-br-none bg-primary text-primary-foreground'
-                                    : 'rounded-bl-none line bg-surface-elevated text-foreground shadow-control'
-                            )}>
-                                {msg.content}
+                        <div key={msg.id} className="contents">
+                            {newDay && (
+                                <p className="my-2 self-center rounded-pill bg-surface-elevated px-3 py-1 text-meta text-foreground-muted">{dayLabel(msg.createdAt)}</p>
+                            )}
+                            <div data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start', first && !newDay && 'mt-3')}>
+                                {speaker && <span className="mb-1 px-1 text-tag text-foreground-muted">{speaker}</span>}
+                                <div className={clsx(
+                                    'whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-body-sm',
+                                    isMe
+                                        ? 'bg-primary text-primary-foreground'
+                                        : 'line bg-surface-elevated text-foreground shadow-control',
+                                    last && (isMe ? 'rounded-br-none' : 'rounded-bl-none')
+                                )}>
+                                    {msg.content}
+                                    <span className={clsx('float-right ml-3 mt-2 text-meta', isMe ? 'text-primary-foreground/80' : 'text-foreground-muted')}>{time(msg.createdAt)}</span>
+                                </div>
                             </div>
-                            <span className="mt-1 px-1 text-meta text-foreground-muted">{messageTime(msg.createdAt)}</span>
                         </div>
                     );
                 })}
@@ -178,8 +204,10 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                 ) : (
                     <>
                         {sendError && <p role="alert" className="mb-2 text-tag text-danger">{sendError}</p>}
-                        <form onSubmit={handleSend} className="flex gap-2">
+                        <form onSubmit={handleSend} className="flex items-center gap-2">
+                            <EmojiPicker onPick={insertEmoji} disabled={isPending} />
                             <Input
+                                ref={inputRef}
                                 type="text"
                                 value={draft}
                                 onChange={(e) => setDraft(e.target.value)}
