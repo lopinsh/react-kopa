@@ -27,7 +27,7 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                 activeId={activeConversationId}
                 onOpen={openConversation}
                 titleOf={titleOf}
-                className={activeConversationId ? 'hidden md:flex' : 'flex'}
+                className={activeConversationId ? 'hidden lg:flex' : 'flex'}
             />
 
             {/* Below md one column: the list, and a chat that takes the whole screen (back arrow in its bar). */}
