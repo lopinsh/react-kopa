@@ -46,6 +46,8 @@ export interface EventPanelData {
     subCategories: string[];
     group: { name: string; slug: string; city: string };
     join: EventJoinView;
+    /** Organisers only: requests waiting for a decision (0 for anyone else). */
+    pendingCount: number;
     /** `people` is null for signed-out viewers: they get the number only (D12). */
     going: { count: number; viewerGoing: boolean; people: Face[] | null };
 }
@@ -78,7 +80,7 @@ export function toFace(u: FaceSource): Face {
 export function toEventPanel(
     e: EventPanelSource,
     lang: TextLang,
-    viewer: { myStatus: AttendanceStatus | null; canManage: boolean; people: Face[] | null }
+    viewer: { myStatus: AttendanceStatus | null; canManage: boolean; people: Face[] | null; pendingCount?: number }
 ): EventPanelData {
     const text = resolveEventText(e.translations.map((t) => ({ ...t, instructions: null })), lang, e.originalLang, true);
     const resolved = TaxonomyResolver.resolve(e.group.category);
@@ -103,6 +105,7 @@ export function toEventPanel(
         subCategories: subCategoryTitles(e.group.tags, lang),
         group: { name: e.group.name, slug: e.group.slug, city: e.group.city },
         join: { eventId: e.id, mode: e.joinMode, isFull: e.isFull, ended: isEventPast(e), myStatus: viewer.myStatus, canManage: viewer.canManage },
+        pendingCount: viewer.canManage ? viewer.pendingCount ?? 0 : 0,
         going: { count: e._count.attendees, viewerGoing: viewer.myStatus === 'GOING', people: viewer.people }
     };
 }

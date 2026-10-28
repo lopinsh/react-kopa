@@ -20,6 +20,7 @@ import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import type { BannerCredit } from '@/lib/validations/banner';
 import { assertBannerAllowed, bannerCreditColumns, storedBanner, toBannerCredit } from '@/lib/banner';
+import { startOfTodayInRiga } from '@/lib/event-dates';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
@@ -259,6 +260,16 @@ export const GroupService = {
         const canSeeApplications = isAdmin || isSiteAdmin;
         const pendingCount = canSeeApplications ? await prisma.membership.count({ where: { groupId: g.id, role: 'PENDING' } }) : 0;
 
+        // Event requests waiting on upcoming events: the same people see them (the team), on the Pasākumi page.
+        const pendingEventCount = canSeeApplications
+            ? await prisma.attendance.count({
+                where: {
+                    status: 'PENDING',
+                    event: { groupId: g.id, OR: [{ endDate: { gte: startOfTodayInRiga() } }, { endDate: null, startDate: { gte: startOfTodayInRiga() } }] }
+                }
+            })
+            : 0;
+
         // A waiting applicant gets a link to their own chat with the team (nobody else's, never queried for others).
         const chatId = currentUserId && userRole === 'PENDING' ? await MessageService.findGroupChatId(g.id, currentUserId) : null;
 
@@ -330,7 +341,7 @@ export const GroupService = {
                 accentColor,
             },
             sections,
-            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isPrivate: g.type === 'PRIVATE', isTeam: isAdmin, pendingCount }),
+            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isPrivate: g.type === 'PRIVATE', isTeam: isAdmin, pendingCount, pendingEventCount }),
             category: {
                 id: resolved.categoryId,
                 title: categoryTitle,

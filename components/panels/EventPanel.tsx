@@ -35,6 +35,12 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
                 {where && <Fact icon={MapPin}>{where}</Fact>}
                 {event.membersOnly && <p className="text-body-sm text-foreground">{t('membersOnly')}</p>}
                 {event.text && <p lang={langAttr(event.textLang, locale)} className="text-body-sm text-foreground">{event.text}</p>}
+                {event.pendingCount > 0 && (
+                    <p className="flex flex-wrap items-center gap-x-2 text-body-sm text-foreground">
+                        <span>{t('panel.requests', { count: event.pendingCount })}</span>
+                        <FullPageLink path={`${groupPath}/events/${event.slug}`} className={PANEL_LINK}>{t('panel.manage')} →</FullPageLink>
+                    </p>
+                )}
                 <FacesLine going={event.going} ended={event.join.ended} />
                 <JoinStep join={event.join} trailing={<FullPageLink path={`${groupPath}/events/${event.slug}`} className={PANEL_LINK}>{t('panel.allInfo')}</FullPageLink>} />
                 <p className="text-meta text-foreground-muted">

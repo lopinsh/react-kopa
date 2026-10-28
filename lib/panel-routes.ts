@@ -9,6 +9,9 @@ export function isPanelAddress(path: string): boolean {
     return /^\/[^/]+\/group\/[^/]+(\/events\/[^/]+)?\/?$/.test(path);
 }
 
+/** Notifications that are work for the team on the event page (approve, let in): their link is a full page load, never the panel. */
+export const FULL_PAGE_NOTIFICATIONS: readonly string[] = ['EVENT_REQUEST', 'EVENT_SPOT_FREED'];
+
 /** A panel's address: the group's home, or one of its events. */
 export interface PanelTarget {
     locale: string;

@@ -349,7 +349,10 @@ export class EventService {
         const myStatus = mine?.status ?? null;
         const canManage = !!viewerId && (event.creatorId === viewerId || access.isGroupAdmin);
         const people = viewerId ? await EventService.goingFaces(event.id, viewerId, myStatus === 'GOING') : null;
-        return { kind: 'event', event: toEventPanel(event, lang, { myStatus, canManage, people }) };
+        const pendingCount = canManage && event.joinMode === 'REQUEST' && !isEventPast(event)
+            ? await prisma.attendance.count({ where: { eventId: event.id, status: 'PENDING' } })
+            : 0;
+        return { kind: 'event', event: toEventPanel(event, lang, { myStatus, canManage, people, pendingCount }) };
     });
 
     /**
@@ -815,6 +818,28 @@ export class EventService {
             data: { status: decision === 'approve' ? 'GOING' : 'DECLINED' }
         });
         return await EventService.buildContext(event);
+    }
+
+    /**
+     * Organiser takes a going person off the event. Organisers (creator, group owner and admins) can't be removed.
+     * The place is not given to the waitlist: letting someone in stays the organiser's decision (letInFromWaitlist).
+     */
+    static async removeAttendee(
+        eventId: string,
+        targetUserId: string,
+        actorId: string
+    ): Promise<EventActionContext> {
+        const event = await EventService.loadForOrganiser(eventId, actorId);
+        if (isEventPast(event)) throw new ActionError('EVENT_PAST');
+
+        const current = await prisma.attendance.findUnique({ where: { userId_eventId: { userId: targetUserId, eventId } } });
+        if (!current || current.status !== 'GOING') throw new ActionError('NOT_FOUND');
+
+        const context = await EventService.buildContext(event);
+        if (context.organiserIds.includes(targetUserId)) throw new ActionError('FORBIDDEN');
+
+        await prisma.attendance.delete({ where: { userId_eventId: { userId: targetUserId, eventId } } });
+        return context;
     }
 
     /**

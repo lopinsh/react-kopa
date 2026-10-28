@@ -11,7 +11,7 @@ import type { BannerCredit } from '@/lib/validations/banner';
 import type { EventJoinView, Face } from './event-panel';
 
 /** A person on the organiser's lists. */
-export interface Person { userId: string; name: string | null; username: string | null }
+export interface Person { userId: string; name: string | null; username: string | null; /** Organiser (event creator, group owner or admin): can't be removed. */ team: boolean }
 
 /** The event page (R9a): everything it shows, already cut to what this viewer may see. Panel and page share `Face` and `EventJoinView`. */
 export interface EventPageData {
@@ -123,6 +123,9 @@ export async function loadOrganiserLists(eventId: string): Promise<NonNullable<E
         orderBy: { joinedAt: 'asc' },
         select: { userId: true, status: true, user: { select: { name: true, username: true } } }
     });
-    const of = (status: AttendanceStatus): Person[] => rows.filter((r) => r.status === status).map((r) => ({ userId: r.userId, name: r.user.name, username: r.user.username }));
+    const event = await prisma.event.findUnique({ where: { id: eventId }, select: { creatorId: true, groupId: true } });
+    const admins = event ? await prisma.membership.findMany({ where: { groupId: event.groupId, role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } }) : [];
+    const team = new Set([...(event?.creatorId ? [event.creatorId] : []), ...admins.map((a) => a.userId)]);
+    const of = (status: AttendanceStatus): Person[] => rows.filter((r) => r.status === status).map((r) => ({ userId: r.userId, name: r.user.name, username: r.user.username, team: team.has(r.userId) }));
     return { going: of('GOING'), pending: of('PENDING'), waitlist: of('WAITLISTED') };
 }

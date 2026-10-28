@@ -5,6 +5,7 @@ import { useFormatter, useLocale, useNow, useTranslations } from 'next-intl';
 import { Check } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
+import { FULL_PAGE_NOTIFICATIONS } from '@/lib/panel-routes';
 import { notificationIcon } from '@/lib/notification-icons';
 import { formatNotificationText } from '@/lib/utils/notification-text';
 import { relativeTo } from '@/lib/utils/relative-time';
@@ -32,7 +33,10 @@ export default function NotificationItem({ n, onRead }: { n: NotificationView; o
             <div className="min-w-0 flex-1 pr-7">
                 <p className="text-meta">
                     {n.link
-                        ? <Link href={n.link} onClick={tap} className={clsx('stretch weight-strong text-foreground', STRETCH)}>{headline}</Link>
+                        ? FULL_PAGE_NOTIFICATIONS.includes(n.type)
+                            // A plain anchor: a soft click on an event address would open the panel, and the team approves on the full page.
+                            ? <a href={`/${locale}${n.link}`} onClick={tap} className={clsx('stretch weight-strong text-foreground', STRETCH)}>{headline}</a>
+                            : <Link href={n.link} onClick={tap} className={clsx('stretch weight-strong text-foreground', STRETCH)}>{headline}</Link>
                         : <button type="button" onClick={tap} className={clsx('stretch text-left weight-strong text-foreground', STRETCH)}>{headline}</button>}
                     {group?.path ? (
                         <> · <Link href={group.path} className="relative z-[2] weight-strong text-primary hover:underline">{group.name}</Link></>

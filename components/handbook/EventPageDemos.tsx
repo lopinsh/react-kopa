@@ -5,7 +5,7 @@ import type { EventPageData } from '@/lib/services/event-page';
 import type { Face } from '@/lib/services/event-panel';
 
 const FACES: Face[] = ['anna', 'janis', 'marta'].map((seed) => ({ id: seed, name: seed, image: `https://api.dicebear.com/10.x/clay/svg?seed=${seed}` }));
-const PEOPLE = ['Anna', 'Jānis', 'Marta'].map((name, i) => ({ userId: `sample-${i}`, name, username: null }));
+const PEOPLE = ['Anna', 'Jānis', 'Marta'].map((name, i) => ({ userId: `sample-${i}`, name, username: null, team: false }));
 
 /**
  * The event page and its "Rīkotājiem" box with sample data: an open event with a picture and practical info, a request event whose

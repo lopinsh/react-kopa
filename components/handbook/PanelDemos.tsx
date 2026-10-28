@@ -15,7 +15,7 @@ export default async function PanelDemos({ row, text }: { row: EventRowData; tex
         id: row.id, slug: row.slug, title: row.title, titleLang: row.titleLang, text, textLang: 'lv',
         startDate: row.startDate, endDate: new Date(row.startDate.getTime() + 2 * 3600_000), city: row.city, isOnline: false, location: 'Rožu iela 5', image, imageCredit: null,
         membersOnly: false, category: row.category, subCategories: row.subCategories, group: { ...row.group, city: row.city },
-        join: JOIN, going: { count: 12, viewerGoing: false, people },
+        join: JOIN, pendingCount: 0, going: { count: 12, viewerGoing: false, people },
     });
     const steps: EventJoinView[] = [JOIN, { ...JOIN, mode: 'REQUEST' }, { ...JOIN, mode: 'REQUEST', isFull: true }, { ...JOIN, mode: 'REQUEST', myStatus: 'PENDING' }];
     return (

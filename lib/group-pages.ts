@@ -14,7 +14,7 @@ const SEGMENT: Record<GroupPageKey, string> = { info: '', announcements: '/annou
  * The pages a viewer sees in a group's frame, in the fixed order (C9). Pages they may not open are
  * left out, not greyed (AR-49).
  */
-export function groupPages(o: { base: string; isMember: boolean; isPrivate?: boolean; isTeam: boolean; pendingCount: number }): GroupPageLink[] {
+export function groupPages(o: { base: string; isMember: boolean; isPrivate?: boolean; isTeam: boolean; pendingCount: number; pendingEventCount?: number }): GroupPageLink[] {
     const visible: Record<GroupPageKey, boolean> = {
         info: true,
         events: true,
@@ -25,6 +25,7 @@ export function groupPages(o: { base: string; isMember: boolean; isPrivate?: boo
     return GROUP_PAGE_KEYS.filter((key) => visible[key]).map((key) => {
         const link: GroupPageLink = { key, href: o.base + SEGMENT[key] };
         if (key === 'members' && o.isTeam && o.pendingCount > 0) link.badge = o.pendingCount;
+        if (key === 'events' && o.isTeam && (o.pendingEventCount ?? 0) > 0) link.badge = o.pendingEventCount;
         return link;
     });
 }

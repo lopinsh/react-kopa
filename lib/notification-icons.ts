@@ -22,6 +22,7 @@ const ICONS: Record<string, LucideIcon> = {
     EVENT_ROOM_AGAIN: CalendarDays,
     EVENT_NOW_OPEN: CalendarDays,
     EVENT_CANCELLED: CalendarX,
+    EVENT_REMOVED: CalendarX,
     TAG_MERGED: Tag,
     GROUP_HIDDEN: EyeOff,
     GROUP_DELETED: Trash2,

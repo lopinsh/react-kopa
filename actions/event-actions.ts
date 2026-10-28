@@ -53,12 +53,12 @@ type EventPaths = { l1Slug: string; groupSlug: string; eventSlug: string };
 
 function revalidateEventPaths(locale: string, ctx: EventPaths) {
     const base = `/${locale}/${ctx.l1Slug}/group/${ctx.groupSlug}`;
-    revalidatePath(base, 'page');
+    revalidatePath(base, 'layout'); // the Pasākumi badge sits in the group frame
     revalidatePath(`${base}/events`, 'page');
     revalidatePath(`${base}/events/${ctx.eventSlug}`, 'page');
 }
 
-type EventNotificationType = 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN';
+type EventNotificationType = 'EVENT_REQUEST' | 'EVENT_APPROVED' | 'EVENT_DECLINED' | 'EVENT_LET_IN' | 'EVENT_SPOT_FREED' | 'EVENT_ROOM_AGAIN' | 'EVENT_NOW_OPEN' | 'EVENT_REMOVED';
 
 /** One compact notification about an event; `authorName` is the person it is about. */
 function notifyEvent(
@@ -155,6 +155,24 @@ export async function decideAttendance(eventId: string, targetUserId: string, de
         const result = await EventService.decide(eventId, targetUserId, session.user.id, decision);
         await notifyEvent(targetUserId, decision === 'approve' ? 'EVENT_APPROVED' : 'EVENT_DECLINED', result);
         revalidateEventPaths(locale, result);
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'MANAGE_FAILED');
+    }
+}
+
+/**
+ * Organiser takes a going person off the event; that person is told.
+ */
+export async function removeAttendee(eventId: string, targetUserId: string, locale: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    try {
+        const result = await EventService.removeAttendee(eventId, targetUserId, session.user.id);
+        await notifyEvent(targetUserId, 'EVENT_REMOVED', result);
+        revalidateEventPaths(locale, result);
+        updateTag('events');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');
