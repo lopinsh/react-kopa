@@ -727,7 +727,7 @@
     },
     "activity": {
       "title": "Aktivitāte",
-      "subtitle": "Jaunākais vietnē, sākot ar svaigāko.",
+      "subtitle": "Vai vietne dzīvo, un kas tajā notiek.",
       "filtersLabel": "Rādīt",
       "filter": {
         "all": "Visi",
@@ -1361,6 +1361,43 @@
         "orderWarning": "Nosaukums ir lielāks par lapas virsrakstu. Publicēt tik un tā?",
         "allType": "Visi burti un sistēma"
       }
+    },
+    "vitality": {
+      "demoShow": "Rādīt ar demo",
+      "demoLeftOut": "Demo lietotāji un viņu grupas nav ieskaitīti.",
+      "growth": "Izaugsme",
+      "series": {
+        "users": "Lietotāji",
+        "groups": "Grupas",
+        "joins": "Pievienošanās grupām",
+        "events": "Pasākumi",
+        "signups": "Pieteikumi pasākumiem"
+      },
+      "recent": "7 d. +{week} · 30 d. +{month}",
+      "change": "{delta} ({percent}) pret iepriekšējām 30 d.",
+      "changeNoBase": "{delta} pret iepriekšējām 30 d.",
+      "noChange": "Bez izmaiņām pret iepriekšējām 30 d.",
+      "chartLabel": "{series}, pēdējās 12 nedēļas: {values}",
+      "weekBar": "Nedēļa no {date}: {count}",
+      "weekBarPartial": "Šī nedēļa līdz šim: {count}",
+      "participation": "Dalība",
+      "inGroup": "Lietotāji vismaz vienā grupā",
+      "inGroupValue": "{percent} ({none, plural, =0 {visi grupās} one {# bez grupas} other {# bez grupas}})",
+      "avgMembers": "Vidēji dalībnieku grupā",
+      "groupsMin3": "Grupas ar 3 vai vairāk dalībniekiem",
+      "messages": "Čata ziņas",
+      "posts": "Jaunumi",
+      "perWindow": "7 d. {week} · 30 d. {month}",
+      "health": "Grupu veselība",
+      "healthNote": "Aktīva: pēdējās 30 dienās jauns dalībnieks, jaunums, čata ziņa vai pasākums. Tukša: tikai īpašnieks. Paslēptās grupas nav ieskaitītas.",
+      "active": "Aktīvas",
+      "quiet": "Klusas",
+      "empty": "Tukšas",
+      "quietList": "Klusās grupas",
+      "lastActivity": "Pēdējā aktivitāte {date}",
+      "quietMore": "Un vēl {count}",
+      "quietNone": "Klusu grupu nav.",
+      "feedTitle": "Jaunākais"
     }
   },
   "messages": {

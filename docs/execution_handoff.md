@@ -60,6 +60,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
   - [x] **R28-4 Polish batch** (pushed, live; commits "R28-4"): admin tag card names editable on the card (note cmvs5qr2u); announcement item without List icon (cmvs63h08); next-meeting chip without weekday (cmvs64cba); chat bubbles grouped with in-bubble time, day dividers and an emoji popover (cmvs6rglk); message icon button on member rows (part of cmvs6heh2, still open). Spec `specs/R28-4.md`.
   - [ ] **R29 Events for organisers** (spec `specs/R29.md`): [x] notification opens the full event page, panel "N pieteikumi → Pārvaldīt"; [x] Pasākumi badge; [x] going list Rakstīt / Noņemt (`removeAttendee`, `EVENT_REMOVED`). Pushed, live.
   - [x] **R30 Aktivitāte** (spec `specs/R30.md`, note cmvtnds2f): [x] R30-1 admin activity feed (`/admin/activity`, chips, "Rādīt vairāk" by cursor; announcements chip "Jaunumi", requests and waitlist own rows, group creator = current owner). Reviewed, pushed, live.
+  - [ ] **R31 Dzīvīgums** (spec `specs/R31.md`): [ ] R31-1 vitality cards on `/admin/activity` (growth tiles with 12-week bars, participation, group health, demo switch `?demo=1`); [ ] R31-2 `User.lastSeenAt` once a day, active users and return rate.
 
 ## Standing owner rules
 

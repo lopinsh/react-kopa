@@ -727,7 +727,7 @@
     },
     "activity": {
       "title": "Activity",
-      "subtitle": "Latest on the site, newest first.",
+      "subtitle": "Whether the site is alive, and what happens on it.",
       "filtersLabel": "Show",
       "filter": {
         "all": "All",
@@ -1361,6 +1361,43 @@
         "orderWarning": "Item titles are larger than the page title. Publish anyway?",
         "allType": "All type and system"
       }
+    },
+    "vitality": {
+      "demoShow": "Include demo",
+      "demoLeftOut": "Demo users and their groups are left out.",
+      "growth": "Growth",
+      "series": {
+        "users": "Users",
+        "groups": "Groups",
+        "joins": "Group joins",
+        "events": "Events",
+        "signups": "Event sign-ups"
+      },
+      "recent": "7 d +{week} · 30 d +{month}",
+      "change": "{delta} ({percent}) vs the previous 30 d",
+      "changeNoBase": "{delta} vs the previous 30 d",
+      "noChange": "No change vs the previous 30 d",
+      "chartLabel": "{series}, last 12 weeks: {values}",
+      "weekBar": "Week of {date}: {count}",
+      "weekBarPartial": "This week so far: {count}",
+      "participation": "Participation",
+      "inGroup": "Users in at least one group",
+      "inGroupValue": "{percent} ({none, plural, =0 {all in a group} other {# in none}})",
+      "avgMembers": "Average members per group",
+      "groupsMin3": "Groups with 3 or more members",
+      "messages": "Chat messages",
+      "posts": "Announcements",
+      "perWindow": "7 d {week} · 30 d {month}",
+      "health": "Group health",
+      "healthNote": "Active: a new member, announcement, chat message or event in the last 30 days. Empty: only the owner. Hidden groups are left out.",
+      "active": "Active",
+      "quiet": "Quiet",
+      "empty": "Empty",
+      "quietList": "Quiet groups",
+      "lastActivity": "Last activity {date}",
+      "quietMore": "And {count} more",
+      "quietNone": "No quiet groups.",
+      "feedTitle": "Latest"
     }
   },
   "messages": {

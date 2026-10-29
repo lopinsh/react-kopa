@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Activity } from 'lucide-react';
 import FilterChip from '@/components/ui/FilterChip';
@@ -20,6 +20,7 @@ export default function ActivityFeed({ filter, initial }: Props) {
     const t = useTranslations('admin.activity');
     const tErrors = useTranslations('errors');
     const router = useRouter();
+    const params = useSearchParams();
     const { error: toastError } = useToast();
     const [page, setPage] = useState(initial);
     const [isPending, startTransition] = useTransition();
@@ -27,7 +28,12 @@ export default function ActivityFeed({ filter, initial }: Props) {
 
     const pick = (next: ActivityFilter) => {
         if (next === filter || isFiltering) return;
-        startFilter(() => router.replace(next === 'all' ? '?' : `?type=${next}`, { scroll: false }));
+        {
+            const query = new URLSearchParams(params.toString());
+            if (next === 'all') query.delete('type');
+            else query.set('type', next);
+            startFilter(() => router.replace(`?${query.toString()}`, { scroll: false }));
+        }
     };
 
     const more = () => {
