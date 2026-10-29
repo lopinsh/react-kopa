@@ -127,6 +127,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     await PresenceService.touch(token.id as string);
                     token.lastSeenWrittenAt = Date.now();
                 } catch (error) {
+                    // Retry in a minute, not on every request while the DB is down.
+                    token.lastSeenWrittenAt = Date.now() - LAST_SEEN_EVERY_MS + ROLE_RECHECK_MS;
                     console.error('lastSeenAt write failed', error);
                 }
             }

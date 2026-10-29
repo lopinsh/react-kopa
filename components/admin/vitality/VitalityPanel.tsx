@@ -16,7 +16,7 @@ export default function VitalityPanel({ snapshot }: { snapshot: VitalitySnapshot
     const window = (week: number, month: number) => t('perWindow', { week: n(week), month: n(month) });
     const inGroup = format.number(p.users === 0 ? 0 : p.inGroup / p.users, { style: 'percent', maximumFractionDigits: 0 });
     const rows = [
-        [t('inGroup'), t('inGroupValue', { percent: inGroup, none: Math.max(0, p.users - p.inGroup) })],
+        [t('inGroup'), t('inGroupValue', { percent: inGroup, none: n(Math.max(0, p.users - p.inGroup)) })],
         [t('avgMembers'), format.number(p.avgMembers, { maximumFractionDigits: 1, minimumFractionDigits: 1 })],
         [t('groupsMin3'), n(p.groupsMin3)],
         [t('messages'), window(p.messages7, p.messages30)],

@@ -74,7 +74,7 @@ export async function participationRow(now: Date, d: Demo): Promise<Participatio
         )
         SELECT
             (SELECT count(*)::int FROM "User" u WHERE ${d.user(Prisma.sql`u.id`)}) AS users,
-            (SELECT count(DISTINCT m."userId")::int FROM "Membership" m WHERE m.role IN ('OWNER', 'ADMIN', 'MEMBER') AND ${d.user(Prisma.sql`m."userId"`)}) AS "inGroup",
+            (SELECT count(DISTINCT m."userId")::int FROM "Membership" m WHERE m.role IN ('OWNER', 'ADMIN', 'MEMBER') AND ${d.user(Prisma.sql`m."userId"`)} AND ${d.group(Prisma.sql`m."groupId"`)}) AS "inGroup",
             (SELECT count(*)::int FROM gm) AS groups,
             (SELECT coalesce(avg(n), 0)::float8 FROM gm) AS "avgMembers",
             (SELECT count(*)::int FROM gm WHERE n >= ${VITALITY_MIN_MEMBERS}) AS "groupsMin3",
