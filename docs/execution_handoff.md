@@ -59,6 +59,7 @@ Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a
   - [x] **R28-3 Ziņas width and head picture** (commits "R28-3"): Ziņas hides the own-area aside and the chat column has `min-w-0` (note cmvs5d3zv); from 768 the group picture joins the head tile as one card, the credit is a chip on the picture (note cmvs5k51o). Baselines `messages` and `group-page`. Review: below lg an open chat takes the Ziņas card alone (list hidden, back arrow shown), as the 181 px chat at 768 was cramped. Pushed, live. Spec `specs/R28-3.md`.
   - [x] **R28-4 Polish batch** (pushed, live; commits "R28-4"): admin tag card names editable on the card (note cmvs5qr2u); announcement item without List icon (cmvs63h08); next-meeting chip without weekday (cmvs64cba); chat bubbles grouped with in-bubble time, day dividers and an emoji popover (cmvs6rglk); message icon button on member rows (part of cmvs6heh2, still open). Spec `specs/R28-4.md`.
   - [ ] **R29 Events for organisers** (spec `specs/R29.md`): [x] notification opens the full event page, panel "N pieteikumi → Pārvaldīt"; [x] Pasākumi badge; [x] going list Rakstīt / Noņemt (`removeAttendee`, `EVENT_REMOVED`). Pushed, live.
+  - [ ] **R30 Aktivitāte** (spec `specs/R30.md`, note cmvtnds2f): [x] R30-1 admin activity feed (`/admin/activity`, chips, "Rādīt vairāk" by cursor; announcements chip "Jaunumi", requests and waitlist own rows, group creator = current owner). Not pushed; review next.
 
 ## Standing owner rules
 

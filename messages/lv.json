@@ -725,6 +725,35 @@
       "deleteContentTitle": "Dzēst saturu?",
       "deleteContentConfirm": "Dzēst"
     },
+    "activity": {
+      "title": "Aktivitāte",
+      "subtitle": "Jaunākais vietnē, sākot ar svaigāko.",
+      "filtersLabel": "Rādīt",
+      "filter": {
+        "all": "Visi",
+        "users": "Lietotāji",
+        "groups": "Grupas",
+        "membership": "Dalība",
+        "events": "Pasākumi",
+        "posts": "Jaunumi"
+      },
+      "kind": {
+        "USER_JOINED": "<actor>{actorName}</actor> reģistrējās",
+        "GROUP_CREATED": "<actor>{actorName}</actor> izveidoja grupu <target>{targetName}</target>",
+        "MEMBER_JOINED": "<actor>{actorName}</actor> pievienojās grupai <target>{targetName}</target>",
+        "MEMBER_REQUESTED": "<actor>{actorName}</actor> lūdz pievienoties grupai <target>{targetName}</target>",
+        "EVENT_CREATED": "<actor>{actorName}</actor> izveidoja pasākumu <target>{targetName}</target>",
+        "EVENT_SIGNUP": "<actor>{actorName}</actor> pieteicās uz <target>{targetName}</target>",
+        "EVENT_SIGNUP_PENDING": "<actor>{actorName}</actor> gaida apstiprinājumu uz <target>{targetName}</target>",
+        "EVENT_SIGNUP_WAITLISTED": "<actor>{actorName}</actor> ir rindā uz <target>{targetName}</target>",
+        "POST_PUBLISHED": "<actor>{actorName}</actor> publicēja jaunumu <target>{targetName}</target>"
+      },
+      "hidden": "paslēpta",
+      "unknownUser": "Nezināms lietotājs",
+      "more": "Rādīt vairāk",
+      "empty": "Šeit vēl nekā nav.",
+      "loadFailed": "Neizdevās ielādēt."
+    },
     "team": {
       "title": "Komanda",
       "subtitle": "Izvēlies, kas palīdz vadīt vietni kā administrators. Mainīt to var tikai tu, īpašnieks.",
@@ -748,6 +777,7 @@
     },
     "nav": {
       "reports": "Ziņojumi",
+      "activity": "Aktivitāte",
       "categories": "Tēmas",
       "locations": "Vietas",
       "translations": "Tulkojumi",
@@ -759,6 +789,7 @@
       "menu": "Admins",
       "desc": {
         "reports": "Dalībnieku ziņojumi izskatīšanai",
+        "activity": "Kas notiek vietnē: jauni lietotāji, grupas, dalība",
         "categories": "Tēmas, veidi un jaunās birkas pārskatīšanai",
         "locations": "Pilsētas un jaunās pilsētas pārskatīšanai",
         "translations": "Vietnes tekstu labošana un apstiprināšana",

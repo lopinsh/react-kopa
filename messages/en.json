@@ -725,6 +725,35 @@
       "deleteContentTitle": "Delete content?",
       "deleteContentConfirm": "Delete"
     },
+    "activity": {
+      "title": "Activity",
+      "subtitle": "Latest on the site, newest first.",
+      "filtersLabel": "Show",
+      "filter": {
+        "all": "All",
+        "users": "Users",
+        "groups": "Groups",
+        "membership": "Membership",
+        "events": "Events",
+        "posts": "Announcements"
+      },
+      "kind": {
+        "USER_JOINED": "<actor>{actorName}</actor> signed up",
+        "GROUP_CREATED": "<actor>{actorName}</actor> created the group <target>{targetName}</target>",
+        "MEMBER_JOINED": "<actor>{actorName}</actor> joined <target>{targetName}</target>",
+        "MEMBER_REQUESTED": "<actor>{actorName}</actor> asked to join <target>{targetName}</target>",
+        "EVENT_CREATED": "<actor>{actorName}</actor> created the event <target>{targetName}</target>",
+        "EVENT_SIGNUP": "<actor>{actorName}</actor> signed up for <target>{targetName}</target>",
+        "EVENT_SIGNUP_PENDING": "<actor>{actorName}</actor> is waiting for approval for <target>{targetName}</target>",
+        "EVENT_SIGNUP_WAITLISTED": "<actor>{actorName}</actor> is on the waitlist for <target>{targetName}</target>",
+        "POST_PUBLISHED": "<actor>{actorName}</actor> posted the announcement <target>{targetName}</target>"
+      },
+      "hidden": "hidden",
+      "unknownUser": "Unknown user",
+      "more": "Show more",
+      "empty": "Nothing here yet.",
+      "loadFailed": "Could not load more."
+    },
     "team": {
       "title": "Team",
       "subtitle": "Choose who helps run the site as an admin. Only you, the owner, can change this.",
@@ -748,6 +777,7 @@
     },
     "nav": {
       "reports": "Reports",
+      "activity": "Activity",
       "categories": "Topics",
       "locations": "Locations",
       "translations": "Translations",
@@ -759,6 +789,7 @@
       "menu": "Admin",
       "desc": {
         "reports": "Reports from members to review",
+        "activity": "What happens on the site: new users, groups, joins",
         "categories": "Topics, types and new tags to review",
         "locations": "Cities and new cities to review",
         "translations": "Edit and approve site texts",

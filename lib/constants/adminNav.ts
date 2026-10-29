@@ -1,5 +1,5 @@
 import { DESIGN_PARTS } from './theme';
-import { AlertTriangle, BookOpen, EyeOff, Languages, ListChecks, MapPin, MessageSquareText, Network, Palette, UserCog, type LucideIcon } from 'lucide-react';
+import { Activity, AlertTriangle, BookOpen, EyeOff, Languages, ListChecks, MapPin, MessageSquareText, Network, Palette, UserCog, type LucideIcon } from 'lucide-react';
 
 /** Admin > the five sections and their pages, in menu order (AR-68). One list: the sections bar, the pages list and the phone drawer all read it. */
 export type AdminBadge = 'tags' | 'cities' | 'reports' | 'suggestions';
@@ -25,6 +25,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
         items: [
             { id: 'overview', href: '/admin', match: 'exact', icon: EyeOff },
             { id: 'reports', href: '/admin/reports', match: 'prefix', icon: AlertTriangle, badge: 'reports' },
+            { id: 'activity', href: '/admin/activity', match: 'prefix', icon: Activity },
         ],
     },
     {
