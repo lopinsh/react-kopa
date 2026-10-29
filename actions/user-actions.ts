@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { UserService } from '@/lib/services/user.service';
 import { revalidateTag, revalidatePath } from 'next/cache';
-import { profileSchema, privacySchema } from '@/lib/validations/user';
+import { profileSchema, privacySchema, emailSettingsSchema } from '@/lib/validations/user';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import type { OwnCounts } from '@/lib/types/own-area';
@@ -82,5 +82,22 @@ export async function markMyGroupsSeen(): Promise<ActionResponse> {
     } catch (error) {
         console.error('[markMyGroupsSeen] Error:', error);
         return { success: false, error: 'UPDATE_FAILED' };
+    }
+}
+
+/** The email digest switch from Iestatījumi (R33). */
+export async function updateEmailSettings(input: unknown): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+
+    const parsed = emailSettingsSchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+
+    try {
+        await UserService.updateEmailSettings(session.user.id, parsed.data);
+        revalidatePath('/[locale]/settings', 'page');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'UPDATE_FAILED');
     }
 }

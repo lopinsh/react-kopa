@@ -6,6 +6,16 @@ import google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { PresenceService } from "@/lib/services/presence.service";
+import { cookies } from "next/headers";
+
+/** The site language from next-intl's cookie, for the email digest (R33). Never throws: where cookies are out of reach the email goes in the default language. */
+async function readLocaleCookie(): Promise<string | null> {
+    try {
+        return (await cookies()).get("NEXT_LOCALE")?.value ?? null;
+    } catch {
+        return null;
+    }
+}
 
 // Simple per-user password map for local development.
 // Key: email, Value: password
@@ -124,7 +134,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (token.id && Date.now() - Number(token.lastSeenWrittenAt ?? 0) > LAST_SEEN_EVERY_MS) {
                 // Day-level last visit for the admin vitality panel. A failed write never signs anyone out.
                 try {
-                    await PresenceService.touch(token.id as string);
+                    await PresenceService.touch(token.id as string, await readLocaleCookie());
                     token.lastSeenWrittenAt = Date.now();
                 } catch (error) {
                     // Retry in a minute, not on every request while the DB is down.

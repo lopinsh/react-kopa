@@ -46,7 +46,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Group life | Event page | B | R9a done (page; the form follows) |
 | Group life | Create / edit event | B | R4 done (place), R9a |
 | Group life | Group settings | B | R4 done (field), R9c done (settings cards like Iestatījumi; language bar wraps by group) |
-| Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9c done (Mans profils shows what others see; Privātums in Iestatījumi) |
+| Me | Own profile, Manas grupas, Ziņas, Paziņojumi, Iestatījumi | B (frame) | R2a frame; R8 done (Manas grupas, Ziņas, Paziņojumi); R9c done (Mans profils shows what others see; Privātums in Iestatījumi); R33: E-pasts switch in Iestatījumi |
 | Me | Public profile | F | R9c done; R32: contact line under the bio (and on Biedri rows), shown only to signed-in people who share a group, everyone signed in by the Privātums switch, never visitors; private profile: only you |
 | Me | Edit profile | D | R9c done; R32 contact field with who-sees-it hint ("Labot profilu" is a page of its own; the switches are in Iestatījumi) |
 | Static | About, privacy, 404 | F | R12 |

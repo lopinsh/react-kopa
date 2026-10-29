@@ -30,6 +30,12 @@ model User {
   /// Free-text contact (R32); who sees it: lib/services/contact.ts
   contact              String?
   contactVisibleToAll  Boolean             @default(false)
+  /// R33: email digest of unread things; off by the Iestatījumi switch or the unsubscribe link.
+  emailNotifications   Boolean             @default(true)
+  /// R33: last used site language ('lv' | 'en'), written with the daily lastSeenAt write; null = DEFAULT_LOCALE.
+  locale               String?
+  /// R33: when the last digest that listed messages went out; a chat counts again only for messages after it.
+  messagesEmailedAt    DateTime?
   cities               String[]
   username             String?             @unique
   accounts             Account[]
@@ -432,10 +438,13 @@ model Notification {
   /// USER = about the person's own groups and events; ADMIN = needs a site admin's attention (admin tab of the bell).
   audience  String   @default("USER")
   createdAt DateTime @default(now())
+  /// R33: set when an email digest listed this notification; never mailed twice.
+  emailedAt DateTime?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, audience, read])
   @@index([userId, audience, createdAt])
+  @@index([read, emailedAt, createdAt])
 }
 
 model Report {

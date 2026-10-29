@@ -12,6 +12,7 @@ import { MessageService } from './message.service';
 import type { MyRole } from '@/lib/types/own-area';
 import { contactFor } from './contact';
 import type { PrivacySettings, ProfileViewContext } from '@/lib/types/profile';
+import { DEMO_EMAIL_DOMAIN } from '@/lib/constants/vitality';
 
 /** The fields a profile page shows. Never the email, password hash or role. */
 const PROFILE_USER_SELECT = {
@@ -51,6 +52,22 @@ export const UserService = {
             where: { id: userId },
             select: { isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true, contactVisibleToAll: true },
         });
+    },
+
+    /** The email digest switch (R33); `canEmail` is false for an account with no address or a demo account. */
+    async getEmailSettings(userId: string): Promise<{ emailNotifications: boolean; canEmail: boolean } | null> {
+        const user = await prisma.user.findUnique({ where: { id: userId }, select: { emailNotifications: true, email: true } });
+        if (!user) return null;
+        return { emailNotifications: user.emailNotifications, canEmail: Boolean(user.email) && !user.email!.endsWith(`@${DEMO_EMAIL_DOMAIN}`) };
+    },
+
+    async updateEmailSettings(userId: string, data: { emailNotifications: boolean }): Promise<void> {
+        try {
+            await prisma.user.update({ where: { id: userId }, data: { emailNotifications: data.emailNotifications } });
+        } catch (error) {
+            console.error('[UserService.updateEmailSettings] Error:', error);
+            throw new ActionError('UPDATE_FAILED');
+        }
     },
 
     /** Saves only the switches given (Prisma ignores `undefined`); never touches name, bio, places or picture. */

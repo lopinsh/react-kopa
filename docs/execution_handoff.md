@@ -18,6 +18,9 @@
 - [x] **R19 Tēmu rādītājs** (spec `docs/development/specs/R19.md`, drawing `docs/development/r19-category-sidebar.html`): the category drawer and the Tēma drop-down as a quiet index (neutral icons, tone only on hover icon and the selected row, tint + dot, quiet search with Veidi, empty shows "0"); one session R19-1, no DB change; reviewed, pushed, live.
 - [x] **R20 Dēļa galva** (spec `docs/development/specs/R20.md`, drawing `docs/development/r20-board-heading.html`): the title is the Grupas | Pasākumi switch with filter-following counts, one 28 px chip row, the column flush left and the board to the right gutter on shared row lines, header field over the title from 1024; sessions R20-1 (grid, title, counts, header) and R20-2 (chips, sticky veil, skeleton); no DB change; reviewed, pushed, live.
 - [x] **R32 Kontakti** (spec `docs/development/specs/R32.md`): R32-1 profile contact, seen by shared-group members, switch for everyone signed in; Biedri rows; migration `user_contact`. Reviewed (visibility matrix incl. hidden group, PENDING, private, switch, admin; 360–1920 lv/en light/dark): pushed, live.
+- [ ] **R33 E-pasts** (spec `docs/development/specs/R33.md`): unread digest by email, one switch in Iestatījumi, signed unsubscribe link.
+  - [x] R33-1 schema (migration `add_email_digest`), language with last seen, E-pasts switch, unsubscribe page and one-click route.
+  - [ ] R33-2 mailer, digest service, cron route.
 
 Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a short plan and the owner's OK before spec/build):
 

@@ -1614,7 +1614,13 @@
         "contactAll": "Show my contact to everyone signed in",
         "contactAllDesc": "When off, only people who share a group with you see your contact. Visitors who aren't signed in never see it."
       },
-      "saved": "Saved"
+      "saved": "Saved",
+      "email": {
+        "title": "Email",
+        "digest": "Email me about unread messages and requests",
+        "digestDesc": "One short email when something has waited for you over 10 minutes. It never includes what people wrote.",
+        "noEmail": "This account has no email address."
+      }
     },
     "myGroups": {
       "menuLabel": "My groups sections",
@@ -2077,5 +2083,15 @@
     "next": "Next picture",
     "counter": "{n} / {total}",
     "close": "Close the gallery"
+  },
+  "email": {
+    "unsubscribe": {
+      "title": "Stop emails",
+      "text": "We'll stop emailing you about unread things. You can turn it back on in Settings.",
+      "confirm": "Stop emails",
+      "done": "Done. We won't email you again.",
+      "settingsLink": "Open settings",
+      "invalid": "This link isn't valid. You can turn emails off in Settings."
+    }
   }
 }

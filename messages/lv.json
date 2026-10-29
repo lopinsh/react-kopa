@@ -1614,7 +1614,13 @@
         "contactAll": "Rādīt kontaktus visiem pierakstītajiem",
         "contactAllDesc": "Ja izslēgts, kontaktus redz tikai cilvēki, ar kuriem tev ir kopīga grupa. Neierakstītiem apmeklētājiem tie nav redzami nekad."
       },
-      "saved": "Saglabāts"
+      "saved": "Saglabāts",
+      "email": {
+        "title": "E-pasts",
+        "digest": "Sūtīt e-pastu par nelasītām ziņām un pieteikumiem",
+        "digestDesc": "Vienu īsu vēstuli, ja kaut kas tevi gaida ilgāk par 10 minūtēm. Ziņu saturu tajā neliekam.",
+        "noEmail": "Šim kontam nav e-pasta adreses."
+      }
     },
     "myGroups": {
       "menuLabel": "Manas grupas sadaļas",
@@ -2077,5 +2083,15 @@
     "next": "Nākamais attēls",
     "counter": "{n} / {total}",
     "close": "Aizvērt galeriju"
+  },
+  "email": {
+    "unsubscribe": {
+      "title": "Atteikties no e-pastiem",
+      "text": "Mēs vairs nesūtīsim e-pastus par nelasītām lietām. Ieslēgt atpakaļ vari Iestatījumos.",
+      "confirm": "Atteikties",
+      "done": "Gatavs. E-pastus vairs nesūtīsim.",
+      "settingsLink": "Atvērt iestatījumus",
+      "invalid": "Šī saite nav derīga. E-pastus vari izslēgt Iestatījumos."
+    }
   }
 }

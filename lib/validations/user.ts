@@ -31,3 +31,6 @@ export const privacySchema = z
     })
     .partial()
     .refine((v) => Object.values(v).some((x) => x !== undefined), 'VALIDATION_FAILED');
+
+/** The email digest switch in Iestatījumi (R33). */
+export const emailSettingsSchema = z.object({ emailNotifications: z.boolean() }).strict();

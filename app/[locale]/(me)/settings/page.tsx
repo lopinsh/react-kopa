@@ -6,6 +6,7 @@ import { auth } from '@/lib/auth';
 import { signInUrl } from '@/lib/auth-redirect';
 import AppearanceSetting from '@/components/me/AppearanceSetting';
 import PrivacySettings from '@/components/me/PrivacySettings';
+import EmailSettings from '@/components/me/EmailSettings';
 import { UserService } from '@/lib/services/user.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -14,20 +15,25 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     return { title: t('title') };
 }
 
-/** Iestatījumi: the last page of your own area: Privātums (who sees what, OD-26), then Izskats. */
+/** Iestatījumi: the last page of your own area: Privātums (who sees what, OD-26), E-pasts (R33), then Izskats. */
 export default async function SettingsPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
     const session = await auth();
     if (!session?.user?.id) redirect(signInUrl(locale, '/settings'));
 
-    const [t, privacy] = await Promise.all([getTranslations('profile.settings'), UserService.getPrivacySettings(session.user.id)]);
-    if (!privacy) redirect(`/${locale}`);
+    const [t, privacy, email] = await Promise.all([
+        getTranslations('profile.settings'),
+        UserService.getPrivacySettings(session.user.id),
+        UserService.getEmailSettings(session.user.id),
+    ]);
+    if (!privacy || !email) redirect(`/${locale}`);
 
     return (
         <div className="grid max-w-focus gap-6">
             {/* On desktop the marked menu item already names the page; on phones the name stands over the content. */}
             <PageHead phoneOnly title={t('title')} />
             <PrivacySettings initial={privacy} />
+            <EmailSettings initial={email.emailNotifications} canEmail={email.canEmail} />
             <AppearanceSetting />
         </div>
     );
