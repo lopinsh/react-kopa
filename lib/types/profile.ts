@@ -16,6 +16,8 @@ export type ProfileViewContext = {
         image: string | null;
         avatarSeed: string | null;
         bio: string | null;
+        /** Set only when this viewer may see it (lib/services/contact.ts). */
+        contact: string | null;
         cities: string[];
         createdAt: Date;
     };
@@ -26,6 +28,8 @@ export type ProfileViewContext = {
     /** Heading: Grupas (all), Kopīgās grupas (only shared); never over an empty list, or no groups section. */
     groupsScope: 'all' | 'shared' | 'none';
     canMessage: boolean;
+    /** Own profile only: who sees the contact; null when there is none or this is not the own profile. */
+    ownContactScope: 'all' | 'shared' | null;
 };
 
-export type PrivacySettings = { isProfilePublic: boolean; allowDirectMessages: boolean; showGroupsOnProfile: boolean };
+export type PrivacySettings = { isProfilePublic: boolean; allowDirectMessages: boolean; showGroupsOnProfile: boolean; contactVisibleToAll: boolean };

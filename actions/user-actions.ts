@@ -27,7 +27,8 @@ export async function updateProfile(formData: unknown): Promise<ActionResponse> 
             name: data.name,
             image: data.image || undefined,
             username: data.username || undefined,
-            bio: data.bio || undefined,
+            bio: data.bio || null,
+            contact: data.contact?.trim() || null,
             cities: citiesArray,
             avatarSeed: data.avatarSeed || undefined,
         });

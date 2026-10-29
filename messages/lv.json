@@ -1565,8 +1565,14 @@
         "USERNAME_INVALID_CHARS": "Tikai mazie burti, cipari un pasvītras.",
         "USERNAME_TAKEN": "Šis lietotājvārds jau ir aizņemts.",
         "BIO_TOO_LONG": "Teksts nedrīkst būt garāks par 500 rakstzīmēm.",
-        "IMAGE_INVALID": "Ievadi derīgu attēla adresi (https://…)."
-      }
+        "IMAGE_INVALID": "Ievadi derīgu attēla adresi (https://…).",
+        "CONTACT_TOO_LONG": "Kontakti var būt ne garāki par 200 zīmēm."
+      },
+      "contact": "Kontakti",
+      "contactPlaceholder": "Tālrunis, e-pasts, Telegram…",
+      "contactHint": "Redz cilvēki, ar kuriem tev ir kopīga grupa. Plašāk to vari atvērt sadaļā",
+      "contactPrivacyLink": "Privātums",
+      "contactPrivate": "Tavs profils ir privāts, tāpēc kontaktus redzi tikai tu."
     },
     "editDesc": "Atjaunini savu publisko profila informāciju.",
     "editTitle": "Labot profilu",
@@ -1604,7 +1610,9 @@
         "allowMessages": "Atļaut ziņas",
         "allowMessagesDesc": "Citi biedri var tev rakstīt privātas ziņas.",
         "showGroups": "Rādīt manas grupas",
-        "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad."
+        "showGroupsDesc": "Tavā profilā redzamas publiskās grupas, kurās esi. Privātās grupas netiek rādītas nekad.",
+        "contactAll": "Rādīt kontaktus visiem pierakstītajiem",
+        "contactAllDesc": "Ja izslēgts, kontaktus redz tikai cilvēki, ar kuriem tev ir kopīga grupa. Neierakstītiem apmeklētājiem tie nav redzami nekad."
       },
       "saved": "Saglabāts"
     },
@@ -1627,7 +1635,11 @@
       "asOthersSee": "Tā tavu profilu redz citi.",
       "groupsHidden": "Tavas grupas citi neredz; kopīgo grupu biedri redz tās, kas jums kopīgas.",
       "privateNote": "Tavs profils ir privāts: citi redz tikai, ka tas ir privāts.",
-      "changePrivacy": "Mainīt Iestatījumos"
+      "changePrivacy": "Mainīt Iestatījumos",
+      "contactShared": "Kontaktus redz tikai cilvēki, ar kuriem tev ir kopīga grupa."
+    },
+    "contact": {
+      "label": "Kontakti"
     }
   },
   "report": {
@@ -1763,7 +1775,7 @@
       "cookies3": "Mēs neizmantojam reklāmu vai trešo pušu analītiku un nepārdodam datus.",
       "cookiesTitle": "Sīkdatnes un vietējā krātuve",
       "data1": "Tavu kontu: vārdu, e-pasta adresi un paroli (glabājas tikai kā vienvirziena jaucējkods). Ja pieslēdzies ar Google vai GitHub, mēs no tiem saņemam tavu vārdu, e-pasta adresi un profila attēlu.",
-      "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas un tavas privātuma izvēles (vai profils ir publisks, vai tev drīkst rakstīt ziņas un vai tajā redzamas tavas grupas).",
+      "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas, neobligātus kontaktus un tavas privātuma izvēles (vai profils ir publisks, vai tev drīkst rakstīt ziņas, vai tajā redzamas tavas grupas un kam redzami kontakti).",
       "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz. Mēs arī atzīmējam dienu, kad pēdējo reizi biji vietnē, lai redzētu, vai to lieto.",
       "dataTitle": "Ko mēs glabājam",
       "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
@@ -1774,7 +1786,8 @@
       "visibility1": "Publiskas grupas, to publiskos pasākumus un publiskus profilus var redzēt ikviens. Tikai dalībniekiem paredzēto saturu redz tikai dalībnieki.",
       "visibility2": "Ziņas tiek glabātas mūsu serverī, un tās nav šifrētas no gala līdz galam.",
       "visibilityTitle": "Kas to var redzēt",
-      "cookies4": "Tava pārlūkprogramma šajā ierīcē atceras pēdējos meklētos vārdus, lai meklēšana tos varētu parādīt vēlreiz. Tie netiek sūtīti mums; katru var noņemt ar ×."
+      "cookies4": "Tava pārlūkprogramma šajā ierīcē atceras pēdējos meklētos vārdus, lai meklēšana tos varētu parādīt vēlreiz. Tie netiek sūtīti mums; katru var noņemt ar ×.",
+      "visibility3": "Kontaktus, ko ieraksti profilā, redz pierakstīti cilvēki, ar kuriem tev ir kopīga grupa (vai visi pierakstītie, ja to izvēlies), un vietnes administratori. Ja profils ir privāts, tos neredz neviens cits."
     },
     "notFound": {
       "signInHint": "Ja esi slēgtas grupas biedrs,",

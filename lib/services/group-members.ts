@@ -1,6 +1,7 @@
 import { avatarUrl } from '@/lib/avatar';
 import { GroupService, type GroupContext } from '@/lib/services/group.service';
 import { MessageService } from '@/lib/services/message.service';
+import { contactForMemberRow } from '@/lib/services/contact';
 import { allowedMemberActions, type MemberManageAction } from '@/lib/utils/permissions';
 
 export type MemberAction = MemberManageAction | 'message' | 'profile';
@@ -12,6 +13,8 @@ export interface MemberRowData {
     avatar: string;
     role: 'OWNER' | 'ADMIN' | 'MEMBER';
     since: Date;
+    /** Only when this viewer may see it (R32); the switch itself is never sent. */
+    contact: string | null;
     /** The public profile address, or null when the person keeps theirs private. */
     profileHref: string | null;
     canMessage: boolean;
@@ -55,6 +58,7 @@ export const GroupMembersService = {
                     avatar: avatarUrl(m.user),
                     role: m.role,
                     since: m.joinedAt,
+                    contact: contactForMemberRow(m.user, viewerId, { hidden: !!group.moderation.hidden, isSiteAdmin: group.moderation.isSiteAdmin }),
                     profileHref,
                     canMessage,
                     actions: [...(canMessage ? (['message'] as const) : []), ...(profileHref ? (['profile'] as const) : []), ...manage],

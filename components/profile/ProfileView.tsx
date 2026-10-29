@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
 import GroupList from '@/components/discovery/GroupList';
 import { ProfileIdentity, ProfileFacts, ProfileBio } from '@/components/profile/ProfileParts';
+import ContactLine from '@/components/profile/ContactLine';
 import { cardActivities } from '@/lib/services/card-activity';
 import type { ProfileViewContext } from '@/lib/types/profile';
 
@@ -37,6 +38,7 @@ export default async function ProfileView({ view, viewerId, locale, action, own 
             </div>
 
             <ProfileBio person={person} own={own} />
+            {person.contact && <ContactLine contact={person.contact} />}
 
             {groupsScope !== 'none' && (
                 <section className="grid gap-3">

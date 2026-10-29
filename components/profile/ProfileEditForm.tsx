@@ -3,11 +3,12 @@
 import { useEffect, useState, useTransition } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { profileSchema, USER_BIO_MAX, USER_NAME_MAX, type ProfileFormValues } from '@/lib/validations/user';
+import { profileSchema, USER_BIO_MAX, USER_CONTACT_MAX, USER_NAME_MAX, type ProfileFormValues } from '@/lib/validations/user';
 import TextCounter from '@/components/ui/TextCounter';
 import Button from '@/components/ui/Button';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import AvatarField from './AvatarField';
+import ContactField from './ContactField';
 import { isOverLimit } from '@/lib/text-limit';
 import { updateProfile } from '@/actions/user-actions';
 import { useSession } from 'next-auth/react';
@@ -23,6 +24,8 @@ type Props = {
         image: string | null;
         username?: string | null;
         bio?: string | null;
+        contact?: string | null;
+        isProfilePublic?: boolean;
         cities?: string[];
         avatarSeed?: string | null;
     };
@@ -48,6 +51,7 @@ export default function ProfileEditForm({ user }: Props) {
             image: user.image || '',
             username: user.username || '',
             bio: user.bio || '',
+            contact: user.contact || '',
             cities: (user.cities || []).join(', '),
             avatarSeed: user.avatarSeed || '',
         },
@@ -62,8 +66,8 @@ export default function ProfileEditForm({ user }: Props) {
         return () => window.removeEventListener('beforeunload', warn);
     }, [isDirty, leaving]);
 
-    const [watchedImage, watchedSeed, watchedName, watchedBio] = useWatch({ control: form.control, name: ['image', 'avatarSeed', 'name', 'bio'] });
-    const over = isOverLimit(watchedName, USER_NAME_MAX) || isOverLimit(watchedBio, USER_BIO_MAX);
+    const [watchedImage, watchedSeed, watchedName, watchedBio, watchedContact] = useWatch({ control: form.control, name: ['image', 'avatarSeed', 'name', 'bio', 'contact'] });
+    const over = isOverLimit(watchedName, USER_NAME_MAX) || isOverLimit(watchedBio, USER_BIO_MAX) || isOverLimit(watchedContact, USER_CONTACT_MAX);
 
     const fieldError = (message?: string) =>
         message ? <p className="text-meta text-danger">{tv(message as 'NAME_TOO_SHORT')}</p> : null;
@@ -123,6 +127,8 @@ export default function ProfileEditForm({ user }: Props) {
                 />
                 <div className="flex items-start gap-2">{fieldError(errors.bio?.message)}<TextCounter id="bio-count" length={(watchedBio ?? '').length} max={USER_BIO_MAX} /></div>
             </div>
+
+            <ContactField register={form.register('contact')} length={(watchedContact ?? '').length} error={errors.contact?.message} isPublic={user.isProfilePublic !== false} />
 
             <div className="space-y-2">
                 <label htmlFor="cities" className="block text-button-sm text-foreground">{t('edit.citiesLabel')}</label>

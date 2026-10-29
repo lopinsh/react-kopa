@@ -1565,8 +1565,14 @@
         "USERNAME_INVALID_CHARS": "Only lowercase letters, numbers and underscores.",
         "USERNAME_TAKEN": "This username is already taken.",
         "BIO_TOO_LONG": "The text can be at most 500 characters.",
-        "IMAGE_INVALID": "Enter a valid image address (https://…)."
-      }
+        "IMAGE_INVALID": "Enter a valid image address (https://…).",
+        "CONTACT_TOO_LONG": "Contact can be at most 200 characters."
+      },
+      "contact": "Contact",
+      "contactPlaceholder": "Phone, email, Telegram…",
+      "contactHint": "Seen by people who share a group with you. You can open it to more people in",
+      "contactPrivacyLink": "Privacy",
+      "contactPrivate": "Your profile is private, so only you see your contact."
     },
     "editDesc": "Update your public profile information.",
     "editTitle": "Edit Profile",
@@ -1604,7 +1610,9 @@
         "allowMessages": "Allow messages",
         "allowMessagesDesc": "Other members can send you direct messages.",
         "showGroups": "Show my groups",
-        "showGroupsDesc": "Your profile lists the public groups you belong to. Private groups are never shown."
+        "showGroupsDesc": "Your profile lists the public groups you belong to. Private groups are never shown.",
+        "contactAll": "Show my contact to everyone signed in",
+        "contactAllDesc": "When off, only people who share a group with you see your contact. Visitors who aren't signed in never see it."
       },
       "saved": "Saved"
     },
@@ -1627,7 +1635,11 @@
       "asOthersSee": "This is how others see your profile.",
       "groupsHidden": "Others don't see your groups; people who share a group with you see the ones you share.",
       "privateNote": "Your profile is private: others only see that it is private.",
-      "changePrivacy": "Change in Settings"
+      "changePrivacy": "Change in Settings",
+      "contactShared": "Only people who share a group with you see your contact."
+    },
+    "contact": {
+      "label": "Contact"
     }
   },
   "report": {
@@ -1763,7 +1775,7 @@
       "cookies3": "We do not use advertising or third-party analytics, and we do not sell data.",
       "cookiesTitle": "Cookies and local storage",
       "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
-      "data2": "Your profile: username, optional bio, cities, and your privacy choices (whether your profile is public, whether people may message you, and whether it lists your groups).",
+      "data2": "Your profile: username, optional bio, cities, optional contact, and your privacy choices (whether your profile is public, whether people may message you, whether it lists your groups and who sees your contact).",
       "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file. We also note the day you last visited, to see whether the site is used.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
@@ -1774,7 +1786,8 @@
       "visibility1": "Public groups, their public events and public profiles can be seen by anyone. Members-only content is shown only to members.",
       "visibility2": "Messages are stored on our server and are not end-to-end encrypted.",
       "visibilityTitle": "Who can see it",
-      "cookies4": "Your browser remembers your last few search words on this device so the search can show them again. They are never sent to us; you can remove each one with ×."
+      "cookies4": "Your browser remembers your last few search words on this device so the search can show them again. They are never sent to us; you can remove each one with ×.",
+      "visibility3": "The contact you add to your profile is seen by signed-in people who share a group with you (or everyone signed in, if you choose), and by site admins. If your profile is private, nobody else sees it."
     },
     "notFound": {
       "signInHint": "If you are a member of a closed group,",

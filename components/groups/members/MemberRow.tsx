@@ -4,6 +4,7 @@ import RoleTag from '@/components/ui/RoleTag';
 import MemberRowMenu from '@/components/groups/members/MemberRowMenu';
 import type { MemberRowData } from '@/lib/services/group-members';
 import { UI } from '@/lib/constants';
+import ContactLine from '@/components/profile/ContactLine';
 
 type Props = { member: MemberRowData; groupId: string };
 
@@ -25,6 +26,7 @@ export default async function MemberRow({ member, groupId }: Props) {
                     <RoleTag role={member.role} />
                 </div>
                 <p className="text-meta text-foreground-muted">{t('members.since', { date: format.dateTime(member.since, { month: 'long', year: 'numeric' }) })}</p>
+                {member.contact && <ContactLine contact={member.contact} compact />}
             </div>
             {member.actions.length > 0 && (
                 <MemberRowMenu groupId={groupId} userId={member.userId} name={name} actions={member.actions} profileHref={member.profileHref} />

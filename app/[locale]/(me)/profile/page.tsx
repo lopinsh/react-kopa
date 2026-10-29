@@ -30,7 +30,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
 
     return (
         <div className="grid gap-5">
-            <ProfileViewerNote privacy={privacy} />
+            <ProfileViewerNote privacy={privacy} ownContactScope={view.ownContactScope} />
             <ProfileView
                 view={view}
                 viewerId={session.user.id}

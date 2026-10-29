@@ -10,12 +10,13 @@ import type { RegisterValues } from '@/lib/validations/auth';
 import { USERNAME_MAX_LENGTH, RESERVED_USERNAMES } from '@/lib/username';
 import { MessageService } from './message.service';
 import type { MyRole } from '@/lib/types/own-area';
+import { contactFor } from './contact';
 import type { PrivacySettings, ProfileViewContext } from '@/lib/types/profile';
 
 /** The fields a profile page shows. Never the email, password hash or role. */
 const PROFILE_USER_SELECT = {
     id: true, name: true, image: true, avatarSeed: true, username: true, bio: true,
-    cities: true, createdAt: true, isProfilePublic: true, showGroupsOnProfile: true,
+    contact: true, contactVisibleToAll: true, cities: true, createdAt: true, isProfilePublic: true, showGroupsOnProfile: true,
 } as const;
 
 /** The group columns a profile's cards need, with the category titles in the viewer's language. */
@@ -40,7 +41,7 @@ export const UserService = {
         return await prisma.user.findUnique({
             where: { id: userId },
             select: {
-                id: true, name: true, image: true, email: true, username: true, bio: true, cities: true, avatarSeed: true,
+                id: true, name: true, image: true, email: true, username: true, bio: true, contact: true, isProfilePublic: true, cities: true, avatarSeed: true,
             }
         });
     },
@@ -48,7 +49,7 @@ export const UserService = {
     async getPrivacySettings(userId: string): Promise<PrivacySettings | null> {
         return await prisma.user.findUnique({
             where: { id: userId },
-            select: { isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true },
+            select: { isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true, contactVisibleToAll: true },
         });
     },
 
@@ -61,6 +62,7 @@ export const UserService = {
                     isProfilePublic: data.isProfilePublic,
                     allowDirectMessages: data.allowDirectMessages,
                     showGroupsOnProfile: data.showGroupsOnProfile,
+                    contactVisibleToAll: data.contactVisibleToAll,
                 },
             });
             return;
@@ -136,7 +138,8 @@ export const UserService = {
         name?: string;
         image?: string;
         username?: string;
-        bio?: string;
+        bio?: string | null;
+        contact?: string | null;
         cities?: string[];
         avatarSeed?: string;
     }): Promise<void> {
@@ -186,15 +189,15 @@ export const UserService = {
 
         if (!profile.isProfilePublic && !isOwn) {
             return {
-                person: { id: profile.id, name: null, username: null, image: null, avatarSeed: null, bio: null, cities: [], createdAt: profile.createdAt },
-                isOwn, isPrivate: true, groups: [], groupsScope: 'none', canMessage: false,
+                person: { id: profile.id, name: null, username: null, image: null, avatarSeed: null, bio: null, contact: null, cities: [], createdAt: profile.createdAt },
+                isOwn, isPrivate: true, groups: [], groupsScope: 'none', canMessage: false, ownContactScope: null,
             };
         }
 
         if (opts.withoutGroups) {
             return {
-                person: { id: profile.id, name: profile.name, username: profile.username, image: profile.image, avatarSeed: profile.avatarSeed, bio: profile.bio, cities: profile.cities, createdAt: profile.createdAt },
-                isOwn, isPrivate: !profile.isProfilePublic, groups: [], groupsScope: 'none', canMessage: false,
+                person: { id: profile.id, name: profile.name, username: profile.username, image: profile.image, avatarSeed: profile.avatarSeed, bio: profile.bio, contact: null, cities: profile.cities, createdAt: profile.createdAt },
+                isOwn, isPrivate: !profile.isProfilePublic, groups: [], groupsScope: 'none', canMessage: false, ownContactScope: null,
             };
         }
 
@@ -230,10 +233,12 @@ export const UserService = {
 
         const canMessage = isOwn ? false : (await MessageService.messageableUserIds(viewerId, [profile.id])).has(profile.id);
 
+        const contact = await contactFor(profile, viewerId, { asStranger });
+
         return {
             person: {
                 id: profile.id, name: profile.name, username: profile.username, image: profile.image, avatarSeed: profile.avatarSeed,
-                bio: profile.bio, cities: profile.cities, createdAt: profile.createdAt,
+                bio: profile.bio, contact, cities: profile.cities, createdAt: profile.createdAt,
             },
             isOwn,
             isPrivate: !profile.isProfilePublic,
@@ -241,6 +246,7 @@ export const UserService = {
             // No heading over an empty list: a stranger sees no section, and Mans profils shows the same.
             groupsScope: memberships.length === 0 ? 'none' : groupsScope,
             canMessage,
+            ownContactScope: isOwn && profile.contact ? (profile.contactVisibleToAll ? 'all' : 'shared') : null,
         };
     },
 

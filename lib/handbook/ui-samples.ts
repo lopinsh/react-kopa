@@ -132,6 +132,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         avatar: `https://api.dicebear.com/10.x/clay/svg?seed=${p.avatarSeed}`,
         role,
         since: ago(400 * 24 * HOUR),
+        contact: null,
         profileHref: `/profile/${p.name.split(' ')[0].toLowerCase()}`,
         canMessage: true,
         actions,
@@ -197,8 +198,8 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
 
     // Profiles (R9c): your own (what others see), another person's with Sūtīt ziņu.
     const profileOwn: ProfileViewContext = {
-        person: { id: janis.id, name: janis.name, username: 'janis_berzins', image: null, avatarSeed: janis.avatarSeed, bio: s('profileBio'), cities: ['Jelgava', 'Riga'], createdAt: new Date(now.getFullYear() - 1, 2, 1) },
-        isOwn: true, isPrivate: false, groups: [{ card: groupCard, role: 'ADMIN' }], groupsScope: 'all', canMessage: false,
+        person: { id: janis.id, name: janis.name, username: 'janis_berzins', image: null, avatarSeed: janis.avatarSeed, bio: s('profileBio'), contact: null, cities: ['Jelgava', 'Riga'], createdAt: new Date(now.getFullYear() - 1, 2, 1) },
+        isOwn: true, isPrivate: false, groups: [{ card: groupCard, role: 'ADMIN' }], groupsScope: 'all', canMessage: false, ownContactScope: null,
     };
     const profileOther: ProfileViewContext = { ...profileOwn, isOwn: false, groups: [{ card: groupCardBare, role: 'MEMBER' }], groupsScope: 'shared', canMessage: true };
 

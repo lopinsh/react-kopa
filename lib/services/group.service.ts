@@ -62,7 +62,7 @@ export interface GroupMember {
     id: string;
     role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'PENDING';
     joinedAt: Date;
-    user: { id: string; name: string | null; username: string | null; avatarSeed: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean };
+    user: { id: string; name: string | null; username: string | null; avatarSeed: string | null; image: string | null; allowDirectMessages: boolean; isProfilePublic: boolean; contact: string | null; contactVisibleToAll: boolean };
     /** The group chat with this person (their join request and everything said since); only loaded for pending applicants, and only for admins and the applicant. */
     chatId: string | null;
     applicationMessages: Array<{
@@ -394,7 +394,7 @@ export const GroupService = {
                 userId: true,
                 joinedAt: true,
                 user: {
-                    select: { id: true, name: true, username: true, avatarSeed: true, image: true, allowDirectMessages: true, isProfilePublic: true }
+                    select: { id: true, name: true, username: true, avatarSeed: true, image: true, allowDirectMessages: true, isProfilePublic: true, contact: true, contactVisibleToAll: true }
                 }
             }
         });

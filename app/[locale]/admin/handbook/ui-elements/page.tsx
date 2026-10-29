@@ -301,7 +301,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
                 <UiSpecimen id="profileView" names={[]} files={['components/profile/ProfileView.tsx', 'components/profile/ProfileViewerNote.tsx', 'lib/services/user.service.ts']}>
                     <div className="grid gap-10">
                         <div className="grid gap-5">
-                            <ProfileViewerNote privacy={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true }} />
+                            <ProfileViewerNote ownContactScope={null} privacy={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: true, contactVisibleToAll: false }} />
                             <ProfileView view={samples.profileOwn} locale={locale} own action={<span className={buttonClass('secondary')}>{tProfile('editTitle')}</span>} />
                         </div>
                         <ProfileView view={samples.profileOther} locale={locale} action={<MessageUserButton userId={samples.profileOther.person.id} />} />
@@ -311,7 +311,7 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="privacySettings" names={[]} files={['components/me/PrivacySettings.tsx']}>
                     <div className="max-w-xl">
-                        <PrivacySettings initial={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: false }} demo />
+                        <PrivacySettings initial={{ isProfilePublic: true, allowDirectMessages: true, showGroupsOnProfile: false, contactVisibleToAll: false }} demo />
                     </div>
                 </UiSpecimen>
 

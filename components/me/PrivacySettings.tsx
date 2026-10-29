@@ -11,6 +11,7 @@ const ROWS = [
     { key: 'isProfilePublic', label: 'publicProfile' },
     { key: 'allowDirectMessages', label: 'allowMessages' },
     { key: 'showGroupsOnProfile', label: 'showGroups' },
+    { key: 'contactVisibleToAll', label: 'contactAll' },
 ] as const;
 
 type RowProps = { field: keyof Privacy; label: (typeof ROWS)[number]['label']; checked: boolean; onSaved: () => void; demo: boolean };
