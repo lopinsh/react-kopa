@@ -85,5 +85,6 @@ The same situation behaves the same way on every screen.
 - Stored only when the person must act or would miss something.
 - Every notification opens exactly the thing it is about.
 - A notification is read when you tap it; opening the list marks nothing.
+- The only trace of a visit is `lastSeenAt`, day-level, written at most once a day, and shown to admins as counts only (Aktivitāte, R31); the privacy page says so.
 
 Next: [Who sees what](roles.md).

@@ -3,6 +3,7 @@ import type { VitalitySnapshot } from '@/lib/services/vitality.service';
 import DemoToggle from './DemoToggle';
 import GrowthTile from './GrowthTile';
 import GroupHealth from './GroupHealth';
+import PresenceCard from './PresenceCard';
 
 const CARD = 'space-y-4 rounded-2xl border border-border bg-surface p-4 sm:p-6';
 
@@ -25,6 +26,7 @@ export default function VitalityPanel({ snapshot }: { snapshot: VitalitySnapshot
     return (
         <div className="space-y-section">
             <DemoToggle on={snapshot.includeDemo} />
+            {snapshot.presence && <PresenceCard presence={snapshot.presence} now={new Date()} />}
             <section className={CARD} aria-labelledby="vitality-growth">
                 <h2 id="vitality-growth" className="text-section">{t('growth')}</h2>
                 <div className="grid grid-cols-1 gap-6 min-[480px]:grid-cols-2 lg:grid-cols-3">

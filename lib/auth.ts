@@ -5,6 +5,7 @@ import github from "next-auth/providers/github";
 import google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { PresenceService } from "@/lib/services/presence.service";
 
 // Simple per-user password map for local development.
 // Key: email, Value: password
@@ -26,6 +27,8 @@ const DEV_PASSWORDS: Record<string, string> = {
 };
 
 const ROLE_RECHECK_MS = 60_000;
+// The last-visit day is written at most this often per user (R31-2).
+const LAST_SEEN_EVERY_MS = 24 * 60 * 60_000;
 
 // Seed accounts with site powers have public passwords: never allowed in production.
 const SEED_SITE_ADMINS = new Set(["admin@local", "siteowner@local"]);
@@ -116,6 +119,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                     token.username = dbUser.username;
                     token.role = dbUser.role;
                     token.avatarSeed = dbUser.avatarSeed;
+                }
+            }
+            if (token.id && Date.now() - Number(token.lastSeenWrittenAt ?? 0) > LAST_SEEN_EVERY_MS) {
+                // Day-level last visit for the admin vitality panel. A failed write never signs anyone out.
+                try {
+                    await PresenceService.touch(token.id as string);
+                    token.lastSeenWrittenAt = Date.now();
+                } catch (error) {
+                    console.error('lastSeenAt write failed', error);
                 }
             }
             return token;

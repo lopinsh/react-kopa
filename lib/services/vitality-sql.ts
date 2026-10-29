@@ -109,3 +109,22 @@ export function healthRows(now: Date, activeDays: number, d: Demo): Promise<Heal
         WHERE g."hiddenAt" IS NULL AND ${d.group(Prisma.sql`g.id`)}
     `);
 }
+
+export type PresenceRow = { active1: number; active7: number; active30: number; cohort: number; returned: number; since: Date | null };
+
+/** Active users by `lastSeenAt` (R31-2) and the return rate of those who signed up 30-60 days ago. */
+export async function presenceRow(now: Date, d: Demo): Promise<PresenceRow> {
+    const since = (days: number) => utc(new Date(now.getTime() - days * DAY_MS));
+    const rows = await prisma.$queryRaw<PresenceRow[]>(Prisma.sql`
+        WITH u AS (SELECT "createdAt", "lastSeenAt" FROM "User" x WHERE ${d.user(Prisma.sql`x.id`)})
+        SELECT
+            (count(*) FILTER (WHERE "lastSeenAt" >= ${since(1)}))::int AS active1,
+            (count(*) FILTER (WHERE "lastSeenAt" >= ${since(7)}))::int AS active7,
+            (count(*) FILTER (WHERE "lastSeenAt" >= ${since(30)}))::int AS active30,
+            (count(*) FILTER (WHERE "createdAt" >= ${since(60)} AND "createdAt" < ${since(30)}))::int AS cohort,
+            (count(*) FILTER (WHERE "createdAt" >= ${since(60)} AND "createdAt" < ${since(30)} AND "lastSeenAt" >= ${since(30)}))::int AS returned,
+            min("lastSeenAt") AS since
+        FROM u
+    `);
+    return rows[0];
+}

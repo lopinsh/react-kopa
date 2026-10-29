@@ -20,6 +20,8 @@ model User {
   role                 AppRole             @default(USER)
   createdAt            DateTime            @default(now())
   updatedAt            DateTime            @updatedAt
+  /// Day-level last visit (R31): written at most once per 24 h; null = not seen since R31-2 shipped.
+  lastSeenAt           DateTime?
   allowDirectMessages  Boolean             @default(true)
   isProfilePublic      Boolean             @default(true)
   showGroupsOnProfile  Boolean             @default(false)

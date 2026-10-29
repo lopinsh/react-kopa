@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { VITALITY_ACTIVE_DAYS, VITALITY_QUIET_LIMIT, VITALITY_SERIES, type VitalitySeriesKey } from '@/lib/constants/vitality';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
-import { demoFilter, healthRows, participationRow, seriesRows, type SeriesRow } from './vitality-sql';
+import { demoFilter, healthRows, participationRow, presenceRow, seriesRows, type SeriesRow } from './vitality-sql';
 
 export type { VitalitySeriesKey };
 export type VitalitySeries = { key: VitalitySeriesKey; total: number; last7: number; last30: number; prev30: number; weeks: { week: string; count: number }[] };
@@ -32,10 +32,11 @@ export const VitalityService = {
     async getSnapshot({ includeDemo }: { includeDemo: boolean }): Promise<VitalitySnapshot> {
         const now = new Date();
         const demo = demoFilter(includeDemo);
-        const [seriesData, participation, health] = await Promise.all([
+        const [seriesData, participation, health, presence] = await Promise.all([
             Promise.all(VITALITY_SERIES.map((key) => seriesRows(key, now, demo))),
             participationRow(now, demo),
             healthRows(now, VITALITY_ACTIVE_DAYS, demo),
+            presenceRow(now, demo),
         ]);
 
         const empty = health.filter((g) => g.members === 0);
@@ -58,7 +59,7 @@ export const VitalityService = {
             series: VITALITY_SERIES.map((key, i) => toSeries(key, seriesData[i])),
             participation,
             health: { active: live.length - quiet.length, quiet: quiet.length, empty: empty.length, quietGroups, quietMore: quiet.length - listed.length },
-            presence: null,
+            presence,
         };
     },
 };

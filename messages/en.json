@@ -1397,7 +1397,18 @@
       "lastActivity": "Last activity {date}",
       "quietMore": "And {count} more",
       "quietNone": "No quiet groups.",
-      "feedTitle": "Latest"
+      "feedTitle": "Latest",
+      "presence": "Visits",
+      "active1": "Last 24 h",
+      "active7": "In 7 days",
+      "active30": "In 30 days",
+      "activeNote": "Users who visited (counted once a day).",
+      "returnRate": "Come back",
+      "returnRateValue": "{returned} of {cohort} ({percent})",
+      "returnRateNote": "Signed up 30–60 days ago and visited in the last 30 days.",
+      "seenSince": "Counted since {date}.",
+      "returnFrom": "The return rate is complete from {date}.",
+      "noPresence": "No data yet."
     }
   },
   "messages": {
@@ -1753,7 +1764,7 @@
       "cookiesTitle": "Cookies and local storage",
       "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
       "data2": "Your profile: username, optional bio, cities, and your privacy choices (whether your profile is public, whether people may message you, and whether it lists your groups).",
-      "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file.",
+      "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file. We also note the day you last visited, to see whether the site is used.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
       "rights1": "You can edit your profile at any time. Deleting your account from within the site is not available yet.",

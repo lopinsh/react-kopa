@@ -18,5 +18,6 @@ declare module "next-auth/jwt" {
         avatarSeed?: string | null;
         role: 'USER' | 'ADMIN' | 'OWNER';
         roleCheckedAt?: number;
+        lastSeenWrittenAt?: number;
     }
 }

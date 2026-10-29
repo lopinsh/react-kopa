@@ -1397,7 +1397,18 @@
       "lastActivity": "Pēdējā aktivitāte {date}",
       "quietMore": "Un vēl {count}",
       "quietNone": "Klusu grupu nav.",
-      "feedTitle": "Jaunākais"
+      "feedTitle": "Jaunākais",
+      "presence": "Apmeklējums",
+      "active1": "Pēdējās 24 h",
+      "active7": "7 dienās",
+      "active30": "30 dienās",
+      "activeNote": "Lietotāji, kas bija vietnē (skaitīts reizi dienā).",
+      "returnRate": "Atgriežas",
+      "returnRateValue": "{returned} no {cohort} ({percent})",
+      "returnRateNote": "Reģistrējās pirms 30–60 dienām un bija vietnē pēdējās 30 dienās.",
+      "seenSince": "Skaitīts kopš {date}.",
+      "returnFrom": "Atgriešanās rādītājs būs precīzs no {date}.",
+      "noPresence": "Vēl nav datu."
     }
   },
   "messages": {
@@ -1753,7 +1764,7 @@
       "cookiesTitle": "Sīkdatnes un vietējā krātuve",
       "data1": "Tavu kontu: vārdu, e-pasta adresi un paroli (glabājas tikai kā vienvirziena jaucējkods). Ja pieslēdzies ar Google vai GitHub, mēs no tiem saņemam tavu vārdu, e-pasta adresi un profila attēlu.",
       "data2": "Tavu profilu: lietotājvārdu, neobligātu aprakstu, pilsētas un tavas privātuma izvēles (vai profils ir publisks, vai tev drīkst rakstīt ziņas un vai tajā redzamas tavas grupas).",
-      "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz.",
+      "data3": "Ko tu dari vietnē: grupas, kuras izveido vai kurām pievienojies, ierakstus, privātās ziņas, pieteikšanos pasākumiem, paziņojumus un sūdzības, ko iesniedz. Mēs arī atzīmējam dienu, kad pēdējo reizi biji vietnē, lai redzētu, vai to lieto.",
       "dataTitle": "Ko mēs glabājam",
       "intro": "Šajā lapā vienkāršā valodā aprakstīts, ko Ejam Kopā patiešām glabā un kāpēc.",
       "rights1": "Savu profilu vari labot jebkurā laikā. Konta dzēšana pašā vietnē vēl nav pieejama.",
