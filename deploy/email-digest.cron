@@ -1,0 +1,3 @@
+# Ejam Kopā email digest (R33): every 5 minutes. CRON_SECRET must equal the app's .env value.
+# The stable proxy container owns :3000 on the box, so the call stays local.
+*/5 * * * * . /path/to/ejam/.env && curl -fsS -m 60 -X POST -H "x-cron-secret: $CRON_SECRET" http://127.0.0.1:3000/api/cron/email-digest >/dev/null

@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { EMAIL_DIGEST_TYPES } from '@/lib/constants';
 import { resolveNotificationGroups } from './notification-groups';
 import type { NotificationView } from '@/lib/types/own-area';
 import { isSiteAdmin } from '@/lib/site-role';
@@ -39,7 +40,7 @@ export type NotificationRow<T extends { id: string }> = T & {
  * Unread notifications with the same audience, type and target (the link) become one row: the newest one,
  * placed where it was. Read ones are never folded, and neither is a lone unread one. Input is newest first.
  */
-function groupUnread<T extends { id: string; read: boolean; audience: string; type: string; link: string | null }>(items: T[]): NotificationRow<T>[] {
+export function groupUnread<T extends { id: string; read: boolean; audience: string; type: string; link: string | null }>(items: T[]): NotificationRow<T>[] {
     const keyOf = (n: T) => `${n.audience}|${n.type}|${n.link ?? ''}`;
     const unreadIds = new Map<string, string[]>();
     for (const n of items) {
@@ -71,6 +72,32 @@ function withShortExcerpt(args: NotificationPayload['args']): NotificationPayloa
 }
 
 export const NotificationService = {
+    /** People with an unread, not yet emailed notification of a digest type created in [since, cutoff] (R33). */
+    async digestCandidates(since: Date, cutoff: Date): Promise<string[]> {
+        const rows = await prisma.notification.findMany({
+            where: { audience: 'USER', read: false, emailedAt: null, type: { in: [...EMAIL_DIGEST_TYPES] }, createdAt: { gte: since, lte: cutoff } },
+            distinct: ['userId'],
+            orderBy: { createdAt: 'asc' },
+            select: { userId: true },
+        });
+        return rows.map((r) => r.userId);
+    },
+
+    /** One person's unread, not yet emailed notifications of the digest types since `since`, newest first (R33). */
+    async unreadForDigest(userId: string, since: Date): Promise<{ id: string; type: string; message: string; link: string | null; createdAt: Date; read: boolean; audience: string }[]> {
+        return prisma.notification.findMany({
+            where: { userId, audience: 'USER', read: false, emailedAt: null, type: { in: [...EMAIL_DIGEST_TYPES] }, createdAt: { gte: since } },
+            orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+            select: { id: true, type: true, message: true, link: true, createdAt: true, read: true, audience: true },
+        });
+    },
+
+    /** Marks the notifications an email listed, so none is mailed twice (R33). */
+    async markEmailed(ids: string[], at: Date): Promise<void> {
+        if (ids.length === 0) return;
+        await prisma.notification.updateMany({ where: { id: { in: ids } }, data: { emailedAt: at } });
+    },
+
     /** Links → the group each is about (see `resolveNotificationGroups`). */
     resolveGroups: resolveNotificationGroups,
 

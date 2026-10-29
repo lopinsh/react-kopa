@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { siteUrl } from '@/lib/email/site-url';
 
 /** Signed unsubscribe links (R33): the signature proves the link came from one of our emails. No expiry; rotating AUTH_SECRET voids old links. */
 export function signUnsubscribe(userId: string): string {
@@ -12,7 +13,6 @@ export function verifyUnsubscribe(userId: string, sig: string): boolean {
     return given.length === expected.length && timingSafeEqual(given, expected);
 }
 
-const siteUrl = () => (process.env.NEXT_PUBLIC_APP_URL ?? '').replace(/\/$/, '');
 
 export function unsubscribeUrl(userId: string, locale: string): string {
     return `${siteUrl()}/${locale}/email/unsubscribe?u=${encodeURIComponent(userId)}&s=${signUnsubscribe(userId)}`;

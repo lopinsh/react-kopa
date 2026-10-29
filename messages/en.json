@@ -1783,6 +1783,7 @@
       "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
       "data2": "Your profile: username, optional bio, cities, optional contact, and your privacy choices (whether your profile is public, whether people may message you, whether it lists your groups and who sees your contact).",
       "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file. We also note the day you last visited, to see whether the site is used.",
+      "data4": "If something has waited for you over 10 minutes, we send one short email saying how many things and what (like \"New message from Anna\"), never what was written. Turn it off in Settings or with the link in every email.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",
       "rights1": "You can edit your profile at any time. Deleting your account from within the site is not available yet.",
@@ -2092,6 +2093,15 @@
       "done": "Done. We won't email you again.",
       "settingsLink": "Open settings",
       "invalid": "This link isn't valid. You can turn emails off in Settings."
+    },
+    "digest": {
+      "subject": "{count, plural, one {# new thing} other {# new things}} on Ejam Kopā",
+      "message": "New message from {name}",
+      "more": "and {count} more",
+      "open": "Open Ejam Kopā",
+      "why": "You get this email because something is unread for you on Ejam Kopā.",
+      "unsubscribe": "Stop these emails",
+      "settings": "Or change it in Settings."
     }
   }
 }

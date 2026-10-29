@@ -116,15 +116,20 @@ async function isTeamMember(groupId: string, userId: string): Promise<boolean> {
     return !!membership && TEAM_ROLES.includes(membership.role);
 }
 
-/** Newest message per conversation that someone else wrote: the basis of "unread". */
-async function newestFromOthers(conversationIds: string[], userId: string): Promise<Map<string, Date>> {
-    if (conversationIds.length === 0) return new Map();
-    const rows = await prisma.message.findMany({
+/** Newest message per conversation that someone else wrote (with who wrote it): the basis of "unread". */
+async function newestRowsFromOthers(conversationIds: string[], userId: string) {
+    if (conversationIds.length === 0) return [];
+    return prisma.message.findMany({
         where: { conversationId: { in: conversationIds }, senderId: { not: userId } },
         orderBy: [{ conversationId: 'asc' }, { createdAt: 'desc' }],
         distinct: ['conversationId'],
-        select: { conversationId: true, createdAt: true }
+        select: { conversationId: true, createdAt: true, sender: { select: { name: true, username: true } } }
     });
+}
+
+/** Newest message per conversation that someone else wrote: the basis of "unread". */
+async function newestFromOthers(conversationIds: string[], userId: string): Promise<Map<string, Date>> {
+    const rows = await newestRowsFromOthers(conversationIds, userId);
     return new Map(rows.map(r => [r.conversationId, r.createdAt]));
 }
 
@@ -395,6 +400,57 @@ export const MessageService = {
             console.error('[MessageService.unreadCount] Error:', error);
             return 0;
         }
+    },
+
+    /**
+     * People who may have something unread (R33 digest): the other side of every message written in [since, cutoff]
+     * (the other DIRECT participant; for a GROUP chat the contact person or the group's current team), minus the writer.
+     */
+    async digestRecipients(since: Date, cutoff: Date): Promise<string[]> {
+        const messages = await prisma.message.findMany({
+            where: { createdAt: { gte: since, lte: cutoff } },
+            distinct: ['conversationId', 'senderId'],
+            select: {
+                senderId: true,
+                conversation: { select: { kind: true, contactUserId: true, originGroupId: true, participants: { select: { id: true } } } }
+            }
+        });
+        const teams = new Map<string, string[]>();
+        const recipients = new Set<string>();
+        for (const m of messages) {
+            const c = m.conversation;
+            let ids: string[];
+            if (c.kind === 'GROUP') {
+                const key = c.originGroupId ?? '';
+                if (!teams.has(key)) teams.set(key, await teamUserIds(c.originGroupId));
+                ids = [...(c.contactUserId ? [c.contactUserId] : []), ...(teams.get(key) ?? [])];
+            } else {
+                ids = c.participants.map(p => p.id);
+            }
+            for (const id of ids) if (id !== m.senderId) recipients.add(id);
+        }
+        return [...recipients];
+    },
+
+    /**
+     * Chats with something unread for the user that is newer than `after` (R33 digest): same definition as `unreadCount`,
+     * plus the writer's name of the newest message. Never returns message text.
+     */
+    async unreadForDigest(userId: string, after: Date): Promise<{ conversationId: string; senderName: string; newestAt: Date }[]> {
+        const conversations = await prisma.conversation.findMany({
+            where: accessWhere(userId),
+            orderBy: { updatedAt: 'desc' },
+            take: INBOX_LIMIT,
+            select: { id: true, reads: { where: { userId }, select: { lastReadAt: true } } }
+        });
+        const newest = await newestRowsFromOthers(conversations.map(c => c.id), userId);
+        const byId = new Map(newest.map(r => [r.conversationId, r]));
+        return conversations.flatMap(c => {
+            const last = byId.get(c.id);
+            const lastReadAt = c.reads[0]?.lastReadAt;
+            if (!last || last.createdAt <= after || (lastReadAt && last.createdAt <= lastReadAt)) return [];
+            return [{ conversationId: c.id, senderName: last.sender.name ?? last.sender.username ?? '', newestAt: last.createdAt }];
+        });
     },
 
     /** The id of the one chat between a person and a group's team, or null. Read-only (never creates). */

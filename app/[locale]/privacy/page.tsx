@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 type Props = { params: Promise<{ locale: string }> };
 
 const SECTIONS = [
-    { title: 'privacy.dataTitle', items: ['privacy.data1', 'privacy.data2', 'privacy.data3'] },
+    { title: 'privacy.dataTitle', items: ['privacy.data1', 'privacy.data2', 'privacy.data3', 'privacy.data4'] },
     { title: 'privacy.visibilityTitle', items: ['privacy.visibility1', 'privacy.visibility2', 'privacy.visibility3'] },
     { title: 'privacy.cookiesTitle', items: ['privacy.cookies1', 'privacy.cookies2', 'privacy.cookies3', 'privacy.cookies4'] },
     { title: 'privacy.rightsTitle', items: ['privacy.rights1'] },

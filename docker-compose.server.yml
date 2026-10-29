@@ -58,6 +58,10 @@ services:
       ALLOW_DEV_PASSWORDS: ${ALLOW_DEV_PASSWORDS:-false}
       # Feedback API token (unset = /api/feedback answers 404). Set it in /root/ejam-kopa/.env on the server.
       FEEDBACK_API_TOKEN: ${FEEDBACK_API_TOKEN:-}
+      # Email digest (R33): unset SMTP_URL = emails are only logged; unset CRON_SECRET = /api/cron/email-digest answers 404.
+      SMTP_URL: ${SMTP_URL:-}
+      MAIL_FROM: ${MAIL_FROM:-}
+      CRON_SECRET: ${CRON_SECRET:-}
       # Unsplash banner search (optional; unset = search hidden, curated photos still work). Set it in /root/ejam-kopa/.env.
       UNSPLASH_ACCESS_KEY: ${UNSPLASH_ACCESS_KEY:-}
       # Server → Soketi over the Docker network. The browser's settings (public host,
