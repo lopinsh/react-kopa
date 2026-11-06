@@ -11,14 +11,17 @@ import Button from '@/components/ui/Button';
 interface SignInFormProps {
     /** Safe same-origin path to continue to after signing in (or registering). */
     callbackUrl: string;
+    /** Auth.js `?error=` code from a failed provider sign-in. */
+    authError?: string;
 }
 
 /** The one sign-in form: used by the sign-in page and the sign-in pop-up. */
-export default function SignInForm({ callbackUrl }: SignInFormProps) {
+export default function SignInForm({ callbackUrl, authError }: SignInFormProps) {
     const t = useTranslations('auth');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const providerError = authError ? (authError === 'OAuthAccountNotLinked' ? t('errorNotLinked') : authError === 'AccessDenied' ? t('errorDenied') : t('errorProvider')) : '';
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -67,7 +70,7 @@ export default function SignInForm({ callbackUrl }: SignInFormProps) {
                     required
                 />
 
-                {error && <p className="text-body-sm text-danger">{error}</p>}
+                {(error || providerError) && <p role="alert" className="text-body-sm text-danger">{error || providerError}</p>}
 
                 <Button
                     type="submit"

@@ -21,6 +21,8 @@
 - [x] **R33 E-pasts** (spec `docs/development/specs/R33.md`): unread digest by email, one switch in Iestatījumi, signed unsubscribe link. Pushed, live.
   - [x] R33-1 schema (migration `add_email_digest`), language with last seen, E-pasts switch, unsubscribe page and one-click route.
   - [x] R33-2 mailer, digest service, cron route (`deploy/email-digest.cron`).
+- [x] **G1 Google sign-in** (no DB change): Google provider links to an existing account with the same verified email; `GOOGLE_*`/`GITHUB_*` passed through `docker-compose.server.yml`; the sign-in page shows a short line for Auth.js `?error=` codes.
+- **Owner setup, Google** (done by the owner 6 Nov): consent screen published; redirect URIs `https://ejam.lumm.eu/api/auth/callback/google` and `http://localhost:3000/api/auth/callback/google`; keys in `/root/ejam-kopa/.env`.
 - **Owner setup, Email (R33)**: SMTP provider, SPF/DKIM/DMARC for the `MAIL_FROM` domain, `SMTP_URL`/`MAIL_FROM`/`CRON_SECRET` in the server `.env`, crontab line from `deploy/email-digest.cron` (non-blocking: without them nothing is sent).
 
 Agenda from the owner's 22 Oct feedback (order agreed; each release still gets a short plan and the owner's OK before spec/build):

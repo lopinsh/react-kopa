@@ -6,7 +6,7 @@ import { safeCallbackPath } from '@/lib/auth-redirect';
 
 type Props = {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ callbackUrl?: string }>;
+    searchParams: Promise<{ callbackUrl?: string; error?: string }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SignInPage({ params, searchParams }: Props) {
     const { locale } = await params;
-    const { callbackUrl } = await searchParams;
+    const { callbackUrl, error } = await searchParams;
     const t = await getTranslations('auth');
 
     // Only same-origin paths are honoured; anything else falls back to the localized home page.
@@ -35,7 +35,7 @@ export default async function SignInPage({ params, searchParams }: Props) {
                     <p className="mt-2 text-body-sm text-foreground">{t('signInSubtitle')}</p>
                 </div>
 
-                <SignInForm callbackUrl={returnTo} />
+                <SignInForm callbackUrl={returnTo} authError={error} />
             </div>
         </div>
     );

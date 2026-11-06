@@ -1,5 +1,8 @@
 {
   "auth": {
+    "errorNotLinked": "That email already has an account. Sign in with your password.",
+    "errorDenied": "Sign-in was cancelled.",
+    "errorProvider": "Sign-in did not work. Please try again.",
     "invalidCredentials": "Wrong email or password.",
     "modalDesc": "Sign in to connect.",
     "modalDescJoin": "Sign in to join.",

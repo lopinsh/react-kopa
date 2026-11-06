@@ -64,6 +64,11 @@ services:
       CRON_SECRET: ${CRON_SECRET:-}
       # Unsplash banner search (optional; unset = search hidden, curated photos still work). Set it in /root/ejam-kopa/.env.
       UNSPLASH_ACCESS_KEY: ${UNSPLASH_ACCESS_KEY:-}
+      # Google / GitHub sign-in (optional; unset = that button hidden). Set them in /root/ejam-kopa/.env.
+      GOOGLE_ID: ${GOOGLE_ID:-}
+      GOOGLE_SECRET: ${GOOGLE_SECRET:-}
+      GITHUB_ID: ${GITHUB_ID:-}
+      GITHUB_SECRET: ${GITHUB_SECRET:-}
       # Server → Soketi over the Docker network. The browser's settings (public host,
       # port 443, TLS) are baked into the image at build time, see deploy.yml.
       PUSHER_APP_ID: ${SOKETI_APP_ID}

@@ -1,5 +1,8 @@
 {
   "auth": {
+    "errorNotLinked": "Šim e-pastam jau ir konts. Pieraksties ar paroli.",
+    "errorDenied": "Pieteikšanās tika atcelta.",
+    "errorProvider": "Pieteikšanās neizdevās. Pamēģini vēlreiz.",
     "invalidCredentials": "Nepareizs e-pasts vai parole.",
     "modalDesc": "Ienāc, lai sazinātos.",
     "modalDescJoin": "Ienāc, lai pieteiktos.",
