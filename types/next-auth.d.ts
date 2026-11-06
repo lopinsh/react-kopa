@@ -18,6 +18,8 @@ declare module "next-auth/jwt" {
         avatarSeed?: string | null;
         role: 'USER' | 'ADMIN' | 'OWNER';
         roleCheckedAt?: number;
+        // When this session signed in; older than emailVerified = ended (Google link, lib/auth.ts).
+        signedInAt?: number;
         lastSeenWrittenAt?: number;
     }
 }

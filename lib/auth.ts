@@ -55,6 +55,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             clientId: process.env.GOOGLE_ID,
             clientSecret: process.env.GOOGLE_SECRET,
             // Google verifies emails, so a Google sign-in may join an existing account with the same address.
+            // Sign-up has no email check, so events.linkAccount below takes the password off such an account.
             allowDangerousEmailAccountLinking: true,
         }),
         Credentials({
@@ -96,10 +97,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     pages: {
         signIn: "/auth/signin",
     },
+    events: {
+        // Anyone can register victim@gmail.com with a password before its owner ever comes.
+        // When Google first proves the address, the password set by whoever registered is
+        // dropped (and older sessions end, see the jwt callback): the account is the Google owner's.
+        linkAccount: async ({ user, account, profile }) => {
+            if (account.provider !== "google" || !user.id) return;
+            const email = profile.email?.trim().toLowerCase();
+            if (!email || email !== user.email?.trim().toLowerCase()) return;
+            await prisma.user.updateMany({
+                where: { id: user.id, emailVerified: null },
+                data: { emailVerified: new Date(), password: null },
+            });
+        },
+    },
     callbacks: {
+        // Linking by email is only safe when Google itself has verified the address.
+        signIn: ({ account, profile }) => account?.provider !== "google" || profile?.email_verified === true,
         jwt: async ({ token, user, trigger }) => {
             if (user) {
                 token.id = user.id as string;
+                token.signedInAt = Date.now();
                 // Fetch user profile data on sign-in so middleware and server code
                 // can use it without repeated DB calls.
                 const dbUser = await prisma.user.findUnique({
@@ -113,7 +131,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             } else if (token.id && Date.now() - Number(token.roleCheckedAt ?? 0) > ROLE_RECHECK_MS) {
                 // The owner can make or remove admins, so a long-lived token must not keep a stale role:
                 // re-read just the role from the DB at most once a minute.
-                const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { role: true } });
+                const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { role: true, emailVerified: true } });
+                // A session from before Google proved the address (e.g. whoever registered it first) ends.
+                if (dbUser?.emailVerified && Number(token.signedInAt ?? 0) < dbUser.emailVerified.getTime()) return null;
                 // A deleted user keeps no site powers.
                 token.role = dbUser?.role ?? 'USER';
                 token.roleCheckedAt = Date.now();
