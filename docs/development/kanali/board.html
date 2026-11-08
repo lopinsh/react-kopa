@@ -26,7 +26,7 @@
   var X = '<path d="M18 6 6 18M6 6l12 12"/>';
 
   function head() {
-    return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus, kanālus</div></div><div class="ml-auto flex items-center gap-2"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></div></header>';
+    return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div><div class="ml-auto flex items-center gap-2"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></div></header>';
   }
   function crumb(t) { return '<p class="text-meta text-foreground-muted">' + t + '</p>'; }
   /* TitleSwitch: current word strong with a short accent underline, others muted, each with a count. */
@@ -88,15 +88,15 @@
     return '<p class="mb-2 mt-1 text-meta weight-strong text-foreground">' + label + '</p>' + filterLine(tema + chips) + barHtml + below(rows, cells);
   }
   function s_c1() {
-    var a = variant('a · Kur = Jelgava, kanāls atvērts', fotoChip + kurChip('Jelgava'),
-      bar(barText('Fotogrāfija · Jelgava kanāls · 12 cilvēki · 2 meklē', '') + faces + '<span class="' + PRIMARY + '">Atvērt</span>'),
+    var a = variant('a · Kur = Jelgava, atvērts (nepierakstījies: tikai skaitļi, bez sejām)', fotoChip + kurChip('Jelgava'),
+      bar(barText('Fotogrāfija Jelgavā · 12 cilvēki · 2 meklē', '') + '<span class="' + PRIMARY + '">Atvērt</span>'),
       rowsA(), gA() + gB());
     var b = variant('b · Kur = Jelgava, vēl nav atvērts', fotoChip + kurChip('Jelgava'),
-      bar(barText('Fotogrāfija · Jelgava kanāls vēl nav atvērts', 'interesē 1 no 2') + '<span class="' + PRIMARY + '">Mani interesē</span>'),
+      bar(barText('Fotogrāfija Jelgavā · vēl nav atvērts', 'interesē 1 no 2') + '<span class="' + PRIMARY + '">Mani interesē</span>'),
       rowsA(), gA() + gB());
     var city = function (n, c) { return '<span class="underline underline-offset-2 text-foreground">' + n + ' <span class="tabular-nums text-foreground-muted">' + c + '</span></span>'; };
     var c = variant('c · pilsēta nav izvēlēta', fotoChip + kurChip(),
-      bar(barText('Fotogrāfija kanāli', '') + '<span class="flex flex-wrap gap-x-3 gap-y-1 text-body-sm">' + city('Rīga', '24') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Valmiera', '6') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Jelgava', '1/2') + '</span>'),
+      bar(barText('Fotogrāfija pilsētās', '') + '<span class="flex flex-wrap gap-x-3 gap-y-1 text-body-sm">' + city('Rīga', '24') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Valmiera', '6') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Jelgava', '1/2') + '</span>'),
       rowOf('Rīgas foto klubs', 'Hobiji', 'Rīga · 64 cilvēki') + rowOf('Valmieras objektīvs', 'Hobiji', 'Valmiera · 12 cilvēki'),
       card({ tag: 'Fotogrāfija', city: 'Rīga', name: 'Rīgas foto klubs', meta: 'Hobiji · 64 cilvēki' }) + card({ tag: 'Fotogrāfija', city: 'Valmiera', name: 'Valmieras objektīvs', meta: 'Hobiji · 12 cilvēki' }));
     return head() + wrap(crumb('Hobiji › Fotogrāfija') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + a + '<div class="my-6 border-t border-dashed border-border"></div>' + b + '<div class="my-6 border-t border-dashed border-border"></div>' + c);
@@ -106,23 +106,23 @@
       both(rowOf('Jelgavas foto pastaigas', 'Hobiji', 'Jelgava · 18 cilvēki') + rowOf('Mobilā foto Jelgavā', 'Hobiji', 'Jelgava · 7 cilvēki') + createRow(true), gA() + gB() + createCard(true)));
   }
   function s_c4() {
-    var chips = ['Fotogrāfija', 'Šahs', 'Rokdarbi', 'Dārzkopība'].map(function (n, i) { return '<span class="' + (i === 0 ? CHOSEN : CHIP) + '">' + n + '</span>'; }).join('') + '<span class="' + QUIET + '">' + ICO(PLUS, 'size-3.5') + 'Cita tēma</span>';
-    var field = function (l, v, muted) { return '<div><p class="text-meta text-foreground-muted">' + l + '</p><div class="mt-1 flex h-11 items-center rounded-md px-3 text-body line bg-surface @3xl:h-10 @3xl:text-body-sm ' + (muted ? 'text-foreground-muted' : 'text-foreground') + '">' + v + '</div></div>'; };
-    var sheet = '<div class="relative mt-6 max-w-focus rounded-2xl bg-surface-elevated p-5 shadow-premium line"><div class="mb-3 flex items-start justify-between gap-3"><h2 class="text-section text-foreground">Ieteikt tēmu</h2><span class="grid size-10 place-items-center text-foreground-muted">' + ICO(X, 'size-5') + '</span></div><div class="flex flex-col gap-3">' + field('Tēmas nosaukums', 'Go', false) + field('Pilsēta', 'Jelgava', false) + '</div><p class="mt-3 text-meta text-foreground-muted">Tēmu apstiprina administrators. Līdz tam to redzi tu un cilvēki, ko uzaicini. Grupa netiek izveidota.</p><div class="mt-4"><span class="' + PRIMARY + '">Ieteikt</span></div></div>';
+    var chips = ['Fotogrāfija', 'Šahs', 'Rokdarbi', 'Dārzkopība'].map(function (n, i) { return '<span class="' + (i === 0 ? CHOSEN : CHIP) + '">' + n + '</span>'; }).join('') + '<span class="' + QUIET + '">' + ICO(PLUS, 'size-3.5') + 'Cits veids</span>';
+    var field = function (l, v) { return '<div><p class="mb-1 text-button-sm text-foreground">' + l + '</p><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground @3xl:h-10 @3xl:text-body-sm">' + v + '</div></div>'; };
+    var sheet = '<div class="relative mt-6 max-w-focus rounded-2xl bg-surface-elevated p-5 shadow-premium line"><div class="mb-3 flex items-start justify-between gap-3"><h2 class="text-section text-foreground">Ieteikt jaunu veidu</h2><span class="grid size-10 place-items-center text-foreground-muted">' + ICO(X, 'size-5') + '</span></div><div class="flex flex-col gap-3"><p class="text-body-sm text-foreground-muted">Administratori to izskatīs. Izvēlies tēmu, kurai tas pieder.</p>' + field('Nosaukums', 'Go') + field('Tēma', 'Hobiji') + '<div class="mt-1 flex justify-end gap-2"><span class="' + OUTLINE + '">Atcelt</span><span class="' + PRIMARY + '">Ieteikt</span></div></div></div>';
     return head() + wrap(crumb('Hobiji') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + filterLine(tema) +
       '<div class="flex flex-wrap items-center gap-1.5">' + chips + '</div>' + sheet);
   }
   function s_c5() {
     var line = '<p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-meta"><span class="inline-flex shrink-0 items-center gap-1.5 weight-medium text-foreground"><span class="size-2 shrink-0 rounded-full bg-[var(--c)]"></span>Hobiji</span><span class="text-foreground-muted">Fotogrāfija</span></p>';
-    var chan = '<p class="text-meta"><span class="weight-strong text-primary underline underline-offset-2">Kanāls: Fotogrāfija · Valmiera</span></p>';
+    var chan = '<p class="text-meta"><span class="weight-strong text-primary underline underline-offset-2">Vairāk par fotogrāfiju Valmierā →</span></p>';
     return head() + wrap('<div class="flex items-center gap-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(CAM) + '</span><div class="min-w-0"><h1 class="text-title text-foreground">Valmieras objektīvs</h1><div class="mt-1.5 grid gap-1">' + line + chan + '<p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta text-foreground-muted"><span class="inline-flex items-center gap-1.5">' + ICO(PIN, 'size-4') + 'Valmiera</span><span class="inline-flex items-center gap-1.5">12 dalībnieki</span></p></div></div></div>');
   }
 
   var screens = [
-    { label: 'C1 Kanāla josla', story: 'Piespiežot tēmas čipu (Fotogrāfija), starp čipu rindu un režģi parādās pilnas platuma josla, tikai tēmām, kam ir kanāls. a) Kur=Jelgava: cilvēki, meklē, sejas, Atvērt. b) Vēl nav atvērts: interesē 1 no 2, Mani interesē. c) Pilsēta nav izvēlēta: pilsētu saraksts, katra saite. Zem joslas parastās grupas (tālrunī rindas, platā ekrānā kartītes). Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
+    { label: 'C1 Kanāla josla', story: 'Piespiežot veida čipu (Fotogrāfija), starp čipu rindu un režģi parādās pilnas platuma josla, tikai veidiem, kam ir kanāls. a) Kur=Jelgava: cilvēki, meklē, Atvērt; nepierakstījies redz tikai skaitļus, bez sejām. b) Vēl nav atvērts: interesē 1 no 2, Mani interesē. c) Pilsēta nav izvēlēta: pilsētu saraksts, katra saite. Zem joslas parastās grupas (tālrunī rindas, platā ekrānā kartītes). Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
     { label: 'C2 Izveides kartīte', story: 'Izveides kartīte paliek "Izveidot jaunu grupu"; zem tās kluss otrs ceļš "vai vienkārši Mani interesē" tiem, kas negrib vadīt grupu.', fn: s_c3 },
-    { label: 'C3 Cita tēma', story: 'Tēmu rindas beigās kluss "+ Cita tēma"; tas atver lapu "Ieteikt tēmu" ar nosaukumu, pilsētu un Ieteikt; piezīme, ka apstiprina administrators.', fn: s_c4 },
-    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Kanāls: Fotogrāfija · Valmiera" ved uz kanālu. Sānjosla nemainās.', fn: s_c5 }
+    { label: 'C3 Cits veids', story: 'Tēmu rindas beigās kluss "+ Cits veids"; tas atver lapu "Ieteikt tēmu" ar nosaukumu, pilsētu un Ieteikt; piezīme, ka apstiprina administrators.', fn: s_c4 },
+    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Vairāk par fotogrāfiju Valmierā →" ved uz kanālu. Sānjosla nemainās.', fn: s_c5 }
   ];
   var stage = document.getElementById('stage');
   screens.forEach(function (s) {

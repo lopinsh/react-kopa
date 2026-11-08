@@ -28,13 +28,14 @@ A **Kanāls** (channel) is a site-owned space for one L2 category in one city, f
    - Create one L1 Space › L2 Space › city room by script.
    - Put a bare chat panel built on `matrix-js-sdk` into a localhost test page.
    - It answers four questions: how heavy the server is, how the chat feels, how accounts and login work, and how moderation maps.
-2. **K2 channels without chat:** interest, opening at 2, the channel page, groups and feed, and moderator applications. A "Drīzumā" ("Soon") placeholder stands where chat will go.
+2. **K2 channels without chat:** interest, opening at 2, the channel page, groups and feed, and moderator applications. Chat is hidden until K3: no placeholder, no empty Saruna block.
 3. **K3 Matrix chat:**
    - Accounts are created by our site.
    - A room for each channel.
    - Our chat panel on the channel page.
    - Moderators mapped to room power levels.
    - Reports work on messages.
+   - Rooms are not `world_readable` and allow no guest access, so signed-out visitors see counts only.
 
 ## K2 detail (draft)
 **Data,** one additive migration:
@@ -69,7 +70,7 @@ A **Kanāls** (channel) is a site-owned space for one L2 category in one city, f
 - Channels work in every city.
 
 ## Decided 8 Nov (owner)
-- **First interested person** sees "Tu esi pirmais" ("You're the first") plus **Uzaicināt draugu** (Invite a friend) and Kopēt saiti (Copy link), with nearby channels below. There is a "Vairs neinteresē" ("Not interested anymore") exit.
+- **First interested person** sees "Tu esi pirmais" ("You're the first") plus one **Dalīties** (Share) button, with nearby channels below. There is a "Vairs neinteresē" ("Not interested anymore") exit.
 - **One level of membership.** You are in or out. Chat notifications are off by default; new groups and events are on.
 - **"Meklē" ("Looking for") cards are in K2.**
   - A pinned card lives about 30 days.
@@ -84,22 +85,37 @@ A **Kanāls** (channel) is a site-owned space for one L2 category in one city, f
 - Data: `District(citySlug, slug, nameLv, nameEn)`, plus a nullable `district` on Group, Event and ChannelSeek.
 - District sub-channels come later, only if a city channel grows too big.
 
-Mockup (8 Nov): five screens, see "Ekrāni un lietotāja stāsti" (A0, A1, A2, B0, B1). The open state shows people, Meklē cards, groups here, Jaunumi (events and posts) and Saruna (chat).
+Mockup (8 Nov): five screens, see "Ekrāni un lietotāja stāsti" (A0, A1, A2, B0, B1). The open state shows people, Meklē cards, groups here, Pasākumi (events), "No grupām" (group announcements; "Jaunumi" is reserved for those) and, from K3, chat.
 
 ## Ekrāni un lietotāja stāsti
 Rule: a visit never makes you a member; A0 and B0 are browsing views, every step in is a tap.
-- **A0 Pirms atvēršanas, skatās.** Anna in Jelgava browses Šahs. She sees "Kanāls vēl nav atvērts · interesē 0 no 2", what a channel is, and groups in nearby cities. One action, "Mani interesē"; nothing happens until she taps.
-- **A1 Pirms atvēršanas, ieinteresēta.** After the tap: "Tu esi pirmais", Uzaicināt draugu, Kopēt saiti, Vairs neinteresē. She is notified when the 2nd person comes.
-- **A2 Jauna tēma.** Jānis wants Go but the topic (L2) doesn't exist. "Ieteikt tēmu" gives him a channel without creating a group. The topic uses the existing `CategoryStatus` `PENDING_REVIEW`: visible to him and those he invites, public once an admin approves.
-- **B0 Atvērts, skatās.** People count, Meklē cards, groups, Jaunumi; chat readable, not writable. Only action: "Pievienoties".
-- **B1 Atvērts, dalībnieks.** Writes in chat, adds a Meklē card, taps "Es arī", has "Pamest".
+- **A0 Pirms atvēršanas, skatās.** Anna in Jelgava browses Šahs. She sees "Šahs Jelgavā vēl nav atvērts · interesē 0 no 2", what this place is, and nearby ones (Ozolnieki, Jelgavas novads). One action, "Mani interesē"; nothing happens until she taps.
+- **A1 Pirms atvēršanas, ieinteresēta.** After the tap: "Tu esi pirmais", Dalīties, Vairs neinteresē. She is notified when the 2nd person comes.
+- **A2 Jauns veids.** Jānis wants Go but the type (L2, "veids") doesn't exist. "Ieteikt veidu" opens the existing suggestion sheet (`CategorySuggest`: Nosaukums, Tēma, Ieteikt), no group is created. It uses the existing `CategoryStatus` `PENDING_REVIEW`; public once an admin approves.
+- **B0 Atvērts, nepierakstījies.** Counts only: people count (no faces), Meklē cards without author names, groups, Pasākumi and "No grupām"; no chat. Only action: "Mani interesē".
+- **B1 Atvērts, dalībnieks.** Sees people, adds a Meklē card, taps "Es arī" (the count is shown only to the card's author, no days-left), has "Vairs neinteresē". Chat arrives in K3.
+
+## Decided 8 Nov (owner, critique fixes)
+1. **Signed-out sees counts only:** no faces, no author names on Meklē cards, no chat (B0, C1a). K3 rooms are not `world_readable`, no guest access.
+2. **No chat placeholder in K2:** chat is hidden until K3 (no "Drīzumā", no "Pagaidām tikai vieta").
+3. **Fixed words:** L2 is "Veids", not "tēma" ("+ Cits veids", "Ieteikt veidu"). "Jaunumi" is only for group announcements; the channel feed is "Pasākumi" plus "No grupām". Uzaicināt draugu + Kopēt saiti become one "Dalīties". Joining is one verb everywhere: "Mani interesē" (no "Pievienoties"); the exit is "Vairs neinteresē".
+4. **"Kanāls" is internal** (spec, admin). User-facing: the title "Šahs Jelgavā" (locative), the bar "Fotogrāfija Jelgavā …", the group link "Vairāk par fotogrāfiju Valmierā →".
+5. **Suggesting a veids** reuses the `CategorySuggest` sheet. We dropped "visible to him and those he invites": a suggestion is visible to admins only until approved.
+6. **"Es arī" count** is visible only to the card's author. No "vēl N dienas" on Meklē cards. A0's nearby places are Ozolnieki and Jelgavas novads, not Rīga.
+
+## Atvērti lielie jautājumi (undecided)
+- Drop the 2-to-open gate?
+- Does a Meklē card lead to a group rather than a DM?
+- Matrix and moderator applications after the pilot?
+- A one-line bar for C1?
+- Seed Jelgava?
 
 ## Ieeja no esošās struktūras
 URL: `/[l1]/kanals/[l2]/[city]`, e.g. `/lv/hobiji/kanals/fotografija/jelgava`. Sidebar unchanged. Drawing: "Ieeja no saraksta" (`kanali/board.html`).
-- **C1 Kanāla josla.** Tapping a topic chip (Fotogrāfija) shows a full-width bar between the chip row and the grid, only for topics that have a channel. With Kur=Jelgava: "Fotogrāfija · Jelgava kanāls · 12 cilvēki · 2 meklē", faces, Atvērt; not yet open: "interesē 1 no 2", Mani interesē; no city: list "Rīga 24 · Valmiera 6 · Jelgava 1/2", each a link. Title switch stays "Grupas · Pasākumi".
+- **C1 Kanāla josla.** Tapping a topic chip (Fotogrāfija) shows a full-width bar between the chip row and the grid, only for topics that have a channel. With Kur=Jelgava: "Fotogrāfija Jelgavā · 12 cilvēki · 2 meklē", no faces for signed-out, Atvērt; not yet open: "interesē 1 no 2", Mani interesē; no city: list "Rīga 24 · Valmiera 6 · Jelgava 1/2", each a link. Title switch stays "Grupas · Pasākumi".
 - **C2 Izveides kartīte.** "Izveidot jaunu grupu" gets a quiet second action "vai vienkārši Mani interesē".
-- **C3 Cita tēma.** Topic chips end with a quiet "+ Cita tēma" that opens the "Ieteikt tēmu" sheet (name, city, Ieteikt; an admin approves).
-- **C4 Grupas lapa.** Group head shows the link "Kanāls: Fotogrāfija · Valmiera" under the category line.
+- **C3 Cits veids.** Veids chips end with a quiet "+ Cits veids" that opens the existing `CategorySuggest` sheet ("Ieteikt jaunu veidu": Nosaukums, Tēma, Ieteikt; admins review).
+- **C4 Grupas lapa.** Group head shows the link "Vairāk par fotogrāfiju Valmierā →" under the category line.
 
 Rejected (owner, 8 Nov): a Kanāli tab in the title switch and the channel as the first grid card. Channels double as L2 tags and the chips are already the navigation.
 
