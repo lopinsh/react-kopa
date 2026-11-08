@@ -84,7 +84,15 @@ A **Kanāls** (channel) is a site-owned space for one L2 category in one city, f
 - Data: `District(citySlug, slug, nameLv, nameEn)`, plus a nullable `district` on Group, Event and ChannelSeek.
 - District sub-channels come later, only if a city channel grows too big.
 
-Mockup (8 Nov): two states, before opening (A) and open (B). The open state shows people, Meklē cards, groups here, Jaunumi (events and posts) and Saruna (chat).
+Mockup (8 Nov): five screens, see "Ekrāni un lietotāja stāsti" (A0, A1, A2, B0, B1). The open state shows people, Meklē cards, groups here, Jaunumi (events and posts) and Saruna (chat).
+
+## Ekrāni un lietotāja stāsti
+Rule: a visit never makes you a member; A0 and B0 are browsing views, every step in is a tap.
+- **A0 Pirms atvēršanas, skatās.** Anna in Jelgava browses Šahs. She sees "Kanāls vēl nav atvērts · interesē 0 no 2", what a channel is, and groups in nearby cities. One action, "Mani interesē"; nothing happens until she taps.
+- **A1 Pirms atvēršanas, ieinteresēta.** After the tap: "Tu esi pirmais", Uzaicināt draugu, Kopēt saiti, Vairs neinteresē. She is notified when the 2nd person comes.
+- **A2 Jauna tēma.** Jānis wants Go but the topic (L2) doesn't exist. "Ieteikt tēmu" gives him a channel without creating a group. The topic uses the existing `CategoryStatus` `PENDING_REVIEW`: visible to him and those he invites, public once an admin approves.
+- **B0 Atvērts, skatās.** People count, Meklē cards, groups, Jaunumi; chat readable, not writable. Only action: "Pievienoties".
+- **B1 Atvērts, dalībnieks.** Writes in chat, adds a Meklē card, taps "Es arī", has "Pamest".
 
 ## Verification (when built)
 - Typecheck, eslint on changed files, `i18n:check`, `ui:check` and the build.

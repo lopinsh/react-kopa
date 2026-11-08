@@ -25,6 +25,34 @@
   </div>
 </template>
 
+<template id="a0">
+  <div class="mx-auto flex max-w-browse flex-col gap-6 px-3 py-6 @3xl:px-gutter">
+    <section class="max-w-focus rounded-2xl bg-surface p-5 shadow-card frame line">
+      <h2 class="text-section text-foreground">Kanāls vēl nav atvērts · interesē 0 no 2</h2>
+      <p class="mt-2 text-body-sm text-foreground-muted">Kanāls ir vieta vienai tēmai vienā pilsētā: cilvēki, grupas, jaunumi un saruna. Tas atvērsies, kad interesēs divi cilvēki.</p>
+      <div class="mt-4"><span class="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Mani interesē</span></div>
+    </section>
+    <section>
+      <h2 class="text-section text-foreground">Citi šaha kanāli tuvumā</h2>
+      <div class="mt-2 max-w-page">
+        <div class="relative flex min-h-[5.5rem] items-center gap-3 py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Šahs · Rīga</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 148 cilvēki</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">Atvērts · 6 grupas</span></span></div>
+        <div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Šahs · Ozolnieki</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 2 cilvēki</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">Atvērts · 1 grupa</span></span></div>
+        <div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Galda spēles · Jelgava</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 1 cilvēks</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">Gaida otru cilvēku</span></span></div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<template id="a2">
+  <div class="mx-auto flex max-w-browse flex-col gap-6 px-3 py-6 @3xl:px-gutter">
+    <section class="max-w-focus rounded-2xl bg-surface p-5 shadow-card frame line">
+      <h2 class="text-section text-foreground">Go vēl nav tēmu sarakstā</h2>
+      <p class="mt-2 text-body-sm text-foreground-muted">Ieteikta tēma ir redzama tev un cilvēkiem, ko uzaicini. Kad administrators to apstiprinās, tā kļūs redzama visiem. Grupa netiek izveidota.</p>
+      <div class="mt-4"><span class="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Ieteikt tēmu</span></div>
+    </section>
+  </div>
+</template>
+
 <template id="a">
   <div class="mx-auto flex max-w-browse flex-col gap-6 px-3 py-6 @3xl:px-gutter">
     <section class="max-w-focus rounded-2xl bg-surface p-5 shadow-card frame line">
@@ -52,10 +80,10 @@
   <div class="mx-auto grid max-w-browse gap-6 px-3 py-6 @3xl:grid-cols-[minmax(0,1fr)_20rem] @3xl:px-gutter">
     <div class="flex min-w-0 flex-col gap-6">
       <section>
-        <div class="flex items-center justify-between gap-2"><h2 class="text-section text-foreground">Meklē</h2><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Pievienot</span></div>
+        <div class="flex items-center justify-between gap-2"><h2 class="text-section text-foreground">Meklē</h2><span data-m class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Pievienot</span></div>
         <div class="mt-2 grid gap-3 @3xl:grid-cols-2">
-          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Meklēju partneri šaha partijām otrdienu vakaros, līmenis ap 1500.</p><p class="mt-1 text-meta text-foreground-muted">Mārtiņš · pirms 2 dienām · vēl 26 dienas</p><div class="mt-3 flex items-center gap-2"><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm frame shadow-control press bg-primary text-primary-foreground">Es arī · 3</span><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Rakstīt</span></div></article>
-          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Vai kāds māca bērniem šahu? Meitai 8 gadi, gribam sākt.</p><p class="mt-1 text-meta text-foreground-muted">Inese · pirms 5 dienām · vēl 22 dienas</p><div class="mt-3 flex items-center gap-2"><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm frame shadow-control press bg-tint text-foreground">Es arī · 5</span><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Rakstīt</span></div></article>
+          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Meklēju partneri šaha partijām otrdienu vakaros, līmenis ap 1500.</p><p class="mt-1 text-meta text-foreground-muted">Mārtiņš · pirms 2 dienām · vēl 26 dienas</p><div data-m class="mt-3 flex items-center gap-2"><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm frame shadow-control press bg-primary text-primary-foreground">Es arī · 3</span><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Rakstīt</span></div></article>
+          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Vai kāds māca bērniem šahu? Meitai 8 gadi, gribam sākt.</p><p class="mt-1 text-meta text-foreground-muted">Inese · pirms 5 dienām · vēl 22 dienas</p><div data-m class="mt-3 flex items-center gap-2"><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm frame shadow-control press bg-tint text-foreground">Es arī · 5</span><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Rakstīt</span></div></article>
         </div>
       </section>
 
@@ -85,7 +113,8 @@
       <section>
         <h2 class="text-section text-foreground">Cilvēki</h2>
         <div class="mt-2 flex items-center gap-3"><div class="flex -space-x-2"><span class="grid size-9 place-items-center rounded-full bg-primary text-tag text-primary-foreground ring-2 ring-background">MA</span><span class="grid size-9 place-items-center rounded-full bg-role-mod text-tag text-role-mod-ink ring-2 ring-background">IN</span><span class="grid size-9 place-items-center rounded-full bg-role-pending text-tag text-role-pending-ink ring-2 ring-background">KR</span><span class="grid size-9 place-items-center rounded-full bg-tint text-tag text-foreground ring-2 ring-background">+9</span></div><p class="text-body-sm text-foreground-muted">12 cilvēki, 2 moderatori</p></div>
-        <p class="mt-3 text-meta text-foreground-muted"><span class="underline underline-offset-2">Vairs neinteresē</span></p>
+        <p data-m class="mt-3 text-meta text-foreground-muted"><span class="underline underline-offset-2">Pamest</span></p>
+        <p data-j class="mt-3"><span class="inline-flex h-11 items-center justify-center rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Pievienoties</span></p>
       </section>
       <section>
         <h2 class="text-section text-foreground">Saruna</h2>
@@ -95,34 +124,38 @@
             <div class="mr-auto flex max-w-[75%] flex-col items-start"><span class="mb-1 px-1 text-tag text-foreground-muted">Mārtiņš</span><div class="rounded-2xl rounded-bl-none px-3 py-2 text-body-sm line bg-surface-elevated text-foreground shadow-control">Kurš nāk otrdien?</div></div>
             <div class="ml-auto mt-3 flex max-w-[75%] flex-col items-end"><div class="rounded-2xl rounded-br-none px-3 py-2 text-body-sm bg-primary text-primary-foreground">Es! Atnesīšu pulksteni.</div></div>
           </div>
-          <div class="border-t border-border bg-surface p-4"><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground-muted @3xl:h-10 @3xl:text-body-sm">Raksti ziņu kanālam</div></div>
+          <div data-m class="border-t border-border bg-surface p-4"><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground-muted @3xl:h-10 @3xl:text-body-sm">Raksti ziņu kanālam</div></div>
         </div>
-        <p class="mt-2 text-meta text-foreground-muted">Pagaidām tikai vieta; saruna tiek izlemta atsevišķi.</p>
+        <p class="mt-2 text-meta text-foreground-muted"><span data-j>Tu vari lasīt; rakstīt var dalībnieki.</span><span data-m>Pagaidām tikai vieta; saruna tiek izlemta atsevišķi.</span></p>
       </section>
     </aside>
   </div>
 </template>
 
 <h1 class="text-title mb-1">Kanāls: Šahs · Jelgava</h1>
-<p class="mb-6 text-body-sm text-foreground-muted">A: pirms atvēršanas (viens interesents). B: kanāls atvērts. Katrs 375 un 1280 px platumā; ritini uz sāniem.</p>
+<p class="mb-6 text-body-sm text-foreground-muted">Pieci ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem. Apmeklējums nekad nepadara tevi par dalībnieku.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
 <script>
   var states = [
-    { id: 'a', label: 'A. Pirms atvēršanas', sub: 'Gaida otru cilvēku · 1 interesents' },
-    { id: 'b', label: 'B. Kanāls atvērts', sub: 'Atvērts · 12 cilvēki · 2 grupas' }
+    { id: 'a0', label: 'A0 Pirms atvēršanas, skatās', story: 'Anna no Jelgavas skatās Šahu: "Kanāls vēl nav atvērts · interesē 0 no 2", kas ir kanāls un grupas tuvējās pilsētās. Vienīgā darbība ir "Mani interesē"; kamēr viņa nepiespiež, nekas nenotiek.', sub: 'Nav atvērts · interesē 0 no 2' },
+    { id: 'a', label: 'A1 Pirms atvēršanas, ieinteresēta', story: 'Pēc pieskāriena Anna redz "Tu esi pirmais", Uzaicināt draugu, Kopēt saiti un Vairs neinteresē. Kad pievienosies otrs cilvēks, viņa saņems paziņojumu.', sub: 'Gaida otru cilvēku · 1 interesents' },
+    { id: 'a2', label: 'A2 Jauna tēma', story: 'Jānis grib Go, bet tēmas nav. "Ieteikt tēmu" dod viņam kanālu bez grupas izveides. Tēma ir PENDING_REVIEW: redzama viņam un uzaicinātajiem, publiska pēc administratora apstiprinājuma.', sub: 'Ieteikta tēma · gaida apstiprinājumu' },
+    { id: 'b', mode: 'b0', label: 'B0 Atvērts, skatās', story: 'Cilvēku skaits, Meklē kartītes, grupas un Jaunumi; saruna lasāma, bet nerakstāma. Vienīgā darbība ir "Pievienoties".', sub: 'Atvērts · 12 cilvēki · 2 grupas' },
+    { id: 'b', mode: 'b1', label: 'B1 Atvērts, dalībnieks', story: 'Dalībnieks raksta sarunā, pievieno Meklē kartīti, piespiež "Es arī" un var "Pamest".', sub: 'Atvērts · 12 cilvēki · 2 grupas' }
   ];
   var stage = document.getElementById('stage');
   states.forEach(function (s) {
     var wrap = document.createElement('section');
-    wrap.innerHTML = '<h2 class="text-section mb-3">' + s.label + '</h2><div class="flex items-start gap-6 overflow-x-auto pb-4"></div>';
+    wrap.innerHTML = '<h2 class="text-section">' + s.label + '</h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p><div class="flex items-start gap-6 overflow-x-auto pb-4"></div>';
     var row = wrap.lastChild;
     [375, 1280].forEach(function (w) {
       var box = document.createElement('div');
       box.className = '@container shrink-0 overflow-hidden rounded-2xl line bg-background';
       box.style.width = w + 'px';
       ['head', 'title', s.id].forEach(function (id) { box.appendChild(document.getElementById(id).content.cloneNode(true)); });
+      box.querySelectorAll(s.mode === 'b0' ? '[data-m]' : '[data-j]').forEach(function (e) { e.remove(); });
       box.querySelector('[data-sub]').textContent = s.sub;
       row.appendChild(box);
     });
