@@ -94,6 +94,14 @@ Rule: a visit never makes you a member; A0 and B0 are browsing views, every step
 - **B0 Atvērts, skatās.** People count, Meklē cards, groups, Jaunumi; chat readable, not writable. Only action: "Pievienoties".
 - **B1 Atvērts, dalībnieks.** Writes in chat, adds a Meklē card, taps "Es arī", has "Pamest".
 
+## Ieeja no esošās struktūras
+URL: `/[l1]/kanals/[l2]/[city]`, e.g. `/lv/hobiji/kanals/fotografija/jelgava`. Sidebar unchanged. Drawing: "Ieeja no saraksta" (`kanali/board.html`).
+- **C1 Virsraksts.** Title switch "Grupas 6 · Pasākumi 0 · Kanāli 4"; the Kanāli tab lists channel rows per city, a not-yet-open one shows "interesē 1 no 2".
+- **C2 Pirmā kartīte.** With topic and city chosen the first grid card is the channel card (A0), then groups; without a city "Fotogrāfija 4 pilsētās → Kanāli".
+- **C3 Izveides kartīte.** "Izveidot jaunu grupu" gets a quiet second action "vai vienkārši Mani interesē".
+- **C4 Cita tēma.** Topic chips end with a quiet "+ Cita tēma" that opens the "Ieteikt tēmu" sheet (name, city, Ieteikt; an admin approves).
+- **C5 Grupas lapa.** Group head shows the link "Kanāls: Fotogrāfija · Valmiera" under the category line.
+
 ## Verification (when built)
 - Typecheck, eslint on changed files, `i18n:check`, `ui:check` and the build.
 - In the browser, with users A, B and C in lv and en at 360–1920 px:
