@@ -8,6 +8,7 @@ html:root{--primary:#4B5E3B;--primary-foreground:#ffffff;--background:#f4f4ef;--
 :root { --font-literata: 'Literata'; --font-commissioner: 'Commissioner'; --accent: var(--cat-games); --c: var(--cat-games); }
 html { color-scheme: light; --tab-mix: 12%; --tab-mix-hover: 20%; --band-mix-base: 24%; --role-live: #1DB954; --role-live-ink: #0B2414; }
 body { background: var(--background); color: var(--foreground); font-family: var(--theme-font-body), system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+@utility sticker { rotate: -2deg; transform-origin: left center; background-color: var(--c); color: var(--on-cat); --line-color: color-mix(in srgb, var(--c) 70%, var(--foreground)); }
 </style>
 <style type="text/tailwindcss">
 @theme {
@@ -67,4 +68,5 @@ body { background: var(--background); color: var(--foreground); font-family: var
 @utility tab-tint { background-color: color-mix(in srgb, var(--c) var(--tab-mix), var(--surface)); }
 @utility banner-tint { background-image: linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, var(--surface)), color-mix(in srgb, var(--accent) 7%, var(--surface))); }
 @utility mark-tint { background-color: color-mix(in srgb, var(--accent) 22%, var(--surface)); color: var(--accent); }
+@utility sticker { rotate: -2deg; transform-origin: left center; background-color: var(--c); color: var(--on-cat); --line-color: color-mix(in srgb, var(--c) 70%, var(--foreground)); }
 </style>
