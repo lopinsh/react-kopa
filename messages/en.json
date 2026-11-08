@@ -835,7 +835,11 @@
         "r21": "Group card"
       },
       "buildPlanEmptyTitle": "No plan in progress",
-      "buildPlanEmptyHint": "The next release plan will appear here once it is written."
+      "buildPlanEmptyHint": "The next release plan will appear here once it is written.",
+      "planTab": "Plan",
+      "planDrawings": {
+        "channel": "Channel page"
+      }
     },
     "handbook": {
       "chapters": "Chapters",

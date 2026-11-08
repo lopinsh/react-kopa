@@ -835,7 +835,11 @@
         "r21": "Grupas kartīte"
       },
       "buildPlanEmptyTitle": "Pašlaik nav neviena plāna",
-      "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts."
+      "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts.",
+      "planTab": "Plāns",
+      "planDrawings": {
+        "channel": "Kanāla lapa"
+      }
     },
     "handbook": {
       "chapters": "Nodaļas",
