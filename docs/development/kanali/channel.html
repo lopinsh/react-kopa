@@ -33,6 +33,8 @@
     shield: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
     heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
     note: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M13 8H7M17 12H7"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    bell: '<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
     check: '<path d="M20 6 9 17l-5-5"/>'
   };
 
@@ -65,7 +67,17 @@
 
   /* ---------- site header (unchanged from the earlier drawing) ---------- */
   function siteHeader() {
-    return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 md:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item md:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center md:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div><div class="ml-auto flex items-center gap-2"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></div></header>';
+    /* Header.tsx as a signed-in member: logo, search field (md+), "Manas grupas" (icon at md, text from lg), then LV, search icon (phone), messages (md+), bell, avatar. ICON_BUTTON from header-styles.ts. */
+    var IB = 'relative grid size-10 shrink-0 place-items-center rounded-pill press text-foreground hover:bg-tint [&_svg]:size-5';
+    var logo = '<a class="order-1 flex min-h-10 shrink-0 items-center"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item md:text-section"><span>Ejam <em class="weight-medium">kopā</em></span><span aria-hidden="true" class="ml-1 mr-2 h-2.5 w-2.5 shrink-0 rounded-full bg-primary shadow-[7px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)] md:ml-1.5 md:h-3 md:w-3 md:shadow-[8px_0_0_0_color-mix(in_srgb,var(--primary)_45%,transparent)]"></span></span></a>';
+    var field = '<div class="order-3 flex min-w-0 flex-1 justify-center md:mx-2"><div class="hidden h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted md:flex">Meklēt grupas, cilvēkus</div></div>';
+    var links = '<nav aria-label="Galvenā izvēlne" class="hidden shrink-0 items-center gap-1 md:order-2 md:flex lg:order-4"><a title="Manas grupas" class="grid size-10 place-items-center rounded-pill text-foreground-muted lg:inline-block lg:size-auto lg:px-3 lg:py-2 lg:text-body-sm">' + ICO(P.users, 'size-5 lg:hidden') + '<span class="hidden lg:inline">Manas grupas</span></a></nav>';
+    var lang = '<button type="button" aria-label="Valoda: latviešu" class="flex h-10 items-center gap-0.5 rounded-pill px-2 text-tag text-foreground hover:bg-tint sm:text-meta">LV' + ICO('<path d="m6 9 6 6 6-6"/>', 'size-3 sm:size-3.5') + '</button>';
+    var search = '<button type="button" aria-label="Meklēt" class="' + IB + ' md:hidden">' + ICO(P.search) + '</button>';
+    var msgs = '<div class="hidden md:block"><button type="button" aria-label="Ziņas" class="' + IB + '">' + ICO(P.note) + '</button></div>';
+    var bell = '<button type="button" aria-label="Paziņojumi" class="' + IB + '">' + ICO(P.bell) + '<span aria-hidden="true" class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-pill bg-primary px-1 text-tag text-primary-foreground ring-2 ring-surface">2</span></button>';
+    var avatar = '<div class="relative shrink-0"><button type="button" aria-label="Profila izvēlne" class="' + IB + '"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></button></div>';
+    return '<header class="sticky top-0 z-10 flex h-header items-center gap-0.5 border-b border-border bg-surface px-3 md:gap-2 md:px-gutter">' + logo + field + links + '<div class="order-5 flex items-center gap-0.5 md:gap-2">' + lang + search + msgs + bell + avatar + '</div></header>';
   }
 
   /* ---------- GroupHead, compact (GroupHead.tsx + BannerName + CategoryLine onTone + GroupActions round) ---------- */
@@ -148,9 +160,9 @@
   }
 
   /* ---------- events: NextMeetingView head + EventDayList + EventRow ---------- */
-  function evRow(time, title, group, first) {
+  function evRow(time, title, group, bare) {
     return '<article class="relative grid grid-cols-[2.75rem_0.5rem_minmax(0,1fr)_auto] items-center gap-x-2 break-inside-avoid rounded-lg border-b border-border px-1.5 py-1.5 last:border-b-0 hover:bg-tint"><time class="text-meta tabular-nums text-foreground-muted">' + time + '</time><span aria-hidden="true" class="size-2 rounded-full bg-[var(--c)]"></span><a class="truncate weight-strong text-foreground after:absolute after:inset-0">' + title + '</a><span class="whitespace-nowrap text-meta text-foreground-muted"></span>' +
-      '<p class="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted"><a class="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">' + group + '</a><span class="min-w-0 shrink-[4] truncate whitespace-pre"> · Spēles</span><span class="min-w-0 shrink-[8] truncate whitespace-pre"> · Šahs</span></p></article>';
+      '<p class="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted"><a class="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">' + group + '</a>' + (bare ? '' : '<span class="min-w-0 shrink-[4] truncate whitespace-pre"> · Spēles</span><span class="min-w-0 shrink-[8] truncate whitespace-pre"> · Šahs</span>') + '</p></article>';
   }
   function dayList(days) {
     return '<div class="@container/events rounded-2xl bg-surface px-4 pb-3 shadow-card frame">' + days.map(function (d) {
@@ -209,7 +221,7 @@
   }
   function nextMeetingBox() {
     return '<section class="hidden lg:block max-w-page rounded-2xl bg-surface px-4 pb-1 pt-3 shadow-card frame"><div class="flex items-baseline justify-between"><h2 class="font-sans text-section text-foreground">Nākamais pasākums</h2><a class="inline-flex items-center gap-1 text-meta text-primary">Visi' + ICO(P.arrow, 'size-3.5') + '</a></div>' +
-      '<a class="grid gap-0.5 rounded-xl py-3 hover:bg-tint"><span class="flex items-baseline gap-2 text-body-sm"><span class="tabular-nums text-foreground-muted">Šodien, 18:30</span><span aria-hidden class="size-2 shrink-0 translate-y-px rounded-full bg-[var(--accent)]"></span><span class="min-w-0 weight-strong">Šaha vakars bibliotēkā</span></span><span class="truncate text-meta text-foreground">Jelgavas šaha vakari, bibliotēka</span></a></section>';
+      '<p class="pt-2 text-meta text-foreground-muted">Šodien · pirmd., 9. nov.</p><div class="pb-2">' + evRow('18:30', 'Šaha vakars bibliotēkā', 'Jelgavas šaha vakari', true) + '</div></section>';
   }
   /* NEW (Čats tab): "Šeit tagad" list in the aside, MemberRow-style rows made compact (size-8 face), online dot bg-success. */
   function hereBox() {
@@ -247,13 +259,14 @@
       '<div class="mx-auto max-w-browse px-gutter pb-6 pt-3 md:pt-5 lg:grid lg:grid-cols-[190px_minmax(0,1fr)] lg:gap-6 lg:has-[>[data-aside]]:grid-cols-[190px_minmax(0,1fr)_var(--spacing-aside)]">' +
       sideNav(o.cur, keys, !o.out) + '<div class="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-6">' + o.body + '</div>' + o.aside + '</div>';
   }
+  var ASIDE_HOME = aside([liveBox(), membersBox({ count: 14, link: true })]);
   var ASIDE_M = aside([liveBox(), nextMeetingBox(), membersBox({ count: 14, link: true })]);
   var ASIDE_OUT = aside([membersBox({ count: 14, faceless: true })]);
   var TABS_SEEK = function (n, action) { return partTabs({ items: [['Meklē', n]], active: 'Meklē', action: action }); };
   /* NEW: live strip (members only, phones): the GroupAside members-box row (faces, text) made a link to Čats with the last line. */
   var STRIP = '<a class="flex items-center gap-3 rounded-xl border-y border-border py-3 lg:hidden">' + faces(3, 'lg') + '<span class="min-w-0 flex-1"><span class="block text-body-sm weight-strong">4 čatā</span><span class="block truncate text-meta text-foreground-muted">Kristaps: Un turnīrs 22.?</span></span>' + ICO(P.arrow, 'size-3.5 text-foreground-muted') + '</a>';
 
-  var HOME = function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('member') + '</div>' + STRIP + nextEvents(), aside: ASIDE_M }); };
+  var HOME = function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('member') + '</div>' + STRIP + nextEvents(), aside: ASIDE_HOME }); };
   var screens = [
     { label: 'Sākums', story: 'Inese atver komūnu, redz, ko Jelgavā meklē šaha cilvēki, un piespiež "Es arī"; zem tā ir čata līnija un nākamie pasākumi.', fn: HOME },
     { label: 'Čats', story: 'Mārtiņš ienāk čatā, redz, kas ir šeit, pasaka, ka nāks otrdien, un viņa rinda ir tāda pati kā citiem.', fn: function () { return page({ cur: 'c', body: chatBody(), aside: aside([hereBox(), membersBox({ count: 14, link: true })]) }); } },
@@ -268,8 +281,8 @@
       return page({ cur: 'p', body: '<div>' + partTabs({ title: 'Cilvēki', items: [['Visi', 14]], active: 'Visi' }) + ul + '</div>', aside: ASIDE_M });
     } },
     { label: 'Nepierakstījies', story: 'Viesis redz tikai skaitļus: cik cilvēku, ko meklē, kādi pasākumi. Vārdu un čata nav.', fn: function () { return page({ out: true, cur: 's', body: '<div>' + TABS_SEEK(3) + seekList('out') + '</div>' + nextEvents(), aside: ASIDE_OUT }); } },
-    { label: 'Tukša komūna', story: 'Anna atver komūnu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(0, ASK) + seekEmpty() + '</div>', aside: aside([membersBox({ count: 0 })]) }); } },
-    { label: 'Autora Meklē rinda pēc "Es arī"', story: 'Inese redz, ka uz viņas ierakstu atsaucās divi cilvēki, un izveido grupu.', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('author') + '</div>' + STRIP + nextEvents(), aside: ASIDE_M }); } }
+    { label: 'Tukša komūna', story: 'Anna atver komūnu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(0) + seekEmpty() + '</div>', aside: '' }); } },
+    { label: 'Autora Meklē rinda pēc "Es arī"', story: 'Inese redz, ka uz viņas ierakstu atsaucās divi cilvēki, un izveido grupu.', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('author') + '</div>' + STRIP + nextEvents(), aside: ASIDE_HOME }); } }
   ];
 
   /* ---------- ☰ drawer (GroupPagesDrawer inside Overlay layout="left"), phones only ---------- */
