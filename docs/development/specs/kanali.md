@@ -123,6 +123,7 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 - Čats in the chat look of Discord/mIRC (left-aligned lines, no bubbles), day dividers, composer at the bottom; hidden in K2.
 - A visit never makes you a member; every step in is a tap.
 - Signed out: counts only, no names, no Čats. Only action: "Mani interesē".
+- OPEN POINT (owner): a signed-in person who does not follow reads the Čats log read-only; the composer is replaced by the line "Mani interesē, lai rakstītu" (drawn in board.html B1-B3).
 - Grupas and Pasākumi are the board's own views for the filter; the town square adds none.
 
 ## Ieeja no esošās struktūras

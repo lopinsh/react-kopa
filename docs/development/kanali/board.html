@@ -51,7 +51,7 @@
 
   /* ---------- site header (as in the earlier drawings) ---------- */
   function head(out) {
-    var right = out ? '<span class="' + btn('secondary', 'sm') + '">Ienākt</span>' : '<span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span>';
+    var right = out ? '' : '<span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span>';
     return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div><div class="ml-auto flex items-center gap-2">' + right + '</div></header>';
   }
 
@@ -106,7 +106,7 @@
     o = o || {};
     var rows = cards.map(function (c, i) { return seekRow(c[0], c[1], c[2], o.mine && i === 0); }).join('');
     var foot = o.out
-      ? '<p class="mt-2 text-meta text-foreground-muted"><span class="tabular-nums weight-strong text-foreground">' + cards.length + '</span> cilvēki meklē biedrus. Ienāc, lai atsauktos vai pastāstītu, ko meklē.</p>'
+      ? '<p class="mt-2 text-meta text-foreground-muted"><span class="tabular-nums weight-strong text-foreground">' + cards.length + '</span> cilvēki meklē biedrus. </p>'
       : '<div class="mt-3"><span class="' + btn('secondary', 'sm') + '">' + ICO(P.plus, 'size-3.5') + 'Pastāsti, ko meklē</span></div>';
     return '<section class="min-w-0"><h2 class="text-item weight-strong text-foreground">Meklē</h2><div class="mt-1">' + (o.out ? '' : rows) + '</div>' + foot + '</section>';
   }
@@ -120,8 +120,10 @@
   var sys = function (t, text) { return '<div class="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-2 py-0.5"><time class="pt-0.5 text-meta tabular-nums text-foreground-muted">' + t + '</time><p class="min-w-0 text-meta italic text-foreground-muted">' + text + '</p></div>'; };
   var dayDiv = function (t) { return '<div class="my-2 flex items-center gap-3 text-meta text-foreground-muted"><span class="h-px flex-1 bg-border"></span>' + t + '<span class="h-px flex-1 bg-border"></span></div>'; };
   var composer = '<div class="border-t border-border bg-surface p-4"><form class="flex items-center gap-2"><div class="relative flex shrink-0"><button type="button" aria-label="Emocijzīmes" class="' + IBTN + '">' + ICO(P.smile, 'size-5') + '</button></div><div class="block w-full rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted min-h-11 py-2 @3xl:min-h-10 flex-1">Raksti ziņu</div><button type="submit" aria-label="Sūtīt" class="' + btn('primary') + '">' + ICO(P.send) + '</button></form><div class="mt-1 flex items-start gap-2"><span class="ml-auto shrink-0 text-meta tabular-nums text-foreground-muted">0 / 500</span></div></div>';
-  function panel(logHtml) {
-    return '<div class="overflow-hidden ' + BOX + '"><div class="h-56 overflow-hidden px-4 py-2">' + logHtml + '</div>' + composer + '</div>';
+  /* NEW, OPEN POINT (owner decides): a signed-in person who does not follow reads the log; the composer is replaced by one line that says to follow first. */
+  var readOnly = '<div class="border-t border-border bg-surface p-4 text-body-sm text-foreground-muted">Mani interesē, lai rakstītu</div>';
+  function panel(logHtml, follows) {
+    return '<div class="overflow-hidden ' + BOX + '"><div class="h-56 overflow-hidden px-4 py-2">' + logHtml + '</div>' + (follows ? composer : readOnly) + '</div>';
   }
   var log = {
     l1: dayDiv('Šodien · pirmd., 9. nov.') + line('09:12', 'Anna', 'Kurš zina labu vietu galda spēlēm Rīgā?') + line('09:20', 'Edgars', 'Ir &quot;Kauliņš&quot; Āgenskalnā.', { mod: true }) + sys('09:41', 'Go: jauna Meklē kartīte') + line('10:05', 'Marta', 'Pirmdienās spēlējam Go Jelgavā.'),
@@ -130,7 +132,7 @@
   };
   /* Čats, signed out: counts only, no log. NEW. */
   function panelOut(here, n) {
-    return '<div class="grid gap-3 p-4 ' + BOX + '"><p class="text-body-sm text-foreground"><span class="tabular-nums weight-strong">' + here + '</span> šeit tagad, <span class="tabular-nums weight-strong">' + n + '</span> interesējas.</p><p class="text-meta text-foreground-muted">Čatu redz tie, kas ir ienākuši.</p><div><span class="' + btn('primary', 'sm') + '">Ienākt</span></div></div>';
+    return '<div class="grid gap-3 p-4 ' + BOX + '"><p class="text-body-sm text-foreground"><span class="tabular-nums weight-strong">' + here + '</span> šeit tagad, <span class="tabular-nums weight-strong">' + n + '</span> interesējas.</p><p class="text-meta text-foreground-muted">Čatu redz tie, kas ir ienākuši. &quot;Mani interesē&quot; ved uz pierakstīšanos.</p></div>';
   }
   /* Room list. NEW: the GroupRow shape with a chat tile; a room links to the board one level down (its URL is the filter). One row per room of each chosen Veids; there is no combined room. */
   function roomRow(name, meta) {
@@ -148,26 +150,26 @@
   }
 
   /* ---------- results below (GroupRow rows on phones, GroupCard grid from 3xl) ---------- */
-  var rowOf = function (name, meta, city) {
-    return '<div class="' + ROW + '">' + tile(P.game) + '<span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">' + meta + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground"><span class="min-w-0 truncate">' + city + '</span></span></span></div>';
+  /* GroupRow: topic line "Spēles · Veids", tab line "Pilsēta · N cilvēki" (muted). */
+  var rowOf = function (name, veids, city, n) {
+    return '<div class="' + ROW + '">' + tile(P.game) + '<span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">Spēles · ' + veids + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground"><span class="min-w-0 truncate text-foreground-muted">' + city + ' · ' + n + ' cilvēki</span></span></span></div>';
   };
   function card(o) {
     var banner = '<div class="relative h-28 banner-tint"><span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--c)]">' + ICO(P.game, 'size-10') + '</span></div>';
     var tag = '<div class="absolute inset-x-4 -bottom-3 z-[2] flex min-w-0 gap-1.5"><span class="flex min-w-0 max-w-[60%] items-center rounded-pill line px-3 py-1 text-tag weight-strong shadow-control sticker"><span class="truncate">' + o.tag + '</span></span><span class="flex min-w-0 items-center gap-1 rounded-pill line bg-surface px-2 py-1 text-tag weight-strong text-foreground shadow-control">' + ICO(P.pin, 'size-3.5 shrink-0 text-foreground-muted') + '<span class="truncate">' + o.city + '</span></span></div>';
     return '<article class="relative flex h-80 flex-col rounded-2xl line bg-surface shadow-card"><div class="relative shrink-0">' + banner + tag + '</div><div class="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden px-5 pb-3 pt-6"><h3 class="line-clamp-2 text-item text-foreground">' + o.name + '</h3><p class="text-meta text-foreground-muted">' + o.meta + '</p></div></article>';
   }
-  function results(city, tag) {
-    var g = [['Jelgavas šaha vakari', tag + ' · 18 cilvēki', 'Jelgava'], ['Šaha pulciņš bibliotēkā', tag + ' · 11 cilvēki', 'Jelgava'], ['Go sākuma līmenim', tag + ' · 7 cilvēki', 'Jelgava']];
-    if (!city) g[2] = ['Rīgas šaha klubs', tag + ' · 34 cilvēki', 'Rīga'];
-    var rows = '<div class="max-w-page @3xl:hidden">' + g.map(function (r) { return rowOf(r[0], r[1], r[2]); }).join('') + '</div>';
-    var cells = '<div class="hidden gap-5 @3xl:grid @3xl:grid-cols-3">' + g.map(function (r) { return card({ tag: tag, city: r[2], name: r[0], meta: r[1] }); }).join('') + '</div>';
+  function results(o) {
+    var all = [['Jelgavas šaha vakari', 'Šahs', 'Jelgava', 18], ['Go sākuma līmenim', 'Go', 'Jelgava', 7], ['Šaha pulciņš bibliotēkā', 'Šahs', 'Jelgava', 11], ['Rīgas šaha klubs', 'Šahs', 'Rīga', 34], ['Kāršu spēļu vakars', 'Kāršu spēles', 'Rīga', 15]];
+    var g = all.filter(function (r) { return (!o.veidi || !o.veidi.length || o.veidi.indexOf(r[1]) >= 0) && (!o.city || r[2] === o.city); }).slice(0, 3);
+    var rows = '<div class="max-w-page @3xl:hidden">' + g.map(function (r) { return rowOf(r[0], r[1], r[2], r[3]); }).join('') + '</div>';
+    var cells = '<div class="hidden gap-5 @3xl:grid @3xl:grid-cols-3">' + g.map(function (r) { return card({ tag: r[1], city: r[2], name: r[0], meta: 'Spēles · ' + r[1] + ' · ' + r[3] + ' cilvēki' }); }).join('') + '</div>';
     return rows + cells;
   }
 
   /* ---------- the board page ---------- */
   function board(o) {
-    var tag = o.veidi && o.veidi.length ? o.veidi.join(' · ') : 'Spēles';
-    var main = '<div class="min-w-0 flex-1 px-3 pb-12 pt-4 @3xl:px-gutter">' + titleSwitch(o.g, 3) + filterLine(o) + square(o.sq) + results(o.city, tag) + '</div>';
+    var main = '<div class="min-w-0 flex-1 px-3 pb-12 pt-4 @3xl:px-gutter">' + titleSwitch(o.g, 3) + filterLine(o) + square(o.sq) + results(o) + '</div>';
     return head(o.out) + '<div class="flex min-h-full">' + rail() + main + '</div>';
   }
 
@@ -182,9 +184,10 @@
   }
 
   /* ---------- states ---------- */
-  var seekL3 = [['Meklēju partneri šaha partijām', 'Šahs · Jelgava · vēl 24 dienas', 3], ['Gribu iemācīties Go, kurš palīdzēs?', 'Go · Jelgava · vēl 11 dienas', 2]];
+  var seekL3 = [['Meklēju partneri šaha partijām', 'Šahs · Jelgava · vēl 24 dienas', 3], ['Meklējam trešo blitz vakariem', 'Šahs · Jelgava · vēl 11 dienas', 2]];
+  var seekGo = ['Gribu iemācīties Go, kurš palīdzēs?', 'Go · Jelgava · vēl 11 dienas', 2];
   var seekL2 = seekL3.slice(0, 1).concat([['Meklējam komandu šaha turnīram', 'Šahs · Rīga · vēl 19 dienas', 4]]);
-  var seekL1 = seekL2.concat([seekL3[1]]);
+  var seekL1 = seekL2.concat([seekGo]);
   var citiesL2 = [['Jelgava', '23 interesējas · 4 šeit tagad'], ['Rīga', '58 interesējas · 9 šeit tagad'], ['Liepāja', '12 interesējas · 1 šeit tagad']];
 
   var screens = [
@@ -193,13 +196,13 @@
     { label: 'B2 Tēma · Veids: Spēles · Šahs', story: 'Pievienots Veids. Meklē rāda kartītes visās pilsētās, Čats ir Šaha istaba, zem tā pilsētu istabu saraksts. Čipu rinda nemaina virsrakstu.',
       fn: function () { return board({ g: 12, veidi: ['Šahs'], sq: { n: 41, here: 6, seek: seekBlock(seekL2), chat: chatBlock(panel(log.l2), rooms('Pilsētu istabas', citiesL2)) } }); } },
     { label: 'B3 Tēma · Veids · Kur: Spēles · Šahs · Jelgava', story: 'Pilsētas laukums. Meklē tikai Jelgava, Čats ir pilsētas istaba, istabu saraksta vairs nav. Kartīte ir uzrakstīta šajā līmenī.',
-      fn: function () { return board({ g: 3, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 23, here: 4, seek: seekBlock(seekL3), chat: chatBlock(panel(log.l3)) } }); } },
+      fn: function () { return board({ g: 2, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 23, here: 4, seek: seekBlock(seekL3), chat: chatBlock(panel(log.l3)) } }); } },
     { label: 'B4 Vairāki Veidi: Šahs + Go', story: 'Saturs saplūst: Meklē rāda abu Veidu kartītes, grupas kopā. Kombinētas istabas nav; Čatā ir tikai abu Veidu istabu saraksts (ar pilsētu: to pilsētas istabas). Tas pats ar vairākām pilsētām vienam Veidam.',
-      fn: function () { return board({ g: 15, veidi: ['Šahs', 'Go'], sq: { n: 58, here: 8, seek: seekBlock(seekL2.concat([seekL3[1]])), chat: chatBlock('<div class="p-4 text-body-sm text-foreground-muted ' + BOX + '">Izvēlies vienu istabu: vairāku Veidu čata nav.</div>', rooms('Izvēlēto Veidu istabas', [['Šahs', '41 interesējas · 6 šeit tagad'], ['Go', '17 interesējas · 2 šeit tagad']])) } }); } },
+      fn: function () { return board({ g: 15, veidi: ['Šahs', 'Go'], sq: { n: 58, here: 8, seek: seekBlock(seekL2.concat([seekGo])), chat: chatBlock('<div class="p-4 text-body-sm text-foreground-muted ' + BOX + '">Izvēlies vienu istabu: vairāku Veidu čata nav.</div>', rooms('Izvēlēto Veidu istabas', [['Šahs', '41 interesējas · 6 šeit tagad'], ['Go', '17 interesējas · 2 šeit tagad']])) } }); } },
     { label: 'B5 Biedrs: seko pilsētas laukumam', story: 'Tas pats B3, bet "Mani interesē" ir ieslēgts (tonēts, ar ķeksīti) un laukums parādās sadaļā Manas grupas. Kartīte, kurai nospiests "Es arī", ir tonēta ar ķeksīti.',
-      fn: function () { return board({ g: 3, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 24, here: 4, follows: true, seek: seekBlock(seekL3, { mine: true }), chat: chatBlock(panel(log.l3)) } }); } },
-    { label: 'B6 Nepierakstījies: tikai skaitļi', story: 'Bez konta redz tikai skaitļus: cik interesējas, cik šeit tagad, cik meklē. Nav ziņu, nav kartīšu teksta; "Mani interesē" un "Ienākt" prasa pierakstīties (NEW: Ienākt panelī). Grupu saraksts zem tā ir tāds pats.',
-      fn: function () { return board({ out: true, g: 3, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 23, here: 4, seek: seekBlock(seekL3, { out: true }), chat: chatBlock(panelOut(4, 23)) } }); } },
+      fn: function () { return board({ g: 2, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 24, here: 4, follows: true, seek: seekBlock(seekL3, { mine: true }), chat: chatBlock(panel(log.l3, true)) } }); } },
+    { label: 'B6 Nepierakstījies: tikai skaitļi', story: 'Bez konta redz tikai skaitļus: cik interesējas, cik šeit tagad, cik meklē. Nav ziņu, nav kartīšu teksta; "Mani interesē" ir vienīgā darbība, tā ved uz pierakstīšanos. Grupu saraksts zem tā ir tāds pats.',
+      fn: function () { return board({ out: true, g: 2, veidi: ['Šahs'], city: 'Jelgava', sq: { n: 23, here: 4, seek: seekBlock(seekL3, { out: true }), chat: chatBlock(panelOut(4, 23)) } }); } },
     { label: 'B7 Grupas galva: kategorijas rinda kā trīs saites', story: 'Rinda "Spēles Šahs Jelgava" ir trīs saites, katra uz saraksta līmeni (Tēma, Veids, Kur). Aizstāj vienu saiti "Hobiji · Fotogrāfija · Valmiera →".',
       fn: function () { return groupHead(); } }
   ];
