@@ -16,7 +16,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-06 | Hubs are created automatically with their L2/L3 tēma and never close. | Confirmed | 9 Nov. |
 | K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Confirmed | 9 Nov. |
 | K-08 | **City is a parallel dimension.** A city room ("Šahs · Jelgava") is one room with two parents: the tēma hub and the city hub (Matrix Spaces, `m.space.child` from both). | Confirmed | 9 Nov. |
-| K-09 | A city room exists potentially for every hub × city, but is created only on real user activity. | Confirmed | 9 Nov. Whether it also needs 2 people: In progress. |
+| K-09 | A city room exists potentially for every hub × city and **opens with its first message**: anyone following the hub can start it by writing the first line. | Confirmed | 9 Nov. |
 | K-10 | Each city has a city hub (Jelgava first): see what is happening locally, visit each other, discover groups, try one. | Confirmed | 9 Nov. Its page content: In progress. |
 | K-11 | Districts: one level (C2, Jelgava › Pārlielupe); no district rooms for now. | Confirmed | 9 Nov. Districts as a content filter only: In progress (my reading). |
 | K-12 | Several Veidi chosen on the board: content merges, no room for the combination. | Confirmed | 9 Nov; which hub card shows then: In progress. |
@@ -50,10 +50,10 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, separate from announcements. | Confirmed | 9 Nov. Building it as its own release: In progress (my proposal). |
 | K-24b | A blog post's author chooses **public or members-only**. A public post shows in the hub feed as an excerpt with its group and member shown and linked; tapping it opens the full blog post page in that group. Public posts, events and announcements are visible to signed-out visitors (names included). | Confirmed | 9 Nov. |
 | K-24a | **Activity feed:** the hub page shows its groups' public announcements, events and blog posts as one merged live feed, organized and compact by period: "Šodien: 3 grupas izveidotas, 32 jauni biedri, 3 jauni raksti, 3 paziņojumi", then "Pagājušajā nedēļā", "Pagājušajā mēnesī". | Confirmed | 9 Nov: "a bit of both" (merged feed + activity numbers). Exact rows, what opens on tap: In progress. |
-| K-25 | The number of members in the hub. | Confirmed | 9 Nov. Definition (followers + members of its groups): In progress. |
+| K-25 | The hub shows **two numbers**: followers and group members ("41 interesējas · 120 grupu biedri"). | Confirmed | 9 Nov. |
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
 | K-27 | Shout-outs are **plain post-it notes** on the board's wall ("If you are interested too, let me know. We could start a group together"). No "Es arī", no "Izveidot grupu ar viņiem". | Confirmed | 9 Nov: "Yes, plain notes. Announcements really are plain post-it notes." |
-| K-27a | Shout-out limits: about 30 days, max 3 active per person, a report action on each. | In progress | Meklē-card rules of 8-9 Nov; not re-decided for shout-outs. |
+| K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Confirmed | 9 Nov. |
 | K-28 | Layout of the hub page (sections, order, phone vs desktop). | In progress | The group-page sections list was rejected ("sounds wrong"). Content is K-20 to K-26 plus K-31. |
 
 ### Chat
@@ -68,7 +68,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-36 | Every group has a members-only chat. | Confirmed | 9 Nov. |
 | K-37 | Before a tēma has groups, interested people coordinate in the hub chat, then start a group and continue there privately. | Confirmed | 9 Nov. |
 | K-38 | Moderators: our site assigns them and sets room power levels (no Space inheritance). | Confirmed | 9 Nov. |
-| K-38a | Owners and admins of child groups apply to moderate; a site admin approves or declines and keeps more power. | Confirmed | 9 Nov ("moderators are back"). For which rooms (hub room, sub-veids rooms, city rooms): In progress. |
+| K-38a | Owners and admins of child groups apply to moderate the hub. | Changed | → K-38c. |
+| K-38c | Group members moderate only their own groups. **Hub admins are assigned manually; for now only site admins are hub admins.** | Confirmed | 9 Nov. |
 | K-38b | Signed-out visitors can read the public rooms (hub room, sub-veids rooms, city rooms); writing needs sign-in and "Mani interesē". | Confirmed | 9 Nov. |
 
 ### Visibility and safety
