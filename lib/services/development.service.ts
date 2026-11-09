@@ -13,7 +13,7 @@ const DRAWING_FILES: Record<DesignDrawingId, string> = {
     r21: 'r21-group-card.html',
 };
 
-/** The plan shown on the build-plan page: a spec rendered as markdown, then one tab per drawing. Drawings are plain HTML in `docs/development/kanali/`; `_site.html` (the site look) is injected into each `<head>`. */
+/** The plan shown on the build-plan page: a spec rendered as markdown, then one tab per drawing. Drawings are plain HTML in `docs/development/kanali/`; the site's compiled CSS plus `_site.html` (theme variables, Tailwind CDN for NEW: classes) are injected into each `<head>`. */
 export const PLAN = {
     spec: 'specs/kanali.md',
     drawings: [
@@ -22,6 +22,21 @@ export const PLAN = {
     ],
 } as const;
 export type PlanDrawingId = (typeof PLAN.drawings)[number]['id'];
+
+/** The site's own compiled stylesheet(s) as /_next/static/... hrefs, read from the build on disk (names are hashed, so resolved per request). Empty under `next dev`, which keeps no files. The font-face-only sheet is skipped. */
+async function siteStylesheetLinks(): Promise<string> {
+    const dir = path.join(process.cwd(), '.next', 'static', 'chunks');
+    const names = await fs.readdir(dir).catch(() => [] as string[]);
+    const sheets = await Promise.all(
+        names
+            .filter((n) => n.endsWith('.css'))
+            .map(async (n) => ({ n, css: await fs.readFile(path.join(dir, n), 'utf8') })),
+    );
+    return sheets
+        .filter((s) => !s.css.startsWith('@font-face'))
+        .map((s) => `<link rel="stylesheet" href="/_next/static/chunks/${s.n}">`)
+        .join('');
+}
 
 export const DevelopmentService = {
     /** The plan's spec markdown, or null when the file is missing. */
@@ -34,11 +49,12 @@ export const DevelopmentService = {
         const entry = PLAN.drawings.find((d) => d.id === id);
         if (!entry) return null;
         try {
-            const [html, site] = await Promise.all([
+            const [html, site, links] = await Promise.all([
                 fs.readFile(path.join(DEVELOPMENT_DIR, entry.file), 'utf8'),
                 fs.readFile(path.join(DEVELOPMENT_DIR, 'kanali', '_site.html'), 'utf8'),
+                siteStylesheetLinks(),
             ]);
-            return html.replace(/<head[^>]*>/i, (head) => head + site);
+            return html.replace(/<head[^>]*>/i, (head) => head + links + site);
         } catch {
             return null;
         }

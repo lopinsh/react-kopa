@@ -72,7 +72,8 @@
   function groupHead() {
     var drawerBtn = '<button type="button" aria-label="Komūnas lapas" class="' + ibtn('onToneGhost', 'md', 'lg:hidden') + '">' + ICO(P.menu, 'size-5') + '</button>';
     var mark = '<span class="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item lg:col-start-1 lg:row-start-1 md:size-12">' + ICO(P.game, 'size-5 md:size-6') + '</span>';
-    var meta = '<div class="mt-1.5 grid gap-1"><p class="flex items-center gap-x-2 gap-y-0.5 text-meta flex-wrap"><span class="inline-flex shrink-0 items-center gap-1.5 weight-medium"><span aria-hidden="true" class="h-2 w-2 shrink-0 rounded-full bg-current"></span>Spēles</span><span>Šahs</span></p>' +
+    /* NEW: on a komūna the two category/place lines are one: "Spēles · Šahs · Jelgava · 14" (the tile stays ~100 px on a phone). */
+    var meta = '<p class="mt-1 flex items-center gap-x-3 text-meta [&_svg]:size-4 [&_svg]:shrink-0 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-1.5 max-md:[&>span:nth-child(2)]:hidden"><span><span aria-hidden="true" class="h-2 w-2 shrink-0 rounded-full bg-current"></span><span class="weight-medium">Spēles</span></span><span>Šahs</span><span>' + ICO(P.pin) + 'Jelgava</span><span>' + ICO(P.users) + '14</span></p>';
       '<p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta [&_svg]:size-4 [&_svg]:shrink-0 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-1.5"><span>' + ICO(P.pin) + 'Jelgava</span><span>' + ICO(P.users) + '14</span></p></div>';
     /* NEW: the komūna's role button "Mani interesē" is GroupActions' round onTone button with a heart icon (the group one uses MessageCircle for "Sazināties"). */
     var action = '<div class="col-start-3 row-start-1 justify-self-end lg:col-start-3 lg:self-center"><button type="button" class="' + btn('onTone', 'md', 'max-md:size-10 max-md:px-0 md:px-5') + '">' + '<span class="md:hidden">' + ICO(P.heart) + '</span><span class="max-md:sr-only">Mani interesē</span></button></div>';
@@ -138,7 +139,7 @@
       var own = mode === 'author' && i === 1;
       return seekRow({ text: s.text, by: mode === 'out' ? s.when : (own ? 'Tu' : s.who) + ' · ' + s.when, out: mode === 'out', own: own });
     }).join('');
-    /* NEW: the list sits straight under the tab row (no mt-4, the tab row's line is its top edge) so the first row starts above 300 px on a phone. */
+    /* NEW: the list sits straight under the tab row (no mt-4, the tab row's line is its top edge) so the first row starts above 260 px on a phone. */
     return '<div class="max-w-page divide-y divide-border border-b border-border">' + rows + '</div>';
   }
   function seekEmpty() {
@@ -190,7 +191,7 @@
     /* NEW: faces row under the tile on phones (opens the "who is here" sheet); desktop has the aside instead. */
     var who = '<button type="button" class="flex items-center gap-3 rounded-xl py-1 text-left lg:hidden">' + faces(4, 'lg') + '<span class="text-body-sm">4 šeit tagad</span>' + ICO(P.arrow, 'ml-auto size-3.5 text-foreground-muted') + '</button>';
     /* NEW: log and composer in one column, the composer pinned under a scrolling log (no box). */
-    return who + '<div class="flex h-[34rem] flex-col"><div class="flex flex-1 flex-col justify-end overflow-hidden py-2">' + chatLog() + '</div>' + composer() + '</div>';
+    return who + '<div class="flex flex-col"><div class="flex flex-col py-2">' + chatLog() + '</div>' + composer() + '</div>';
   }
 
   /* ---------- aside (AsideSlot + GroupAside members box) ---------- */
@@ -252,30 +253,30 @@
   /* NEW: live strip (members only, phones): the GroupAside members-box row (faces, text) made a link to Čats with the last line. */
   var STRIP = '<a class="flex items-center gap-3 rounded-xl border-y border-border py-3 lg:hidden">' + faces(3, 'lg') + '<span class="min-w-0 flex-1"><span class="block text-body-sm weight-strong">4 čatā</span><span class="block truncate text-meta text-foreground-muted">Kristaps: Un turnīrs 22.?</span></span>' + ICO(P.arrow, 'size-3.5 text-foreground-muted') + '</a>';
 
-  var HOME = function () { return page({ cur: 's', body: TABS_SEEK(3, ASK) + seekList('member') + STRIP + nextEvents(), aside: ASIDE_M }); };
+  var HOME = function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('member') + '</div>' + STRIP + nextEvents(), aside: ASIDE_M }); };
   var screens = [
     { label: 'Sākums', story: 'Inese atver komūnu, redz, ko Jelgavā meklē šaha cilvēki, un piespiež "Es arī"; zem tā ir čata līnija un nākamie pasākumi.', fn: HOME },
     { label: 'Čats', story: 'Mārtiņš ienāk čatā, redz, kas ir šeit, pasaka, ka nāks otrdien, un viņa rinda ir tāda pati kā citiem.', fn: function () { return page({ cur: 'c', body: chatBody(), aside: aside([hereBox(), membersBox({ count: 14, link: true })]) }); } },
-    { label: 'Pasākumi', story: 'Kristaps meklē, kad notiks turnīrs; pasākumus rīko grupas, komūna tos tikai rāda.', fn: function () { return page({ cur: 'e', body: partTabs({ title: 'Pasākumi', items: [['Gaidāmie', 3]], active: 'Gaidāmie' }) + '<div class="max-w-page mt-0">' + dayList(DAYS_ALL) + '</div>', aside: ASIDE_M }); } },
+    { label: 'Pasākumi', story: 'Kristaps meklē, kad notiks turnīrs; pasākumus rīko grupas, komūna tos tikai rāda.', fn: function () { return page({ cur: 'e', body: '<div>' + partTabs({ title: 'Pasākumi', items: [['Gaidāmie', 3]], active: 'Gaidāmie' }) + '<div class="max-w-page mt-0">' + dayList(DAYS_ALL) + '</div></div>', aside: ASIDE_M }); } },
     { label: 'Grupas', story: 'Anna meklē, kur šajā tēmā un pilsētā jau var pievienoties, vai izveido savu grupu.', fn: function () {
       var list = '<div class="mt-4 max-w-page md:hidden">' + groupRow('Jelgavas šaha vakari', 'Nākamā: šodien, 18:30') + groupRow('Šahs bērniem', 'Jelgava · 9 biedri') + groupRow('Galda spēļu vakars', 'Jelgava · 6 biedri') + '</div>' +
         '<div class="mt-4 hidden max-w-page gap-5 md:grid md:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">' + groupCard('Jelgavas šaha vakari', 'Meklē: šaha partnerus') + groupCard('Šahs bērniem', 'Pirmdienās bibliotēkā') + '</div>';
-      return page({ cur: 'g', body: partTabs({ title: 'Grupas', items: [['Visas', 3]], active: 'Visas', action: '<button type="button" class="' + btn('secondary', 'sm') + '">Izveidot grupu</button>' }) + list, aside: ASIDE_M });
+      return page({ cur: 'g', body: '<div>' + partTabs({ title: 'Grupas', items: [['Visas', 3]], active: 'Visas', action: '<button type="button" class="' + btn('secondary', 'sm') + '">Izveidot grupu</button>' }) + list + '</div>', aside: ASIDE_M });
     } },
     { label: 'Cilvēki', story: 'Ineta redz, kas ir komūnā un no kuras grupas, un kurš ir moderators.', fn: function () {
       var ul = '<ul class="mt-4 max-w-page divide-y divide-border border-y border-border">' + memberRow('IN', 'Ineta', true, 'Jelgavas šaha vakari', 'bg-role-mod text-role-mod-ink') + memberRow('KR', 'Kristaps', true, 'Šahs bērniem', 'bg-role-mod text-role-mod-ink') + memberRow('MA', 'Mārtiņš', false, 'Jelgavas šaha vakari', 'bg-role-member text-role-member-ink') + memberRow('IE', 'Inese', false, 'Galda spēļu vakars', 'bg-role-member text-role-member-ink') + '</ul>';
-      return page({ cur: 'p', body: partTabs({ title: 'Cilvēki', items: [['Visi', 14]], active: 'Visi' }) + ul, aside: ASIDE_M });
+      return page({ cur: 'p', body: '<div>' + partTabs({ title: 'Cilvēki', items: [['Visi', 14]], active: 'Visi' }) + ul + '</div>', aside: ASIDE_M });
     } },
-    { label: 'Nepierakstījies', story: 'Viesis redz tikai skaitļus: cik cilvēku, ko meklē, kādi pasākumi. Vārdu un čata nav.', fn: function () { return page({ out: true, cur: 's', body: TABS_SEEK(3) + seekList('out') + nextEvents(), aside: ASIDE_OUT }); } },
-    { label: 'Tukša komūna', story: 'Anna atver komūnu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: TABS_SEEK(0, ASK) + seekEmpty(), aside: aside([membersBox({ count: 0 })]) }); } },
-    { label: 'Autora Meklē rinda pēc "Es arī"', story: 'Inese redz, ka uz viņas ierakstu atsaucās divi cilvēki, un izveido grupu.', fn: function () { return page({ cur: 's', body: TABS_SEEK(3, ASK) + seekList('author') + STRIP + nextEvents(), aside: ASIDE_M }); } }
+    { label: 'Nepierakstījies', story: 'Viesis redz tikai skaitļus: cik cilvēku, ko meklē, kādi pasākumi. Vārdu un čata nav.', fn: function () { return page({ out: true, cur: 's', body: '<div>' + TABS_SEEK(3) + seekList('out') + '</div>' + nextEvents(), aside: ASIDE_OUT }); } },
+    { label: 'Tukša komūna', story: 'Anna atver komūnu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(0, ASK) + seekEmpty() + '</div>', aside: aside([membersBox({ count: 0 })]) }); } },
+    { label: 'Autora Meklē rinda pēc "Es arī"', story: 'Inese redz, ka uz viņas ierakstu atsaucās divi cilvēki, un izveido grupu.', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('author') + '</div>' + STRIP + nextEvents(), aside: ASIDE_M }); } }
   ];
 
   /* ---------- ☰ drawer (GroupPagesDrawer inside Overlay layout="left"), phones only ---------- */
   function drawerFrame() {
-    var panel = '<div class="absolute inset-y-0 left-0 flex h-full w-4/5 max-w-xs flex-col overflow-y-auto bg-surface shadow-premium px-3 py-4"><div class="flex items-center gap-3 border-b border-border px-1 pb-3"><span class="mark-tint grid size-9 shrink-0 place-items-center rounded-item">' + ICO(P.game, 'size-5') + '</span><div class="min-w-0"><p class="truncate text-item">Šahs Jelgavā</p><div class="text-meta text-foreground-muted"><p class="flex items-center gap-x-2 text-meta"><span class="inline-flex items-center gap-1.5 weight-medium text-foreground"><span aria-hidden="true" class="h-2 w-2 rounded-full" style="background-color:var(--accent)"></span>Spēles</span><span>Šahs</span></p></div></div></div>' +
+    var panel = '<div class="absolute inset-y-0 left-0 z-50 flex h-full w-4/5 max-w-xs flex-col overflow-y-auto bg-surface shadow-premium px-3 py-4"><div class="flex items-center gap-3 border-b border-border px-1 pb-3"><span class="mark-tint grid size-9 shrink-0 place-items-center rounded-item">' + ICO(P.game, 'size-5') + '</span><div class="min-w-0"><p class="truncate text-item">Šahs Jelgavā</p><div class="text-meta text-foreground-muted"><p class="flex items-center gap-x-2 text-meta"><span class="inline-flex items-center gap-1.5 weight-medium text-foreground"><span aria-hidden="true" class="h-2 w-2 rounded-full" style="background-color:var(--accent)"></span>Spēles</span><span>Šahs</span></p></div></div></div>' +
       '<div class="pt-2"><nav aria-label="Komūnas lapas" class="flex flex-col gap-0.5">' + navRows('s', ['s', 'c', 'e', 'g', 'p']) + '</nav>' + menuActions(true) + '</div></div>';
-    return '<div class="relative h-[44rem] overflow-hidden">' + HOME() + '<div class="absolute inset-0 bg-[var(--scrim)]"></div>' + panel + '</div>';
+    return '<div class="relative h-[44rem] overflow-hidden">' + HOME() + '<div class="absolute inset-0 z-40 bg-[var(--scrim)]"></div>' + panel + '</div>';
   }
 
   /* ---------- stamp ---------- */
