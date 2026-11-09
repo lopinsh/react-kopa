@@ -16,7 +16,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-06 | Hubs are created automatically with their L2/L3 tēma and never close. | Confirmed | 9 Nov. |
 | K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Confirmed | 9 Nov. |
 | K-08 | **City is a parallel dimension.** A city room ("Šahs · Jelgava") is one room with two parents: the tēma hub and the city hub (Matrix Spaces, `m.space.child` from both). | Confirmed | 9 Nov. |
-| K-09 | A city room exists potentially for every hub × city and **opens with its first message**: anyone following the hub can start it by writing the first line. | Confirmed | 9 Nov. |
+| K-09 | A city room opens with its first message. | Changed | → K-09a (9 Nov). |
+| K-09a | A tēma × city hub ("Galda spēles › Šahs › Jelgava") is **created only on request**: the first person sends a message as the first interested; when a second person does the same, site admins get a notification and approve it. | In progress | 9 Nov, my restatement awaiting the owner's confirmation. |
+| K-09b | A hub has a **city filter** to see activity only from chosen cities. | In progress | 9 Nov, awaiting confirmation. |
 | K-10 | Each city has a city hub (Jelgava first) as a **lighter overview**: the city's activity feed and shout-outs plus the list of its city rooms; no room of its own. | Confirmed | 9 Nov. |
 | K-11 | Districts (one level, Jelgava › Pārlielupe). | Changed | 9 Nov: not in Kanāli yet; a later release of their own. |
 | K-12 | Several Veidi chosen on the board: content merges, no room for the combination; **one hub card** first in the grid that links to each selected Veids's hub, so groups aren't pushed out. | Confirmed | 9 Nov. |
@@ -32,7 +34,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-13 | The hub card is the **first** card in the grid; "Izveidot jaunu grupu" stays the **last**. | Confirmed | 9 Nov. |
 | K-14 | One hub card per filter, always matching it; sub-veidi hubs are reached inside the hub (choosing the Šahs chip shows the Šahs hub card). | Confirmed | 9 Nov. |
 | K-15 | The hub card is the size of a group card, but styled differently. | Confirmed | 9 Nov. |
-| K-16 | The hub card shows activity numbers, not chat lines. A locked hub shows something like "1 cilvēks vēlas šeit sākt grupu". | Confirmed | 9 Nov. Exact words: In progress. |
+| K-16 | The hub card shows activity numbers; locked text "1 cilvēks vēlas šeit sākt grupu". | Changed | → K-16a. |
+| K-16a | The hub card shows **just the hub's name as a link, with some visual flair**, e.g. "Šaha kopiena" / "Chess community". | Confirmed | 9 Nov. Whether "… kopiena" is the public name (vs K-01): In progress. |
 | K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
 | K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Confirmed | 9 Nov, owner's words. |
 | K-18a | The optional note left with "Mani interesē" is a shout-out (K-26), a public note on the hub. | Confirmed | 9 Nov: "Those are public announcements. Like shout outs." |
@@ -90,8 +93,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-55 | "+ Cits" at the end of the Veidi chips opens the existing "Ieteikt jaunu tēmu" sheet (`CategorySuggest`); visible to admins only until approved. | Confirmed | 8 Nov. |
 | K-56 | The "Izveidot jaunu grupu" card gets a quiet "vai vienkārši pastāsti, ko meklē". | In progress | 9 Nov (C2), before shout-outs; may become "leave a shout-out". |
 | K-59 | The build-plan page is always current: discarded views are removed, not kept; a choice between options is drawn as A and B side by side. | Confirmed | 9 Nov. |
-| K-57 | Hub address (route) and the city hub's address. | In progress | Not discussed. |
-| K-58 | Joining a group does not remove you from the hub; hubs work in every city, no home city. | In progress | Defaults in the old spec, never discussed. |
+| K-57 | Addresses follow the board: hub `/lv/speles/galda-speles` (`/[l1]/[l2]`, sub-veids `/[l1]/[l2]/[l3]`); city hub `/lv/jelgava`; a city room as `?room=jelgava` on the hub. | Confirmed | 9 Nov. |
+| K-58 | **Followers may be dropped:** "The point is to join groups"; all visitors may post, and people count as part of the hub when they join a group in it. | In progress | 9 Nov, owner reconsidering; affects K-07, K-25, K-33, K-51, K-54. |
 
 ### Pilot and stages
 | Id | Feature | Status | Notes |
