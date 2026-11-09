@@ -281,7 +281,7 @@
       return page({ cur: 'p', body: '<div>' + partTabs({ title: 'Cilvēki', items: [['Visi', 14]], active: 'Visi' }) + ul + '</div>', aside: ASIDE_M });
     } },
     { label: 'Nepierakstījies', story: 'Viesis redz tikai skaitļus: cik cilvēku, ko meklē, kādi pasākumi. Vārdu un čata nav.', fn: function () { return page({ out: true, cur: 's', body: '<div>' + TABS_SEEK(3) + seekList('out') + '</div>' + nextEvents(), aside: ASIDE_OUT }); } },
-    { label: 'Tukšs channel's, story: 'Anna atver kanālu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(0) + seekEmpty() + '</div>', aside: '' }); } },
+    { label: 'Tukšs kanāls', story: 'Anna atver kanālu, kur vēl nekā nav; vienīgā darbība ir "Pastāsti, ko meklē".', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(0) + seekEmpty() + '</div>', aside: '' }); } },
     { label: 'Autora Meklē rinda pēc "Es arī"', story: 'Inese redz, ka uz viņas ierakstu atsaucās divi cilvēki, un izveido grupu.', fn: function () { return page({ cur: 's', body: '<div>' + TABS_SEEK(3, ASK) + seekList('author') + '</div>' + STRIP + nextEvents(), aside: ASIDE_HOME }); } }
   ];
 
