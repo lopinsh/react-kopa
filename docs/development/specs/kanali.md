@@ -17,9 +17,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Confirmed | 9 Nov. |
 | K-08 | **City is a parallel dimension.** A city room ("Šahs · Jelgava") is one room with two parents: the tēma hub and the city hub (Matrix Spaces, `m.space.child` from both). | Confirmed | 9 Nov. |
 | K-09 | A city room exists potentially for every hub × city and **opens with its first message**: anyone following the hub can start it by writing the first line. | Confirmed | 9 Nov. |
-| K-10 | Each city has a city hub (Jelgava first): see what is happening locally, visit each other, discover groups, try one. | Confirmed | 9 Nov. Its page content: In progress. |
-| K-11 | Districts: one level (C2, Jelgava › Pārlielupe); no district rooms for now. | Confirmed | 9 Nov. Districts as a content filter only: In progress (my reading). |
-| K-12 | Several Veidi chosen on the board: content merges, no room for the combination. | Confirmed | 9 Nov; which hub card shows then: In progress. |
+| K-10 | Each city has a city hub (Jelgava first) as a **lighter overview**: the city's activity feed and shout-outs plus the list of its city rooms; no room of its own. | Confirmed | 9 Nov. |
+| K-11 | Districts (one level, Jelgava › Pārlielupe). | Changed | 9 Nov: not in Kanāli yet; a later release of their own. |
+| K-12 | Several Veidi chosen on the board: content merges, no room for the combination; **one hub card** first in the grid that links to each selected Veids's hub, so groups aren't pushed out. | Confirmed | 9 Nov. |
 | K-19 | A kanāls shows once it has 1 Meklē card or 1 group (no "2 to open" gate). | Changed | → K-07 (hubs unlock at 2 people). Content itself is never hidden. |
 | K-29 | L2 is the root of the chat tree; L1 gets no chat "for now" ("cautious, currently against it"). | Confirmed | 9 Nov. |
 | K-39 | A hub is the town-square message board and overview for its tēma. | Confirmed | 9 Nov: "As we agreed before - this is a town square message board/overview". |
@@ -47,7 +47,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-21 | The groups in this hub. | Confirmed | 9 Nov. |
 | K-22 | The latest **public** announcements of those groups. Announcements are practical ("someone forgot their phone after our event"). | Confirmed | 9 Nov. |
 | K-23 | The latest public events of those groups. The hub has no events of its own. | Confirmed | 8-9 Nov. |
-| K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, separate from announcements. | Confirmed | 9 Nov. Building it as its own release: In progress (my proposal). |
+| K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, built in its own release **after hubs**; hubs launch with announcements and events. | Confirmed | 9 Nov. |
 | K-24b | A blog post's author chooses **public or members-only**. A public post shows in the hub feed as an excerpt with its group and member shown and linked; tapping it opens the full blog post page in that group. Public posts, events and announcements are visible to signed-out visitors (names included). | Confirmed | 9 Nov. |
 | K-24a | **Activity feed:** the hub page shows its groups' public announcements, events and blog posts as one merged live feed, organized and compact by period: "Šodien: 3 grupas izveidotas, 32 jauni biedri, 3 jauni raksti, 3 paziņojumi", then "Pagājušajā nedēļā", "Pagājušajā mēnesī". | Confirmed | 9 Nov: "a bit of both" (merged feed + activity numbers). Exact rows, what opens on tap: In progress. |
 | K-25 | The hub shows **two numbers**: followers and group members ("41 interesējas · 120 grupu biedri"). | Confirmed | 9 Nov. |
