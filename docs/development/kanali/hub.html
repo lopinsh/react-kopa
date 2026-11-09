@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <title>Kanāli: čata mezgls (hub)</title>
 </head>
-<body class="min-h-screen bg-background p-6 text-foreground">
-<!-- Plain mock, the Kanāli hub drawing (9 Nov; replaces board.html). Model: every Veids (L2) and sub-Veids has one chat hub; the Tēma (L1) has none. At a filter, the hub is ONE card, the FIRST card of the grid, sibling of CreateCard (card-note frame, solid line edge, bg-tint, filled round MessagesSquare, no sticker, no tear tab; phones: row variant). The hub unlocks at 2 people: "Mani interesē" is like a join request with an optional note. Tapping an open card shows the town-square view (?view=cats). Class strings are copied from: CreateCard.tsx (Round, card-note, row), GroupCard / GroupRow (via board.html), the R20 TitleSwitch (with a third item), chip-styles (CHIP / CHOSEN), ContactForm + Modal (the sheet) and the chat lines of board.html. Viewport prefixes are written as container queries (@3xl, @5xl). Anything with no existing pattern is marked "NEW:", my guesses "OPEN POINT:". -->
+<body class="min-h-screen font-sans bg-background p-6 text-foreground">
+<!-- Plain mock, the Kanāli hub drawing (9 Nov, redone against the live board: docs/handbook/design.md Page layouts A, Shape, Space and depth, Components). Model: every Veids (L2) and sub-Veids has one chat hub; the Tēma (L1) has none. There is no town-square page: a city is the Kur filter on the same view (H4b). At a filter, the hub is ONE cell of the group grid, the FIRST, the same size as a GroupCard (16 rem minimum, 24 rem high, 20 px gap); "Izveidot jaunu grupu" stays the LAST cell. Phones: the same two as rows inside the one divided box. Class strings are copied from the live DOM of /lv?category=games (header, CategoryDrawer, TitleSwitch, filter line, GroupCard, GroupRow, CreateCard, bottom bar) and ChatPanel (header, bubbles, day pill, composer). Viewport prefixes are written as container queries (@3xl = md, @5xl = lg). Anything with no existing pattern is marked "NEW:", open questions "OPEN POINT:". -->
 
 <h1 class="text-title mb-1">Kanāli: čata mezgls uz saraksta</h1>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Katram Veidam (L2) un apakšVeidam ir čata mezgls; Tēmai (L1) nav. Mezgls ir viena karte saraksta sākumā, blakus "Izveidot jaunu grupu". Tas atveras, kad interesējas 2 cilvēki ("Mani interesē"). Katrs ekrāns 375 un 1280 px platumā (ritini uz sāniem). Aizstāj board.html.</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Katram Veidam (L2) un apakšVeidam ir čata mezgls; Tēmai (L1) nav. Mezgls ir viena saraksta šūna, tikpat liela kā grupas karte, saraksta sākumā; "Izveidot jaunu grupu" ir pēdējā. Čats atveras, kad interesējas 2 cilvēki ("Mani interesē"). Pilsēta ir Kur filtrs tajā pašā skatā. Čatam blakus ir cilvēku saraksts. Katrs ekrāns 375 un 1280 px platumā (ritini uz sāniem).</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -20,20 +20,36 @@
     plus: '<path d="M12 5v14M5 12h14"/>',
     x: '<path d="M18 6 6 18M6 6l12 12"/>',
     game: '<rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4m-2-2v4"/><path d="M15 11h.01M18 13h.01"/>',
-    chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
     send: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
     smile: '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>',
     check: '<path d="M20 6 9 17l-5-5"/>',
     bell: '<path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>',
+    right: '<path d="m9 18 6-6-6-6"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    mail: '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    compass: '<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>',
+    news: '<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/>',
+    layers: '<rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>',
     users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
-    right: '<path d="m9 18 6-6-6-6"/>'
+    heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+    music: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+    trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+    book: '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/>',
+    palette: '<circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+    msgs: '<path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2"/><path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"/>',
+    lock: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+    cal: '<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+    dots: '<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>',
+    panel: '<path d="m15 18-6-6 6-6"/>',
+    down: '<path d="m6 9 6 6 6-6"/>',
+    scissors: '<circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>',
+    chatc: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>'
   };
 
-  /* ---------- class strings (copied) ---------- */
-  var CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press text-meta px-3 shrink-0 bg-surface weight-medium text-foreground';
-  var CHIP_MUTED = CHIP.replace('text-foreground', 'text-foreground-muted');
+  /* ---------- class strings (copied from the live board) ---------- */
+  var CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press text-meta px-3 shrink-0 bg-surface weight-medium hover:bg-tint text-foreground';
   var CHOSEN = 'relative inline-flex h-7 min-w-0 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press text-meta pl-3 tab-tint weight-strong text-foreground pr-1';
-  var QUIET = 'relative inline-flex h-7 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill px-3 text-meta text-foreground-muted border border-dashed border-border';
   var B_BASE = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap rounded-pill [&_svg]:size-4';
   var B_SIZE = { md: 'h-11 px-4 text-button @3xl:h-10', sm: 'h-8 px-4 text-button-sm' };
   var B_VAR = {
@@ -43,212 +59,240 @@
   };
   var btn = function (v, size, extra) { return [B_BASE, B_SIZE[size || 'md'], B_VAR[v], extra || ''].join(' '); };
   var IBTN = 'relative inline-flex shrink-0 items-center justify-center rounded-pill outline-none transition-colors size-11 text-foreground-muted hover:bg-tint hover:text-foreground';
+  var HBTN = 'relative grid size-10 shrink-0 place-items-center rounded-pill press text-foreground hover:bg-tint [&_svg]:size-5';
   var BADGE = 'inline-flex h-5 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill px-2 text-tag';
-  var BOX = 'rounded-2xl bg-surface shadow-card frame';
+  var FRAMEBOX = 'rounded-2xl bg-surface shadow-card frame';
+  var CARDBOX = 'rounded-2xl line bg-surface shadow-card';
   var ROW = 'relative flex min-h-[5.5rem] items-center gap-3 border-0 border-t border-dashed border-border py-3 first:border-t-0';
-  var tile = function (ic) { return '<span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(ic, 'size-6') + '</span>'; };
+  var tile = function (ic) { return '<span class="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-item cat-tile">' + ICO(ic, 'size-6') + '</span>'; };
   var dot = '<span aria-hidden="true" class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span>';
+  var live = '<span aria-hidden="true" class="size-2 shrink-0 rounded-full bg-role-live"></span>';
 
-  /* ---------- site header (as in the earlier drawings) ---------- */
+  /* ---------- header (live Header: z-50, h-header, brand left, search centre, Manas grupas, LV, bell, messages, avatar) ---------- */
   function head(out) {
-    var right = out ? '' : '<span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span>';
-    return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div><div class="ml-auto flex items-center gap-2">' + right + '</div></header>';
+    var brand = '<span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span>';
+    var searchBar = '<div class="order-3 mx-2 hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="relative flex w-full max-w-2xl"><div class="flex h-[38px] w-full items-center gap-2 rounded-pill bg-tint px-3 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklēt grupas, cilvēkus</div></div></div>';
+    var mine = '<nav class="order-2 hidden shrink-0 items-center gap-1 @3xl:flex @5xl:order-4"><span class="inline-grid size-10 place-items-center rounded-pill text-foreground-muted @5xl:inline-block @5xl:size-auto @5xl:px-3 @5xl:py-2 @5xl:text-body-sm"><span class="@5xl:hidden">' + ICO(P.users, 'size-5') + '</span><span class="hidden @5xl:inline">Manas grupas</span></span></nav>';
+    var lang = '<span class="grid h-10 place-items-center rounded-pill px-2 text-tag text-foreground @3xl:text-meta">LV</span>';
+    var right = out ? lang + '<span class="' + btn('primary', 'sm') + '">Ienākt</span>'
+      : lang + '<span class="' + HBTN + ' @3xl:hidden">' + ICO(P.search) + '</span><span class="' + HBTN + '">' + ICO(P.bell) + '</span><span class="' + HBTN + '">' + ICO(P.mail) + '<span class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-pill bg-primary px-1 text-tag text-primary-foreground ring-2 ring-surface">7</span></span><span class="' + HBTN + '"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">AD</span></span>';
+    return '<header class="sticky top-0 z-50 flex h-header items-center gap-0.5 border-b border-border bg-surface px-3 @3xl:gap-2 @3xl:px-gutter"><div class="order-1 flex min-h-10 shrink-0 items-center">' + brand + '</div>' + searchBar + mine + '<div class="order-5 ml-auto flex items-center gap-0.5 @3xl:gap-2">' + right + '</div></header>';
+  }
+  /* live bottom bar (phones): Atklāt, Jaunumi, round Es-button, Ziņas, Es. Fixed on the site; drawn at the end of the screen here. */
+  function bottomBar() {
+    var it = function (ic, label, on, badge) { return '<span class="relative flex h-full flex-1 flex-col items-center justify-center gap-0.5 text-meta ' + (on ? 'weight-strong text-foreground' : 'text-foreground-muted') + '"><span class="rounded-pill px-4 py-1 ' + (on ? 'bg-primary/16' : '') + '">' + ICO(ic, 'size-5') + '</span><span>' + label + '</span>' + (badge ? '<span class="absolute -top-1 left-[calc(50%+6px)] flex h-4 min-w-4 items-center justify-center rounded-pill bg-primary px-1 text-tag text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
+    return '<nav class="flex h-16 border-t border-border bg-surface @3xl:hidden">' + it(P.compass, 'Atklāt', true) + it(P.news, 'Jaunumi', false, 7) + '<span class="flex h-full flex-1 items-center justify-center"><span class="grid size-9 place-items-center rounded-full text-foreground ring-2 ring-border">' + ICO(P.plus, 'size-5') + '</span></span>' + it(P.mail, 'Ziņas') + it(P.user, 'Es') + '</nav>';
   }
 
-  /* ---------- Tēmas rail (CategoryDrawer + CategoryRow), desktop only ---------- */
+  /* ---------- Tēmas drawer (live CategoryDrawer: 260 px column, Tēmas + fold button, search, Visas, dashed rule, the 14 Tēmas), from 1024 ---------- */
+  var TEMAS = [['Ceļošana un daba', 8, 'travel', 'compass'], ['Dejas', 4, 'dancing', 'music'], ['Hobiji un aizraušanās', 6, 'hobbies', 'palette'], ['Kopiena un vide', 5, 'community', 'users'], ['Kustības un politika', 2, 'politics', 'users'], ['Mājdzīvnieki', 4, 'pets', 'heart'], ['Māksla un kultūra', 6, 'art', 'palette'], ['Mūzika', 5, 'music', 'music'], ['Reliģija un garīgums', 2, 'religion', 'heart'], ['Sociālās aktivitātes', 4, 'social', 'smile'], ['Spēles', 7, 'games', 'game'], ['Sports un fitness', 17, 'sports', 'trophy'], ['Vecāki un ģimene', 3, 'family', 'users'], ['Veselība un labsajūta', 6, 'wellbeing', 'heart'], ['Zinātne un izglītība', 5, 'education', 'book']];
   function rail() {
-    var rows = [['Spēles', 41, 'games'], ['Hobiji', 63, 'hobbies'], ['Sports', 52, 'sports'], ['Ģimene', 28, 'family'], ['Mūzika', 19, 'music']];
-    var li = rows.map(function (r) {
-      var cur = r[0] === 'Spēles';
-      return '<li><span style="--c:var(--cat-' + r[2] + ')" class="relative group/row flex min-h-[var(--list-row)] items-center gap-2 rounded-item px-2 text-body-sm text-foreground ' + (cur ? 'topic-chosen weight-strong' : '') + '">' + ICO(P.game, 'size-4 shrink-0 text-[var(--c)]') + '<span class="min-w-0 flex-1 truncate">' + r[0] + '</span><span class="text-meta text-foreground-muted tabular-nums">' + r[1] + '</span>' + (cur ? '<span aria-hidden="true" class="size-2 shrink-0 rounded-full bg-[var(--c)]"></span>' : '') + '</span></li>';
+    var ROWC = 'relative group/row flex items-center gap-2 rounded-item px-2 text-body-sm text-foreground transition-colors duration-quick hover:bg-tint min-h-[var(--list-row)]';
+    var li = '<li><span class="' + ROWC + '">' + ICO(P.layers, 'size-4 shrink-0') + '<span class="min-w-0 flex-1 truncate">Visas</span><span class="text-meta text-foreground-muted tabular-nums">84</span></span></li><li class="my-1 border-0 border-t border-dashed border-border mx-2"></li>' + TEMAS.map(function (r) {
+      var cur = r[2] === 'games';
+      return '<li><span style="--c:var(--cat-' + r[2] + ')" class="' + ROWC + (cur ? ' topic-chosen weight-strong' : '') + '">' + ICO(P[r[3]], 'size-4 shrink-0 text-[var(--c)]') + '<span class="min-w-0 flex-1 truncate">' + r[0] + '</span><span class="text-meta text-foreground-muted tabular-nums">' + r[1] + '</span>' + (cur ? '<span class="shrink-0 rounded-full bg-[var(--c)] size-2"></span>' : '') + '</span></li>';
     }).join('');
-    return '<aside class="hidden w-[calc(var(--spacing-gutter)+14.25rem)] shrink-0 flex-col border-r-[length:var(--line-width)] border-[color:var(--line-color)] bg-surface pl-[calc(var(--spacing-gutter)-0.5rem)] pr-[var(--list-pad)] pb-4 @5xl:flex"><div class="mt-4 flex h-10 items-baseline pl-2"><h2 class="text-section">Tēmas</h2></div><ul class="mb-1">' + li + '</ul></aside>';
+    var search = '<div class="mb-4 mt-3 flex h-9 items-center"><div class="flex h-8 w-full items-center gap-2 rounded-item px-2 text-foreground-muted">' + ICO(P.search, 'size-4') + '<span class="min-w-0 flex-1 text-body-sm">Meklēt tēmu</span></div></div>';
+    return '<aside class="hidden w-[calc(var(--spacing-gutter)+14.25rem)] shrink-0 flex-col self-stretch border-r-[length:var(--line-width)] border-[color:var(--line-color)] bg-surface pl-[calc(var(--spacing-gutter)-0.5rem)] pr-[var(--list-pad)] pb-4 @5xl:flex"><div class="mt-4 flex h-10 items-baseline justify-between gap-2 pl-2"><h2 class="text-section">Tēmas</h2><span class="grid size-7 shrink-0 place-items-center self-center rounded-pill ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)] text-foreground-muted">' + ICO(P.panel, 'size-4') + '</span></div>' + search + '<ul class="mb-1 list-none">' + li + '</ul></aside>';
   }
 
-  /* ---------- R20 heading, filter line, Veidi chips ---------- */
+  /* ---------- R20 heading (TitleSwitch), filter line ---------- */
   function titleSwitch(g, e) {
     var items = [['Grupas', g, true], ['Pasākumi', e, false]];
     return '<nav class="flex h-10 items-end gap-5 whitespace-nowrap">' + items.map(function (i) {
-      return '<span class="relative pb-2 text-title transition-colors ' + (i[2] ? 'weight-strong text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-6 after:bg-primary' : 'text-foreground-muted') + '">' + i[0] + '<span class="ml-1.5 text-meta weight-medium tabular-nums text-foreground-muted">' + i[1] + '</span></span>';
+      return '<span class="relative pb-2 text-title transition-colors duration-quick ' + (i[2] ? 'weight-strong text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-6 after:bg-primary' : 'text-foreground-muted') + '">' + i[0] + '<span class="ml-1.5 text-meta weight-medium tabular-nums text-foreground-muted">' + i[1] + '</span></span>';
     }).join('') + '</nav>';
   }
-  var x = '<span aria-hidden="true" class="grid size-5 shrink-0 place-items-center">' + ICO(P.x, 'size-3') + '</span>';
-  /* o.city: a chosen Kur chip; o.veidi: chosen Veidi names */
-  function filterLine(o) {
-    var kur = o.city ? '<span class="' + CHOSEN + '">' + ICO(P.pin, 'size-3 shrink-0') + o.city + x + '</span>' : '<span class="' + CHIP + '">' + ICO(P.pin, 'size-3 shrink-0') + 'Kur</span>';
-    var tema = '<span class="' + CHOSEN + '"><span aria-hidden="true" class="size-2 shrink-0 rounded-full bg-[var(--c)]"></span>Spēles' + x + '</span>';
-    var all = ['Šahs', 'Go', 'Kāršu spēles', 'Galda spēles'];
-    var chosen = o.veidi || [];
-    var chips = chosen.map(function (n) { return '<span class="' + CHOSEN + '"><span class="min-w-0 truncate">' + n + '</span>' + x + '</span>'; }).join('') +
-      all.filter(function (n) { return chosen.indexOf(n) < 0; }).map(function (n) { return '<span class="' + CHIP + '">' + n + '</span>'; }).join('') +
-      '<span class="' + CHIP_MUTED + '">Domino</span>' +
-      /* NEW: "+ Cits" ends the Veidi chips; it opens the existing "Ieteikt jaunu tēmu" sheet (CategorySuggest) with the Tēma preselected. */
-      '<span class="' + QUIET + '">' + ICO(P.plus, 'size-3') + 'Cits</span>';
-    return '<div class="mb-4 mt-3 h-9"><div class="flex h-full items-center gap-1.5 overflow-x-auto @3xl:overflow-visible">' + kur + tema + '<span aria-hidden="true" class="mx-0.5 h-4 w-px shrink-0 bg-border"></span>' + chips + '</div></div>';
-  }
-
-  /* NEW: Meklē rows. The GroupRow shape (text, meta) with a small "Es arī" button in place of the status tab; no faces. A card is written at city level and shows at every level above it, so its meta names Veids and city. */
-  function seekRow(text, meta, n, mine) {
-    var more = '<span aria-label="Ziņot" class="' + IBTN + ' -mr-2">' + ICO('<circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>', 'size-5') + '</span>';
-    var me = mine ? '<span class="' + btn('secondary', 'sm') + '">' + ICO(P.check, 'size-3.5') + 'Es arī <span class="tabular-nums">' + n + '</span></span>' : '<span class="' + btn('quiet', 'sm') + '">Es arī <span class="tabular-nums">' + n + '</span></span>';
-    return '<div class="' + ROW + '"><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + text + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">' + meta + '</span></span></span>' + me + more + '</div>';
-  }
-  var line = function (t, name, text, o) {
-    o = o || {};
-    var who = name ? '<span class="weight-strong ' + (o.me ? 'text-primary' : 'text-foreground') + '">' + name + '</span>' + (o.mod ? ' <span class="ml-1 ' + BADGE + ' bg-role-mod text-role-mod-ink align-middle">Mod</span>' : '') + ': ' : '';
-    return '<div class="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-2 py-0.5 text-body-sm"><time class="pt-0.5 text-meta tabular-nums text-foreground-muted">' + t + '</time><p class="min-w-0 break-words text-foreground">' + who + text + '</p></div>';
-  };
-  var sys = function (t, text) { return '<div class="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-x-2 py-0.5"><time class="pt-0.5 text-meta tabular-nums text-foreground-muted">' + t + '</time><p class="min-w-0 text-meta italic text-foreground-muted">' + text + '</p></div>'; };
-  var dayDiv = function (t) { return '<div class="my-2 flex items-center gap-3 text-meta text-foreground-muted"><span class="h-px flex-1 bg-border"></span>' + t + '<span class="h-px flex-1 bg-border"></span></div>'; };
-  var composer = '<div class="border-t border-border bg-surface p-4"><form class="flex items-center gap-2"><div class="relative flex shrink-0"><button type="button" aria-label="Emocijzīmes" class="' + IBTN + '">' + ICO(P.smile, 'size-5') + '</button></div><div class="block w-full rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted min-h-11 py-2 @3xl:min-h-10 flex-1">Raksti ziņu</div><button type="submit" aria-label="Sūtīt" class="' + btn('primary') + '">' + ICO(P.send) + '</button></form><div class="mt-1 flex items-start gap-2"><span class="ml-auto shrink-0 text-meta tabular-nums text-foreground-muted">0 / 500</span></div></div>';
-  /* GroupRow: topic line "Spēles · Veids", tab line "Pilsēta · N cilvēki" (muted). */
-  var rowOf = function (name, veids, city, n) {
-    return '<div class="' + ROW + '">' + tile(P.game) + '<span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">Spēles · ' + veids + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground"><span class="min-w-0 truncate text-foreground-muted">' + city + ' · ' + n + ' cilvēki</span></span></span></div>';
-  };
-  function card(o) {
-    var banner = '<div class="relative h-28 banner-tint"><span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--c)]">' + ICO(P.game, 'size-10') + '</span></div>';
-    var tag = '<div class="absolute inset-x-4 -bottom-3 z-[2] flex min-w-0 gap-1.5"><span class="flex min-w-0 max-w-[60%] items-center rounded-pill line px-3 py-1 text-tag weight-strong shadow-control sticker"><span class="truncate">' + o.tag + '</span></span><span class="flex min-w-0 items-center gap-1 rounded-pill line bg-surface px-2 py-1 text-tag weight-strong text-foreground shadow-control">' + ICO(P.pin, 'size-3.5 shrink-0 text-foreground-muted') + '<span class="truncate">' + o.city + '</span></span></div>';
-    return '<article class="relative flex h-80 flex-col rounded-2xl line bg-surface shadow-card"><div class="relative shrink-0">' + banner + tag + '</div><div class="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden px-5 pb-3 pt-6"><h3 class="line-clamp-2 text-item text-foreground">' + o.name + '</h3><p class="text-meta text-foreground-muted">' + o.meta + '</p></div></article>';
-  }
-
-  /* ================= hub.html: new parts ================= */
-  P.msgs = '<path d="M16 10a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 14.286V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2"/><path d="M20 9a2 2 0 0 1 2 2v10.286a.71.71 0 0 1-1.212.502l-2.202-2.202A2 2 0 0 0 17.172 19H10a2 2 0 0 1-2-2v-1"/>';
-  P.lock = '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>';
-  P.down = '<path d="m6 9 6 6 6-6"/>';
-  P.cal = '<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>';
-
-  /* NEW: the filled round of the hub (CreateCard's Round, but filled with the Tēma tone). */
-  var FILL = 'grid shrink-0 place-items-center rounded-full bg-[var(--c)] text-[var(--on-cat)]';
-  var more = function (n) { return n < 2 ? 'Vēl ' + (2 - n) + ', un atveras čats' : ''; };
-
-  /* NEW: three-part heading on the town-square view (R20 TitleSwitch with a third item, Čats first). */
+  /* NEW: a third item, Čats, first in the heading (the chat view of the same filters). Counts show from 3xl; on phones the three words need the width. */
   function titleSwitch3(active, c, g, e) {
     var items = [['Čats', c], ['Grupas', g], ['Pasākumi', e]];
     return '<nav class="flex h-10 items-end gap-3 whitespace-nowrap @3xl:gap-5">' + items.map(function (i) {
       var on = i[0] === active;
-      /* the counts show from 3xl; on phones the three words need the width */
-      return '<span class="relative pb-2 text-section transition-colors @3xl:text-title ' + (on ? 'weight-strong text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-6 after:bg-primary' : 'text-foreground-muted') + '">' + i[0] + '<span class="ml-1.5 hidden text-meta @3xl:inline weight-medium tabular-nums text-foreground-muted">' + i[1] + '</span></span>';
+      return '<span class="relative pb-2 text-section transition-colors duration-quick @3xl:text-title ' + (on ? 'weight-strong text-foreground after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-6 after:bg-primary' : 'text-foreground-muted') + '">' + i[0] + '<span class="ml-1.5 hidden text-meta @3xl:inline weight-medium tabular-nums text-foreground-muted">' + i[1] + '</span></span>';
     }).join('') + '</nav>';
   }
+  var x = '<span aria-hidden="true" class="grid size-5 shrink-0 place-items-center">' + ICO(P.x, 'size-3') + '</span>';
+  /* o.city: a chosen Kur chip; o.veidi: chosen Veidi names (live seed Veidi of Spēles) */
+  function filterLine(o) {
+    var kur = o.city ? '<span class="' + CHOSEN + '">' + ICO(P.pin, 'size-3 shrink-0') + o.city + x + '</span>' : '<span class="' + CHIP + ' max-w-40">' + ICO(P.pin, 'size-3 shrink-0') + 'Kur' + ICO(P.down, 'size-3 shrink-0') + '</span>';
+    var tema = '<span class="' + CHOSEN + '"><span aria-hidden="true" class="size-2 shrink-0 rounded-full bg-[var(--c)]"></span>Spēles' + x + '</span>';
+    var all = ['Galda spēles', 'Datorspēles', 'Bēgšanas istabas', 'Galda lomu spēles'];
+    var chosen = o.veidi || [];
+    var chips = chosen.map(function (n) { return '<span class="' + CHOSEN + '"><span class="min-w-0 truncate">' + n + '</span>' + x + '</span>'; }).join('') +
+      all.filter(function (n) { return chosen.indexOf(n) < 0; }).map(function (n) { return '<span class="' + CHIP + '">' + n + '</span>'; }).join('');
+    return '<div class="board-veil sticky top-2 z-20 mb-4 mt-3 h-9"><div class="flex h-full items-center gap-1.5 overflow-x-auto @3xl:overflow-visible">' + kur + tema + '<span aria-hidden="true" class="mx-0.5 h-4 w-px shrink-0 bg-border"></span>' + chips + '</div></div>';
+  }
 
-  /* NEW, grid variant: the hub card. First card of the grid, sibling of CreateCard (card-note frame), but a solid line edge, bg-tint, a filled round MessagesSquare, no sticker and no tear tab. Locked: the count, "Vēl 1, un atveras čats" and a Mani interesē button. Open: the count and the latest chat line (signed in only). */
+  /* ---------- Meklē rows (seeking notes), GroupRow shape ---------- */
+  function seekRow(text, meta, n) {
+    var more = '<span aria-label="Ziņot" class="' + IBTN + ' -mr-2">' + ICO(P.dots, 'size-5') + '</span>';
+    var me = '<span class="' + btn('quiet', 'sm') + '">Es arī <span class="tabular-nums">' + n + '</span></span>';
+    return '<div class="' + ROW + '"><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + text + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">' + meta + '</span></span></span>' + me + more + '</div>';
+  }
+  var SEEK = [['Meklēju partneri šaha partijām', 'Šahs · Jelgava · vēl 24 dienas', 3], ['Gribu iemācīties Go, kurš palīdzēs?', 'Go · Jelgava · vēl 11 dienas', 2]];
+  function seekSection(out) {
+    return '<section class="mt-8 max-w-page"><h2 class="text-section text-foreground">Meklē <span class="text-meta weight-medium tabular-nums text-foreground-muted">' + SEEK.length + '</span></h2><div class="mt-2">' + SEEK.map(function (c) { return seekRow(c[0], c[1], c[2]); }).join('') + '</div>' + (out ? '<p class="mt-2 text-meta text-foreground-muted">"Es arī" ved uz pierakstīšanos.</p>' : '<div class="mt-3"><span class="' + btn('secondary', 'sm') + '">' + ICO(P.plus, 'size-3.5') + 'Pastāsti, ko meklē</span></div>') + '</section>';
+  }
+
+  /* ---------- grid cells: GroupCard (copied), GroupRow, CreateCard ---------- */
+  var FACE_TONES = [40, 55, 30, 65];
+  var faces = function (n, size) {
+    var out = '';
+    for (var i = 0; i < n; i++) out += '<span class="' + size + ' shrink-0 rounded-full ring-2 ring-[color-mix(in_srgb,var(--c)_var(--tab-mix),var(--surface))] bg-[color-mix(in_srgb,var(--c)_' + FACE_TONES[i % 4] + '%,var(--surface))] ' + (i > 0 ? '-ml-1.5' : '') + '"></span>';
+    return '<span aria-hidden="true" class="flex shrink-0">' + out + '</span>';
+  };
+  /* GroupCard: 7:2 picture area (here the Tēma-colour area with the pattern and icon), Tēma pill + city pill on its edge, body (name, sub-categories, bold line, description), the tear-off (perforation, meeting, faces + members + contact). 24 rem high from 768. */
+  function card(o) {
+    var area = '<div class="relative h-[calc(100cqw*2/7)] overflow-hidden rounded-t-2xl band-tint glyph-pattern"><span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--c)]">' + ICO(P.game, 'size-11') + '</span></div>';
+    var tag = '<div class="absolute inset-x-4 -bottom-3 z-[2] flex min-w-0 gap-1.5"><span class="flex min-w-0 max-w-[60%] items-center rounded-pill line px-3 py-1 text-tag weight-strong shadow-control sticker"><span class="truncate">Spēles</span></span><span class="flex min-w-0 items-center gap-1 rounded-pill line bg-surface px-2 py-1 text-tag weight-strong text-foreground shadow-control">' + ICO(P.pin, 'size-3 shrink-0 text-foreground-muted') + '<span class="truncate">' + o.city + '</span></span></div>';
+    var body = '<div class="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden px-[var(--card-pad)] pb-3 pt-6"><h3 class="line-clamp-2 shrink-0 text-item text-foreground">' + o.name + '</h3><p class="flex shrink-0 gap-1.5 whitespace-nowrap text-meta text-foreground-muted"><span class="min-w-0 truncate">' + o.veids + '</span></p>' + (o.looking ? '<p class="line-clamp-2 shrink-0 text-meta weight-strong text-foreground">' + o.looking + '</p>' : '') + '<p class="min-h-0 line-clamp-3 text-meta text-foreground">' + o.tagline + '</p></div>';
+    var tear = '<div class="relative flex shrink-0 flex-col gap-2 rounded-b-2xl px-[var(--card-pad)] py-3 tab-tint text-foreground"><span class="perforation"></span><span class="absolute left-3 top-0 -translate-y-1/2 bg-surface px-1 text-foreground-muted">' + ICO(P.scissors, 'size-4') + '</span><div class="mt-1 flex items-start gap-2 text-meta">' + ICO(P.cal, 'size-4 shrink-0 text-foreground-muted') + '<span class="min-w-0"><span class="block line-clamp-2 weight-strong text-foreground">' + o.event[0] + '</span><span class="block text-foreground-muted">' + o.event[1] + '</span></span></div><div class="flex min-h-8 min-w-0 items-center gap-2 text-meta">' + faces(2, 'size-5') + '<span class="min-w-0 truncate text-foreground-muted">' + o.n + ' dalībnieki</span><span class="ml-auto grid size-8 shrink-0 place-items-center rounded-full border-[1.5px] border-dashed border-foreground-muted/60 text-foreground">' + ICO(P.chatc, 'size-4') + '</span></div></div>';
+    return '<article class="relative flex flex-col rounded-2xl card-note line bg-surface shadow-card @3xl:h-96"><div class="relative shrink-0 [container-type:inline-size]">' + area + tag + '</div>' + body + tear + '</article>';
+  }
+  /* GroupRow (phones): thumb tile, name, "Tēma · Veids", the tab line. */
+  var rowOf = function (g) {
+    return '<div class="' + ROW + '">' + tile(P.game) + '<span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + g.name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted">' + dot + '<span class="min-w-0 truncate">Spēles · ' + g.veids + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground"><span class="min-w-0 truncate text-foreground-muted">' + g.city + ' · ' + g.n + ' dalībnieki</span></span></span></div>';
+  };
+  /* CreateCard, copied (grid and row). Always the LAST cell. */
+  var Round = 'grid shrink-0 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground';
+  var createCard = '<article class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 size-9 ' + Round + '">' + ICO(P.plus) + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā tēmā</span></span></article>';
+  var createRow = '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(P.plus, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā tēmā</span></span><span class="size-7 ' + Round + '">' + ICO(P.plus) + '</span></div>';
+
+  /* ---------- the hub cell ---------- */
+  /* NEW: the filled round of the hub (CreateCard's Round, filled with the Tēma tone). */
+  var FILL = 'grid shrink-0 place-items-center rounded-full bg-[var(--c)] text-[var(--on-cat)]';
+  var more = function (n) { return 'Vēl ' + (2 - n) + ', un atveras čats'; };
+  /* NEW, grid: the cell is a CreateCard sibling (card-note, centred, stretches to the GroupCard height) with a solid line edge and bg-tint. Locked: count, "Vēl 1, un atveras čats", Mani interesē. Open: who is here now and the latest chat line (signed in only). */
   function hubCard(o) {
-    var b = '<span class="' + FILL + ' mb-1 size-9">' + ICO(P.msgs, 'size-4') + '</span><span class="text-item text-foreground">' + o.title + '</span><span class="text-meta text-foreground-muted">' + (o.sub ? o.sub + ' · ' : '') + '<span class="tabular-nums">' + o.n + '</span> interesējas</span>';
-    if (o.locked) b += '<span class="text-meta text-foreground-muted">' + more(o.n) + '</span><span class="mt-2 ' + btn('primary', 'sm') + '">' + ICO(P.bell, 'size-3.5') + 'Mani interesē</span>';
-    else if (o.latest) b += '<span class="mt-2 line-clamp-2 text-body-sm text-foreground-muted"><span class="weight-strong text-foreground">' + o.latest[0] + ':</span> ' + o.latest[1] + '</span>';
-    return '<article data-hub class="card-note flex min-h-24 flex-col rounded-2xl line bg-tint shadow-card text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5">' + b + '</span></article>';
+    var b = '<span class="' + FILL + ' mb-1 size-9">' + ICO(P.msgs) + '</span><span class="text-item text-foreground">' + o.title + '</span><span class="text-meta text-foreground-muted">' + (o.sub ? o.sub + ' · ' : '') + '<span class="tabular-nums">' + o.n + '</span> interesējas</span>';
+    if (o.locked) b += '<span class="text-meta text-foreground-muted">' + more(o.n) + '</span><span class="mt-3 ' + btn('primary', 'sm') + '">' + ICO(P.bell, 'size-3.5') + 'Mani interesē</span>';
+    else b += '<span class="mt-1 flex items-center gap-1.5 text-meta text-foreground">' + live + '<span class="tabular-nums weight-strong">' + o.here + '</span> šeit tagad</span>' + (o.latest ? '<span class="mt-2 block w-full rounded-2xl rounded-bl-none line bg-surface px-3 py-2 text-left text-body-sm text-foreground"><span class="mb-0.5 block text-tag text-foreground-muted">' + o.latest[0] + '</span><span class="line-clamp-2">' + o.latest[1] + '</span></span>' : '');
+    return '<article class="card-note flex min-h-24 flex-col rounded-2xl line bg-tint shadow-card text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-[var(--card-pad)] py-5">' + b + '</span></article>';
   }
-  /* NEW, phone variant: the CreateCard row shape, a filled rounded tile in the thumb's place. */
+  /* NEW, phones: the CreateCard row shape with a filled tile; a tinted band so it reads as the room, not a group. */
   function hubRow(o) {
-    var sub = '<span class="mt-0.5 block text-meta text-foreground-muted">' + (o.sub ? o.sub + ' · ' : '') + '<span class="tabular-nums">' + o.n + '</span> interesējas</span>' + (o.locked ? '<span class="block text-meta text-foreground-muted">' + more(o.n) + '</span>' : (o.latest ? '<span class="mt-0.5 block truncate text-meta text-foreground-muted"><span class="weight-strong text-foreground">' + o.latest[0] + ':</span> ' + o.latest[1] + '</span>' : ''));
+    var sub = '<span class="mt-0.5 block truncate text-meta text-foreground-muted">' + (o.sub ? o.sub + ' · ' : '') + '<span class="tabular-nums">' + o.n + '</span> interesējas' + (o.locked ? '' : ' · <span class="tabular-nums">' + o.here + '</span> šeit tagad') + '</span>' + (o.locked ? '<span class="block text-meta text-foreground-muted">' + more(o.n) + '</span>' : '');
     var end = o.locked ? '<span class="' + btn('primary', 'sm') + '">Mani interesē</span>' : ICO(P.right, 'size-4 shrink-0 text-foreground-muted');
-    return '<div data-hub class="relative mb-1 flex min-h-[5.5rem] items-center gap-3 rounded-item bg-tint px-3 py-3"><span class="' + FILL.replace('rounded-full', 'rounded-item') + ' size-14">' + ICO(P.msgs, 'size-6') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">' + o.title + '</span>' + sub + '</span>' + end + '</div>';
+    return '<div class="relative -mx-2 mt-2 flex min-h-[5.5rem] items-center gap-3 rounded-item bg-tint px-2 py-3"><span class="' + FILL.replace('rounded-full', 'rounded-item') + ' size-14">' + ICO(P.msgs, 'size-6') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">' + o.title + '</span>' + sub + '</span>' + end + '</div>';
   }
-  /* CreateCard, copied (grid and row). */
-  var createCard = '<article class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 grid size-9 shrink-0 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(P.plus, 'size-4') + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā tēmā</span></span></article>';
-  var createRow = '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(P.plus, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā tēmā</span></span><span class="grid size-7 shrink-0 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(P.plus, 'size-4') + '</span></div>';
 
-  var GROUPS = [['Jelgavas šaha vakari', 'Šahs', 'Jelgava', 18], ['Go sākuma līmenim', 'Go', 'Jelgava', 7], ['Šaha pulciņš bibliotēkā', 'Šahs', 'Jelgava', 11], ['Rīgas šaha klubs', 'Šahs', 'Rīga', 34], ['Galda spēļu vakars Rīgā', 'Galda spēles', 'Rīga', 22], ['Kauliņš: galda spēļu klubs', 'Galda spēles', 'Rīga', 14], ['Jelgavas spēļu vakari', 'Galda spēles', 'Jelgava', 9]];
-  function results2(o) {
-    var g = GROUPS.filter(function (r) { return o.veidi.indexOf(r[1]) >= 0 && (!o.city || r[2] === o.city); }).slice(0, 3);
-    var rows = '<div class="max-w-page @3xl:hidden">' + hubRow(o.hub) + createRow + g.map(function (r) { return rowOf(r[0], r[1], r[2], r[3]); }).join('') + '</div>';
-    var cells = '<div class="hidden gap-5 @3xl:grid @3xl:grid-cols-3">' + hubCard(o.hub) + createCard + g.map(function (r) { return card({ tag: r[1], city: r[2], name: r[0], meta: 'Spēles · ' + r[1] + ' · ' + r[3] + ' cilvēki' }); }).join('') + '</div>';
+  /* ---------- the board (hub first, create last) ---------- */
+  var GROUPS = [
+    { name: 'Jelgavas šaha vakari', veids: 'Šahs', city: 'Jelgava', n: 18, tagline: 'Šaha partijas katru ceturtdienu bibliotēkā, jauniem un pieredzējušiem.', looking: 'Meklējam partnerus turnīram', event: ['Šaha turnīrs', 'sest., 22. nov.'] },
+    { name: 'Go sākuma līmenim', veids: 'Go', city: 'Jelgava', n: 7, tagline: 'Mācāmies Go noteikumus no nulles, dēļi ir uz vietas.', event: ['Go vakars bibliotēkā', 'tr., 26. nov.'] },
+    { name: 'Rīgas šaha klubs', veids: 'Šahs', city: 'Rīga', n: 34, tagline: 'Klubs ar savām telpām Vecrīgā, katru nedēļu blitz vakars.', event: ['Blitz vakars', 'otrd., 11. nov.'] },
+    { name: 'Galda spēļu vakars Rīgā', veids: 'Galda spēles', city: 'Rīga', n: 22, tagline: 'Katru otro piektdienu nesam spēles un mācām cits citam.', looking: 'Meklējam vēl vienu galdu', event: ['Spēļu vakars', 'piekt., 14. nov.'] },
+    { name: 'Jelgavas spēļu vakari', veids: 'Galda spēles', city: 'Jelgava', n: 9, tagline: 'Neliela kompānija, spēlējam pie kāda mājās.', event: ['Spēļu vakars', 'sest., 15. nov.'] }
+  ];
+  function results(o) {
+    var g = GROUPS.filter(function (r) { return o.veidi.indexOf(r.veids) >= 0 || (o.veidi.indexOf('Galda spēles') >= 0); }).filter(function (r) { return !o.city || r.city === o.city; }).slice(0, o.count || 4);
+    var rows = '<div class="' + FRAMEBOX + ' px-4 @3xl:hidden">' + hubRow(o.hub) + g.map(rowOf).join('') + createRow + '</div>';
+    var cells = '<div class="hidden gap-[calc(1.25rem+var(--shadow-room))] @3xl:grid @3xl:auto-rows-fr @3xl:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">' + hubCard(o.hub) + g.map(card).join('') + createCard + '</div>';
     return rows + cells;
   }
-  /* The board: as in board.html, but without the town-square part; the hub is the first card/row of the results. */
-  function board2(o) {
-    var main = '<div class="min-w-0 flex-1 px-3 pb-12 pt-4 @3xl:px-gutter">' + titleSwitch(o.g, 3) + filterLine(o) + results2(o) + '</div>';
-    return head(o.out) + '<div class="flex min-h-full">' + rail() + main + '</div>';
+  /* The live page shell: drawer column, then "min-w-0 flex-1 px-gutter pb-20 pt-4"; phones get the bottom bar. */
+  function shell(out, inner) {
+    return head(out) + '<div class="flex min-h-full">' + rail() + '<div class="min-w-0 flex-1 px-gutter pb-6 pt-4 @3xl:pb-20">' + inner + '</div></div>' + (out ? '' : bottomBar());
+  }
+  function board(o) {
+    return shell(o.out, titleSwitch(o.g || 7, 3) + filterLine(o) + results(o));
   }
 
-  /* ---- H2: the Mani interesē sheet. The shape of ContactForm (Modal: title, text, Textarea with TextCounter, Atcelt + primary); phones: bottom sheet with grab bar, wide: centred dialog. NEW text; the note is optional, so the primary is never disabled. ---- */
+  /* ---------- H2: the Mani interesē sheet (ContactForm in Modal) ---------- */
   function sheet() {
     var ta = '<div class="block w-full resize-none rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted py-2 min-h-24">Piem.: meklēju partneri otrdienu vakariem</div>';
     var body = '<div aria-hidden="true" class="mx-auto mb-2 h-1 w-10 shrink-0 rounded-pill bg-border @3xl:hidden"></div><div class="mb-3 flex items-start justify-between gap-3"><h2 class="min-w-0 text-section text-foreground">Mani interesē: Galda spēles</h2><span class="' + IBTN + ' -mr-2 -mt-2">' + ICO(P.x, 'size-5') + '</span></div><div class="space-y-4"><p class="text-body-sm text-foreground">Kad būsi tu un vēl viens, atvērsies čats. Ja gribi, pastāsti, ko meklē (nav obligāti): piezīme paliek pie mezgla un kļūst par vienu no pirmajām čata ziņām, kad čats atvērsies.</p><div>' + ta + '<div class="mt-1 flex"><span class="ml-auto shrink-0 text-meta tabular-nums text-foreground-muted">0 / 500</span></div></div><div class="flex items-center justify-end gap-3 pt-1"><span class="' + btn('secondary') + '">Atcelt</span><span class="' + btn('primary') + '">' + ICO(P.bell) + 'Mani interesē</span></div></div>';
-    return '<div class="absolute inset-0 z-20 flex items-end justify-center bg-scrim @3xl:items-center"><div class="w-full rounded-t-2xl bg-surface p-4 shadow-card frame @3xl:max-w-md @3xl:rounded-2xl @3xl:p-6">' + body + '</div></div>';
+    return '<div class="absolute inset-0 z-[60] flex items-end justify-center bg-scrim @3xl:items-center"><div class="w-full rounded-t-2xl bg-surface p-4 shadow-dialog frame @3xl:max-w-md @3xl:rounded-2xl @3xl:p-6">' + body + '</div></div>';
   }
 
-  /* ---- Town-square view (card tapped): ?view=cats. ---- */
-  var ROOMS = [['Galda spēles', '', 41, false], ['Šahs', '', 24, false], ['Go', '', 17, false], ['Domino', '', 1, true], ['Galda spēles · Jelgava', '', 9, false]];
-  var roomMeta = function (r) { return r[3] ? ICO(P.lock, 'size-3 shrink-0') + '<span class="tabular-nums">' + r[2] + '</span> interesējas' : '<span class="tabular-nums">' + r[2] + '</span> interesējas'; };
-  /* NEW, wide: side list "Istabas". A hairline list of text rows in the rail's row shape (no tiles); the open room is topic-chosen; a locked room shows a lock and its count. */
-  function roomsList(cur) {
-    return '<section><h2 class="text-item weight-strong text-foreground">Istabas</h2><ul class="mt-1">' + ROOMS.map(function (r) {
-      var on = r[0] === cur;
-      return '<li class="border-t border-border first:border-t-0"><span class="flex min-h-[var(--list-row)] items-center gap-2 rounded-item px-2 py-1 text-body-sm ' + (on ? 'topic-chosen weight-strong text-foreground' : (r[3] ? 'text-foreground-muted' : 'text-foreground')) + '"><span class="min-w-0 flex-1 truncate">' + r[0] + '</span><span class="flex shrink-0 items-center gap-1 text-meta text-foreground-muted">' + roomMeta(r) + '</span></span></li>';
-    }).join('') + '</ul></section>';
-  }
-  /* NEW: Meklē rows for the side column and the phone fold: seekRow without the three-dots button, shorter. */
-  function seekSide(cards, out) {
-    var rows = cards.map(function (c, i) {
-      return seekRow(c[0], c[1], c[2], !out && i === 0 && false).replace('min-h-[5.5rem]', 'min-h-[4rem]').replace(/<span aria-label="Ziņot"[\s\S]*?<\/svg><\/span>/, '');
-    }).join('');
-    return rows;
-  }
-  var SEEK = [['Meklēju partneri šaha partijām', 'Šahs · Jelgava · vēl 24 dienas', 3], ['Gribu iemācīties Go, kurš palīdzēs?', 'Go · Jelgava · vēl 11 dienas', 2]];
-  function seekColumn(out) {
-    return '<section class="mt-6"><h2 class="text-item weight-strong text-foreground">Meklē <span class="text-meta weight-medium tabular-nums text-foreground-muted">' + SEEK.length + '</span></h2><div class="mt-1">' + seekSide(SEEK, out) + '</div>' + (out ? '<p class="mt-2 text-meta text-foreground-muted">Es arī ved uz pierakstīšanos.</p>' : '<div class="mt-3"><span class="' + btn('secondary', 'sm') + '">' + ICO(P.plus, 'size-3.5') + 'Pastāsti, ko meklē</span></div>') + '</section>';
-  }
-  /* NEW, phone: the room chip row (rooms of the chosen Veidi), one chip per room, the open one chosen; a locked room is muted with a lock. The Kur chip also picks the room. */
-  function roomChips(cur) {
-    return '<div class="mb-3 flex h-9 items-center gap-1.5 overflow-x-auto">' + ROOMS.map(function (r) {
-      if (r[0] === cur) return '<span class="' + CHOSEN.replace('pl-3', 'pl-2.5').replace('pr-1', 'pr-3') + '">' + ICO(P.msgs, 'size-3 shrink-0') + r[0] + '</span>';
-      return '<span class="' + (r[3] ? CHIP_MUTED : CHIP) + '">' + (r[3] ? ICO(P.lock, 'size-3 shrink-0') : '') + r[0] + '</span>';
-    }).join('') + '</div>';
-  }
-  /* NEW, phone: collapsible Meklē row (closed). */
-  var seekFold = '<div class="mb-3 flex min-h-11 items-center gap-2 rounded-item line bg-surface px-3"><span class="text-item weight-strong text-foreground">Meklē</span><span class="text-meta weight-medium tabular-nums text-foreground-muted">2</span><span class="ml-auto text-foreground-muted">' + ICO(P.down, 'size-4') + '</span></div>';
-
-  /* Chat: the log fills the main column; composer, or for a non-follower a Mani interesē button where the input was. */
+  /* ---------- chat (ChatPanel: header, bubbles, day pill, composer) + the people list ---------- */
+  var tag = function (t) { return ' <span class="ml-1 ' + BADGE + ' bg-role-mod text-role-mod-ink align-middle">' + t + '</span>'; };
+  var bub = function (t, name, text, o) {
+    o = o || {};
+    if (o.me) return '<div class="ml-auto mt-2 flex max-w-[75%] flex-col items-end"><div class="whitespace-pre-wrap break-words rounded-2xl rounded-br-none bg-primary px-3 py-2 text-body-sm text-primary-foreground">' + text + '<span class="float-right ml-3 mt-2 text-meta text-primary-foreground/80">' + t + '</span></div></div>';
+    return '<div class="mr-auto mt-2 flex max-w-[75%] flex-col items-start"><span class="mb-1 px-1 text-tag text-foreground-muted">' + name + (o.mod ? tag('Mod') : '') + '</span><div class="whitespace-pre-wrap break-words rounded-2xl rounded-bl-none line bg-surface-elevated px-3 py-2 text-body-sm text-foreground shadow-control">' + text + '<span class="float-right ml-3 mt-2 text-meta text-foreground-muted">' + t + '</span></div></div>';
+  };
+  var daypill = function (t) { return '<p class="my-2 self-center rounded-pill bg-surface-elevated px-3 py-1 text-meta text-foreground-muted">' + t + '</p>'; };
+  var sysline = function (t) { return '<p class="my-1 text-center text-meta text-foreground-muted">' + t + '</p>'; };
+  var composer = '<div class="border-t border-border bg-surface p-4"><form class="flex items-center gap-2"><span class="' + IBTN + '">' + ICO(P.smile, 'size-5') + '</span><div class="block w-full flex-1 rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted min-h-11 py-2 @3xl:min-h-10">Raksti ziņu</div><span class="' + btn('primary') + '">' + ICO(P.send) + '</span></form><div class="mt-1 flex items-start gap-2"><span class="ml-auto shrink-0 text-meta tabular-nums text-foreground-muted">0 / 500</span></div></div>';
   var footRead = '<div class="border-t border-border bg-surface p-4"><span class="' + btn('primary') + ' w-full">' + ICO(P.bell) + 'Mani interesē</span><p class="mt-2 text-center text-meta text-foreground-muted">Lasīt vari jau tagad, rakstīt var tie, kas interesējas.</p></div>';
-  var logFull = dayDiv('Vakar · svētd., 8. nov.') + sys('20:41', 'Čats atvērās. Pirmās ziņas ir piezīmes, ko abi atstāja, spiežot "Mani interesē".') + line('20:41', 'Mārtiņš', 'Meklēju partneri otrdienu vakariem.') + line('20:44', 'Ineta', 'Gribu iemācīties Go, kurš palīdzēs?', { mod: true }) + line('20:50', 'Anna', 'Vai Domino arī spēlējat?') + dayDiv('Šodien · pirmd., 9. nov.') + line('09:15', 'Kristaps', 'Turnīrs 22. novembrī, kurš nāk?', { mod: true }) + line('09:18', 'Mārtiņš', 'Rīgā vai Jelgavā?') + sys('09:30', 'Jelgavas šaha vakari izveidoja pasākumu') + line('10:02', 'Ineta', 'Jelgavā. Atnesīšu pulksteni.') + line('10:12', 'Tu', 'Esmu klāt, pierakstiet mani.', { me: true });
-  function chatFull(follows) {
-    return '<div class="flex h-[32rem] flex-col overflow-hidden ' + BOX + ' @3xl:h-[44rem]"><div class="min-h-0 flex-1 overflow-hidden px-4 py-2">' + logFull + '</div>' + (follows ? composer : footRead) + '</div>';
+  var LOG = daypill('Vakar · svētd., 8. nov.') + sysline('Čats atvērās. Pirmās ziņas ir piezīmes, ko abi atstāja, spiežot "Mani interesē".') + bub('20:41', 'Mārtiņš', 'Meklēju partneri otrdienu vakariem.') + bub('20:44', 'Ineta', 'Gribu iemācīties Go, kurš palīdzēs?', { mod: true }) + bub('20:50', 'Anna', 'Vai Domino arī spēlējat?') + daypill('Šodien · pirmd., 9. nov.') + bub('09:15', 'Kristaps', 'Turnīrs 22. novembrī, kurš nāk?', { mod: true }) + bub('09:18', 'Mārtiņš', 'Rīgā vai Jelgavā?') + bub('10:02', 'Ineta', 'Jelgavā. Atnesīšu pulksteni.', { mod: true }) + bub('10:12', 'Tu', 'Esmu klāt, pierakstiet mani.', { me: true });
+  var LOG_CITY = daypill('Šodien · pirmd., 9. nov.') + sysline('Čats atvērās. Pirmā ziņa ir piezīme, ko atstāja Ineta.') + bub('08:50', 'Ineta', 'Jelgavā meklēju šaha partneri.', { mod: true }) + bub('09:02', 'Dace', 'Es varu ceturtdienās.') + bub('09:30', 'Ineta', 'Lieliski, bibliotēkā 18:00.', { mod: true }) + bub('10:12', 'Tu', 'Atnākšu arī es.', { me: true });
+
+  /* NEW: the people list (mIRC nick list). Who is in the room: those here now first (green dot, the team marked Mod), then the rest who are interested, muted. Wide: a column inside the chat box; phones: the "N šeit tagad" row opens it as a sheet. */
+  function person(name, o) {
+    o = o || {};
+    var av = '<span class="relative grid size-6 shrink-0 place-items-center rounded-full line bg-tint text-tag text-foreground' + (o.here ? '' : ' opacity-60') + '">' + name.charAt(0) + (o.here ? '<span aria-hidden="true" class="absolute -bottom-0.5 -right-0.5 size-2 rounded-full bg-role-live ring-2 ring-surface"></span>' : '') + '</span>';
+    return '<li class="flex min-h-[var(--list-row)] items-center gap-2 rounded-item px-2 text-body-sm ' + (o.here ? (o.me ? 'weight-strong text-primary' : 'text-foreground') : 'text-foreground-muted') + '">' + av + '<span class="min-w-0 flex-1 truncate">' + name + '</span>' + (o.mod ? '<span class="' + BADGE + ' bg-role-mod text-role-mod-ink">Mod</span>' : '') + '</li>';
   }
-  function roomHead(name, sub) {
-    return '<div class="mb-3"><h1 class="text-section text-foreground">' + name + '</h1><p class="text-meta text-foreground-muted">' + sub + '</p></div>';
+  function peopleBody(p) {
+    var h = function (t, n) { return '<h3 class="px-2 text-item weight-strong text-foreground">' + t + ' <span class="text-meta weight-medium tabular-nums text-foreground-muted">' + n + '</span></h3>'; };
+    return h('Šeit tagad', p.here.length) + '<ul class="mt-1 list-none">' + p.here.map(function (r) { return person(r[0], { here: true, mod: r[1], me: r[2] }); }).join('') + '</ul><div class="mt-4">' + h('Interesējas', p.total - p.here.length) + '</div><ul class="mt-1 list-none">' + p.rest.map(function (r) { return person(r); }).join('') + '<li class="flex min-h-[var(--list-row)] items-center px-2 text-meta text-foreground-muted">Vēl <span class="mx-1 tabular-nums">' + (p.total - p.here.length - p.rest.length) + '</span> cilvēki</li></ul>';
+  }
+  function peopleCol(p) { return '<aside class="hidden w-60 shrink-0 overflow-hidden border-l border-border py-4 pr-2 @3xl:block">' + peopleBody(p) + '</aside>'; }
+  /* NEW, phones: the faces row under the chat header; it opens the people sheet. */
+  function hereRow(p) {
+    return '<div class="flex min-h-11 items-center gap-2 border-b border-border px-4 @3xl:hidden">' + faces(Math.min(p.here.length, 5), 'size-6') + '<span class="min-w-0 truncate text-meta text-foreground"><span class="tabular-nums weight-strong">' + p.here.length + '</span> šeit tagad</span>' + ICO(P.right, 'size-4 ml-auto shrink-0 text-foreground-muted') + '</div>';
+  }
+  var PEOPLE = { here: [['Mārtiņš'], ['Ineta', true], ['Anna'], ['Kristaps', true], ['Dace'], ['Tu', false, true]], total: 41, rest: ['Edgars', 'Jānis', 'Laima', 'Santa'] };
+  var PEOPLE_CITY = { here: [['Ineta', true], ['Dace'], ['Tu', false, true], ['Anna']], total: 9, rest: ['Edgars', 'Jānis', 'Laima'] };
+
+  /* ChatPanel header: round avatar (the hub's round), title, meta line. */
+  function chatHead(title, meta) {
+    return '<div class="z-10 flex items-center justify-between border-b border-border bg-surface p-4"><div class="flex min-w-0 items-center gap-3"><span class="' + FILL + ' size-8">' + ICO(P.msgs) + '</span><div class="min-w-0"><span class="block truncate weight-strong">' + title + '</span><span class="block truncate text-meta text-foreground-muted">' + meta + '</span></div></div></div>';
+  }
+  /* One box, one thing you act on: the chat with its people column. */
+  function chatBox(o) {
+    var p = o.city ? PEOPLE_CITY : PEOPLE;
+    var title = o.city ? 'Galda spēles · ' + o.city : 'Galda spēles';
+    var meta = (o.city ? '' : 'Šahs, Go · ') + p.total + ' interesējas · ' + p.here.length + ' šeit tagad';
+    var h = 'h-[34rem] @3xl:h-[40rem]';
+    if (o.out) {
+      return '<section class="flex h-80 flex-col overflow-hidden ' + CARDBOX + '">' + chatHead(title, meta) + '<div class="flex flex-1 flex-col items-center justify-center gap-3 p-6 text-center">' + ICO(P.lock, 'size-6 text-foreground-muted') + '<p class="text-body-sm text-foreground"><span class="tabular-nums weight-strong">' + p.here.length + '</span> šeit tagad, <span class="tabular-nums weight-strong">' + p.total + '</span> interesējas.</p><p class="text-meta text-foreground-muted">Čatu redz tie, kas ir ienākuši.</p><span class="' + btn('primary', 'sm') + '">Ienākt</span></div></section>';
+    }
+    return '<section class="flex overflow-hidden ' + CARDBOX + ' ' + h + '"><div class="flex min-w-0 flex-1 flex-col">' + chatHead(title, meta) + hereRow(p) + '<div class="flex min-h-0 flex-1 flex-col justify-end gap-0.5 overflow-hidden p-4">' + (o.city ? LOG_CITY : LOG) + '</div>' + (o.follows ? composer : footRead) + '</div>' + peopleCol(p) + '</section>';
+  }
+  /* NEW: the people sheet on phones (bottom sheet with grab bar, like the Mani interesē sheet). */
+  function peopleSheet(p) {
+    return '<div class="absolute inset-0 z-[60] flex items-end justify-center bg-scrim @3xl:hidden"><div class="max-h-[80%] w-full overflow-hidden rounded-t-2xl bg-surface p-4 shadow-dialog frame"><div aria-hidden="true" class="mx-auto mb-2 h-1 w-10 shrink-0 rounded-pill bg-border"></div><div class="mb-2 flex items-center justify-between"><h2 class="text-section text-foreground">Čatā</h2><span class="' + IBTN + ' -mr-2">' + ICO(P.x, 'size-5') + '</span></div>' + peopleBody(p) + '</div></div>';
   }
 
-  /* The Čats main view. o.follows: composer; else read-only; o.out: signed out. */
-  function squareView(o) {
-    var f = { veidi: ['Galda spēles'], city: o.city };
-    var fl = filterLine(f);
-    var tabs = titleSwitch3('Čats', 41, 12, 3);
-    var chatCol;
-    if (o.out) {
-      var lockBox = '<div class="grid gap-3 p-4 ' + BOX + '"><p class="flex items-center gap-2 text-body-sm text-foreground">' + ICO(P.lock, 'size-4 shrink-0 text-foreground-muted') + '<span><span class="tabular-nums weight-strong">6</span> šeit tagad, <span class="tabular-nums weight-strong">41</span> interesējas.</span></p><p class="text-meta text-foreground-muted">Čatu redz tie, kas ir ienākuši.</p><div><span class="' + btn('primary', 'sm') + '">Ienākt</span></div></div>';
-      var ev = '<section class="mt-6"><h2 class="text-item weight-strong text-foreground">Pasākumi</h2><div class="mt-1">' + [['22. nov', 'Šaha turnīrs Jelgavā', 'Šahs · Jelgava · 14 iet'], ['26. nov', 'Go vakars bibliotēkā', 'Go · Jelgava · 6 iet']].map(function (e) {
-        return '<div class="' + ROW.replace('min-h-[5.5rem]', 'min-h-[4rem]') + '"><span class="grid size-14 shrink-0 place-items-center rounded-item bg-tint text-meta weight-strong text-foreground">' + e[0] + '</span><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + e[1] + '</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">' + e[2] + '</span></span></div>';
-      }).join('') + '</div></section>';
-      chatCol = lockBox + seekColumn(true) + ev;
-      return head(true) + '<div class="flex min-h-full">' + rail() + '<div class="min-w-0 flex-1 px-3 pb-12 pt-4 @3xl:px-gutter">' + tabs + fl + roomChips('Galda spēles') + roomHead('Galda spēles', 'Šahs, Go · 41 interesējas · 6 šeit tagad') + '<div class="grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_20rem]"><div class="min-w-0">' + chatCol + '</div><div class="hidden border-l-[length:var(--line-width)] border-[color:var(--line-color)] pl-6 @3xl:block">' + roomsList('Galda spēles') + '</div></div></div></div>';
-    }
-    var side = roomsList('Galda spēles') + seekColumn(false);
-    return head(false) + '<div class="flex min-h-full">' + rail() + '<div class="min-w-0 flex-1 px-3 pb-6 pt-4 @3xl:px-gutter">' + tabs + fl + '<div class="@3xl:hidden">' + roomChips('Galda spēles') + seekFold + '</div>' + '<div class="grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_20rem]"><div class="min-w-0">' + roomHead('Galda spēles', 'Šahs, Go · 41 interesējas · 6 šeit tagad') + chatFull(o.follows) + '</div><div class="hidden border-l-[length:var(--line-width)] border-[color:var(--line-color)] pl-6 @3xl:block">' + side + '</div></div></div></div>';
+  /* The chat view: the same filters, the heading switch on Čats. o.city: Kur chosen; o.out: signed out. */
+  function chatView(o) {
+    var tabs = titleSwitch3('Čats', o.city ? 9 : 41, o.city ? 4 : 12, 3);
+    var out = o.out;
+    var events = '<section class="mt-8 max-w-page"><h2 class="text-section text-foreground">Pasākumi</h2><div class="mt-2">' + [['22. nov', 'Šaha turnīrs Jelgavā', 'Šahs · Jelgava · 14 iet'], ['26. nov', 'Go vakars bibliotēkā', 'Go · Jelgava · 6 iet']].map(function (e) {
+      return '<div class="' + ROW + '"><span class="grid size-14 shrink-0 place-items-center rounded-item bg-tint text-meta weight-strong text-foreground">' + e[0] + '</span><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + e[1] + '</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">' + e[2] + '</span></span></div>';
+    }).join('') + '</div></section>';
+    return shell(out, tabs + filterLine({ veidi: ['Galda spēles'], city: o.city }) + chatBox(o) + seekSection(out) + (out ? events : ''));
   }
 
   /* ---------- states ---------- */
   var hubLocked = { title: 'Galda spēles', n: 1, locked: true };
-  var hubOpen = { title: 'Galda spēles', sub: 'Šahs, Go', n: 41, locked: false, latest: ['Anna', 'Vai Domino arī spēlējat?'] };
+  var hubOpen = { title: 'Galda spēles', sub: 'Šahs, Go', n: 41, here: 6, locked: false, latest: ['Anna', 'Vai Domino arī spēlējat?'] };
   var hubCity = { title: 'Šahs · Jelgava', n: 1, locked: true };
 
   var screens = [
-    { id: '1', label: 'H1 Galda spēles: čats vēl slēgts', story: 'Filtrs: Spēles · Galda spēles. Katram Veidam ir čata mezgls; šeit to pagaidām interesē viens cilvēks, tāpēc čats ir slēgts. Mezgla karte ir saraksta pirmā karte, blakus "Izveidot jaunu grupu" (CreateCard: card-note rāmis, bet nepārtraukta līnija, bg-tint, aizpildīts apaļš MessagesSquare, bez uzlīmes un bez noraušanas cilpas). Telefonā tā pati rinda ar aizpildītu plātni. Tēmai (L1) mezgla nav.',
-      fn: function () { return board2({ g: 3, veidi: ['Galda spēles'], hub: hubLocked }); } },
-    { id: '2', label: 'H2 "Mani interesē" logs', story: 'Nospiež "Mani interesē": logs kā pieteikšanās grupā (ContactForm), piezīme nav obligāta, tāpēc "Mani interesē" nav izslēgts. Ar diviem cilvēkiem čats atveras. Piezīmes paliek pie mezgla un kļūst par pirmajām čata ziņām, kad tas atveras (skat. H3, H4).', h: 760,
-      fn: function () { return board2({ g: 3, veidi: ['Galda spēles'], hub: hubLocked }) + sheet(); } },
-    { id: '3', label: 'H3 Atvērts čats: Galda spēles', story: 'Atvērtā mezgla karte: virsraksts "Galda spēles", zem tā aktīvie apakšVeidi ("Šahs, Go · 41 interesējas") un pēdējā čata rinda (ar autora vārdu, tikai ienākušajiem). Kombinētu istabu nav. Visa karte ved uz pilsētas laukumu (?view=cats).',
-      fn: function () { return board2({ g: 3, veidi: ['Galda spēles'], hub: hubOpen }); } },
-    { id: '4', label: 'H4 Pilsētas laukums (karte nospiesta, ?view=cats)', story: 'Slēdzis "Čats | Grupas | Pasākumi" (R20 virsraksts ar trešo vienumu); čipi paliek. Kur čips izvēlas istabu. Istabas nosaukums ir lapas virsraksts. 1280: čats kolonnā pilnā augstumā, šaurā labā kolonna ar līniju sarakstiem "Istabas" (atvērta ir tonēta: pats Galda spēļu mezgls, tad apakšmezgli Šahs, Go, slēgtais "Domino · 1 interesējas", tad pilsētu istabas "Galda spēles · Jelgava"; čata pirmās rindas ir piezīmes) un "Meklē" (ar "Es arī"). 375: istabu čipu rinda virs čata, "Meklē 2" salokāma rinda. Bez lielo burtu zīmēm, bez plātnēm istabām.',
-      fn: function () { return squareView({ follows: true }); } },
-    { id: '5a', label: 'H5 Seko: var rakstīt', story: 'Interesējas: čata apakšā ir ievades lauks.',
-      fn: function () { return squareView({ follows: true }); } },
-    { id: '5b', label: 'H5 Neseko: tikai lasa', story: 'Ienācis, bet neinteresējas: log redz, bet apakšā nav izliekama ievades lauka; tā vietā poga "Mani interesē".',
-      fn: function () { return squareView({ follows: false }); } },
-    { id: '6', label: 'H6 Nepierakstījies', story: 'Redz Meklē (bez autoru vārdiem: kartītēm te to nav) un pasākumus; čats paslēpts (tikai skaitļi un "Ienākt"). "Es arī" ved uz pierakstīšanos.',
-      fn: function () { return squareView({ out: true }); } },
-    { id: '7', label: 'H7 Šahs · Jelgava: pilsētas istaba', story: 'Filtrs ar Kur = Jelgava dod pilsētas mezglu. OPEN POINT (2 cilvēku noteikums): arī pilsētas istaba atveras, kad tajā pilsētā interesējas 2 cilvēki; līdz tam karte ir slēgta un parāda "Vēl 1, un atveras čats", bet Šaha mezgls paliek pieejams čipā.',
-      fn: function () { return board2({ g: 3, veidi: ['Šahs'], city: 'Jelgava', hub: hubCity }); } }
+    { id: '1', label: 'H1 Galda spēles: čats vēl slēgts', story: 'Filtrs: Spēles · Galda spēles. Saraksta pirmā šūna ir mezgls, tikpat liela kā grupas karte (automātiskais režģis, 16 rem minimums, 24 rem augsts, 20 px atstarpe), "Izveidot jaunu grupu" ir pēdējā. Mezgls ir CreateCard radinieks: card-note, bet nepārtraukta līnija un bg-tint, aizpildīts apaļš čata simbols. Karte nav grupa: nav attēla, uzlīmes un noraušanas cilpas. Telefonā abas ir rindas vienā dalītā rāmī, mezgls ar tonētu joslu. Tēmai (L1) mezgla nav.',
+      fn: function () { return board({ veidi: ['Galda spēles'], hub: hubLocked, count: 4 }); } },
+    { id: '2', label: 'H2 "Mani interesē" logs', story: 'Nospiež "Mani interesē": logs kā pieteikšanās grupā (ContactForm), piezīme nav obligāta, tāpēc poga nav izslēgta. Ar diviem cilvēkiem čats atveras; piezīmes kļūst par pirmajām čata ziņām (H3, H4).', h: 800,
+      fn: function () { return board({ veidi: ['Galda spēles'], hub: hubLocked, count: 4 }) + sheet(); } },
+    { id: '3', label: 'H3 Atvērts čats: Galda spēles', story: 'Atvērtā mezgla šūna: virsraksts, aktīvie apakšVeidi ("Šahs, Go · 41 interesējas"), kas ir šeit tagad un pēdējā čata rinda (ar autora vārdu, tikai ienākušajiem). Kombinētu istabu nav. Visa šūna ved uz čata skatu (H4).',
+      fn: function () { return board({ veidi: ['Galda spēles'], hub: hubOpen, count: 4 }); } },
+    { id: '4', label: 'H4 Čata skats (šūna nospiesta)', story: 'Tie paši filtri, virsraksta slēdzis "Čats | Grupas | Pasākumi" (R20 slēdzis ar trešo vienumu). Čats ir viens rāmis (ChatPanel: galva, burbuļi, dienas josla, ievades josla) ar cilvēku sarakstu (kā mIRC niku saraksts): 1280 px labajā malā kolonna "Šeit tagad" (zaļš punkts, komanda ar Mod) un "Interesējas" (pelēki). 375 px: zem galvas rinda ar sejām "6 šeit tagad", kas atver sarakstu (H4c). Zem čata: "Meklē".',
+      fn: function () { return chatView({ follows: true }); } },
+    { id: '4b', label: 'H4b Galda spēles · Jelgava', story: 'Kur = Jelgava tajā pašā čata skatā: tas pats rāmis, virsraksts "Galda spēles · Jelgava", cilvēku saraksts un ziņas tikai pilsētai; saturs (Grupas, Pasākumi) arī filtrēts. OPEN POINT: kā ienākt šeit. Variants A: izvēlēties Kur čipu, kamēr ir čata skats. Variants B: ar Kur = Jelgava hub šūna kļūst par pilsētas mezglu (H7) un ved šeit. Abi var darboties kopā; nav izlemts, vai Veida mezgls (H3) un pilsētas mezgls abi paliek sarakstā.',
+      fn: function () { return chatView({ follows: true, city: 'Jelgava' }); } },
+    { id: '4c', label: 'H4c Cilvēku saraksts telefonā', story: '375 px: rinda "6 šeit tagad" atver lapu no apakšas (kā "Mani interesē" lapa): Šeit tagad, Interesējas. 1280 px cilvēku saraksts jau ir blakus čatam, tāpēc tur tas ir tas pats ekrāns kā H4.', h: 812,
+      fn: function () { return chatView({ follows: true }) + peopleSheet(PEOPLE); } },
+    { id: '5a', label: 'H5 Seko: var rakstīt', story: 'Interesējas: čata apakšā ir ievades lauks; cilvēku saraksts kā H4.',
+      fn: function () { return chatView({ follows: true }); } },
+    { id: '5b', label: 'H5 Neseko: tikai lasa', story: 'Ienācis, bet neinteresējas: ziņas redz un sarakstu redz, bet ievades lauka nav; tā vietā poga "Mani interesē".',
+      fn: function () { return chatView({ follows: false }); } },
+    { id: '6', label: 'H6 Nepierakstījies', story: 'Čats ir aizvērts (tikai skaitļi un "Ienākt"), cilvēku vārdu nav. Redz Meklē un pasākumus. "Es arī" ved uz pierakstīšanos.',
+      fn: function () { return chatView({ out: true }); } },
+    { id: '7', label: 'H7 Šahs · Jelgava: slēgts', story: 'Kur = Jelgava dod pilsētas mezglu. OPEN POINT (2 cilvēku noteikums): arī pilsētas čats atveras, kad tajā pilsētā interesējas 2 cilvēki; līdz tam šūna rāda "Vēl 1, un atveras čats", bet Šaha mezgls paliek pieejams čipā.',
+      fn: function () { return board({ veidi: ['Šahs'], city: 'Jelgava', hub: hubCity, count: 4 }); } }
   ];
 
   var stage = document.getElementById('stage');
@@ -263,6 +307,12 @@
       box.setAttribute('data-w', w);
       box.style.width = w + 'px';
       if (s.h) { box.style.height = s.h + 'px'; }
+      /* the type roles and the gutter are fluid by viewport width; a drawing box is not a viewport, so fix them to what 375 and 1280 give */
+      var fl = w === 375 ? { t: '1.625rem', s: '1.25rem', i: '1.0625rem', g: '1rem' } : { t: '2.2rem', s: '1.5rem', i: '1.16rem', g: '2rem' };
+      box.style.setProperty('--type-title-size', fl.t);
+      box.style.setProperty('--type-section-size', fl.s);
+      box.style.setProperty('--type-item-size', fl.i);
+      box.style.setProperty('--spacing-gutter', fl.g);
       box.style.setProperty('--c', 'var(--cat-games)');
       box.style.setProperty('--accent', 'var(--cat-games)');
       box.innerHTML = s.fn();
