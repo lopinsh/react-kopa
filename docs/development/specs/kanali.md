@@ -20,6 +20,11 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-10 | Each city has a city hub (Jelgava first): see what is happening locally, visit each other, discover groups, try one. | Confirmed | 9 Nov. Its page content: In progress. |
 | K-11 | Districts: one level (C2, Jelgava › Pārlielupe); no district rooms for now. | Confirmed | 9 Nov. Districts as a content filter only: In progress (my reading). |
 | K-12 | Several Veidi chosen on the board: content merges, no room for the combination. | Confirmed | 9 Nov; which hub card shows then: In progress. |
+| K-19 | A kanāls shows once it has 1 Meklē card or 1 group (no "2 to open" gate). | Changed | → K-07 (hubs unlock at 2 people). Content itself is never hidden. |
+| K-29 | L2 is the root of the chat tree; L1 gets no chat "for now" ("cautious, currently against it"). | Confirmed | 9 Nov. |
+| K-39 | A hub is the town-square message board and overview for its tēma. | Confirmed | 9 Nov: "As we agreed before - this is a town square message board/overview". |
+| K-43 | Multi-city kanāli later at L1 · L2 ("Spēles · Šahs"). | Changed | → K-05/K-06: hubs are nationwide from the start; cities are rooms (K-08). |
+| K-44 | Going live (domain, backups, legal pages, Jelgava promotion) is out of scope for now. | Confirmed | 9 Nov. |
 
 ### Board and hub card
 | Id | Feature | Status | Notes |
@@ -30,6 +35,10 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-16 | The hub card shows activity numbers, not chat lines. A locked hub shows something like "1 cilvēks vēlas šeit sākt grupu". | Confirmed | 9 Nov. Exact words: In progress. |
 | K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
 | K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Confirmed | 9 Nov, owner's words. |
+| K-18a | The optional note left with "Mani interesē" is a shout-out (K-26), a public note on the hub. | Confirmed | 9 Nov: "Those are public announcements. Like shout outs." |
+| K-18b | Notes become the first chat lines when the hub unlocks. | Changed | My idea, drawn without the owner's OK; replaced by K-18a. |
+| K-18c | Locked sub-veidi hubs listed inside the parent hub ("Go · 1 interesējas") as an invitation to be the second. | In progress | My proposal. |
+| K-18d | The board "town-square view" (`?view=cats`, switch "Čats \| Grupas \| Pasākumi"). | Changed | → K-05: the hub card opens the hub page. |
 
 ### Hub page content
 | Id | Feature | Status | Notes |
@@ -41,7 +50,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, separate from announcements. | Confirmed | 9 Nov. Building it as its own release: In progress (my proposal). |
 | K-25 | The number of members in the hub. | Confirmed | 9 Nov. Definition (followers + members of its groups): In progress. |
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
-| K-27 | "Es arī" and "Izveidot grupu ar viņiem" on shout-outs. | In progress | They came with Meklē cards; not re-decided for shout-outs. |
+| K-27 | "Es arī" and "Izveidot grupu ar viņiem" (wizard prefilled `?city=&tag=`, respondents invited) on shout-outs. | In progress | They came with Meklē cards (9 Nov); not re-decided for shout-outs. |
+| K-27a | Shout-out limits: about 30 days, max 3 active per person, a report action on each; the "Es arī" count seen only by the author. | In progress | Meklē-card rules of 8-9 Nov; not re-decided for shout-outs. |
 | K-28 | Layout of the hub page (sections, order, phone vs desktop). | In progress | The group-page sections list was rejected ("sounds wrong"). Content is K-20 to K-26 plus K-31. |
 
 ### Chat
@@ -55,7 +65,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-35 | The chat look: the site's bubbles (as in the latest drawing) or mIRC lines (as in the 9 Nov spec). | In progress | Asked, not answered. |
 | K-36 | Every group has a members-only chat. | Confirmed | 9 Nov. |
 | K-37 | Before a tēma has groups, interested people coordinate in the hub chat, then start a group and continue there privately. | Confirmed | 9 Nov. |
-| K-38 | Moderators: our site assigns them and sets room power levels (no Space inheritance). | Confirmed | 9 Nov. Who appoints them for which room: In progress. |
+| K-38 | Moderators: our site assigns them and sets room power levels (no Space inheritance). | Confirmed | 9 Nov. |
+| K-38a | Owners and admins of child groups apply to moderate; a site admin approves or declines and keeps more power. | Confirmed | 9 Nov ("moderators are back"). For which rooms (hub room, sub-veids rooms, city rooms): In progress. |
+| K-38b | The public hub room "for all visitors": readable signed out? | In progress | 9 Nov "public room for all visitors" vs K-41 "chat stays hidden" signed out. |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
@@ -72,6 +84,10 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-52 | Invites: from a group → the group page; from a hub → the hub page. | Confirmed | 9 Nov. |
 | K-53 | Site words: L1 "Tēma", L2 "Veids/Veidi". | In progress | I switched the spec to them; not confirmed. |
 | K-54 | One joining verb "Mani interesē"; the exit is "Vairs neinteresē". | Confirmed | 8 Nov. |
+| K-55 | "+ Cits" at the end of the Veidi chips opens the existing "Ieteikt jaunu tēmu" sheet (`CategorySuggest`); visible to admins only until approved. | Confirmed | 8 Nov. |
+| K-56 | The "Izveidot jaunu grupu" card gets a quiet "vai vienkārši pastāsti, ko meklē". | In progress | 9 Nov (C2), before shout-outs; may become "leave a shout-out". |
+| K-57 | Hub address (route) and the city hub's address. | In progress | Not discussed. |
+| K-58 | Joining a group does not remove you from the hub; hubs work in every city, no home city. | In progress | Defaults in the old spec, never discussed. |
 
 ### Pilot and stages
 | Id | Feature | Status | Notes |
