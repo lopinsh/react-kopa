@@ -59,7 +59,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
 | K-27 | Shout-outs are **plain post-it notes** on the board's wall ("If you are interested too, let me know. We could start a group together"). No "Es arī", no "Izveidot grupu ar viņiem". | Confirmed | 9 Nov: "Yes, plain notes. Announcements really are plain post-it notes." |
 | K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Confirmed | 9 Nov. |
-| K-28 | Layout of the hub page (sections, order, phone vs desktop). | In progress | The group-page sections list was rejected ("sounds wrong"). Content is K-20 to K-26 plus K-31. |
+| K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." Next: owner names the good parts, then one combined layout. |
 
 ### Chat
 | Id | Feature | Status | Notes |
@@ -104,7 +104,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 |---|---|---|---|
 | K-70 | Success is people meeting in person; Jelgava pilot through the city newspaper; seeding before the article. | Confirmed | 9 Nov. |
 | K-71 | Stages: K1 Matrix spike, K2 hubs without chat, K3 chat. | In progress | Set before the hub pages; to be restated. |
-| K-72 | Drawings: `channel.html`, `board.html` and the old hub states removed; `hub.html` redrawn from this ledger, open choices as A/B. | In progress | 9 Nov. | Going live (domain, backups, legal pages, Jelgava promotion) is out of scope for now. The goal is to get the site to the point where going live *can* be considered. The first real audience is planned to be Jelgava, reached through the city newspaper, so expect casual internet users.
+| K-72 | Drawings: old ones removed; `hub.html` (A/B) and `hub-c.html` (C) drawn from the ledger. | Confirmed | 9 Nov, c75c07f. |
 
 ## Context
 Most people won't create a group, but they still want to find others interested in the same thing nearby. A **hub** (internal word; users see only its title) is the town-square message board and overview of one Veids or sub-veids (K-05, K-39): the groups in it, what they made public, people's shout-outs, and a Discord-like chat with rooms for its sub-veidi and cities (K-31). City is a parallel dimension: a city room has two parents, the tēma hub and the city hub (K-08). Chat runs on self-hosted Matrix (K-30). The first audience is Jelgava, through the city newspaper (K-70).
