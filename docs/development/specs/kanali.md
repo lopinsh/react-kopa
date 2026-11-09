@@ -6,9 +6,9 @@
 Most people won't create a group, but they still want to find others interested in the same topic in the same place.
 
 A **kanāls** (internal word; users see no special name, only the title) is the **town square for the zoom level the board filter is set to.** It is in the spirit of mIRC public channels and Couchsurfing city groups.
-- **Three levels, one tree:** L1 › L1 · L2 › L1 · L2 · City, for example Spēles › Spēles · Šahs › Spēles · Šahs · Jelgava. A city only counts under a tēma path: "Jelgava" alone, or L1 · City, is the normal board with no town square and no chat.
+- **Three levels, one tree:** L1 › L1 · L2 › L1 · L2 · City, for example Spēles › Spēles · Šahs › Spēles · Šahs · Jelgava. A city only counts under a Veids path: "Jelgava" alone, or L1 · City, is the normal board with no town square and no chat.
 - **Content is derived** from the groups and Meklē cards below, like a filter. Nothing is stored per level except its chat room and the people who follow it.
-- **Every level has a chat room.** A city room is for local talk. An upper room (L1, L1 · L2) is for talk across cities or tēmas, and it lists its child rooms.
+- **Every level has a chat room.** A city room is for local talk. An upper room (L1, L1 · L2) is for talk across cities or Veidi, and it lists its child rooms.
 - **It lives on the board itself.** The URL is the board filter; there is no separate page. A town-square part (Meklē, Čats, Mani interesē) sits on the board for the current filter.
 - **No events of its own.** Every event is created by a group; a tournament between groups is an event of the organising group.
 - **Chat runs on Matrix,** self-hosted. People talk in our own chat panel on our site; the Matrix phone apps (Element X, FluffyChat) are optional. A Discord bridge is possible later; it is not planned.
@@ -19,21 +19,21 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 
    | Filter (`category`, `tags`, `city` in `lib/discovery-params.ts`) | Level | Chat |
    |---|---|---|
-   | L1, no tēma, no city | L1 square ("Spēles") | L1 room, lists its L2 rooms |
-   | L1 + one tēma, no city | L2 square ("Spēles · Šahs") | L2 room, lists its city rooms |
-   | L1 + one tēma + one city | city square ("Spēles · Šahs · Jelgava") | city room |
-   | L1 + city, no tēma; city alone; nothing | normal board | none |
-2. **Multi-tēma filter** (Šahs + Go, with or without a city): the content merges; there is **no combo room**. Čats lists the rooms of the selected tēmas (with a city: their city rooms). The same holds for several cities under one tēma.
+   | L1, no Veids, no city | L1 square ("Spēles") | L1 room, lists its L2 rooms |
+   | L1 + one Veids, no city | L2 square ("Spēles · Šahs") | L2 room, lists its city rooms |
+   | L1 + one Veids + one city | city square ("Spēles · Šahs · Jelgava") | city room |
+   | L1 + city, no Veids; city alone; nothing | normal board | none |
+2. **Multi-Veids filter** (Šahs + Go, with or without a city): the content merges; there is **no combo room**. Čats lists the rooms of the selected Veidi (with a city: their city rooms). The same holds for several cities under one Veids.
 3. **Matrix layout:** one Space per L1 and per L2, each with its own room; city rooms sit inside their L2 Space.
 4. **Group page:** the category line L1 / L2 / city becomes three links, each to its town square (board URL at that level). This replaces the single link "Hobiji · Fotogrāfija · Valmiera →".
 5. **Manas grupas** lists the town squares you follow ("Mani interesē"), under your groups.
 6. **Moderators are per room.** City rooms: owners and admins of a child group apply and a site admin approves (as before). Upper rooms: a site admin appoints moderators directly; there is no application.
-7. **Meklē cards are written at city level** (tēma + city) and show at every level above: a card in Spēles · Šahs · Jelgava also shows on Spēles · Šahs and on Spēles.
+7. **Meklē cards are written at city level** (Veids + city) and show at every level above: a card in Spēles · Šahs · Jelgava also shows on Spēles · Šahs and on Spēles.
 
 ## Open points, each with a default
 - **What "Mani interesē" follows upstairs.** Default: it follows that one level. You get its chat room in your list and, in the email digest, new Meklē cards and new groups anywhere below it. It does not follow the child rooms; each child room is its own tap.
 - **An upper level with an empty room.** Default: the town-square part shows whenever anything below has content (one Meklē card or one group), even if its own room has no messages yet. The empty room shows the list of child rooms and the composer. A level with nothing below shows no town-square part at all (no `EmptyState` on the board for it).
-- **How "Pastāsti, ko meklē" asks for tēma and city upstairs.** Default: the sheet prefills what the filter already says and asks only what is missing. On Spēles it asks for the tēma (chips of the L1's tēmas) and the city (`Select` of cities). On Spēles · Šahs it asks only for the city. With several tēmas or cities selected, it asks you to pick one of them. No preselected city: we don't guess one from the profile.
+- **How "Pastāsti, ko meklē" asks for Veids and city upstairs.** Default: the sheet prefills what the filter already says and asks only what is missing. On Spēles it asks for the Veids (chips of the Tēma's Veidi) and the city (`Select` of cities). On Spēles · Šahs it asks only for the city. With several Veidi or cities selected, it asks you to pick one of them. No preselected city: we don't guess one from the profile.
 - **Other filter pieces.** Defaults: an L3 tag (veids) counts as its L2 parent's level; a search text (`q`) hides the town-square part (a search is not a zoom); the part shows on both Grupas and Pasākumi views.
 
 ## Facts from the code survey that shape the design
@@ -47,13 +47,13 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 ## Order of work (project "Kanāli", stages K1-K3)
 1. **K1 Matrix spike** (no release, nothing pushed):
    - Run continuwuity locally or on the media box, with a throwaway server name.
-   - Create the **3-level tree** by script: L1 Space with its own room › L2 Space with its own room › city room inside the L2 Space (for example Spēles › Šahs › Jelgava, plus a second city and a second tēma so a room lists its children).
+   - Create the **3-level tree** by script: L1 Space with its own room › L2 Space with its own room › city room inside the L2 Space (for example Spēles › Šahs › Jelgava, plus a second city and a second Veids so a room lists its children).
    - Put a bare chat panel built on `matrix-js-sdk` into a localhost test page; it can switch between a room and its child rooms.
    - It answers five questions: how heavy the server is, how the chat feels, how accounts and login work, how moderation maps to power levels per room, and how a Space lists its child rooms to our panel.
 2. **K2 town square without chat:** on the board, for the current zoom level: Meklē cards and "Es arī", "Mani interesē", the three links on the group page, the followed squares in Manas grupas, wizard prefill, moderator applications (city rooms) and appointments (upper rooms), reports. The Čats part stays hidden; no placeholder where chat will go.
 3. **K3 Matrix chat:**
    - Accounts are created by our site. A Matrix room is created lazily for a `ChatRoom` the first time it is opened by a signed-in person; Spaces are created with it as needed.
-   - Our chat panel in the Čats part of the board (signed-in only). An upper room shows its child rooms; with several tēmas selected, Čats lists their rooms.
+   - Our chat panel in the Čats part of the board (signed-in only). An upper room shows its child rooms; with several Veidi selected, Čats lists their rooms.
    - Moderators mapped to room power levels per room; reports work on messages.
    - Rooms are not `world_readable` and allow no guest access, so signed-out visitors see counts only.
 
@@ -96,9 +96,9 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 
 ## Decided 8 Nov (owner), still standing
 - **Signed-out sees counts only:** no faces, no author names on Meklē cards, no chat.
-- **Fixed words** (revised 9 Nov: use the site's existing ones): L2 is "tēma" ("+ Cits" chip, "Ieteikt jaunu tēmu", "šajā tēmā"). "Jaunumi" is only for group announcements; the feed is "Pasākumi" plus "No grupām". One "Dalīties". One joining verb: "Mani interesē"; the exit is "Vairs neinteresē".
+- **Fixed words** (revised 9 Nov: use the site's existing ones): L1 is "Tēma", L2 is "Veids" / "Veidi" (messages `topicIndex`); "+ Cits" ends the Veidi chips and opens the existing sheet "Ieteikt jaunu tēmu" (kept, its wording is the site's), "šajā tēmā" stays on the create card. "Jaunumi" is only for group announcements; the feed is "Pasākumi" plus "No grupām". One "Dalīties". One joining verb: "Mani interesē"; the exit is "Vairs neinteresē".
 - **No public name** (9 Nov; "kanāls" is the internal word in code, spec and admin). User-facing: the title "Spēles · Šahs · Jelgava".
-- **Suggesting a tēma** reuses the `CategorySuggest` sheet; visible to admins only until approved (`CategoryStatus` `PENDING_REVIEW`).
+- **Suggesting a Tēma or Veids** reuses the `CategorySuggest` sheet; visible to admins only until approved (`CategoryStatus` `PENDING_REVIEW`).
 - **"Es arī" count** is visible only to the card's author. No "vēl N dienas".
 - Rejected: a Kanāli tab in the title switch and the kanāls as the first grid card (the chips are the navigation).
 - **Districts (apkaimes):** kanāli stay city-level; a district is an optional place detail (`District(citySlug, slug, nameLv, nameEn)` and a nullable `district` on Group, Event, ChannelSeek) with a filter chip in the city-level town square. District rooms only later.
@@ -118,7 +118,7 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 - District rooms under a city room.
 
 ## Ekrāni un lietotāju stāsti
-*Replaced 9 Nov:* the separate page in the group page frame with the tabs Sākums, Čats, Pasākumi, Grupas, Cilvēki, and the drawing "Kanāls" (`docs/development/kanali/channel.html`). Kept as history; new drawings of the board's town-square part come with K2's spec. What carries over:
+*Main drawing (9 Nov): `docs/development/kanali/board.html` (town square on the board at each level, member, signed out, group head). `channel.html` is kept as history.* *Replaced 9 Nov:* the separate page in the group page frame with the tabs Sākums, Čats, Pasākumi, Grupas, Cilvēki, and the drawing "Kanāls" (`docs/development/kanali/channel.html`). Kept as history; new drawings of the board's town-square part come with K2's spec. What carries over:
 - Meklē board as hairline rows ("Es arī", "…" menu with Ziņot); the author's row after "Es arī" shows "2 atsaucās" and "Izveidot grupu" (no in-page notification card; the bell does it).
 - Čats in the chat look of Discord/mIRC (left-aligned lines, no bubbles), day dividers, composer at the bottom; hidden in K2.
 - A visit never makes you a member; every step in is a tap.
@@ -129,14 +129,14 @@ A **kanāls** (internal word; users see no special name, only the title) is the 
 - *URL `/[l1]/kanals/[l2]/[city]`: replaced 9 Nov*; the URL is the board filter, e.g. `/lv?category=speles&tags=sahs&city=jelgava`. Sidebar unchanged.
 - *C1 Josla: replaced 9 Nov* by the town-square part between the chips and the grid. Title switch stays "Grupas · Pasākumi".
 - **C2 Izveides kartīte** (kept). "Izveidot jaunu grupu" (šajā tēmā) gets a quiet second action "vai vienkārši pastāsti, ko meklē".
-- **C3 Cits** (kept). Tēmu chips end with a quiet "+ Cits" that opens the `CategorySuggest` sheet ("Ieteikt jaunu tēmu").
+- **C3 Cits** (kept). Veidi chips end with a quiet "+ Cits" that opens the `CategorySuggest` sheet ("Ieteikt jaunu tēmu").
 - **C4 Grupas lapa** (restated 9 Nov). The category line L1 / L2 / city is three links, each to its town square.
 
 ## Verification (when built)
 - Typecheck, eslint on changed files, `i18n:check`, `ui:check` and the build.
 - In the browser, with users A, B and C in lv and en at 360-1920 px:
   1. A posts a Meklē card on Spēles · Šahs · Jelgava; it shows there, on Spēles · Šahs and on Spēles. Spēles · Jelgava and Jelgava alone show the normal board.
-  2. On Spēles, "Pastāsti, ko meklē" asks for tēma and city; on Spēles · Šahs only for the city.
+  2. On Spēles, "Pastāsti, ko meklē" asks for Veids and city; on Spēles · Šahs only for the city.
   3. B taps "Es arī"; A is notified, taps "Izveidot grupu ar viņiem" and the wizard opens prefilled.
   4. Šahs + Go merges the cards; no combo room is created.
   5. A fourth active card is refused; a report reaches the admin queue.

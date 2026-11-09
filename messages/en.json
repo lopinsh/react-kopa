@@ -838,8 +838,8 @@
       "buildPlanEmptyHint": "The next release plan will appear here once it is written.",
       "planTab": "Plan",
       "planDrawings": {
-        "channel": "Channel page",
-        "board": "Entry from the list"
+        "channel": "Channel page (replaced)",
+        "board": "Town square on the board"
       }
     },
     "handbook": {

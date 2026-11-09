@@ -838,8 +838,8 @@
       "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts.",
       "planTab": "Plāns",
       "planDrawings": {
-        "channel": "Kanāla lapa",
-        "board": "Ieeja no saraksta"
+        "channel": "Kanāla lapa (aizstāta)",
+        "board": "Pilsētas laukums uz saraksta"
       }
     },
     "handbook": {
