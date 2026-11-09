@@ -1,6 +1,84 @@
 # Kanāli: a town square for each zoom level of the board
 
-> Status 9 Nov 2026: **"Decided 9 Nov, zoom levels (owner)" replaces the separate per-city page.** Older parts that conflict are kept for history and marked *replaced 9 Nov*. The rest is still a draft. Going live (domain, backups, legal pages, Jelgava promotion) is out of scope for now. The goal is to get the site to the point where going live *can* be considered. The first real audience is planned to be Jelgava, reached through the city newspaper, so expect casual internet users.
+> Status 9 Nov 2026: **the Feature ledger below is the source of truth.** Every section after it is history and draft (the zoom-level model in "Context" and "Decided 9 Nov, zoom levels" is *Changed*, see the ledger). Briefs, drawings and questions point at a ledger id.
+
+## Feature ledger
+Statuses: **Confirmed** (owner decided), **In progress** (still open, or my proposal the owner has not answered), **Changed** (owner changed their mind; the row names what replaced it). Updated during every conversation, not at the end.
+
+### Model
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-01 | No public name; the page shows its title. | Confirmed | 8-9 Nov. The internal word (kanāls or hub) is In progress. |
+| K-02 | Separate per-city page L1 · L2 · City with 5 tabs (`channel.html`). | Changed | → K-05. |
+| K-03 | Town square on the board, following the filter's zoom level (`board.html`). | Changed | → K-05. |
+| K-04 | A chat room at every level, L1 included. | Changed | → K-06: L1 has no hub and no hub card, "for now". |
+| K-05 | **A hub is its own page** for one Veids (L2) or sub-veids (L3), built in the group-page frame. The board shows only the hub card, which links to it. Hub content never appears on the board. | Confirmed | 9 Nov: "Hub chats reside inside the hub pages, that are created similarly to group pages." |
+| K-06 | Hubs are created automatically with their L2/L3 tēma and never close. | Confirmed | 9 Nov. |
+| K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Confirmed | 9 Nov. |
+| K-08 | **City is a parallel dimension.** A city room ("Šahs · Jelgava") is one room with two parents: the tēma hub and the city hub (Matrix Spaces, `m.space.child` from both). | Confirmed | 9 Nov. |
+| K-09 | A city room exists potentially for every hub × city, but is created only on real user activity. | Confirmed | 9 Nov. Whether it also needs 2 people: In progress. |
+| K-10 | Each city has a city hub (Jelgava first): see what is happening locally, visit each other, discover groups, try one. | Confirmed | 9 Nov. Its page content: In progress. |
+| K-11 | Districts: one level (C2, Jelgava › Pārlielupe); no district rooms for now. | Confirmed | 9 Nov. Districts as a content filter only: In progress (my reading). |
+| K-12 | Several Veidi chosen on the board: content merges, no room for the combination. | Confirmed | 9 Nov; which hub card shows then: In progress. |
+
+### Board and hub card
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-13 | The hub card is the **first** card in the grid; "Izveidot jaunu grupu" stays the **last**. | Confirmed | 9 Nov. |
+| K-14 | One hub card per filter; sub-veidi hubs are reached inside the hub. | In progress | My proposal, not answered. |
+| K-15 | The hub card is the size of a group card, but styled differently. | Confirmed | 9 Nov. |
+| K-16 | The hub card shows activity numbers, not chat lines. A locked hub shows something like "1 cilvēks vēlas šeit sākt grupu". | Confirmed | 9 Nov. Exact words: In progress. |
+| K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
+| K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Confirmed | 9 Nov, owner's words. |
+
+### Hub page content
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-20 | Sub-veidi (L3) of this hub. | Confirmed | 9 Nov. |
+| K-21 | The groups in this hub. | Confirmed | 9 Nov. |
+| K-22 | The latest **public** announcements of those groups. Announcements are practical ("someone forgot their phone after our event"). | Confirmed | 9 Nov. |
+| K-23 | The latest public events of those groups. The hub has no events of its own. | Confirmed | 8-9 Nov. |
+| K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, separate from announcements. | Confirmed | 9 Nov. Building it as its own release: In progress (my proposal). |
+| K-25 | The number of members in the hub. | Confirmed | 9 Nov. Definition (followers + members of its groups): In progress. |
+| K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
+| K-27 | "Es arī" and "Izveidot grupu ar viņiem" on shout-outs. | In progress | They came with Meklē cards; not re-decided for shout-outs. |
+| K-28 | Layout of the hub page (sections, order, phone vs desktop). | In progress | The group-page sections list was rejected ("sounds wrong"). Content is K-20 to K-26 plus K-31. |
+
+### Chat
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-30 | Matrix, self-hosted, in our own chat panel; Element/FluffyChat optional. | Confirmed | 8-9 Nov. |
+| K-31 | **Chat section built like Discord:** a public room for the hub, a room per sub-veids (L3), city rooms; the user moves between the public child rooms from a room list. | Confirmed | 9 Nov. |
+| K-32 | No merged chat: a parent has its own room and lists its children (like an mIRC channel list). | Confirmed | 9 Nov. |
+| K-33 | Chat is read-only until "Mani interesē". | Confirmed | 9 Nov. |
+| K-34 | The chat shows the people list: who is in the room and who is online now. | Confirmed | 9 Nov. |
+| K-35 | The chat look: the site's bubbles (as in the latest drawing) or mIRC lines (as in the 9 Nov spec). | In progress | Asked, not answered. |
+| K-36 | Every group has a members-only chat. | Confirmed | 9 Nov. |
+| K-37 | Before a tēma has groups, interested people coordinate in the hub chat, then start a group and continue there privately. | Confirmed | 9 Nov. |
+| K-38 | Moderators: our site assigns them and sets room power levels (no Space inheritance). | Confirmed | 9 Nov. Who appoints them for which room: In progress. |
+
+### Visibility and safety
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-40 | Signed-out visitors see counts only. | Changed | → K-41. |
+| K-41 | Signed-out visitors read the shout-outs (no author names) and events; the chat stays hidden; actions lead to sign-in and back. | Confirmed | 9 Nov ("Read Meklē + events"). |
+| K-42 | A report action on every chat line; private messages only through a shared group. | In progress | My proposal. |
+
+### Entry points and words
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-50 | Group page: the category line's L1 / L2 / city parts link to their hubs. | Confirmed | 9 Nov. |
+| K-51 | Manas grupas lists the hubs you follow. | Confirmed | 9 Nov. |
+| K-52 | Invites: from a group → the group page; from a hub → the hub page. | Confirmed | 9 Nov. |
+| K-53 | Site words: L1 "Tēma", L2 "Veids/Veidi". | In progress | I switched the spec to them; not confirmed. |
+| K-54 | One joining verb "Mani interesē"; the exit is "Vairs neinteresē". | Confirmed | 8 Nov. |
+
+### Pilot and stages
+| Id | Feature | Status | Notes |
+|---|---|---|---|
+| K-70 | Success is people meeting in person; Jelgava pilot through the city newspaper; seeding before the article. | Confirmed | 9 Nov. |
+| K-71 | Stages: K1 Matrix spike, K2 hubs without chat, K3 chat. | In progress | Set before the hub pages; to be restated. |
+| K-72 | `hub.html` states H4-H7 put hub content on the board. | Changed | To redraw as a hub page (K-05) once K-28 is settled. | Going live (domain, backups, legal pages, Jelgava promotion) is out of scope for now. The goal is to get the site to the point where going live *can* be considered. The first real audience is planned to be Jelgava, reached through the city newspaper, so expect casual internet users.
 
 ## Context
 Most people won't create a group, but they still want to find others interested in the same topic in the same place.
