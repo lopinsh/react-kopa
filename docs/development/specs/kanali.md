@@ -13,7 +13,7 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 - **Chat runs on Matrix,** self-hosted. We don't build our own chat engine and don't depend on an outside service.
   - People talk on our site, in our own chat panel; the Matrix phone apps (Element X, FluffyChat) are optional.
   - A Discord bridge is possible later; it is not planned.
-- The page uses the **group page frame** (head tile with picture, side menu), with the tabs Sākums, Saruna, Pasākumi, Grupas, Cilvēki.
+- The page uses the **group page frame** (compact head tile, side menu, live-chat aside), with the tabs Sākums, Čats, Pasākumi, Grupas, Cilvēki.
 
 ## Facts from the code survey that shape the design
 - `Group.categoryId` must be L1 (`taxonomy.service.ts:712`). L2 reaches a group only through `Group.tags`.
@@ -28,9 +28,9 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
    - Create one L1 Space > L2 Space > city room by script.
    - Put a bare chat panel built on `matrix-js-sdk` into a localhost test page.
    - It answers four questions: how heavy the server is, how the chat feels, how accounts and login work, and how moderation maps.
-2. **K2 komūna without chat:** Meklē cards and "Es arī", the page and its tabs (the Saruna tab stays hidden), the one-line bar, wizard prefill, moderator applications, reports. No placeholder where chat will go.
+2. **K2 komūna without chat:** Meklē cards and "Es arī", the page and its tabs (the Čats tab stays hidden), the one-line bar, wizard prefill, moderator applications, reports. No placeholder where chat will go.
 3. **K3 Matrix chat:**
-   - Accounts are created by our site; a room for each komūna; our chat panel in the Saruna tab (members only).
+   - Accounts are created by our site; a room for each komūna; our chat panel in the Čats tab (members only).
    - Moderators mapped to room power levels; reports work on messages.
    - Rooms are not `world_readable` and allow no guest access, so signed-out visitors see counts only.
 
@@ -85,15 +85,15 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 7. **Seeding** (kept). Before the article, the owner and 2-3 Jelgava organisers each start a real group with one dated event. Article topics: šahs un galda spēles, pastaigas/nūjošana, fotogrāfija, koris, skriešana, jaunie vecāki. The article links to the board filtered to Jelgava.
 
 ## Ekrāni un lietotāju stāsti
-Drawing "Komūna" (`kanali/channel.html`): one full page in the group page frame (head with picture: "Šahs Jelgavā", "Komūna · 14 cilvēki", Mani interesē / Vairs neinteresē), each tab drawn once in member view, then three short states. Rule: a visit never makes you a member; every step in is a tap.
-- **A1 Sākums.** The Meklē board (cards, "Es arī", report, the 3-card limit) and the next group events.
-- **A2 Saruna.** Chat for members only, moderators marked; the `ChatPanel` look. Hidden in K2.
-- **A3 Pasākumi.** The child groups' public events; a tournament between groups is the organiser group's event.
-- **A4 Grupas.** The groups in this tēma and city, and "Izveidot grupu".
-- **A5 Cilvēki.** Members with their group, moderators, and how to apply to moderate.
-- **B1 Nepierakstījies.** Counts only: no names on cards, no chat. Only action: "Mani interesē".
-- **B2 Tukša komūna.** Reached by a link; first-card prompt "Pastāsti, ko meklē", "Mani interesē" as the lighter step. Lists hide such pages.
-- **B3 Tava kartīte pēc "Es arī".** Notification and "Izveidot grupu ar viņiem" (wizard prefilled, respondents invited).
+Drawing "Komūna" (`kanali/channel.html`): the group page frame as built (compact `GroupHead` tile, ☰ drawer on phones, `FrameColumns` with the pages menu and a live-chat aside on desktop), every element copied from the real component. Each screen at 375 and 1280 px, member view unless noted. Rule: a visit never makes you a member; every step in is a tap. Chat is a tab named "Čats", in the chat look of Discord/mIRC (left-aligned lines, no bubbles).
+- **Sākums.** Meklē board as hairline rows ("Es arī", "…" menu with Ziņot), live strip (members only), next events. Phone: tile, tabs, three rows above the fold.
+- **Čats.** Log with day dividers and system lines, composer pinned at the bottom; "Šeit tagad" faces row on phones, aside on desktop. Hidden in K2.
+- **Pasākumi.** The child groups' public events (`EventDayList`); a tournament between groups is the organiser group's event.
+- **Grupas.** The groups in this tēma and city (`GroupRow` on phones, `GroupCard` from 768) and "Izveidot grupu".
+- **Cilvēki.** Members with their group (`MemberRow`), moderators (`RoleTag`), and the "Pieteikties moderēt" action.
+- **Nepierakstījies.** Counts only: no names, no Čats tab. Only action: "Mani interesē".
+- **Tukša komūna.** `EmptyState` with one action "Pastāsti, ko meklē". Lists hide such pages.
+- **Autora Meklē rinda pēc "Es arī".** "2 atsaucās" and "Izveidot grupu" (wizard prefilled, respondents invited) on the row; no in-page notification card (the bell does it).
 
 ## Ieeja no esošās struktūras
 URL: `/[l1]/kanals/[l2]/[city]`, e.g. `/lv/hobiji/kanals/fotografija/jelgava`. Sidebar unchanged. Drawing "Ieeja no saraksta" (`kanali/board.html`).
