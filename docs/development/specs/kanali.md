@@ -8,17 +8,18 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 ### Model
 | Id | Feature | Status | Notes |
 |---|---|---|---|
-| K-01 | No public name; the page shows its title. | Confirmed | 8-9 Nov. The internal word (kanāls or hub) is In progress. |
+| K-01 | No public name; the page shows only its title. | Changed | → K-01a. |
+| K-01a | A hub's public name is **"<tēma> kopiena"**: "Šaha kopiena", "Galda spēļu kopiena", "Jelgavas kopiena" (card, page title, links). Internal word: hub. | Confirmed | 9 Nov. |
 | K-02 | Separate per-city page L1 · L2 · City with 5 tabs (`channel.html`). | Changed | → K-05. |
 | K-03 | Town square on the board, following the filter's zoom level (`board.html`). | Changed | → K-05. |
 | K-04 | A chat room at every level, L1 included. | Changed | → K-06: L1 has no hub and no hub card, "for now". |
 | K-05 | **A hub is its own page** for one Veids (L2) or sub-veids (L3), built in the group-page frame. The board shows only the hub card, which links to it. Hub content never appears on the board. | Confirmed | 9 Nov: "Hub chats reside inside the hub pages, that are created similarly to group pages." |
 | K-06 | Hubs are created automatically with their L2/L3 tēma and never close. | Confirmed | 9 Nov. |
-| K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Confirmed | 9 Nov. |
+| K-07 | A hub shows (unlocks) at **2 interested people**. "Mani interesē" works like a group join request; the note is optional. | Changed | → K-58: no followers; Veids/sub-veids hubs are open from creation. The 2-person rule stays only for city hub requests (K-09a). |
 | K-08 | **City is a parallel dimension.** A city room ("Šahs · Jelgava") is one room with two parents: the tēma hub and the city hub (Matrix Spaces, `m.space.child` from both). | Confirmed | 9 Nov. |
 | K-09 | A city room opens with its first message. | Changed | → K-09a (9 Nov). |
-| K-09a | A tēma × city hub ("Galda spēles › Šahs › Jelgava") is **created only on request**: the first person sends a message as the first interested; when a second person does the same, site admins get a notification and approve it. | In progress | 9 Nov, my restatement awaiting the owner's confirmation. |
-| K-09b | A hub has a **city filter** to see activity only from chosen cities. | In progress | 9 Nov, awaiting confirmation. |
+| K-09a | A tēma × city hub ("Galda spēles › Šahs › Jelgava") is **created only on request**: the first person sends a message as the first interested; when a second person does the same, site admins get a notification and approve it. | Confirmed | 9 Nov, owner approved the restatement. |
+| K-09b | A hub has a **city filter** to see activity only from chosen cities. | Confirmed | 9 Nov. |
 | K-10 | Each city has a city hub (Jelgava first) as a **lighter overview**: the city's activity feed and shout-outs plus the list of its city rooms; no room of its own. | Confirmed | 9 Nov. |
 | K-11 | Districts (one level, Jelgava › Pārlielupe). | Changed | 9 Nov: not in Kanāli yet; a later release of their own. |
 | K-12 | Several Veidi chosen on the board: content merges, no room for the combination; **one hub card** first in the grid that links to each selected Veids's hub, so groups aren't pushed out. | Confirmed | 9 Nov. |
@@ -35,12 +36,12 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-14 | One hub card per filter, always matching it; sub-veidi hubs are reached inside the hub (choosing the Šahs chip shows the Šahs hub card). | Confirmed | 9 Nov. |
 | K-15 | The hub card is the size of a group card, but styled differently. | Confirmed | 9 Nov. |
 | K-16 | The hub card shows activity numbers; locked text "1 cilvēks vēlas šeit sākt grupu". | Changed | → K-16a. |
-| K-16a | The hub card shows **just the hub's name as a link, with some visual flair**, e.g. "Šaha kopiena" / "Chess community". | Confirmed | 9 Nov. Whether "… kopiena" is the public name (vs K-01): In progress. |
+| K-16a | The hub card shows **just the hub's name ("Šaha kopiena") as a link, with some visual flair**. | Confirmed | 9 Nov. |
 | K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
-| K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Confirmed | 9 Nov, owner's words. |
+| K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | In progress | 9 Nov text; with no follow sheet (K-58) it likely moves to the city hub request (K-09a). |
 | K-18a | The optional note left with "Mani interesē" is a shout-out (K-26), a public note on the hub. | Confirmed | 9 Nov: "Those are public announcements. Like shout outs." |
 | K-18b | Notes become the first chat lines when the hub unlocks. | Changed | My idea, drawn without the owner's OK; replaced by K-18a. |
-| K-18c | Locked sub-veidi hubs listed inside the parent hub ("Go · 1 interesējas") as an invitation to be the second. | In progress | My proposal. |
+| K-18c | Locked sub-veidi hubs listed inside the parent hub ("Go · 1 interesējas") as an invitation to be the second. | Changed | Veids hubs are never locked (K-58); pending city hub requests may be listed instead: In progress. |
 | K-18d | The board "town-square view" (`?view=cats`, switch "Čats \| Grupas \| Pasākumi"). | Changed | → K-05: the hub card opens the hub page. |
 
 ### Hub page content
@@ -53,7 +54,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-24 | The latest public blog posts of those groups. **Blog post is a new group post type**, built in its own release **after hubs**; hubs launch with announcements and events. | Confirmed | 9 Nov. |
 | K-24b | A blog post's author chooses **public or members-only**. A public post shows in the hub feed as an excerpt with its group and member shown and linked; tapping it opens the full blog post page in that group. Public posts, events and announcements are visible to signed-out visitors (names included). | Confirmed | 9 Nov. |
 | K-24a | **Activity feed:** the hub page shows its groups' public announcements, events and blog posts as one merged live feed, organized and compact by period: "Šodien: 3 grupas izveidotas, 32 jauni biedri, 3 jauni raksti, 3 paziņojumi", then "Pagājušajā nedēļā", "Pagājušajā mēnesī". | Confirmed | 9 Nov: "a bit of both" (merged feed + activity numbers). Exact rows, what opens on tap: In progress. |
-| K-25 | The hub shows **two numbers**: followers and group members ("41 interesējas · 120 grupu biedri"). | Confirmed | 9 Nov. |
+| K-25 | The hub shows two numbers: followers and group members. | Changed | → K-25a. |
+| K-25a | The hub's number is the **members of its groups**. | Confirmed | 9 Nov (K-58). |
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
 | K-27 | Shout-outs are **plain post-it notes** on the board's wall ("If you are interested too, let me know. We could start a group together"). No "Es arī", no "Izveidot grupu ar viņiem". | Confirmed | 9 Nov: "Yes, plain notes. Announcements really are plain post-it notes." |
 | K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Confirmed | 9 Nov. |
@@ -65,7 +67,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-30 | Matrix, self-hosted, in our own chat panel; Element/FluffyChat optional. | Confirmed | 8-9 Nov. |
 | K-31 | **Chat section built like Discord:** a public room for the hub, a room per sub-veids (L3), city rooms; the user moves between the public child rooms from a room list. | Confirmed | 9 Nov. |
 | K-32 | No merged chat: a parent has its own room and lists its children (like an mIRC channel list). | Confirmed | 9 Nov. |
-| K-33 | Chat is read-only until "Mani interesē". | Confirmed | 9 Nov. |
+| K-33 | Chat is read-only until "Mani interesē". | Changed | → K-33a. |
+| K-33a | **Anyone signed in** can write in hub chats and leave notes; members of the hub's groups carry a flair showing they "live here". | Confirmed | 9 Nov. |
 | K-34 | The chat shows the people list: who is in the room and who is online now. | Confirmed | 9 Nov. |
 | K-35 | The chat look: mIRC lines (left-aligned, no bubbles). | Confirmed | 9 Nov: "more compact". |
 | K-36 | Every group has a members-only chat. | Confirmed | 9 Nov. |
@@ -86,15 +89,15 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | Id | Feature | Status | Notes |
 |---|---|---|---|
 | K-50 | Group page: the category line's L1 / L2 / city parts link to their hubs. | Confirmed | 9 Nov. |
-| K-51 | Manas grupas lists the hubs you follow. | Confirmed | 9 Nov. |
+| K-51 | Manas grupas lists the hubs you follow. | Changed | No follow (K-58); Manas grupas lists groups only. |
 | K-52 | Invites: from a group → the group page; from a hub → the hub page. | Confirmed | 9 Nov. |
 | K-53 | Site words: L1 "Tēma", L2 "Veids/Veidi". | Confirmed | 9 Nov (both offered options carried them; say if not). |
-| K-54 | One joining verb "Mani interesē"; the exit is "Vairs neinteresē". | Confirmed | 8 Nov. |
+| K-54 | One joining verb "Mani interesē"; the exit is "Vairs neinteresē". | Changed | No hub follow (K-58); "Mani interesē" / "Vairs neinteresē" leave hubs. |
 | K-55 | "+ Cits" at the end of the Veidi chips opens the existing "Ieteikt jaunu tēmu" sheet (`CategorySuggest`); visible to admins only until approved. | Confirmed | 8 Nov. |
 | K-56 | The "Izveidot jaunu grupu" card gets a quiet "vai vienkārši pastāsti, ko meklē". | In progress | 9 Nov (C2), before shout-outs; may become "leave a shout-out". |
 | K-59 | The build-plan page is always current: discarded views are removed, not kept; a choice between options is drawn as A and B side by side. | Confirmed | 9 Nov. |
 | K-57 | Addresses follow the board: hub `/lv/speles/galda-speles` (`/[l1]/[l2]`, sub-veids `/[l1]/[l2]/[l3]`); city hub `/lv/jelgava`; a city room as `?room=jelgava` on the hub. | Confirmed | 9 Nov. |
-| K-58 | **Followers may be dropped:** "The point is to join groups"; all visitors may post, and people count as part of the hub when they join a group in it. | In progress | 9 Nov, owner reconsidering; affects K-07, K-25, K-33, K-51, K-54. |
+| K-58 | **No followers on hubs.** The point is to join groups: you count as part of a hub by being a member of one of its groups. | Confirmed | 9 Nov. |
 
 ### Pilot and stages
 | Id | Feature | Status | Notes |
