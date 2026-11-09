@@ -8,7 +8,7 @@
 <!-- Plain mock. Class strings are copied from components/discovery (GroupCard, CreateCard, filter/TitleSwitch, filter/chip-styles) and shell Header. The script builds each screen from small string helpers and stamps it into the 375 and 1280 boxes; layout follows the box width (container queries). -->
 
 <h1 class="text-title mb-1">Ieeja no saraksta</h1>
-<p class="mb-6 text-body-sm text-foreground-muted">Kā komūnas iekļaujas esošajā sarakstā: tie paši čipi, tās pašas kartītes, tā pati izveides kartīte. Četri ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem.</p>
+<p class="mb-6 text-body-sm text-foreground-muted">Kā kanāli iekļaujas esošajā sarakstā: tie paši čipi, tās pašas kartītes, tā pati izveides kartīte. Četri ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -80,7 +80,7 @@
     return '<p class="mb-2 mt-1 text-meta weight-strong text-foreground">' + label + '</p>' + filterLine(tema + fotoChip + kurChip('Jelgava')) + barHtml + both(rows, cells);
   }
   function s_c1() {
-    var a = variant('a · Jelgavā kāds meklē', bar('Komūna: 2 cilvēki meklē biedrus →'), rowsA(), gA() + gB());
+    var a = variant('a · Jelgavā kāds meklē', bar('2 cilvēki meklē biedrus →'), rowsA(), gA() + gB());
     var b = variant('b · nekā nav: josla nerādās', '', createRow(false), createCard(false));
     return head() + wrap(crumb('Hobiji › Fotogrāfija') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + a + '<div class="my-6 border-t border-dashed border-border"></div>' + b);
   }
@@ -102,10 +102,10 @@
   }
 
   var screens = [
-    { label: 'C1 Komūnas josla', story: 'Kad ir izvēlēta tēma (Fotogrāfija) un pilsēta (Jelgava) un tur ir vismaz viena Meklē kartīte vai grupa, starp čipu rindu un režģi parādās vienas rindas josla: "Komūna: 2 cilvēki meklē biedrus → Skatīt", bez sejām. a) ir saturs. b) nekā nav: josla nerādās, redzama tikai izveides kartīte. Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
+    { label: 'C1 Josla', story: 'Kad ir izvēlēta tēma (Fotogrāfija) un pilsēta (Jelgava) un tur ir vismaz viena Meklē kartīte vai grupa, starp čipu rindu un režģi parādās vienas rindas josla: "2 cilvēki meklē biedrus → Skatīt", bez sejām. a) ir saturs. b) nekā nav: josla nerādās, redzama tikai izveides kartīte. Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
     { label: 'C2 Izveides kartīte', story: 'Izveides kartīte paliek "Izveidot jaunu grupu"; zem tās kluss otrs ceļš "vai vienkārši pastāsti, ko meklē" tiem, kas negrib vadīt grupu (Meklē kartīte).', fn: s_c3 },
     { label: 'C3 Cits', story: 'Tēmu rindas beigās kluss "+ Cits"; tas atver esošo ieteikuma logu: "Ieteikt jaunu tēmu", nosaukums, tēma, Ieteikt; administratori to izskata.', fn: s_c4 },
-    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Hobiji · Fotogrāfija · Valmiera →" ved uz komūnu. Sānjosla nemainās.', fn: s_c5 }
+    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Hobiji · Fotogrāfija · Valmiera →" ved uz kanālu. Sānjosla nemainās.', fn: s_c5 }
   ];
   var stage = document.getElementById('stage');
   screens.forEach(function (s) {

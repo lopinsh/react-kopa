@@ -838,7 +838,7 @@
       "buildPlanEmptyHint": "The next release plan will appear here once it is written.",
       "planTab": "Plan",
       "planDrawings": {
-        "channel": "Komūna page",
+        "channel": "Channel page",
         "board": "Entry from the list"
       }
     },
