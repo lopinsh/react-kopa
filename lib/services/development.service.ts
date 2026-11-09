@@ -17,8 +17,6 @@ const DRAWING_FILES: Record<DesignDrawingId, string> = {
 export const PLAN = {
     spec: 'specs/kanali.md',
     drawings: [
-        { id: 'channel', file: 'kanali/channel.html' },
-        { id: 'board', file: 'kanali/board.html' },
         { id: 'hub', file: 'kanali/hub.html' },
     ],
 } as const;
