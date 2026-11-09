@@ -5,7 +5,7 @@
 ## Context
 Most people won't create a group, but they still want to find others interested in the same topic in the same place.
 
-A **komūna** (internal name: kanāls, "channel") is the **town square** for one tēma (L2 category) in one city, for example "Šahs Jelgavā". It is in the spirit of mIRC public channels and Couchsurfing city groups:
+A **komūna** (internal name: kanāls, "channel") is the **town square** for one tēma (L2 category) in one city, for example "Jelgava · Spēles · Šahs". It is in the spirit of mIRC public channels and Couchsurfing city groups:
 - It is a **local message board** ("Meklē" cards) plus **chat**, where people from the different groups and the merely interested hang out and talk.
 - It has **no events of its own.** Events are always created by a group (organisers have a group under the komūna). A tournament between groups is an event of the organising group, shown on the komūna.
 - It shows once it has at least one Meklē card or one group; a page with nothing is hidden (no "2 to open" gate).
@@ -49,7 +49,7 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 
 **Entry points:**
 - On the board, when one tēma and one city are selected and the komūna has content, a one-line bar above `GroupResults`.
-- On the group page, a link "Fotogrāfijas komūna Valmierā →".
+- On the group page, a link "Valmiera · Hobiji · Fotogrāfija →".
 - Wizard prefill: `create/page.tsx` reads `?city=&tag=`, and the wizard gets `initialCity` and `initialTags`.
 
 **Notifications:** `CHANNEL_NEW_GROUP` (in the email digest), the "Es arī" notification to a card's author, `CHANNEL_MOD_REQUEST` (to admins), `CHANNEL_MOD_DECISION`. No `CHANNEL_OPENED`.
@@ -69,7 +69,7 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 ## Decided 8 Nov (owner), still standing
 - **Signed-out sees counts only:** no faces, no author names on Meklē cards, no chat.
 - **Fixed words** (revised 9 Nov: use the site's existing ones): L2 is "tēma" ("+ Cits" chip, "Ieteikt jaunu tēmu", "šajā tēmā"). "Jaunumi" is only for group announcements; the feed is "Pasākumi" plus "No grupām". One "Dalīties". One joining verb: "Mani interesē"; the exit is "Vairs neinteresē".
-- **Public name "komūna"** (9 Nov; "Kanāls" stays internal in spec and admin). User-facing: the title "Šahs Jelgavā", the group link "Fotogrāfijas komūna Valmierā →".
+- **Public name "komūna"** (9 Nov; "Kanāls" stays internal in spec and admin). User-facing: the title "Jelgava · Spēles · Šahs", the group link "Valmiera · Hobiji · Fotogrāfija →".
 - **Suggesting a tēma** reuses the `CategorySuggest` sheet; visible to admins only until approved (`CategoryStatus` `PENDING_REVIEW`).
 - **"Es arī" count** is visible only to the card's author. No "vēl N dienas".
 - Rejected: a Kanāli tab in the title switch and the komūna as the first grid card (the chips are the navigation).
@@ -81,8 +81,14 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 3. **Matrix chat is back** (K1 spike, K2 komūna without chat, K3 chat) and **moderators are back** (owners and admins of child groups apply, a site admin approves; `ChannelModRequest` and `CHANNEL_MOD_*` restored).
 4. **No 2-to-open gate** (kept): a komūna page shows once it has at least 1 Meklē card or 1 group; pages with nothing are hidden. The first action is "Pastāsti, ko meklē"; "Mani interesē" is the lighter follow.
 5. **Meklē leads to a group, not a DM** (kept). No "Rakstīt". When others tap "Es arī", the author gets a notification and "Izveidot grupu ar viņiem", which opens the wizard prefilled `?city=&tag=` and invites them. Max 3 active cards per person; each card has a report action.
-6. **The bar is one line** (kept): "2 cilvēki Jelgavā meklē fotogrāfijas biedrus → Skatīt". No faces, no city-list variant.
+6. **The bar is one line** (kept): "Jelgava · Hobiji · Fotogrāfija: 2 cilvēki meklē biedrus → Skatīt". No faces, no city-list variant.
 7. **Seeding** (kept). Before the article, the owner and 2-3 Jelgava organisers each start a real group with one dated event. Article topics: šahs un galda spēles, pastaigas/nūjošana, fotogrāfija, koris, skriešana, jaunie vecāki. The article links to the board filtered to Jelgava.
+
+## Komūnas nosaukums (decided 9 Nov, owner)
+A komūna's title is the city (the existing entity) plus L1 plus L2, always in this form: "Jelgava · Spēles · Šahs". It is the tile title, the drawer head, the sticky bar, the page title, and the wording of the board bar and the group-page link ("Valmiera · Hobiji · Fotogrāfija →"). The tile's meta line keeps only the people count; the city and categories are not repeated there. The title may wrap to two lines on a phone; the city is never cut.
+
+## Later
+- Multi-city communities may be allowed later, with stricter rules (who can open one, moderation, limits). Until then a komūna is one city, one L2.
 
 ## Ekrāni un lietotāju stāsti
 Drawing "Komūna" (`kanali/channel.html`): the group page frame as built (compact `GroupHead` tile, ☰ drawer on phones, `FrameColumns` with the pages menu and a live-chat aside on desktop), every element copied from the real component. Each screen at 375 and 1280 px, member view unless noted. Rule: a visit never makes you a member; every step in is a tap. Chat is a tab named "Čats", in the chat look of Discord/mIRC (left-aligned lines, no bubbles).
@@ -97,10 +103,10 @@ Drawing "Komūna" (`kanali/channel.html`): the group page frame as built (compac
 
 ## Ieeja no esošās struktūras
 URL: `/[l1]/kanals/[l2]/[city]`, e.g. `/lv/hobiji/kanals/fotografija/jelgava`. Sidebar unchanged. Drawing "Ieeja no saraksta" (`kanali/board.html`).
-- **C1 Komūnas josla.** With a tēma and a city chosen and content in that komūna, one line between the chips and the grid: "2 cilvēki Jelgavā meklē fotogrāfijas biedrus → Skatīt". With nothing there, no bar shows. Title switch stays "Grupas · Pasākumi".
+- **C1 Komūnas josla.** With a tēma and a city chosen and content in that komūna, one line between the chips and the grid: "Jelgava · Hobiji · Fotogrāfija: 2 cilvēki meklē biedrus → Skatīt". With nothing there, no bar shows. Title switch stays "Grupas · Pasākumi".
 - **C2 Izveides kartīte.** "Izveidot jaunu grupu" (šajā tēmā) gets a quiet second action "vai vienkārši pastāsti, ko meklē".
 - **C3 Cits.** Tēmu chips end with a quiet "+ Cits" that opens the `CategorySuggest` sheet ("Ieteikt jaunu tēmu").
-- **C4 Grupas lapa.** Group head shows "Fotogrāfijas komūna Valmierā →" under the category line.
+- **C4 Grupas lapa.** Group head shows "Valmiera · Hobiji · Fotogrāfija →" under the category line.
 
 ## Verification (when built)
 - Typecheck, eslint on changed files, `i18n:check`, `ui:check` and the build.

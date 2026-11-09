@@ -2,12 +2,12 @@
 <html lang="lv">
 <head>
 <meta charset="utf-8">
-<title>Komūna: Šahs Jelgavā</title>
+<title>Komūna: Jelgava · Spēles · Šahs</title>
 </head>
 <body class="min-h-screen bg-background p-6 text-foreground">
 <!-- Plain mock. Every element is the markup of a real component with its class strings: GroupHead (compact), GroupPagesDrawer, GroupPagesNav, PageNavLink NAV_ROW, GroupMenuActions, PartTabs, AnnouncementItem (+ AnnouncementItemMenu), Button/IconButton, EmptyState, EventDayList + EventRow, NextMeetingView, GroupAside members box, GroupRow, GroupCard, MemberRow + RoleTag, ChatPanel composer, FrameColumns + AsideSlot (layout.tsx of the group). Classes are written with the site's viewport prefixes (md:, lg:, max-md:); the script maps them to container queries (@3xl, @5xl) so each box behaves as a window of that width. Anything with no existing pattern is marked "NEW:" in a comment. -->
 
-<h1 class="text-title mb-1">Komūna: Šahs Jelgavā</h1>
+<h1 class="text-title mb-1">Komūna: Jelgava · Spēles · Šahs</h1>
 <p class="mb-6 text-body-sm text-foreground-muted">Grupas lapas rāmis, kāds tas ir būvēts: kompakts galvas bloks, ☰ izvēlne telefonā, kreisā izvēlne un čata sānjosla datorā. Katrs ekrāns 375 un 1280 px platumā (ritini uz sāniem). Apmeklējums nekad nepadara tevi par dalībnieku.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -84,15 +84,15 @@
   function groupHead() {
     var drawerBtn = '<button type="button" aria-label="Komūnas lapas" class="' + ibtn('onToneGhost', 'md', 'lg:hidden') + '">' + ICO(P.menu, 'size-5') + '</button>';
     var mark = '<span class="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item lg:col-start-1 lg:row-start-1 md:size-12">' + ICO(P.game, 'size-5 md:size-6') + '</span>';
-    /* NEW: on a komūna the two category/place lines are one: "Spēles · Šahs · Jelgava · 14" (the tile stays ~100 px on a phone). */
-    var meta = '<p class="mt-1 flex items-center gap-x-3 text-meta [&_svg]:size-4 [&_svg]:shrink-0 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-1.5 max-md:[&>span:nth-child(2)]:hidden"><span><span aria-hidden="true" class="h-2 w-2 shrink-0 rounded-full bg-current"></span><span class="weight-medium">Spēles</span></span><span>Šahs</span><span>' + ICO(P.pin) + 'Jelgava</span><span>' + ICO(P.users) + '14</span></p>';
+    /* NEW: a komūna's title is city + L1 + L2 ("Jelgava · Spēles · Šahs"), so the meta line keeps only the people count. */
+    var meta = '<p class="mt-1 flex items-center gap-1.5 text-meta [&_svg]:size-4 [&_svg]:shrink-0">' + ICO(P.users) + '14</p>';
       '<p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta [&_svg]:size-4 [&_svg]:shrink-0 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-1.5"><span>' + ICO(P.pin) + 'Jelgava</span><span>' + ICO(P.users) + '14</span></p></div>';
     /* NEW: the komūna's role button "Mani interesē" is GroupActions' round onTone button with a heart icon (the group one uses MessageCircle for "Sazināties"). */
     var action = '<div class="col-start-3 row-start-1 justify-self-end lg:col-start-3 lg:self-center"><button type="button" class="' + btn('onTone', 'md', 'max-md:size-10 max-md:px-0 md:px-5') + '">' + '<span class="md:hidden">' + ICO(P.heart) + '</span><span class="max-md:sr-only">Mani interesē</span></button></div>';
     return '<div class="mx-auto grid max-w-browse gap-3 px-gutter pt-3 md:pt-5 md:gap-x-6">' +
       '<div class="tone-fill frame relative grid min-w-0 rounded-2xl p-4 md:gap-x-4 grid-cols-[auto_auto_1fr] items-center gap-y-2 md:px-6 md:py-5 lg:grid-cols-[auto_1fr_auto]">' +
       drawerBtn + mark +
-      '<div class="col-span-3 min-w-0 lg:col-span-1 lg:col-start-2 lg:row-start-1"><h1 class="line-clamp-2 break-words py-[0.2em] -my-[0.2em] md:max-lg:line-clamp-1 text-item md:text-title">Šahs Jelgavā</h1>' + meta + '</div>' +
+      '<div class="col-span-3 min-w-0 lg:col-span-1 lg:col-start-2 lg:row-start-1"><h1 class="line-clamp-2 break-words py-[0.2em] -my-[0.2em] md:max-lg:line-clamp-1 text-item md:text-title">Jelgava · Spēles · Šahs</h1>' + meta + '</div>' +
       action + '</div></div>';
   }
 
@@ -287,7 +287,7 @@
 
   /* ---------- ☰ drawer (GroupPagesDrawer inside Overlay layout="left"), phones only ---------- */
   function drawerFrame() {
-    var panel = '<div class="absolute inset-y-0 left-0 z-50 flex h-full w-4/5 max-w-xs flex-col overflow-y-auto bg-surface shadow-premium px-3 py-4"><div class="flex items-center gap-3 border-b border-border px-1 pb-3"><span class="mark-tint grid size-9 shrink-0 place-items-center rounded-item">' + ICO(P.game, 'size-5') + '</span><div class="min-w-0"><p class="truncate text-item">Šahs Jelgavā</p><div class="text-meta text-foreground-muted"><p class="flex items-center gap-x-2 text-meta"><span class="inline-flex items-center gap-1.5 weight-medium text-foreground"><span aria-hidden="true" class="h-2 w-2 rounded-full" style="background-color:var(--accent)"></span>Spēles</span><span>Šahs</span></p></div></div></div>' +
+    var panel = '<div class="absolute inset-y-0 left-0 z-50 flex h-full w-4/5 max-w-xs flex-col overflow-y-auto bg-surface shadow-premium px-3 py-4"><div class="flex items-center gap-3 border-b border-border px-1 pb-3"><span class="mark-tint grid size-9 shrink-0 place-items-center rounded-item">' + ICO(P.game, 'size-5') + '</span><div class="min-w-0"><p class="line-clamp-2 text-item">Jelgava · Spēles · Šahs</p></div></div>' +
       '<div class="pt-2"><nav aria-label="Komūnas lapas" class="flex flex-col gap-0.5">' + navRows('s', ['s', 'c', 'e', 'g', 'p']) + '</nav>' + menuActions(true) + '</div></div>';
     return '<div class="relative h-[44rem] overflow-hidden">' + HOME() + '<div class="absolute inset-0 z-40 bg-[var(--scrim)]"></div>' + panel + '</div>';
   }
