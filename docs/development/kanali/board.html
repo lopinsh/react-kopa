@@ -58,14 +58,14 @@
     return '<article class="relative flex h-80 flex-col rounded-2xl line bg-surface shadow-card"><div class="relative shrink-0">' + banner + tag + '</div><div class="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden px-5 pb-3 pt-6"><h3 class="line-clamp-2 text-item text-foreground">' + o.name + '</h3><p class="text-meta text-foreground-muted">' + o.meta + '</p>' + (o.note ? '<p class="line-clamp-2 text-meta weight-strong text-foreground">' + o.note + '</p>' : '') + '</div></article>';
   }
   var createCard = function (second) {
-    return '<div class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 grid size-9 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(PLUS, 'size-4') + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-2 text-meta text-foreground-muted underline underline-offset-2">vai vienkārši Mani interesē</span>' : '') + '</span></div>';
+    return '<div class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 grid size-9 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(PLUS, 'size-4') + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-2 text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
   };
   /* Phones list rows (GroupRow), from 3xl of the box a card grid. */
   var rowOf = function (name, meta, city, status) {
     return '<div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(CAM) + '</span><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="min-w-0 truncate">' + meta + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 text-meta ' + (status ? 'line text-foreground-muted' : 'tab-tint text-foreground') + '"><span class="min-w-0 truncate">' + (city || '') + '</span></span></span></div>';
   };
   var createRow = function (second) {
-    return '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(PLUS, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-0.5 block truncate text-meta text-foreground-muted underline underline-offset-2">vai vienkārši Mani interesē</span>' : '') + '</span></div>';
+    return '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(PLUS, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-0.5 block truncate text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
   };
   var both = function (rows, cells) { return '<div class="max-w-page @3xl:hidden">' + rows + '</div><div class="hidden gap-5 @3xl:grid @3xl:grid-cols-3">' + cells + '</div>'; };
   var grid = function (cells) { return '<div class="grid gap-5 @3xl:grid-cols-3">' + cells + '</div>'; };
@@ -73,27 +73,16 @@
   var gA = function () { return card({ tag: 'Fotogrāfija', city: 'Jelgava', name: 'Jelgavas foto pastaigas', meta: 'Hobiji · 18 cilvēki', note: 'Meklē: modeli sestdienas pastaigai' }); };
   var gB = function () { return card({ tag: 'Fotogrāfija', city: 'Jelgava', name: 'Mobilā foto Jelgavā', meta: 'Hobiji · 7 cilvēki' }); };
 
-  /* Channel bar: full width between the chip row and the grid; only for a topic that has a channel. */
-  var bar = function (inner) { return '<div class="mb-5 flex flex-col gap-3 rounded-2xl line bg-surface px-4 py-3 shadow-card @3xl:flex-row @3xl:items-center">' + inner + '</div>'; };
-  var barText = function (a, b) { return '<span class="min-w-0 flex-1"><span class="block text-item text-foreground">' + a + '</span>' + (b ? '<span class="mt-0.5 block text-meta text-foreground-muted">' + b + '</span>' : '') + '</span>'; };
+  /* Channel bar: one line between the chip row and the grid; only when the Veids x city has a Meklē card or a group. */
+  var bar = function (text) { return '<div class="mb-5 flex min-h-11 items-center gap-3 rounded-2xl line bg-surface px-4 py-2 shadow-card"><span class="min-w-0 flex-1 truncate text-body-sm text-foreground">' + text + '</span><span class="shrink-0 text-button-sm text-primary underline underline-offset-2">Skatīt</span></div>'; };
   var rowsA = function () { return rowOf('Jelgavas foto pastaigas', 'Hobiji', 'Jelgava · 18 cilvēki') + rowOf('Mobilā foto Jelgavā', 'Hobiji', 'Jelgava · 7 cilvēki'); };
-  var below = function (rows, cells) { return both(rows, cells); };
-  function variant(label, chips, barHtml, rows, cells) {
-    return '<p class="mb-2 mt-1 text-meta weight-strong text-foreground">' + label + '</p>' + filterLine(tema + chips) + barHtml + below(rows, cells);
+  function variant(label, barHtml, rows, cells) {
+    return '<p class="mb-2 mt-1 text-meta weight-strong text-foreground">' + label + '</p>' + filterLine(tema + fotoChip + kurChip('Jelgava')) + barHtml + both(rows, cells);
   }
   function s_c1() {
-    var a = variant('a · Kur = Jelgava, atvērts (nepierakstījies: tikai skaitļi, bez sejām)', fotoChip + kurChip('Jelgava'),
-      bar(barText('Fotogrāfija Jelgavā · 12 cilvēki · 2 meklē', '') + '<span class="' + PRIMARY + '">Atvērt</span>'),
-      rowsA(), gA() + gB());
-    var b = variant('b · Kur = Jelgava, vēl nav atvērts', fotoChip + kurChip('Jelgava'),
-      bar(barText('Fotogrāfija Jelgavā · vēl nav atvērts', 'interesē 1 no 2') + '<span class="' + PRIMARY + '">Mani interesē</span>'),
-      rowsA(), gA() + gB());
-    var city = function (n, c) { return '<span class="underline underline-offset-2 text-foreground">' + n + ' <span class="tabular-nums text-foreground-muted">' + c + '</span></span>'; };
-    var c = variant('c · pilsēta nav izvēlēta', fotoChip + kurChip(),
-      bar(barText('Fotogrāfija pilsētās', '') + '<span class="flex flex-wrap gap-x-3 gap-y-1 text-body-sm">' + city('Rīga', '24') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Valmiera', '6') + '<span class="text-foreground-muted" aria-hidden="true">·</span>' + city('Jelgava', '1/2') + '</span>'),
-      rowOf('Rīgas foto klubs', 'Hobiji', 'Rīga · 64 cilvēki') + rowOf('Valmieras objektīvs', 'Hobiji', 'Valmiera · 12 cilvēki'),
-      card({ tag: 'Fotogrāfija', city: 'Rīga', name: 'Rīgas foto klubs', meta: 'Hobiji · 64 cilvēki' }) + card({ tag: 'Fotogrāfija', city: 'Valmiera', name: 'Valmieras objektīvs', meta: 'Hobiji · 12 cilvēki' }));
-    return head() + wrap(crumb('Hobiji › Fotogrāfija') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + a + '<div class="my-6 border-t border-dashed border-border"></div>' + b + '<div class="my-6 border-t border-dashed border-border"></div>' + c);
+    var a = variant('a · Jelgavā kāds meklē', bar('2 cilvēki Jelgavā meklē fotogrāfijas biedrus →'), rowsA(), gA() + gB());
+    var b = variant('b · nekā nav: josla nerādās', '', createRow(false), createCard(false));
+    return head() + wrap(crumb('Hobiji › Fotogrāfija') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + a + '<div class="my-6 border-t border-dashed border-border"></div>' + b);
   }
   function s_c3() {
     return head() + wrap(crumb('Hobiji') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + filterLine(tema + fotoChip + kurChip('Jelgava')) +
@@ -113,9 +102,9 @@
   }
 
   var screens = [
-    { label: 'C1 Kanāla josla', story: 'Piespiežot veida čipu (Fotogrāfija), starp čipu rindu un režģi parādās pilnas platuma josla, tikai veidiem, kam ir kanāls. a) Kur=Jelgava: cilvēki, meklē, Atvērt; nepierakstījies redz tikai skaitļus, bez sejām. b) Vēl nav atvērts: interesē 1 no 2, Mani interesē. c) Pilsēta nav izvēlēta: pilsētu saraksts, katra saite. Zem joslas parastās grupas (tālrunī rindas, platā ekrānā kartītes). Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
-    { label: 'C2 Izveides kartīte', story: 'Izveides kartīte paliek "Izveidot jaunu grupu"; zem tās kluss otrs ceļš "vai vienkārši Mani interesē" tiem, kas negrib vadīt grupu.', fn: s_c3 },
-    { label: 'C3 Cits veids', story: 'Tēmu rindas beigās kluss "+ Cits veids"; tas atver lapu "Ieteikt tēmu" ar nosaukumu, pilsētu un Ieteikt; piezīme, ka apstiprina administrators.', fn: s_c4 },
+    { label: 'C1 Kanāla josla', story: 'Kad ir izvēlēts veids (Fotogrāfija) un pilsēta (Jelgava) un tur ir vismaz viena Meklē kartīte vai grupa, starp čipu rindu un režģi parādās vienas rindas josla: "2 cilvēki Jelgavā meklē fotogrāfijas biedrus → Skatīt", bez sejām. a) ir saturs. b) nekā nav: josla nerādās, redzama tikai izveides kartīte. Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
+    { label: 'C2 Izveides kartīte', story: 'Izveides kartīte paliek "Izveidot jaunu grupu"; zem tās kluss otrs ceļš "vai vienkārši pastāsti, ko meklē" tiem, kas negrib vadīt grupu (Meklē kartīte).', fn: s_c3 },
+    { label: 'C3 Cits veids', story: 'Veidu rindas beigās kluss "+ Cits veids"; tas atver esošo ieteikuma logu: "Ieteikt jaunu veidu", nosaukums, tēma, Ieteikt; administratori to izskata.', fn: s_c4 },
     { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Vairāk par fotogrāfiju Valmierā →" ved uz kanālu. Sānjosla nemainās.', fn: s_c5 }
   ];
   var stage = document.getElementById('stage');
