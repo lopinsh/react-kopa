@@ -18,7 +18,7 @@ A **kanāls** ("channel"; users see no special name, only its title) is the **to
 ## Facts from the code survey that shape the design
 - `Group.categoryId` must be L1 (`taxonomy.service.ts:712`). L2 reaches a group only through `Group.tags`.
   - So a kanāls is **its own model**.
-  - Its child groups are **derived**, never stored: PUBLIC, unhidden groups tagged with that L2 (or its L3 children) in the kanāls' city.
+  - Its child groups are **derived**, never stored: PUBLIC, unhidden groups tagged with that L2 (or its L3 children) in the channel's city.
 - The site has no chat for a whole group. Matrix fills that gap, so no group-chat code of our own is needed.
 - `Event.visibility` and `Post.visibility` exist. The Pasākumi tab shows only `PUBLIC` events of the child groups.
 
