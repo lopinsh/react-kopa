@@ -838,7 +838,8 @@
       "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts.",
       "planTab": "Plāns",
       "planDrawings": {
-        "hub": "Mezgli"
+        "hub": "Mezgli A/B",
+        "hubC": "Mezgls C"
       }
     },
     "handbook": {

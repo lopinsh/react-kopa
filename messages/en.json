@@ -838,7 +838,8 @@
       "buildPlanEmptyHint": "The next release plan will appear here once it is written.",
       "planTab": "Plan",
       "planDrawings": {
-        "hub": "Hubs"
+        "hub": "Hubs A/B",
+        "hubC": "Hub C"
       }
     },
     "handbook": {
