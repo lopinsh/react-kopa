@@ -2,154 +2,150 @@
 <html lang="lv">
 <head>
 <meta charset="utf-8">
-<title>Šahs Jelgavā</title>
+<title>Komūna: Šahs Jelgavā</title>
 </head>
 <body class="min-h-screen bg-background p-6 text-foreground">
-<!-- Plain mock. Markup is written once per part in a template; the small script at the end only stamps it into the 375 and 1280 boxes. Layout follows the box width (container queries). -->
+<!-- Plain mock. The komūna page uses the group page frame: head tile (GroupHead, HeadPicture, GroupActions), side menu (GroupPagesNav, PageNavLink NAV_ROW) and the chat look of messages/ChatPanel. The script builds each tab from string helpers and stamps it into the 375 and 1280 boxes; layout follows the box width (container queries). On a phone the real page opens the menu from a drawer; here the menu is drawn as a row so every tab is visible. -->
 
-<template id="head">
-  <header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter">
-    <span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span>
-    <div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div>
-    <div class="ml-auto flex items-center gap-2"><span class="grid size-10 place-items-center rounded-pill text-foreground-muted"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></div>
-  </header>
-</template>
-
-<template id="title">
-  <div class="px-3 pt-5 @3xl:px-gutter">
-    <p class="text-meta text-foreground-muted">Spēles › Šahs</p>
-    <div class="mt-2 flex items-center gap-3">
-      <span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4m-2-2v4"/><path d="M15 11h.01M18 13h.01"/></svg></span>
-      <div class="min-w-0"><h1 class="text-title text-foreground">Šahs Jelgavā</h1><p class="text-meta text-foreground-muted" data-sub></p></div>
-    </div>
-  </div>
-</template>
-
-<template id="a0">
-  <div class="mx-auto flex max-w-browse flex-col gap-6 px-3 py-6 @3xl:px-gutter">
-    <section class="max-w-focus rounded-2xl bg-surface p-5 shadow-card frame line">
-      <h2 class="text-section text-foreground">Šeit vēl neviens neko nemeklē</h2>
-      <p class="mt-2 text-body-sm text-foreground-muted">Šī ir vieta, kur atrast cilvēkus šahu spēlēšanai Jelgavā. Esi pirmais: pastāsti, ko meklē, un tie, kam tas interesē, atsauksies.</p>
-      <div class="mt-4 flex flex-wrap gap-2"><span class="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Pastāsti, ko meklē</span><span class="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 line shadow-control press bg-transparent text-foreground">Mani interesē</span></div>
-    </section>
-    <section>
-      <h2 class="text-section text-foreground">Šahs tuvumā</h2>
-      <div class="mt-2 max-w-page">
-        <div class="relative flex min-h-[5.5rem] items-center gap-3 py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Šahs Jelgavas novadā</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 31 cilvēks</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">3 grupas · 2 meklē</span></span></div>
-        <div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Šahs Ozolniekos</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 2 cilvēki</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">1 grupa</span></span></div>
-        <div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Galda spēles Jelgavā</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · 1 cilvēks</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted">1 meklē</span></span></div>
-      </div>
-    </section>
-  </div>
-</template>
-
-<template id="a2">
-  <div class="mx-auto max-w-browse px-3 py-6 @3xl:px-gutter">
-    <div class="max-w-focus rounded-2xl bg-surface-elevated p-5 shadow-premium line">
-      <div class="mb-3 flex items-start justify-between gap-3"><h2 class="text-section text-foreground">Ieteikt jaunu veidu</h2><span class="grid size-10 place-items-center text-foreground-muted"><svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></span></div>
-      <div class="flex flex-col gap-3">
-        <p class="text-body-sm text-foreground-muted">Administratori to izskatīs. Izvēlies tēmu, kurai tas pieder. Grupa netiek izveidota.</p>
-        <div><p class="mb-1 text-button-sm text-foreground">Nosaukums</p><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground @3xl:h-10 @3xl:text-body-sm">Go</div></div>
-        <div><p class="mb-1 text-button-sm text-foreground">Tēma</p><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground @3xl:h-10 @3xl:text-body-sm">Spēles</div></div>
-        <div class="mt-1 flex justify-end gap-2"><span class="inline-flex h-11 items-center justify-center rounded-pill px-4 text-button @3xl:h-10 line shadow-control bg-transparent text-foreground">Atcelt</span><span class="inline-flex h-11 items-center justify-center rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Ieteikt</span></div>
-      </div>
-    </div>
-  </div>
-</template>
-
-<template id="au">
-  <div class="mx-auto flex max-w-browse flex-col gap-6 px-3 py-6 @3xl:px-gutter">
-    <section class="max-w-focus rounded-2xl bg-surface p-4 shadow-card frame line">
-      <p class="text-meta text-foreground-muted">Paziņojums · šodien</p>
-      <p class="mt-1 text-body-sm text-foreground">2 cilvēki atsaucās uz tavu kartīti šahā Jelgavā.</p>
-    </section>
-    <section class="max-w-focus">
-      <h2 class="text-section text-foreground">Tava kartīte</h2>
-      <article class="mt-2 rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Vai kāds māca bērniem šahu? Meitai 8 gadi, gribam sākt.</p><p class="mt-1 text-meta text-foreground-muted">Tu · pirms 5 dienām</p><p class="mt-3 text-meta text-foreground-muted">2 cilvēki atsaucās</p>
-        <div class="mt-3"><span class="inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Izveidot grupu ar viņiem</span></div>
-        <p class="mt-3 text-meta text-foreground-muted">Atvērsies grupas izveide ar Šahs un Jelgava jau ievadītu; atsaucēji saņems uzaicinājumu.</p>
-      </article>
-    </section>
-  </div>
-</template>
-
-<template id="b">
-  <div class="mx-auto grid max-w-browse gap-6 px-3 py-6 @3xl:grid-cols-[minmax(0,1fr)_20rem] @3xl:px-gutter">
-    <div class="flex min-w-0 flex-col gap-6">
-      <section>
-        <div class="flex items-center justify-between gap-2"><h2 class="text-section text-foreground">Meklē</h2><span data-m class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Pastāsti, ko meklē</span></div><p data-m class="mt-1 text-meta text-foreground-muted">Vari turēt līdz 3 kartītēm. Tev ir 1.</p>
-        <div class="mt-2 grid gap-3 @3xl:grid-cols-2">
-          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Meklēju partneri šaha partijām otrdienu vakaros, līmenis ap 1500.</p><p class="mt-1 text-meta text-foreground-muted"><span data-m>Mārtiņš · </span>pirms 2 dienām</p><div data-m class="mt-3 flex items-center gap-2"><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm frame shadow-control press bg-primary text-primary-foreground">Es arī</span><span class="text-meta text-foreground-muted underline underline-offset-2">Ziņot</span></div></article>
-          <article class="rounded-2xl bg-surface p-4 shadow-card frame line"><p class="text-body-sm text-foreground">Vai kāds māca bērniem šahu? Meitai 8 gadi, gribam sākt.</p><p class="mt-1 text-meta text-foreground-muted"><span data-m>Tu · </span>pirms 5 dienām</p><p data-m class="mt-3 text-meta text-foreground-muted">2 cilvēki atsaucās</p></article>
-        </div>
-      </section>
-
-      <section>
-        <div class="flex items-center justify-between gap-2"><h2 class="text-section text-foreground">Grupas šeit</h2><span class="inline-flex h-8 items-center rounded-pill px-4 text-button-sm line shadow-control bg-transparent text-foreground">Izveidot grupu</span></div>
-        <div class="mt-2">
-          <div class="relative flex min-h-[5.5rem] items-center gap-3 py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Jelgavas šaha vakari</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · Šahs</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground"><span class="truncate">Nākamā: Ot, 18:30 bibliotēkā</span></span></span><span class="rounded-pill bg-role-member px-2 py-0.5 text-tag text-role-member-ink">Dalībnieks</span></div>
-          <div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile"><svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="12" x="2" y="6" rx="2"/></svg></span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">Šahs bērniem</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">Spēles · Šahs · Ģimene</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 tab-tint text-meta text-foreground-muted"><span class="truncate">Jelgava · 9 dalībnieki</span></span></span></div>
-        </div>
-      </section>
-
-      <section>
-        <h2 class="text-section text-foreground">Pasākumi</h2>
-        <div class="mt-2 rounded-2xl bg-surface px-4 pb-3 shadow-card frame line">
-          <section><h3 class="pb-0.5 pt-3 text-item text-foreground">Otrdien, 11. novembrī</h3>
-            <div class="relative grid grid-cols-[2.75rem_0.5rem_minmax(0,1fr)_auto] items-center gap-x-2 rounded-lg px-1.5 py-1.5"><time class="text-meta tabular-nums text-foreground-muted">18:30</time><span class="size-2 rounded-full bg-[var(--c)]"></span><span class="truncate weight-strong text-foreground">Šaha vakars bibliotēkā</span><span class="whitespace-nowrap text-meta text-foreground-muted">Jelgava · 7 iet</span><p class="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted"><span class="truncate weight-medium text-foreground underline decoration-border underline-offset-2">Jelgavas šaha vakari</span><span class="truncate whitespace-pre"> · Spēles</span></p></div>
-          </section>
-          <section class="border-t border-border"><h3 class="pb-0.5 pt-3 text-item text-foreground">Sestdien, 15. novembrī</h3>
-            <div class="relative grid grid-cols-[2.75rem_0.5rem_minmax(0,1fr)_auto] items-center gap-x-2 rounded-lg px-1.5 py-1.5"><time class="text-meta tabular-nums text-foreground-muted">11:00</time><span class="size-2 rounded-full bg-[var(--c)]"></span><span class="truncate weight-strong text-foreground">Bērnu šaha rīts</span><span class="whitespace-nowrap text-meta text-foreground-muted">Jelgava · 4 iet</span><p class="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted"><span class="truncate weight-medium text-foreground underline decoration-border underline-offset-2">Šahs bērniem</span><span class="truncate whitespace-pre"> · Spēles</span></p></div>
-          </section>
-        </div>
-      </section>
-      <section>
-        <h2 class="text-section text-foreground">No grupām</h2>
-        <div class="mt-2 rounded-2xl bg-surface px-4 pb-1 shadow-card frame line">
-          <article class="grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 py-4"><div class="min-w-0"><h3 class="break-words text-item text-foreground">Jauns laiks: otrdienās 18:30</h3><p class="mt-1 max-w-reading text-body-sm text-foreground">Bibliotēkā ir atbrīvojusies telpa, tāpēc vakari pārceļas uz otrdienām.</p><p class="mt-1.5 text-meta text-foreground-muted">Jelgavas šaha vakari · pirms 3 dienām</p></div></article>
-        </div>
-      </section>
-    </div>
-
-    <aside class="flex min-w-0 flex-col gap-6">
-      <section>
-        <h2 class="text-section text-foreground">Cilvēki</h2>
-        <div class="mt-2 flex items-center gap-3"><div data-m class="flex -space-x-2"><span class="grid size-9 place-items-center rounded-full bg-primary text-tag text-primary-foreground ring-2 ring-background">MA</span><span class="grid size-9 place-items-center rounded-full bg-role-mod text-tag text-role-mod-ink ring-2 ring-background">IN</span><span class="grid size-9 place-items-center rounded-full bg-role-pending text-tag text-role-pending-ink ring-2 ring-background">KR</span><span class="grid size-9 place-items-center rounded-full bg-tint text-tag text-foreground ring-2 ring-background">+9</span></div><p class="text-body-sm text-foreground-muted"><span data-m>12 cilvēki, 2 moderatori</span><span data-j>12 cilvēki</span></p></div>
-        <p data-m class="mt-3 text-meta text-foreground-muted"><span class="underline underline-offset-2">Vairs neinteresē</span></p>
-        <p data-j class="mt-3"><span class="inline-flex h-11 items-center justify-center rounded-pill px-4 text-button @3xl:h-10 frame shadow-control press bg-primary text-primary-foreground">Mani interesē</span></p>
-      </section>
-    </aside>
-  </div>
-</template>
-
-<h1 class="text-title mb-1">Šahs Jelgavā</h1>
-<p class="mb-6 text-body-sm text-foreground-muted">Pieci ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem. Apmeklējums nekad nepadara tevi par dalībnieku.</p>
+<h1 class="text-title mb-1">Komūna: Šahs Jelgavā</h1>
+<p class="mb-6 text-body-sm text-foreground-muted">Viena pilnā lapa ar grupas lapas rāmi: pieci cilņu ekrāni dalībnieka skatā un trīs īsi stāvokļi. Katrs 375 un 1280 px platumā; ritini uz sāniem. Apmeklējums nekad nepadara tevi par dalībnieku.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
 <script>
-  var states = [
-    { id: 'a0', label: 'A0 Tukšs veids × pilsēta', story: 'Anna atver Šahu Jelgavā, bet šeit vēl nekā nav: ne kartīšu, ne grupu. Lapa parāda pirmo darbību "Pastāsti, ko meklē" (Meklē kartīte); vieglāks sekojums ir "Mani interesē". Zem tās tuvumā esošās vietas. Šādas lapas sarakstos paslēptas, kamēr tajās nekā nav.', sub: 'Vēl nekā nav' },
-    { id: 'b', mode: 'b0', label: 'A1 Skatās, nepierakstījies', story: 'Viesis redz tikai skaitļus: cilvēku skaitu, Meklē kartītes bez vārdiem, grupas un pasākumus; sejas un sarunu nav. Vienīgā darbība ir "Mani interesē".', sub: '12 cilvēki · 2 meklē · 2 grupas' },
-    { id: 'b', mode: 'b1', label: 'A2 Dalībnieks', story: 'Dalībnieks redz cilvēkus, pievieno Meklē kartīti (līdz 3), piespiež "Es arī" (skaitu redz tikai kartītes autors), ziņo par kartīti vai saka "Vairs neinteresē". Kartītes nenoved uz privātu sarunu; saruna notiek grupā.', sub: '12 cilvēki · 2 meklē · 2 grupas' },
-    { id: 'au', label: 'A3 Tava kartīte pēc "Es arī"', story: 'Kad citi piespiež "Es arī", autore saņem paziņojumu. "Izveidot grupu ar viņiem" atver grupas izveidi ar pilsētu un veidu jau ievadītu un uzaicina atsaucējus.', sub: '2 cilvēki atsaucās' },
-    { id: 'a2', label: 'A4 Jauns veids', story: 'Jānis grib Go, bet veida nav. "Ieteikt veidu" atver to pašu logu kā esošais ieteikuma logs: nosaukums un tēma. Administratori to izskata; apstiprināts veids kļūst redzams visiem.', sub: 'Ieteikts veids · gaida apstiprinājumu' }
+  var ICO = function (d, c) { return '<svg aria-hidden="true" class="' + (c || 'size-4') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  var P = {
+    home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+    chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
+    cal: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+    pin: '<path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
+    game: '<rect width="20" height="12" x="2" y="6" rx="2"/><path d="M6 12h4m-2-2v4"/><path d="M15 11h.01M18 13h.01"/>',
+    send: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+    max: '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>'
+  };
+  var BTN = 'inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button @3xl:h-10 ';
+  var PRIMARY = BTN + 'frame shadow-control press bg-primary text-primary-foreground';
+  var OUTLINE = BTN + 'line shadow-control press bg-transparent text-foreground';
+  var ONTONE = BTN + 'frame press bg-[var(--tone-btn)] text-[var(--tone-btn-ink)] @3xl:px-5';
+  var SMALL = 'inline-flex h-8 items-center rounded-pill px-4 text-button-sm ';
+  var NAV_ROW = 'flex min-h-10 shrink-0 items-center gap-3 rounded-xl px-3 py-2 text-body-sm text-foreground';
+  var TAGS = 'tab-tint text-meta';
+
+  function head() {
+    return '<header class="sticky top-0 z-10 flex h-header items-center gap-2 border-b border-border bg-surface px-3 @3xl:px-gutter"><span class="inline-flex items-center whitespace-nowrap font-heading weight-strong text-primary text-item @3xl:text-section"><span>Ejam <em class="weight-medium">kopā</em></span></span><div class="hidden min-w-0 flex-1 justify-center @3xl:flex"><div class="flex h-10 w-full max-w-2xl items-center rounded-pill line bg-surface px-3 text-body-sm text-foreground-muted">Meklēt grupas, cilvēkus</div></div><div class="ml-auto flex items-center gap-2"><span class="grid size-8 place-items-center rounded-full bg-primary text-tag text-primary-foreground">OK</span></div></header>';
+  }
+
+  /* GroupHead (full, with picture) */
+  function groupHead(o) {
+    var picture = '<div class="relative min-w-0 @3xl:col-start-2 @3xl:row-start-1"><div class="relative block aspect-[3/1] w-full overflow-hidden rounded-2xl frame bg-tint @3xl:aspect-auto @3xl:h-full @3xl:min-h-40 @3xl:rounded-l-none"><div class="absolute inset-0 banner-tint"></div><span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[var(--accent)]">' + ICO(P.game, 'size-12') + '</span><span aria-hidden="true" class="absolute right-2 top-2 grid size-8 place-items-center rounded-pill bg-[var(--photo-chip)] text-[var(--photo-ink)]">' + ICO(P.max) + '</span></div></div>';
+    var action = o.action ? '<div class="@3xl:ml-auto @3xl:shrink-0"><span class="' + ONTONE + ' w-full @3xl:w-auto">' + o.action + '</span></div>' : '';
+    return '<div class="mx-auto grid max-w-browse gap-3 px-3 pt-3 @3xl:grid-cols-[minmax(0,1fr)_30%] @3xl:gap-x-0 @3xl:px-gutter @3xl:pt-5">' +
+      '<div class="tone-fill frame relative grid min-w-0 grid-cols-[auto_1fr] items-center gap-x-3 gap-y-3 rounded-2xl p-4 @3xl:gap-x-4 @3xl:rounded-r-none @3xl:p-6">' +
+      '<span class="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item @3xl:size-12">' + ICO(P.game, 'size-5 @3xl:size-6') + '</span>' +
+      '<div class="min-w-0"><h1 class="line-clamp-2 break-words text-title">Šahs Jelgavā</h1><div class="mt-1.5 grid gap-1">' +
+      '<p class="flex items-center gap-x-2 text-meta"><span class="inline-flex shrink-0 items-center gap-1.5 weight-medium"><span class="size-2 shrink-0 rounded-full bg-current"></span>Spēles</span><span>Šahs</span></p>' +
+      '<p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta"><span class="inline-flex items-center gap-1.5">' + ICO(P.pin) + 'Jelgava</span><span class="inline-flex items-center gap-1.5">' + ICO(P.users) + 'Komūna · ' + o.people + '</span></p></div></div>' +
+      (action ? '<div class="col-span-2 flex flex-col gap-3 @3xl:flex-row @3xl:items-center @3xl:justify-between @3xl:border-t @3xl:border-[color-mix(in_srgb,var(--on-cat)_30%,transparent)] @3xl:pt-4"><p class="min-w-0 text-body-sm @3xl:text-body">Vieta, kur Jelgavā atrast cilvēkus šaham un galda spēlēm.</p>' + action + '</div>' : '') +
+      '</div>' + picture + '</div>';
+  }
+
+  /* GroupPagesNav: PageNavLink rows. Narrow = a scrolling row, wide = a column. */
+  function nav(cur, tabs) {
+    var items = { s: ['Sākums', P.home, 0], c: ['Saruna', P.chat, 0], e: ['Pasākumi', P.cal, tabs.e], g: ['Grupas', P.users, tabs.g], p: ['Cilvēki', P.user, tabs.p] };
+    var keys = tabs.keys;
+    return '<nav aria-label="Komūnas lapas" class="-mx-3 flex gap-0.5 overflow-x-auto px-3 pt-2 @3xl:sticky @3xl:top-5 @3xl:mx-0 @3xl:flex-col @3xl:self-start @3xl:overflow-visible @3xl:px-0 @3xl:pt-0">' + keys.map(function (k) {
+      var i = items[k]; var on = k === cur;
+      return '<span class="' + NAV_ROW + (on ? ' bg-tint weight-strong' : '') + '">' + ICO(i[1], 'size-4 text-foreground-muted') + i[0] + (i[2] ? '<span class="ml-auto rounded-pill px-2 text-tag text-foreground-muted ' + (on ? 'bg-surface' : 'bg-tint') + '">' + i[2] + '</span>' : '') + '</span>';
+    }).join('') + '</nav>';
+  }
+
+  var av = function (t, c, size) { return '<span class="grid ' + (size || 'size-9') + ' shrink-0 place-items-center rounded-full ' + c + ' text-tag">' + t + '</span>'; };
+  var h2 = function (t, extra) { return '<div class="flex items-center justify-between gap-2"><h2 class="text-section text-foreground">' + t + '</h2>' + (extra || '') + '</div>'; };
+  var card = 'rounded-2xl bg-surface p-4 shadow-card frame line';
+
+  /* Meklē board */
+  function seeks(mode) {
+    var respond = function (n, own) { return mode === 'out' ? '' : own ? '<p class="mt-3 text-meta text-foreground-muted">' + n + ' cilvēki atsaucās</p>' : '<div class="mt-3 flex items-center gap-3"><span class="' + SMALL + 'frame shadow-control press bg-primary text-primary-foreground">Es arī</span><span class="text-meta text-foreground-muted underline underline-offset-2">Ziņot</span></div>'; };
+    var who = function (name, when) { return (mode === 'out' ? '' : name + ' · ') + when; };
+    var c1 = '<article class="' + card + '"><p class="text-body-sm text-foreground">Meklēju partneri šaha partijām otrdienu vakaros, līmenis ap 1500.</p><p class="mt-1 text-meta text-foreground-muted">' + who('Mārtiņš', 'pirms 2 dienām') + '</p>' + respond(0, false) + '</article>';
+    var mine = mode === 'author';
+    var c2 = '<article class="' + card + '"><p class="text-body-sm text-foreground">Vai kāds māca bērniem šahu? Meitai 8 gadi, gribam sākt.</p><p class="mt-1 text-meta text-foreground-muted">' + (mode === 'out' ? 'pirms 5 dienām' : mode === 'member' ? 'Inese · pirms 5 dienām' : 'Tu · pirms 5 dienām') + '</p>' + (mine ? '<p class="mt-3 text-meta text-foreground-muted">2 cilvēki atsaucās</p><div class="mt-3"><span class="' + PRIMARY + '">Izveidot grupu ar viņiem</span></div><p class="mt-3 text-meta text-foreground-muted">Atvērsies grupas izveide ar tēmu un pilsētu jau ievadītu; atsaucēji saņems uzaicinājumu.</p>' : respond(0, false)) + '</article>';
+    var add = mode === 'out' ? '' : '<span class="' + SMALL + 'line shadow-control bg-transparent text-foreground">Pastāsti, ko meklē</span>';
+    return '<section>' + h2('Meklē', add) + (mode === 'out' ? '' : '<p class="mt-1 text-meta text-foreground-muted">Vari turēt līdz 3 kartītēm. Tev ir ' + (mode === 'member' ? 1 : 1) + '.</p>') + '<div class="mt-3 grid gap-3 @3xl:grid-cols-2">' + c1 + c2 + '</div></section>';
+  }
+  function emptySeeks() {
+    return '<section class="max-w-focus ' + card + ' p-5"><h2 class="text-section text-foreground">Šeit vēl neviens neko nemeklē</h2><p class="mt-2 text-body-sm text-foreground-muted">Esi pirmais: pastāsti, ko meklē, un tie, kam tas interesē, atsauksies.</p><div class="mt-4 flex flex-wrap gap-2"><span class="' + PRIMARY + '">Pastāsti, ko meklē</span><span class="' + OUTLINE + '">Mani interesē</span></div></section>';
+  }
+  var evRow = function (time, title, group, going) {
+    return '<div class="relative grid grid-cols-[2.75rem_0.5rem_minmax(0,1fr)_auto] items-center gap-x-2 rounded-lg px-1.5 py-1.5"><time class="text-meta tabular-nums text-foreground-muted">' + time + '</time><span class="size-2 rounded-full bg-[var(--c)]"></span><span class="truncate weight-strong text-foreground">' + title + '</span><span class="whitespace-nowrap text-meta text-foreground-muted">Jelgava · ' + going + ' iet</span><p class="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted"><span class="truncate weight-medium text-foreground underline decoration-border underline-offset-2">' + group + '</span></p></div>';
+  };
+  function nextEvents(n) {
+    var rows = [evRow('18:30', 'Šaha vakars bibliotēkā', 'Jelgavas šaha vakari', 7), evRow('11:00', 'Bērnu šaha rīts', 'Šahs bērniem', 4)].slice(0, n);
+    return '<section>' + h2('Nākamie pasākumi') + '<div class="mt-2 ' + card.replace('p-4', 'px-3 py-2') + '">' + rows.join('<div class="border-t border-border"></div>') + '</div></section>';
+  }
+  var groupRow = function (name, meta, status, first) {
+    return '<div class="relative flex min-h-[5.5rem] items-center gap-3 py-3' + (first ? '' : ' border-t border-dashed border-border') + '"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(P.game, 'size-6') + '</span><span class="min-w-0 flex-1"><span class="line-clamp-2 block text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="truncate">' + meta + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 ' + TAGS + ' text-foreground"><span class="truncate">' + status + '</span></span></span></div>';
+  };
+
+  /* Chat: the ChatPanel look */
+  function chat() {
+    var m = function (n, t, me) { return me ? '<div class="ml-auto mt-3 flex max-w-[75%] flex-col items-end"><div class="rounded-2xl rounded-br-none px-3 py-2 text-body-sm bg-primary text-primary-foreground">' + t + '</div></div>' : '<div class="mr-auto mt-3 flex max-w-[75%] flex-col items-start"><span class="mb-1 px-1 text-tag text-foreground-muted">' + n + '</span><div class="rounded-2xl rounded-bl-none px-3 py-2 text-body-sm line bg-surface-elevated text-foreground shadow-control">' + t + '</div></div>'; };
+    return '<section class="flex flex-col overflow-hidden rounded-2xl bg-surface shadow-card frame line"><div class="flex items-center gap-3 border-b border-border bg-surface p-4"><span class="flex size-8 shrink-0 items-center justify-center rounded-full line bg-surface">' + ICO(P.users, 'size-4 text-foreground-muted') + '</span><div class="min-w-0"><span class="block truncate weight-strong">Šahs Jelgavā</span><span class="text-meta text-foreground-muted">14 cilvēki · redzama tikai dalībniekiem</span></div></div><div class="flex flex-col gap-0.5 p-4"><p class="my-2 self-center rounded-pill bg-surface-elevated px-3 py-1 text-meta text-foreground-muted">Šodien</p>' +
+      m('Mārtiņš', 'Kurš nāk otrdien uz bibliotēku?') + m('Ineta · moderatore', 'Es! Atnesīšu pulksteni.') + m('Kristaps', 'Un turnīrs 22. novembrī? Rīko Jelgavas šaha vakari.') + m('', 'Esmu klāt, pierakstiet mani.', true) +
+      '</div><div class="border-t border-border bg-surface p-4"><form class="flex items-center gap-2"><div class="flex h-11 flex-1 items-center rounded-md px-3 text-body line bg-surface text-foreground-muted @3xl:h-10 @3xl:text-body-sm">Raksti ziņu</div><span class="grid size-11 shrink-0 place-items-center rounded-pill frame press bg-primary text-primary-foreground @3xl:size-10">' + ICO(P.send) + '</span></form></div></section>';
+  }
+
+  function eventsPage() {
+    var day = function (d, rows) { return '<section class="border-t border-border first:border-t-0"><h3 class="pb-0.5 pt-3 text-item text-foreground">' + d + '</h3>' + rows + '</section>'; };
+    return '<section>' + h2('Pasākumi') + '<p class="mt-1 text-meta text-foreground-muted">Pasākumus veido grupas; komūna tos tikai rāda.</p><div class="mt-2 rounded-2xl bg-surface px-4 pb-3 shadow-card frame line">' +
+      day('Otrdien, 11. novembrī', evRow('18:30', 'Šaha vakars bibliotēkā', 'Jelgavas šaha vakari', 7)) +
+      day('Sestdien, 15. novembrī', evRow('11:00', 'Bērnu šaha rīts', 'Šahs bērniem', 4)) +
+      day('Sestdien, 22. novembrī', evRow('12:00', 'Starpgrupu šaha turnīrs', 'Jelgavas šaha vakari', 12)) + '</div></section>';
+  }
+  function groupsPage() {
+    return '<section>' + h2('Grupas', '<span class="' + SMALL + 'line shadow-control bg-transparent text-foreground">Izveidot grupu</span>') + '<div class="mt-2 max-w-page">' + groupRow('Jelgavas šaha vakari', 'Spēles · Šahs', 'Nākamā: Ot, 18:30 bibliotēkā', true) + groupRow('Šahs bērniem', 'Spēles · Šahs · Ģimene', 'Jelgava · 9 biedri') + groupRow('Galda spēļu vakars', 'Spēles · Galda spēles', 'Jelgava · 6 biedri') + '</div></section>';
+  }
+  function peoplePage() {
+    var row = function (i, n, c, sub, first) { return '<div class="flex items-center gap-3 py-3' + (first ? '' : ' border-t border-dashed border-border') + '">' + av(i, c, 'size-10') + '<span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">' + n + '</span><span class="block truncate text-meta text-foreground-muted">' + sub + '</span></span></div>'; };
+    return '<section>' + h2('Cilvēki') + '<p class="mt-1 text-meta text-foreground-muted">14 cilvēki, 2 moderatori. Grupu īpašnieki un administratori var pieteikties moderēt; apstiprina vietnes administrators.</p><div class="mt-2 max-w-page">' +
+      row('IN', 'Ineta', 'bg-role-mod text-role-mod-ink', 'Moderatore · Jelgavas šaha vakari', true) + row('KR', 'Kristaps', 'bg-role-mod text-role-mod-ink', 'Moderators · Šahs bērniem') + row('MA', 'Mārtiņš', 'bg-role-member text-role-member-ink', 'Jelgavas šaha vakari') + row('IE', 'Inese', 'bg-role-member text-role-member-ink', 'Meklē: šaha skolotāju') + '</div></section>';
+  }
+
+  var KEYS_M = { keys: ['s', 'c', 'e', 'g', 'p'], e: 3, g: 3, p: 14 };
+  var KEYS_O = { keys: ['s', 'e', 'g', 'p'], e: 3, g: 3, p: 14 };
+  var KEYS_E = { keys: ['s', 'e', 'g', 'p'], e: 0, g: 0, p: 0 };
+  function page(o) {
+    return head() + groupHead({ people: o.people, action: o.action }) +
+      '<div class="mx-auto grid max-w-browse gap-4 px-3 pb-8 pt-2 @3xl:grid-cols-[13rem_minmax(0,1fr)] @3xl:gap-8 @3xl:px-gutter @3xl:pt-6">' + nav(o.cur, o.tabs) + '<div class="flex min-w-0 flex-col gap-6">' + o.body + '</div></div>';
+  }
+  var screens = [
+    { label: 'A1 Sākums', story: 'Dalībnieks atver komūnu un redz Meklē dēli: kartītes, uz kurām var atbildēt ar "Es arī" vai par ko ziņot, un savu limitu (līdz 3). Zem tā nākamie grupu pasākumi. Komūnai nav savu pasākumu.', fn: function () { return page({ cur: 's', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: seeks('member') + nextEvents(2) }); } },
+    { label: 'A2 Saruna', story: 'Vieta, kur satiekas cilvēki no dažādām grupām un tie, kas tikai interesējas. Saruna ir redzama tikai dalībniekiem; moderatori ir atzīmēti. Izskats kā ziņu paneļa sarunai.', fn: function () { return page({ cur: 'c', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: chat() }); } },
+    { label: 'A3 Pasākumi', story: 'Grupu publiskie pasākumi vienuviet. Pasākumu vienmēr veido grupa; starpgrupu turnīrs ir rīkotājas grupas pasākums, ko komūna rāda.', fn: function () { return page({ cur: 'e', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: eventsPage() }); } },
+    { label: 'A4 Grupas', story: 'Grupas, kas izveidotas šajā tēmā šajā pilsētā. Rīkotājiem te ir sava grupa; "Izveidot grupu" ved uz izveidi ar tēmu un pilsētu jau ievadītu.', fn: function () { return page({ cur: 'g', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: groupsPage() }); } },
+    { label: 'A5 Cilvēki', story: 'Dalībnieki ar grupu un moderatori. Grupu īpašnieki un administratori var pieteikties moderēt; pieteikumu apstiprina vietnes administrators.', fn: function () { return page({ cur: 'p', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: peoplePage() }); } },
+    { label: 'B1 Nepierakstījies', story: 'Viesis redz tikai skaitļus: cilvēku skaitu, Meklē kartītes bez vārdiem, grupas un pasākumus. Sarunas un sejas nav. Vienīgā darbība ir "Mani interesē".', fn: function () { return page({ cur: 's', tabs: KEYS_O, people: '14 cilvēki', action: 'Mani interesē', body: seeks('out') + nextEvents(2) }); } },
+    { label: 'B2 Tukša komūna', story: 'Anna atver Šahu Jelgavā, bet šeit vēl nekā nav. Lapa piedāvā pirmo darbību "Pastāsti, ko meklē"; vieglāks ir "Mani interesē". Sarakstos tādas komūnas nerāda, kamēr tajās nekā nav.', fn: function () { return page({ cur: 's', tabs: KEYS_E, people: '0 cilvēki', action: 'Mani interesē', body: emptySeeks() }); } },
+    { label: 'B3 Tava kartīte pēc "Es arī"', story: 'Kad citi piespiež "Es arī", autore saņem paziņojumu. "Izveidot grupu ar viņiem" atver grupas izveidi ar tēmu un pilsētu jau ievadītu un uzaicina atsaucējus.', fn: function () { return page({ cur: 's', tabs: KEYS_M, people: '14 cilvēki', action: 'Vairs neinteresē', body: '<section class="max-w-focus ' + card + '"><p class="text-meta text-foreground-muted">Paziņojums · šodien</p><p class="mt-1 text-body-sm text-foreground">2 cilvēki atsaucās uz tavu kartīti Šahā Jelgavā.</p></section>' + seeks('author') }); } }
   ];
   var stage = document.getElementById('stage');
-  states.forEach(function (s) {
-    var wrap = document.createElement('section');
-    wrap.innerHTML = '<h2 class="text-section">' + s.label + '</h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p><div class="flex items-start gap-6 overflow-x-auto pb-4"></div>';
-    var row = wrap.lastChild;
+  screens.forEach(function (s) {
+    var sec = document.createElement('section');
+    sec.innerHTML = '<h2 class="text-section">' + s.label + '</h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p><div class="flex items-start gap-6 overflow-x-auto pb-4"></div>';
+    var row = sec.lastChild;
     [375, 1280].forEach(function (w) {
       var box = document.createElement('div');
       box.className = '@container shrink-0 overflow-hidden rounded-2xl line bg-background';
       box.style.width = w + 'px';
-      ['head', 'title', s.id].forEach(function (id) { box.appendChild(document.getElementById(id).content.cloneNode(true)); });
-      box.querySelectorAll(s.mode === 'b0' ? '[data-m]' : '[data-j]').forEach(function (e) { e.remove(); });
-      box.querySelector('[data-sub]').textContent = s.sub;
+      box.style.setProperty('--c', 'var(--cat-games)');
+      box.style.setProperty('--accent', 'var(--cat-games)');
+      box.innerHTML = s.fn();
       row.appendChild(box);
     });
-    stage.appendChild(wrap);
+    stage.appendChild(sec);
   });
 </script>
 </body>

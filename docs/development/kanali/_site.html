@@ -9,6 +9,8 @@ html:root{--primary:#4B5E3B;--primary-foreground:#ffffff;--background:#f4f4ef;--
 html { color-scheme: light; --tab-mix: 12%; --tab-mix-hover: 20%; --band-mix-base: 24%; --role-live: #1DB954; --role-live-ink: #0B2414; }
 body { background: var(--background); color: var(--foreground); font-family: var(--theme-font-body), system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 @utility sticker { rotate: -2deg; transform-origin: left center; background-color: var(--c); color: var(--on-cat); --line-color: color-mix(in srgb, var(--c) 70%, var(--foreground)); }
+@utility tone-fill { background-color: var(--accent); color: var(--on-cat); }
+@utility mark-on-tone { background-color: color-mix(in srgb, var(--on-cat) 15%, transparent); color: var(--on-cat); }
 </style>
 <style type="text/tailwindcss">
 @theme {

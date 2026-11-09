@@ -8,7 +8,7 @@
 <!-- Plain mock. Class strings are copied from components/discovery (GroupCard, CreateCard, filter/TitleSwitch, filter/chip-styles) and shell Header. The script builds each screen from small string helpers and stamps it into the 375 and 1280 boxes; layout follows the box width (container queries). -->
 
 <h1 class="text-title mb-1">Ieeja no saraksta</h1>
-<p class="mb-6 text-body-sm text-foreground-muted">Kā kanāli iekļaujas esošajā sarakstā: tie paši čipi, tās pašas kartītes, tā pati izveides kartīte. Četri ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem.</p>
+<p class="mb-6 text-body-sm text-foreground-muted">Kā komūnas iekļaujas esošajā sarakstā: tie paši čipi, tās pašas kartītes, tā pati izveides kartīte. Četri ekrāni, katrs 375 un 1280 px platumā; ritini uz sāniem.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -58,14 +58,14 @@
     return '<article class="relative flex h-80 flex-col rounded-2xl line bg-surface shadow-card"><div class="relative shrink-0">' + banner + tag + '</div><div class="flex min-h-0 min-w-0 flex-1 flex-col gap-1.5 overflow-hidden px-5 pb-3 pt-6"><h3 class="line-clamp-2 text-item text-foreground">' + o.name + '</h3><p class="text-meta text-foreground-muted">' + o.meta + '</p>' + (o.note ? '<p class="line-clamp-2 text-meta weight-strong text-foreground">' + o.note + '</p>' : '') + '</div></article>';
   }
   var createCard = function (second) {
-    return '<div class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 grid size-9 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(PLUS, 'size-4') + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-2 text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
+    return '<div class="card-note flex min-h-24 flex-col rounded-2xl border-[1.5px] border-dashed border-border bg-surface text-center"><span class="flex flex-1 flex-col items-center justify-center gap-1 px-4 py-5"><span class="mb-1 grid size-9 place-items-center rounded-full border-[1.5px] border-foreground-muted/60 text-foreground">' + ICO(PLUS, 'size-4') + '</span><span class="text-item text-foreground">Izveidot jaunu grupu</span><span class="text-meta text-foreground-muted">šajā tēmā</span>' + (second ? '<span class="mt-2 text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
   };
   /* Phones list rows (GroupRow), from 3xl of the box a card grid. */
   var rowOf = function (name, meta, city, status) {
     return '<div class="relative flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3 first:border-t-0"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(CAM) + '</span><span class="min-w-0 flex-1"><span class="line-clamp-2 text-item text-foreground">' + name + '</span><span class="mt-0.5 flex items-center text-meta text-foreground-muted"><span class="mr-1.5 size-2 shrink-0 rounded-full bg-[var(--c)]"></span><span class="min-w-0 truncate">' + meta + '</span></span><span class="mt-1.5 flex h-7 items-center rounded-item px-2 text-meta ' + (status ? 'line text-foreground-muted' : 'tab-tint text-foreground') + '"><span class="min-w-0 truncate">' + (city || '') + '</span></span></span></div>';
   };
   var createRow = function (second) {
-    return '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(PLUS, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā kategorijā</span>' + (second ? '<span class="mt-0.5 block truncate text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
+    return '<div class="flex min-h-[5.5rem] items-center gap-3 border-t border-dashed border-border py-3"><span class="grid size-14 shrink-0 place-items-center rounded-item border-[1.5px] border-dashed border-border">' + ICO(PLUS, 'size-5 text-foreground-muted') + '</span><span class="min-w-0 flex-1"><span class="block truncate text-item text-foreground">Izveidot jaunu grupu</span><span class="mt-0.5 block truncate text-meta text-foreground-muted">šajā tēmā</span>' + (second ? '<span class="mt-0.5 block truncate text-meta text-foreground-muted underline underline-offset-2">vai vienkārši pastāsti, ko meklē</span>' : '') + '</span></div>';
   };
   var both = function (rows, cells) { return '<div class="max-w-page @3xl:hidden">' + rows + '</div><div class="hidden gap-5 @3xl:grid @3xl:grid-cols-3">' + cells + '</div>'; };
   var grid = function (cells) { return '<div class="grid gap-5 @3xl:grid-cols-3">' + cells + '</div>'; };
@@ -73,7 +73,7 @@
   var gA = function () { return card({ tag: 'Fotogrāfija', city: 'Jelgava', name: 'Jelgavas foto pastaigas', meta: 'Hobiji · 18 cilvēki', note: 'Meklē: modeli sestdienas pastaigai' }); };
   var gB = function () { return card({ tag: 'Fotogrāfija', city: 'Jelgava', name: 'Mobilā foto Jelgavā', meta: 'Hobiji · 7 cilvēki' }); };
 
-  /* Channel bar: one line between the chip row and the grid; only when the Veids x city has a Meklē card or a group. */
+  /* Channel bar: one line between the chip row and the grid; only when the tēma x city has a Meklē card or a group. */
   var bar = function (text) { return '<div class="mb-5 flex min-h-11 items-center gap-3 rounded-2xl line bg-surface px-4 py-2 shadow-card"><span class="min-w-0 flex-1 truncate text-body-sm text-foreground">' + text + '</span><span class="shrink-0 text-button-sm text-primary underline underline-offset-2">Skatīt</span></div>'; };
   var rowsA = function () { return rowOf('Jelgavas foto pastaigas', 'Hobiji', 'Jelgava · 18 cilvēki') + rowOf('Mobilā foto Jelgavā', 'Hobiji', 'Jelgava · 7 cilvēki'); };
   function variant(label, barHtml, rows, cells) {
@@ -89,23 +89,23 @@
       both(rowOf('Jelgavas foto pastaigas', 'Hobiji', 'Jelgava · 18 cilvēki') + rowOf('Mobilā foto Jelgavā', 'Hobiji', 'Jelgava · 7 cilvēki') + createRow(true), gA() + gB() + createCard(true)));
   }
   function s_c4() {
-    var chips = ['Fotogrāfija', 'Šahs', 'Rokdarbi', 'Dārzkopība'].map(function (n, i) { return '<span class="' + (i === 0 ? CHOSEN : CHIP) + '">' + n + '</span>'; }).join('') + '<span class="' + QUIET + '">' + ICO(PLUS, 'size-3.5') + 'Cits veids</span>';
+    var chips = ['Fotogrāfija', 'Šahs', 'Rokdarbi', 'Dārzkopība'].map(function (n, i) { return '<span class="' + (i === 0 ? CHOSEN : CHIP) + '">' + n + '</span>'; }).join('') + '<span class="' + QUIET + '">' + ICO(PLUS, 'size-3.5') + 'Cits</span>';
     var field = function (l, v) { return '<div><p class="mb-1 text-button-sm text-foreground">' + l + '</p><div class="flex h-11 items-center rounded-md px-3 text-body line bg-surface text-foreground @3xl:h-10 @3xl:text-body-sm">' + v + '</div></div>'; };
-    var sheet = '<div class="relative mt-6 max-w-focus rounded-2xl bg-surface-elevated p-5 shadow-premium line"><div class="mb-3 flex items-start justify-between gap-3"><h2 class="text-section text-foreground">Ieteikt jaunu veidu</h2><span class="grid size-10 place-items-center text-foreground-muted">' + ICO(X, 'size-5') + '</span></div><div class="flex flex-col gap-3"><p class="text-body-sm text-foreground-muted">Administratori to izskatīs. Izvēlies tēmu, kurai tas pieder.</p>' + field('Nosaukums', 'Go') + field('Tēma', 'Hobiji') + '<div class="mt-1 flex justify-end gap-2"><span class="' + OUTLINE + '">Atcelt</span><span class="' + PRIMARY + '">Ieteikt</span></div></div></div>';
+    var sheet = '<div class="relative mt-6 max-w-focus rounded-2xl bg-surface-elevated p-5 shadow-premium line"><div class="mb-3 flex items-start justify-between gap-3"><h2 class="text-section text-foreground">Ieteikt jaunu tēmu</h2><span class="grid size-10 place-items-center text-foreground-muted">' + ICO(X, 'size-5') + '</span></div><div class="flex flex-col gap-3"><p class="text-body-sm text-foreground-muted">Administratori to izskatīs. Izvēlies tēmu, kurai tā pieder.</p>' + field('Nosaukums', 'Go') + field('Tēma', 'Hobiji') + '<div class="mt-1 flex justify-end gap-2"><span class="' + OUTLINE + '">Atcelt</span><span class="' + PRIMARY + '">Ieteikt</span></div></div></div>';
     return head() + wrap(crumb('Hobiji') + '<div class="mt-2">' + titleSwitch('Grupas') + '</div>' + filterLine(tema) +
       '<div class="flex flex-wrap items-center gap-1.5">' + chips + '</div>' + sheet);
   }
   function s_c5() {
     var line = '<p class="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-meta"><span class="inline-flex shrink-0 items-center gap-1.5 weight-medium text-foreground"><span class="size-2 shrink-0 rounded-full bg-[var(--c)]"></span>Hobiji</span><span class="text-foreground-muted">Fotogrāfija</span></p>';
-    var chan = '<p class="text-meta"><span class="weight-strong text-primary underline underline-offset-2">Vairāk par fotogrāfiju Valmierā →</span></p>';
+    var chan = '<p class="text-meta"><span class="weight-strong text-primary underline underline-offset-2">Fotogrāfijas komūna Valmierā →</span></p>';
     return head() + wrap('<div class="flex items-center gap-3"><span class="grid size-14 shrink-0 place-items-center rounded-item cat-tile">' + ICO(CAM) + '</span><div class="min-w-0"><h1 class="text-title text-foreground">Valmieras objektīvs</h1><div class="mt-1.5 grid gap-1">' + line + chan + '<p class="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta text-foreground-muted"><span class="inline-flex items-center gap-1.5">' + ICO(PIN, 'size-4') + 'Valmiera</span><span class="inline-flex items-center gap-1.5">12 dalībnieki</span></p></div></div></div>');
   }
 
   var screens = [
-    { label: 'C1 Kanāla josla', story: 'Kad ir izvēlēts veids (Fotogrāfija) un pilsēta (Jelgava) un tur ir vismaz viena Meklē kartīte vai grupa, starp čipu rindu un režģi parādās vienas rindas josla: "2 cilvēki Jelgavā meklē fotogrāfijas biedrus → Skatīt", bez sejām. a) ir saturs. b) nekā nav: josla nerādās, redzama tikai izveides kartīte. Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
+    { label: 'C1 Komūnas josla', story: 'Kad ir izvēlēta tēma (Fotogrāfija) un pilsēta (Jelgava) un tur ir vismaz viena Meklē kartīte vai grupa, starp čipu rindu un režģi parādās vienas rindas josla: "2 cilvēki Jelgavā meklē fotogrāfijas biedrus → Skatīt", bez sejām. a) ir saturs. b) nekā nav: josla nerādās, redzama tikai izveides kartīte. Virsraksts paliek Grupas · Pasākumi.', fn: s_c1 },
     { label: 'C2 Izveides kartīte', story: 'Izveides kartīte paliek "Izveidot jaunu grupu"; zem tās kluss otrs ceļš "vai vienkārši pastāsti, ko meklē" tiem, kas negrib vadīt grupu (Meklē kartīte).', fn: s_c3 },
-    { label: 'C3 Cits veids', story: 'Veidu rindas beigās kluss "+ Cits veids"; tas atver esošo ieteikuma logu: "Ieteikt jaunu veidu", nosaukums, tēma, Ieteikt; administratori to izskata.', fn: s_c4 },
-    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Vairāk par fotogrāfiju Valmierā →" ved uz kanālu. Sānjosla nemainās.', fn: s_c5 }
+    { label: 'C3 Cits', story: 'Tēmu rindas beigās kluss "+ Cits"; tas atver esošo ieteikuma logu: "Ieteikt jaunu tēmu", nosaukums, tēma, Ieteikt; administratori to izskata.', fn: s_c4 },
+    { label: 'C4 Grupas lapa', story: 'Grupas galvā zem kategorijas rindas saite "Fotogrāfijas komūna Valmierā →" ved uz komūnu. Sānjosla nemainās.', fn: s_c5 }
   ];
   var stage = document.getElementById('stage');
   screens.forEach(function (s) {
