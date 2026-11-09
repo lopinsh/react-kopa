@@ -81,7 +81,7 @@ A **komūna** (internal name: kanāls, "channel") is the **town square** for one
 3. **Matrix chat is back** (K1 spike, K2 komūna without chat, K3 chat) and **moderators are back** (owners and admins of child groups apply, a site admin approves; `ChannelModRequest` and `CHANNEL_MOD_*` restored).
 4. **No 2-to-open gate** (kept): a komūna page shows once it has at least 1 Meklē card or 1 group; pages with nothing are hidden. The first action is "Pastāsti, ko meklē"; "Mani interesē" is the lighter follow.
 5. **Meklē leads to a group, not a DM** (kept). No "Rakstīt". When others tap "Es arī", the author gets a notification and "Izveidot grupu ar viņiem", which opens the wizard prefilled `?city=&tag=` and invites them. Max 3 active cards per person; each card has a report action.
-6. **The bar is one line** (kept): "Jelgava · Hobiji · Fotogrāfija: 2 cilvēki meklē biedrus → Skatīt". No faces, no city-list variant.
+6. **The bar is one line** (kept): "Komūna: 2 cilvēki meklē biedrus → Skatīt". No faces, no city-list variant. The chips already name the city and tēmas, so the bar does not repeat the title (it would truncate at 375).
 7. **Seeding** (kept). Before the article, the owner and 2-3 Jelgava organisers each start a real group with one dated event. Article topics: šahs un galda spēles, pastaigas/nūjošana, fotogrāfija, koris, skriešana, jaunie vecāki. The article links to the board filtered to Jelgava.
 
 ## Komūnas nosaukums (decided 9 Nov, owner)
@@ -103,7 +103,7 @@ Drawing "Komūna" (`kanali/channel.html`): the group page frame as built (compac
 
 ## Ieeja no esošās struktūras
 URL: `/[l1]/kanals/[l2]/[city]`, e.g. `/lv/hobiji/kanals/fotografija/jelgava`. Sidebar unchanged. Drawing "Ieeja no saraksta" (`kanali/board.html`).
-- **C1 Komūnas josla.** With a tēma and a city chosen and content in that komūna, one line between the chips and the grid: "Jelgava · Hobiji · Fotogrāfija: 2 cilvēki meklē biedrus → Skatīt". With nothing there, no bar shows. Title switch stays "Grupas · Pasākumi".
+- **C1 Komūnas josla.** With a tēma and a city chosen and content in that komūna, one line between the chips and the grid: "Komūna: 2 cilvēki meklē biedrus → Skatīt". With nothing there, no bar shows. Title switch stays "Grupas · Pasākumi".
 - **C2 Izveides kartīte.** "Izveidot jaunu grupu" (šajā tēmā) gets a quiet second action "vai vienkārši pastāsti, ko meklē".
 - **C3 Cits.** Tēmu chips end with a quiet "+ Cits" that opens the `CategorySuggest` sheet ("Ieteikt jaunu tēmu").
 - **C4 Grupas lapa.** Group head shows "Valmiera · Hobiji · Fotogrāfija →" under the category line.
