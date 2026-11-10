@@ -9,7 +9,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | Id | Feature | Status | Notes |
 |---|---|---|---|
 | K-01 | No public name; the page shows only its title. | Changed | → K-01a. |
-| K-01a | A hub's public name is **"<tēma> kopiena"**: "Šaha kopiena", "Galda spēļu kopiena", "Jelgavas kopiena" (card, page title, links). Internal word: hub. | Confirmed | 9 Nov. |
+| K-01a | A hub's public name is **"<tēma> kopiena"**: "Šaha kopiena", "Galda spēļu kopiena", "Jelgavas kopiena" (card, page title, links). Internal word: hub. | Changed | 9 Nov. → K-115. |
 | K-02 | Separate per-city page L1 · L2 · City with 5 tabs (`channel.html`). | Changed | → K-05. |
 | K-03 | Town square on the board, following the filter's zoom level (`board.html`). | Changed | → K-05. |
 | K-04 | A chat room at every level, L1 included. | Changed | → K-06: L1 has no hub and no hub card, "for now". |
@@ -97,6 +97,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-112 | **Busy Pasākumi month (~40 events):** the day strip shows dots on every day, the list is grouped by day, the first 15 show, then "Rādīt vēl 25" with a count line. | Confirmed | 10 Nov, note cmway5mu0. Approved 10 Nov with the Pasākumi section (K-114). Drawn in Pasākumi (phone and 1280) next to the quiet month. |
 | K-113 | **Approved 10 Nov after small notes:** Pārskats signed in (cmwaxxc2j), Grupas (cmwaxyib8: "revisit after real users"), Grupu saraksta līmeņi (cmwaxzp1h), Pasākumi layout (cmway0b5p), Ziņas layout (cmway0u6t), Čats room (cmway2mui), Jelgavas kopiena (cmway3jb7). Chat meta line smaller and fainter: see K-101. | Confirmed | Ziņas and Pasākumi stay Procesā in v17 because K-111 and K-112 add new states. |
 | K-114 | **Approved 10 Nov (v18):** Pasākumi with the busy month (cmwb090nr, K-112), Ziņas grouped (cmwb09ixv, K-111), the desktop Pasākumi, Grupas and Ziņas pages (cmwb0amww, K-91, K-103), signed-out Pārskats (cmwb0b23m, K-41, K-24b). Signed-out Čats (K-38b) stays Procesā. | Confirmed | Drawing `hub.html` v18. |
+| K-115 | **A hub's public name is "Kopiena <Veids>":** "Kopiena Šahs", "Kopiena Galda spēles" (en "<Veids> community"), the plain stored title, no genitive and no list in code. Replaces K-01a. Drawings still show "Šaha kopiena": illustrations only. | Confirmed | 10 Nov, owner answer to K1 question 1. |
 | K-105 | Approved 10 Nov: the board cases with two equals, three or more and the city filter (K-74, K-09b, K-10, K-84), Pārskats signed in (K-05, K-89, K-24a, K-79), the Katalogs (K-88) and the online list (K-34). The same patterns carry to the similar screens (signed-out Pārskats, city hub, the phone member list). | Confirmed | Notes cmwaqgyl9, cmwaqh73h, cmwaqhnse, cmwatxtrl, cmwatyj3i, cmwatywt2, cmwau0ue6, cmwaqqje4, cmwaqpegb. K-91 (A/B hybrid, cmwaqy9pd) and Ziņas delete (cmvtq6lyq) stay open. |
 
 ### Chat
