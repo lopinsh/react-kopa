@@ -612,6 +612,33 @@
       "moveLater": "Move later"
     }
   },
+  "hub": {
+    "name": "{title} community",
+    "memberLine": "{members, plural, one {# member} other {# members}} in {groups, plural, one {# group} other {# groups}}",
+    "pages": {
+      "overview": "Overview",
+      "groups": "Groups",
+      "events": "Events"
+    },
+    "frame": {
+      "pagesLabel": "Community pages",
+      "pathLabel": "Where this community sits"
+    },
+    "actions": {
+      "createGroup": "Create a group",
+      "share": "Share"
+    },
+    "groups": {
+      "tabsLabel": "Groups views",
+      "tabAll": "All",
+      "tabNew": "New",
+      "more": "{n, plural, one {# more group} other {# more groups}}",
+      "empty": "No groups here yet. Start the first one!"
+    },
+    "events": {
+      "empty": "No upcoming events."
+    }
+  },
   "admin": {
     "dashboard": {
       "title": "Administration",

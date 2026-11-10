@@ -34,6 +34,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Group and event panels | centred overlay (sheet on phones) | R6b done |
 | Find | Search | header field, panel (full screen on phones) | R7 done |
 | Find | Manas grupas | A | R8 done |
+| Find | Hub (kopiena): Pārskats, Grupas, Pasākumi | B (group frame, no aside) | K1 (K1-1 built: frame, Grupas) |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a, R9b done (parts on one page, tabs jump; group picture), R28 section pictures |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |

@@ -36,13 +36,15 @@ const STEP_DESC_KEYS = ['step1Desc', 'step2Desc', 'step3Desc'] as const;
 type Props = {
     taxonomy: TaxonomyTree;
     initialL1Slug?: string;
+    /** A Veids (or sub-veids) of that Tēma to tick at the start; an unknown slug is ignored (a hub's Izveidot grupu). */
+    initialTagSlug?: string;
     /** The picker's Unsplash search is on (the key is set). */
     searchEnabled: boolean;
     /** Site admins: the raw image address under "Papildu". */
     canEditUrl: boolean;
 };
 
-export default function GroupCreationWizard({ taxonomy, initialL1Slug, searchEnabled, canEditUrl }: Props) {
+export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTagSlug, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -68,6 +70,12 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug, searchEna
             label: l1.title
         };
     }, [initialL1Slug, taxonomy]);
+
+    // The wizard ticks Veidi only (no sub-veidi): a sub-veids slug ticks its Veids.
+    const initialTagIds = useMemo(() => {
+        const l2 = taxonomy.find((t) => t.slug === initialL1Slug || t.id === initialL1Slug)?.subcategories.find((s) => s.slug === initialTagSlug || s.tags.some((x) => x.slug === initialTagSlug));
+        return l2 ? [l2.id] : [];
+    }, [initialL1Slug, initialTagSlug, taxonomy]);
 
     const [accentColor, setAccentColor] = useState<string>(
         defaultTaxSelection?.kind === 'existing' ? defaultTaxSelection.l1Color : NEUTRAL_ACCENT
@@ -104,7 +112,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug, searchEna
             bannerImage: '',
             bannerCredit: null,
             city: undefined,
-            tagIds: [],
+            tagIds: initialTagIds,
             type: 'PUBLIC',
             isAcceptingMembers: true,
         },

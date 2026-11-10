@@ -21,14 +21,18 @@ export default async function CreateGroupPage({
     searchParams,
 }: {
     params: Promise<{ locale: string }>;
-    searchParams: Promise<{ category?: string }>;
+    searchParams: Promise<{ category?: string; tag?: string }>;
 }) {
     const session = await auth();
     const { locale } = await params;
-    const { category } = await searchParams;
+    const { category, tag } = await searchParams;
 
     if (!session?.user) {
-        redirect(signInUrl(locale, '/create'));
+        // Back to the wizard with the same Tēma and Veids ticked (a hub's Izveidot grupu, K1-08).
+        const back = new URLSearchParams();
+        if (category) back.set('category', category);
+        if (category && tag) back.set('tag', tag);
+        redirect(signInUrl(locale, back.size > 0 ? `/create?${back}` : '/create'));
     }
 
     const [taxonomyResponse, cities] = await Promise.all([getTaxonomy(locale), CityService.listActive(locale)]);
@@ -37,7 +41,7 @@ export default async function CreateGroupPage({
     return (
         <div className="container mx-auto max-w-4xl px-4 py-8">
             <CitiesProvider cities={cities}>
-                <GroupCreationWizard taxonomy={taxonomy} initialL1Slug={category} searchEnabled={isUnsplashSearchEnabled()} canEditUrl={isSiteAdmin(session.user.role)} />
+                <GroupCreationWizard taxonomy={taxonomy} initialL1Slug={category} initialTagSlug={tag} searchEnabled={isUnsplashSearchEnabled()} canEditUrl={isSiteAdmin(session.user.role)} />
             </CitiesProvider>
         </div>
     );

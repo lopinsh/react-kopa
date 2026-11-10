@@ -188,6 +188,9 @@ export const UI = {
     groupPicture: 'group-picture',
     groupStickyBar: 'group-sticky-bar',
     groupMenu: 'group-menu',
+    hubBanner: 'hub-banner',
+    hubStickyBar: 'hub-sticky-bar',
+    hubMenu: 'hub-menu',
     socialLinks: 'social-links',
     nextMeeting: 'next-meeting',
     joinButton: 'join-button',
@@ -303,4 +306,5 @@ export const UNSPLASH_LIMITS = {
     perPage: 8,
 } as const;
 export * from './activity';
+export * from './hubs';
 export * from './email';

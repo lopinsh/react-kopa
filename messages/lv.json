@@ -612,6 +612,33 @@
       "moveLater": "Pārvietot atpakaļ"
     }
   },
+  "hub": {
+    "name": "Kopiena {title}",
+    "memberLine": "{members, plural, zero {# dalībnieku} one {# dalībnieks} other {# dalībnieki}} {groups, plural, zero {# grupās} one {# grupā} other {# grupās}}",
+    "pages": {
+      "overview": "Pārskats",
+      "groups": "Grupas",
+      "events": "Pasākumi"
+    },
+    "frame": {
+      "pagesLabel": "Kopienas lapas",
+      "pathLabel": "Kur šī kopiena atrodas"
+    },
+    "actions": {
+      "createGroup": "Izveidot grupu",
+      "share": "Dalīties"
+    },
+    "groups": {
+      "tabsLabel": "Grupu skati",
+      "tabAll": "Visas",
+      "tabNew": "Jaunās",
+      "more": "Vēl {n, plural, one {# grupa} other {# grupas}}",
+      "empty": "Šeit vēl nav grupu. Sāc pirmo!"
+    },
+    "events": {
+      "empty": "Tuvākajā laikā pasākumu nav."
+    }
+  },
   "admin": {
     "dashboard": {
       "title": "Administrēšana",

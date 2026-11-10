@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
+import { hubHref } from '@/lib/hub-path';
 import { topicHref, type DiscoveryParams } from '@/lib/discovery-params';
 import { UI } from '@/lib/constants';
 
@@ -21,10 +22,12 @@ type Props = {
     onTone?: boolean;
     /** Only the sub-categories: the main category is named elsewhere (the card's sticker or band). */
     subOnly?: boolean;
+    /** Where a sub-category goes: the board filtered by it (default) or its hub (the group page, K-50). The main category always goes to the board: it has no hub. */
+    linkTo?: 'board' | 'hub';
 };
 
 /** "● Sports  Nordic walking, Walks": the category with its dot, then the sub-categories, in one wrapping line. */
-export default function CategoryLine({ color, category, subCategories, l1Slug, subSlugs = [], from, oneLine = false, aboveCardLink = false, onTone = false, subOnly = false }: Props) {
+export default function CategoryLine({ color, category, subCategories, l1Slug, subSlugs = [], from, oneLine = false, aboveCardLink = false, onTone = false, subOnly = false, linkTo = 'board' }: Props) {
     const link = (href: string, label: string) => (
         <Link href={href} className={clsx('hover:underline', aboveCardLink && 'relative z-10')}>{label}</Link>
     );
@@ -39,7 +42,7 @@ export default function CategoryLine({ color, category, subCategories, l1Slug, s
                     {subCategories.map((title, i) => (
                         <span key={subSlugs[i] ?? title}>
                             {i > 0 && ', '}
-                            {l1Slug && subSlugs[i] ? link(topicHref(l1Slug, subSlugs[i], from), title) : title}
+                            {l1Slug && subSlugs[i] ? link(linkTo === 'hub' ? hubHref(l1Slug, subSlugs[i]) : topicHref(l1Slug, subSlugs[i], from), title) : title}
                         </span>
                     ))}
                 </span>

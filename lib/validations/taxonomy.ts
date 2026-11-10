@@ -1,12 +1,14 @@
 import { z } from 'zod';
 import { hexColorSchema } from './theme';
-import { CATEGORY_NAME_MAX, LOCALES } from '@/lib/constants';
+import { CATEGORY_NAME_MAX, HUB_RESERVED_SLUGS, LOCALES } from '@/lib/constants';
 
 /** A category/tag name as people see it: trimmed, 2-60 characters. */
 export const categoryNameSchema = z.string().trim().min(2).max(CATEGORY_NAME_MAX);
 
 /** URL slug of a category: what slugify() produces (lowercase letters, digits, underscores, single hyphens). */
-export const categorySlugSchema = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9_]+(?:-[a-z0-9_]+)*$/);
+export const categorySlugSchema = z.string().trim().toLowerCase().min(1).max(80).regex(/^[a-z0-9_]+(?:-[a-z0-9_]+)*$/)
+    // A hub's page names and the group routes: a Veids with one of these slugs would shadow a hub page (K1-03).
+    .refine((slug) => !(HUB_RESERVED_SLUGS as readonly string[]).includes(slug), { message: 'VALIDATION_FAILED' });
 
 const idSchema = z.string().min(1).max(64);
 

@@ -1,0 +1,31 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+import { Plus, Share2 } from 'lucide-react';
+import { Link } from '@/i18n/routing';
+import { useHubContext } from '@/components/providers/HubProvider';
+import { useShareLink } from '@/hooks/useShareLink';
+import { buttonClass, iconButtonClass } from '@/components/ui/Button';
+
+/**
+ * The two actions of the head tile (K1-08, K-85): Izveidot grupu opens the wizard with this Tēma and Veids ticked (signed out, the wizard page sends to sign-in and back);
+ * Dalīties shares the address of the hub, its word shows from `md`.
+ */
+export default function HubActions() {
+    const t = useTranslations('hub.actions');
+    const hub = useHubContext();
+    const share = useShareLink();
+
+    return (
+        <div className="flex items-center gap-1">
+            <Link href={`/create?category=${hub.l1Slug}&tag=${hub.slug}`} className={buttonClass('onTone', 'px-4')}>
+                <Plus aria-hidden className="size-4" />
+                {t('createGroup')}
+            </Link>
+            <button type="button" onClick={() => share({ title: hub.name, url: window.location.href })} aria-label={t('share')} className={iconButtonClass('onToneGhost', 'md', 'md:w-auto md:gap-1.5 md:px-3 md:text-button-sm')}>
+                <Share2 aria-hidden className="size-4" />
+                <span className="max-md:sr-only">{t('share')}</span>
+            </button>
+        </div>
+    );
+}
