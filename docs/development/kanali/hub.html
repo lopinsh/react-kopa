@@ -8,7 +8,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page (AF-22); future drawings follow it. Plain mock, ONE combined Kanāli hub drawing, redrawn 10 Nov from the Feature ledger in docs/development/specs/kanali.md (K-59: no discarded views kept). Frames follow the group page (design.md, layout B: head tile, pages down the left from 1024 px, a sticky ☰ bar on phones, the in-page tab bar); class strings come from the site's own roles and utilities. Rows still In progress are drawn as defaults and marked OPEN: K-xx. -->
 
 <h1 class="text-title mb-1">Kanāli: kopienas</h1>
-<p class="text-meta text-foreground-muted">Versija v16 · publicēta 2026-11-10 18:35</p>
+<p class="text-meta text-foreground-muted">Versija v16 · publicēta 2026-11-10 19:05</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Viens apvienots zīmējums (K-28, 10. nov.): kopiena ir sava lapa Veidam vai apakšVeidam (K-05) grupas lapas rāmī: galva ar ceļu un nolaižamajiem (K-84, K-85), kreisā izvēlne Pārskats, Grupas, Pasākumi, Ziņas, Čats, katrai lapai sava lapas josla (K-86); telefonā ☰ josla. Kur nolaižamais ir kreisajā izvēlnē (Pārskats) vai cilņu joslas beigās (citas lapas), K-98; katram skatam ir virsraksts un apraksts (K-99). Sekotāju nav (K-58). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis(-ji) (1280, kur zīmēts arī 1920) zem tā pilnā platumā; šaurākā logā rinda ritinās sāņus. Sadaļas ar OPEN vēl nav apstiprinātas (K-91 darbvirsmas varianti A un B).</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -377,10 +377,13 @@
       var look = 'flex min-h-11 min-w-0 flex-col items-center justify-center rounded-xl py-1 ' + (chosen ? 'bg-primary text-primary-foreground' : (d[3] ? 'bg-tint/40 ' : '') + 'text-foreground') + (past ? ' opacity-45' : '');
       return '<span class="' + look + '"><span class="text-tag ' + (chosen ? 'text-primary-foreground' : 'text-foreground-muted') + '">' + d[0] + '</span><span class="text-item tabular-nums' + (!d[2] && !chosen ? ' opacity-60' : '') + '">' + d[1] + '</span><span aria-hidden="true" class="size-1.5 rounded-full ' + (d[2] && !past ? 'bg-primary' : 'invisible') + '"></span></span>';
     }).join('');
-    var seg = function (t, on) { return '<span class="relative inline-flex h-6 items-center whitespace-nowrap rounded-pill px-3 text-meta ' + (on ? 'bg-tint weight-strong text-foreground' : 'weight-medium text-foreground-muted') + '">' + t + '</span>'; };
-    var pill = '<div class="mb-2 flex"><div class="inline-flex h-7 items-center gap-0.5 rounded-pill frame bg-surface p-px weight-medium">' + seg('Šodien') + seg('Šonedēļ', true) + seg('Nedēļas nogalē') + '<span class="relative inline-flex h-6 items-center rounded-pill px-3 text-meta text-foreground-muted">' + ICO(P.cal, 'size-3') + '</span></div></div>';
+    /* as the live filter line (DateChoices / DateButton): from the @4xl container one framed pill, Šodien · Šonedēļ · Nedēļas nogalē · calendar; narrower one chip "Šonedēļ ▾" */
+    var seg = function (t, on) { return '<span class="relative inline-flex h-6 items-center whitespace-nowrap rounded-pill px-3 text-meta ' + (on ? 'tab-tint weight-strong' : 'weight-medium text-foreground-muted') + '">' + t + '</span>'; };
+    var FR = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control press text-meta [--c:var(--primary)]';
+    var pill = '<div class="mb-2 hidden @4xl:flex"><div class="' + FR + ' gap-0.5 bg-surface p-px weight-medium">' + seg('Šodien') + seg('Šonedēļ', true) + seg('Nedēļas nogalē') + '<span class="relative inline-flex h-6 items-center rounded-pill px-3 text-meta text-foreground-muted">' + ICO(P.cal, 'size-3') + '</span></div></div>' +
+      '<div class="mb-2 flex @4xl:hidden"><span class="' + FR + ' bg-surface px-3 weight-medium text-foreground">' + ICO(P.cal, 'size-3 shrink-0') + 'Šonedēļ' + ICO(P.down, 'size-3 shrink-0 text-foreground-muted') + '</span></div>';
     var arrow = 'grid size-9 place-items-center rounded-pill text-foreground-muted';
-    return pill + '<nav class="mb-3 rounded-2xl bg-surface p-2 pb-1.5 line shadow-card"><div class="mb-1 flex items-center justify-between"><span class="' + arrow + ' opacity-35">' + ICO(P.left, 'size-4') + '</span><p class="text-item text-foreground">Novembris 2026</p><span class="' + arrow + '">' + ICO(P.right, 'size-4') + '</span></div><div class="grid grid-cols-7 gap-1">' + cells + '</div></nav>';
+    return pill + '<nav class="mb-3 rounded-2xl bg-surface p-2 pb-1.5 line shadow-card"><div class="mb-1 flex items-center justify-between"><span class="' + arrow + ' opacity-35">' + ICO(P.left, 'size-4') + '</span><p class="text-item text-foreground">2026. g. novembris</p><span class="' + arrow + '">' + ICO(P.right, 'size-4') + '</span></div><div class="grid grid-cols-7 gap-1">' + cells + '</div></nav>';
   }
   function pageEvents(o) {
     var days = '<div><h3 class="text-item weight-strong text-foreground">Šodien · otrd., 10. nov.</h3><p class="mt-1 text-meta text-foreground-muted">Šodien nav pasākumu.</p></div>';
