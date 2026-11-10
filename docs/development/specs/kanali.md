@@ -121,7 +121,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 |---|---|---|---|
 | K-70 | Success is people meeting in person; Jelgava pilot through the city newspaper; seeding before the article. | Confirmed | 9 Nov. |
 | K-71 | Stages: K1 Matrix spike, K2 hubs without chat, K3 chat. | In progress | Set before the hub pages; to be restated. |
-| K-72 | Drawings: old ones removed; `hub.html` (A/B) and `hub-c.html` (C) drawn from the ledger. | Confirmed | 9 Nov, c75c07f. |
+| K-72 | Drawings: old ones removed; one combined `hub.html` drawn from the ledger (board hub card cases, hub page frame with Pārskats, Grupas, Pasākumi, Ziņas, Čats, city hub, signed-out). `hub-c.html` and `hub-options.html` removed (K-59). | Confirmed | 9 Nov, c75c07f; 10 Nov combined. |
 
 ## Context
 Most people won't create a group, but they still want to find others interested in the same thing nearby. A **hub** (internal word; users see only its title) is the town-square message board and overview of one Veids or sub-veids (K-05, K-39): the groups in it, what they made public, people's shout-outs, and a Discord-like chat with rooms for its sub-veidi and cities (K-31). City is a parallel dimension: a city room has two parents, the tēma hub and the city hub (K-08). Chat runs on self-hosted Matrix (K-30). The first audience is Jelgava, through the city newspaper (K-70).
