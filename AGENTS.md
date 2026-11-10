@@ -137,7 +137,7 @@ type ActionResponse<T> =
 
 - Non-trivial changes: produce a short plan first, including a **Motivation & Design Alignment** note tying the approach to the Laws, and wait for approval. Trivial fixes (typos, single strings) can proceed directly.
 - Verify library APIs against current docs rather than guessing (Next.js 16, Prisma 6, next-intl 4, Auth.js v5 have all changed recently), and verify UI changes in a real browser.
-- Drawings in `docs/development/` (the build-plan tabs) carry a version line under their title, `Versija vN · publicēta YYYY-MM-DD HH:MM` (local time of the commit): bump N and the time in every commit that changes the drawing, so the owner can tell whether the page is current.
+- Drawings in `docs/development/` (the build-plan tabs) carry a version line under their title, `Versija vN · publicēta YYYY-MM-DD HH:MM` (local time of the commit): bump N and the time in every commit that changes the drawing, so the owner can tell whether the page is current. A drawing with sections (`section[data-label][data-st][data-v][data-d]`) gives each a status: Jauns = not reviewed, Procesā = reviewed and in work, Apstiprināts = owner-approved. Atjaunots is derived, never written: the section's version is the drawing's current one and it is not approved. Change an approved section and it becomes Procesā with the new version (so it shows Atjaunots).
 - Known debt is listed under "Known code debt" in `docs/execution_handoff.md`. Don't add to it; fix adjacent violations only when in scope.
 
 <!-- BEGIN:nextjs-agent-rules -->

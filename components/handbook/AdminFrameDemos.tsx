@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
+import { CHIP_LOOK } from '@/components/admin/frame/chip-look';
 import AdminBadge from '@/components/admin/frame/AdminBadge';
 import { ADMIN_NAV } from '@/lib/constants/adminNav';
 
@@ -84,14 +85,15 @@ export function AdminPagesDemo({ drawer = false }: { drawer?: boolean }) {
 const SIDEBAR_ROW = 'flex min-h-11 items-center rounded-item px-3 py-2 text-body-sm';
 const CHIP = 'inline-flex h-5 items-center gap-1 rounded-pill px-2 text-tag';
 
-/** Static page sidebar: two tabs, three sections with the three status chips, the second one current. */
+/** Static page sidebar: two tabs, four sections with the four status chips, the second one current. */
 export function AdminSidebarDemo() {
     const t = useTranslations('admin.nav');
     const ts = useTranslations('admin.development.status');
     const rows = [
         { id: 'a', label: 'Mezgli', chip: 'approved', date: '10. nov.' },
         { id: 'b', label: 'Kanāla lapa', chip: 'progress', date: '10. nov.' },
-        { id: 'c', label: 'Istaba', chip: 'open', date: '9. nov.' },
+        { id: 'c', label: 'Istaba', chip: 'new', date: '9. nov.' },
+        { id: 'd', label: 'Vārda karte', chip: 'updated', date: '10. nov.' },
     ] as const;
     return (
         <aside className="w-aside max-w-full border-r border-border bg-background p-3">
@@ -104,7 +106,7 @@ export function AdminSidebarDemo() {
                     <span key={r.id} className={clsx(SIDEBAR_ROW, 'flex-col items-start gap-1', i === 1 ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted')}>
                         {r.label}
                         <span className="flex items-center gap-2 text-meta text-foreground-muted">
-                            <span className={clsx(CHIP, r.chip === 'open' ? 'line text-foreground' : 'bg-tint', r.chip === 'progress' ? 'text-foreground-muted' : 'text-foreground')}>{ts(r.chip)}</span>
+                            <span className={clsx(CHIP, CHIP_LOOK[r.chip])}>{ts(r.chip)}</span>
                             v13 {r.date}
                         </span>
                     </span>

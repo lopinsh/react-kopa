@@ -6,7 +6,7 @@ import AdminSidebarLayout, { type SidebarSection, type SidebarTab } from '@/comp
 import useActiveSection from '@/components/admin/frame/useActiveSection';
 
 type Status = NonNullable<SidebarSection['status']>;
-const STATUSES: Status[] = ['approved', 'progress', 'open'];
+const STATUSES: Status[] = ['approved', 'progress', 'new', 'updated'];
 
 function statusOf(value: string | undefined): Status | undefined {
     return STATUSES.find((s) => s === value);

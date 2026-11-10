@@ -840,7 +840,8 @@
       "status": {
         "approved": "Apstiprināts",
         "progress": "Procesā",
-        "open": "Atvērts"
+        "new": "Jauns",
+        "updated": "Atjaunots"
       },
       "planTab": "Plāns",
       "planDrawings": {

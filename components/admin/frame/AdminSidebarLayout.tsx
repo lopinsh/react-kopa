@@ -1,5 +1,6 @@
 'use client';
 
+import { CHIP_LOOK } from './chip-look';
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
@@ -12,7 +13,7 @@ import AdminSidebarFold from './AdminSidebarFold';
 import useActiveSection from './useActiveSection';
 
 export type SidebarTab = { id: string; href: string; label: string; current: boolean; flagged?: boolean };
-export type SidebarSection = { id: string; label: string; status?: 'approved' | 'progress' | 'open'; version?: string; date?: string };
+export type SidebarSection = { id: string; label: string; status?: 'approved' | 'progress' | 'new' | 'updated'; version?: string; date?: string };
 export type SidebarLabels = { tabs: string; sections: string };
 
 const ROW = 'flex min-h-11 w-full items-center gap-2 rounded-item px-3 py-2 text-left text-body-sm hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary';
@@ -20,7 +21,7 @@ const ROW = 'flex min-h-11 w-full items-center gap-2 rounded-item px-3 py-2 text
 function Chip({ status }: { status: NonNullable<SidebarSection['status']> }) {
     const t = useTranslations('admin.development.status');
     return (
-        <span className={clsx('inline-flex h-5 items-center gap-1 rounded-pill px-2 text-tag', status === 'open' ? 'line text-foreground' : 'bg-tint', status === 'progress' ? 'text-foreground-muted' : 'text-foreground')}>
+        <span className={clsx('inline-flex h-5 items-center gap-1 rounded-pill px-2 text-tag', CHIP_LOOK[status])}>
             {status === 'approved' && <Check aria-hidden className="size-3" />}
             {t(status)}
         </span>

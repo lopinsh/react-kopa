@@ -840,7 +840,8 @@
       "status": {
         "approved": "Approved",
         "progress": "In progress",
-        "open": "Open"
+        "new": "New",
+        "updated": "Updated"
       },
       "planTab": "Plan",
       "planDrawings": {
