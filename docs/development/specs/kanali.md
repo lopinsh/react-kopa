@@ -66,12 +66,13 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-77 | Shout-outs are called **"Ziņas"** on the hub (same word as the inbox; the page tells them apart) and are more compact. | Confirmed | 10 Nov note cmwac2417 and answer. |
 | K-78 | The activity feed as drawn on "Jelgavas kopiena" is the right direction. | Confirmed | 10 Nov note cmwac580g: "not final, but this is good". |
 | K-79 | On phones the hub content is more compact, done smartly from what successful projects do. | In progress | 10 Nov note cmwac7myh (drawing C). Look at others first. |
-| K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." 10 Nov: owner skipped the question for now (also my combined-layout proposal); stays open until the owner picks it up. 10 Nov notes: A (one page) rejected on phone and desktop. Navigation follows the group page's logic: left vertical menu and horizontal sections (not its content); Čats is a page in the left menu with its own inner navigation, still to design. |
+| K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." 10 Nov: owner skipped the question for now (also my combined-layout proposal); stays open until the owner picks it up. 10 Nov notes: A (one page) rejected on phone and desktop. Navigation follows the group page's logic: left vertical menu and horizontal sections (not its content); Čats is a page in the left menu with its own inner navigation, still to design. Horizontal sections = the group page's in-page tab bar, adapting to the page (Pasākumi: Gaidāmie / Pagājušie; Informācija: the group's own sections like Par mums, Kontakti). Čats: an mIRC-type chat with tabs such as a directory and preferences (→ K-81). |
 
 ### Chat
 | Id | Feature | Status | Notes |
 |---|---|---|---|
 | K-80 | The chat idea (room list + chat) is liked; it needs a design review before it is final. | In progress | 10 Nov note cmwabz3xr. |
+| K-81 | Čats inner navigation: an mIRC-type chat page with its own tab bar (rooms/directory, preferences, …). | In progress | 10 Nov answer; researched with K-73..K-79 before drawing. |
 | K-30 | Matrix, self-hosted, in our own chat panel; Element/FluffyChat optional. | Confirmed | 8-9 Nov. |
 | K-31 | **Chat section built like Discord:** a public room for the hub, a room per sub-veids (L3), city rooms; the user moves between the public child rooms from a room list. | Confirmed | 9 Nov. |
 | K-32 | No merged chat: a parent has its own room and lists its children (like an mIRC channel list). | Confirmed | 9 Nov. |
