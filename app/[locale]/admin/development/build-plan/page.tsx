@@ -59,7 +59,7 @@ export default async function BuildPlanPage({ params, searchParams }: { params: 
                 ))}
             </nav>
             {current ? (
-                <iframe key={current} title={t(`planDrawings.${current}`)} srcDoc={html ?? ''} className="min-h-0 w-full flex-1 border-0 bg-background" />
+                <iframe key={current} data-feedback-frame={current} title={t(`planDrawings.${current}`)} srcDoc={html ?? ''} className="min-h-0 w-full flex-1 border-0 bg-background" />
             ) : (
                 <div className="min-h-0 flex-1 overflow-y-auto px-gutter py-6">
                     <article className="max-w-5xl min-w-0">{markdown && <HandbookMarkdown markdown={markdown} />}</article>

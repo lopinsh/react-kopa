@@ -30,7 +30,7 @@ export default async function DesignDrawings({ current }: { current: DesignDrawi
                     </Link>
                 ))}
             </nav>
-            <iframe key={current} title={t(`drawings.${current}`)} srcDoc={html} className="mt-4 h-[80dvh] min-h-96 w-full rounded-xl line bg-background" />
+            <iframe key={current} data-feedback-frame={current} title={t(`drawings.${current}`)} srcDoc={html} className="mt-4 h-[80dvh] min-h-96 w-full rounded-xl line bg-background" />
         </section>
     );
 }

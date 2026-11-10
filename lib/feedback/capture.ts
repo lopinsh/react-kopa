@@ -118,8 +118,10 @@ function anchor(el: Element): string | null {
 export function buildSelector(el: Element): string {
     const frame = frameOf(el);
     if (frame) {
+        // A stable key beats the title, which is translated (a note made in /lv must resolve in /en).
+        const key = frame.getAttribute('data-feedback-frame')?.trim();
         const title = frame.title.trim();
-        const outer = title ? `iframe[title="${CSS.escape(title)}"]` : buildSelector(frame);
+        const outer = key ? `iframe[data-feedback-frame="${CSS.escape(key)}"]` : title ? `iframe[title="${CSS.escape(title)}"]` : buildSelector(frame);
         return `${outer}${FRAME_SEP}${buildLocalSelector(el)}`;
     }
     return buildLocalSelector(el);
