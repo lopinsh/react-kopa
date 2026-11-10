@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<title>Kanāli: mezglu varianti</title>
+</head>
+<body class="min-h-screen font-sans bg-background p-6 text-foreground">
+<!-- Comparison sheet (10 Nov) for the owner to PICK options; nothing here is decided. Ledger rows: K-73..K-81 and K-28 in docs/development/specs/kanali.md. Hub navigation = group page logic: left menu + in-page tab bar. Each option is its own section-like block with a heading (id i<item><letter>), so Atsauksmes notes pin per option. The quiet "Ieteicams" tag marks a suggestion, not a decision. Sketches are 375 px (item 5 also 1280), built from handbook design.md type roles and the site's own classes. -->
+<h1 class="text-title mb-1">Mezglu varianti: izvēlei</h1>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Pieci jautājumi par kopienas (mezgla) lapu, katram trīs varianti blakus. Nekas šeit nav izlemts: ar piezīmi pie varianta atzīmē to, kuru izvēlies. Mezgla navigācija seko grupas lapas loģikai: kreisā izvēlne un lapas tabu josla (K-28). Klusais "Ieteicams" ir ieteikums, ne lēmums.</p>
+<div id="stage" class="flex flex-col gap-12"></div>
+
+<script>
+  var ICO = function (d, c) { return '<svg aria-hidden="true" class="' + (c || 'size-4') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  var P = {
+    x: '<path d="M18 6 6 18M6 6l12 12"/>', plus: '<path d="M12 5v14M5 12h14"/>', search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    sliders: '<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+    down: '<path d="m6 9 6 6 6-6"/>', hash: '<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>'
+  };
+  var CHIP = 'relative inline-flex h-7 items-center gap-1 whitespace-nowrap rounded-pill line shadow-control text-meta px-3 shrink-0 bg-surface text-foreground';
+  var CHOSEN = 'relative inline-flex h-7 shrink-0 items-center gap-1 whitespace-nowrap rounded-pill frame shadow-control text-meta pl-3 pr-2 bg-primary text-primary-foreground weight-strong';
+  var chip = function (t) { return '<span class="' + CHIP + '">' + t + '</span>'; };
+  var chosen = function (t) { return '<span class="' + CHOSEN + '">' + t + ICO(P.x, 'size-3') + '</span>'; };
+  var dot = '<span aria-hidden="true" class="size-2 shrink-0 rounded-pill bg-[var(--cat-games)]"></span>';
+  var dotB = '<span aria-hidden="true" class="size-2 shrink-0 rounded-pill bg-[var(--cat-sports)]"></span>';
+  var dotC = '<span aria-hidden="true" class="size-2 shrink-0 rounded-pill bg-[var(--cat-community)]"></span>';
+  var M = 'text-meta text-foreground-muted';
+  var CARD = 'rounded-2xl line bg-surface shadow-card';
+  var DASH = 'border-0 border-t border-dashed border-border';
+  var lab = function (t) { return '<p class="' + M + '">' + t + '</p>'; };
+  var strip = function (inner) { return '<div class="flex gap-2 overflow-hidden">' + inner + '</div>'; };
+  var head = function (t, sub) { return '<div class="mb-3"><p class="text-item">' + t + '</p>' + (sub ? '<p class="' + M + '">' + sub + '</p>' : '') + '</div>'; };
+  var tabs = function (items, cur) { return '<div class="flex gap-1 overflow-hidden border-0 border-b border-border">' + items.map(function (t, i) { return '<span class="whitespace-nowrap px-3 py-2 text-body-sm ' + (i === cur ? 'weight-strong text-foreground border-0 border-b-2 border-solid border-[var(--accent)]' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>'; };
+
+  /* ---------- 1 · K-73 tēmu čipi ---------- */
+  var s1a = head('Galda spēļu kopiena', 'Izvēlies tēmas') +
+    strip(chosen('Šahs') + chip('Galda spēles') + chip('Kāršu spēles') + chip('Lomu spēles') + '<span class="' + CHIP + ' weight-strong">' + ICO(P.sliders, 'size-3') + 'Visi filtri</span>') +
+    '<div class="mt-4 ' + CARD + ' p-4"><p class="text-item">Visi filtri</p>' +
+    '<p class="mt-3 ' + M + '">Galda spēles</p><div class="mt-1 flex flex-wrap gap-2">' + chip('Stratēģijas') + chip('Ģimenes') + chip('Kooperatīvās') + '</div>' +
+    '<p class="mt-3 ' + M + '">Šahs un dambrete</p><div class="mt-1 flex flex-wrap gap-2">' + chosen('Šahs') + chip('Blics') + chip('Dambrete') + '</div>' +
+    '<p class="mt-3 ' + M + '">Kāršu spēles</p><div class="mt-1 flex flex-wrap gap-2">' + chip('Pokers') + chip('Brigde') + '</div>' +
+    '<div class="mt-4 inline-flex h-10 items-center rounded-pill frame bg-primary px-4 text-button text-primary-foreground">Rādīt 24 grupas</div></div>';
+  var s1b = head('Galda spēļu kopiena', 'Izvēlies veidu, tad tēmu') +
+    lab('Izvēlēts') + '<div class="mb-3 mt-1">' + strip(chosen('Šahs') + chosen('Blics')) + '</div>' +
+    lab('Veidi') + '<div class="mb-3 mt-1">' + strip(chip('Galda spēles') + '<span class="' + CHIP + ' weight-strong">Šahs un dambrete ' + ICO(P.down, 'size-3') + '</span>' + chip('Kāršu spēles') + chip('Lomu')) + '</div>' +
+    lab('Šahs un dambrete') + '<div class="mt-1">' + strip(chosen('Šahs') + chosen('Blics') + chip('Dambrete') + chip('Problēmas')) + '</div>';
+  var s1c = head('Galda spēļu kopiena', 'Izvēlies tēmas') +
+    '<div class="flex flex-wrap gap-2">' + chosen('Šahs') + chosen('Kooperatīvās') + '<span class="' + CHIP + ' text-foreground-muted">' + ICO(P.plus, 'size-3') + 'Pievienot tēmu</span></div>' +
+    '<div class="mt-3 flex h-10 items-center gap-2 rounded-pill line bg-surface px-3 text-body-sm">' + ICO(P.search, 'size-4') + '<span>bl</span></div>' +
+    '<div class="mt-2 ' + CARD + ' p-2"><p class="px-3 py-2 text-body-sm">Blics <span class="' + M + '">· Šahs un dambrete</span></p><p class="px-3 py-2 text-body-sm">Bloku spēles <span class="' + M + '">· Galda spēles</span></p></div>';
+
+  /* ---------- 2 · K-75 kopienas kartīte ---------- */
+  var card2 = function (inner) { return '<div class="' + CARD + ' p-4">' + inner + '</div>'; };
+  var s2a = lab('Kā Discord atklāšana') + '<div class="mt-2">' + card2('<p class="text-item">Galda spēļu kopiena</p><p class="mt-1 text-body-sm">Visi, kas Latvijā spēlē galda spēles: no šaha līdz lomu spēlēm.</p><p class="mt-2 ' + M + '">1 240 dalībnieki · 38 šeit tagad</p><div class="mt-2 flex flex-wrap gap-2">' + chip('Šahs') + chip('Pokers') + chip('Stratēģijas') + chip('Ģimenes') + chip('Kooperatīvās') + '</div>') + '</div>';
+  var s2b = lab('Kā Meetup') + '<div class="mt-2">' + card2('<p class="text-item">Galda spēļu kopiena</p><p class="mt-1 ' + M + '">120 dalībnieki 13 grupās</p><p class="mt-2 text-body-sm">Nākamais: Šaha vakars · ot., 18:30 · Rīga</p><div class="mt-2 flex flex-wrap gap-2">' + chip('Šahs') + chip('Pokers') + chip('Stratēģijas') + chip('+4') + '</div>') + '</div>' +
+    '<div class="mt-3">' + card2('<p class="text-item">Šaha kopiena</p><p class="mt-1 ' + M + '">64 dalībnieki 6 grupās</p><p class="mt-2 ' + M + '">Pēdējā aktivitāte pirms 2 d.</p><div class="mt-2 flex flex-wrap gap-2">' + chip('Blics') + chip('Problēmas') + '</div>') + '</div>';
+  var s2c = lab('Kā Reddit rinda') + '<div class="mt-2 ' + CARD + ' px-4">' + [['Galda spēļu kopiena', '312 aktīvi šonedēļ', 'Visi, kas spēlē galda spēles Latvijā.'], ['Šaha kopiena', '58 aktīvi', 'Turnīri, blics un vakara partijas.'], ['Jelgavas kopiena', '41 aktīvi', 'Jelgavas spēļu vakari un pasākumi.']].map(function (r, i) { return '<div class="py-3 ' + (i ? DASH : '') + '"><div class="flex justify-between gap-3"><p class="text-item">' + r[0] + '</p><span class="' + M + ' shrink-0">' + r[1] + '</span></div><p class="mt-1 text-body-sm">' + r[2] + '</p></div>'; }).join('') + '</div>';
+
+  /* ---------- 3 · K-74/K-75 divi un vairāki mezgli ---------- */
+  var s3a = lab('Divi mezgli: sadalīta kartīte') + '<div class="mt-2 ' + CARD + ' grid grid-cols-2"><div class="p-4"><p class="flex items-center gap-2 text-item">' + dot + 'Galda spēles</p><p class="mt-1 ' + M + '">120 dalībnieki</p></div><div class="border-0 border-l border-border p-4"><p class="flex items-center gap-2 text-item">' + dotB + 'Šahs</p><p class="mt-1 ' + M + '">64 dalībnieki</p></div></div>' +
+    '<p class="mt-3 ' + M + '">Jelgavas šaha vakars · pieder abiem</p>';
+  var s3b = lab('Galvenais un klusāks otrais') + '<div class="mt-2 ' + CARD + ' p-4"><p class="flex items-center gap-2 text-item">' + dot + 'Galda spēļu kopiena</p><p class="mt-1 ' + M + '">120 dalībnieki 13 grupās</p><div class="mt-3 pt-3 ' + DASH + '"><p class="flex items-center gap-2 text-body-sm text-foreground-muted">' + dotB + 'arī Šaha kopiena</p></div></div>' +
+    '<p class="mt-3 ' + M + '">Norāda uz kārtību; vienlīdzīgiem mezgliem droši vien nepiemērots.</p>';
+  var s3c = lab('Trīs un vairāk: saraksts') + '<div class="mt-2 ' + CARD + ' px-4">' + [[dot, 'Galda spēļu', '120'], [dotB, 'Šaha', '64'], [dotC, 'Jelgavas', '41']].map(function (r, i) { return '<div class="flex items-center gap-2 py-3 ' + (i ? DASH : '') + '">' + r[0] + '<p class="min-w-0 flex-1 truncate text-body-sm">' + r[1] + ' kopiena</p><span class="' + M + '">' + r[2] + '</span></div>'; }).join('') + '<p class="py-3 ' + DASH + ' ' + M + '">+2 kopienas</p></div>';
+
+  /* ---------- 4 · K-79 + Ziņas, kompakts telefonā ---------- */
+  var feedRow = function (a, b, t) { return '<div class="flex items-baseline gap-2 py-2"><p class="min-w-0 flex-1 truncate text-body-sm"><span class="weight-strong">' + a + '</span> ' + b + '</p><span class="' + M + ' shrink-0">' + t + '</span></div>'; };
+  var post = function (who, txt) { return '<div class="py-3"><p class="' + M + '"><span class="weight-strong text-foreground">' + who + '</span> · Galda spēļu kopiena</p><p class="mt-1 line-clamp-3 text-body-sm">' + txt + ' <span class="text-foreground-muted">… vairāk</span></p></div>'; };
+  var T1 = 'Meklēju partneri šaha vakaram Jelgavā ceturtdien. Nav jābūt stipram, galvenais, lai ir prieks. Ņemšu līdzi pašu galdu.';
+  var s4a = lab('Aktivitāte vienā rindā') + '<div class="mt-2 ' + CARD + ' px-4">' + feedRow('Anna', 'pievienojās Šaha vakars', '2 h') + feedRow('Jānis', 'izveidoja pasākumu', '5 h') + feedRow('Šaha vakars', 'jauns paziņojums', '1 d') + feedRow('Līga', 'pievienojās Pokers', '1 d') + feedRow('Mārtiņš', 'uzrakstīja rakstu', '2 d') + '<p class="py-2 text-body-sm weight-strong">Skatīt visas</p></div>';
+  var s4b = lab('Ziņas kā kompakti ieraksti') + '<div class="mt-2 ' + CARD + ' px-4">' + post('Anna', T1) + '<div class="' + DASH + '">' + post('Jānis', 'Rīt spēļu vakars Ķengaragā, vēl ir pāris brīvu vietu. Rakstiet man.') + '</div><p class="py-2 text-body-sm weight-strong ' + DASH + '">Skatīt visas</p></div>';
+  var s4c = lab('Ziņas kā horizontāla lente virs plūsmas') + '<div class="mt-2 flex gap-3 overflow-hidden">' + ['Anna', 'Jānis', 'Līga'].map(function (n) { return '<div class="' + CARD + ' w-52 shrink-0 p-3"><p class="' + M + '">' + n + '</p><p class="mt-1 line-clamp-3 text-body-sm">' + T1 + '</p></div>'; }).join('') + '</div>' +
+    '<div class="mt-3 ' + CARD + ' px-4">' + feedRow('Anna', 'pievienojās Šaha vakars', '2 h') + feedRow('Jānis', 'izveidoja pasākumu', '5 h') + feedRow('Līga', 'pievienojās Pokers', '1 d') + '</div><p class="mt-2 ' + M + '">Lenti viegli palaist garām.</p>';
+
+  /* ---------- 5 · K-81 Čats ---------- */
+  var MSG = [['Anna', '18:02', 'Kurš nāk ceturtdien uz šaha vakaru?'], ['Jānis', '18:04', 'Es nāku, ņemšu pulksteni.'], ['Līga', '18:07', 'Un es, ja būs vieta.']];
+  var log = function () { return '<div class="flex flex-col gap-2">' + MSG.map(function (m) { return '<p class="text-body-sm"><span class="' + M + '">' + m[1] + '</span> <span class="weight-strong">' + m[0] + '</span> ' + m[2] + '</p>'; }).join('') + '</div>'; };
+  var composer = '<div class="flex h-10 items-center rounded-pill line bg-surface px-4 text-body-sm text-foreground-muted">Rakstīt ziņu…</div>';
+  var ROOMS = [['Galda spēļu kopiena', 3], ['Šaha kopiena', 0], ['Jelgava', 12]];
+  var roomList = function (cur) { return ROOMS.map(function (r, i) { return '<div class="flex min-h-10 items-center gap-2 rounded-xl px-3 py-2 text-body-sm ' + (i === cur ? 'bg-tint weight-strong' : '') + '">' + ICO(P.hash, 'size-4') + '<span class="min-w-0 flex-1 truncate">' + r[0] + '</span>' + (r[1] ? '<span class="rounded-pill bg-tint px-2 text-tag">' + r[1] + '</span>' : '') + '</div>'; }).join(''); };
+  var chatBody = '<div class="flex h-64 flex-col justify-between pt-4"><div>' + log() + '</div>' + composer + '</div>';
+  var s5 = {
+    a: {
+      p: lab('Telefons: saraksta ekrāns, tad čats') + '<div class="mt-2 ' + CARD + ' p-2">' + roomList(0) + '<p class="px-3 py-2 ' + M + '">Katalogs · Iestatījumi</p></div><p class="mt-2 ' + M + '">Pieskāriens telpai atver čatu ar bultu atpakaļ.</p>',
+      d: '<div class="grid grid-cols-[16rem_1fr] gap-6 p-8"><div class="' + CARD + ' p-2">' + roomList(0) + '<p class="px-3 py-2 ' + M + '">Katalogs · Iestatījumi</p></div><div class="' + CARD + ' flex h-80 flex-col justify-between p-4"><div><p class="text-item">Galda spēļu kopiena</p><div class="mt-3">' + log() + '</div></div>' + composer + '</div></div>'
+    },
+    b: {
+      p: lab('Telefons: telpas kā tabi') + '<div class="mt-2 ' + CARD + ' p-3">' + tabs(['Galda spēles', 'Šahs', 'Jelgava', 'Katalogs'], 0) + '<div class="pt-3">' + log() + '</div><div class="mt-3">' + composer + '</div></div><p class="mt-2 ' + M + '">Tabi ritinās sāniski; Iestatījumi beigās.</p>',
+      d: '<div class="p-8"><div class="' + CARD + ' p-4">' + tabs(['Galda spēļu kopiena', 'Šaha kopiena', 'Jelgava', 'Katalogs', 'Iestatījumi'], 0) + chatBody + '</div></div>'
+    },
+    c: {
+      p: lab('Telefons: telpas nosaukums galvā, izvēle lapā') + '<div class="mt-2 ' + CARD + ' p-3"><div class="flex items-center justify-between rounded-pill bg-tint px-4 py-2"><span class="text-item">Galda spēļu kopiena</span>' + ICO(P.down, 'size-4') + '</div><div class="pt-3">' + log() + '</div><div class="mt-3">' + composer + '</div></div>' +
+        '<div class="mt-3 ' + CARD + ' p-2 shadow-premium">' + roomList(0) + '<p class="px-3 py-2 text-body-sm">Katalogs</p><p class="px-3 py-2 text-body-sm">Iestatījumi</p></div>',
+      d: '<div class="p-8"><div class="' + CARD + ' p-4"><div class="flex items-center justify-between"><span class="inline-flex items-center gap-2 rounded-pill bg-tint px-4 py-2 text-item">Galda spēļu kopiena ' + ICO(P.down, 'size-4') + '</span><span class="' + M + '">Katalogs · Iestatījumi</span></div>' + chatBody + '</div></div>'
+    }
+  };
+
+  /* ---------- sheet ---------- */
+  var items = [
+    { n: 1, t: 'Tēmu čipi (K-73)', q: 'Kā izvēlēties starp desmitiem apakšveidu, nepārpildot lapu?', rec: 'b', o: [
+      ['a', 'Ritinājums + "Visi filtri"', 'Kam čipu ir daudz un kas izvēlas ātri.', 'Biežākie čipi vienā rindā, pēdējais atver pilnu grupētu lapu; izvēlētie stāv priekšā.', s1a],
+      ['b', 'Grupēts pa veidiem', 'Kas zina veidu un meklē tēmu tajā.', 'Veidi kā čipi, pieskaroties atveras otrā rinda ar apakšveidiem; izvēlētie joslā "Izvēlēts".', s1b],
+      ['c', 'Čipi + meklēšana', 'Kas zina, ko meklē, un raksta.', 'Izvēlētie čipi ar x, tad "+ Pievienot tēmu" atver meklēšanas lauku.', s1c]] },
+    { n: 2, t: 'Mezgla kartīte (K-75)', q: 'Kas redzams kopienas kartītē grupas kartītes izmērā?', rec: 'b', o: [
+      ['a', 'Discord atklāšana', 'Kam svarīgi, vai kopiena ir dzīva.', 'Nosaukums, apraksts vienā rindā, dalībnieki, šeit tagad, līdz 5 tagi.', s2a],
+      ['b', 'Meetup', 'Kas grib zināt, vai notiek pasākumi.', 'Nosaukums, dalībnieki un grupas, nākamais pasākums vai pēdējā aktivitāte, līdz 3 apakšveidi "+N". Bez tiešsaistes skaita.', s2b],
+      ['c', 'Reddit rinda', 'Kas pārlūko garu sarakstu.', 'Nosaukums, aktīvie šonedēļ un apraksts vienā rindā.', s2c]] },
+    { n: 3, t: 'Divi mezgli vienā kartītē (K-74, K-75)', q: 'Kā rādīt grupu, kas pieder diviem mezgliem, un trīs un vairāk?', rec: 'a', o: [
+      ['a', 'Sadalīta kartīte', 'Grupām, kas pieder diviem mezgliem.', 'Divas puses ar tievu līniju, nosaukumi parastā svarā, L1 krāsas punkts, viena meta rinda katrai. Trim un vairāk ieteikums ir C.', s3a],
+      ['b', 'Galvenais + klusāks otrais', 'Kam ir viens "īstais" mezgls.', 'Pirmais mezgls kartītes sirdī, otrais klusā rindā zem tā.', s3b],
+      ['c', 'Saraksts trim un vairāk', 'Grupām, kas pieder daudziem mezgliem.', 'Rindas: punkts, nosaukums, klusais skaits; pirmās 3, tad "+N kopienas".', s3c]] },
+    { n: 4, t: 'Ziņas telefonā (K-79)', q: 'Kā telefonā blīvāk parādīt aktivitāti un Ziņas?', rec: 'a', o: [
+      ['a', 'Aktivitāte vienā rindā', 'Kas ātri pārskata, kas jauns.', 'Kas/ko pa kreisi, laiks pa labi, 3-5 rindas, tad "Skatīt visas". Ziņām ieteikums ir B.', s4a],
+      ['b', 'Ziņas kā kompakti ieraksti', 'Kas lasa cilvēku piezīmes.', 'Autora rinda, 2-3 teksta rindas, "… vairāk", bez lielām atstarpēm.', s4b],
+      ['c', 'Ziņu lente', 'Kas pārlūko ar pirkstu.', 'Horizontāla ziņu lente virs plūsmas; viegli palaist garām.', s4c]] },
+    { n: 5, t: 'Čats mezgla izvēlnē (K-81, K-28)', q: 'Kā pārslēgties starp telpām čata lapā? Ieteikums: B darbvirsmā, C telefonā.', rec: 'b', desk: true, o: [
+      ['a', 'Saraksts + čats', 'Kas uztur daudz telpu (Slack, Discord, Telegram).', 'Telpu kolonna un čats; telefonā saraksta ekrāns, pieskāriens atver čatu.', s5.a],
+      ['b', 'Tabi kā mIRC', 'Kas pazīst grupas lapas tabu joslu.', 'Tabi ir telpas, tad "Katalogs" un "Iestatījumi"; sakrīt ar lapas tabu joslu (K-28).', s5.b],
+      ['c', 'Telpas pārslēdzējs', 'Kas pārsvarā sēž vienā telpā (Reddit čats).', 'Galvā telpas nosaukums, pieskāriens atver sarakstu ar telpām, "Katalogu" un iestatījumiem.', s5.c]] }
+  ];
+  var stage = document.getElementById('stage');
+  var BOXVARS = { 375: '--type-title-size:1.625rem;--type-section-size:1.25rem;--type-item-size:1.0625rem;--spacing-gutter:1rem', 1280: '--type-title-size:2.2rem;--type-section-size:1.5rem;--type-item-size:1.16rem;--spacing-gutter:2rem' };
+  var mk = function (w, html, pad) {
+    var d = document.createElement('div');
+    d.className = '@container relative shrink-0 overflow-hidden rounded-2xl line bg-background' + (pad ? ' p-4' : '');
+    d.setAttribute('data-w', w);
+    d.style.width = w + 'px';
+    d.style.cssText += ';' + BOXVARS[w] + ';--accent:var(--cat-games);--c:var(--cat-games)';
+    d.innerHTML = html;
+    return d;
+  };
+  items.forEach(function (it) {
+    var sec = document.createElement('section');
+    sec.id = 'i' + it.n;
+    sec.innerHTML = '<h2 class="text-section">' + it.n + '. ' + it.t + '</h2><p class="mt-1 max-w-reading text-body-sm text-foreground-muted">' + it.q + '</p><div class="mt-4 flex items-start gap-6 overflow-x-auto pb-4" data-row="p"></div>' + (it.desk ? '<div class="mt-2 flex items-start gap-6 overflow-x-auto pb-4" data-row="d"></div>' : '');
+    var rows = sec.querySelectorAll('[data-row]');
+    it.o.forEach(function (o) {
+      var key = o[0].toUpperCase();
+      var wrap = document.createElement('div');
+      wrap.id = 'i' + it.n + o[0];
+      wrap.className = 'flex w-[375px] shrink-0 flex-col gap-2';
+      wrap.innerHTML = '<h3 class="text-item">Variants ' + key + ': ' + o[1] + (it.rec === o[0] ? ' <span class="ml-1 align-middle text-tag text-foreground-muted">Ieteicams</span>' : '') + '</h3><p class="text-body-sm"><span class="text-foreground-muted">Kam:</span> ' + o[2] + '</p><p class="text-body-sm text-foreground-muted">' + o[3] + '</p>';
+      wrap.appendChild(mk(375, it.desk ? o[4].p : o[4], true));
+      rows[0].appendChild(wrap);
+      if (it.desk) {
+        var dw = document.createElement('div');
+        dw.id = 'i' + it.n + o[0] + '-desk';
+        dw.className = 'flex shrink-0 flex-col gap-2';
+        dw.innerHTML = '<h3 class="text-item">Variants ' + key + ' darbvirsmā (1280)</h3>';
+        dw.appendChild(mk(1280, o[4].d, false));
+        rows[1].appendChild(dw);
+      }
+    });
+    stage.appendChild(sec);
+  });
+</script>
+</body>
+</html>

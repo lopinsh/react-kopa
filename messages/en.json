@@ -839,7 +839,8 @@
       "planTab": "Plan",
       "planDrawings": {
         "hub": "Hubs A/B",
-        "hubC": "Hub C"
+        "hubC": "Hub C",
+        "hubOptions": "Hub options"
       }
     },
     "handbook": {

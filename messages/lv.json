@@ -839,7 +839,8 @@
       "planTab": "Plāns",
       "planDrawings": {
         "hub": "Mezgli A/B",
-        "hubC": "Mezgls C"
+        "hubC": "Mezgls C",
+        "hubOptions": "Mezglu varianti"
       }
     },
     "handbook": {

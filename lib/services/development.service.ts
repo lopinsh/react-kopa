@@ -19,6 +19,7 @@ export const PLAN = {
     drawings: [
         { id: 'hub', file: 'kanali/hub.html' },
         { id: 'hubC', file: 'kanali/hub-c.html' },
+        { id: 'hubOptions', file: 'kanali/hub-options.html' },
     ],
 } as const;
 export type PlanDrawingId = (typeof PLAN.drawings)[number]['id'];
