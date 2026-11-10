@@ -33,7 +33,7 @@ export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) 
         <section aria-label={t('card.label')} data-hub-card={mode} style={tone} className={box}>
             {mode === 'list' ? (
                 <>
-                    <p className="flex items-center gap-2 text-title text-foreground"><CategoryDisc slug={l1Slug} color={hubs[0].accentColor} size={36} />{t('card.list', { n: hubs.length })}</p>
+                    <p className="flex items-center gap-2 text-item text-foreground"><CategoryDisc slug={l1Slug} color={hubs[0].accentColor} size={36} />{t('card.list', { n: hubs.length })}</p>
                     <ul className="flex flex-col divide-y divide-dashed divide-border">
                         {hubs.map((h) => <li key={h.slug}><Link href={h.href} className="block py-2 text-item text-foreground">{t('name', { title: h.title })}</Link></li>)}
                     </ul>

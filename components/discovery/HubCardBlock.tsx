@@ -19,7 +19,7 @@ export default async function HubCardBlock({ hub, l1Slug, locale, compact = fals
         <div className="flex min-w-0 flex-col gap-2">
             <div className="flex items-center gap-2">
                 <CategoryDisc slug={l1Slug} color={hub.accentColor} size={compact ? 28 : 36} />
-                <Link href={hub.href} className={`min-w-0 truncate text-foreground after:absolute after:inset-0 ${compact ? 'text-item' : 'text-title'}`}>{t('name', { title: hub.title })}</Link>
+                <Link href={hub.href} className={`min-w-0 text-item text-foreground after:absolute after:inset-0 ${compact ? 'truncate' : 'line-clamp-2'}`}>{t('name', { title: hub.title })}</Link>
             </div>
             <p className="text-meta text-foreground-muted">{t('memberLine', { members: hub.stats.memberCount, groups: hub.stats.groupCount })}</p>
             <p className="line-clamp-2 text-meta text-foreground">{when}</p>

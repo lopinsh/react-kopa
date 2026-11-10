@@ -83,6 +83,11 @@ const SCREENS: Screen[] = [
       await waitForPanel(p);
     },
   },
+  // Hubs (K1): the seed's games > boardgames hub, signed out (the default view).
+  { name: 'hub-overview', run: async (p) => { await p.goto('/lv/games/boardgames'); } },
+  { name: 'hub-groups', run: async (p) => { await p.goto('/lv/games/boardgames/groups'); } },
+  { name: 'hub-events', run: async (p) => { await p.goto('/lv/games/boardgames/events'); } },
+  { name: 'board-hub-card', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames'); } },
   { name: 'messages', signedIn: true, run: async (p) => { await p.goto('/lv/messages'); } },
   { name: 'my-groups', signedIn: true, run: async (p) => { await p.goto('/lv/profile/my-groups'); } },
   { name: 'profile', signedIn: true, run: async (p) => { await p.goto('/lv/profile'); } },

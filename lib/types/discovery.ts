@@ -31,6 +31,8 @@ export interface EventDiscoveryFilters {
     limit?: number;
     /** Events that are over (no `from`/`to`): the list runs newest first. */
     past?: boolean;
+    /** Public events only, never the viewer's own members-only ones (a hub, K1 invariant). */
+    publicOnly?: boolean;
 }
 
 /** What the counts are asked for: the list's filters minus paging. */

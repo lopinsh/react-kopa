@@ -922,7 +922,7 @@ export class EventService {
 
         const [publicRows, memberRows] = await Promise.all([
             loadPublic(),
-            userId
+            userId && !filters.publicOnly
                 ? withIds().then((w) => prisma.event.findMany({
                     where: {
                         AND: [
@@ -979,7 +979,7 @@ export class EventService {
         );
         const [publicRows, memberRows] = await Promise.all([
             loadPublic(),
-            userId
+            userId && !filters.publicOnly
                 ? withIds().then((w) => prisma.event.findMany({
                     where: {
                         AND: [eventWhere(w), { visibility: 'MEMBERS_ONLY', group: { members: { some: { userId, role: { not: 'PENDING' } } } } }]
