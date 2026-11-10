@@ -633,13 +633,36 @@
       "tabAll": "Visas",
       "tabNew": "Jaunās",
       "more": "Vēl {n, plural, one {# grupa} other {# grupas}}",
-      "empty": "Šeit vēl nav grupu. Sāc pirmo!"
+      "empty": "Šeit vēl nav grupu. Sāc pirmo!",
+      "all": "Visas grupas ({n})"
     },
     "events": {
       "tabsLabel": "Pasākumu skati",
       "emptyPast": "Pagājušu pasākumu vēl nav.",
       "count": "{shown} no {total} pasākumiem",
-      "showMore": "Rādīt vēl {n}"
+      "showMore": "Rādīt vēl {n}",
+      "all": "Visi pasākumi",
+      "open": "Atvērt pasākumu",
+      "empty": "Tuvākajā laikā pasākumu nav."
+    },
+    "activity": {
+      "title": "Aktivitāte",
+      "today": "Šodien",
+      "lastWeek": "Pagājušajā nedēļā",
+      "lastMonth": "Pagājušajā mēnesī",
+      "groupsCreated": "{n, plural, one {# grupa izveidota} other {# grupas izveidotas}}",
+      "newMembers": "{n, plural, one {# jauns biedrs} other {# jauni biedri}}",
+      "announcements": "{n, plural, one {# paziņojums} other {# paziņojumi}}",
+      "groupCreatedRow": "Izveidota grupa \"{name}\"",
+      "kindAnnouncement": "Paziņojums",
+      "kindEvent": "Pasākums",
+      "kindGroup": "Jauna grupa",
+      "showMore": "rādīt vairāk",
+      "empty": "Šeit vēl nekas nav noticis."
+    },
+    "subTopics": {
+      "title": "Apakšveidi",
+      "more": "+{n}"
     }
   },
   "admin": {

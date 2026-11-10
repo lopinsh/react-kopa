@@ -47,7 +47,7 @@ export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: H
         { key: 'past', label: tCommon('eventsTabPast'), href: `${upcomingHref}${upcomingHref.includes('?') ? '&' : '?'}tab=past` },
     ];
     const base = when === 'past' ? tabs[1].href : discoveryHref(p, {});
-    const moreHref = `${base}${base.includes('?') ? '&' : '?'}limit=${limit + HUB_EVENTS_STEP}`;
+    const moreHref = `${base}${base.includes('?') ? '&' : '?'}limit=${Math.min(total, DISCOVERY_EVENTS_MAX_LIMIT)}`;
     const days = groupByDay(events, when === 'past' ? new Date(0) : w.bounds.from, zone);
     const nextWeek = when === 'upcoming' && isWeekChoice(w.choice)
         ? <TextLink href={discoveryHref(p, { date: weekRange(addDays(w.week, 7)), day: null })}>{tDiscovery('showNextWeek')}</TextLink>
@@ -84,7 +84,7 @@ export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: H
                     <HubEventDays days={days} today={w.today} showCity={p.cities.length !== 1} />
                     {hasMore ? (
                         <div className="flex flex-col items-center gap-1">
-                            <Link href={moreHref} scroll={false} className={buttonClass('secondary', undefined, 'sm')}>{t('events.showMore', { n: Math.min(HUB_EVENTS_STEP, total - events.length) })}</Link>
+                            <Link href={moreHref} scroll={false} className={buttonClass('secondary', undefined, 'sm')}>{t('events.showMore', { n: Math.min(total, DISCOVERY_EVENTS_MAX_LIMIT) - events.length })}</Link>
                             <p className="text-meta text-foreground-muted">{t('events.count', { shown: events.length, total })}</p>
                         </div>
                     ) : nextWeek && <div className="text-center">{nextWeek}</div>}

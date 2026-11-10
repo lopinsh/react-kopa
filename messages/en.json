@@ -633,13 +633,36 @@
       "tabAll": "All",
       "tabNew": "New",
       "more": "{n, plural, one {# more group} other {# more groups}}",
-      "empty": "No groups here yet. Start the first one!"
+      "empty": "No groups here yet. Start the first one!",
+      "all": "All groups ({n})"
     },
     "events": {
       "tabsLabel": "Events views",
       "emptyPast": "No past events yet.",
       "count": "{shown} of {total} events",
-      "showMore": "Show {n} more"
+      "showMore": "Show {n} more",
+      "all": "All events",
+      "open": "Open event",
+      "empty": "No upcoming events."
+    },
+    "activity": {
+      "title": "Activity",
+      "today": "Today",
+      "lastWeek": "Last week",
+      "lastMonth": "Last month",
+      "groupsCreated": "{n, plural, one {# group created} other {# groups created}}",
+      "newMembers": "{n, plural, one {# new member} other {# new members}}",
+      "announcements": "{n, plural, one {# announcement} other {# announcements}}",
+      "groupCreatedRow": "Group \"{name}\" created",
+      "kindAnnouncement": "Announcement",
+      "kindEvent": "Event",
+      "kindGroup": "New group",
+      "showMore": "show more",
+      "empty": "Nothing has happened here yet."
+    },
+    "subTopics": {
+      "title": "Sub-types",
+      "more": "+{n}"
     }
   },
   "admin": {

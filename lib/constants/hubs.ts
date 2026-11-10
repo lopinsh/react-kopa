@@ -6,6 +6,9 @@ export const HUB_GROUP_TIERS = { full: 4, list: 16 } as const;
 /** Rows in the Pārskats previews (groups, events; K-106, K-94). */
 export const HUB_PREVIEW_ROWS = 3;
 
+/** Rows in each period of the Pārskats activity feed (K-24a). */
+export const HUB_FEED_ROWS = 5;
+
 /** Events shown at first and added by "Rādīt vēl" (K-112). */
 export const HUB_EVENTS_STEP = 15;
 

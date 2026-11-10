@@ -47,3 +47,18 @@ export async function hubEvents(
     ]);
     return { events: loaded.events, hasMore: loaded.hasMore, total, weekCounts: loaded.weekCounts, calendarCounts: loaded.calendarCounts };
 }
+
+/** The next `take` upcoming events of the hub for Pārskats (K1-21) and how many there are in all, under the Kur filter; same visibility as the page. */
+export async function hubEventPreview(
+    hub: { slug: string; l1Slug: string },
+    o: { cities: string[]; take: number },
+    locale: string,
+    viewerId?: string,
+): Promise<{ events: EventRowData[]; total: number }> {
+    const filters = { category: hub.l1Slug, tags: [hub.slug], cities: o.cities };
+    const [list, total] = await Promise.all([
+        EventService.getDiscoverableEvents({ ...filters, limit: o.take }, locale, viewerId),
+        prisma.event.count({ where: { AND: [eventWhere(filters), visibleTo(viewerId)] } }),
+    ]);
+    return { events: list.events, total };
+}

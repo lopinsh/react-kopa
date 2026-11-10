@@ -9,7 +9,8 @@ import { GROUP_CARD_SELECT, toGroupCard, type GroupCardData } from './group-card
 import { cardActivities, type CardActivity } from './card-activity';
 import { cardFaces } from './card-faces';
 import { UserService } from './user.service';
-import { hubEvents } from './hub-events';
+import { hubEventPreview, hubEvents } from './hub-events';
+import { hubActivity } from './hub-activity';
 import { hubCityCounts, hubGroupWhere, hubMemberCount, newSince } from './hub-query';
 import type { Face } from './event-panel';
 import type { MembershipRole } from '@prisma/client';
@@ -117,6 +118,12 @@ export const HubService = {
 
     /** The hub's events (K1-14): see `hubEvents`. */
     getEvents: hubEvents,
+
+    /** The next few events and their total, for Pārskats (K1-21). */
+    getEventPreview: hubEventPreview,
+
+    /** The activity feed by period (K1-19). */
+    getActivity: hubActivity,
 
     /** The hub's groups, newest first, with what the cards show (activity line, faces, the viewer's roles). `tab` 'new' = created in the last 30 days. */
     async getGroups(hub: HubContext, o: { cities: string[]; tab: 'all' | 'new'; take: number }, locale: string, viewerId?: string): Promise<HubGroups> {
