@@ -352,7 +352,7 @@
   function chatBar(on) {
     var unread = ' <span aria-hidden="true" class="size-2 rounded-full bg-primary"></span>';
     var open = '<span class="hidden items-center gap-5 @5xl:flex">' + [['Galda spēles', on === 'room'], ['Šahs'], ['Šahs · Jelgava']].map(function (t) { return '<span class="relative inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap text-body-sm ' + (t[1] ? 'weight-strong text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-primary' : 'text-foreground-muted') + '">' + t[0] + (t[0] === 'Šahs' ? unread : '') + '</span>'; }).join('') + '</span>';
-    var t = function (l, ic, k) { return '<span class="relative inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap text-body-sm ' + (on === k ? 'weight-strong text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-primary' : 'text-foreground-muted') + '">' + ICO(ic, 'size-4') + l + '</span>'; };
+    var t = function (l, ic, k) { return '<span class="relative inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap text-body-sm ' + (on === k ? 'weight-strong text-foreground after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-primary' : 'text-foreground-muted') + '">' + ICO(ic, 'hidden size-4 @5xl:block') + l + '</span>'; };
     return '<div class="flex items-center gap-4 overflow-x-auto border-0 border-b border-border @5xl:gap-5">' + switcher(on === 'room' ? 'Galda spēles' : 'Telpas') + open + '<span class="ml-auto flex shrink-0 items-center gap-4 @5xl:gap-5">' + t('Katalogs', 'list', 'cat') + t('Iestatījumi', 'sliders', 'set') + '</span></div>';
   }
   function roomPane(out, withSheet) {
@@ -398,7 +398,7 @@
   /* phone: the sticky context bar once the head has scrolled away (design.md Sticky context bar): ☰ and the hub name under the header */
   function scrolled() {
     var bar = '<div class="sticky top-header z-40 flex h-10 items-center gap-2 border-b border-border bg-surface px-gutter text-body-sm weight-strong text-foreground">' + ICO(P.menu, 'size-5') + 'Galda spēļu kopiena<span class="ml-auto text-meta weight-normal text-foreground-muted">Pārskats</span></div>';
-    return head(false) + bar + '<div class="px-gutter pt-3">' + tabBar([['Aktivitāte'], ['Ziņas', true], ['Pasākumi'], ['Grupas']]) + '<div class="mt-4 grid gap-6">' + zinasSec({}) + eventsSec({}) + '</div></div>' + bottomBar();
+    return head(false) + bar + '<div class="px-gutter pt-3">' + tabBar([['Aktivitāte'], ['Ziņas', true], ['Pasākumi'], ['Grupas']]) + '<div class="mt-4 grid grid-cols-[minmax(0,1fr)] gap-6">' + zinasSec({}) + eventsSec({}) + '</div></div>' + bottomBar();
   }
 
   /* ---------- screens ---------- */
