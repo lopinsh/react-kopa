@@ -636,7 +636,10 @@
       "empty": "No groups here yet. Start the first one!"
     },
     "events": {
-      "empty": "No upcoming events."
+      "tabsLabel": "Events views",
+      "emptyPast": "No past events yet.",
+      "count": "{shown} of {total} events",
+      "showMore": "Show {n} more"
     }
   },
   "admin": {

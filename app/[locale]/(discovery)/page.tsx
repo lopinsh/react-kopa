@@ -17,7 +17,7 @@ import FilterLine from '@/components/discovery/filter/FilterLine';
 import AlsoMatchesLine from '@/components/discovery/filter/AlsoMatchesLine';
 import GroupResults from '@/components/discovery/GroupResults';
 import EventResults from '@/components/discovery/EventResults';
-import { loadEvents } from './load-events';
+import { loadEvents } from '@/lib/services/event-window';
 import { buildAlsoMatches, wantsAlsoMatches } from './also-matches';
 import { auth } from '@/lib/auth';
 import { cityLabel } from '@/lib/city-label';

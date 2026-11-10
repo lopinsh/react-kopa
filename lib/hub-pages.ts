@@ -21,3 +21,10 @@ export function hubPageForPath(pathname: string, base: string): HubPageKey {
     const rest = pathname.startsWith(base) ? pathname.slice(base.length) : '';
     return HUB_PAGE_KEYS.find((k) => k !== 'overview' && rest === SEGMENT[k]) ?? 'overview';
 }
+
+/** How many events a hub's Pasākumi list shows: `?limit=` in steps of `step`, at least one step, at most `max`. */
+export function parseEventsLimit(raw: string | undefined, step: number, max: number): number {
+    const asked = parseInt(raw ?? '', 10);
+    const steps = Number.isFinite(asked) ? Math.ceil(asked / step) * step : step;
+    return Math.min(Math.max(steps, step), Math.floor(max / step) * step);
+}

@@ -901,7 +901,8 @@ export class EventService {
         const lang = toTextLang(locale);
         const withIds = async () => ({ ...where, searchIds: where.search ? await matchingEventIds(where.search) : undefined });
         const include = EVENT_ROW_INCLUDE(lang);
-        const orderBy: Prisma.EventOrderByWithRelationInput[] = [{ startDate: 'asc' }, { id: 'asc' }];
+        const dir = filters.past ? 'desc' : 'asc';
+        const orderBy: Prisma.EventOrderByWithRelationInput[] = [{ startDate: dir }, { id: dir }];
 
         // The cache holds the narrow row shape (an excerpt, not whole descriptions).
         const loadPublic = unstable_cache(
@@ -911,7 +912,7 @@ export class EventService {
                 orderBy,
                 take: limit + 1
             })).map((e) => toEventRow(e, lang, null)),
-            [`events-discovery-v7-${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
+            [`events-discovery-v7-${filters.past ? 'past-' : ''}${locale}-${cities.join(',')}-${filters.category}-${tags.join(',')}-${filters.search}-${filters.from?.toISOString()}-${filters.to?.toISOString()}-${limit}`],
             {
                 revalidate: 60,
                 // A group's hide, category or tag change (including a tag merge) moves its events too.
@@ -942,7 +943,7 @@ export class EventService {
         // Cached rows come back with dates as strings; revive them before sorting.
         const merged = [...publicRows, ...memberRows]
             .map((e) => ({ ...e, startDate: new Date(e.startDate), endDate: e.endDate ? new Date(e.endDate) : null }))
-            .sort((a, b) => a.startDate.getTime() - b.startDate.getTime() || (a.id < b.id ? -1 : 1))
+            .sort((a, b) => (filters.past ? -1 : 1) * (a.startDate.getTime() - b.startDate.getTime() || (a.id < b.id ? -1 : 1)))
             .slice(0, limit + 1);
         const shown = merged.slice(0, limit);
         const mine = await EventService.myTags(shown.map((e) => e.id), userId);

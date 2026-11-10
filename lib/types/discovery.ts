@@ -29,6 +29,8 @@ export interface EventDiscoveryFilters {
     to?: Date;
     /** Default DISCOVERY_EVENTS_LIMIT (100), clamped to 1…DISCOVERY_EVENTS_MAX_LIMIT (200). */
     limit?: number;
+    /** Events that are over (no `from`/`to`): the list runs newest first. */
+    past?: boolean;
 }
 
 /** What the counts are asked for: the list's filters minus paging. */

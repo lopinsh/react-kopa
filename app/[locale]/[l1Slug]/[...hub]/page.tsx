@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     return { title: address.page === 'overview' ? name : `${name} | ${t(`pages.${address.page}`)}` };
 }
 
-/** Dispatches to the page of the hub the address names (K1-03). Pārskats shows the Grupas list until K1-3 builds it; Pasākumi is built in K1-2. */
+/** Dispatches to the page of the hub the address names (K1-03). Pārskats shows the Grupas list until K1-3 builds it; Pasākumi is K1-2. */
 export default async function HubPage({ params, searchParams }: { params: Promise<Params>; searchParams: Promise<Search> }) {
     const { locale, l1Slug, hub: segments } = await params;
     const address = parseHubPath(segments);
@@ -31,7 +31,7 @@ export default async function HubPage({ params, searchParams }: { params: Promis
 
     const sp = await searchParams;
     const { cities } = parseDiscoveryParams(sp);
-    if (address.page === 'events') return <EventsPage />;
     const session = await auth();
+    if (address.page === 'events') return <EventsPage hub={hub} sp={sp} locale={locale} viewerId={session?.user?.id} />;
     return <GroupsPage hub={hub} cities={cities} tab={sp.tab === 'new' ? 'new' : 'all'} locale={locale} viewerId={session?.user?.id} />;
 }

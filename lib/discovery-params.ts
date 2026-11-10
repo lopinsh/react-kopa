@@ -15,6 +15,11 @@ export interface DiscoveryParams {
     date: DateChoice;
     /** Pasākumi only: the day the list starts at inside the choice (the strip's tap). */
     day: DayKey | null;
+    /**
+     * Where the links point (a hub's Pasākumi: `/games/boardgames/events`); the board when absent. Never read from the URL, never written to it.
+     * A set path is a page of its own, so its links carry no `tab=events`.
+     */
+    path?: string;
 }
 
 type RawParams = URLSearchParams | Record<string, string | string[] | undefined>;
@@ -54,7 +59,7 @@ export function discoveryHref(current: DiscoveryParams, change: Partial<Discover
     if (p.kind !== 'events') { p.date = { kind: 'week' }; p.day = null; }
     else if ('date' in change && !('day' in change)) p.day = null;
     const qs = new URLSearchParams();
-    if (p.kind === 'events') qs.set('tab', 'events');
+    if (p.kind === 'events' && !p.path) qs.set('tab', 'events');
     if (p.q) qs.set('q', p.q);
     if (p.cities.length > 0) qs.set('city', p.cities.join(','));
     if (p.category) qs.set('category', p.category);
@@ -64,7 +69,8 @@ export function discoveryHref(current: DiscoveryParams, change: Partial<Discover
     if (p.day) qs.set('day', p.day);
     if (p.limit && p.limit > DISCOVERY_GROUPS_PAGE) qs.set('limit', String(p.limit));
     const s = qs.toString().replace(/%2C/g, ',');
-    return s ? `/?${s}` : '/';
+    const base = p.path ?? '/';
+    return s ? `${base}?${s}` : base;
 }
 
 /**
