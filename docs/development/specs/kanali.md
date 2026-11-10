@@ -38,7 +38,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-16 | The hub card shows activity numbers; locked text "1 cilvēks vēlas šeit sākt grupu". | Changed | → K-16a. |
 | K-16a | The hub card shows **just the hub's name ("Šaha kopiena") as a link, with some visual flair**. | Confirmed | 9 Nov. |
 | K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
-| K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | In progress | 9 Nov text; with no follow sheet (K-58) it likely moves to the city hub request (K-09a). |
+| K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Changed | 10 Nov: dropped. No "you are first" text anywhere; the city hub request window only asks for the optional note (K-18a). |
 | K-18a | The optional note left with "Mani interesē" is a shout-out (K-26), a public note on the hub. | Confirmed | 9 Nov: "Those are public announcements. Like shout outs." |
 | K-18b | Notes become the first chat lines when the hub unlocks. | Changed | My idea, drawn without the owner's OK; replaced by K-18a. |
 | K-18c | Locked sub-veidi hubs listed inside the parent hub ("Go · 1 interesējas") as an invitation to be the second. | Changed | Veids hubs are never locked (K-58); pending city hub requests may be listed instead: In progress. |
@@ -59,7 +59,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
 | K-27 | Shout-outs are **plain post-it notes** on the board's wall ("If you are interested too, let me know. We could start a group together"). No "Es arī", no "Izveidot grupu ar viņiem". | Confirmed | 9 Nov: "Yes, plain notes. Announcements really are plain post-it notes." |
 | K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Confirmed | 9 Nov. |
-| K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." Next: owner names the good parts, then one combined layout. |
+| K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." 10 Nov: owner skipped the question for now (also my combined-layout proposal); stays open until the owner picks it up. |
 
 ### Chat
 | Id | Feature | Status | Notes |
@@ -83,7 +83,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 |---|---|---|---|
 | K-40 | Signed-out visitors see counts only. | Changed | → K-41. |
 | K-41 | Signed-out visitors read the shout-outs (no author names) and events; actions lead to sign-in and back. | Confirmed | 9 Nov. The part "the chat stays hidden" is Changed → K-38b. |
-| K-42 | A report action on every chat line; private messages only through a shared group. | In progress | My proposal. |
+| K-42 | A report action on every chat line; private messages only through a shared group. | Changed | 10 Nov: moderation (reports, private messages) is designed later, not in the first hub release. |
 
 ### Entry points and words
 | Id | Feature | Status | Notes |
@@ -94,7 +94,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-53 | Site words: L1 "Tēma", L2 "Veids/Veidi". | Confirmed | 9 Nov (both offered options carried them; say if not). |
 | K-54 | One joining verb "Mani interesē"; the exit is "Vairs neinteresē". | Changed | No hub follow (K-58); "Mani interesē" / "Vairs neinteresē" leave hubs. |
 | K-55 | "+ Cits" at the end of the Veidi chips opens the existing "Ieteikt jaunu tēmu" sheet (`CategorySuggest`); visible to admins only until approved. | Confirmed | 8 Nov. |
-| K-56 | The "Izveidot jaunu grupu" card gets a quiet "vai vienkārši pastāsti, ko meklē". | In progress | 9 Nov (C2), before shout-outs; may become "leave a shout-out". |
+| K-56 | The "Izveidot jaunu grupu" card gets a quiet "vai vienkārši pastāsti, ko meklē". | Changed | 10 Nov: no second action; the card only creates a group. |
 | K-59 | The build-plan page is always current: discarded views are removed, not kept; a choice between options is drawn as A and B side by side. | Confirmed | 9 Nov. |
 | K-57 | Addresses follow the board: hub `/lv/speles/galda-speles` (`/[l1]/[l2]`, sub-veids `/[l1]/[l2]/[l3]`); city hub `/lv/jelgava`; a city room as `?room=jelgava` on the hub. | Confirmed | 9 Nov. |
 | K-58 | **No followers on hubs.** The point is to join groups: you count as part of a hub by being a member of one of its groups. | Confirmed | 9 Nov. |
