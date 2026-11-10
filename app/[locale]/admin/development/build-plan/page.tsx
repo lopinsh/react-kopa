@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import BuildPlanView from '@/components/admin/plan/BuildPlanView';
 import HandbookMarkdown from '@/components/handbook/HandbookMarkdown';
-import { buttonClass } from '@/components/ui/Button';
-import { Link } from '@/i18n/routing';
 import { requireAdminPage } from '@/lib/admin-access';
 import { DevelopmentService, PLAN, type PlanDrawingId } from '@/lib/services/development.service';
+import { markdownHeadings } from '@/lib/services/handbook.service';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
     const { locale } = await params;
@@ -17,7 +17,7 @@ function drawingId(value: string | undefined): PlanDrawingId | null {
 }
 
 /**
- * The plan for the next release (admin review tool): the spec as text, then one tab per drawing. The tab is in the URL (`?d=`).
+ * The plan for the next release (admin review tool): the spec as text, then one tab per drawing, as the page sidebar's tabs (`?d=`).
  * Drawings are complete pages with the site look injected, so each runs in an isolated frame. Between plans the page shows the empty note.
  */
 export default async function BuildPlanPage({ params, searchParams }: { params: Promise<{ locale: string }>; searchParams: Promise<{ d?: string }> }) {
@@ -26,6 +26,7 @@ export default async function BuildPlanPage({ params, searchParams }: { params: 
     await requireAdminPage(locale, '/admin/development/build-plan');
 
     const t = await getTranslations('admin.development');
+    const tn = await getTranslations('admin.nav');
     const current = drawingId(d);
     const [markdown, html] = await Promise.all([
         current ? null : DevelopmentService.getPlanSpec(),
@@ -34,37 +35,29 @@ export default async function BuildPlanPage({ params, searchParams }: { params: 
 
     if (!current && markdown === null) {
         return (
-            <div className="max-w-reading rounded-xl line bg-surface p-6">
-                <h1 className="text-title text-foreground">{t('buildPlanEmptyTitle')}</h1>
-                <p className="mt-2 text-body text-foreground-muted">{t('buildPlanEmptyHint')}</p>
+            <div className="container mx-auto px-4 py-6">
+                <div className="max-w-reading rounded-xl line bg-surface p-6">
+                    <h1 className="text-title text-foreground">{t('buildPlanEmptyTitle')}</h1>
+                    <p className="mt-2 text-body text-foreground-muted">{t('buildPlanEmptyHint')}</p>
+                </div>
             </div>
         );
     }
 
+    const tabs = [
+        { id: 'spec', href: '/admin/development/build-plan', label: t('planTab'), current: !current },
+        ...PLAN.drawings.map(({ id }) => ({ id, href: `/admin/development/build-plan?d=${id}`, label: t(`planDrawings.${id}`), current: id === current })),
+    ];
+    const specSections = markdown ? markdownHeadings(markdown).map((h) => ({ id: h.id, label: h.text })) : [];
     return (
-        <div className="flex min-h-96 flex-1 flex-col">
-            <nav aria-label={t('planTab')} className="flex gap-1 overflow-x-auto bg-surface px-gutter py-2">
-                <Link href="/admin/development/build-plan" aria-current={current ? undefined : 'page'} className={buttonClass(current ? 'quiet' : 'primary', 'shrink-0', 'sm')}>
-                    {t('planTab')}
-                </Link>
-                {PLAN.drawings.map(({ id }) => (
-                    <Link
-                        key={id}
-                        href={`/admin/development/build-plan?d=${id}`}
-                        aria-current={id === current ? 'page' : undefined}
-                        className={buttonClass(id === current ? 'primary' : 'quiet', 'shrink-0', 'sm')}
-                    >
-                        {t(`planDrawings.${id}`)}
-                    </Link>
-                ))}
-            </nav>
-            {current ? (
-                <iframe key={current} data-feedback-frame={current} title={t(`planDrawings.${current}`)} srcDoc={html ?? ''} className="min-h-0 w-full flex-1 border-0 bg-background" />
-            ) : (
-                <div className="min-h-0 flex-1 overflow-y-auto px-gutter py-6">
-                    <article className="max-w-5xl min-w-0">{markdown && <HandbookMarkdown markdown={markdown} />}</article>
-                </div>
-            )}
-        </div>
+        <BuildPlanView
+            key={current ?? 'spec'}
+            tabs={tabs}
+            specSections={specSections}
+            drawing={current ? { id: current, title: t(`planDrawings.${current}`), html: html ?? '' } : null}
+            labels={{ tabs: tn('pageTabs'), sections: tn('pageSections') }}
+        >
+            {markdown && <HandbookMarkdown markdown={markdown} />}
+        </BuildPlanView>
     );
 }

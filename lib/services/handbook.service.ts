@@ -53,6 +53,10 @@ async function readSource(file: string): Promise<string> {
     return raw.replace(/\r\n/g, '\n');
 }
 
+export function markdownHeadings(markdown: string): HandbookHeading[] {
+    return parse(markdown).headings;
+}
+
 function parse(markdown: string): { title: string; headings: HandbookHeading[] } {
     let title = '';
     const headings: HandbookHeading[] = [];

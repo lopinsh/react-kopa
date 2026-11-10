@@ -97,15 +97,17 @@ export default function AdminSidebarLayout({ tabs, sections, current, labels, on
     const active = useActiveSection(current === undefined ? sections.map((s) => s.id) : []);
     const here = current === undefined ? active : current;
     return (
-        <div className={clsx('lg:flex', fill && 'flex min-h-0 flex-1 flex-col')} data-ui={UI.tabs}>
+        <div className={clsx('lg:flex', fill && 'flex min-h-0 flex-1 flex-col lg:flex-row')} data-ui={UI.tabs}>
             <aside
                 aria-label={labels.sections}
                 className={clsx('hidden w-aside shrink-0 overflow-y-auto border-r border-border bg-background p-3 lg:block', fill ? 'lg:self-stretch' : 'lg:sticky lg:top-[var(--admin-bars,0px)] lg:max-h-[calc(100dvh-var(--spacing-header)-var(--admin-bars,0px))] lg:self-start')}
             >
                 <SidebarList tabs={items} sections={sections} current={here} labels={labels} onJump={onJump} />
             </aside>
-            <div className={clsx('min-w-0 flex-1 px-gutter', fill ? 'flex min-h-0 flex-col' : 'py-6')}>
-                <AdminSidebarFold tabs={items} sections={sections} current={here} labels={labels} onJump={onJump} />
+            <div className={clsx('min-w-0 flex-1', fill ? 'flex min-h-0 flex-col' : 'px-gutter py-6')}>
+                <div className={fill ? 'px-gutter' : undefined}>
+                    <AdminSidebarFold tabs={items} sections={sections} current={here} labels={labels} onJump={onJump} />
+                </div>
                 {children}
             </div>
         </div>
