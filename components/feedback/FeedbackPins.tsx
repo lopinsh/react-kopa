@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { FEEDBACK_TAB_STATUSES } from '@/lib/constants';
-import { findNoteElement, isCovered } from '@/lib/feedback/capture';
+import { findNoteElement, forEachDocument, frameOffset, isCovered } from '@/lib/feedback/capture';
 import type { FeedbackItem } from '@/lib/services/feedback.service';
 
 type Props = {
@@ -37,10 +37,12 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
             if (!el?.isConnected) el = findNoteElement(note);
             if (el) resolved.current.set(note.id, el); else resolved.current.delete(note.id);
             if (!el) { missing.push(note.id); return; }
-            const rect = el.getBoundingClientRect();
+            const local = el.getBoundingClientRect();
+            const off = frameOffset(el);
+            const rect = new DOMRect(local.left + off.x, local.top + off.y, local.width, local.height);
             const empty = rect.width === 0 && rect.height === 0;
             const offscreen = rect.bottom < 0 || rect.top > window.innerHeight || rect.right < 0 || rect.left > window.innerWidth;
-            if (empty || offscreen || isCovered(el, rect)) return;
+            if (empty || offscreen || isCovered(el, local)) return;
             next.push({
                 id: note.id,
                 n: i + 1,
@@ -66,9 +68,16 @@ export default function FeedbackPins({ notes, onOpen, onMissing }: Props) {
         schedule();
         window.addEventListener('scroll', schedule, true);
         window.addEventListener('resize', schedule);
+        // Scrolling inside an iframe doesn't reach the top window.
+        const offFrames = forEachDocument((doc) => {
+            if (doc === document) return () => {};
+            doc.addEventListener('scroll', schedule, true);
+            return () => doc.removeEventListener('scroll', schedule, true);
+        });
         const timer = window.setInterval(refresh, 1000);
         return () => {
             cancelAnimationFrame(frame);
+            offFrames();
             window.clearInterval(timer);
             window.removeEventListener('scroll', schedule, true);
             window.removeEventListener('resize', schedule);

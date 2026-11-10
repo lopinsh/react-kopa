@@ -4,8 +4,88 @@
  * True when the event target belongs to feedback mode's own layer or bar. Pop-ups and dropdown menus that close
  * on an outside click must ignore these, otherwise pressing a comment button on an item of an open menu closes it.
  */
+/** `instanceof Element` fails for nodes of an iframe (another realm), so check the node type. */
+export function isElement(target: EventTarget | null): target is Element {
+    return target !== null && (target as Node).nodeType === 1;
+}
+
 export function inFeedbackLayer(target: EventTarget | null): boolean {
-    return target instanceof Element && target.closest('[data-feedback-ignore]') !== null;
+    return isElement(target) && target.closest('[data-feedback-ignore]') !== null;
+}
+
+
+/** Separates the iframe part of a selector from the path inside that frame. */
+const FRAME_SEP = ' >>> ';
+
+/** The iframe element that holds `el`'s document, or null for the top document (or a cross-origin frame). */
+export function frameOf(el: Element): HTMLIFrameElement | null {
+    try {
+        const frame = el.ownerDocument.defaultView?.frameElement;
+        return frame instanceof HTMLIFrameElement ? frame : null;
+    } catch {
+        return null;
+    }
+}
+
+/** Same-origin iframes of a document (their `contentDocument` is readable). */
+function framesOf(doc: Document): HTMLIFrameElement[] {
+    return Array.from(doc.querySelectorAll('iframe')).filter((f) => {
+        try { return f.contentDocument !== null && f.contentDocument.body !== null; } catch { return false; }
+    });
+}
+
+/** The top document and every readable same-origin iframe document inside it (nested too). */
+export function allDocuments(root: Document = document): Document[] {
+    const docs: Document[] = [root];
+    for (const f of framesOf(root)) if (f.contentDocument) docs.push(...allDocuments(f.contentDocument));
+    return docs;
+}
+
+/** Offset of the element's document origin in the top window's viewport (0,0 for the top document). */
+export function frameOffset(el: Element): { x: number; y: number } {
+    let x = 0;
+    let y = 0;
+    for (let frame = frameOf(el); frame; frame = frameOf(frame)) {
+        const r = frame.getBoundingClientRect();
+        x += r.left + frame.clientLeft;
+        y += r.top + frame.clientTop;
+    }
+    return { x, y };
+}
+
+/** The element's bounding rect in top-window viewport coordinates. */
+export function viewportRect(el: Element): DOMRect {
+    const r = el.getBoundingClientRect();
+    const o = frameOffset(el);
+    return new DOMRect(r.left + o.x, r.top + o.y, r.width, r.height);
+}
+
+/** Title of the frame holding `el`, or '' for the top document. */
+function frameTitle(el: Element): string {
+    const frame = frameOf(el);
+    return frame ? frame.title.trim() : '';
+}
+
+/**
+ * Runs `attach` for the top document and each same-origin iframe document, again for frames that load or
+ * appear later. `attach` returns its cleanup. Returns the overall cleanup.
+ */
+export function forEachDocument(attach: (doc: Document) => () => void): () => void {
+    const live = new Map<Document, () => void>();
+    const sync = () => {
+        const docs = new Set(allDocuments());
+        for (const [doc, off] of Array.from(live)) if (!docs.has(doc)) { off(); live.delete(doc); }
+        for (const doc of docs) if (!live.has(doc)) live.set(doc, attach(doc));
+    };
+    sync();
+    const timer = window.setInterval(sync, 500);
+    document.addEventListener('load', sync, true);
+    return () => {
+        window.clearInterval(timer);
+        document.removeEventListener('load', sync, true);
+        for (const off of live.values()) off();
+        live.clear();
+    };
 }
 
 /** Matches the `component` limit in the feedback schema. */
@@ -36,13 +116,24 @@ function anchor(el: Element): string | null {
  * joined with a plain descendant combinator when the path is cut short).
  */
 export function buildSelector(el: Element): string {
+    const frame = frameOf(el);
+    if (frame) {
+        const title = frame.title.trim();
+        const outer = title ? `iframe[title="${CSS.escape(title)}"]` : buildSelector(frame);
+        return `${outer}${FRAME_SEP}${buildLocalSelector(el)}`;
+    }
+    return buildLocalSelector(el);
+}
+
+function buildLocalSelector(el: Element): string {
+    const doc = el.ownerDocument;
     const own = anchor(el);
     if (own) return own;
 
     const steps: string[] = [];
     let node: Element | null = el;
     let root: string | null = null;
-    while (node && node !== document.body && node !== document.documentElement) {
+    while (node && node !== doc.body && node !== doc.documentElement) {
         const a = anchor(node);
         if (a) { root = a; break; }
         steps.unshift(segment(node));
@@ -106,11 +197,13 @@ export function buildBreadcrumb(el: Element): string {
     const empty = visibleText(el) === '' ? ', empty' : '';
     const self = `${el.tagName.toLowerCase()}${classes} (${Math.round(rect.width)}\u00d7${Math.round(rect.height)}${empty})`;
     const steps: string[] = [];
-    for (let node = el.parentElement; node && node !== document.body && node !== document.documentElement; node = node.parentElement) {
+    const doc = el.ownerDocument;
+    for (let node = el.parentElement; node && node !== doc.body && node !== doc.documentElement; node = node.parentElement) {
         const label = ancestorLabel(node);
         if (label && label !== steps[0]) steps.unshift(label);
     }
-    return [...steps, self].join(' \u203a ').slice(0, 600);
+    const title = frameTitle(el);
+    return [...(title ? [`"${title}"`] : []), ...steps, self].join(' \u203a ').slice(0, 600);
 }
 
 const SCOPE_HTML_MAX = 1500;
@@ -149,7 +242,7 @@ export function buildScopeHtml(el: Element): string {
 /** "Section title › nearest heading before the element", e.g. "A group page in the new look › Ko meklējam". */
 function nearestHeading(el: Element): string | null {
     let found: Element | null = null;
-    for (const h of Array.from(document.querySelectorAll('h1, h2, h3, h4, h5, h6'))) {
+    for (const h of Array.from(el.ownerDocument.querySelectorAll('h1, h2, h3, h4, h5, h6'))) {
         const before = h.contains(el) || (h.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
         if (!before) break;
         found = h;
@@ -170,8 +263,8 @@ export function locate(el: Element): ElementLocator {
         outerHtml: buildScopeHtml(el),
         heading: nearestHeading(el),
         commit: (process.env.NEXT_PUBLIC_COMMIT_SHA || 'dev').slice(0, 40),
-        boxX: Math.round(rect.left + window.scrollX),
-        boxY: Math.round(rect.top + window.scrollY),
+        boxX: Math.round(rect.left + (el.ownerDocument.defaultView?.scrollX ?? 0)),
+        boxY: Math.round(rect.top + (el.ownerDocument.defaultView?.scrollY ?? 0)),
         boxW: Math.round(rect.width),
         boxH: Math.round(rect.height),
     };
@@ -180,7 +273,11 @@ export function locate(el: Element): ElementLocator {
 /** Finds the element for a stored selector, or null if the page no longer has it. */
 export function findBySelector(selector: string): Element | null {
     try {
-        return document.querySelector(selector);
+        const at = selector.indexOf(FRAME_SEP);
+        if (at === -1) return document.querySelector(selector);
+        const frame = document.querySelector(selector.slice(0, at));
+        const doc = frame instanceof HTMLIFrameElement ? frame.contentDocument : null;
+        return doc ? doc.querySelector(selector.slice(at + FRAME_SEP.length)) : null;
     } catch {
         return null;
     }
@@ -211,6 +308,8 @@ export function findNoteElement(note: NoteAnchor): Element | null {
     const named = name.trim();
 
     const bySelector = findBySelector(note.selector);
+    // Inside a frame there are no `data-ui` names to fall back on: the selector and the text decide.
+    if (note.selector.includes(FRAME_SEP)) return bySelector && sameText(bySelector, note.elementText) ? bySelector : null;
     if (bySelector) {
         const own = bySelector.closest('[data-ui]');
         const nameOk = !named || own?.getAttribute('data-ui')?.trim() === named;
@@ -219,7 +318,7 @@ export function findNoteElement(note: NoteAnchor): Element | null {
     }
     if (!named) return bySelector;
 
-    const candidates = Array.from(document.querySelectorAll('[data-ui]')).filter((el) => el.getAttribute('data-ui')?.trim() === named);
+    const candidates = allDocuments().flatMap((d) => Array.from(d.querySelectorAll('[data-ui]'))).filter((el) => el.getAttribute('data-ui')?.trim() === named);
     const inContext = context
         ? candidates.filter((el) => el.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim() === context)
         : candidates;
@@ -232,32 +331,36 @@ export function findNoteElement(note: NoteAnchor): Element | null {
     const box = note.box;
     const distance = (el: Element) => {
         const r = el.getBoundingClientRect();
-        return Math.abs(r.left + window.scrollX - box.x) + Math.abs(r.top + window.scrollY - box.y);
+        const view = el.ownerDocument.defaultView;
+        return Math.abs(r.left + (view?.scrollX ?? 0) - box.x) + Math.abs(r.top + (view?.scrollY ?? 0) - box.y);
     };
     return finalists.reduce((best, el) => (distance(el) < distance(best) ? el : best));
 }
 
 /** What a person would read on the element: collapsed whitespace, first ~120 characters. */
 export function visibleText(el: Element): string {
-    const raw = el instanceof HTMLElement ? el.innerText : el.textContent ?? '';
+    const raw = 'innerText' in el && typeof el.innerText === 'string' ? el.innerText : el.textContent ?? '';
     return raw.replace(/\s+/g, ' ').trim().slice(0, TEXT_LENGTH);
 }
 
 /**
+ * `rect` is the element's own rect in its document's viewport (not shifted by a frame offset).
  * True when something else (e.g. an open pop-up and its backdrop) lies over the element's centre,
  * so its pin would float on top of that pop-up. Feedback mode's own layers don't count. A pop-up rendered
  * inside the element (e.g. the join pop-up inside the group header) still covers it: anything `fixed`
  * between the element and the point counts as a layer on top.
  */
 export function isCovered(el: Element, rect: DOMRect): boolean {
-    const x = Math.min(Math.max(rect.left + rect.width / 2, 0), window.innerWidth - 1);
-    const y = Math.min(Math.max(rect.top + rect.height / 2, 0), window.innerHeight - 1);
-    const top = document.elementFromPoint(x, y);
+    const doc = el.ownerDocument;
+    const view = doc.defaultView ?? window;
+    const x = Math.min(Math.max(rect.left + rect.width / 2, 0), view.innerWidth - 1);
+    const y = Math.min(Math.max(rect.top + rect.height / 2, 0), view.innerHeight - 1);
+    const top = doc.elementFromPoint(x, y);
     if (!top || top.closest('[data-feedback-ignore]')) return false;
     if (top.contains(el)) return false;
     if (!el.contains(top)) return true;
     for (let node: Element | null = top; node && node !== el; node = node.parentElement) {
-        if (getComputedStyle(node).position === 'fixed') return true;
+        if (view.getComputedStyle(node).position === 'fixed') return true;
     }
     return false;
 }
@@ -269,7 +372,7 @@ export function isCovered(el: Element, rect: DOMRect): boolean {
  */
 export function componentOf(el: Element | null): string | null {
     const name = el?.closest('[data-ui]')?.getAttribute('data-ui')?.trim();
-    const context = el?.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim();
+    const context = el?.closest('[data-feedback-context]')?.getAttribute('data-feedback-context')?.trim() || (el ? frameTitle(el) : '');
     const joined = [name, context].filter(Boolean).join(' · ');
     return joined ? joined.slice(0, COMPONENT_MAX) : null;
 }

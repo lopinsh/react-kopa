@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { forEachDocument, isElement, viewportRect } from '@/lib/feedback/capture';
 
 export type PickRect = { left: number; top: number; width: number; height: number };
 
 function pickable(target: EventTarget | null): Element | null {
-    if (!(target instanceof Element)) return null;
+    if (!isElement(target)) return null;
     return target.closest('[data-feedback-ignore]') ? null : target;
 }
 
@@ -24,7 +25,7 @@ export function useElementPicker(enabled: boolean, onPick: (el: Element) => void
         const onMove = (e: MouseEvent) => {
             const el = pickable(e.target);
             if (!el) { setRect(null); return; }
-            const r = el.getBoundingClientRect();
+            const r = viewportRect(el);
             setRect({ left: r.left, top: r.top, width: r.width, height: r.height });
         };
         const swallow = (e: Event) => {
@@ -40,16 +41,19 @@ export function useElementPicker(enabled: boolean, onPick: (el: Element) => void
             onPick(el);
         };
 
-        document.addEventListener('mousemove', onMove, true);
-        document.addEventListener('pointerdown', swallow, true);
-        document.addEventListener('mousedown', swallow, true);
-        document.addEventListener('click', onClick, true);
-        return () => {
-            document.removeEventListener('mousemove', onMove, true);
-            document.removeEventListener('pointerdown', swallow, true);
-            document.removeEventListener('mousedown', swallow, true);
-            document.removeEventListener('click', onClick, true);
-        };
+        // The page and every same-origin iframe (e.g. the build-plan drawings).
+        return forEachDocument((doc) => {
+            doc.addEventListener('mousemove', onMove, true);
+            doc.addEventListener('pointerdown', swallow, true);
+            doc.addEventListener('mousedown', swallow, true);
+            doc.addEventListener('click', onClick, true);
+            return () => {
+                doc.removeEventListener('mousemove', onMove, true);
+                doc.removeEventListener('pointerdown', swallow, true);
+                doc.removeEventListener('mousedown', swallow, true);
+                doc.removeEventListener('click', onClick, true);
+            };
+        });
     }, [enabled, onPick]);
 
     return enabled ? rect : null;

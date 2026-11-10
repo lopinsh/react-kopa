@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { MessageSquarePlus } from 'lucide-react';
 import { clsx } from 'clsx';
-import { isCovered } from '@/lib/feedback/capture';
+import { allDocuments, forEachDocument, frameOffset, isCovered, isElement } from '@/lib/feedback/capture';
 
 type Props = {
     /** Off while paused, while a pop-up is open, or in "comment anywhere" mode. */
@@ -18,7 +18,7 @@ const BUTTON_SIZE = 28;
 const INSET = 4;
 
 function ignored(target: EventTarget | null): boolean {
-    return !(target instanceof Element) || target.closest('[data-feedback-ignore]') !== null;
+    return !isElement(target) || target.closest('[data-feedback-ignore]') !== null;
 }
 
 /** The innermost named element around the target, unless it belongs to feedback mode itself. */
@@ -42,12 +42,14 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
 
     const measure = useCallback(() => {
         const next: Entry[] = [];
-        document.querySelectorAll('[data-ui]').forEach((el) => {
+        allDocuments().flatMap((d) => Array.from(d.querySelectorAll('[data-ui]'))).forEach((el) => {
             if (el.closest('[data-feedback-ignore]')) return;
-            const rect = el.getBoundingClientRect();
-            if (rect.width === 0 || rect.height === 0) return;
+            const local = el.getBoundingClientRect();
+            if (local.width === 0 || local.height === 0) return;
+            const off = frameOffset(el);
+            const rect = new DOMRect(local.left + off.x, local.top + off.y, local.width, local.height);
             const offscreen = rect.bottom < 0 || rect.top > window.innerHeight || rect.right < 0 || rect.left > window.innerWidth;
-            if (offscreen || isCovered(el, rect)) return;
+            if (offscreen || isCovered(el, local)) return;
             next.push({
                 el,
                 name: el.getAttribute('data-ui') ?? '',
@@ -55,7 +57,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
                 top: Math.round(rect.top),
                 width: Math.round(rect.width),
                 height: Math.round(rect.height),
-                radius: getComputedStyle(el).borderRadius,
+                radius: (el.ownerDocument.defaultView ?? window).getComputedStyle(el).borderRadius,
             });
         });
         // Runs on every scroll frame and once a second; only re-render when something moved.
@@ -73,9 +75,15 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
         schedule();
         window.addEventListener('scroll', schedule, true);
         window.addEventListener('resize', schedule);
+        const offFrames = forEachDocument((doc) => {
+            if (doc === document) return () => {};
+            doc.addEventListener('scroll', schedule, true);
+            return () => doc.removeEventListener('scroll', schedule, true);
+        });
         const timer = window.setInterval(schedule, 1000);
         return () => {
             cancelAnimationFrame(frame);
+            offFrames();
             window.clearInterval(timer);
             window.removeEventListener('scroll', schedule, true);
             window.removeEventListener('resize', schedule);
@@ -98,7 +106,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
         // pointermove fires while scrolling, so it is left out here.
         const onMove = (e: PointerEvent) => {
             if (e.pointerType !== 'mouse') return;
-            if (e.target instanceof Element && e.target.closest('[data-feedback-comment]')) return;
+            if (isElement(e.target) && e.target.closest('[data-feedback-comment]')) return;
             setActive(namedAround(e.target));
         };
         const onDown = (e: PointerEvent) => {
@@ -110,7 +118,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
         };
         const onCancel = () => { selectOnTap = null; };
         const swallow = (e: Event) => {
-            if (!selectOnTap || !(e.target instanceof Node) || !selectOnTap.contains(e.target)) return;
+            if (!selectOnTap || !e.target || !selectOnTap.contains(e.target as Node)) return;
             e.preventDefault();
             e.stopPropagation();
         };
@@ -119,7 +127,7 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
         const onClick = (e: MouseEvent) => {
             const picked = selectOnTap;
             selectOnTap = null;
-            if (picked && e.target instanceof Node && picked.contains(e.target)) {
+            if (picked && e.target && picked.contains(e.target as Node)) {
                 e.preventDefault();
                 e.stopPropagation();
                 setActive(picked);
@@ -128,18 +136,20 @@ export default function FeedbackNamedElements({ enabled, onPick }: Props) {
             if (!ignored(e.target) && !namedAround(e.target) && lastPointer !== 'mouse') setActive(null);
         };
 
-        document.addEventListener('pointermove', onMove, true);
-        document.addEventListener('pointerdown', onDown, true);
-        document.addEventListener('pointercancel', onCancel, true);
-        document.addEventListener('mousedown', swallow, true);
-        document.addEventListener('click', onClick, true);
-        return () => {
-            document.removeEventListener('pointermove', onMove, true);
-            document.removeEventListener('pointerdown', onDown, true);
-            document.removeEventListener('pointercancel', onCancel, true);
-            document.removeEventListener('mousedown', swallow, true);
-            document.removeEventListener('click', onClick, true);
-        };
+        return forEachDocument((doc) => {
+            doc.addEventListener('pointermove', onMove, true);
+            doc.addEventListener('pointerdown', onDown, true);
+            doc.addEventListener('pointercancel', onCancel, true);
+            doc.addEventListener('mousedown', swallow, true);
+            doc.addEventListener('click', onClick, true);
+            return () => {
+                doc.removeEventListener('pointermove', onMove, true);
+                doc.removeEventListener('pointerdown', onDown, true);
+                doc.removeEventListener('pointercancel', onCancel, true);
+                doc.removeEventListener('mousedown', swallow, true);
+                doc.removeEventListener('click', onClick, true);
+            };
+        });
     }, [enabled]);
 
     if (!enabled) return null;
