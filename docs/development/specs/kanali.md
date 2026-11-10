@@ -38,9 +38,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-16 | The hub card shows activity numbers; locked text "1 cilvēks vēlas šeit sākt grupu". | Changed | → K-16a. |
 | K-16a | The hub card shows **just the hub's name ("Šaha kopiena") as a link, with some visual flair**. | Changed | → K-74 (10 Nov notes: the empty card space is wasted). |
 | K-17 | No "Vēl 1, un atveras čats" text. | Confirmed | 9 Nov: "redundant". |
-| K-73 | Topic chips: there can be too many Veidi/sub-veidi; unselected chips follow common practice, selected chips stay as they are. | In progress | 10 Nov note cmwabl0ip. Look at how other projects do it before drawing. |
+| K-73 | Topic chips: there can be too many Veidi/sub-veidi; unselected chips follow common practice, selected chips stay as they are. | Confirmed | 10 Nov note cmwabl0ip. Look at how other projects do it before drawing. 10 Nov (options page, note cmwah2l9i): option B, chips grouped by Veids (a Veids opens its sub-veidi); long lists use the site's existing drop-down with a search box on top. |
 | K-74 | **Always one hub card.** One hub: as much about the hub as fits (overview: latest activity, groups, members). Two hubs: the same, split in two. Three or more: a list of the hubs. | Confirmed | 10 Nov (notes cmwabmk9e, cmwabpdk9 and answer). |
-| K-75 | What the hub card shows and how two hubs on one card are kept apart (now too bold, they clash; smaller text, more separation). | In progress | 10 Nov notes cmwabmk9e, cmwabo309: look at how other projects do it first. |
+| K-75 | What the hub card shows and how two hubs on one card are kept apart (now too bold, they clash; smaller text, more separation). | In progress | 10 Nov notes cmwabmk9e, cmwabo309: look at how other projects do it first. 10 Nov (note cmwah5qdh): card content = option B: name, "120 dalībnieki 13 grupās", next public event or "Pēdējā aktivitāte pirms 2 d.", up to 3 sub-veidi chips "+N"; no online count. Two hubs on a card: still to discuss (parent and child, note cmwah998r). |
 | K-18 | The "Mani interesē" sheet text: "Šobrīd esi pirmais. Atstāj ziņu citiem, lai atrastu līdzīgi domājošos." | Changed | 10 Nov: dropped. No "you are first" text anywhere; the city hub request window only asks for the optional note (K-18a). |
 | K-18a | The optional note left with "Mani interesē" is a shout-out (K-26), a public note on the hub. | Confirmed | 9 Nov: "Those are public announcements. Like shout outs." |
 | K-18b | Notes become the first chat lines when the hub unlocks. | Changed | My idea, drawn without the owner's OK; replaced by K-18a. |
@@ -65,14 +65,15 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-76 | Member line: "120 dalībnieki 13 grupās". | Confirmed | 10 Nov note cmwabq1gv. |
 | K-77 | Shout-outs are called **"Ziņas"** on the hub (same word as the inbox; the page tells them apart) and are more compact. | Confirmed | 10 Nov note cmwac2417 and answer. |
 | K-78 | The activity feed as drawn on "Jelgavas kopiena" is the right direction. | Confirmed | 10 Nov note cmwac580g: "not final, but this is good". |
-| K-79 | On phones the hub content is more compact, done smartly from what successful projects do. | In progress | 10 Nov note cmwac7myh (drawing C). Look at others first. |
+| K-79 | On phones the hub content is more compact, done smartly from what successful projects do. | In progress | 10 Nov note cmwac7myh (drawing C). Look at others first. 10 Nov (note cmwaha91f): activity feed as one-line rows (option A); tapping a row expands it (accordion). Ziņas rows not yet commented. |
 | K-28 | Layout of the hub page. | In progress | 9 Nov: options A (one page), B (Pārskats \| Čats pages) and C (Discord columns) drawn; owner: "No single version is ok for now, but there are good ideas." 10 Nov: owner skipped the question for now (also my combined-layout proposal); stays open until the owner picks it up. 10 Nov notes: A (one page) rejected on phone and desktop. Navigation follows the group page's logic: left vertical menu and horizontal sections (not its content); Čats is a page in the left menu with its own inner navigation, still to design. Horizontal sections = the group page's in-page tab bar, adapting to the page (Pasākumi: Gaidāmie / Pagājušie; Informācija: the group's own sections like Par mums, Kontakti). Čats: an mIRC-type chat with tabs such as a directory and preferences (→ K-81). |
 
 ### Chat
 | Id | Feature | Status | Notes |
 |---|---|---|---|
 | K-80 | The chat idea (room list + chat) is liked; it needs a design review before it is final. | In progress | 10 Nov note cmwabz3xr. |
-| K-81 | Čats inner navigation: an mIRC-type chat page with its own tab bar (rooms/directory, preferences, …). | In progress | 10 Nov answer; researched with K-73..K-79 before drawing. |
+| K-81 | Čats inner navigation: an mIRC-type chat page with its own tab bar (rooms/directory, preferences, …). | In progress | 10 Nov answer; researched with K-73..K-79 before drawing. 10 Nov (note cmwahcjyw): room switcher (option C) is the direction; many rooms → drop-down with built-in search, as in K-73. To discuss. |
+| K-82 | Čats has a member list: who is here and who is online; members can start a private chat, but the other person approves first. | In progress | 10 Nov note cmwahe642. Details to discuss (K-42 moderation still later). |
 | K-30 | Matrix, self-hosted, in our own chat panel; Element/FluffyChat optional. | Confirmed | 8-9 Nov. |
 | K-31 | **Chat section built like Discord:** a public room for the hub, a room per sub-veids (L3), city rooms; the user moves between the public child rooms from a room list. | Confirmed | 9 Nov. |
 | K-32 | No merged chat: a parent has its own room and lists its children (like an mIRC channel list). | Confirmed | 9 Nov. |
