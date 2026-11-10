@@ -1,8 +1,8 @@
 /**
  * Reads and answers feedback notes left by site admins (feedback mode), through the token-protected API.
  *
- *   npm run feedback                       compact list of open notes, grouped by page and heading
- *   npm run feedback -- show <id>          full detail for one open note (selector, box, scope HTML, reply thread)
+ *   npm run feedback                       compact list of open and in-progress notes (with reply counts), grouped by page and heading
+ *   npm run feedback -- show <id>          full detail for one note in any status (selector, box, scope HTML, replies)
  *   npm run feedback -- done <id> "reply"  mark done (reply optional; added to the thread, nothing is overwritten)
  *   npm run feedback -- doing <id>
  *   npm run feedback -- wontdo <id> "reply"
@@ -111,7 +111,8 @@ function pageOf(note: Note): string {
 }
 
 function printCompactNote(note: Note, sub: string): void {
-    console.log(`- ${note.id} · ${note.kind} · ${note.status}`);
+    const replies = note.replies.length ? ` · ${note.replies.length} repl${note.replies.length === 1 ? 'y' : 'ies'}` : '';
+    console.log(`- ${note.id} · ${note.kind} · ${note.status}${replies}`);
     if (sub) console.log(`  Sub-heading: ${sub}`);
     // Clicked text · component or template name · (on the redesign page) viewport · drawing and section.
     const on = [note.elementText ? `"${truncate(note.elementText, ELEMENT_TEXT_MAX)}"` : '', note.component ?? ''].filter(Boolean);
@@ -138,13 +139,19 @@ function printCompact(notes: Note[]): void {
         }
         console.log('');
     }
-    console.log(`${notes.length} open note${notes.length === 1 ? '' : 's'}. Details: npm run feedback -- show <id>`);
+    console.log(`${notes.length} open/in-progress note${notes.length === 1 ? '' : 's'}. Details: npm run feedback -- show <id>`);
 }
 
-async function fetchOpen(): Promise<Note[]> {
-    const res = await call('/api/feedback?status=OPEN');
+async function fetchNotes(status?: string): Promise<Note[]> {
+    const res = await call(`/api/feedback${status ? `?status=${status}` : ''}`);
     if (!res.ok) fail(`List failed: HTTP ${res.status}`);
     return ((await res.json()) as { notes: Note[] }).notes;
+}
+
+/** OPEN and DOING both still need work. */
+async function fetchOpen(): Promise<Note[]> {
+    const [open, doing] = await Promise.all([fetchNotes('OPEN'), fetchNotes('DOING')]);
+    return [...open, ...doing].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 }
 
 async function list(): Promise<void> {
@@ -156,9 +163,9 @@ async function list(): Promise<void> {
 
 async function show(id: string | undefined): Promise<void> {
     if (!id) fail('Usage: npm run feedback -- show <id>');
-    // No single-note endpoint: fetch the open list and filter.
-    const note = (await fetchOpen()).find((n) => n.id === id);
-    if (!note) fail(`No open note with id ${id}.`);
+    // No single-note endpoint: look in the open list first, then in all notes (any status, newest 200 not guaranteed).
+    const note = (await fetchOpen()).find((n) => n.id === id) ?? (await fetchNotes()).find((n) => n.id === id);
+    if (!note) fail(`No note with id ${id}.`);
     printNote(note);
 }
 
