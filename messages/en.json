@@ -660,6 +660,13 @@
       "showMore": "show more",
       "empty": "Nothing has happened here yet."
     },
+    "card": {
+      "label": "Community",
+      "nextEvent": "Next event: {title}, {date}",
+      "lastActivity": "Last activity {when}",
+      "noActivity": "No activity yet",
+      "list": "{n} communities"
+    },
     "subTopics": {
       "title": "Sub-types",
       "more": "+{n}"

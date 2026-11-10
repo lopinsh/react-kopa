@@ -660,6 +660,13 @@
       "showMore": "rādīt vairāk",
       "empty": "Šeit vēl nekas nav noticis."
     },
+    "card": {
+      "label": "Kopiena",
+      "nextEvent": "Nākamais pasākums: {title}, {date}",
+      "lastActivity": "Pēdējā aktivitāte {when}",
+      "noActivity": "Aktivitātes vēl nav",
+      "list": "{n, plural, zero {# kopienu} one {# kopiena} other {# kopienas}}"
+    },
     "subTopics": {
       "title": "Apakšveidi",
       "more": "+{n}"

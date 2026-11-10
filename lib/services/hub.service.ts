@@ -11,6 +11,7 @@ import { cardFaces } from './card-faces';
 import { UserService } from './user.service';
 import { hubEventPreview, hubEvents } from './hub-events';
 import { hubActivity } from './hub-activity';
+import { hubSummaries } from './hub-summary';
 import { hubCityCounts, hubGroupWhere, hubMemberCount, newSince } from './hub-query';
 import type { Face } from './event-panel';
 import type { MembershipRole } from '@prisma/client';
@@ -121,6 +122,9 @@ export const HubService = {
 
     /** The next few events and their total, for Pārskats (K1-21). */
     getEventPreview: hubEventPreview,
+
+    /** What the board's hub card shows for the chosen Veidi (K1-26). */
+    getSummary: hubSummaries,
 
     /** The activity feed by period (K1-19). */
     getActivity: hubActivity,

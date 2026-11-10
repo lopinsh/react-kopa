@@ -2,6 +2,8 @@ import { Search } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import GroupList from './GroupList';
 import CreateCard from './CreateCard';
+import HubCard from './HubCard';
+import { HubService } from '@/lib/services/hub.service';
 import EmptyState from '@/components/ui/EmptyState';
 import { Link } from '@/i18n/routing';
 import { buttonClass } from '@/components/ui/Button';
@@ -21,13 +23,20 @@ type Props = {
     params: DiscoveryParams;
     /** Group id → the viewer's role in the groups they belong to or wait for: those open as full pages and carry a role tag. */
     myRoles?: Record<string, MembershipRole>;
+    locale: string;
 };
 
 /** The Grupas list: the cards or rows, "Rādīt vēl" when more are left, the create card at the true end of a chosen category (also when it is empty). */
-export default async function GroupResults({ groups, hasMore, activity, faces, params, myRoles }: Props) {
+export default async function GroupResults({ groups, hasMore, activity, faces, params, myRoles, locale }: Props) {
     const t = await getTranslations('discovery');
     const createFor = params.category && !hasMore ? params.category : null;
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
+
+    // The hub card (K1-26): only with a Tēma and at least one Veids chosen (an L1 alone has no hub, K-06).
+    const hubs = params.category && params.tags.length > 0 ? await HubService.getSummary(params.category, params.tags, locale) : [];
+    const lead = hubs.length > 0 && params.category
+        ? { card: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="card" />, row: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="row" /> }
+        : undefined;
 
     if (groups.length === 0) {
         return (
@@ -39,7 +48,7 @@ export default async function GroupResults({ groups, hasMore, activity, faces, p
     }
     return (
         <>
-            <GroupList groups={groups} activity={activity} faces={faces} createFor={createFor} filters={params} highlight={params.q} myRoles={myRoles} />
+            <GroupList lead={lead} groups={groups} activity={activity} faces={faces} createFor={createFor} filters={params} highlight={params.q} myRoles={myRoles} />
             {canAskMore && (
                 <div className="mt-5 flex justify-center">
                     <Link href={discoveryHref(params, { limit: params.limit + DISCOVERY_GROUPS_PAGE })} scroll={false} className={buttonClass('quiet')}>

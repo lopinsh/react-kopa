@@ -132,7 +132,7 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
                             <FilterLine />
                             <AlsoMatchesLine />
                             {p.kind === 'groups'
-                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} faces={faces} params={p} myRoles={myRoles} />
+                                ? <GroupResults groups={groupsRes.groups} hasMore={groupsRes.hasMore} activity={activity} faces={faces} params={p} myRoles={myRoles} locale={locale} />
                                 : events && <EventResults events={events.events} hasMore={events.hasMore} window={w} params={p} zone={zone} weekCounts={events.weekCounts} />}
                         </div>
                     </div>

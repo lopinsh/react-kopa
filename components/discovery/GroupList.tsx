@@ -1,6 +1,7 @@
 import GroupCard from './GroupCard';
 import GroupRow from './GroupRow';
 import CreateCard from './CreateCard';
+import type { ReactNode } from 'react';
 import type { GroupCardData } from '@/lib/services/group-card';
 import type { CardActivity } from '@/lib/services/card-activity';
 import type { Face } from '@/lib/services/event-panel';
@@ -10,6 +11,8 @@ import type { MyRole } from '@/lib/types/own-area';
 
 type Props = {
     groups: GroupCardData[];
+    /** The hub card (K1-29): the first cell of the grid, and the block above the rows on phones. Two nodes, as the grid and the rows are two lists. */
+    lead?: { card: ReactNode; row: ReactNode };
     /** Group id → its latest activity (next meeting, else newest public announcement), shown on the card's bottom line (C2). */
     activity?: Record<string, CardActivity>;
     /** Group id → up to three public-profile members, for signed-in viewers: the faces on the card's picture. */
@@ -32,15 +35,17 @@ type Props = {
  * Groups as cards from `md` (a grid that fills the width) and as rows on phones. Both are server-rendered; the one not in use is
  * `display: none`. Used by discovery and the profiles.
  */
-export default function GroupList({ groups, activity = {}, faces = {}, createFor, filters, highlight, fullPage = false, myRoles, mine }: Props) {
+export default function GroupList({ groups, lead, activity = {}, faces = {}, createFor, filters, highlight, fullPage = false, myRoles, mine }: Props) {
     const full = (id: string) => fullPage || !!myRoles?.[id];
     const roleOf = (id: string) => mine?.[id]?.role ?? myRoles?.[id];
     return (
         <>
             <div className="hidden gap-[calc(1.25rem+var(--shadow-room))] md:grid md:auto-rows-fr md:grid-cols-[repeat(auto-fill,minmax(16rem,1fr))]">
+                {lead?.card}
                 {groups.map((g) => <GroupCard key={g.id} group={g} activity={activity[g.id]} faces={faces[g.id]} filters={filters} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="card" color={groups[0]?.category.color} />}
             </div>
+            {lead?.row && <div className="md:hidden">{lead.row}</div>}
             <div className="rounded-2xl bg-surface px-4 md:hidden shadow-card frame">
                 {groups.map((g) => <GroupRow key={g.id} group={g} activity={activity[g.id]} highlight={highlight} fullPage={full(g.id)} role={roleOf(g.id)} showMember={!mine} requestCount={mine?.[g.id]?.requestCount} />)}
                 {createFor && <CreateCard l1Slug={createFor} variant="row" color={groups[0]?.category.color} />}
