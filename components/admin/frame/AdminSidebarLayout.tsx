@@ -27,6 +27,17 @@ function Chip({ status }: { status: NonNullable<SidebarSection['status']> }) {
     );
 }
 
+/** Only rendered for a flagged tab: a reader without admin has no admin texts, so the lookup must not run for everyone. */
+function FlaggedDot() {
+    const text = useTranslations('admin.design')('contrast.partHasIssues');
+    return (
+        <>
+            <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-warning" />
+            <span className="sr-only">{text}</span>
+        </>
+    );
+}
+
 function Meta({ section }: { section: SidebarSection }) {
     const format = useFormatter();
     if (!section.status && !section.version && !section.date) return null;
@@ -41,7 +52,6 @@ function Meta({ section }: { section: SidebarSection }) {
 
 /** The tabs (top) and sections (under a hairline); shared by the sidebar and the fold panel (AF-12, AF-14). */
 export function SidebarList({ tabs, sections, current, labels, onJump, onPick }: { tabs: SidebarTab[]; sections: SidebarSection[]; current: string | null; labels: SidebarLabels; onJump?: (id: string) => void; onPick?: () => void }) {
-    const flaggedText = useTranslations('admin.design')('contrast.partHasIssues');
     const listRef = useRef<HTMLElement>(null);
     useEffect(() => {
         listRef.current?.querySelector('[aria-current="location"]')?.scrollIntoView({ block: 'nearest' });
@@ -53,12 +63,7 @@ export function SidebarList({ tabs, sections, current, labels, onJump, onPick }:
                     {tabs.map((tab) => (
                         <Link key={tab.id} href={tab.href} scroll={false} replace aria-current={tab.current ? 'page' : undefined} onClick={onPick} className={clsx(ROW, tab.current ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted')}>
                             {tab.label}
-                            {tab.flagged && (
-                                <>
-                                    <span aria-hidden="true" className="inline-block size-1.5 rounded-full bg-warning" />
-                                    <span className="sr-only">{flaggedText}</span>
-                                </>
-                            )}
+                            {tab.flagged && <FlaggedDot />}
                         </Link>
                     ))}
                 </nav>
