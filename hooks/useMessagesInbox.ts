@@ -58,6 +58,19 @@ export function useMessagesInbox({ initialConversations, currentUserId, locale, 
         }
     }, [locale]);
 
+    const markDeleted = useCallback((id: string, conversationId: string) => {
+        const deletedAt = new Date();
+        setMessages(prev => prev.map(m => m.id === id ? { ...m, content: '', deletedAt } : m));
+        setConversations(prev => prev.map(c => c.id === conversationId && c.lastMessage?.id === id
+            ? { ...c, lastMessage: { ...c.lastMessage, content: '', deletedAt } }
+            : c));
+    }, []);
+
+    // The sender deleted a message: blank it here too, and in the list preview when it was the last one.
+    useRealtimeEvent<{ id: string; conversationId: string }>('message-deleted', ({ id, conversationId }) => {
+        markDeleted(id, conversationId);
+    });
+
     useRealtimeEvent<ChatMessage>('new-message', (message) => {
         const incoming = { ...message, createdAt: new Date(message.createdAt) };
         const isActive = activeIdRef.current === incoming.conversationId;
@@ -77,7 +90,7 @@ export function useMessagesInbox({ initialConversations, currentUserId, locale, 
             if (idx === -1) return prev;
             const updated: InboxRow = {
                 ...prev[idx],
-                lastMessage: { id: incoming.id, content: incoming.content, createdAt: incoming.createdAt, senderId: incoming.senderId },
+                lastMessage: { id: incoming.id, content: incoming.content, createdAt: incoming.createdAt, deletedAt: null, senderId: incoming.senderId },
                 unread: !isActive && fromOthers ? true : prev[idx].unread && !isActive
             };
             return [updated, ...prev.filter((_, i) => i !== idx)];
@@ -107,6 +120,14 @@ export function useMessagesInbox({ initialConversations, currentUserId, locale, 
         setActiveConversationId(id);
     }, []);
 
+    /** "Dzēst sarunu" went through: the chat leaves this person's list and closes. */
+    const removeConversation = useCallback((id: string) => {
+        setConversations(prev => prev.filter(c => c.id !== id));
+        setMessages([]);
+        setActiveConversationId(null);
+        window.dispatchEvent(new Event(MESSAGES_READ));
+    }, []);
+
     const addSent = useCallback((sent: ChatMessage) => {
         setMessages(prev => prev.some(m => m.id === sent.id) ? prev : [...prev, sent]);
     }, []);
@@ -115,5 +136,5 @@ export function useMessagesInbox({ initialConversations, currentUserId, locale, 
         setConversations(prev => prev.map(c => c.id === id ? { ...c, isBlocked } : c));
     }, []);
 
-    return { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked };
+    return { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked, markDeleted, removeConversation };
 }

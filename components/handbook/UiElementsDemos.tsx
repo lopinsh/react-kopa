@@ -45,6 +45,8 @@ export function InboxDemo({ samples }: { samples: UiSamples }) {
                     unknownName={t('unknownName')}
                     onBack={noop}
                     onSent={noop}
+                    onMessageDeleted={noop}
+                    onConversationCleared={noop}
                     onBlockedChange={noop}
                 />
             </div>

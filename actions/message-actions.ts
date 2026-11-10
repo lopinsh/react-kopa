@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth';
 import { MessageService, type InboxRow, type MessageView } from '@/lib/services/message.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
-import { messageTextSchema } from '@/lib/validations/message';
+import { chatIdSchema, messageTextSchema } from '@/lib/validations/message';
 import { INBOX_LIMIT } from '@/lib/constants';
 
 /** The viewer's chats, newest first; `limit` is for the header dropdown (the first rows), the page takes the lot. */
@@ -92,5 +92,34 @@ export async function blockConversation(conversationId: string, isBlocked: boole
         return { success: true };
     } catch (error) {
         return handleActionError(error);
+    }
+}
+
+/** The sender deletes one of their messages. */
+export async function deleteMessage(messageId: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!chatIdSchema.safeParse(messageId).success) return { success: false, error: 'VALIDATION_FAILED' };
+
+    try {
+        await MessageService.deleteMessage(messageId, session.user.id);
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'MESSAGE_DELETE_FAILED');
+    }
+}
+
+/** "Dzēst sarunu": clears the history for the signed-in person only. */
+export async function clearConversation(conversationId: string): Promise<ActionResponse> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    if (!chatIdSchema.safeParse(conversationId).success) return { success: false, error: 'VALIDATION_FAILED' };
+
+    try {
+        await MessageService.clearConversation(conversationId, session.user.id);
+        revalidatePath(`/[locale]/messages`, 'page');
+        return { success: true };
+    } catch (error) {
+        return handleActionError(error, 'CONVERSATION_CLEAR_FAILED');
     }
 }

@@ -27,6 +27,7 @@ type MessageEvent = {
 /** Events on the signed-in person's private channel. This provider is their only owner: it binds each once and passes it on. */
 type RealtimeEvents = {
     'new-message': unknown;
+    'message-deleted': unknown;
     'new-notification': unknown;
 };
 type Subscribe = <E extends keyof RealtimeEvents>(event: E, handler: (data: unknown) => void) => () => void;
@@ -93,6 +94,7 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     // One listener list per event; the provider binds each event once and calls everyone below.
     const listeners = useRef<{ [E in keyof RealtimeEvents]: Set<(data: unknown) => void> }>({
         'new-message': new Set(),
+        'message-deleted': new Set(),
         'new-notification': new Set(),
     });
     const subscribe = useMemo<Subscribe>(() => (event, handler) => {
@@ -109,6 +111,10 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
     usePusher<MessageEvent>(channel, 'new-message', (data) => {
         handleNewMessage(data);
         listeners.current['new-message'].forEach((listener) => listener(data));
+    });
+
+    usePusher<{ id: string; conversationId: string }>(channel, 'message-deleted', (data) => {
+        listeners.current['message-deleted'].forEach((listener) => listener(data));
     });
 
     return (

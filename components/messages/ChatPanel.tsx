@@ -2,9 +2,9 @@
 
 import { useEffect, useId, useRef, useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
-import { Send, Users, Ban, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Send, Users, Ban, AlertCircle, ArrowLeft, MoreHorizontal, Trash2 } from 'lucide-react';
 import { clsx } from 'clsx';
-import { sendMessage, blockConversation } from '@/actions/message-actions';
+import { sendMessage, blockConversation, clearConversation } from '@/actions/message-actions';
 import { avatarUrl } from '@/lib/avatar';
 import { Link } from '@/i18n/routing';
 import { MESSAGE_MAX_LENGTH, messageTextSchema } from '@/lib/validations/message';
@@ -19,7 +19,9 @@ import { isOverLimit } from '@/lib/text-limit';
 import { useToast } from '@/hooks/use-toast';
 
 import { Input } from '@/components/ui/Input';
-import Button from '@/components/ui/Button';
+import Button, { IconButton } from '@/components/ui/Button';
+import { MenuItemButton, MenuPanel, useMenu } from '@/components/ui/Menu';
+import MessageDeleteButton from './MessageDeleteButton';
 export type ChatMessage = Omit<MessageView, 'createdAt'> & { createdAt: Date | string };
 
 type Props = {
@@ -30,12 +32,16 @@ type Props = {
     unknownName: string;
     onBack: () => void;
     onSent: (message: ChatMessage) => void;
+    /** A message of the viewer was deleted (the list and chat blank it). */
+    onMessageDeleted: (messageId: string) => void;
+    /** "Dzēst sarunu" went through: the chat leaves the viewer's list. */
+    onConversationCleared: () => void;
     onBlockedChange: (isBlocked: boolean) => void;
     /** The back button also on wide screens (the drawer has no side list). */
     alwaysShowBack?: boolean;
 };
 
-export default function ChatPanel({ conversation, messages, currentUserId, title, unknownName, onBack, onSent, onBlockedChange, alwaysShowBack = false }: Props) {
+export default function ChatPanel({ conversation, messages, currentUserId, title, unknownName, onBack, onSent, onMessageDeleted, onConversationCleared, onBlockedChange, alwaysShowBack = false }: Props) {
     const t = useTranslations('messages');
     const tErrors = useTranslations('errors');
     const { time, dayKey, dayLabel } = useChatTimeline();
@@ -46,6 +52,8 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
     const [sendError, setSendError] = useState<string | null>(null);
     const [isPending, startTransition] = useTransition();
     const [blockConfirmOpen, setBlockConfirmOpen] = useState(false);
+    const [clearConfirmOpen, setClearConfirmOpen] = useState(false);
+    const { open: menuOpen, rootRef: menuRootRef, triggerProps, menuProps } = useMenu();
     const { error: toastError } = useToast();
     const listRef = useRef<HTMLDivElement>(null);
 
@@ -102,6 +110,16 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
         });
     };
 
+    const handleClear = () => {
+        if (isPending) return;
+        startTransition(async () => {
+            const result = await clearConversation(conversation.id);
+            setClearConfirmOpen(false);
+            if (result.success) onConversationCleared();
+            else toastError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+        });
+    };
+
     const origin = conversation.origin;
     const originKey = origin?.type === 'JOIN_REQUEST' ? 'originJoinRequest' : origin?.type === 'GROUP_CONTACT' ? 'originGroupContact' : null;
 
@@ -123,6 +141,7 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                     </div>
                 </div>
 
+                <div className="flex shrink-0 items-center gap-1">
                 {conversation.canBlock && (
                     <ConfirmPopover
                         isOpen={blockConfirmOpen}
@@ -144,6 +163,29 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                         )}
                     />
                 )}
+                <div className="relative flex items-center" ref={menuRootRef}>
+                    <IconButton {...triggerProps} aria-label={t('chatActions')}>
+                        <MoreHorizontal aria-hidden className="size-5" />
+                    </IconButton>
+                    {menuOpen && (
+                        <MenuPanel label={t('chatActions')} placement="anchor" {...menuProps}>
+                            <MenuItemButton icon={<Trash2 aria-hidden className="size-4 text-foreground-muted" />} onSelect={() => setClearConfirmOpen(true)}>
+                                {t('deleteConversation')}
+                            </MenuItemButton>
+                        </MenuPanel>
+                    )}
+                    <ConfirmPopover
+                        anchorRef={triggerProps.ref}
+                        isOpen={clearConfirmOpen}
+                        onOpenChange={setClearConfirmOpen}
+                        message={t('confirmDeleteConversation')}
+                        confirmLabel={t('deleteConversation')}
+                        destructive
+                        isPending={isPending}
+                        onConfirm={handleClear}
+                    />
+                </div>
+                </div>
             </div>
 
             <div ref={listRef} className="flex flex-1 flex-col gap-0.5 overflow-y-auto p-4">
@@ -180,15 +222,20 @@ export default function ChatPanel({ conversation, messages, currentUserId, title
                             )}
                             <div data-ui={UI.chatBubble} className={clsx('flex max-w-[75%] flex-col', isMe ? 'ml-auto items-end' : 'mr-auto items-start', first && !newDay && 'mt-3')}>
                                 {speaker && <span className="mb-1 px-1 text-tag text-foreground-muted">{speaker}</span>}
-                                <div className={clsx(
-                                    'whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-body-sm',
-                                    isMe
-                                        ? 'bg-primary text-primary-foreground'
-                                        : 'line bg-surface-elevated text-foreground shadow-control',
-                                    last && (isMe ? 'rounded-br-none' : 'rounded-bl-none')
-                                )}>
-                                    {msg.content}
-                                    <span className={clsx('float-right ml-3 mt-2 text-meta', isMe ? 'text-primary-foreground/80' : 'text-foreground-muted')}>{time(msg.createdAt)}</span>
+                                <div className="flex max-w-full items-center gap-1">
+                                    {isMe && !msg.deletedAt && <MessageDeleteButton messageId={msg.id} onDeleted={() => onMessageDeleted(msg.id)} />}
+                                    <div className={clsx(
+                                        'whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-body-sm',
+                                        msg.deletedAt
+                                            ? 'line italic text-foreground-muted'
+                                            : isMe
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'line bg-surface-elevated text-foreground shadow-control',
+                                        last && (isMe ? 'rounded-br-none' : 'rounded-bl-none')
+                                    )}>
+                                        {msg.deletedAt ? t('messageDeleted') : msg.content}
+                                        <span className={clsx('float-right ml-3 mt-2 text-meta not-italic', isMe && !msg.deletedAt ? 'text-primary-foreground/80' : 'text-foreground-muted')}>{time(msg.createdAt)}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

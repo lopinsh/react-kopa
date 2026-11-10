@@ -17,7 +17,7 @@ type Props = {
 
 export default function MessagesLayout({ initialConversations, currentUserId, locale, initialConversationId = null }: Props) {
     const t = useTranslations('messages');
-    const { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked } =
+    const { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked, markDeleted, removeConversation } =
         useMessagesInbox({ initialConversations, currentUserId, locale, initialConversationId });
 
     return (
@@ -47,6 +47,8 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                         unknownName={t('unknownUser')}
                         onBack={() => openConversation(null)}
                         onSent={addSent}
+                        onMessageDeleted={(id) => markDeleted(id, activeConversation.id)}
+                        onConversationCleared={() => removeConversation(activeConversation.id)}
                         onBlockedChange={(isBlocked) => setBlocked(activeConversation.id, isBlocked)}
                     />
                 )}

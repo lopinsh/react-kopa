@@ -32,6 +32,8 @@ export interface MessageView {
     id: string;
     content: string;
     createdAt: Date;
+    /** Set when the sender deleted it: `content` is then empty. */
+    deletedAt: Date | null;
     senderId: string;
     conversationId: string;
     sender: PersonView;
@@ -52,7 +54,7 @@ export interface InboxRow {
     other: PersonView | null;
     /** The group of a group chat, with its server-resolved L1 category colour. Null for DIRECT chats and after the group was deleted. */
     group: { id: string; name: string; categoryTitle: string; subCategories: string[]; l1Slug: string; accentColor: string; href: string | null } | null;
-    lastMessage: { id: string; content: string; createdAt: Date; senderId: string } | null;
+    lastMessage: { id: string; content: string; createdAt: Date; deletedAt: Date | null; senderId: string } | null;
     /** DIRECT chats: names of up to SHARED_GROUPS_SHOWN groups both people belong to (members or team, not hidden), and how many more. */
     sharedGroups: string[];
     sharedMore: number;
@@ -99,6 +101,19 @@ function accessWhere(userId: string): Prisma.ConversationWhereInput {
     };
 }
 
+/** Everyone who can see the chat right now: the participants, the contact person and the current team. */
+async function chatRecipients(conversationId: string, access: ConversationAccess): Promise<Set<string>> {
+    const participants = await prisma.conversation.findUnique({
+        where: { id: conversationId },
+        select: { participants: { select: { id: true } } }
+    });
+    return new Set<string>([
+        ...(participants?.participants.map(p => p.id) ?? []),
+        ...(access.contactUserId ? [access.contactUserId] : []),
+        ...(await teamUserIds(access.originGroupId))
+    ]);
+}
+
 async function teamUserIds(groupId: string | null): Promise<string[]> {
     if (!groupId) return [];
     const members = await prisma.membership.findMany({
@@ -120,7 +135,7 @@ async function isTeamMember(groupId: string, userId: string): Promise<boolean> {
 async function newestRowsFromOthers(conversationIds: string[], userId: string) {
     if (conversationIds.length === 0) return [];
     return prisma.message.findMany({
-        where: { conversationId: { in: conversationIds }, senderId: { not: userId } },
+        where: { conversationId: { in: conversationIds }, senderId: { not: userId }, deletedAt: null },
         orderBy: [{ conversationId: 'asc' }, { createdAt: 'desc' }],
         distinct: ['conversationId'],
         select: { conversationId: true, createdAt: true, sender: { select: { name: true, username: true } } }
@@ -134,12 +149,13 @@ async function newestFromOthers(conversationIds: string[], userId: string): Prom
 }
 
 function toMessageView(message: {
-    id: string; content: string; createdAt: Date; senderId: string; conversationId: string; sender: PersonView;
+    id: string; content: string; createdAt: Date; deletedAt: Date | null; senderId: string; conversationId: string; sender: PersonView;
 }): MessageView {
     return {
         id: message.id,
         content: message.content,
         createdAt: message.createdAt,
+        deletedAt: message.deletedAt,
         senderId: message.senderId,
         conversationId: message.conversationId,
         sender: message.sender
@@ -251,9 +267,9 @@ export const MessageService = {
                     messages: {
                         orderBy: { createdAt: 'desc' },
                         take: 1,
-                        select: { id: true, content: true, createdAt: true, senderId: true }
+                        select: { id: true, content: true, createdAt: true, deletedAt: true, senderId: true }
                     },
-                    reads: { where: { userId }, select: { lastReadAt: true } }
+                    reads: { where: { userId }, select: { lastReadAt: true, clearedAt: true } }
                 }
             });
 
@@ -262,7 +278,13 @@ export const MessageService = {
                 sharedGroupNames(userId, conversations.filter(c => c.kind === 'DIRECT').flatMap(c => c.participants.filter(p => p.id !== userId).map(p => p.id)))
             ]);
 
-            return conversations.map((c): InboxRow => {
+            // A chat the person cleared stays out of their list until something newer than the clear arrives.
+            const visible = conversations.filter(c => {
+                const clearedAt = c.reads[0]?.clearedAt;
+                return !clearedAt || (!!c.messages[0] && c.messages[0].createdAt > clearedAt);
+            });
+
+            return visible.map((c): InboxRow => {
                 const isGroup = c.kind === 'GROUP';
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
@@ -302,13 +324,17 @@ export const MessageService = {
     async getMessages(conversationId: string, userId: string): Promise<MessageView[]> {
         try {
             if (!(await MessageService.canAccess(conversationId, userId))) throw new ActionError('NOT_FOUND');
+            const read = await prisma.conversationRead.findUnique({
+                where: { conversationId_userId: { conversationId, userId } },
+                select: { clearedAt: true }
+            });
             const messages = await prisma.message.findMany({
-                where: { conversationId },
+                where: { conversationId, ...(read?.clearedAt ? { createdAt: { gt: read.clearedAt } } : {}) },
                 // The newest messages, turned back to oldest first for display.
                 orderBy: { createdAt: 'desc' },
                 take: CHAT_HISTORY_LIMIT,
                 select: {
-                    id: true, content: true, createdAt: true, senderId: true, conversationId: true,
+                    id: true, content: true, createdAt: true, deletedAt: true, senderId: true, conversationId: true,
                     sender: { select: PERSON_SELECT }
                 }
             });
@@ -330,7 +356,7 @@ export const MessageService = {
                 prisma.message.create({
                     data: { content, conversationId, senderId, createdAt: now },
                     select: {
-                        id: true, content: true, createdAt: true, senderId: true, conversationId: true,
+                        id: true, content: true, createdAt: true, deletedAt: true, senderId: true, conversationId: true,
                         sender: { select: PERSON_SELECT }
                     }
                 }),
@@ -345,16 +371,7 @@ export const MessageService = {
 
             const view = toMessageView(message);
 
-            // Realtime goes to everyone who can see the chat right now: the participants, the contact person and the current team.
-            const participants = await prisma.conversation.findUnique({
-                where: { id: conversationId },
-                select: { participants: { select: { id: true } } }
-            });
-            const recipients = new Set<string>([
-                ...(participants?.participants.map(p => p.id) ?? []),
-                ...(access.contactUserId ? [access.contactUserId] : []),
-                ...(await teamUserIds(access.originGroupId))
-            ]);
+            const recipients = await chatRecipients(conversationId, access);
             await Promise.all([...recipients].map(id => triggerRealtime(
                 `private-user-${id}`,
                 'new-message',
@@ -408,7 +425,7 @@ export const MessageService = {
      */
     async digestRecipients(since: Date, cutoff: Date): Promise<string[]> {
         const messages = await prisma.message.findMany({
-            where: { createdAt: { gte: since, lte: cutoff } },
+            where: { createdAt: { gte: since, lte: cutoff }, deletedAt: null },
             distinct: ['conversationId', 'senderId'],
             select: {
                 senderId: true,
@@ -624,6 +641,7 @@ export const MessageService = {
                 id: true,
                 contactUserId: true,
                 messages: {
+                    where: { deletedAt: null },
                     orderBy: { createdAt: 'desc' },
                     take: CHAT_HISTORY_LIMIT,
                     select: {
@@ -638,6 +656,47 @@ export const MessageService = {
             if (c.contactUserId) threads.set(c.contactUserId, { conversationId: c.id, messages: [...c.messages].reverse() });
         }
         return threads;
+    },
+
+    /** The sender deletes a message: the text is blanked for good and both sides see "Ziņa izdzēsta" (live). Only the sender may. */
+    async deleteMessage(messageId: string, userId: string): Promise<{ conversationId: string }> {
+        try {
+            const message = await prisma.message.findUnique({
+                where: { id: messageId },
+                select: { id: true, senderId: true, conversationId: true, deletedAt: true }
+            });
+            if (!message) throw new ActionError('NOT_FOUND');
+            const access = await MessageService.canAccess(message.conversationId, userId);
+            if (!access) throw new ActionError('NOT_FOUND');
+            if (message.senderId !== userId) throw new ActionError('FORBIDDEN');
+            if (message.deletedAt) return { conversationId: message.conversationId };
+
+            await prisma.message.update({ where: { id: messageId }, data: { content: '', deletedAt: new Date() } });
+            const recipients = await chatRecipients(message.conversationId, access);
+            await Promise.all([...recipients].map(id => triggerRealtime(
+                `private-user-${id}`,
+                'message-deleted',
+                { id: messageId, conversationId: message.conversationId }
+            )));
+            return { conversationId: message.conversationId };
+        } catch (error) {
+            return fail(error, 'deleteMessage', 'MESSAGE_DELETE_FAILED');
+        }
+    },
+
+    /** "Dzēst sarunu": hides the history up to now for this person only; the chat returns with the next newer message. */
+    async clearConversation(conversationId: string, userId: string): Promise<void> {
+        try {
+            if (!(await MessageService.canAccess(conversationId, userId))) throw new ActionError('NOT_FOUND');
+            const now = new Date();
+            await prisma.conversationRead.upsert({
+                where: { conversationId_userId: { conversationId, userId } },
+                create: { conversationId, userId, lastReadAt: now, clearedAt: now },
+                update: { lastReadAt: now, clearedAt: now }
+            });
+        } catch (error) {
+            fail(error, 'clearConversation', 'CONVERSATION_CLEAR_FAILED');
+        }
     },
 
     /** Block or unblock. Group chats: only the team. Direct chats: either person, except people who administer a group the blocker is in. */

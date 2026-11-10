@@ -36,6 +36,7 @@ export function UnreadMessagesProvider({ children }: { children: React.ReactNode
     }, [refresh]);
 
     useRealtimeEvent('new-message', refresh);
+    useRealtimeEvent('message-deleted', refresh);
 
     return <UnreadMessagesContext.Provider value={userId ? count : 0}>{children}</UnreadMessagesContext.Provider>;
 }

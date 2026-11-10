@@ -47,7 +47,9 @@ export default function ConversationRow({ conversation: conv, title, active = fa
                 <span className={clsx('block truncate text-meta', conv.unread ? 'weight-strong text-foreground' : 'text-foreground-muted')}>
                     {conv.isBlocked
                         ? <span className="inline-flex items-center gap-1 italic text-danger"><Ban aria-hidden className="size-3" /> {t('blocked')}</span>
-                        : conv.lastMessage?.content || t('noMessages')}
+                        : conv.lastMessage?.deletedAt
+                            ? <span className="italic">{t('messageDeleted')}</span>
+                            : conv.lastMessage?.content || t('noMessages')}
                 </span>
                 {shared && (
                     <span className="mt-0.5 flex items-center gap-1 text-meta text-foreground-muted">
