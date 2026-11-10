@@ -221,7 +221,7 @@
 
   /* ---------- the city request sheet (K-09a): only the optional note; the second request opens the city hub at once (10 Nov, for now) ---------- */
   function sheet() {
-    var ta = '<div class="block w-full resize-none rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted py-2 min-h-24">Ziņa citiem (nav obligāta), piem.: gribētu atrast kādu, ar ko spēlēt domino</div>';
+    var ta = '<div class="box-border block w-full resize-none rounded-md line bg-surface px-3 text-body @3xl:text-body-sm text-foreground-muted py-2 min-h-24">Ziņa citiem (nav obligāta), piem.: gribētu atrast kādu, ar ko spēlēt domino</div>';
     var body = '<div aria-hidden="true" class="mx-auto mb-2 h-1 w-10 shrink-0 rounded-pill bg-border @3xl:hidden"></div><div class="mb-3 flex items-start justify-between gap-3"><h2 class="min-w-0 text-section text-foreground">Pieprasīt Galda spēļu kopienu Liepājā</h2><span class="' + IBTN + ' -mr-2 -mt-2">' + ICO(P.x, 'size-5') + '</span></div><div class="space-y-4"><p class="text-body-sm text-foreground">Kopiena atveras, kad to pieprasa vēl kāds. Ziņa ir publiska Ziņa kopienā.</p><div>' + ta + '<div class="mt-1 flex"><span class="ml-auto shrink-0 text-meta tabular-nums text-foreground-muted">0 / 500</span></div></div><div class="flex items-center justify-end gap-3 pt-1"><span class="' + btn('secondary') + '">Atcelt</span><span class="' + btn('primary') + '">' + ICO(P.send) + 'Pieprasīt</span></div></div>';
     return '<div class="absolute inset-0 z-[60] flex items-end justify-center bg-scrim @3xl:items-center"><div class="w-full rounded-t-2xl bg-surface p-4 shadow-dialog frame @3xl:max-w-md @3xl:rounded-2xl @3xl:p-6">' + body + '</div></div>';
   }
@@ -332,9 +332,9 @@
     return ZG.map(function (t) {
       var groups = t[1].map(function (g) {
         var rows = g[1].map(function (n) { if (n === 'MINE') { return zina(ZMORE, false, false, true); } var o = first; first = false; return zina(n, o, out); }).join('');
-        return '<div>' + (g[0] ? '<p class="mb-1 text-meta text-foreground-muted">' + (out ? g[0] : lnk(g[0])) + '</p>' : '') + '<div class="' + BOX + '">' + rows + '</div></div>';
+        return '<div class="min-w-0">' + (g[0] ? '<p class="mb-1 text-meta text-foreground-muted">' + (out ? g[0] : lnk(g[0])) + '</p>' : '') + '<div class="' + BOX + '">' + rows + '</div></div>';
       }).join('');
-      return '<section class="grid gap-3"><h2 class="text-item weight-strong text-foreground">' + t[0] + '</h2>' + groups + '</section>';
+      return '<section class="grid grid-cols-[minmax(0,1fr)] gap-3"><h2 class="text-item weight-strong text-foreground">' + t[0] + '</h2>' + groups + '</section>';
     }).join('');
   }
   function zinasSec(o) {
