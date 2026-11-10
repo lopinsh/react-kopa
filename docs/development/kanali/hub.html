@@ -445,6 +445,7 @@
     box.style.setProperty('--spacing-gutter', fl.g);
     box.style.setProperty('--c', 'var(--cat-games)');
     box.style.setProperty('--accent', 'var(--cat-games)');
+    box.style.transformOrigin = 'top left';
     box.innerHTML = s.fn();
     col.appendChild(box);
     row.appendChild(col);
@@ -454,11 +455,25 @@
     section.id = s.id;
     section.innerHTML = '<h2 class="text-section">' + s.label + '</h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var row = document.createElement('div');
-    row.className = 'flex items-start gap-6 overflow-x-auto pb-4';
+    row.className = 'flex flex-wrap items-start gap-6 pb-4';
     (s.w || [375, 1280]).forEach(function (w) { addBox(row, s, w); });
     section.appendChild(row);
     stage.appendChild(section);
   });
+  /* fit: a frame wider than the pane is scaled down (transform; the column keeps the scaled size so nothing is clipped or overlaps). When two frames do not fit side by side they wrap, phone above. */
+  function fit() {
+    var avail = stage.clientWidth;
+    stage.querySelectorAll('[data-w]').forEach(function (box) {
+      var w = +box.getAttribute('data-w');
+      var k = Math.min(1, avail / w);
+      box.style.transform = k < 1 ? 'scale(' + k + ')' : '';
+      box.parentNode.style.width = w * k + 'px';
+      box.parentNode.style.height = box.offsetHeight * k + 'px';
+    });
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  if (window.ResizeObserver) { new ResizeObserver(fit).observe(stage); }
 </script>
 </body>
 </html>
