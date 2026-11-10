@@ -8,12 +8,12 @@ import { sectionBadge } from '@/lib/admin-nav';
 import { useAdminFrame } from './AdminFrameProvider';
 import AdminBadge from './AdminBadge';
 
-/** The five sections across, sticky at the top of the shell's scroller; from `sm` (phones use the drawer). Opening one goes to its first page. */
+/** The five sections across, from `sm` (the frame's sticky wrapper holds it) (phones use the drawer). Opening one goes to its first page. */
 export default function AdminSections() {
     const t = useTranslations('admin.nav');
     const { sections, counts, location } = useAdminFrame();
     return (
-        <nav data-ui={UI.tabs} aria-label={t('sectionsLabel')} className="sticky top-0 z-30 hidden border-b border-border bg-background sm:block">
+        <nav data-ui={UI.tabs} aria-label={t('sectionsLabel')} className="hidden border-b border-border bg-background sm:block">
             <ul className="container mx-auto flex gap-1 px-4">
                 {sections.map((s) => {
                     const on = location.section?.id === s.id;

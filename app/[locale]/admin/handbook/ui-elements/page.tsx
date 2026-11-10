@@ -11,7 +11,7 @@ import { AnnouncementDemo, BannerPickerDemo, ChipDemo, InboxDemo, LanguageEditor
 import { StyleDemos } from '@/components/handbook/StyleDemos';
 import { HeaderListsDemo, MyGroupsPartsDemo } from '@/components/handbook/OwnAreaDemos';
 import { CounterDemo, ErrorStateDemo, PopoverDemo, SheetDemo, SkeletonDemo, SwitchDemo, ToastButtons } from '@/components/handbook/BehaviourDemos';
-import { AdminPagesDemo, AdminSectionsDemo } from '@/components/handbook/AdminFrameDemos';
+import { AdminPagesDemo, AdminSectionsDemo, AdminSidebarDemo } from '@/components/handbook/AdminFrameDemos';
 import UiSpecimen from '@/components/handbook/UiSpecimen';
 import ProfileView from '@/components/profile/ProfileView';
 import ProfileViewerNote from '@/components/profile/ProfileViewerNote';
@@ -325,6 +325,10 @@ export default async function UiElementsPage({ params }: { params: Promise<{ loc
 
                 <UiSpecimen id="adminPages" names={[UI.tabs]} files={['components/admin/frame/AdminPagesNav.tsx']}>
                     <AdminPagesDemo />
+                </UiSpecimen>
+
+                <UiSpecimen id="adminSidebar" names={[UI.tabs]} files={['components/admin/frame/AdminSidebarLayout.tsx']}>
+                    <AdminSidebarDemo />
                 </UiSpecimen>
 
                 <UiSpecimen id="adminDrawer" names={[UI.tabs]} files={['components/admin/frame/AdminDrawer.tsx']}>

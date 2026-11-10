@@ -27,3 +27,8 @@ export function useAdminFrame(): Value {
     if (!v) throw new Error('useAdminFrame outside AdminFrameProvider');
     return v;
 }
+
+/** For parts that also render outside the frame (a Handbook reader without admin): null instead of throwing. */
+export function useOptionalAdminFrame(): Value | null {
+    return useContext(AdminFrameContext);
+}

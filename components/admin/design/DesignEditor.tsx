@@ -79,7 +79,7 @@ export default function DesignEditor({ initial, initialPart, toneRows }: { initi
                     {part === 'fonts' && <FontsPart theme={theme} disabled={busy} onFont={setFont} />}
                     {part === 'type' && <TypePart theme={theme} disabled={busy} onType={setType} />}
                 </div>
-                <aside aria-labelledby="design-sample" className="lg:sticky lg:top-24">
+                <aside aria-labelledby="design-sample" className="lg:sticky lg:top-[calc(var(--admin-bars,0px)+1rem)]">
                     <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                         <h3 id="design-sample" className="text-item text-foreground">{t('sampleTitle')}</h3>
                         <SegmentedField label={t('sampleMode')} value={sampleMode} options={(['light', 'dark'] as const).map((m) => ({ value: m, label: t(`mode.${m}`) }))} onChange={setSampleMode} />

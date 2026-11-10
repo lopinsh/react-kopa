@@ -16,7 +16,7 @@ export default async function DesignDrawings({ current }: { current: DesignDrawi
     const html = await DevelopmentService.getDrawing(current);
 
     return (
-        <section id="drawings" className="mt-12 scroll-mt-24 border-t border-border pt-8">
+        <section id="drawings" className="mt-12 scroll-mt-[calc(var(--admin-bars,0px)+1rem)] border-t border-border pt-8">
             <h2 className="text-section text-foreground">{t('bookTitle')}</h2>
             <nav aria-label={t('bookTitle')} className="mt-4 flex gap-1 overflow-x-auto">
                 {DESIGN_DRAWINGS.map((id) => (

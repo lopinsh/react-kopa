@@ -42,7 +42,7 @@ export default async function BuildPlanPage({ params, searchParams }: { params: 
     }
 
     return (
-        <div className="flex h-[calc(100dvh-7.0625rem)] md:h-[calc(100dvh-9.875rem)] lg:h-[calc(100dvh-6.3125rem)] min-h-96 flex-col">
+        <div className="flex min-h-96 flex-1 flex-col">
             <nav aria-label={t('planTab')} className="flex gap-1 overflow-x-auto bg-surface px-gutter py-2">
                 <Link href="/admin/development/build-plan" aria-current={current ? undefined : 'page'} className={buttonClass(current ? 'quiet' : 'primary', 'shrink-0', 'sm')}>
                     {t('planTab')}

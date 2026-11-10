@@ -39,12 +39,12 @@ const linkClass = 'weight-medium text-primary underline underline-offset-2 hover
 const components: Components = {
     h1: ({ children }) => <h1 className="mb-6 text-title text-foreground">{children}</h1>,
     h2: ({ children }) => (
-        <h2 id={headingId(textOf(children))} className="mb-4 mt-12 scroll-mt-24 border-b border-border pb-2 text-section text-foreground">
+        <h2 id={headingId(textOf(children))} className="mb-4 mt-12 scroll-mt-[calc(var(--admin-bars,0px)+1rem)] border-b border-border pb-2 text-section text-foreground">
             {children}
         </h2>
     ),
     h3: ({ children }) => (
-        <h3 id={headingId(textOf(children))} className="mb-2 mt-8 scroll-mt-24 text-item text-foreground">
+        <h3 id={headingId(textOf(children))} className="mb-2 mt-8 scroll-mt-[calc(var(--admin-bars,0px)+1rem)] text-item text-foreground">
             {children}
         </h3>
     ),

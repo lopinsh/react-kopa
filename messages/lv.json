@@ -813,10 +813,11 @@
       "overview": "Pārskats",
       "uiElements": "UI elementi",
       "pagesLabel": "Administrēšanas lapas",
+      "pageTabs": "Lapas daļas",
+      "pageSections": "Sadaļas",
       "sectionsLabel": "Administrēšanas sadaļas",
       "drawerTitle": "Administrēšana",
       "openMenu": "Atvērt administrēšanas izvēlni",
-      "onThisPage": "Šajā lapā",
       "parts": {
         "looks": "Noskaņojumi",
         "colours": "Krāsas",
@@ -836,6 +837,11 @@
       },
       "buildPlanEmptyTitle": "Pašlaik nav neviena plāna",
       "buildPlanEmptyHint": "Nākamā izlaiduma plāns parādīsies šeit, kad tas būs uzrakstīts.",
+      "status": {
+        "approved": "Apstiprināts",
+        "progress": "Procesā",
+        "open": "Atvērts"
+      },
       "planTab": "Plāns",
       "planDrawings": {
         "hub": "Mezgli"
@@ -844,7 +850,6 @@
     "handbook": {
       "chapters": "Nodaļas",
       "overview": "Pārskats",
-      "onThisPage": "Šajā lapā",
       "note": "Iekšējs dokuments, tikai angliski. Avots: docs/handbook repozitorijā.",
       "uiElements": "Saskarnes elementi",
       "ui": {
@@ -951,7 +956,8 @@
           "skeleton": "Ielādes formas",
           "counter": "Rakstzīmju skaitītājs",
           "adminSections": "Administrēšanas sadaļu josla (atvērta Vietne)",
-          "adminPages": "Administrēšanas lapu saraksts (atvērts Dizains, tā daļas zem tā)",
+          "adminPages": "Administrēšanas lapu rinda (atvērts Dizains)",
+          "adminSidebar": "Lapas sānjosla (cilnes, sadaļas ar statusu, versiju un datumu)",
           "adminDrawer": "Administrēšanas atvilktne tālrunī",
           "errorState": "Kļūdas stāvoklis",
           "confirmPopover": "Apstiprinājums pie pogas",

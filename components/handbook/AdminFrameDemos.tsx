@@ -25,7 +25,7 @@ export function AdminSectionsDemo() {
     );
 }
 
-/** Static pages list (Design open, its parts indented); `drawer` shows it in the phone drawer's frame. */
+/** Static pages: the row under the sections bar (Design open); `drawer` shows the list with its parts indented in the phone drawer's frame. */
 export function AdminPagesDemo({ drawer = false }: { drawer?: boolean }) {
     const t = useTranslations('admin.nav');
     const list = (
@@ -52,11 +52,64 @@ export function AdminPagesDemo({ drawer = false }: { drawer?: boolean }) {
             })}
         </nav>
     );
-    if (!drawer) return <div className="max-w-64">{list}</div>;
+    if (!drawer) {
+        return (
+            <nav aria-label={t('pagesLabel')} className="border-b border-border">
+                <ul className="flex gap-1 overflow-x-auto">
+                    {DESIGN.items.map((item) => {
+                        const Icon = item.icon;
+                        const open = item.id === 'design';
+                        return (
+                            <li key={item.id}>
+                                <span className={clsx('flex min-h-11 items-center gap-2 whitespace-nowrap border-b-2 px-3 text-body-sm', open ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted')}>
+                                    <Icon className="size-4" aria-hidden="true" />
+                                    {t(item.id)}
+                                    {item.id === 'translations' && <AdminBadge count={2} />}
+                                </span>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        );
+    }
     return (
         <div className="mx-auto max-w-xs rounded-2xl line bg-surface p-3 shadow-card">
             <p className="px-3 pb-2 text-item text-foreground">{t('drawerTitle')}</p>
             {list}
         </div>
+    );
+}
+
+const SIDEBAR_ROW = 'flex min-h-11 items-center rounded-item px-3 py-2 text-body-sm';
+const CHIP = 'inline-flex h-5 items-center gap-1 rounded-pill px-2 text-tag';
+
+/** Static page sidebar: two tabs, three sections with the three status chips, the second one current. */
+export function AdminSidebarDemo() {
+    const t = useTranslations('admin.nav');
+    const ts = useTranslations('admin.development.status');
+    const rows = [
+        { id: 'a', label: 'Mezgli', chip: 'approved', date: '10. nov.' },
+        { id: 'b', label: 'Kanāla lapa', chip: 'progress', date: '10. nov.' },
+        { id: 'c', label: 'Istaba', chip: 'open', date: '9. nov.' },
+    ] as const;
+    return (
+        <aside className="w-aside max-w-full border-r border-border bg-background p-3">
+            <div className="flex flex-col gap-0.5">
+                <span className={clsx(SIDEBAR_ROW, 'bg-tint weight-strong text-foreground')}>{t('parts.looks')}</span>
+                <span className={clsx(SIDEBAR_ROW, 'text-foreground-muted')}>{t('parts.colours')}</span>
+            </div>
+            <div className="mt-3 flex flex-col gap-0.5 border-t border-border pt-3">
+                {rows.map((r, i) => (
+                    <span key={r.id} className={clsx(SIDEBAR_ROW, 'flex-col items-start gap-1', i === 1 ? 'bg-tint weight-strong text-foreground' : 'text-foreground-muted')}>
+                        {r.label}
+                        <span className="flex items-center gap-2 text-meta text-foreground-muted">
+                            <span className={clsx(CHIP, r.chip === 'open' ? 'line text-foreground' : 'bg-tint', r.chip === 'progress' ? 'text-foreground-muted' : 'text-foreground')}>{ts(r.chip)}</span>
+                            v13 {r.date}
+                        </span>
+                    </span>
+                ))}
+            </div>
+        </aside>
     );
 }

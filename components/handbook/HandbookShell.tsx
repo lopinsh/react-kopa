@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
+import AdminSidebarLayout from '@/components/admin/frame/AdminSidebarLayout';
 import type { HandbookHeading } from '@/lib/services/handbook.service';
 
 interface Props {
@@ -9,28 +10,17 @@ interface Props {
     wide?: boolean;
 }
 
-/** One reading column plus the chapter's own headings ("On this page", sticky from `lg`). The chapter list lives in the admin frame's pages list (AR-68). */
+/** One reading column inside the page sidebar (AF-12): the chapters on top, this chapter's headings under them (AF-13). */
 export default async function HandbookShell({ headings, children, wide = false }: Props) {
     const t = await getTranslations('admin.handbook');
-    const toc = !wide && headings.length > 0;
+    const tn = await getTranslations('admin.nav');
+    const sections = wide ? [] : headings.map((h) => ({ id: h.id, label: h.text }));
     return (
-        <div className={toc ? 'xl:grid xl:grid-cols-[minmax(0,70ch)_14rem] xl:gap-10' : undefined}>
+        <AdminSidebarLayout sections={sections} labels={{ tabs: tn('pageTabs'), sections: tn('pageSections') }}>
             <article className={wide ? 'min-w-0' : 'min-w-0 max-w-reading'}>
                 {children}
                 {!wide && <p className="mt-12 border-t border-border pt-4 text-meta text-foreground-muted">{t('note')}</p>}
             </article>
-            {toc && (
-                <nav aria-label={t('onThisPage')} className="sticky top-14 mt-6 self-start xl:mt-0">
-                    <p className="px-3 pb-1 text-tag text-foreground-muted">{t('onThisPage')}</p>
-                    <ul className="space-y-0.5 border-l border-border pl-2">
-                        {headings.map((h) => (
-                            <li key={h.id}>
-                                <a href={`#${h.id}`} className="block rounded-lg px-3 py-1 text-body-sm text-foreground-muted hover:text-foreground">{h.text}</a>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
-            )}
-        </div>
+        </AdminSidebarLayout>
     );
 }

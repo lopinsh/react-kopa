@@ -4,16 +4,19 @@ import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { Link } from '@/i18n/routing';
 import PageNavLink from '@/components/ui/PageNavLink';
-import { useAdminFrame } from './AdminFrameProvider';
+import { UI } from '@/lib/constants';
+import { useAdminFrame, useOptionalAdminFrame } from './AdminFrameProvider';
+import AdminBadge from './AdminBadge';
 import type { AdminNavItem } from '@/lib/constants/adminNav';
 
 export type AdminPart = { id: string; href: string; label: string; flagged?: boolean };
 
-/** The parts of an admin page, shown indented under it while it is open: Design's `?part=`, the Handbook's chapters. */
+/** The parts of an admin page: Design's `?part=`, the Handbook's chapters. Indented under the page in the drawer, the sidebar's tabs on `frame` pages. Empty outside the frame. */
 export function useAdminParts(item: AdminNavItem | null): AdminPart[] {
     const t = useTranslations('admin.nav');
-    const { chapters, flaggedParts } = useAdminFrame();
-    if (!item) return [];
+    const frame = useOptionalAdminFrame();
+    if (!item || !frame) return [];
+    const { chapters, flaggedParts } = frame;
     if (item.id === 'design') return (item.parts ?? []).map((p) => ({ id: p, href: `${item.href}?part=${p}`, label: t(`parts.${p}`), flagged: flaggedParts.includes(p) }));
     if (item.id === 'handbook') {
         return [
@@ -56,13 +59,43 @@ function Parts({ item, part, replace }: { item: AdminNavItem; part: string | nul
     );
 }
 
-/** The open section's pages, down the left (AR-21): no title, the open page tinted, its parts indented under it. */
-export default function AdminPagesNav({ variant }: { variant: 'side' | 'drawer' }) {
+/** The open section's pages. `row`: a tab row under the sections from `lg` (AF-01), none for a one-page section; `drawer`: the phone drawer's list, the open page's parts indented under it. */
+export default function AdminPagesNav({ variant }: { variant: 'row' | 'drawer' }) {
     const t = useTranslations('admin.nav');
     const { location, counts } = useAdminFrame();
     if (!location.section) return null;
+    if (variant === 'row') {
+        if (location.section.items.length <= 1) return null;
+        return (
+            <nav data-ui={UI.tabs} aria-label={t('pagesLabel')} className="hidden border-b border-border lg:block">
+                <ul className="container mx-auto flex gap-1 overflow-x-auto px-4">
+                    {location.section.items.map((item) => {
+                        const on = location.item?.id === item.id;
+                        const Icon = item.icon;
+                        const badge = item.badge ? counts[item.badge] : 0;
+                        return (
+                            <li key={item.id}>
+                                <Link
+                                    href={item.href}
+                                    aria-current={on ? 'page' : undefined}
+                                    className={clsx(
+                                        'flex min-h-11 items-center gap-2 whitespace-nowrap border-b-2 px-3 text-body-sm focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary',
+                                        on ? 'border-primary weight-strong text-foreground' : 'border-transparent text-foreground-muted hover:text-foreground'
+                                    )}
+                                >
+                                    <Icon aria-hidden className="size-4" />
+                                    {t(item.id)}
+                                    <AdminBadge count={badge} danger={item.badge === 'reports'} />
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        );
+    }
     return (
-        <nav aria-label={t('pagesLabel')} className={clsx('flex-col gap-0.5', variant === 'side' ? 'sticky top-14 hidden self-start lg:flex' : 'flex pt-1')}>
+        <nav aria-label={t('pagesLabel')} className="flex flex-col gap-0.5 pt-1">
             {location.section.items.map((item) => {
                 const open = location.item?.id === item.id;
                 return (
@@ -74,9 +107,9 @@ export default function AdminPagesNav({ variant }: { variant: 'side' | 'drawer' 
                             current={open && (!item.parts && item.id !== 'handbook' || location.part === null)}
                             badge={item.badge ? counts[item.badge] : 0}
                             badgeDanger={item.badge === 'reports'}
-                            replace={variant === 'drawer'}
+                            replace
                         />
-                        {open && <Parts item={item} part={location.part} replace={variant === 'drawer'} />}
+                        {open && <Parts item={item} part={location.part} replace />}
                     </div>
                 );
             })}

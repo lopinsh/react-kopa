@@ -813,10 +813,11 @@
       "overview": "Overview",
       "uiElements": "UI elements",
       "pagesLabel": "Admin pages",
+      "pageTabs": "Page parts",
+      "pageSections": "Sections",
       "sectionsLabel": "Admin sections",
       "drawerTitle": "Administration",
       "openMenu": "Open the admin menu",
-      "onThisPage": "On this page",
       "parts": {
         "looks": "Looks",
         "colours": "Colours",
@@ -836,6 +837,11 @@
       },
       "buildPlanEmptyTitle": "No plan in progress",
       "buildPlanEmptyHint": "The next release plan will appear here once it is written.",
+      "status": {
+        "approved": "Approved",
+        "progress": "In progress",
+        "open": "Open"
+      },
       "planTab": "Plan",
       "planDrawings": {
         "hub": "Hubs"
@@ -844,7 +850,6 @@
     "handbook": {
       "chapters": "Chapters",
       "overview": "Overview",
-      "onThisPage": "On this page",
       "note": "Internal document, English only. Source: docs/handbook in the repository.",
       "uiElements": "UI elements",
       "ui": {
@@ -951,7 +956,8 @@
           "skeleton": "Loading shapes",
           "counter": "Character counter",
           "adminSections": "Admin sections bar (Site open)",
-          "adminPages": "Admin pages list (Design open, its parts under it)",
+          "adminPages": "Admin pages row (Design open)",
+          "adminSidebar": "Page sidebar (tabs, sections with status, version and date)",
           "adminDrawer": "Admin phone drawer",
           "errorState": "Error state",
           "confirmPopover": "Confirmation at the button",

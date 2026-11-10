@@ -15,6 +15,8 @@ export type AdminNavItem = {
     ownerOnly?: true;
     /** Design parts, opened as `?part=`; the Handbook's chapters are dynamic and come from the layout. */
     parts?: readonly string[];
+    /** The page has its own sections: `sidebar` = a left sidebar at the window's edge; `fill` = the same, and the body fills the space under the bars (AF-16). */
+    frame?: 'sidebar' | 'fill';
 };
 
 export type AdminNavSection = { id: AdminSectionId; items: AdminNavItem[] };
@@ -38,7 +40,7 @@ export const ADMIN_NAV: AdminNavSection[] = [
     {
         id: 'site',
         items: [
-            { id: 'design', href: '/admin/design', match: 'prefix', icon: Palette, parts: DESIGN_PARTS },
+            { id: 'design', href: '/admin/design', match: 'prefix', icon: Palette, parts: DESIGN_PARTS, frame: 'sidebar' },
             { id: 'translations', href: '/admin/translations', match: 'prefix', icon: Languages, badge: 'suggestions' },
         ],
     },
@@ -47,8 +49,8 @@ export const ADMIN_NAV: AdminNavSection[] = [
         id: 'development',
         items: [
             { id: 'feedback', href: '/admin/feedback', match: 'prefix', icon: MessageSquareText },
-            { id: 'handbook', href: '/admin/handbook', match: 'prefix', icon: BookOpen },
-            { id: 'buildPlan', href: '/admin/development/build-plan', match: 'prefix', icon: ListChecks },
+            { id: 'handbook', href: '/admin/handbook', match: 'prefix', icon: BookOpen, frame: 'sidebar' },
+            { id: 'buildPlan', href: '/admin/development/build-plan', match: 'prefix', icon: ListChecks, frame: 'fill' },
         ],
     },
 ];

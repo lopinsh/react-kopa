@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAdminFrame } from './AdminFrameProvider';
 import AdminSections from './AdminSections';
@@ -16,26 +17,50 @@ function PhoneBar() {
 }
 
 /**
- * Admin frame (AR-68): sections across (sticky), the open section's pages down the left from `lg`, the page on the right.
- * A section with one page (Komanda) has no left column and the page uses the full width.
+ * Admin frame (AF-01): two sticky rows under the header, the sections and the open section's pages (from `lg`; phones use the drawer).
+ * The rows' height is measured into `--admin-bars` (AF-05) for whatever has to clear them. Pages with their own sections (`frame` on the
+ * nav item) render their sidebar layout edge to edge (AF-10); `fill` pages also fill the height under the rows (AF-20).
  */
 export default function AdminFrame({ children }: { children: React.ReactNode }) {
     const { location } = useAdminFrame();
-    const single = (location.section?.items.length ?? 0) <= 1;
+    const rootRef = useRef<HTMLDivElement>(null);
+    const barsRef = useRef<HTMLDivElement>(null);
+    const mode = location.item?.frame;
+    useEffect(() => {
+        const root = rootRef.current;
+        const bars = barsRef.current;
+        if (!root || !bars) return;
+        // `main` is content-sized inside the shell's scroller, so `h-full` can't resolve (spec risk 1): `fill` pages get the scroller's height minus its padding and the footer, measured.
+        const scroller = document.getElementById('main-content');
+        const footer = scroller?.querySelector(':scope > footer') ?? null;
+        const write = () => {
+            root.style.setProperty('--admin-bars', `${bars.offsetHeight}px`);
+            if (mode === 'fill' && scroller) {
+                const pad = parseFloat(getComputedStyle(scroller).paddingBottom) || 0;
+                root.style.setProperty('--admin-fill', `${Math.max(0, scroller.clientHeight - pad - (footer?.getBoundingClientRect().height ?? 0))}px`);
+            }
+        };
+        write();
+        const observer = new ResizeObserver(write);
+        observer.observe(bars);
+        if (mode === 'fill' && scroller) observer.observe(scroller);
+        if (footer) observer.observe(footer);
+        return () => observer.disconnect();
+    }, [mode]);
     return (
-        <>
-            <AdminSections />
-            <div className="container mx-auto px-4">
-                <PhoneBar />
-                {single ? (
-                    <div className="py-6">{children}</div>
-                ) : (
-                    <div className="lg:grid lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
-                        <div className="hidden lg:block lg:pt-6"><AdminPagesNav variant="side" /></div>
-                        <div className="min-w-0 py-6">{children}</div>
-                    </div>
-                )}
+        <div ref={rootRef} className={mode === 'fill' ? 'flex h-[var(--admin-fill,100%)] flex-col' : undefined}>
+            <div ref={barsRef} className="sticky top-0 z-30 bg-background">
+                <AdminSections />
+                <AdminPagesNav variant="row" />
             </div>
-        </>
+            <div className="container mx-auto px-4"><PhoneBar /></div>
+            {mode === 'fill' ? (
+                <div className="flex min-h-0 flex-1 flex-col">{children}</div>
+            ) : mode === 'sidebar' ? (
+                children
+            ) : (
+                <div className="container mx-auto px-4 py-6">{children}</div>
+            )}
+        </div>
     );
 }

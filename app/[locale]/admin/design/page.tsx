@@ -5,6 +5,7 @@ import { CATEGORY_TONE_SLUGS, DESIGN_PARTS, type DesignPart } from '@/lib/consta
 import { TaxonomyService } from '@/lib/services/taxonomy.service';
 import { getActiveTheme } from '@/lib/theme/server';
 import DesignEditor from '@/components/admin/design/DesignEditor';
+import AdminSidebarLayout from '@/components/admin/frame/AdminSidebarLayout';
 import AdminPageHeader from '@/components/admin/AdminPageHeader';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -22,6 +23,7 @@ export default async function AdminDesignPage({
 }) {
     const { locale } = await params;
     const t = await getTranslations('admin.design');
+    const tn = await getTranslations('admin.nav');
 
     await requireAdminPage(locale, '/admin/design');
 
@@ -33,7 +35,8 @@ export default async function AdminDesignPage({
     const toneRows = CATEGORY_TONE_SLUGS.map((slug) => ({ slug, title: taxonomy.find((c) => c.slug === slug)?.title ?? null }));
 
     return (
-        <div className="space-y-6">
+        <AdminSidebarLayout sections={[]} labels={{ tabs: tn('pageTabs'), sections: tn('pageSections') }}>
+        <div className="max-w-browse space-y-6">
             <AdminPageHeader title={t('title')} subtitle={t('subtitle')} />
             {theme.isPreview && <p className="mb-6 rounded-xl bg-surface px-4 py-3 text-body-sm text-foreground">{t('previewActive')}</p>}
             <DesignEditor
@@ -43,5 +46,6 @@ export default async function AdminDesignPage({
                 initial={{ presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont, styleKey: theme.styleKey, type: theme.type }}
             />
         </div>
+        </AdminSidebarLayout>
     );
 }

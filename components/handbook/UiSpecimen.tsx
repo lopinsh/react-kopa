@@ -19,7 +19,7 @@ type Props = {
 export default function UiSpecimen({ id, names, files, children, padding = 'plain' }: Props) {
     const t = useTranslations('admin.handbook.ui');
     return (
-        <section id={id} className="scroll-mt-24 space-y-3">
+        <section id={id} className="scroll-mt-[calc(var(--admin-bars,0px)+1rem)] space-y-3">
             <h2 className="text-section text-foreground">{t(`sections.${id}`)}</h2>
             <div className={clsx('overflow-hidden rounded-2xl line bg-background', padding === 'plain' && 'p-4 sm:p-6')}>
                 {children}
