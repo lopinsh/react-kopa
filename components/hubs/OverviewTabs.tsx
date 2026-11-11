@@ -29,5 +29,5 @@ export default function OverviewTabs({ items }: { items: Array<{ id: string; lab
         setActive(key);
     };
 
-    return <PartTabs label={t('overview.tabsLabel')} items={items.map(({ id, label }) => ({ key: id, label, href: `#${id}` }))} active={active} onSelect={go} />;
+    return <PartTabs width="full" label={t('overview.tabsLabel')} items={items.map(({ id, label }) => ({ key: id, label, href: `#${id}` }))} active={active} onSelect={go} />;
 }

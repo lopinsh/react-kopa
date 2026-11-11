@@ -55,7 +55,7 @@ export default async function NotesPage({ hub, sp, cities, locale, viewer }: { h
     return (
         <>
             <HubTabs label={t('tabsLabel')} items={tabs} active={tab} before={<NoteSearch className="hidden w-56 lg:block" />} />
-            <div className="grid items-start gap-section xl:grid-cols-[minmax(0,1fr)_minmax(16rem,20rem)]">
+            <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-section xl:grid-cols-[minmax(0,var(--container-reading))_minmax(16rem,20rem)] xl:justify-start">
                 <div className="grid min-w-0 max-w-reading grid-cols-[minmax(0,1fr)] gap-section">
                     <NoteSearch className="lg:hidden" />
                     {gone && <p className="text-body-sm text-foreground-muted">{t('gone')}</p>}
