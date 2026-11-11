@@ -89,6 +89,12 @@ The same situation behaves the same way on every screen.
 - Signed out: no names anywhere; one button "Ienākt, lai atbildētu".
 - Ziņot on a Ziņa or reply goes to the admin reports list.
 
+### Topic x city hubs (K3)
+
+- Kur on a topic hub is a switcher: Visas pilsētas, an open city (its topic x city hub, same page), or a city with Pieprasīt ("N interesējas", never names). The city is part of the address (`/lv/games/boardgames/jelgava`), not a filter.
+- Pieprasīt: one request per person per city; an optional note becomes a public Ziņa (counts toward the 3). The second distinct person opens the hub at once and lands on it; the first asker is told. A shared `?request=<city>` link opens the sheet.
+- A hub that is not open has no page: its address goes to the topic hub with the sheet open. Site admins can Aizvērt kopienu; groups and Ziņas stay, two new requests open it again.
+
 ## Notifications
 
 - Stored only when the person must act or would miss something.

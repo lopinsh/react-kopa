@@ -15,6 +15,7 @@ A screen shows only what the viewer can use. Hidden, not disabled.
 | Read notes and replies | yes, no names | yes, with names |
 | Reply, Rakstīt privāti, Ziņot | "Ienākt, lai atbildētu" | yes (not on own Ziņa) |
 | Edit, renew, delete | hidden | own only; site admins delete any |
+| Close a topic x city hub (Aizvērt kopienu) | hidden | no; site admins only |
 
 **Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
 

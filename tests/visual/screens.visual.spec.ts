@@ -88,6 +88,7 @@ const SCREENS: Screen[] = [
   { name: 'hub-groups', run: async (p) => { await p.goto('/lv/games/boardgames/groups'); } },
   { name: 'hub-events', run: async (p) => { await p.goto('/lv/games/boardgames/events'); } },
   { name: 'hub-notes', run: async (p) => { await p.goto('/lv/games/boardgames/messages'); } },
+  { name: 'hub-local', run: async (p) => { await p.goto('/lv/games/boardgames/jelgava'); } },
   { name: 'board-hub-card', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames'); } },
   { name: 'messages', signedIn: true, run: async (p) => { await p.goto('/lv/messages'); } },
   { name: 'my-groups', signedIn: true, run: async (p) => { await p.goto('/lv/profile/my-groups'); } },
