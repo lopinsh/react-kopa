@@ -53,14 +53,14 @@ export async function hubActivity(hub: { l1Id: string; l1Slug: string; slug: str
         const inGroup: Prisma.PostWhereInput = { visibility: 'PUBLIC', archivedAt: null, createdAt: when, group: groupWhere };
         const take = HUB_FEED_ROWS;
         const [groups, groupCount, members, announcements, announcementCount, events] = await Promise.all([
-            prisma.group.findMany({ where: { AND: [groupWhere, { createdAt: when }] }, orderBy: { createdAt: 'desc' }, take, select: { id: true, name: true, slug: true, createdAt: true } }),
+            prisma.group.findMany({ where: { AND: [groupWhere, { createdAt: when }] }, orderBy: [{ createdAt: 'desc' }, { slug: 'asc' }], take, select: { id: true, name: true, slug: true, createdAt: true } }),
             prisma.group.count({ where: { AND: [groupWhere, { createdAt: when }] } }),
             prisma.membership.count({ where: { role: { not: 'PENDING' }, joinedAt: when, group: groupWhere } }),
             prisma.post.findMany({ where: inGroup, orderBy: { createdAt: 'desc' }, take, select: { id: true, title: true, content: true, createdAt: true, group: { select: { name: true, slug: true } } } }),
             prisma.post.count({ where: inGroup }),
             prisma.event.findMany({
                 where: { visibility: 'PUBLIC', createdAt: when, group: groupWhere },
-                orderBy: { createdAt: 'desc' },
+                orderBy: [{ createdAt: 'desc' }, { slug: 'asc' }],
                 take,
                 select: { id: true, slug: true, originalLang: true, createdAt: true, translations: { select: { lang: true, title: true, description: true } }, group: { select: { name: true, slug: true } } },
             }),
@@ -77,7 +77,8 @@ export async function hubActivity(hub: { l1Id: string; l1Slug: string; slug: str
                 const text = resolveEventText(e.translations.map((t) => ({ ...t, instructions: null })), lang, e.originalLang, true);
                 return { id: `e-${e.id}`, kind: 'event', title: text.title, titleLang: text.titleLang, at: e.createdAt, excerpt: plainExcerpt(text.description, EXCERPT), group: e.group, groupHref: groupPath(e.group.slug), href: `${groupPath(e.group.slug)}/events/${e.slug}` };
             }),
-        ].sort((a, b) => b.at.getTime() - a.at.getTime() || (a.id < b.id ? -1 : 1)).slice(0, take);
+            // Same-moment rows keep one order on every run (ids differ per seed; the visual baseline pins equal times).
+        ].sort((a, b) => b.at.getTime() - a.at.getTime() || a.href.localeCompare(b.href) || (a.id < b.id ? -1 : 1)).slice(0, take);
 
         return { key, counts: { groups: groupCount, members, announcements: announcementCount }, rows };
     }));
