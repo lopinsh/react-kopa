@@ -82,6 +82,8 @@ export interface GroupContext {
     /** "Ko meklējam?" (AR-35): the team's one short line, or null. */
     lookingFor: string | null;
     city: string;
+    /** The city hub's address without locale (`/jelgava`, K3-25); null for a city without one (legacy or pending). */
+    cityHref: string | null;
     type: 'PUBLIC' | 'PRIVATE';
     categoryId: string;
     bannerImage: string | null;
@@ -317,6 +319,7 @@ export const GroupService = {
             description: g.description,
             lookingFor: g.lookingFor,
             city: g.city,
+            cityHref: await CityService.bySegment(g.city, locale).then((c) => (c ? `/${c.segment}` : null)),
             type: g.type as 'PUBLIC' | 'PRIVATE',
             categoryId: g.categoryId,
             bannerImage: g.bannerImage,

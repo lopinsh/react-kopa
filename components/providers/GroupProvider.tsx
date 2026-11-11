@@ -16,6 +16,8 @@ export interface GroupState {
     category: { l1Slug: string; l1Title: string; subCategories: string[]; subCategorySlugs: string[] };
     /** City slug; the client labels it with `cityLabel`. */
     city: string;
+    /** The city hub's address without locale, null for a city without one (K3-25). */
+    cityHref: string | null;
     memberCount: number;
     /** The tagline ("Ko meklējam?"): the banner (from md) and Informācija (phones) always show it when set. */
     lookingFor: string | null;

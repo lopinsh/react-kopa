@@ -68,6 +68,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         description: s('groupDescription'),
         lookingFor: null,
         city: 'Jelgava',
+        cityHref: '/jelgava',
         type: 'PUBLIC',
         categoryId: 'sample-category',
         bannerImage: null,

@@ -5,6 +5,7 @@ import { useSelectedLayoutSegment } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Lock, MapPin, Users } from 'lucide-react';
 import { clsx } from 'clsx';
+import { Link } from '@/i18n/routing';
 import { cityLabel } from '@/lib/city-label';
 import { UI } from '@/lib/constants';
 import { useGroupContext } from '@/components/providers/GroupProvider';
@@ -38,7 +39,7 @@ export default function GroupHead({ picture, variant }: { picture?: ReactNode; v
         <div className="mt-1.5 grid gap-1">
             <CategoryLine onTone color="var(--accent)" category={g.category.l1Title} subCategories={g.category.subCategories} l1Slug={g.category.l1Slug} subSlugs={g.category.subCategorySlugs} linkTo="hub" />
             <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-meta [&_svg]:size-4 [&_svg]:shrink-0 [&>span]:inline-flex [&>span]:items-center [&>span]:gap-1.5">
-                <span><MapPin aria-hidden />{cityLabel(tCities, g.city)}</span>
+                <span><MapPin aria-hidden />{g.cityHref ? <Link href={g.cityHref} className="hover:underline">{cityLabel(tCities, g.city)}</Link> : cityLabel(tCities, g.city)}</span>
                 <span><Users aria-hidden />{t('members', { count: g.memberCount })}</span>
                 {g.isPrivate && <span><Lock aria-hidden />{t('membersOnly')}</span>}
             </p>

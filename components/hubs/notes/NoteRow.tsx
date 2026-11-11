@@ -5,6 +5,7 @@ import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { House, Pencil } from 'lucide-react';
 import { relativeTo } from '@/lib/utils/relative-time';
 import type { HubNoteReplyRow, HubNoteRow, NoteComposeOptions } from '@/lib/services/hub-note.service';
+import { Link } from '@/i18n/routing';
 import AccordionRow from '@/components/hubs/AccordionRow';
 import NoteActions from './NoteActions';
 import NoteReplies from './NoteReplies';
@@ -33,7 +34,7 @@ export default function NoteRow({ note, edit, mineList, defaultOpen, replies, re
             {note.author && <><span>{note.author.name}</span>{note.author.flair && <House aria-label={t('flair')} role="img" className="size-3" />}<span aria-hidden="true">·</span></>}
             <span>{age}</span>
             {!note.expired && <><span aria-hidden="true">·</span><span>{t('replies', { n: note.replyCount })}</span></>}
-            {note.city && <><span aria-hidden="true">·</span><span>{note.city.name}</span></>}
+            {note.city && <><span aria-hidden="true">·</span>{note.city.href ? <Link href={note.city.href} className="hover:underline">{note.city.name}</Link> : <span>{note.city.name}</span>}</>}
             {mineList && <><span aria-hidden="true">·</span><span>{ends}</span></>}
         </>
     );

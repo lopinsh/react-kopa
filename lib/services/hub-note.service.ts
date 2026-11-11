@@ -6,12 +6,12 @@ import { isSiteAdmin } from '@/lib/site-role';
 import { toTextLang } from '@/lib/translations';
 import type { HubNoteEditInput, HubNoteInput } from '@/lib/validations/hub-note';
 import type { HubContext } from './hub.service';
-import { CityService, type CityOption } from './city.service';
+import { CityService, citySegment, type CityOption } from './city.service';
 import { hubGroupWhere } from './hub-query';
 import { hubNoteWhere, groupNotes, type NoteSection } from './hub-note-query';
 import { ChatRequestService } from './chat-request.service';
 import { NoteReplies } from './hub-note-reply';
-import { NOTE_SELECT, noteTopicHref, toNoteRow, type HubNoteRow, type NoteViewer } from './hub-note-row';
+import { NOTE_SELECT, noteTopicHref, toNoteRow, type HubNoteRow, type NoteSource, type NoteViewer } from './hub-note-row';
 
 export type { HubNoteRow, NoteViewer } from './hub-note-row';
 export type { NoteSection } from './hub-note-query';
@@ -87,6 +87,23 @@ async function cityId(slug: string | null | undefined): Promise<string | null> {
     return city.id;
 }
 
+/** The open topic x city hub of each note that has a city (K3-26): note id to `/games/boardgames/jelgava`. A closed or requested hub gives no entry. */
+async function openCityHubs(sources: NoteSource[]): Promise<Map<string, string>> {
+    const withCity = sources.filter((n) => n.city);
+    const map = new Map<string, string>();
+    if (withCity.length === 0) return map;
+    const open = await prisma.hubCity.findMany({
+        where: { status: 'OPEN', OR: withCity.map((n) => ({ categoryId: n.categoryId, city: { slug: n.city?.slug } })) },
+        select: { categoryId: true, city: { select: { slug: true } } },
+    });
+    const keys = new Set(open.map((h) => `${h.categoryId}:${h.city.slug}`));
+    for (const n of withCity) {
+        const topic = noteTopicHref(n.category)?.replace(/[/]messages$/, '');
+        if (n.city && topic && keys.has(`${n.categoryId}:${n.city.slug}`)) map.set(n.id, `${topic}/${citySegment(n.city.slug)}`);
+    }
+    return map;
+}
+
 /** Notes of a hub (K2). Permission and limit checks live here; actions only authenticate. Replies live in hub-note-reply.ts. */
 export const HubNoteService = {
     ...NoteReplies,
@@ -117,7 +134,8 @@ export const HubNoteService = {
             }));
         }
         const requests = viewer ? await ChatRequestService.stateFor(viewer.id, sources) : new Map<string, 'pending' | 'open' | 'hidden'>();
-        const rows = sources.map((n) => ({ ...toNoteRow(n, { lang, locale, now, viewer, isAdmin: isSiteAdmin(viewer?.role), flair }), request: requests.get(n.id) ?? ('none' as const) }));
+        const cityHubs = await openCityHubs(sources);
+        const rows = sources.map((n) => ({ ...toNoteRow(n, { lang, locale, now, viewer, isAdmin: isSiteAdmin(viewer?.role), flair, cityHubs }), request: requests.get(n.id) ?? ('none' as const) }));
         return { rows, sections: o.tab === 'mine' ? [] : groupNotes(rows, hub) };
     },
 

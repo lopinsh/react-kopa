@@ -11,6 +11,7 @@ export function toGroupState(group: GroupContext): GroupState {
         isPrivate: group.type === 'PRIVATE',
         category: { l1Slug: group.category.l1Slug, l1Title: group.category.l1Title, subCategories: group.category.subCategories, subCategorySlugs: group.category.subCategorySlugs },
         city: group.city,
+        cityHref: group.cityHref,
         memberCount: group.stats.memberCount,
         lookingFor: group.lookingFor,
         isAcceptingMembers: group.isAcceptingMembers,

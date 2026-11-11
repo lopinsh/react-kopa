@@ -23,7 +23,8 @@ export interface HubNoteRow {
     createdAt: Date;
     expiresAt: Date;
     expired: boolean;
-    city: { slug: string; name: string } | null;
+    /** `href`: the topic x city hub's address (no locale) when that hub is open (K3-26), else null. */
+    city: { slug: string; name: string; href: string | null } | null;
     /** Null when the note is for the whole community (no group, or the group is not public). */
     group: { id: string; name: string; href: string } | null;
     /** The Veids it was posted on, with the hub's Ziņas address (no locale). */
@@ -49,7 +50,7 @@ export function noteTopicHref(c: NoteSource['category']): string | null {
     return null;
 }
 
-export function toNoteRow(n: NoteSource, o: { lang: string; locale: string; now: Date; viewer?: NoteViewer; isAdmin: boolean; flair: Set<string> }): HubNoteRow {
+export function toNoteRow(n: NoteSource, o: { lang: string; locale: string; now: Date; viewer?: NoteViewer; isAdmin: boolean; flair: Set<string>; /** Note id to the open topic x city hub's address (K3-26). */ cityHubs?: Map<string, string> }): HubNoteRow {
     const expired = n.expiresAt.getTime() <= o.now.getTime();
     const mine = !!o.viewer && n.authorId === o.viewer.id;
     const publicGroup = n.group && n.group.type === 'PUBLIC' && !n.group.hiddenAt ? n.group : null;
@@ -59,7 +60,7 @@ export function toNoteRow(n: NoteSource, o: { lang: string; locale: string; now:
         createdAt: n.createdAt,
         expiresAt: n.expiresAt,
         expired,
-        city: n.city ? { slug: n.city.slug, name: o.locale === 'en' ? n.city.nameEn : n.city.nameLv } : null,
+        city: n.city ? { slug: n.city.slug, name: o.locale === 'en' ? n.city.nameEn : n.city.nameLv, href: o.cityHubs?.get(`${n.id}`) ?? null } : null,
         group: publicGroup ? { id: publicGroup.id, name: publicGroup.name, href: `/${TaxonomyResolver.resolve(publicGroup.category).l1Slug}/group/${publicGroup.slug}` } : null,
         topic: { slug: n.category.slug, title: pickTitle(n.category.titles, o.lang, n.category.slug), href: noteTopicHref(n.category) ?? '' },
         author: o.viewer ? { ...n.author, flair: o.flair.has(`${n.category.slug}:${n.authorId}`) } : null,
