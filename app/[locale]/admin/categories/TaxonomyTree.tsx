@@ -6,6 +6,7 @@ import TaxonomyTreeNode from './TaxonomyTreeNode';
 export type SelectedTaxonomyNode =
     | { type: 'l1'; id: string }
     | { type: 'l2'; id: string; l1Id: string }
+    | { type: 'l3'; id: string; l2Id: string; l1Id: string }
     | { type: 'pending'; id: string }
     | { type: 'bulk-merge'; ids: string[] };
 
@@ -21,7 +22,7 @@ type Props = {
 export default function TaxonomyTree({ tree, pendingTags, selectedNode, onNodeSelect, selectedActionIds, onToggleActionId }: Props) {
     const t = useTranslations('admin.taxonomy.tree');
 
-    // Group pending tags by their parent L1 to render them under the correct L1
+    // Group pending tags by their parent (an L1 for a Veids suggestion, an L2 for a sub-veids one)
     const pendingByParent = pendingTags.reduce((acc, tag) => {
         if (!tag.parent) return acc;
         if (!acc[tag.parent.id]) {
@@ -34,7 +35,7 @@ export default function TaxonomyTree({ tree, pendingTags, selectedNode, onNodeSe
     const [expandedIds, setExpandedIds] = useState<Set<string>>(() => {
         const initial = new Set<string>();
         tree.forEach(l1 => {
-            if (pendingByParent[l1.id]?.length > 0) {
+            if (pendingByParent[l1.id]?.length > 0 || l1.subcategories.some(l2 => pendingByParent[l2.id]?.length > 0)) {
                 initial.add(l1.id);
             }
         });
@@ -79,6 +80,7 @@ export default function TaxonomyTree({ tree, pendingTags, selectedNode, onNodeSe
                         key={l1.id}
                         l1={l1}
                         pendingL2s={pendingByParent[l1.id] || []}
+                        pendingByParent={pendingByParent}
                         selectedNode={selectedNode}
                         onNodeSelect={onNodeSelect}
                         isExpanded={expandedIds.has(l1.id)}

@@ -18,8 +18,11 @@ import { CATEGORY_NAME_MAX } from '@/lib/constants';
 import { Input, Select } from '@/components/ui/Input';
 const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'), { ssr: false });
 
-/** "Ieteikt jaunu kategoriju": the typed word goes to the admins as a waiting Veids of the chosen Tēma. Signed out: the sign-in pop-up. */
-export default function CategorySuggest({ word, onClose }: { word: string; onClose: () => void }) {
+/**
+ * "Ieteikt jaunu kategoriju": the typed word goes to the admins as a waiting Veids of the chosen Tēma.
+ * With `parent` (a Veids) it is a sub-veids of that Veids and the Tēma choice is skipped (K-55). Signed out: the sign-in pop-up.
+ */
+export default function CategorySuggest({ word, onClose, parent }: { word: string; onClose: () => void; parent?: { id: string; title: string } }) {
     const t = useTranslations('discovery');
     const tErrors = useTranslations('errors');
     const tCommon = useTranslations('common');
@@ -30,7 +33,7 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
     const { status } = useSession();
     const { isAuthenticated, isModalOpen, closeModal, gateAction } = useAuthGate();
     const [name, setName] = useState(word.slice(0, CATEGORY_NAME_MAX));
-    const [topicId, setTopicId] = useState(categories.find((c) => c.slug === params.category)?.id ?? '');
+    const [topicId, setTopicId] = useState(parent?.id ?? categories.find((c) => c.slug === params.category)?.id ?? '');
     const [isPending, setIsPending] = useState(false);
     const [invalid, setInvalid] = useState(false);
 
@@ -53,22 +56,22 @@ export default function CategorySuggest({ word, onClose }: { word: string; onClo
     if (status === 'unauthenticated') return <AuthGateModal isOpen onClose={onClose} />;
     if (!isAuthenticated && isModalOpen) return <AuthGateModal isOpen onClose={closeModal} />;
     return (
-        <Modal onClose={onClose} title={t('suggestTitle')} locked={isPending}>
+        <Modal onClose={onClose} title={parent ? t('suggestSubTitle', { title: parent.title }) : t('suggestTitle')} locked={isPending}>
             <form onSubmit={(e) => { e.preventDefault(); submit(); }} className="flex flex-col gap-3">
-                <p className="text-body-sm text-foreground-muted">{t('suggestText')}</p>
+                <p className="text-body-sm text-foreground-muted">{parent ? t('suggestSubText') : t('suggestText')}</p>
                 <div>
                     <label htmlFor="suggest-name" className="mb-1 block text-button-sm">{t('suggestName')}</label>
                     <Input id="suggest-name" value={name} onChange={(e) => setName(e.target.value)} aria-describedby="suggest-count" className="ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]" />
                     <TextCounter id="suggest-count" length={name.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
                 </div>
-                <div>
+                {!parent && <div>
                     <label htmlFor="suggest-topic" className="mb-1 block text-button-sm">{t('topic')}</label>
                     <Select id="suggest-topic" value={topicId} onChange={(e) => setTopicId(e.target.value)} className="ring-[length:var(--line-width)] ring-inset ring-[color:var(--line-color)]">
                         <option value="">—</option>
                         {categories.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                     </Select>
                     {invalid && !topicId && <p role="alert" className="mt-1 text-meta text-danger">{t('suggestPickTopic')}</p>}
-                </div>
+                </div>}
                 <div className="mt-1 flex justify-end gap-2">
                     <Button type="button" variant="secondary" onClick={onClose} disabled={isPending}>{tCommon('cancel')}</Button>
                     <Button type="submit" disabled={isPending || name.trim().length < 2}>{t('suggestSend')}</Button>

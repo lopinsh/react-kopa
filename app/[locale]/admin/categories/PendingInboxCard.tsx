@@ -117,7 +117,9 @@ export default function PendingInboxCard({ item, canonicalOptions, onSelect }: P
                     </p>
                     {item.parent && (
                         <p className="text-body-sm mt-1">
-                            {t('parentLabel', { title: item.parent.title })}
+                            {item.level === 3 && item.grandparentTitle
+                                ? t('parentLabelSub', { topic: item.grandparentTitle, title: item.parent.title })
+                                : t('parentLabel', { title: item.parent.title })}
                         </p>
                     )}
                 </div>

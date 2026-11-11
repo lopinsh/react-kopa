@@ -379,7 +379,9 @@
       "alsoMatches": "Atbilst arī:",
       "alsoMatchesTitle": "Atbilst arī",
       "moreMatches": "{count, plural, zero {Vēl # tēmas un veidi} one {Vēl # tēma vai veids} other {Vēl # tēmas un veidi}}"
-    }
+    },
+    "suggestSubTitle": "Ieteikt apakšveidu: {title}",
+    "suggestSubText": "Administratori to vispirms pārbauda. Līdz tam to redzi tu un administratori."
   },
   "moderation": {
     "hideGroup": "Paslēpt grupu",
@@ -799,7 +801,8 @@
         "cityGroups": "{count, plural, =0 {Neviena grupa to vēl neizmanto} one {# grupa to izmanto} other {# grupas to izmanto}}",
         "confirmRejectCity": "Noraidīt šo pilsētu? Grupām, kas to izmanto, pilsēta tiks noņemta, un īpašniekiem lūgs izvēlēties citu.",
         "rejectTitle": "Noraidīt birku?",
-        "rejectCityTitle": "Noraidīt pilsētu?"
+        "rejectCityTitle": "Noraidīt pilsētu?",
+        "parentLabelSub": "Ieteikts apakšveids veidam {title} ({topic})"
       },
       "fields": {
         "color": "Krāsa",
@@ -832,14 +835,25 @@
         "save": "Saglabāt",
         "subcategories": "Apakštēmas ({count})",
         "subcategoryCreated": "Apakštēma izveidota",
-        "unsavedChanges": "Nesaglabātas izmaiņas"
+        "unsavedChanges": "Nesaglabātas izmaiņas",
+        "l3Title": "Apakšveids",
+        "l3Parent": "Veids",
+        "subtopics": "Apakšveidi ({count})",
+        "noSubtopics": "Apakšveidu vēl nav.",
+        "createSubtopic": "Izveidot apakšveidu",
+        "addSubtopic": "+ Pievienot apakšveidu",
+        "subtopicCreated": "Apakšveids izveidots",
+        "mergeWith": "Apvienot ar…",
+        "mergePlaceholder": "Izvēlies apakšveidu…",
+        "mergeAction": "Apvienot"
       },
       "node": {
         "children": "{count} {count, plural, zero {apakštēmu} one {apakštēma} other {apakštēmas}}",
         "pending": "gaida",
         "missingLang": "nav {lang} nosaukuma",
         "wildcard": "{count} {count, plural, zero {brīvo birku} one {brīvā birka} other {brīvās birkas}}",
-        "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}"
+        "group": "{count} {count, plural, zero {grupu} one {grupa} other {grupas}}",
+        "subtopics": "{count} {count, plural, zero {apakšveidu} one {apakšveids} other {apakšveidi}}"
       },
       "override": {
         "saved": "Tēmas atjauninātas",

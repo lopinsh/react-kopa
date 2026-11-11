@@ -6,6 +6,7 @@ import type { SelectedTaxonomyNode } from './TaxonomyTree';
 import type { ActiveL2WithAliases, PendingCategoryWithContext, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
 import SlideoverL1View from './SlideoverL1View';
 import SlideoverL2View from './SlideoverL2View';
+import SlideoverL3View from './SlideoverL3View';
 import SlideoverPendingView from './SlideoverPendingView';
 import SlideoverMergeView from './SlideoverMergeView';
 
@@ -47,6 +48,9 @@ export default function TaxonomySlideover({ selectedNode, onNodeSelect, onClose,
     } else if (selectedNode.type === 'l2') {
         const l2 = categories.find(c => c.id === selectedNode.id);
         if (l2) content = <SlideoverL2View l2={l2} categories={categories} tree={tree} onNodeSelect={onNodeSelect} />;
+    } else if (selectedNode.type === 'l3') {
+        const l3 = categories.find(c => c.id === selectedNode.id);
+        if (l3) content = <SlideoverL3View l3={l3} categories={categories} tree={tree} onNodeSelect={onNodeSelect} />;
     } else if (selectedNode.type === 'pending') {
         const pending = pendingTags.find(p => p.id === selectedNode.id);
         if (pending) {

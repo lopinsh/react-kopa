@@ -1,15 +1,15 @@
-import { useId, useState, useTransition } from 'react';
+import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { approveTag, addAlias, deleteAlias } from '@/actions/taxonomy-actions';
+import { addAlias, deleteAlias } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
 import { ChevronLeft } from 'lucide-react';
 import type { ActiveL2WithAliases, TaxonomyTree as TaxonomyTreeData } from '@/lib/services/taxonomy.service';
 import { tint } from '@/lib/color-utils';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
-import TextCounter from '@/components/ui/TextCounter';
-import { CATEGORY_NAME_MAX } from '@/lib/constants';
+import SlideoverTopicForm from './SlideoverTopicForm';
+import SlideoverSubtopics from './SlideoverSubtopics';
 
 import { Input, Select } from '@/components/ui/Input';
 type Props = {
@@ -21,41 +21,14 @@ type Props = {
 
 export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
     const t = useTranslations('admin.taxonomy.slideover');
-    const tFields = useTranslations('admin.taxonomy.fields');
     const tAliases = useTranslations('admin.taxonomy.aliases');
     const c = useTranslations('common');
     const { success, error } = useToast();
     const router = useRouter();
     const [isPending, startTransition] = useTransition();
 
-    const initialEn = l2.translations.find(t => t.lang === 'en')?.title || '';
-    const initialLv = l2.translations.find(t => t.lang === 'lv')?.title || '';
-
-    const uid = useId();
-    const [nameEn, setNameEn] = useState(initialEn);
-    const [nameLv, setNameLv] = useState(initialLv);
-    const [slugEn, setSlugEn] = useState(l2.slug);
-    const [slugLv, setSlugLv] = useState(l2.slugLv || l2.slug);
-
     const [aliasValue, setAliasValue] = useState('');
     const [aliasLocale, setAliasLocale] = useState('');
-
-    const handleSave = async () => {
-        startTransition(async () => {
-            const res = await approveTag(l2.id, {
-                nameEn: nameEn.trim(),
-                nameLv: nameLv.trim(),
-                slugEn: slugEn.trim(),
-                slugLv: slugLv.trim()
-            });
-            if (res.success) {
-                success(t('save') + ' - ' + c('success'));
-                router.refresh();
-            } else {
-                error(c('error'));
-            }
-        });
-    };
 
     const handleAddAlias = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -86,6 +59,8 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
     };
 
     const parentL1 = tree.find(l1 => l1.id === l2.parentId);
+    const sub = parentL1?.subcategories.find(x => x.id === l2.id);
+    const l2Node = parentL1 && sub ? { l1: parentL1, sub } : null;
 
     return (
         <div className="space-y-8 pb-12">
@@ -112,66 +87,9 @@ export default function SlideoverL2View({ l2, tree, onNodeSelect }: Props) {
                 </div>
             )}
 
-            {/* L2 Edit Form */}
-            <section>
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-item">{t('l2Title')}</h3>
-                    {(nameEn !== initialEn || nameLv !== initialLv || slugEn !== l2.slug || slugLv !== (l2.slugLv || l2.slug)) && (
-                        <span className="bg-warning/10 text-warning text-meta px-2 py-0.5 rounded-pill">{t('unsavedChanges')}</span>
-                    )}
-                </div>
+            <SlideoverTopicForm topic={l2} heading={t('l2Title')} image={l2Node?.sub.image ?? null} />
 
-                <div className="grid gap-4 bg-surface-elevated/30 p-4 line rounded-xl">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameEn')}</label>
-                            <Input
-                                type="text" aria-describedby={`${uid}-en`}
-                                value={nameEn}
-                                onChange={e => setNameEn(e.target.value)}
-                            />
-                            <TextCounter id={`${uid}-en`} length={nameEn.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
-                        </div>
-                        <div>
-                            <label className="block text-tag text-foreground-muted mb-1">{tFields('nameLv')}</label>
-                            <Input
-                                type="text" aria-describedby={`${uid}-lv`}
-                                value={nameLv}
-                                onChange={e => setNameLv(e.target.value)}
-                            />
-                            <TextCounter id={`${uid}-lv`} length={nameLv.length} max={CATEGORY_NAME_MAX} className="mt-1 text-right" />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4 border-t border-border pt-4">
-                        <div>
-                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugEn')}</label>
-                            <Input
-                                type="text"
-                                value={slugEn}
-                                onChange={e => setSlugEn(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-tag text-foreground-muted mb-1">{tFields('slugLv')}</label>
-                            <Input
-                                type="text"
-                                value={slugLv}
-                                onChange={e => setSlugLv(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="flex justify-end pt-2">
-                        <button
-                            type="button"
-                            onClick={handleSave}
-                            disabled={isPending}
-                            className="px-4 py-2 text-button-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50"
-                        >
-                            {t('save')}
-                        </button>
-                    </div>
-                </div>
-            </section>
+            {l2Node && <SlideoverSubtopics l2={l2Node.sub} l1Id={l2Node.l1.id} onNodeSelect={onNodeSelect} />}
 
             {/* Aliases */}
             <section>

@@ -379,7 +379,9 @@
       "alsoMatches": "Also matches:",
       "alsoMatchesTitle": "Also matches",
       "moreMatches": "{count, plural, one {# more theme or type} other {# more themes and types}}"
-    }
+    },
+    "suggestSubTitle": "Suggest a sub-type: {title}",
+    "suggestSubText": "The admins check it first. Until then you and the admins see it."
   },
   "moderation": {
     "hideGroup": "Hide group",
@@ -799,7 +801,8 @@
         "cityGroups": "{count, plural, =0 {No groups use it yet} one {# group uses it} other {# groups use it}}",
         "confirmRejectCity": "Reject this city? Groups using it are left without a city and their owners are asked to choose another.",
         "rejectTitle": "Reject tag?",
-        "rejectCityTitle": "Reject city?"
+        "rejectCityTitle": "Reject city?",
+        "parentLabelSub": "Suggested sub-type of {title} ({topic})"
       },
       "fields": {
         "color": "Color",
@@ -832,14 +835,25 @@
         "save": "Save",
         "subcategories": "Types ({count})",
         "subcategoryCreated": "Type created",
-        "unsavedChanges": "Unsaved changes"
+        "unsavedChanges": "Unsaved changes",
+        "l3Title": "Sub-type",
+        "l3Parent": "Type",
+        "subtopics": "Sub-types ({count})",
+        "noSubtopics": "No sub-types yet.",
+        "createSubtopic": "Create sub-type",
+        "addSubtopic": "+ Add sub-type",
+        "subtopicCreated": "Sub-type created",
+        "mergeWith": "Merge with…",
+        "mergePlaceholder": "Choose a sub-type…",
+        "mergeAction": "Merge"
       },
       "node": {
         "children": "{count} {count, plural, one {child} other {children}}",
         "pending": "pending",
         "missingLang": "missing {lang} name",
         "wildcard": "{count} {count, plural, one {wildcard} other {wildcards}}",
-        "group": "{count} {count, plural, one {group} other {groups}}"
+        "group": "{count} {count, plural, one {group} other {groups}}",
+        "subtopics": "{count} {count, plural, one {sub-type} other {sub-types}}"
       },
       "override": {
         "saved": "Topics updated",
