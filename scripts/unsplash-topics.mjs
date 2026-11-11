@@ -250,7 +250,7 @@ function writeReview() {
       ? `Foto: <a class="underline" href="https://unsplash.com/@${p.username}?utm_source=ejam_kopa&amp;utm_medium=referral">${esc(p.name)}</a>, <a class="underline" href="https://unsplash.com/?utm_source=ejam_kopa&amp;utm_medium=referral">Unsplash</a> · <a class="underline" href="https://unsplash.com/photos/${p.id}?utm_source=ejam_kopa&amp;utm_medium=referral">${p.id}</a>`
       : 'Foto: nav piemērota foto';
     const pics = p
-      ? `<div class="flex shrink-0 items-center gap-3 @4xl:ml-auto"><div class="w-64 shrink-0 overflow-hidden rounded-xl bg-surface shadow-card"><img src="${img(p.path, SLIVER)}" alt="" loading="eager" class="block h-12 w-full object-cover" width="640" height="96"><div class="px-3 py-2 text-meta text-foreground-muted">Kopiena ${esc(r.lv)}</div></div>
+      ? `<div class="flex min-w-0 max-w-full items-center gap-3 @4xl:ml-auto"><div class="w-64 min-w-0 shrink overflow-hidden rounded-xl bg-surface shadow-card"><img src="${img(p.path, SLIVER)}" alt="" loading="eager" class="block h-12 w-full object-cover" width="640" height="96"><div class="px-3 py-2 text-meta text-foreground-muted">Kopiena ${esc(r.lv)}</div></div>
       <img src="${img(p.path, THUMB)}" alt="" loading="eager" class="size-12 shrink-0 rounded-lg object-cover" width="96" height="96">
       <img src="${img(p.path, FULL)}" alt="" loading="eager" class="hidden aspect-video w-36 shrink-0 rounded-lg object-cover @4xl:block"></div>`
       : '<div class="w-64 shrink-0 rounded-xl line px-3 py-4 text-meta text-foreground-muted">Nav foto</div>';
