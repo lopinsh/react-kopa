@@ -3,6 +3,7 @@ import { redirect } from '@/i18n/routing';
 import { isSiteAdmin } from '@/lib/site-role';
 import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
+import { hubPages } from '@/lib/hub-pages';
 import { parseHubPath } from '@/lib/hub-path';
 import { HubService } from '@/lib/services/hub.service';
 import { CityHubService } from '@/lib/services/city-hub.service';
@@ -33,7 +34,7 @@ export default async function HubLayout({
     const hub = await HubService.getHubContext(l1Slug, address.l2Slug, address.middle.join('/'), locale);
     if (!hub) notFound();
     // A city without an open hub: the topic hub, same page, with the request sheet (K3-08).
-    if (hub.unopenedCity) redirect({ href: `${hub.topicHref}?request=${hub.unopenedCity}`, locale });
+    if (hub.unopenedCity) redirect({ href: `${hubPages(hub.topicHref).find((x) => x.key === address.page)?.href ?? hub.topicHref}?request=${hub.unopenedCity}`, locale });
 
     const [session, t] = await Promise.all([auth(), getTranslations({ locale, namespace: 'hub' })]);
     const kur = await HubCityService.kurOptions({ id: hub.id, l1Id: hub.l1Id, slug: hub.slug }, locale, session?.user?.id);

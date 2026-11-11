@@ -51,7 +51,7 @@ export default async function HubPage({ params, searchParams }: { params: Promis
     const hub = await HubService.getHubContext(l1Slug, address.l2Slug, address.middle.join('/'), locale);
     if (!hub) notFound();
 
-    if (hub.unopenedCity) redirect({ href: `${hub.topicHref}?request=${hub.unopenedCity}`, locale });
+    if (hub.unopenedCity) redirect({ href: `${hubPages(hub.topicHref).find((x) => x.key === address.page)?.href ?? hub.topicHref}?request=${hub.unopenedCity}`, locale });
     const asked = typeof sp.city === 'string' ? parseCities(sp.city) : [];
     if (!hub.local && asked.length > 0) {
         // An old `?city=` link (K1/K2 bookmarks): the first open topic x city hub among them, else the plain hub (K3-08).
