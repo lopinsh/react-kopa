@@ -316,6 +316,8 @@
     "moreVeidi": "{count, plural, one {# more type} other {# more types}}",
     "searchPlace": "Search for a city",
     "searchVeids": "Search for a type",
+    "subtypesOf": "{veids} sub-types",
+    "otherSubtype": "+ Other",
     "nothingFound": "Nothing found.",
     "placeHint": "You can suggest a new place when you create a group; the admins approve it.",
     "categories": "Topics",

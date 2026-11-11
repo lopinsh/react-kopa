@@ -112,7 +112,8 @@ export default async function DiscoveryPage({ params, searchParams }: Props) {
             .map((c) => ({ ...c, count: counts.byCategory[c.slug] ?? 0 }))
             .sort((a, b) => collator.compare(a.title, b.title)),
         veidi: tree.flatMap((l1) => l1.subcategories.filter((s) => s.status === 'ACTIVE').map((s) => ({
-            slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0
+            id: s.id, slug: s.slug, title: s.title, l1Slug: l1.slug, count: counts.bySubCategory[s.slug] ?? 0,
+            subs: s.tags.filter((x) => x.status === 'ACTIVE').map((x) => ({ slug: x.slug, title: x.title, count: counts.bySubCategory[x.slug] ?? 0 }))
         }))),
         counts: { total: counts.total, anyTopic: counts.anyTopic, anyPlace: counts.anyPlace, byCity: counts.byCity, online: counts.online },
         kindTotals: p.kind === 'groups' ? { groups: counts.total, events: otherCounts.total } : { groups: otherCounts.total, events: counts.total },

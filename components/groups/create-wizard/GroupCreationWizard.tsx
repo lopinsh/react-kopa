@@ -73,10 +73,11 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTa
         };
     }, [initialL1Slug, taxonomy]);
 
-    // The wizard ticks Veidi only (no sub-veidi): a sub-veids slug ticks its Veids.
+    // A Veids slug ticks its Veids; a sub-veids slug ticks it and its Veids (D3).
     const initialTagIds = useMemo(() => {
         const l2 = taxonomy.find((t) => t.slug === initialL1Slug || t.id === initialL1Slug)?.subcategories.find((s) => s.slug === initialTagSlug || s.tags.some((x) => x.slug === initialTagSlug));
-        return l2 ? [l2.id] : [];
+        const l3 = l2?.tags.find((x) => x.slug === initialTagSlug);
+        return l2 ? [l2.id, ...(l3 ? [l3.id] : [])] : [];
     }, [initialL1Slug, initialTagSlug, taxonomy]);
 
     const [accentColor, setAccentColor] = useState<string>(

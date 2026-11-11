@@ -12,15 +12,17 @@ type Props = {
     onPick: () => void;
     /** Zero-count rows that are not ticked fade (they would give an empty list). */
     faded?: boolean;
+    /** A sub-veids: one step in under its Veids. */
+    indent?: boolean;
 };
 
 /**
  * One row of the Kur and Veids lists: a click on the box ticks or unticks it and the list stays open; a click on the name picks
  * only this one and closes the list. The box has its own padded hit area; Space ticks it, Enter on the name picks.
  */
-export default function CheckRow({ name, count, checked, onToggle, onPick, faded = false }: Props) {
+export default function CheckRow({ name, count, checked, onToggle, onPick, faded = false, indent = false }: Props) {
     return (
-        <div className={clsx('flex min-h-11 items-center rounded-xl text-body-sm hover:bg-tint md:min-h-9', faded && !checked && 'opacity-45')}>
+        <div className={clsx('flex min-h-11 items-center rounded-xl text-body-sm hover:bg-tint md:min-h-9', indent && 'ml-5', faded && !checked && 'opacity-45')}>
             <label className="grid min-h-11 cursor-pointer place-items-center pl-3 pr-2 md:min-h-9">
                 <input type="checkbox" checked={checked} onChange={onToggle} aria-label={name} className="size-4 shrink-0 accent-primary" />
             </label>

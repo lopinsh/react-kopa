@@ -316,6 +316,8 @@
     "moreVeidi": "{count, plural, zero {Vēl # veidi} one {Vēl # veids} other {Vēl # veidi}}",
     "searchPlace": "Meklēt pilsētu",
     "searchVeids": "Meklēt veidu",
+    "subtypesOf": "{veids} apakšveidi",
+    "otherSubtype": "+ Cits",
     "nothingFound": "Nekas nav atrasts.",
     "placeHint": "Jaunu vietu var ieteikt, veidojot grupu; to apstiprina administratori.",
     "categories": "Tēmas",
