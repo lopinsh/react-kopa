@@ -33,7 +33,7 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
         HubNoteService.list(hub, { cities, q: '', tab: 'all', take: HUB_PREVIEW_ROWS }, locale, viewer),
         HubNoteService.count(hub, cities),
     ]);
-    const pages = hubPages(hub.href, cities);
+    const pages = hubPages(hub.href);
     const hrefOf = (key: 'groups' | 'events' | 'messages') => pages.find((p) => p.key === key)?.href ?? hub.href;
     const notesHref = hrefOf('messages');
     const composeHref = viewer ? `${notesHref}${notesHref.includes('?') ? '&' : '?'}compose=1` : null;

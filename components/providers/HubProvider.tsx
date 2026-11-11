@@ -2,7 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from 'react';
 import type { HubPathPart, HubSubTopic } from '@/lib/services/hub.service';
-import type { CityOption } from '@/lib/services/city.service';
+import type { KurOption } from '@/lib/services/hub-city.service';
 
 /** Everything a hub's frame (head, menu, drawer, Kur) shows; hydrated from the service in the layout (Context Law). */
 export interface HubState {
@@ -17,9 +17,14 @@ export interface HubState {
     path: HubPathPart[];
     stats: { memberCount: number; groupCount: number };
     subTopics: HubSubTopic[];
-    cities: CityOption[];
-    cityCounts: { byCity: Record<string, number>; anyPlace: number };
+    /** The topic hub's address (no city); `href` is the topic x city hub's on one. */
+    topicHref: string;
+    /** The topic x city hub the page is on (K3), else null. */
+    local: { hubCityId: string; citySlug: string; segment: string; cityName: string; cityHref: string } | null;
+    /** Kur (K3-10): every city with its state for this topic hub. */
+    kur: KurOption[];
     signedIn: boolean;
+    isAdmin: boolean;
 }
 
 const HubContext = createContext<HubState | undefined>(undefined);

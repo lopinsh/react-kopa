@@ -35,7 +35,7 @@ export default function NoteCompose({ options, mineHref, startOpen }: { options:
                 </div>
             ) : (
                 <div className="rounded-2xl bg-surface p-4 shadow-card frame">
-                    <NoteForm options={options} hubSlug={hub.slug} onDone={() => setOpen(false)} />
+                    <NoteForm options={options} hubSlug={hub.slug} fixedCity={hub.local ? { slug: hub.local.citySlug, name: hub.local.cityName } : undefined} onDone={() => setOpen(false)} />
                 </div>
             ))}
             {gate && <AuthGateModal isOpen onClose={() => setGate(false)} returnTo={`/${locale}${hub.href}/messages?compose=1`} />}

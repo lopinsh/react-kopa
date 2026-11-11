@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Users } from 'lucide-react';
 import { UI } from '@/lib/constants';
 import { useHubContext } from '@/components/providers/HubProvider';
+import { Link } from '@/i18n/routing';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import HubActions from './HubActions';
 import HubPagesDrawer from './HubPagesDrawer';
@@ -27,9 +28,10 @@ export default function HubHead() {
                 <div className="col-span-3 grid min-w-0 gap-1 lg:col-span-1 lg:col-start-2 lg:row-start-1">
                     <HubPath path={hub.path} label={t('frame.pathLabel')} />
                     <h1 className="line-clamp-2 break-words py-[0.2em] -my-[0.2em] text-title">{hub.name}</h1>
-                    <p className="inline-flex items-center gap-1.5 text-meta [&_svg]:size-4 [&_svg]:shrink-0">
+                    <p className="inline-flex flex-wrap items-center gap-x-1.5 text-meta [&_svg]:size-4 [&_svg]:shrink-0">
                         <Users aria-hidden />
                         {t('memberLine', { members: hub.stats.memberCount, groups: hub.stats.groupCount })}
+                        {hub.local && <><span aria-hidden>·</span><Link href={hub.local.cityHref} className="underline underline-offset-2">{t('cityParent', { city: hub.local.cityName })}</Link></>}
                     </p>
                 </div>
                 <div className="col-span-3 justify-self-start lg:col-span-1 lg:col-start-3 lg:row-start-1 lg:justify-self-end">

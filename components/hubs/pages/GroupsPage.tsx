@@ -20,7 +20,7 @@ export default async function GroupsPage({ hub, cities, tab, locale, viewerId }:
         getTranslations({ locale, namespace: 'hub' }),
         HubService.getGroups(hub, { cities, tab, take: HUB_GROUP_TIERS.list }, locale, viewerId),
     ]);
-    const groupsHref = hubPages(hub.href, cities).find((p) => p.key === 'groups')?.href ?? hub.href;
+    const groupsHref = hubPages(hub.href).find((p) => p.key === 'groups')?.href ?? hub.href;
     const items = [
         { key: 'all', label: t('groups.tabAll'), href: groupsHref },
         { key: 'new', label: t('groups.tabNew'), href: `${groupsHref}${groupsHref.includes('?') ? '&' : '?'}tab=new` },

@@ -34,14 +34,14 @@ export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: H
     const when = sp.tab === 'past' ? 'past' : 'upcoming';
     const eventsPath = `${hub.href}/events`;
     // The hub's Tēma and Veids are the page's own, not filters in the address: only Kur and the dates are.
-    const p: DiscoveryParams = { ...parseDiscoveryParams({ ...sp, tab: 'events' }), category: null, tags: [], q: '', path: eventsPath };
+    const p: DiscoveryParams = { ...parseDiscoveryParams({ ...sp, city: hub.local?.citySlug, tab: 'events' }), category: null, tags: [], q: '', path: eventsPath };
     const w = eventWindow(p, dayInZone(new Date(), zone), zone);
     if (when === 'upcoming' && w.expired) redirect({ href: discoveryHref(p, { date: { kind: 'week' }, day: null }), locale });
 
     const limit = parseEventsLimit(typeof sp.limit === 'string' ? sp.limit : undefined, HUB_EVENTS_STEP, DISCOVERY_EVENTS_MAX_LIMIT);
     const { events, hasMore, total, weekCounts, calendarCounts } = await HubService.getEvents(hub, { when, params: p, window: w, limit }, locale, zone, viewerId);
 
-    const upcomingHref = hubPages(hub.href, p.cities).find((x) => x.key === 'events')?.href ?? eventsPath;
+    const upcomingHref = hubPages(hub.href).find((x) => x.key === 'events')?.href ?? eventsPath;
     const tabs = [
         { key: 'upcoming', label: tCommon('eventsTabUpcoming'), href: upcomingHref },
         { key: 'past', label: tCommon('eventsTabPast'), href: `${upcomingHref}${upcomingHref.includes('?') ? '&' : '?'}tab=past` },

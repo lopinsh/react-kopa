@@ -32,7 +32,7 @@ export default async function NotesPage({ hub, sp, cities, locale, viewer }: { h
         query.z ? HubNoteService.replies(query.z, viewer) : null,
     ]);
 
-    const base = hubPages(hub.href, cities).find((p) => p.key === 'messages')?.href ?? `${hub.href}/messages`;
+    const base = hubPages(hub.href).find((p) => p.key === 'messages')?.href ?? `${hub.href}/messages`;
     const withQuery = (extra: Record<string, string>) => {
         const [path, qs = ''] = base.split('?');
         const p = new URLSearchParams(qs);

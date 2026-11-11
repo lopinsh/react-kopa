@@ -1,84 +1,79 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { MapPin } from 'lucide-react';
-import { usePathname, useRouter } from '@/i18n/routing';
-import { parseCities } from '@/lib/discovery-params';
+import { clsx } from 'clsx';
+import { Check, MapPin } from 'lucide-react';
+import { Link, usePathname, useRouter } from '@/i18n/routing';
+import { foldText } from '@/lib/text-fold';
+import { hubPageForPath, hubPages } from '@/lib/hub-pages';
 import { useHubContext } from '@/components/providers/HubProvider';
+import { buttonClass } from '@/components/ui/Button';
 import FilterButton from '@/components/discovery/filter/FilterButton';
 import FilterPopover, { usePopover } from '@/components/discovery/lists/FilterPopover';
-import PlaceList from '@/components/discovery/lists/PlaceList';
+import ListSearch from '@/components/discovery/lists/ListSearch';
+import HubCityRequestSheet from './HubCityRequestSheet';
+
+const ROW = 'flex min-h-11 w-full items-center justify-between gap-2 rounded-xl px-3 text-left text-body-sm md:min-h-9';
 
 /**
- * "Kur" on a hub (K1-07, K-98): one place filter for the whole hub, kept in `?city=` on the current page. Same behaviour as the board's:
- * desktop ticks apply at once (replace); the phone sheet applies its ticks together when it closes.
+ * "Kur" on a topic hub (K3-10, K-127): not a filter but a switcher. "Visas pilsētas" is the topic hub, an open city its topic x city hub (both keep the
+ * current page), any other city offers "Pieprasīt" (the request sheet). Rows are links, so the page changes without client state.
  */
 export default function HubPlaceButton() {
     const t = useTranslations('discovery');
-    const { cities, cityCounts } = useHubContext();
+    const th = useTranslations('hub.kur');
+    const hub = useHubContext();
     const router = useRouter();
     const pathname = usePathname();
-    const search = useSearchParams();
     const { bindHost, ...pop } = usePopover();
-    const chosen = parseCities(search.get('city'));
-    const [draft, setDraft] = useState<string[]>([]);
-    const picked = useRef<string[] | null>(null);
+    const [typed, setTyped] = useState('');
+    const [asking, setAsking] = useState<string | null>(null);
 
-    const go = (next: string[], replace: boolean) => {
-        const qs = new URLSearchParams(search.toString());
-        if (next.length > 0) qs.set('city', next.join(','));
-        else qs.delete('city');
-        const s = qs.toString().replace(/%2C/g, ',');
-        router[replace ? 'replace' : 'push'](s ? `${pathname}?${s}` : pathname, { scroll: false });
-    };
-
-    const names = chosen.map((slug) => cities.find((c) => c.slug === slug)?.name ?? slug);
-    const more = names.length - 1;
-    const close = () => {
-        const next = picked.current ?? draft;
-        picked.current = null;
-        if (!pop.desktop && next.join() !== chosen.join()) go(next, false);
-        pop.setOpen(false);
-    };
-    // A name click: only that city and the list closes; the phone sheet closes as by Back first, then `close` applies it.
-    const pick = (slug: string) => {
-        setDraft([slug]);
-        if (!pop.desktop) {
-            picked.current = [slug];
-            window.history.back();
-            return;
-        }
-        go([slug], true);
-        pop.setOpen(false);
-        pop.host?.querySelector('button')?.focus();
-    };
+    const page = hubPageForPath(pathname, hub.href);
+    const hrefOf = (base: string) => hubPages(base).find((p) => p.key === page)?.href ?? base;
+    const rows = hub.kur.filter((c) => !typed || foldText(c.name).includes(foldText(typed.trim())));
+    const close = () => { setTyped(''); pop.setOpen(false); };
 
     return (
         <div ref={bindHost} className="relative shrink-0">
             <FilterButton
                 icon={<MapPin aria-hidden="true" className="size-3 shrink-0" />}
-                label={names.length === 0 ? t('where') : <>{names[0]}{more > 0 && <em className="ml-1 shrink-0 text-tag not-italic">+{more}</em>}</>}
-                ariaLabel={names.length === 0 ? t('where') : t('placeLabel', { places: names.join(', ') })}
-                chosen={names.length > 0}
+                label={hub.local ? hub.local.cityName : t('where')}
+                ariaLabel={hub.local ? t('placeLabel', { places: hub.local.cityName }) : t('where')}
+                chosen={!!hub.local}
                 open={pop.open}
-                onToggle={() => { setDraft(chosen); pop.toggle(); }}
+                onToggle={() => { setTyped(''); pop.toggle(); }}
                 controls={pop.id}
-                onClear={() => go([], false)}
-                clearLabel={t('clearChoice', { what: names.join(', ') })}
+                onClear={() => router.push(hrefOf(hub.topicHref), { scroll: false })}
+                clearLabel={t('clearChoice', { what: hub.local?.cityName ?? '' })}
                 widthClass="max-w-40"
             />
             <FilterPopover pop={pop} title={t('where')} onClose={close}>
-                <PlaceList
-                    cities={cities}
-                    counts={cityCounts}
-                    selected={draft}
-                    onChange={(next) => { setDraft(next); if (pop.desktop) go(next, true); }}
-                    onPick={pick}
-                    autoFocus={pop.desktop}
-                />
+                <ListSearch value={typed} onChange={setTyped} label={th('search')} autoFocus={pop.desktop} />
+                {!typed && (
+                    <Link href={hrefOf(hub.topicHref)} onClick={close} aria-current={hub.local ? undefined : 'true'} className={clsx(ROW, 'mt-1', hub.local ? 'hover:bg-tint' : 'bg-tint weight-strong')}>
+                        {th('all')}
+                        {!hub.local && <Check aria-hidden className="size-4 shrink-0" />}
+                    </Link>
+                )}
+                {rows.map((c) => {
+                    const current = hub.local?.segment === c.segment;
+                    const meta = c.status === 'open' ? th('groups', { count: c.groupCount }) : c.viewerRequested ? th('mine') : c.requestCount > 0 ? th('interested', { count: c.requestCount }) : th('none');
+                    const body = <span className="min-w-0"><span className="block truncate">{c.name}</span><span className="block truncate text-meta text-foreground-muted">{meta}</span></span>;
+                    if (c.status === 'open') {
+                        return <Link key={c.slug} href={hrefOf(`${hub.topicHref}/${c.segment}`)} onClick={close} aria-current={current ? 'true' : undefined} className={clsx(ROW, current ? 'bg-tint weight-strong' : 'hover:bg-tint')}>{body}{current && <Check aria-hidden className="size-4 shrink-0" />}</Link>;
+                    }
+                    return (
+                        <div key={c.slug} className={ROW}>
+                            {body}
+                            {!c.viewerRequested && <button type="button" onClick={() => { close(); setAsking(c.segment); }} className={buttonClass('secondary', 'shrink-0', 'sm')}>{th('request')}</button>}
+                        </div>
+                    );
+                })}
+                {rows.length === 0 && <p className="px-3 py-3 text-body-sm italic text-foreground-muted">{t('nothingFound')}</p>}
             </FilterPopover>
+            {asking && <HubCityRequestSheet segment={asking} onClose={() => setAsking(null)} />}
         </div>
     );
 }

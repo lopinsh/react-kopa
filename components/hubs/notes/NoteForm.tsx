@@ -16,7 +16,7 @@ import type { HubNoteRow, NoteComposeOptions } from '@/lib/services/hub-note.ser
  * Compose or edit a Ziņa (K2-14): text, Veids (new notes on an L2 hub), Grupa (only the person's own groups in that Veids) and Pilsēta, both optional.
  * New: ends on the note's own page (`?z=`); edit: the same fields inside the row, the Veids fixed.
  */
-export default function NoteForm({ options, hubSlug, note, onDone, onCancel }: { options: NoteComposeOptions; hubSlug?: string; note?: HubNoteRow; onDone?: () => void; onCancel?: () => void }) {
+export default function NoteForm({ options, hubSlug, fixedCity, note, onDone, onCancel }: { options: NoteComposeOptions; hubSlug?: string; /** On a topic x city hub the Ziņa is about that city (K3-12). */ fixedCity?: { slug: string; name: string }; note?: HubNoteRow; onDone?: () => void; onCancel?: () => void }) {
     const t = useTranslations('hub.notes');
     const tCommon = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -27,7 +27,8 @@ export default function NoteForm({ options, hubSlug, note, onDone, onCancel }: {
     const [content, setContent] = useState(note?.content ?? '');
     const [topic, setTopic] = useState(note?.topic.slug ?? hubSlug ?? options.topics[0]?.slug ?? '');
     const [groupId, setGroupId] = useState(note?.group?.id ?? '');
-    const [citySlug, setCitySlug] = useState(note?.city?.slug ?? '');
+    const [pickedCity, setCitySlug] = useState(note?.city?.slug ?? '');
+    const citySlug = !note && fixedCity ? fixedCity.slug : pickedCity;
     const groups = options.topics.find((x) => x.slug === topic)?.groups ?? [];
 
     const submit = (e: FormEvent) => {
@@ -77,10 +78,11 @@ export default function NoteForm({ options, hubSlug, note, onDone, onCancel }: {
                 )}
                 <div>
                     <label htmlFor={`${id}-city`} className="mb-1 block text-meta text-foreground-muted">{t('form.city')}</label>
-                    <Select id={`${id}-city`} value={citySlug} onChange={(e) => setCitySlug(e.target.value)}>
+                    <Select id={`${id}-city`} value={citySlug} disabled={!note && !!fixedCity} aria-describedby={!note && fixedCity ? `${id}-cityFixed` : undefined} onChange={(e) => setCitySlug(e.target.value)}>
                         <option value="">{t('form.noCity')}</option>
                         {options.cities.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
                     </Select>
+                    {!note && fixedCity && <p id={`${id}-cityFixed`} className="mt-1 text-meta text-foreground-muted">{t('cityFixed', { city: fixedCity.name })}</p>}
                 </div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
