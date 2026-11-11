@@ -11,6 +11,16 @@ import { ModerationService } from './moderation.service';
 import { isSiteAdminUser } from './site-role.service';
 import type { HubContext } from './hub.service';
 
+/** One open topic x city hub in the city hub's Pilsētas istabas (K3-20): "Šahs · Jelgava" with its numbers. */
+export interface CityRoom {
+    slug: string;
+    title: string;
+    /** Without locale. */
+    href: string;
+    groupCount: number;
+    lastActivityAt: Date | null;
+}
+
 export interface KurOption {
     slug: string;
     segment: string;
@@ -23,6 +33,39 @@ export interface KurOption {
 
 /** Topic x city hubs (K3): what the Kur switcher lists, requesting one, closing one. The city hub itself is derived from `City` and needs no rows. */
 export const HubCityService = {
+    /**
+     * The OPEN topic x city hubs of a city (K3-20), last activity first (newest of a group's update or an event's creation among the room's groups; none last, then by title).
+     * A CLOSED or REQUESTED hub is not listed (invariant).
+     */
+    async openInCity(city: { id: string; slug: string; segment: string }, locale: string): Promise<CityRoom[]> {
+        const lang = toTextLang(locale);
+        const rows = await prisma.hubCity.findMany({
+            where: { cityId: city.id, status: 'OPEN', category: { status: 'ACTIVE', level: { in: [2, 3] } } },
+            select: { category: { select: { id: true, slug: true, level: true, titles: { select: { lang: true, title: true } }, parent: { select: { id: true, slug: true, parent: { select: { id: true, slug: true } } } } } } },
+        });
+        const rooms = await Promise.all(rows.map(async ({ category: c }): Promise<CityRoom | null> => {
+            const l1 = c.level === 2 ? c.parent : c.parent?.parent;
+            const l2Slug = c.level === 2 ? c.slug : c.parent?.slug;
+            if (!l1 || !l2Slug) return null;
+            const where = hubGroupWhere({ l1Id: l1.id, slug: c.slug }, [city.slug], lang);
+            const [groupCount, g, e] = await Promise.all([
+                prisma.group.count({ where }),
+                prisma.group.aggregate({ where, _max: { updatedAt: true } }),
+                prisma.event.aggregate({ where: { visibility: 'PUBLIC', group: where }, _max: { createdAt: true } }),
+            ]);
+            const times = [g._max.updatedAt, e._max.createdAt].filter((d): d is Date => d !== null);
+            return {
+                slug: c.slug,
+                title: pickTitle(c.titles, lang, c.slug),
+                href: hubHref(l1.slug, l2Slug, c.level === 3 ? c.slug : undefined, 'overview', city.segment),
+                groupCount,
+                lastActivityAt: times.length ? new Date(Math.max(...times.map((d) => d.getTime()))) : null,
+            };
+        }));
+        const collator = new Intl.Collator(lang);
+        return rooms.filter((r): r is CityRoom => r !== null).sort((a, b) => (b.lastActivityAt?.getTime() ?? 0) - (a.lastActivityAt?.getTime() ?? 0) || collator.compare(a.title, b.title));
+    },
+
     /**
      * Every ACTIVE city for the topic hub's Kur switcher (K3-06): open ones first (most groups), then the rest by name.
      * A CLOSED hub reads as none; requests are counts, never names.

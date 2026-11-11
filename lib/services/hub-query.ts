@@ -4,10 +4,19 @@ import { HUB_NEW_DAYS } from '@/lib/constants';
 import type { TextLang } from '@/lib/translations';
 import { groupWhere } from './discovery-query';
 
-/** What a hub's queries need to know about it: its Tēma's id and its own slug (an L2 also matches its L3 children). */
+/** What a hub's queries need to know about it: its Tēma's id and its own slug (an L2 also matches its L3 children). Both null on a city hub: every topic (K3-16). */
 export interface HubTopic {
-    l1Id: string;
-    slug: string;
+    l1Id: string | null;
+    slug: string | null;
+}
+
+/** What the hub pages (Grupas, Pasākumi) read from a hub: a topic hub's `HubContext` or a city hub's scope. */
+export interface HubScope extends HubTopic {
+    l1Slug: string | null;
+    /** The hub's address without locale. */
+    href: string;
+    /** Set when the city is fixed by the hub (a topic x city hub or the city hub). */
+    local: { citySlug: string } | null;
 }
 
 /**
@@ -15,7 +24,7 @@ export interface HubTopic {
  * the board's `groupWhere` with the hub's Tēma and its slug as the one topic (K1-02).
  */
 export function hubGroupWhere(hub: HubTopic, cities: string[], lang: TextLang): Prisma.GroupWhereInput {
-    return groupWhere({ categoryId: hub.l1Id, tags: [hub.slug], cities: [...cities].sort() }, lang);
+    return groupWhere({ categoryId: hub.l1Id ?? undefined, tags: hub.slug ? [hub.slug] : [], cities: [...cities].sort() }, lang);
 }
 
 /** Groups created in the last `HUB_NEW_DAYS` days (the Jaunās tab). */

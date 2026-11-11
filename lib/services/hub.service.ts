@@ -13,7 +13,7 @@ import { UserService } from './user.service';
 import { hubEventPreview, hubEvents } from './hub-events';
 import { hubActivity } from './hub-activity';
 import { hubSummaries } from './hub-summary';
-import { hubCityCounts, hubGroupWhere, hubMemberCount, newSince } from './hub-query';
+import { hubCityCounts, hubGroupWhere, hubMemberCount, newSince, type HubScope } from './hub-query';
 import type { Face } from './event-panel';
 import type { MembershipRole } from '@prisma/client';
 
@@ -168,7 +168,7 @@ export const HubService = {
     getActivity: hubActivity,
 
     /** The hub's groups, newest first, with what the cards show (activity line, faces, the viewer's roles). `tab` 'new' = created in the last 30 days. */
-    async getGroups(hub: HubContext, o: { cities: string[]; tab: 'all' | 'new'; take: number }, locale: string, viewerId?: string): Promise<HubGroups> {
+    async getGroups(hub: Pick<HubScope, 'l1Id' | 'slug'>, o: { cities: string[]; tab: 'all' | 'new'; take: number }, locale: string, viewerId?: string): Promise<HubGroups> {
         const lang = toTextLang(locale);
         const where = { ...hubGroupWhere({ l1Id: hub.l1Id, slug: hub.slug }, o.cities, lang), ...(o.tab === 'new' ? newSince() : {}) };
         const [total, rows] = await Promise.all([
