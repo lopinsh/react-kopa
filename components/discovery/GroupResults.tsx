@@ -33,7 +33,7 @@ export default async function GroupResults({ groups, hasMore, activity, faces, p
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
 
     // The hub card (K1-26): only with a Tēma and at least one Veids chosen (an L1 alone has no hub, K-06).
-    const hubs = params.category && params.tags.length > 0 ? await HubService.getSummary(params.category, params.tags, locale) : [];
+    const hubs = params.category && params.tags.length > 0 ? await HubService.getSummary(params.category, params.tags, locale, params.cities.length === 1 ? params.cities[0] : undefined) : [];
     const lead = hubs.length > 0 && params.category
         ? { card: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="card" />, row: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="row" /> }
         : undefined;
@@ -41,6 +41,7 @@ export default async function GroupResults({ groups, hasMore, activity, faces, p
     if (groups.length === 0) {
         return (
             <>
+                {lead && <><div className="mx-auto mb-4 hidden max-w-sm md:block">{lead.card}</div><div className="md:hidden">{lead.row}</div></>}
                 <EmptyState icon={Search} title={t('noGroupsFound')} description={t('adjustFilters')} />
                 {createFor && <div className="mx-auto max-w-xs"><CreateCard l1Slug={createFor} variant="card" /></div>}
             </>

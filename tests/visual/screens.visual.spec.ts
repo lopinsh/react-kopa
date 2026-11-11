@@ -90,6 +90,7 @@ const SCREENS: Screen[] = [
   { name: 'hub-notes', run: async (p) => { await p.goto('/lv/games/boardgames/messages'); } },
   { name: 'hub-local', run: async (p) => { await p.goto('/lv/games/boardgames/jelgava'); } },
   { name: 'city-hub', run: async (p) => { await p.goto('/lv/jelgava'); } },
+  { name: 'board-city', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames&city=Jelgava'); } },
   { name: 'board-hub-card', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames'); } },
   { name: 'messages', signedIn: true, run: async (p) => { await p.goto('/lv/messages'); } },
   { name: 'my-groups', signedIn: true, run: async (p) => { await p.goto('/lv/profile/my-groups'); } },

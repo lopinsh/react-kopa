@@ -1,13 +1,15 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
-import { CategoryDisc } from '@/components/ui/CategoryIcon';
-import HubCardBlock from './HubCardBlock';
+import HubCardBlock, { HubDisc, hubLabel } from './HubCardBlock';
 import type { HubSummary } from '@/lib/services/hub-summary';
 
 type Props = { hubs: HubSummary[]; l1Slug: string; locale: string; variant: 'card' | 'row' };
 
 /** How the chosen Veidi relate (K-74): one, a parent with its own children, two others, or three and more. */
-export function hubMode(hubs: HubSummary[]): 'one' | 'parentChild' | 'split' | 'list' {
+export function hubMode(all: HubSummary[]): 'one' | 'parentChild' | 'split' | 'list' {
+    // One chosen city adds its city hub as an equal (K3-23): beside one Veids it halves the card, beside more it is the list's last row.
+    if (all.some((h) => h.kind === 'city')) return all.length === 2 ? 'split' : 'list';
+    const hubs = all;
     if (hubs.length === 1) return 'one';
     const parents = hubs.filter((h) => h.level === 2);
     if (parents.length === 1 && hubs.every((h) => h === parents[0] || h.parentSlug === parents[0].slug)) return 'parentChild';
@@ -16,7 +18,7 @@ export function hubMode(hubs: HubSummary[]): 'one' | 'parentChild' | 'split' | '
 
 /**
  * The hub card, first in the board's grid when a Veids is chosen (K1-26, K-13, K-15): the size of a group card, tinted and edged apart from the groups (no tear-off, no picture).
- * One hub: the full block; parent and child: the parent's block with compact child rows; two others: split equally with a dashed divider; three or more: a list "N kopienas". Always one cell (K-12).
+ * One hub: the full block; parent and child: the parent's block with compact child rows; two others: split equally with a dashed divider; three or more: a list "N kopienas". A chosen city adds "Kopiena <pilsēta>" as an equal: the second half beside one Veids, the last list row beside more (K-130). Always one cell (K-12).
  * On phones (`row`) it is a block above the rows.
  */
 export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) {
@@ -33,9 +35,9 @@ export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) 
         <section aria-label={t('card.label')} data-hub-card={mode} style={tone} className={box}>
             {mode === 'list' ? (
                 <>
-                    <p className="flex items-center gap-2 text-item text-foreground"><CategoryDisc slug={l1Slug} color={hubs[0].accentColor} size={36} />{t('card.list', { n: hubs.length })}</p>
+                    <p className="flex items-center gap-2 text-item text-foreground"><HubDisc hub={hubs[0]} l1Slug={l1Slug} size={36} />{t('card.list', { n: hubs.length })}</p>
                     <ul className="flex flex-col divide-y divide-dashed divide-border">
-                        {hubs.map((h) => <li key={h.slug}><Link href={h.href} className="block py-2 text-item text-foreground">{t('name', { title: h.title })}</Link></li>)}
+                        {hubs.map((h) => <li key={h.slug}><Link href={h.href} className="block py-2 text-item text-foreground">{hubLabel(t, h)}</Link></li>)}
                     </ul>
                 </>
             ) : mode === 'split' ? (
@@ -50,7 +52,7 @@ export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) 
                             {kids.map((k) => (
                                 <li key={k.slug}>
                                     <Link href={k.href} className="flex items-baseline justify-between gap-2 py-2 text-item text-foreground">
-                                        <span className="min-w-0 truncate">{t('name', { title: k.title })}</span>
+                                        <span className="min-w-0 truncate">{hubLabel(t, k)}</span>
                                         <span className="shrink-0 text-meta text-foreground-muted">{t('memberLine', { members: k.stats.memberCount, groups: k.stats.groupCount })}</span>
                                     </Link>
                                 </li>
