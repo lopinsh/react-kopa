@@ -530,6 +530,9 @@ export const TaxonomyService = {
                 throw new ActionError('VALIDATION_FAILED');
             }
 
+            // Ziņas sit on the Veids and would be cascade-deleted with it: move them first (K2 Risk 1).
+            await tx.hubNote.updateMany({ where: { categoryId: pendingId }, data: { categoryId: canonicalId } });
+
             const groups = await tx.group.findMany({
                 where: {
                     tags: {
@@ -975,6 +978,9 @@ export const TaxonomyService = {
                 update: { title: canonicalUpdates.nameLv },
                 create: { categoryId: canonicalId, lang: 'lv', title: canonicalUpdates.nameLv },
             });
+
+            // Ziņas sit on the Veids and would be cascade-deleted with it: move them first (K2 Risk 1).
+            await tx.hubNote.updateMany({ where: { categoryId: { in: mergedIds } }, data: { categoryId: canonicalId } });
 
             // 2. Map group relationships
             const groups = await tx.group.findMany({

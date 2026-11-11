@@ -10,6 +10,8 @@ import { revalidatePath } from 'next/cache';
 export async function createReport(data: {
     targetGroupId?: string;
     targetEventId?: string;
+    targetNoteId?: string;
+    targetNoteReplyId?: string;
     reason: string;
 }): Promise<ActionResponse<void>> {
     const session = await auth();
@@ -17,7 +19,7 @@ export async function createReport(data: {
         return { success: false, error: 'UNAUTHORIZED' };
     }
     // Only the known reasons are stored, so the admin list can always show them translated.
-    if (!isReportReason(data.reason) || (!data.targetGroupId && !data.targetEventId)) {
+    if (!isReportReason(data.reason) || [data.targetGroupId, data.targetEventId, data.targetNoteId, data.targetNoteReplyId].filter(Boolean).length !== 1) {
         return { success: false, error: 'VALIDATION_FAILED' };
     }
 
@@ -26,6 +28,8 @@ export async function createReport(data: {
             reporterId: session.user.id,
             targetGroupId: data.targetGroupId,
             targetEventId: data.targetEventId,
+            targetNoteId: data.targetNoteId,
+            targetNoteReplyId: data.targetNoteReplyId,
             reason: data.reason,
         });
 

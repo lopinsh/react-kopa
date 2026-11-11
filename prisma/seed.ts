@@ -198,6 +198,7 @@ async function main() {
 
   // ─── Cleanup ──────────────────────────────────────────────────────────────────
   console.log('🧹 Clearing existing data...');
+  await prisma.hubNote.deleteMany();
   await prisma.post.deleteMany();
   await prisma.attendance.deleteMany();
   await prisma.event.deleteMany();
@@ -724,6 +725,32 @@ async function main() {
     .filter((x): x is NonNullable<typeof x> => x !== null);
 
   await prisma.post.createMany({ data: postCreateData });
+
+  // ─── Ziņas (hub notes, K2) ────────────────────────────────────────────────────
+  console.log('📝 Seeding Ziņas...');
+  const cityIdBySlug = Object.fromEntries((await prisma.city.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
+  const ago = (hours: number) => new Date(Date.now() - hours * 3_600_000);
+  const noteSeeds: { content: string; author: typeof oskars; category: string; city?: string; groupSlug?: string; ageHours: number; expired?: boolean }[] = [
+    { content: 'Meklēju cilvēkus, ar ko trešdienās spēlēt Catan. Esmu iesācējs, bet mācos ātri.', author: janis, category: 'boardgames', city: 'Riga', ageHours: 3 },
+    { content: 'Vai kāds spēlē Wingspan Jelgavā? Gribētu sapulcēt galdu.', author: marta, category: 'boardgames', city: 'Jelgava', ageHours: 20 },
+    { content: 'Mūsu klubā vienmēr ir vieta vēl vienam spēlētājam, nāc ciemos!', author: toms, category: 'boardgames', groupSlug: 'boardgames-riga', ageHours: 30 },
+    { content: 'Meklēju komandu LAN vakaram, jebkurā pilsētā.', author: andris, category: 'pc-games', ageHours: 50 },
+    { content: 'Šī ziņa jau beigusies (Manas, Atjaunot).', author: janis, category: 'boardgames', ageHours: 24 * 31, expired: true },
+  ];
+  for (const n of noteSeeds) {
+    const categoryId = categoryIdBySlug[n.category];
+    if (!categoryId) continue;
+    const createdAt = ago(n.ageHours);
+    await prisma.hubNote.create({
+      data: {
+        authorId: n.author.id, categoryId, content: n.content,
+        cityId: n.city ? cityIdBySlug[n.city] ?? null : null,
+        groupId: n.groupSlug ? groupIdBySlug[n.groupSlug] ?? null : null,
+        createdAt,
+        expiresAt: new Date(createdAt.getTime() + 30 * 86_400_000),
+      },
+    });
+  }
 
   console.log('✅ Seeding complete!');
   console.log(`   ${groupSeeds.length} groups · ${eventSeeds.length} events · ${postSeeds.length} posts`);
