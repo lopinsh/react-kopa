@@ -24,6 +24,7 @@ export async function applyTaxonomyContent(prisma: PrismaClient, l2Ids: Map<stri
         titles: { create: [{ lang: 'lv', title: s.lv }, { lang: 'en', title: s.en }] },
       },
     });
+    if (row.level !== 3 || row.parentId !== parentId) continue; // the slug is taken by another category: leave it alone
     subIds.set(s.slug, row.id);
     await fill(row.id, s.photo);
   }

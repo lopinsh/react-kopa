@@ -52,7 +52,7 @@ UPDATE "Category" SET "imagePath" = 'photo-1593113598332-cd288d649433', "imageCr
 UPDATE "Category" SET "imagePath" = 'photo-1788538812851-9aacd4189fa8', "imageCreditName" = 'Zoshua Colah', "imageCreditUser" = 'zoshuacolah' WHERE slug = 'community-gardens' AND level = 2 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
 
 -- Sub-veidi: the row, its two titles and its photo (titles only for a row this statement inserted)
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'movie-nights' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'movie-nights' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'documentary-films', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1517604931442-7e0c8ed2963c', 'Krists Luhaers', 'kristsll' FROM parent
@@ -62,7 +62,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dokumentālās filmas'), ('en', 'Documentary films')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1517604931442-7e0c8ed2963c', "imageCreditName" = 'Krists Luhaers', "imageCreditUser" = 'kristsll' WHERE slug = 'documentary-films' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'movie-nights' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'movie-nights' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'classic-cinema', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1478720568477-152d9b164e26', 'Jeremy Yap', 'jeremyyappy' FROM parent
@@ -72,7 +72,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Klasiskais kino'), ('en', 'Classic cinema')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1478720568477-152d9b164e26', "imageCreditName" = 'Jeremy Yap', "imageCreditUser" = 'jeremyyappy' WHERE slug = 'classic-cinema' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dinner-clubs' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dinner-clubs' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'world-cuisine', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1556911261-6bd341186b2f', 'Jason Briscoe', 'jsnbrsc' FROM parent
@@ -82,7 +82,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Pasaules virtuve'), ('en', 'World cuisine')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1556911261-6bd341186b2f', "imageCreditName" = 'Jason Briscoe', "imageCreditUser" = 'jsnbrsc' WHERE slug = 'world-cuisine' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dinner-clubs' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dinner-clubs' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'home-baking', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'flagged/photo-1561668038-2742fcef75d7', 'Theme Photos', 'themephotos' FROM parent
@@ -92,7 +92,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Mājas cepšana'), ('en', 'Home baking')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'flagged/photo-1561668038-2742fcef75d7', "imageCreditName" = 'Theme Photos', "imageCreditUser" = 'themephotos' WHERE slug = 'home-baking' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'street-photography', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1493794179168-82ca7cb00437', 'Jezael Melgoza', 'jezar' FROM parent
@@ -102,7 +102,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Ielu fotogrāfija'), ('en', 'Street photography')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1493794179168-82ca7cb00437', "imageCreditName" = 'Jezael Melgoza', "imageCreditUser" = 'jezar' WHERE slug = 'street-photography' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'nature-photography', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1548881897-cb2089c8c99e', 'Blair Fraser', 'mrblairfraser' FROM parent
@@ -112,7 +112,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dabas fotogrāfija'), ('en', 'Nature photography')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1548881897-cb2089c8c99e', "imageCreditName" = 'Blair Fraser', "imageCreditUser" = 'mrblairfraser' WHERE slug = 'nature-photography' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'photography' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'film-photography', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1623475329493-889804e377f8', 'Markus Spiske', 'markusspiske' FROM parent
@@ -122,7 +122,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Filmiņu fotogrāfija'), ('en', 'Film photography')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1623475329493-889804e377f8', "imageCreditName" = 'Markus Spiske', "imageCreditUser" = 'markusspiske' WHERE slug = 'film-photography' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'gardening' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'gardening' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'vegetable-gardening', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1591857177580-dc82b9ac4e1e', 'Markus Spiske', 'markusspiske' FROM parent
@@ -132,7 +132,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dārzeņu dārzs'), ('en', 'Vegetable gardening')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1591857177580-dc82b9ac4e1e', "imageCreditName" = 'Markus Spiske', "imageCreditUser" = 'markusspiske' WHERE slug = 'vegetable-gardening' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'gardening' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'gardening' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'flower-gardening', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1691556859744-907e0f41f9fc', 'Donna McL', 'ddmcl_' FROM parent
@@ -142,7 +142,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Puķu dārzs'), ('en', 'Flower gardening')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1691556859744-907e0f41f9fc', "imageCreditName" = 'Donna McL', "imageCreditUser" = 'ddmcl_' WHERE slug = 'flower-gardening' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'model-building' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'model-building' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'scale-models', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1661078482272-6c8722c116b4', 'Matias Luge', 'matiasluge' FROM parent
@@ -152,7 +152,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Mēroga modeļi'), ('en', 'Scale models')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1661078482272-6c8722c116b4', "imageCreditName" = 'Matias Luge', "imageCreditUser" = 'matiasluge' WHERE slug = 'scale-models' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'model-building' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'model-building' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'model-railways', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1453053507108-9f5456eb481f', 'Darren Bockman', 'bockman' FROM parent
@@ -162,7 +162,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Modeļu dzelzceļš'), ('en', 'Model railways')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1453053507108-9f5456eb481f', "imageCreditName" = 'Darren Bockman', "imageCreditUser" = 'bockman' WHERE slug = 'model-railways' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'running' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'running' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'trail-running', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1592859600972-1b0834d83747', 'Maksim Shutov', 'maksimshutov' FROM parent
@@ -172,7 +172,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Trail skriešana'), ('en', 'Trail running')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1592859600972-1b0834d83747', "imageCreditName" = 'Maksim Shutov', "imageCreditUser" = 'maksimshutov' WHERE slug = 'trail-running' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'running' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'running' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'marathon', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1596727362302-b8d891c42ab8', 'Miguel A Amutio', 'amutiomi' FROM parent
@@ -182,7 +182,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Maratoni'), ('en', 'Marathon')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1596727362302-b8d891c42ab8', "imageCreditName" = 'Miguel A Amutio', "imageCreditUser" = 'amutiomi' WHERE slug = 'marathon' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'road-cycling', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1541625602330-2277a4c46182', 'Coen van de Broek', 'ocen' FROM parent
@@ -192,7 +192,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Šosejas riteņbraukšana'), ('en', 'Road cycling')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1541625602330-2277a4c46182', "imageCreditName" = 'Coen van de Broek', "imageCreditUser" = 'ocen' WHERE slug = 'road-cycling' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'mountain-biking', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1602168430888-e344806f9f29', 'Tim Foster', 'timberfoster' FROM parent
@@ -202,7 +202,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Kalnu riteņi'), ('en', 'Mountain biking')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1602168430888-e344806f9f29', "imageCreditName" = 'Tim Foster', "imageCreditUser" = 'timberfoster' WHERE slug = 'mountain-biking' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'cycling' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'city-cycling', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1594769658591-8e78705afebd', 'Ross Sneddon', 'rosssneddon' FROM parent
@@ -212,7 +212,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Pilsētas riteņbraukšana'), ('en', 'City cycling')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1594769658591-8e78705afebd', "imageCreditName" = 'Ross Sneddon', "imageCreditUser" = 'rosssneddon' WHERE slug = 'city-cycling' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'swimming' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'swimming' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'winter-swimming', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1701854305546-3a93741e3b37', 'Mika Ruusunen', 'mikafinland' FROM parent
@@ -222,7 +222,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Ziemas peldēšana'), ('en', 'Winter swimming')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1701854305546-3a93741e3b37', "imageCreditName" = 'Mika Ruusunen', "imageCreditUser" = 'mikafinland' WHERE slug = 'winter-swimming' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'swimming' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'swimming' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'pool-swimming', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1530549387789-4c1017266635', 'Gentrit Sylejmani', 'gentritbsylejmani' FROM parent
@@ -232,7 +232,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Peldēšana baseinā'), ('en', 'Pool swimming')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1530549387789-4c1017266635', "imageCreditName" = 'Gentrit Sylejmani', "imageCreditUser" = 'gentritbsylejmani' WHERE slug = 'pool-swimming' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'basketball' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'basketball' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'street-basketball', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1494199505258-5f95387f933c', 'Andy Zhou', 'humadethis' FROM parent
@@ -242,7 +242,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Basketbols ielās'), ('en', 'Street basketball')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1494199505258-5f95387f933c', "imageCreditName" = 'Andy Zhou', "imageCreditUser" = 'humadethis' WHERE slug = 'street-basketball' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'basketball' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'basketball' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'indoor-basketball', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1626003573503-2e088d82c647', 'Marius Christensen', 'mariuschristensen' FROM parent
@@ -252,7 +252,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Zāles basketbols'), ('en', 'Indoor basketball')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1626003573503-2e088d82c647', "imageCreditName" = 'Marius Christensen', "imageCreditUser" = 'mariuschristensen' WHERE slug = 'indoor-basketball' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'multi-day-hikes', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1551632811-561732d1e306', 'Toomas Tartes', 'toomastartes' FROM parent
@@ -262,7 +262,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Daudzdienu pārgājieni'), ('en', 'Multi-day hikes')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1551632811-561732d1e306', "imageCreditName" = 'Toomas Tartes', "imageCreditUser" = 'toomastartes' WHERE slug = 'multi-day-hikes' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'day-hikes', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1760715163125-de17bc6ba0ef', 'Alex Moliski', 'alexmoliski' FROM parent
@@ -272,7 +272,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dienas pārgājieni'), ('en', 'Day hikes')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1760715163125-de17bc6ba0ef', "imageCreditName" = 'Alex Moliski', "imageCreditUser" = 'alexmoliski' WHERE slug = 'day-hikes' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'hiking' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'nordic-walking', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1487956382158-bb926046304a', 'Arek Adeoye', 'areksan' FROM parent
@@ -282,7 +282,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Nūjošana'), ('en', 'Nordic walking')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1487956382158-bb926046304a', "imageCreditName" = 'Arek Adeoye', "imageCreditUser" = 'areksan' WHERE slug = 'nordic-walking' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'camping' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'camping' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'tent-camping', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1775141573727-1b211a90e98c', 'Jimmy Liu', 'jimmy__liu' FROM parent
@@ -292,7 +292,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Telšu kempings'), ('en', 'Tent camping')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1775141573727-1b211a90e98c', "imageCreditName" = 'Jimmy Liu', "imageCreditUser" = 'jimmy__liu' WHERE slug = 'tent-camping' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'camping' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'camping' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'campervan-trips', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1576793048000-494aaa93d160', 'Jordan Irving', 'jordanirving_' FROM parent
@@ -302,7 +302,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Kemperu braucieni'), ('en', 'Campervan trips')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1576793048000-494aaa93d160', "imageCreditName" = 'Jordan Irving', "imageCreditUser" = 'jordanirving_' WHERE slug = 'campervan-trips' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'english-language', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1577896851231-70ef18881754', 'National Cancer Institute', 'nci' FROM parent
@@ -312,7 +312,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Angļu valoda'), ('en', 'English language')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1577896851231-70ef18881754', "imageCreditName" = 'National Cancer Institute', "imageCreditUser" = 'nci' WHERE slug = 'english-language' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'german-language', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1589395937658-0557e7d89fad', 'Annika Gordon', 'annikamaria' FROM parent
@@ -322,7 +322,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Vācu valoda'), ('en', 'German language')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1589395937658-0557e7d89fad', "imageCreditName" = 'Annika Gordon', "imageCreditUser" = 'annikamaria' WHERE slug = 'german-language' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'languages' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'spanish-language', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1673515334717-da4d85aaf38b', 'Ling App', 'lingapp' FROM parent
@@ -332,7 +332,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Spāņu valoda'), ('en', 'Spanish language')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1673515334717-da4d85aaf38b', "imageCreditName" = 'Ling App', "imageCreditUser" = 'lingapp' WHERE slug = 'spanish-language' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'tutors' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'tutors' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'maths-tutoring', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1635372722656-389f87a941b7', 'Thomas T', 'pyssling240' FROM parent
@@ -342,7 +342,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Matemātika'), ('en', 'Maths tutoring')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1635372722656-389f87a941b7', "imageCreditName" = 'Thomas T', "imageCreditUser" = 'pyssling240' WHERE slug = 'maths-tutoring' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'tutors' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'tutors' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'programming-tutoring', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1534665482403-a909d0d97c67', 'Danial Igdery', 'ricaros' FROM parent
@@ -352,7 +352,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Programmēšana'), ('en', 'Programming')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1534665482403-a909d0d97c67', "imageCreditName" = 'Danial Igdery', "imageCreditUser" = 'ricaros' WHERE slug = 'programming-tutoring' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'science-talks' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'science-talks' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'astronomy', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1604728890708-631078e3eab7', 'Ken Cheung', 'kencheungphoto' FROM parent
@@ -362,7 +362,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Astronomija'), ('en', 'Astronomy')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1604728890708-631078e3eab7', "imageCreditName" = 'Ken Cheung', "imageCreditUser" = 'kencheungphoto' WHERE slug = 'astronomy' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'science-talks' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'science-talks' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'history-talks', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1508107536691-b1449928187d', 'Annie Spratt', 'anniespratt' FROM parent
@@ -372,7 +372,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Vēstures sarunas'), ('en', 'History talks')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1508107536691-b1449928187d', "imageCreditName" = 'Annie Spratt', "imageCreditUser" = 'anniespratt' WHERE slug = 'history-talks' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'chess', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1523875194681-bedd468c58bf', 'JESHOOTS.COM', 'jeshoots' FROM parent
@@ -382,7 +382,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Šahs'), ('en', 'Chess')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1523875194681-bedd468c58bf', "imageCreditName" = 'JESHOOTS.COM', "imageCreditUser" = 'jeshoots' WHERE slug = 'chess' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'go', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1633974026122-2861ae7b6087', 'Elena Popova', 'elenapopova' FROM parent
@@ -392,7 +392,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Go'), ('en', 'Go (game)')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1633974026122-2861ae7b6087', "imageCreditName" = 'Elena Popova', "imageCreditUser" = 'elenapopova' WHERE slug = 'go' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'dominoes', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1617398759584-bb7c6be1bf3c', 'Tom Wilson', 'pastorthomasbwilson' FROM parent
@@ -402,7 +402,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Domino'), ('en', 'Dominoes')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1617398759584-bb7c6be1bf3c', "imageCreditName" = 'Tom Wilson', "imageCreditUser" = 'pastorthomasbwilson' WHERE slug = 'dominoes' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'boardgames' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'novuss', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1652558973276-7c57960f50cd', 'Shamoil', 'shamoil326' FROM parent
@@ -412,7 +412,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Novuss'), ('en', 'Novuss')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1652558973276-7c57960f50cd', "imageCreditName" = 'Shamoil', "imageCreditUser" = 'shamoil326' WHERE slug = 'novuss' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'pc-games' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'pc-games' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'console-games', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1493711662062-fa541adb3fc8', 'JESHOOTS.COM', 'jeshoots' FROM parent
@@ -422,7 +422,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Konsoļu spēles'), ('en', 'Console games')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1493711662062-fa541adb3fc8', "imageCreditName" = 'JESHOOTS.COM', "imageCreditUser" = 'jeshoots' WHERE slug = 'console-games' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'pc-games' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'pc-games' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'retro-gaming', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1550745165-9bc0b252726f', 'Lorenzo Herrera', 'lorenzoherrera' FROM parent
@@ -432,7 +432,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Retro spēles'), ('en', 'Retro gaming')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1550745165-9bc0b252726f', "imageCreditName" = 'Lorenzo Herrera', "imageCreditUser" = 'lorenzoherrera' WHERE slug = 'retro-gaming' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'rock-school' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'rock-school' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'guitar', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1535587566541-97121a128dc5', 'Caio Silva', 'caaaaaaaaaio' FROM parent
@@ -442,7 +442,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Ģitāra'), ('en', 'Guitar')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1535587566541-97121a128dc5', "imageCreditName" = 'Caio Silva', "imageCreditUser" = 'caaaaaaaaaio' WHERE slug = 'guitar' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'rock-school' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'rock-school' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'drums', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1519892300165-cb5542fb47c7', 'Matthijs Smit', 'matthijssm' FROM parent
@@ -452,7 +452,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Bungas'), ('en', 'Drums')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1519892300165-cb5542fb47c7', "imageCreditName" = 'Matthijs Smit', "imageCreditUser" = 'matthijssm' WHERE slug = 'drums' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'hatha-yoga', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1599901860904-17e6ed7083a0', 'Ginny Rose Stewart', 'ginnyrose' FROM parent
@@ -462,7 +462,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Hatha joga'), ('en', 'Hatha yoga')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1599901860904-17e6ed7083a0', "imageCreditName" = 'Ginny Rose Stewart', "imageCreditUser" = 'ginnyrose' WHERE slug = 'hatha-yoga' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'vinyasa-yoga', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1758274526589-e33e9707ddca', 'Vitaly Gariev', 'silverkblack' FROM parent
@@ -472,7 +472,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Vinjasa joga'), ('en', 'Vinyasa yoga')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1758274526589-e33e9707ddca', "imageCreditName" = 'Vitaly Gariev', "imageCreditUser" = 'silverkblack' WHERE slug = 'vinyasa-yoga' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'yoga' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'yin-yoga', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1767611104976-86ce57776dc3', 'Margaret Young', 'wildsoulmagsyogi' FROM parent
@@ -482,7 +482,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Jin joga'), ('en', 'Yin yoga')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1767611104976-86ce57776dc3', "imageCreditName" = 'Margaret Young', "imageCreditUser" = 'wildsoulmagsyogi' WHERE slug = 'yin-yoga' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'meditation' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'meditation' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'mindfulness', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1522075782449-e45a34f1ddfb', 'Sage Friedman', 'sagefriedman' FROM parent
@@ -492,7 +492,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Apzinātība'), ('en', 'Mindfulness')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1522075782449-e45a34f1ddfb', "imageCreditName" = 'Sage Friedman', "imageCreditUser" = 'sagefriedman' WHERE slug = 'mindfulness' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'meditation' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'meditation' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'breathwork', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1616771499668-b7af9e431c5a', 'Jonathan Mabey', 'blueguy590' FROM parent
@@ -502,7 +502,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Elpošanas prakse'), ('en', 'Breathwork')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1616771499668-b7af9e431c5a', "imageCreditName" = 'Jonathan Mabey', "imageCreditUser" = 'blueguy590' WHERE slug = 'breathwork' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'watercolour', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1591724316824-a6986e18e5c1', 'Elena Mozhvilo', 'miracleday' FROM parent
@@ -512,7 +512,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Akvarelis'), ('en', 'Watercolour')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1591724316824-a6986e18e5c1', "imageCreditName" = 'Elena Mozhvilo', "imageCreditUser" = 'miracleday' WHERE slug = 'watercolour' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'oil-painting', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1614189647266-8fbdad9c72de', 'Klara Kulikova', 'kkalerry' FROM parent
@@ -522,7 +522,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Eļļas glezniecība'), ('en', 'Oil painting')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1614189647266-8fbdad9c72de', "imageCreditName" = 'Klara Kulikova', "imageCreditUser" = 'kkalerry' WHERE slug = 'oil-painting' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'painting' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'acrylic-painting', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1531913764164-f85c52e6e654', 'Steve A Johnson', 'steve_j' FROM parent
@@ -532,7 +532,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Akrila glezniecība'), ('en', 'Acrylic painting')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1531913764164-f85c52e6e654', "imageCreditName" = 'Steve A Johnson', "imageCreditUser" = 'steve_j' WHERE slug = 'acrylic-painting' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'writing' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'writing' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'poetry', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1473186505569-9c61870c11f9', 'Álvaro Serrano', 'alvaroserrano' FROM parent
@@ -542,7 +542,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dzeja'), ('en', 'Poetry')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1473186505569-9c61870c11f9', "imageCreditName" = 'Álvaro Serrano', "imageCreditUser" = 'alvaroserrano' WHERE slug = 'poetry' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'writing' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'writing' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'fiction-writing', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1505682634904-d7c8d95cdc50', 'Patrick Fore', 'patrickian4' FROM parent
@@ -552,7 +552,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Prozas rakstīšana'), ('en', 'Fiction writing')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1505682634904-d7c8d95cdc50', "imageCreditName" = 'Patrick Fore', "imageCreditUser" = 'patrickian4' WHERE slug = 'fiction-writing' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'theatre' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'theatre' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'improv-theatre', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1588928781379-c355ab3edc9b', 'Eduardo Pastor', 'eduardopastor' FROM parent
@@ -562,7 +562,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Improvizācijas teātris'), ('en', 'Improv theatre')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1588928781379-c355ab3edc9b', "imageCreditName" = 'Eduardo Pastor', "imageCreditUser" = 'eduardopastor' WHERE slug = 'improv-theatre' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'theatre' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'theatre' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'amateur-theatre', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1603647284638-60268b672f55', 'Javad Esmaeili', 'javad_esmaeili' FROM parent
@@ -572,7 +572,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Amatieru teātris'), ('en', 'Amateur theatre')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1603647284638-60268b672f55', "imageCreditName" = 'Javad Esmaeili', "imageCreditUser" = 'javad_esmaeili' WHERE slug = 'amateur-theatre' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'ceramics' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'ceramics' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'pottery-wheel', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1422246358533-95dcd3d48961', 'Alex Jones', 'alexjones' FROM parent
@@ -582,7 +582,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Podnieka ripa'), ('en', 'Pottery wheel')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1422246358533-95dcd3d48961', "imageCreditName" = 'Alex Jones', "imageCreditUser" = 'alexjones' WHERE slug = 'pottery-wheel' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'ceramics' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'ceramics' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'hand-building', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1508269151431-a34449ca161d', 'Andy Kelly', 'askkell' FROM parent
@@ -592,7 +592,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Veidošana ar rokām'), ('en', 'Hand-building clay')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1508269151431-a34449ca161d', "imageCreditName" = 'Andy Kelly', "imageCreditUser" = 'askkell' WHERE slug = 'hand-building' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dog-owners' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dog-owners' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'dog-walking', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1598959853379-cf6efb7959df', 'Steffan Mitchell', 'steffmitchell' FROM parent
@@ -602,7 +602,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Suņu pastaigas'), ('en', 'Dog walking')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1598959853379-cf6efb7959df', "imageCreditName" = 'Steffan Mitchell', "imageCreditUser" = 'steffmitchell' WHERE slug = 'dog-walking' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dog-owners' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'dog-owners' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'dog-training', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1620289052446-202137ffa876', 'John Tuesday', 'john_tuesday' FROM parent
@@ -612,7 +612,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Suņu dresūra'), ('en', 'Dog training')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1620289052446-202137ffa876', "imageCreditName" = 'John Tuesday', "imageCreditUser" = 'john_tuesday' WHERE slug = 'dog-training' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'horse-riding' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'horse-riding' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'show-jumping', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1613085411234-9c83af5562d8', 'Valerie Semenova', 'ufolera' FROM parent
@@ -622,7 +622,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Konkūrs'), ('en', 'Show jumping')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1613085411234-9c83af5562d8', "imageCreditName" = 'Valerie Semenova', "imageCreditUser" = 'ufolera' WHERE slug = 'show-jumping' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'horse-riding' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'horse-riding' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'trail-riding', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1789878770372-edee9e47de4e', 'Duy Thanh Nguyen', 'duythanh' FROM parent
@@ -632,7 +632,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Izjādes dabā'), ('en', 'Trail riding')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1789878770372-edee9e47de4e', "imageCreditName" = 'Duy Thanh Nguyen', "imageCreditUser" = 'duythanh' WHERE slug = 'trail-riding' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'volunteering' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'volunteering' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'animal-shelter', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1594004844563-536a03a6e532', 'Madeline Bowen', 'madelinebowen' FROM parent
@@ -642,7 +642,7 @@ ins AS (
 INSERT INTO "CategoryTranslation" (id, lang, title, "categoryId")
 SELECT gen_random_uuid()::text, v.lang, v.title, ins.id FROM ins, (VALUES ('lv', 'Dzīvnieku patversme'), ('en', 'Animal shelter')) AS v(lang, title);
 UPDATE "Category" SET "imagePath" = 'photo-1594004844563-536a03a6e532', "imageCreditName" = 'Madeline Bowen', "imageCreditUser" = 'madelinebowen' WHERE slug = 'animal-shelter' AND level = 3 AND "imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL;
-WITH parent AS (SELECT id FROM "Category" WHERE slug = 'volunteering' AND level = 2),
+WITH parent AS (SELECT id FROM "Category" WHERE slug = 'volunteering' AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, 'food-bank', 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, 'photo-1599059813005-11265ba4b4ce', 'Joel Muniz', 'jmuniz' FROM parent

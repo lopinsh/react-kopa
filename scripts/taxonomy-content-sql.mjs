@@ -32,7 +32,7 @@ if (arg === '--ping') {
   out.push('', '-- Sub-veidi: the row, its two titles and its photo (titles only for a row this statement inserted)');
   for (const s of SUBTOPICS) {
     const p = s.photo;
-    out.push(`WITH parent AS (SELECT id FROM "Category" WHERE slug = ${q(s.parent)} AND level = 2),
+    out.push(`WITH parent AS (SELECT id FROM "Category" WHERE slug = ${q(s.parent)} AND level = 2 AND status = 'ACTIVE'),
 ins AS (
   INSERT INTO "Category" (id, slug, level, "parentId", status, "isWildcard", "updatedAt", "imagePath", "imageCreditName", "imageCreditUser")
   SELECT gen_random_uuid()::text, ${q(s.slug)}, 3, parent.id, 'ACTIVE', false, CURRENT_TIMESTAMP, ${p ? `${q(p.path)}, ${q(p.name)}, ${q(p.username)}` : 'NULL, NULL, NULL'} FROM parent
