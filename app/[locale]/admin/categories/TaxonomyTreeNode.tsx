@@ -34,21 +34,21 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, pendingByParent, sele
         <div className="flex flex-col border-b border-border last:border-b-0">
             {/* L1 Row */}
             <div
-                className={`group flex items-center gap-3 px-4 py-3 cursor-default hover:bg-surface-elevated transition-colors border-l-4 ${isSelected ? 'bg-surface-elevated' : ''}`}
+                className={`group flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-3 cursor-default hover:bg-surface-elevated transition-colors border-l-4 ${isSelected ? 'bg-surface-elevated' : ''}`}
                 style={{ borderLeftColor: l1.color }}
                 onClick={() => onToggle(!isExpanded)}
             >
-                <div className="p-1 text-foreground-muted">
+                <div className="p-1 shrink-0 text-foreground-muted">
                     {isExpanded ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
                 </div>
 
-                <div className="flex items-center justify-center w-8 h-8 rounded-full" style={{ backgroundColor: tint(l1.color, 12), color: l1.color }}>
+                <div className="flex items-center justify-center w-8 h-8 shrink-0 rounded-full" style={{ backgroundColor: tint(l1.color, 12), color: l1.color }}>
                     <CategoryIcon slug={l1.slug} className="w-4 h-4" />
                 </div>
 
-                <span className="weight-strong">{l1.title}</span>
+                <span className="weight-strong min-w-0 truncate">{l1.title}</span>
 
-                <span className="ml-auto text-tag bg-surface-elevated text-foreground-muted px-2 py-0.5 rounded-pill">
+                <span className="ml-auto shrink-0 text-tag bg-surface-elevated text-foreground-muted px-2 py-0.5 rounded-pill">
                     {tNode('children', { count: l1.subcategories.length })}
                 </span>
 
@@ -58,7 +58,7 @@ export default function TaxonomyTreeNode({ l1, pendingL2s, pendingByParent, sele
                         e.stopPropagation();
                         onNodeSelect({ type: 'l1', id: l1.id });
                     }}
-                    className="ml-2 text-tag bg-surface line px-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
+                    className="ml-0 sm:ml-2 shrink-0 text-tag bg-surface line px-3 py-1.5 rounded-lg hover:bg-surface-elevated transition-colors cursor-pointer"
                 >
                     {c('edit')}
                 </button>
