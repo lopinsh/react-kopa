@@ -80,12 +80,21 @@ The same situation behaves the same way on every screen.
 - Recent searches stay on this device and can be removed one by one.
 - The picture picker's Unsplash search is the exception: it runs on Meklēt or Enter, not as you type, because the photo service limits requests.
 
+## Ziņas (hub notes)
+
+- A Ziņa is a short note on a hub (K-26): optional city and group (only the author's own group in that hub), a sub-veids note also shows on the parent hub.
+- It ends after 30 days; the author renews it (an expired one starts clean, without replies). At most 3 are active per person across the site.
+- Replies are public and vanish with the Ziņa. Everyone edits and deletes only what they wrote; the Ziņa's author cannot delete others' replies; site admins delete anything.
+- "Rakstīt privāti" sends a chat request into the author's Ziņas inbox (Pieprasījumi): Pieņemt opens a normal direct chat with the request text first. A declined request looks like a pending one to the sender, forever: no notification, no second request from the same Ziņa.
+- Signed out: no names anywhere; one button "Ienākt, lai atbildētu".
+- Ziņot on a Ziņa or reply goes to the admin reports list.
+
 ## Notifications
 
 - Stored only when the person must act or would miss something.
 - Every notification opens exactly the thing it is about.
 - A notification is read when you tap it; opening the list marks nothing.
 - The only trace of a visit is `lastSeenAt`, day-level, written at most once a day, and shown to admins as counts only (Aktivitāte, R31); the privacy page says so.
-- Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`); off by the Iestatījumi switch or the link in every email.
+- Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`), plus replies to your Ziņa and chat requests; off by the Iestatījumi switch or the link in every email.
 
 Next: [Who sees what](roles.md).

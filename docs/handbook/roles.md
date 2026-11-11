@@ -10,6 +10,12 @@ A screen shows only what the viewer can use. Hidden, not disabled.
 | Announcements marked public (the newest one, on Information) | yes | yes | yes | yes | yes |
 | Requests, Settings, posting | hidden | hidden | hidden | hidden | yes (Owner tab: owner only) |
 
+| Ziņas (hub notes) | Logged out | Signed in |
+|---|---|---|
+| Read notes and replies | yes, no names | yes, with names |
+| Reply, Rakstīt privāti, Ziņot | "Ienākt, lai atbildētu" | yes (not on own Ziņa) |
+| Edit, renew, delete | hidden | own only; site admins delete any |
+
 **Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
 
 **Who is going.** The number for logged-out visitors; faces and a name for signed-in viewers (D12).
