@@ -737,6 +737,15 @@
     },
     "localName": "{name} · {city}",
     "cityParent": "Kopiena {city}",
+    "city": {
+      "name": "Kopiena {city}",
+      "tabs": { "activity": "Aktivitāte", "notes": "Ziņas", "rooms": "Pilsētas istabas" },
+      "allGroups": "Visas grupas pilsētā {city}",
+      "openInHub": "Atvērt kopienā",
+      "notesEmpty": "Ziņu par šo pilsētu vēl nav.",
+      "roomsEmpty": "Vēl nav. Izvēlies veidu un pieprasi to pilsētā {city}.",
+      "moreRooms": "Vēl {count} istabas"
+    },
     "kur": {
       "search": "Meklēt pilsētu",
       "all": "Visas pilsētas",

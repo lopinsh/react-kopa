@@ -16,8 +16,9 @@ const DAY = 86_400_000;
  * One Ziņa as an accordion row (K-79, K2-13): one line closed (the text, never bold), open the whole text, a meta line and the actions.
  * `mineList` (Manas) puts the expiry where the age stands. Signed out the author is null: no name reaches the row (K-41).
  */
-export default function NoteRow({ note, edit, mineList, defaultOpen, replies }: { note: HubNoteRow; edit?: NoteComposeOptions; mineList?: boolean; defaultOpen?: boolean; replies?: HubNoteReplyRow[] }) {
+export default function NoteRow({ note, edit, mineList, defaultOpen, replies, readOnly }: { note: HubNoteRow; edit?: NoteComposeOptions; mineList?: boolean; defaultOpen?: boolean; replies?: HubNoteReplyRow[]; /** The city hub's row (K3-19): text and reply count, a link to the note on its hub, nothing to write. */ readOnly?: boolean }) {
     const t = useTranslations('hub.notes');
+    const tCity = useTranslations('hub.city');
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
     const [editing, setEditing] = useState(false);
@@ -36,6 +37,10 @@ export default function NoteRow({ note, edit, mineList, defaultOpen, replies }: 
             {mineList && <><span aria-hidden="true">·</span><span>{ends}</span></>}
         </>
     );
+
+    if (readOnly) {
+        return <AccordionRow id={`z-${note.id}`} icon={<Pencil />} title={note.content} when={age} meta={meta} multiline action={{ href: `${note.topic.href}?z=${note.id}`, label: tCity('openInHub') }} />;
+    }
 
     return (
         <AccordionRow

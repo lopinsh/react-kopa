@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server';
 import { auth } from '@/lib/auth';
 import { parseHubPath } from '@/lib/hub-path';
 import { HubService } from '@/lib/services/hub.service';
+import { CityHubService } from '@/lib/services/city-hub.service';
 import { HubCityService } from '@/lib/services/hub-city.service';
 import { HubProvider } from '@/components/providers/HubProvider';
 import FrameColumns from '@/components/ui/FrameColumns';
@@ -25,6 +26,8 @@ export default async function HubLayout({
     params: Promise<{ locale: string; l1Slug: string; hub: string[] }>;
 }) {
     const { locale, l1Slug, hub: segments } = await params;
+    // A city hub's Grupas, Pasākumi and Ziņas: the city frame (the `[l1Slug]` layout) is the whole frame (K3-15).
+    if (await CityHubService.getContext(l1Slug, locale)) return children;
     const address = parseHubPath(segments);
     if (!address) notFound();
     const hub = await HubService.getHubContext(l1Slug, address.l2Slug, address.middle.join('/'), locale);

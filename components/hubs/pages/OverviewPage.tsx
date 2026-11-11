@@ -44,7 +44,7 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
 
     return (
         <>
-            <OverviewTabs />
+            <OverviewTabs items={[{ id: 'hub-activity', label: t('activity.title') }, { id: 'hub-notes', label: t('pages.messages') }, { id: 'hub-events', label: t('pages.events') }, { id: 'hub-groups', label: t('pages.groups') }]} />
             <div className="grid items-start gap-section xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] 2xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)]">
                 <div className="min-w-0 xl:row-span-2 2xl:row-span-1">
                     <HubSection id="hub-activity" title={t('activity.title')}>

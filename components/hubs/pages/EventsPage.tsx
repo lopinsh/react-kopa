@@ -7,7 +7,8 @@ import { discoveryHref, parseDiscoveryParams, type DiscoveryParams } from '@/lib
 import { eventWindow } from '@/lib/discovery-window';
 import { groupByDay } from '@/lib/event-days';
 import { hubPages, parseEventsLimit } from '@/lib/hub-pages';
-import { HubService, type HubContext } from '@/lib/services/hub.service';
+import { HubService } from '@/lib/services/hub.service';
+import type { HubScope } from '@/lib/services/hub-query';
 import { DiscoveryProvider } from '@/components/providers/DiscoveryProvider';
 import DayStrip from '@/components/discovery/dates/DayStrip';
 import DateChoices from '@/components/discovery/dates/DateChoices';
@@ -26,7 +27,7 @@ type Search = Record<string, string | string[] | undefined>;
  * headings (cards from `lg`), the first 15 and "Rādīt vēl"; Pagājušie: newest first, no strip. The date parts read the board's `DiscoveryProvider`, here
  * filled with the hub's dates and links (`path`), no lists.
  */
-export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: HubContext; sp: Search; locale: string; viewerId?: string }) {
+export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: HubScope; sp: Search; locale: string; viewerId?: string }) {
     const t = await getTranslations({ locale, namespace: 'hub' });
     const tDiscovery = await getTranslations({ locale, namespace: 'discovery' });
     const tCommon = await getTranslations({ locale, namespace: 'common' });
@@ -61,7 +62,7 @@ export default async function EventsPage({ hub, sp, locale, viewerId }: { hub: H
 
     return (
         <>
-            <HubTabs label={t('events.tabsLabel')} items={tabs} active={when} />
+            <HubTabs label={t('events.tabsLabel')} items={tabs} active={when} kur={!!hub.slug} />
             {when === 'upcoming' && (
                 <DiscoveryProvider state={state}>
                     <div className="@container/filter">

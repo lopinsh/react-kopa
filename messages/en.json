@@ -737,6 +737,15 @@
     },
     "localName": "{name} · {city}",
     "cityParent": "{city} community",
+    "city": {
+      "name": "{city} community",
+      "tabs": { "activity": "Activity", "notes": "Notes", "rooms": "City rooms" },
+      "allGroups": "All groups in {city}",
+      "openInHub": "Open in community",
+      "notesEmpty": "No notes about this city yet.",
+      "roomsEmpty": "None yet. Pick an activity and ask for it in {city}.",
+      "moreRooms": "{count} more rooms"
+    },
     "kur": {
       "search": "Find a city",
       "all": "All cities",
