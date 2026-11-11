@@ -82,3 +82,16 @@ export function getCurated(l1Slug: string): UnsplashPick[] {
         credit: { name: c.name, username: c.username },
     }));
 }
+
+/** The photo of a Veids or sub-veids: the stored path with its credit (invariant 4: shown only with both). */
+export interface CategoryImage { url: string; credit: NonNullable<BannerCredit> }
+export interface CategoryImageColumns { imagePath: string | null; imageCreditName: string | null; imageCreditUser: string | null }
+
+/** Own photo first; a sub-veids without one shows its Veids's (`fallback`). Null when neither has a full set. */
+export function categoryImage(own: CategoryImageColumns, fallback?: CategoryImageColumns | null): CategoryImage | null {
+    for (const c of [own, fallback]) {
+        const credit = c ? toBannerCredit(c.imageCreditName, c.imageCreditUser) : null;
+        if (c?.imagePath && credit) return { url: unsplashImageUrl(c.imagePath, BANNER_IMG_PARAMS), credit };
+    }
+    return null;
+}

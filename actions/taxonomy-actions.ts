@@ -14,7 +14,7 @@ import type {
 } from '@/lib/services/taxonomy.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import {
-    submitPendingTagSchema, createL2Schema, approveTagSchema, updateL1Schema, addAliasSchema, idListSchema, bulkMergeSchema,
+    submitPendingTagSchema, createTopicSchema, approveTagSchema, updateL1Schema, addAliasSchema, idListSchema, bulkMergeSchema,
 } from '@/lib/validations/taxonomy';
 
 type ApproveTagParams = {
@@ -80,7 +80,7 @@ export async function submitPendingTag(label: string, parentId: string, locale: 
     label = parsed.data.label;
 
     try {
-        const { category, created } = await TaxonomyService.createPendingL2({
+        const { category, created } = await TaxonomyService.createPending({
             label,
             parentId,
             submittedById: session.user.id,
@@ -121,7 +121,7 @@ export async function approveTag(id: string, params: ApproveTagParams): Promise<
     if (!parsed.success) return INVALID;
 
     try {
-        const category = await TaxonomyService.approveL2(parsed.data.id, {
+        const category = await TaxonomyService.approve(parsed.data.id, {
             nameEn: parsed.data.nameEn, nameLv: parsed.data.nameLv, slugEn: parsed.data.slugEn, slugLv: parsed.data.slugLv,
         });
         revalidateTag('categories', 'max');
@@ -132,17 +132,17 @@ export async function approveTag(id: string, params: ApproveTagParams): Promise<
     }
 }
 
-export async function createL2(parentId: string, params: { nameEn: string; nameLv: string }): Promise<ActionResponse<{ id: string }>> {
+export async function createTopic(parentId: string, params: { nameEn: string; nameLv: string }): Promise<ActionResponse<{ id: string }>> {
     const admin = await requireSiteAdmin();
     if (!admin.success) {
         return admin;
     }
 
-    const parsed = createL2Schema.safeParse({ parentId, ...params });
+    const parsed = createTopicSchema.safeParse({ parentId, ...params });
     if (!parsed.success) return INVALID;
 
     try {
-        const category = await TaxonomyService.createActiveL2(parsed.data);
+        const category = await TaxonomyService.createActive(parsed.data);
         revalidateTag('categories', 'max');
         revalidateTaxonomyAdminPages();
         return { success: true, data: { id: category.id } };

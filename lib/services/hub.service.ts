@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { prisma } from '@/lib/prisma';
+import { categoryImage, type CategoryImage } from '@/lib/banner';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { toTextLang } from '@/lib/translations';
 import { topicHref } from '@/lib/discovery-params';
@@ -25,6 +26,7 @@ async function resolveTopic(l1Slug: string, l2Slug: string, slug: string | undef
 }
 
 const TITLES = { select: { lang: true, title: true } } as const;
+const IMAGE_COLS = { imagePath: true, imageCreditName: true, imageCreditUser: true } as const;
 
 export interface HubPathPart {
     title: string;
@@ -50,6 +52,8 @@ export interface HubContext {
     /** Without locale: `/games/boardgames`. */
     href: string;
     path: HubPathPart[];
+    /** The category's photo with credit (a sub-veids falls back to its Veids's); null when none. */
+    image: CategoryImage | null;
     theme: { accentColor: string };
     stats: { memberCount: number; groupCount: number };
     /** The L3 children of an L2 hub, most groups first; empty on an L3 hub. */
@@ -98,8 +102,8 @@ export const HubService = {
         const cat = await prisma.category.findFirst({
             where: l3Slug ? { slug: l3Slug, level: 3, status: 'ACTIVE', parent: l2Where } : l2Where,
             select: {
-                id: true, slug: true, level: true, color: true, titles: TITLES,
-                parent: { select: { id: true, slug: true, color: true, titles: TITLES, parent: { select: { id: true, slug: true, color: true, titles: TITLES } } } },
+                id: true, slug: true, level: true, color: true, titles: TITLES, ...IMAGE_COLS,
+                parent: { select: { id: true, slug: true, color: true, titles: TITLES, ...IMAGE_COLS, parent: { select: { id: true, slug: true, color: true, titles: TITLES } } } },
                 children: { where: { status: 'ACTIVE' }, select: { slug: true, titles: TITLES } },
             },
         });
@@ -137,6 +141,7 @@ export const HubService = {
             level: cat.level,
             slug: cat.slug,
             title: title(cat),
+            image: categoryImage(cat, cat.level === 3 ? cat.parent : null),
             l1Id: l1.id,
             l1Slug: l1.slug,
             href: hubHref(l1.slug, l2.slug, cat.level === 3 ? cat.slug : undefined, 'overview', open?.city.segment),

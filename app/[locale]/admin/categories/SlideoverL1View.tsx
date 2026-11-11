@@ -9,7 +9,7 @@ import { Link } from '@/i18n/routing';
 import { CATEGORY_TONES } from '@/lib/constants';
 import { isCategoryToneSlug } from '@/lib/theme/category';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
-import { updateL1, createL2 } from '@/actions/taxonomy-actions';
+import { updateL1, createTopic } from '@/actions/taxonomy-actions';
 import { useToast } from '@/hooks/use-toast';
 import L1Aliases from './L1Aliases';
 import type { SelectedTaxonomyNode } from './TaxonomyTree';
@@ -55,7 +55,7 @@ export default function SlideoverL1View({ l1, onNodeSelect }: Props) {
         e.preventDefault();
         if (!newNameEn.trim() || !newNameLv.trim()) return;
         startTransition(async () => {
-            const res = await createL2(l1.id, { nameEn: newNameEn.trim(), nameLv: newNameLv.trim() });
+            const res = await createTopic(l1.id, { nameEn: newNameEn.trim(), nameLv: newNameLv.trim() });
             if (res.success) {
                 success(t('subcategoryCreated'));
                 setNewNameEn('');

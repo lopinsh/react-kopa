@@ -14,7 +14,7 @@ const idSchema = z.string().min(1).max(64);
 
 export const submitPendingTagSchema = z.object({ label: categoryNameSchema, parentId: idSchema });
 
-export const createL2Schema = z.object({ parentId: idSchema, nameEn: categoryNameSchema, nameLv: categoryNameSchema });
+export const createTopicSchema = z.object({ parentId: idSchema, nameEn: categoryNameSchema, nameLv: categoryNameSchema });
 
 export const approveTagSchema = z.object({
     id: idSchema,

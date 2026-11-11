@@ -436,7 +436,9 @@ export const GroupService = {
             slug = `${baseSlug}-${Math.random().toString(36).slice(2, 6)}`;
         }
 
-        const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], targetCategoryId);
+        // D3: a sub-veids always brings its Veids.
+        const tagIds = await TaxonomyService.withParentTopics(data.tagIds ?? []);
+        const tagError = await TaxonomyService.validateGroupTags(tagIds, targetCategoryId);
         if (tagError) throw new ActionError(tagError);
         if (!(await TaxonomyService.isValidPrimaryCategory(targetCategoryId))) {
             throw new ActionError('VALIDATION_FAILED');
@@ -444,7 +446,7 @@ export const GroupService = {
         if (!(await CityService.isUsableBy(data.city, userId))) {
             throw new ActionError('VALIDATION_FAILED');
         }
-        const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
+        const tagsToConnect = tagIds.map((id) => ({ id }));
 
         // Pre-fetch category to get l1Slug
         const category = await prisma.category.findUnique({
@@ -688,7 +690,8 @@ export const GroupService = {
         if (canEditOwnerFields) {
             updateData.isAcceptingMembers = data.isAcceptingMembers;
             // Groups saved before the limit may keep their tags but not gain any.
-            const tagError = await TaxonomyService.validateGroupTags(data.tagIds ?? [], data.categoryId, {
+            const tagIds = await TaxonomyService.withParentTopics(data.tagIds ?? []);
+            const tagError = await TaxonomyService.validateGroupTags(tagIds, data.categoryId, {
                 currentTagIds: current.tags.map((t) => t.id),
                 currentCategoryId: current.categoryId,
             });
@@ -699,7 +702,7 @@ export const GroupService = {
             updateData.name = data.name;
             updateData.type = data.type;
             updateData.category = { connect: { id: data.categoryId } };
-            const tagsToConnect = data.tagIds ? data.tagIds.map((id: string) => ({ id })) : [];
+            const tagsToConnect = tagIds.map((id) => ({ id }));
             updateData.tags = {
                 set: [],
                 connect: tagsToConnect,
