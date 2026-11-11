@@ -198,6 +198,7 @@ async function main() {
 
   // ─── Cleanup ──────────────────────────────────────────────────────────────────
   console.log('🧹 Clearing existing data...');
+  await prisma.hubCity.deleteMany();
   await prisma.hubNote.deleteMany();
   await prisma.post.deleteMany();
   await prisma.attendance.deleteMany();
@@ -751,6 +752,29 @@ async function main() {
       },
     });
     if (n.reply) await prisma.hubNoteReply.create({ data: { noteId: note.id, authorId: n.reply.author.id, content: n.reply.content, createdAt: ago(n.reply.ageHours) } });
+  }
+
+  // ─── Topic x city hubs (K3) ───────────────────────────────────────────────────
+  console.log('🏙️  Seeding topic x city hubs...');
+  const boardgamesId = categoryIdBySlug['boardgames'];
+  if (boardgamesId && cityIdBySlug['Jelgava'] && cityIdBySlug['Liepaja']) {
+    const asked = ago(200);
+    const requestNote = await prisma.hubNote.create({
+      data: {
+        authorId: janis.id, categoryId: boardgamesId, cityId: cityIdBySlug['Jelgava'],
+        content: 'Gribētu atrast kādu, ar ko Jelgavā spēlēt galda spēles trešdienu vakaros.',
+        createdAt: asked, expiresAt: new Date(asked.getTime() + 30 * 86_400_000),
+      },
+    });
+    await prisma.hubCity.create({
+      data: {
+        categoryId: boardgamesId, cityId: cityIdBySlug['Jelgava'], status: 'OPEN', openedAt: ago(150), createdAt: asked,
+        requests: { create: [{ userId: janis.id, noteId: requestNote.id, createdAt: asked }, { userId: marta.id, createdAt: ago(150) }] },
+      },
+    });
+    await prisma.hubCity.create({
+      data: { categoryId: boardgamesId, cityId: cityIdBySlug['Liepaja'], status: 'REQUESTED', createdAt: ago(100), requests: { create: [{ userId: anna.id, createdAt: ago(100) }] } },
+    });
   }
 
   console.log('✅ Seeding complete!');

@@ -36,3 +36,13 @@ export const hubNoteListSchema = z.object({
 });
 
 export const hubNoteIdSchema = idSchema;
+
+/** Asking for a topic x city hub (K3-02): the Veids's slug, the city's address segment, an optional public Ziņa. */
+export const hubCityRequestSchema = z.object({
+    hubSlug: slugSchema,
+    city: slugSchema,
+    note: z.string().trim().max(HUB_NOTE_MAX).optional().transform((v) => v || undefined),
+});
+export type HubCityRequestInput = z.infer<typeof hubCityRequestSchema>;
+
+export const hubCityCloseSchema = z.object({ hubCityId: idSchema });

@@ -481,7 +481,8 @@
     "CITY_EXISTS": "Pilsēta ar šādu nosaukumu jau ir.",
     "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst.",
     "SECTION_PICTURE_LIMIT": "Sadaļā jau ir 8 attēli.",
-    "SECTION_NOT_FOUND": "Šī sadaļa vairs nav atrodama."
+    "SECTION_NOT_FOUND": "Šī sadaļa vairs nav atrodama.",
+    "HUB_CITY_REQUESTED": "Tu to jau pieprasīji"
   },
   "group": {
     "members": {
@@ -629,7 +630,10 @@
     },
     "actions": {
       "createGroup": "Izveidot grupu",
-      "share": "Dalīties"
+      "share": "Dalīties",
+      "close": "Aizvērt kopienu",
+      "closeConfirm": "Aizvērt {name}? Grupas un Ziņas paliek; atvērt to var no jauna divi pieprasījumi.",
+      "closed": "Kopiena aizvērta"
     },
     "groups": {
       "tabsLabel": "Grupu skati",
@@ -727,7 +731,29 @@
       "send": "Sūtīt",
       "pending": "Gaida apstiprinājumu",
       "openChat": "Atvērt sarunu",
-      "repliesLoadFailed": "Neizdevās ielādēt atbildes."
+      "repliesLoadFailed": "Neizdevās ielādēt atbildes.",
+      "cityFixed": "Ziņa ir par {city}"
+    },
+    "localName": "Kopiena {name} · {city}",
+    "cityParent": "Kopiena {city}",
+    "kur": {
+      "search": "Meklēt pilsētu",
+      "all": "Visas pilsētas",
+      "groups": "{count, plural, =1 {# grupa} other {# grupas}}",
+      "interested": "{count} interesējas",
+      "none": "Kopienas vēl nav",
+      "mine": "Tu pieprasīji",
+      "request": "Pieprasīt",
+      "label": "Kur: {place}"
+    },
+    "request": {
+      "title": "Pieprasīt {hub} pilsētā {city}",
+      "body": "Kopiena atveras, kad to pieprasa vēl kāds. Ziņa ir publiska Ziņa kopienā.",
+      "note": "Ziņa citiem (nav obligāta), piem.: gribētu atrast kādu, ar ko spēlēt domino",
+      "submit": "Pieprasīt",
+      "cancel": "Atcelt",
+      "sent": "Pieprasīts. Kopiena atvērsies, kad pieprasīs vēl kāds.",
+      "opened": "Kopiena ir atvērta"
     }
   },
   "admin": {
@@ -1673,7 +1699,8 @@
       "CITY_REJECTED": "Pilsēta „{cityName}” netika pieņemta. Izvēlies citu savai grupai",
       "HUB_NOTE_REPLY": "{authorName} atbildēja uz tavu ziņu",
       "CHAT_REQUEST": "{authorName} vēlas ar tevi sarakstīties",
-      "CHAT_REQUEST_ACCEPTED": "{authorName} pieņēma tavu ziņu"
+      "CHAT_REQUEST_ACCEPTED": "{authorName} pieņēma tavu ziņu",
+      "HUB_CITY_OPENED": "Atvērta kopiena {hubName} · {cityName}"
     },
     "tabPersonal": "Personīgie",
     "tabAdmin": "Administrācija",

@@ -481,7 +481,8 @@
     "CITY_EXISTS": "A city with this name already exists.",
     "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted.",
     "SECTION_PICTURE_LIMIT": "This section already has 8 pictures.",
-    "SECTION_NOT_FOUND": "This section no longer exists."
+    "SECTION_NOT_FOUND": "This section no longer exists.",
+    "HUB_CITY_REQUESTED": "You already asked for this"
   },
   "group": {
     "members": {
@@ -629,7 +630,10 @@
     },
     "actions": {
       "createGroup": "Create a group",
-      "share": "Share"
+      "share": "Share",
+      "close": "Close community",
+      "closeConfirm": "Close {name}? Groups and notes stay; two new requests open it again.",
+      "closed": "Community closed"
     },
     "groups": {
       "tabsLabel": "Groups views",
@@ -727,7 +731,29 @@
       "send": "Send",
       "pending": "Waiting for approval",
       "openChat": "Open chat",
-      "repliesLoadFailed": "Could not load the replies."
+      "repliesLoadFailed": "Could not load the replies.",
+      "cityFixed": "This note is about {city}"
+    },
+    "localName": "{name} · {city}",
+    "cityParent": "{city} community",
+    "kur": {
+      "search": "Find a city",
+      "all": "All cities",
+      "groups": "{count, plural, =1 {# group} other {# groups}}",
+      "interested": "{count} interested",
+      "none": "No community yet",
+      "mine": "You asked",
+      "request": "Ask for it",
+      "label": "Where: {place}"
+    },
+    "request": {
+      "title": "Ask for {hub} in {city}",
+      "body": "It opens when one more person asks. Your note is a public note in the community.",
+      "note": "A note for others (optional), e.g. looking for someone to play dominoes with",
+      "submit": "Ask",
+      "cancel": "Cancel",
+      "sent": "Done. It opens when one more person asks.",
+      "opened": "The community is open"
     }
   },
   "admin": {
@@ -1673,7 +1699,8 @@
       "CITY_REJECTED": "The city “{cityName}” was not accepted. Choose another one for your group",
       "HUB_NOTE_REPLY": "{authorName} replied to your note",
       "CHAT_REQUEST": "{authorName} would like to message you",
-      "CHAT_REQUEST_ACCEPTED": "{authorName} accepted your message"
+      "CHAT_REQUEST_ACCEPTED": "{authorName} accepted your message",
+      "HUB_CITY_OPENED": "{hubName} · {cityName} is open"
     },
     "tabPersonal": "Personal",
     "tabAdmin": "Admin",

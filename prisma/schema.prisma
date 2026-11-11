@@ -48,6 +48,8 @@ model User {
   posts                Post[]
   reports              Report[]            @relation("FiledReports")
   hubNotes             HubNote[]
+  hubCityRequests      HubCityRequest[]
+  hubCitiesClosed      HubCity[]           @relation("HubCityClosedBy")
   hubNoteReplies       HubNoteReply[]
   chatRequestsSent     ChatRequest[]       @relation("ChatRequestSender")
   chatRequestsReceived ChatRequest[]       @relation("ChatRequestRecipient")
@@ -121,6 +123,7 @@ model Category {
   groups         Group[]
   groupsWithTags Group[]               @relation("GroupTags")
   hubNotes       HubNote[]
+  hubCities      HubCity[]
 }
 
 model CategoryAlias {
@@ -198,6 +201,7 @@ model City {
   submittedAt   DateTime?
   createdAt     DateTime   @default(now())
   hubNotes      HubNote[]
+  hubCities     HubCity[]
 
   @@index([status])
 }
@@ -501,9 +505,51 @@ model HubNote {
   replies      HubNoteReply[]
   chatRequests ChatRequest[]
   reports      Report[]
+  cityRequest  HubCityRequest?
 
   @@index([categoryId, expiresAt])
   @@index([authorId, expiresAt])
+}
+
+enum HubCityStatus {
+  REQUESTED
+  OPEN
+  CLOSED
+}
+
+/// A topic x city hub ("Šahs · Jelgava", K3): opens when HUB_CITY_OPEN_AT distinct people ask. The city hub itself is derived from City.
+model HubCity {
+  id         String           @id @default(cuid())
+  /// The topic hub: an ACTIVE L2 or L3 Category.
+  categoryId String
+  cityId     String
+  status     HubCityStatus    @default(REQUESTED)
+  openedAt   DateTime?
+  closedAt   DateTime?
+  closedById String?
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  category   Category         @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  city       City             @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  closedBy   User?            @relation("HubCityClosedBy", fields: [closedById], references: [id], onDelete: SetNull)
+  requests   HubCityRequest[]
+
+  @@unique([categoryId, cityId])
+  @@index([cityId, status])
+}
+
+/// One "Pieprasīt": a person asking for a topic x city hub, with the optional public Ziņa they left.
+model HubCityRequest {
+  id        String   @id @default(cuid())
+  hubCityId String
+  userId    String
+  noteId    String?  @unique
+  createdAt DateTime @default(now())
+  hubCity   HubCity  @relation(fields: [hubCityId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note      HubNote? @relation(fields: [noteId], references: [id], onDelete: SetNull)
+
+  @@unique([hubCityId, userId])
 }
 
 model HubNoteReply {

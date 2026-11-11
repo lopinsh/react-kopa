@@ -32,3 +32,12 @@ export const HUB_NOTE_ACTIVE_MAX = 3;
 export const HUB_NOTE_MAX = 500;
 export const HUB_NOTE_REPLY_MAX = 500;
 export const HUB_NOTE_PAGE_MAX = 200;
+
+/** Topic x city hubs (K3): how many distinct people must ask before one opens (K-09a, K-126). */
+export const HUB_CITY_OPEN_AT = 2;
+
+/** Address segments a city may not take: the static folders under `app/[locale]/` and the hub page names (K3-02). Compared lower-cased. */
+export const CITY_RESERVED_SEGMENTS: readonly string[] = [
+    'about', 'admin', 'auth', 'create', 'email', 'onboarding', 'privacy', 'profile', 'messages', 'notifications', 'settings', 'group',
+    ...HUB_RESERVED_SLUGS,
+];

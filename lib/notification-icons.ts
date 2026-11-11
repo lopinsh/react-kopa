@@ -38,6 +38,7 @@ const ICONS: Record<string, LucideIcon> = {
     CITY_APPROVED: MapPin,
     CITY_REJECTED: MapPin,
     HUB_NOTE_REPLY: MessageSquare,
+    HUB_CITY_OPENED: MapPin,
     CHAT_REQUEST: Mail,
     CHAT_REQUEST_ACCEPTED: UserCheck,
 };
