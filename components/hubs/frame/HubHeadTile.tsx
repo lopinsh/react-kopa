@@ -1,6 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Users } from 'lucide-react';
 import { UI } from '@/lib/constants';
@@ -12,7 +13,7 @@ import HubPath from './HubPath';
  * the member line and the two actions. The ☰ drawer sits in the tile below 1024. Its `data-ui` marker is what the sticky bar watches.
  * A hub and a city hub fill it from their own contexts.
  */
-export default function HubHeadTile({ path, name, icon, drawer, members, groups, aside, actions, sliver }: {
+export default function HubHeadTile({ path, name, icon, drawer, members, groups, aside, actions, photo }: {
     path: HubPathPart[];
     name: string;
     icon: ReactNode;
@@ -22,15 +23,20 @@ export default function HubHeadTile({ path, name, icon, drawer, members, groups,
     /** After the member line (a topic x city hub's parent city link). */
     aside?: ReactNode;
     actions: ReactNode;
-    /** A thin photo strip on top of the tile (L3 D10): the tile loses its top corners to it. */
-    sliver?: ReactNode;
+    /** The hub's photo (L3 D10), blended into the tile under a tone wash: the tile keeps its height. */
+    photo?: string;
 }) {
     const t = useTranslations('hub');
 
     return (
         <div className="mx-auto px-gutter pt-3 md:pt-5">
-            {sliver}
-            <div data-ui={UI.hubBanner} className={`tone-fill frame relative grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 ${sliver ? 'rounded-b-2xl' : 'rounded-2xl'} p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]`}>
+            <div data-ui={UI.hubBanner} className={`tone-fill frame relative isolate grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]`}>
+                {photo && (
+                    <span aria-hidden className="absolute inset-0 -z-10 overflow-hidden rounded-2xl">
+                        <Image src={photo} alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover grayscale" />
+                        <span className="absolute inset-0 bg-[color-mix(in_srgb,var(--accent)_82%,transparent)]" />
+                    </span>
+                )}
                 {drawer}
                 <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item md:size-12 lg:col-start-1 lg:row-start-1">{icon}</span>
                 <div className="col-span-3 grid min-w-0 gap-1 lg:col-span-1 lg:col-start-2 lg:row-start-1">
