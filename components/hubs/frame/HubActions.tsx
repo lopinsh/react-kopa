@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Plus, Share2, XCircle } from 'lucide-react';
 import { Link, useRouter } from '@/i18n/routing';
@@ -23,21 +23,19 @@ export default function HubActions() {
     const router = useRouter();
     const { success, error: toastError } = useToast();
     const [confirming, setConfirming] = useState(false);
-    const [isPending, startTransition] = useTransition();
+    const [isPending, setPending] = useState(false);
 
-    const close = () => {
+    const close = async () => {
         if (isPending || !hub.local) return;
-        const hubCityId = hub.local.hubCityId;
-        startTransition(async () => {
-            const result = await closeHubCity(hubCityId);
-            if (!result.success) {
-                toastError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
-                return;
-            }
-            setConfirming(false);
-            success(t('closed'));
-            router.push(hub.topicHref);
-        });
+        setPending(true);
+        const result = await closeHubCity(hub.local.hubCityId);
+        if (!result.success) {
+            setPending(false);
+            toastError(tErrors.has(result.error) ? tErrors(result.error as 'ACTION_FAILED') : tErrors('ACTION_FAILED'));
+            return;
+        }
+        success(t('closed'));
+        router.push(hub.topicHref);
     };
 
     return (

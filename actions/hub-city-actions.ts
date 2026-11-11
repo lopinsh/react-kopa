@@ -44,7 +44,7 @@ export async function closeHubCity(hubCityId: unknown): Promise<ActionResponse<v
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
     try {
         await HubCityService.close(parsed.data.hubCityId, admin.userId);
-        refreshHubs();
+        // No revalidatePath here: it would re-render the page the admin is on, which is now an unopened city and redirects to its request sheet before the client navigates. The client pushes to the topic hub, which renders fresh.
         return { success: true };
     } catch (error: unknown) {
         return handleActionError(error);
