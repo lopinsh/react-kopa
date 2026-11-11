@@ -99,6 +99,13 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-114 | **Approved 10 Nov (v18):** Pasākumi with the busy month (cmwb090nr, K-112), Ziņas grouped (cmwb09ixv, K-111), the desktop Pasākumi, Grupas and Ziņas pages (cmwb0amww, K-91, K-103), signed-out Pārskats (cmwb0b23m, K-41, K-24b). Signed-out Čats (K-38b) stays Procesā. | Confirmed | Drawing `hub.html` v18. |
 | K-115 | **A hub's public name is "Kopiena <Veids>":** "Kopiena Šahs", "Kopiena Galda spēles" (en "<Veids> community"), the plain stored title, no genitive and no list in code. Replaces K-01a. Drawings still show "Šaha kopiena": illustrations only. | Confirmed | 10 Nov, owner answer to K1 question 1. |
 | K-105 | Approved 10 Nov: the board cases with two equals, three or more and the city filter (K-74, K-09b, K-10, K-84), Pārskats signed in (K-05, K-89, K-24a, K-79), the Katalogs (K-88) and the online list (K-34). The same patterns carry to the similar screens (signed-out Pārskats, city hub, the phone member list). | Confirmed | Notes cmwaqgyl9, cmwaqh73h, cmwaqhnse, cmwatxtrl, cmwatyj3i, cmwatywt2, cmwau0ue6, cmwaqqje4, cmwaqpegb. K-91 (A/B hybrid, cmwaqy9pd) and Ziņas delete (cmvtq6lyq) stay open. |
+| K-116 | **City on a Ziņa is optional info**, never defaulted from the author; a Ziņa without a city shows for every Kur choice. | Confirmed | 11 Nov owner decision. Spec K2 (K2-03, K2-14). |
+| K-117 | A Ziņa may attach **one of the author's own groups in that hub**; none → "Visai kopienai" (K-111). | Confirmed | 11 Nov. K2-05. |
+| K-118 | A Ziņa on a **sub-veids hub also shows on the parent hub**, grouped under that sub-veids. | Confirmed | 11 Nov. K2-03, K2-04. |
+| K-119 | Everyone edits and deletes **only what they wrote** (Ziņa or reply); a Ziņa's author cannot remove others' replies; site admins remove anything. | Confirmed | 11 Nov. K2-06, K2-22. |
+| K-120 | Private "Rakstīt ziņu" = a **chat request** in the recipient's Ziņas inbox (Pieņemt / Noraidīt). The sender sees "gaida apstiprinājumu" until accepted; after a decline it stays so forever (the sender never learns); no second request to the same person from the same Ziņa. | Confirmed | 11 Nov. K2-23..K2-26. |
+| K-121 | **Replies vanish when their Ziņa expires**; 30-day expiry with renew, max 3 active per person site-wide (K-27a); Ziņot goes into the existing Report queue (new nullable target). | Confirmed | 11 Nov. K2-06, K2-09, K2-27. |
+| K-122 | Pārskats gets the **Ziņas 3-row preview** (Variant B column) and the **tab row** deferred from K1; the hub menu shows Ziņas. | Confirmed | 11 Nov. K2-10, K2-17..K2-19. |
 
 ### Chat
 | Id | Feature | Status | Notes |
