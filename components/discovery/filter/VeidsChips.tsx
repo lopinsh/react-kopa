@@ -16,8 +16,8 @@ import { isVeidsChosen, subsChosen, toggleSub, toggleVeids } from './veids-choic
 
 export function Chip({ label, chosen, onClick, muted = false }: { label: string; chosen: boolean; onClick?: () => void; muted?: boolean }) {
     return (
-        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, 'max-w-full', chosen ? clsx(CHOSEN, 'min-w-0 shrink-0') : clsx('shrink-0 bg-surface weight-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
-            {/* A chosen chip always stays; a long name (a sub-veids) is cut with an ellipsis at 16rem, narrower on a narrow line. */}
+        <button type="button" aria-pressed={chosen} onClick={onClick} className={clsx(CHIP, 'max-w-full', chosen ? clsx(CHOSEN, 'min-w-0 shrink-0 md:shrink') : clsx('shrink-0 bg-surface weight-medium hover:bg-tint', muted ? 'text-foreground-muted' : 'text-foreground'))}>
+            {/* A chosen chip always stays: from md, where the line clips, it shrinks and its name is cut with an ellipsis (also at 16rem for a long sub-veids). */}
             <span className="min-w-0 max-w-64 truncate">{label}</span>
             {chosen && <span aria-hidden="true" className="grid size-5 shrink-0 place-items-center"><X className="size-3" /></span>}
         </button>
@@ -63,7 +63,7 @@ export default function VeidsChips() {
     const hidden = entries.length - fit;
     const chip = (e: Entry, live: boolean) => {
         const el = <Chip key={e.key} label={e.label} chosen={e.chosen} muted={e.muted} onClick={live ? e.onClick : undefined} />;
-        return e.divider ? <span key={e.key} className="inline-flex max-w-full shrink-0 items-center gap-1.5"><span aria-hidden="true" className="h-4 w-px bg-border" />{el}</span> : el;
+        return e.divider ? <span key={e.key} className={clsx('inline-flex max-w-full items-center gap-1.5', e.chosen ? 'min-w-0 shrink-0 md:shrink' : 'shrink-0')}><span aria-hidden="true" className="h-4 w-px bg-border" />{el}</span> : el;
     };
     const close = () => {
         const next = picked.current ?? draft;
