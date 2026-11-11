@@ -33,7 +33,7 @@ export default function HubHeadTile({ path, name, icon, drawer, members, groups,
             <div data-ui={UI.hubBanner} className={`tone-fill frame relative isolate grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]`}>
                 {photo && (
                     <span aria-hidden className="absolute inset-0 -z-10 isolate overflow-hidden rounded-2xl bg-(--accent)">
-                        <Image src={photo} alt="" fill sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover grayscale brightness-(--hub-photo-dim) contrast-(--hub-photo-contrast) mix-blend-luminosity opacity-(--hub-photo-opacity)" />
+                        <Image src={photo} alt="" fill loading="eager" sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover grayscale brightness-(--hub-photo-dim) contrast-(--hub-photo-contrast) mix-blend-luminosity opacity-(--hub-photo-opacity)" />
                         <span className="absolute inset-0 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--accent)_70%,transparent)_30%,transparent_100%)]" />
                     </span>
                 )}
