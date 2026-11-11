@@ -435,6 +435,8 @@
     "CREATE_FAILED": "Failed to create resource.",
     "DELETE_FAILED": "Failed to delete resource.",
     "DM_NOT_ALLOWED": "You can only message people who share a group with you. Use the group's contact form instead.",
+    "HUB_NOTE_LIMIT": "You can have up to 3 active notes.",
+    "CHAT_REQUEST_EXISTS": "You already sent a request.",
     "GROUP_GONE": "This group no longer exists, so this conversation is read-only.",
     "MESSAGE_DELETE_FAILED": "Could not delete the message.",
     "CONVERSATION_CLEAR_FAILED": "Could not delete the conversation.",

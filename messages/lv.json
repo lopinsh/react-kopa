@@ -435,6 +435,8 @@
     "CREATE_FAILED": "Neizdevās izveidot resursu.",
     "DELETE_FAILED": "Neizdevās dzēst resursu.",
     "DM_NOT_ALLOWED": "Privāti vari rakstīt tikai cilvēkiem, ar kuriem kopā esat kādā grupā. Raksti grupai, izmantojot tās kontaktformu.",
+    "HUB_NOTE_LIMIT": "Vienlaikus var būt līdz 3 aktīvām ziņām.",
+    "CHAT_REQUEST_EXISTS": "Tu jau esi nosūtījis pieprasījumu.",
     "GROUP_GONE": "Šīs grupas vairs nav, tāpēc saruna ir tikai lasāma.",
     "MESSAGE_DELETE_FAILED": "Neizdevās izdzēst ziņu.",
     "CONVERSATION_CLEAR_FAILED": "Neizdevās izdzēst sarunu.",

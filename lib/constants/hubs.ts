@@ -25,3 +25,10 @@ export type HubPageKey = (typeof HUB_PAGE_KEYS)[number];
 
 /** Words a Veids / sub-veids slug may not take: they are page names under a hub or group routes. */
 export const HUB_RESERVED_SLUGS = ['group', 'groups', 'events', 'messages', 'chat'] as const;
+
+/** Ziņas (hub notes, K2): how long one lasts, how many a person may have at once site-wide, text limits, rows read for one Ziņas page. */
+export const HUB_NOTE_DAYS = 30;
+export const HUB_NOTE_ACTIVE_MAX = 3;
+export const HUB_NOTE_MAX = 500;
+export const HUB_NOTE_REPLY_MAX = 500;
+export const HUB_NOTE_PAGE_MAX = 200;

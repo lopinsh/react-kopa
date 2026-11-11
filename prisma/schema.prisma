@@ -47,6 +47,10 @@ model User {
   notifications        Notification[]
   posts                Post[]
   reports              Report[]            @relation("FiledReports")
+  hubNotes             HubNote[]
+  hubNoteReplies       HubNoteReply[]
+  chatRequestsSent     ChatRequest[]       @relation("ChatRequestSender")
+  chatRequestsReceived ChatRequest[]       @relation("ChatRequestRecipient")
   sessions             Session[]
   submittedCategories  Category[]          @relation("SubmittedCategories")
   submittedCities      City[]              @relation("SubmittedCities")
@@ -116,6 +120,7 @@ model Category {
   submittedBy    User?                 @relation("SubmittedCategories", fields: [submittedById], references: [id])
   groups         Group[]
   groupsWithTags Group[]               @relation("GroupTags")
+  hubNotes       HubNote[]
 }
 
 model CategoryAlias {
@@ -170,6 +175,7 @@ model Group {
   members            Membership[]
   posts              Post[]
   reports            Report[]
+  hubNotes           HubNote[]
   tags               Category[]     @relation("GroupTags")
 
   @@unique([categoryId, slug])
@@ -191,6 +197,7 @@ model City {
   submittedBy   User?      @relation("SubmittedCities", fields: [submittedById], references: [id], onDelete: SetNull)
   submittedAt   DateTime?
   createdAt     DateTime   @default(now())
+  hubNotes      HubNote[]
 
   @@index([status])
 }
@@ -395,6 +402,7 @@ model Conversation {
   participants  User[]             @relation("ConversationParticipants")
   messages      Message[]
   reads         ConversationRead[]
+  chatRequests  ChatRequest[]
   originGroup   Group?             @relation(fields: [originGroupId], references: [id], onDelete: SetNull)
   contactUser   User?              @relation("ConversationContact", fields: [contactUserId], references: [id], onDelete: Cascade)
 
@@ -456,12 +464,81 @@ model Report {
   reporterId    String
   targetGroupId String?
   targetEventId String?
+  targetNoteId      String?
+  targetNoteReplyId String?
   reason        String
   status        String   @default("PENDING")
   createdAt     DateTime @default(now())
   reporter      User     @relation("FiledReports", fields: [reporterId], references: [id], onDelete: Cascade)
   event         Event?   @relation(fields: [targetEventId], references: [id])
   group         Group?   @relation(fields: [targetGroupId], references: [id])
+  note          HubNote?      @relation(fields: [targetNoteId], references: [id], onDelete: Cascade)
+  noteReply     HubNoteReply? @relation(fields: [targetNoteReplyId], references: [id], onDelete: Cascade)
+}
+
+enum ChatRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+/// A Ziņa: a post-it note on a hub (K2). Hard delete; expired rows stay so the author can renew them.
+model HubNote {
+  id         String   @id @default(cuid())
+  authorId   String
+  /// The hub: an ACTIVE L2 or L3 Category.
+  categoryId String
+  cityId     String?
+  groupId    String?
+  content    String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  author       User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  city         City?         @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  group        Group?        @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  replies      HubNoteReply[]
+  chatRequests ChatRequest[]
+  reports      Report[]
+
+  @@index([categoryId, expiresAt])
+  @@index([authorId, expiresAt])
+}
+
+model HubNoteReply {
+  id        String   @id @default(cuid())
+  noteId    String
+  authorId  String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  note      HubNote  @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  reports   Report[]
+
+  @@index([noteId, createdAt])
+}
+
+/// A private "Rakstīt privāti" request from a Ziņa's reader to its author (K-120).
+model ChatRequest {
+  id             String            @id @default(cuid())
+  senderId       String
+  recipientId    String
+  noteId         String?
+  content        String
+  status         ChatRequestStatus @default(PENDING)
+  conversationId String?
+  createdAt      DateTime          @default(now())
+  decidedAt      DateTime?
+  sender         User              @relation("ChatRequestSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipient      User              @relation("ChatRequestRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  note           HubNote?          @relation(fields: [noteId], references: [id], onDelete: SetNull)
+  conversation   Conversation?     @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+
+  @@unique([noteId, senderId])
+  @@index([recipientId, status])
+  @@index([senderId, status])
 }
 
 enum GroupType {
