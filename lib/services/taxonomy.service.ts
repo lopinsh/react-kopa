@@ -53,6 +53,9 @@ export type L2SearchResult = {
     slug: string;
     title: string;
     isAlias: boolean;
+    /** 2 = Veids, 3 = sub-veids (`parentId` is its Veids). */
+    level: 2 | 3;
+    parentId: string;
 };
 
 /** A pending sub-category the tag picker may offer. */
@@ -62,6 +65,9 @@ export type PendingTagOption = {
     title: string;
     /** Chosen by enough different people to be offered to everyone. */
     isPublic: boolean;
+    /** 2 = Veids, 3 = sub-veids; `parentId` is the L1 (level 2) or the Veids (level 3). */
+    level: 2 | 3;
+    parentId: string;
 };
 
 export type PendingCategoryWithContext = {
@@ -255,9 +261,9 @@ export const TaxonomyService = {
 
         const categories = await prisma.category.findMany({
             where: {
-                level: 2,
-                parentId: l1Id,
                 status: 'ACTIVE',
+                // Veidi under the L1 and the sub-veidi under those.
+                AND: [{ OR: [{ level: 2, parentId: l1Id }, { level: 3, parent: { parentId: l1Id } }] }],
                 OR: [
                     {
                         // Any language, so a sub-category named in one language only is still found.
@@ -286,6 +292,8 @@ export const TaxonomyService = {
             select: {
                 id: true,
                 slug: true,
+                level: true,
+                parentId: true,
                 titles: { select: { lang: true, title: true } },
                 aliases: {
                     where: {
@@ -303,12 +311,18 @@ export const TaxonomyService = {
             take: 30,
         });
 
-        return categories.map((category) => ({
-            id: category.id,
-            slug: category.slug,
-            title: pickTitle(category.titles, lang, category.slug),
-            isAlias: category.aliases.length > 0,
-        }));
+        return categories.flatMap((category) =>
+            category.parentId
+                ? [{
+                    id: category.id,
+                    slug: category.slug,
+                    title: pickTitle(category.titles, lang, category.slug),
+                    isAlias: category.aliases.length > 0,
+                    level: category.level === 3 ? (3 as const) : (2 as const),
+                    parentId: category.parentId,
+                }]
+                : []
+        );
     },
 
     /**
@@ -431,10 +445,16 @@ export const TaxonomyService = {
     async getPendingTagOptions(l1Id: string, selectedIds: string[], locale: string): Promise<PendingTagOption[]> {
         const lang = locale === 'en' ? 'en' : 'lv';
         const pending = await prisma.category.findMany({
-            where: { parentId: l1Id, level: 2, status: 'PENDING_REVIEW', isWildcard: true },
+            where: {
+                OR: [{ parentId: l1Id, level: 2 }, { level: 3, parent: { parentId: l1Id, status: 'ACTIVE' } }],
+                status: 'PENDING_REVIEW',
+                isWildcard: true,
+            },
             select: {
                 id: true,
                 slug: true,
+                level: true,
+                parentId: true,
                 titles: { select: { lang: true, title: true } },
                 groupsWithTags: { select: { members: { where: { role: 'OWNER' }, select: { userId: true } } } },
             },
@@ -446,7 +466,8 @@ export const TaxonomyService = {
             const isPublic = supporters.size >= MIN_PENDING_TAG_SUPPORTERS;
             if (!isPublic && !selectedIds.includes(tag.id)) return [];
             const title = pickTitle(tag.titles, lang, tag.slug);
-            return [{ id: tag.id, slug: tag.slug, title, isPublic }];
+            if (!tag.parentId) return [];
+            return [{ id: tag.id, slug: tag.slug, title, isPublic, level: tag.level === 3 ? (3 as const) : (2 as const), parentId: tag.parentId }];
         });
     },
 

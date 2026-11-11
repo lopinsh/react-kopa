@@ -8,19 +8,20 @@ import TagBrowseList from './TagBrowseList';
 import TagResultRow from './TagResultRow';
 import type { TagSearch } from './useTagSearch';
 import type { PendingTags } from './usePendingTags';
+import type { TagSelection } from './useTagSelection';
 import Button from '@/components/ui/Button';
 
 type Props = {
     l1: L1Category;
-    allowL3: boolean;
     tagIds: string[];
     onToggle: (id: string) => void;
     search: TagSearch;
     pending: PendingTags;
+    selection: TagSelection;
 };
 
 /** The open dropdown: browse list, search results, the "create sub-topic" step and "Done". */
-export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pending }: Props) {
+export default function TagResults({ l1, tagIds, onToggle, search, pending, selection }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const { query, isSearching, mergedResults } = search;
@@ -49,7 +50,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                 <>
                     <div className="p-2 space-y-1">
                         {!query.trim() ? (
-                            <TagBrowseList l1={l1} allowL3={allowL3} tagIds={tagIds} onToggle={onToggle} pending={pending} />
+                            <TagBrowseList l1={l1} tagIds={tagIds} onToggle={onToggle} pending={pending} selection={selection} />
                         ) : (
                             <>
                                 {isSearching && (
@@ -64,7 +65,7 @@ export default function TagResults({ l1, allowL3, tagIds, onToggle, search, pend
                                             <PendingTagOption key={option.id} option={option} selected={tagIds.includes(option.id)} onToggle={onToggle} />
                                         ))}
                                         {mergedResults.map((tag) => (
-                                            <TagResultRow key={tag.id} tag={tag} l1Title={l1.title} selected={tagIds.includes(tag.id)} onToggle={onToggle} />
+                                            <TagResultRow key={tag.id} tag={tag} l1Title={l1.title} selected={tagIds.includes(tag.id)} disabled={selection.isDisabled(tag.id)} onToggle={onToggle} />
                                         ))}
                                     </>
                                 ) : (

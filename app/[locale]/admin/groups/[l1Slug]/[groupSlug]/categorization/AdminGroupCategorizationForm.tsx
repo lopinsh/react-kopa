@@ -80,7 +80,7 @@ export default function AdminGroupCategorizationForm({
                     <p className="mt-2 text-body-sm text-foreground-muted">{selectedL1.title}</p>
 
                     <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>
-                        <TagPicker l1={selectedL1} allowL3={false} maxTags={initialTagIds.length} />
+                        <TagPicker l1={selectedL1} />
                     </div>
                 </div>
 

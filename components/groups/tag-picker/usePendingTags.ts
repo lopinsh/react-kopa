@@ -48,11 +48,13 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
             return;
         }
 
-        const pendingTag: PendingTag = { id: result.data.id, title: trimmed };
+        // Under a Veids it is a sub-veids: its Veids is tagged with it (D3).
+        const isSub = parentId !== l1.id;
+        const pendingTag: PendingTag = isSub ? { id: result.data.id, title: trimmed, level: 3, parentId } : { id: result.data.id, title: trimmed, level: 2 };
 
         setPendingById((prev) => ({ ...prev, [pendingTag.id]: pendingTag }));
         if (!tagIds.includes(pendingTag.id)) {
-            setTagIds([...tagIds, pendingTag.id]);
+            setTagIds([...tagIds, ...(isSub && !tagIds.includes(parentId) ? [parentId] : []), pendingTag.id]);
         }
 
         resetTyping();
@@ -65,7 +67,7 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
      * (case-insensitive) is selected, otherwise the text becomes a new pending one.
      */
     async function commitTypedText() {
-        const typed = (inlineWildcardParentId === l1.id ? inlineWildcardText : query).trim();
+        const typed = (inlineWildcardParentId ? inlineWildcardText : query).trim();
         if (typed.length < 2) {
             closeList();
             return;
@@ -77,12 +79,12 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
             searchResults.find((tag) => tag.title.toLowerCase() === key);
 
         // Search text the user already used to pick a result ("fot" → "Fotogrāfija") is a search, not a new name.
-        const pickedFromSearch = inlineWildcardParentId !== l1.id && mergedResults.some((tag) => tagIds.includes(tag.id));
+        const pickedFromSearch = !inlineWildcardParentId && mergedResults.some((tag) => tagIds.includes(tag.id));
 
         if (!pendingMatch && known && !tagIds.includes(known.id)) {
             setTagIds([...tagIds, known.id]);
         } else if (!pendingMatch && !known && !pickedFromSearch) {
-            await createPending(l1.id, typed);
+            await createPending(inlineWildcardParentId ?? l1.id, typed);
             return;
         }
         resetTyping();
@@ -96,14 +98,27 @@ export function usePendingTags({ l1, tagIds, setTagIds, search, closeList }: Arg
     const knownIds = new Set(flatTags.map((tag) => tag.id));
     const selectedPending: PendingTag[] = tagIds
         .filter((id) => !knownIds.has(id))
-        .map((id) => pendingById[id] ?? { id, title: sharedPending.find((option) => option.id === id)?.title ?? t('pendingReview') });
+        .map((id): PendingTag => {
+            if (pendingById[id]) return pendingById[id];
+            const shared = sharedPending.find((option) => option.id === id);
+            if (!shared) return { id, title: t('pendingReview') };
+            return shared.level === 3 ? { id, title: shared.title, level: 3, parentId: shared.parentId } : { id, title: shared.title, level: 2 };
+        });
+
+    /** Level and Veids of a suggestion (own or shared), for the limits and the auto-tag. */
+    function pendingInfo(id: string): { level: 2 | 3; parentId: string | null } | undefined {
+        const own = pendingById[id] ?? selectedPending.find((tag) => tag.id === id);
+        if (own) return { level: own.level ?? 2, parentId: own.parentId ?? null };
+        const shared = sharedPending.find((option) => option.id === id);
+        return shared ? { level: shared.level, parentId: shared.level === 3 ? shared.parentId : null } : undefined;
+    }
 
     return {
         wildcardMode, setWildcardMode,
         inlineWildcardParentId, setInlineWildcardParentId,
         inlineWildcardText, setInlineWildcardText,
         isSubmittingPending, createPending, commitTypedText,
-        offeredPending, pendingMatches, selectedPending,
+        offeredPending, pendingMatches, selectedPending, pendingInfo,
     };
 }
 

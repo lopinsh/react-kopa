@@ -34,7 +34,6 @@ export default function GroupTab(props: GroupSettingsFormProps) {
                             taxSelection={taxSelection}
                             onTaxChange={handleTaxChange}
                             selectedL1={selectedL1}
-                            maxTags={initialTaxonomy.initialTagIds.length}
                             tagsCleared={tagsCleared}
                         />
                     </div>

@@ -1023,7 +1023,8 @@
       },
       "planTab": "Plan",
       "planDrawings": {
-        "hub": "Hubs"
+        "hub": "Hubs",
+        "l3": "Sub-topics and photos"
       }
     },
     "handbook": {
@@ -1938,6 +1939,11 @@
     "submit": "Create",
     "subtopics": "Sub-topics",
     "tagsAndSubtopics": "Tags & Sub-topics",
+    "addedParent": "Also added: {veids}",
+    "subLimitHint": "Sub-types: up to {max}",
+    "otherSubtype": "+ Other",
+    "nameOfSubtypePlaceholder": "Name of sub-type...",
+    "subtypesOf": "{veids} sub-types",
     "typePrivate": "Members only",
     "typePrivateDesc": "Approval or invite only.",
     "typePublic": "Public Group",

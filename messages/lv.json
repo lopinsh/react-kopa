@@ -1023,7 +1023,8 @@
       },
       "planTab": "Plāns",
       "planDrawings": {
-        "hub": "Mezgli"
+        "hub": "Mezgli",
+        "l3": "Apakšveidi un foto"
       }
     },
     "handbook": {
@@ -1938,6 +1939,11 @@
     "submit": "Izveidot",
     "subtopics": "Apakštēmas",
     "tagsAndSubtopics": "Tagi un apakštēmas",
+    "addedParent": "Pievienots arī: {veids}",
+    "subLimitHint": "Apakšveidi: līdz {max}",
+    "otherSubtype": "+ Cits",
+    "nameOfSubtypePlaceholder": "Apakšveida nosaukums...",
+    "subtypesOf": "{veids} apakšveidi",
     "typePrivate": "Tikai biedriem",
     "typePrivateDesc": "Tikai ar uzaicinājumu vai apstiprinājumu.",
     "typePublic": "Publiska Grupa",

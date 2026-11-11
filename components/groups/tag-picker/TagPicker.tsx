@@ -6,22 +6,20 @@ import { clsx } from 'clsx';
 import { useTranslations } from 'next-intl';
 import type { L1Category } from '@/lib/services/taxonomy.service';
 import { useFormContext } from 'react-hook-form';
-import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { GroupFormValues } from '@/lib/validations/group';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useTagSearch } from './useTagSearch';
 import { usePendingTags } from './usePendingTags';
+import { useTagSelection } from './useTagSelection';
 import SelectedTags from './SelectedTags';
 import TagResults from './TagResults';
 
 type Props = {
     l1: L1Category;
-    allowL3?: boolean;
-    /** A legacy group that already has more tags than the limit may keep (and swap within) that many; never above the limit otherwise. */
-    maxTags?: number;
 };
 
-export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAGS }: Props) {
+/** The tag picker: Veidi and their sub-veidi, a sub-veids bringing its Veids. Per-level limits come from the constants (a legacy group keeps what it had). */
+export default function TagPicker({ l1 }: Props) {
     const t = useTranslations('wizard');
     const {
         watch,
@@ -35,7 +33,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
     const containerRef = useRef<HTMLDivElement>(null);
 
     const setTagIds = (next: string[]) => setValue('tagIds', next, { shouldValidate: true });
-    const search = useTagSearch(l1, allowL3);
+    const search = useTagSearch(l1);
     const pending = usePendingTags({ l1, tagIds, setTagIds, search, closeList: () => setIsOpen(false) });
     const { query, changeQuery, clearQuery, flatTags } = search;
 
@@ -44,25 +42,29 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
         pending.setWildcardMode(false);
     });
 
+    const selection = useTagSelection({ tagIds, setTagIds, flatTags, pending });
+
     function toggleTag(tagId: string) {
-        setTagIds(tagIds.includes(tagId) ? tagIds.filter((id) => id !== tagId) : [...tagIds, tagId]);
+        selection.toggle(tagId);
         inputRef.current?.focus();
     }
 
-    const removeTag = (tagId: string) => setTagIds(tagIds.filter((id) => id !== tagId));
-
-    const selectedTags = tagIds
+    const titleOf = (id: string | undefined) => flatTags.find((tag) => tag.id === id)?.title ?? '';
+    const selectedFlat = tagIds
         .map((id) => flatTags.find((tag) => tag.id === id))
         .filter((tag): tag is NonNullable<typeof tag> => tag !== undefined);
-
-    const tagLimit = Math.max(MAX_GROUP_TAGS, maxTags);
-    const limitReached = tagIds.length >= tagLimit;
+    // A chosen sub-veids shows as "Veids › sub-veids"; its Veids is not repeated as a chip of its own.
+    const covered = new Set([...selectedFlat.filter((tag) => tag.level === 3).map((tag) => tag.l2Id), ...pending.selectedPending.map((tag) => tag.parentId)]);
+    const selectedTags = selectedFlat.filter((tag) => !covered.has(tag.id));
+    const selectedSubs = selectedFlat.filter((tag) => tag.level === 3).map((tag) => ({ ...tag, title: `${tag.l2Title} › ${tag.title}` }));
+    const selectedPending = pending.selectedPending.map((tag) => (tag.parentId ? { ...tag, title: `${titleOf(tag.parentId)} › ${tag.title}` } : tag));
+    const { veidiFull, subFull, veidiLimit, subLimit } = selection;
 
     return (
         <div ref={containerRef} className="relative w-full mt-6 space-y-3">
             <div className="flex items-center justify-between">
                 <label className="text-button-sm text-foreground">
-                    {allowL3 ? t('tagsAndSubtopics') : t('subtopics')} <span className="text-tag text-danger">*</span>
+                    {t('tagsAndSubtopics')} <span className="text-tag text-danger">*</span>
                 </label>
             </div>
 
@@ -72,7 +74,7 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                     isOpen ? 'border-primary' : errors.tagIds ? 'border-danger/40' : 'border-border'
                 )}
             >
-                <SelectedTags tags={selectedTags} pending={pending.selectedPending} onRemove={removeTag} />
+                <SelectedTags tags={[...selectedTags, ...selectedSubs]} pending={selectedPending} onRemove={selection.toggle} />
 
                 <div className="flex items-center gap-2">
                     <Search className="size-4 shrink-0 text-foreground-muted" />
@@ -81,7 +83,6 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                         type="text"
                         className="flex-1 bg-transparent text-body md:text-body-sm text-foreground placeholder:text-foreground-muted focus:outline-none"
                         placeholder={t('searchTopicsPlaceholder', { category: l1.title })}
-                        disabled={limitReached}
                         value={query}
                         onChange={(e) => {
                             changeQuery(e.target.value);
@@ -115,12 +116,14 @@ export default function TagPicker({ l1, allowL3 = false, maxTags = MAX_GROUP_TAG
                 </div>
             </div>
 
-            {limitReached && !errors.tagIds && <p className="text-meta text-foreground-muted">{t('tagLimitHint', { max: tagLimit })}</p>}
-            {errors.tagIds && <p className="text-meta text-danger">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: tagLimit })}</p>}
+            <p className="sr-only" role="status" aria-live="polite">
+                {selection.announcedParentId ? t('addedParent', { veids: titleOf(selection.announcedParentId) }) : ''}
+            </p>
+            {!errors.tagIds && veidiFull && <p className="text-meta text-foreground-muted">{t('tagLimitHint', { max: veidiLimit })}</p>}
+            {!errors.tagIds && subFull && <p className="text-meta text-foreground-muted">{t('subLimitHint', { max: subLimit })}</p>}
+            {errors.tagIds && <p className="text-meta text-danger">{t(errors.tagIds.message === 'TOPIC_LIMIT' ? 'TOPIC_LIMIT' : 'TOPIC_REQUIRED', { max: veidiLimit })}</p>}
 
-            {isOpen && !limitReached && (
-                <TagResults l1={l1} allowL3={allowL3} tagIds={tagIds} onToggle={toggleTag} search={search} pending={pending} />
-            )}
+            {isOpen && <TagResults l1={l1} tagIds={tagIds} onToggle={toggleTag} search={search} pending={pending} selection={selection} />}
         </div>
     );
 }

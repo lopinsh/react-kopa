@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { GROUP_TYPES, MAX_GROUP_TAGS } from '@/lib/constants';
+import { GROUP_TYPES, MAX_GROUP_SUBTAGS, MAX_GROUP_TAGS } from '@/lib/constants';
 import { TEXT_LANGS } from '@/lib/translations';
 import { bannerCreditSchema } from '@/lib/validations/banner';
 
@@ -10,8 +10,8 @@ import { bannerCreditSchema } from '@/lib/validations/banner';
  * `maxTags` defaults to the global limit. Forms for groups saved before the limit (more tags than
  * allowed) pass their current count so an untouched form still validates; they can only remove tags.
  */
-export function tagIdsSchema(maxTags: number = MAX_GROUP_TAGS) {
-    return z.array(z.string()).min(1, 'TOPIC_REQUIRED').max(Math.max(maxTags, MAX_GROUP_TAGS), 'TOPIC_LIMIT');
+export function tagIdsSchema(maxTags: number = MAX_GROUP_TAGS + MAX_GROUP_SUBTAGS) {
+    return z.array(z.string()).min(1, 'TOPIC_REQUIRED').max(Math.max(maxTags, MAX_GROUP_TAGS + MAX_GROUP_SUBTAGS), 'TOPIC_LIMIT');
 }
 
 export const step1Object = z.object({
@@ -61,7 +61,7 @@ export const step3Object = z.object({
 export const step3Schema = step3Object;
 
 // Combined Form Schema
-export function buildGroupFormSchema(maxTags: number = MAX_GROUP_TAGS) {
+export function buildGroupFormSchema(maxTags: number = MAX_GROUP_TAGS + MAX_GROUP_SUBTAGS) {
     return step1Object
         .extend({ tagIds: tagIdsSchema(maxTags) })
         .merge(step2Schema)

@@ -16,12 +16,11 @@ type Props = {
     onTaxChange: (sel: TaxonomySelection | null) => void;
     selectedL1: L1Category | null;
     /** Tags the group had when the form opened (a legacy group may keep more than the usual limit). */
-    maxTags?: number;
     /** Changing the main category just removed the sub-topics that were chosen. */
     tagsCleared?: boolean;
 };
 
-export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, selectedL1, maxTags, tagsCleared = false }: Props) {
+export default function CategorizationSection({ taxonomy, taxSelection, onTaxChange, selectedL1, tagsCleared = false }: Props) {
     const gt = useTranslations('group');
   const c_common = useTranslations('common');
     const t = useTranslations('wizard');
@@ -54,7 +53,7 @@ export default function CategorizationSection({ taxonomy, taxSelection, onTaxCha
                         )}
                         {/* The picker colours itself from the category's accent. */}
                         <div style={{ '--accent': categoryColor(selectedL1.slug, selectedL1.color) } as React.CSSProperties}>
-                            <TagPicker l1={selectedL1} allowL3={false} maxTags={maxTags} />
+                            <TagPicker l1={selectedL1} />
                         </div>
                     </div>
                 )}

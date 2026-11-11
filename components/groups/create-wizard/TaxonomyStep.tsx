@@ -51,7 +51,7 @@ export default function TaxonomyStep({ taxonomy, taxSelection, handleTaxChange, 
                             {t('tagsClearedOnCategoryChange')}
                         </p>
                     )}
-                    <TagPicker l1={selectedL1} allowL3={false} />
+                    <TagPicker l1={selectedL1} />
                 </div>
             )}
 
