@@ -176,7 +176,7 @@ export async function mergeInto(tx: Prisma.TransactionClient, pendingId: string,
         }),
         tx.category.findUnique({
             where: { id: canonicalId },
-            select: { id: true, parentId: true, level: true, status: true, children: { select: { id: true, titles: { select: { title: true } } } } },
+            select: { id: true, parentId: true, level: true, status: true, children: { where: { status: 'ACTIVE' }, select: { id: true, titles: { select: { title: true } } } } },
         }),
     ]);
 
@@ -216,13 +216,11 @@ export async function mergeInto(tx: Prisma.TransactionClient, pendingId: string,
 
     const pendingLabel = pending.titles[0]?.title?.trim();
     if (pendingLabel) {
-        try {
-            await tx.categoryAlias.create({
-                data: { value: pendingLabel, locale: pending.titles[0]?.lang === 'lv' ? 'lv' : 'en', categoryId: canonicalId },
-            });
-        } catch (error) {
-            if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2002') throw error;
-        }
+        // ON CONFLICT DO NOTHING: a caught unique error would abort the surrounding Postgres transaction.
+        await tx.categoryAlias.createMany({
+            data: [{ value: pendingLabel, locale: pending.titles[0]?.lang === 'lv' ? 'lv' : 'en', categoryId: canonicalId }],
+            skipDuplicates: true,
+        });
     }
 
     await tx.category.delete({ where: { id: pendingId } });

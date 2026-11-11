@@ -2,7 +2,6 @@ import { ActionError } from '@/types/actions';
 import { Prisma, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
-import { moveHubCities } from './hub-city-merge';
 import * as TaxonomyWrite from './taxonomy-write';
 import { createUniqueCategorySlug } from './taxonomy-write';
 import { slugify } from '@/lib/slug';
@@ -752,66 +751,8 @@ export const TaxonomyService = {
                 create: { categoryId: canonicalId, lang: 'lv', title: canonicalUpdates.nameLv },
             });
 
-            // Ziņas sit on the Veids and would be cascade-deleted with it: move them first (K2 Risk 1).
-            await tx.hubNote.updateMany({ where: { categoryId: { in: mergedIds } }, data: { categoryId: canonicalId } });
-            await moveHubCities(tx, mergedIds, canonicalId);
-
-            // 2. Map group relationships
-            const groups = await tx.group.findMany({
-                where: { tags: { some: { id: { in: mergedIds } } } },
-                select: { id: true, tags: { select: { id: true } } },
-            });
-
-            for (const group of groups) {
-                const groupTags = group.tags.map(t => t.id);
-                const hasCanonical = groupTags.includes(canonicalId);
-                const tagsToRemove = mergedIds.filter(id => groupTags.includes(id));
-
-                if (tagsToRemove.length === 0) continue;
-
-                if (hasCanonical) {
-                    await tx.group.update({
-                        where: { id: group.id },
-                        data: { tags: { disconnect: tagsToRemove.map(id => ({ id })) } }
-                    });
-                } else {
-                    await tx.group.update({
-                        where: { id: group.id },
-                        data: {
-                            tags: {
-                                disconnect: tagsToRemove.map(id => ({ id })),
-                                connect: { id: canonicalId }
-                            }
-                        }
-                    });
-                }
-            }
-
-            // 3. Create aliases for merged tags
-            for (const tag of tags) {
-                if (tag.id === canonicalId) continue;
-                const titleEn = tag.titles[0]?.title?.trim();
-                if (titleEn) {
-                    try {
-                        await tx.categoryAlias.create({
-                            data: {
-                                value: titleEn,
-                                locale: tag.titles[0]?.lang === 'lv' ? 'lv' : 'en',
-                                categoryId: canonicalId,
-                            }
-                        });
-                    } catch (error) {
-                        if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2002') {
-                            throw error;
-                        }
-                    }
-                }
-            }
-
-            // 4. Delete merged tags
-            await tx.category.deleteMany({
-                where: { id: { in: mergedIds } }
-            });
+            // Each merged tag hands over its groups (D3 kept), notes, hub cities, name and sub-veidi, then goes.
+            for (const id of mergedIds) await TaxonomyWrite.mergeInto(tx, id, canonicalId);
         });
     },
 };
