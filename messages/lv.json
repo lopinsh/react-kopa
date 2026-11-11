@@ -735,7 +735,7 @@
       "repliesLoadFailed": "Neizdevās ielādēt atbildes.",
       "cityFixed": "Ziņa ir par {city}"
     },
-    "localName": "Kopiena {name} · {city}",
+    "localName": "{name} · {city}",
     "cityParent": "Kopiena {city}",
     "kur": {
       "search": "Meklēt pilsētu",

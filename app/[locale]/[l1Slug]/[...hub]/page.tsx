@@ -22,7 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
     const hub = address && await HubService.getHubContext(l1Slug, address.l2Slug, address.middle.join('/'), locale);
     if (!address || !hub) return {};
     const t = await getTranslations({ locale, namespace: 'hub' });
-    const name = t('name', { title: hub.title });
+    const base = t('name', { title: hub.title });
+    const name = hub.local ? t('localName', { name: base, city: hub.local.cityName }) : base;
     return { title: address.page === 'overview' ? name : `${name} | ${t(`pages.${address.page}`)}` };
 }
 
