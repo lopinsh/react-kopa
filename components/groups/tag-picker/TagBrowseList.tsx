@@ -45,8 +45,8 @@ export default function TagBrowseList({ l1, tagIds, onToggle, pending, selection
                             <TagCheck selected={tagIds.includes(l2.id)} />
                         </button>
 
-                        {(l2.tags.length > 0 || subPending.length > 0) && (
-                            <div role="group" aria-label={t('subtypesOf', { veids: l2.title })} className="ml-4 space-y-1 border-l border-border/50 pl-2">
+                        {/* Every Veids opens its sub-veidi list, so "+ Cits" can suggest the first one (owner decision, L3-12). */}
+                        <div role="group" aria-label={t('subtypesOf', { veids: l2.title })} className="ml-4 space-y-1 border-l border-border/50 pl-2">
                                 {l2.tags.map((tag) => (
                                     <button
                                         key={tag.id}
@@ -70,7 +70,6 @@ export default function TagBrowseList({ l1, tagIds, onToggle, pending, selection
                                 ))}
                                 <InlineSuggest parentId={l2.id} kind="sub" pending={pending} disabled={!selection.canSuggestUnder(l2.id)} />
                             </div>
-                        )}
                     </div>
                 );
             })}
