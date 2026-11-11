@@ -27,6 +27,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-128 | **Every hub shows activity from its child entities** (groups, events, Ziņas of children). The city hub shows the Ziņas of its topic × city hubs read-only; nobody writes Ziņas on the city hub itself. | Confirmed | 11 Nov owner decision. K3-19. |
 | K-129 | **City hub Pārskats:** activity, Ziņas, Pilsētas istabas list (open topic × city hubs, K-107 tiers); no Kur. | Confirmed | 11 Nov owner decision. K3-18..K3-20. |
 | K-130 | **Board with Kur one city:** the hub card shows the topic hub and Kopiena Jelgava as equals (drawing `board-city`). | Confirmed | 11 Nov owner decision. K3-23, K3-24. |
+| K-131 | **City hub shows every Ziņa with that city**, including notes left with a request for a topic × city hub that is not open yet. | Confirmed | 11 Nov owner answer (K3 question 1). K3-16, K3-19. |
+| K-132 | **Kur on a topic hub shows "1 interesējas"** for a city with requests (counts, never names) next to Pieprasīt. | Confirmed | 11 Nov owner answer (K3 question 2). K3-10. |
+| K-133 | **City hub pages: Pārskats, Grupas, Pasākumi and Ziņas.** Ziņas is read-only (no Kur, no Rakstīt ziņu); Grupas and Pasākumi are the hub pages scoped to the city, without a Tēma. | Confirmed | 11 Nov owner answer (K3 question 3). Changes K-129 (the menu was Pārskats + Ziņas). K3-17, K3-2. |
 | K-11 | Districts (one level, Jelgava › Pārlielupe). | Changed | 9 Nov: not in Kanāli yet; a later release of their own. |
 | K-12 | Several Veidi chosen on the board: content merges, no room for the combination; **one hub card** first in the grid that links to each selected Veids's hub, so groups aren't pushed out. | Confirmed | 9 Nov. |
 | K-19 | A kanāls shows once it has 1 Meklē card or 1 group (no "2 to open" gate). | Changed | → K-07 (hubs unlock at 2 people). Content itself is never hidden. |
