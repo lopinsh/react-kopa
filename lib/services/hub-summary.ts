@@ -35,9 +35,9 @@ export interface HubSummary {
 
 /**
  * What the board's hub card shows for the chosen Veidi (K1-26): one summary per slug in `slugs` that is an active level-2 or level-3 category under `l1Slug`
- * (others are dropped, so an L1 alone gives none, K-06). Every source is read once per hub with the hub's own `hubGroupWhere`; the number of hubs is the number of chosen chips.
+ * (others are dropped, so an L1 alone gives none, K-06). `scopeToCity`: the board has no groups for the chosen city (K-137), so a Veids without an open hub there shows the city's own numbers, not the nationwide ones. Every source is read once per hub with the hub's own `hubGroupWhere`; the number of hubs is the number of chosen chips.
  */
-export async function hubSummaries(l1Slug: string, slugs: string[], locale: string, citySlug?: string): Promise<HubSummary[]> {
+export async function hubSummaries(l1Slug: string, slugs: string[], locale: string, citySlug?: string, scopeToCity = false): Promise<HubSummary[]> {
     const lang = toTextLang(locale);
     const city = citySlug ? await CityHubService.getContext(citySegment(citySlug), locale) : null;
     const l1 = { slug: l1Slug, level: 1, status: 'ACTIVE' as const };
@@ -68,7 +68,7 @@ export async function hubSummaries(l1Slug: string, slugs: string[], locale: stri
 
         // One city chosen and this Veids has an open hub there: its name, address and numbers are the city's (K3-24); otherwise the nationwide ones (K1-30).
         const open = city ? await prisma.hubCity.findFirst({ where: { categoryId: c.id, cityId: city.cityId, status: 'OPEN' }, select: { id: true } }) : null;
-        const inCity = open && city ? [city.slug] : [];
+        const inCity = (open || scopeToCity) && city ? [city.slug] : [];
         const where = hubGroupWhere({ l1Id: l1Id(c) ?? '', slug: c.slug }, inCity, lang);
         const inGroup = { group: where };
         const [groupCount, memberCount, next, g, m, p, e, kids] = await Promise.all([

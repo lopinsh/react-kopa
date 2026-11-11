@@ -38,13 +38,15 @@ type Props = {
     initialL1Slug?: string;
     /** A Veids (or sub-veids) of that Tēma to tick at the start; an unknown slug is ignored (a hub's Izveidot grupu). */
     initialTagSlug?: string;
+    /** `City.slug` ticked on arrival (a topic x city hub's Izveidot grupu, K-136). */
+    initialCity?: string;
     /** The picker's Unsplash search is on (the key is set). */
     searchEnabled: boolean;
     /** Site admins: the raw image address under "Papildu". */
     canEditUrl: boolean;
 };
 
-export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTagSlug, searchEnabled, canEditUrl }: Props) {
+export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTagSlug, initialCity, searchEnabled, canEditUrl }: Props) {
     const t = useTranslations('wizard');
     const c = useTranslations('common');
     const tErrors = useTranslations('errors');
@@ -111,7 +113,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTa
             lookingFor: null,
             bannerImage: '',
             bannerCredit: null,
-            city: undefined,
+            city: initialCity,
             tagIds: initialTagIds,
             type: 'PUBLIC',
             isAcceptingMembers: true,

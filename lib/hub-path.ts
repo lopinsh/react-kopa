@@ -32,3 +32,9 @@ export function parseHubPath(segments: string[]): HubAddress | null {
 export function hubHref(l1Slug: string, l2Slug: string, l3Slug?: string, page: HubPageKey = 'overview', citySegment?: string): string {
     return `/${l1Slug}/${l2Slug}${l3Slug ? `/${l3Slug}` : ''}${citySegment ? `/${citySegment}` : ''}${SEGMENT[page]}`;
 }
+
+/** The wizard with the hub's Tēma and Veids ticked, and the city when the hub is one city's (K-136); `citySlug` is `City.slug`. */
+export function createGroupHref(l1Slug: string | null, slug: string | null, citySlug?: string): string {
+    if (!l1Slug) return '/create';
+    return `/create?category=${l1Slug}${slug ? `&tag=${slug}` : ''}${citySlug ? `&city=${encodeURIComponent(citySlug)}` : ''}`;
+}

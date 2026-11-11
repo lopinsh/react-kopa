@@ -298,6 +298,7 @@
     "moreEvents": "+{count, plural, zero {# pasākumu} one {# pasākums} other {# pasākumi}}",
     "stickerLabel": "Rādīt grupas: {category}",
     "noGroupsFound": "Grupas netika atrastas",
+    "noGroupsInCity": "Pilsētā {city} vēl nav grupu",
     "where": "Kur",
     "topic": "Tēma",
     "everywhere": "Visur",
@@ -656,6 +657,7 @@
     "activity": {
       "title": "Aktivitāte",
       "today": "Šodien",
+      "openedAfter": "Atvērta pēc {n, plural, one {# pieprasījuma} other {# pieprasījumiem}}",
       "lastWeek": "Pagājušajā nedēļā",
       "lastMonth": "Pagājušajā mēnesī",
       "groupsCreated": "{n, plural, one {# grupa izveidota} other {# grupas izveidotas}}",
@@ -744,6 +746,7 @@
       "openInHub": "Atvērt kopienā",
       "notesEmpty": "Ziņu par šo pilsētu vēl nav.",
       "roomsEmpty": "Vēl nav. Izvēlies veidu un pieprasi to pilsētā {city}.",
+      "pickTitle": "Ko pieprasīt pilsētā {city}?",
       "moreRooms": "Vēl {count} istabas"
     },
     "kur": {

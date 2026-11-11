@@ -33,11 +33,21 @@ export default async function GroupResults({ groups, hasMore, activity, faces, p
     const canAskMore = hasMore && params.limit < DISCOVERY_GROUPS_MAX;
 
     // The hub card (K1-26): only with a Tēma and at least one Veids chosen (an L1 alone has no hub, K-06).
-    const hubs = params.category && params.tags.length > 0 ? await HubService.getSummary(params.category, params.tags, locale, params.cities.length === 1 ? params.cities[0] : undefined) : [];
+    const hubs = params.category && params.tags.length > 0 ? await HubService.getSummary(params.category, params.tags, locale, params.cities.length === 1 ? params.cities[0] : undefined, groups.length === 0) : [];
     const lead = hubs.length > 0 && params.category
         ? { card: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="card" />, row: <HubCard hubs={hubs} l1Slug={params.category} locale={locale} variant="row" /> }
         : undefined;
 
+    const city = hubs.find((h) => h.kind === 'city');
+    if (groups.length === 0 && lead && city) {
+        // Kur is one city with no groups (K-137): the hub card keeps the grid's first cell, the line says why the rest is empty.
+        return (
+            <>
+                <GroupList lead={lead} groups={[]} createFor={createFor} filters={params} />
+                <p className="mt-5 text-center text-body-sm text-foreground-muted">{t('noGroupsInCity', { city: city.title })}</p>
+            </>
+        );
+    }
     if (groups.length === 0) {
         return (
             <>

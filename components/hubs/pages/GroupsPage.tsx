@@ -4,6 +4,7 @@ import { Link } from '@/i18n/routing';
 import { HUB_GROUP_TIERS } from '@/lib/constants';
 import { discoveryHref, parseDiscoveryParams } from '@/lib/discovery-params';
 import { hubPages } from '@/lib/hub-pages';
+import { createGroupHref } from '@/lib/hub-path';
 import { HubService } from '@/lib/services/hub.service';
 import type { HubScope } from '@/lib/services/hub-query';
 import GroupList from '@/components/discovery/GroupList';
@@ -35,7 +36,7 @@ export default async function GroupsPage({ hub, cities, tab, locale, viewerId }:
                 <EmptyState
                     icon={Users}
                     title={t('groups.empty')}
-                    action={<Link href={hub.l1Slug ? `/create?category=${hub.l1Slug}&tag=${hub.slug}` : '/create'} className={buttonClass('primary')}><Plus aria-hidden className="size-4" />{t('actions.createGroup')}</Link>}
+                    action={<Link href={createGroupHref(hub.l1Slug, hub.slug, cities.length === 1 ? cities[0] : undefined)} className={buttonClass('primary')}><Plus aria-hidden className="size-4" />{t('actions.createGroup')}</Link>}
                 />
             ) : total <= HUB_GROUP_TIERS.full ? (
                 <GroupList groups={groups} activity={activity} faces={faces} myRoles={myRoles} />

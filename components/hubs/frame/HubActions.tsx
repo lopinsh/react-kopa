@@ -8,6 +8,7 @@ import { closeHubCity } from '@/actions/hub-city-actions';
 import { useToast } from '@/hooks/use-toast';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import { useHubContext } from '@/components/providers/HubProvider';
+import { createGroupHref } from '@/lib/hub-path';
 import { useShareLink } from '@/hooks/useShareLink';
 import { buttonClass, iconButtonClass } from '@/components/ui/Button';
 
@@ -40,7 +41,7 @@ export default function HubActions() {
 
     return (
         <div className="flex items-center gap-1">
-            <Link href={`/create?category=${hub.l1Slug}&tag=${hub.slug}`} className={buttonClass('onTone', 'px-4')}>
+            <Link href={createGroupHref(hub.l1Slug, hub.slug, hub.local?.citySlug)} className={buttonClass('onTone', 'px-4')}>
                 <Plus aria-hidden className="size-4" />
                 {t('createGroup')}
             </Link>

@@ -62,6 +62,11 @@ export const CityHubService = {
         return { rows, sections: groupNotes(rows, { slug: '', level: 2, title: '' }), total };
     },
 
+    /** The Veidi the viewer can still request in this city (K-135). */
+    requestable(ctx: CityHubContext, locale: string, viewerId?: string) {
+        return HubCityService.requestable({ id: ctx.cityId }, locale, viewerId);
+    },
+
     /** Pilsētas istabas (K3-20): the open topic x city hubs. */
     rooms(ctx: CityHubContext, locale: string): Promise<CityRoom[]> {
         return HubCityService.openInCity({ id: ctx.cityId, slug: ctx.slug, segment: ctx.segment }, locale);

@@ -298,6 +298,7 @@
     "moreEvents": "+{count, plural, one {# event} other {# events}}",
     "stickerLabel": "Show groups: {category}",
     "noGroupsFound": "No groups found",
+    "noGroupsInCity": "No groups in {city} yet",
     "where": "Where",
     "topic": "Topic",
     "everywhere": "Everywhere",
@@ -656,6 +657,7 @@
     "activity": {
       "title": "Activity",
       "today": "Today",
+      "openedAfter": "Opened after {n, plural, one {# request} other {# requests}}",
       "lastWeek": "Last week",
       "lastMonth": "Last month",
       "groupsCreated": "{n, plural, one {# group created} other {# groups created}}",
@@ -744,6 +746,7 @@
       "openInHub": "Open in community",
       "notesEmpty": "No notes about this city yet.",
       "roomsEmpty": "None yet. Pick an activity and ask for it in {city}.",
+      "pickTitle": "What to ask for in {city}?",
       "moreRooms": "{count} more rooms"
     },
     "kur": {

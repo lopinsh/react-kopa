@@ -31,6 +31,15 @@ export interface KurOption {
     viewerRequested: boolean;
 }
 
+/** One Veids (L2, or an L3 under it) a person can ask to open in a city (K-135): its topic address, without locale and without the city. */
+export interface RequestableTopic {
+    slug: string;
+    title: string;
+    /** The L2 title above an L3, else the L1 title. */
+    parentTitle: string;
+    href: string;
+}
+
 /** Topic x city hubs (K3): what the Kur switcher lists, requesting one, closing one. The city hub itself is derived from `City` and needs no rows. */
 export const HubCityService = {
     /**
@@ -64,6 +73,36 @@ export const HubCityService = {
         }));
         const collator = new Intl.Collator(lang);
         return rooms.filter((r): r is CityRoom => r !== null).sort((a, b) => (b.lastActivityAt?.getTime() ?? 0) - (a.lastActivityAt?.getTime() ?? 0) || collator.compare(a.title, b.title));
+    },
+
+    /**
+     * The Veidi (L2, L3) the viewer can still ask for in a city (K-135): not open there, not already requested by the viewer. Only L2/L3 x city exists, never L1 x city.
+     * A request goes to the topic's own `?request=<city>` sheet.
+     */
+    async requestable(city: { id: string }, locale: string, viewerId?: string): Promise<RequestableTopic[]> {
+        const lang = toTextLang(locale);
+        const [topics, taken] = await Promise.all([
+            prisma.category.findMany({
+                where: { level: { in: [2, 3] }, status: 'ACTIVE' },
+                select: { slug: true, level: true, titles: { select: { lang: true, title: true } }, parent: { select: { slug: true, titles: { select: { lang: true, title: true } }, parent: { select: { slug: true, titles: { select: { lang: true, title: true } } } } } } },
+            }),
+            prisma.hubCity.findMany({
+                where: { cityId: city.id, status: { in: ['OPEN', 'REQUESTED'] } },
+                select: { status: true, category: { select: { slug: true } }, requests: { select: { userId: true } } },
+            }),
+        ]);
+        const skip = new Set(taken.filter((r) => r.status === 'OPEN' || (!!viewerId && r.requests.some((q) => q.userId === viewerId))).map((r) => r.category.slug));
+        const out: RequestableTopic[] = [];
+        for (const c of topics) {
+            if (skip.has(c.slug)) continue;
+            const l1 = c.level === 2 ? c.parent : c.parent?.parent;
+            const l2 = c.level === 2 ? c : c.parent;
+            if (!l1 || !l2) continue;
+            const above = c.level === 2 ? l1 : l2;
+            out.push({ slug: c.slug, title: pickTitle(c.titles, lang, c.slug), parentTitle: pickTitle(above.titles, lang, above.slug), href: hubHref(l1.slug, l2.slug, c.level === 3 ? c.slug : undefined) });
+        }
+        const collator = new Intl.Collator(lang);
+        return out.sort((a, b) => collator.compare(a.parentTitle, b.parentTitle) || collator.compare(a.title, b.title));
     },
 
     /**
@@ -133,6 +172,11 @@ export const HubCityService = {
             if (opens) await tx.hubCity.update({ where: { id: row.id }, data: { status: 'OPEN', openedAt: new Date() } });
             return { opened: opens, href, names, notifyUserIds: opens ? row.requests.map((r) => r.userId) : [] };
         });
+    },
+
+    /** How many people asked for a topic x city hub (K-136); the requests of an open hub stay until it is closed. */
+    requestCount(hubCityId: string): Promise<number> {
+        return prisma.hubCityRequest.count({ where: { hubCityId } });
     },
 
     /** Closes an OPEN hub (K3-05, site admins only, checked here too): requests go, notes stay; two new requests reopen it. */
