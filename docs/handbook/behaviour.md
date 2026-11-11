@@ -95,6 +95,12 @@ The same situation behaves the same way on every screen.
 - Pieprasīt: one request per person per city; an optional note becomes a public Ziņa (counts toward the 3). The second distinct person opens the hub at once and lands on it; the first asker is told. A shared `?request=<city>` link opens the sheet.
 - A hub that is not open has no page: its address goes to the topic hub with the sheet open. Site admins can Aizvērt kopienu; groups and Ziņas stay, two new requests open it again.
 
+### City hubs (K3)
+
+- Every active city has a hub, "Kopiena Jelgava", at `/lv/jelgava`: Pārskats (Aktivitāte of the city's groups, Ziņas, Pilsētas istabas), Grupas, Pasākumi and Ziņas. It has no Tēma, no Kur and nothing to write: no Rakstīt ziņu, reply, private message or report. Izveidot grupu and Dalīties stay.
+- Ziņas lists every Ziņa that has this city, request notes included, grouped by Veids; a row opens to its text and reply count and links to the note on its own hub (Atvērt kopienā). Signed out sees the same without names.
+- Pilsētas istabas lists the city's open topic x city hubs ("Šahs · Jelgava", groups and last activity), the first 16, then "Vēl N istabas" opens the rest in place.
+
 ## Notifications
 
 - Stored only when the person must act or would miss something.
