@@ -31,6 +31,7 @@ export function formatNotificationText(t: NotificationTranslator, type: string, 
         canonicalTag: String((locale === 'en' ? args.canonicalTagEn : locale === 'lv' ? args.canonicalTagLv : undefined) ?? args.canonicalTag ?? ''),
         // City notices store both names too; older ones only have `cityName`.
         cityName: String((locale === 'en' ? args.cityNameEn : locale === 'lv' ? args.cityNameLv : undefined) ?? args.cityName ?? args.cityNameLv ?? ''),
+        hubName: String((locale === 'en' ? args.hubNameEn : args.hubNameLv) ?? ''),
         waitlistCount: Number(args.waitlistCount ?? 0)
     });
     // Older notifications stored the event title as `title`.

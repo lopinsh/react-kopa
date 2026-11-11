@@ -41,6 +41,24 @@ async function assertRoom(tx: Prisma.TransactionClient, userId: string, now: Dat
     if (active >= HUB_NOTE_ACTIVE_MAX) throw new ActionError('HUB_NOTE_LIMIT');
 }
 
+/**
+ * Creates a Ziņa inside the caller's transaction, under the author's lock and the 3-note limit (K2, reused by the topic x city request, K3-05).
+ * `noteId` of the result is the new row.
+ */
+export async function createNoteTx(
+    tx: Prisma.TransactionClient,
+    userId: string,
+    data: { categoryId: string; cityId: string | null; groupId?: string | null; content: string },
+    now: Date = new Date(),
+) {
+    await lockAuthor(tx, userId);
+    await assertRoom(tx, userId, now);
+    return tx.hubNote.create({
+        data: { authorId: userId, categoryId: data.categoryId, cityId: data.cityId, groupId: data.groupId ?? null, content: data.content, expiresAt: expiryFrom(now) },
+        select: { id: true, category: NOTE_SELECT.category },
+    });
+}
+
 /** The Veids a note is posted on: an ACTIVE L2/L3 with an ACTIVE chain above it. */
 async function findTopic(slug: string) {
     const c = await prisma.category.findFirst({
@@ -138,14 +156,7 @@ export const HubNoteService = {
         if (input.groupId) await assertOwnGroup(input.groupId, userId, topic);
         const cityIdValue = await cityId(input.citySlug);
         const now = new Date();
-        const note = await prisma.$transaction(async (tx) => {
-            await lockAuthor(tx, userId);
-            await assertRoom(tx, userId, now);
-            return tx.hubNote.create({
-                data: { authorId: userId, categoryId: topic.id, cityId: cityIdValue, groupId: input.groupId ?? null, content: input.content, expiresAt: expiryFrom(now) },
-                select: { id: true, category: NOTE_SELECT.category },
-            });
-        });
+        const note = await prisma.$transaction((tx) => createNoteTx(tx, userId, { categoryId: topic.id, cityId: cityIdValue, groupId: input.groupId, content: input.content }, now));
         return { id: note.id, href: `${noteTopicHref(note.category) ?? ''}?z=${note.id}` };
     },
 

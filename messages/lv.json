@@ -402,6 +402,7 @@
     "logReason": "Iemesls",
     "action_GROUP_HIDE": "Paslēpa grupu",
     "action_GROUP_RESTORE": "Atjaunoja grupu",
+    "action_HUB_CITY_CLOSE": "Aizvēra kopienu",
     "action_GROUP_EDIT": "Rediģēja grupu",
     "deletedTarget": "(dzēsta)",
     "hiddenBannerOwner": "Paslēpta, to izdarīja vietnes administrators: {reason}",
@@ -743,8 +744,7 @@
       "interested": "{count} interesējas",
       "none": "Kopienas vēl nav",
       "mine": "Tu pieprasīji",
-      "request": "Pieprasīt",
-      "label": "Kur: {place}"
+      "request": "Pieprasīt"
     },
     "request": {
       "title": "Pieprasīt {hub} pilsētā {city}",

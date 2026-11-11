@@ -2,7 +2,8 @@ import type { HubPageKey } from '@/lib/constants';
 
 export interface HubAddress {
     l2Slug: string;
-    l3Slug?: string;
+    /** Between the L2 and the page: `[l3]`, `[city]` or `[l3, city]` (resolved by the service: an L3 first, else a city segment). */
+    middle: string[];
     page: HubPageKey;
 }
 
@@ -11,18 +12,23 @@ const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', e
 const PAGE_OF: Record<string, HubPageKey> = { groups: 'groups', events: 'events', messages: 'messages' };
 
 /**
- * The segments after the L1 slug: `[l2]`, `[l2, page]`, `[l2, l3]`, `[l2, l3, page]` with page `groups`, `events` or `messages`.
- * Anything longer or unknown is null. A second segment named like a page is the page, never an L3 (reserved slugs keep an L3 from taking the name).
+ * The segments after the L1 slug: `[l2, ...middle (0..2), page?]` with page `groups`, `events` or `messages` (K3-04).
+ * Anything longer is null. A segment named like a page is the page, never an L3 or a city (reserved slugs keep them from taking the name).
  */
 export function parseHubPath(segments: string[]): HubAddress | null {
-    const [l2Slug, a, b, ...rest] = segments;
-    if (!l2Slug || rest.length > 0) return null;
-    if (a === undefined) return { l2Slug, page: 'overview' };
-    if (b === undefined) return a in PAGE_OF ? { l2Slug, page: PAGE_OF[a] } : { l2Slug, l3Slug: a, page: 'overview' };
-    return b in PAGE_OF && !(a in PAGE_OF) ? { l2Slug, l3Slug: a, page: PAGE_OF[b] } : null;
+    const [l2Slug, ...rest] = segments;
+    if (!l2Slug) return null;
+    const last = rest[rest.length - 1];
+    const page: HubPageKey = last !== undefined && last in PAGE_OF ? PAGE_OF[last] : 'overview';
+    const middle = page === 'overview' ? rest : rest.slice(0, -1);
+    if (middle.length > 2 || middle.some((m) => m in PAGE_OF)) return null;
+    return { l2Slug, middle, page };
 }
 
-/** A hub's address without locale: `/games/boardgames`, `/games/boardgames/chess`; a page adds `/groups`, `/events` or `/messages`. */
-export function hubHref(l1Slug: string, l2Slug: string, l3Slug?: string, page: HubPageKey = 'overview'): string {
-    return `/${l1Slug}/${l2Slug}${l3Slug ? `/${l3Slug}` : ''}${SEGMENT[page]}`;
+/**
+ * A hub's address without locale: `/games/boardgames`, `/games/boardgames/chess`, a topic x city hub `/games/boardgames/chess/jelgava`;
+ * a page adds `/groups`, `/events` or `/messages`.
+ */
+export function hubHref(l1Slug: string, l2Slug: string, l3Slug?: string, page: HubPageKey = 'overview', citySegment?: string): string {
+    return `/${l1Slug}/${l2Slug}${l3Slug ? `/${l3Slug}` : ''}${citySegment ? `/${citySegment}` : ''}${SEGMENT[page]}`;
 }

@@ -2,6 +2,7 @@ import { ActionError } from '@/types/actions';
 import { Prisma, Category, CategoryAlias } from '@prisma/client';
 import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
+import { moveHubCities } from './hub-city-merge';
 import { slugify } from '@/lib/slug';
 import { categoryColor } from '@/lib/theme/category';
 import { pickTitle } from '@/lib/utils/localized-title';
@@ -92,6 +93,11 @@ export type ActiveL2WithAliases = {
     aliases: Array<{ id: string; value: string; locale: string | null; createdAt: Date }>;
 };
 
+/** A Veids slug may not equal an ACTIVE city's address segment (K3-03): the category would shadow the city hub, so the slug counts as taken. */
+async function takenByCity(slug: string): Promise<boolean> {
+    return (await prisma.city.count({ where: { status: 'ACTIVE', slug: { equals: slug, mode: 'insensitive' } } })) > 0;
+}
+
 async function createUniqueCategorySlug(baseLabel: string): Promise<string> {
     const baseSlug = slugify(baseLabel);
     if (!baseSlug) {
@@ -99,7 +105,7 @@ async function createUniqueCategorySlug(baseLabel: string): Promise<string> {
     }
 
     const exact = await prisma.category.findUnique({ where: { slug: baseSlug }, select: { id: true } });
-    if (!exact) {
+    if (!exact && !(await takenByCity(baseSlug))) {
         return baseSlug;
     }
 
@@ -107,7 +113,7 @@ async function createUniqueCategorySlug(baseLabel: string): Promise<string> {
     while (true) {
         const candidate = `${baseSlug}-${suffix}`;
         const exists = await prisma.category.findUnique({ where: { slug: candidate }, select: { id: true } });
-        if (!exists) {
+        if (!exists && !(await takenByCity(candidate))) {
             return candidate;
         }
         suffix += 1;
@@ -426,7 +432,7 @@ export const TaxonomyService = {
             where: { id: { not: id }, OR: [{ slug: params.slugEn }, { slugLv: params.slugLv }] },
             select: { id: true },
         });
-        if (clash) throw new ActionError('TAG_ALREADY_EXISTS');
+        if (clash || await takenByCity(params.slugEn)) throw new ActionError('TAG_ALREADY_EXISTS');
 
         return prisma.$transaction(async (tx) => {
             const updated = await tx.category.update({
@@ -532,6 +538,7 @@ export const TaxonomyService = {
 
             // Ziņas sit on the Veids and would be cascade-deleted with it: move them first (K2 Risk 1).
             await tx.hubNote.updateMany({ where: { categoryId: pendingId }, data: { categoryId: canonicalId } });
+            await moveHubCities(tx, [pendingId], canonicalId);
 
             const groups = await tx.group.findMany({
                 where: {
@@ -981,6 +988,7 @@ export const TaxonomyService = {
 
             // Ziņas sit on the Veids and would be cascade-deleted with it: move them first (K2 Risk 1).
             await tx.hubNote.updateMany({ where: { categoryId: { in: mergedIds } }, data: { categoryId: canonicalId } });
+            await moveHubCities(tx, mergedIds, canonicalId);
 
             // 2. Map group relationships
             const groups = await tx.group.findMany({

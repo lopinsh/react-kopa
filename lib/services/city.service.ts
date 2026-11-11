@@ -3,6 +3,7 @@ import { unstable_cache } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { slugify } from '@/lib/slug';
+import { CITY_RESERVED_SEGMENTS } from '@/lib/constants';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 
 export const CITIES_TAG = 'cities';
@@ -32,6 +33,16 @@ export interface CityGroup {
     slug: string;
     l1Slug: string;
     ownerIds: string[];
+}
+
+/** A city's address segment (K3-03): the stored slug, lower-cased. */
+export const citySegment = (slug: string): string => slug.toLowerCase();
+
+/** The city a slug would shadow: a static route or a Tēma (L1) address segment, so the slug counts as taken (K3-03). */
+async function shadowsRoute(slug: string): Promise<boolean> {
+    const segment = citySegment(slug);
+    if (CITY_RESERVED_SEGMENTS.includes(segment)) return true;
+    return (await prisma.category.count({ where: { level: 1, slug: segment } })) > 0;
 }
 
 const lang = (locale: string): CityLang => (locale === 'en' ? 'en' : 'lv');
@@ -89,8 +100,8 @@ const loadAllNames = unstable_cache(
 );
 
 const loadActive = unstable_cache(
-    async (): Promise<{ slug: string; nameLv: string; nameEn: string }[]> =>
-        prisma.city.findMany({ where: { status: 'ACTIVE' }, select: { slug: true, nameLv: true, nameEn: true } }),
+    async (): Promise<{ id: string; slug: string; nameLv: string; nameEn: string }[]> =>
+        prisma.city.findMany({ where: { status: 'ACTIVE' }, select: { id: true, slug: true, nameLv: true, nameEn: true } }),
     ['city-active'],
     { tags: [CITIES_TAG], revalidate: 60 }
 );
@@ -148,6 +159,13 @@ export const CityService = {
         }
     },
 
+    /** The ACTIVE city at an address segment (`/lv/jelgava`), or null; pending cities have no hub (K3-03). */
+    async bySegment(segment: string, locale: string): Promise<{ id: string; slug: string; segment: string; name: string; nameLv: string; nameEn: string } | null> {
+        const wanted = segment.toLowerCase();
+        const row = (await loadActive()).find((r) => citySegment(r.slug) === wanted);
+        return row ? { id: row.id, slug: row.slug, segment: wanted, name: lang(locale) === 'en' ? row.nameEn : row.nameLv, nameLv: row.nameLv, nameEn: row.nameEn } : null;
+    },
+
     /** For the admin: everything, pending first. */
     async listAll(): Promise<CityRow[]> {
         const [rows, counts] = await Promise.all([
@@ -190,6 +208,7 @@ export const CityService = {
         const base = citySlugBase(name);
         for (let attempt = 0; attempt < 20; attempt++) {
             const slug = attempt === 0 ? base : `${base}-${attempt + 1}`;
+            if (await shadowsRoute(slug)) continue;
             try {
                 const city = await prisma.city.create({
                     data: { slug, nameLv: name, nameEn: name, status: 'PENDING_REVIEW', submittedById: params.userId, submittedAt: new Date() },
@@ -232,8 +251,10 @@ export const CityService = {
         if (await nameTakenByOther(names)) throw new ActionError('CITY_EXISTS');
         const base = citySlugBase(names.nameEn);
         for (let attempt = 0; attempt < 20; attempt++) {
+            const slug = attempt === 0 ? base : `${base}-${attempt + 1}`;
+            if (await shadowsRoute(slug)) continue;
             try {
-                await prisma.city.create({ data: { slug: attempt === 0 ? base : `${base}-${attempt + 1}`, nameLv: names.nameLv, nameEn: names.nameEn } });
+                await prisma.city.create({ data: { slug, nameLv: names.nameLv, nameEn: names.nameEn } });
                 return;
             } catch (error) {
                 if (!isUniqueViolation(error)) throw error;

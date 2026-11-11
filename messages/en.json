@@ -402,6 +402,7 @@
     "logReason": "Reason",
     "action_GROUP_HIDE": "Hid group",
     "action_GROUP_RESTORE": "Restored group",
+    "action_HUB_CITY_CLOSE": "Closed community",
     "action_GROUP_EDIT": "Edited group",
     "deletedTarget": "(deleted)",
     "hiddenBannerOwner": "Hidden by a site admin: {reason}",
@@ -743,8 +744,7 @@
       "interested": "{count} interested",
       "none": "No community yet",
       "mine": "You asked",
-      "request": "Ask for it",
-      "label": "Where: {place}"
+      "request": "Ask for it"
     },
     "request": {
       "title": "Ask for {hub} in {city}",

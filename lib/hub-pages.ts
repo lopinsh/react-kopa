@@ -8,12 +8,11 @@ export interface HubPageLink {
 const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages' };
 
 /**
- * The pages a hub's menu shows, in order (K1-04). `base` is the hub's address without locale; `cities` (the Kur filter) is carried to every page.
+ * The pages a hub's menu shows, in order (K1-04). `base` is the hub's address without locale (a topic x city hub's includes the city).
  * Čats joins here with K5.
  */
-export function hubPages(base: string, cities: string[]): HubPageLink[] {
-    const qs = cities.length > 0 ? `?city=${cities.join(',')}` : '';
-    return HUB_PAGE_KEYS.map((key) => ({ key, href: `${base}${SEGMENT[key]}${qs}` }));
+export function hubPages(base: string): HubPageLink[] {
+    return HUB_PAGE_KEYS.map((key) => ({ key, href: `${base}${SEGMENT[key]}` }));
 }
 
 /** The page a path (without locale) is on, under the hub at `base`. */

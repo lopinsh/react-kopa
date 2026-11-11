@@ -7,7 +7,7 @@ import { GroupService } from './group.service';
 import { ActionError } from '@/types/actions';
 import { isSiteAdminUser, isSiteOwnerUser } from './site-role.service';
 
-export type AdminActionType = 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
+export type AdminActionType = 'HUB_CITY_CLOSE' | 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
 
 export interface AdminActionEntry {
     id: string;
