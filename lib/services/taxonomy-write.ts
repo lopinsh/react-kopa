@@ -168,7 +168,7 @@ export async function approve(id: string, params: { nameEn: string; nameLv: stri
 }
 
 /** Moves one category's groups, notes, hub cities and name into its canonical sibling and deletes it; children move first. */
-export async function mergeInto(tx: Prisma.TransactionClient, pendingId: string, canonicalId: string): Promise<void> {
+export async function mergeInto(tx: Prisma.TransactionClient, pendingId: string, canonicalId: string, children = false): Promise<void> {
     const [pending, canonical] = await Promise.all([
         tx.category.findUnique({
             where: { id: pendingId },
@@ -183,13 +183,13 @@ export async function mergeInto(tx: Prisma.TransactionClient, pendingId: string,
     if (!pending || (pending.level !== 2 && pending.level !== 3)) throw new ActionError('TAG_NOT_FOUND');
     if (!canonical || canonical.level !== pending.level || canonical.status !== 'ACTIVE') throw new ActionError('TAG_NOT_FOUND');
     // Siblings only: an L3 merges into another sub-veids of the same Veids, an L2 into a Veids of the same L1.
-    if (pending.parentId !== canonical.parentId) throw new ActionError('TAG_LEVEL_INVALID');
+    if (!children && pending.parentId !== canonical.parentId) throw new ActionError('TAG_LEVEL_INVALID');
 
     // An L2 hands its sub-veidi to the canonical; one with the same name there is merged into it instead.
     for (const child of pending.children) {
         const names = child.titles.map((t) => t.title.trim().toLowerCase());
         const twin = canonical.children.find((c) => c.titles.some((t) => names.includes(t.title.trim().toLowerCase())));
-        if (twin) await mergeInto(tx, child.id, twin.id);
+        if (twin) await mergeInto(tx, child.id, twin.id, true);
         else await tx.category.update({ where: { id: child.id }, data: { parentId: canonicalId } });
     }
 
