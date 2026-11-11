@@ -18,13 +18,13 @@ const AuthGateModal = dynamic(() => import('@/components/modals/AuthGateModal'),
  * The replies of an open Ziņa (K2-21): read when the row first opens (a page of notes does not read every reply), oldest first, then the reply
  * field. Signed out (`note.author` is null) the field is replaced by one sign-in button that returns to the note (K-41).
  */
-export default function NoteReplies({ note, opened }: { note: HubNoteRow; opened: boolean }) {
+export default function NoteReplies({ note, opened, initial }: { note: HubNoteRow; opened: boolean; initial?: HubNoteReplyRow[] }) {
     const t = useTranslations('hub.notes');
     const tErrors = useTranslations('errors');
     const locale = useLocale();
     const { error: toastError } = useToast();
     const id = useId();
-    const [replies, setReplies] = useState<HubNoteReplyRow[] | null>(null);
+    const [replies, setReplies] = useState<HubNoteReplyRow[] | null>(initial ?? null);
     const [failed, setFailed] = useState(false);
     const [text, setText] = useState('');
     const [gate, setGate] = useState(false);

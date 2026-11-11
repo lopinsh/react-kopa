@@ -19,15 +19,17 @@ const first = (v: string | string[] | undefined) => (typeof v === 'string' ? v :
 /**
  * Ziņas of a hub (K2-10..16): tabs Visas / Manas (signed out: Visas only) with search and Kur at the end from 1024 px, "Rakstīt ziņu" above the list, the notes
  * grouped by sub-veids and group in framed boxes (K-111), the hint line; from `xl` a side column. Signed out the service returns no authors (K-41).
- * Replies and the private request join the open row with K2-3.
+ * The row `?z=` opens comes with its replies; the others read theirs on first open (K2-21).
  */
 export default async function NotesPage({ hub, sp, cities, locale, viewer }: { hub: HubContext; sp: Search; cities: string[]; locale: string; viewer?: { id: string; role?: string | null } }) {
     const query = hubNoteListSchema.parse({ tab: first(sp.tab), q: first(sp.q), z: first(sp.z) });
     const tab = viewer ? query.tab : 'all';
     const t = await getTranslations({ locale, namespace: 'hub.notes' });
-    const [list, options] = await Promise.all([
+    // The row `?z=` opens arrives with its replies (K2-21); other rows read theirs on first open.
+    const [list, options, zReplies] = await Promise.all([
         HubNoteService.list(hub, { cities, q: query.q, tab, take: HUB_NOTE_PAGE_MAX }, locale, viewer),
         viewer ? HubNoteService.composeOptions(hub, viewer.id, locale) : null,
+        query.z ? HubNoteService.replies(query.z, viewer) : null,
     ]);
 
     const base = hubPages(hub.href, cities).find((p) => p.key === 'messages')?.href ?? `${hub.href}/messages`;
@@ -46,7 +48,7 @@ export default async function NotesPage({ hub, sp, cities, locale, viewer }: { h
     const gone = !!query.z && !query.q && cities.length === 0 && !list.rows.some((r) => r.id === query.z);
     const compose = <NoteCompose options={options} mineHref={withQuery({ tab: 'mine' })} startOpen={first(sp.compose) === '1'} />;
     const rowOf = (n: (typeof list.rows)[number], mineList?: boolean) => (
-        <NoteRow key={n.id} note={n} edit={n.mine && options ? options : undefined} mineList={mineList} defaultOpen={n.id === query.z} />
+        <NoteRow key={n.id} note={n} edit={n.mine && options ? options : undefined} mineList={mineList} defaultOpen={n.id === query.z} replies={n.id === query.z && zReplies ? zReplies : undefined} />
     );
     const BOX = 'rounded-2xl bg-surface px-4 shadow-card frame';
 
