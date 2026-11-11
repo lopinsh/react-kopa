@@ -102,6 +102,11 @@ export const HubNoteService = {
         return prisma.hubNote.count({ where: { authorId: userId, expiresAt: { gt: new Date() } } });
     },
 
+    /** How many active Ziņas the hub shows with Kur applied (the Pārskats block heading). */
+    async count(hub: HubContext, cities: string[]): Promise<number> {
+        return prisma.hubNote.count({ where: hubNoteWhere(hub, { cities, q: '', tab: 'all', now: new Date() }) });
+    },
+
     /** What the compose form offers: the hub and its sub-veidi, the person's groups on each, the active cities. */
     async composeOptions(hub: HubContext, userId: string, locale: string): Promise<NoteComposeOptions> {
         const lang = toTextLang(locale);

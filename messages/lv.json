@@ -620,7 +620,8 @@
     "pages": {
       "overview": "Pārskats",
       "groups": "Grupas",
-      "events": "Pasākumi"
+      "events": "Pasākumi",
+      "messages": "Ziņas"
     },
     "frame": {
       "pagesLabel": "Kopienas lapas",
@@ -672,6 +673,49 @@
     "subTopics": {
       "title": "Apakšveidi",
       "more": "+{n}"
+    },
+    "overview": {
+      "tabsLabel": "Pārskata sadaļas"
+    },
+    "rail": {
+      "events": "Tuvākie pasākumi",
+      "about": "Par kopienu"
+    },
+    "notes": {
+      "tabsLabel": "Ziņu skati",
+      "write": "Rakstīt ziņu",
+      "tabAll": "Visas",
+      "tabMine": "Manas",
+      "search": "Meklēt Ziņās",
+      "all": "Visas Ziņas",
+      "forEveryone": "Visai kopienai",
+      "replies": "{n, plural, zero {# atbilžu} one {# atbilde} other {# atbildes}}",
+      "flair": "Dzīvo šeit: šīs kopienas grupas dalībnieks",
+      "expiresIn": "beidzas pēc {days} d.",
+      "expired": "Beigusies",
+      "renew": "Atjaunot",
+      "edit": "Labot",
+      "delete": "Dzēst",
+      "report": "Ziņot",
+      "deleteConfirm": "Dzēst šo ziņu? Pazudīs arī atbildes.",
+      "hint": "Ziņa beidzas pēc 30 dienām, vienlaikus var būt līdz 3 aktīvām. Atbildi var publiski vai ar „Rakstīt privāti“: tad čata pieprasījums nonāk otra cilvēka Ziņu iesūtnē.",
+      "empty": "Šeit vēl nav ziņu. Uzraksti pirmo!",
+      "emptyMine": "Tev šeit vēl nav ziņu.",
+      "noResults": "Nekas netika atrasts.",
+      "gone": "Šī ziņa vairs nav aktīva.",
+      "limit": "Tev jau ir {max} aktīvas ziņas. Izdzēs kādu sadaļā „Manas“.",
+      "activeCount": "Aktīvas {n} no {max} visā vietnē",
+      "form": {
+        "text": "Ziņa",
+        "placeholder": "Ko tu meklē? Piem., gribētu atrast kādu, ar ko spēlēt domino.",
+        "topic": "Veids",
+        "group": "Grupa",
+        "city": "Pilsēta (nav obligāta)",
+        "noCity": "Nav norādīta",
+        "publish": "Publicēt",
+        "save": "Saglabāt",
+        "formLabel": "Jauna ziņa"
+      }
     }
   },
   "admin": {

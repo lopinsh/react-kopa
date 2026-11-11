@@ -11,17 +11,19 @@ type Props = {
     onClose: () => void;
     /** Why sign-in is asked: the sentence under the title names it ("Eju" and "Pieteikties" say join). */
     reason?: 'contact' | 'join';
+    /** Where sign-in returns to (a path with locale and query); default the current page. */
+    returnTo?: string;
 };
 
 /** Sign-in pop-up for actions inside the site, so people stay on the page they were on. */
-export default function AuthGateModal({ isOpen, onClose, reason = 'contact' }: Props) {
+export default function AuthGateModal({ isOpen, onClose, reason = 'contact', returnTo }: Props) {
     const t = useTranslations('auth');
     const locale = useLocale();
     const pathname = usePathname();
 
     if (!isOpen) return null;
 
-    const callbackUrl = safeCallbackPath(pathname, `/${locale}`);
+    const callbackUrl = safeCallbackPath(returnTo ?? pathname, `/${locale}`);
 
     return (
         <Modal

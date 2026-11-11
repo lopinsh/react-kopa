@@ -20,7 +20,7 @@ export const HUB_OVERVIEW_CHIPS = 6;
 export const HUB_NEW_DAYS = 30;
 
 /** The pages of a hub, in menu order. */
-export const HUB_PAGE_KEYS = ['overview', 'groups', 'events'] as const;
+export const HUB_PAGE_KEYS = ['overview', 'groups', 'events', 'messages'] as const;
 export type HubPageKey = (typeof HUB_PAGE_KEYS)[number];
 
 /** Words a Veids / sub-veids slug may not take: they are page names under a hub or group routes. */

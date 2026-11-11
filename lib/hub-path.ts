@@ -7,11 +7,11 @@ export interface HubAddress {
 }
 
 /** URL segment of each page below a hub: Pārskats is the hub's own address. */
-const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events' };
-const PAGE_OF: Record<string, HubPageKey> = { groups: 'groups', events: 'events' };
+const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages' };
+const PAGE_OF: Record<string, HubPageKey> = { groups: 'groups', events: 'events', messages: 'messages' };
 
 /**
- * The segments after the L1 slug: `[l2]`, `[l2, page]`, `[l2, l3]`, `[l2, l3, page]` with page `groups` or `events`.
+ * The segments after the L1 slug: `[l2]`, `[l2, page]`, `[l2, l3]`, `[l2, l3, page]` with page `groups`, `events` or `messages`.
  * Anything longer or unknown is null. A second segment named like a page is the page, never an L3 (reserved slugs keep an L3 from taking the name).
  */
 export function parseHubPath(segments: string[]): HubAddress | null {
@@ -22,7 +22,7 @@ export function parseHubPath(segments: string[]): HubAddress | null {
     return b in PAGE_OF && !(a in PAGE_OF) ? { l2Slug, l3Slug: a, page: PAGE_OF[b] } : null;
 }
 
-/** A hub's address without locale: `/games/boardgames`, `/games/boardgames/chess`; a page adds `/groups` or `/events`. */
+/** A hub's address without locale: `/games/boardgames`, `/games/boardgames/chess`; a page adds `/groups`, `/events` or `/messages`. */
 export function hubHref(l1Slug: string, l2Slug: string, l3Slug?: string, page: HubPageKey = 'overview'): string {
     return `/${l1Slug}/${l2Slug}${l3Slug ? `/${l3Slug}` : ''}${SEGMENT[page]}`;
 }

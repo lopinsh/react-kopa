@@ -11,7 +11,7 @@ export const NOTE_SELECT = {
     id: true, content: true, createdAt: true, expiresAt: true, authorId: true, categoryId: true,
     author: { select: { id: true, name: true, image: true, avatarSeed: true } },
     city: { select: { slug: true, nameLv: true, nameEn: true } },
-    group: { select: { slug: true, name: true, type: true, hiddenAt: true, category: CHAIN } },
+    group: { select: { id: true, slug: true, name: true, type: true, hiddenAt: true, category: CHAIN } },
     category: { select: { id: true, slug: true, level: true, titles: TITLES, parent: { select: { slug: true, parent: { select: { slug: true } } } } } },
     _count: { select: { replies: true } },
 } satisfies Prisma.HubNoteSelect;
@@ -25,7 +25,7 @@ export interface HubNoteRow {
     expired: boolean;
     city: { slug: string; name: string } | null;
     /** Null when the note is for the whole community (no group, or the group is not public). */
-    group: { name: string; href: string } | null;
+    group: { id: string; name: string; href: string } | null;
     /** The Veids it was posted on, with the hub's Ziņas address (no locale). */
     topic: { slug: string; title: string; href: string };
     /** Null for a signed-out viewer (K-41): no names reach a public page. */
@@ -60,7 +60,7 @@ export function toNoteRow(n: NoteSource, o: { lang: string; locale: string; now:
         expiresAt: n.expiresAt,
         expired,
         city: n.city ? { slug: n.city.slug, name: o.locale === 'en' ? n.city.nameEn : n.city.nameLv } : null,
-        group: publicGroup ? { name: publicGroup.name, href: `/${TaxonomyResolver.resolve(publicGroup.category).l1Slug}/group/${publicGroup.slug}` } : null,
+        group: publicGroup ? { id: publicGroup.id, name: publicGroup.name, href: `/${TaxonomyResolver.resolve(publicGroup.category).l1Slug}/group/${publicGroup.slug}` } : null,
         topic: { slug: n.category.slug, title: pickTitle(n.category.titles, o.lang, n.category.slug), href: noteTopicHref(n.category) ?? '' },
         author: o.viewer ? { ...n.author, flair: o.flair.has(`${n.category.slug}:${n.authorId}`) } : null,
         // Replies vanish with the Ziņa's expiry (K-121).

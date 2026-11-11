@@ -5,11 +5,11 @@ export interface HubPageLink {
     href: string;
 }
 
-const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events' };
+const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages' };
 
 /**
  * The pages a hub's menu shows, in order (K1-04). `base` is the hub's address without locale; `cities` (the Kur filter) is carried to every page.
- * Ziņas and Čats join here with K2 and K5.
+ * Čats joins here with K5.
  */
 export function hubPages(base: string, cities: string[]): HubPageLink[] {
     const qs = cities.length > 0 ? `?city=${cities.join(',')}` : '';

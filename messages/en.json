@@ -620,7 +620,8 @@
     "pages": {
       "overview": "Overview",
       "groups": "Groups",
-      "events": "Events"
+      "events": "Events",
+      "messages": "Notes"
     },
     "frame": {
       "pagesLabel": "Community pages",
@@ -672,6 +673,49 @@
     "subTopics": {
       "title": "Sub-types",
       "more": "+{n}"
+    },
+    "overview": {
+      "tabsLabel": "Overview sections"
+    },
+    "rail": {
+      "events": "Coming up",
+      "about": "About this hub"
+    },
+    "notes": {
+      "tabsLabel": "Notes views",
+      "write": "Write a note",
+      "tabAll": "All",
+      "tabMine": "Mine",
+      "search": "Search notes",
+      "all": "All notes",
+      "forEveryone": "For the whole hub",
+      "replies": "{n, plural, one {# reply} other {# replies}}",
+      "flair": "Lives here: member of a group in this hub",
+      "expiresIn": "ends in {days} d.",
+      "expired": "Expired",
+      "renew": "Renew",
+      "edit": "Edit",
+      "delete": "Delete",
+      "report": "Report",
+      "deleteConfirm": "Delete this note? Its replies go too.",
+      "hint": "A note ends after 30 days; you can have up to 3 at a time. Reply in public, or with \"Send a message\": a chat request then lands in the other person's inbox.",
+      "empty": "No notes here yet. Write the first one!",
+      "emptyMine": "You have no notes here yet.",
+      "noResults": "Nothing found.",
+      "gone": "This note is no longer active.",
+      "limit": "You already have {max} active notes. Delete one under \"Mine\" first.",
+      "activeCount": "{n} of {max} active across the site",
+      "form": {
+        "text": "Note",
+        "placeholder": "What are you looking for? E.g. someone to play dominoes with.",
+        "topic": "Type",
+        "group": "Group",
+        "city": "City (optional)",
+        "noCity": "Not set",
+        "publish": "Post",
+        "save": "Save",
+        "formLabel": "New note"
+      }
     }
   },
   "admin": {

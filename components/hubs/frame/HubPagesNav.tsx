@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { CalendarDays, LayoutDashboard, Users, type LucideIcon } from 'lucide-react';
+import { CalendarDays, LayoutDashboard, StickyNote, Users, type LucideIcon } from 'lucide-react';
 import { usePathname } from '@/i18n/routing';
 import { UI, type HubPageKey } from '@/lib/constants';
 import { parseCities } from '@/lib/discovery-params';
@@ -11,7 +11,7 @@ import { useHubContext } from '@/components/providers/HubProvider';
 import PageNavLink from '@/components/ui/PageNavLink';
 import HubPlaceButton from './HubPlaceButton';
 
-const ICONS: Record<HubPageKey, LucideIcon> = { overview: LayoutDashboard, groups: Users, events: CalendarDays };
+const ICONS: Record<HubPageKey, LucideIcon> = { overview: LayoutDashboard, groups: Users, events: CalendarDays, messages: StickyNote };
 
 /**
  * A hub's pages (K1-04): down the left from `lg` (`side`, sticky), in the ☰ drawer below that (`drawer`). On Pārskats the Kur place is the last item (K1-06);
