@@ -1,6 +1,6 @@
 // Generates the data-only migration that ships the approved sub-veidi and photos (L3-18, D11) from prisma/taxonomy-content.ts.
 //   node --experimental-strip-types scripts/taxonomy-content-sql.mjs <migration-dir-name>   writes prisma/migrations/<name>/migration.sql
-//   node --experimental-strip-types scripts/taxonomy-content-sql.mjs --ping                  one Unsplash download ping per photo (dev, needs UNSPLASH_ACCESS_KEY in .env); run once after the deploy
+//   node --experimental-strip-types scripts/taxonomy-content-sql.mjs --ping                  one Unsplash download ping per photo (dev, needs UNSPLASH_ACCESS_KEY in .env); after the deploy, re-run hourly until all are pinged
 // Expand-only and idempotent: rows are inserted with ON CONFLICT (slug) DO NOTHING (an admin rename or removal survives), photos fill only
 // Veidi/sub-veidi whose three image columns are all empty, a missing parent Veids skips its rows, group tags are never touched.
 import fs from 'node:fs';
@@ -16,13 +16,18 @@ const [arg] = process.argv.slice(2);
 if (arg === '--ping') {
   const key = fs.readFileSync(path.join(ROOT, '.env'), 'utf8').match(/^UNSPLASH_ACCESS_KEY=(.*)$/m)?.[1]?.trim();
   if (!key) throw new Error('no UNSPLASH_ACCESS_KEY in .env');
+  // Resumable: at 50 requests/h the 108 photos take three runs; pinged ids are kept in the git-ignored cache and never pinged twice.
+  const doneFile = path.join(ROOT, 'scripts', '.unsplash-cache', 'pinged.json');
+  const done = new Set(fs.existsSync(doneFile) ? JSON.parse(fs.readFileSync(doneFile, 'utf8')) : []);
   let ok = 0;
-  for (const p of photos) {
+  for (const p of photos.filter((x) => !done.has(x.id))) {
     const res = await fetch(`https://api.unsplash.com/photos/${p.id}/download`, { headers: { Authorization: `Client-ID ${key}` } });
-    if (res.ok) ok += 1; else console.warn(`ping ${p.id}: ${res.status}`);
+    if (res.ok) { ok += 1; done.add(p.id); } else console.warn(`ping ${p.id}: ${res.status}`);
     if (res.status === 403) break;
   }
-  console.log(`pinged ${ok} of ${photos.length}`);
+  fs.mkdirSync(path.dirname(doneFile), { recursive: true });
+  fs.writeFileSync(doneFile, JSON.stringify([...done]));
+  console.log(`pinged ${ok} now, ${done.size} of ${photos.length} in all`);
 } else if (arg) {
   const none = `"imagePath" IS NULL AND "imageCreditName" IS NULL AND "imageCreditUser" IS NULL`;
   const cols = (p) => `"imagePath" = ${q(p.path)}, "imageCreditName" = ${q(p.name)}, "imageCreditUser" = ${q(p.username)}`;
