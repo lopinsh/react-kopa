@@ -730,10 +730,10 @@ async function main() {
   console.log('📝 Seeding Ziņas...');
   const cityIdBySlug = Object.fromEntries((await prisma.city.findMany({ select: { id: true, slug: true } })).map((c) => [c.slug, c.id]));
   const ago = (hours: number) => new Date(Date.now() - hours * 3_600_000);
-  const noteSeeds: { content: string; author: typeof oskars; category: string; city?: string; groupSlug?: string; ageHours: number; expired?: boolean }[] = [
+  const noteSeeds: { content: string; author: typeof oskars; category: string; city?: string; groupSlug?: string; ageHours: number; expired?: boolean; reply?: { author: typeof oskars; content: string; ageHours: number } }[] = [
     { content: 'Meklēju cilvēkus, ar ko trešdienās spēlēt Catan. Esmu iesācējs, bet mācos ātri.', author: janis, category: 'boardgames', city: 'Riga', ageHours: 3 },
     { content: 'Vai kāds spēlē Wingspan Jelgavā? Gribētu sapulcēt galdu.', author: marta, category: 'boardgames', city: 'Jelgava', ageHours: 20 },
-    { content: 'Mūsu klubā vienmēr ir vieta vēl vienam spēlētājam, nāc ciemos!', author: toms, category: 'boardgames', groupSlug: 'boardgames-riga', ageHours: 30 },
+    { content: 'Mūsu klubā vienmēr ir vieta vēl vienam spēlētājam, nāc ciemos!', author: toms, category: 'boardgames', city: 'Riga', groupSlug: 'boardgames-riga', ageHours: 30, reply: { author: janis, content: 'Paldies, atnākšu uz nākamo vakaru!', ageHours: 26 } },
     { content: 'Meklēju komandu LAN vakaram, jebkurā pilsētā.', author: andris, category: 'pc-games', ageHours: 50 },
     { content: 'Šī ziņa jau beigusies (Manas, Atjaunot).', author: janis, category: 'boardgames', ageHours: 24 * 31, expired: true },
   ];
@@ -741,7 +741,7 @@ async function main() {
     const categoryId = categoryIdBySlug[n.category];
     if (!categoryId) continue;
     const createdAt = ago(n.ageHours);
-    await prisma.hubNote.create({
+    const note = await prisma.hubNote.create({
       data: {
         authorId: n.author.id, categoryId, content: n.content,
         cityId: n.city ? cityIdBySlug[n.city] ?? null : null,
@@ -750,6 +750,7 @@ async function main() {
         expiresAt: new Date(createdAt.getTime() + 30 * 86_400_000),
       },
     });
+    if (n.reply) await prisma.hubNoteReply.create({ data: { noteId: note.id, authorId: n.reply.author.id, content: n.reply.content, createdAt: ago(n.reply.ageHours) } });
   }
 
   console.log('✅ Seeding complete!');
