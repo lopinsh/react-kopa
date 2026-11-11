@@ -55,7 +55,7 @@ export default function TagPicker({ l1 }: Props) {
         .filter((tag): tag is NonNullable<typeof tag> => tag !== undefined);
     // A chosen sub-veids shows as "Veids › sub-veids"; its Veids is not repeated as a chip of its own.
     const covered = new Set([...selectedFlat.filter((tag) => tag.level === 3).map((tag) => tag.l2Id), ...pending.selectedPending.map((tag) => tag.parentId)]);
-    const selectedTags = selectedFlat.filter((tag) => !covered.has(tag.id));
+    const selectedTags = selectedFlat.filter((tag) => tag.level !== 3 && !covered.has(tag.id));
     const selectedSubs = selectedFlat.filter((tag) => tag.level === 3).map((tag) => ({ ...tag, title: `${tag.l2Title} › ${tag.title}` }));
     const selectedPending = pending.selectedPending.map((tag) => (tag.parentId ? { ...tag, title: `${titleOf(tag.parentId)} › ${tag.title}` } : tag));
     const { veidiFull, subFull, veidiLimit, subLimit } = selection;

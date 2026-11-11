@@ -25,6 +25,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                     {tag.title}
                     <button
                         type="button"
+                        aria-label={t('removeTag', { tag: tag.title })}
                         onClick={(e) => {
                             e.preventDefault();
                             onRemove(tag.id);
@@ -43,6 +44,7 @@ export default function SelectedTags({ tags, pending, onRemove }: Props) {
                     {tag.title} ({t('awaitingApproval')})
                     <button
                         type="button"
+                        aria-label={t('removeTag', { tag: tag.title })}
                         onClick={(e) => {
                             e.preventDefault();
                             onRemove(tag.id);

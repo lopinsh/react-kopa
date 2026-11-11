@@ -747,7 +747,11 @@
     "cityParent": "{city} community",
     "city": {
       "name": "{city} community",
-      "tabs": { "activity": "Activity", "notes": "Notes", "rooms": "City rooms" },
+      "tabs": {
+        "activity": "Activity",
+        "notes": "Notes",
+        "rooms": "City rooms"
+      },
       "allGroups": "All groups in {city}",
       "openInHub": "Open in community",
       "notesEmpty": "No notes about this city yet.",
@@ -1958,7 +1962,8 @@
     "fieldLookingFor": "Tagline",
     "fieldLookingForPlaceholder": "e.g. Looking for a drummer",
     "fieldLookingForHint": "One short line about what the group is looking for right now.",
-    "LOOKING_FOR_TOO_LONG": "The text cannot exceed 60 characters."
+    "LOOKING_FOR_TOO_LONG": "The text cannot exceed 60 characters.",
+    "removeTag": "Remove “{tag}”"
   },
   "pages": {
     "draftNotice": "Ejam Kopā is still being built. This page is updated whenever the site starts storing something new.",

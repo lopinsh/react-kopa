@@ -747,7 +747,11 @@
     "cityParent": "Kopiena {city}",
     "city": {
       "name": "Kopiena {city}",
-      "tabs": { "activity": "Aktivitāte", "notes": "Ziņas", "rooms": "Pilsētas istabas" },
+      "tabs": {
+        "activity": "Aktivitāte",
+        "notes": "Ziņas",
+        "rooms": "Pilsētas istabas"
+      },
       "allGroups": "Visas grupas pilsētā {city}",
       "openInHub": "Atvērt kopienā",
       "notesEmpty": "Ziņu par šo pilsētu vēl nav.",
@@ -1958,7 +1962,8 @@
     "fieldLookingFor": "Sauklis",
     "fieldLookingForPlaceholder": "piem., Meklējam bundzinieku",
     "fieldLookingForHint": "Viens īss teikums par to, ko grupa šobrīd meklē.",
-    "LOOKING_FOR_TOO_LONG": "Teksts nedrīkst pārsniegt 60 rakstzīmes."
+    "LOOKING_FOR_TOO_LONG": "Teksts nedrīkst pārsniegt 60 rakstzīmes.",
+    "removeTag": "Noņemt “{tag}”"
   },
   "pages": {
     "draftNotice": "Ejam Kopā vēl tiek veidota. Šī lapa tiek atjaunināta ikreiz, kad vietne sāk glabāt ko jaunu.",
