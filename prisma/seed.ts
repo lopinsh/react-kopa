@@ -758,18 +758,12 @@ async function main() {
   console.log('🏙️  Seeding topic x city hubs...');
   const boardgamesId = categoryIdBySlug['boardgames'];
   if (boardgamesId && cityIdBySlug['Jelgava'] && cityIdBySlug['Liepaja']) {
+    // No request note: a Jelgava note would add a row to the hub-notes and hub-overview baselines (K3 visual rule).
     const asked = ago(200);
-    const requestNote = await prisma.hubNote.create({
-      data: {
-        authorId: janis.id, categoryId: boardgamesId, cityId: cityIdBySlug['Jelgava'],
-        content: 'Gribētu atrast kādu, ar ko Jelgavā spēlēt galda spēles trešdienu vakaros.',
-        createdAt: asked, expiresAt: new Date(asked.getTime() + 30 * 86_400_000),
-      },
-    });
     await prisma.hubCity.create({
       data: {
         categoryId: boardgamesId, cityId: cityIdBySlug['Jelgava'], status: 'OPEN', openedAt: ago(150), createdAt: asked,
-        requests: { create: [{ userId: janis.id, noteId: requestNote.id, createdAt: asked }, { userId: marta.id, createdAt: ago(150) }] },
+        requests: { create: [{ userId: janis.id, createdAt: asked }, { userId: marta.id, createdAt: ago(150) }] },
       },
     });
     await prisma.hubCity.create({
