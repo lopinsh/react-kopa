@@ -18,7 +18,7 @@ export default function HubHead() {
     const hub = useHubContext();
 
     return (
-        <div className="mx-auto max-w-browse px-gutter pt-3 md:pt-5">
+        <div className="mx-auto px-gutter pt-3 md:pt-5">
             <div data-ui={UI.hubBanner} className="tone-fill frame relative grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]">
                 <HubPagesDrawer onTone />
                 <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item md:size-12 lg:col-start-1 lg:row-start-1">

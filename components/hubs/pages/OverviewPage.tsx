@@ -45,8 +45,8 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
     return (
         <>
             <OverviewTabs />
-            <div className="grid items-start gap-section xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-                <div className="min-w-0 xl:row-span-2">
+            <div className="grid items-start gap-section xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] 2xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)]">
+                <div className="min-w-0 xl:row-span-2 2xl:row-span-1">
                     <HubSection id="hub-activity" title={t('activity.title')}>
                         <div className={`${BOX} p-4`}><ActivityFeed periods={periods} locale={locale} /></div>
                     </HubSection>

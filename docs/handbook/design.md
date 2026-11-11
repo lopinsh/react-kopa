@@ -144,7 +144,7 @@ Never a bare `rounded`, `rounded-sm`, `rounded-[…]` or `shadow-sm…2xl` (`ui:
 
 - 4 px grid; spacing steps 2.5 and 3.5 and arbitrary `[Npx]` spacing are not used (0.5 and 1.5 stay for hairline nudges). A control's padding is 12, a card's 20.
 - Space tokens: `gutter` (page sides, `px-gutter`, 16 px on a phone to 32 px) and `section` (the gap between page sections, `gap-section`, 32 to 64 px).
-- Width tokens: `max-w-browse` 1200 (frames; not discovery, whose board fills to the right gutter since R20), `max-w-page` 760 (group and event pages), `max-w-focus` 560 (forms, wizard), `max-w-reading` 66ch (running text: Par mums, custom sections, announcements, event descriptions, rich text). No `max-w-[Npx]`; `calc()` and viewport units are the only arbitrary widths, for sizing against the screen.
+- Width tokens: `max-w-browse` 1200 (group and own-area frames; not discovery nor a hub, which fill to the right gutter: R20, K-124), `max-w-page` 760 (group and event pages), `max-w-focus` 560 (forms, wizard), `max-w-reading` 66ch (running text: Par mums, custom sections, announcements, event descriptions, rich text). No `max-w-[Npx]`; `calc()` and viewport units are the only arbitrary widths, for sizing against the screen.
 - Fewer boxes: a box is for one thing you act on as a unit (a card in a grid, a dialog, the wizard, the next-meeting box). Group page sections sit on the page under their heading, announcements are rows divided by hairlines.
 - Gaps: 8 inside a row, 12–16 between items, 24–32 between sections.
 - Space inside a card is never more than the space between cards: 20 px inside (padding, 6 px between lines), 20 px visible air between cards in the grid (Drosmīgs adds `--shadow-room` so the hard shadow does not eat it).

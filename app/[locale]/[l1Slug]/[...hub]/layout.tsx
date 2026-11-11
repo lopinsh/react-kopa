@@ -52,7 +52,7 @@ export default async function HubLayout({
             <style dangerouslySetInnerHTML={{ __html: `:root{--accent:${hub.theme.accentColor};--accent-foreground:var(--on-cat)}@media(max-width:1023px){:root{--sticky-bar:2.5rem}}` }} />
             <HubStickyBar />
             <HubHead />
-            <FrameColumns navFrom="lg" nav={<HubPagesNav variant="side" />}>
+            <FrameColumns navFrom="lg" wide nav={<HubPagesNav variant="side" />}>
                 {children}
             </FrameColumns>
         </HubProvider>
