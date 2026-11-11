@@ -69,7 +69,7 @@ export function GroupDialogsProvider({ children }: { children: ReactNode }) {
             {(dialog === 'join' || dialog === 'team') && (
                 <ContactForm onClose={close} groupId={g.id} groupName={g.name} allowJoin={dialog === 'join' && g.isAcceptingMembers} returnFocusRef={dialog === 'team' ? returnRef : undefined} />
             )}
-            {dialog === 'report' && <ReportModal onClose={close} targetGroupId={g.id} returnFocusRef={returnRef} />}
+            {dialog === 'report' && <ReportModal onClose={close} target={{ groupId: g.id }} returnFocusRef={returnRef} />}
             {isModalOpen && <AuthGateModal isOpen={isModalOpen} onClose={closeModal} />}
         </GroupDialogsContext.Provider>
     );

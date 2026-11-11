@@ -11,12 +11,13 @@ import { REPORT_REASONS, isReportReason } from '@/lib/constants';
 
 type Props = {
     onClose: () => void;
-    targetGroupId: string;
+    /** What is reported: a group, a Ziņa or a reply to one. */
+    target: { groupId: string } | { noteId: string } | { noteReplyId: string };
     returnFocusRef?: RefObject<HTMLElement | null>;
 };
 
-/** Reporting a group (OD-11: groups only for now): one reason from a short list, then "Nosūtīt". Mount = open. */
-export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: Props) {
+/** Reporting a group, a Ziņa or a reply: one reason from a short list, then "Nosūtīt". Mount = open. */
+export default function ReportModal({ onClose, target, returnFocusRef }: Props) {
     const t = useTranslations('report');
     const name = useId();
     const [reason, setReason] = useState<string>(REPORT_REASONS[0]);
@@ -26,7 +27,10 @@ export default function ReportModal({ onClose, targetGroupId, returnFocusRef }: 
     const handleSubmit = () => {
         if (isPending || !isReportReason(reason)) return;
         startTransition(async () => {
-            const res = await createReport({ targetGroupId, reason });
+            const res = await createReport({
+                ...('groupId' in target ? { targetGroupId: target.groupId } : 'noteId' in target ? { targetNoteId: target.noteId } : { targetNoteReplyId: target.noteReplyId }),
+                reason,
+            });
             if (res.success) {
                 onClose();
                 success(t('success'));

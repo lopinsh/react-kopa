@@ -7,15 +7,18 @@ import { useMessagesInbox } from '@/hooks/useMessagesInbox';
 import type { InboxRow } from '@/lib/services/message.service';
 import ConversationList from './ConversationList';
 import ChatPanel from './ChatPanel';
+import type { ChatRequestInbox } from '@/lib/services/chat-request.service';
 
 type Props = {
     initialConversations: InboxRow[];
     currentUserId: string;
     locale: string;
     initialConversationId?: string | null;
+    requests?: ChatRequestInbox;
+    focusRequestId?: string | null;
 };
 
-export default function MessagesLayout({ initialConversations, currentUserId, locale, initialConversationId = null }: Props) {
+export default function MessagesLayout({ initialConversations, currentUserId, locale, initialConversationId = null, requests, focusRequestId }: Props) {
     const t = useTranslations('messages');
     const { conversations, activeConversation, activeConversationId, messages, titleOf, openConversation, addSent, setBlocked, markDeleted, removeConversation } =
         useMessagesInbox({ initialConversations, currentUserId, locale, initialConversationId });
@@ -27,6 +30,8 @@ export default function MessagesLayout({ initialConversations, currentUserId, lo
                 activeId={activeConversationId}
                 onOpen={openConversation}
                 titleOf={titleOf}
+                requests={requests}
+                focusRequestId={focusRequestId}
                 className={activeConversationId ? 'hidden lg:flex' : 'flex'}
             />
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import Button from '@/components/ui/Button';
 import ConfirmPopover from '@/components/ui/ConfirmPopover';
@@ -8,16 +9,20 @@ import { useToast } from '@/hooks/use-toast';
 import { deleteHubNote, renewHubNote } from '@/actions/hub-note-actions';
 import type { ActionResponse } from '@/types/actions';
 import type { HubNoteRow } from '@/lib/services/hub-note.service';
+import NotePrivate from './NotePrivate';
+
+const ReportModal = dynamic(() => import('@/components/modals/ReportModal'), { ssr: false });
 
 /**
  * What a person may do with a Ziņa (§1): the author edits (active only), renews and deletes; a site admin deletes any. Others' notes show no
- * buttons yet: Atbildēt, "Rakstīt privāti" and Ziņot join here with K2-3 (replies and requests).
+ * the private request ("Rakstīt privāti") and Ziņot (K2-23, K2-27); replies sit above, in NoteReplies.
  */
 export default function NoteActions({ note, onEdit }: { note: HubNoteRow; onEdit?: () => void }) {
     const t = useTranslations('hub.notes');
     const tErrors = useTranslations('errors');
     const { error: toastError } = useToast();
     const [confirm, setConfirm] = useState(false);
+    const [reporting, setReporting] = useState(false);
     const [isPending, startTransition] = useTransition();
 
     const run = (act: () => Promise<ActionResponse<void>>, after?: () => void) => {
@@ -29,9 +34,13 @@ export default function NoteActions({ note, onEdit }: { note: HubNoteRow; onEdit
         });
     };
 
-    if (!note.mine && !note.canDelete) return null;
+    // Signed out (no author) and expired notes offer nothing here; others' notes offer the private request and Ziņot.
+    const others = !note.mine && !!note.author && !note.expired;
+    if (!note.mine && !note.canDelete && !others) return null;
     return (
-        <div className="mt-2 flex flex-wrap items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+            {others && <NotePrivate note={note} />}
+            {others && <Button size="sm" variant="quiet" onClick={() => setReporting(true)}>{t('report')}</Button>}
             {note.mine && !note.expired && onEdit && <Button size="sm" variant="quiet" disabled={isPending} onClick={onEdit}>{t('edit')}</Button>}
             {note.mine && <Button size="sm" variant="quiet" disabled={isPending} onClick={() => run(() => renewHubNote(note.id))}>{t('renew')}</Button>}
             {note.canDelete && (
@@ -46,6 +55,7 @@ export default function NoteActions({ note, onEdit }: { note: HubNoteRow; onEdit
                     renderTrigger={(trigger) => <Button {...trigger} size="sm" variant="quiet">{t('delete')}</Button>}
                 />
             )}
+            {reporting && <ReportModal onClose={() => setReporting(false)} target={{ noteId: note.id }} />}
         </div>
     );
 }

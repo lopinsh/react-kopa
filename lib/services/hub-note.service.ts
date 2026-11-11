@@ -9,10 +9,13 @@ import type { HubContext } from './hub.service';
 import { CityService, type CityOption } from './city.service';
 import { hubGroupWhere } from './hub-query';
 import { hubNoteWhere, groupNotes, type NoteSection } from './hub-note-query';
+import { ChatRequestService } from './chat-request.service';
+import { NoteReplies } from './hub-note-reply';
 import { NOTE_SELECT, noteTopicHref, toNoteRow, type HubNoteRow, type NoteViewer } from './hub-note-row';
 
 export type { HubNoteRow, NoteViewer } from './hub-note-row';
 export type { NoteSection } from './hub-note-query';
+export type { HubNoteReplyRow } from './hub-note-reply';
 
 export interface HubNoteList {
     rows: HubNoteRow[];
@@ -66,8 +69,10 @@ async function cityId(slug: string | null | undefined): Promise<string | null> {
     return city.id;
 }
 
-/** Notes of a hub (K2). Permission and limit checks live here; actions only authenticate. Replies join in K2-3. */
+/** Notes of a hub (K2). Permission and limit checks live here; actions only authenticate. Replies live in hub-note-reply.ts. */
 export const HubNoteService = {
+    ...NoteReplies,
+
     /** The hub's Ziņas, newest first, with the grouped sections. Signed out (`viewer` undefined): `author` is null (K-41). */
     async list(hub: HubContext, o: { cities: string[]; q: string; tab: 'all' | 'mine'; take: number }, locale: string, viewer?: NoteViewer): Promise<HubNoteList> {
         const now = new Date();
@@ -93,7 +98,8 @@ export const HubNoteService = {
                 rows.forEach((r) => flair.add(`${slug}:${r.userId}`));
             }));
         }
-        const rows = sources.map((n) => toNoteRow(n, { lang, locale, now, viewer, isAdmin: isSiteAdmin(viewer?.role), flair }));
+        const requests = viewer ? await ChatRequestService.stateFor(viewer.id, sources) : new Map<string, 'pending' | 'open' | 'hidden'>();
+        const rows = sources.map((n) => ({ ...toNoteRow(n, { lang, locale, now, viewer, isAdmin: isSiteAdmin(viewer?.role), flair }), request: requests.get(n.id) ?? ('none' as const) }));
         return { rows, sections: o.tab === 'mine' ? [] : groupNotes(rows, hub) };
     },
 

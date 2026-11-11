@@ -6,6 +6,8 @@ import { CHAT_HISTORY_LIMIT, INBOX_LIMIT, SHARED_GROUPS_SHOWN } from '@/lib/cons
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 import { isSiteAdmin } from '@/lib/site-role';
 import { pickTitle } from '@/lib/utils/localized-title';
+import { ChatRequestService } from './chat-request.service';
+import { ensurePairChat, findPairChat } from './direct-chat';
 
 /**
  * Two kinds of chat (see `Conversation.kind`):
@@ -408,11 +410,13 @@ export const MessageService = {
                 select: { id: true, reads: { where: { userId }, select: { lastReadAt: true } } }
             });
             const newest = await newestFromOthers(conversations.map(c => c.id), userId);
-            return conversations.filter(c => {
+            const unreadChats = conversations.filter(c => {
                 const last = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;
                 return !!last && (!lastReadAt || last > lastReadAt);
             }).length;
+            // Chat requests waiting in the Ziņas inbox count too (K2-25).
+            return unreadChats + await ChatRequestService.incomingCount(userId);
         } catch (error) {
             console.error('[MessageService.unreadCount] Error:', error);
             return 0;
@@ -533,20 +537,7 @@ export const MessageService = {
         try {
             if (!userId || !otherUserId || userId === otherUserId) throw new ActionError('FORBIDDEN');
 
-            const findPairChat = async (db: Prisma.TransactionClient | typeof prisma) => {
-                const candidates = await db.conversation.findMany({
-                    where: {
-                        kind: 'DIRECT',
-                        AND: [
-                            { participants: { some: { id: userId } } },
-                            { participants: { some: { id: otherUserId } } }
-                        ]
-                    },
-                    select: { id: true, _count: { select: { participants: true } } }
-                });
-                return candidates.find(c => c._count.participants === 2);
-            };
-            const existing = await findPairChat(prisma);
+            const existing = await findPairChat(prisma, userId, otherUserId);
             if (existing) return { id: existing.id, created: false };
 
             const [target, viewer] = await Promise.all([
@@ -568,22 +559,7 @@ export const MessageService = {
             });
             if (!shared) throw new ActionError('DM_NOT_ALLOWED');
 
-            // Two people opening a chat at the same moment must end up with one: serialize per pair
-            // (lock released at commit) and look again before creating.
-            const pairKey = [userId, otherUserId].sort().join(':');
-            return await prisma.$transaction(async (tx) => {
-                await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${pairKey}))`;
-                const raced = await findPairChat(tx);
-                if (raced) return { id: raced.id, created: false };
-                const created = await tx.conversation.create({
-                    data: {
-                        kind: 'DIRECT',
-                        participants: { connect: [{ id: userId }, { id: otherUserId }] }
-                    },
-                    select: { id: true }
-                });
-                return { id: created.id, created: true };
-            });
+            return await ensurePairChat(userId, otherUserId);
         } catch (error) {
             return fail(error, 'getOrCreateDirectChat', 'CREATE_FAILED');
         }

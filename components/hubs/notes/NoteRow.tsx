@@ -7,6 +7,7 @@ import { relativeTo } from '@/lib/utils/relative-time';
 import type { HubNoteRow, NoteComposeOptions } from '@/lib/services/hub-note.service';
 import AccordionRow from '@/components/hubs/AccordionRow';
 import NoteActions from './NoteActions';
+import NoteReplies from './NoteReplies';
 import NoteForm from './NoteForm';
 
 const DAY = 86_400_000;
@@ -20,6 +21,8 @@ export default function NoteRow({ note, edit, mineList, defaultOpen }: { note: H
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
     const [editing, setEditing] = useState(false);
+    // Replies are read the first time the row opens.
+    const [opened, setOpened] = useState(!!defaultOpen);
     const age = relativeTo(format, new Date(note.createdAt), now);
     const days = Math.max(1, Math.ceil((new Date(note.expiresAt).getTime() - now.getTime()) / DAY));
     const ends = note.expired ? t('expired') : t('expiresIn', { days });
@@ -43,10 +46,11 @@ export default function NoteRow({ note, edit, mineList, defaultOpen }: { note: H
             meta={meta}
             multiline
             defaultOpen={defaultOpen}
+            onToggle={(open) => open && setOpened(true)}
         >
             {editing && edit
                 ? <NoteForm options={edit} note={note} onDone={() => setEditing(false)} />
-                : <NoteActions note={note} onEdit={edit ? () => setEditing(true) : undefined} />}
+                : <><NoteReplies note={note} opened={opened} /><NoteActions note={note} onEdit={edit ? () => setEditing(true) : undefined} /></>}
         </AccordionRow>
     );
 }

@@ -715,7 +715,19 @@
         "publish": "Publicēt",
         "save": "Saglabāt",
         "formLabel": "Jauna ziņa"
-      }
+      },
+      "reply": "Atbildēt",
+      "replyPlaceholder": "Tava atbilde",
+      "signInToReply": "Ienākt, lai atbildētu",
+      "replyDeleteConfirm": "Dzēst šo atbildi?",
+      "noReplies": "Atbilžu vēl nav.",
+      "message": "Rakstīt privāti",
+      "messageHint": "{name} saņems pieprasījumu un varēs to pieņemt.",
+      "messagePlaceholder": "Ko tu gribi pateikt?",
+      "send": "Sūtīt",
+      "pending": "Gaida apstiprinājumu",
+      "openChat": "Atvērt sarunu",
+      "repliesLoadFailed": "Neizdevās ielādēt atbildes."
     }
   },
   "admin": {
@@ -829,12 +841,16 @@
       "markAsResolved": "Atzīmēt kā atrisinātu",
       "reportedByLabel": "Sūdzību iesniedza",
       "reportedEntity": "Sūdzības objekts",
-      "subtitle": "Izskati sūdzības par grupām un pasākumiem.",
+      "subtitle": "Izskati sūdzības par grupām, pasākumiem un ziņām.",
       "title": "Ziņojumi",
       "allClear": "Viss tīrs!",
       "allClearDesc": "Nav neatrisinātu sūdzību, kam vajadzīga uzmanība.",
       "deleteContentTitle": "Dzēst saturu?",
-      "deleteContentConfirm": "Dzēst"
+      "deleteContentConfirm": "Dzēst",
+      "kindNote": "Ziņa",
+      "kindReply": "Atbilde",
+      "by": "Autors: {name}",
+      "openHub": "Atvērt Ziņas"
     },
     "activity": {
       "title": "Aktivitāte",
@@ -1571,7 +1587,15 @@
     "emptyTitle": "Pagaidām kluss",
     "emptyText": "Kad uzrakstīsi grupai vai kāds uzrakstīs tev, saruna būs šeit.",
     "loadFailed": "Neizdevās ielādēt ziņas.",
-    "sharedMore": "+{count}"
+    "sharedMore": "+{count}",
+    "requests": {
+      "title": "Pieprasījumi",
+      "about": "par ziņu „{excerpt}“",
+      "aboutGone": "par ziņu, kuras vairs nav",
+      "accept": "Pieņemt",
+      "decline": "Noraidīt",
+      "pending": "gaida apstiprinājumu"
+    }
   },
   "nav": {
     "adminPanel": "Administrēšanas panelis",
@@ -1646,7 +1670,10 @@
       "ADMIN_GROUP_HIDDEN": "Grupa tika paslēpta",
       "ADMIN_CITY_PENDING": "Piedāvāta jauna pilsēta",
       "CITY_APPROVED": "Tava pilsēta „{cityName}” ir apstiprināta",
-      "CITY_REJECTED": "Pilsēta „{cityName}” netika pieņemta. Izvēlies citu savai grupai"
+      "CITY_REJECTED": "Pilsēta „{cityName}” netika pieņemta. Izvēlies citu savai grupai",
+      "HUB_NOTE_REPLY": "{authorName} atbildēja uz tavu ziņu",
+      "CHAT_REQUEST": "{authorName} vēlas ar tevi sarakstīties",
+      "CHAT_REQUEST_ACCEPTED": "{authorName} pieņēma tavu ziņu"
     },
     "tabPersonal": "Personīgie",
     "tabAdmin": "Administrācija",

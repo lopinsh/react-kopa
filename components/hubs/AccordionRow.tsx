@@ -27,17 +27,19 @@ type Props = {
     multiline?: boolean;
     /** Three lines of body (events) instead of the feed's two. */
     clamp?: 2 | 3;
+    /** Told when the row opens or closes (a Ziņa reads its replies on first open). */
+    onToggle?: (open: boolean) => void;
 };
 
 /** A one-line row that a tap opens (K-79, K-100): icon, text, when; open shows the text once, its meta and a link on. Body text is never bold (K-109). */
-export default function AccordionRow({ icon, title, lang, sub, when, body, meta, action, children, defaultOpen = false, id: anchor, multiline, clamp = 2 }: Props) {
+export default function AccordionRow({ icon, title, lang, sub, when, body, meta, action, children, defaultOpen = false, id: anchor, multiline, clamp = 2, onToggle }: Props) {
     const [open, setOpen] = useState(defaultOpen);
     const id = useId();
     const row = useRef<HTMLDivElement>(null);
     useEffect(() => { if (defaultOpen) row.current?.scrollIntoView({ block: 'center' }); }, [defaultOpen]);
     return (
         <div ref={row} id={anchor} className="border-0 border-t border-dashed border-border first:border-t-0">
-            <button type="button" aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)} className="flex min-h-11 w-full items-center gap-2 py-2 text-left">
+            <button type="button" aria-expanded={open} aria-controls={id} onClick={() => { setOpen(!open); onToggle?.(!open); }} className="flex min-h-11 w-full items-center gap-2 py-2 text-left">
                 <span className="grid size-6 shrink-0 place-items-center rounded-item bg-tint text-foreground-muted [&>svg]:size-3.5" aria-hidden="true">{icon}</span>
                 <span className="min-w-0 flex-1">
                     <span lang={lang} className={clsx('block text-body-sm text-foreground', open ? clsx('break-words', multiline && 'whitespace-pre-line') : 'truncate')}>{title}</span>

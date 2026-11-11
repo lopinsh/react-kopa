@@ -33,7 +33,7 @@ export interface HubNoteRow {
     replyCount: number;
     mine: boolean;
     canDelete: boolean;
-    /** Filled by the chat request release (K2-3). */
+    /** The viewer's "Rakstīt privāti" state on this note; a declined request reads `pending` (K-120). */
     request: 'none' | 'pending' | 'open' | 'hidden';
 }
 

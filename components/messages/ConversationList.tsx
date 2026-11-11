@@ -8,7 +8,9 @@ import FilterChip from '@/components/ui/FilterChip';
 import EmptyState from '@/components/ui/EmptyState';
 import { MessageSquare } from 'lucide-react';
 import { UI } from '@/lib/constants';
+import type { ChatRequestInbox } from '@/lib/services/chat-request.service';
 import ConversationRow from './ConversationRow';
+import ChatRequests from './ChatRequests';
 
 type Props = {
     conversations: InboxRow[];
@@ -16,6 +18,8 @@ type Props = {
     onOpen: (id: string) => void;
     titleOf: (conv: InboxRow) => string;
     className?: string;
+    requests?: ChatRequestInbox;
+    focusRequestId?: string | null;
 };
 
 type Filter = 'ALL' | InboxRow['kind'];
@@ -28,7 +32,7 @@ const FILTERS: Array<{ value: Filter; labelKey: 'filterAll' | 'filterPersonal' |
 ];
 
 /** The chats of the Ziņas page: the name, the filter chips (Visas · Personīgās · Grupu) and the rows (AR-64). */
-export default function ConversationList({ conversations, activeId, onOpen, titleOf, className }: Props) {
+export default function ConversationList({ conversations, activeId, onOpen, titleOf, className, requests, focusRequestId }: Props) {
     const t = useTranslations('messages');
     const [filter, setFilter] = useState<Filter>('ALL');
 
@@ -50,6 +54,7 @@ export default function ConversationList({ conversations, activeId, onOpen, titl
                 )}
             </div>
             <div className="flex-1 overflow-y-auto">
+                {requests && <ChatRequests requests={requests} focusId={focusRequestId} />}
                 {visible.length > 0 ? visible.map(conv => (
                     <ConversationRow key={conv.id} conversation={conv} title={titleOf(conv)} active={activeId === conv.id} onOpen={() => onOpen(conv.id)} />
                 )) : conversations.length > 0 ? (

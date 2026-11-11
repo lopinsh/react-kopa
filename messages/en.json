@@ -715,7 +715,19 @@
         "publish": "Post",
         "save": "Save",
         "formLabel": "New note"
-      }
+      },
+      "reply": "Reply",
+      "replyPlaceholder": "Your reply",
+      "signInToReply": "Sign in to reply",
+      "replyDeleteConfirm": "Delete this reply?",
+      "noReplies": "No replies yet.",
+      "message": "Send a message",
+      "messageHint": "{name} gets a request and can accept it.",
+      "messagePlaceholder": "What would you like to say?",
+      "send": "Send",
+      "pending": "Waiting for approval",
+      "openChat": "Open chat",
+      "repliesLoadFailed": "Could not load the replies."
     }
   },
   "admin": {
@@ -829,12 +841,16 @@
       "markAsResolved": "Mark as resolved",
       "reportedByLabel": "Reported by",
       "reportedEntity": "Reported item",
-      "subtitle": "Look through the reports about groups and events.",
+      "subtitle": "Look through the reports about groups, events and notes.",
       "title": "Reports",
       "allClear": "All Clear!",
       "allClearDesc": "No active reports require attention.",
       "deleteContentTitle": "Delete content?",
-      "deleteContentConfirm": "Delete"
+      "deleteContentConfirm": "Delete",
+      "kindNote": "Note",
+      "kindReply": "Reply",
+      "by": "Written by {name}",
+      "openHub": "Open the notes"
     },
     "activity": {
       "title": "Activity",
@@ -1571,7 +1587,15 @@
     "emptyTitle": "All quiet for now",
     "emptyText": "When you write to a group or someone writes to you, the conversation will be here.",
     "loadFailed": "Could not load messages.",
-    "sharedMore": "+{count}"
+    "sharedMore": "+{count}",
+    "requests": {
+      "title": "Requests",
+      "about": "about the note “{excerpt}”",
+      "aboutGone": "about a note that is gone",
+      "accept": "Accept",
+      "decline": "Decline",
+      "pending": "waiting for approval"
+    }
   },
   "nav": {
     "adminPanel": "Admin panel",
@@ -1646,7 +1670,10 @@
       "ADMIN_GROUP_HIDDEN": "A group was hidden",
       "ADMIN_CITY_PENDING": "New city suggested",
       "CITY_APPROVED": "Your city “{cityName}” was approved",
-      "CITY_REJECTED": "The city “{cityName}” was not accepted. Choose another one for your group"
+      "CITY_REJECTED": "The city “{cityName}” was not accepted. Choose another one for your group",
+      "HUB_NOTE_REPLY": "{authorName} replied to your note",
+      "CHAT_REQUEST": "{authorName} would like to message you",
+      "CHAT_REQUEST_ACCEPTED": "{authorName} accepted your message"
     },
     "tabPersonal": "Personal",
     "tabAdmin": "Admin",

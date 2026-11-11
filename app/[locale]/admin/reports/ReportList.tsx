@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import dynamic from 'next/dynamic';
 import { resolveReport, deleteReportedContent } from '@/actions/report-actions';
 import { isStoredReportReason } from '@/lib/constants';
-import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff } from 'lucide-react';
+import { CheckCircle2, AlertTriangle, ExternalLink, Calendar, Users, EyeOff, StickyNote, MessageSquare } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import ConfirmDialog from '@/components/ui/ConfirmDialog';
@@ -22,7 +22,11 @@ type ReportItem = {
     reporter: { id: string; name: string | null; image: string | null; avatarSeed?: string | null };
     group: { id: string; name: string; slug: string; l1Slug: string } | null;
     event: { id: string; title: string } | null;
+    /** A reported Ziņa or reply: its text, author and the hub's Ziņas page. */
+    note: NoteTarget | null;
+    noteReply: NoteTarget | null;
 };
+type NoteTarget = { id: string; content: string; authorName: string | null; href: string | null };
 
 export default function ReportList({ initialReports }: { initialReports: ReportItem[] }) {
     const t = useTranslations('admin.reports');
@@ -115,8 +119,24 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                             <span className="text-body-sm text-foreground">{report.event.title}</span>
                                         </div>
                                     )}
-                                    {/* The group or event was deleted after the report was filed. */}
-                                    {!report.group && !report.event && (
+                                    {[{ target: report.note, Icon: StickyNote, label: t('kindNote') }, { target: report.noteReply, Icon: MessageSquare, label: t('kindReply') }].map(({ target, Icon, label }) => target && (
+                                        <div key={label} className="mt-1 grid gap-1">
+                                            <div className="flex items-center gap-2">
+                                                <Icon className="size-4 text-primary" />
+                                                <span className="text-tag text-foreground-muted">{label}</span>
+                                            </div>
+                                            <p className="whitespace-pre-line break-words text-body-sm text-foreground">{target.content}</p>
+                                            <p className="text-meta text-foreground-muted">{t('by', { name: target.authorName ?? t('anonymousUser') })}</p>
+                                            {target.href && (
+                                                <Link href={target.href} className="flex items-center gap-1 text-button-sm text-foreground transition-colors hover:text-primary">
+                                                    {t('openHub')}
+                                                    <ExternalLink className="size-3" />
+                                                </Link>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {/* The group, event, Ziņa or reply was deleted after the report was filed. */}
+                                    {!report.group && !report.event && !report.note && !report.noteReply && (
                                         <span className="text-body-sm text-foreground-muted">{tMod('deletedTarget')}</span>
                                     )}
                                 </div>
@@ -155,8 +175,8 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {tMod('hideGroup')}
                                 </button>
                             )}
-                            {/* Groups are hidden first ("Hide group"); only events are deleted from here. */}
-                            {report.event && (
+                            {/* Groups are hidden first ("Hide group"); events, Ziņas and replies are deleted from here. */}
+                            {(report.event || report.note || report.noteReply) && (
                             <button
                                 onClick={() => setAskDelete(report.id)}
                                 disabled={isPending}
