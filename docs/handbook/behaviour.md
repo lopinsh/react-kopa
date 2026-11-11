@@ -110,3 +110,5 @@ The same situation behaves the same way on every screen.
 - Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`), plus replies to your Ziņa and chat requests; off by the Iestatījumi switch or the link in every email.
 
 Next: [Who sees what](roles.md).
+
+Picking sub-veidi (L3-2): a group carries up to 2 Veidi and up to 1 sub-veids (constants `MAX_GROUP_TAGS`, `MAX_GROUP_SUBTAGS`, enforced by the service). Picking a sub-veids in the tag picker tags its Veids too and says so ("Pievienots arī: …"); un-picking a Veids drops its sub-veidi; a sub-veids chip reads "Veids › sub-veids". "+ Cits" under a Veids's sub-veidi suggests a new one.
