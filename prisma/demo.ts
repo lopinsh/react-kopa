@@ -9,6 +9,7 @@
  */
 import { PrismaClient } from '@prisma/client';
 import { ABOUT_TITLE, DEMO_CREATE_PARAGRAPH, DEMO_EMAIL_DOMAIN, DEMO_GROUPS, DEMO_L2S, DEMO_NOTICE, DEMO_USERS } from './demo-data';
+import { applyTaxonomyContent } from './taxonomy-apply';
 import { fallbackGroup } from './demo-data/fallback';
 import type { DemoGroup, DemoUser } from './demo-data';
 
@@ -304,6 +305,7 @@ async function syncGroup(g: DemoGroup, l1Id: string, l2Id: string, ctx: Ctx): Pr
 async function apply(): Promise<void> {
   validate();
   const resolvedL2 = await upsertTaxonomy();
+  await applyTaxonomyContent(prisma, resolvedL2);
   const userId = await upsertUsers();
   const allDemoIds = [...userId.values()];
 

@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { applyTaxonomyContent } from './taxonomy-apply';
 
 const prisma = new PrismaClient();
 
@@ -168,10 +169,13 @@ async function main() {
       });
       categoryIdBySlug[l2.slug] = createdL2.id;
       l1IdByL2Slug[l2.slug] = createdL1.id; // map L2 to L1
-
-
     }
   }
+
+  // Approved sub-veidi and photos (L3-18); a few groups carry a sub-veids so hubs and board chips show them.
+  const subIdBySlug = await applyTaxonomyContent(prisma, new Map(Object.entries(categoryIdBySlug).filter(([slug]) => l1IdByL2Slug[slug] !== categoryIdBySlug[slug])));
+  for (const [slug, id] of subIdBySlug) categoryIdBySlug[slug] = id;
+  const GROUP_SUB: Record<string, string> = { 'boardgames-riga': 'chess', 'running-riga': 'trail-running', 'pargajieni-riga': 'day-hikes', 'cycling-cesis': 'road-cycling', 'yoga-jurmala': 'hatha-yoga' };
 
   // ─── Users ───────────────────────────────────────────────────────────────────
   console.log('👤 Seeding users...');
@@ -430,7 +434,7 @@ async function main() {
         discordLink: g.discordLink,
         instagramLink: g.instagramLink,
         websiteLink: g.websiteLink,
-        tags: originalCatId !== l1CatId ? { connect: [{ id: originalCatId }] } : undefined,
+        tags: originalCatId !== l1CatId ? { connect: [{ id: originalCatId }, ...(GROUP_SUB[g.slug] && categoryIdBySlug[GROUP_SUB[g.slug]] ? [{ id: categoryIdBySlug[GROUP_SUB[g.slug]] }] : [])] } : undefined,
         members: {
           create: [
             { userId: g.owner.id, role: 'OWNER' },
