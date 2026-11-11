@@ -4,6 +4,8 @@
 /* Every colour, radius, shadow, line and heading weight of the look is written by the site theme (<style id="site-theme"> in
    app/layout.tsx, from lib/constants/theme.ts via lib/theme/css.ts). Nothing of a look lives here, so a swap changes every surface. */
 :root {
+  /* hub head photo brightness under the tone wash: dimmed in light so white --on-cat keeps 4.5:1 on a white pixel */
+  --hub-photo-dim: 0.5;
   /* Shell Dimensions */
   --header-height: var(--spacing-header);
   /* Height of the sticky PartTabs row; the group aside is lowered by it (+ the 1.5rem column gap) to sit level with the first section text. */
@@ -121,6 +123,7 @@ html {
 
 html.dark {
   color-scheme: dark;
+  --hub-photo-dim: 1;
   --tab-mix: 16%;
   --tab-mix-hover: 24%;
   --band-mix-base: 30%;
