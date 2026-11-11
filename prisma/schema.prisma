@@ -103,27 +103,30 @@ model VerificationToken {
 }
 
 model Category {
-  id             String                @id @default(cuid())
-  slug           String                @unique
-  slugLv         String?
-  level          Int
-  color          String?
-  parentId       String?
-  isWildcard     Boolean               @default(false)
-  status         CategoryStatus        @default(ACTIVE)
-  submittedById  String?
-  submittedAt    DateTime?
-  createdAt      DateTime              @default(now())
-  updatedAt      DateTime              @updatedAt
-  parent         Category?             @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children       Category[]            @relation("CategoryHierarchy")
-  titles         CategoryTranslation[]
-  aliases        CategoryAlias[]
-  submittedBy    User?                 @relation("SubmittedCategories", fields: [submittedById], references: [id])
-  groups         Group[]
-  groupsWithTags Group[]               @relation("GroupTags")
-  hubNotes       HubNote[]
-  hubCities      HubCity[]
+  id              String                @id @default(cuid())
+  slug            String                @unique
+  slugLv          String?
+  level           Int
+  color           String?
+  parentId        String?
+  isWildcard      Boolean               @default(false)
+  imagePath       String?
+  imageCreditName String?
+  imageCreditUser String?
+  status          CategoryStatus        @default(ACTIVE)
+  submittedById   String?
+  submittedAt     DateTime?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  parent          Category?             @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children        Category[]            @relation("CategoryHierarchy")
+  titles          CategoryTranslation[]
+  aliases         CategoryAlias[]
+  submittedBy     User?                 @relation("SubmittedCategories", fields: [submittedById], references: [id])
+  groups          Group[]
+  groupsWithTags  Group[]               @relation("GroupTags")
+  hubNotes        HubNote[]
+  hubCities       HubCity[]
 }
 
 model CategoryAlias {
@@ -368,7 +371,7 @@ model Membership {
 }
 
 model Post {
-  id         String    @id @default(cuid())
+  id         String     @id @default(cuid())
   /// Announcement headline. Null on posts written before announcements had titles.
   title      String?
   content    String
@@ -378,10 +381,10 @@ model Post {
   archivedAt DateTime?
   /// Who may read it: everyone who can see the group, or members only (C3).
   visibility Visibility @default(MEMBERS_ONLY)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  group      Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  group      Group      @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@index([groupId, createdAt])
 }
@@ -445,18 +448,18 @@ model Message {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   type      String
   message   String
   link      String?
-  read      Boolean  @default(false)
+  read      Boolean   @default(false)
   /// USER = about the person's own groups and events; ADMIN = needs a site admin's attention (admin tab of the bell).
-  audience  String   @default("USER")
-  createdAt DateTime @default(now())
+  audience  String    @default("USER")
+  createdAt DateTime  @default(now())
   /// R33: set when an email digest listed this notification; never mailed twice.
   emailedAt DateTime?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, audience, read])
   @@index([userId, audience, createdAt])
@@ -464,20 +467,20 @@ model Notification {
 }
 
 model Report {
-  id            String   @id @default(cuid())
-  reporterId    String
-  targetGroupId String?
-  targetEventId String?
+  id                String        @id @default(cuid())
+  reporterId        String
+  targetGroupId     String?
+  targetEventId     String?
   targetNoteId      String?
   targetNoteReplyId String?
-  reason        String
-  status        String   @default("PENDING")
-  createdAt     DateTime @default(now())
-  reporter      User     @relation("FiledReports", fields: [reporterId], references: [id], onDelete: Cascade)
-  event         Event?   @relation(fields: [targetEventId], references: [id])
-  group         Group?   @relation(fields: [targetGroupId], references: [id])
-  note          HubNote?      @relation(fields: [targetNoteId], references: [id], onDelete: Cascade)
-  noteReply     HubNoteReply? @relation(fields: [targetNoteReplyId], references: [id], onDelete: Cascade)
+  reason            String
+  status            String        @default("PENDING")
+  createdAt         DateTime      @default(now())
+  reporter          User          @relation("FiledReports", fields: [reporterId], references: [id], onDelete: Cascade)
+  event             Event?        @relation(fields: [targetEventId], references: [id])
+  group             Group?        @relation(fields: [targetGroupId], references: [id])
+  note              HubNote?      @relation(fields: [targetNoteId], references: [id], onDelete: Cascade)
+  noteReply         HubNoteReply? @relation(fields: [targetNoteReplyId], references: [id], onDelete: Cascade)
 }
 
 enum ChatRequestStatus {
@@ -488,20 +491,20 @@ enum ChatRequestStatus {
 
 /// A Ziņa: a post-it note on a hub (K2). Hard delete; expired rows stay so the author can renew them.
 model HubNote {
-  id         String   @id @default(cuid())
-  authorId   String
+  id           String          @id @default(cuid())
+  authorId     String
   /// The hub: an ACTIVE L2 or L3 Category.
-  categoryId String
-  cityId     String?
-  groupId    String?
-  content    String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  author       User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category     Category      @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  city         City?         @relation(fields: [cityId], references: [id], onDelete: SetNull)
-  group        Group?        @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  categoryId   String
+  cityId       String?
+  groupId      String?
+  content      String
+  expiresAt    DateTime
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  author       User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category     Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  city         City?           @relation(fields: [cityId], references: [id], onDelete: SetNull)
+  group        Group?          @relation(fields: [groupId], references: [id], onDelete: SetNull)
   replies      HubNoteReply[]
   chatRequests ChatRequest[]
   reports      Report[]
