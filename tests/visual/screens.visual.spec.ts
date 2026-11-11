@@ -92,6 +92,9 @@ const SCREENS: Screen[] = [
   { name: 'city-hub', run: async (p) => { await p.goto('/lv/jelgava'); } },
   { name: 'board-city', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames&city=Jelgava'); } },
   { name: 'board-hub-card', run: async (p) => { await p.goto('/lv?category=games&tags=boardgames'); } },
+  // L3: a sub-veids on the board (its Veids chip as the group's head, hub card "Kopiena Šahs") and its own hub page, signed out.
+  { name: 'board-subtopic', run: async (p) => { await p.goto('/lv?category=games&tags=chess'); } },
+  { name: 'hub-subtopic', run: async (p) => { await p.goto('/lv/games/boardgames/chess'); } },
   { name: 'messages', signedIn: true, run: async (p) => { await p.goto('/lv/messages'); } },
   { name: 'my-groups', signedIn: true, run: async (p) => { await p.goto('/lv/profile/my-groups'); } },
   { name: 'profile', signedIn: true, run: async (p) => { await p.goto('/lv/profile'); } },
