@@ -106,6 +106,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-120 | Private "Rakstīt ziņu" = a **chat request** in the recipient's Ziņas inbox (Pieņemt / Noraidīt). The sender sees "gaida apstiprinājumu" until accepted; after a decline it stays so forever (the sender never learns); no second request to the same person from the same Ziņa. | Confirmed | 11 Nov. K2-23..K2-26. |
 | K-121 | **Replies vanish when their Ziņa expires**; 30-day expiry with renew, max 3 active per person site-wide (K-27a); Ziņot goes into the existing Report queue (new nullable target). | Confirmed | 11 Nov. K2-06, K2-09, K2-27. |
 | K-122 | Pārskats gets the **Ziņas 3-row preview** (Variant B column) and the **tab row** deferred from K1; the hub menu shows Ziņas. | Confirmed | 11 Nov. K2-10, K2-17..K2-19. |
+| K-123 | **Two buttons, two names:** compose a Ziņa = "Rakstīt ziņu" (en "Write a note"); private message to a Ziņa's author = "Rakstīt privāti" (en "Send a message"). **Ziņas and replies are reported separately** (two Report targets). | Confirmed | 11 Nov owner answers to K2 questions 1 and 2. K2-23, K2-09. |
 
 ### Chat
 | Id | Feature | Status | Notes |
