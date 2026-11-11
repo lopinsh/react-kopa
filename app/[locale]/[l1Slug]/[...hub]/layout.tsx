@@ -49,6 +49,7 @@ export default async function HubLayout({
             path: hub.path,
             stats: hub.stats,
             subTopics: hub.subTopics,
+            image: hub.image?.url ?? null,
             topicHref: hub.topicHref,
             local: hub.local && { hubCityId: hub.local.hubCityId, citySlug: hub.local.citySlug, segment: hub.local.segment, cityName: hub.local.cityName, cityHref: hub.local.cityHref },
             kur,

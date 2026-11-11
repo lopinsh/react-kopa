@@ -12,7 +12,7 @@ import HubPath from './HubPath';
  * the member line and the two actions. The ☰ drawer sits in the tile below 1024. Its `data-ui` marker is what the sticky bar watches.
  * A hub and a city hub fill it from their own contexts.
  */
-export default function HubHeadTile({ path, name, icon, drawer, members, groups, aside, actions }: {
+export default function HubHeadTile({ path, name, icon, drawer, members, groups, aside, actions, sliver }: {
     path: HubPathPart[];
     name: string;
     icon: ReactNode;
@@ -22,12 +22,15 @@ export default function HubHeadTile({ path, name, icon, drawer, members, groups,
     /** After the member line (a topic x city hub's parent city link). */
     aside?: ReactNode;
     actions: ReactNode;
+    /** A thin photo strip on top of the tile (L3 D10): the tile loses its top corners to it. */
+    sliver?: ReactNode;
 }) {
     const t = useTranslations('hub');
 
     return (
         <div className="mx-auto px-gutter pt-3 md:pt-5">
-            <div data-ui={UI.hubBanner} className="tone-fill frame relative grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]">
+            {sliver}
+            <div data-ui={UI.hubBanner} className={`tone-fill frame relative grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 ${sliver ? 'rounded-b-2xl' : 'rounded-2xl'} p-4 md:gap-x-4 md:p-6 lg:grid-cols-[auto_1fr_auto]`}>
                 {drawer}
                 <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item md:size-12 lg:col-start-1 lg:row-start-1">{icon}</span>
                 <div className="col-span-3 grid min-w-0 gap-1 lg:col-span-1 lg:col-start-2 lg:row-start-1">

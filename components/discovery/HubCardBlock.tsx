@@ -2,6 +2,7 @@ import { getFormatter, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import { MapPin } from 'lucide-react';
 import { CategoryDisc } from '@/components/ui/CategoryIcon';
+import CategoryPhoto from '@/components/ui/CategoryPhoto';
 import type { HubSummary } from '@/lib/services/hub-summary';
 
 const CHIP = 'inline-flex h-7 shrink-0 items-center whitespace-nowrap rounded-pill line press bg-surface px-3 text-meta text-foreground hover:bg-tint';
@@ -23,8 +24,8 @@ export function hubLabel(t: (key: 'name' | 'localName', values: Record<string, s
     return hub.cityName ? t('localName', { name, city: hub.cityName }) : name;
 }
 
-/** One hub inside the card: the round icon, the name as the link, "N dalībnieki M grupās", the next public event or the last activity, up to three sub-veidi chips and "+N" (K-75). `compact` is the smaller half of a split. */
-export default async function HubCardBlock({ hub, l1Slug, locale, compact = false }: { hub: HubSummary; l1Slug: string; locale: string; compact?: boolean }) {
+/** One hub inside the card: the round icon, the name as the link, "N dalībnieki M grupās", the next public event or the last activity, up to three sub-veidi chips and "+N" (K-75). A hub with a photo starts with a thin sliver of it (D8, D11; no credit on cards): `bleed` runs it to the card edges (the full block), a half of a split keeps it inside. `compact` is the smaller half of a split. */
+export default async function HubCardBlock({ hub, l1Slug, locale, compact = false, bleed = false }: { hub: HubSummary; l1Slug: string; locale: string; compact?: boolean; bleed?: boolean }) {
     const t = await getTranslations({ locale, namespace: 'hub' });
     const format = await getFormatter({ locale });
     const now = new Date();
@@ -35,6 +36,7 @@ export default async function HubCardBlock({ hub, l1Slug, locale, compact = fals
             : t('card.noActivity');
     return (
         <div className="flex min-w-0 flex-col gap-2">
+            {hub.image && <CategoryPhoto src={hub.image} sizes="(min-width: 1024px) 400px, 100vw" className={bleed ? "-mx-4 -mt-4 mb-1 h-12 rounded-t-2xl" : "h-8 rounded-xl"} />}
             <div className="flex items-center gap-2">
                 <HubDisc hub={hub} l1Slug={l1Slug} size={compact ? 28 : 36} />
                 <Link href={hub.href} className={`min-w-0 text-item text-foreground after:absolute after:inset-0 ${compact ? 'truncate' : 'line-clamp-2'}`}>{hubLabel(t, hub)}</Link>

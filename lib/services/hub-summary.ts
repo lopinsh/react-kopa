@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { categoryImage } from '@/lib/banner';
 import { HUB_CARD_CHIPS } from '@/lib/constants';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { resolveEventText, toTextLang, type TextLang } from '@/lib/translations';
@@ -11,6 +12,7 @@ import { CityHubService, type CityHubContext } from './city-hub.service';
 import { citySegment } from './city.service';
 
 const TITLES = { select: { lang: true, title: true } } as const;
+const IMAGE_COLS = { imagePath: true, imageCreditName: true, imageCreditUser: true } as const;
 
 export interface HubSummary {
     /** A Veids hub, or the city hub paired with it when one city is chosen (K3-23). */
@@ -20,6 +22,8 @@ export interface HubSummary {
     /** The L2 above an L3 (null on an L2): lets the card see that one chosen Veids is the parent of another. */
     parentSlug: string | null;
     title: string;
+    /** The category photo (its own, else its Veids's) as a design element on the card; no credit here (D11). Null for a city hub or no photo. */
+    image: string | null;
     /** The open topic x city hub's city name (K3-24): the card names it "Kopiena <Veids> · <pilsēta>". */
     cityName: string | null;
     /** Without locale. */
@@ -44,8 +48,8 @@ export async function hubSummaries(l1Slug: string, slugs: string[], locale: stri
     const cats = await prisma.category.findMany({
         where: { slug: { in: slugs }, level: { in: [2, 3] }, status: 'ACTIVE', OR: [{ parent: l1 }, { parent: { parent: l1 } }] },
         select: {
-            id: true, slug: true, level: true, color: true, titles: TITLES,
-            parent: { select: { id: true, slug: true, color: true, titles: TITLES, parent: { select: { id: true, slug: true } } } },
+            id: true, slug: true, level: true, color: true, titles: TITLES, ...IMAGE_COLS,
+            parent: { select: { id: true, slug: true, color: true, titles: TITLES, ...IMAGE_COLS, parent: { select: { id: true, slug: true } } } },
             children: { where: { status: 'ACTIVE' }, select: { slug: true, titles: TITLES } },
         },
     });
@@ -62,6 +66,7 @@ export async function hubSummaries(l1Slug: string, slugs: string[], locale: stri
             level: c.level as 2 | 3,
             parentSlug: c.level === 3 ? c.parent?.slug ?? null : null,
             title: title(c),
+            image: categoryImage(c, c.level === 3 ? c.parent : null)?.url ?? null,
             href: hubHref(l1Slug, l2Slug, c.level === 3 ? c.slug : undefined),
             accentColor: TaxonomyResolver.resolve(c).accentColor,
         };
@@ -116,7 +121,7 @@ async function citySummary(city: CityHubContext, accentColor: string, lang: Text
     ]);
     const times = [g._max.createdAt, m._max.joinedAt, p._max.createdAt, e._max.createdAt].filter((d): d is Date => d !== null);
     return {
-        kind: 'city', slug: city.slug, level: 2, parentSlug: null, title: city.name, cityName: null, href: city.href, accentColor, stats: city.stats,
+        kind: 'city', slug: city.slug, level: 2, parentSlug: null, title: city.name, image: null, cityName: null, href: city.href, accentColor, stats: city.stats,
         nextEvent: null, lastActivityAt: times.length ? new Date(Math.max(...times.map((d) => d.getTime()))) : null, subTopics: [], moreCount: 0,
     };
 }

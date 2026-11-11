@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
+import CategoryPhoto from '@/components/ui/CategoryPhoto';
 import HubCardBlock, { HubDisc, hubLabel } from './HubCardBlock';
 import type { HubSummary } from '@/lib/services/hub-summary';
 
@@ -17,7 +18,7 @@ export function hubMode(all: HubSummary[]): 'one' | 'parentChild' | 'split' | 'l
 }
 
 /**
- * The hub card, first in the board's grid when a Veids is chosen (K1-26, K-13, K-15): the size of a group card, tinted and edged apart from the groups (no tear-off, no picture).
+ * The hub card, first in the board's grid when a Veids is chosen (K1-26, K-13, K-15): the size of a group card, tinted and edged apart from the groups (no tear-off). The hub's photo is a design element, never a credit (L3 D8-D11): a sliver on top of each block and of each half, a small rounded thumbnail per list row.
  * One hub: the full block; parent and child: the parent's block with compact child rows; two others: split equally with a dashed divider; three or more: a list "N kopienas". A chosen city adds "Kopiena <pilsēta>" as an equal: the second half beside one Veids, the last list row beside more (K-130). Always one cell (K-12).
  * On phones (`row`) it is a block above the rows.
  */
@@ -37,7 +38,12 @@ export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) 
                 <>
                     <p className="flex items-center gap-2 text-item text-foreground"><HubDisc hub={hubs[0]} l1Slug={l1Slug} size={36} />{t('card.list', { n: hubs.length })}</p>
                     <ul className="flex flex-col divide-y divide-dashed divide-border">
-                        {hubs.map((h) => <li key={h.slug}><Link href={h.href} className="block py-2 text-item text-foreground">{hubLabel(t, h)}</Link></li>)}
+                        {hubs.map((h) => <li key={h.slug}>
+                            <Link href={h.href} className="flex items-center gap-3 py-2 text-item text-foreground">
+                                {h.image ? <CategoryPhoto src={h.image} sizes="40px" className="size-8 rounded-lg" /> : <HubDisc hub={h} l1Slug={l1Slug} size={32} />}
+                                <span className="min-w-0 flex-1 truncate">{hubLabel(t, h)}</span>
+                            </Link>
+                        </li>)}
                     </ul>
                 </>
             ) : mode === 'split' ? (
@@ -46,7 +52,7 @@ export default async function HubCard({ hubs, l1Slug, locale, variant }: Props) 
                 </div>
             ) : (
                 <>
-                    <div className="relative"><HubCardBlock hub={main} l1Slug={l1Slug} locale={locale} /></div>
+                    <div className="relative"><HubCardBlock hub={main} l1Slug={l1Slug} locale={locale} bleed /></div>
                     {kids.length > 0 && (
                         <ul className="flex flex-col divide-y divide-dashed divide-border border-t border-dashed border-border">
                             {kids.map((k) => (

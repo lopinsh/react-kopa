@@ -16,6 +16,7 @@ import OverviewTabs from '@/components/hubs/OverviewTabs';
 import NoteRow from '@/components/hubs/notes/NoteRow';
 import HubSection from '@/components/hubs/HubSection';
 import SubTopicChips from '@/components/hubs/SubTopicChips';
+import BannerCredit from '@/components/forms/banner/BannerCredit';
 
 const BOX = 'rounded-2xl bg-surface shadow-card frame';
 
@@ -85,6 +86,7 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
                         <HubSection id="hub-subtopics" title={t('subTopics.title')} count={hub.subTopics.length}><SubTopicChips hub={hub} locale={locale} /></HubSection>
                     </div>
                 )}
+                {hub.image && <BannerCredit credit={hub.image.credit} className="xl:col-span-full" />}
             </div>
         </>
     );

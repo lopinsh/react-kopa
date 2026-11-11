@@ -17,6 +17,8 @@ export interface HubState {
     path: HubPathPart[];
     stats: { memberCount: number; groupCount: number };
     subTopics: HubSubTopic[];
+    /** The hub's photo URL for the head sliver (L3 D10); the credit stays on the server side, on Pārskats (D11). */
+    image: string | null;
     /** The topic hub's address (no city); `href` is the topic x city hub's on one. */
     topicHref: string;
     /** The topic x city hub the page is on (K3), else null. */
