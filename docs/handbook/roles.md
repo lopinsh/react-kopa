@@ -17,6 +17,12 @@ A screen shows only what the viewer can use. Hidden, not disabled.
 | Edit, renew, delete | hidden | own only; site admins delete any |
 | Close a topic x city hub (Aizvērt kopienu) | hidden | no; site admins only |
 
+| Čats (hub room) | Logged out | Signed in |
+|---|---|---|
+| Read the last 50 lines | yes, with names (no name card, no profile link) | yes, live |
+| Write | "Ienākt" and a read-only note | yes, joined on first open |
+| Iestatījumi tab | hidden | yes |
+
 **Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
 
 **Who is going.** The number for logged-out visitors; faces and a name for signed-in viewers (D12).

@@ -59,6 +59,7 @@ The same situation behaves the same way on every screen.
 - New things appear in place, quietly.
 - Counts (unread, requests) update without a reload.
 - A toast only for things outside the current screen.
+- Chat signed in is live through the SDK; signed out the page asks the server again every 30 s while it is visible.
 
 ## Sign-in needed
 

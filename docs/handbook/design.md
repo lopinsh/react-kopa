@@ -34,7 +34,7 @@ Rule: the group's own content starts near the top. The banner carries the at-a-g
 | Find | Group and event panels | centred overlay (sheet on phones) | R6b done |
 | Find | Search | header field, panel (full screen on phones) | R7 done |
 | Find | Manas grupas | A | R8 done |
-| Find | Hub (kopiena): Pārskats (tab row + panel grid), Grupas, Pasākumi, Ziņas | B (group frame, no aside) | K1 (K1-1 built: frame, Grupas) |
+| Find | Hub (kopiena): Pārskats (tab row + panel grid), Grupas, Pasākumi, Ziņas, Čats (room pane, no Kur) | B (group frame, no aside) | K1 (K1-1 built: frame, Grupas) |
 | Create | Create group wizard | D | R4 done (field), R12 |
 | Join | Group Informācija | B | R3a, R9b done (parts on one page, tabs jump; group picture), R28 section pictures |
 | Join | Join / Contact pop-up, sign-in pop-up | pop-up | R3b done |
@@ -166,6 +166,7 @@ Never a bare `rounded`, `rounded-sm`, `rounded-[…]` or `shadow-sm…2xl` (`ui:
 
 One component per job, in `components/ui/`. Pages use these and don't restyle them.
 
+- **Room switcher and tabs (Čats).** A pill `# Title ▾` opens a bottom sheet below 768 px and a drop-down from there, with search, open rooms first, Katalogs last. From `lg` the rooms a person has open are tabs beside it (newest last, max 8, a close × on hover or focus, not on the current one); Katalogs and Iestatījumi sit at the right with the Tabs active marker. Phones show the pill alone.
 - **Button.** Pill. Primary (filled, one per area), secondary (tint), quiet (ring), danger, `onTone` (light pill, only on the group head tile). Sizes md (44 px on phones, 40 from `md`) and sm (32 px). Always the site colour, never the group's. Round icon-only: `IconButton` (see Motion and icons).
 - **Badge and RoleTag.** Badge is the small tag: tone `tag`, `outline` or `muted`. Tone `role` is a solid pill in the look's colour for that role. RoleTag shows Īpašnieks, Mod, Gaida (and a quiet Biedrs on discovery) in those colours, and nothing for a member elsewhere; the colour is fixed once there, so every place it appears has it.
 - **FilterChip.** Filters (clickable). Off: surface with a ring. On: site colour tint with a stronger ring.
