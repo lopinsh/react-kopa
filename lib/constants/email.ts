@@ -8,10 +8,10 @@ export const EMAIL_DIGEST_LOOKBACK_MS = 24 * 60 * 60_000;
 export const EMAIL_DIGEST_MAX_LINES = 10;
 /** People mailed per cron run; the rest go in the next run. */
 export const EMAIL_DIGEST_MAX_USERS = 200;
-/** Notification types that may be emailed: requests, applications, inquiries, approvals, accepts, let-ins, declines, note replies and chat requests. */
+/** Notification types that may be emailed: requests, applications, inquiries, approvals, accepts, let-ins, declines, note replies, chat requests and chat mentions. */
 export const EMAIL_DIGEST_TYPES = [
     'JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY',
     'REQUEST_APPROVED', 'APPLICATION_ACCEPTED', 'APPLICATION_DECLINED',
     'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN',
-    'HUB_NOTE_REPLY', 'HUB_CITY_OPENED', 'CHAT_REQUEST', 'CHAT_REQUEST_ACCEPTED',
+    'HUB_NOTE_REPLY', 'HUB_CITY_OPENED', 'CHAT_REQUEST', 'CHAT_REQUEST_ACCEPTED', 'CHAT_MENTION',
 ] as const satisfies readonly NotificationPayload['type'][];

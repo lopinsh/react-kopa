@@ -1,5 +1,5 @@
 import {
-    Bell, CalendarDays, CalendarX, Crown, EyeOff, Flag, Lightbulb, List, Mail, MapPin, MessageCircle, MessageSquare, Shield, Tag, Trash2, UserCheck, UserPlus, UserX,
+    AtSign, Bell, CalendarDays, CalendarX, Crown, EyeOff, Flag, Lightbulb, List, Mail, MapPin, MessageCircle, MessageSquare, Shield, Tag, Trash2, UserCheck, UserPlus, UserX,
     type LucideIcon,
 } from 'lucide-react';
 
@@ -41,6 +41,7 @@ const ICONS: Record<string, LucideIcon> = {
     HUB_CITY_OPENED: MapPin,
     CHAT_REQUEST: Mail,
     CHAT_REQUEST_ACCEPTED: UserCheck,
+    CHAT_MENTION: AtSign,
 };
 
 export function notificationIcon(type: string): LucideIcon {

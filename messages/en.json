@@ -1811,6 +1811,7 @@
       "HUB_NOTE_REPLY": "{authorName} replied to your note",
       "CHAT_REQUEST": "{authorName} would like to message you",
       "CHAT_REQUEST_ACCEPTED": "{authorName} accepted your message",
+      "CHAT_MENTION": "{authorName} mentioned you in {room}",
       "HUB_CITY_OPENED": "{hubName} · {cityName} is open"
     },
     "tabPersonal": "Personal",

@@ -5,7 +5,7 @@ type NotificationTranslator = ReturnType<typeof useTranslations<'notifications'>
 
 // Types whose detail line is something a person wrote, shown in quotes.
 const QUOTED_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'INQUIRY_RECEIVED', 'APPLICATION_INQUIRY', 'NEW_POST', 'ADMIN_FEEDBACK']);
-const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'APPLICATION_DECLINED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'GROUP_DELETED', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN', 'EVENT_NOW_OPEN', 'EVENT_REMOVED', 'EVENT_CANCELLED', 'OWNERSHIP_TRANSFERRED', 'ADMIN_GRANTED', 'ADMIN_REVOKED', 'ADMIN_REPORT', 'ADMIN_TAG_PENDING', 'ADMIN_SUGGESTION', 'ADMIN_FEEDBACK', 'ADMIN_GROUP_HIDDEN', 'ADMIN_CITY_PENDING', 'CITY_APPROVED', 'CITY_REJECTED', 'HUB_NOTE_REPLY', 'HUB_CITY_OPENED', 'CHAT_REQUEST', 'CHAT_REQUEST_ACCEPTED']);
+const KNOWN_TYPES = new Set(['JOIN_REQUEST', 'APPLICATION_RECEIVED', 'APPLICATION_ACCEPTED', 'APPLICATION_DECLINED', 'REQUEST_APPROVED', 'APPLICATION_INQUIRY', 'INQUIRY_RECEIVED', 'NEW_POST', 'NEW_EVENT', 'TAG_MERGED', 'GROUP_HIDDEN', 'GROUP_DELETED', 'EVENT_REQUEST', 'EVENT_APPROVED', 'EVENT_DECLINED', 'EVENT_LET_IN', 'EVENT_SPOT_FREED', 'EVENT_ROOM_AGAIN', 'EVENT_NOW_OPEN', 'EVENT_REMOVED', 'EVENT_CANCELLED', 'OWNERSHIP_TRANSFERRED', 'ADMIN_GRANTED', 'ADMIN_REVOKED', 'ADMIN_REPORT', 'ADMIN_TAG_PENDING', 'ADMIN_SUGGESTION', 'ADMIN_FEEDBACK', 'ADMIN_GROUP_HIDDEN', 'ADMIN_CITY_PENDING', 'CITY_APPROVED', 'CITY_REJECTED', 'HUB_NOTE_REPLY', 'HUB_CITY_OPENED', 'CHAT_REQUEST', 'CHAT_REQUEST_ACCEPTED', 'CHAT_MENTION']);
 
 export interface NotificationText {
     headline: string;
@@ -31,6 +31,7 @@ export function formatNotificationText(t: NotificationTranslator, type: string, 
         canonicalTag: String((locale === 'en' ? args.canonicalTagEn : locale === 'lv' ? args.canonicalTagLv : undefined) ?? args.canonicalTag ?? ''),
         // City notices store both names too; older ones only have `cityName`.
         cityName: String((locale === 'en' ? args.cityNameEn : locale === 'lv' ? args.cityNameLv : undefined) ?? args.cityName ?? args.cityNameLv ?? ''),
+        room: String((locale === 'en' ? args.roomEn : args.roomLv) ?? args.room ?? ''),
         hubName: String((locale === 'en' ? args.hubNameEn : args.hubNameLv) ?? ''),
         waitlistCount: Number(args.waitlistCount ?? 0)
     });

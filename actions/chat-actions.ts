@@ -7,10 +7,12 @@ import { handleActionError } from '@/lib/action-utils';
 import { ChatAccessService, type ChatBrowserSession } from '@/lib/services/chat-access.service';
 import { ChatCardService, type ChatCard } from '@/lib/services/chat-card.service';
 import { ChatPeopleService, type ChatLineName, type OnlineList } from '@/lib/services/chat-people.service';
+import { ChatMentionService } from '@/lib/services/chat-mention.service';
 import { ChatRequestService } from '@/lib/services/chat-request.service';
+import { UserService } from '@/lib/services/user.service';
 import type { PublicLine } from '@/lib/services/matrix.service';
 import { NotificationService } from '@/lib/services/notification.service';
-import { chatNamesSchema, chatSessionSchema, directChatRequestSchema, hubKeySchema, openRoomSchema, personCardSchema, roomOnlineSchema } from '@/lib/validations/chat';
+import { chatNamesSchema, chatSessionSchema, chatSettingsSchema, directChatRequestSchema, hubKeySchema, notifyMentionsSchema, openRoomSchema, personCardSchema, roomOnlineSchema } from '@/lib/validations/chat';
 import type { ActionResponse } from '@/types/actions';
 
 /** A Matrix login for the signed-in person's browser (K5-05). The tokens go to the browser's memory only. */
@@ -107,5 +109,34 @@ export async function sendDirectChatRequest(input: unknown): Promise<ActionRespo
         return { success: true };
     } catch (error: unknown) {
         return handleActionError(error);
+    }
+}
+
+/** Iestatījumi of Čats (K5-22): each switch saves on its own. */
+export async function saveChatSettings(input: unknown): Promise<ActionResponse<void>> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    const parsed = chatSettingsSchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+    try {
+        await UserService.saveChatSettings(session.user.id, parsed.data);
+        revalidatePath('/[locale]/[l1Slug]/[...hub]', 'page');
+        return { success: true };
+    } catch (error: unknown) {
+        return handleActionError(error);
+    }
+}
+
+/** After a line with @mentions was sent (K5-24): the people mentioned get one bell notice per room until they read it. */
+export async function notifyMentions(input: unknown): Promise<ActionResponse<void>> {
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'UNAUTHORIZED' };
+    const parsed = notifyMentionsSchema.safeParse(input);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+    try {
+        await ChatMentionService.notify(session.user.id, parsed.data.hubKey, parsed.data.eventId);
+        return { success: true };
+    } catch (error: unknown) {
+        return handleActionError(error, 'CHAT_UNAVAILABLE');
     }
 }

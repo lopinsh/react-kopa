@@ -54,6 +54,22 @@ export const UserService = {
         });
     },
 
+    /** The Čats switches in Iestatījumi (K5-22): the mention notice and chat requests (the same `allowDirectMessages` the site settings change). */
+    async getChatSettings(userId: string): Promise<{ mentionNotify: boolean; allowRequests: boolean } | null> {
+        const u = await prisma.user.findUnique({ where: { id: userId }, select: { chatMentionNotify: true, allowDirectMessages: true } });
+        return u ? { mentionNotify: u.chatMentionNotify, allowRequests: u.allowDirectMessages } : null;
+    },
+
+    /** Saves only the switches given. */
+    async saveChatSettings(userId: string, data: { mentionNotify?: boolean; allowRequests?: boolean }): Promise<void> {
+        try {
+            await prisma.user.update({ where: { id: userId }, data: { chatMentionNotify: data.mentionNotify, allowDirectMessages: data.allowRequests } });
+        } catch (error) {
+            console.error('[UserService.saveChatSettings] Error:', error);
+            throw new ActionError('UPDATE_FAILED');
+        }
+    },
+
     /** The email digest switch (R33); `canEmail` is false for an account with no address or a demo account. */
     async getEmailSettings(userId: string): Promise<{ emailNotifications: boolean; canEmail: boolean } | null> {
         const user = await prisma.user.findUnique({ where: { id: userId }, select: { emailNotifications: true, email: true } });

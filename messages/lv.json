@@ -1811,6 +1811,7 @@
       "HUB_NOTE_REPLY": "{authorName} atbildēja uz tavu ziņu",
       "CHAT_REQUEST": "{authorName} vēlas ar tevi sarakstīties",
       "CHAT_REQUEST_ACCEPTED": "{authorName} pieņēma tavu ziņu",
+      "CHAT_MENTION": "{authorName} tevi pieminēja istabā {room}",
       "HUB_CITY_OPENED": "Atvērta kopiena {hubName} · {cityName}"
     },
     "tabPersonal": "Personīgie",
