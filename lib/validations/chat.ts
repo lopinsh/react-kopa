@@ -11,3 +11,10 @@ export const hubKeySchema = z.object({ hubSlug: slugSchema, city: slugSchema.opt
 export type HubKeyInput = z.infer<typeof hubKeySchema>;
 
 export const openRoomSchema = z.object({ hubKey: hubKeySchema });
+
+/** Site user ids whose names a Čats line shows (K5-11): at most one screenful of senders. */
+export const chatNamesSchema = z.object({ ids: z.array(z.string().trim().min(1).max(40)).min(1).max(100) });
+export type ChatNamesInput = z.infer<typeof chatNamesSchema>;
+
+/** One line typed into the composer (K5-11). */
+export const chatLineSchema = z.string().trim().min(1).max(2000);

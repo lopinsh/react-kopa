@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { isSiteAdmin } from '@/lib/site-role';
 import { ActionError } from '@/types/actions';
 import { enc, errcodeOf, isRecord, matrixConfig, matrixFetch, MatrixRequestError, type MatrixConfig } from './matrix-client';
 
@@ -7,7 +8,7 @@ import { enc, errcodeOf, isRecord, matrixConfig, matrixFetch, MatrixRequestError
 export interface MatrixStatus { configured: boolean; reachable: boolean; serverName: string | null; publicUrl: string | null; version: string | null }
 export interface MatrixSession { userId: string; accessToken: string; deviceId: string; homeserverUrl: string }
 export interface ExpiringSession { accessToken: string; refreshToken: string; expiresInMs: number }
-export interface PublicLine { body: string; ts: number; name: string | null }
+export interface PublicLine { body: string; ts: number; name: string | null; mod: boolean }
 
 const V3 = '/_matrix/client/v3';
 const ID_RE = /^[a-z0-9]+$/;
@@ -161,11 +162,11 @@ export const MatrixService = {
         const chunk = isRecord(res) && Array.isArray(res.chunk) ? res.chunk : [];
         const lines = chunk.filter(isRecord).filter((e) => e.type === 'm.room.message' && isRecord(e.content) && e.content.msgtype === 'm.text' && typeof e.content.body === 'string');
         const ids = lines.map((e) => siteUserId(e.sender)).filter((x): x is string => !!x);
-        const users = await prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } });
-        const names = new Map(users.map((u) => [u.id, u.name]));
+        const users = await prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true, role: true } });
+        const names = new Map(users.map((u) => [u.id, u]));
         return lines.map((e) => {
             const id = siteUserId(e.sender);
-            return { body: isRecord(e.content) ? String(e.content.body) : '', ts: typeof e.origin_server_ts === 'number' ? e.origin_server_ts : 0, name: id ? names.get(id) ?? null : null };
+            return { body: isRecord(e.content) ? String(e.content.body) : '', ts: typeof e.origin_server_ts === 'number' ? e.origin_server_ts : 0, name: id ? names.get(id)?.name ?? null : null, mod: isSiteAdmin(id ? names.get(id)?.role : null) };
         }).reverse();
     },
 

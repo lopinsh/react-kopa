@@ -87,7 +87,8 @@ export default function UserMenu({ user, initialOpen }: Props) {
                         icon={<LogOut aria-hidden className={ICON} />}
                         onSelect={() => {
                             setSigningOut(true);
-                            void signOut();
+                            // The chat client (if this tab opened one) logs its device out first, best effort (K5.md 2.4).
+                            void import('@/components/hubs/chat/matrix-client').then((m) => m.logoutChat()).catch(() => undefined).finally(() => { void signOut(); });
                         }}
                     >
                         {t('signOut')}
