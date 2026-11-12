@@ -16,6 +16,7 @@
     "redesign:build": "node scripts/redesign/gen.mjs",
     "plan:check": "node scripts/redesign/check-plan.mjs",
     "db:up": "docker compose up -d db soketi",
+    "matrix:up": "bash deploy/matrix/up.sh",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:seed": "prisma db seed",

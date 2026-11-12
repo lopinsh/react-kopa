@@ -72,3 +72,6 @@ test.ts
 /prisma/demo.js
 /prisma/demo-data/*.js
 scripts/.unsplash-cache/
+
+# Matrix trial (K4): rendered Synapse config
+/.matrix/

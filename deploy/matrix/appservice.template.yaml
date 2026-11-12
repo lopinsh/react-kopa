@@ -1,0 +1,14 @@
+id: ejam
+url: null
+as_token: __AS_TOKEN__
+hs_token: __HS_TOKEN__
+sender_localpart: ejam
+rate_limited: false
+namespaces:
+  users:
+    - exclusive: true
+      regex: '@u_[a-z0-9]+:__SERVER_NAME_RE__'
+  aliases:
+    - exclusive: true
+      regex: '#ejk_.*:__SERVER_NAME_RE__'
+  rooms: []

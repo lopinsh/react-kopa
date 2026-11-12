@@ -32,6 +32,23 @@ services:
       - "6001:6001"
       - "9601:9601"
 
+  synapse:
+    image: ghcr.io/element-hq/synapse:v1.165.0
+    container_name: ejam-kopa-synapse
+    profiles: ["matrix"]
+    restart: unless-stopped
+    environment:
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+      PYTHONPATH: /data
+    volumes:
+      - ./.matrix:/data
+    ports:
+      - "8008:8008"
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 512m
+
   app:
     build:
       context: .

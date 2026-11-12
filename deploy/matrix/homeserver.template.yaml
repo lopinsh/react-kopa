@@ -1,0 +1,52 @@
+# Rendered by deploy/matrix/render.sh. Only what differs from Synapse defaults.
+server_name: "__SERVER_NAME__"
+public_baseurl: "__PUBLIC_URL__"
+pid_file: /tmp/homeserver.pid
+signing_key_path: /data/signing.key
+log_config: /data/log.config
+media_store_path: /tmp/media_store
+report_stats: false
+macaroon_secret_key: "__MACAROON_SECRET__"
+form_secret: "__FORM_SECRET__"
+trusted_key_servers: []
+suppress_key_server_warning: true
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    bind_addresses: ["0.0.0.0"]
+    resources:
+      - names: [client]
+        compress: false
+
+federation_domain_whitelist: []
+enable_registration: false
+password_config:
+  enabled: false
+allow_guest_access: __ALLOW_GUESTS__
+require_auth_for_profile_requests: true
+app_service_config_files:
+  - /data/ejam-appservice.yaml
+modules:
+  - module: ejam_rules.EjamRules
+    config:
+      sender: "@ejam:__SERVER_NAME__"
+presence:
+  enabled: false
+user_directory:
+  enabled: false
+enable_media_repo: false
+url_preview_enabled: false
+caches:
+  global_factor: 0.5
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: "__DB_PASSWORD__"
+    database: synapse
+    host: "__DB_HOST__"
+    cp_min: 1
+    cp_max: 5

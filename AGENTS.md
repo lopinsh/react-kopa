@@ -43,6 +43,7 @@ npm run dev                   # http://localhost:3000
 | All checks | `npm run check` |
 | Production build | `npm run build` (needs `AUTH_SECRET` + `DATABASE_URL`) |
 | New migration | `npm run db:migrate -- --name <snake_case_name>` (stop dev server first) |
+| Matrix trial (Synapse, opt-in, K4; needs `MATRIX_*` in `.env`) | `npm run matrix:up` |
 | Regenerate client | `npm run db:generate` (after every schema change) |
 | Seed | `npm run db:seed` |
 | Smoke test (built app on :3000, seeded DB; CI runs it) | `npm run test:smoke` |
