@@ -154,6 +154,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-147 | **City room list lives at `/lv/<city>/rooms`:** the Katalogs of the city's rooms in the city frame, not in the city menu; each row opens that room's Čats. | Confirmed | 12 Nov owner answer (K5 Owner question 1). K5-23. |
 | K-148 | **"Online now" comes from a Soketi presence channel** (`presence-site`): online while any site tab is open, never stored; ids only on the socket, no names. | Confirmed | 12 Nov owner answer (K5 Owner question 2). K5-15. |
 | K-149 | **Signed-out online list shows names too**, not the count only; names do not open a card or link (K-142). | Confirmed | 12 Nov owner answer (K5 Owner question 3). K5-18. |
+| K-150 | **Čats block on Pārskats:** heading "Čats" with "N tiešsaistē", the hub room's last 3 lines as one-line rows (time · name · text), then "Atvērt čatu ›"; an empty room says so and keeps the link. Placed after Ziņas (phone: Aktivitāte, Ziņas, Čats, Pasākumi, Grupas; desktop: under Ziņas in its column). Lines read on the server (no SDK on Pārskats); signed out shows names (K-142). | Confirmed | 12 Nov owner request + answers. Changes K-89 order. K5-28 (K5-3). |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
