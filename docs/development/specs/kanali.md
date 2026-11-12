@@ -151,6 +151,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-144 | **A closed topic × city hub's room is gone:** out of Katalogs, its lines not shown; a reopen starts a fresh room. | Confirmed | 12 Nov owner answer. Overrides K3.md §9 "archives the room". K5-01. |
 | K-145 | **Chat notifies @mentions only:** bell / Jaunumi, the email digest if on, unread dots on open rooms, one switch in Iestatījumi. | Confirmed | 12 Nov owner answer. K5-22, K5-24..K5-26. |
 | K-146 | **Signed-out chat readers refresh every 30 s** (server read, K-140); no live connection. | Confirmed | 12 Nov owner answer. K5-11. |
+| K-147 | **City room list lives at `/lv/<city>/rooms`:** the Katalogs of the city's rooms in the city frame, not in the city menu; each row opens that room's Čats. | Confirmed | 12 Nov owner answer (K5 Owner question 1). K5-23. |
+| K-148 | **"Online now" comes from a Soketi presence channel** (`presence-site`): online while any site tab is open, never stored; ids only on the socket, no names. | Confirmed | 12 Nov owner answer (K5 Owner question 2). K5-15. |
+| K-149 | **Signed-out online list shows names too**, not the count only; names do not open a card or link (K-142). | Confirmed | 12 Nov owner answer (K5 Owner question 3). K5-18. |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
