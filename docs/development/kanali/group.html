@@ -2,13 +2,14 @@
 <html lang="lv">
 <head>
 <meta charset="utf-8">
+<style>/* the drawing has no Tailwind preflight, so the browser default margins on headings and paragraphs would show: zero them like the site does */h1,h2,h3,h4,p,ul,ol{margin:0}</style>
 <title>Kanāli: grupas lapa</title>
 </head>
 <body class="min-h-screen font-sans bg-background p-6 text-foreground">
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page (AF-22). Plain mock, drawn 12 Nov from the ledger rows K-151..K-156 in docs/development/specs/kanali.md. The head copies HubHeadTile/HubPath/HubActions (components/hubs/frame), the picture box copies HeadPicture, the aside copies GroupAside; class strings come from the site's own roles and utilities. Layout from design.md (group page, layout B). -->
 
 <h1 class="text-title mb-1">Kanāli: grupas lapa</h1>
-<p class="text-meta text-foreground-muted">Versija v2 · publicēta 2026-11-12 18:56</p>
+<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-12 18:58</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Grupas galva kļūst kā kopienas galva (K-151): divtoņu bilde toņa flīzē, ceļš "Tēma › Apakštēma" (K-152), pogas Sazināties un Dalīties (K-153). Grupas bilde pārceļas uz labo joslu, zem tās kopienas kaste (K-154); telefonā bilde ir 3:1 strēmele zem galvas, kopienas kaste pēc satura (K-155). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā pilnā platumā un pārplūst no 1024.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -114,6 +115,7 @@
     box.style.setProperty('--c', 'var(--cat-community)');
     box.style.setProperty('--accent', 'var(--cat-community)');
     box.style.setProperty('--accent-foreground', 'var(--on-cat)');
+    box.style.height = 'auto';
     box.innerHTML = s.fn(w);
     col.appendChild(box);
     row.appendChild(col);
