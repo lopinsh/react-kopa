@@ -492,6 +492,7 @@
     "SECTION_NOT_FOUND": "Šī sadaļa vairs nav atrodama.",
     "MATRIX_UNAVAILABLE": "Matrix serveris nav pieejams.",
     "MATRIX_FAILED": "Matrix pieprasījums neizdevās.",
+    "CHAT_UNAVAILABLE": "Čats šobrīd nav pieejams. Pamēģini vēlāk.",
     "HUB_CITY_REQUESTED": "Tu to jau pieprasīji"
   },
   "group": {

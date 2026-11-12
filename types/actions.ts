@@ -69,6 +69,7 @@ export const ERROR_CODES = [
     'SECTION_NOT_FOUND',
     'MATRIX_UNAVAILABLE',
     'MATRIX_FAILED',
+    'CHAT_UNAVAILABLE',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];
