@@ -45,7 +45,7 @@ export default async function CityOverviewPage({ city, locale, viewer }: { city:
                             <p className="text-body-sm text-foreground-muted">{tCity('roomsEmpty', { city: city.name })}</p>
                             {requestable.length > 0 && <CityRequestPicker topics={requestable} cityName={city.name} citySegment={city.segment} />}
                         </div>
-                    ) : <CityRooms rooms={rooms} cityName={city.name} />}
+                    ) : <CityRooms rooms={rooms} cityName={city.name} moreHref={`${city.href}/rooms`} />}
                 </HubSection>
             </div>
         </>

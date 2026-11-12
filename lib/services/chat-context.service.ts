@@ -54,6 +54,20 @@ export async function family(l2Id: string, locale: string): Promise<RoomRef[]> {
 }
 
 export const ChatContextService = {
+    /**
+     * Where `?room=<slug>` on a hub leads (K5-27, K-57): an OPEN topic x city room with that city segment, else an ACTIVE L3's room, else the hub's own Čats.
+     * The address carries no locale (the caller adds it).
+     */
+    async roomHref(hub: { id: string; level: 2 | 3; topicHref: string }, room: string, locale: string): Promise<string> {
+        const own = await prisma.category.findUnique({ where: { id: hub.id }, select: { parentId: true } });
+        const rooms = await family(hub.level === 2 ? hub.id : own?.parentId ?? hub.id, locale);
+        const want = room.toLowerCase();
+        const hit = rooms.find((r) => r.kind === 'city' && r.categoryId === hub.id && r.key.endsWith(`:${want}`))
+            ?? rooms.find((r) => r.kind === 'sub' && r.href.split('/').at(-2) === want)
+            ?? rooms.find((r) => r.categoryId === hub.id && r.kind !== 'city');
+        return hit?.href ?? `${hub.topicHref}/chat`;
+    },
+
     /** Built for the hub the Čats page is on (K5-09). A signed-out visitor gets the last 50 lines now; a failed read marks chat unavailable instead of throwing (K5-14). */
     async pageContext(hub: HubInput, viewer: { id: string; role?: string | null } | null, memberLine: string, locale: string): Promise<ChatPageContext> {
         const own = await prisma.category.findUnique({ where: { id: hub.id }, select: { parentId: true } });

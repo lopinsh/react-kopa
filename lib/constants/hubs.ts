@@ -2,6 +2,8 @@
 
 /** How many groups a hub list shows in each tier: 1-4 cards, 5-16 compact rows, more: the first 16 and a link to the board (K-106). */
 export const HUB_GROUP_TIERS = { full: 4, list: 16 } as const;
+/** Pilsētas istabas on a city's Pārskats: rows before "Vēl N istabas" links to the city's Katalogs (K5-23). */
+export const CITY_ROOM_ROWS = 8;
 
 /** Rows in the Pārskats previews (groups, events; K-106, K-94). */
 export const HUB_PREVIEW_ROWS = 3;
@@ -38,6 +40,6 @@ export const HUB_CITY_OPEN_AT = 2;
 
 /** Address segments a city may not take: the static folders under `app/[locale]/` and the hub page names (K3-02). Compared lower-cased. */
 export const CITY_RESERVED_SEGMENTS: readonly string[] = [
-    'about', 'admin', 'auth', 'create', 'email', 'onboarding', 'privacy', 'profile', 'messages', 'notifications', 'settings', 'group',
+    'about', 'admin', 'auth', 'create', 'email', 'onboarding', 'privacy', 'profile', 'messages', 'notifications', 'settings', 'group', 'rooms',
     ...HUB_RESERVED_SLUGS,
 ];

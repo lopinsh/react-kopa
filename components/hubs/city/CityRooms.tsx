@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { HUB_GROUP_TIERS } from '@/lib/constants';
+import { CITY_ROOM_ROWS } from '@/lib/constants';
 import { relativeTo } from '@/lib/utils/relative-time';
 import { TEXT_LINK_CLASS } from '@/components/ui/TextLink';
 
@@ -16,15 +15,14 @@ export interface CityRoomRow {
 }
 
 /**
- * Pilsētas istabas (K3-20, K-107): the city's open topic x city hubs as compact rows "Šahs · Jelgava", meta "N grupas · {relative}", the first 16;
- * "Vēl N istabas" shows the rest in place (a link to the Katalogs comes with K5).
+ * Pilsētas istabas (K3-20, K-107): the city's open topic x city hubs as compact rows "Šahs · Jelgava", meta "N grupas · {relative}", the first 8;
+ * "Vēl N istabas" links to the city's Katalogs `/[city]/rooms` (K5-23, K-147).
  */
-export default function CityRooms({ rooms, cityName }: { rooms: CityRoomRow[]; cityName: string }) {
+export default function CityRooms({ rooms, cityName, moreHref }: { rooms: CityRoomRow[]; cityName: string; moreHref: string }) {
     const t = useTranslations('hub');
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
-    const [all, setAll] = useState(false);
-    const shown = all ? rooms : rooms.slice(0, HUB_GROUP_TIERS.list);
+    const shown = rooms.slice(0, CITY_ROOM_ROWS);
     const more = rooms.length - shown.length;
 
     return (
@@ -40,7 +38,7 @@ export default function CityRooms({ rooms, cityName }: { rooms: CityRoomRow[]; c
             ))}
             {more > 0 && (
                 <div className="border-0 border-t border-dashed border-border py-2">
-                    <button type="button" onClick={() => setAll(true)} className={TEXT_LINK_CLASS}>{t('city.moreRooms', { count: more })}</button>
+                    <Link href={moreHref} className={TEXT_LINK_CLASS}>{t('city.moreRooms', { count: more })}</Link>
                 </div>
             )}
         </div>

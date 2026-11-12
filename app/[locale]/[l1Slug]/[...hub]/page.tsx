@@ -7,6 +7,7 @@ import { parseCities } from '@/lib/discovery-params';
 import { hubPages } from '@/lib/hub-pages';
 import { parseHubPath } from '@/lib/hub-path';
 import { HubService } from '@/lib/services/hub.service';
+import { ChatContextService } from '@/lib/services/chat-context.service';
 import { CityHubService } from '@/lib/services/city-hub.service';
 import { HubCityService } from '@/lib/services/hub-city.service';
 import OverviewPage from '@/components/hubs/pages/OverviewPage';
@@ -61,6 +62,7 @@ export default async function HubPage({ params, searchParams }: { params: Promis
         const base = open ? `${hub.topicHref}/${open.segment}` : hub.topicHref;
         redirect({ href: hubPages(base).find((x) => x.key === address.page)?.href ?? base, locale });
     }
+    if (typeof sp.room === 'string' && sp.room) redirect({ href: await ChatContextService.roomHref({ id: hub.id, level: hub.level, topicHref: hub.topicHref }, sp.room.slice(0, 100), locale), locale });
     // The city is part of the address now: a topic x city hub fixes it for every query (K3-08).
     const cities = hub.local ? [hub.local.citySlug] : [];
     if (address.page === 'messages') return <NotesPage hub={hub} sp={sp} cities={cities} locale={locale} viewer={session?.user?.id ? { id: session.user.id, role: session.user.role } : undefined} />;
