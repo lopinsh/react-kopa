@@ -1134,7 +1134,8 @@
       "planTab": "Plan",
       "planDrawings": {
         "hub": "Hubs",
-        "l3": "Sub-topics and photos"
+        "l3": "Sub-topics and photos",
+        "group": "Group page"
       }
     },
     "handbook": {
