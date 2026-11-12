@@ -7,6 +7,7 @@ import { ChevronDown, Hash, List, MapPin, MessagesSquare, Search, X } from 'luci
 import { Link } from '@/i18n/routing';
 import { buttonClass } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import UnreadDot from './UnreadDot';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import type { RoomKind, RoomRef } from '@/lib/services/chat-context.service';
 
@@ -14,7 +15,7 @@ const ICONS: Record<RoomKind, typeof Hash> = { hub: MessagesSquare, sub: Hash, c
 const ROW = 'flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-body-sm text-foreground hover:bg-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary md:min-h-10';
 
 /** The room switcher pill (K5-12): `# Title ▾`; opens a bottom sheet below 768 px, a drop-down from there, with search (K-73). Open rooms first, then the rest, then Katalogs. */
-export default function RoomSwitcher({ family, current, open: openKeys, catalogHref }: { family: RoomRef[]; current: RoomRef; open: readonly string[]; catalogHref: string }) {
+export default function RoomSwitcher({ family, current, open: openKeys, catalogHref, unread }: { family: RoomRef[]; current: RoomRef; open: readonly string[]; catalogHref: string; unread: ReadonlySet<string> }) {
     const t = useTranslations('hub.chat');
     const tCommon = useTranslations('common');
     const id = useId();
@@ -39,7 +40,7 @@ export default function RoomSwitcher({ family, current, open: openKeys, catalogH
         return (
             <li key={r.key}>
                 <Link href={r.href} aria-current={r.key === current.key ? 'page' : undefined} className={clsx(ROW, r.key === current.key && 'weight-strong')}>
-                    <RowIcon aria-hidden className="size-4 shrink-0 text-foreground-muted" /><span className="min-w-0 flex-1 truncate">{r.title}</span>
+                    <RowIcon aria-hidden className="size-4 shrink-0 text-foreground-muted" /><span className="min-w-0 flex-1 truncate">{r.title}</span>{unread.has(r.key) && <UnreadDot label={t('newBelow')} />}
                 </Link>
             </li>
         );
@@ -50,7 +51,7 @@ export default function RoomSwitcher({ family, current, open: openKeys, catalogH
         <div ref={root} className="relative shrink-0 self-center">
             <button type="button" aria-expanded={shown} aria-controls={id} onClick={() => setShown((s) => !s)}
                 className={buttonClass('secondary', 'max-w-48 shadow-control', 'sm')}>
-                <Icon aria-hidden className="size-3.5 shrink-0" /><span className="truncate">{current.title}</span><ChevronDown aria-hidden className="size-3 shrink-0" />
+                <Icon aria-hidden className="size-3.5 shrink-0" /><span className="truncate">{current.title}</span>{unread.size > 0 && <UnreadDot label={t('newBelow')} />}<ChevronDown aria-hidden className="size-3 shrink-0" />
             </button>
             {shown && (
                 <>

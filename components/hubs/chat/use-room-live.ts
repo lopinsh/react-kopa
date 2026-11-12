@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { MatrixClient, MatrixEvent, Room } from 'matrix-js-sdk';
-import { chatNames, openRoom } from '@/actions/chat-actions';
+import { chatNames, notifyMentions, openRoom } from '@/actions/chat-actions';
 import type { HubKey } from '@/lib/services/chat-access.service';
 import { connectChat } from './matrix-client';
 import type { ChatEntry } from './chat-lines';
@@ -85,16 +85,32 @@ export function useRoomLive(userId: string, hubKey: HubKey) {
         void chatNames({ hubKey: city ? { hubSlug: slug, city } : { hubSlug: slug }, ids }).then((res) => { if (res.success && res.data) setNames((n) => ({ ...n, ...res.data })); });
     }, [events, slug, city]);
 
-    const send = useCallback(async (text: string): Promise<boolean> => {
+    // The room on screen is read (K-145): a receipt for its last line while the tab is visible, again when it becomes visible.
+    useEffect(() => {
+        const l = live.current;
+        const last = events[events.length - 1];
+        if (!l || !last || last.getSender() === l.client.getUserId()) return;
+        const mark = () => { if (document.visibilityState === 'visible') void l.client.sendReadReceipt(last).catch(() => undefined); };
+        mark();
+        document.addEventListener('visibilitychange', mark);
+        return () => document.removeEventListener('visibilitychange', mark);
+    }, [events]);
+
+    /** Sends a line; `mentions` are site user ids picked with @ (K5-24): they go in `m.mentions`, then the site notifies them. */
+    const send = useCallback(async (text: string, mentions: string[] = []): Promise<boolean> => {
         const l = live.current;
         if (!l) return false;
         try {
-            await l.client.sendTextMessage(l.room.roomId, text);
+            const sdk = await import('matrix-js-sdk');
+            const domain = (l.client.getUserId() ?? '').split(':').slice(1).join(':');
+            const ids = mentions.map((id) => `@u_${id}:${domain}`);
+            const sent = await l.client.sendMessage(l.room.roomId, { msgtype: sdk.MsgType.Text, body: text, ...(ids.length ? { 'm.mentions': { user_ids: ids } } : {}) });
+            if (ids.length) void notifyMentions({ hubKey: city ? { hubSlug: slug, city } : { hubSlug: slug }, eventId: sent.event_id });
             return true;
         } catch {
             return false;
         }
-    }, []);
+    }, [slug, city]);
 
     const loadMore = useCallback(async () => {
         const l = live.current;

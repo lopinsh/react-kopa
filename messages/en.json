@@ -857,7 +857,8 @@
         "requests": "Chat requests",
         "requestsHint": "A request lands in your Ziņas inbox; you accept or decline.",
         "saveFailed": "Could not save. Try again."
-      }
+      },
+      "mention": "People to mention"
     }
   },
   "admin": {
