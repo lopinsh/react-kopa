@@ -833,6 +833,30 @@
         "open": "Open rooms",
         "others": "Other rooms",
         "none": "No room matches."
+      },
+      "catalog": {
+        "search": "Find a room",
+        "hint": "By activity. An opened room joins your tabs.",
+        "open": "Open",
+        "opened": "Open now",
+        "empty": "No room matches.",
+        "quiet": "Quiet",
+        "meta": "{count} online",
+        "label": "Rooms",
+        "cityTitle": "Rooms in {city}"
+      },
+      "settings": {
+        "label": "Chat settings",
+        "notifications": "Notifications",
+        "mentions": "Notify me when I'm mentioned",
+        "look": "Look",
+        "compact": "Compact view",
+        "compactHint": "Less space between lines",
+        "times": "Show times",
+        "who": "Who can write to you",
+        "requests": "Chat requests",
+        "requestsHint": "A request lands in your Ziņas inbox; you accept or decline.",
+        "saveFailed": "Could not save. Try again."
       }
     }
   },

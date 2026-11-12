@@ -2,10 +2,12 @@
 
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useFormatter, useTranslations } from 'next-intl';
+import { clsx } from 'clsx';
 import { ArrowDown } from 'lucide-react';
 import { buttonClass } from '@/components/ui/Button';
 import { dayKey, toRuns, type ChatEntry } from './chat-lines';
 import ChatLine from './ChatLine';
+import { useChatLook } from './use-chat-look';
 
 const PINNED_PX = 48;
 
@@ -16,6 +18,7 @@ const PINNED_PX = 48;
 export default function ChatLog({ entries, hasMore = false, loadingMore = false, onLoadMore }: { entries: ChatEntry[]; hasMore?: boolean; loadingMore?: boolean; onLoadMore?: () => void }) {
     const t = useTranslations('hub.chat');
     const format = useFormatter();
+    const [{ compact }] = useChatLook();
     const box = useRef<HTMLDivElement>(null);
     const pinned = useRef(true);
     const before = useRef({ height: 0, first: '', last: '' });
@@ -64,7 +67,7 @@ export default function ChatLog({ entries, hasMore = false, loadingMore = false,
                 {entries.length === 0 ? (
                     <p className="m-auto max-w-xs text-center text-body-sm italic text-foreground-muted">{t('empty')}</p>
                 ) : (
-                    <ul className="mt-auto grid list-none gap-3">
+                    <ul className={clsx('mt-auto grid list-none', compact ? 'gap-1' : 'gap-3')}>
                         {runs.map((run, i) => (
                             <li key={run.id} className="grid gap-3">
                                 {(i === 0 || runs[i - 1].day !== run.day) && <p className="text-center text-tag weight-normal text-foreground-muted">{label(run.entries[0].ts, run.day)}</p>}

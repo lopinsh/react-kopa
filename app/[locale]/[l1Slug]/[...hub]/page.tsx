@@ -64,7 +64,7 @@ export default async function HubPage({ params, searchParams }: { params: Promis
     // The city is part of the address now: a topic x city hub fixes it for every query (K3-08).
     const cities = hub.local ? [hub.local.citySlug] : [];
     if (address.page === 'messages') return <NotesPage hub={hub} sp={sp} cities={cities} locale={locale} viewer={session?.user?.id ? { id: session.user.id, role: session.user.role } : undefined} />;
-    if (address.page === 'chat') return <ChatPage hub={hub} locale={locale} viewer={session?.user?.id ? { id: session.user.id, role: session.user.role } : undefined} />;
+    if (address.page === 'chat') return <ChatPage hub={hub} locale={locale} view={typeof sp.view === 'string' ? sp.view : undefined} viewer={session?.user?.id ? { id: session.user.id, role: session.user.role } : undefined} />;
     if (address.page === 'events') return <EventsPage hub={hub} sp={sp} locale={locale} viewerId={session?.user?.id} />;
     if (address.page === 'overview') return <OverviewPage hub={hub} cities={cities} locale={locale} viewerId={session?.user?.id} viewerRole={session?.user?.role} />;
     return <GroupsPage hub={hub} cities={cities} tab={sp.tab === 'new' ? 'new' : 'all'} locale={locale} viewerId={session?.user?.id} />;

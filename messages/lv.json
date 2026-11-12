@@ -833,6 +833,30 @@
         "open": "Atvērtās istabas",
         "others": "Citas istabas",
         "none": "Neviena istaba neatbilst meklētajam."
+      },
+      "catalog": {
+        "search": "Meklēt istabu",
+        "hint": "Pēc aktivitātes. Atvērta istaba pievienojas tavām cilnēm.",
+        "open": "Atvērt",
+        "opened": "Atvērta",
+        "empty": "Neviena istaba neatbilst meklētajam.",
+        "quiet": "Kluss",
+        "meta": "{count} tiešsaistē",
+        "label": "Istabas",
+        "cityTitle": "Istabas pilsētā {city}"
+      },
+      "settings": {
+        "label": "Čata iestatījumi",
+        "notifications": "Paziņojumi",
+        "mentions": "Paziņot, kad mani piemin",
+        "look": "Izskats",
+        "compact": "Kompakts skats",
+        "compactHint": "Mazāk atstarpju starp rindām",
+        "times": "Rādīt laikus",
+        "who": "Kas var tev rakstīt",
+        "requests": "Čata pieprasījumi",
+        "requestsHint": "Pieprasījums nonāk tavā Ziņu iesūtnē, tu apstiprini vai noraidi.",
+        "saveFailed": "Neizdevās saglabāt. Mēģini vēlreiz."
       }
     }
   },
