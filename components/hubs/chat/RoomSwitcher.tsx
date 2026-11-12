@@ -3,7 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
-import { ChevronDown, Hash, List, MapPin, MessagesSquare, Search } from 'lucide-react';
+import { ChevronDown, Hash, List, MapPin, MessagesSquare, Search, X } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { buttonClass } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -16,6 +16,7 @@ const ROW = 'flex min-h-11 items-center gap-3 rounded-xl px-3 py-2 text-body-sm 
 /** The room switcher pill (K5-12): `# Title ▾`; opens a bottom sheet below 768 px, a drop-down from there, with search (K-73). Open rooms first, then the rest, then Katalogs. */
 export default function RoomSwitcher({ family, current, open: openKeys, catalogHref }: { family: RoomRef[]; current: RoomRef; open: readonly string[]; catalogHref: string }) {
     const t = useTranslations('hub.chat');
+    const tCommon = useTranslations('common');
     const id = useId();
     const [shown, setShown] = useState(false);
     const [q, setQ] = useState('');
@@ -53,11 +54,14 @@ export default function RoomSwitcher({ family, current, open: openKeys, catalogH
             </button>
             {shown && (
                 <>
-                    <div aria-hidden className="fixed inset-0 z-40 bg-foreground/30 md:hidden" />
+                    <div aria-hidden onClick={() => setShown(false)} className="fixed inset-0 z-40 bg-foreground/30 md:hidden" />
                     <div id={id} className="fixed inset-x-0 bottom-0 z-50 grid max-h-[75dvh] grid-rows-[auto_minmax(0,1fr)] rounded-t-2xl bg-surface p-3 shadow-premium md:absolute md:inset-x-auto md:bottom-auto md:left-0 md:top-full md:mt-2 md:max-h-96 md:w-72 md:rounded-menu md:p-1.5 md:line">
-                        <div className="relative pb-2">
-                            <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-[calc(50%+0.25rem)] text-foreground-muted" />
-                            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('switcher.search')} aria-label={t('switcher.search')} className="pl-9" autoFocus />
+                        <div className="relative flex items-center gap-2 pb-2">
+                            <div className="relative min-w-0 flex-1">
+                                <Search aria-hidden className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-foreground-muted" />
+                                <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('switcher.search')} aria-label={t('switcher.search')} className="pl-9" autoFocus />
+                            </div>
+                            <button type="button" onClick={() => setShown(false)} aria-label={tCommon('close')} className="inline-flex size-10 shrink-0 items-center justify-center rounded-pill text-foreground-muted hover:bg-tint md:hidden"><X aria-hidden className="size-5" /></button>
                         </div>
                         <div className="min-h-0 overflow-y-auto">
                             {opened.length > 0 && <><p className={heading}>{t('switcher.open')}</p><ul className="list-none">{opened.map(row)}</ul></>}
