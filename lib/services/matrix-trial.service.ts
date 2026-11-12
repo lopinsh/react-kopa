@@ -15,16 +15,20 @@ export interface TrialCheck { id: string; ok: boolean; detail: string }
 
 const V3 = '/_matrix/client/v3';
 
+/** The first open topic x city hub; with none open (production today) the first active Veids and city, so the trial still has a topic and a city. */
 async function trialHub() {
-    const hub = await prisma.hubCity.findFirst({
-        where: { status: 'OPEN' },
-        orderBy: { openedAt: 'asc' },
-        select: {
-            categoryId: true, cityId: true,
-            category: { select: { slug: true, titles: { select: { lang: true, title: true } } } },
-            city: { select: { nameLv: true } },
-        },
-    });
+    const select = {
+        categoryId: true, cityId: true,
+        category: { select: { slug: true, titles: { select: { lang: true, title: true } } } },
+        city: { select: { nameLv: true } },
+    } as const;
+    const open = await prisma.hubCity.findFirst({ where: { status: 'OPEN' }, orderBy: { openedAt: 'asc' }, select });
+    const hub = open ?? await (async () => {
+        const category = await prisma.category.findFirst({ where: { level: 2, status: 'ACTIVE' }, orderBy: { slug: 'asc' }, select: { id: true, slug: true, titles: { select: { lang: true, title: true } } } });
+        const city = await prisma.city.findFirst({ where: { status: 'ACTIVE' }, orderBy: { slug: 'asc' }, select: { id: true, nameLv: true } });
+        if (!category || !city) return null;
+        return { categoryId: category.id, cityId: city.id, category: { slug: category.slug, titles: category.titles }, city: { nameLv: city.nameLv } };
+    })();
     if (!hub) throw new ActionError('NOT_FOUND');
     const topic = pickTitle(hub.category.titles, 'lv', hub.category.slug);
     return { hub, topic, city: hub.city.nameLv };
