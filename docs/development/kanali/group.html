@@ -8,7 +8,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page (AF-22). Plain mock, drawn 12 Nov from the ledger rows K-151..K-156 in docs/development/specs/kanali.md. The head copies HubHeadTile/HubPath/HubActions (components/hubs/frame), the picture box copies HeadPicture, the aside copies GroupAside; class strings come from the site's own roles and utilities. Layout from design.md (group page, layout B). -->
 
 <h1 class="text-title mb-1">Kanāli: grupas lapa</h1>
-<p class="text-meta text-foreground-muted">Versija v1 · publicēta 2026-11-12 18:52</p>
+<p class="text-meta text-foreground-muted">Versija v2 · publicēta 2026-11-12 18:56</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Grupas galva kļūst kā kopienas galva (K-151): divtoņu bilde toņa flīzē, ceļš "Tēma › Apakštēma" (K-152), pogas Sazināties un Dalīties (K-153). Grupas bilde pārceļas uz labo joslu, zem tās kopienas kaste (K-154); telefonā bilde ir 3:1 strēmele zem galvas, kopienas kaste pēc satura (K-155). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā pilnā platumā un pārplūst no 1024.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -29,7 +29,8 @@
     users2: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
     clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>'
   };
-  var PHOTO = 'https://images.unsplash.com/photo-1558008258-3256797b43f3?auto=format&fit=crop&w=1200&q=70';
+  var HUBPHOTO = 'https://images.unsplash.com/photo-1565803974275-dccd2f933cbb?w=1600&h=900&fit=crop&auto=format&q=75'; /* cleanup hub photo, Brian Yurasits, Unsplash */
+  var GROUPPHOTO = 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1600&h=900&fit=crop&auto=format&q=75'; /* the group's own picture: forest */
   var FRAMEBOX = 'rounded-2xl bg-surface shadow-card frame';
   var PAGES = [['Informācija', 'home'], ['Pasākumi', 'cal'], ['Ziņas', 'news'], ['Čats', 'chat'], ['Biedri', 'users']];
   var BTN_TONE = 'inline-flex h-11 items-center justify-center gap-1.5 whitespace-nowrap rounded-pill px-4 text-button frame press bg-[var(--tone-btn,var(--surface))] text-[var(--tone-btn-ink,var(--foreground))] hover:opacity-90';
@@ -42,19 +43,19 @@
     var photo = o.tilePhoto ? '<span aria-hidden="true" class="absolute inset-0 -z-10 isolate overflow-hidden rounded-2xl bg-(--accent)"><img src="' + o.tilePhoto + '" alt="" class="absolute inset-0 size-full object-cover grayscale brightness-(--hub-photo-dim) contrast-(--hub-photo-contrast) mix-blend-luminosity opacity-(--hub-photo-opacity)"><span class="absolute inset-0 bg-[linear-gradient(90deg,color-mix(in_srgb,var(--accent)_70%,transparent)_30%,transparent_100%)]"></span></span>' : '';
     var path = '<nav><p class="flex flex-wrap items-center gap-x-1 gap-y-0.5 text-meta"><span>Kopiena un vide</span>' + ICO(P.right, 'size-3.5 shrink-0') + '<span class="underline underline-offset-2">Apkārtnes sakopšana</span></p></nav>';
     var acts = '<div class="flex items-center gap-1"><span class="' + BTN_TONE + '">' + ICO(P.chat) + 'Sazināties</span><span class="' + BTN_GHOST + '" aria-label="Dalīties">' + ICO(P.share) + '<span class="max-[1023px]:sr-only hidden @3xl:inline">Dalīties</span></span></div>';
-    return '<div class="mx-auto max-w-browse px-gutter pt-3 @3xl:pt-5"><div class="tone-fill frame relative isolate grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 @3xl:gap-x-4 @3xl:p-6 @5xl:grid-cols-[auto_1fr_auto]">' + photo +
+    return '<div class="mx-auto max-w-browse px-gutter pt-3 @3xl:pt-5"><div class="tone-fill frame relative isolate text-[var(--on-cat)] grid min-w-0 grid-cols-[auto_auto_1fr] items-center gap-y-3 rounded-2xl p-4 @3xl:gap-x-4 @3xl:p-6 @5xl:grid-cols-[auto_1fr_auto]">' + photo +
       '<span class="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item @5xl:hidden">' + ICO(P.menu, 'size-5') + '</span>' +
       '<span class="mark-on-tone hidden size-12 shrink-0 place-items-center rounded-item @5xl:col-start-1 @5xl:row-start-1 @5xl:grid">' + ICO(P.users, 'size-6') + '</span>' +
       '<div class="col-span-3 grid min-w-0 gap-1 @5xl:col-span-1 @5xl:col-start-2 @5xl:row-start-1">' + path + '<h1 class="line-clamp-2 break-words text-title">Valmiera Zaļā</h1><p class="inline-flex flex-wrap items-center gap-x-4 gap-y-1 text-meta"><span class="inline-flex items-center gap-1.5">' + ICO(P.pin) + 'Valmiera</span><span class="inline-flex items-center gap-1.5">' + ICO(P.users2) + '2 biedri</span></p></div>' +
       '<div class="col-span-3 justify-self-start @5xl:col-span-1 @5xl:col-start-3 @5xl:row-start-1 @5xl:justify-self-end">' + acts + '</div></div></div>';
   }
   /* K-154 / K-155: the group picture, rounded frame, credit chip, expand icon. strip = phone 3:1 under the head. */
-  function picture(strip) {
-    return '<div class="relative min-w-0"><span class="relative block w-full overflow-hidden rounded-2xl frame bg-tint ' + (strip ? 'aspect-[3/1]' : 'aspect-[4/3]') + '"><img src="' + PHOTO + '" alt="" class="absolute inset-0 size-full object-cover"><span class="absolute right-2 top-2 grid size-8 place-items-center ' + CHIP + '">' + ICO(P.expand) + '</span></span><span class="absolute bottom-2 left-2 max-w-[calc(100%-1rem)] px-3 py-1 text-meta ' + CHIP + '">Foto: Unsplash</span></div>';
+  function picture(strip, src, who) {
+    return '<div class="relative min-w-0"><span class="relative block w-full overflow-hidden rounded-2xl frame bg-tint ' + (strip ? 'aspect-[3/1]' : 'aspect-[4/3]') + '"><img src="' + src + '" alt="" class="absolute inset-0 size-full object-cover"><span class="absolute right-2 top-2 grid size-8 place-items-center ' + CHIP + '">' + ICO(P.expand) + '</span></span><span class="absolute bottom-2 left-2 max-w-[calc(100%-1rem)] px-3 py-1 text-meta ' + CHIP + '">Foto: ' + who + ', Unsplash</span></div>';
   }
   /* K-154: hub box "Daļa no kopienas …" */
   function hubBox() {
-    return '<div class="grid gap-3 p-3 ' + FRAMEBOX + '"><div class="grid gap-0.5"><p class="text-meta text-foreground-muted">Daļa no kopienas</p><p class="text-item weight-strong text-foreground"><span class="underline underline-offset-2">Apkārtnes sakopšana</span></p><p class="inline-flex items-center gap-1.5 text-meta text-foreground-muted">' + ICO(P.users, 'size-4') + '8 dalībnieki 2 grupās</p></div><div class="flex flex-wrap items-center gap-2"><span class="' + QUIET + '">Atvērt kopienu' + ICO(P.right, 'size-3.5') + '</span><span class="' + QUIET + '">' + ICO(P.chat) + 'Čats</span></div></div>';
+    return '<div class="grid gap-3 rounded-2xl bg-surface p-3 shadow-card frame"><div><p class="text-meta text-foreground-muted">Daļa no kopienas</p><p class="text-body"><span class="underline underline-offset-2">Apkārtnes sakopšana</span></p><p class="inline-flex items-center gap-1.5 text-meta text-foreground-muted">' + ICO(P.users, 'size-4') + '8 dalībnieki 2 grupās</p></div><div class="flex flex-wrap items-center gap-2"><span class="' + QUIET + '">Atvērt kopienu' + ICO(P.right, 'size-3.5') + '</span><span class="' + QUIET + '">' + ICO(P.chat) + 'Čats</span></div></div>';
   }
   function meeting() {
     return '<div class="grid gap-1 p-3 ' + FRAMEBOX + '"><h3 class="text-item weight-strong text-foreground">Nākamā tikšanās</h3><p class="text-body-sm text-foreground">Mežaparka talka</p><p class="inline-flex items-center gap-1.5 text-meta text-foreground-muted">' + ICO(P.clock, 'size-4') + 'Sestd., 21. nov. 10:00 · Valmiera</p></div>';
@@ -64,12 +65,10 @@
   }
   function members() { return '<div class="flex items-center gap-3 p-3 ' + FRAMEBOX + '">' + faces() + '<span class="text-body-sm">2 biedri</span></div>'; }
   function content(phone) {
-    var h = function (t) { return '<h2 class="text-section text-foreground">' + t + '</h2>'; };
-    return '<div class="grid min-w-0 content-start gap-section">' +
-      '<section class="grid gap-2">' + h('Par grupu') + '<p class="max-w-reading text-body">Sakopjam Valmieras parkus, mežmalas un upes krastus. Talkas ik otro sestdienu, maisus un cimdus nodrošinām; vajag tikai labu garastāvokli.</p></section>' +
-      (phone ? '<section class="grid gap-2">' + h('Pasākumi') + meeting() + '</section>' : '') +
-      '<section class="grid gap-2">' + h('Biedri') + members() + '</section>' +
-      (phone ? '<section class="grid gap-2">' + h('Kopiena') + hubBox() + '</section>' : '') +
+    var sec = function (t, body) { return '<section><h2 class="mb-2 max-w-reading text-section">' + t + '</h2>' + body + '</section>'; };
+    return '<div class="flex min-w-0 flex-col gap-section">' +
+      sec('Par grupu', '<p class="max-w-reading text-body">Sakopjam Valmieras parkus, mežmalas un upes krastus. Talkas ik otro sestdienu, maisus un cimdus nodrošinām; vajag tikai labu garastāvokli.</p>') +
+      (phone ? meeting() + hubBox() + members() : '') +
       '</div>';
   }
   function menu() {
@@ -83,9 +82,9 @@
   function page(o, phone) {
     var tile = headTile({ tilePhoto: o.tilePhoto });
     if (phone) {
-      return header() + tile + '<div class="px-gutter pt-3">' + (o.pic ? picture(true) : '') + '</div><div class="px-gutter py-4">' + content(true) + '</div>';
+      return header() + tile + '<div class="px-gutter pt-3">' + (o.pic ? picture(true, GROUPPHOTO, 'Valmieras grupa') : '') + '</div><div class="px-gutter py-4">' + content(true) + '</div>';
     }
-    var aside = '<aside class="grid content-start gap-3">' + (o.pic ? picture(false) : '') + hubBox() + meeting() + members() + '</aside>';
+    var aside = '<aside class="grid content-start gap-3">' + (o.pic ? picture(false, GROUPPHOTO, 'Valmieras grupa') : '') + hubBox() + meeting() + members() + '</aside>';
     return header() + tile + '<div class="mx-auto grid max-w-browse gap-6 px-gutter py-5 @5xl:grid-cols-[190px_minmax(0,1fr)_17.5rem]">' + menu() + content(false) + aside + '</div>';
   }
 
@@ -94,8 +93,8 @@
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var D = '2026-11-12';
   var screens = [
-    { id: 'g-with-pic', st: 'Jauns', v: 'v1', d: D, label: 'Grupas galva ar savu bildi (K-151..K-155)', story: 'Valmiera Zaļā, Kopiena un vide › Apkārtnes sakopšana. Toņa flīzē divtoņu bilde ir grupas pašas bilde (K-151). Ceļa pēdējā daļa ved uz tuvāko atvērto kopienu (K-152). Pogas Sazināties (lomas poga) un Dalīties (K-153). Labajā joslā: grupas bilde, kopienas kaste, tuvākā tikšanās, biedri (K-154). Telefonā bilde ir 3:1 strēmele zem galvas, kopienas kaste pēc satura (K-155).', fn: function (w) { return page({ pic: true, tilePhoto: PHOTO }, w === 375); } },
-    { id: 'g-hub-photo', st: 'Jauns', v: 'v1', d: D, label: 'Grupa bez savas bildes: tuvākās kopienas bilde (K-151)', story: 'Grupai nav savas bildes: flīzē ir tuvākās kopienas bilde divtoņos, labajā joslā bildes kastes nav, kopienas kaste ir pirmā; telefonā strēmeles nav.', fn: function (w) { return page({ pic: false, tilePhoto: PHOTO }, w === 375); } },
+    { id: 'g-with-pic', st: 'Jauns', v: 'v1', d: D, label: 'Grupas galva ar savu bildi (K-151..K-155)', story: 'Valmiera Zaļā, Kopiena un vide › Apkārtnes sakopšana. Toņa flīzē divtoņu bilde ir grupas pašas bilde (K-151). Ceļa pēdējā daļa ved uz tuvāko atvērto kopienu (K-152). Pogas Sazināties (lomas poga) un Dalīties (K-153). Labajā joslā: grupas bilde, kopienas kaste, tuvākā tikšanās, biedri (K-154). Telefonā bilde ir 3:1 strēmele zem galvas, kopienas kaste pēc satura (K-155).', fn: function (w) { return page({ pic: true, tilePhoto: GROUPPHOTO }, w === 375); } },
+    { id: 'g-hub-photo', st: 'Jauns', v: 'v1', d: D, label: 'Grupa bez savas bildes: tuvākās kopienas bilde (K-151)', story: 'Grupai nav savas bildes: flīzē ir tuvākās kopienas bilde divtoņos, labajā joslā bildes kastes nav, kopienas kaste ir pirmā; telefonā strēmeles nav.', fn: function (w) { return page({ pic: false, tilePhoto: HUBPHOTO }, w === 375); } },
     { id: 'g-plain', st: 'Jauns', v: 'v1', d: D, label: 'Grupa bez bildes un bez kopienas bildes: gluds tonis (K-151)', story: 'Ne grupai, ne tuvākajai kopienai nav bildes: flīze ir vienkrāsains Tēmas tonis, tāpat kā kopienas galvai bez bildes.', fn: function (w) { return page({ pic: false }, w === 375); } }
   ];
 
@@ -114,6 +113,7 @@
     box.style.setProperty('--spacing-gutter', fl.g);
     box.style.setProperty('--c', 'var(--cat-community)');
     box.style.setProperty('--accent', 'var(--cat-community)');
+    box.style.setProperty('--accent-foreground', 'var(--on-cat)');
     box.innerHTML = s.fn(w);
     col.appendChild(box);
     row.appendChild(col);
