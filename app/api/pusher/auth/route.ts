@@ -1,5 +1,5 @@
 import { auth } from '@/lib/auth';
-import { pusherServer } from '@/lib/pusher';
+import { pusherServer, PRESENCE_CHANNEL } from '@/lib/pusher';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
@@ -16,6 +16,11 @@ export async function POST(req: Request) {
 
         if (!socketId || !channelName) {
             return new NextResponse('Missing parameters', { status: 400 });
+        }
+
+        // Online now (K5-15): everyone signed in joins `presence-site` with the id only (no name, no email on the socket).
+        if (channelName === PRESENCE_CHANNEL) {
+            return NextResponse.json(pusherServer.authorizeChannel(socketId, channelName, { user_id: session.user.id, user_info: {} }));
         }
 
         // Security Check: Ensure users can ONLY subscribe to their OWN private channel

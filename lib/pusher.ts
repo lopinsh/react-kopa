@@ -1,6 +1,9 @@
 import PusherServer from 'pusher';
 import PusherClient from 'pusher-js';
 
+/** Everyone signed in with a tab open (K5-15): who is online now; nothing is stored. */
+export const PRESENCE_CHANNEL = 'presence-site';
+
 let _pusherServer: PusherServer | null = null;
 let _pusherClient: PusherClient | null = null;
 

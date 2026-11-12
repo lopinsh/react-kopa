@@ -78,6 +78,26 @@ export const ChatRequestService = {
         }
     },
 
+    /** A request to a person from a name card (K5-20), no Ziņa behind it (`noteId` null). Not self, they take requests, no chat and no open request in either direction. */
+    async sendDirect(senderId: string, recipientId: string, content: string): Promise<{ id: string; recipientId: string }> {
+        if (senderId === recipientId) throw new ActionError('FORBIDDEN');
+        const to = await prisma.user.findUnique({ where: { id: recipientId }, select: { allowDirectMessages: true } });
+        if (!to) throw new ActionError('NOT_FOUND');
+        if (!to.allowDirectMessages) throw new ActionError('DM_NOT_ALLOWED');
+        if (await findPairChat(prisma, senderId, recipientId)) throw new ActionError('CHAT_REQUEST_EXISTS');
+        if (await this.isWaiting(senderId, recipientId)) throw new ActionError('CHAT_REQUEST_EXISTS');
+        const created = await prisma.chatRequest.create({ data: { senderId, recipientId, noteId: null, content }, select: { id: true } });
+        return { id: created.id, recipientId };
+    },
+
+    /** An open request between two people: mine to them (a declined one reads as open, K-120) or theirs to me. */
+    async isWaiting(viewerId: string, otherId: string): Promise<boolean> {
+        const n = await prisma.chatRequest.count({
+            where: { OR: [{ senderId: viewerId, recipientId: otherId, status: { in: ['PENDING', 'DECLINED'] } }, { senderId: otherId, recipientId: viewerId, status: 'PENDING' }] },
+        });
+        return n > 0;
+    },
+
     /** Incoming PENDING requests, and the viewer's own sent ones (PENDING or DECLINED, both shown as waiting). */
     async listForInbox(userId: string): Promise<ChatRequestInbox> {
         const [incoming, outgoing] = await Promise.all([

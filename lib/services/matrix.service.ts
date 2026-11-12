@@ -170,6 +170,13 @@ export const MatrixService = {
         }).reverse();
     },
 
+    /** Site user ids of the people who have joined a room (K5-16), asked as the sender. */
+    async joinedSiteIds(roomId: string): Promise<string[]> {
+        const res = await matrixFetch('GET', `${V3}/rooms/${enc(roomId)}/joined_members`);
+        const joined = isRecord(res) && isRecord(res.joined) ? Object.keys(res.joined) : [];
+        return joined.map((m) => siteUserId(m)).filter((x): x is string => !!x);
+    },
+
     /** K-82: a user (with the user's own token: identity assertion skips the alias hook) tries a private room, an invite and two aliases. Expected: all refused. */
     async probePrivateRoom(token: string, roomId: string, inviteeUserId: string): Promise<{ createRoom: string; invite: string; alias: string; aliasOutside: string }> {
         const own = { token };

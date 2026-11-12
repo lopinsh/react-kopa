@@ -1,4 +1,3 @@
-import { isSiteAdmin } from '@/lib/site-role';
 import { prisma } from '@/lib/prisma';
 import { ActionError } from '@/types/actions';
 import { CityService } from './city.service';
@@ -23,7 +22,7 @@ export interface HubKey { hubSlug: string; city?: string }
 const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 /** The room behind a hub key, or null: unknown or inactive Veids, unknown city, or a topic x city hub that is not OPEN (K-144). */
-async function resolveKey(key: HubKey): Promise<ChatRoomRef | null> {
+export async function resolveKey(key: HubKey): Promise<ChatRoomRef | null> {
     const cat = await prisma.category.findFirst({ where: { slug: key.hubSlug, status: 'ACTIVE', level: { in: [2, 3] } }, select: { id: true } });
     if (!cat) return null;
     if (!key.city) return openRef(cat.id);
@@ -62,11 +61,5 @@ export const ChatAccessService = {
         if (!matrixConfig()) throw new ActionError('CHAT_UNAVAILABLE');
         const ref = await resolveKey(key);
         return ref ? ChatRoomService.readPublic(ref, 50) : [];
-    },
-
-    /** Names for the senders of lines the SDK delivered (F5: never the SDK's `u_<id>`): site id to name and whether the person is a site admin (Mod). */
-    async names(ids: string[]): Promise<Record<string, { name: string; mod: boolean }>> {
-        const users = await prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true, role: true } });
-        return Object.fromEntries(users.map((u) => [u.id, { name: u.name ?? '', mod: isSiteAdmin(u.role) }]));
     },
 };

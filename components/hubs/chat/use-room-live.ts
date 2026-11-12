@@ -8,7 +8,7 @@ import { connectChat } from './matrix-client';
 import type { ChatEntry } from './chat-lines';
 
 export type LiveStatus = 'connecting' | 'ready' | 'unavailable';
-type Names = Record<string, { name: string; mod: boolean }>;
+type Names = Record<string, { name: string; mod: boolean; group: string | null }>;
 
 const FIRST_SCREEN = 50;
 const MORE = 30;
@@ -82,8 +82,8 @@ export function useRoomLive(userId: string, hubKey: HubKey) {
         const ids = [...new Set(events.map((e) => SITE_SENDER.exec(e.getSender() ?? '')?.[1]).filter((x): x is string => !!x))].filter((id) => !asked.current.has(id));
         if (ids.length === 0) return;
         ids.forEach((id) => asked.current.add(id));
-        void chatNames({ ids }).then((res) => { if (res.success && res.data) setNames((n) => ({ ...n, ...res.data })); });
-    }, [events]);
+        void chatNames({ hubKey: city ? { hubSlug: slug, city } : { hubSlug: slug }, ids }).then((res) => { if (res.success && res.data) setNames((n) => ({ ...n, ...res.data })); });
+    }, [events, slug, city]);
 
     const send = useCallback(async (text: string): Promise<boolean> => {
         const l = live.current;

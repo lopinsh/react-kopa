@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useSession } from 'next-auth/react';
 import { useTranslations, useLocale } from 'next-intl';
 import { usePusher } from '@/hooks/usePusher';
+import { PRESENCE_CHANNEL } from '@/lib/pusher';
 import { Link, useRouter } from '@/i18n/routing';
 import { X, Bell } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -112,6 +113,9 @@ export default function RealtimeProvider({ children }: { children: React.ReactNo
         handleNewMessage(data);
         listeners.current['new-message'].forEach((listener) => listener(data));
     });
+
+    // Joining the presence channel is what makes the person "online now" (K5-15); no event is read from it here.
+    usePusher<unknown>(session?.user?.id ? PRESENCE_CHANNEL : '', 'pusher:subscription_succeeded', () => {});
 
     usePusher<{ id: string; conversationId: string }>(channel, 'message-deleted', (data) => {
         listeners.current['message-deleted'].forEach((listener) => listener(data));
