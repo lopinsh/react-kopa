@@ -31,7 +31,7 @@ export default function GroupHead({ picture, photo, variant }: { picture?: React
     const segment = useSelectedLayoutSegment();
     const full = (variant ?? (segment === null ? 'full' : 'compact')) === 'full';
     const canShare = segment !== 'settings';
-    const actions = <div className="flex items-center gap-1 max-md:[&>:first-child]:flex-1"><GroupActions phone={full ? 'full' : 'round'} />{canShare && <GroupShare />}</div>;
+    const actions = <div className="flex items-center gap-1 max-md:[&>:not(:last-child)]:flex-1"><GroupActions phone={full ? 'full' : 'round'} />{canShare && <GroupShare />}</div>;
 
     const mark = (
         <span className="mark-on-tone grid size-10 shrink-0 place-items-center rounded-item lg:col-start-1 lg:row-start-1 md:size-12">
