@@ -155,6 +155,12 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-148 | **"Online now" comes from a Soketi presence channel** (`presence-site`): online while any site tab is open, never stored; ids only on the socket, no names. | Confirmed | 12 Nov owner answer (K5 Owner question 2). K5-15. |
 | K-149 | **Signed-out online list shows names too**, not the count only; names do not open a card or link (K-142). | Confirmed | 12 Nov owner answer (K5 Owner question 3). K5-18. |
 | K-150 | **Čats block on Pārskats:** heading "Čats" with "N tiešsaistē", the hub room's last 3 lines as one-line rows (time · name · text), then "Atvērt čatu ›"; an empty room says so and keeps the link. Placed after Ziņas (phone: Aktivitāte, Ziņas, Čats, Pasākumi, Grupas; desktop: under Ziņas in its column). Lines read on the server (no SDK on Pārskats); signed out shows names (K-142). | Confirmed | 12 Nov owner request + answers. Changes K-89 order. K5-28 (K5-3). |
+| K-151 | **Group head = hub head look:** two-tone photo in the tone tile (HubHeadTile duotone). Photo = the group's own picture, else its closest hub's photo, else plain tone. | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
+| K-152 | **Path in the head instead of CategoryLine:** "Kopiena un vide › Apkārtnes sakopšana" like HubPath; the last part links to the closest hub (most specific OPEN: subtopic×city, subtopic, type×city, type). | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
+| K-153 | **Head actions:** the role button (Sazināties) + Dalīties, like HubActions. | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
+| K-154 | **Informācija right sidebar:** group picture box first (rounded frame, credit chip, expand icon), then a hub box "Daļa no kopienas Apkārtnes sakopšana · 8 dalībnieki 2 grupās" with Atvērt kopienu + Čats links, then next meeting, members. | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
+| K-155 | **Phone:** the picture stays a 3:1 strip under the head; the hub box comes after the content. | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
+| K-156 | **Group page drawing:** sections with picture, with the hub's photo only, plain tone; phone 375 on top, desktop 1280 below. | In progress | 12 Nov owner decision. Drawing `kanali/group.html`. |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
