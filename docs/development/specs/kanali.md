@@ -144,6 +144,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-38c | Group members moderate only their own groups. **Hub admins are assigned manually; for now only site admins are hub admins.** | Confirmed | 9 Nov. |
 | K-38b | Signed-out visitors can read the public rooms (hub room, sub-veids rooms, city rooms); writing needs sign-in and "Mani interesē". | Confirmed | 9 Nov. |
 | K-142 | **Signed-out chat readers see names** (pseudonyms), but cannot write or open profiles (no name card, no profile link). Ziņas keep K-41 (no names signed out). | Confirmed | 12 Nov owner answer (K4 spec §15). Matrix database is development-only: fresh before the real launch. |
+| K-139 | **Matrix runs as an application service:** one Matrix user per site user (`@u_<id>`), no second password; rooms and Spaces found by alias `#ejk_…`, the site stores nothing; sessions expire (30 min, refreshed) so tokens do not pile up. | In progress | 12 Nov, K4 findings F1, F1b, F2, F3, F7 (`specs/K4.md` §8). Owner confirms. |
+| K-140 | **Signed-out readers read chat through the site** (server read), not Matrix guests; guest access stays off. | In progress | 12 Nov, K4 F4 (24-31 ms, no guest rows). Names shown (K-142). Owner confirms. |
+| K-141 | Synapse on the home server, always on, at `ejam.lumm.eu/_matrix/client/` (`server_name ejam.lumm.eu`); only the client API is public. RAM cap decided after a few days of real use. | In progress | 12 Nov, K4-2: 104-131 MiB so far. Matrix DB is development-only, fresh before launch (K-142 notes). |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
@@ -170,7 +173,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | Id | Feature | Status | Notes |
 |---|---|---|---|
 | K-70 | Success is people meeting in person; Jelgava pilot through the city newspaper; seeding before the article. | Confirmed | 9 Nov. |
-| K-71 | **Stages:** K1 hub pages without chat (no migration, hubs derived from tags); K2 Ziņas (shout-outs); K3 city hubs; K4 Matrix spike; K5 Čats. Later, in releases of their own: blog posts (K-24), moderation (K-42), districts (K-11). | Confirmed | 10 Nov, restated with the owner. Spec of K1: `docs/development/specs/K1.md`. |
+| K-71 | **Stages:** K1 hub pages without chat (no migration, hubs derived from tags); K2 Ziņas (shout-outs); K3 city hubs; K4 Matrix spike; K5 Čats. Later, in releases of their own: blog posts (K-24), moderation (K-42), districts (K-11). | Confirmed | 10 Nov, restated with the owner. Spec of K1: `docs/development/specs/K1.md`. 12 Nov: K4 trial done, spec `K4.md` (K-139..K-141). |
 | K-72 | Drawings: old ones removed; one combined `hub.html` drawn from the ledger (board hub card cases, hub page frame with Pārskats, Grupas, Pasākumi, Ziņas, Čats, city hub, signed-out). `hub-c.html` and `hub-options.html` removed (K-59). | Confirmed | 9 Nov, c75c07f; 10 Nov combined. 10 Nov: frames are never shrunk (phone frame first, desktop frame(s) below at full width, a narrow pane scrolls the row sideways); drawing updated for K-90, K-81, K-86, K-10, K-93, K-34; K-91 desktop variants A and B added (Pārskats at 1280 and 1920, Pasākumi/Grupas card grids, Ziņas reading column + rail), marked OPEN. |
 
 ## Context
