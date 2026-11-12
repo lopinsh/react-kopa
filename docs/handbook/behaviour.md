@@ -100,7 +100,7 @@ The same situation behaves the same way on every screen.
 
 - Every active city has a hub, "Kopiena Jelgava", at `/lv/jelgava`: Pārskats (Aktivitāte of the city's groups, Ziņas, Pilsētas istabas), Grupas, Pasākumi and Ziņas. It has no Tēma, no Kur and nothing to write: no Rakstīt ziņu, reply, private message or report. Izveidot grupu and Dalīties stay.
 - Ziņas lists every Ziņa that has this city, request notes included, grouped by Veids; a row opens to its text and reply count and links to the note on its own hub (Atvērt kopienā). Signed out sees the same without names.
-- Pilsētas istabas lists the city's open topic x city hubs ("Šahs · Jelgava", groups and last activity), the first 16, then "Vēl N istabas" opens the rest in place.
+- Pilsētas istabas lists the city's open topic x city hubs ("Šahs · Jelgava", groups and last activity), the first 16, then "Vēl N istabas" links to the city's Katalogs at `/lv/jelgava/rooms` (K-147), which sorts them by last line and opens each room's Čats.
 
 ## Notifications
 
@@ -109,7 +109,8 @@ The same situation behaves the same way on every screen.
 - A notification is read when you tap it; opening the list marks nothing.
 - The only trace of a visit is `lastSeenAt`, day-level, written at most once a day, and shown to admins as counts only (Aktivitāte, R31); the privacy page says so.
 - "Online now" in Čats is live only (K-148): a signed-in tab joins the Soketi presence channel `presence-site` with the user id, nothing else; it is never stored, and the list is asked again every 60 s while visible. The privacy page says so.
-- Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`), plus replies to your Ziņa and chat requests; off by the Iestatījumi switch or the link in every email.
+- Čats notifies @mentions only (K-145): picking a name after `@` in the composer marks it; the person gets one bell notice (`CHAT_MENTION`) per room until they read it, none if they turned "Paziņot, kad mani piemin" off, never for mentioning yourself. No other chat line rings the bell; unread rooms show a dot on their tab and switcher row, no numbers, no sound.
+- Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`), plus replies to your Ziņa, chat requests and chat mentions; off by the Iestatījumi switch or the link in every email.
 
 Next: [Who sees what](roles.md).
 

@@ -2,8 +2,6 @@
 
 /** How many groups a hub list shows in each tier: 1-4 cards, 5-16 compact rows, more: the first 16 and a link to the board (K-106). */
 export const HUB_GROUP_TIERS = { full: 4, list: 16 } as const;
-/** Pilsētas istabas on a city's Pārskats: rows before "Vēl N istabas" links to the city's Katalogs (K5-23). */
-export const CITY_ROOM_ROWS = 8;
 
 /** Rows in the Pārskats previews (groups, events; K-106, K-94). */
 export const HUB_PREVIEW_ROWS = 3;

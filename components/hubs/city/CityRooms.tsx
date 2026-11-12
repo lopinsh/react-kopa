@@ -2,7 +2,7 @@
 
 import { useFormatter, useNow, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
-import { CITY_ROOM_ROWS } from '@/lib/constants';
+import { HUB_GROUP_TIERS } from '@/lib/constants';
 import { relativeTo } from '@/lib/utils/relative-time';
 import { TEXT_LINK_CLASS } from '@/components/ui/TextLink';
 
@@ -15,14 +15,14 @@ export interface CityRoomRow {
 }
 
 /**
- * Pilsētas istabas (K3-20, K-107): the city's open topic x city hubs as compact rows "Šahs · Jelgava", meta "N grupas · {relative}", the first 8;
+ * Pilsētas istabas (K3-20, K-107): the city's open topic x city hubs as compact rows "Šahs · Jelgava", meta "N grupas · {relative}", the first 16 (K-107 tiers);
  * "Vēl N istabas" links to the city's Katalogs `/[city]/rooms` (K5-23, K-147).
  */
 export default function CityRooms({ rooms, cityName, moreHref }: { rooms: CityRoomRow[]; cityName: string; moreHref: string }) {
     const t = useTranslations('hub');
     const format = useFormatter();
     const now = useNow({ updateInterval: 60_000 });
-    const shown = rooms.slice(0, CITY_ROOM_ROWS);
+    const shown = rooms.slice(0, HUB_GROUP_TIERS.list);
     const more = rooms.length - shown.length;
 
     return (
