@@ -21,7 +21,7 @@ export function matrixConfig(): MatrixConfig | null {
 
 /** A Matrix error body (`errcode`), so callers can branch on M_USER_IN_USE, M_FORBIDDEN, M_NOT_FOUND. */
 export class MatrixRequestError extends ActionError {
-    constructor(public errcode: string, public status: number, detail?: string) {
+    constructor(public errcode: string, public status: number, detail?: string, public retryAfterMs?: number) {
         super('MATRIX_FAILED', detail ?? errcode);
     }
 }
@@ -39,7 +39,7 @@ export const enc = encodeURIComponent;
  * One JSON request to Synapse. Network error or 5xx is MATRIX_UNAVAILABLE; a 4xx with a Matrix body is a MatrixRequestError.
  * The result is `unknown`: callers read it through the small guards beside them.
  */
-export async function matrixFetch(method: 'GET' | 'POST' | 'PUT', path: string, body?: unknown, auth?: MatrixAuth): Promise<unknown> {
+export async function matrixFetch(method: 'GET' | 'POST' | 'PUT' | 'DELETE', path: string, body?: unknown, auth?: MatrixAuth): Promise<unknown> {
     const cfg = matrixConfig();
     if (!cfg) throw new ActionError('MATRIX_FAILED', 'not configured');
     const asUser = auth !== undefined && auth !== 'anonymous' && 'asUser' in auth ? auth.asUser : undefined;
@@ -58,7 +58,7 @@ export async function matrixFetch(method: 'GET' | 'POST' | 'PUT', path: string, 
     if (!res.ok) {
         const errcode = isRecord(json) && typeof json.errcode === 'string' ? json.errcode : null;
         if (!errcode) throw new ActionError('MATRIX_FAILED');
-        throw new MatrixRequestError(errcode, res.status, isRecord(json) && typeof json.error === 'string' ? json.error : undefined);
+        throw new MatrixRequestError(errcode, res.status, isRecord(json) && typeof json.error === 'string' ? json.error : undefined, isRecord(json) && typeof json.retry_after_ms === 'number' ? json.retry_after_ms : undefined);
     }
     return json;
 }

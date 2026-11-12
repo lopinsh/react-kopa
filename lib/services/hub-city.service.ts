@@ -7,6 +7,7 @@ import { hubHref } from '@/lib/hub-path';
 import { CityService } from './city.service';
 import { hubCityCounts, hubGroupWhere } from './hub-query';
 import { createNoteTx } from './hub-note.service';
+import { ChatRoomService } from './chat-room.service';
 import { ModerationService } from './moderation.service';
 import { isSiteAdminUser } from './site-role.service';
 import type { HubContext } from './hub.service';
@@ -155,7 +156,7 @@ export const HubCityService = {
         const href = hubHref(l1, l2, topic.level === 3 ? topic.slug : undefined, 'overview', city.segment);
         const hubId = topic.id;
         const names = { hubNameLv: pickTitle(topic.titles, 'lv', topic.slug), hubNameEn: pickTitle(topic.titles, 'en', topic.slug), cityNameLv: city.nameLv, cityNameEn: city.nameEn };
-        return prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx) => {
             await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`hub-city:${hubId}:${city.id}`}))`;
             const found = await tx.hubCity.findUnique({ where: { categoryId_cityId: { categoryId: hubId, cityId: city.id } }, include: { requests: { select: { userId: true } } } });
             const row = found ?? { ...(await tx.hubCity.create({ data: { categoryId: hubId, cityId: city.id } })), requests: [] };
@@ -172,6 +173,9 @@ export const HubCityService = {
             if (opens) await tx.hubCity.update({ where: { id: row.id }, data: { status: 'OPEN', openedAt: new Date() } });
             return { opened: opens, href, names, notifyUserIds: opens ? row.requests.map((r) => r.userId) : [] };
         });
+        // K-126: the hub's room is made when it opens; best effort, a down Synapse never fails the request.
+        if (result.opened) ChatRoomService.afterCommit('ensure room', () => ChatRoomService.ensureById(hubId, city.id));
+        return result;
     },
 
     /** How many people asked for a topic x city hub (K-136); the requests of an open hub stay until it is closed. */
@@ -184,7 +188,7 @@ export const HubCityService = {
         if (!(await isSiteAdminUser(adminId))) throw new ActionError('FORBIDDEN');
         const row = await prisma.hubCity.findUnique({
             where: { id: hubCityId },
-            select: { id: true, status: true, city: { select: { nameLv: true } }, category: { select: { slug: true, titles: { select: { lang: true, title: true } } } } },
+            select: { id: true, status: true, categoryId: true, cityId: true, city: { select: { nameLv: true } }, category: { select: { slug: true, titles: { select: { lang: true, title: true } } } } },
         });
         if (!row || row.status !== 'OPEN') throw new ActionError('NOT_FOUND');
         const targetName = `${pickTitle(row.category.titles, 'lv', row.category.slug)} · ${row.city.nameLv}`;
@@ -193,5 +197,7 @@ export const HubCityService = {
             await tx.hubCity.update({ where: { id: hubCityId }, data: { status: 'CLOSED', closedAt: new Date(), closedById: adminId } });
             await ModerationService.logAction(adminId, 'HUB_CITY_CLOSE', 'HubCity', hubCityId, undefined, tx, targetName);
         });
+        // K-144: the room is gone with the hub; best effort.
+        ChatRoomService.afterCommit('close room', () => ChatRoomService.closeById(row.categoryId, row.cityId));
     },
 };

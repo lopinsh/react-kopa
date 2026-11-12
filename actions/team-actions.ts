@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteOwner } from '@/lib/action-utils';
+import { ChatRoomService } from '@/lib/services/chat-room.service';
 import { TeamService, type TeamCandidate } from '@/lib/services/team.service';
 
 export async function searchTeamCandidates(query: string): Promise<ActionResponse<TeamCandidate[]>> {
@@ -21,6 +22,7 @@ export async function makeAdmin(userId: string, locale: string): Promise<ActionR
     if (!actor.success) return actor;
     try {
         await TeamService.makeAdmin(actor.userId, userId);
+        ChatRoomService.afterCommit('power levels', () => ChatRoomService.syncAllPowerLevels());
         revalidatePath(`/${locale}/admin/team`, 'page');
         return { success: true };
     } catch (error) {
@@ -33,6 +35,7 @@ export async function removeAdmin(userId: string, locale: string): Promise<Actio
     if (!actor.success) return actor;
     try {
         await TeamService.removeAdmin(actor.userId, userId);
+        ChatRoomService.afterCommit('power levels', () => ChatRoomService.syncAllPowerLevels());
         revalidatePath(`/${locale}/admin/team`, 'page');
         return { success: true };
     } catch (error) {
