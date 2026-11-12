@@ -12,7 +12,7 @@ const MAX_ROWS = 5;
 
 export interface MentionCandidate { id: string; name: string }
 
-const AT_RE = /(^|s)@([^s@]{0,30})$/;
+const AT_RE = /(^|\s)@([^@\n]{0,30})$/;
 const MAX_SUGGEST = 6;
 
 /** The composer (K5-11): Enter sends, Shift+Enter breaks the line; the text stays when a send fails. `@` suggests names from `candidates` (K5-24, max 6, ↑↓ Enter). */
@@ -25,7 +25,7 @@ export default function ChatComposer({ onSend, candidates = [] }: { onSend: (tex
     const [picked, setPicked] = useState<MentionCandidate[]>([]);
     const [at, setAt] = useState<string | null>(null);
     const [active, setActive] = useState(0);
-    const suggestions = at === null ? [] : candidates.filter((c) => c.name.toLocaleLowerCase().includes(at.toLocaleLowerCase())).slice(0, MAX_SUGGEST);
+    const suggestions = at === null ? [] : candidates.filter((c) => c.name.toLocaleLowerCase().startsWith(at.toLocaleLowerCase())).slice(0, MAX_SUGGEST);
 
     const look = (value: string, caret: number) => {
         setAt(AT_RE.exec(value.slice(0, caret))?.[2] ?? null);
