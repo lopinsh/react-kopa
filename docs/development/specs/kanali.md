@@ -143,6 +143,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-38a | Owners and admins of child groups apply to moderate the hub. | Changed | → K-38c. |
 | K-38c | Group members moderate only their own groups. **Hub admins are assigned manually; for now only site admins are hub admins.** | Confirmed | 9 Nov. |
 | K-38b | Signed-out visitors can read the public rooms (hub room, sub-veids rooms, city rooms); writing needs sign-in and "Mani interesē". | Confirmed | 9 Nov. |
+| K-142 | **Signed-out chat readers see names** (pseudonyms), but cannot write or open profiles (no name card, no profile link). Ziņas keep K-41 (no names signed out). | Confirmed | 12 Nov owner answer (K4 spec §15). Matrix database is development-only: fresh before the real launch. |
 
 ### Visibility and safety
 | Id | Feature | Status | Notes |
