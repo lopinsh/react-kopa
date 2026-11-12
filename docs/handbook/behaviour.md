@@ -108,6 +108,7 @@ The same situation behaves the same way on every screen.
 - Every notification opens exactly the thing it is about.
 - A notification is read when you tap it; opening the list marks nothing.
 - The only trace of a visit is `lastSeenAt`, day-level, written at most once a day, and shown to admins as counts only (Aktivitāte, R31); the privacy page says so.
+- "Online now" in Čats is live only (K-148): a signed-in tab joins the Soketi presence channel `presence-site` with the user id, nothing else; it is never stored, and the list is asked again every 60 s while visible. The privacy page says so.
 - Email is a digest, not a copy (R33): after 10 minutes unread, one email lists how many things and what (bell headline, group or event, sender name), never what was written; only direct messages and requests, applications, questions and their answers (`EMAIL_DIGEST_TYPES`), plus replies to your Ziņa and chat requests; off by the Iestatījumi switch or the link in every email.
 
 Next: [Who sees what](roles.md).

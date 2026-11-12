@@ -25,7 +25,7 @@ export default function ChatLine({ run }: { run: ChatRun }) {
             <p className="text-tag weight-normal text-foreground-muted/70">
                 {format.dateTime(last.ts, { hour: '2-digit', minute: '2-digit' })}
                 {last.name && <> · {openCard && !last.own
-                    ? <button type="button" onClick={() => openCard(last.sender)} className="text-tag hover:underline focus-visible:outline-2 focus-visible:outline-primary">{last.name}</button>
+                    ? <button type="button" onClick={(e) => openCard(last.sender, e.currentTarget)} className="text-tag hover:underline focus-visible:outline-2 focus-visible:outline-primary">{last.name}</button>
                     : <span className={clsx(last.own && 'text-primary')}>{last.name}</span>}</>}
                 {last.group && <> · {last.group}</>}
                 {last.mod && <> · {t('mod')}</>}

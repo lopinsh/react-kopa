@@ -11,14 +11,14 @@ import { directChatRequestSchema } from '@/lib/validations/chat';
 import { useToast } from '@/hooks/use-toast';
 import Badge from '@/components/ui/Badge';
 import Button, { buttonClass } from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal';
 import ChatRequestSheet from '@/components/hubs/ChatRequestSheet';
+import NameCardPop from './NameCardPop';
 
 /**
- * The name card (K5-19, K5-20): a tap on a name in a line or the online list. A sheet from the bottom on phones, a small dialog from there up (design.md Pop-up).
+ * The name card (K5-19, K5-20): a tap on a name in a line or the online list. A sheet from the bottom on phones, a pop-up at the name from 768 px (design.md Pop-up, `NameCardPop`).
  * Avatar, name + Mod, status, shared groups, "Rakstīt ziņu" (a chat request into Ziņas, K-82) and the profile link.
  */
-export default function ChatNameCard({ userId, onClose }: { userId: string; onClose: () => void }) {
+export default function ChatNameCard({ userId, anchor, onClose }: { userId: string; anchor: HTMLElement; onClose: () => void }) {
     const t = useTranslations('hub.chat');
     const tErrors = useTranslations('errors');
     const { error: toastError } = useToast();
@@ -49,7 +49,7 @@ export default function ChatNameCard({ userId, onClose }: { userId: string; onCl
     };
 
     return (
-        <Modal onClose={onClose} title={card?.name || t('card.title')} size="sm" locked={isPending}>
+        <NameCardPop anchor={anchor} onClose={onClose} title={card?.name || t('card.title')} locked={isPending}>
             {!card ? (
                 <p role="status" className="text-body-sm text-foreground-muted">{failed ? t('card.failed') : t('connecting')}</p>
             ) : (
@@ -84,6 +84,6 @@ export default function ChatNameCard({ userId, onClose }: { userId: string; onCl
                     )}
                 </div>
             )}
-        </Modal>
+        </NameCardPop>
     );
 }

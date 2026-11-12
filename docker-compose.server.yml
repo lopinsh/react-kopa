@@ -24,8 +24,8 @@ services:
       SOKETI_DEFAULT_APP_ID: ${SOKETI_APP_ID}
       SOKETI_DEFAULT_APP_KEY: ${SOKETI_APP_KEY}
       SOKETI_DEFAULT_APP_SECRET: ${SOKETI_APP_SECRET}
-      # Presence channels hold 100 members by default; "online now" (presence-site) needs room to grow (K5-15).
-      SOKETI_DEFAULT_APP_MAX_PRESENCE_MEMBERS_PER_CHANNEL: "5000"
+      # Presence channels hold 100 members by default (Soketi 1.6 cli: PRESENCE_MAX_MEMBERS -> presence.maxMembersPerChannel); "online now" (presence-site) needs room to grow (K5-15).
+      SOKETI_PRESENCE_MAX_MEMBERS: "5000"
     ports:
       - "6001:6001"
 

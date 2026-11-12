@@ -38,7 +38,7 @@ function Row({ p }: { p: OnlinePerson }) {
     return (
         <li>
             {open && id
-                ? <button type="button" onClick={() => open(id)} className={clsx(cls, 'hover:bg-tint focus-visible:outline-2 focus-visible:outline-primary')}>{body}</button>
+                ? <button type="button" onClick={(e) => open(id, e.currentTarget)} className={clsx(cls, 'hover:bg-tint focus-visible:outline-2 focus-visible:outline-primary')}>{body}</button>
                 : <div className={cls}>{body}</div>}
         </li>
     );

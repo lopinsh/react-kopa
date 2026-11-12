@@ -75,14 +75,19 @@ export const ChatPeopleService = {
         return this.lineNames(ids.filter((id) => members.has(id)), key, locale);
     },
 
-    /** Online now (K5-15) and in this room (K-82, K-34): Moderatori first, then A-Z. Signed out gets plain names only (K-149). */
-    async online(key: HubKey, locale: string, signedIn: boolean): Promise<OnlineList> {
+    /**
+     * Online now (K5-15) and in this room (K-82, K-34): Moderatori first, then A-Z. Signed out gets plain names only (K-149).
+     * The signed-in viewer asking has the room open (and is joined on open), so they count at once, before their socket and join reach the 10 s cache.
+     */
+    async online(key: HubKey, locale: string, viewerId: string | null): Promise<OnlineList> {
+        const signedIn = !!viewerId;
         if (!matrixConfig()) throw new ActionError('CHAT_UNAVAILABLE');
         const ref = await resolveKey(key);
         const roomId = ref ? await ChatRoomService.roomIdFor(ref) : null;
         if (!roomId) return { people: [], count: 0 };
         const [members, online] = await Promise.all([MatrixService.joinedSiteIds(roomId), OnlineService.onlineIds()]);
-        const ids = members.filter((id) => online.has(id)).slice(0, 300);
+        const ids = members.filter((id) => online.has(id) && id !== viewerId).slice(0, 300);
+        if (viewerId) ids.push(viewerId);
         const [users, flair] = await Promise.all([
             prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true, role: true, image: true, avatarSeed: true, bio: true, isProfilePublic: true } }),
             signedIn ? flairOf(ids, key, locale) : new Map<string, ChatGroupFlair>(),

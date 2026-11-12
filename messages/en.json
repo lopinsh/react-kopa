@@ -2081,7 +2081,7 @@
       "cookiesTitle": "Cookies and local storage",
       "data1": "Your account: name, email address, and a password (stored only as a one-way hash). If you sign in with Google or GitHub, we receive your name, email address and profile picture from them.",
       "data2": "Your profile: username, optional bio, cities, optional contact, and your privacy choices (whether your profile is public, whether people may message you, whether it lists your groups and who sees your contact).",
-      "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file. We also note the day you last visited, to see whether the site is used.",
+      "data3": "What you do on the site: groups you create or join, posts, direct messages, event RSVPs, notifications, and reports you file. We also note the day you last visited, to see whether the site is used. While you have the site open, other signed-in people can see you are online in the chat rooms you are in; that is not stored.",
       "data4": "If something has waited for you over 10 minutes, we send one short email saying how many things and what (like \"New message from Anna\"), never what was written. Turn it off in Settings or with the link in every email.",
       "dataTitle": "What we store",
       "intro": "This page describes what Ejam Kopā actually stores and why. It is written in plain language.",

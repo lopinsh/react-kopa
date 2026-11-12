@@ -22,6 +22,8 @@ A screen shows only what the viewer can use. Hidden, not disabled.
 | Read the last 50 lines | yes, with names (no name card, no profile link) | yes, live |
 | Write | "Ienākt" and a read-only note | yes, joined on first open |
 | Iestatījumi tab | hidden | yes |
+| Online list | names as plain text (K-149) | avatar, status, group, Mod; a name opens the name card |
+| Name card, "Rakstīt ziņu" | hidden | yes; status and profile link only for a public profile; no button when requests are off |
 
 **Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
 

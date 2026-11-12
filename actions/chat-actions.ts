@@ -69,7 +69,7 @@ export async function roomOnline(input: unknown): Promise<ActionResponse<OnlineL
     const parsed = roomOnlineSchema.safeParse(input);
     if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
     try {
-        return { success: true, data: await ChatPeopleService.online(parsed.data.hubKey, await getLocale(), !!session?.user?.id) };
+        return { success: true, data: await ChatPeopleService.online(parsed.data.hubKey, await getLocale(), session?.user?.id ?? null) };
     } catch (error: unknown) {
         return handleActionError(error, 'CHAT_UNAVAILABLE');
     }

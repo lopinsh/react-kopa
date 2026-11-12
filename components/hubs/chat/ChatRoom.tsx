@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
@@ -42,8 +42,9 @@ export default function ChatRoom() {
     const t = useTranslations('hub.chat');
     const { configured, room, viewer, lines } = useChatContext();
     const view = useSearchParams().get('view');
-    const [cardFor, setCardFor] = useState<string | null>(null);
+    const [cardFor, setCardFor] = useState<{ id: string; anchor: HTMLElement } | null>(null);
     const online = useRoomOnline(room.hubKey, configured);
+    const openCard = useCallback((id: string, anchor: HTMLElement) => setCardFor({ id, anchor }), []);
     const Icon = KIND_ICON[room.kind];
     const people = view === 'people' && configured;
     const pathname = usePathname();
@@ -58,7 +59,7 @@ export default function ChatRoom() {
                     <Link href={`${pathname}?view=people`} className="inline-flex shrink-0 items-center gap-0.5 text-meta text-foreground-muted hover:text-foreground lg:hidden">{t('onlineCount', { count: online.count })}<ChevronRight aria-hidden className="size-4" /></Link>
                 )}
             </div>
-            <NameCardProvider value={viewer ? setCardFor : null}>
+            <NameCardProvider value={viewer ? openCard : null}>
                 <div className="flex min-h-0 flex-1">
                     <div className={clsx('min-w-0 flex-1 flex-col', people ? 'hidden lg:flex' : 'flex')}>
                         {!configured
@@ -71,7 +72,7 @@ export default function ChatRoom() {
                         <ChatPeople list={online} backHref={pathname} className={clsx('lg:w-56 lg:shrink-0 lg:border-l lg:border-border', people ? 'w-full' : 'hidden lg:flex')} />
                     )}
                 </div>
-                {cardFor && <ChatNameCard key={cardFor} userId={cardFor} onClose={() => setCardFor(null)} />}
+                {cardFor && <ChatNameCard key={cardFor.id} userId={cardFor.id} anchor={cardFor.anchor} onClose={() => setCardFor(null)} />}
             </NameCardProvider>
         </section>
     );
