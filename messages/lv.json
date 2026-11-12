@@ -781,6 +781,24 @@
     }
   },
   "admin": {
+    "matrixTrial": {
+      "title": "Matrix izmēģinājums",
+      "intro": "Tikai administratoriem. Pārbauda Matrix serveri pirms Čata.",
+      "notConfigured": "Matrix nav iestatīts šajā vidē.",
+      "unreachable": "Matrix serveris neatbild.",
+      "status": "Serveris {server} · {version}",
+      "setup": "Izveidot izmēģinājuma istabas",
+      "runChecks": "Palaist pārbaudes",
+      "checkOk": "Izdevās",
+      "checkFailed": "Neizdevās",
+      "liveTitle": "Istaba (pierakstījies)",
+      "guestTitle": "Lasīšana bez pierakstīšanās: viesis",
+      "serverTitle": "Lasīšana bez pierakstīšanās: serveris",
+      "refresh": "Atjaunot",
+      "messagePlaceholder": "Raksti ziņu istabai",
+      "send": "Sūtīt",
+      "empty": "Istabā vēl nav ziņu."
+    },
     "dashboard": {
       "title": "Administrēšana",
       "subtitle": "Paslēptās grupas un moderācijas žurnāls."

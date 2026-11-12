@@ -781,6 +781,24 @@
     }
   },
   "admin": {
+    "matrixTrial": {
+      "title": "Matrix trial",
+      "intro": "Admins only. Tests the Matrix server before Chat.",
+      "notConfigured": "Matrix is not set up in this environment.",
+      "unreachable": "The Matrix server does not respond.",
+      "status": "Server {server} · {version}",
+      "setup": "Create trial rooms",
+      "runChecks": "Run checks",
+      "checkOk": "Passed",
+      "checkFailed": "Failed",
+      "liveTitle": "Room (signed in)",
+      "guestTitle": "Reading signed out: guest",
+      "serverTitle": "Reading signed out: server",
+      "refresh": "Refresh",
+      "messagePlaceholder": "Write to the room",
+      "send": "Send",
+      "empty": "No messages in the room yet."
+    },
     "dashboard": {
       "title": "Administration",
       "subtitle": "See what has been hidden and moderated."

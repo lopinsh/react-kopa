@@ -4,7 +4,7 @@ import { enc, errcodeOf, isRecord, matrixConfig, matrixFetch, MatrixRequestError
 
 /** The Matrix side of the site (K4, K-30): site users are appservice users, the site owns rooms and power levels. */
 
-export interface MatrixStatus { configured: boolean; reachable: boolean; serverName: string | null; version: string | null }
+export interface MatrixStatus { configured: boolean; reachable: boolean; serverName: string | null; publicUrl: string | null; version: string | null }
 export interface MatrixSession { userId: string; accessToken: string; deviceId: string; homeserverUrl: string }
 export interface PublicLine { body: string; ts: number; name: string | null }
 
@@ -42,14 +42,14 @@ export const MatrixService = {
 
     async status(): Promise<MatrixStatus> {
         const c = matrixConfig();
-        if (!c) return { configured: false, reachable: false, serverName: null, version: null };
+        if (!c) return { configured: false, reachable: false, serverName: null, publicUrl: null, version: null };
         try {
             const v = await matrixFetch('GET', '/_matrix/client/versions', undefined, 'anonymous');
             await matrixFetch('GET', `${V3}/account/whoami`);
             const list = isRecord(v) && Array.isArray(v.versions) ? v.versions : [];
-            return { configured: true, reachable: true, serverName: c.serverName, version: String(list[list.length - 1] ?? '') };
+            return { configured: true, reachable: true, serverName: c.serverName, publicUrl: c.publicUrl, version: String(list[list.length - 1] ?? '') };
         } catch (e) {
-            if (e instanceof ActionError && e.code === 'MATRIX_UNAVAILABLE') return { configured: true, reachable: false, serverName: c.serverName, version: null };
+            if (e instanceof ActionError && e.code === 'MATRIX_UNAVAILABLE') return { configured: true, reachable: false, serverName: c.serverName, publicUrl: c.publicUrl, version: null };
             throw e;
         }
     },
@@ -116,11 +116,12 @@ export const MatrixService = {
         return roomId;
     },
 
-    /** The site is 100, every site admin 50, nobody else (K-38, K-38c). `extra` adds users, for the checks. */
+    /** The site (room creator) is above 100, every site admin 50, nobody else (K-38, K-38c). `extra` adds users, for the checks. */
     async syncPowerLevels(roomId: string, extra: string[] = []): Promise<Record<string, number>> {
         const admins = await prisma.user.findMany({ where: { role: { in: ['ADMIN', 'OWNER'] } }, select: { id: true } });
         const current = await matrixFetch('GET', `${V3}/rooms/${enc(roomId)}/state/m.room.power_levels`);
-        const users: Record<string, number> = { [this.senderMxid()]: 100 };
+        // Room version 12: the creator (our sender) has unlimited power and must not be listed in `users`.
+        const users: Record<string, number> = {};
         for (const a of admins) users[this.userMxid(a.id)] = 50;
         for (const x of extra) users[x] = 50;
         await matrixFetch('PUT', `${V3}/rooms/${enc(roomId)}/state/m.room.power_levels`, { ...(isRecord(current) ? current : {}), users });
@@ -145,13 +146,15 @@ export const MatrixService = {
         }).reverse();
     },
 
-    /** K-82: a user tries to make a private room, to invite into the trial room and to make an alias. Expected: all refused. */
-    async probePrivateRoom(userId: string, roomId: string, inviteeUserId: string): Promise<{ createRoom: string; invite: string; alias: string }> {
-        const asUser = { asUser: this.userMxid(userId) };
+    /** K-82: a user (with the user's own token: identity assertion skips the alias hook) tries a private room, an invite and two aliases. Expected: all refused. */
+    async probePrivateRoom(token: string, roomId: string, inviteeUserId: string): Promise<{ createRoom: string; invite: string; alias: string; aliasOutside: string }> {
+        const own = { token };
+        const putAlias = (local: string) => errcodeOf(() => matrixFetch('PUT', `${V3}/directory/room/${enc(this.alias(local))}`, { room_id: roomId }, own));
         return {
-            createRoom: await errcodeOf(() => matrixFetch('POST', `${V3}/createRoom`, { preset: 'private_chat', is_direct: true }, asUser)),
-            invite: await errcodeOf(() => matrixFetch('POST', `${V3}/rooms/${enc(roomId)}/invite`, { user_id: this.userMxid(inviteeUserId) }, asUser)),
-            alias: await errcodeOf(() => matrixFetch('PUT', `${V3}/directory/room/${enc(this.alias('ejk_probe'))}`, { room_id: roomId }, asUser)),
+            createRoom: await errcodeOf(() => matrixFetch('POST', `${V3}/createRoom`, { preset: 'private_chat', is_direct: true }, own)),
+            invite: await errcodeOf(() => matrixFetch('POST', `${V3}/rooms/${enc(roomId)}/invite`, { user_id: this.userMxid(inviteeUserId) }, own)),
+            alias: await putAlias('ejk_probe'),
+            aliasOutside: await putAlias('probe_outside'),
         };
     },
 

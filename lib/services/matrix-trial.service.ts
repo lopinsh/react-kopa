@@ -130,9 +130,11 @@ export const MatrixTrialService = {
         });
 
         await run('F7', async () => {
-            const p = await MatrixService.probePrivateRoom(plain.id, t.room, other.id);
-            const ok = [p.createRoom, p.invite, p.alias].every((c) => c !== 'OK');
-            return `${ok ? 'ok' : 'FAIL'} createRoom=${p.createRoom} invite=${p.invite} alias=${p.alias}`;
+            const sp = await MatrixService.sessionFor(plain.id, 'EJAM_CHECK');
+            await MatrixService.joinAs(plain.id, t.room);
+            const p = await MatrixService.probePrivateRoom(sp.accessToken, t.room, other.id);
+            const ok = Object.values(p).every((c) => c !== 'OK');
+            return `${ok ? 'ok' : 'FAIL'} createRoom=${p.createRoom} invite=${p.invite} aliasInNamespace=${p.alias} aliasOutside=${p.aliasOutside}`;
         });
         return checks;
     },
