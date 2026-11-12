@@ -67,6 +67,8 @@ export const ERROR_CODES = [
     'BANNER_URL_NOT_ALLOWED',
     'SECTION_PICTURE_LIMIT',
     'SECTION_NOT_FOUND',
+    'MATRIX_UNAVAILABLE',
+    'MATRIX_FAILED',
 ] as const;
 
 export type ErrorCode = (typeof ERROR_CODES)[number];

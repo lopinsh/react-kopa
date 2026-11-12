@@ -490,6 +490,8 @@
     "CITY_IN_USE": "Groups or events still use this city, so it can't be deleted.",
     "SECTION_PICTURE_LIMIT": "This section already has 8 pictures.",
     "SECTION_NOT_FOUND": "This section no longer exists.",
+    "MATRIX_UNAVAILABLE": "The Matrix server is not available.",
+    "MATRIX_FAILED": "The Matrix request failed.",
     "HUB_CITY_REQUESTED": "You already asked for this"
   },
   "group": {

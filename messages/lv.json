@@ -490,6 +490,8 @@
     "CITY_IN_USE": "Šo pilsētu vēl izmanto grupas vai pasākumi, tāpēc to nevar dzēst.",
     "SECTION_PICTURE_LIMIT": "Sadaļā jau ir 8 attēli.",
     "SECTION_NOT_FOUND": "Šī sadaļa vairs nav atrodama.",
+    "MATRIX_UNAVAILABLE": "Matrix serveris nav pieejams.",
+    "MATRIX_FAILED": "Matrix pieprasījums neizdevās.",
     "HUB_CITY_REQUESTED": "Tu to jau pieprasīji"
   },
   "group": {
