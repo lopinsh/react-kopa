@@ -42,3 +42,13 @@ export function useOpenTabs(l2Id: string, currentKey: string, known: readonly st
 
     return { keys, close };
 }
+
+/** The keys open as tabs in one L2 community, read once in the browser (K5-21: Katalogs marks them "Atvērta"). `null` until read. */
+export function useOpenKeys(l2Id: string | null): string[] | null {
+    const [keys, setKeys] = useState<string[] | null>(null);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- the list lives in localStorage, which only the browser can read
+        setKeys(l2Id ? read(l2Id) : []);
+    }, [l2Id]);
+    return keys;
+}
