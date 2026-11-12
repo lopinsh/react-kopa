@@ -16,6 +16,7 @@ Source of truth for AI agents and human contributors working on **Ejam Kopā** (
 | Database | PostgreSQL 15 via Prisma ORM 6 |
 | Auth | Auth.js / NextAuth v5 (beta) |
 | Realtime | Pusher protocol via self-hosted Soketi |
+| Chat | Matrix (Synapse) as application service, matrix-js-sdk |
 | i18n | next-intl, locales `lv` (default) and `en` |
 | Icons | `lucide-react` only |
 
@@ -44,6 +45,7 @@ npm run dev                   # http://localhost:3000
 | Production build | `npm run build` (needs `AUTH_SECRET` + `DATABASE_URL`) |
 | New migration | `npm run db:migrate -- --name <snake_case_name>` (stop dev server first) |
 | Matrix trial (Synapse starts with `db:up`; re-render config and restart: `npm run matrix:up`) | `npm run matrix:up` |
+| Make every Čats room (idempotent; run once after the K5-1 deploy) | `npm run matrix:backfill` |
 | Regenerate client | `npm run db:generate` (after every schema change) |
 | Seed | `npm run db:seed` |
 | Smoke test (built app on :3000, seeded DB; CI runs it) | `npm run test:smoke` |
