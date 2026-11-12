@@ -3,11 +3,13 @@
 import { useFormatter, useTranslations } from 'next-intl';
 import { clsx } from 'clsx';
 import { linkParts, type ChatRun } from './chat-lines';
+import { useNameCard } from './name-card-context';
 
 /** One run of lines (K-81, K-101): each message full width, then one small meta line under the last: time · name · Mod. Plain text; URLs are links. */
 export default function ChatLine({ run }: { run: ChatRun }) {
     const t = useTranslations('hub.chat');
     const format = useFormatter();
+    const openCard = useNameCard();
     const last = run.entries[run.entries.length - 1];
     return (
         <li className="grid gap-0.5">
@@ -22,7 +24,10 @@ export default function ChatLine({ run }: { run: ChatRun }) {
             ))}
             <p className="text-tag weight-normal text-foreground-muted/70">
                 {format.dateTime(last.ts, { hour: '2-digit', minute: '2-digit' })}
-                {last.name && <> · <span className={clsx(last.own && 'text-primary')}>{last.name}</span></>}
+                {last.name && <> · {openCard && !last.own
+                    ? <button type="button" onClick={() => openCard(last.sender)} className="text-tag hover:underline focus-visible:outline-2 focus-visible:outline-primary">{last.name}</button>
+                    : <span className={clsx(last.own && 'text-primary')}>{last.name}</span>}</>}
+                {last.group && <> · {last.group}</>}
                 {last.mod && <> · {t('mod')}</>}
             </p>
         </li>

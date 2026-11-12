@@ -809,6 +809,25 @@
         "settings": "Iestatījumi",
         "close": "Aizvērt {room}"
       },
+      "onlineCount": "{count} tiešsaistē",
+      "people": {
+        "title": "Tiešsaistē",
+        "mods": "Moderatori",
+        "all": "Visi, A–Z",
+        "search": "Meklēt vārdu",
+        "legend": "Grupa šajā kopienā. Vārds atver mazu karti.",
+        "back": "Atpakaļ uz istabu"
+      },
+      "card": {
+        "title": "Cilvēks",
+        "failed": "Neizdevās ielādēt.",
+        "shared": "Kopīgās grupas",
+        "write": "Rakstīt ziņu",
+        "openChat": "Atvērt sarunu",
+        "pending": "Pieprasījums nosūtīts",
+        "dmOff": "Šis cilvēks nepieņem čata pieprasījumus.",
+        "profile": "Skatīt profilu"
+      },
       "switcher": {
         "search": "Meklēt istabu",
         "open": "Atvērtās istabas",

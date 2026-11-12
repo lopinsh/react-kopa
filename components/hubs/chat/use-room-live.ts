@@ -115,7 +115,7 @@ export function useRoomLive(userId: string, hubKey: HubKey) {
 
     const entries: ChatEntry[] = events.map((e) => {
         const id = SITE_SENDER.exec(e.getSender() ?? '')?.[1] ?? e.getSender() ?? '';
-        return { id: e.getId() ?? e.getTxnId() ?? `${e.getTs()}`, sender: id, name: names[id]?.name || null, mod: !!names[id]?.mod, own: id === userId, ts: e.getTs(), body: String(e.getContent().body) };
+        return { id: e.getId() ?? e.getTxnId() ?? `${e.getTs()}`, sender: id, name: names[id]?.name || null, mod: !!names[id]?.mod, group: names[id]?.group ?? null, own: id === userId, ts: e.getTs(), body: String(e.getContent().body) };
     });
     return { status, entries, send, loadMore, hasMore, loadingMore };
 }

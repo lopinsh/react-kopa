@@ -22,7 +22,7 @@ export default function ChatReadOnly({ lines }: { lines: PublicLine[] }) {
         return () => window.clearInterval(id);
     }, [router]);
 
-    const entries = lines.map((l, i) => ({ id: `${l.ts}-${i}`, sender: l.name ?? '', name: l.name, mod: l.mod, own: false, ts: l.ts, body: l.body }));
+    const entries = lines.map((l, i) => ({ id: `${l.ts}-${i}`, sender: l.name ?? '', name: l.name, mod: l.mod, group: null, own: false, ts: l.ts, body: l.body }));
     return (
         <>
             <ChatLog entries={entries} />

@@ -5,6 +5,8 @@ export interface ChatEntry {
     sender: string;
     name: string | null;
     mod: boolean;
+    /** The person's community group (flair, K-33a); signed out and unknown: null. */
+    group: string | null;
     own: boolean;
     ts: number;
     body: string;

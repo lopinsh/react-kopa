@@ -809,6 +809,25 @@
         "settings": "Settings",
         "close": "Close {room}"
       },
+      "onlineCount": "{count} online",
+      "people": {
+        "title": "Online",
+        "mods": "Moderators",
+        "all": "Everyone, A–Z",
+        "search": "Find a name",
+        "legend": "Group in this community. A name opens a small card.",
+        "back": "Back to the room"
+      },
+      "card": {
+        "title": "Person",
+        "failed": "Could not load.",
+        "shared": "Groups in common",
+        "write": "Send a message",
+        "openChat": "Open conversation",
+        "pending": "Request sent",
+        "dmOff": "This person does not take chat requests.",
+        "profile": "View profile"
+      },
       "switcher": {
         "search": "Find a room",
         "open": "Open rooms",
