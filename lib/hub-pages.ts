@@ -5,14 +5,14 @@ export interface HubPageLink {
     href: string;
 }
 
-const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages' };
+const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages', chat: '/chat' };
 
 /**
  * The pages a hub's menu shows, in order (K1-04). `base` is the hub's address without locale (a topic x city hub's includes the city).
- * Čats joins here with K5.
+ * The city hub shows no Čats (K-133): it passes `omit`.
  */
-export function hubPages(base: string): HubPageLink[] {
-    return HUB_PAGE_KEYS.map((key) => ({ key, href: `${base}${SEGMENT[key]}` }));
+export function hubPages(base: string, omit: readonly HubPageKey[] = []): HubPageLink[] {
+    return HUB_PAGE_KEYS.filter((key) => !omit.includes(key)).map((key) => ({ key, href: `${base}${SEGMENT[key]}` }));
 }
 
 /** The page a path (without locale) is on, under the hub at `base`. */

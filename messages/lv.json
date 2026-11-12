@@ -633,7 +633,8 @@
       "overview": "Pārskats",
       "groups": "Grupas",
       "events": "Pasākumi",
-      "messages": "Ziņas"
+      "messages": "Ziņas",
+      "chat": "Čats"
     },
     "frame": {
       "pagesLabel": "Kopienas lapas",
@@ -779,6 +780,41 @@
       "cancel": "Atcelt",
       "sent": "Pieprasīts. Kopiena atvērsies, kad pieprasīs vēl kāds.",
       "opened": "Kopiena ir atvērta"
+    },
+    "chat": {
+      "unavailable": "Čats šobrīd nav pieejams. Pamēģini vēlāk.",
+      "readOnly": "Lasīt vari jau tagad, rakstīt var pēc ienākšanas.",
+      "signIn": "Ienākt",
+      "composer": "Raksti ziņu",
+      "send": "Sūtīt",
+      "sendFailed": "Neizdevās nosūtīt. Mēģini vēlreiz.",
+      "newBelow": "Jaunas ziņas",
+      "loadMore": "Ielādē agrākās ziņas…",
+      "empty": "Te vēl neviens nav rakstījis. Saki pirmais \"Sveiki!\"",
+      "mod": "Mod",
+      "connecting": "Savienojas…",
+      "today": "Šodien",
+      "yesterday": "Vakar",
+      "log": "Ziņas",
+      "room": "Istaba",
+      "kind": {
+        "hub": "Kopienas istaba",
+        "sub": "Veida istaba",
+        "city": "Pilsētas istaba"
+      },
+      "tabs": {
+        "label": "Čata istabas",
+        "rooms": "Istabas",
+        "catalog": "Katalogs",
+        "settings": "Iestatījumi",
+        "close": "Aizvērt {room}"
+      },
+      "switcher": {
+        "search": "Meklēt istabu",
+        "open": "Atvērtās istabas",
+        "others": "Citas istabas",
+        "none": "Neviena istaba neatbilst meklētajam."
+      }
     }
   },
   "admin": {

@@ -13,7 +13,7 @@ import PagesStickyBar from '@/components/hubs/frame/PagesStickyBar';
 
 /** The city hub's pages: Pārskats, Grupas, Pasākumi, Ziņas, no Kur (K-10, K-133). */
 export function CityPagesNav({ variant }: { variant: 'side' | 'drawer' }) {
-    return <PagesMenu base={useCityHubContext().href} variant={variant} />;
+    return <PagesMenu base={useCityHubContext().href} variant={variant} omit={['chat']} />;
 }
 
 function CityDrawer({ onTone = false }: { onTone?: boolean }) {

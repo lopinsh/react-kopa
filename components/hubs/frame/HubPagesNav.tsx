@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
-import { CalendarDays, LayoutDashboard, StickyNote, Users, type LucideIcon } from 'lucide-react';
+import { CalendarDays, LayoutDashboard, MessagesSquare, StickyNote, Users, type LucideIcon } from 'lucide-react';
 import { usePathname } from '@/i18n/routing';
 import { UI, type HubPageKey } from '@/lib/constants';
 import { hubPageForPath, hubPages } from '@/lib/hub-pages';
@@ -10,13 +10,13 @@ import { useHubContext } from '@/components/providers/HubProvider';
 import PageNavLink from '@/components/ui/PageNavLink';
 import HubPlaceButton from './HubPlaceButton';
 
-const ICONS: Record<HubPageKey, LucideIcon> = { overview: LayoutDashboard, groups: Users, events: CalendarDays, messages: StickyNote };
+const ICONS: Record<HubPageKey, LucideIcon> = { overview: LayoutDashboard, groups: Users, events: CalendarDays, messages: StickyNote, chat: MessagesSquare };
 
 /**
  * The pages of a hub or city hub (K1-04, K3-17) under `base`: down the left from `lg` (`side`, sticky), in the ☰ drawer below that (`drawer`).
  * `children` ends the menu (a hub's Kur place on Pārskats, K1-06).
  */
-export function PagesMenu({ base, variant, children }: { base: string; variant: 'side' | 'drawer'; children?: ReactNode }) {
+export function PagesMenu({ base, variant, omit, children }: { base: string; variant: 'side' | 'drawer'; /** Pages this menu leaves out (a city hub has no Čats, K-133). */ omit?: readonly HubPageKey[]; children?: ReactNode }) {
     const t = useTranslations('hub');
     const pathname = usePathname();
     const current = hubPageForPath(pathname, base);
@@ -24,7 +24,7 @@ export function PagesMenu({ base, variant, children }: { base: string; variant: 
     return (
         <div className={variant === 'side' ? 'sticky top-5 hidden self-start lg:block' : 'pt-2'}>
             <nav data-ui={UI.hubMenu} aria-label={t('frame.pagesLabel')} className="flex flex-col gap-0.5">
-                {hubPages(base).map(({ key, href }) => (
+                {hubPages(base, omit).map(({ key, href }) => (
                     <PageNavLink key={key} href={href} icon={ICONS[key]} label={t(`pages.${key}`)} current={current === key} replace={variant === 'drawer'} />
                 ))}
             </nav>

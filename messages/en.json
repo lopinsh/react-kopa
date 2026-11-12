@@ -633,7 +633,8 @@
       "overview": "Overview",
       "groups": "Groups",
       "events": "Events",
-      "messages": "Notes"
+      "messages": "Notes",
+      "chat": "Chat"
     },
     "frame": {
       "pagesLabel": "Community pages",
@@ -779,6 +780,41 @@
       "cancel": "Cancel",
       "sent": "Done. It opens when one more person asks.",
       "opened": "The community is open"
+    },
+    "chat": {
+      "unavailable": "Chat is not available right now. Try again later.",
+      "readOnly": "You can read now; sign in to write.",
+      "signIn": "Sign in",
+      "composer": "Write a message",
+      "send": "Send",
+      "sendFailed": "Could not send. Try again.",
+      "newBelow": "New messages",
+      "loadMore": "Loading earlier messages…",
+      "empty": "Nobody has written here yet. Be the first to say hi.",
+      "mod": "Mod",
+      "connecting": "Connecting…",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "log": "Messages",
+      "room": "Room",
+      "kind": {
+        "hub": "Community room",
+        "sub": "Type room",
+        "city": "City room"
+      },
+      "tabs": {
+        "label": "Chat rooms",
+        "rooms": "Rooms",
+        "catalog": "Directory",
+        "settings": "Settings",
+        "close": "Close {room}"
+      },
+      "switcher": {
+        "search": "Find a room",
+        "open": "Open rooms",
+        "others": "Other rooms",
+        "none": "No room matches."
+      }
     }
   },
   "admin": {

@@ -8,8 +8,8 @@ export interface HubAddress {
 }
 
 /** URL segment of each page below a hub: Pārskats is the hub's own address. */
-const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages' };
-const PAGE_OF: Record<string, HubPageKey> = { groups: 'groups', events: 'events', messages: 'messages' };
+const SEGMENT: Record<HubPageKey, string> = { overview: '', groups: '/groups', events: '/events', messages: '/messages', chat: '/chat' };
+const PAGE_OF: Record<string, HubPageKey> = { groups: 'groups', events: 'events', messages: 'messages', chat: 'chat' };
 
 /**
  * The segments after the L1 slug: `[l2, ...middle (0..2), page?]` with page `groups`, `events` or `messages` (K3-04).
