@@ -18,6 +18,11 @@ function cfg(): MatrixConfig {
     return c;
 }
 
+/** createRoom lost a race for its alias: M_ROOM_IN_USE, or Synapse's 409 when both passed the alias check at once. */
+export function aliasTaken(e: unknown): boolean {
+    return e instanceof MatrixRequestError && (e.errcode === 'M_ROOM_IN_USE' || e.status === 409);
+}
+
 function readExpiring(res: unknown): ExpiringSession {
     const expiresInMs = isRecord(res) && typeof res.expires_in_ms === 'number' ? res.expires_in_ms : 0;
     return { accessToken: str(res, 'access_token'), refreshToken: str(res, 'refresh_token'), expiresInMs };
@@ -154,7 +159,7 @@ export const MatrixService = {
     async readPublic(roomId: string, limit = 30): Promise<PublicLine[]> {
         const res = await matrixFetch('GET', `${V3}/rooms/${enc(roomId)}/messages?dir=b&limit=${limit}`);
         const chunk = isRecord(res) && Array.isArray(res.chunk) ? res.chunk : [];
-        const lines = chunk.filter(isRecord).filter((e) => e.type === 'm.room.message' && isRecord(e.content) && typeof e.content.body === 'string');
+        const lines = chunk.filter(isRecord).filter((e) => e.type === 'm.room.message' && isRecord(e.content) && e.content.msgtype === 'm.text' && typeof e.content.body === 'string');
         const ids = lines.map((e) => siteUserId(e.sender)).filter((x): x is string => !!x);
         const users = await prisma.user.findMany({ where: { id: { in: ids } }, select: { id: true, name: true } });
         const names = new Map(users.map((u) => [u.id, u.name]));

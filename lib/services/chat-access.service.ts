@@ -41,6 +41,7 @@ export const ChatAccessService = {
 
     /** First open (K-33a): make the room if missing and join the person. A join rate limit is retried once after the wait Synapse names. */
     async open(userId: string, key: HubKey): Promise<{ roomId: string }> {
+        if (!matrixConfig()) throw new ActionError('CHAT_UNAVAILABLE');
         const ref = await resolveKey(key);
         if (!ref) throw new ActionError('NOT_FOUND');
         const roomId = await ChatRoomService.ensure(ref);
@@ -57,6 +58,7 @@ export const ChatAccessService = {
 
     /** Signed-out read (K-140, K-142): the last lines with names; `[]` when the room does not exist. */
     async read(key: HubKey): Promise<PublicLine[]> {
+        if (!matrixConfig()) throw new ActionError('CHAT_UNAVAILABLE');
         const ref = await resolveKey(key);
         return ref ? ChatRoomService.readPublic(ref, 50) : [];
     },

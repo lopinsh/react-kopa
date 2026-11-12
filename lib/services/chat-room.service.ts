@@ -1,6 +1,6 @@
 import { ActionError } from '@/types/actions';
-import { enc, matrixConfig, matrixFetch, MatrixRequestError } from './matrix-client';
-import { MatrixService, type PublicLine } from './matrix.service';
+import { enc, matrixConfig, matrixFetch } from './matrix-client';
+import { aliasTaken, MatrixService, type PublicLine } from './matrix.service';
 import { allRoomRefs, citySpaceAlias, l2SpaceAlias, roomAlias, roomRef, type ChatRoomRef } from './chat-room-refs';
 
 /** Čats rooms and their Spaces (K5-01..K5-04): found by alias, never stored on the site (K-139). The site is always the sender. */
@@ -27,14 +27,16 @@ export const ChatRoomService = {
         return resolve(roomAlias(r));
     },
 
-    /** The room's id; creates the Spaces and the room if missing. Two first visitors at once: M_ROOM_IN_USE, then resolve again. */
+    /** The room's id; creates the Spaces and the room if missing. Two first visitors at once: the alias is taken (M_ROOM_IN_USE or 409), then resolve again. */
     async ensure(r: ChatRoomRef): Promise<string> {
         const found = await resolve(roomAlias(r));
         if (found) return found;
         try {
             return await create(r);
         } catch (e) {
-            if (e instanceof MatrixRequestError && e.errcode === 'M_ROOM_IN_USE') {
+            if (aliasTaken(e)) {
+                // The winner is still setting the room up (Synapse names the alias before the room is ready): give it a moment, then use theirs.
+                await new Promise((done) => setTimeout(done, 500));
                 const again = await resolve(roomAlias(r));
                 if (again) return again;
             }
@@ -46,12 +48,13 @@ export const ChatRoomService = {
     async close(r: ChatRoomRef): Promise<void> {
         const roomId = await resolve(roomAlias(r));
         if (!roomId) return;
-        await matrixFetch('DELETE', `${V3}/directory/room/${enc(MatrixService.alias(roomAlias(r)))}`);
+        // The alias goes last, so a close that fails halfway can be run again (it finds the room by the alias).
         const spaces = [await resolve(l2SpaceAlias(r.l2Id)), r.cityId ? await resolve(citySpaceAlias(r.cityId)) : null];
         for (const space of spaces) {
             if (space) await matrixFetch('PUT', `${V3}/rooms/${enc(space)}/state/m.space.child/${enc(roomId)}`, {});
         }
         await matrixFetch('PUT', `${V3}/rooms/${enc(roomId)}/state/m.room.join_rules`, { join_rule: 'invite' });
+        await matrixFetch('DELETE', `${V3}/directory/room/${enc(MatrixService.alias(roomAlias(r)))}`);
     },
 
     /** Site admins 50, nobody else, in every existing room of an OPEN hub or ACTIVE L2/L3 (K-38c). Returns how many rooms were synced. */
