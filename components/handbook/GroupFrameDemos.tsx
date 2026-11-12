@@ -51,7 +51,7 @@ export function GroupHeadDemo({ samples }: { samples: UiSamples }) {
             {cases.map(({ viewer, variant, photo, isPrivate }, i) => (
                 <AccentScope key={`${viewer}-${i}`} color={SAMPLE_ACCENT}>
                     <GroupProvider value={sampleState(samples.group, viewer, { isPrivate })}>
-                        <GroupHead variant={variant} picture={photo ? <HeadPicture image={SAMPLE_IMAGE} /> : undefined} />
+                        <GroupHead variant={variant} photo={photo ? SAMPLE_IMAGE : undefined} picture={photo ? <HeadPicture variant="strip" image={SAMPLE_IMAGE} /> : undefined} />
                     </GroupProvider>
                 </AccentScope>
             ))}

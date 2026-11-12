@@ -607,7 +607,11 @@
       "hidePicture": "Sakļaut attēlu",
       "openPicture": "Atvērt grupas attēlu",
       "editGroup": "Labot grupu",
-      "aboutLabel": "Par šo grupu"
+      "aboutLabel": "Par šo grupu",
+      "share": "Dalīties",
+      "hubLabel": "Daļa no kopienas",
+      "hubOpen": "Atvērt kopienu",
+      "hubChat": "Čats"
     },
     "nextMeeting": {
       "title": "Nākamais pasākums",

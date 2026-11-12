@@ -73,6 +73,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
         categoryId: 'sample-category',
         bannerImage: null,
         bannerCredit: null,
+        hub: { path: [{ title: 'Spēles', href: '/games' }, { title: 'Galda spēles', href: '/games/boardgames' }], title: 'Galda spēles', href: '/games/boardgames', chatHref: '/games/boardgames/chat', image: null, memberCount: 8, groupCount: 2 },
         isAcceptingMembers: true,
         socialLinks: { discord: null, website: 'https://example.org', instagram: null },
         stats: { memberCount: 23, pendingCount: 0 },

@@ -15,6 +15,7 @@ export function toGroupState(group: GroupContext): GroupState {
         memberCount: group.stats.memberCount,
         lookingFor: group.lookingFor,
         isAcceptingMembers: group.isAcceptingMembers,
+        hub: group.hub && { path: group.hub.path, title: group.hub.title, href: group.hub.href, chatHref: group.hub.chatHref, memberCount: group.hub.memberCount, groupCount: group.hub.groupCount },
         pages: group.pages,
         moderation: { isSiteAdmin: group.moderation.isSiteAdmin, hidden: !!group.moderation.hidden },
         user: group.user,

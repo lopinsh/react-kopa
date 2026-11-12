@@ -21,6 +21,7 @@ import { getSiteRole } from './site-role.service';
 import type { BannerCredit } from '@/lib/validations/banner';
 import { assertBannerAllowed, bannerCreditColumns, storedBanner, toBannerCredit } from '@/lib/banner';
 import { startOfTodayInRiga } from '@/lib/event-dates';
+import { closestHub, type GroupHub } from './group-hub';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
@@ -89,6 +90,8 @@ export interface GroupContext {
     bannerImage: string | null;
     /** Photographer of an Unsplash banner; null for any other image. */
     bannerCredit: BannerCredit;
+    /** The most specific OPEN hub of the group (K-152), or null: the head path, the head photo fallback and the side-column hub box. */
+    hub: GroupHub | null;
     isAcceptingMembers: boolean;
     socialLinks: {
         discord: string | null;
@@ -312,6 +315,9 @@ export const GroupService = {
             })
             : GroupService.getVirtualSections(group, lang);
 
+        const cityHref = await CityService.bySegment(g.city, locale).then((c) => (c ? `/${c.segment}` : null));
+        const hub = await closestHub({ categoryId: g.categoryId, tagIds: g.tags.map((t) => t.id), cityHref }, locale);
+
         return {
             id: g.id,
             name: g.name,
@@ -319,11 +325,12 @@ export const GroupService = {
             description: g.description,
             lookingFor: g.lookingFor,
             city: g.city,
-            cityHref: await CityService.bySegment(g.city, locale).then((c) => (c ? `/${c.segment}` : null)),
+            cityHref,
             type: g.type as 'PUBLIC' | 'PRIVATE',
             categoryId: g.categoryId,
             bannerImage: g.bannerImage,
             bannerCredit: toBannerCredit(g.bannerCreditName, g.bannerCreditUser),
+            hub,
             isAcceptingMembers: g.isAcceptingMembers,
             socialLinks: {
                 discord: g.discordLink,

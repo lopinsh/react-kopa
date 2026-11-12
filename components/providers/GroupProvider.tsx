@@ -32,6 +32,8 @@ export interface GroupState {
         /** The viewer's own chat with the team while their request waits (never anyone else's), or null. */
         chatId: string | null;
     };
+    /** The closest OPEN hub (K-152): path for the head, box for the side column; null when none. */
+    hub: { path: Array<{ title: string; href?: string }>; title: string; href: string; chatHref: string; memberCount: number; groupCount: number } | null;
     pendingCount?: number;
     sections: Array<{
         id: string;

@@ -2,6 +2,8 @@ import { GroupService } from '@/lib/services/group.service';
 import { notFound } from 'next/navigation';
 import { auth } from '@/lib/auth';
 import HiddenGroupBanner from '@/components/groups/HiddenGroupBanner';
+import HeadPicture from '@/components/groups/frame/HeadPicture';
+import { getSmartImageUrl } from '@/lib/image-utils';
 import GroupHeadRow from '@/components/groups/frame/GroupHeadRow';
 import GroupStickyBar from '@/components/groups/frame/GroupStickyBar';
 import GroupPagesNav from '@/components/groups/frame/GroupPagesNav';
@@ -41,11 +43,11 @@ export default async function GroupLayout({
             {group.moderation.isSiteAdmin && <AdminGroupBridge />}
             <GroupDialogsProvider>
             <GroupStickyBar />
-            <GroupHeadRow image={group.bannerImage} credit={group.bannerCredit} />
+            <GroupHeadRow image={group.bannerImage} credit={group.bannerCredit} hubPhoto={group.hub?.image?.url} />
             <FrameColumns
                 navFrom="lg"
                 nav={<GroupPagesNav variant="side" />}
-                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: `/${l1Slug}/group/${group.slug}`, isMember: group.user.isMember, socialLinks: group.socialLinks }} viewerId={session?.user?.id} />}
+                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: `/${l1Slug}/group/${group.slug}`, isMember: group.user.isMember, socialLinks: group.socialLinks, hub: group.hub, picture: group.bannerImage ? <HeadPicture variant="box" image={getSmartImageUrl(group.bannerImage)} credit={group.bannerCredit} /> : null }} viewerId={session?.user?.id} />}
             >
                 {children}
             </FrameColumns>

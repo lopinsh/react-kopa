@@ -607,7 +607,11 @@
       "hidePicture": "Collapse the picture",
       "openPicture": "Open the group's picture",
       "editGroup": "Edit group",
-      "aboutLabel": "About this group"
+      "aboutLabel": "About this group",
+      "share": "Share",
+      "hubLabel": "Part of the community",
+      "hubOpen": "Open community",
+      "hubChat": "Chat"
     },
     "nextMeeting": {
       "title": "Next event",
