@@ -44,7 +44,7 @@ $COMPOSE up -d --no-deps db soketi
 # never fatal: a Synapse problem must not fail a site deploy. Skipped when MATRIX_AS_TOKEN is unset.
 matrix_up() {
   # No `set -e` here: the caller's `||` switches errexit off inside the function, so each step returns on failure itself.
-  set -a; . <(grep '^MATRIX_' .env | tr -d ''); set +a
+  set -a; . <(grep '^MATRIX_' .env | tr -d '\r'); set +a
   [ -n "${MATRIX_AS_TOKEN:-}" ] || { log "matrix: MATRIX_AS_TOKEN unset, skipped"; return 0; }
   before="$(cat matrix/homeserver.yaml matrix/ejam-appservice.yaml matrix/ejam_rules.py 2>/dev/null | sha256sum)"
   bash deploy/matrix/render.sh matrix || return 1
