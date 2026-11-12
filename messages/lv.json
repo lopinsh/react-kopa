@@ -858,7 +858,10 @@
         "requestsHint": "Pieprasījums nonāk tavā Ziņu iesūtnē, tu apstiprini vai noraidi.",
         "saveFailed": "Neizdevās saglabāt. Mēģini vēlreiz."
       },
-      "mention": "Piemināt cilvēku"
+      "mention": "Piemināt cilvēku",
+      "block": {
+        "open": "Atvērt čatu"
+      }
     }
   },
   "admin": {

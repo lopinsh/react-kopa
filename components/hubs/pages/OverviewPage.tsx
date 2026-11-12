@@ -7,10 +7,12 @@ import { hubPages } from '@/lib/hub-pages';
 import { createGroupHref } from '@/lib/hub-path';
 import { HubService, type HubContext } from '@/lib/services/hub.service';
 import { HubCityService } from '@/lib/services/hub-city.service';
+import { ChatPreviewService } from '@/lib/services/chat-preview.service';
 import { HubNoteService } from '@/lib/services/hub-note.service';
 import { buttonClass } from '@/components/ui/Button';
 import GroupRow from '@/components/discovery/GroupRow';
 import ActivityFeed from '@/components/hubs/ActivityFeed';
+import ChatOverview from '@/components/hubs/ChatOverview';
 import HubEventRows from '@/components/hubs/HubEventRows';
 import OverviewTabs from '@/components/hubs/OverviewTabs';
 import NoteRow from '@/components/hubs/notes/NoteRow';
@@ -28,7 +30,7 @@ const BOX = 'rounded-2xl bg-surface shadow-card frame';
 export default async function OverviewPage({ hub, cities, locale, viewerId, viewerRole }: { hub: HubContext; cities: string[]; locale: string; viewerId?: string; viewerRole?: string | null }) {
     const zone = await getTimeZone();
     const viewer = viewerId ? { id: viewerId, role: viewerRole } : undefined;
-    const [t, periods, preview, groups, notes, noteCount, requestCount] = await Promise.all([
+    const [t, periods, preview, groups, notes, noteCount, requestCount, chat] = await Promise.all([
         getTranslations({ locale, namespace: 'hub' }),
         HubService.getActivity(hub, { cities }, locale, zone),
         HubService.getEventPreview(hub, { cities, take: HUB_PREVIEW_ROWS }, locale, viewerId),
@@ -36,9 +38,10 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
         HubNoteService.list(hub, { cities, q: '', tab: 'all', take: HUB_PREVIEW_ROWS }, locale, viewer),
         HubNoteService.count(hub, cities),
         hub.local ? HubCityService.requestCount(hub.local.hubCityId) : Promise.resolve(0),
+        ChatPreviewService.preview(hub.local ? { hubSlug: hub.slug, city: hub.local.segment } : { hubSlug: hub.slug }, locale),
     ]);
     const pages = hubPages(hub.href);
-    const hrefOf = (key: 'groups' | 'events' | 'messages') => pages.find((p) => p.key === key)?.href ?? hub.href;
+    const hrefOf = (key: 'groups' | 'events' | 'messages' | 'chat') => pages.find((p) => p.key === key)?.href ?? hub.href;
     const notesHref = hrefOf('messages');
     const composeHref = viewer ? `${notesHref}${notesHref.includes('?') ? '&' : '?'}compose=1` : null;
     const writeClass = buttonClass('secondary', undefined, 'sm');
@@ -48,7 +51,7 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
 
     return (
         <>
-            <OverviewTabs items={[{ id: 'hub-activity', label: t('activity.title') }, { id: 'hub-notes', label: t('pages.messages') }, { id: 'hub-events', label: t('pages.events') }, { id: 'hub-groups', label: t('pages.groups') }]} />
+            <OverviewTabs items={[{ id: 'hub-activity', label: t('activity.title') }, { id: 'hub-notes', label: t('pages.messages') }, ...(chat ? [{ id: 'hub-chat', label: t('pages.chat') }] : []), { id: 'hub-events', label: t('pages.events') }, { id: 'hub-groups', label: t('pages.groups') }]} />
             <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-section xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] 2xl:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1fr)]">
                 <div className="min-w-0 xl:row-span-2 2xl:row-span-1">
                     <HubSection id="hub-activity" title={t('activity.title')}>
@@ -59,11 +62,14 @@ export default async function OverviewPage({ hub, cities, locale, viewerId, view
                         </div>
                     </HubSection>
                 </div>
-                <HubSection id="hub-notes" title={t('pages.messages')} count={noteCount} action={write} link={{ href: notesHref, label: t('notes.all') }}>
-                    <div className={`${BOX} px-4`}>
-                        {notes.rows.length === 0 ? <p className="py-4 text-body-sm text-foreground-muted">{t('notes.empty')}</p> : notes.rows.map((n) => <NoteRow key={n.id} note={n} />)}
-                    </div>
-                </HubSection>
+                <div className="grid min-w-0 gap-section">
+                    <HubSection id="hub-notes" title={t('pages.messages')} count={noteCount} action={write} link={{ href: notesHref, label: t('notes.all') }}>
+                        <div className={`${BOX} px-4`}>
+                            {notes.rows.length === 0 ? <p className="py-4 text-body-sm text-foreground-muted">{t('notes.empty')}</p> : notes.rows.map((n) => <NoteRow key={n.id} note={n} />)}
+                        </div>
+                    </HubSection>
+                    {chat && <ChatOverview preview={chat} chatHref={hrefOf('chat')} locale={locale} />}
+                </div>
                 <HubSection id="hub-events" title={t('pages.events')} count={preview.total} link={{ href: hrefOf('events'), label: t('events.all') }}>
                     <div className={`${BOX} px-4`}><HubEventRows events={preview.events} locale={locale} /></div>
                 </HubSection>
