@@ -43,16 +43,20 @@ $COMPOSE up -d --no-deps db soketi
 # Matrix (K4): render config, make the synapse database, start/restart Synapse. Idempotent, and
 # never fatal: a Synapse problem must not fail a site deploy. Skipped when MATRIX_AS_TOKEN is unset.
 matrix_up() {
-  set -e
-  set -a; . <(grep '^MATRIX_' .env | tr -d '\r'); set +a
+  # No `set -e` here: the caller's `||` switches errexit off inside the function, so each step returns on failure itself.
+  set -a; . <(grep '^MATRIX_' .env | tr -d ''); set +a
   [ -n "${MATRIX_AS_TOKEN:-}" ] || { log "matrix: MATRIX_AS_TOKEN unset, skipped"; return 0; }
   before="$(cat matrix/homeserver.yaml matrix/ejam-appservice.yaml matrix/ejam_rules.py 2>/dev/null | sha256sum)"
-  bash deploy/matrix/render.sh matrix
-  until docker exec ejam-kopa-db sh -c 'pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"' >/dev/null 2>&1; do sleep 1; done
-  docker exec -i -e PGPW="$MATRIX_DB_PASSWORD" ejam-kopa-db sh -c 'psql -U "$POSTGRES_USER" -d postgres -v pw="$PGPW"' < deploy/matrix/create-db.sql
-  $COMPOSE up -d --no-deps synapse
+  bash deploy/matrix/render.sh matrix || return 1
+  w=0
+  until docker exec ejam-kopa-db sh -c 'pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"' >/dev/null 2>&1; do
+    [ "$w" -ge 60 ] && return 1
+    sleep 1; w=$((w + 1))
+  done
+  docker exec -i -e PGPW="$MATRIX_DB_PASSWORD" ejam-kopa-db sh -c 'psql -U "$POSTGRES_USER" -d postgres -v pw="$PGPW"' < deploy/matrix/create-db.sql || return 1
+  $COMPOSE up -d --no-deps synapse || return 1
   after="$(cat matrix/homeserver.yaml matrix/ejam-appservice.yaml matrix/ejam_rules.py | sha256sum)"
-  if [ "$before" != "$after" ] && running ejam-kopa-synapse; then docker restart ejam-kopa-synapse >/dev/null; log "matrix: config changed, synapse restarted"; fi
+  if [ "$before" != "$after" ] && running ejam-kopa-synapse; then docker restart ejam-kopa-synapse >/dev/null || return 1; log "matrix: config changed, synapse restarted"; fi
   log "matrix: synapse up"
 }
 ( matrix_up ) || log "matrix: FAILED (site deploy continues)"
