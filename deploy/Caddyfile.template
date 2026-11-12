@@ -13,20 +13,37 @@
 }
 
 :3000 {
-	reverse_proxy __UPSTREAMS__ {
-		# Sticky per browser: unstable_cache / revalidatePath are per process, so a
-		# visitor keeps seeing their own writes. Technical cookie (an upstream hash).
-		# Clients without it (or pointing at a down upstream) get least_conn.
-		lb_policy cookie ejk_lb {
-			fallback least_conn
+	# Matrix (K4): only the client API reaches Synapse. Admin API, federation and key
+	# endpoints are refused here, never forwarded (/_synapse/admin answers without a token).
+	# Synapse stopped = 502 on /_matrix/client/ only.
+	handle /_matrix/client/* {
+		reverse_proxy synapse:8008 {
+			flush_interval -1
 		}
-		# An upstream that fails to dial is retried on another one.
-		lb_try_duration 15s
-		lb_try_interval 250ms
-		fail_duration 5s
-		health_uri /api/health
-		health_interval 2s
-		health_timeout 2s
-		flush_interval -1
+	}
+	handle /_synapse/* {
+		respond 404
+	}
+	handle /_matrix/* {
+		respond 404
+	}
+
+	handle {
+		reverse_proxy __UPSTREAMS__ {
+			# Sticky per browser: unstable_cache / revalidatePath are per process, so a
+			# visitor keeps seeing their own writes. Technical cookie (an upstream hash).
+			# Clients without it (or pointing at a down upstream) get least_conn.
+			lb_policy cookie ejk_lb {
+				fallback least_conn
+			}
+			# An upstream that fails to dial is retried on another one.
+			lb_try_duration 15s
+			lb_try_interval 250ms
+			fail_duration 5s
+			health_uri /api/health
+			health_interval 2s
+			health_timeout 2s
+			flush_interval -1
+		}
 	}
 }

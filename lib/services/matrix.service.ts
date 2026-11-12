@@ -6,6 +6,7 @@ import { enc, errcodeOf, isRecord, matrixConfig, matrixFetch, MatrixRequestError
 
 export interface MatrixStatus { configured: boolean; reachable: boolean; serverName: string | null; publicUrl: string | null; version: string | null }
 export interface MatrixSession { userId: string; accessToken: string; deviceId: string; homeserverUrl: string }
+export interface ExpiringSession { accessToken: string; refreshToken: string; expiresInMs: number }
 export interface PublicLine { body: string; ts: number; name: string | null }
 
 const V3 = '/_matrix/client/v3';
@@ -15,6 +16,11 @@ function cfg(): MatrixConfig {
     const c = matrixConfig();
     if (!c) throw new ActionError('MATRIX_FAILED', 'not configured');
     return c;
+}
+
+function readExpiring(res: unknown): ExpiringSession {
+    const expiresInMs = isRecord(res) && typeof res.expires_in_ms === 'number' ? res.expires_in_ms : 0;
+    return { accessToken: str(res, 'access_token'), refreshToken: str(res, 'refresh_token'), expiresInMs };
 }
 
 /** Content for `power_level_content_override` (K-33a: any member writes; K-38: the site owns structure). */
@@ -72,6 +78,18 @@ export const MatrixService = {
         const mxid = await this.ensureUser(userId);
         const res = await matrixFetch('POST', `${V3}/login`, { type: 'm.login.application_service', identifier: { type: 'm.id.user', user: `u_${userId}` }, device_id: deviceId });
         return { userId: mxid, accessToken: str(res, 'access_token'), deviceId: str(res, 'device_id'), homeserverUrl: cfg().publicUrl };
+    },
+
+    /** F1b: a login that asks for a refresh token; the access token then expires (`refreshable_access_token_lifetime`). */
+    async expiringSessionFor(userId: string, deviceId = 'EJAM_CHECK'): Promise<ExpiringSession> {
+        await this.ensureUser(userId);
+        const res = await matrixFetch('POST', `${V3}/login`, { type: 'm.login.application_service', identifier: { type: 'm.id.user', user: `u_${userId}` }, device_id: deviceId, refresh_token: true });
+        return readExpiring(res);
+    },
+
+    /** Trades a refresh token for a new access token (no appservice token needed; the browser may call this itself). */
+    async refreshSession(refreshToken: string): Promise<ExpiringSession> {
+        return readExpiring(await matrixFetch('POST', `${V3}/refresh`, { refresh_token: refreshToken }, 'anonymous'));
     },
 
     async whoami(token: string): Promise<string> {

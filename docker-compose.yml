@@ -35,7 +35,6 @@ services:
   synapse:
     image: ghcr.io/element-hq/synapse:v1.165.0
     container_name: ejam-kopa-synapse
-    profiles: ["matrix"]
     restart: unless-stopped
     environment:
       SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
@@ -47,7 +46,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    mem_limit: 512m
 
   app:
     build:

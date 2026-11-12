@@ -26,7 +26,7 @@ Requires Node 20+ and Docker.
 ```bash
 cp .env.example .env          # local defaults match docker-compose
 npm ci                        # .npmrc sets legacy-peer-deps (next-auth beta vs Next 16)
-npm run db:up                 # Postgres on :5433, Soketi on :6001
+npm run db:up                 # Postgres on :5433, Soketi on :6001, Synapse on :8008
 npx prisma migrate deploy     # apply existing migrations
 npm run db:seed               # optional demo data (prisma/seed.ts)
 npm run dev                   # http://localhost:3000
@@ -43,7 +43,7 @@ npm run dev                   # http://localhost:3000
 | All checks | `npm run check` |
 | Production build | `npm run build` (needs `AUTH_SECRET` + `DATABASE_URL`) |
 | New migration | `npm run db:migrate -- --name <snake_case_name>` (stop dev server first) |
-| Matrix trial (Synapse, opt-in, K4; needs `MATRIX_*` in `.env`) | `npm run matrix:up` |
+| Matrix trial (Synapse starts with `db:up`; re-render config and restart: `npm run matrix:up`) | `npm run matrix:up` |
 | Regenerate client | `npm run db:generate` (after every schema change) |
 | Seed | `npm run db:seed` |
 | Smoke test (built app on :3000, seeded DB; CI runs it) | `npm run test:smoke` |

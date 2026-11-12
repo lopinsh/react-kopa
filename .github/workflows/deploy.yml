@@ -66,6 +66,12 @@ jobs:
           scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} \
             deploy/server-deploy.sh deploy/Caddyfile.template \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/
+          # Matrix templates (K4): server-deploy.sh renders them into /root/ejam-kopa/matrix
+          ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }} \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p /root/ejam-kopa/deploy/matrix"
+          scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} \
+            deploy/matrix/* \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/root/ejam-kopa/deploy/matrix/
           # Target the parent dir: scp -r into the existing prisma/ dir nested it (prisma/prisma) and left migrations stale
           scp -i ~/.ssh/deploy_key -P ${{ secrets.SSH_PORT }} -r \
             prisma \

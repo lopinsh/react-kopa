@@ -82,6 +82,17 @@ export const MatrixTrialService = {
             return `${ok ? 'ok' : 'FAIL'} idempotent=${a === b} whoami=${who === adminMx} earlierTokenAfterRelogin=${old} passwordLogin=${pw}`;
         });
 
+        await run('F1b', async () => {
+            const e1 = await MatrixService.expiringSessionFor(adminId);
+            const who1 = await MatrixService.whoami(e1.accessToken);
+            const e2 = await MatrixService.refreshSession(e1.refreshToken);
+            const who2 = await MatrixService.whoami(e2.accessToken);
+            const oldAfter = await errcodeOf(() => MatrixService.whoami(e1.accessToken));
+            const reuse = await errcodeOf(() => MatrixService.refreshSession(e1.refreshToken));
+            const ok = e1.expiresInMs > 0 && who1 === adminMx && who2 === adminMx && e2.accessToken !== e1.accessToken && e2.refreshToken !== '';
+            return `${ok ? 'ok' : 'FAIL'} expiresInMs=${e1.expiresInMs} whoami=${who1 === adminMx} refreshed=${e2.accessToken !== e1.accessToken} newWhoami=${who2 === adminMx} oldAccessAfterRefresh=${oldAfter} oldRefreshReuse=${reuse}`;
+        });
+
         await run('F2', async () => {
             const [h1, h2] = await Promise.all([MatrixService.hierarchy(t.topicSpace), MatrixService.hierarchy(t.citySpace)]);
             const state = await matrixFetch('GET', `${V3}/rooms/${enc(t.room)}/state`);

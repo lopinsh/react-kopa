@@ -50,3 +50,7 @@ database:
     host: "__DB_HOST__"
     cp_min: 1
     cp_max: 5
+# Expiring tokens (K4 F1): a login that asks for refresh_token gets an access token that
+# lives 30 minutes and a refresh token; tokens without refresh stay valid until logout.
+refreshable_access_token_lifetime: 30m
+refresh_token_lifetime: 30d

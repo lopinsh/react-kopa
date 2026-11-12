@@ -27,6 +27,23 @@ services:
     ports:
       - "6001:6001"
 
+  # Matrix homeserver (K4): application service for the site, federation off, only
+  # /_matrix/client/ is routed by "proxy". Config is rendered by deploy/server-deploy.sh
+  # from deploy/matrix/ into ./matrix (git-ignored secrets). Its own database "synapse"
+  # in the db container. No mem_limit while RAM is observed (K4.md section 7.2).
+  synapse:
+    image: ghcr.io/element-hq/synapse:v1.165.0
+    container_name: ejam-kopa-synapse
+    restart: unless-stopped
+    environment:
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+      PYTHONPATH: /data
+    volumes:
+      - ./matrix:/data
+    depends_on:
+      db:
+        condition: service_healthy
+
   # Blue/green app, 3 processes per colour: one Node process uses about one core, the
   # box has 4, so three app processes use ~3 and leave one for Postgres, Soketi, Caddy
   # and Jellyfin. deploy/server-deploy.sh starts the idle colour (all 3), waits for their
@@ -77,6 +94,11 @@ services:
       PUSHER_HOST: "soketi"
       PUSHER_PORT: "6001"
       PUSHER_TLS: "false"
+      # Matrix trial (K4, optional; unset = no Matrix). Runtime only.
+      MATRIX_HOMESERVER_URL: ${MATRIX_HOMESERVER_URL:-}
+      MATRIX_PUBLIC_URL: ${MATRIX_PUBLIC_URL:-}
+      MATRIX_SERVER_NAME: ${MATRIX_SERVER_NAME:-}
+      MATRIX_AS_TOKEN: ${MATRIX_AS_TOKEN:-}
     depends_on:
       db:
         condition: service_healthy
