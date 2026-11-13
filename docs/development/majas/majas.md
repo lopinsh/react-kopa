@@ -32,6 +32,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (open, or my proposal n
 | M-08 | **Simple first, reveal later:** less text on first impression; no mIRC-style wall; capabilities appear as people need them. | Confirmed | 13 Nov principle. Goes into the handbook once the mock settles how. |
 | M-09 | **A hub is a dashboard overview of the content it encompasses** (a set of filters plus one layout, reusable at any depth: person, L1, L2, L3, city). | In progress | 13 Nov: needs much more thinking. |
 | M-10 | **Ziņas are not restricted by hub level** at first. | Confirmed | 13 Nov. Changes the L2/L3-only rule. |
+| M-15 | **Filtering like online clothing shops** (Reserved, About You, Zalando) instead of the left L1 sidebar: top-level choice as tabs or a menu at the top, sub-topics as a scrolling chip row, filter buttons (Kur, Kad, …) that open small drop-downs, on phones one "Filtri" button opening a sheet that ends in "Rādīt N grupas", chosen filters as removable chips. | In progress | 13 Nov, wife's suggestion. A shop category page is a saved set of filters with a layout, close to M-09. Builds on K-73. |
 | M-12 | **How talk looks** in a hub. | In progress | References below; two options drawn in `talk`. |
 
 ## Chat references
