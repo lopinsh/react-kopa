@@ -58,10 +58,10 @@
   var hubHead = '<div class="tone-fill grid gap-1 rounded-2xl p-4 text-[var(--on-cat)]"><p class="text-meta">Kopiena un vide</p><p class="text-title">Saruna</p></div>';
   screens.push({ id: 'wall', label: 'A: Ziņu siena ar īsām atbildēm (M-12)', story: 'Kopienas saruna kā siena: ziņas ar atbildēm zem tām. Lēna, lasāma, der, kad neviens nav tiešsaistē vienlaikus.', fn: function (w) {
     var posts = w === 375 ? wallPost() + wallPost() : '<div class="grid grid-cols-2 gap-4">' + wallPost() + wallPost() + wallPost() + wallPost() + '</div>';
-    return frame(w, 'Ziņas', hubHead + composer + posts); } });
+    return frame(w, 'Atklāt', hubHead + composer + posts); } });
   screens.push({ id: 'bubbles', label: 'B: Burbuļi kā ziņapmaiņā (M-12)', story: 'Tā pati saruna kā ziņapmaiņas lietotnē: burbuļi, jaunākais apakšā. Dzīvāka, bet ar maz cilvēkiem tukša.', fn: function (w) {
     var msgs = msg(0) + msg(0, 'w-1/2') + msg(1) + msg(0, 'w-2/3') + msg(1, 'w-1/2');
-    return frame(w, 'Ziņas', hubHead + '<div class="grid gap-2 ' + (w === 375 ? '' : 'mx-auto w-full max-w-reading') + '">' + msgs + '</div>' + composer); } });
+    return frame(w, 'Atklāt', hubHead + '<div class="grid gap-2 ' + (w === 375 ? '' : 'mx-auto w-full max-w-reading') + '">' + msgs + '</div>' + composer); } });
 
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }

@@ -59,13 +59,13 @@
   screens.push({ id: 'new-user', label: 'Mājas jaunam lietotājam (M-01, M-11)', story: 'Nav grupu, nav pasākumu: viena starta kartiņa ar trim soļiem, lai cilvēks vispirms kļūst redzams (M-11). Pārējais parādīsies, kad būs ko rādīt.', fn: function (w) {
     var card = '<div class="' + box + ' grid gap-3"><p class="text-item">Sāc šeit</p><ol class="grid gap-3">' + step(1, 'Izvēlies tēmas un pilsētu') + step(2, 'Uzraksti ziņu, lai tevi atrod') + step(3, 'Atrodi grupu') + '</ol><span class="inline-flex h-11 items-center justify-center rounded-pill bg-primary px-4 text-button text-primary-foreground">Sākt</span></div>';
     return frame(w, 'Mājas', head(true) + card); } });
-  screens.push({ id: 'regular', label: 'Mājas parastam lietotājam (M-01, M-06)', story: 'Zvaniņš galvā (M-06), tad tuvākie pasākumi, manas ziņas, manas grupas, manas kopienas.', fn: function (w) {
+  screens.push({ id: 'regular', label: 'Mājas parastam lietotājam (M-01, M-06)', story: 'Zvaniņš galvā (M-06), zem tā darbības, kas vairs nav joslā (M-02): rakstīt ziņu, izveidot grupu, pievienot pasākumu; tad tuvākie pasākumi, manas ziņas, manas grupas, manas kopienas.', fn: function (w) {
     var ev = sec('Tuvākie pasākumi', item(ICO(P.cal)) + item(ICO(P.cal)));
     var zi = sec('Manas ziņas', item(ICO(P.chat)));
     var gr = sec('Manas grupas', '<div class="grid grid-cols-2 gap-2">' + item() + item() + '</div>');
     var ko = sec('Manas kopienas', '<div class="flex flex-wrap gap-2">' + pill('Kopiena un vide') + pill('Sports') + pill('Mūzika') + '</div>');
     var body = w === 375 ? ev + zi + gr + ko : '<div class="grid grid-cols-[2fr_1fr] gap-8"><div class="grid gap-6">' + ev + gr + '</div><div class="grid content-start gap-6">' + zi + ko + '</div></div>';
-    return frame(w, 'Mājas', head(true) + body); } });
+    return frame(w, 'Mājas', head(true) + '<div class="flex flex-wrap gap-2">' + pill('Rakstīt ziņu', true) + pill('Izveidot grupu') + pill('Pievienot pasākumu') + '</div>' + body); } });
 
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
