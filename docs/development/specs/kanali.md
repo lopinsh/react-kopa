@@ -1,4 +1,4 @@
-| Confirmed | Owner confirmed 12 Nov. || Confirmed |Owner confirmed 12 Nov. || Confirmed | Owner confirmed 12 Nov. || Confirmed |Owner confirmed 12 Nov. || Confirmed | Owner confirmed 12 Nov. || Confirmed |Owner confirmed 12 Nov. |# Kanāli: hubs, the town squares of each tēma
+# Kanāli: hubs, the town squares of each tēma
 
 > Status 9 Nov 2026: **the Feature ledger is the source of truth** and is updated during every conversation. Briefs, drawings and questions point at a ledger id. Discarded designs are removed from this page (git keeps the history).
 

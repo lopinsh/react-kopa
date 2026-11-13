@@ -81,6 +81,16 @@ The same situation behaves the same way on every screen.
 - Recent searches stay on this device and can be removed one by one.
 - The picture picker's Unsplash search is the exception: it runs on Meklēt or Enter, not as you type, because the photo service limits requests.
 
+## Hubs (kopiena)
+
+- A hub is the town square of one Veids (L2) or sub-veids (L3): its own page in the group-page frame, an overview with a message board, not a group. It is created with its Veids and never closes. Its public name is "Kopiena <Veids>" (en "<Veids> community"), the stored title as it is. Addresses follow the board: `/lv/speles/galda-speles`, a sub-veids `/[l1]/[l2]/[l3]`, a city hub `/lv/jelgava`.
+- No followers: you count as part of a hub by being a member of one of its groups. The hub's number is the members of its groups ("120 dalībnieki 13 grupās"). Hub content never appears on the board; the board shows only the hub card, which links in.
+- A hub shows activity from its children (groups, events, Ziņas, the public announcements of its groups), merged and compact by period (Šodien, Pagājušajā nedēļā, Pagājušajā mēnesī). It has no events of its own. Public items are readable signed out (Ziņas without names).
+- City is a parallel dimension: a city room ("Šahs · Jelgava") has two parents, the topic hub and the city hub. Hub admins are assigned by hand; for now only site admins are.
+- Menu: Pārskats, Grupas, Pasākumi, Ziņas, Čats. Pārskats order: Aktivitāte, Ziņas (3-row preview), Čats (last 3 lines, "N tiešsaistē", Atvērt čatu), Pasākumi, Grupas; sub-hubs at the bottom as a few chips and "+N" into the board with the filters set. Head actions: Izveidot grupu (wizard filled with the Veids) and Dalīties; Rakstīt ziņu lives in Ziņas. Tab bars: Grupas Visas / Jaunās, Pasākumi Gaidāmie / Pagājušie, Ziņas Visas / Manas. Kur is the last item of the menu on Pārskats and the end of the tab bar on the inner pages. Pages start with the tab bar and content, with no title or description of their own.
+- Groups list in tiers: 1-4 groups are full cards, 5-16 the compact list, 17 or more the first 16 and "Vēl N grupas" into discovery with Veids and Kur set. City rooms use the same tiers ("Vēl N istabas"). Pasākumi use the site's day strip and calendar; a busy month lists by day, the first 15, then "Rādīt vēl N". Ziņas are grouped by sub-veids, then by group; a Ziņa with no group goes under "Visai kopienai".
+- Čats: a public room per hub, per sub-veids and per city room, like an mIRC channel list (lines, no bubbles; a parent never merges its children's rooms). Anyone signed in writes; members of the hub's groups carry a flair. Katalogs lists the hub's rooms by activity with search. Signed out reads (names shown, no profile link) and refreshes every 30 s. Moderators are assigned by the site; group members moderate only their own groups. Group chats come later.
+
 ## Ziņas (hub notes)
 
 - A Ziņa is a short note on a hub (K-26): optional city and group (only the author's own group in that hub), a sub-veids note also shows on the parent hub.
@@ -88,7 +98,8 @@ The same situation behaves the same way on every screen.
 - Replies are public and vanish with the Ziņa. Everyone edits and deletes only what they wrote; the Ziņa's author cannot delete others' replies; site admins delete anything.
 - "Rakstīt privāti" sends a chat request into the author's Ziņas inbox (Pieprasījumi): Pieņemt opens a normal direct chat with the request text first. A declined request looks like a pending one to the sender, forever: no notification, no second request from the same Ziņa.
 - Signed out: no names anywhere; one button "Ienākt, lai atbildētu".
-- Ziņot on a Ziņa or reply goes to the admin reports list.
+- Ziņot on a Ziņa or reply goes to the admin reports list (two separate targets).
+- A Ziņa is a plain public note ("if you are interested too, let me know"), not chat; the optional note left with Mani interesē is one. Replies and private messages reach you through the normal notifications. Button names: Rakstīt ziņu (compose), Rakstīt privāti (message the author). A Ziņa's city is optional and never defaulted; one without a city shows for every Kur choice.
 
 ### Topic x city hubs (K3)
 
