@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 /** The chapters of the Handbook, in reading order. Each is a file `docs/handbook/<slug>.md`. */
-export const HANDBOOK_CHAPTERS = ['values', 'why', 'principles', 'voice', 'behaviour', 'roles', 'design'] as const;
+export const HANDBOOK_CHAPTERS = ['why', 'principles', 'voice', 'behaviour', 'roles', 'hubs', 'design'] as const;
 
 export type ChapterSlug = (typeof HANDBOOK_CHAPTERS)[number];
 

@@ -82,7 +82,7 @@ components/providers/ Context providers (GroupProvider, …)
 messages/            en.json, lv.json
 prisma/              schema.prisma, migrations/, seed.ts
 scripts/             Maintenance scripts; scripts/debug/ holds ad-hoc local DB probes
-docs/                execution_handoff.md (plan), handbook/ (values, voice, behaviour, design)
+docs/                execution_handoff.md (plan), handbook/ (why, principles, voice, behaviour, roles, hubs, design)
 ```
 
 ## The Laws (non-negotiable)

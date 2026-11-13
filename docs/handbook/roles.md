@@ -1,36 +1,27 @@
 # Who sees what
 
-A screen shows only what the viewer can use. Hidden, not disabled.
+A screen shows only what the viewer can use. Members-only pages, parts and events are hidden, not greyed: no tab, lock or empty place for people who may not see them.
+
+## A group
 
 | On a group page | Logged out | Signed in | Pending | Member | Team |
 |---|---|---|---|---|---|
-| Main button | Contact → sign-in pop-up | Contact | "Pieteikums nosūtīts" + "Atvērt sarunu"; "Atsaukt pieteikumu" in the "…" menu | none (role and "Rakstīt komandai" in the "…" menu) | none; Iestatījumi in the group's pages |
+| Main button | Sazināties → sign-in pop-up | Sazināties | "Pieteikums nosūtīts" + "Atvērt sarunu"; "Atsaukt pieteikumu" in the group's actions | none (role and "Rakstīt komandai" in the group's actions) | Labot grupu; Iestatījumi in the group's pages |
 | Information, public events | yes | yes | yes | yes | yes |
 | Members, the Announcements page, members-only events and announcements | hidden | hidden | hidden | yes | yes |
 | Announcements marked public (the newest one, on Information) | yes | yes | yes | yes | yes |
 | Requests, Settings, posting | hidden | hidden | hidden | hidden | yes (Owner tab: owner only) |
 
-| Ziņas (hub notes) | Logged out | Signed in |
-|---|---|---|
-| Read notes and replies | yes, no names | yes, with names |
-| Reply, Rakstīt privāti, Ziņot | "Ienākt, lai atbildētu" | yes (not on own Ziņa) |
-| Edit, renew, delete | hidden | own only; site admins delete any |
-| Close a topic x city hub (Aizvērt kopienu) | hidden | no; site admins only |
+**One button.** A group is reached through one button, Sazināties. Its form has a switch, "Vēlos pievienoties grupai", on while the group takes new members, so the same message also asks to join; without it, it is only a message. There is no separate Join button. A hidden group shows no Sazināties.
 
-| Čats (hub room) | Logged out | Signed in |
-|---|---|---|
-| Read the last 50 lines | yes, with names (no name card, no profile link) | yes, live |
-| Write | "Ienākt" and a read-only note | yes, joined on first open |
-| Iestatījumi tab | hidden | yes |
-| Online list | names as plain text (K-149) | avatar, status, group, Mod; a name opens the name card |
-| Name card, "Rakstīt ziņu" | hidden | yes; status and profile link only for a public profile; no button when requests are off |
+**A private group** ("Tikai biedriem") and its events are out of discovery and search; someone with the link sees what a signed-in visitor sees.
 
-**Hidden, not greyed (AR-49).** Members-only pages, parts and events leave no tab, lock or empty place for people who may not see them.
+## People
 
-**Who is going.** The number for logged-out visitors; faces and a name for signed-in viewers (D12).
+- **Who is going.** Logged-out visitors see the number; signed-in viewers see faces and a name. Private profiles are counted, never shown.
+- **Contact line** on a profile (and on Biedri rows): shown only to signed-in people who share a group, or to everyone signed in when the Privātums switch allows it; never to visitors. A private profile is seen only by its owner.
+- **Site admins** see every admin section; the Komanda roles and deleting are the owner's alone. Site-admin tools never sit in a group's own menu.
 
-**A private group ("Tikai biedriem")** and its events are out of discovery and search; someone with the link sees what a signed-in visitor sees (OD-07).
+Hubs have their own table in [Kopienas](hubs.md#who-sees-what).
 
-**One button (owner, 2026-10-12).** A group is reached through one button, "Sazināties" (Contact). Its form has a switch, "Vēlos pievienoties grupai", on while the group takes new members, so the same message also asks to join; without the switch it is only a message. There is no separate Join button. After "Nosūtīt" the form closes and a toast says "Ziņa nosūtīta" (AR-45). A hidden group shows no "Sazināties".
-
-Next: [Design](design.md).
+Next: [Kopienas](hubs.md).

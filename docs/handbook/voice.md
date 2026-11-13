@@ -7,9 +7,9 @@ Like a friendly neighbour who organises things: plain, warm, short. Labels name 
 - Buttons are verbs that name the result: "Publicēt", "Nosūtīt", "Pieteikties".
 - After an action, say what happened, in the past tense: "Nosūtīts".
 - Errors say what is wrong and how to fix it. No codes, no apologies.
-- Empty pages say what will appear there and how to add the first one.
 - Use "tu" in Latvian (informal, like the rest of the site).
-- Sentence case everywhere. CAPITALS only for tiny labels, rarely.
+- Sentence case everywhere, table headers included; no capitals or letter-spacing for emphasis. Numbers in text are plain digits.
+- The brand is written "Ejam kopā".
 - Words of the system stay out: no "entity", "inquiry", "status: PENDING".
 
 ## Fixed words

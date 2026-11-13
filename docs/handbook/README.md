@@ -6,13 +6,15 @@ The Handbook is the single source of truth for what Ejam Kopā believes, how the
 
 ## Chapters
 
-1. [Values](values.md): what we believe.
-2. [Why it exists](why.md): the purpose, the core loop, typical situations, scope and how we work.
-3. [Principles](principles.md): how the values become stances for the product.
-4. [Voice and words](voice.md): how the site speaks.
-5. [Behaviour patterns](behaviour.md): how the same situation behaves the same way everywhere.
-6. [Who sees what](roles.md): what each kind of viewer sees.
-7. [Design](design.md): layouts, screens, foundations, components.
+1. [Why it exists](why.md): the purpose, the values, the core loop, scope and how we work.
+2. [Principles](principles.md): how the values become stances for the product.
+3. [Voice and words](voice.md): how the site speaks, and the fixed words.
+4. [Behaviour patterns](behaviour.md): how the same situation behaves the same way everywhere.
+5. [Who sees what](roles.md): what each kind of viewer sees.
+6. [Kopienas](hubs.md): hubs, their Ziņas and Čats.
+7. [Design](design.md): layouts, foundations, components.
+
+Each rule lives in one chapter; the others link to it. A handbook rule is a decision that shapes future work; what the code already shows, and the history of how we got here, stay in the code, the specs and git.
 
 The live site also has a page that shows the real UI components with sample data: `/admin/handbook/ui-elements` (admins only).
 
