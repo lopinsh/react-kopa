@@ -15,11 +15,11 @@ const DRAWING_FILES: Record<DesignDrawingId, string> = {
 
 /** The plan shown on the build-plan page: a spec rendered as markdown, then one tab per drawing. Drawings are plain HTML in `docs/development/kanali/`; the site's compiled CSS plus `_site.html` (theme variables, Tailwind CDN for NEW: classes) are injected into each `<head>`. */
 export const PLAN = {
-    spec: 'specs/kanali.md',
+    spec: 'majas/majas.md',
     drawings: [
-        { id: 'hub', file: 'kanali/hub.html' },
-        { id: 'group', file: 'kanali/group.html' },
-        { id: 'l3', file: 'l3/categories.html' },
+        { id: 'home', file: 'majas/home.html' },
+        { id: 'jaunumi', file: 'majas/jaunumi.html' },
+        { id: 'talk', file: 'majas/talk.html' },
     ],
 } as const;
 export type PlanDrawingId = (typeof PLAN.drawings)[number]['id'];

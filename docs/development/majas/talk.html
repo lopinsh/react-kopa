@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<style>/* the drawing has no Tailwind preflight, so the browser default margins on headings and paragraphs would show: zero them like the site does */h1,h2,h3,h4,p,ul,ol{margin:0}</style>
+<title>Mājas: saruna kopienā</title>
+</head>
+<body class="min-h-screen font-sans bg-background p-6 text-foreground">
+<!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
+
+<h1 class="text-title mb-1">Mājas: saruna kopienā</h1>
+<p class="text-meta text-foreground-muted">Versija v1 · publicēta 2026-11-13 11:32</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Divi varianti, kā izskatās saruna L1 kopienā (M-07, M-08, M-12): maz teksta, bez sienas. Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā pilnā platumā.</p>
+
+<div id="stage" class="flex flex-col gap-10"></div>
+
+<script>
+  var ICO = function (d, c) { return '<svg aria-hidden="true" class="' + (c || 'size-5') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  var P = {
+    home: '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+    cal: '<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+    news: '<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/>',
+    chat: '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>',
+    search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+    send: '<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+    reply: '<path d="M9 17 4 12l5-5"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>'
+  };
+  var ph = function (w) { return '<span class="block h-3 rounded bg-tint ' + (w || 'w-2/3') + '"></span>'; };
+  var lines = function (n) { var o = ''; for (var i = 0; i < (n || 2); i++) o += ph(i ? 'w-1/2' : 'w-5/6'); return '<span class="grid w-full flex-1 gap-1.5">' + o + '</span>'; };
+  var dot = function (c) { return '<span class="size-9 shrink-0 rounded-pill ' + (c || 'bg-tint') + '"></span>'; };
+  var pill = function (t, on) { return '<span class="inline-flex h-8 items-center whitespace-nowrap rounded-pill px-3 text-button-sm ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
+  var box = 'rounded-2xl bg-surface p-3 shadow-card frame';
+  var BAR = [['Jaunumi', 'news'], ['Pasākumi', 'cal'], ['Mājas', 'home'], ['Ziņas', 'chat'], ['Atklāt', 'search']];
+  function phoneBar(active) {
+    return '<nav class="flex items-end justify-around border-t line bg-surface px-1 pb-2 pt-1">' + BAR.map(function (b) {
+      var on = b[0] === active, mid = b[0] === 'Mājas';
+      var ic = mid ? '<span class="-mt-4 grid size-12 place-items-center rounded-pill bg-primary text-primary-foreground shadow-premium">' + ICO(P[b[1]], 'size-6') + '</span>' : '<span class="py-1">' + ICO(P[b[1]]) + '</span>';
+      return '<span class="flex w-16 flex-col items-center text-meta ' + (on ? 'text-foreground' : 'text-foreground-muted') + '">' + ic + '<span>' + b[0] + '</span></span>';
+    }).join('') + '</nav>';
+  }
+  function deskBar(active) {
+    return '<nav class="flex items-center gap-6 border-b line bg-surface px-8 py-3"><span class="text-item">Ejam Kopā</span>' + BAR.map(function (b) {
+      return '<span class="inline-flex items-center gap-1.5 text-body ' + (b[0] === active ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">' + ICO(P[b[1]], 'size-4') + b[0] + '</span>';
+    }).join('') + '<span class="ml-auto">' + dot() + '</span></nav>';
+  }
+  function frame(w, active, body) {
+    return w === 375 ? '<div class="grid gap-4 p-4">' + body + '</div>' + phoneBar(active) : deskBar(active) + '<div class="mx-auto grid max-w-browse gap-6 p-8">' + body + '</div>';
+  }
+  var D = '2026-11-13';
+  var screens = [];
+
+  var msg = function (me, w) { return '<div class="flex ' + (me ? 'justify-end' : '') + '"><span class="grid gap-1.5 rounded-2xl p-3 ' + (me ? 'bg-tint' : 'bg-surface frame') + ' ' + (w || 'w-3/4') + '">' + ph('w-full') + ph('w-1/2') + '</span></div>'; };
+  var wallPost = function () { return '<div class="' + box + ' grid gap-2"><div class="flex items-center gap-2">' + dot() + ph('w-1/3') + '</div>' + lines(2) + '<div class="ml-6 grid gap-1.5 border-l-2 border-border pl-3"><div class="flex items-center gap-2">' + dot('bg-tint') + ph('w-1/2') + '</div><div class="flex items-center gap-2">' + dot() + ph('w-2/5') + '</div></div><span class="inline-flex items-center gap-1.5 text-meta text-foreground-muted">' + ICO(P.reply, 'size-4') + 'Atbildēt</span></div>'; };
+  var composer = '<div class="flex items-center gap-2"><span class="h-10 flex-1 rounded-pill line px-4 text-body leading-10 text-foreground-muted">Uzraksti ziņu</span><span class="grid size-10 place-items-center rounded-pill bg-primary text-primary-foreground">' + ICO(P.send) + '</span></div>';
+  var hubHead = '<div class="tone-fill grid gap-1 rounded-2xl p-4 text-[var(--on-cat)]"><p class="text-meta">Kopiena un vide</p><p class="text-title">Saruna</p></div>';
+  screens.push({ id: 'wall', label: 'A: Ziņu siena ar īsām atbildēm (M-12)', story: 'Kopienas saruna kā siena: ziņas ar atbildēm zem tām. Lēna, lasāma, der, kad neviens nav tiešsaistē vienlaikus.', fn: function (w) {
+    var posts = w === 375 ? wallPost() + wallPost() : '<div class="grid grid-cols-2 gap-4">' + wallPost() + wallPost() + wallPost() + wallPost() + '</div>';
+    return frame(w, 'Ziņas', hubHead + composer + posts); } });
+  screens.push({ id: 'bubbles', label: 'B: Burbuļi kā ziņapmaiņā (M-12)', story: 'Tā pati saruna kā ziņapmaiņas lietotnē: burbuļi, jaunākais apakšā. Dzīvāka, bet ar maz cilvēkiem tukša.', fn: function (w) {
+    var msgs = msg(0) + msg(0, 'w-1/2') + msg(1) + msg(0, 'w-2/3') + msg(1, 'w-1/2');
+    return frame(w, 'Ziņas', hubHead + '<div class="grid gap-2 ' + (w === 375 ? '' : 'mx-auto w-full max-w-reading') + '">' + msgs + '</div>' + composer); } });
+
+  var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
+  function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
+  var stage = document.getElementById('stage');
+  function addBox(row, s, w) {
+    var col = document.createElement('div');
+    col.className = w === 375 ? 'shrink-0' : 'w-full';
+    var b = document.createElement('div');
+    b.className = '@container relative overflow-hidden rounded-2xl line bg-background';
+    b.setAttribute('data-w', w);
+    if (w === 375) { b.style.width = '375px'; } else { b.style.width = '100%'; b.style.maxWidth = w + 'px'; b.style.minWidth = '64rem'; }
+    var fl = w === 375 ? { t: '1.625rem', s: '1.25rem', i: '1.0625rem', g: '1rem' } : { t: '2.2rem', s: '1.5rem', i: '1.16rem', g: '2rem' };
+    b.style.setProperty('--type-title-size', fl.t);
+    b.style.setProperty('--type-section-size', fl.s);
+    b.style.setProperty('--type-item-size', fl.i);
+    b.style.setProperty('--spacing-gutter', fl.g);
+    b.style.setProperty('--accent', 'var(--cat-community)');
+    b.innerHTML = s.fn(w);
+    col.appendChild(b);
+    row.appendChild(col);
+  }
+  var row;
+  screens.forEach(function (s) {
+    var section = document.createElement('section');
+    section.id = s.id;
+    section.dataset.label = s.label;
+    section.dataset.st = 'new';
+    section.dataset.v = 'v1';
+    section.dataset.d = D;
+    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">Jauns</span> <span class="text-meta weight-medium text-foreground-muted">v1 · ' + dayLabel(D) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
+    row = document.createElement('div');
+    row.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';
+    [375, 1280].forEach(function (w) { addBox(row, s, w); });
+    section.appendChild(row);
+    stage.appendChild(section);
+  });
+</script>
+</body>
+</html>

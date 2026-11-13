@@ -1137,9 +1137,9 @@
       },
       "planTab": "Plan",
       "planDrawings": {
-        "hub": "Hubs",
-        "l3": "Sub-topics and photos",
-        "group": "Group page"
+        "home": "Home",
+        "jaunumi": "News",
+        "talk": "Talk"
       }
     },
     "handbook": {
