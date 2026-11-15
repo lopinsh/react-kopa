@@ -6,7 +6,6 @@ import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@p
 import { EventFormValues } from '@/lib/validations/event';
 import { ActionError } from '@/types/actions';
 import { assertBannerAllowed, bannerCreditColumns, storedBanner } from '@/lib/banner';
-
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
@@ -14,6 +13,7 @@ import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, langRecord, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import { canSee, publicEventWhere } from './visibility';
 import { getViewerAccess, teamMemberWhere, approvedMemberWhere } from './access';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
@@ -221,7 +221,7 @@ export class EventService {
         const access = await EventService.getAccess(groupRecord.id, userId);
 
         // Members-only events do not exist for everyone else (404).
-        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) {
+        if (!canSee(event.visibility, access)) {
             return null;
         }
 
@@ -326,7 +326,7 @@ export class EventService {
         if (!event) return null;
 
         const access = await EventService.getAccess(group.id, viewerId);
-        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) {
+        if (!canSee(event.visibility, access)) {
             const pending = (await getViewerAccess(group.id, viewerId)).role === 'PENDING';
             return { kind: 'membersOnly', group: { id: group.id, name: group.name, isAcceptingMembers: group.isAcceptingMembers, canContact: !pending } };
         }
@@ -361,7 +361,7 @@ export class EventService {
         const event = await prisma.event.findFirst({ where: { slug: eventSlug, groupId: group.id }, include: EVENT_PAGE_INCLUDE(lang) });
         if (!event) return null;
         const access = await EventService.getAccess(group.id, userId);
-        if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) return null;
+        if (!canSee(event.visibility, access)) return null;
 
         const mine = userId
             ? await prisma.attendance.findUnique({ where: { userId_eventId: { userId, eventId: event.id } }, select: { status: true } })
@@ -629,7 +629,7 @@ export class EventService {
                     { OR: [{ endDate: null }, { endDate: { gt: now } }] },
                     { OR: [{ group: { hiddenAt: null } }, { groupId: { in: seesHidden } }] },
                     { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },
-                    { OR: [{ visibility: 'PUBLIC' }, { visibility: 'MEMBERS_ONLY', groupId: { in: privileged } }] }
+                    { OR: [publicEventWhere(), { visibility: 'MEMBERS_ONLY', groupId: { in: privileged } }] }
                 ]
             },
             orderBy: [{ startDate: 'asc' }, { createdAt: 'asc' }],

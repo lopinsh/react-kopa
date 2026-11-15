@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client';
+import { publicGroupWhere, publicPostWhere, publicEventWhere } from './visibility';
 import { prisma } from '@/lib/prisma';
 import { legacyTitle } from '@/lib/utils/announcement-title';
 import { startOfTodayInRiga } from '@/lib/event-dates';
@@ -21,7 +22,7 @@ export interface CardActivity {
  * (members-only items never reach a card).
  */
 function publicAnnouncements(): Prisma.PostWhereInput {
-    return { archivedAt: null, visibility: 'PUBLIC', group: { type: 'PUBLIC', hiddenAt: null } };
+    return { ...publicPostWhere(), group: publicGroupWhere() };
 }
 
 /**
@@ -50,8 +51,8 @@ export async function cardActivities(groups: Array<{ id: string }>, locale: stri
         where: {
             groupId: { in: withEvent },
             id: { notIn: [...next.values()].map((e) => e.id) },
-            visibility: 'PUBLIC',
-            group: { type: 'PUBLIC', hiddenAt: null },
+            ...publicEventWhere(),
+            group: publicGroupWhere(),
             AND: [
                 { OR: [{ endDate: null }, { endDate: { gt: now } }] },
                 { OR: [{ endDate: { gte: today } }, { endDate: null, startDate: { gte: today } }] },

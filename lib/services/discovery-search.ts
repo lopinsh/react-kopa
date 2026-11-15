@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicEventWhere } from './visibility';
 import { DiscoveryService } from './discovery.service';
 import { TaxonomyService } from './taxonomy.service';
 import { CityService } from './city.service';
@@ -84,7 +85,7 @@ export async function runSearch({ word, cities, theme: askedTheme }: SearchInput
             take: SEARCH_ROWS_MAX
         }),
         prisma.event.findMany({
-            where: { AND: [eventWhere({ search: query, searchIds: eventIds, cities, category: theme ?? undefined }), { visibility: 'PUBLIC' }] },
+            where: { AND: [eventWhere({ search: query, searchIds: eventIds, cities, category: theme ?? undefined }), publicEventWhere()] },
             include: EVENT_ROW_INCLUDE(lang),
             orderBy: [{ startDate: 'asc' }, { id: 'asc' }],
             take: SEARCH_ROWS_MAX

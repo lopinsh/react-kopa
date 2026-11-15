@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicEventWhere, publicPostWhere } from './visibility';
 import { HUB_FEED_ROWS } from '@/lib/constants';
 import { addDays, dayInZone, zonedDayStart } from '@/lib/discovery-dates';
 import { plainExcerpt } from '@/lib/text-excerpt';
@@ -57,7 +58,7 @@ export async function scopeActivity(groupWhere: Prisma.GroupWhereInput, l1Slug: 
 
     const periods = await Promise.all(ranges.map(async ({ key, from, to }): Promise<FeedPeriod> => {
         const when = { gte: from, lt: to };
-        const inGroup: Prisma.PostWhereInput = { visibility: 'PUBLIC', archivedAt: null, createdAt: when, group: groupWhere };
+        const inGroup: Prisma.PostWhereInput = { ...publicPostWhere(), createdAt: when, group: groupWhere };
         const take = HUB_FEED_ROWS;
         const [groups, groupCount, members, announcements, announcementCount, events] = await Promise.all([
             prisma.group.findMany({ where: { AND: [groupWhere, { createdAt: when }] }, orderBy: [{ createdAt: 'desc' }, { slug: 'asc' }], take, select: { id: true, name: true, slug: true, createdAt: true, category: GROUP_REF.select.category } }),
@@ -66,7 +67,7 @@ export async function scopeActivity(groupWhere: Prisma.GroupWhereInput, l1Slug: 
             prisma.post.findMany({ where: inGroup, orderBy: { createdAt: 'desc' }, take, select: { id: true, title: true, content: true, createdAt: true, group: GROUP_REF } }),
             prisma.post.count({ where: inGroup }),
             prisma.event.findMany({
-                where: { visibility: 'PUBLIC', createdAt: when, group: groupWhere },
+                where: { ...publicEventWhere(), createdAt: when, group: groupWhere },
                 orderBy: [{ createdAt: 'desc' }, { slug: 'asc' }],
                 take,
                 select: { id: true, slug: true, originalLang: true, createdAt: true, translations: { select: { lang: true, title: true, description: true } }, group: GROUP_REF },

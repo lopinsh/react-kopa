@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicGroupWhere, publicPostWhere } from './visibility';
 import { ANNOUNCEMENTS_LIMIT } from '@/lib/constants';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
 import { AUTHOR_SELECT, getRole, toRow, type PostWithAuthor } from './post.service';
@@ -40,7 +41,7 @@ function toItem(post: PostWithAuthor): AnnouncementItemData {
 export async function getAnnouncementsPage(groupId: string, viewerId: string | null, tab: 'current' | 'archive'): Promise<AnnouncementsPage> {
     const role = viewerId ? await getRole(groupId, viewerId) : null;
     if (!isAtLeastMember(role)) {
-        const where = { groupId, archivedAt: null, visibility: 'PUBLIC' as const, group: { type: 'PUBLIC' as const, hiddenAt: null } };
+        const where = { groupId, ...publicPostWhere(), group: publicGroupWhere() };
         const [posts, current] = await Promise.all([
             tab === 'archive' ? Promise.resolve([]) : prisma.post.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: ANNOUNCEMENTS_LIMIT, include: { author: { select: AUTHOR_SELECT } } }),
             prisma.post.count({ where }),
@@ -69,7 +70,7 @@ export async function getLatestForInfo(groupId: string, viewer: { isMember: bool
     const post = await prisma.post.findFirst({
         where: viewer.isMember
             ? { groupId, archivedAt: null }
-            : { groupId, archivedAt: null, visibility: 'PUBLIC', group: { type: 'PUBLIC', hiddenAt: null } },
+            : { groupId, ...publicPostWhere(), group: publicGroupWhere() },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
         include: { author: { select: AUTHOR_SELECT } },
     });

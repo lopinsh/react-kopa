@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicEventWhere } from './visibility';
 import type { HubScope } from './hub-query';
 import { eventWhere } from './discovery-query';
 import { EventService } from './event.service';
@@ -19,7 +20,7 @@ export interface HubEvents {
 }
 
 /** A hub shows public events only, also to members (K1 invariant: nothing members-only reaches a hub). */
-const PUBLIC: Prisma.EventWhereInput = { visibility: 'PUBLIC' };
+const PUBLIC: Prisma.EventWhereInput = publicEventWhere();
 
 /**
  * A hub's events (K1-14): the board's own loaders with the hub's Tēma and Veids as the filters, so a hub lists what the board lists for them.

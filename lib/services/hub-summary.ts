@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicEventWhere, publicPostWhere } from './visibility';
 import { categoryImage } from '@/lib/banner';
 import { HUB_CARD_CHIPS } from '@/lib/constants';
 import { pickTitle } from '@/lib/utils/localized-title';
@@ -80,14 +81,14 @@ export async function hubSummaries(l1Slug: string, slugs: string[], locale: stri
             prisma.group.count({ where }),
             hubMemberCount(where),
             prisma.event.findFirst({
-                where: { AND: [eventWhere({ category: l1Slug, tags: [c.slug], cities: inCity }), { visibility: 'PUBLIC', startDate: { gte: new Date() } }] },
+                where: { AND: [eventWhere({ category: l1Slug, tags: [c.slug], cities: inCity }), { ...publicEventWhere(), startDate: { gte: new Date() } }] },
                 orderBy: [{ startDate: 'asc' }, { id: 'asc' }],
                 select: { startDate: true, originalLang: true, translations: { select: { lang: true, title: true, description: true } } },
             }),
             prisma.group.aggregate({ where, _max: { createdAt: true } }),
             prisma.membership.aggregate({ where: { role: { not: 'PENDING' }, ...inGroup }, _max: { joinedAt: true } }),
-            prisma.post.aggregate({ where: { visibility: 'PUBLIC', archivedAt: null, ...inGroup }, _max: { createdAt: true } }),
-            prisma.event.aggregate({ where: { visibility: 'PUBLIC', ...inGroup }, _max: { createdAt: true } }),
+            prisma.post.aggregate({ where: { ...publicPostWhere(), ...inGroup }, _max: { createdAt: true } }),
+            prisma.event.aggregate({ where: { ...publicEventWhere(), ...inGroup }, _max: { createdAt: true } }),
             Promise.all(c.level === 2 ? c.children.map(async (k) => ({
                 slug: k.slug, title: title(k), href: hubHref(l1Slug, l2Slug, k.slug),
                 n: await prisma.group.count({ where: hubGroupWhere({ l1Id: l1Id(c) ?? '', slug: k.slug }, [], lang) }),
@@ -116,8 +117,8 @@ async function citySummary(city: CityHubContext, accentColor: string, lang: Text
     const [g, m, p, e] = await Promise.all([
         prisma.group.aggregate({ where, _max: { createdAt: true } }),
         prisma.membership.aggregate({ where: { role: { not: 'PENDING' }, ...inGroup }, _max: { joinedAt: true } }),
-        prisma.post.aggregate({ where: { visibility: 'PUBLIC', archivedAt: null, ...inGroup }, _max: { createdAt: true } }),
-        prisma.event.aggregate({ where: { visibility: 'PUBLIC', ...inGroup }, _max: { createdAt: true } }),
+        prisma.post.aggregate({ where: { ...publicPostWhere(), ...inGroup }, _max: { createdAt: true } }),
+        prisma.event.aggregate({ where: { ...publicEventWhere(), ...inGroup }, _max: { createdAt: true } }),
     ]);
     const times = [g._max.createdAt, m._max.joinedAt, p._max.createdAt, e._max.createdAt].filter((d): d is Date => d !== null);
     return {

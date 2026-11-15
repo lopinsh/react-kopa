@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { publicEventWhere, publicGroupWhere } from './visibility';
 import type { Prisma } from '@prisma/client';
 import { DISCOVERY_DAY_RANGE_MAX } from '@/lib/constants';
 import { startOfTodayInRiga } from '@/lib/event-dates';
@@ -87,8 +88,7 @@ export function groupWhere(filters: GroupDiscoveryFilters, lang: TextLang): Pris
     }
 
     return {
-        hiddenAt: null,
-        type: 'PUBLIC',
+        ...publicGroupWhere(),
         ...(cities && cities.length > 0 ? { city: { in: cities } } : {}),
         AND: and
     };
@@ -105,7 +105,7 @@ export function clampRange(from: Date, to: Date): { from: Date; to: Date } | nul
 export function eventWhere(filters: EventDiscoveryFilters, now: Date = new Date()): Prisma.EventWhereInput {
     const { cities, category, tags, search, searchIds, from, to, past } = filters;
     // A private group's events are out of discovery and search (OD-07): its event list would show the group.
-    const groupAnd: Prisma.GroupWhereInput[] = [{ hiddenAt: null, type: 'PUBLIC' }];
+    const groupAnd: Prisma.GroupWhereInput[] = [publicGroupWhere()];
     if (category) groupAnd.push(topicMatch(category));
     groupAnd.push(...anyTopic(tags ?? []));
 
@@ -192,7 +192,7 @@ export async function loadGroupFacetRows(input: FacetInput, lang: TextLang): Pro
 export async function loadEventFacetRows(input: FacetInput, now: Date = new Date()): Promise<FacetRow[]> {
     const searchIds = input.query ? await matchingEventIds(input.query) : undefined;
     const events = await prisma.event.findMany({
-        where: { AND: [eventWhere({ search: input.query, searchIds, from: input.from, to: input.to }, now), { visibility: 'PUBLIC' }] },
+        where: { AND: [eventWhere({ search: input.query, searchIds, from: input.from, to: input.to }, now), publicEventWhere()] },
         select: {
             city: true,
             isOnline: true,
