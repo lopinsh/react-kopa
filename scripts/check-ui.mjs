@@ -1,4 +1,4 @@
-// UI guard (npm run ui:check; type:check is an alias).
+// UI guard (npm run ui:check).
 // Type rule (strict): pages and components use the role utilities (text-display … text-tag), not raw sizes.
 // Bans text-[Npx|rem|clamp|calc], text-xs…text-9xl, leading-*, tracking-*, font weights other than font-normal (a reset) under app/ and components/.
 // Space rules (strict too): no spacing steps 2.5/3.5 (0.5 and 1.5 stay), no [Npx]/[Nrem] spacing, no max-w-[Npx|rem|ch|em]

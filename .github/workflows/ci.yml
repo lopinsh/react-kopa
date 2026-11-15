@@ -12,6 +12,20 @@ concurrency:
 jobs:
   checks:
     runs-on: ubuntu-24.04
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: kopa_user
+          POSTGRES_PASSWORD: kopa_password
+          POSTGRES_DB: ejam_kopa
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U kopa_user -d ejam_kopa"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://kopa_user:kopa_password@localhost:5433/ejam_kopa?schema=public
     steps:
       - uses: actions/checkout@v4
 
@@ -35,6 +49,13 @@ jobs:
 
       - name: Type roles (strict)
         run: npm run ui:check
+
+      - name: Services guard
+        run: npm run services:check
+
+      # Integration tests of the access rules against a throwaway database next to the service's (see tests/services/run.mjs).
+      - name: Service tests
+        run: npm run test:services
 
   build-and-smoke:
     runs-on: ubuntu-24.04
