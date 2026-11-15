@@ -14,7 +14,7 @@ import { UserService } from './user.service';
 import { hubEventPreview, hubEvents } from './hub-events';
 import { hubActivity } from './hub-activity';
 import { hubSummaries } from './hub-summary';
-import { hubCityCounts, hubGroupWhere, hubMemberCount, newSince, type HubScope } from './hub-query';
+import { hubGroupWhere, hubMemberCount, newSince, type HubScope } from './hub-query';
 import type { Face } from './event-panel';
 import type { MembershipRole } from '@prisma/client';
 
@@ -154,11 +154,6 @@ export const HubService = {
             subTopics: subTopics.sort((a, b) => b.groupCount - a.groupCount || a.title.localeCompare(b.title, locale)),
         };
     }),
-
-    /** Groups per city across the topic hub (never city-scoped), for the Kur list. */
-    async getCityCounts(hub: HubContext, locale: string) {
-        return hubCityCounts(hubGroupWhere({ l1Id: hub.l1Id, slug: hub.slug }, [], toTextLang(locale)));
-    },
 
     /** The hub's events (K1-14): see `hubEvents`. */
     getEvents: hubEvents,

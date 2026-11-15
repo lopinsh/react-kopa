@@ -18,7 +18,7 @@ Budget: about 50 tool calls. If you get near the cap, commit your fixes, don't p
 - If a step needs a tool you don't have, don't work around it. Skip that step, finish what you can, and start your report with `MISSING TOOL: <name>`, why the step needs it and what you tried. The orchestrator asks the owner; once approved, the tool is added for that problem only and removed again afterwards.
 - Read the diff per file (`git diff <base>..HEAD -- <path>`), highest-risk files first: data exposure, permissions, time, migrations, global layout.
 - Fix real bugs and small issues yourself. Report only what needs an owner decision.
-- Commit by explicit paths. End every commit message with `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
+- Commit by explicit paths. End every commit message with the `Co-Authored-By` trailer for the model you are running as.
 
 Checks: `npm run typecheck`, `npx eslint <changed files>`, `npm run i18n:check`.
 

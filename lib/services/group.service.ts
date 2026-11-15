@@ -378,16 +378,6 @@ export const GroupService = {
     }),
 
     /**
-     * The viewer's role in the group at this address (PENDING included), or null: one query. The group panel asks it to send members
-     * and applicants to the full page instead (cmv9amjft); no group, no viewer or no membership all give null.
-     */
-    async getViewerMembershipRole(groupSlug: string, l1Slug: string, viewerId: string | undefined): Promise<MembershipRole | null> {
-        if (!viewerId) return null;
-        const m = await prisma.membership.findFirst({ where: { userId: viewerId, group: findGroupByPath(groupSlug, l1Slug) }, select: { role: true } });
-        return m?.role ?? null;
-    },
-
-    /**
      * The member list of a group, for the pages that show it (members, group home, settings); the
      * group context itself carries only counts and the viewer's own role.
      * Pending applicants (with their request chat) are included only for group admins, site admins

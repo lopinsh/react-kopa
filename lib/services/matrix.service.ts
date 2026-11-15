@@ -49,7 +49,6 @@ export const MatrixService = {
         if (!ID_RE.test(userId)) throw new ActionError('MATRIX_FAILED', 'user id is not a valid localpart');
         return `@u_${userId}:${cfg().serverName}`;
     },
-    senderMxid(): string { return `@ejam:${cfg().serverName}`; },
     alias(local: string): string { return `#${local}:${cfg().serverName}`; },
 
     async status(): Promise<MatrixStatus> {

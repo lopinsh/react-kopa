@@ -4,7 +4,7 @@ Source of truth for AI agents and human contributors working on **Ejam Kopā** (
 
 **Before any task:** read `docs/execution_handoff.md` (current state and next release), and when `FEEDBACK_API_TOKEN` is set in `.env` run `npm run feedback` to see open notes from the site admins (read the whole output, don't truncate it with head/tail; use `npm run feedback -- show <id>` for full detail on the note you're fixing). Take them into account; when you fix one, mark it with `npm run feedback -- done <id> "reply naming the commit or item"`. For product/UI decisions read `docs/handbook/` (start with its `README.md`): values, principles, voice, behaviour and design. Every layer answers to the one above it. Read these docs, the build plan and specs by section: grep the headings or rule ids, then read the parts your task needs, not whole files.
 
-**Pushing to `main` deploys to production (ejam.lumm.eu)** via `.github/workflows/deploy.yml`. Never push without the user's explicit OK, and only after the Definition of done passes.
+**Pushing to `main` deploys to production (ejam.lumm.eu)** via `.github/workflows/deploy.yml`. Reviewed work is pushed by the agent itself, never ask (the owner reviews on ejam.lumm.eu); only after the Definition of done passes.
 
 ## Stack
 

@@ -170,19 +170,6 @@ function groupHref(group: { slug: string; hiddenAt: Date | null; category: Param
 }
 
 /**
- * The category line shown next to a group name: its level-2 tag when the main category is level 1
- * (a level-1 category says little, e.g. "Sports"), otherwise the resolved category title.
- */
-export function groupCategoryTitle(
-    resolved: ReturnType<typeof TaxonomyResolver.resolve>,
-    tags: ReadonlyArray<{ slug: string; titles: ReadonlyArray<{ lang: string; title: string }> }>,
-    lang: string
-): string {
-    const l2Tag = resolved.level === 1 ? tags[0] : undefined;
-    return l2Tag ? pickTitle(l2Tag.titles, lang, l2Tag.slug) : resolved.categoryTitle;
-}
-
-/**
  * The two-part category of a group conversation: its level-1 category, then its sub-categories
  * (level-2 tags, or the category itself when that is level 2), as on the group header.
  */
