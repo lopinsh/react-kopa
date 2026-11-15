@@ -10,6 +10,8 @@ import { eventSchema, type EventFormValues } from '@/lib/validations/event';
 import { ActionResponse } from '@/types/actions';
 import { EventService, type EventActionContext } from '@/lib/services/event.service';
 import type { Event as EventModel } from '@prisma/client';
+import { groupHref, eventHref } from '@/lib/routes';
+import { revalidateGroup } from '@/lib/revalidate';
 
 /**
  * Create a new event within a group.
@@ -33,13 +35,12 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
                     type: 'NEW_EVENT',
                     translationKey: 'newEvent',
                     args: { eventTitle, groupName },
-                    link: `/${l1Slug}/group/${groupSlug}/events/${event.slug}`
+                    link: eventHref(l1Slug, groupSlug, event.slug)
                 })
             ));
         }
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}/events`, 'page');
+        revalidateGroup(locale, l1Slug, groupSlug, 'page', ['events']);
         // Discovery lists upcoming events from a cache tagged 'events'.
         updateTag('events');
         return { success: true, data: { event } };
@@ -52,7 +53,7 @@ export async function createEvent(groupId: string, data: EventFormValues, locale
 type EventPaths = { l1Slug: string; groupSlug: string; eventSlug: string };
 
 function revalidateEventPaths(locale: string, ctx: EventPaths) {
-    const base = `/${locale}/${ctx.l1Slug}/group/${ctx.groupSlug}`;
+    const base = `/${locale}${groupHref(ctx.l1Slug, ctx.groupSlug)}`;
     revalidatePath(base, 'layout'); // the Pasākumi badge sits in the group frame
     revalidatePath(`${base}/events`, 'page');
     revalidatePath(`${base}/events/${ctx.eventSlug}`, 'page');
@@ -77,7 +78,7 @@ function notifyEvent(
             ...(extra.authorName !== undefined && { authorName: extra.authorName }),
             ...(extra.waitlistCount !== undefined && { waitlistCount: extra.waitlistCount })
         },
-        link: `/${ctx.l1Slug}/group/${ctx.groupSlug}/events/${ctx.eventSlug}`
+        link: eventHref(ctx.l1Slug, ctx.groupSlug, ctx.eventSlug)
     });
 }
 
@@ -261,11 +262,11 @@ export async function deleteEvent(eventId: string, locale: string): Promise<Acti
             type: 'EVENT_CANCELLED',
             translationKey: 'EVENT_CANCELLED',
             args: { groupName: ctx.groupName, eventTitle: ctx.eventTitle },
-            link: `/${ctx.l1Slug}/group/${ctx.groupSlug}/events`
+            link: groupHref(ctx.l1Slug, ctx.groupSlug, 'events')
         })));
         revalidateEventPaths(locale, ctx);
         updateTag('events');
-        listPath = `/${locale}/${ctx.l1Slug}/group/${ctx.groupSlug}/events`;
+        listPath = `/${locale}${groupHref(ctx.l1Slug, ctx.groupSlug, 'events')}`;
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
     }

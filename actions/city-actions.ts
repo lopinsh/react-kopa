@@ -7,6 +7,8 @@ import { handleActionError, validateActionData, requireSiteAdmin } from '@/lib/a
 import { CITIES_TAG, CityService } from '@/lib/services/city.service';
 import { NotificationService } from '@/lib/services/notification.service';
 import { cityNameSchema, cityNamesSchema, type CityNamesInput } from '@/lib/validations/city';
+import { groupHref } from '@/lib/routes';
+import { revalidateGroupEveryLocale } from '@/lib/revalidate';
 
 const KNOWN_CITY_ERRORS: ErrorCode[] = ['NOT_FOUND', 'CITY_EXISTS', 'CITY_IN_USE', 'CREATE_FAILED'];
 
@@ -71,7 +73,7 @@ export async function approveCity(id: string, names: CityNamesInput): Promise<Ac
                 translationKey: 'CITY_APPROVED',
                 args: { cityNameLv: result.nameLv, cityNameEn: result.nameEn },
                 // The submitter's own group with this city, else discovery filtered by the city.
-                link: ownGroup ? `/${ownGroup.l1Slug}/group/${ownGroup.slug}` : `/?city=${encodeURIComponent(result.slug)}`,
+                link: ownGroup ? groupHref(ownGroup.l1Slug, ownGroup.slug) : `/?city=${encodeURIComponent(result.slug)}`,
             });
         }
         refreshCities();
@@ -97,11 +99,10 @@ export async function rejectCity(id: string): Promise<ActionResponse> {
                     type: 'CITY_REJECTED',
                     translationKey: 'CITY_REJECTED',
                     args: { cityNameLv: result.nameLv, cityNameEn: result.nameEn, groupName: group.name },
-                    link: `/${group.l1Slug}/group/${group.slug}/settings`,
+                    link: groupHref(group.l1Slug, group.slug, 'settings'),
                 });
             }
-            revalidatePath(`/lv/${group.l1Slug}/group/${group.slug}`, 'page');
-            revalidatePath(`/en/${group.l1Slug}/group/${group.slug}`, 'page');
+            revalidateGroupEveryLocale(group.l1Slug, group.slug);
         }
         // A suggester without a group (for example the group was deleted) still hears about it.
         if (result.submittedById && !told.has(result.submittedById) && result.submittedById !== admin.userId) {

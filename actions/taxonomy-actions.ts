@@ -16,6 +16,7 @@ import { NotificationService } from '@/lib/services/notification.service';
 import {
     submitPendingTagSchema, createTopicSchema, approveTagSchema, updateL1Schema, addAliasSchema, idListSchema, bulkMergeSchema,
 } from '@/lib/validations/taxonomy';
+import { revalidateGroup } from '@/lib/revalidate';
 
 type ApproveTagParams = {
     nameEn: string;
@@ -244,8 +245,7 @@ export async function adminUpdateGroupTags(groupId: string, tagIds: string[], lo
         const { slug, l1Slug } = await TaxonomyService.adminUpdateGroupTags(groupId, tagIds);
         // The group's sub-categories changed: discovery lists and counts follow.
         revalidateTag('groups', 'max');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['settings']);
 
         return { success: true };
     } catch (error) {

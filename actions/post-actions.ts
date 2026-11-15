@@ -1,12 +1,13 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { auth } from '@/lib/auth';
 import { NotificationService } from '@/lib/services/notification.service';
 import { PostService } from '@/lib/services/post.service';
 import { type ActionResponse } from '@/types/actions';
 import { handleActionError } from '@/lib/action-utils';
 import { announcementSchema, type AnnouncementInput } from '@/lib/validations/announcement';
+import { groupHref } from '@/lib/routes';
+import { revalidateGroup } from '@/lib/revalidate';
 
 /**
  * Publish an announcement. Only the group's owner and admins may (enforced by the service);
@@ -30,14 +31,13 @@ export async function createPost(groupId: string, input: AnnouncementInput, loca
                 type: 'NEW_POST',
                 translationKey: 'newPost',
                 args: { authorName: post.authorName, groupName: post.groupName, excerpt: parsed.data.title },
-                link: `/${post.l1Slug}/group/${post.slug}/announcements`
+                link: groupHref(post.l1Slug, post.slug, 'announcements')
             });
         } catch (notifyError) {
             console.error('[createPost] notify failed:', notifyError);
         }
 
-        revalidatePath(`/${locale}/${post.l1Slug}/group/${post.slug}`, 'page');
-        revalidatePath(`/${locale}/${post.l1Slug}/group/${post.slug}/announcements`, 'page');
+        revalidateGroup(locale, post.l1Slug, post.slug, 'page', ['announcements']);
         return { success: true, data: { postId: post.postId } };
     } catch (error) {
         return handleActionError(error, 'CREATE_FAILED');
@@ -53,8 +53,7 @@ export async function setPostArchived(postId: string, archived: boolean, locale:
 
     try {
         const { slug, l1Slug } = await PostService.setArchived(postId, session.user.id, archived);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['announcements']);
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'UPDATE_FAILED');

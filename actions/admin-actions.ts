@@ -4,6 +4,7 @@ import { requireSiteAdmin, handleActionError } from '@/lib/action-utils';
 import { revalidatePath, revalidateTag, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { AdminService } from '@/lib/services/admin.service';
+import { revalidateGroup } from '@/lib/revalidate';
 
 export async function rejectWildcard(categoryId: string): Promise<ActionResponse> {
     const admin = await requireSiteAdmin();
@@ -34,7 +35,7 @@ export async function suspendReportedGroup(reportId: string, groupId: string, re
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
         revalidatePath('/[locale]/admin/reports', 'page');
-        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
+        revalidateGroup(locale, result.l1Slug, result.slug, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');

@@ -12,6 +12,8 @@ import { CITIES_TAG } from '@/lib/services/city.service';
 import { ActionError, ActionResponse } from '@/types/actions';
 import { validateActionData, handleActionError } from '@/lib/action-utils';
 import { messageTextSchema } from '@/lib/validations/message';
+import { groupHref } from '@/lib/routes';
+import { revalidateGroup, revalidateGroupPattern } from '@/lib/revalidate';
 
 /**
  * Creates a new group and handles optional wildcard category creation.
@@ -28,7 +30,7 @@ export async function createGroup(data: GroupCreateValues, locale: string): Prom
 
         const { slug, l1Slug } = result;
 
-        revalidatePath(`/[locale]/${l1Slug}/group/${slug}`, 'page');
+        revalidateGroupPattern('page', { l1Slug, slug });
         revalidatePath(`/${locale}`, 'page');
         updateTag('groups');
         // A pending city becomes public with the first group that uses it (CityService names).
@@ -53,20 +55,20 @@ export async function joinGroup(groupId: string, locale: string, message?: strin
 
         const { slugs, groupName, adminIds, conversationId } = result;
         // The frame (banner, pages, member count) lives in the layout.
-        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidateGroupPattern('layout');
 
         await Promise.all(adminIds.map(adminId => NotificationService.notify({
             userId: adminId,
             type: 'JOIN_REQUEST',
             translationKey: 'joinRequest',
             args: { authorName: session.user.name || session.user.username || '', groupName, excerpt: message ?? '' },
-            link: slugs ? `/${slugs.l1Slug}/group/${slugs.slug}/members?tab=requests` : undefined
+            link: slugs ? `${groupHref(slugs.l1Slug, slugs.slug, 'members')}?tab=requests` : undefined
         })));
 
         return { success: true, data: { pending: true, conversationId } };
     } catch (error) {
         // A stale tab catches up to the pending state.
-        if (error instanceof ActionError && error.code === 'ALREADY_REQUESTED') revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        if (error instanceof ActionError && error.code === 'ALREADY_REQUESTED') revalidateGroupPattern('layout');
         return handleActionError(error, 'JOIN_FAILED');
     }
 }
@@ -81,7 +83,7 @@ export async function cancelJoinRequest(groupId: string): Promise<ActionResponse
     try {
         await GroupService.cancelJoinRequest(groupId, session.user.id);
 
-        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidateGroupPattern('layout');
         revalidatePath('/[locale]/profile/my-groups', 'page');
         return { success: true };
     } catch (error) {
@@ -128,7 +130,7 @@ export async function leaveGroup(groupId: string): Promise<ActionResponse> {
         await GroupService.leaveGroup(groupId, session.user.id);
 
         updateTag('groups');
-        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidateGroupPattern('layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'LEAVE_FAILED');
@@ -156,7 +158,7 @@ export async function manageMembership(
                 type: 'APPLICATION_ACCEPTED',
                 translationKey: 'applicationAccepted',
                 args: { groupName },
-                link: `/${l1Slug}/group/${groupSlug}`
+                link: groupHref(l1Slug, groupSlug)
             });
         } else {
             // Declining deletes the membership; without a word the person would never learn the answer.
@@ -165,12 +167,12 @@ export async function manageMembership(
                 type: 'APPLICATION_DECLINED',
                 translationKey: 'applicationDeclined',
                 args: { groupName },
-                link: `/${l1Slug}/group/${groupSlug}`
+                link: groupHref(l1Slug, groupSlug)
             });
         }
 
         // The frame (Biedri badge, member count) lives in the group layout: invalidate it with the pages.
-        revalidatePath('/[locale]/[l1Slug]/group/[groupSlug]', 'layout');
+        revalidateGroupPattern('layout');
         revalidatePath('/[locale]/profile/my-groups', 'page');
         // Approving changes the member count and avatars on discovery cards.
         updateTag('groups');
@@ -195,8 +197,7 @@ export async function updateGroup(groupId: string, data: GroupFormValues, locale
 
         const { slug, l1Slug } = result;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['settings']);
         updateTag('groups');
         // A group made private (or public) moves its events out of (into) discovery and search.
         updateTag('events');
@@ -251,8 +252,7 @@ export async function upsertSectionAction(
         const { slug, l1Slug, sectionId } = result;
 
         updateTag('groups');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['settings']);
 
         return { success: true, data: { sectionId } };
     } catch (error) {
@@ -277,8 +277,7 @@ export async function reorderSectionsAction(
 
         const { slug, l1Slug } = result;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['settings']);
 
         return { success: true };
     } catch (error) {
@@ -302,8 +301,7 @@ export async function deleteSectionAction(
 
         const { slug, l1Slug } = result;
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/settings`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['settings']);
         revalidatePath(`/${locale}`, 'page');
 
         return { success: true };
@@ -323,7 +321,7 @@ export async function promoteMember(groupId: string, targetUserId: string, local
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'ADMIN', session.user.id);
 
         const { slug, l1Slug } = result;
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
+        revalidatePath(`/${locale}${groupHref(l1Slug, slug, 'members')}`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -342,7 +340,7 @@ export async function demoteMember(groupId: string, targetUserId: string, locale
         const result = await GroupService.updateMemberRole(groupId, targetUserId, 'MEMBER', session.user.id);
 
         const { slug, l1Slug } = result;
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
+        revalidatePath(`/${locale}${groupHref(l1Slug, slug, 'members')}`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -362,7 +360,7 @@ export async function kickMember(groupId: string, targetUserId: string, locale: 
         updateTag('groups');
 
         const { slug, l1Slug } = result;
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/members`, 'page');
+        revalidatePath(`/${locale}${groupHref(l1Slug, slug, 'members')}`, 'page');
 
         return { success: true };
     } catch (error) {
@@ -379,8 +377,7 @@ export async function deletePostAction(postId: string, locale: string): Promise<
 
     try {
         const { slug, l1Slug } = await PostService.deleteAnnouncement(postId, session.user.id);
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}`, 'page');
-        revalidatePath(`/${locale}/${l1Slug}/group/${slug}/announcements`, 'page');
+        revalidateGroup(locale, l1Slug, slug, 'page', ['announcements']);
 
         return { success: true };
     } catch (error) {
@@ -406,10 +403,10 @@ export async function transferOwnership(groupId: string, targetUserId: string, l
             type: 'OWNERSHIP_TRANSFERRED',
             translationKey: 'ownershipTransferred',
             args: { authorName: session.user.name || session.user.username || '', groupName },
-            link: `/${l1Slug}/group/${groupSlug}`
+            link: groupHref(l1Slug, groupSlug)
         });
 
-        revalidatePath(`/${locale}/${l1Slug}/group/${groupSlug}`, 'layout');
+        revalidateGroup(locale, l1Slug, groupSlug, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'MANAGE_FAILED');

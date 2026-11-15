@@ -4,6 +4,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteAdmin, requireSiteOwner } from '@/lib/action-utils';
 import { ModerationService } from '@/lib/services/moderation.service';
+import { revalidateGroup } from '@/lib/revalidate';
 
 export async function hideGroup(groupId: string, reason: string, locale: string): Promise<ActionResponse> {
     const admin = await requireSiteAdmin();
@@ -16,7 +17,7 @@ export async function hideGroup(groupId: string, reason: string, locale: string)
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
+        revalidateGroup(locale, result.l1Slug, result.slug, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -34,7 +35,7 @@ export async function restoreGroup(groupId: string, locale: string): Promise<Act
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
+        revalidateGroup(locale, result.l1Slug, result.slug, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'ACTION_FAILED');
@@ -52,7 +53,7 @@ export async function deleteHiddenGroup(groupId: string, reason: string, locale:
         updateTag('events');
         revalidatePath(`/${locale}`, 'page');
         revalidatePath(`/${locale}/admin`, 'page');
-        revalidatePath(`/${locale}/${result.l1Slug}/group/${result.slug}`, 'layout');
+        revalidateGroup(locale, result.l1Slug, result.slug, 'layout');
         return { success: true };
     } catch (error) {
         return handleActionError(error, 'DELETE_FAILED');
