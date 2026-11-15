@@ -6,6 +6,7 @@ import { NotificationService } from './notification.service';
 import { GroupService } from './group.service';
 import { ActionError } from '@/types/actions';
 import { isSiteAdminUser, isSiteOwnerUser } from './site-role.service';
+import { groupHref } from '@/lib/routes';
 
 export type AdminActionType = 'HUB_CITY_CLOSE' | 'GROUP_HIDE' | 'GROUP_RESTORE' | 'GROUP_EDIT' | 'GROUP_DELETE' | 'ADMIN_GRANT' | 'ADMIN_REVOKE';
 
@@ -181,7 +182,7 @@ export const ModerationService = {
             return {
                 id: g.id,
                 name: g.name,
-                href: `/${TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}`,
+                href: groupHref(TaxonomyResolver.resolve(g.category).l1Slug, g.slug),
                 ownerName: owner ? owner.name || owner.username : null,
                 reason: g.hiddenReason,
                 hiddenAt: g.hiddenAt as Date,
@@ -230,7 +231,7 @@ export const ModerationService = {
                 adminName: a.admin ? a.admin.name || a.admin.username : null,
                 targetName: a.targetName ?? nameOfGone.get(a.targetId) ?? null,
                 target: g
-                    ? { name: g.name, href: `/${TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}` }
+                    ? { name: g.name, href: groupHref(TaxonomyResolver.resolve(g.category).l1Slug, g.slug) }
                     : null
             };
         });

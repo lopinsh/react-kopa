@@ -8,6 +8,7 @@ import { loadFullPage } from '@/lib/full-page';
 import type { EventFormValues, EventFormData } from '@/lib/validations/event';
 import { createEvent, updateEvent } from '@/actions/event-actions';
 import type { EventToEdit } from '@/components/forms/event/EventForm';
+import { eventHref } from '@/lib/routes';
 
 // A lost connection rejects the action: show it as a failed save and keep the form (an uncaught rejection would drop it for the error page).
 const SAVE_FAILED = { success: false as const, error: 'SAVE_FAILED' };
@@ -59,7 +60,7 @@ export function useEventSave({ form, groupId, groupSlug, l1Slug, event, waitingC
                 eventSlug = result.data!.event.slug;
             }
             // Land on the event's own page, in full (a soft click on an event's address would open its panel).
-            loadFullPage(`/${locale}/${l1Slug}/group/${groupSlug}/events/${eventSlug}`);
+            loadFullPage(`/${locale}${eventHref(l1Slug, groupSlug, eventSlug)}`);
         });
     }
 

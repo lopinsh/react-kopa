@@ -4,6 +4,7 @@ import { ACTIVITY_PAGE_SIZE, ACTIVITY_KINDS, type ActivityKind } from '@/lib/con
 import { resolveEventText, toTextLang } from '@/lib/translations';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import type { ActivityCursor } from '@/lib/validations/activity';
+import { groupHref } from '@/lib/routes';
 
 export type ActivityEntry = {
     key: string;
@@ -42,7 +43,7 @@ function actor(user: Person): ActivityEntry['actor'] {
     return { name: user.name ?? user.username, href: user.username ? `/profile/${user.username}` : null };
 }
 
-const groupPath = (g: GroupRef) => `/${TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}`;
+const groupPath = (g: GroupRef) => groupHref(TaxonomyResolver.resolve(g.category).l1Slug, g.slug);
 const groupRef = { select: { slug: true, name: true, hiddenAt: true, category: { include: TaxonomyResolver.getInclude('lv') } } } as const;
 const person = { select: { name: true, username: true } } as const;
 const textRows = { select: { lang: true, title: true, description: true, instructions: true } } as const;

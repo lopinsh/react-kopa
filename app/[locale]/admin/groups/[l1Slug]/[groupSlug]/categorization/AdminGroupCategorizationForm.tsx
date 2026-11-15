@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import { categoryColor } from '@/lib/theme/category';
 import Button from '@/components/ui/Button';
+import { groupHref } from '@/lib/routes';
 
 type Props = {
     locale: string;
@@ -67,7 +68,7 @@ export default function AdminGroupCategorizationForm({
             }
 
             success(t('override.saved'));
-            loadFullPage(`/${locale}/${l1Slug}/group/${groupSlug}`);
+            loadFullPage(`/${locale}${groupHref(l1Slug, groupSlug)}`);
         });
     });
 

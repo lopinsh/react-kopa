@@ -17,6 +17,7 @@ import type { Face } from '@/lib/services/event-panel';
 import { UI } from '@/lib/constants';
 import type { DiscoveryParams } from '@/lib/discovery-params';
 import type { MyRole } from '@/lib/types/own-area';
+import { groupHref } from '@/lib/routes';
 
 type Props = {
     group: GroupCardData;
@@ -54,7 +55,7 @@ export default function GroupCard({ group, activity, filters, highlight, fullPag
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
     const rows = cardRows(group.tagline, !!activity?.event, !!activity?.announcement);
     const { shown, more } = fitSubCategories(group.subCategories.map((title, i) => ({ title, value: group.subCategorySlugs[i] })));
-    const path = `/${group.category.l1Slug}/group/${group.slug}`;
+    const path = groupHref(group.category.l1Slug, group.slug);
     const name = <Highlight text={group.name} word={highlight} />;
     // The team has no one to write to; everyone else (a visitor, a waiting request, a member) may write to the organisers.
     const contact = role === 'OWNER' || role === 'ADMIN' ? null : { groupId: group.id, groupName: group.name, allowJoin: role === undefined && group.isAcceptingMembers };

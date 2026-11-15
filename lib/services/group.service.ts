@@ -23,6 +23,7 @@ import { assertBannerAllowed, bannerCreditColumns, storedBanner, toBannerCredit 
 import { startOfTodayInRiga } from '@/lib/event-dates';
 import { closestHub, type GroupHub } from './group-hub';
 import { groupPages, type GroupPageLink } from '@/lib/group-pages';
+import { groupHref } from '@/lib/routes';
 
 /** One group section as a visitor sees it: text already resolved to their language (or the original, flagged). */
 export interface SectionView {
@@ -351,7 +352,7 @@ export const GroupService = {
                 accentColor,
             },
             sections,
-            pages: groupPages({ base: `/${resolved.l1Slug}/group/${g.slug}`, isMember, isPrivate: g.type === 'PRIVATE', isTeam: isAdmin, pendingCount, pendingEventCount }),
+            pages: groupPages({ base: groupHref(resolved.l1Slug, g.slug), isMember, isPrivate: g.type === 'PRIVATE', isTeam: isAdmin, pendingCount, pendingEventCount }),
             category: {
                 id: resolved.categoryId,
                 title: categoryTitle,

@@ -13,6 +13,7 @@ import { GroupProvider } from '@/components/providers/GroupProvider';
 import { GroupDialogsProvider } from '@/components/groups/frame/GroupDialogs';
 import AdminGroupBridge from '@/components/admin-panel/AdminGroupBridge';
 import { toGroupState } from '@/components/providers/to-group-state';
+import { groupHref } from '@/lib/routes';
 
 /**
  * The frame of a group (AR-47): the head (info tile, picture), the pages down the left (a ☰ drawer on phones) and the page beside them.
@@ -47,7 +48,7 @@ export default async function GroupLayout({
             <FrameColumns
                 navFrom="lg"
                 nav={<GroupPagesNav variant="side" />}
-                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: `/${l1Slug}/group/${group.slug}`, isMember: group.user.isMember, socialLinks: group.socialLinks, hub: group.hub, picture: group.bannerImage ? <HeadPicture variant="box" image={getSmartImageUrl(group.bannerImage)} credit={group.bannerCredit} /> : null }} viewerId={session?.user?.id} />}
+                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: groupHref(l1Slug, group.slug), isMember: group.user.isMember, socialLinks: group.socialLinks, hub: group.hub, picture: group.bannerImage ? <HeadPicture variant="box" image={getSmartImageUrl(group.bannerImage)} credit={group.bannerCredit} /> : null }} viewerId={session?.user?.id} />}
             >
                 {children}
             </FrameColumns>

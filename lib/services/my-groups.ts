@@ -13,6 +13,7 @@ import { EVENT_ROW_INCLUDE, toEventRow } from './event-row';
 import { NEWS_GROUP_SELECT, toNewsGroup, resolveNotificationGroups } from './notification-groups';
 import { ANSWER_TYPES, sinceOf, stillOn } from './own-counts';
 import type { MyGroup, MyGroupsOverview, MyRequest, NewsItem } from '@/lib/types/own-area';
+import { groupHref } from '@/lib/routes';
 
 const DAY_MS = 86_400_000;
 
@@ -97,7 +98,7 @@ export async function getMyGroupsOverview(userId: string, locale: string, zone: 
     }));
     const requests: MyRequest[] = memberships.filter((m) => m.role === 'PENDING').map((m) => {
         const card = toGroupCard(m.group, lang);
-        return { card, groupId: card.id, name: card.name, path: `/${card.category.l1Slug}/group/${card.slug}`, color: card.category.color, since: m.joinedAt };
+        return { card, groupId: card.id, name: card.name, path: groupHref(card.category.l1Slug, card.slug), color: card.category.color, since: m.joinedAt };
     });
 
     const postItems: NewsItem[] = posts.map((p) => {

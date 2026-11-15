@@ -6,6 +6,7 @@ import { resolveEventText, toTextLang, type TextLang } from '@/lib/translations'
 import { hubGroupWhere } from './hub-query';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import type { Prisma } from '@prisma/client';
+import { groupHref } from '@/lib/routes';
 
 export type FeedPeriodKey = 'today' | 'lastWeek' | 'lastMonth';
 
@@ -52,7 +53,7 @@ export async function scopeActivity(groupWhere: Prisma.GroupWhereInput, l1Slug: 
         { key: 'lastWeek', from: edge(7), to: edge(0) },
         { key: 'lastMonth', from: edge(37), to: edge(7) },
     ];
-    const groupPath = (g: { slug: string; category: Parameters<typeof TaxonomyResolver.resolve>[0] }) => `/${l1Slug ?? TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}`;
+    const groupPath = (g: { slug: string; category: Parameters<typeof TaxonomyResolver.resolve>[0] }) => groupHref(l1Slug ?? TaxonomyResolver.resolve(g.category).l1Slug, g.slug);
 
     const periods = await Promise.all(ranges.map(async ({ key, from, to }): Promise<FeedPeriod> => {
         const when = { gte: from, lt: to };

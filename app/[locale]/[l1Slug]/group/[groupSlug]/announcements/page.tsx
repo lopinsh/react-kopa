@@ -11,6 +11,7 @@ import PartTabs from '@/components/ui/PartTabs';
 import { auth } from '@/lib/auth';
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { groupHref } from '@/lib/routes';
 
 export async function generateMetadata({
     params,
@@ -51,7 +52,7 @@ export default async function GroupAnnouncementsPage({
         getTranslations('group.frame'),
         getAnnouncementsPage(group.id, session?.user?.id ?? null, tab),
     ]);
-    const base = `/${l1Slug}/group/${groupSlug}/announcements`;
+    const base = groupHref(l1Slug, groupSlug, 'announcements');
     const current = { key: 'current', label: t('announcementsTabCurrent'), href: base, count: page.counts.current };
     const tabs = group.user.isMember ? [current, { key: 'archive', label: t('announcementsTabArchive'), href: `${base}?tab=archive`, count: page.counts.archive }] : [current];
 

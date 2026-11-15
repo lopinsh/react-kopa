@@ -13,6 +13,7 @@ import { toTextLang } from '@/lib/translations';
 import EventForm from '@/components/forms/event/EventForm';
 import { CitiesProvider } from '@/components/providers/CitiesContext';
 import { CityService } from '@/lib/services/city.service';
+import { eventHref } from '@/lib/routes';
 
 type Params = { locale: string; l1Slug: string; groupSlug: string; eventSlug: string };
 
@@ -21,7 +22,7 @@ export const metadata: Metadata = { robots: { index: false } };
 export default async function EditEventPage({ params }: { params: Promise<Params> }) {
     const { locale, l1Slug, groupSlug, eventSlug } = await params;
     const session = await auth();
-    const eventPath = `/${l1Slug}/group/${groupSlug}/events/${eventSlug}`;
+    const eventPath = eventHref(l1Slug, groupSlug, eventSlug);
 
     if (!session?.user?.id) redirect(signInUrl(locale, `${eventPath}/edit`));
 

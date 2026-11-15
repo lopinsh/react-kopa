@@ -9,6 +9,7 @@ import MembersOnlyNotice from '@/components/events/MembersOnlyNotice';
 import { eventJsonLd } from '@/lib/event-json-ld';
 import { cityLabel } from '@/lib/city-label';
 import { jsonForScript } from '@/lib/sanitize';
+import { groupHref } from '@/lib/routes';
 
 type Params = { locale: string; l1Slug: string; groupSlug: string; eventSlug: string };
 
@@ -37,7 +38,7 @@ export default async function EventPage({ params }: { params: Promise<Params> })
 
     const tCities = await getTranslations('cities');
     const jsonLd = eventJsonLd(event, { locale, l1Slug, cityName: cityLabel(tCities, event.city), appUrl: process.env.NEXT_PUBLIC_APP_URL ?? '' });
-    const groupPath = `/${l1Slug}/group/${event.group.slug}`;
+    const groupPath = groupHref(l1Slug, event.group.slug);
     const team = event.organiser;
 
     return (

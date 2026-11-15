@@ -12,6 +12,7 @@ import PanelPicture from './PanelPicture';
 import PanelBody, { PANEL_LINK, PanelTitle } from './PanelBody';
 import Fact from './Fact';
 import FullPageLink from './FullPageLink';
+import { groupHref } from '@/lib/routes';
 
 /** The event panel (AR-55): when, where, the first words, who is going, the one step and "Visa informācija", and who organises it. */
 export default async function EventPanel({ event, l1Slug }: { event: EventPanelData; l1Slug: string }) {
@@ -22,7 +23,7 @@ export default async function EventPanel({ event, l1Slug }: { event: EventPanelD
     const start = new Date(event.startDate);
     const end = event.endDate ? new Date(event.endDate) : null;
     const when = end ? formatter.dateTimeRange(start, end, EVENT_DAY_TIME) : formatter.dateTime(start, EVENT_DAY_TIME);
-    const groupPath = `/${l1Slug}/group/${event.group.slug}`;
+    const groupPath = groupHref(l1Slug, event.group.slug);
     const where = event.isOnline ? t('online') : [cityLabel(tCities, event.city), event.location].filter(Boolean).join(', ');
 
     return (

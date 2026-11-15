@@ -1,5 +1,6 @@
 import { plainExcerpt } from '@/lib/text-excerpt';
 import type { EventPageData } from '@/lib/services/event-page';
+import { groupHref } from '@/lib/routes';
 
 const DESCRIPTION_MAX = 500;
 
@@ -34,7 +35,7 @@ export function eventJsonLd(event: EventPageData, opts: { locale: string; l1Slug
         organizer: {
             '@type': 'Organization',
             name: event.group.name,
-            url: `${opts.appUrl}/${opts.locale}/${opts.l1Slug}/group/${event.group.slug}`
+            url: `${opts.appUrl}/${opts.locale}${groupHref(opts.l1Slug, event.group.slug)}`
         }
     };
 }

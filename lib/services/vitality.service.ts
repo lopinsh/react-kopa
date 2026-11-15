@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { VITALITY_ACTIVE_DAYS, VITALITY_QUIET_LIMIT, VITALITY_SERIES, type VitalitySeriesKey } from '@/lib/constants/vitality';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { demoFilter, healthRows, participationRow, presenceRow, seriesRows, type SeriesRow } from './vitality-sql';
+import { groupHref } from '@/lib/routes';
 
 export type { VitalitySeriesKey };
 export type VitalitySeries = { key: VitalitySeriesKey; total: number; last7: number; last30: number; prev30: number; weeks: { week: string; count: number }[] };
@@ -51,7 +52,7 @@ export const VitalityService = {
         const quietGroups = listed.flatMap((g): QuietGroup[] => {
             const row = byId.get(g.id);
             if (!row) return [];
-            return [{ id: g.id, name: row.name, href: `/${TaxonomyResolver.resolve(row.category).l1Slug}/group/${row.slug}`, lastActivity: g.lastActivity }];
+            return [{ id: g.id, name: row.name, href: groupHref(TaxonomyResolver.resolve(row.category).l1Slug, row.slug), lastActivity: g.lastActivity }];
         });
 
         return {

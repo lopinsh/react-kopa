@@ -5,6 +5,7 @@ import { pickTitle } from '@/lib/utils/localized-title';
 import { ModerationService, type AdminActionEntry } from './moderation.service';
 import { isSiteAdminUser } from './site-role.service';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { groupHref } from '@/lib/routes';
 
 /** What the admin panel's Grupa tab shows about one group (R25-2). Never a raw Prisma payload. */
 export interface GroupPanelData {
@@ -50,7 +51,7 @@ export async function getGroupPanel(groupId: string, adminId: string, locale: st
     return {
         id: group.id,
         title: group.name,
-        href: `/${resolved.l1Slug}/group/${group.slug}`,
+        href: groupHref(resolved.l1Slug, group.slug),
         theme: { l1: resolved.l1Title, l2: group.tags.map((t) => pickTitle(t.titles, locale, t.slug)) },
         status: group.hiddenAt
             ? { hidden: true, reason: group.hiddenReason, by: group.hiddenBy ? group.hiddenBy.name || group.hiddenBy.username : null, at: group.hiddenAt }

@@ -14,6 +14,7 @@ import type { TaxonomySelection } from '@/lib/types/taxonomy';
 import { useToast } from '@/hooks/use-toast';
 import { MAX_GROUP_TAGS } from '@/lib/constants';
 import type { SettingsTab } from '../SettingsTabs';
+import { groupHref } from '@/lib/routes';
 
 export type GroupSettingsGroup = {
     id: string;
@@ -124,7 +125,7 @@ export function useGroupSettingsForm({ group, taxonomy, locale, activeTab, canEd
 
                 // The category (and so the first URL segment) can change; keep the person in settings.
                 if (result.data?.slug && (result.data.slug !== group.slug || result.data.l1Slug !== group.l1Slug)) {
-                    router.replace(`/${result.data.l1Slug}/group/${result.data.slug}/settings?tab=${activeTab}`);
+                    router.replace(`${groupHref(result.data.l1Slug, result.data.slug, 'settings')}?tab=${activeTab}`);
                 }
 
                 router.refresh();

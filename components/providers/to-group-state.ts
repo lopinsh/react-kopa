@@ -1,5 +1,6 @@
 import type { GroupContext } from '@/lib/services/group.service';
 import type { GroupState } from './GroupProvider';
+import { groupHref } from '@/lib/routes';
 
 /** The service's group context as the frame's client state: titles only for sections, no section text. */
 export function toGroupState(group: GroupContext): GroupState {
@@ -7,7 +8,7 @@ export function toGroupState(group: GroupContext): GroupState {
         id: group.id,
         slug: group.slug,
         name: group.name,
-        href: `/${group.category.l1Slug}/group/${group.slug}`,
+        href: groupHref(group.category.l1Slug, group.slug),
         isPrivate: group.type === 'PRIVATE',
         category: { l1Slug: group.category.l1Slug, l1Title: group.category.l1Title, subCategories: group.category.subCategories, subCategorySlugs: group.category.subCategorySlugs },
         city: group.city,

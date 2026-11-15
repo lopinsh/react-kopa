@@ -11,6 +11,7 @@ import PhotoRow from '@/components/groups/frame/PhotoRow';
 import AddSectionPictures from '@/components/groups/frame/AddSectionPictures';
 import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 import { langAttr } from '@/lib/translations';
+import { groupHref } from '@/lib/routes';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
 
@@ -54,7 +55,7 @@ export default async function GroupPage({ params, searchParams }: { params: Prom
     });
     return (
         <>
-            <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} afterFirst={<div className="lg:hidden"><NextMeetingBox groupId={group.id} groupHref={`/${l1Slug}/group/${group.slug}`} viewerId={session?.user?.id} /></div>} />
+            <InfoSections label={tFrame('partsLabel')} parts={parts} initial={open?.id ?? ''} afterFirst={<div className="lg:hidden"><NextMeetingBox groupId={group.id} groupHref={groupHref(l1Slug, group.slug)} viewerId={session?.user?.id} /></div>} />
         </>
     );
 }

@@ -12,6 +12,7 @@ import { dayInZone, zonedDayStart } from '@/lib/discovery-dates';
 import { groupByDay } from '@/lib/event-days';
 import EmptyState from '@/components/ui/EmptyState';
 import { buttonClass } from '@/components/ui/Button';
+import { groupHref } from '@/lib/routes';
 
 export async function generateMetadata({
     params,
@@ -54,7 +55,7 @@ export default async function GroupEventsPage({
         getTranslations('group'), getTranslations('group.frame'), getTranslations('common')
     ]);
     const isOwnerOrAdmin = group.user.isAdmin;
-    const base = `/${l1Slug}/group/${groupSlug}`;
+    const base = groupHref(l1Slug, groupSlug);
 
     const today = dayInZone(new Date(), zone);
     const days = groupByDay(rows, currentTab === 'past' ? new Date(0) : zonedDayStart(today, zone), zone);
@@ -81,7 +82,7 @@ export default async function GroupEventsPage({
                     title={t('noEvents')}
                     description={currentTab === 'upcoming' ? t('noUpcomingEvents') : t('noPastEvents')}
                     action={isOwnerOrAdmin && currentTab === 'upcoming' ? (
-                        <Link href={`/${l1Slug}/group/${groupSlug}/create-event`} className={buttonClass('secondary')}>
+                        <Link href={groupHref(l1Slug, groupSlug, 'create-event')} className={buttonClass('secondary')}>
                             <Plus aria-hidden="true" />
                             {t('createFirstEvent')}
                         </Link>

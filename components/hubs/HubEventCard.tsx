@@ -5,6 +5,7 @@ import { useDateFormatter } from '@/lib/date-format';
 import { langAttr } from '@/lib/translations';
 import { UI } from '@/lib/constants';
 import type { EventRowData } from '@/lib/services/event-row';
+import { groupHref, eventHref } from '@/lib/routes';
 
 /** One event as a card in the desktop grid (K-91, K-103): the row's content stacked, the whole card opens the event. Phones keep `EventRow`. */
 export default function HubEventCard({ event }: { event: EventRowData }) {
@@ -21,7 +22,7 @@ export default function HubEventCard({ event }: { event: EventRowData }) {
                 {format.dateTime(start, { hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })}
             </time>
             <Link
-                href={`/${event.category.l1Slug}/group/${event.group.slug}/events/${event.slug}`}
+                href={eventHref(event.category.l1Slug, event.group.slug, event.slug)}
                 scroll={false}
                 data-opens-panel
                 lang={langAttr(event.titleLang, locale)}
@@ -31,7 +32,7 @@ export default function HubEventCard({ event }: { event: EventRowData }) {
             </Link>
             <p className="flex min-w-0 items-center gap-1.5 text-meta text-foreground-muted">
                 <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-[var(--c)]" />
-                <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} className="relative z-10 min-w-0 truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                <Link href={groupHref(event.category.l1Slug, event.group.slug)} className="relative z-10 min-w-0 truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                 <span className="shrink-0">· {place}</span>
             </p>
             {event.excerpt && <p className="mt-1 line-clamp-3 text-meta text-foreground">{event.excerpt}</p>}

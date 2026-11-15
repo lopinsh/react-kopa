@@ -10,6 +10,7 @@ import { resolveKey, type HubKey } from './chat-access.service';
 import { hubGroupWhere } from './hub-query';
 import { OnlineService } from './online.service';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { groupHref } from '@/lib/routes';
 
 /** Names, flair and the online list of a Čats room (K5-16, K5-17). Names come from the site, never from Matrix (F5). */
 
@@ -48,7 +49,7 @@ async function flairOf(ids: string[], key: HubKey, locale: string): Promise<Map<
     for (const r of rows) {
         const isLocal = !!scope.city && r.group.city === scope.city;
         if (flair.has(r.userId) && (local.has(r.userId) || !isLocal)) continue;
-        flair.set(r.userId, { name: r.group.name, href: `/${TaxonomyResolver.resolve(r.group.category).l1Slug}/group/${r.group.slug}` });
+        flair.set(r.userId, { name: r.group.name, href: groupHref(TaxonomyResolver.resolve(r.group.category).l1Slug, r.group.slug) });
         if (isLocal) local.add(r.userId);
     }
     return flair;

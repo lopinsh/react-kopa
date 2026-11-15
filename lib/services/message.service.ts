@@ -8,6 +8,7 @@ import { isSiteAdmin } from '@/lib/site-role';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { ChatRequestService } from './chat-request.service';
 import { ensurePairChat, findPairChat } from './direct-chat';
+import { groupHref as groupPath } from '@/lib/routes';
 
 /**
  * Two kinds of chat (see `Conversation.kind`):
@@ -166,7 +167,7 @@ function toMessageView(message: {
 
 function groupHref(group: { slug: string; hiddenAt: Date | null; category: Parameters<typeof TaxonomyResolver.resolve>[0] }): string | null {
     // Hidden groups 404 for everyone but site admins, so no link.
-    return group.hiddenAt ? null : `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}`;
+    return group.hiddenAt ? null : groupPath(TaxonomyResolver.resolve(group.category).l1Slug, group.slug);
 }
 
 /**

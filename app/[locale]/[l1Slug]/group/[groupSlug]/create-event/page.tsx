@@ -8,6 +8,7 @@ import { signInUrl } from '@/lib/auth-redirect';
 import { getTranslations } from 'next-intl/server';
 import { isSiteAdmin } from '@/lib/site-role';
 import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
+import { groupHref } from '@/lib/routes';
 
 export default async function CreateEventPage({
     params,
@@ -18,7 +19,7 @@ export default async function CreateEventPage({
     const session = await auth();
 
     if (!session) {
-        redirect(signInUrl(locale, `/${l1Slug}/group/${groupSlug}/create-event`));
+        redirect(signInUrl(locale, groupHref(l1Slug, groupSlug, 'create-event')));
     }
 
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session?.user?.id);
@@ -31,7 +32,7 @@ export default async function CreateEventPage({
     const canCreate = group.user.isAdmin;
 
     if (!canCreate) {
-        redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
+        redirect(`/${locale}${groupHref(l1Slug, groupSlug)}`);
     }
 
     const [t, tw, cities] = await Promise.all([getTranslations('event'), getTranslations('eventWizard'), CityService.listActive(locale)]);

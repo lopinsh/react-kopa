@@ -22,6 +22,7 @@ import { MAX_GROUP_TAGS, NEUTRAL_ACCENT } from '@/lib/constants';
 import { categoryColor } from '@/lib/theme/category';
 import { clsx } from 'clsx';
 import Button from '@/components/ui/Button';
+import { groupHref } from '@/lib/routes';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -184,7 +185,7 @@ export default function GroupCreationWizard({ taxonomy, initialL1Slug, initialTa
             if (!result.success) {
                 setServerError(result.error);
             } else if (result.data?.slug && result.data?.l1Slug) {
-                loadFullPage(`/${locale}/${result.data.l1Slug}/group/${result.data.slug}`);
+                loadFullPage(`/${locale}${groupHref(result.data.l1Slug, result.data.slug)}`);
             }
         });
     });

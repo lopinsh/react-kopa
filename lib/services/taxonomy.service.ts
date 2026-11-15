@@ -10,6 +10,7 @@ import { categoryImage, type CategoryImage } from '@/lib/banner';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { MAX_GROUP_SUBTAGS, MAX_GROUP_TAGS, MIN_PENDING_TAG_SUPPORTERS } from '@/lib/constants';
+import { groupHref } from '@/lib/routes';
 
 export type L3Tag = {
     id: string;
@@ -157,7 +158,7 @@ async function collectMergeNotices(
             notices.push({
                 userId,
                 args: { originalTag, canonicalTag: canonical.name, canonicalTagEn: canonical.en, canonicalTagLv: canonical.lv, groupName: group.name },
-                link: `/${TaxonomyResolver.resolve(group.category).l1Slug}/group/${group.slug}/settings?tab=categorization`,
+                link: `${groupHref(TaxonomyResolver.resolve(group.category).l1Slug, group.slug, 'settings')}?tab=categorization`,
             });
         }
     }

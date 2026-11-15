@@ -11,6 +11,7 @@ import type { GroupCardData } from '@/lib/services/group-card';
 import type { CardActivity } from '@/lib/services/card-activity';
 import type { MyRole } from '@/lib/types/own-area';
 import { UI } from '@/lib/constants';
+import { groupHref } from '@/lib/routes';
 
 const NAME_LINK = 'outline-none after:absolute after:inset-0 after:z-[1]';
 
@@ -45,7 +46,7 @@ export default function GroupRow({ group, activity, highlight, replace = false, 
     const topic = [group.category.l1Title, ...group.subCategories].join(' · ');
     const hasTag = !!role && !(role === 'MEMBER' && !showMember);
     const hasNote = !!activity?.event || !!activity?.announcement || !!group.lookingFor;
-    const path = `/${group.category.l1Slug}/group/${group.slug}`;
+    const path = groupHref(group.category.l1Slug, group.slug);
     const name = <Highlight text={group.name} word={highlight} />;
     const searchAttr = searchItem ? { 'data-search-item': true } : {};
 

@@ -15,6 +15,7 @@ import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
 import { signInUrl } from '@/lib/auth-redirect';
 import { isSiteAdmin } from '@/lib/site-role';
 import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
+import { groupHref } from '@/lib/routes';
 
 type Params = { locale: string; groupSlug: string; l1Slug: string };
 
@@ -45,12 +46,12 @@ export default async function GroupSettingsPage(props: {
     const session = await auth();
 
     if (!session?.user?.id) {
-        redirect(signInUrl(locale, `/${l1Slug}/group/${groupSlug}/settings`));
+        redirect(signInUrl(locale, groupHref(l1Slug, groupSlug, 'settings')));
     }
 
     if (tab && LEGACY_TABS[tab]) {
         const [newTab, hash] = LEGACY_TABS[tab].split('#');
-        redirect(`/${locale}/${l1Slug}/group/${groupSlug}/settings?tab=${newTab}${hash ? `#${hash}` : ''}`);
+        redirect(`/${locale}${groupHref(l1Slug, groupSlug, 'settings')}?tab=${newTab}${hash ? `#${hash}` : ''}`);
     }
 
     const group = await GroupService.getGroupWithContext(groupSlug, locale, l1Slug, session.user.id);
@@ -62,7 +63,7 @@ export default async function GroupSettingsPage(props: {
 
     // Owner and moderators manage the group; site admins can override without membership.
     if (!group.user.isAdmin && !isAppAdmin) {
-        redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
+        redirect(`/${locale}${groupHref(l1Slug, groupSlug)}`);
     }
 
     const [taxonomyRes, cities] = await Promise.all([getTaxonomy(locale), CityService.listActive(locale)]);

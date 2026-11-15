@@ -9,6 +9,7 @@ import EmptyState from '@/components/ui/EmptyState';
 import MemberRow from '@/components/groups/members/MemberRow';
 import RequestRow from '@/components/groups/members/RequestRow';
 import type { Metadata } from 'next';
+import { groupHref } from '@/lib/routes';
 
 export async function generateMetadata({
     params,
@@ -45,7 +46,7 @@ export default async function GroupMembersPage({
 
     // Gated for members only
     if (!group.user.isMember) {
-        redirect(`/${locale}/${l1Slug}/group/${groupSlug}`);
+        redirect(`/${locale}${groupHref(l1Slug, groupSlug)}`);
     }
 
     const t = await getTranslations('group');
@@ -54,7 +55,7 @@ export default async function GroupMembersPage({
     const { members, requests } = await GroupMembersService.getMembersPage(group, session?.user?.id);
     // Requests are for the team only: anyone else with ?tab=requests sees the members.
     const currentTab = requests && tab === 'requests' ? 'requests' : 'members';
-    const base = `/${l1Slug}/group/${groupSlug}`;
+    const base = groupHref(l1Slug, groupSlug);
 
     return (
         <>

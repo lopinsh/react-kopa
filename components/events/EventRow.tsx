@@ -10,6 +10,7 @@ import { rowWordOf } from '@/lib/event-join';
 import { langAttr } from '@/lib/translations';
 import type { EventRowData } from '@/lib/services/event-row';
 import { UI } from '@/lib/constants';
+import { groupHref, eventHref } from '@/lib/routes';
 
 type Props = {
     event: EventRowData;
@@ -53,7 +54,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
             </time>
             <span aria-hidden="true" className="size-2 rounded-full bg-[var(--c)]" />
             <Link
-                href={`/${event.category.l1Slug}/group/${event.group.slug}/events/${event.slug}`}
+                href={eventHref(event.category.l1Slug, event.group.slug, event.slug)}
                 scroll={false}
                 replace={replace}
                 data-opens-panel={replace ? undefined : true}
@@ -73,7 +74,7 @@ export default function EventRow({ event, showGroup, showCity, headingDay, highl
             )}
             {showGroup && (
                 <p className="col-span-2 col-start-3 row-start-2 flex min-w-0 text-meta text-foreground-muted">
-                    <Link href={`/${event.category.l1Slug}/group/${event.group.slug}`} replace={replace} className="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
+                    <Link href={groupHref(event.category.l1Slug, event.group.slug)} replace={replace} className="relative z-10 min-w-0 shrink truncate weight-medium text-foreground underline decoration-border underline-offset-2">{event.group.name}</Link>
                     <span className="min-w-0 shrink-[4] truncate whitespace-pre"> · {event.category.l1Title}</span>
                     {event.subCategories.length > 0 && <span className="min-w-0 shrink-[8] truncate whitespace-pre"> · {event.subCategories.join(', ')}</span>}
                 </p>

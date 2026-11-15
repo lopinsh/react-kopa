@@ -5,6 +5,7 @@ import { createDateFormatter, EVENT_DAY_TIME } from '@/lib/date-format';
 import { langAttr } from '@/lib/translations';
 import type { EventRowData } from '@/lib/services/event-row';
 import AccordionRow from './AccordionRow';
+import { eventHref } from '@/lib/routes';
 
 /** The next events as accordion rows (K-79): the Pasākumi block of Pārskats and the desktop rail of Ziņas. */
 export default async function HubEventRows({ events, locale }: { events: EventRowData[]; locale: string }) {
@@ -27,7 +28,7 @@ export default async function HubEventRows({ events, locale }: { events: EventRo
             body={e.excerpt}
             clamp={3}
             meta={<span>{e.isOnline ? tEvent('online') : cityLabel(tCities, e.city)}</span>}
-            action={{ href: `/${e.category.l1Slug}/group/${e.group.slug}/events/${e.slug}`, label: t('events.open') }}
+            action={{ href: eventHref(e.category.l1Slug, e.group.slug, e.slug), label: t('events.open') }}
         />
     ));
 }

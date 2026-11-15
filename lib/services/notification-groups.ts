@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { groupCategoryParts } from './message.service';
 import type { NewsGroup } from '@/lib/types/own-area';
+import { groupHref } from '@/lib/routes';
 
 // The group a notification is about is named by its link: the group page itself, or a conversation that started from a group.
 const GROUP_LINK = /^\/([^/?#]+)\/group\/([^/?#]+)/;
@@ -24,7 +25,7 @@ export function toNewsGroup(g: NewsGroupSource, locale: string): NewsGroup & { l
     const parts = groupCategoryParts(resolved, g.tags, locale);
     return {
         name: g.name,
-        path: `/${resolved.l1Slug}/group/${g.slug}`,
+        path: groupHref(resolved.l1Slug, g.slug),
         l1Slug: resolved.l1Slug,
         color: resolved.accentColor,
         categoryTitle: parts.categoryTitle,

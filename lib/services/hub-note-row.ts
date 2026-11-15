@@ -2,6 +2,7 @@ import type { Prisma } from '@prisma/client';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { hubHref } from '@/lib/hub-path';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { groupHref } from '@/lib/routes';
 
 const TITLES = { select: { lang: true, title: true } } as const;
 const CHAIN = { select: { id: true, slug: true, level: true, color: true, parent: { select: { id: true, slug: true, level: true, color: true, parent: { select: { id: true, slug: true, level: true, color: true } } } } } } as const;
@@ -61,7 +62,7 @@ export function toNoteRow(n: NoteSource, o: { lang: string; locale: string; now:
         expiresAt: n.expiresAt,
         expired,
         city: n.city ? { slug: n.city.slug, name: o.locale === 'en' ? n.city.nameEn : n.city.nameLv, href: o.cityHubs?.get(`${n.id}`) ?? null } : null,
-        group: publicGroup ? { id: publicGroup.id, name: publicGroup.name, href: `/${TaxonomyResolver.resolve(publicGroup.category).l1Slug}/group/${publicGroup.slug}` } : null,
+        group: publicGroup ? { id: publicGroup.id, name: publicGroup.name, href: groupHref(TaxonomyResolver.resolve(publicGroup.category).l1Slug, publicGroup.slug) } : null,
         topic: { slug: n.category.slug, title: pickTitle(n.category.titles, o.lang, n.category.slug), href: noteTopicHref(n.category) ?? '' },
         author: o.viewer ? { ...n.author, flair: o.flair.has(`${n.category.slug}:${n.authorId}`) } : null,
         // Replies vanish with the Ziņa's expiry (K-121).

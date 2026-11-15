@@ -1,4 +1,5 @@
 import { LOCALES } from '@/lib/constants';
+import { groupHref } from '@/lib/routes';
 
 const L = LOCALES.join('|');
 /** Pages a panel must never open over: the group wizard and admin (their links and redirects want the full page). */
@@ -32,7 +33,7 @@ export function wantsFullPage(from: string | null, t: PanelTarget): boolean {
     if (!from) return false;
     const path = from.replace(/\/$/, '');
     if (NEVER_UNDER.test(path)) return true;
-    const group = `/${t.locale}/${t.l1Slug}/group/${t.groupSlug}`;
+    const group = `/${t.locale}${groupHref(t.l1Slug, t.groupSlug)}`;
     if (!t.eventSlug) return path === group || path.startsWith(`${group}/`);
     const event = `${group}/events/${t.eventSlug}`;
     return path === event || path.startsWith(`${event}/`) || path === `${group}/create-event`;

@@ -11,6 +11,7 @@ import ConfirmDialog from '@/components/ui/ConfirmDialog';
 import EmptyState from '@/components/ui/EmptyState';
 import { avatarUrl } from '@/lib/avatar';
 import { useDateFormatter } from '@/lib/date-format';
+import { groupHref } from '@/lib/routes';
 
 const HideGroupModal = dynamic(() => import('@/components/modals/HideGroupModal'), { ssr: false });
 
@@ -107,7 +108,7 @@ export default function ReportList({ initialReports }: { initialReports: ReportI
                                     {report.group && (
                                         <div className="flex items-center gap-2">
                                             <Users className="size-4 text-primary" />
-                                            <Link href={`/${report.group.l1Slug}/group/${report.group.slug}`} className="text-button-sm text-foreground hover:text-primary transition-colors flex items-center gap-1">
+                                            <Link href={groupHref(report.group.l1Slug, report.group.slug)} className="text-button-sm text-foreground hover:text-primary transition-colors flex items-center gap-1">
                                                 {report.group.name}
                                                 <ExternalLink className="size-3" />
                                             </Link>

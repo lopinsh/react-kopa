@@ -4,6 +4,7 @@ import { plainExcerpt } from '@/lib/text-excerpt';
 import { ActionError } from '@/types/actions';
 import { ChatRequestService } from './chat-request.service';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { groupHref } from '@/lib/routes';
 
 /** The name card (K5-19): what a signed-in reader sees when a name in a Čats line or the online list is tapped. Reuses profile data, no chat profile (K-81). */
 
@@ -48,7 +49,7 @@ export const ChatCardService = {
         return {
             ...base, status, profileHref, canRequest,
             chatHref: chatId ? `/messages?c=${chatId}` : null,
-            sharedGroups: groups.map((g) => ({ name: g.name, href: `/${TaxonomyResolver.resolve(g.category).l1Slug}/group/${g.slug}` })),
+            sharedGroups: groups.map((g) => ({ name: g.name, href: groupHref(TaxonomyResolver.resolve(g.category).l1Slug, g.slug) })),
         };
     },
 };

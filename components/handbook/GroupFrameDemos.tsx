@@ -15,6 +15,7 @@ import GroupSocialLinks from '@/components/groups/GroupSocialLinks';
 import { NextMeetingView } from '@/components/groups/NextMeetingBox';
 import { buttonClass } from '@/components/ui/Button';
 import { Link } from '@/i18n/routing';
+import { groupHref } from '@/lib/routes';
 
 /** A plain picture for the sample banner (no network): a soft landscape in two greys. ui-allow: illustration image, not UI colour */
 export const SAMPLE_IMAGE = `data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfd6c4"/><stop offset="1" stop-color="#8f9a82"/></linearGradient></defs><rect width="1600" height="400" fill="url(#g)"/><circle cx="1250" cy="120" r="70" fill="#f1f3ec"/></svg>')}`;
@@ -29,7 +30,7 @@ const USER: Record<Viewer, GroupContext['user']> = {
 
 export function sampleState(group: GroupContext, viewer: Viewer, o: { isPrivate?: boolean } = {}) {
     const user = USER[viewer];
-    const base = `/${group.category.l1Slug}/group/${group.slug}`;
+    const base = groupHref(group.category.l1Slug, group.slug);
     return toGroupState({
         ...group,
         user,
@@ -62,7 +63,7 @@ export function GroupHeadDemo({ samples }: { samples: UiSamples }) {
 /** The pages column (the team's, with the waiting count), the page's part tabs with their action, the next-meeting box and the social links. */
 export async function GroupPagesDemo({ samples }: { samples: UiSamples }) {
     const [t, tCommon, tFrame] = await Promise.all([getTranslations('group'), getTranslations('common'), getTranslations('group.frame')]);
-    const base = `/${samples.group.category.l1Slug}/group/${samples.group.slug}`;
+    const base = groupHref(samples.group.category.l1Slug, samples.group.slug);
     const nextEvent = { slug: 'sample', title: samples.eventDays[0]?.rows[0]?.title ?? '', titleLang: 'lv' as const, startDate: samples.eventDays[0]?.rows[0]?.startDate ?? new Date(), endDate: null, running: false, excerpt: samples.group.description };
     return (
         <AccentScope color={SAMPLE_ACCENT}>
