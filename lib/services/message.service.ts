@@ -1,4 +1,4 @@
-import { Prisma, type ConversationKind, type MembershipRole } from '@prisma/client';
+import { Prisma, type ConversationKind } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { ActionError, type ErrorCode } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
@@ -6,6 +6,7 @@ import { CHAT_HISTORY_LIMIT, INBOX_LIMIT, SHARED_GROUPS_SHOWN } from '@/lib/cons
 import { TaxonomyResolver } from '@/lib/services/taxonomy-resolver.service';
 import { isSiteAdmin } from '@/lib/site-role';
 import { pickTitle } from '@/lib/utils/localized-title';
+import { getViewerAccess, teamMemberWhere } from './access';
 import { ChatRequestService } from './chat-request.service';
 import { ensurePairChat, findPairChat } from './direct-chat';
 import { groupHref as groupPath } from '@/lib/routes';
@@ -20,7 +21,6 @@ import { groupHref as groupPath } from '@/lib/routes';
  */
 
 const PERSON_SELECT = { id: true, name: true, image: true, avatarSeed: true } as const;
-const TEAM_ROLES: MembershipRole[] = ['OWNER', 'ADMIN'];
 
 export type OriginType = 'JOIN_REQUEST' | 'GROUP_CONTACT';
 
@@ -99,7 +99,7 @@ function accessWhere(userId: string): Prisma.ConversationWhereInput {
         OR: [
             { participants: { some: { id: userId } } },
             { kind: 'GROUP', contactUserId: userId },
-            { kind: 'GROUP', originGroup: { members: { some: { userId, role: { in: TEAM_ROLES } } } } }
+            { kind: 'GROUP', originGroup: { members: { some: { userId, ...teamMemberWhere() } } } }
         ]
     };
 }
@@ -120,18 +120,14 @@ async function chatRecipients(conversationId: string, access: ConversationAccess
 async function teamUserIds(groupId: string | null): Promise<string[]> {
     if (!groupId) return [];
     const members = await prisma.membership.findMany({
-        where: { groupId, role: { in: TEAM_ROLES } },
+        where: { groupId, ...teamMemberWhere() },
         select: { userId: true }
     });
     return members.map(m => m.userId);
 }
 
 async function isTeamMember(groupId: string, userId: string): Promise<boolean> {
-    const membership = await prisma.membership.findUnique({
-        where: { userId_groupId: { userId, groupId } },
-        select: { role: true }
-    });
-    return !!membership && TEAM_ROLES.includes(membership.role);
+    return (await getViewerAccess(groupId, userId)).isTeam;
 }
 
 /** Newest message per conversation that someone else wrote (with who wrote it): the basis of "unread". */
@@ -680,7 +676,7 @@ export const MessageService = {
                     const sharedAdminMembership = await prisma.membership.findFirst({
                         where: {
                             userId: other.id,
-                            role: { in: TEAM_ROLES },
+                            ...teamMemberWhere(),
                             group: { members: { some: { userId } } }
                         },
                         select: { id: true }

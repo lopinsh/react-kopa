@@ -5,6 +5,7 @@ import { ActionError } from '@/types/actions';
 import { triggerRealtime } from '@/lib/pusher';
 import { legacyTitle } from '@/lib/utils/announcement-title';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
+import { getViewerAccess, approvedMemberWhere } from './access';
 
 export const AUTHOR_SELECT = { id: true, name: true, username: true, image: true, avatarSeed: true } as const;
 
@@ -37,13 +38,10 @@ const GROUP_SLUG_SELECT = {
  * the same as the group page (everyone else gets a 404 there).
  */
 export async function getRole(groupId: string, userId: string) {
-    const membership = await prisma.membership.findUnique({
-        where: { userId_groupId: { userId, groupId } },
-        select: { role: true, group: { select: { hiddenAt: true } } }
-    });
-    if (!membership) return null;
-    if (membership.group.hiddenAt && membership.role !== 'OWNER') return null;
-    return membership.role;
+    const access = await getViewerAccess(groupId, userId);
+    if (!access.role) return null;
+    if (access.groupHidden && !access.isOwner) return null;
+    return access.role;
 }
 
 /** Announcements: top-level posts written by a group's owner or admins. There are no replies. */
@@ -85,7 +83,7 @@ export const PostService = {
                 groupId,
                 group: { hiddenAt: null },
                 userId: { not: authorId },
-                role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
+                ...approvedMemberWhere()
             },
             select: { userId: true }
         });

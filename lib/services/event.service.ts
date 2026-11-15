@@ -6,7 +6,7 @@ import { Prisma, AttendanceStatus, EventJoinMode, Event as EventModel } from '@p
 import { EventFormValues } from '@/lib/validations/event';
 import { ActionError } from '@/types/actions';
 import { assertBannerAllowed, bannerCreditColumns, storedBanner } from '@/lib/banner';
-import { hasAdminRights } from '@/lib/utils/permissions';
+
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { eventTiming, isEventPast, startOfTodayInRiga } from '@/lib/event-dates';
 import { slugify } from '@/lib/slug';
@@ -14,6 +14,7 @@ import { findGroupByPath } from './group-path';
 import { resolveEventText, originalEventTitle, toTextLang, langRecord, hasText, TEXT_LANGS, type TextLang } from '@/lib/translations';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import { getViewerAccess, teamMemberWhere, approvedMemberWhere } from './access';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
 import { EVENT_PANEL_INCLUDE, toEventPanel, toFace, type EventPanelData, type Face } from './event-panel';
@@ -88,19 +89,8 @@ export interface NextEventView {
 export class EventService {
     /** Role of the user in the group plus site-admin flag. */
     private static async getAccess(groupId: string, userId?: string) {
-        if (!userId) return { isMember: false, isGroupAdmin: false, isSiteAdmin: false };
-        const [membership, siteRole] = await Promise.all([
-            prisma.membership.findUnique({
-                where: { userId_groupId: { userId, groupId } },
-                select: { role: true }
-            }),
-            getSiteRole(userId)
-        ]);
-        return {
-            isMember: !!membership && membership.role !== 'PENDING',
-            isGroupAdmin: hasAdminRights(membership?.role),
-            isSiteAdmin: isSiteAdminRole(siteRole)
-        };
+        const access = await getViewerAccess(groupId, userId);
+        return { isMember: access.isMember, isGroupAdmin: access.isTeam, isSiteAdmin: access.isSiteAdmin };
     }
 
     /**
@@ -154,7 +144,7 @@ export class EventService {
     /** `eventTitle` is the title in the event's original language (what notifications quote); `title` overrides it (just edited). */
     private static async buildContext(event: EventWithGroup, title?: string): Promise<EventActionContext> {
         const admins = await prisma.membership.findMany({
-            where: { groupId: event.groupId, role: { in: ['OWNER', 'ADMIN'] } },
+            where: { groupId: event.groupId, ...teamMemberWhere() },
             select: { userId: true }
         });
         return {
@@ -337,9 +327,7 @@ export class EventService {
 
         const access = await EventService.getAccess(group.id, viewerId);
         if (event.visibility === 'MEMBERS_ONLY' && !(access.isMember || access.isSiteAdmin)) {
-            const pending = viewerId
-                ? (await prisma.membership.findUnique({ where: { userId_groupId: { userId: viewerId, groupId: group.id } }, select: { role: true } }))?.role === 'PENDING'
-                : false;
+            const pending = (await getViewerAccess(group.id, viewerId)).role === 'PENDING';
             return { kind: 'membersOnly', group: { id: group.id, name: group.name, isAcceptingMembers: group.isAcceptingMembers, canContact: !pending } };
         }
 
@@ -437,16 +425,7 @@ export class EventService {
      * Create a new event within a group.
      */
     static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }> {
-        const membership = await prisma.membership.findUnique({
-            where: {
-                userId_groupId: {
-                    userId: userId,
-                    groupId: groupId,
-                }
-            }
-        });
-
-        if (!membership || !hasAdminRights(membership.role)) {
+        if (!(await getViewerAccess(groupId, userId)).isTeam) {
             throw new ActionError('FORBIDDEN');
         }
 
@@ -499,7 +478,7 @@ export class EventService {
                 where: {
                     groupId,
                     userId: { not: userId },
-                    role: { in: ['MEMBER', 'ADMIN', 'OWNER'] }
+                    ...approvedMemberWhere()
                 },
                 select: { userId: true }
             });

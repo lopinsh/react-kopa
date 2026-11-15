@@ -5,6 +5,7 @@ import { MembershipRole } from '@prisma/client';
 import { GroupFormValues, GroupCreateValues } from '@/lib/validations/group';
 import { ActionError } from '@/types/actions';
 import { Prisma } from '@prisma/client';
+import { getViewerAccess, accessFromRole, teamMemberWhere } from './access';
 import { hasAdminRights, allowedMemberActions } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
@@ -253,12 +254,12 @@ export const GroupService = {
         // Hidden groups exist only for site admins (banner + restore) and the group's owner (banner only).
         const isSiteAdmin = isSiteAdminRole(currentUserId ? await getSiteRole(currentUserId) : null);
         const g = group;
-        const isOwner = !!currentUserId && g.members.some((m: { userId: string; role: string }) => m.userId === currentUserId && m.role === 'OWNER');
-        if (g.hiddenAt && !isSiteAdmin && !isOwner) return null;
+        const userMembership = currentUserId ? g.members.find((m: { userId: string }) => m.userId === currentUserId) : null;
+        const viewer = accessFromRole(userMembership?.role ?? null, null, !!g.hiddenAt);
+        if (g.hiddenAt && !isSiteAdmin && !viewer.isOwner) return null;
 
         // 1. Resolve Membership & Role
-        const userMembership = currentUserId ? g.members.find((m: { userId: string }) => m.userId === currentUserId) : null;
-        const isMember = !!userMembership && userMembership.role !== 'PENDING';
+        const isMember = viewer.isMember;
         const userRole = userMembership?.role || null;
         const isAdmin = hasAdminRights(userRole);
 
@@ -509,7 +510,7 @@ export const GroupService = {
     async sendInquiry(groupId: string, userId: string, message: string): Promise<{ conversationId: string; teamIds: string[]; groupName: string }> {
         const group = await prisma.group.findFirst({
             where: { id: groupId, hiddenAt: null },
-            select: { name: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
+            select: { name: true, members: { where: teamMemberWhere(), select: { userId: true } } }
         });
 
         if (!group) throw new ActionError('NOT_FOUND');
@@ -534,7 +535,7 @@ export const GroupService = {
 
         const group = await prisma.group.findFirst({
             where: { id: groupId, hiddenAt: null },
-            select: { name: true, isAcceptingMembers: true, members: { where: { role: { in: ['OWNER', 'ADMIN'] } }, select: { userId: true } } }
+            select: { name: true, isAcceptingMembers: true, members: { where: teamMemberWhere(), select: { userId: true } } }
         });
         if (!group) throw new ActionError('NOT_FOUND');
         if (!group.isAcceptingMembers) throw new ActionError('NOT_ACCEPTING_MEMBERS');
@@ -605,11 +606,7 @@ export const GroupService = {
     },
 
     async deleteGroup(groupId: string, userId: string): Promise<void> {
-        const isOwner = await prisma.membership.findFirst({
-            where: { groupId, userId, role: 'OWNER' }
-        });
-
-        if (!isOwner) throw new ActionError('FORBIDDEN');
+        if (!(await getViewerAccess(groupId, userId)).isOwner) throw new ActionError('FORBIDDEN');
 
         const deleted = await this.deleteGroupRecord(groupId);
         if (!deleted) throw new ActionError('NOT_FOUND');
@@ -635,18 +632,16 @@ export const GroupService = {
      * and the colour comes from the category.
      */
     async updateGroup(groupId: string, data: GroupFormValues, userId: string): Promise<{ slug: string; l1Slug: string }> {
-        const [membership, actor, current] = await Promise.all([
-            prisma.membership.findFirst({ where: { groupId, userId } }),
-            getSiteRole(userId),
+        const [access, current] = await Promise.all([
+            getViewerAccess(groupId, userId),
             prisma.group.findUnique({
                 where: { id: groupId },
                 select: { name: true, city: true, bannerImage: true, type: true, isAcceptingMembers: true, categoryId: true, tags: { select: { id: true } } }
             })
         ]);
 
-        const role = membership?.role;
-        const isAppAdmin = isSiteAdminRole(actor);
-        if (!hasAdminRights(role) && !isAppAdmin) {
+        const isAppAdmin = access.isSiteAdmin;
+        if (!access.isTeam && !isAppAdmin) {
             throw new ActionError('FORBIDDEN');
         }
         if (!current) throw new ActionError('NOT_FOUND');
@@ -657,7 +652,7 @@ export const GroupService = {
             throw new ActionError('VALIDATION_FAILED');
         }
 
-        const canEditOwnerFields = role === 'OWNER' || isAppAdmin;
+        const canEditOwnerFields = access.isOwner || isAppAdmin;
 
         if (!canEditOwnerFields) {
             const currentTags = current.tags.map(t => t.id).sort().join(',');
@@ -717,7 +712,7 @@ export const GroupService = {
             }
         });
 
-        if (isAppAdmin && !hasAdminRights(role)) {
+        if (isAppAdmin && !access.isTeam) {
             await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
         }
 
@@ -813,12 +808,7 @@ export const GroupService = {
      * A site admin without a role in the group is logged (GROUP_EDIT) by the caller.
      */
     async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
-        const [membership, actor] = await Promise.all([
-            prisma.membership.findFirst({ where: { groupId, userId }, select: { role: true } }),
-            getSiteRole(userId)
-        ]);
-        const isManager = hasAdminRights(membership?.role);
-        const isSiteAdmin = isSiteAdminRole(actor);
+        const { isTeam: isManager, isSiteAdmin } = await getViewerAccess(groupId, userId);
         return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
     },
 
@@ -973,14 +963,11 @@ export const GroupService = {
      * Owner only. OWNER is never set here: ownership only moves through `transferOwnership`.
      */
     async updateMemberRole(groupId: string, targetUserId: string, newRole: 'ADMIN' | 'MEMBER', actorId: string): Promise<GroupSlugs> {
-        const actorMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: actorId, groupId } },
-            include: { group: { select: GROUP_SLUG_SELECT } }
-        });
-
-        if (!actorMembership || actorMembership.role !== 'OWNER') {
+        const actor = await getViewerAccess(groupId, actorId);
+        if (!actor.isOwner) {
             throw new ActionError('FORBIDDEN');
         }
+        const actorGroup = await prisma.group.findUniqueOrThrow({ where: { id: groupId }, select: GROUP_SLUG_SELECT });
 
         // The owner keeps their own role.
         if (targetUserId === actorId) {
@@ -990,7 +977,7 @@ export const GroupService = {
         // The same rule the member menu shows.
         const target = await prisma.membership.findUnique({ where: { userId_groupId: { userId: targetUserId, groupId } }, select: { role: true } });
         if (!target) throw new ActionError('NOT_FOUND');
-        if (!allowedMemberActions(actorMembership.role, target.role).includes(newRole === 'ADMIN' ? 'promote' : 'demote')) {
+        if (!allowedMemberActions(actor.role, target.role).includes(newRole === 'ADMIN' ? 'promote' : 'demote')) {
             throw new ActionError('FORBIDDEN');
         }
 
@@ -1002,7 +989,7 @@ export const GroupService = {
         });
         if (updated.count !== 1) throw new ActionError('VALIDATION_FAILED');
 
-        return { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug };
+        return { slug: actorGroup.slug, l1Slug: TaxonomyResolver.resolve(actorGroup.category).l1Slug };
     },
 
     /**
@@ -1054,16 +1041,7 @@ export const GroupService = {
 
         if (!membershipToManage) throw new ActionError('NOT_FOUND');
 
-        const requesterMembership = await prisma.membership.findUnique({
-            where: {
-                userId_groupId: {
-                    userId: actorId,
-                    groupId: membershipToManage.groupId
-                }
-            }
-        });
-
-        if (!requesterMembership || !hasAdminRights(requesterMembership.role)) {
+        if (!(await getViewerAccess(membershipToManage.groupId, actorId)).isTeam) {
             throw new ActionError('FORBIDDEN');
         }
 
@@ -1097,14 +1075,11 @@ export const GroupService = {
      * but never the owner or another moderator. Nobody removes the owner.
      */
     async removeMember(groupId: string, targetUserId: string, actorId: string): Promise<GroupSlugs> {
-        const actorMembership = await prisma.membership.findUnique({
-            where: { userId_groupId: { userId: actorId, groupId } },
-            include: { group: { select: GROUP_SLUG_SELECT } }
-        });
-
-        if (!actorMembership || !hasAdminRights(actorMembership.role)) {
+        const actor = await getViewerAccess(groupId, actorId);
+        if (!actor.isTeam) {
             throw new ActionError('FORBIDDEN');
         }
+        const actorGroup = await prisma.group.findUniqueOrThrow({ where: { id: groupId }, select: GROUP_SLUG_SELECT });
 
         const targetMembership = await prisma.membership.findUnique({
             where: { userId_groupId: { userId: targetUserId, groupId } }
@@ -1118,7 +1093,7 @@ export const GroupService = {
         }
 
         // The same rule the member menu shows.
-        if (!allowedMemberActions(actorMembership.role, targetMembership.role).includes('remove')) {
+        if (!allowedMemberActions(actor.role, targetMembership.role).includes('remove')) {
             throw new ActionError('FORBIDDEN');
         }
 
@@ -1126,6 +1101,6 @@ export const GroupService = {
             where: { userId_groupId: { userId: targetUserId, groupId } }
         });
 
-        return { slug: actorMembership.group.slug, l1Slug: TaxonomyResolver.resolve(actorMembership.group.category).l1Slug };
+        return { slug: actorGroup.slug, l1Slug: TaxonomyResolver.resolve(actorGroup.category).l1Slug };
     }
 };
