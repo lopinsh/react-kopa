@@ -9,7 +9,7 @@ import { pickTitle } from '@/lib/utils/localized-title';
 import { getViewerAccess, teamMemberWhere } from './access';
 import { ChatRequestService } from './chat-request.service';
 import { ensurePairChat, findPairChat } from './direct-chat';
-import { groupHref as groupPath } from '@/lib/routes';
+import { groupHref } from '@/lib/routes';
 
 /**
  * Two kinds of chat (see `Conversation.kind`):
@@ -161,9 +161,9 @@ function toMessageView(message: {
     };
 }
 
-function groupHref(group: { slug: string; hiddenAt: Date | null; category: Parameters<typeof TaxonomyResolver.resolve>[0] }): string | null {
+function originGroupHref(group: { slug: string; hiddenAt: Date | null; category: Parameters<typeof TaxonomyResolver.resolve>[0] }): string | null {
     // Hidden groups 404 for everyone but site admins, so no link.
-    return group.hiddenAt ? null : groupPath(TaxonomyResolver.resolve(group.category).l1Slug, group.slug);
+    return group.hiddenAt ? null : groupHref(TaxonomyResolver.resolve(group.category).l1Slug, group.slug);
 }
 
 /**
@@ -274,7 +274,7 @@ export const MessageService = {
                 const isGroup = c.kind === 'GROUP';
                 const viewerIsContact = isGroup && c.contactUserId === userId;
                 const resolved = c.originGroup ? TaxonomyResolver.resolve(c.originGroup.category) : null;
-                const href = c.originGroup ? groupHref(c.originGroup) : null;
+                const href = c.originGroup ? originGroupHref(c.originGroup) : null;
                 const category = resolved && c.originGroup ? groupCategoryParts(resolved, c.originGroup.tags, locale) : null;
                 const lastFromOthers = newest.get(c.id);
                 const lastReadAt = c.reads[0]?.lastReadAt;

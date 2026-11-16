@@ -17,7 +17,7 @@ export default function GlobalError({ error, retry }: { error: Error & { digest?
         console.error(error);
     }, [error]);
 
-    const locale = typeof window !== 'undefined' && window.location.pathname.startsWith('/en') ? 'en' : 'lv';
+    const locale = typeof window !== 'undefined' && /^\/en(\/|$)/.test(window.location.pathname) ? 'en' : 'lv';
     const copy = (locale === 'en' ? en : lv).common.errorState;
 
     return (

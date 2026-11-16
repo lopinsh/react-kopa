@@ -36,12 +36,6 @@ export interface ViewerAccess {
 
 const NO_ACCESS: ViewerAccess = { role: null, isMember: false, isTeam: false, isOwner: false, isSiteAdmin: false, groupHidden: false };
 
-/** The viewer's membership role in a group, or null. One lookup; the rest of the access is derived from it. */
-export async function findMembershipRole(groupId: string, userId: string): Promise<MembershipRole | null> {
-    const m = await prisma.membership.findUnique({ where: { userId_groupId: { userId, groupId } }, select: { role: true } });
-    return m?.role ?? null;
-}
-
 /** Derives the flags from a role the caller already holds (the resolver and callers with their own membership query). */
 export function accessFromRole(role: MembershipRole | null, siteRole: string | null, groupHidden = false): ViewerAccess {
     return {
@@ -61,10 +55,10 @@ export function accessFromRole(role: MembershipRole | null, siteRole: string | n
  */
 export const getViewerAccess = cache(async (groupId: string, userId?: string | null): Promise<ViewerAccess> => {
     if (!userId) return NO_ACCESS;
-    const [role, siteRole, group] = await Promise.all([
-        findMembershipRole(groupId, userId),
-        getSiteRole(userId),
-        prisma.group.findUnique({ where: { id: groupId }, select: { hiddenAt: true } })
+    // Role and hidden flag in one query (a membership cannot outlive its group); the site role is cached per request.
+    const [group, siteRole] = await Promise.all([
+        prisma.group.findUnique({ where: { id: groupId }, select: { hiddenAt: true, members: { where: { userId }, select: { role: true }, take: 1 } } }),
+        getSiteRole(userId)
     ]);
-    return accessFromRole(role, siteRole, !!group?.hiddenAt);
+    return accessFromRole(group?.members[0]?.role ?? null, siteRole, !!group?.hiddenAt);
 });
