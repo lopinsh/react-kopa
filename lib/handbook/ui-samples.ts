@@ -94,7 +94,7 @@ export function buildUiSamples(s: SampleText, locale: string, now: Date = new Da
             color: SAMPLE_ACCENT,
         },
         tags: [],
-        moderation: { isSiteAdmin: false, hidden: null },
+        moderation: { isSiteAdmin: false, canSwitchMode: false, mode: null, hidden: null },
     };
 
     const memberGroupContext = { ...group, user: { isMember: true, role: 'MEMBER' as const, isAdmin: false, chatId: null } };

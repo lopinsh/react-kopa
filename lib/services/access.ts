@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { hasAdminRights, isAtLeastMember, isOwner } from '@/lib/utils/permissions';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
+import { getAdminMode } from './admin-mode';
+import type { AdminMode } from '@/lib/constants';
 
 /** The group team: the roles that run a group (owner and moderators). The team is never stored; it is these members. */
 export const TEAM_ROLES: MembershipRole[] = ['OWNER', 'ADMIN'];
@@ -32,9 +34,11 @@ export interface ViewerAccess {
     isSiteAdmin: boolean;
     /** The group is hidden by moderation (false when the group does not exist). */
     groupHidden: boolean;
+    /** The site admin's simulated group mode that produced this standing (A-2), or null: the real one. */
+    simulated: AdminMode | null;
 }
 
-const NO_ACCESS: ViewerAccess = { role: null, isMember: false, isTeam: false, isOwner: false, isSiteAdmin: false, groupHidden: false };
+const NO_ACCESS: ViewerAccess = { role: null, isMember: false, isTeam: false, isOwner: false, isSiteAdmin: false, groupHidden: false, simulated: null };
 
 /** Derives the flags from a role the caller already holds (the resolver and callers with their own membership query). */
 export function accessFromRole(role: MembershipRole | null, siteRole: string | null, groupHidden = false): ViewerAccess {
@@ -44,8 +48,15 @@ export function accessFromRole(role: MembershipRole | null, siteRole: string | n
         isTeam: hasAdminRights(role),
         isOwner: isOwner(role),
         isSiteAdmin: isSiteAdminRole(siteRole),
-        groupHidden
+        groupHidden,
+        simulated: null
     };
+}
+
+/** A site admin's simulated mode (A-2): owner acts as OWNER (site powers kept), member as an approved member, visitor as a signed-in outsider. */
+function accessFromMode(mode: AdminMode, siteRole: string | null, groupHidden: boolean): ViewerAccess {
+    const base = mode === 'owner' ? accessFromRole('OWNER', siteRole, groupHidden) : mode === 'member' ? accessFromRole('MEMBER', null, groupHidden) : accessFromRole(null, null, groupHidden);
+    return { ...base, simulated: mode };
 }
 
 /**
@@ -56,9 +67,11 @@ export function accessFromRole(role: MembershipRole | null, siteRole: string | n
 export const getViewerAccess = cache(async (groupId: string, userId?: string | null): Promise<ViewerAccess> => {
     if (!userId) return NO_ACCESS;
     // Role and hidden flag in one query (a membership cannot outlive its group); the site role is cached per request.
-    const [group, siteRole] = await Promise.all([
+    const [group, siteRole, mode] = await Promise.all([
         prisma.group.findUnique({ where: { id: groupId }, select: { hiddenAt: true, members: { where: { userId }, select: { role: true }, take: 1 } } }),
-        getSiteRole(userId)
+        getSiteRole(userId),
+        getAdminMode(userId)
     ]);
+    if (mode) return accessFromMode(mode, siteRole, !!group?.hiddenAt);
     return accessFromRole(group?.members[0]?.role ?? null, siteRole, !!group?.hiddenAt);
 });

@@ -18,7 +18,7 @@ export function toGroupState(group: GroupContext): GroupState {
         isAcceptingMembers: group.isAcceptingMembers,
         hub: group.hub && { path: group.hub.path, title: group.hub.title, href: group.hub.href, chatHref: group.hub.chatHref, memberCount: group.hub.memberCount, groupCount: group.hub.groupCount },
         pages: group.pages,
-        moderation: { isSiteAdmin: group.moderation.isSiteAdmin, hidden: !!group.moderation.hidden },
+        moderation: { isSiteAdmin: group.moderation.isSiteAdmin, canSwitchMode: group.moderation.canSwitchMode, mode: group.moderation.mode, hidden: !!group.moderation.hidden },
         user: group.user,
         pendingCount: group.stats.pendingCount,
         sections: group.sections.map(({ id, title, titleLang, order, visibility }) => ({ id, title, titleLang, order, visibility })),

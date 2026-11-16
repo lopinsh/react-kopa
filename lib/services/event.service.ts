@@ -14,6 +14,7 @@ import { resolveEventText, originalEventTitle, toTextLang, langRecord, hasText, 
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import { canSee, publicEventWhere } from './visibility';
+import { getAdminMode, logOwnerModeWrite } from './admin-mode';
 import { getViewerAccess, teamMemberWhere, approvedMemberWhere } from './access';
 import { plainExcerpt } from '@/lib/text-excerpt';
 import { EVENT_ROW_INCLUDE, tagOf, toEventRow, type EventRowData } from './event-row';
@@ -169,6 +170,7 @@ export class EventService {
         if (!event) throw new ActionError('EVENT_NOT_FOUND');
         const access = await EventService.getAccess(event.groupId, actorId);
         if (event.creatorId !== actorId && !access.isGroupAdmin) throw new ActionError('FORBIDDEN');
+        await logOwnerModeWrite(await getViewerAccess(event.groupId, actorId), actorId, event.groupId);
         return event;
     }
 
@@ -432,9 +434,11 @@ export class EventService {
      * Create a new event within a group.
      */
     static async createEvent(groupId: string, data: EventFormValues, userId: string): Promise<{ event: EventModel; eventTitle: string; membersToNotify: { userId: string }[]; groupName: string; groupSlug: string; l1Slug: string }> {
-        if (!(await getViewerAccess(groupId, userId)).isTeam) {
+        const teamAccess = await getViewerAccess(groupId, userId);
+        if (!teamAccess.isTeam) {
             throw new ActionError('FORBIDDEN');
         }
+        await logOwnerModeWrite(teamAccess, userId, groupId);
 
         assertBannerAllowed(data.bannerImage, { current: null, isSiteAdmin: isSiteAdminRole(await getSiteRole(userId)) });
 
@@ -615,16 +619,19 @@ export class EventService {
         // A hidden group's events stay visible to those who may still open the group: its owner and site admins.
         let seesHidden: string[] = [];
         if (viewerId) {
-            const [memberships, siteRole] = await Promise.all([
+            const [memberships, siteRole, mode] = await Promise.all([
                 prisma.membership.findMany({
                     where: { userId: viewerId, groupId: { in: groupIds }, role: { not: 'PENDING' } },
                     select: { groupId: true, role: true }
                 }),
-                getSiteRole(viewerId)
+                getSiteRole(viewerId),
+                getAdminMode(viewerId)
             ]);
-            const admin = isSiteAdminRole(siteRole);
-            privileged = admin ? groupIds : memberships.map((m) => m.groupId);
-            seesHidden = admin ? groupIds : memberships.filter((m) => m.role === 'OWNER').map((m) => m.groupId);
+            // A site admin's simulated mode (A-2) replaces the real standing in every group: owner and member see members-only events, visitor only public ones.
+            const admin = !mode && isSiteAdminRole(siteRole);
+            const all = admin || mode === 'owner' || mode === 'member';
+            privileged = all ? groupIds : mode === 'visitor' ? [] : memberships.map((m) => m.groupId);
+            seesHidden = admin || mode === 'owner' ? groupIds : mode ? [] : memberships.filter((m) => m.role === 'OWNER').map((m) => m.groupId);
         }
         const now = new Date();
         const today = startOfTodayInRiga(now);

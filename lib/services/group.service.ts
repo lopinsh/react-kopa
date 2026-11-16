@@ -5,8 +5,8 @@ import { MembershipRole } from '@prisma/client';
 import { GroupFormValues, GroupCreateValues } from '@/lib/validations/group';
 import { ActionError } from '@/types/actions';
 import { Prisma } from '@prisma/client';
-import { getViewerAccess, accessFromRole, teamMemberWhere } from './access';
-import { hasAdminRights, allowedMemberActions } from '@/lib/utils/permissions';
+import { getViewerAccess, teamMemberWhere } from './access';
+import { allowedMemberActions } from '@/lib/utils/permissions';
 import { pickTitle } from '@/lib/utils/localized-title';
 import { MAX_SECTIONS, DEFAULT_SECTION_TITLES, PRACTICAL_INFO_SAMPLE, isDefaultSectionTitle } from '@/lib/constants';
 import { resolveSectionText, TEXT_LANGS, langRecord, toTextLang, hasText, type TextLang } from '@/lib/translations';
@@ -17,6 +17,8 @@ import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { TaxonomyService } from './taxonomy.service';
 import { ModerationService } from './moderation.service';
 import { MessageService } from './message.service';
+import type { AdminMode } from '@/lib/constants';
+import { logOwnerModeWrite } from './admin-mode';
 import { isSiteAdmin as isSiteAdminRole } from '@/lib/site-role';
 import { getSiteRole } from './site-role.service';
 import type { BannerCredit } from '@/lib/validations/banner';
@@ -140,7 +142,12 @@ export interface GroupContext {
         level: number;
     }>;
     moderation: {
+        /** Site-admin powers in this group right now (false in a simulated member or visitor mode). */
         isSiteAdmin: boolean;
+        /** The viewer is really a site admin: the mode switch shows whatever the mode. */
+        canSwitchMode: boolean;
+        /** The simulated group mode (A-2) the page is rendered in, or null. */
+        mode: AdminMode | null;
         hidden: { reason: string | null; at: Date } | null;
     };
 }
@@ -252,16 +259,17 @@ export const GroupService = {
         if (!group) return null;
 
         // Hidden groups exist only for site admins (banner + restore) and the group's owner (banner only).
-        const isSiteAdmin = isSiteAdminRole(currentUserId ? await getSiteRole(currentUserId) : null);
+        // The one resolver: the real role, or a site admin's simulated mode (A-2), so page, tabs and buttons agree.
         const g = group;
-        const userMembership = currentUserId ? g.members.find((m: { userId: string }) => m.userId === currentUserId) : null;
-        const viewer = accessFromRole(userMembership?.role ?? null, null, !!g.hiddenAt);
+        const viewer = await getViewerAccess(g.id, currentUserId);
+        const isSiteAdmin = viewer.isSiteAdmin;
+        const canSwitchMode = isSiteAdminRole(currentUserId ? await getSiteRole(currentUserId) : null);
         if (g.hiddenAt && !isSiteAdmin && !viewer.isOwner) return null;
 
         // 1. Resolve Membership & Role
         const isMember = viewer.isMember;
-        const userRole = userMembership?.role || null;
-        const isAdmin = hasAdminRights(userRole);
+        const userRole = viewer.role;
+        const isAdmin = viewer.isTeam;
 
         // 2. Open join requests are only counted for people who may see them (group admins, site admins).
         const canSeeApplications = isAdmin || isSiteAdmin;
@@ -374,6 +382,8 @@ export const GroupService = {
             })),
             moderation: {
                 isSiteAdmin,
+                canSwitchMode,
+                mode: viewer.simulated,
                 hidden: g.hiddenAt ? { reason: g.hiddenReason, at: g.hiddenAt } : null
             }
         };
@@ -606,7 +616,9 @@ export const GroupService = {
     },
 
     async deleteGroup(groupId: string, userId: string): Promise<void> {
-        if (!(await getViewerAccess(groupId, userId)).isOwner) throw new ActionError('FORBIDDEN');
+        const access = await getViewerAccess(groupId, userId);
+        // Simulated owner mode never deletes a group: the site owner does that in Admin > Moderācija.
+        if (!access.isOwner || access.simulated) throw new ActionError('FORBIDDEN');
 
         const deleted = await this.deleteGroupRecord(groupId);
         if (!deleted) throw new ActionError('NOT_FOUND');
@@ -712,7 +724,7 @@ export const GroupService = {
             }
         });
 
-        if (isAppAdmin && !access.isTeam) {
+        if ((isAppAdmin && !access.isTeam) || access.simulated === 'owner') {
             await ModerationService.logAction(userId, 'GROUP_EDIT', 'GROUP', groupId);
         }
 
@@ -808,8 +820,10 @@ export const GroupService = {
      * A site admin without a role in the group is logged (GROUP_EDIT) by the caller.
      */
     async getManagerAccess(groupId: string, userId: string): Promise<{ allowed: boolean; bySiteAdminOnly: boolean }> {
-        const { isTeam: isManager, isSiteAdmin } = await getViewerAccess(groupId, userId);
-        return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: !isManager && isSiteAdmin };
+        const access = await getViewerAccess(groupId, userId);
+        const { isTeam: isManager, isSiteAdmin } = access;
+        // Owner mode (A-2) is a site admin acting as the owner: logged the same way.
+        return { allowed: isManager || isSiteAdmin, bySiteAdminOnly: (!isManager && isSiteAdmin) || access.simulated === 'owner' };
     },
 
     /**
@@ -967,6 +981,7 @@ export const GroupService = {
         if (!actor.isOwner) {
             throw new ActionError('FORBIDDEN');
         }
+        await logOwnerModeWrite(actor, actorId, groupId);
         const actorGroup = await prisma.group.findUniqueOrThrow({ where: { id: groupId }, select: GROUP_SLUG_SELECT });
 
         // The owner keeps their own role.
@@ -1041,9 +1056,11 @@ export const GroupService = {
 
         if (!membershipToManage) throw new ActionError('NOT_FOUND');
 
-        if (!(await getViewerAccess(membershipToManage.groupId, actorId)).isTeam) {
+        const actorAccess = await getViewerAccess(membershipToManage.groupId, actorId);
+        if (!actorAccess.isTeam) {
             throw new ActionError('FORBIDDEN');
         }
+        await logOwnerModeWrite(actorAccess, actorId, membershipToManage.groupId);
 
         // Only open requests can be approved or declined (never an existing member, moderator or owner).
         if (membershipToManage.role !== 'PENDING') {
@@ -1079,6 +1096,7 @@ export const GroupService = {
         if (!actor.isTeam) {
             throw new ActionError('FORBIDDEN');
         }
+        await logOwnerModeWrite(actor, actorId, groupId);
         const actorGroup = await prisma.group.findUniqueOrThrow({ where: { id: groupId }, select: GROUP_SLUG_SELECT });
 
         const targetMembership = await prisma.membership.findUnique({

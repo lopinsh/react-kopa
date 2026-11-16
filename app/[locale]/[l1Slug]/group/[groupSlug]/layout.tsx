@@ -11,6 +11,7 @@ import FrameColumns from '@/components/ui/FrameColumns';
 import GroupAside from '@/components/groups/frame/GroupAside';
 import { GroupProvider } from '@/components/providers/GroupProvider';
 import { GroupDialogsProvider } from '@/components/groups/frame/GroupDialogs';
+import AdminModeMarker from '@/components/admin-panel/AdminModeMarker';
 import AdminGroupBridge from '@/components/admin-panel/AdminGroupBridge';
 import { toGroupState } from '@/components/providers/to-group-state';
 import { groupHref } from '@/lib/routes';
@@ -41,7 +42,8 @@ export default async function GroupLayout({
             {group.moderation.hidden && (
                 <HiddenGroupBanner groupId={group.id} reason={group.moderation.hidden.reason} canRestore={group.moderation.isSiteAdmin} />
             )}
-            {group.moderation.isSiteAdmin && <AdminGroupBridge />}
+            {group.moderation.canSwitchMode && <AdminGroupBridge />}
+            {group.moderation.mode && <AdminModeMarker mode={group.moderation.mode} />}
             <GroupDialogsProvider>
             <GroupStickyBar />
             <GroupHeadRow image={group.bannerImage} credit={group.bannerCredit} hubPhoto={group.hub?.image?.url} />

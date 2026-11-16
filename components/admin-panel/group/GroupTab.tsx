@@ -11,6 +11,7 @@ import GroupTabFacts from './GroupTabFacts';
 import GroupTabActions from './GroupTabActions';
 import GroupTabReports from './GroupTabReports';
 import GroupTabLog from './GroupTabLog';
+import GroupTabMode from './GroupTabMode';
 
 /** The Grupa tab: the open group's status, facts, hide or restore, reports and log. Fetched when the tab opens and after a hide or restore. */
 export default function GroupTab() {
@@ -67,6 +68,7 @@ export default function GroupTab() {
     return (
         <div className="flex min-h-0 flex-1 flex-col divide-y divide-border overflow-y-auto">
             <GroupTabStatus data={current} />
+            <GroupTabMode mode={group.mode} />
             <GroupTabFacts data={current} />
             <GroupTabActions group={group} reasonRef={reasonRef} restoreRef={restoreRef} />
             <GroupTabReports reports={current.reports} labelRef={reportsRef} />

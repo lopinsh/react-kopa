@@ -13,7 +13,6 @@ import PartTabs from '@/components/ui/PartTabs';
 import SettingsTabs, { type SettingsTab } from '@/components/groups/SettingsTabs';
 import { deriveInitialTaxonomy } from '@/lib/utils/taxonomy-utils';
 import { signInUrl } from '@/lib/auth-redirect';
-import { isSiteAdmin } from '@/lib/site-role';
 import { isUnsplashSearchEnabled } from '@/lib/services/unsplash.service';
 import { groupHref } from '@/lib/routes';
 
@@ -59,7 +58,7 @@ export default async function GroupSettingsPage(props: {
         notFound();
     }
 
-    const isAppAdmin = isSiteAdmin(session.user.role);
+    const isAppAdmin = group.moderation.isSiteAdmin; // the resolver's answer: follows a simulated mode (A-2)
 
     // Owner and moderators manage the group; site admins can override without membership.
     if (!group.user.isAdmin && !isAppAdmin) {

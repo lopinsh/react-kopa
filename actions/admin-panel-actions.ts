@@ -5,8 +5,8 @@ import type { ActionResponse } from '@/types/actions';
 import { handleActionError, requireSiteAdmin } from '@/lib/action-utils';
 import { AdminService, type ShieldCounts } from '@/lib/services/admin.service';
 import { getGroupPanel, type GroupPanelData } from '@/lib/services/group-panel';
-import { ADMIN_PANEL_COOKIE, LEGACY_PANEL_COOKIES, type AdminPanelTab } from '@/lib/constants';
-import { adminPanelTabSchema, groupPanelInputSchema } from '@/lib/validations/admin-panel';
+import { ADMIN_MODE_COOKIE, ADMIN_PANEL_COOKIE, LEGACY_PANEL_COOKIES, type AdminMode, type AdminPanelTab } from '@/lib/constants';
+import { adminModeSchema, adminPanelTabSchema, groupPanelInputSchema } from '@/lib/validations/admin-panel';
 
 /** Opens the admin tool panel on a tab, or closes it (null). One tab at a time: feedback and translate both capture page clicks. */
 export async function setAdminPanel(tab: AdminPanelTab | null): Promise<ActionResponse> {
@@ -26,6 +26,22 @@ export async function setAdminPanel(tab: AdminPanelTab | null): Promise<ActionRe
         });
     } else {
         cookieStore.delete(ADMIN_PANEL_COOKIE);
+    }
+    return { success: true };
+}
+
+/** Sets or clears (null) the simulated group mode of the signed-in site admin (A-2). The services honour the cookie for site admins only. */
+export async function setAdminMode(mode: AdminMode | null): Promise<ActionResponse> {
+    const check = await requireSiteAdmin();
+    if (!check.success) return { success: false, error: check.error };
+    const parsed = adminModeSchema.safeParse(mode);
+    if (!parsed.success) return { success: false, error: 'VALIDATION_FAILED' };
+
+    const cookieStore = await cookies();
+    if (parsed.data) {
+        cookieStore.set(ADMIN_MODE_COOKIE, parsed.data, { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/' });
+    } else {
+        cookieStore.delete(ADMIN_MODE_COOKIE);
     }
     return { success: true };
 }

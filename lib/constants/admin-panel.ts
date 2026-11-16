@@ -32,3 +32,12 @@ export function isAdminPanelFocus(value: unknown): value is AdminPanelFocus {
 /** The Grupa tab's lists: last log entries and open reports. */
 export const GROUP_PANEL_LOG_MAX = 5;
 export const GROUP_PANEL_REPORTS_MAX = 5;
+
+/** Site admins' simulated group modes (A-2): one httpOnly cookie, honoured only for a site admin. No cookie = off. */
+export const ADMIN_MODE_COOKIE = 'admin_mode';
+export const ADMIN_MODES = ['owner', 'member', 'visitor'] as const;
+export type AdminMode = (typeof ADMIN_MODES)[number];
+
+export function isAdminMode(value: unknown): value is AdminMode {
+    return typeof value === 'string' && (ADMIN_MODES as readonly string[]).includes(value);
+}

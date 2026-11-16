@@ -3,6 +3,7 @@
 import React, { createContext, useContext, ReactNode } from 'react';
 import { MembershipRole } from '@prisma/client';
 import type { GroupPageLink } from '@/lib/group-pages';
+import type { AdminMode } from '@/lib/constants';
 
 /** Everything the group's frame (banner, pages, drawer, actions) shows; hydrated from the service in the layout. */
 export interface GroupState {
@@ -24,7 +25,7 @@ export interface GroupState {
     isAcceptingMembers: boolean;
     /** The pages this viewer sees, in order. */
     pages: GroupPageLink[];
-    moderation: { isSiteAdmin: boolean; hidden: boolean };
+    moderation: { isSiteAdmin: boolean; /** Really a site admin (the mode switch shows in any mode). */ canSwitchMode: boolean; /** The simulated group mode (A-2), or null. */ mode: AdminMode | null; hidden: boolean };
     user: {
         role: MembershipRole | 'PENDING' | null;
         isMember: boolean;

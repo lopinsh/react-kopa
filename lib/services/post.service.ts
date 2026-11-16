@@ -6,6 +6,7 @@ import { triggerRealtime } from '@/lib/pusher';
 import { legacyTitle } from '@/lib/utils/announcement-title';
 import { TaxonomyResolver } from './taxonomy-resolver.service';
 import { getViewerAccess, approvedMemberWhere } from './access';
+import { logOwnerModeWrite } from './admin-mode';
 
 export const AUTHOR_SELECT = { id: true, name: true, username: true, image: true, avatarSeed: true } as const;
 
@@ -37,6 +38,11 @@ const GROUP_SLUG_SELECT = {
  * The viewer's role in the group. A group hidden by moderation is readable by its owner only,
  * the same as the group page (everyone else gets a 404 there).
  */
+/** Logs a write done in a site admin's simulated owner mode (A-2); a no-op for everyone else. */
+async function noteOwnerMode(groupId: string, userId: string): Promise<void> {
+    await logOwnerModeWrite(await getViewerAccess(groupId, userId), userId, groupId);
+}
+
 export async function getRole(groupId: string, userId: string) {
     const access = await getViewerAccess(groupId, userId);
     if (!access.role) return null;
@@ -49,6 +55,7 @@ export const PostService = {
     async createAnnouncement(data: { groupId: string; authorId: string; title: string; content: string; visibility: Visibility }) {
         const role = await getRole(data.groupId, data.authorId);
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
+        await noteOwnerMode(data.groupId, data.authorId);
 
         // The choice is offered in public groups only; a private group's posts are always members only.
         const group = await prisma.group.findUnique({ where: { id: data.groupId }, select: { type: true } });
@@ -98,6 +105,7 @@ export const PostService = {
         if (!post) throw new ActionError('NOT_FOUND');
         const role = await getRole(post.groupId, actorId);
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
+        await noteOwnerMode(post.groupId, actorId);
 
         await prisma.post.update({ where: { id: postId }, data: { archivedAt: archived ? new Date() : null } });
         // Only the id goes over the (public) channel; open pages refresh from the server.
@@ -115,6 +123,7 @@ export const PostService = {
         // Same rule as the other post methods: owner/admins only; in a hidden group only the owner.
         const role = await getRole(post.groupId, actorId);
         if (!hasAdminRights(role)) throw new ActionError('FORBIDDEN');
+        await noteOwnerMode(post.groupId, actorId);
 
         await prisma.post.delete({ where: { id: postId } });
         // Only the id goes over the (public) group channel; open pages refresh from the server.
