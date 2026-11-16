@@ -74,8 +74,8 @@ each<Ann>('announcements page', {
     public: row(ann(1), { member: ann(2), admin: ann(2, true), owner: ann(2, true) }),
     // A private group's announcements are for members only; its non-members see none.
     private: row(ann(0), { member: ann(2), admin: ann(2, true), owner: ann(2, true) }),
-    // OPEN: owner decision. Hidden group: announcements are readable by the owner only. Its admins and members, and site admins, see nothing.
-    hidden: row(ann(0), { owner: ann(2, true) }),
+    // OPEN: owner decision. Hidden group: announcements are readable by the owner and (A-1, owner 16 Nov) site admins, who see the public ones as in any group. Its admins and members see nothing.
+    hidden: row(ann(0), { owner: ann(2, true), siteAdmin: ann(1) }),
 }, async (f, v) => {
     const p = await getAnnouncementsPage(f.groupId, cast.id(v) ?? null, 'current');
     return { items: p.items.length, archive: p.counts.archive, canManage: p.canManage };
@@ -90,10 +90,10 @@ const eventPage = async (f: Fixture, v: Viewer, vis: 'PUBLIC' | 'MEMBERS_ONLY'):
 const PUBLIC_EVENT: Record<Viewer, Seen> = row<Seen>('seen', { admin: 'organiser', owner: 'organiser' });
 // The creator is the owner; an admin organises too; a site admin only reads (no organiser lists).
 const MEMBERS_EVENT: Record<Viewer, Seen> = row<Seen>('none', { member: 'seen', admin: 'organiser', owner: 'organiser', siteAdmin: 'seen' });
-const NOBODY = same<Seen>('none');
-// OPEN: owner decision. Event pages of a hidden group are visible to nobody, not even its owner or a site admin (the group page is).
-each<Seen>('event page, public event', { public: PUBLIC_EVENT, private: PUBLIC_EVENT, hidden: NOBODY }, (f, v) => eventPage(f, v, 'PUBLIC'));
-each<Seen>('event page, members-only event', { public: MEMBERS_EVENT, private: MEMBERS_EVENT, hidden: NOBODY }, (f, v) => eventPage(f, v, 'MEMBERS_ONLY'));
+// OPEN: owner decision. Event pages of a hidden group are visible to site admins only (A-1, owner 16 Nov), not even its own owner.
+const HIDDEN_EVENT: Record<Viewer, Seen> = row<Seen>('none', { siteAdmin: 'seen' });
+each<Seen>('event page, public event', { public: PUBLIC_EVENT, private: PUBLIC_EVENT, hidden: HIDDEN_EVENT }, (f, v) => eventPage(f, v, 'PUBLIC'));
+each<Seen>('event page, members-only event', { public: MEMBERS_EVENT, private: MEMBERS_EVENT, hidden: HIDDEN_EVENT }, (f, v) => eventPage(f, v, 'MEMBERS_ONLY'));
 
 // The event panel (slide-over): 'event', the 'membersOnly' notice (and whether it offers to contact the team), or none.
 type Panel = 'none' | 'event' | 'membersOnly' | 'membersOnly-nocontact';
@@ -104,8 +104,10 @@ const eventPanel = async (f: Fixture, v: Viewer, vis: 'PUBLIC' | 'MEMBERS_ONLY')
 };
 const PANEL_PUBLIC = same<Panel>('event');
 const PANEL_MEMBERS: Record<Viewer, Panel> = row<Panel>('membersOnly', { pending: 'membersOnly-nocontact', member: 'event', admin: 'event', owner: 'event', siteAdmin: 'event' });
-each<Panel>('event panel, public event', { public: PANEL_PUBLIC, private: PANEL_PUBLIC, hidden: same<Panel>('none') }, (f, v) => eventPanel(f, v, 'PUBLIC'));
-each<Panel>('event panel, members-only event', { public: PANEL_MEMBERS, private: PANEL_MEMBERS, hidden: same<Panel>('none') }, (f, v) => eventPanel(f, v, 'MEMBERS_ONLY'));
+// A-1: a hidden group's event opens for site admins only.
+const HIDDEN_PANEL: Record<Viewer, Panel> = row<Panel>('none', { siteAdmin: 'event' });
+each<Panel>('event panel, public event', { public: PANEL_PUBLIC, private: PANEL_PUBLIC, hidden: HIDDEN_PANEL }, (f, v) => eventPanel(f, v, 'PUBLIC'));
+each<Panel>('event panel, members-only event', { public: PANEL_MEMBERS, private: PANEL_MEMBERS, hidden: HIDDEN_PANEL }, (f, v) => eventPanel(f, v, 'MEMBERS_ONLY'));
 
 // The members-only notice on the event page: shown to exactly those who cannot open the event.
 const GATE = row<boolean>(true, { member: false, admin: false, owner: false, siteAdmin: false });

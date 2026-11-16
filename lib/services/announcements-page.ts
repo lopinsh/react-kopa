@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { publicGroupWhere, publicPostWhere } from './visibility';
 import { ANNOUNCEMENTS_LIMIT } from '@/lib/constants';
 import { hasAdminRights, isAtLeastMember } from '@/lib/utils/permissions';
+import { getViewerAccess } from './access';
 import { AUTHOR_SELECT, getRole, toRow, type PostWithAuthor } from './post.service';
 
 /** One announcement as the pages show it: `title` is always filled (old posts: their first line). */
@@ -41,7 +42,9 @@ function toItem(post: PostWithAuthor): AnnouncementItemData {
 export async function getAnnouncementsPage(groupId: string, viewerId: string | null, tab: 'current' | 'archive'): Promise<AnnouncementsPage> {
     const role = viewerId ? await getRole(groupId, viewerId) : null;
     if (!isAtLeastMember(role)) {
-        const where = { groupId, ...publicPostWhere(), group: publicGroupWhere() };
+        // A site admin also reads a hidden group's public announcements (to check the content); everyone else only a visible group's.
+        const seesHidden = viewerId ? (await getViewerAccess(groupId, viewerId)).isSiteAdmin : false;
+        const where = { groupId, ...publicPostWhere(), group: seesHidden ? { type: 'PUBLIC' as const } : publicGroupWhere() };
         const [posts, current] = await Promise.all([
             tab === 'archive' ? Promise.resolve([]) : prisma.post.findMany({ where, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], take: ANNOUNCEMENTS_LIMIT, include: { author: { select: AUTHOR_SELECT } } }),
             prisma.post.count({ where }),
@@ -66,11 +69,11 @@ export async function getAnnouncementsPage(groupId: string, viewerId: string | n
  * The newest not archived announcement for the group's Informācija. Members get any (the page already hides a hidden group from non-owners); everyone else only a public one of a
  * visible public group (the group filter is the same as the cards').
  */
-export async function getLatestForInfo(groupId: string, viewer: { isMember: boolean }): Promise<AnnouncementItemData | null> {
+export async function getLatestForInfo(groupId: string, viewer: { isMember: boolean; isSiteAdmin?: boolean }): Promise<AnnouncementItemData | null> {
     const post = await prisma.post.findFirst({
         where: viewer.isMember
             ? { groupId, archivedAt: null }
-            : { groupId, ...publicPostWhere(), group: publicGroupWhere() },
+            : { groupId, ...publicPostWhere(), group: viewer.isSiteAdmin ? { type: 'PUBLIC' as const } : publicGroupWhere() },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
         include: { author: { select: AUTHOR_SELECT } },
     });

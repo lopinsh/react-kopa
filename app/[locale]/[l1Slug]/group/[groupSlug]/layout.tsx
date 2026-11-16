@@ -48,7 +48,7 @@ export default async function GroupLayout({
             <FrameColumns
                 navFrom="lg"
                 nav={<GroupPagesNav variant="side" />}
-                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: groupHref(l1Slug, group.slug), isMember: group.user.isMember, socialLinks: group.socialLinks, hub: group.hub, picture: group.bannerImage ? <HeadPicture variant="box" image={getSmartImageUrl(group.bannerImage)} credit={group.bannerCredit} /> : null }} viewerId={session?.user?.id} />}
+                aside={<GroupAside group={{ id: group.id, offsetOnInfo: group.sections.length > 1, memberCount: group.stats.memberCount, base: groupHref(l1Slug, group.slug), isMember: group.user.isMember, isSiteAdmin: group.moderation.isSiteAdmin, socialLinks: group.socialLinks, hub: group.hub, picture: group.bannerImage ? <HeadPicture variant="box" image={getSmartImageUrl(group.bannerImage)} credit={group.bannerCredit} /> : null }} viewerId={session?.user?.id} />}
             >
                 {children}
             </FrameColumns>

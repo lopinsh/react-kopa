@@ -18,6 +18,7 @@ type Group = {
     memberCount: number;
     base: string;
     isMember: boolean;
+    isSiteAdmin: boolean;
     /** Sections with tabs: the column starts level with the first section's text. */
     offsetOnInfo: boolean;
     hub: GroupHub | null;
@@ -32,7 +33,7 @@ type Group = {
  * On Informācija the next meeting shows here from 1024; below that the page shows it after its first section.
  */
 export default async function GroupAside({ group, viewerId }: { group: Group; viewerId?: string }) {
-    const [t, tHub, faces, latest] = await Promise.all([getTranslations('group.frame'), getTranslations('hub'), cardFaces([group.id], viewerId), getLatestForInfo(group.id, { isMember: group.isMember })]);
+    const [t, tHub, faces, latest] = await Promise.all([getTranslations('group.frame'), getTranslations('hub'), cardFaces([group.id], viewerId), getLatestForInfo(group.id, { isMember: group.isMember, isSiteAdmin: group.isSiteAdmin })]);
     const row = (
         <>
             <Faces faces={faces[group.id] ?? []} size="lg" />

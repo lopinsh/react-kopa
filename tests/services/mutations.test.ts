@@ -44,7 +44,8 @@ each('createEvent', { public: TEAM_ONLY, private: TEAM_ONLY, hidden: TEAM_ONLY }
 // Update: the event's creator or a group admin. A site admin who is not in the group may not.
 const EDIT = row('FORBIDDEN', { admin: 'ok', owner: 'ok' });
 // OPEN: owner decision. In a hidden group nobody edits an event (the owner included: EVENT_NOT_FOUND), yet the team can still create one.
-each('updateEvent', { public: EDIT, private: EDIT, hidden: same('EVENT_NOT_FOUND') }, (f, actor) => EventService.updateEvent(f.eventId.PUBLIC, eventForm('Changed title'), actor));
+// A-1: a site admin gets past the hidden check but is no organiser (FORBIDDEN), as in any group.
+each('updateEvent', { public: EDIT, private: EDIT, hidden: row('EVENT_NOT_FOUND', { siteAdmin: 'FORBIDDEN' }) }, (f, actor) => EventService.updateEvent(f.eventId.PUBLIC, eventForm('Changed title'), actor));
 
 describe('updateEvent, creator no longer in the group', () => {
     // OPEN: owner decision. The check is "creator or admin", so a creator who left (or was removed) keeps editing their event.

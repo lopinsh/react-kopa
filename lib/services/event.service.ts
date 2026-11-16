@@ -93,6 +93,12 @@ export class EventService {
         return { isMember: access.isMember, isGroupAdmin: access.isTeam, isSiteAdmin: access.isSiteAdmin };
     }
 
+    /** A hidden group's events are open to site admins only (its owner and everyone else get a 404). */
+    private static async mayOpenGroup(group: { id: string; hiddenAt: Date | null }, userId?: string): Promise<boolean> {
+        if (!group.hiddenAt) return true;
+        return (await getViewerAccess(group.id, userId)).isSiteAdmin;
+    }
+
     /**
      * Members-only events are visible to approved group members and site admins.
      */
@@ -120,7 +126,7 @@ export class EventService {
         }
     }
 
-    private static async loadEventForAction(eventId: string): Promise<EventWithGroup | null> {
+    private static async loadEventForAction(eventId: string, actorId?: string): Promise<EventWithGroup | null> {
         const event = await prisma.event.findUnique({
             where: { id: eventId },
             include: {
@@ -137,7 +143,7 @@ export class EventService {
                 }
             }
         });
-        if (!event || event.group.hiddenAt) return null;
+        if (!event || !(await EventService.mayOpenGroup(event.group, actorId))) return null;
         return event;
     }
 
@@ -159,7 +165,7 @@ export class EventService {
 
     /** Loads the event and checks that the actor is an organiser. */
     private static async loadForOrganiser(eventId: string, actorId: string): Promise<EventWithGroup> {
-        const event = await EventService.loadEventForAction(eventId);
+        const event = await EventService.loadEventForAction(eventId, actorId);
         if (!event) throw new ActionError('EVENT_NOT_FOUND');
         const access = await EventService.getAccess(event.groupId, actorId);
         if (event.creatorId !== actorId && !access.isGroupAdmin) throw new ActionError('FORBIDDEN');
@@ -180,11 +186,11 @@ export class EventService {
         const lang = locale === 'en' ? 'en' : 'lv';
 
         const groupRecord = await prisma.group.findFirst({
-            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
-            select: { id: true }
+            where: findGroupByPath(groupSlug, l1Slug),
+            select: { id: true, hiddenAt: true }
         });
 
-        if (!groupRecord) return null;
+        if (!groupRecord || !(await EventService.mayOpenGroup(groupRecord, userId))) return null;
 
         const event = await prisma.event.findFirst({
             where: {
@@ -277,15 +283,16 @@ export class EventService {
         l1Slug?: string
     ): Promise<{ groupName: string; groupSlug: string; l1Slug: string } | null> => {
         const group = await prisma.group.findFirst({
-            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
+            where: findGroupByPath(groupSlug, l1Slug),
             select: {
                 id: true,
+                hiddenAt: true,
                 name: true,
                 slug: true,
                 category: { include: TaxonomyResolver.getInclude('lv') }
             }
         });
-        if (!group) return null;
+        if (!group || !(await EventService.mayOpenGroup(group, userId))) return null;
 
         const event = await prisma.event.findFirst({
             where: { slug: eventSlug, groupId: group.id, visibility: 'MEMBERS_ONLY' },
@@ -315,10 +322,10 @@ export class EventService {
     ): Promise<EventPanelResult> => {
         const lang = toTextLang(locale);
         const group = await prisma.group.findFirst({
-            where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null },
-            select: { id: true, name: true, isAcceptingMembers: true }
+            where: findGroupByPath(groupSlug, l1Slug),
+            select: { id: true, hiddenAt: true, name: true, isAcceptingMembers: true }
         });
-        if (!group) return null;
+        if (!group || !(await EventService.mayOpenGroup(group, viewerId))) return null;
         const event = await prisma.event.findFirst({
             where: { slug: eventSlug, groupId: group.id },
             include: EVENT_PANEL_INCLUDE(lang)
@@ -356,8 +363,8 @@ export class EventService {
         l1Slug?: string
     ): Promise<EventPageData | null> => {
         const lang = toTextLang(locale);
-        const group = await prisma.group.findFirst({ where: { ...findGroupByPath(groupSlug, l1Slug), hiddenAt: null }, select: { id: true } });
-        if (!group) return null;
+        const group = await prisma.group.findFirst({ where: findGroupByPath(groupSlug, l1Slug), select: { id: true, hiddenAt: true } });
+        if (!group || !(await EventService.mayOpenGroup(group, userId))) return null;
         const event = await prisma.event.findFirst({ where: { slug: eventSlug, groupId: group.id }, include: EVENT_PAGE_INCLUDE(lang) });
         if (!event) return null;
         const access = await EventService.getAccess(group.id, userId);
@@ -690,7 +697,7 @@ export class EventService {
 
     /** Checks that the event exists, its group is visible and the user may see it. */
     private static async loadForParticipant(eventId: string, userId: string): Promise<EventWithGroup> {
-        const event = await EventService.loadEventForAction(eventId);
+        const event = await EventService.loadEventForAction(eventId, userId);
         if (!event) throw new ActionError('EVENT_NOT_FOUND');
         if (event.visibility === 'MEMBERS_ONLY' && !(await EventService.canSeeMembersOnly(event.groupId, userId))) {
             throw new ActionError('MEMBERS_ONLY');
