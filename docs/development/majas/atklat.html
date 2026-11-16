@@ -9,8 +9,8 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from ledger rows M-15 and M-16 in docs/development/majas/majas.md; grey boxes are placeholders. Layout after the owner's Zalando and About You screenshots. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt</h1>
-<p class="text-meta text-foreground-muted">Versija v2 · publicēta 2026-11-13 15:06</p>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Atklāt kā interneta veikalā (M-15): augšā cilnes Jaunumi · Grupas · Pasākumi · Cilvēki (M-05), kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā.</p>
+<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:54</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">PRIEKŠLIKUMS (M-05, vēl neapstiprināts): kad Jaunumi ir sava lapa, Atklāt cilnes ir Grupas · Pasākumi · Cilvēki, un darbvirsmā uz Jaunumi ved logotips. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-17.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -33,19 +33,25 @@
   var dot = function (c) { return '<span class="size-9 shrink-0 rounded-pill ' + (c || 'bg-tint') + '"></span>'; };
   var pill = function (t, on) { return '<span class="inline-flex h-8 items-center whitespace-nowrap rounded-pill px-3 text-button-sm ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
   var box = 'rounded-2xl bg-surface p-3 shadow-card frame';
-  var BAR = [['Atklāt', 'search'], ['Ziņas', 'chat'], ['Mājas', 'home'], ['Paziņojumi', 'bell'], ['Es', 'user']];
+  P.shield = '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>';
+  P.gear = '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>';
+  P.compass = '<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>';
+  var BAR = [['Jaunumi', 'news'], ['Atklāt', 'compass'], ['Mājas', 'home'], ['Paziņojumi', 'bell'], ['Ziņas', 'chat']];
   function phoneBar(active) {
-    return '<nav class="flex items-end justify-around border-t line bg-surface px-1 pb-2 pt-1">' + BAR.map(function (b) {
+    return '<nav class="flex items-end justify-around border-t line bg-surface px-0 pb-2 pt-1">' + BAR.map(function (b) {
       var on = b[0] === active, mid = b[0] === 'Mājas';
       var ic = mid ? '<span class="-mt-4 grid size-12 place-items-center rounded-pill bg-primary text-primary-foreground shadow-premium">' + ICO(P[b[1]], 'size-6') + '</span>' : '<span class="py-1">' + ICO(P[b[1]]) + '</span>';
-      return '<span class="flex w-16 flex-col items-center text-meta ' + (on ? 'text-foreground' : 'text-foreground-muted') + '">' + ic + '<span>' + b[0] + '</span></span>';
+      return '<span class="flex min-w-0 flex-1 flex-col items-center text-meta ' + (on ? 'text-foreground' : 'text-foreground-muted') + '">' + ic + '<span>' + b[0] + '</span></span>';
     }).join('') + '</nav>';
   }
   function deskBar(active) {
-    var link = function (t, ic) { return '<span class="inline-flex items-center gap-1.5 text-body ' + (t === active ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
-    var round = function (ic) { return '<span class="grid size-9 place-items-center rounded-pill line text-foreground-muted">' + ICO(ic, 'size-4') + '</span>'; };
-    return '<nav class="flex items-center gap-6 border-b line bg-surface px-8 py-3"><span class="text-item">Ejam Kopā</span>' + link('Mājas', 'home') + link('Atklāt', 'search')
-      + '<span class="ml-auto flex items-center gap-2">' + round('<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>') + round(P.chat) + round(P.bell) + dot() + '</span></nav>';
+    var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
+    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
+    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
+    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
+      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
+      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+      + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
     return w === 375 ? '<div class="grid gap-4 p-4">' + body + '</div>' + phoneBar(active) : deskBar(active) + '<div class="mx-auto grid max-w-browse gap-6 p-8">' + body + '</div>';
@@ -55,10 +61,11 @@
   P.back = '<path d="m15 18-6-6 6-6"/>';
   P.filter = '<path d="M3 6h18M7 12h10M10 18h4"/>';
   var D = '2026-11-13';
+  var signedOut = false;
   var screens = [];
 
   var drop = function (t) { return '<span class="inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-pill line bg-surface px-3 text-button-sm text-foreground">' + t + ICO(P.down, 'size-4') + '</span>'; };
-  var tabs = function (on) { return '<div class="flex gap-6 border-b border-border">' + ['Jaunumi', 'Grupas', 'Pasākumi', 'Cilvēki'].map(function (t) { return '<span class="-mb-px pb-2 text-body ' + (t === on ? 'border-b-2 border-foreground text-foreground weight-strong' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>'; };
+  var tabs = function (on) { return '<div class="flex gap-6 border-b border-border">' + ['Grupas', 'Pasākumi', 'Cilvēki'].map(function (t) { return '<span class="-mb-px pb-2 text-body ' + (t === on ? 'border-b-2 border-foreground text-foreground weight-strong' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>'; };
   var L1 = [['Spēles', 'games', '<rect width="12" height="12" x="2" y="10" rx="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/>'], ['Sports', 'sports', '<circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 0 20M2 12h20"/>'], ['Mūzika', 'music', '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'], ['Daba un ceļojumi', 'travel', '<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>'], ['Māksla', 'art', '<circle cx="13.5" cy="6.5" r=".5"/><path d="M12 2a10 10 0 0 0 0 20c1 0 1.5-.8 1.5-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16a6 6 0 0 0 6-6c0-4.4-4.5-8.3-10-8.3z"/>'], ['Kopiena un vide', 'community', '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>']];
   var tile = function (c, ic) { return '<span class="grid size-7 shrink-0 place-items-center rounded-lg text-[var(--on-cat)]" style="background:var(--cat-' + c + ')">' + ICO(ic, 'size-4') + '</span>'; };
   var l1row = function (x, strong) { return '<span class="flex items-center gap-2' + (strong ? ' weight-strong' : '') + '">' + tile(x[1], x[2]) + x[0] + '</span>'; };
@@ -86,20 +93,19 @@
     };
   }
 
-  screens.push({ id: 'all', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
+  screens.push({ id: 'all', st: 'progress', v: 'v3', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
     if (w === 375) return phone(tabs('Grupas') + head('Visas tēmas', '248 grupas') + '<div class="grid">' + L1.map(function (x) { return row(l1row(x, 0), 1); }).join('') + '</div>');
     return shop('Grupas', 'Visas tēmas', '248 grupas', many(card), 'grid-cols-3', allTree)(w); } });
-  screens.push({ id: 'shop', st: 'progress', v: 'v2', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'Cilnes Jaunumi · Grupas · Pasākumi · Cilvēki. Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
-  screens.push({ id: 'shop', label: 'Atklāt kā veikalā: koks, virsraksts, filtru pogas (M-15)', story: 'Augšā cilnes (Grupas · Pasākumi · Jaunumi apstiprinātas, Cilvēki priekšlikums). Kreisajā kolonnā tikai izvēlētā zara koks: vecāks, izvēlētais treknrakstā ar bērniem, brāļi; pārējās tēmas sakļautas apakšā. Virsraksts ar skaitu, filtru pogas ar izkrītošām izvēlnēm, Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push({ id: 'shop', st: 'progress', v: 'v3', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'PRIEKŠLIKUMS: cilnes Grupas · Pasākumi · Cilvēki (Jaunumi ir sava lapa, darbvirsmā logotips ved uz to). Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
 
   var sheetRow = function (t, v) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + '<span class="flex items-center gap-1 text-meta text-foreground-muted">' + v + ICO(P.right, 'size-4') + '</span></span>'; };
-  screens.push({ id: 'phone', st: 'progress', v: 'v2', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
+  screens.push({ id: 'phone', st: 'progress', v: 'v3', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
     phone(tabs('Grupas') + head('Galda spēles', '13 grupas') + chips + fbar + many(card)(2)),
     phone('<span class="flex items-center gap-1 text-body text-foreground-muted">' + ICO(P.back, 'size-4') + 'Spēles</span><h2 class="text-title">Galda spēles</h2><div class="grid">' + row('<span class="weight-strong">Skatīt visu: Galda spēles</span>') + row('Šahs', 1) + row('Go', 1) + row('Domino', 1) + row('Novuss', 1) + row('Kāršu spēles', 1) + '</div>'),
     phone('<div class="flex items-center justify-between"><h2 class="text-title">Filtri</h2><span class="text-button-sm text-foreground-muted">Notīrīt</span></div><div class="grid">' + sheetRow('Kur', 'Jelgava') + sheetRow('Kad', 'Jebkad') + '</div><span class="mt-24 inline-flex h-11 items-center justify-center rounded-pill bg-primary text-button text-primary-foreground">Rādīt 13 grupas</span>')
   ] });
 
-  screens.push({ id: 'people', st: 'progress', v: 'v2', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Kā rādīt cilvēkus, vēl nav zināms.', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
+  screens.push({ id: 'people', st: 'progress', v: 'v3', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Kā rādīt cilvēkus, vēl nav zināms.', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
 
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
@@ -127,11 +133,12 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    section.dataset.d = D;
-    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(D) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
+    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    section.dataset.d = dd;
+    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var r = document.createElement('div');
     if (s.phones) {
-      r.className = 'flex flex-wrap items-start gap-6 pb-4';
+      r.className = 'flex flex-wrap items-start gap-6 overflow-x-auto pb-4';
       s.phones.forEach(function (h) { addBox(r, h, 375); });
     } else {
       r.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';

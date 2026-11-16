@@ -9,8 +9,8 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: Ziņojumi un Laukums</h1>
-<p class="text-meta text-foreground-muted">Versija v2 · publicēta 2026-11-13 15:06</p>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Divas dažādas lietas. Ziņojumi paliek: siena ar īsām atbildēm (M-12, M-14). Laukums ir tagad: cilvēki, kas skatās to pašu tēmu un vietu, redz cits citu un var parunāt (M-25..M-28); sarunas izgaist pēc aktivitātes.</p>
+<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:59</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Divas dažādas lietas. Ziņojumi paliek: viena siena ar īsām atbildēm (M-12), ko redz caur dažādām lēcām (M-31): kopienā un grupā tie paši Ziņojumi, autors ir grupa vai cilvēks (M-14); termiņa nav (apstiprināts). Laukums ir tagad: cilvēki, kas skatās to pašu tēmu un vietu, redz cits citu un var parunāt (M-25..M-28); sarunas izgaist pēc aktivitātes.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -33,33 +33,52 @@
   var dot = function (c) { return '<span class="size-9 shrink-0 rounded-pill ' + (c || 'bg-tint') + '"></span>'; };
   var pill = function (t, on) { return '<span class="inline-flex h-8 items-center whitespace-nowrap rounded-pill px-3 text-button-sm ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
   var box = 'rounded-2xl bg-surface p-3 shadow-card frame';
-  var BAR = [['Atklāt', 'search'], ['Ziņas', 'chat'], ['Mājas', 'home'], ['Paziņojumi', 'bell'], ['Es', 'user']];
+  P.shield = '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>';
+  P.gear = '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/>';
+  P.compass = '<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36z"/>';
+  var BAR = [['Jaunumi', 'news'], ['Atklāt', 'compass'], ['Mājas', 'home'], ['Paziņojumi', 'bell'], ['Ziņas', 'chat']];
   function phoneBar(active) {
-    return '<nav class="flex items-end justify-around border-t line bg-surface px-1 pb-2 pt-1">' + BAR.map(function (b) {
+    return '<nav class="flex items-end justify-around border-t line bg-surface px-0 pb-2 pt-1">' + BAR.map(function (b) {
       var on = b[0] === active, mid = b[0] === 'Mājas';
       var ic = mid ? '<span class="-mt-4 grid size-12 place-items-center rounded-pill bg-primary text-primary-foreground shadow-premium">' + ICO(P[b[1]], 'size-6') + '</span>' : '<span class="py-1">' + ICO(P[b[1]]) + '</span>';
-      return '<span class="flex w-16 flex-col items-center text-meta ' + (on ? 'text-foreground' : 'text-foreground-muted') + '">' + ic + '<span>' + b[0] + '</span></span>';
+      return '<span class="flex min-w-0 flex-1 flex-col items-center text-meta ' + (on ? 'text-foreground' : 'text-foreground-muted') + '">' + ic + '<span>' + b[0] + '</span></span>';
     }).join('') + '</nav>';
   }
   function deskBar(active) {
-    var link = function (t, ic) { return '<span class="inline-flex items-center gap-1.5 text-body ' + (t === active ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
-    var round = function (ic) { return '<span class="grid size-9 place-items-center rounded-pill line text-foreground-muted">' + ICO(ic, 'size-4') + '</span>'; };
-    return '<nav class="flex items-center gap-6 border-b line bg-surface px-8 py-3"><span class="text-item">Ejam Kopā</span>' + link('Mājas', 'home') + link('Atklāt', 'search')
-      + '<span class="ml-auto flex items-center gap-2">' + round('<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>') + round(P.chat) + round(P.bell) + dot() + '</span></nav>';
+    var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
+    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
+    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
+    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
+      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
+      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+      + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
     return w === 375 ? '<div class="grid gap-4 p-4">' + body + '</div>' + phoneBar(active) : deskBar(active) + '<div class="mx-auto grid max-w-browse gap-6 p-8">' + body + '</div>';
   }
   var D = '2026-11-13';
+  var signedOut = false;
   var screens = [];
 
   var msg = function (me, w) { return '<div class="flex ' + (me ? 'justify-end' : '') + '"><span class="grid gap-1.5 rounded-2xl p-3 ' + (me ? 'bg-tint' : 'bg-surface frame') + ' ' + (w || 'w-3/4') + '">' + ph('w-full') + ph('w-1/2') + '</span></div>'; };
-  var wallPost = function () { return '<div class="' + box + ' grid gap-2"><div class="flex items-center gap-2">' + dot() + ph('w-1/3') + '</div>' + lines(2) + '<div class="ml-6 grid gap-1.5 border-l-2 border-border pl-3"><div class="flex items-center gap-2">' + dot('bg-tint') + ph('w-1/2') + '</div><div class="flex items-center gap-2">' + dot() + ph('w-2/5') + '</div></div><span class="inline-flex items-center gap-1.5 text-meta text-foreground-muted">' + ICO(P.reply, 'size-4') + 'Atbildēt</span></div>'; };
+  var author = function (g, name) { return '<div class="flex items-center gap-2">' + (g ? '<span class="grid size-9 shrink-0 place-items-center rounded-lg bg-tint">' + ICO(P.users, 'size-4') + '</span>' : dot()) + '<span class="grid"><span class="text-item">' + name + '</span><span class="text-meta text-foreground-muted">' + (g ? 'Grupa' : 'Cilvēks') + ' · Jelgava</span></span></div>'; };
+  var wallPost = function (g, name, text, n, notify) { return '<div class="' + box + ' grid gap-2">' + author(g, name) + '<p class="text-body">' + text + '</p>' + (n ? '<div class="ml-6 grid gap-1.5 border-l-2 border-border pl-3">' + ph('w-1/2') + (n > 1 ? ph('w-2/5') : '') + '</div>' : '') + '<span class="flex flex-wrap items-center gap-3 text-meta text-foreground-muted"><span class="inline-flex items-center gap-1.5">' + ICO(P.reply, 'size-4') + 'Atbildēt' + (n ? ' · ' + n : '') + '</span>' + (notify ? '<span class="inline-flex items-center gap-1.5">' + ICO(P.bell, 'size-4') + 'Paziņoja biedriem</span>' : '') + (g ? '' : '<span>Rakstīt privāti</span>') + '</span></div>'; };
+  var P1 = function () { return wallPost(true, 'Jelgavas novusisti', 'Nākamreiz tiekamies bibliotēkā, ceturtdien 18:00.', 2, true); };
+  var P2 = function () { return wallPost(false, 'Marta', 'Meklēju, ar ko spēlēt šahu.', 1); };
+  var P3 = function () { return wallPost(false, 'Jānis', 'Kam ir lieks galds uz sestdienu?', 0); };
+  var P4 = function () { return wallPost(true, 'Jelgavas novusisti', 'Jauns grafiks no decembra.', 1, true); };
   var composer = '<div class="flex items-center gap-2"><span class="h-10 flex-1 rounded-pill line px-4 text-body leading-10 text-foreground-muted">Uzraksti ziņojumu</span><span class="grid size-10 place-items-center rounded-pill bg-primary text-primary-foreground">' + ICO(P.send) + '</span></div>';
-  var hubHead = '<div class="tone-fill grid gap-1 rounded-2xl p-4 text-[var(--on-cat)]"><p class="text-meta">Kopiena un vide</p><p class="text-title">Ziņojumi</p></div>';
-  screens.push({ id: 'wall', st: 'progress', v: 'v2', label: 'Ziņojumi: siena ar īsām atbildēm (M-12, M-14)', story: 'Ziņojumi no grupām un cilvēkiem, īsas atbildes zem tiem, no turienes var rakstīt privāti (M-23). Lēni un paliek; reāllaika saruna ir Laukumā.', fn: function (w) {
-    var posts = w === 375 ? wallPost() + wallPost() : '<div class="grid grid-cols-2 gap-4">' + wallPost() + wallPost() + wallPost() + wallPost() + '</div>';
-    return frame(w, 'Atklāt', hubHead + composer + posts); } });
+  var hubHead = '<div class="grid gap-1 rounded-2xl bg-primary p-4 text-primary-foreground"><p class="text-meta">Lēca: tēma + vieta</p><p class="text-title">Kopiena un vide · Jelgava</p></div>';
+  var groupHead = '<div class="grid gap-1 rounded-2xl bg-primary p-4 text-primary-foreground"><p class="text-meta">Lēca: šī grupa</p><p class="text-title">Jelgavas novusisti</p></div><div class="flex gap-6 border-b border-border">' + ['Pasākumi', 'Ziņojumi', 'Dalībnieki'].map(function (t) { return '<span class="-mb-px pb-2 text-body ' + (t === 'Ziņojumi' ? 'border-b-2 border-foreground text-foreground weight-strong' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>';
+  var authors = '<div class="flex flex-wrap gap-2"><span class="text-meta leading-8 text-foreground-muted">Autors</span>' + pill('Visi', true) + pill('Grupas') + pill('Cilvēki') + '</div>';
+  var props = '<div class="grid gap-1 rounded-2xl line p-3 text-body-sm"><span class="text-item">PRIEKŠLIKUMI (neapstiprināti, M-14)</span><span>1. Atbildes visur, arī grupas Ziņojumam.</span><span>2. Grupas Ziņojums paziņo tās biedriem.</span><span>3. Ierobežojums 3 tikai cilvēkiem, ne grupām.</span><span class="text-foreground-muted">Termiņa nav (apstiprināts 16. nov.).</span></div>';
+  var capNote = '<p class="text-meta text-foreground-muted">Cilvēkam līdz 3 aktīviem ziņojumiem (priekšlikums). Grupai ierobežojuma nav.</p>';
+  screens.push({ id: 'wall-hub', st: 'progress', v: 'v3', label: 'Ziņojumi caur kopienas lēcu (M-12, M-14, M-31)', story: 'Viena Ziņojumu siena, šeit skatīta caur lēcu "tēma + vieta". Autors ir grupa vai cilvēks, lasītājs var filtrēt pēc autora. Grupas un cilvēka kartīte ir viena un tā pati; no cilvēka ziņojuma var rakstīt privāti (M-23). Termiņa nav. Zem tiem pašiem ziņojumiem grupas lēca (nākamā sadaļa). Priekšlikumi ir atzīmēti rāmī.', fn: function (w) {
+    var posts = w === 375 ? P1() + P2() + P3() : '<div class="grid grid-cols-2 gap-4">' + P1() + P2() + P3() + P4() + '</div>';
+    return frame(w, 'Atklāt', hubHead + composer + capNote + authors + posts + props); } });
+  screens.push({ id: 'wall-group', st: 'progress', v: 'v3', label: 'Tie paši Ziņojumi caur grupas lēcu (M-14, M-31)', story: 'Grupas lapā Ziņojumi ir tie paši ziņojumi, atlasīti pēc autora "šī grupa": grupas paziņojumi nav cits veids, tikai cits skats (M-31). Divas kartītes šeit ir tās pašas, kas kopienas sienā (Jelgavas novusisti). PRIEKŠLIKUMS: tām var atbildēt, un grupas Ziņojums paziņo biedriem (zīme "Paziņoja biedriem"); ierobežojums 3 grupām neattiecas.', fn: function (w) {
+    var posts = w === 375 ? P1() + P4() : '<div class="grid grid-cols-2 gap-4">' + P1() + P4() + '</div>';
+    return frame(w, 'Atklāt', groupHead + composer + posts + props); } });
   var faces = function (n) { var o = ''; for (var i = 0; i < n; i++) o += '<span class="-ml-2 size-8 rounded-pill bg-tint ring-2 ring-[var(--surface)] first:ml-0"></span>'; return '<span class="flex">' + o + '</span>'; };
   var line = function (t, op) { return '<div class="flex items-start gap-2 ' + op + '">' + dot('bg-tint size-7') + '<span class="grid flex-1 gap-1"><span class="text-meta text-foreground-muted">' + t + '</span>' + ph('w-4/5') + '</span></div>'; };
   var talkBox = '<div class="flex items-center gap-2"><span class="h-10 flex-1 rounded-pill line px-4 text-body leading-10 text-foreground-muted">Uzraksti laukumā</span><span class="grid size-10 place-items-center rounded-pill bg-primary text-primary-foreground">' + ICO(P.send) + '</span></div>';
@@ -71,11 +90,11 @@
   var busy = line('Anna · pirms 3 h', 'opacity-40') + line('Jānis · pirms 1 h', 'opacity-70') + line('Marta · pirms 10 min', '') + line('Pēteris · tikko', '');
   var quiet = line('Ilze · pirms 3 dienām', 'opacity-70') + line('Kārlis · vakar', '');
   var grid3 = '<div class="grid content-start gap-4"><div class="flex items-baseline gap-2"><h2 class="text-title">Galda spēles · Jelgava</h2><span class="text-meta text-foreground-muted">13 grupas</span></div><div class="grid grid-cols-2 gap-4">' + [1, 2, 3, 4].map(function () { return '<div class="grid gap-2 ' + box + '"><span class="block h-24 rounded-xl bg-tint"></span>' + lines(2) + '</div>'; }).join('') + '</div></div>';
-  screens.push({ id: 'square', label: 'Laukums: tu esi tur, kur skaties (M-25, M-27, M-28)', story: 'Skatoties Atklāt › Galda spēles › Jelgava, tu stāvi šajā laukumā. Redzams, kas šeit tagad; uzruna aicina runāt laukumā, nevis rakstīt kādam vienam. Rosīgā laukumā rindas izgaist pēc ~4 stundām. Telefonā laukums ir lapa, ko atver no peldoša "Šeit tagad: 5".', fn: function (w) {
+  screens.push({ id: 'square', st: 'progress', v: 'v3', label: 'Laukums: tu esi tur, kur skaties (M-25, M-27, M-28)', story: 'Skatoties Atklāt › Galda spēles › Jelgava, tu stāvi šajā laukumā. Redzams, kas šeit tagad; uzruna aicina runāt laukumā, nevis rakstīt kādam vienam. Rosīgā laukumā rindas izgaist pēc ~4 stundām. Telefonā laukums ir lapa, ko atver no peldoša "Šeit tagad: 5".', fn: function (w) {
     var sq = square('Galda spēles · Jelgava', 5, 'Šeit ir 5 cilvēki, kam interesē galda spēles. Droši uzraksti.', busy);
     if (w === 375) return frame(w, 'Atklāt', sq);
     return frame(w, 'Atklāt', '<div class="grid grid-cols-[1fr_24rem] gap-8">' + grid3 + sq + '</div>'); } });
-  screens.push({ id: 'elastic', label: 'Klusais laukums un elastīgie laukumi (M-26, M-28)', story: 'Novuss · Bauska: šobrīd neviena. Laukums paplašinās uz augšu un rāda, kas tagad skatās Galda spēles visā Latvijā. Klusā laukumā sarunas paliek dienām, lai nākamais saprot noskaņu.', fn: function (w) {
+  screens.push({ id: 'elastic', st: 'progress', v: 'v3', label: 'Klusais laukums un elastīgie laukumi (M-26, M-28)', story: 'Novuss · Bauska: šobrīd neviena. Laukums paplašinās uz augšu un rāda, kas tagad skatās Galda spēles visā Latvijā. Klusā laukumā sarunas paliek dienām, lai nākamais saprot noskaņu.', fn: function (w) {
     var sq = square('Galda spēles · Latvija', 2, 'Šeit ir 2 cilvēki, kam interesē galda spēles. Droši uzraksti.', quiet, 'Novuss · Bauska šobrīd tukšs: rādām Galda spēles visā Latvijā.');
     if (w === 375) return frame(w, 'Atklāt', sq);
     return frame(w, 'Atklāt', '<div class="grid grid-cols-[1fr_24rem] gap-8">' + grid3.replace('Galda spēles · Jelgava', 'Novuss · Bauska').replace('13 grupas', '1 grupa') + sq + '</div>'); } });
@@ -107,8 +126,9 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    section.dataset.d = D;
-    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(D) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
+    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    section.dataset.d = dd;
+    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');
     row.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';
     [375, 1280].forEach(function (w) { addBox(row, s, w); });
