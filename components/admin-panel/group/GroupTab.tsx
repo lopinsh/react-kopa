@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { getGroupPanelData } from '@/actions/admin-panel-actions';
 import { useAdminGroup } from '@/components/providers/AdminGroupContext';
 import type { GroupPanelData } from '@/lib/services/group-panel';
+import type { AdminMode } from '@/lib/constants';
 import { takePanelFocus } from '../panel-storage';
 import GroupTabStatus from './GroupTabStatus';
 import GroupTabFacts from './GroupTabFacts';
@@ -14,7 +15,7 @@ import GroupTabLog from './GroupTabLog';
 import GroupTabMode from './GroupTabMode';
 
 /** The Grupa tab: the open group's status, facts, hide or restore, reports and log. Fetched when the tab opens and after a hide or restore. */
-export default function GroupTab() {
+export default function GroupTab({ mode }: { mode: AdminMode | null }) {
     const t = useTranslations('admin.panel.group');
     const locale = useLocale();
     const group = useAdminGroup();
@@ -54,7 +55,15 @@ export default function GroupTab() {
         return () => window.removeEventListener('ek:admin-panel-focus', focusRequested);
     }, [current, focusRequested]);
 
-    if (!group) return <p className="px-4 py-3 text-meta text-foreground-muted">{t('none')}</p>;
+    // Off a group page (or on a group the mode makes a 404) the switch still shows, so a mode can always be changed or switched off.
+    if (!group) {
+        return (
+            <div className="flex min-h-0 flex-1 flex-col divide-y divide-border overflow-y-auto">
+                <GroupTabMode mode={mode} />
+                <p className="px-4 py-3 text-meta text-foreground-muted">{t('none')}</p>
+            </div>
+        );
+    }
     if (failedId === groupId && !current) {
         return (
             <div className="flex flex-col items-start gap-2 px-4 py-3">
@@ -68,7 +77,7 @@ export default function GroupTab() {
     return (
         <div className="flex min-h-0 flex-1 flex-col divide-y divide-border overflow-y-auto">
             <GroupTabStatus data={current} />
-            <GroupTabMode mode={group.mode} />
+            <GroupTabMode mode={mode} />
             <GroupTabFacts data={current} />
             <GroupTabActions group={group} reasonRef={reasonRef} restoreRef={restoreRef} />
             <GroupTabReports reports={current.reports} labelRef={reportsRef} />

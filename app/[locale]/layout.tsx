@@ -10,8 +10,9 @@ import MobileNav from '@/components/shell/MobileNav';
 import CookieConsent from '@/components/shell/CookieConsent';
 import { Footer } from '@/components/shell/Footer';
 import { getConfiguredOAuthProviders } from '@/lib/auth-providers';
-import { getAdminPanelTab } from '@/lib/admin-panel/server';
+import { getAdminPanelTab, getCurrentAdminMode } from '@/lib/admin-panel/server';
 import AdminPanelLoader from '@/components/admin-panel/AdminPanelLoader';
+import AdminModeMarker from '@/components/admin-panel/AdminModeMarker';
 import { getActiveTheme } from '@/lib/theme/server';
 import ThemePreviewBar from '@/components/admin/design/ThemePreviewBar';
 import TimeZoneSync from '@/components/shell/TimeZoneSync';
@@ -46,12 +47,14 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     const initialTab = isBottomTab(navCookie) ? navCookie : 'discover';
     const skipToContent = (await getTranslations({ locale, namespace: 'shell' }))('skipToContent');
 
-    const [allMessages, timeZone, panelTab, theme] = await Promise.all([
+    const [allMessages, timeZone, panelTab, theme, adminMode] = await Promise.all([
         getMessages(),
         getTimeZone(),
         // Only a signed-in site admin with the tool panel open gets a tab; everyone else gets the page unchanged.
         getAdminPanelTab(),
         getActiveTheme(),
+        // A site admin's simulated group mode (A-2): the marker shows on every page while it is on.
+        getCurrentAdminMode(),
     ]);
     // Only a site admin with a saved design preview gets the bar; the colours themselves are set in the root layout.
     const themePreview = theme.isPreview;
@@ -61,6 +64,13 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
     const design = typeof admin === 'object' ? admin.design : undefined;
     if (typeof admin === 'object' && panelTab) messages.admin = { panel: admin.panel, ...(typeof design === 'object' ? { design: panelTab === 'design' ? { bar: design.bar, type: design.type } : { bar: design.bar } } : {}) };
     else if (themePreview && typeof design === 'object') messages.admin = { design: { bar: design.bar } };
+    // The mode marker's texts, panel closed (open, the whole panel namespace is already sent).
+    const panelMsgs = typeof admin === 'object' ? admin.panel : undefined;
+    const groupMsgs = typeof panelMsgs === 'object' ? panelMsgs.group : undefined;
+    if (adminMode && !panelTab && typeof groupMsgs === 'object') {
+        const { marker, markerOff, modeOwner, modeMember, modeVisitor } = groupMsgs;
+        messages.admin = { ...(typeof messages.admin === 'object' ? messages.admin : {}), panel: { group: { marker, markerOff, modeOwner, modeMember, modeVisitor } } };
+    }
 
     return (
         <Providers locale={locale} timeZone={timeZone} messages={messages} oauthProviders={getConfiguredOAuthProviders()} panelTab={panelTab}>
@@ -73,6 +83,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
 
             {/* App Shell */}
             <div data-shell className="flex h-dvh flex-col">
+                {adminMode && <AdminModeMarker mode={adminMode} />}
                 <Header />
 
                 <div className="flex flex-1 overflow-hidden">
@@ -99,7 +110,7 @@ export default async function LocaleLayout({ children, panel, params }: Props) {
             <CookieConsent />
             <TimeZoneSync />
 
-            {panelTab && <AdminPanelLoader tab={panelTab} draftActive={themePreview} designTheme={panelTab === 'design' ? { presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont, styleKey: theme.styleKey, type: theme.type } : null} />}
+            {panelTab && <AdminPanelLoader tab={panelTab} mode={adminMode}draftActive={themePreview} designTheme={panelTab === 'design' ? { presetKey: theme.presetKey, light: theme.light, dark: theme.dark, headingFont: theme.headingFont, bodyFont: theme.bodyFont, styleKey: theme.styleKey, type: theme.type } : null} />}
             {themePreview && !panelTab && <ThemePreviewBar />}
         </Providers>
     );

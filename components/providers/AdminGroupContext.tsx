@@ -1,6 +1,5 @@
 'use client';
 
-import type { AdminMode } from '@/lib/constants';
 import { createContext, useContext, useState, type ReactNode } from 'react';
 
 /** The group page the viewer is on, as far as the admin tool panel and the shield need it. Only a site admin's group layout fills it. */
@@ -14,8 +13,6 @@ export type AdminGroupRef = {
     hidden: boolean;
     /** Not hidden and not the admin's own group. */
     canHide: boolean;
-    /** The simulated group mode (A-2) this page renders in, or null. */
-    mode: AdminMode | null;
 };
 
 type Value = { group: AdminGroupRef | null; setGroup: (next: AdminGroupRef | null | ((prev: AdminGroupRef | null) => AdminGroupRef | null)) => void };

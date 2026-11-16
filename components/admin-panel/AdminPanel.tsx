@@ -6,7 +6,7 @@ import { clsx } from 'clsx';
 import { useRouter } from '@/i18n/routing';
 import { setAdminPanel } from '@/actions/admin-panel-actions';
 import { useToast } from '@/hooks/use-toast';
-import { ADMIN_PANEL_TABS, type AdminPanelTab } from '@/lib/constants';
+import { ADMIN_PANEL_TABS, type AdminMode, type AdminPanelTab } from '@/lib/constants';
 import { useAdminGroup } from '@/components/providers/AdminGroupContext';
 import type { ThemeInput } from '@/lib/validations/theme';
 import PanelTopBar from './PanelTopBar';
@@ -25,10 +25,10 @@ import { useSheetOnFocusRequest } from './useSheetOnFocusRequest';
  * It sits above slide-overs (an admin annotates inside them) and below the dialogs it opens.
  */
 
-type Props = { tab: AdminPanelTab; draftActive: boolean; designTheme: ThemeInput | null };
+type Props = { tab: AdminPanelTab; mode: AdminMode | null; draftActive: boolean; designTheme: ThemeInput | null };
 
 /** The admin tool panel: floats and docks from 768 px, a bottom sheet on phones. A tool, not a pop-up: no scrim, no focus trap. */
-export default function AdminPanel({ tab: serverTab, draftActive, designTheme }: Props) {
+export default function AdminPanel({ tab: serverTab, mode, draftActive, designTheme }: Props) {
     const t = useTranslations('admin.panel');
     const tErrors = useTranslations('errors');
     const router = useRouter();
@@ -154,7 +154,7 @@ export default function AdminPanel({ tab: serverTab, draftActive, designTheme }:
                 <PanelTabs tabs={tabs} value={tab} onChange={selectTab} />
                 <p className="px-4 pt-2 text-meta text-foreground-muted">{t(`hint.${tab}`)}</p>
                 <div role="tabpanel" id={`admin-panel-body-${tab}`} aria-labelledby={`admin-panel-tab-${tab}`} className="flex min-h-0 flex-1 flex-col">
-                    <PanelTabBody tab={tab} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} draftActive={draftActive} />
+                    <PanelTabBody tab={tab} mode={mode} paused={paused} selection={selection} onSelect={setSelection} onPicked={onPicked} designTheme={designTheme} draftActive={draftActive} />
                 </div>
                 {draftActive && tab !== 'design' && <PanelDraftNote />}
             </section>

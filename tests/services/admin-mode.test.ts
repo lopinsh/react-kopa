@@ -41,6 +41,26 @@ describe('mode off or unusable', () => {
         setAdminModeForTest('owner');
         assert.equal(await outcome(() => EventService.createEvent(f.groupId, eventForm('x'), cast.id('outsider')!)), 'FORBIDDEN');
     });
+    it('signed out with the cookie set: no access', async () => {
+        const f = await makeGroup(cast, 'public');
+        setAdminModeForTest('owner');
+        const a = await getViewerAccess(f.groupId, null);
+        assert.deepEqual([a.role, a.isMember, a.isTeam, a.isSiteAdmin, a.simulated], [null, false, false, false, null]);
+    });
+    for (const m of [undefined, 'owner'] as const) {
+        it(`the real owner deletes their group (${m ? 'cookie set' : 'no cookie'})`, async () => {
+            const f = await makeGroup(cast, 'public');
+            setAdminModeForTest(m);
+            assert.equal(await outcome(() => GroupService.deleteGroup(f.groupId, cast.id('owner')!)), 'ok');
+        });
+    }
+    it('owner mode cannot transfer ownership; the real owner keeps the group', async () => {
+        const f = await makeGroup(cast, 'public');
+        setAdminModeForTest('owner');
+        assert.notEqual(await outcome(() => GroupService.transferOwnership(f.groupId, cast.id('member')!, admin())), 'ok');
+        const owners = await prisma.membership.findMany({ where: { groupId: f.groupId, role: 'OWNER' }, select: { userId: true } });
+        assert.deepEqual(owners.map((o) => o.userId), [cast.id('owner')]);
+    });
 });
 
 // Expected standing of the site admin per mode: [role, isMember, isTeam, isSiteAdmin].

@@ -11,14 +11,14 @@ export default function AdminGroupBridge() {
     const { id, name, href, slug } = g;
     const l1Slug = g.category.l1Slug;
     const hidden = Boolean(g.moderation.hidden);
-    const canHide = !hidden && g.user.role !== 'OWNER';
-    const mode = g.moderation.mode;
+    // In owner mode the role is the simulated one: the real check is the server's (hideGroup refuses the admin's own group).
+    const canHide = !hidden && (g.moderation.mode === 'owner' || g.user.role !== 'OWNER');
 
     useEffect(() => {
-        setGroup({ id, name, href, l1Slug, slug, hidden, canHide, mode });
+        setGroup({ id, name, href, l1Slug, slug, hidden, canHide });
         // Soft navigation group → group mounts the next bridge before this cleanup: clear only our own.
         return () => setGroup((prev) => (prev?.id === id ? null : prev));
-    }, [id, name, href, l1Slug, slug, hidden, canHide, mode, setGroup]);
+    }, [id, name, href, l1Slug, slug, hidden, canHide, setGroup]);
 
     return null;
 }

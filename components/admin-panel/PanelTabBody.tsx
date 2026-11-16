@@ -1,6 +1,6 @@
 'use client';
 
-import type { AdminPanelTab } from '@/lib/constants';
+import type { AdminMode, AdminPanelTab } from '@/lib/constants';
 import type { ThemeInput } from '@/lib/validations/theme';
 import DesignTab from './DesignTab';
 import FeedbackTab from './FeedbackTab';
@@ -18,10 +18,10 @@ export type PanelTabProps = {
 };
 
 /** The body of the open tab. */
-export default function PanelTabBody({ tab, designTheme, draftActive, ...props }: PanelTabProps & { tab: AdminPanelTab; designTheme: ThemeInput | null; draftActive: boolean }) {
+export default function PanelTabBody({ tab, mode, designTheme, draftActive, ...props }: PanelTabProps & { tab: AdminPanelTab; mode: AdminMode | null; designTheme: ThemeInput | null; draftActive: boolean }) {
     if (tab === 'feedback') return <FeedbackTab {...props} />;
     if (tab === 'translate') return <TranslateTab {...props} />;
-    if (tab === 'group') return <GroupTab />;
+    if (tab === 'group') return <GroupTab mode={mode} />;
     if (tab === 'design' && designTheme) return <DesignTab {...props} designTheme={designTheme} draftActive={draftActive} />;
     return <div data-tab={tab} className="min-h-0 flex-1" />;
 }

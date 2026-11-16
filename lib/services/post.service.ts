@@ -34,15 +34,15 @@ const GROUP_SLUG_SELECT = {
     category: { include: TaxonomyResolver.getInclude('lv') }
 } as const;
 
-/**
- * The viewer's role in the group. A group hidden by moderation is readable by its owner only,
- * the same as the group page (everyone else gets a 404 there).
- */
 /** Logs a write done in a site admin's simulated owner mode (A-2); a no-op for everyone else. */
 async function noteOwnerMode(groupId: string, userId: string): Promise<void> {
     await logOwnerModeWrite(await getViewerAccess(groupId, userId), userId, groupId);
 }
 
+/**
+ * The viewer's role in the group. A group hidden by moderation is readable by its owner only,
+ * the same as the group page (everyone else gets a 404 there).
+ */
 export async function getRole(groupId: string, userId: string) {
     const access = await getViewerAccess(groupId, userId);
     if (!access.role) return null;
