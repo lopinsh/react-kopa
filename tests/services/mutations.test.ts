@@ -60,6 +60,24 @@ describe('updateEvent, creator no longer in the group', () => {
     });
 });
 
+// A-1 + owner 16 Nov: a site admin may RSVP to a public event in a hidden group (admin mode off). Others get the hidden 404 for the event.
+describe('setAttendance, public event in a hidden group', () => {
+    it('a site admin may RSVP (GOING)', async () => {
+        const f = await makeGroup(cast, 'hidden');
+        assert.equal(await outcome(() => EventService.setAttendance(f.eventId.PUBLIC, cast.ids.siteAdmin, 'GOING')), 'ok');
+    });
+    // OPEN: owner decision. The owner is not a site admin, so the hidden check gives EVENT_NOT_FOUND here too.
+    it('the group owner gets EVENT_NOT_FOUND', async () => {
+        const f = await makeGroup(cast, 'hidden');
+        assert.equal(await outcome(() => EventService.setAttendance(f.eventId.PUBLIC, cast.ids.owner, 'GOING')), 'EVENT_NOT_FOUND');
+    });
+    // OPEN: owner decision. A plain member of a hidden group is shut out of its events the same way.
+    it('a plain member gets EVENT_NOT_FOUND', async () => {
+        const f = await makeGroup(cast, 'hidden');
+        assert.equal(await outcome(() => EventService.setAttendance(f.eventId.PUBLIC, cast.ids.member, 'GOING')), 'EVENT_NOT_FOUND');
+    });
+});
+
 // Announcements (PostService.createAnnouncement uses getRole): team only; in a hidden group the owner only.
 const POST = (hiddenAdmin: string) => row('FORBIDDEN', { admin: hiddenAdmin, owner: 'ok' });
 each('createAnnouncement', { public: POST('ok'), private: POST('ok'), hidden: POST('FORBIDDEN') },
