@@ -75,7 +75,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (still open, or my prop
 | K-25a | The hub's number is the **members of its groups**. | Confirmed | 9 Nov (K-58). |
 | K-26 | **Shout-outs:** public notes by individuals on the hub ("Oskars: gribētu atrast kādu, ar ko spēlēt domino"). Not chat: chat is real-time, for whoever is there now. | Confirmed | 9 Nov. Replaces the Meklē cards. |
 | K-27 | Shout-outs are **plain post-it notes** on the board's wall ("If you are interested too, let me know. We could start a group together"). No "Es arī", no "Izveidot grupu ar viņiem". | Confirmed | 9 Nov: "Yes, plain notes. Announcements really are plain post-it notes." |
-| K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Changed | 9 Nov. → Mājas M-14: no expiry for now (16 Nov); replies never count, the cap's size and scope (per hub or site-wide) open again (18 Nov). The live site keeps 3 site-wide until Mājas. |
+| K-27a | Shout-outs expire after 30 days (the author can renew); max 3 active per person across the site; each has "Ziņot". | Changed | 9 Nov. → Mājas M-14: no expiry for now (16 Nov); replies never count; 3 active per hub (where posted), at most 10 site-wide (18 Nov). The live site keeps 3 site-wide until Mājas. |
 | K-76 | Member line: "120 dalībnieki 13 grupās". | Confirmed | 10 Nov note cmwabq1gv. |
 | K-77 | Shout-outs are called **"Ziņas"** on the hub (same word as the inbox; the page tells them apart) and are more compact. | Confirmed | 10 Nov note cmwac2417 and answer. |
 | K-83 | A Ziņa can be answered both ways: public replies under it and a private "Rakstīt ziņu" (chat request in the Ziņas inbox, K-82). | Confirmed | 10 Nov answer. |
