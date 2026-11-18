@@ -10,7 +10,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: sākumlapa</h1>
-<p class="text-meta text-foreground-muted">Versija v6 · publicēta 2026-11-18 10:53</p>
+<p class="text-meta text-foreground-muted">Versija v7 · publicēta 2026-11-18 14:23</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Mājas ir tava vieta (M-01) un vecais Es (M-32): galvā profils, iestatījumi un adminam admin ieeja; zem tā tavas grupas, pasākumi un ziņojumi. Ievads ir pēc izvēles (M-19). Telefona josla (M-18): Jaunumi · Atklāt · Mājas · Paziņojumi · Ziņas, Ziņas ir privātās ziņas; nav atsevišķa Es. Darbvirsmā galva kā šobrīd (M-17). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā.</p>
 <div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
@@ -65,15 +65,15 @@
 
   var sec = function (t, inner) { return '<section class="grid gap-2"><h3 class="text-item">' + t + '</h3>' + inner + '</section>'; };
   var item = function (ic) { return '<div class="flex items-center gap-3 ' + box + '">' + (ic || dot()) + lines(2) + '</div>'; };
-  var head = function (admin) { return '<div class="flex items-center gap-3">' + '<span class="size-14 shrink-0 rounded-pill bg-tint"></span><div class="grid min-w-0 flex-1 gap-1"><h2 class="text-title">Anna Bērziņa</h2><span class="flex flex-wrap gap-2">' + pill('Labot profilu') + '</span></div><span class="flex shrink-0 gap-2"><span class="grid size-10 place-items-center rounded-pill line" title="Iestatījumi">' + ICO(P.gear) + '</span>' + (admin ? '<span class="grid size-10 place-items-center rounded-pill line" title="Admin">' + ICO(P.shield) + '</span>' : '') + '</span></div>'; };
+  var head = function (admin) { return '<div class="flex items-center gap-3">' + '<span class="size-14 shrink-0 rounded-pill bg-tint"></span><div class="grid min-w-0 flex-1 gap-1"><h2 class="text-title">Anna Bērziņa</h2><span class="flex flex-wrap gap-2">' + pill('Labot profilu') + pill('Ievads') + '</span></div><span class="flex shrink-0 gap-2"><span class="grid size-10 place-items-center rounded-pill line" title="Iestatījumi">' + ICO(P.gear) + '</span>' + (admin ? '<span class="grid size-10 place-items-center rounded-pill line" title="Admin">' + ICO(P.shield) + '</span>' : '') + '</span></div>'; };
   var step = function (n, t) { return '<li class="flex items-center gap-3"><span class="grid size-7 shrink-0 place-items-center rounded-pill bg-tint text-meta">' + n + '</span><span class="text-body">' + t + '</span></li>'; };
   var empty = function (t, hint) { return sec(t, '<p class="rounded-2xl line p-3 text-body-sm text-foreground-muted">' + hint + '</p>'); };
   var acts = '<div class="flex flex-wrap gap-2">' + pill('Rakstīt ziņojumu', true) + pill('Izveidot grupu') + pill('Pievienot pasākumu') + '</div>';
   var tour = '<div class="absolute inset-0 grid place-items-center bg-[var(--scrim)] p-6"><div class="grid w-full max-w-sm gap-3 rounded-2xl bg-surface p-5 shadow-premium"><p class="text-section">Gribi īsu ievadu?</p><p class="text-body text-foreground-muted">Trīs soļi: tēmas un pilsēta, ziņojums, lai tevi atrod, grupa vai pasākums.</p><div class="flex gap-2"><span class="inline-flex h-11 flex-1 items-center justify-center rounded-pill bg-primary text-button text-primary-foreground">Jā</span><span class="inline-flex h-11 flex-1 items-center justify-center rounded-pill line text-button">Vēlāk</span></div></div></div>';
-  screens.push({ id: 'new-user', st: 'progress', v: 'v6', label: 'Mājas jaunam lietotājam: ievads pēc izvēles (M-01, M-19)', story: 'Pirmajā reizē mazs logs jautā "Gribi īsu ievadu?" ar Jā / Vēlāk. Aiz tā parastās Mājas ar tukšām sadaļām un darbībām; nekas netiek uzspiests. Ievadu vēlāk var sākt no Mājām (saite "Ievads" profila galvā).', fn: function (w) {
+  screens.push({ id: 'new-user', st: 'progress', v: 'v7', label: 'Mājas jaunam lietotājam: ievads pēc izvēles (M-01, M-19)', story: 'Pirmajā reizē mazs logs jautā "Gribi īsu ievadu?" ar Jā / Vēlāk. Aiz tā parastās Mājas ar tukšām sadaļām un darbībām; nekas netiek uzspiests. Ievadu vēlāk var sākt ar pogu "Ievads" profila galvā, blakus Labot profilu (M-19).', fn: function (w) {
     var body = acts + empty('Tuvākie pasākumi', 'Vēl nav. Atrodi kādu Atklāt vai pievieno savu.') + empty('Mani ziņojumi', 'Uzraksti, ko meklē, lai tevi atrod.') + empty('Manas grupas', 'Vēl neesi nevienā grupā.');
     return frame(w, 'Mājas', head(false) + body) + tour; } });
-  screens.push({ id: 'regular', st: 'progress', v: 'v6', label: 'Mājas parastam lietotājam (M-01, M-17)', story: 'Mājas ir vecais Es (M-32): galvā profils (attēls, vārds, Labot profilu), iestatījumi un adminam admin ieeja (attēlots admina skats); jaunam lietotājam tikai profils un iestatījumi. Zem tā darbības: rakstīt ziņojumu, izveidot grupu, pievienot pasākumu (arī savu, M-24); tad tuvākie pasākumi, mani ziņojumi, manas grupas, manas kopienas. Paziņojumi un Ziņas ir savās joslas vietās.', fn: function (w) {
+  screens.push({ id: 'regular', st: 'progress', v: 'v7', label: 'Mājas parastam lietotājam (M-01, M-17)', story: 'Mājas ir vecais Es (M-32): galvā profils (attēls, vārds, Labot profilu), iestatījumi un adminam admin ieeja (attēlots admina skats); jaunam lietotājam tikai profils un iestatījumi. Zem tā darbības: rakstīt ziņojumu, izveidot grupu, pievienot pasākumu (arī savu, M-24); tad tuvākie pasākumi, mani ziņojumi, manas grupas, manas kopienas. Paziņojumi un Ziņas ir savās joslas vietās.', fn: function (w) {
     var ev = sec('Tuvākie pasākumi', item(ICO(P.cal)) + item(ICO(P.cal)));
     var zi = sec('Mani ziņojumi', item(ICO(P.chat)));
     var gr = sec('Manas grupas', '<div class="grid grid-cols-2 gap-2">' + item() + item() + '</div>');
@@ -108,7 +108,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');
