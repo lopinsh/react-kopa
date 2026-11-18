@@ -10,7 +10,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from ledger rows M-15 and M-16 in docs/development/majas/majas.md; grey boxes are placeholders. Layout after the owner's Zalando and About You screenshots. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt</h1>
-<p class="text-meta text-foreground-muted">Versija v6 · publicēta 2026-11-18 10:53</p>
+<p class="text-meta text-foreground-muted">Versija v7 · publicēta 2026-11-18 14:26</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Atklāt cilnes ir Grupas · Pasākumi · Cilvēki (M-05). Darbvirsmā Jaunumi ir galvā blakus Mājas un Atklāt (C, izvēlēts); A variants (uz Jaunumi ved tikai zīme) apskatāms ar slēdzi zemāk. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-33.</p>
 <div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
@@ -101,7 +101,7 @@
   screens.push({ id: 'all', st: 'progress', v: 'v6', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
     if (w === 375) return phone(tabs('Grupas') + head('Visas tēmas', '248 grupas') + '<div class="grid">' + L1.map(function (x) { return row(l1row(x, 0), 1); }).join('') + '</div>');
     return shop('Grupas', 'Visas tēmas', '248 grupas', many(card), 'grid-cols-3', allTree)(w); } });
-  screens.push({ id: 'shop', st: 'progress', v: 'v6', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push({ id: 'shop', st: 'progress', v: 'v7', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad) un sākumā daži papildu: grupām "uzņem jaunus" un "nesen aktīva", pasākumiem "var pievienoties bez apstiprinājuma" (M-22, zem "Visi filtri"); Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
 
   var sheetRow = function (t, v) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + '<span class="flex items-center gap-1 text-meta text-foreground-muted">' + v + ICO(P.right, 'size-4') + '</span></span>'; };
   screens.push({ id: 'phone', st: 'progress', v: 'v3', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
@@ -110,7 +110,7 @@
     phone('<div class="flex items-center justify-between"><h2 class="text-title">Filtri</h2><span class="text-button-sm text-foreground-muted">Notīrīt</span></div><div class="grid">' + sheetRow('Kur', 'Jelgava') + sheetRow('Kad', 'Jebkad') + '</div><span class="mt-24 inline-flex h-11 items-center justify-center rounded-pill bg-primary text-button text-primary-foreground">Rādīt 13 grupas</span>')
   ] });
 
-  screens.push({ id: 'people', st: 'progress', v: 'v6', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Kā rādīt cilvēkus, vēl nav zināms.', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
+  screens.push({ id: 'people', st: 'progress', v: 'v7', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Cilvēks redzams tikai, kamēr viņam ir aktīvs ziņojums šajā tēmā un vietā: attēls, vārds, teksts, Atbildēt un Rakstīt privāti (M-16). Neviens nav sarakstā tikai tāpēc, ka eksistē. Ziņojumu var uzrakstīt no Mājām un no jebkuras kopienas lapas (M-11).', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
 
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
@@ -138,7 +138,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var r = document.createElement('div');

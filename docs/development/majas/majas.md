@@ -29,7 +29,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (open, or my proposal n
 | M-32 | **Mājas is the old Es:** profile, settings and the admin entry live in Mājas; there is no separate Es item. | Confirmed | 16 Nov, owner: "Home is the old Es". |
 | M-04 | **Landing:** signed in → Mājas; signed out → Jaunumi, the home page for visitors. | Confirmed | 13 Nov; 16 Nov, owner: Jaunumi is a page of its own (the first bar item), no longer "Atklāt › Jaunumi". |
 | M-06 | Notifications as a bell on the Mājas head. | Changed | → M-17/M-18: notifications keep their own item. |
-| M-11 | **Be seen before joining:** a new user can write a Ziņojums in their topic so others find them. | In progress | Builds on K-26, K-18a. |
+| M-11 | **Be seen before joining:** a new user can write a Ziņojums in their topic so others find them, **from Mājas ("Rakstīt ziņojumu") and from any hub page**. It shows on the Cilvēki tab (M-16) and in Jaunumi. | Confirmed | Builds on K-26, K-18a. 18 Nov, owner: "from Mājas, and from other hubs". |
 | M-19 | **The tour is optional:** on the first visit a small window asks "Gribi īsu ievadu?" (Jā / Vēlāk); no start card forced into Mājas. | Confirmed | 13 Nov. 18 Nov, owner: an **"Ievads" row in Mājas** (beside profile and settings) starts it later. |
 | M-03 | **Pasākumi tab:** my events first, then events in my topics and city, with the calendar. | Changed | My proposal; → M-36. |
 | M-36 | **Mājas is everything about me, Atklāt is for the new:** the user's own events, groups and Ziņojumi live in Mājas (their own lens of the site, M-31); Atklāt and its Pasākumi tab only browse and discover, filtered by the tree and Kur/Kad, with a calendar. | Confirmed | 18 Nov, owner: "Home section, where the user sees all info related to him. His own lens of the site. Discover is to… discover something new. To browse." |
@@ -42,8 +42,8 @@ Statuses: **Confirmed** (owner decided), **In progress** (open, or my proposal n
 | M-20 | **Jaunumi cards are sized by "can I act on this soon?"**: large = an event near me this week, a person looking for company in my topic; medium = a new group in my topic or city; the rest bundled into one line ("3 jaunas grupas Sportā šonedēļ"). | Confirmed | 13 Nov. Replaces the mixed-size grid without a rule. |
 | M-15 | **Filtering like online clothing shops** (Zalando, About You, Reserved; owner's screenshots 13 Nov): tabs above everything; on desktop a **tree of the current branch only** in the left column; a big title with the count; a row of drop-down filter pills; Kārtot at the right. Phone: the tree becomes a list, one level per screen ("Skatīt visu", back arrow), a chip row of the current node's children under the title, a "Filtri · Kārtot" bar opening a sheet that ends in "Rādīt N grupas". | Confirmed | 13 Nov. Desktop tree confirmed; phone version is my proposal from the shops, drawn. A shop category page is a saved set of filters with a layout, close to M-09. |
 | M-21 | **Back to all topics:** the tree's top row is "‹ Visas tēmas" (every L1 with its colour and icon, like today's menu); the chosen L1 keeps its icon and colour; every row upward is a link. | Confirmed | 13 Nov. Keep L1 colours and icons. |
-| M-22 | **Filters:** Kur and Kad now. **Valoda is never a filter.** Plan per tab later, e.g. events: size (≤6 / medium / large), free; groups: size, how often they meet, open or by request, recently active. | In progress | 13 Nov: "not clear yet". |
-| M-16 | **Cilvēki tab:** people's Ziņojumi ("meklēju, ar ko spēlēt šahu"), with the same tree and filters, so a person in no group is findable (M-11). How people are shown: not known yet. | In progress | |
+| M-22 | **Filters:** Kur and Kad on every tab; **Valoda is never a filter.** At the start a few extras: Grupas "accepting new members" and "recently active"; Pasākumi "open to join" (no approval needed); Cilvēki none. More filters (size, how often they meet, event size, free) only once there is enough content to need them (M-08). | Confirmed | 13 Nov: "not clear yet". 18 Nov, owner chose Kur + Kad with few extras. |
+| M-16 | **Cilvēki tab: people are shown through their Ziņojumi** ("Meklēju, ar ko spēlēt šahu"): a person appears only while they have an active Ziņojums in that topic/place, with photo, name, the text, Atbildēt and Rakstīt privāti. Nobody is listed just for existing. Same tree and filters, so a person in no group is findable (M-11). | Confirmed | 18 Nov, owner. |
 
 ### Ziņojumi
 | Id | Feature | Status | Notes |
@@ -66,7 +66,7 @@ Statuses: **Confirmed** (owner decided), **In progress** (open, or my proposal n
 | M-29 | **Everyone is visible by default.** Later: hiding is mutual (hidden → you don't see others and can't write). | Confirmed | 13 Nov. Hiding: later. |
 | M-30 | **Rush hours** (a square evening for a topic). | In progress | Later. |
 | M-08 | **Simple first, reveal later:** less text on first impression, no mIRC-style wall; capabilities appear as people need them. | Confirmed | 13 Nov principle. Goes into the handbook once settled how. |
-| M-09 | **A hub is a dashboard overview of the content it encompasses** (filters plus one layout, at any depth). | In progress | Needs more thinking; M-15 and M-25 are steps toward it. |
+| M-09 | **A hub is a dashboard overview of the content it encompasses** (filters plus one layout, at any depth): an overview page (Pārskats) with blocks for groups, events, Ziņojumi and talk, each block linking to the full list. | Confirmed | 18 Nov, owner chose the overview dashboard over "Atklāt with a head". Starting point: today's hub Pārskats (K1, drawing `kanali/hub.html`); the blocks read the same content as Atklāt (M-31). Not drawn in the Mājas drawings yet. |
 
 ## Chat references
 - **Twitch / YouTube live chat:** built for speed; unusable for talking.
@@ -79,9 +79,9 @@ Statuses: **Confirmed** (owner decided), **In progress** (open, or my proposal n
 ## Open questions
 1. (settled 18 Nov: M-35, option C; A kept drawn.)
 2. (settled 16 Nov: M-32.)
-3. Filters per tab (M-22).
-4. How people are shown on the Cilvēki tab (M-16).
+3. (settled 18 Nov: M-22, Kur + Kad and a few extras.)
+4. (settled 18 Nov: M-16, through their Ziņojumi.)
 5. (settled 18 Nov: M-14; replies everywhere, members notified of their group's Ziņojumi, cap 3 per hub / 10 site-wide for persons only, opt-in reply notices; expiry later.)
 6. (settled 18 Nov: M-36.)
-7. What a hub's layout is, now that a hub is a lens (M-09, M-31).
+7. (settled 18 Nov: M-09, overview dashboard.)
 8. (settled 18 Nov: M-34, footer only; the site name is a working title.)
