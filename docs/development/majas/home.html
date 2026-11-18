@@ -9,7 +9,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: sākumlapa</h1>
-<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:54</p>
+<p class="text-meta text-foreground-muted">Versija v4 · publicēta 2026-11-18 10:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Mājas ir tava vieta (M-01) un vecais Es (M-32): galvā profils, iestatījumi un adminam admin ieeja; zem tā tavas grupas, pasākumi un ziņojumi. Ievads ir pēc izvēles (M-19). Telefona josla (M-18): Jaunumi · Atklāt · Mājas · Paziņojumi · Ziņas, Ziņas ir privātās ziņas; nav atsevišķa Es. Darbvirsmā galva kā šobrīd (M-17). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -46,11 +46,11 @@
   }
   function deskBar(active) {
     var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
-    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
-    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
-    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
-      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
-      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+    var item = function (t, ic) { return '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === t ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
+    var mark = '<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-item text-primary-foreground" title="Zīme (M-34), ved uz Jaunumi">EK</span>';
+    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + item('Mājas', 'home') + item('Atklāt', 'compass')
+      + '<span class="ml-2 flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>'
+      + '<span class="ml-auto flex items-center gap-3"><span class="text-body-sm">LV</span>'
       + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
@@ -67,10 +67,10 @@
   var empty = function (t, hint) { return sec(t, '<p class="rounded-2xl line p-3 text-body-sm text-foreground-muted">' + hint + '</p>'); };
   var acts = '<div class="flex flex-wrap gap-2">' + pill('Rakstīt ziņojumu', true) + pill('Izveidot grupu') + pill('Pievienot pasākumu') + '</div>';
   var tour = '<div class="absolute inset-0 grid place-items-center bg-[var(--scrim)] p-6"><div class="grid w-full max-w-sm gap-3 rounded-2xl bg-surface p-5 shadow-premium"><p class="text-section">Gribi īsu ievadu?</p><p class="text-body text-foreground-muted">Trīs soļi: tēmas un pilsēta, ziņojums, lai tevi atrod, grupa vai pasākums.</p><div class="flex gap-2"><span class="inline-flex h-11 flex-1 items-center justify-center rounded-pill bg-primary text-button text-primary-foreground">Jā</span><span class="inline-flex h-11 flex-1 items-center justify-center rounded-pill line text-button">Vēlāk</span></div></div></div>';
-  screens.push({ id: 'new-user', st: 'progress', v: 'v3', label: 'Mājas jaunam lietotājam: ievads pēc izvēles (M-01, M-19)', story: 'Pirmajā reizē mazs logs jautā "Gribi īsu ievadu?" ar Jā / Vēlāk. Aiz tā parastās Mājas ar tukšām sadaļām un darbībām; nekas netiek uzspiests. Ievadu vēlāk var sākt no Mājām (saite "Ievads" profila galvā).', fn: function (w) {
+  screens.push({ id: 'new-user', st: 'progress', v: 'v4', label: 'Mājas jaunam lietotājam: ievads pēc izvēles (M-01, M-19)', story: 'Pirmajā reizē mazs logs jautā "Gribi īsu ievadu?" ar Jā / Vēlāk. Aiz tā parastās Mājas ar tukšām sadaļām un darbībām; nekas netiek uzspiests. Ievadu vēlāk var sākt no Mājām (saite "Ievads" profila galvā).', fn: function (w) {
     var body = acts + empty('Tuvākie pasākumi', 'Vēl nav. Atrodi kādu Atklāt vai pievieno savu.') + empty('Mani ziņojumi', 'Uzraksti, ko meklē, lai tevi atrod.') + empty('Manas grupas', 'Vēl neesi nevienā grupā.');
     return frame(w, 'Mājas', head(false) + body) + tour; } });
-  screens.push({ id: 'regular', st: 'progress', v: 'v3', label: 'Mājas parastam lietotājam (M-01, M-17)', story: 'Mājas ir vecais Es (M-32): galvā profils (attēls, vārds, Labot profilu), iestatījumi un adminam admin ieeja (attēlots admina skats); jaunam lietotājam tikai profils un iestatījumi. Zem tā darbības: rakstīt ziņojumu, izveidot grupu, pievienot pasākumu (arī savu, M-24); tad tuvākie pasākumi, mani ziņojumi, manas grupas, manas kopienas. Paziņojumi un Ziņas ir savās joslas vietās.', fn: function (w) {
+  screens.push({ id: 'regular', st: 'progress', v: 'v4', label: 'Mājas parastam lietotājam (M-01, M-17)', story: 'Mājas ir vecais Es (M-32): galvā profils (attēls, vārds, Labot profilu), iestatījumi un adminam admin ieeja (attēlots admina skats); jaunam lietotājam tikai profils un iestatījumi. Zem tā darbības: rakstīt ziņojumu, izveidot grupu, pievienot pasākumu (arī savu, M-24); tad tuvākie pasākumi, mani ziņojumi, manas grupas, manas kopienas. Paziņojumi un Ziņas ir savās joslas vietās.', fn: function (w) {
     var ev = sec('Tuvākie pasākumi', item(ICO(P.cal)) + item(ICO(P.cal)));
     var zi = sec('Mani ziņojumi', item(ICO(P.chat)));
     var gr = sec('Manas grupas', '<div class="grid grid-cols-2 gap-2">' + item() + item() + '</div>');
@@ -105,7 +105,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');

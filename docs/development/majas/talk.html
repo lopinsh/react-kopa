@@ -9,7 +9,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: Ziņojumi un Laukums</h1>
-<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:59</p>
+<p class="text-meta text-foreground-muted">Versija v4 · publicēta 2026-11-18 10:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Divas dažādas lietas. Ziņojumi paliek: viena siena ar īsām atbildēm (M-12), ko redz caur dažādām lēcām (M-31): kopienā un grupā tie paši Ziņojumi, autors ir grupa vai cilvēks (M-14); termiņa nav (apstiprināts). Laukums ir tagad: cilvēki, kas skatās to pašu tēmu un vietu, redz cits citu un var parunāt (M-25..M-28); sarunas izgaist pēc aktivitātes.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -46,11 +46,11 @@
   }
   function deskBar(active) {
     var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
-    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
-    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
-    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
-      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
-      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+    var item = function (t, ic) { return '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === t ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
+    var mark = '<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-item text-primary-foreground" title="Zīme (M-34), ved uz Jaunumi">EK</span>';
+    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + item('Mājas', 'home') + item('Atklāt', 'compass')
+      + '<span class="ml-2 flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>'
+      + '<span class="ml-auto flex items-center gap-3"><span class="text-body-sm">LV</span>'
       + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
@@ -73,10 +73,10 @@
   var authors = '<div class="flex flex-wrap gap-2"><span class="text-meta leading-8 text-foreground-muted">Autors</span>' + pill('Visi', true) + pill('Grupas') + pill('Cilvēki') + '</div>';
   var props = '<div class="grid gap-1 rounded-2xl line p-3 text-body-sm"><span class="text-item">PRIEKŠLIKUMI (neapstiprināti, M-14)</span><span>1. Atbildes visur, arī grupas Ziņojumam.</span><span>2. Grupas Ziņojums paziņo tās biedriem.</span><span>3. Ierobežojums 3 tikai cilvēkiem, ne grupām.</span><span class="text-foreground-muted">Termiņa nav (apstiprināts 16. nov.).</span></div>';
   var capNote = '<p class="text-meta text-foreground-muted">Cilvēkam līdz 3 aktīviem ziņojumiem (priekšlikums). Grupai ierobežojuma nav.</p>';
-  screens.push({ id: 'wall-hub', st: 'progress', v: 'v3', label: 'Ziņojumi caur kopienas lēcu (M-12, M-14, M-31)', story: 'Viena Ziņojumu siena, šeit skatīta caur lēcu "tēma + vieta". Autors ir grupa vai cilvēks, lasītājs var filtrēt pēc autora. Grupas un cilvēka kartīte ir viena un tā pati; no cilvēka ziņojuma var rakstīt privāti (M-23). Termiņa nav. Zem tiem pašiem ziņojumiem grupas lēca (nākamā sadaļa). Priekšlikumi ir atzīmēti rāmī.', fn: function (w) {
+  screens.push({ id: 'wall-hub', st: 'progress', v: 'v4', label: 'Ziņojumi caur kopienas lēcu (M-12, M-14, M-31)', story: 'Viena Ziņojumu siena, šeit skatīta caur lēcu "tēma + vieta". Autors ir grupa vai cilvēks, lasītājs var filtrēt pēc autora. Grupas un cilvēka kartīte ir viena un tā pati; no cilvēka ziņojuma var rakstīt privāti (M-23). Termiņa nav. Zem tiem pašiem ziņojumiem grupas lēca (nākamā sadaļa). Priekšlikumi ir atzīmēti rāmī.', fn: function (w) {
     var posts = w === 375 ? P1() + P2() + P3() : '<div class="grid grid-cols-2 gap-4">' + P1() + P2() + P3() + P4() + '</div>';
     return frame(w, 'Atklāt', hubHead + composer + capNote + authors + posts + props); } });
-  screens.push({ id: 'wall-group', st: 'progress', v: 'v3', label: 'Tie paši Ziņojumi caur grupas lēcu (M-14, M-31)', story: 'Grupas lapā Ziņojumi ir tie paši ziņojumi, atlasīti pēc autora "šī grupa": grupas paziņojumi nav cits veids, tikai cits skats (M-31). Divas kartītes šeit ir tās pašas, kas kopienas sienā (Jelgavas novusisti). PRIEKŠLIKUMS: tām var atbildēt, un grupas Ziņojums paziņo biedriem (zīme "Paziņoja biedriem"); ierobežojums 3 grupām neattiecas.', fn: function (w) {
+  screens.push({ id: 'wall-group', st: 'progress', v: 'v4', label: 'Tie paši Ziņojumi caur grupas lēcu (M-14, M-31)', story: 'Grupas lapā Ziņojumi ir tie paši ziņojumi, atlasīti pēc autora "šī grupa": grupas paziņojumi nav cits veids, tikai cits skats (M-31). Divas kartītes šeit ir tās pašas, kas kopienas sienā (Jelgavas novusisti). PRIEKŠLIKUMS: tām var atbildēt, un grupas Ziņojums paziņo biedriem (zīme "Paziņoja biedriem"); ierobežojums 3 grupām neattiecas.', fn: function (w) {
     var posts = w === 375 ? P1() + P4() : '<div class="grid grid-cols-2 gap-4">' + P1() + P4() + '</div>';
     return frame(w, 'Atklāt', groupHead + composer + posts + props); } });
   var faces = function (n) { var o = ''; for (var i = 0; i < n; i++) o += '<span class="-ml-2 size-8 rounded-pill bg-tint ring-2 ring-[var(--surface)] first:ml-0"></span>'; return '<span class="flex">' + o + '</span>'; };
@@ -90,11 +90,11 @@
   var busy = line('Anna · pirms 3 h', 'opacity-40') + line('Jānis · pirms 1 h', 'opacity-70') + line('Marta · pirms 10 min', '') + line('Pēteris · tikko', '');
   var quiet = line('Ilze · pirms 3 dienām', 'opacity-70') + line('Kārlis · vakar', '');
   var grid3 = '<div class="grid content-start gap-4"><div class="flex items-baseline gap-2"><h2 class="text-title">Galda spēles · Jelgava</h2><span class="text-meta text-foreground-muted">13 grupas</span></div><div class="grid grid-cols-2 gap-4">' + [1, 2, 3, 4].map(function () { return '<div class="grid gap-2 ' + box + '"><span class="block h-24 rounded-xl bg-tint"></span>' + lines(2) + '</div>'; }).join('') + '</div></div>';
-  screens.push({ id: 'square', st: 'progress', v: 'v3', label: 'Laukums: tu esi tur, kur skaties (M-25, M-27, M-28)', story: 'Skatoties Atklāt › Galda spēles › Jelgava, tu stāvi šajā laukumā. Redzams, kas šeit tagad; uzruna aicina runāt laukumā, nevis rakstīt kādam vienam. Rosīgā laukumā rindas izgaist pēc ~4 stundām. Telefonā laukums ir lapa, ko atver no peldoša "Šeit tagad: 5".', fn: function (w) {
+  screens.push({ id: 'square', st: 'progress', v: 'v4', label: 'Laukums: tu esi tur, kur skaties (M-25, M-27, M-28)', story: 'Skatoties Atklāt › Galda spēles › Jelgava, tu stāvi šajā laukumā. Redzams, kas šeit tagad; uzruna aicina runāt laukumā, nevis rakstīt kādam vienam. Rosīgā laukumā rindas izgaist pēc ~4 stundām. Telefonā laukums ir lapa, ko atver no peldoša "Šeit tagad: 5".', fn: function (w) {
     var sq = square('Galda spēles · Jelgava', 5, 'Šeit ir 5 cilvēki, kam interesē galda spēles. Droši uzraksti.', busy);
     if (w === 375) return frame(w, 'Atklāt', sq);
     return frame(w, 'Atklāt', '<div class="grid grid-cols-[1fr_24rem] gap-8">' + grid3 + sq + '</div>'); } });
-  screens.push({ id: 'elastic', st: 'progress', v: 'v3', label: 'Klusais laukums un elastīgie laukumi (M-26, M-28)', story: 'Novuss · Bauska: šobrīd neviena. Laukums paplašinās uz augšu un rāda, kas tagad skatās Galda spēles visā Latvijā. Klusā laukumā sarunas paliek dienām, lai nākamais saprot noskaņu.', fn: function (w) {
+  screens.push({ id: 'elastic', st: 'progress', v: 'v4', label: 'Klusais laukums un elastīgie laukumi (M-26, M-28)', story: 'Novuss · Bauska: šobrīd neviena. Laukums paplašinās uz augšu un rāda, kas tagad skatās Galda spēles visā Latvijā. Klusā laukumā sarunas paliek dienām, lai nākamais saprot noskaņu.', fn: function (w) {
     var sq = square('Galda spēles · Latvija', 2, 'Šeit ir 2 cilvēki, kam interesē galda spēles. Droši uzraksti.', quiet, 'Novuss · Bauska šobrīd tukšs: rādām Galda spēles visā Latvijā.');
     if (w === 375) return frame(w, 'Atklāt', sq);
     return frame(w, 'Atklāt', '<div class="grid grid-cols-[1fr_24rem] gap-8">' + grid3.replace('Galda spēles · Jelgava', 'Novuss · Bauska').replace('13 grupas', '1 grupa') + sq + '</div>'); } });
@@ -126,7 +126,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');

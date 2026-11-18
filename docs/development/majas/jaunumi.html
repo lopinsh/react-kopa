@@ -9,7 +9,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt › Jaunumi</h1>
-<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:54</p>
+<p class="text-meta text-foreground-muted">Versija v4 · publicēta 2026-11-18 10:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Jaunumi ir sava lapa un pirmā josla (M-18), ne vairs cilne Atklāt iekšā (M-04, M-05). Tā ir nepierakstīta cilvēka sākumlapa: īsa uzruna, veids pieteikties, plūsma. Kartītes lielums pēc jautājuma "vai es ar to drīz varu ko darīt?" (M-20): lielas, vidējas, pārējais saišķos vienā rindā. Desktopā logotips ved uz Jaunumi.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -46,11 +46,11 @@
   }
   function deskBar(active) {
     var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
-    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
-    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
-    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
-      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
-      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+    var item = function (t, ic) { return '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === t ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
+    var mark = '<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-item text-primary-foreground" title="Zīme (M-34), ved uz Jaunumi">EK</span>';
+    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + item('Mājas', 'home') + item('Atklāt', 'compass')
+      + '<span class="ml-2 flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>'
+      + '<span class="ml-auto flex items-center gap-3"><span class="text-body-sm">LV</span>'
       + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
@@ -72,11 +72,11 @@
     if (w === 375) return A + B + '<div class="grid grid-cols-2 gap-3">' + C + Dd + '</div>' + E + R;
     return '<div class="grid grid-cols-4 gap-4"><div class="col-span-2">' + A + '</div><div class="col-span-2">' + B + '</div>' + C + Dd + '<div class="col-span-2">' + E + '</div></div>' + R;
   };
-  screens.push({ id: 'landing', st: 'progress', v: 'v3', label: 'Jaunumi nepierakstītam: mājaslapa apmeklētājam (M-04, M-20)', story: 'Nepierakstīts apmeklētājs nonāk šeit. Virsū īsa uzruna ar pieteikšanās veidu (darbvirsmā galvā "Pieteikties"), tad plūsma. Lielas kartītes: tas, ko var darīt drīz (pasākums tuvumā šonedēļ, cilvēks, kas meklē kompāniju). Vidējas: jauna grupa tavā tēmā vai pilsētā, grupas ziņojums. Pārējais saišķos. Josla ir tā pati (M-18); Mājas, Paziņojumi un Ziņas lūdz pieteikties.', fn: function (w) {
+  screens.push({ id: 'landing', st: 'progress', v: 'v4', label: 'Jaunumi nepierakstītam: mājaslapa apmeklētājam (M-04, M-20)', story: 'Nepierakstīts apmeklētājs nonāk šeit. Virsū īsa uzruna ar pieteikšanās veidu (darbvirsmā galvā "Pieteikties"), tad plūsma. Lielas kartītes: tas, ko var darīt drīz (pasākums tuvumā šonedēļ, cilvēks, kas meklē kompāniju). Vidējas: jauna grupa tavā tēmā vai pilsētā, grupas ziņojums. Pārējais saišķos. Josla ir tā pati (M-18); Mājas, Paziņojumi un Ziņas lūdz pieteikties.', fn: function (w) {
     signedOut = true;
     var hero = '<div class="' + box + ' grid gap-3"><p class="text-title">Ejam kopā</p><p class="text-body text-foreground-muted">Atrodi cilvēkus, ar kuriem kopā darīt lietas.</p><span class="flex flex-wrap gap-2"><span class="inline-flex h-11 items-center rounded-pill bg-primary px-4 text-button text-primary-foreground">Pieteikties</span><span class="inline-flex h-11 items-center rounded-pill line px-4 text-button">Reģistrēties</span></span></div>';
     var out = frame(w, 'Jaunumi', hero + feed(w)); signedOut = false; return out; } });
-  screens.push({ id: 'signed-in', st: 'progress', v: 'v3', label: 'Jaunumi pierakstītam (M-05, M-20)', story: 'Tā pati plūsma bez uzrunas, pēc tavām tēmām un pilsētas. Pierakstītam sākumlapa ir Mājas; Jaunumi ir pirmā josla.', fn: function (w) { return frame(w, 'Jaunumi', feed(w)); } });
+  screens.push({ id: 'signed-in', st: 'progress', v: 'v4', label: 'Jaunumi pierakstītam (M-05, M-20)', story: 'Tā pati plūsma bez uzrunas, pēc tavām tēmām un pilsētas. Pierakstītam sākumlapa ir Mājas; Jaunumi ir pirmā josla.', fn: function (w) { return frame(w, 'Jaunumi', feed(w)); } });
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var stage = document.getElementById('stage');
@@ -104,7 +104,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');

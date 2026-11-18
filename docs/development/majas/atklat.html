@@ -9,7 +9,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from ledger rows M-15 and M-16 in docs/development/majas/majas.md; grey boxes are placeholders. Layout after the owner's Zalando and About You screenshots. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt</h1>
-<p class="text-meta text-foreground-muted">Versija v3 · publicēta 2026-11-16 15:54</p>
+<p class="text-meta text-foreground-muted">Versija v4 · publicēta 2026-11-18 10:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">PRIEKŠLIKUMS (M-05, vēl neapstiprināts): kad Jaunumi ir sava lapa, Atklāt cilnes ir Grupas · Pasākumi · Cilvēki, un darbvirsmā uz Jaunumi ved logotips. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-17.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
@@ -46,11 +46,11 @@
   }
   function deskBar(active) {
     var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
-    var atk = '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === 'Atklāt' ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + ICO(P.compass, 'size-4') + 'Atklāt</span>';
-    var home = '<span class="text-body ' + (active === 'Mājas' ? 'text-foreground underline underline-offset-8' : 'text-foreground-muted') + '">Mājas</span>';
-    return '<nav class="flex items-center gap-4 border-b line bg-surface px-8 py-3"><span class="text-item whitespace-nowrap" title="Logotips ved uz Jaunumi">Ejam kopā</span>'
-      + '<span class="flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>' + atk
-      + '<span class="ml-auto flex items-center gap-3">' + home + '<span class="text-body-sm">LV</span>'
+    var item = function (t, ic) { return '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === t ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
+    var mark = '<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-item text-primary-foreground" title="Zīme (M-34), ved uz Jaunumi">EK</span>';
+    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + item('Mājas', 'home') + item('Atklāt', 'compass')
+      + '<span class="ml-2 flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>'
+      + '<span class="ml-auto flex items-center gap-3"><span class="text-body-sm">LV</span>'
       + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
   }
   function frame(w, active, body) {
@@ -93,10 +93,10 @@
     };
   }
 
-  screens.push({ id: 'all', st: 'progress', v: 'v3', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
+  screens.push({ id: 'all', st: 'progress', v: 'v4', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
     if (w === 375) return phone(tabs('Grupas') + head('Visas tēmas', '248 grupas') + '<div class="grid">' + L1.map(function (x) { return row(l1row(x, 0), 1); }).join('') + '</div>');
     return shop('Grupas', 'Visas tēmas', '248 grupas', many(card), 'grid-cols-3', allTree)(w); } });
-  screens.push({ id: 'shop', st: 'progress', v: 'v3', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'PRIEKŠLIKUMS: cilnes Grupas · Pasākumi · Cilvēki (Jaunumi ir sava lapa, darbvirsmā logotips ved uz to). Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push({ id: 'shop', st: 'progress', v: 'v4', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'PRIEKŠLIKUMS: cilnes Grupas · Pasākumi · Cilvēki (Jaunumi ir sava lapa, darbvirsmā logotips ved uz to). Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
 
   var sheetRow = function (t, v) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + '<span class="flex items-center gap-1 text-meta text-foreground-muted">' + v + ICO(P.right, 'size-4') + '</span></span>'; };
   screens.push({ id: 'phone', st: 'progress', v: 'v3', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
@@ -105,7 +105,7 @@
     phone('<div class="flex items-center justify-between"><h2 class="text-title">Filtri</h2><span class="text-button-sm text-foreground-muted">Notīrīt</span></div><div class="grid">' + sheetRow('Kur', 'Jelgava') + sheetRow('Kad', 'Jebkad') + '</div><span class="mt-24 inline-flex h-11 items-center justify-center rounded-pill bg-primary text-button text-primary-foreground">Rādīt 13 grupas</span>')
   ] });
 
-  screens.push({ id: 'people', st: 'progress', v: 'v3', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Kā rādīt cilvēkus, vēl nav zināms.', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
+  screens.push({ id: 'people', st: 'progress', v: 'v4', label: 'Cilne Cilvēki: cilvēku ziņojumi (M-16)', story: 'Tas pats koks un filtri, saturs ir cilvēku ziņojumi ("meklēju, ar ko spēlēt šahu"), lai atrod arī to, kurš vēl nav nevienā grupā (M-11). Kā rādīt cilvēkus, vēl nav zināms.', fn: shop('Cilvēki', 'Galda spēles', '8 ziņojumi', many(note), 'grid-cols-2') });
 
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
@@ -133,7 +133,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var r = document.createElement('div');
