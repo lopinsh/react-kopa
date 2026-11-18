@@ -10,7 +10,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from ledger rows M-15 and M-16 in docs/development/majas/majas.md; grey boxes are placeholders. Layout after the owner's Zalando and About You screenshots. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt</h1>
-<p class="text-meta text-foreground-muted">Versija v7 · publicēta 2026-11-18 14:26</p>
+<p class="text-meta text-foreground-muted">Versija v8 · publicēta 2026-11-18 14:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Atklāt cilnes ir Grupas · Pasākumi · Cilvēki (M-05). Darbvirsmā Jaunumi ir galvā blakus Mājas un Atklāt (C, izvēlēts); A variants (uz Jaunumi ved tikai zīme) apskatāms ar slēdzi zemāk. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-33.</p>
 <div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
@@ -97,11 +97,25 @@
     };
   }
 
+  /* Pasākumi tab (M-36, M-22): only discovery; my own events live in Mājas. A personal event (M-24) sits among group events. */
+  P.clock = '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>';
+  var toggle = function (t) { return '<span class="inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-pill line bg-surface px-3 text-button-sm text-foreground">' + t + '</span>'; };
+  var evPills = '<div class="flex flex-wrap items-center gap-2">' + drop('Kur') + drop('Kad') + toggle('Bez apstiprinājuma') + '<span class="ml-auto">' + drop('Kārtot') + '</span></div>';
+  var DAYS = [['P', 17], ['O', 18], ['T', 19], ['C', 20], ['Pk', 21], ['S', 22], ['Sv', 23]];
+  var week = '<div class="grid grid-cols-7 gap-1 rounded-2xl line p-2">' + DAYS.map(function (d, i) { var on = i === 3, has = [1, 3, 5, 6].indexOf(i) >= 0; return '<span class="grid place-items-center gap-0.5 rounded-xl py-1 ' + (on ? 'bg-primary text-primary-foreground' : '') + '"><span class="text-meta">' + d[0] + '</span><span class="text-item">' + d[1] + '</span><span class="size-1.5 rounded-pill ' + (has ? (on ? 'bg-surface' : 'bg-foreground') : '') + '"></span></span>'; }).join('') + '</div>';
+  var evRow = function (time, t, who, own) { return '<div class="flex items-center gap-3 ' + box + '"><span class="grid w-14 shrink-0 place-items-center rounded-xl bg-tint py-1"><span class="text-meta">ce</span><span class="text-item">' + time + '</span></span><span class="grid min-w-0 flex-1 gap-0.5"><span class="flex flex-wrap items-center gap-2"><span class="text-item">' + t + '</span>' + (own ? '<span class="rounded-pill bg-tint px-2 text-meta">Savs pasākums</span>' : '') + '</span><span class="text-meta text-foreground-muted">' + who + '</span></span></div>'; };
+  var evList = '<div class="grid gap-2">' + evRow('18:00', 'Šaha vakars iesācējiem', 'Šaha klubs Bandinieks · bibliotēka') + evRow('19:00', 'Spēlēšu Carcassonne, nāc līdzi', 'Marta · Jelgava, centrs', true) + evRow('19:30', 'Galda spēļu vakars', 'Galda spēļu vakari · kafejnīca') + '</div>';
+  var evScreen = { id: 'events', st: 'new', v: 'v8', label: 'Cilne Pasākumi: atklāt jaunus pasākumus (M-36, M-22, M-24)', story: 'Atklāt ir, lai atrastu jaunu: šeit nav "mani pasākumi" (tie ir Mājās, M-36). Tas pats koks un filtri Kur un Kad, papildus "Bez apstiprinājuma" (var pievienoties uzreiz, M-22). Virs saraksta nedēļa ar punktiem dienām, kurās kaut kas notiek; izvēlētās dienas pasākumi zemāk. Starp grupu pasākumiem arī cilvēka savs pasākums (M-24).', fn: function (w) {
+    if (w === 375) return frame(w, 'Atklāt', tabs('Pasākumi') + head('Galda spēles', '9 pasākumi') + chips + fbar + week + '<p class="text-item">Ceturtdiena, 20. nov.</p>' + evList);
+    return frame(w, 'Atklāt', tabs('Pasākumi') + '<div class="grid grid-cols-[14rem_1fr] gap-8">' + tree + '<div class="grid content-start gap-4">' + head('Galda spēles', '9 pasākumi') + evPills + week + '<p class="text-item">Ceturtdiena, 20. nov.</p>' + evList + '</div></div>');
+  } };
+
 
   screens.push({ id: 'all', st: 'progress', v: 'v6', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
     if (w === 375) return phone(tabs('Grupas') + head('Visas tēmas', '248 grupas') + '<div class="grid">' + L1.map(function (x) { return row(l1row(x, 0), 1); }).join('') + '</div>');
     return shop('Grupas', 'Visas tēmas', '248 grupas', many(card), 'grid-cols-3', allTree)(w); } });
   screens.push({ id: 'shop', st: 'progress', v: 'v7', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad) un sākumā daži papildu: grupām "uzņem jaunus" un "nesen aktīva", pasākumiem "var pievienoties bez apstiprinājuma" (M-22, zem "Visi filtri"); Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push(evScreen);
 
   var sheetRow = function (t, v) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + '<span class="flex items-center gap-1 text-meta text-foreground-muted">' + v + ICO(P.right, 'size-4') + '</span></span>'; };
   screens.push({ id: 'phone', st: 'progress', v: 'v3', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
@@ -138,7 +152,8 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var vn = Number((s.v || 'v1').slice(1));
+    var dd = vn >= 4 ? '2026-11-18' : vn === 3 ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var r = document.createElement('div');

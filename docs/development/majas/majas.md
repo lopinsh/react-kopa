@@ -1,6 +1,6 @@
 # Mājas: a home first, then the rest
 
-> Status 13 Nov 2026: idea stage. The **Feature ledger** is the source of truth and is updated during every conversation. The drawings are cheap wireframes meant to be reacted to and changed; nothing is built.
+> Status 18 Nov 2026: mockup stage. The open questions are answered and every decided screen is drawn; the owner reviews, comments on and approves the wireframes on Būvplāns before any talk of building. The **Feature ledger** is the source of truth and is updated during every conversation; nothing is built.
 
 ## Why
 Feedback from a new user's point of view (13 Nov): discovery as the first page is overwhelming. A person needs a home first, a way to be seen before they are ready to join a group, one place for what's new, and a simple first impression that reveals more later. And one wish of the owner's: bring back the feeling of **real-time closeness**: on other social sites you browse alone, out of sync with everyone, a ghost that leaves replies; here you should feel that others are in the same place now, like striking up a conversation in a queue or by the tea pot at an event.

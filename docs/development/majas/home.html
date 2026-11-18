@@ -10,7 +10,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: sākumlapa</h1>
-<p class="text-meta text-foreground-muted">Versija v7 · publicēta 2026-11-18 14:23</p>
+<p class="text-meta text-foreground-muted">Versija v8 · publicēta 2026-11-18 14:35</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Mājas ir tava vieta (M-01) un vecais Es (M-32): galvā profils, iestatījumi un adminam admin ieeja; zem tā tavas grupas, pasākumi un ziņojumi. Ievads ir pēc izvēles (M-19). Telefona josla (M-18): Jaunumi · Atklāt · Mājas · Paziņojumi · Ziņas, Ziņas ir privātās ziņas; nav atsevišķa Es. Darbvirsmā galva kā šobrīd (M-17). Katrai sadaļai 375 px rāmis pirmais, darbvirsmas rāmis (1280) zem tā.</p>
 <div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
@@ -81,6 +81,28 @@
     var body = w === 375 ? ev + zi + gr + ko : '<div class="grid grid-cols-[2fr_1fr] gap-8"><div class="grid gap-6">' + ev + gr + '</div><div class="grid content-start gap-6">' + zi + ko + '</div></div>';
     return frame(w, 'Mājas', head(true) + acts + body); } });
 
+  /* Own event without a group (M-24) and the reply-notification switch (M-14), both reached from Mājas. */
+  P.pin = '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>';
+  P.clock = '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>';
+  var sheet = function (title, body) { return '<div class="grid gap-4 p-4"><div class="flex items-center justify-between"><h2 class="text-title">' + title + '</h2><span class="text-button-sm text-foreground-muted">Aizvērt</span></div>' + body + '</div>'; };
+  var field = function (label, value, muted) { return '<div class="grid gap-1"><span class="text-meta text-foreground-muted">' + label + '</span><span class="flex h-11 items-center rounded-xl line bg-surface px-3 text-body ' + (muted ? 'text-foreground-muted' : '') + '">' + value + '</span></div>'; };
+  var hint = function (t) { return '<p class="text-meta text-foreground-muted">' + t + '</p>'; };
+  var big = function (t, on) { return '<span class="inline-flex h-11 items-center justify-center rounded-pill text-button ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
+  var choice = function (t, sub, on) { return '<div class="flex items-center gap-3 rounded-2xl p-3 ' + (on ? 'bg-tint' : 'line') + '"><span class="size-5 shrink-0 rounded-pill ' + (on ? 'bg-primary' : 'line') + '"></span><span class="grid"><span class="text-item">' + t + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span></div>'; };
+  var ownEvent = '<div class="grid gap-2 ' + box + '"><div class="flex items-center gap-2">' + dot() + '<span class="grid"><span class="text-item">Marta</span><span class="text-meta text-foreground-muted">Savs pasākums · Sports</span></span></div><p class="text-body">Eju uz sporta zāli, nāc līdzi!</p><span class="flex flex-wrap gap-3 text-meta text-foreground-muted"><span class="inline-flex items-center gap-1">' + ICO(P.clock, 'size-4') + 'Šodien 18:00</span><span class="inline-flex items-center gap-1">' + ICO(P.pin, 'size-4') + 'Jelgava, centrs</span></span><span class="flex gap-2">' + pill('Nākšu', true) + pill('Rakstīt privāti') + '</span><span class="text-meta text-foreground-muted">Pazudīs, kad laiks būs pagājis.</span></div>';
+  screens.push({ id: 'own-event', st: 'new', v: 'v8', label: 'Savs pasākums bez grupas (M-24)', story: 'No Mājām "Pievienot pasākumu": vispirms izvēle, kam tas ir: savai grupai vai tikai sev. Savam pasākumam vajag tikai ko, kad un aptuveni kur; precīzu vietu pasaka, kad cilvēki sarunājušies. Pa labi: kā tas izskatās Jaunumos un Atklāt › Pasākumi; pēc norādītā laika tas pazūd. Atsauksmes un pārbaude: vēlāk.', phones: [
+    sheet('Jauns pasākums', '<p class="text-body">Kam ir šis pasākums?</p>' + choice('Manai grupai', 'Jelgavas novusisti', false) + choice('Tikai man', 'Savs pasākums: aicini citus līdzi', true) + big('Tālāk', true)),
+    sheet('Savs pasākums', field('Ko darīsi?', 'Eju uz sporta zāli, nāc līdzi!') + field('Kad', 'Šodien, 18:00') + field('Kur aptuveni', 'Jelgava, centrs') + hint('Precīzu vietu pasaki, kad esat sarunājuši.') + field('Tēma', 'Sports › Fitness') + big('Publicēt', true)),
+    '<div class="grid gap-4 p-4"><h2 class="text-title">Jaunumi</h2>' + ownEvent + '</div>' + phoneBar('Jaunumi')
+  ] });
+
+  var sw = function (on) { return '<span class="flex h-6 w-11 shrink-0 items-center rounded-pill p-0.5 ' + (on ? 'justify-end bg-primary' : 'justify-start bg-tint') + '"><span class="size-5 rounded-pill bg-surface shadow-control"></span></span>'; };
+  var setRow = function (t, sub, on) { return '<div class="flex items-center justify-between gap-3 border-b line py-3"><span class="grid"><span class="text-body">' + t + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span>' + sw(on) + '</div>'; };
+  screens.push({ id: 'reply-switch', st: 'new', v: 'v8', label: 'Paziņojums par atbildēm: pēc izvēles (M-14)', story: 'Mājas › Iestatījumi: jauns slēdzis "Atbildes uz maniem ziņojumiem", sākumā izslēgts. Ja to ieslēdz, autors saņem paziņojumu, kad kāds atbild uz viņa Ziņojumu. Grupas Ziņojumi saviem biedriem paziņo vienmēr (M-14). E-pasta kopsavilkums ir tas pats, kas šodien.', phones: [
+    sheet('Iestatījumi', '<h3 class="text-section">Paziņojumi</h3><div class="grid">' + setRow('Atbildes uz maniem ziņojumiem', 'Paziņot, kad kāds atbild. Sākumā izslēgts.', false) + setRow('E-pasts', 'Nelasītā kopsavilkums', true) + '</div>'),
+    sheet('Iestatījumi', '<h3 class="text-section">Paziņojumi</h3><div class="grid">' + setRow('Atbildes uz maniem ziņojumiem', 'Paziņot, kad kāds atbild.', true) + setRow('E-pasts', 'Nelasītā kopsavilkums', true) + '</div>')
+  ] });
+
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var stage = document.getElementById('stage');
@@ -97,7 +119,7 @@
     b.style.setProperty('--type-item-size', fl.i);
     b.style.setProperty('--spacing-gutter', fl.g);
     b.style.setProperty('--accent', 'var(--cat-community)');
-    b.innerHTML = s.fn(w);
+    b.innerHTML = typeof s === 'string' ? s : s.fn(w);
     col.appendChild(b);
     row.appendChild(col);
   }
@@ -108,12 +130,18 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var vn = Number((s.v || 'v1').slice(1));
+    var dd = vn >= 4 ? '2026-11-18' : vn === 3 ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');
-    row.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';
-    [375, 1280].forEach(function (w) { addBox(row, s, w); });
+    if (s.phones) {
+      row.className = 'flex flex-wrap items-start gap-6 overflow-x-auto pb-4';
+      s.phones.forEach(function (h) { addBox(row, h, 375); });
+    } else {
+      row.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';
+      [375, 1280].forEach(function (w) { addBox(row, s, w); });
+    }
     section.appendChild(row);
     stage.appendChild(section);
   });
