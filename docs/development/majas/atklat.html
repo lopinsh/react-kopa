@@ -9,8 +9,8 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from ledger rows M-15 and M-16 in docs/development/majas/majas.md; grey boxes are placeholders. Layout after the owner's Zalando and About You screenshots. -->
 
 <h1 class="text-title mb-1">Mājas: Atklāt</h1>
-<p class="text-meta text-foreground-muted">Versija v4 · publicēta 2026-11-18 10:35</p>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">PRIEKŠLIKUMS (M-05, vēl neapstiprināts): kad Jaunumi ir sava lapa, Atklāt cilnes ir Grupas · Pasākumi · Cilvēki, un darbvirsmā uz Jaunumi ved logotips. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-17.</p>
+<p class="text-meta text-foreground-muted">Versija v5 · publicēta 2026-11-18 10:48</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Atklāt cilnes vēl nav izlemtas (M-05): pirmās trīs sadaļas rāda variantus A, B un C, lai varētu izvēlēties. Pārējās sadaļas zīmētas pēc A varianta: Atklāt cilnes ir Grupas · Pasākumi · Cilvēki, un darbvirsmā uz Jaunumi ved zīme. Pārējais kā veikalā (M-15): kreisajā kolonnā tikai izvēlētā zara koks ar ceļu atpakaļ uz visām tēmām un L1 krāsām un ikonām (M-21), virs saraksta filtri Kur un Kad (M-22). Telefonā koks ir saraksts pa vienam līmenim, zem virsraksta bērnu čipi, filtri lapā. Darbvirsmas galva kā M-33.</p>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -48,7 +48,7 @@
     var round = function (ic, badge) { return '<span class="relative grid size-9 place-items-center text-foreground">' + ICO(ic, 'size-5') + (badge ? '<span class="absolute -right-1 -top-1 rounded-pill bg-primary px-1 text-meta text-primary-foreground">' + badge + '</span>' : '') + '</span>'; };
     var item = function (t, ic) { return '<span class="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-pill px-4 text-button-sm ' + (active === t ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + ICO(P[ic], 'size-4') + t + '</span>'; };
     var mark = '<span class="grid size-10 shrink-0 place-items-center rounded-xl bg-primary text-item text-primary-foreground" title="Zīme (M-34), ved uz Jaunumi">EK</span>';
-    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + item('Mājas', 'home') + item('Atklāt', 'compass')
+    return '<nav class="flex items-center gap-2 border-b line bg-surface px-8 py-3">' + mark + (withNews ? item('Jaunumi', 'news') : '') + item('Mājas', 'home') + item('Atklāt', 'compass')
       + '<span class="ml-2 flex h-10 max-w-xl flex-1 items-center gap-2 rounded-pill bg-tint px-4 text-body-sm text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē grupu vai nodarbi…</span>'
       + '<span class="ml-auto flex items-center gap-3"><span class="text-body-sm">LV</span>'
       + (signedOut ? '<span class="inline-flex h-10 items-center rounded-pill bg-primary px-4 text-button-sm text-primary-foreground">Pieteikties</span>' : round(P.shield) + round(P.chat) + round(P.bell, '9+') + dot()) + '</span></nav>';
@@ -62,10 +62,12 @@
   P.filter = '<path d="M3 6h18M7 12h10M10 18h4"/>';
   var D = '2026-11-13';
   var signedOut = false;
+  var withNews = false;
   var screens = [];
 
   var drop = function (t) { return '<span class="inline-flex h-9 items-center gap-1 whitespace-nowrap rounded-pill line bg-surface px-3 text-button-sm text-foreground">' + t + ICO(P.down, 'size-4') + '</span>'; };
-  var tabs = function (on) { return '<div class="flex gap-6 border-b border-border">' + ['Grupas', 'Pasākumi', 'Cilvēki'].map(function (t) { return '<span class="-mb-px pb-2 text-body ' + (t === on ? 'border-b-2 border-foreground text-foreground weight-strong' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>'; };
+  var T3 = ['Grupas', 'Pasākumi', 'Cilvēki'], T4 = ['Jaunumi'].concat(T3);
+  var tabs = function (on, list) { return '<div class="flex gap-6 border-b border-border">' + (list || T3).map(function (t) { return '<span class="-mb-px pb-2 text-body ' + (t === on ? 'border-b-2 border-foreground text-foreground weight-strong' : 'text-foreground-muted') + '">' + t + '</span>'; }).join('') + '</div>'; };
   var L1 = [['Spēles', 'games', '<rect width="12" height="12" x="2" y="10" rx="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/>'], ['Sports', 'sports', '<circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 0 20M2 12h20"/>'], ['Mūzika', 'music', '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'], ['Daba un ceļojumi', 'travel', '<path d="m8 3 4 8 5-5 5 15H2L8 3z"/>'], ['Māksla', 'art', '<circle cx="13.5" cy="6.5" r=".5"/><path d="M12 2a10 10 0 0 0 0 20c1 0 1.5-.8 1.5-1.7 0-.5-.2-.9-.5-1.2-.3-.3-.4-.7-.4-1.1 0-.9.8-1.7 1.7-1.7H16a6 6 0 0 0 6-6c0-4.4-4.5-8.3-10-8.3z"/>'], ['Kopiena un vide', 'community', '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>']];
   var tile = function (c, ic) { return '<span class="grid size-7 shrink-0 place-items-center rounded-lg text-[var(--on-cat)]" style="background:var(--cat-' + c + ')">' + ICO(ic, 'size-4') + '</span>'; };
   var l1row = function (x, strong) { return '<span class="flex items-center gap-2' + (strong ? ' weight-strong' : '') + '">' + tile(x[1], x[2]) + x[0] + '</span>'; };
@@ -86,17 +88,24 @@
   var many = function (x) { return function (n) { var o = ''; for (var i = 0; i < n; i++) o += x; return o; }; };
   var phone = function (body) { return '<div class="grid gap-4 p-4">' + body + '</div>' + phoneBar('Atklāt'); };
   var row = function (t, sub) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + (sub ? ICO(P.right, 'size-4') : '') + '</span>'; };
-  function shop(tab, title, count, list, cols, t) {
+  function shop(tab, title, count, list, cols, t, tabList) {
     return function (w) {
-      if (w === 375) return frame(w, 'Atklāt', tabs(tab) + head(title, count) + chips + fbar + list(2));
-      return frame(w, 'Atklāt', tabs(tab) + '<div class="grid grid-cols-[14rem_1fr] gap-8">' + (t || tree) + '<div class="grid content-start gap-4">' + head(title, count) + pills + '<div class="grid gap-4 ' + cols + '">' + list(6) + '</div></div></div>');
+      if (w === 375) return frame(w, 'Atklāt', tabs(tab, tabList) + head(title, count) + chips + fbar + list(2));
+      return frame(w, 'Atklāt', tabs(tab, tabList) + '<div class="grid grid-cols-[14rem_1fr] gap-8">' + (t || tree) + '<div class="grid content-start gap-4">' + head(title, count) + pills + '<div class="grid gap-4 ' + cols + '">' + list(6) + '</div></div></div>');
     };
   }
+
+  /* M-05: three options for Atklāt's tabs and how desktop reaches Jaunumi (owner decides from these, 18 Nov). */
+  var mixed = function (n) { var o = ''; for (var i = 0; i < n; i++) o += i % 2 ? note : card; return o; };
+  var withHeaderNews = function (fn) { return function (w) { withNews = true; var out = fn(w); withNews = false; return out; }; };
+  screens.push({ id: 'tabs-a', st: 'new', v: 'v5', label: 'A variants: cilnes Grupas · Pasākumi · Cilvēki, uz Jaunumi ved zīme (M-05)', story: 'Mans priekšlikums. Jaunumi ir tikai sava lapa: telefonā pirmā josla, darbvirsmā uz to ved zīme (EK) augšā pa kreisi. Atklāt ir tīri "meklēt pēc tēmas". Mīnuss: darbvirsmā vārds "Jaunumi" nekur nav redzams, jāzina, ka zīme ved uz turieni.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push({ id: 'tabs-b', st: 'new', v: 'v5', label: 'B variants: Jaunumi ir arī pirmā Atklāt cilne (M-05)', story: 'Jaunumi ir sava lapa (visa plūsma) un arī pirmā Atklāt cilne, kur tā pati plūsma rāda tikai izvēlēto tēmu un vietu (te: Galda spēles). Darbvirsmā uz Jaunumi ved gan cilne, gan zīme. Plus: jaunumus var skatīt pa tēmām. Mīnuss: viens vārds divās vietās ar nedaudz atšķirīgu nozīmi.', fn: shop('Jaunumi', 'Galda spēles', '21 jaunums šonedēļ', mixed, 'grid-cols-2', null, T4) });
+  screens.push({ id: 'tabs-c', st: 'new', v: 'v5', label: 'C variants: Jaunumi darbvirsmas galvā blakus Mājas un Atklāt (M-05)', story: 'Cilnes kā A variantā, bet darbvirsmas galvā Jaunumi ir trešais vienums blakus Mājas un Atklāt, tāpat kā telefona joslā (M-18). Plus: abās ierīcēs tās pašas vietas un vārdi. Mīnuss: galvā viens vienums vairāk, un zīme ved uz to pašu lapu kā Jaunumi.', fn: withHeaderNews(shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3')) });
 
   screens.push({ id: 'all', st: 'progress', v: 'v4', label: 'Visas tēmas: sākuma skats (M-21)', story: 'Nekas nav izvēlēts: kolonnā visas L1 tēmas ar savu krāsu un ikonu, kā līdz šim. Izvēloties vienu, atveras tās zars (nākamā sadaļa); augšā "‹ Visas tēmas" ved atpakaļ šurp.', fn: function (w) {
     if (w === 375) return phone(tabs('Grupas') + head('Visas tēmas', '248 grupas') + '<div class="grid">' + L1.map(function (x) { return row(l1row(x, 0), 1); }).join('') + '</div>');
     return shop('Grupas', 'Visas tēmas', '248 grupas', many(card), 'grid-cols-3', allTree)(w); } });
-  screens.push({ id: 'shop', st: 'progress', v: 'v4', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'PRIEKŠLIKUMS: cilnes Grupas · Pasākumi · Cilvēki (Jaunumi ir sava lapa, darbvirsmā logotips ved uz to). Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
+  screens.push({ id: 'shop', st: 'progress', v: 'v4', label: 'Atklāt kā veikalā: koks, virsraksts, filtri (M-15, M-21, M-22)', story: 'Cilnes zīmētas pēc A varianta (M-05 vēl atvērts). Kreisajā kolonnā augšā "‹ Visas tēmas", tad izvēlētā L1 ar krāsu un ikonu, izvēlētais zars treknrakstā ar bērniem, brāļi. Virsraksts ar skaitu, filtri Kur un Kad (Valoda nekad), Kārtot pa labi.', fn: shop('Grupas', 'Galda spēles', '13 grupas', many(card), 'grid-cols-3') });
 
   var sheetRow = function (t, v) { return '<span class="flex items-center justify-between border-b line py-3 text-body">' + t + '<span class="flex items-center gap-1 text-meta text-foreground-muted">' + v + ICO(P.right, 'size-4') + '</span></span>'; };
   screens.push({ id: 'phone', st: 'progress', v: 'v3', label: 'Telefonā: čipi, pa vienam līmenim, filtru lapa (M-15)', story: 'Pa kreisi saraksts: zem virsraksta izvēlētās tēmas bērni kā čipi, zem tiem Filtri un Kārtot. Vidū koks kā saraksts, viens līmenis ekrānā, ar atpakaļ bultu un "Skatīt visu". Pa labi filtru lapa, kuras poga rāda, cik grupu paliks.', phones: [
@@ -133,7 +142,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     var r = document.createElement('div');
