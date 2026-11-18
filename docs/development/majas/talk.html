@@ -10,7 +10,7 @@
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
 <h1 class="text-title mb-1">Mājas: Ziņojumi un Laukums</h1>
-<p class="text-meta text-foreground-muted">Versija v8 · publicēta 2026-11-18 13:57</p>
+<p class="text-meta text-foreground-muted">Versija v9 · publicēta 2026-11-18 14:16</p>
 <p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Divas dažādas lietas. Ziņojumi paliek: viena siena ar īsām atbildēm (M-12), ko redz caur dažādām lēcām (M-31): kopienā un grupā tie paši Ziņojumi, autors ir grupa vai cilvēks (M-14); termiņa nav (apstiprināts). Laukums ir tagad: cilvēki, kas skatās to pašu tēmu un vietu, redz cits citu un var parunāt (M-25..M-28); sarunas izgaist pēc aktivitātes.</p>
 <div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
@@ -79,7 +79,7 @@
   screens.push({ id: 'wall-hub', st: 'progress', v: 'v8', label: 'Ziņojumi caur kopienas lēcu (M-12, M-14, M-31)', story: 'Viena Ziņojumu siena, šeit skatīta caur lēcu "tēma + vieta". Autors ir grupa vai cilvēks, lasītājs var filtrēt pēc autora. Grupas un cilvēka kartīte ir viena un tā pati; no cilvēka ziņojuma var rakstīt privāti (M-23). Termiņa nav. Zem tiem pašiem ziņojumiem grupas lēca (nākamā sadaļa). Priekšlikumi ir atzīmēti rāmī.', fn: function (w) {
     var posts = w === 375 ? P1() + P2() + P3() : '<div class="grid grid-cols-2 gap-4">' + P1() + P2() + P3() + P4() + '</div>';
     return frame(w, 'Atklāt', hubHead + composer + capNote + authors + posts + props); } });
-  screens.push({ id: 'wall-group', st: 'progress', v: 'v6', label: 'Tie paši Ziņojumi caur grupas lēcu (M-14, M-31)', story: 'Grupas lapā Ziņojumi ir tie paši ziņojumi, atlasīti pēc autora "šī grupa": grupas paziņojumi nav cits veids, tikai cits skats (M-31). Divas kartītes šeit ir tās pašas, kas kopienas sienā (Jelgavas novusisti). PRIEKŠLIKUMS: tām var atbildēt, un grupas Ziņojums paziņo biedriem (zīme "Paziņoja biedriem"); ierobežojums 3 grupām neattiecas.', fn: function (w) {
+  screens.push({ id: 'wall-group', st: 'progress', v: 'v9', label: 'Tie paši Ziņojumi caur grupas lēcu (M-14, M-31)', story: 'Grupas lapā Ziņojumi ir tie paši ziņojumi, atlasīti pēc autora "šī grupa": grupas paziņojumi nav cits veids, tikai cits skats (M-31). Divas kartītes šeit ir tās pašas, kas kopienas sienā (Jelgavas novusisti). Tām var atbildēt tāpat kā jebkuram Ziņojumam (M-14), un ierobežojums grupām neattiecas. PRIEKŠLIKUMS, vēl atvērts: grupas Ziņojums paziņo biedriem (zīme "Paziņoja biedriem").', fn: function (w) {
     var posts = w === 375 ? P1() + P4() : '<div class="grid grid-cols-2 gap-4">' + P1() + P4() + '</div>';
     return frame(w, 'Atklāt', groupHead + composer + posts + props); } });
   var faces = function (n) { var o = ''; for (var i = 0; i < n; i++) o += '<span class="-ml-2 size-8 rounded-pill bg-tint ring-2 ring-[var(--surface)] first:ml-0"></span>'; return '<span class="flex">' + o + '</span>'; };
@@ -129,7 +129,7 @@
     section.dataset.label = s.label;
     section.dataset.st = s.st || 'new';
     section.dataset.v = s.v || 'v1';
-    var dd = s.v === 'v8' || s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
+    var dd = s.v === 'v9' || s.v === 'v8' || s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
     section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
     row = document.createElement('div');
