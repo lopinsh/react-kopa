@@ -8,8 +8,8 @@
 <body class="min-h-screen font-sans bg-background p-6 text-foreground">
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 19 Nov from the ledger rows in docs/development/specs/admin-tools.md; grey boxes are placeholders. -->
 <h1 class="text-title mb-1">Admin rīki: atsevišķi rīki</h1>
-<p class="text-meta text-foreground-muted">Versija v1 · publicēta 2026-11-19 16:40</p>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Vairoga izvēlne un četri rīki, katrs savā formā (AT-01, AT-02): Atsauksmes un Tulkot josla lapas apakšā, Dizains sānu panelis, Šī grupa panelis grupas lapās. Ledžers: docs/development/specs/admin-tools.md. Mani ieteikumi (AT-03a, AT-09) ir atzīmēti.</p>
+<p class="text-meta text-foreground-muted">Versija v2 · publicēta 2026-11-19 17:31</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Vairoga izvēlne un rīki ar visām šodienas funkcijām (AT-15): Atsauksmes josla ar vienu klikšķi Komentēt (AT-11), piespraudes, kartīte, saraksts; Tulkot, Dizains un Šī grupa kā sānu paneļi (AT-10). Ledžers: docs/development/specs/admin-tools.md. Mans ieteikums (AT-09) ir atzīmēts.</p>
 <div id="stage" class="flex flex-col gap-10"></div>
 <script>
   var ICO = function (d, c) { return '<svg aria-hidden="true" class="' + (c || 'size-5') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
@@ -38,7 +38,7 @@
   P.alert = '<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>';
   P.bulb = '<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/>';
   P.eye = '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>';
-  var AT = {"AT-01": "Atsevišķi rīki, nav kopīga paneļa", "AT-02": "Katram rīkam sava forma", "AT-03": "Saraksts aizvērts; atvērtās un nesen atbildētās", "AT-03a": "Cik ilgi atbildēta piezīme ir nesen (mans ieteikums)", "AT-04": "Ieraksts ved uz tieši šo piezīmi", "AT-05": "Admin panelis kļūst par Administrāciju", "AT-06": "Pārkāpumu Ziņojumi kļūst par Sūdzībām", "AT-07": "Īsceļi izvēlnē pazūd", "AT-08": "Pārskats: Jādara, pulss, pēdējās darbības", "AT-09": "Skaitlis uz vairoga (mans ieteikums)"};
+  var AT = {"AT-01": "Atsevišķi rīki", "AT-02": "Aizvietots ar AT-10", "AT-03": "Saraksts aizvērts, locījumi", "AT-04": "Ieraksts ved uz tieši šo piezīmi", "AT-05": "Administrācija", "AT-06": "Sūdzības", "AT-07": "Īsceļi izvēlnē pazūd", "AT-08": "Pārskats", "AT-09": "Skaitlis uz vairoga (mans ieteikums)", "AT-10": "Josla Atsauksmēm, sānu paneļi pārējiem", "AT-11": "Komentēt vienam klikšķim", "AT-12": "Ekrānattēls katrai piezīmei", "AT-13": "Nelasītas atbildes", "AT-14": "Tulkot lapas kontekstā", "AT-15": "Visas šodienas funkcijas paliek"};
   var tip = function (h) { return h.replace(/AT-\d\da?/g, function (m) { return AT[m] ? '<abbr title="' + AT[m] + '">' + m + '</abbr>' : m; }); };
   var noteBox = function (n) { return '<dl class="mt-2 grid max-w-reading gap-1 rounded-2xl bg-tint p-3 text-body-sm">' + [['Šodien', n[0]], ['Jaunais', n[1]], ['Tev jāizlemj', n[2]]].map(function (r) { return '<div class="flex gap-2"><dt class="w-28 shrink-0 weight-medium">' + r[0] + '</dt><dd class="text-foreground-muted">' + tip(r[1]) + '</dd></div>'; }).join('') + '</dl>'; };
   var prop = '<span class="inline-flex h-5 items-center rounded-pill bg-tint px-2 text-meta">Mans ieteikums</span>';
@@ -56,64 +56,171 @@
   var cnt = function (n) { return '<span class="rounded-pill bg-primary px-2 text-meta text-primary-foreground">' + n + '</span>'; };
   var cap = function (t) { return '<p class="text-meta text-foreground-muted">' + t + '</p>'; };
   var screens = [];
-  /* 1. Shield menu: separate tools. Variant B adds the AT-09 count. */
+  P.grip = '<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>';
+  P.dock = '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M15 3v18"/>';
+  P.x = '<path d="M18 6 6 18M6 6l12 12"/>';
+  P.msg = '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/>';
+  var kbd = function (t) { return '<kbd class="inline-flex h-5 items-center rounded-md line px-1.5 text-meta">' + t + '</kbd>'; };
+  var chip = function (t, on) { return '<span class="inline-flex h-7 items-center whitespace-nowrap rounded-pill px-3 text-button-sm ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
+  var fld = function (label, value, muted, tall) { return '<div class="grid gap-1"><span class="text-meta text-foreground-muted">' + label + '</span><span class="flex ' + (tall ? 'min-h-20 items-start py-2' : 'h-11 items-center') + ' rounded-xl line bg-surface px-3 text-body ' + (muted ? 'text-foreground-muted' : '') + '">' + value + '</span></div>'; };
+  var btn = function (t, on) { return '<span class="inline-flex h-11 items-center justify-center rounded-pill px-5 text-button ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
+  var btnS = function (t, on) { return '<span class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm ' + (on ? 'bg-primary text-primary-foreground' : 'line text-foreground') + '">' + t + '</span>'; };
+  var card = function (inner, extra) { return '<div class="grid gap-3 rounded-2xl bg-surface p-3 shadow-card frame ' + (extra || '') + '">' + inner + '</div>'; };
+  var pin = function (n, answered) { return '<span class="inline-grid size-6 shrink-0 place-items-center rounded-pill text-meta ' + (answered ? 'line bg-surface text-foreground' : 'bg-primary text-primary-foreground') + '" title="' + (answered ? 'Piezīme ' + n + ' (atbildēta)' : 'Piezīme ' + n + ' (jauna)') + '">' + n + '</span>'; };
+  var cap2 = function (t) { return '<p class="text-meta text-foreground-muted">' + t + '</p>'; };
+  var hdr = function (t) { return '<h3 class="text-item">' + t + '</h3>'; };
+  var shot = function (gone) { return '<div class="relative grid h-24 place-items-center overflow-hidden rounded-xl line bg-tint"><span class="grid w-3/4 gap-1.5">' + ph('w-2/3') + ph('w-full') + '</span><span class="absolute ' + (gone ? 'bottom-3 right-6 border-dashed' : 'right-6 top-3') + ' rounded-lg line px-2 text-meta">' + (gone ? 'elements nav atrasts' : 'Poga') + '</span>' + (gone ? '<span class="absolute bottom-1 left-2 text-meta text-foreground-muted">Ekrānattēls · pēdējā vieta</span>' : '<span class="absolute bottom-1 left-2 text-meta text-foreground-muted">Ekrānattēls</span>') + '</div>'; };
+  /* A page to hang the tool on: heading, a text line, a button and two cards. */
+  var mock = function (o) {
+    o = o || {};
+    return '<div class="grid gap-3 p-4"><div class="grid gap-1">' + (o.role ? '<span class="inline-flex w-fit items-center rounded-md bg-primary px-1.5 text-meta text-primary-foreground">Lapas virsraksts</span>' : '') + '<h2 class="text-title ' + (o.role ? 'rounded-md outline outline-2 outline-[var(--accent)]' : '') + '">' + (o.pins ? pin(1) + ' ' : '') + 'Atrodi savus cilvēkus</h2></div>'
+      + '<p class="text-body text-foreground-muted ' + (o.mark ? 'underline decoration-dotted underline-offset-4' : '') + '">' + (o.missing ? '<span class="rounded-sm outline outline-2 outline-dashed outline-[var(--accent)]">Vēl nav pasākumu</span> · ' : '') + 'Grupas tuvu tev.</p>'
+      + '<div class="grid justify-items-start gap-2"><span class="inline-flex h-11 items-center rounded-pill bg-primary px-5 text-button text-primary-foreground ' + (o.hover ? 'outline outline-2 outline-offset-2 outline-[var(--accent)]' : '') + '">' + (o.pins ? pin(2, true) + '&nbsp;' : '') + 'Pievienoties</span>' + (o.hover ? '<span class="rounded-lg bg-foreground px-2 py-1 text-meta text-background">Atstāt piezīmi pie Poga "Pievienoties"</span>' : '') + '</div>'
+      + '<div class="grid grid-cols-2 gap-2"><div class="' + box + '">' + lines(2) + '</div><div class="' + box + '">' + lines(2) + '</div></div>' + (o.extra || '') + '</div>';
+  };
+  /* Side panel: desktop = docked at the right edge with drag, dock and close; phone = bottom sheet (bar / half / full). */
+  var panelBar = function (w, title, size) {
+    var ib = function (ic, t) { return '<span class="grid size-8 place-items-center rounded-pill text-foreground-muted" title="' + t + '">' + ICO(P[ic], 'size-4') + '</span>'; };
+    return '<div class="flex items-center gap-1 border-b line px-3 py-2">' + ib('grip', 'Vilkt') + '<h3 class="mr-auto text-section">' + title + '</h3>'
+      + (w === 375 ? '<span class="text-meta text-foreground-muted">' + (size || 'puse') + '</span>' + ib('chevron', 'Mainīt paneļa augstumu') : ib('dock', 'Piestiprināt labajā malā')) + ib('x', 'Aizvērt') + '</div>';
+  };
+  var withSide = function (w, page, title, body, foot, size) {
+    var inner = panelBar(w, title, size) + '<div class="grid gap-3 p-4">' + body + '</div>' + (foot || '');
+    if (w === 375) return siteBar(w) + page + '<div class="rounded-t-2xl bg-surface shadow-premium frame"><div class="mx-auto mt-2 h-1 w-10 rounded-pill bg-tint"></div>' + inner + '</div>';
+    return siteBar(w) + '<div class="flex"><div class="min-w-0 flex-1">' + page + '</div><aside class="w-[22rem] shrink-0 border-l line bg-surface">' + inner + '</aside></div>';
+  };
+  var footBar = function (a, b, c) { return '<div class="flex items-center gap-2 border-t line px-4 py-2"><span class="mr-auto text-meta text-foreground-muted">' + a + '</span>' + (b || '') + (c || '') + '</div>'; };
+  var shell = function (w, inner) { return inner; };
+
+  /* 1. Shield menu. */
   var menu = function (withCount) {
-    return '<div class="w-full max-w-xs overflow-hidden rounded-2xl bg-surface shadow-premium frame">'
+    var sub = function (t) { return '<div class="flex items-center gap-2 border-b line py-1.5 pl-11 pr-3 text-body-sm last:border-b-0">' + ICO(P.right, 'size-3') + t + '</div>'; };
+    return '<div class="w-full max-w-sm overflow-hidden rounded-2xl bg-surface shadow-premium frame">'
       + lrow('shield', 'Administrācija', 'Pārskats un darāmais', withCount ? cnt(12) : '')
       + lrow('chat', 'Atsauksmes', 'Josla lapas apakšā')
-      + lrow('lang', 'Tulkot', 'Josla lapas apakšā')
+      + lrow('lang', 'Tulkot', 'Sānu panelis')
       + lrow('palette', 'Dizains', 'Sānu panelis · tikai īpašniekam')
-      + lrow('users', 'Šī grupa', 'Tikai grupas lapās') + '</div>';
+      + lrow('users', 'Šī grupa', 'Sānu panelis · tikai grupas lapās')
+      + sub('Skatīt grupu kā') + sub('Labot grupu') + sub('Labot tēmu') + sub('Paslēpt grupu') + sub('Sūdzības par šo grupu') + sub('Žurnāls') + '</div>';
   };
-  screens.push({ id: 'menu', st: 'new', v: 'v1', d: '2026-11-19', label: 'Vairoga izvēlne: katrs rīks atsevišķi (AT-01, AT-05, AT-07, AT-09)',
-    story: 'Vairogs vairs neved uz "Admin paneli" ar īsceļiem Ziņojumi, Atsauksmes, Ieteikumi (AT-07). Tur ir Administrācija (AT-05) un katrs rīks savs (AT-01); Šī grupa parādās tikai grupas lapās, Dizains tikai īpašniekam.',
-    note: ['Vairogs atver "Admin paneli" ar īsceļiem; rīki ir viens kopīgs panelis.', 'Izvēlnē Administrācija, Atsauksmes, Tulkot, Dizains (īpašniekam), Šī grupa (grupas lapā); īsceļu nav.', 'AT-09: vai vairogam vajag mazu skaitli ar Jādara kopsummu? Zīmēts kā B, mans ieteikums.'],
+  screens.push({ id: 'menu', st: 'new', v: 'v2', d: '2026-11-19', label: 'Vairoga izvēlne: katrs rīks atsevišķi (AT-01, AT-05, AT-07, AT-09, AT-10)',
+    story: 'Katrs rīks ir savā rindā (AT-01); īsceļu Ziņojumi, Atsauksmes, Ieteikumi izvēlnē vairs nav (AT-07). Šī grupa rāda tos pašus vienumus, kas šodien, un katrs atver paneli pie sava lauka (AT-15).',
+    note: ['Vairogs atver "Admin paneli" un īsceļus; "Rīku paneļa" cilnes Atsauksmes · Tulkot · Dizains · Grupa; grupas vienumi atver paneli pie vajadzīgā lauka.', 'Rindas Administrācija, Atsauksmes (josla), Tulkot, Dizains, Šī grupa (sānu paneļi); zem Šī grupa tie paši vienumi, katrs atver paneli pie sava lauka.', 'AT-09: vai vairogam vajag mazu skaitli ar Jādara kopsummu? Zīmēts kā B, mans ieteikums.'],
     fn: function (w) {
-      var two = '<div class="' + (w === 375 ? 'grid gap-5' : 'grid grid-cols-2 gap-8') + '"><div class="grid content-start gap-2"><span class="text-item">A: bez skaitļa</span>' + menu(false) + cap('Vairogs bez zīmes.') + '</div><div class="grid content-start gap-2"><span class="flex items-center gap-2 text-item">B: ar skaitli ' + prop + '</span>' + menu(true) + cap('Skaitlis ir Jādara kopsumma no pārskata (sūdzības, ieteikumi, atsauksmes, trūkstošie tulkojumi). Pazūd, kad nav ko darīt.') + '</div></div>';
+      var two = '<div class="' + (w === 375 ? 'grid gap-5' : 'grid grid-cols-2 gap-8') + '"><div class="grid content-start gap-2"><span class="text-item">A: bez skaitļa</span>' + menu(false) + '</div><div class="grid content-start gap-2"><span class="flex items-center gap-2 text-item">B: ar skaitli ' + prop + '</span>' + menu(true) + cap('Skaitlis ir Jādara kopsumma no pārskata. Pazūd, kad nav ko darīt.') + '</div></div>';
       return siteBar(w, '12') + '<div class="grid gap-4 p-4">' + two + '</div>';
     } });
-  /* 2. Atsauksmes bottom bar. */
-  var fbRow = function (state, t, sub, st) { return '<a class="flex items-center gap-3 border-b line px-3 py-2 last:border-b-0"><span class="size-2.5 shrink-0 rounded-pill ' + (state === 'open' ? 'bg-primary' : 'bg-tint') + '"></span><span class="grid min-w-0 flex-1"><span class="truncate text-body">' + t + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span>' + (st ? '<span class="shrink-0">' + st + '</span>' : '') + ICO(P.right, 'size-4') + '</a>'; };
-  var fold = function (t) { return '<div class="flex items-center gap-2 border-b line bg-tint px-3 py-2 text-button-sm last:border-b-0">' + ICO(P.right, 'size-4') + t + '</div>'; };
-  var fbClosed = '<div class="flex items-center gap-3 border-t line bg-surface px-4 py-2 shadow-premium">' + ICO(P.chat, 'size-5') + '<span class="text-button-sm">Atsauksmes</span><span class="text-meta text-foreground-muted">3 atvērtas</span><span class="ml-auto inline-flex h-8 items-center gap-1 rounded-pill line px-3 text-button-sm">Atvērt ' + ICO(P.chevron, 'size-4') + '</span></div>';
-  var fbOpen = '<div class="border-t line bg-surface shadow-premium"><div class="flex items-center gap-3 px-4 py-2">' + ICO(P.chat, 'size-5') + '<span class="text-button-sm">Atsauksmes</span><span class="ml-auto inline-flex h-8 items-center gap-1 rounded-pill line px-3 text-button-sm">Aizvērt</span></div><div class="mx-4 mb-2 flex items-center gap-2"><span class="flex h-11 min-w-0 flex-1 items-center rounded-xl line bg-surface px-3 text-body text-foreground-muted">Raksti par šo lapu…</span><span class="inline-flex h-11 items-center rounded-pill bg-primary px-4 text-button text-primary-foreground">Sūtīt</span></div><div class="mx-4 mb-3 overflow-hidden rounded-2xl line">'
-    + fbRow('open', 'Poga "Pievienoties" par maza', 'Atvērta · šodien', tag('Gaida'))
-    + fbRow('open', 'Trūkst filtra pēc pilsētas', 'Atvērta · vakar', tag('Gaida'))
-    + fbRow('done', 'Teksts nepārlūkojas telefonā', 'Atbildēts pirms 2 dienām: "Salabots, paldies"', '<span class="rounded-pill bg-tint px-2 text-meta">Jauns</span>')
-    + fold('Izdarītās (131)') + fold('Elements vairs nav lapā (14)') + '</div></div>';
-  screens.push({ id: 'feedback', st: 'new', v: 'v1', d: '2026-11-19', label: 'Atsauksmes: josla lapas apakšā ar salocītu sarakstu (AT-02, AT-03, AT-03a, AT-04)',
-    story: 'Josla ir šaura un aizvērta, līdz to atver (AT-03). Atvērta rāda atvērtās un nesen atbildētās piezīmes; vecākās izdarītās un piezīmes bez elementa ir salocītas. Katra rinda ir saite uz tieši šo piezīmi (AT-04).',
-    note: ['Sānu panelis ar visām 136 piezīmēm vienmēr vaļā.', 'Aizvērta josla; atvērta: atvērtās + nesen atbildētās, locījumi "Izdarītās (N)" un "Elements vairs nav lapā (N)".', 'AT-03a: cik ilgi atbildēta piezīme ir "nesen"? Mans ieteikums: 7 dienas vai līdz to izlasi. Vai der?'],
-    fn: function (w) {
-      var shell = function (inner, lab) { return '<div class="grid gap-2"><span class="px-4 pt-3 text-item">' + lab + '</span><div class="flex min-h-[24rem] flex-col justify-between"><div>' + siteBar(375) + pageBody() + '</div>' + inner + '</div></div>'; };
-      var opt = '<div class="grid gap-1 px-4 pb-4"><span class="flex flex-wrap items-center gap-2 text-button-sm">AT-03a: "nesen" ir 7 dienas vai līdz izlasi ' + prop + '</span><span class="text-meta text-foreground-muted">Atbildēta piezīme rāda zīmi "Jauns", kamēr neatver atbildi; pēc 7 dienām pāriet uz Izdarītās.</span></div>';
-      if (w === 375) return shell(fbClosed, 'Aizvērta') + shell(fbOpen, 'Atvērta') + opt;
-      return '<div class="grid grid-cols-2 gap-6">' + shell(fbClosed, 'Aizvērta') + shell(fbOpen, 'Atvērta') + '</div>' + opt;
-    } });
-  /* 3. Tulkot bar. */
-  var trRow = function (k, lv, en) { return '<div class="grid gap-1 border-b line px-3 py-2 last:border-b-0"><span class="text-meta text-foreground-muted">' + k + '</span><div class="grid gap-2 @lg:grid-cols-2"><span class="flex h-11 items-center rounded-xl line px-3 text-body">' + lv + '</span><span class="flex h-11 items-center rounded-xl line px-3 text-body ' + (en ? '' : 'text-foreground-muted') + '">' + (en || 'Trūkst tulkojuma') + '</span></div></div>'; };
-  screens.push({ id: 'translate', st: 'new', v: 'v1', d: '2026-11-19', label: 'Tulkot: josla lapas apakšā (AT-01, AT-02)',
-    story: 'Tulkot ir sava josla, tāda pati kā Atsauksmes: lapas apakšā, šaura, aizvērta, līdz to atver. Rāda tikai šīs lapas tekstus.',
-    note: ['Cilne kopīgajā Rīku panelī.', 'Atsevišķa josla lapas apakšā ar šīs lapas tekstiem latviski un angliski.', 'Vai josla der Tulkot, vai labāk sānu panelis kā Dizainam?'],
-    fn: function (w) {
-      var bar = '<div class="border-t line bg-surface shadow-premium"><div class="flex items-center gap-3 px-4 py-2">' + ICO(P.lang, 'size-5') + '<span class="text-button-sm">Tulkot</span><span class="text-meta text-foreground-muted">2 trūkst šajā lapā</span><span class="ml-auto inline-flex h-8 items-center rounded-pill line px-3 text-button-sm">Aizvērt</span></div><div class="mx-4 mb-3 overflow-hidden rounded-2xl line">' + trRow('home.empty.title', 'Vēl nav pasākumu', 'No events yet') + trRow('home.empty.hint', 'Atrodi kādu Atklāt', '') + '</div></div>';
-      return '<div class="flex min-h-[24rem] flex-col justify-between"><div>' + siteBar(w) + pageBody() + '</div>' + bar + '</div>';
-    } });
-  /* 4. Dizains side panel and 5. Šī grupa panel. */
-  var slider = function (t, v) { return '<div class="grid gap-1"><span class="flex justify-between text-body-sm"><span>' + t + '</span><span class="text-foreground-muted">' + v + '</span></span><span class="h-2 rounded-pill bg-tint"><span class="block h-2 w-1/2 rounded-pill bg-primary"></span></span></div>'; };
-  var withPanel = function (w, panelBody) {
-    var panel = '<aside class="grid content-start gap-3 border-l line bg-surface p-4 ' + (w === 375 ? '' : 'w-80 shrink-0') + '">' + panelBody + '</aside>';
-    return siteBar(w) + (w === 375 ? '<div class="grid grid-cols-[1fr_12rem]"><div class="min-w-0">' + pageBody() + '</div>' + panel + '</div>' : '<div class="flex"><div class="min-w-0 flex-1">' + pageBody() + '</div>' + panel + '</div>');
+
+  /* 2. Atsauksmes bar: one-shot Komentēt. */
+  var fbBar = function (state) {
+    var left = ICO(P.chat, 'size-5') + '<span class="text-button-sm">Atsauksmes</span>';
+    if (state === 'pick') return '<div class="flex flex-wrap items-center gap-3 border-t line bg-surface px-4 py-2 shadow-premium">' + left + '<span class="text-body-sm">Noklikšķini uz elementa · Esc atceļ</span><span class="ml-auto">' + btnS('Atcelt') + '</span></div>';
+    return '<div class="flex flex-wrap items-center gap-3 border-t line bg-surface px-4 py-2 shadow-premium">' + left + '<span class="text-meta text-foreground-muted">3 atvērtas · 1 nelasīta atbilde</span><span class="ml-auto flex items-center gap-2">' + btnS('Komentēt', true) + kbd('C') + btnS('Atvērt') + '</span></div>';
   };
-  var panelHead = function (t) { return '<div class="flex items-center justify-between"><h3 class="text-section">' + t + '</h3><span class="text-button-sm text-foreground-muted">Aizvērt</span></div>'; };
-  screens.push({ id: 'design', st: 'new', v: 'v1', d: '2026-11-19', label: 'Dizains: sānu panelis, tikai īpašniekam (AT-01, AT-02)',
-    story: 'Dizains paliek sānu panelis, jo tas ir redaktors: lapa paliek redzama, kamēr maini. Atveras tikai īpašniekam. Tas ir eksperiments, nevis rokasgrāmatas dizains.',
-    note: ['Cilne Rīku panelī.', 'Savs sānu panelis ar slīdņiem; lapa blakus redzama.', 'Vai sānu panelis der Dizainam?'],
-    fn: function (w) { return withPanel(w, panelHead('Dizains') + slider('Virsraksta izmērs', '2,2 rem') + slider('Sadaļu atstarpe', '2 rem') + slider('Stūru apaļums', '16 px') + '<div class="flex flex-wrap gap-2">' + pill('Saglabāt', true) + pill('Atcelt') + '</div>'); } });
-  screens.push({ id: 'group', st: 'new', v: 'v1', d: '2026-11-19', label: 'Šī grupa: panelis grupas lapās (AT-01, AT-02)',
-    story: 'Šī grupa ir savs panelis, tikai grupas lapās: grupas stāvoklis un adminam vajadzīgās darbības (paslēpt, atvērt sūdzības par šo grupu).',
-    note: ['Cilne Rīku panelī.', 'Savs panelis grupas lapā ar stāvokli un darbībām.', 'Vai ar šīm darbībām pietiek?'],
-    fn: function (w) { return withPanel(w, panelHead('Šī grupa') + '<p class="text-body-sm text-foreground-muted">Jelgavas novusisti · redzama</p><div class="overflow-hidden rounded-2xl line">' + lrow('users', 'Īpašnieks · Biedri', 'Anna · 24') + lrow('eye', 'Skatīt grupu kā', 'Izslēgts') + lrow('alert', 'Sūdzības par šo grupu', '1 atvērta') + lrow('eye', 'Paslēpt grupu', 'Īpašnieks saņems iemeslu') + lrow('users', 'Žurnāls', 'Pēdējās darbības') + '</div>'); } });
+  var frameOf = function (w, state, lab, cap) { return '<div class="grid gap-2"><span class="px-4 pt-3 text-item">' + lab + '</span><div class="flex min-h-[22rem] flex-col justify-between"><div>' + siteBar(w === 375 ? 375 : 375) + mock({ hover: state === 'pick' }) + '</div>' + fbBar(state) + '</div>' + '<div class="px-4 pb-3">' + cap2(cap) + '</div></div>'; };
+  screens.push({ id: 'comment', st: 'new', v: 'v2', d: '2026-11-19', label: 'Atsauksmes josla: Komentēt vienam klikšķim (AT-11, AT-02)',
+    story: 'Lapa vienmēr strādā. "Komentēt" (vai taustiņš C): nākamais klikšķis uz elementa liek piezīmi, tad atpakaļ parastā režīmā; Esc atceļ. Klikšķis piesaistās tuvākajam nosauktajam elementam. Darbvirsmā Alt+klikšķis komentē uzreiz.',
+    note: ['Josla "Pauze": pauzē klikšķi strādā; "Komentēt jebkur"; kamēr ieslēgts, klikšķi lapā komentē.', 'Parasts skats; "Komentēt": viens klikšķis, kontūra ar nosaukumu, Esc atceļ; Alt+klikšķis uzreiz.', 'Vai viena klikšķa "Komentēt" aizvieto Pauzi un "Komentēt jebkur"?'],
+    fn: function (w) {
+      var alt = '<div class="flex flex-wrap items-center gap-2 px-4 pb-4 text-body-sm">' + kbd('Alt') + '+ klikšķis darbvirsmā komentē uzreiz, bez joslas pogas. Atstāj piezīmi pie nosauktā elementa, ja tāds ir (piem. Poga "Pievienoties"), citādi pie paša klikšķa vietas.</div>';
+      var a = frameOf(w, 'browse', 'Parasts skats', 'Lapa strādā kā parasti; pogas un saites darbojas.'), b = frameOf(w, 'pick', 'Komentēt ieslēgts', 'Nākamais klikšķis atver piezīmes logu un režīms izslēdzas.');
+      return w === 375 ? a + b + alt : '<div class="grid grid-cols-2 gap-6">' + a + b + '</div>' + alt;
+    } });
+
+  /* 3. Pins and the note dialog. */
+  screens.push({ id: 'pins', st: 'new', v: 'v2', d: '2026-11-19', label: 'Piespraudes un piezīmes logs (AT-15)',
+    story: 'Piezīmes lapā ir apļi ar numuru: jauna (pilns aplis) un atbildēta (tukšs aplis). Aplis atver piezīmes kartīti. Jauna piezīme: veids, teksts, saglabāt.',
+    note: ['Piespraudes jauna/atbildēta; logs "Atstāt piezīmi" ar veidiem Kļūda · Ideja · Uzlabojums · Jautājums.', 'Tas pats; piezīme saglabā arī mazu ekrānattēlu (AT-12).', 'Vai atšķirība jauna / atbildēta ir saprotama?'],
+    fn: function (w) {
+      var page = '<div class="grid gap-2"><span class="px-4 pt-3 text-item">Lapa ar piespraudēm</span>' + siteBar(375) + mock({ pins: true }) + '<div class="flex flex-wrap items-center gap-3 px-4 pb-3 text-meta text-foreground-muted">' + pin(1) + ' Piezīme 1 (jauna) ' + pin(2, true) + ' Piezīme 2 (atbildēta)</div></div>';
+      var dlg = '<div class="grid content-start gap-3 p-4"><span class="text-item">Piezīmes logs</span>' + card('<div class="flex items-center justify-between"><h3 class="text-section">Atstāt piezīmi</h3><span class="text-button-sm text-foreground-muted">Aizvērt</span></div><p class="text-body-sm text-foreground-muted">Par: Poga "Pievienoties"</p><div class="grid gap-1"><span class="text-meta text-foreground-muted">Veids</span><span class="flex flex-wrap gap-2">' + chip('Kļūda', true) + chip('Ideja') + chip('Uzlabojums') + chip('Jautājums') + '</span></div>' + fld('Tava piezīme', 'Kas nav kārtībā vai kas varētu būt labāk?', true, true) + '<div class="grid gap-1"><span class="text-meta text-foreground-muted">Ekrānattēls (AT-12)</span>' + shot(false) + '</div><div class="flex flex-wrap gap-2">' + btn('Saglabāt piezīmi', true) + btn('Atcelt') + '</div>') + '</div>';
+      return w === 375 ? page + dlg : '<div class="grid grid-cols-2 gap-6">' + page + dlg + '</div>';
+    } });
+
+  /* 4. Note card. */
+  var msg = function (who, t, agent) { return '<div class="grid gap-0.5 rounded-xl p-2 ' + (agent ? 'bg-tint' : 'line') + '"><span class="flex items-center gap-2 text-meta text-foreground-muted">' + who + (agent ? ' ' + tag('Aģents') : '') + '</span><span class="text-body-sm">' + t + '</span></div>'; };
+  var noteCard = function (gone) {
+    return card('<div class="flex flex-wrap items-center gap-2"><h3 class="text-section">Piezīme</h3>' + pin(gone ? 3 : 1, !gone) + '<span class="ml-auto flex flex-wrap gap-1">' + chip('Atvērta', !gone) + chip('Darbā') + chip('Izdarīts', gone ? false : false) + chip('Nedarīsim') + '</span></div>'
+      + '<p class="text-body-sm text-foreground-muted">Kļūda · Par: Poga "Pievienoties"' + (gone ? ' · <span class="text-foreground">elements nav atrasts</span>' : '') + '</p>' + shot(gone)
+      + '<p class="text-body">Poga ir pārāk maza telefonā, grūti trāpīt.</p>'
+      + (gone ? cap2('Piespraude paliek pēdējā vietā; ekrānattēlu redz arī aģents (AT-12).') : '<div class="grid gap-2">' + msg('Tu · pirms 2 dienām', 'Pārbaudīju: arī planšetē.') + msg('Aģents · vakar', 'Palielināju pogu līdz 44 px. Pārbaudi, lūdzu.', true) + msg('Agrākā atbilde · pirms 3 dienām', 'Redzu, skatīšos.', true) + '</div><span class="flex h-11 items-center rounded-xl line bg-surface px-3 text-body text-foreground-muted">Pievienot atbildi…</span><div class="flex flex-wrap items-center gap-2">' + btn('Nosūtīt atbildi', true) + '<a class="text-button-sm underline">Atvērt piezīmes lapu</a><span class="ml-auto text-button-sm text-foreground-muted">Dzēst</span></div>' + cap2('"Dzēst" vaicā "Dzēst šo piezīmi?"; pēc dzēšanas "Piezīme dzēsta".')));
+  };
+  screens.push({ id: 'notecard', st: 'new', v: 'v2', d: '2026-11-19', label: 'Piezīmes kartīte ar atbildēm (AT-04, AT-12, AT-15)',
+    story: 'Kartīte rāda statusu, veidu, attēlu, tavu atbilžu pavedienu un aģenta atbildes; atbildēt un dzēst var šeit. Ja elementa vairs nav, redzams attēls, piespraude paliek pēdējā vietā.',
+    note: ['Kartīte lapā ar statusu, atbilžu pavedienu, atbildēšanu un dzēšanu; bez attēla.', 'Tā pati kartīte ar ekrānattēlu un saiti uz piezīmes lapu; piezīme bez elementa paliek ar attēlu.', 'Vai kartītei kaut kā trūkst, ko šodien lieto?'],
+    fn: function (w) { var a = '<div class="grid content-start gap-2 p-4"><span class="text-item">Piezīme ar atbildēm</span>' + noteCard(false) + '</div>', b = '<div class="grid content-start gap-2 p-4"><span class="text-item">Piezīme, kuras elementa vairs nav</span>' + noteCard(true) + '</div>'; return w === 375 ? a + b : '<div class="grid grid-cols-2">' + a + b + '</div>'; } });
+
+  /* 5. Opened list. */
+  var fbRow = function (title, sub, o) { o = o || {}; return '<a class="flex items-center gap-3 border-b line px-3 py-2 last:border-b-0">' + (o.unread ? '<span class="size-2.5 shrink-0 rounded-pill bg-primary" title="Neatvērta atbilde"></span>' : '<span class="size-2.5 shrink-0"></span>') + '<span class="grid min-w-0 flex-1"><span class="truncate text-body">' + title + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span>' + (o.st ? tag(o.st) : '') + ICO(P.right, 'size-4') + '</a>'; };
+  var foldRow = function (t) { return '<div class="flex items-center gap-2 border-b line bg-tint px-3 py-2 text-button-sm last:border-b-0">' + ICO(P.right, 'size-4') + t + '</div>'; };
+  var subHead = function (t) { return '<div class="flex items-center gap-2 border-b line px-3 py-2 text-button-sm last:border-b-0">' + ICO(P.chevron, 'size-4') + t + '</div>'; };
+  screens.push({ id: 'list', st: 'new', v: 'v2', d: '2026-11-19', label: 'Atsauksmju saraksts: nelasītas atbildes un locījumi (AT-03, AT-04, AT-13, AT-15)',
+    story: 'Saraksts atveras no joslas. Šajā lapā atvērtās piezīmes, Citās lapās (ar saitēm uz tām lapām), Izdarītās salocītas. Punkts = atbilde, ko neesi atvēris; piezīme ar punktu paliek sarakstā arī Izdarīta.',
+    note: ['Saraksts vienmēr vaļā, visas piezīmes; "Šajā lapā · N", "Citās lapās · N", "Visas piezīmes".', 'Aizvērts, līdz atver; punkts pie nelasītas atbildes; locījumi Šajā lapā, Citās lapās, Izdarītās; "Visas piezīmes" paliek.', 'Vai nelasīta atbilde (punkts) ir pareizais "nesen atbildēts"?'],
+    fn: function (w) {
+      var list = '<div class="border-t line bg-surface shadow-premium"><div class="flex items-center gap-3 px-4 py-2">' + ICO(P.chat, 'size-5') + '<span class="text-button-sm">Atsauksmes</span><span class="ml-auto flex items-center gap-2">' + btnS('Komentēt', true) + btnS('Aizvērt') + '</span></div><div class="mx-4 mb-3 overflow-hidden rounded-2xl line">'
+        + subHead('Šajā lapā · 2') + fbRow('Poga "Pievienoties" par maza', 'Kļūda · Atvērta', { st: 'Atvērta' }) + fbRow('Trūkst filtra pēc pilsētas', 'Ideja · Izdarīts · jauna atbilde', { unread: true, st: 'Izdarīts' })
+        + subHead('Citās lapās · 4') + fbRow('Teksts nepārlūkojas telefonā', 'Atklāt · /lv/atklat · Atvērta') + fbRow('Kartīte bez attēla', 'Grupa · /lv/pilsetas/jelgava/grupa/skrejeji · Darbā')
+        + foldRow('Izdarītās (131)') + '<a class="flex items-center gap-2 px-3 py-2 text-button-sm underline">Visas piezīmes</a></div></div>';
+      var sel = '<div class="grid gap-1 px-4 pb-4"><span class="text-body-sm">Citu lapu piezīmes ved uz to lapu un atver tieši šo piezīmi (AT-04). "Visas piezīmes" atver Atsauksmju lapu ar filtriem un iztukšošanu.</span></div>';
+      var pg = '<div class="grid gap-2"><div class="flex min-h-[22rem] flex-col justify-between"><div>' + siteBar(375) + mock({ pins: true }) + '</div>' + list + '</div>' + sel + '</div>';
+      return pg;
+    } });
+
+  /* 6. Tulkot side panel. */
+  var tkey = function (k, langs) { return '<div class="flex items-baseline justify-between gap-3 rounded-xl px-2 py-1 text-body-sm"><span class="break-all font-mono">' + k + '</span><span class="shrink-0 text-foreground-muted">' + langs + '</span></div>'; };
+  screens.push({ id: 'translate', st: 'new', v: 'v2', d: '2026-11-19', label: 'Tulkot: sānu panelis lapas kontekstā (AT-10, AT-14, AT-15)',
+    story: 'Kamēr Tulkot ir ieslēgts, tulkojamie teksti lapā ir iezīmēti (punktota apakšsvītra), trūkstošie citādi (raustīta kontūra). Alt+klikšķis uz teksta atver tā atslēgu ar latviešu un angļu tekstu blakus.',
+    note: ['Cilne "Tulkot" Rīku panelī: iezīmētie teksti, meklēšana, forma, "Šajā lapā trūkst · N".', 'Sānu panelis: Alt+klikšķis atver atslēgu, lv un en blakus, "Nākamais trūkstošais"; meklēšana, forma un skaits paliek.', 'Vai trūkstošo zīme (raustīta kontūra) un poga "Nākamais trūkstošais" der?'],
+    fn: function (w) {
+      var body = '<p class="text-body-sm text-foreground-muted">Iezīmētie teksti ir tulkojami. <span class="inline-flex items-center gap-1">' + kbd('Alt') + '+ klikšķis uz teksta atver tā atslēgu.</span></p>'
+        + '<span class="flex h-11 items-center gap-2 rounded-xl line bg-surface px-3 text-body text-foreground-muted">' + ICO(P.search, 'size-4') + 'Meklē pēc atslēgas vai teksta</span>'
+        + '<div class="grid gap-2"><h4 class="text-meta text-foreground-muted">Izvēlēts</h4><p class="break-all font-mono text-meta">home.empty.title</p><div class="grid gap-2 ' + (w === 375 ? '' : 'grid-cols-2') + '">' + fld('Latviski', 'Vēl nav pasākumu') + fld('Angliski', 'Trūkst', true) + '</div><span class="text-meta text-foreground-muted">Oriģināls: "Vēl nav pasākumu"</span><p class="text-meta text-foreground-muted">Vietturus, daudzskaitļa variantus un birkas atstāj tādus, kādi tie ir.</p><div class="flex flex-wrap gap-2">' + btn('Saglabāt', true) + btn('Atcelt') + '</div></div>'
+        + '<div class="grid gap-1"><h4 class="text-meta text-foreground-muted">Šajā lapā trūkst · 3</h4>' + tkey('home.empty.title', 'EN') + tkey('home.empty.hint', 'EN') + tkey('home.groups.title', 'EN') + '<div class="pt-1">' + btnS('Nākamais trūkstošais', true) + '</div></div>';
+      return withSide(w, mock({ mark: true, missing: true }), 'Tulkot', body, footBar('3 trūkst'), 'puse');
+    } });
+
+  /* 7. Dizains side panel. */
+  screens.push({ id: 'design', st: 'new', v: 'v2', d: '2026-11-19', label: 'Dizains: sānu panelis ar lomu, skaidrojumu un melnrakstu (AT-10, AT-15)',
+    story: 'Noklikšķini uz teksta lapā vai izvēlies lomu. Virs teksta parādās lomas čips, tās pašas lomas teksti iegūst kontūru ar skaitu. Izmaiņas ir melnraksts, ko redzi tikai tu, līdz publicē.',
+    note: ['Cilne "Dizains": Loma, skaidrojums, "Šajā lapā: N vietās", Publicēt, Atmest, secības brīdinājums.', 'Sānu panelis ar tām pašām funkcijām; lapa paliek redzama.', 'Vai pietiek ar šo, vai redaktoram vajag ko vēl (nav jāatbild, ja der)?'],
+    fn: function (w) {
+      var stp = function (t) { return '<div class="flex items-center justify-between rounded-xl line px-3 py-2 text-body-sm"><span>' + t[0] + '</span><span class="flex items-center gap-2 text-foreground-muted">Mazāk: ' + t[0].toLowerCase() + ' <b class="text-foreground">' + t[1] + '</b> Vairāk</span></div>'; };
+      var body = '<div class="grid gap-1"><span class="text-meta text-foreground-muted">Loma</span><span class="flex h-11 items-center justify-between rounded-xl line bg-surface px-3 text-body">Lapas virsraksts ' + ICO(P.chevron, 'size-4') + '</span></div>'
+        + '<div class="grid gap-1 rounded-xl bg-tint p-3"><span class="text-meta text-foreground-muted">Kāpēc šis teksts izskatās tā</span><span class="text-body-sm">Lapas virsraksts vidēji · Izcēlums +1 → izcelts</span></div>'
+        + '<p class="text-meta text-foreground-muted">Šajā lapā: 3 vietās</p><p class="text-meta text-foreground-muted">Mainās visur, kur lieto šo lomu. Redzi tikai tu, līdz publicē.</p>'
+        + '<div class="grid gap-2">' + stp(['Izmērs', '28 px']) + stp(['Biezums', 'vidēji']) + stp(['Fonts', 'Virsraksti']) + '</div><a class="text-button-sm underline">Visi burti un sistēma →</a>';
+      var foot = '<div class="flex flex-wrap items-center gap-2 border-t line px-4 py-2"><span class="mr-auto text-meta text-foreground-muted">2 izmaiņas melnrakstā</span>' + btnS('Publicēt', true) + btnS('Atmest') + '</div>';
+      var warn = card('<p class="text-body">Nosaukums ir lielāks par lapas virsrakstu. Publicēt tik un tā?</p><div class="flex flex-wrap gap-2">' + btn('Publicēt', true) + btn('Atcelt') + '</div>');
+      var note = '<div class="grid content-start gap-2 p-4"><span class="flex flex-wrap items-center gap-2 text-item">Variants: secības brīdinājums ' + tag('Melnraksts aktīvs') + '</span>' + warn + '</div>';
+      return withSide(w, mock({ role: true }), 'Dizains', body, foot, 'puse') + note;
+    } });
+
+  /* 8. Šī grupa side panel. */
+  screens.push({ id: 'group', st: 'new', v: 'v2', d: '2026-11-19', label: 'Šī grupa: sānu panelis ar to pašu saturu (AT-10, AT-15)',
+    story: 'Panelis grupas lapā: stāvoklis, fakti, Skatīt grupu kā (josla ar zīmi visās lapās, līdz izslēdz), labošanas saites, paslēpt ar iemeslu vai atjaunot, sūdzības par grupu un žurnāls.',
+    note: ['Cilne "Grupa" Rīku panelī ar to pašu saturu; marķieris "Skatāt kā …" lapas augšā.', 'Sānu panelis; saturs tas pats, ar vārdu "Sūdzības" (AT-06).', 'Vai kāda grupas darbība trūkst?'],
+    fn: function (w) {
+      var strip = '<div class="flex items-center gap-3 bg-primary px-4 py-2 text-body-sm text-primary-foreground"><span class="flex-1">Skatāt kā Biedrs (imitācija)</span><span class="underline">Izslēgt</span></div>';
+      var facts = '<div class="overflow-hidden rounded-2xl line">' + lrow('users', 'Īpašnieks', 'Anna') + lrow('cal', 'Izveidota', '3. nov. 2026') + lrow('users', 'Biedri', '24') + lrow('eye', 'Piekļuve', 'Publiska') + lrow('alert', 'Atvērtas sūdzības', '1') + '</div>';
+      var mode = '<div class="grid gap-2"><h4 class="text-item">Skatīt grupu kā</h4><span class="flex flex-wrap gap-2">' + chip('Izslēgts') + chip('Īpašnieks') + chip('Biedrs', true) + chip('Apmeklētājs') + '</span><p class="text-meta text-foreground-muted">Imitācija: dalība netiek izveidota. Attiecas uz visām grupām, līdz izslēdz.</p></div>';
+      var acts = '<div class="flex flex-wrap gap-2">' + btnS('Labot grupu') + btnS('Labot tēmu') + '</div><div class="grid gap-2 rounded-2xl line p-3"><span class="text-item">Paslēpt grupu</span>' + fld('Iemesls (redzams īpašniekam)', 'Kāpēc šī grupa tiek paslēpta?', true, true) + '<span class="text-meta text-foreground-muted">5–500 rakstzīmes · Īpašnieks saņems paziņojumu ar iemeslu. Grupu vēlāk var atjaunot.</span>' + btnS('Paslēpt grupu', true) + '</div>' + cap2('Paslēptai grupai: "Paslēpta · Marta · šodien" un poga Atjaunot grupu. Savu grupu paslēpt nevar; dzēst var Administrēšanā > Moderācija.');
+      var rep = '<div class="grid gap-1"><h4 class="text-item">Sūdzības par šo grupu</h4>' + lrow('alert', 'Aizvainojošs apraksts', 'Anna B. · vakar') + '<a class="text-button-sm underline">Visas sūdzības</a></div><div class="grid gap-1"><h4 class="text-item">Žurnāls</h4>' + lrow('eye', 'Grupa atjaunota', 'Jānis · 17. nov.') + '<a class="text-button-sm underline">Viss žurnāls</a></div>';
+      var body = '<div class="flex items-center gap-2"><span class="text-body-sm text-foreground-muted">Jelgavas novusisti</span>' + tag('Redzama') + '</div>' + facts + mode + acts + rep;
+      var page = (w === 375 ? '' : '') + strip + mock({});
+      return withSide(w, page, 'Šī grupa', body, '', 'pilna');
+    } });
+
+  /* 9. Panel form: drag, dock, close; phone sheet sizes. */
+  screens.push({ id: 'panelform', st: 'new', v: 'v2', d: '2026-11-19', label: 'Paneļa forma: vilkt, piestiprināt, aizvērt; telefonā josla / puse / pilna (AT-10)',
+    story: 'Tulkot, Dizains un Šī grupa ir viens panelis ar vienu uzvedību. Darbvirsmā to var vilkt, piestiprināt labajā malā no 768 px un aizvērt. Telefonā tā ir apakšas lapa trīs augstumos.',
+    note: ['Tas pats panelis, ko atcerās pēdējo vietu.', 'Darbvirsmā: vilkt, piestiprināt, aizvērt. Telefonā: josla, puse, pilna.', 'Vai pietiek ar šīm trim telefona pozīcijām?'],
+    fn: function (w) {
+      var mini = function (lab, h, body) { return '<div class="grid gap-1"><span class="text-meta text-foreground-muted">' + lab + '</span><div class="' + h + ' overflow-hidden rounded-t-2xl bg-surface shadow-premium frame">' + panelBar(375, 'Tulkot', lab) + body + '</div></div>'; };
+      if (w === 375) return '<div class="grid gap-4 p-4">' + mini('josla', 'h-14', '') + mini('puse', 'h-48', '<div class="grid gap-2 p-4">' + ph('w-2/3') + ph('w-full') + ph('w-1/2') + '</div>') + mini('pilna', 'h-80', '<div class="grid gap-2 p-4">' + ph('w-2/3') + ph('w-full') + ph('w-1/2') + ph('w-full') + ph('w-2/3') + '</div>') + '</div>';
+      var pan = function (lab, cls) { return '<div class="grid content-start gap-2"><span class="text-item">' + lab + '</span><div class="' + cls + ' overflow-hidden rounded-2xl bg-surface shadow-premium frame">' + panelBar(1280, 'Tulkot') + '<div class="grid gap-2 p-4">' + ph('w-2/3') + ph('w-full') + ph('w-1/2') + '</div></div></div>'; };
+      return siteBar(w) + '<div class="grid grid-cols-2 gap-8 p-8">' + pan('Piestiprināts labajā malā (no 768 px)', 'w-[22rem]') + pan('Atbrīvots: pavelkams jebkur', 'w-[22rem] ml-8') + '<p class="col-span-2 text-body-sm text-foreground-muted">Rīki augšā: vilkt (rokturis), piestiprināt / atbrīvot, aizvērt. Esc aizver. Panelis atceras vietu un augstumu.</p></div>';
+    } });
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var stage = document.getElementById('stage');

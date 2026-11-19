@@ -10,9 +10,12 @@
 ## Šodien → Jaunais
 | Kas | Šodien | Jaunais | Id |
 |---|---|---|---|
-| Rīki | Viens "Rīku panelis" ar cilnēm Atsauksmes · Tulkot · Dizains · Grupa | Katrs rīks atsevišķi, ieslēdz vairoga izvēlnē | AT-01, AT-02 |
-| Atsauksmes | Sānu panelis, saraksts vienmēr vaļā, visas piezīmes | Šaura josla lapas apakšā; saraksts aizvērts, līdz to atver | AT-02, AT-03 |
-| Saraksta saturs | Visas piezīmes, arī izdarītās | Atvērtās un nesen atbildētās; pārējās salocītas | AT-03 |
+| Rīki | Viens "Rīku panelis" ar cilnēm Atsauksmes · Tulkot · Dizains · Grupa | Atsauksmes josla lapas apakšā; Tulkot, Dizains, Šī grupa katrs savs sānu panelis (vilkt, piestiprināt, telefonā josla/puse/pilna) | AT-01, AT-10 |
+| Atsauksmes | Sānu panelis, saraksts vienmēr vaļā; režīmi Pauze un Komentēt jebkur | Šaura josla; viena klikšķa Komentēt (C, Esc, Alt+klikšķis); saraksts aizvērts | AT-03, AT-10, AT-11 |
+| Saraksta saturs | Visas piezīmes, arī izdarītās | Šajā lapā, Citās lapās, Izdarītās salocīts; punkts pie nelasītas atbildes | AT-03, AT-13 |
+| Piezīme | Elements un teksts | Arī mazs ekrānattēls; elementam pazūdot piespraude paliek | AT-12 |
+| Tulkot | Cilne ar meklēšanu un trūkstošo sarakstu | Sānu panelis: Alt+klikšķis uz teksta, lv un en blakus, trūkstošajiem zīme, Nākamais trūkstošais | AT-14 |
+| Šodienas funkcijas | Veidi, piespraudes, pavediens, Dizaina loma/melnraksts, Grupas fakti, Skatīt kā | Visas paliek | AT-15 |
 | Ieraksts sarakstā | Atver piezīmi lapā (ja elements vēl ir) | Ved uz tieši šo piezīmi | AT-04 |
 | "Admin panelis" | Saite uz /admin | "Administrācija" | AT-05 |
 | "Ziņojumi" (pārkāpumi) | Tā sauc sūdzības | "Sūdzības" (Ziņojumi tagad ir publiski paziņojumi, M-14) | AT-06 |
