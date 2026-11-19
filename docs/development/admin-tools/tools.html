@@ -113,7 +113,7 @@
   screens.push({ id: 'group', st: 'new', v: 'v1', d: '2026-11-19', label: 'Šī grupa: panelis grupas lapās (AT-01, AT-02)',
     story: 'Šī grupa ir savs panelis, tikai grupas lapās: grupas stāvoklis un adminam vajadzīgās darbības (paslēpt, atvērt sūdzības par šo grupu).',
     note: ['Cilne Rīku panelī.', 'Savs panelis grupas lapā ar stāvokli un darbībām.', 'Vai ar šīm darbībām pietiek?'],
-    fn: function (w) { return withPanel(w, panelHead('Šī grupa') + '<p class="text-body-sm text-foreground-muted">Jelgavas novusisti · redzama</p><div class="overflow-hidden rounded-2xl line">' + lrow('eye', 'Paslēpt grupu', 'Pazūd no Atklāt') + lrow('alert', 'Sūdzības par grupu', '1 neatrisināta') + lrow('users', 'Biedri', '24') + '</div>'); } });
+    fn: function (w) { return withPanel(w, panelHead('Šī grupa') + '<p class="text-body-sm text-foreground-muted">Jelgavas novusisti · redzama</p><div class="overflow-hidden rounded-2xl line">' + lrow('users', 'Īpašnieks · Biedri', 'Anna · 24') + lrow('eye', 'Skatīt grupu kā', 'Izslēgts') + lrow('alert', 'Sūdzības par šo grupu', '1 atvērta') + lrow('eye', 'Paslēpt grupu', 'Īpašnieks saņems iemeslu') + lrow('users', 'Žurnāls', 'Pēdējās darbības') + '</div>'); } });
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var stage = document.getElementById('stage');

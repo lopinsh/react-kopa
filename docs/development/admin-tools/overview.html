@@ -57,7 +57,7 @@
   var cap = function (t) { return '<p class="text-meta text-foreground-muted">' + t + '</p>'; };
   var screens = [];
   var adminBar = function (w, active) {
-    var tabs = ['Pārskats', 'Sūdzības', 'Ieteikumi', 'Atsauksmes', 'Tulkojumi'];
+    var tabs = ['Pārskats', 'Moderācija', 'Struktūra', 'Vietne', 'Komanda', 'Izstrāde'];
     return siteBar(w) + '<div class="flex gap-1 overflow-x-auto border-b line bg-surface px-4 py-2">' + tabs.map(function (t) { return '<span class="inline-flex h-8 shrink-0 items-center rounded-pill px-3 text-button-sm ' + (t === active ? 'bg-primary text-primary-foreground' : 'text-foreground') + '">' + t + '</span>'; }).join('') + '</div>';
   };
   var todo = function (ic, t, n) { return '<a class="flex items-center gap-3 border-b line px-3 py-2.5 last:border-b-0">' + ICO(P[ic], 'size-5') + '<span class="flex-1 text-body">' + t + '</span>' + (n ? cnt(n) : '<span class="text-meta text-foreground-muted">nekā</span>') + ICO(P.right, 'size-4') + '</a>'; };
@@ -81,7 +81,7 @@
     fn: function (w) {
       var rowC = function (t, sub) { return '<div class="flex items-center gap-3 border-b line px-3 py-2.5 last:border-b-0">' + ICO(P.alert, 'size-5') + '<span class="grid min-w-0 flex-1"><span class="text-body">' + t + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span>' + pill('Atvērt') + '</div>'; };
       var hid = function (t, sub) { return '<div class="flex items-center gap-3 border-b line px-3 py-2.5 last:border-b-0">' + ICO(P.eye, 'size-5') + '<span class="grid min-w-0 flex-1"><span class="text-body">' + t + '</span><span class="text-meta text-foreground-muted">' + sub + '</span></span>' + pill('Atjaunot') + '</div>'; };
-      return adminBar(w, 'Sūdzības') + wrap(w, hd('Sūdzības', '3 gaida atbildi.') + sect('Atvērtās', '<div class="overflow-hidden rounded-2xl line bg-surface">' + rowC('Grupa: Rīta skrējiens', 'Aizvainojošs apraksts · pirms 2 st.') + rowC('Cilvēks: Anna B.', 'Surogātziņas · vakar') + rowC('Ziņojums: Mainu velosipēdu', 'Reklāma · 17. nov.') + '</div>') + sect('Paslēptās grupas', '<div class="overflow-hidden rounded-2xl line bg-surface">' + hid('Rīta skrējiens', 'Paslēpa Marta · šodien') + hid('Pirmdienas šahs', 'Paslēpa Jānis · 12. nov.') + '</div>'));
+      return adminBar(w, 'Moderācija') + wrap(w, hd('Sūdzības', '3 gaida atbildi.') + sect('Atvērtās', '<div class="overflow-hidden rounded-2xl line bg-surface">' + rowC('Grupa: Rīta skrējiens', 'Aizvainojošs apraksts · pirms 2 st.') + rowC('Cilvēks: Anna B.', 'Surogātziņas · vakar') + rowC('Ziņojums: Mainu velosipēdu', 'Reklāma · 17. nov.') + '</div>') + sect('Paslēptās grupas', '<div class="overflow-hidden rounded-2xl line bg-surface">' + hid('Rīta skrējiens', 'Paslēpa Marta · šodien') + hid('Pirmdienas šahs', 'Paslēpa Jānis · 12. nov.') + '</div>'));
     } });
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
