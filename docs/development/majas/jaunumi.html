@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <style>/* the drawing has no Tailwind preflight, so the browser default margins on headings and paragraphs would show: zero them like the site does */h1,h2,h3,h4,p,ul,ol{margin:0}</style>
-<title>Mājas: Atklāt › Jaunumi</title>
+<title>Mājas: Jaunumi</title>
 <style>body[data-hdr="A"] .hdr-c, body:not([data-hdr="A"]) .hdr-a { display: none; }</style>
 </head>
 <body class="min-h-screen font-sans bg-background p-6 text-foreground">
 <!-- The admin sidebar reads section[data-label][data-st][data-v][data-d] from this page. Cheap wireframe, drawn 13 Nov from the ledger rows in docs/development/majas/majas.md; grey boxes are placeholders. -->
 
-<h1 class="text-title mb-1">Mājas: Atklāt › Jaunumi</h1>
-<p class="text-meta text-foreground-muted">Versija v7 · publicēta 2026-11-18 14:23</p>
-<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Jaunumi ir sava lapa un pirmā josla (M-18), ne vairs cilne Atklāt iekšā (M-04, M-05). Tā ir nepierakstīta cilvēka sākumlapa: īsa uzruna, veids pieteikties, plūsma. Kartītes lielums pēc jautājuma "vai es ar to drīz varu ko darīt?" (M-20): lielas, vidējas, pārējais saišķos vienā rindā. Darbvirsmā uz Jaunumi ved zīme un (C variantā) vienums Jaunumi galvā.</p>
-<div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-05): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
+<h1 class="text-title mb-1">Mājas: Jaunumi</h1>
+<p class="text-meta text-foreground-muted">Versija v8 · publicēta 2026-11-19 14:06</p>
+<p class="mb-6 max-w-reading text-body-sm text-foreground-muted">Jaunumi ir sava lapa un pirmā josla (M-18), ne vairs cilne Atklāt iekšā (M-04, M-35). Tā ir nepierakstīta cilvēka sākumlapa: īsa uzruna, veids pieteikties, plūsma. Kartītes lielums pēc jautājuma "vai es ar to drīz varu ko darīt?" (M-20): lielas, vidējas, pārējais saišķos vienā rindā. Darbvirsmā uz Jaunumi ved zīme un (C variantā) vienums Jaunumi galvā.</p>
+<div class="mb-6 flex flex-wrap items-center gap-2 text-body-sm" role="group" aria-label="Darbvirsmas galva">Darbvirsmas galva (M-35): <button type="button" data-hdr="C" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">C: Jaunumi galvā (izvēlēts)</button> <button type="button" data-hdr="A" class="inline-flex h-8 items-center rounded-pill px-3 text-button-sm">A: uz Jaunumi ved zīme</button> <span class="text-meta text-foreground-muted">Telefonā abi vienādi.</span></div>
 
 <div id="stage" class="flex flex-col gap-10"></div>
 
@@ -75,11 +75,11 @@
     if (w === 375) return A + B + '<div class="grid grid-cols-2 gap-3">' + C + Dd + '</div>' + E + R;
     return '<div class="grid grid-cols-4 gap-4"><div class="col-span-2">' + A + '</div><div class="col-span-2">' + B + '</div>' + C + Dd + '<div class="col-span-2">' + E + '</div></div>' + R;
   };
-  screens.push({ id: 'landing', st: 'progress', v: 'v7', label: 'Jaunumi nepierakstītam: mājaslapa apmeklētājam (M-04, M-20)', story: 'Nepierakstīts apmeklētājs nonāk šeit. Virsū īsa uzruna ar pieteikšanās veidu (darbvirsmā galvā "Pieteikties"), tad plūsma. Lielas kartītes: tas, ko var darīt drīz (pasākums tuvumā šonedēļ, cilvēks, kas meklē kompāniju). Vidējas: jauna grupa tavā tēmā vai pilsētā, grupas ziņojums. Pārējais saišķos. Josla ir tā pati (M-18); Mājas, Paziņojumi un Ziņas lūdz pieteikties.', fn: function (w) {
+  screens.push({ id: 'landing', st: 'progress', v: 'v8', d: '2026-11-19', note: ["Apmeklētājs nonāk Atklāt.", "Apmeklētājam sava lapa Jaunumi ar uzrunu un plūsmu.", "Vai uzruna un kartīšu izmēri der?"], label: 'Jaunumi nepierakstītam: mājaslapa apmeklētājam (M-04, M-20)', story: 'Nepierakstīts apmeklētājs nonāk šeit. Virsū īsa uzruna ar pieteikšanās veidu (darbvirsmā galvā "Pieteikties"), tad plūsma. Lielas kartītes: tas, ko var darīt drīz (pasākums tuvumā šonedēļ, cilvēks, kas meklē kompāniju). Vidējas: jauna grupa tavā tēmā vai pilsētā, grupas ziņojums. Pārējais saišķos. Josla ir tā pati (M-18); Mājas, Paziņojumi un Ziņas lūdz pieteikties.', fn: function (w) {
     signedOut = true;
     var hero = '<div class="' + box + ' grid gap-3"><p class="text-title">Atrodi cilvēkus, ar kuriem kopā darīt lietas.</p><span class="flex flex-wrap gap-2"><span class="inline-flex h-11 items-center rounded-pill bg-primary px-4 text-button text-primary-foreground">Pieteikties</span><span class="inline-flex h-11 items-center rounded-pill line px-4 text-button">Reģistrēties</span></span></div>';
     var out = frame(w, 'Jaunumi', hero + feed(w)); signedOut = false; return out; } });
-  screens.push({ id: 'signed-in', st: 'progress', v: 'v6', label: 'Jaunumi pierakstītam (M-05, M-20)', story: 'Tā pati plūsma bez uzrunas, pēc tavām tēmām un pilsētas. Pierakstītam sākumlapa ir Mājas; Jaunumi ir pirmā josla.', fn: function (w) { return frame(w, 'Jaunumi', feed(w)); } });
+  screens.push({ id: 'signed-in', st: 'progress', v: 'v7', d: '2026-11-19', note: ["Pierakstītam sākums ir Atklāt.", "Jaunumi pēc tavām tēmām un pilsētas; sākums ir Mājas.", "Vai plūsma pierakstītam der?"], label: 'Jaunumi pierakstītam (M-04, M-20)', story: 'Tā pati plūsma bez uzrunas, pēc tavām tēmām un pilsētas. Pierakstītam sākumlapa ir Mājas; Jaunumi ir pirmā josla.', fn: function (w) { return frame(w, 'Jaunumi', feed(w)); } });
   var MONTHS = ['jan.', 'febr.', 'marts', 'apr.', 'maijs', 'jūn.', 'jūl.', 'aug.', 'sept.', 'okt.', 'nov.', 'dec.'];
   function dayLabel(d) { var p = d.split('-'); return Number(p[2]) + '. ' + MONTHS[Number(p[1]) - 1]; }
   var stage = document.getElementById('stage');
@@ -100,6 +100,10 @@
     col.appendChild(b);
     row.appendChild(col);
   }
+  /* M-id tooltips and the "Šodien / Jaunais / Tev jāizlemj" box (read by the owner on Būvplāns). */
+  var MEAN = {"M-01": "Manas grupas kļūst par Mājām", "M-04": "Pierakstīts uz Mājām, nepierakstīts uz Jaunumi", "M-05": "Jaunumi kā Atklāt cilne (aizvietots ar M-35)", "M-07": "L1 zariem arī ir saruna", "M-08": "Vispirms vienkārši, atklāt vēlāk", "M-09": "Kopiena ir pārskats ar blokiem", "M-10": "Ziņojumi nav ierobežoti pēc līmeņa", "M-11": "Būt redzamam pirms pievienošanās", "M-12": "Ziņojumi kā siena ar īsām atbildēm", "M-14": "Grupas paziņojumi un kopienas Ziņas ir Ziņojumi", "M-15": "Filtrēšana kā veikalos", "M-16": "Cilvēki redzami caur Ziņojumiem", "M-17": "Galva kā šodien (aizvietots ar M-33)", "M-18": "Telefona josla Jaunumi · Atklāt · Mājas · Paziņojumi · Ziņas", "M-19": "Ievads pēc izvēles", "M-20": "Jaunumi kartītes pēc \"vai varu drīz darīt\"", "M-21": "Atpakaļ uz visām tēmām", "M-22": "Filtri Kur un Kad, Valoda nekad", "M-23": "Privātās ziņas neierobežotas", "M-24": "Personīgi pasākumi", "M-25": "Laukums ir tas, ko skaties", "M-26": "Elastīgi laukumi", "M-27": "Klātbūtne un uzruna", "M-28": "Sarunas ilgst pēc aktivitātes", "M-31": "Viens saturs, daudz lēcu", "M-32": "Mājas ir vecais Es", "M-33": "Galva darbvirsmā: zīme · Jaunumi · Mājas · Atklāt · meklēšana", "M-34": "Zīme ir noapaļots kvadrāts; nosaukums kājenē", "M-35": "Atklāt cilnes Grupas · Pasākumi · Cilvēki; Jaunumi galvā", "M-36": "Mājas ir viss par mani, Atklāt ir jaunajam"};
+  var tip = function (h) { return h.replace(/M-\d\d/g, function (m) { return MEAN[m] ? '<abbr title="' + MEAN[m] + '">' + m + '</abbr>' : m; }); };
+  var noteBox = function (n) { return '<dl class="mt-2 grid max-w-reading gap-1 rounded-2xl bg-tint p-3 text-body-sm">' + [['Šodien', n[0]], ['Jaunais', n[1]], ['Tev jāizlemj', n[2]]].map(function (r) { return '<div class="flex gap-2"><dt class="w-28 shrink-0 weight-medium">' + r[0] + '</dt><dd class="text-foreground-muted">' + r[1] + '</dd></div>'; }).join('') + '</dl>'; };
   var row;
   screens.forEach(function (s) {
     var section = document.createElement('section');
@@ -109,14 +113,14 @@
     section.dataset.v = s.v || 'v1';
     var dd = s.v === 'v7' || s.v === 'v6' || s.v === 'v5' || s.v === 'v4' ? '2026-11-18' : s.v === 'v3' ? '2026-11-16' : D;
     section.dataset.d = dd;
-    section.innerHTML = '<h2 class="text-section">' + s.label + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + s.story + '</p>';
+    section.innerHTML = '<h2 class="text-section">' + tip(s.label) + ' <span class="ml-1 inline-flex h-5 items-center rounded-pill px-2 align-middle text-meta line text-foreground">' + (s.st === 'progress' ? 'Procesā' : 'Jauns') + '</span> <span class="text-meta weight-medium text-foreground-muted">' + (s.v || 'v1') + ' · ' + dayLabel(dd) + '</span></h2><p class="mb-3 mt-1 max-w-reading text-body-sm text-foreground-muted">' + tip(s.story) + '</p>' + noteBox(s.note);
     row = document.createElement('div');
     row.className = 'flex flex-col items-start gap-6 overflow-x-auto pb-4';
     [375, 1280].forEach(function (w) { addBox(row, s, w); });
     section.appendChild(row);
     stage.appendChild(section);
   });
-  /* A/C switch (M-05): both headers are drawn, the body attribute shows one. Remembered per browser. */
+  /* A/C switch (M-35): both headers are drawn, the body attribute shows one. Remembered per browser. */
   (function () {
     var btns = document.querySelectorAll('button[data-hdr]');
     function set(v) {

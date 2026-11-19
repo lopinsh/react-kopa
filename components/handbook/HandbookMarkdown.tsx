@@ -22,6 +22,7 @@ function resolveHref(href: string | undefined): { kind: 'internal' | 'anchor' | 
     if (!href) return { kind: 'none', href: '' };
     if (/^https?:\/\//.test(href)) return { kind: 'external', href };
     if (href.startsWith('#')) return { kind: 'anchor', href };
+    if (/^\?d=[a-z-]+$/.test(href)) return { kind: 'internal', href: `/admin/development/build-plan${href}` }; // a drawing tab of the build plan
     // The build plan (docs/development/) links rules on the redesign page as `redesign.html#AR-23`.
     const redesign = /^redesign\.html(#[\w-]+)?$/.exec(href);
     if (redesign) return { kind: 'internal', href: '/admin/handbook/design#drawings' };
