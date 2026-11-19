@@ -37,7 +37,7 @@ Katrs ekrāns atveras savā cilnē; viņa augšā ir kastīte "Šodien / Jaunais
 | Sākumlapa | Visiem Atklāt | Pierakstītam Mājas, apmeklētājam Jaunumi | M-04 |
 | Atklāt | Tēmu izvēlne, grupu kartītes | Cilnes Grupas · Pasākumi · Cilvēki; koks un filtri Kur, Kad kā veikalā | M-15, M-22, M-35 |
 | Grupas paziņojumi | Jaunumi visiem biedriem, atbildēt nevar | Ziņojums: atbildēt var, biedriem paziņo | M-14 |
-| Kopienas Ziņas | Citi nosaukums, atbildes ir | Tās pašas Ziņojumi, viens noteikumu kopums | M-14 |
+| Kopienas Ziņas | Cits nosaukums, atbildes ir | Tie paši Ziņojumi, viens noteikumu kopums | M-14 |
 | Ziņojumu limits | 3 aktīvi uz cilvēku visā vietnē | 3 katrā kopienā, kopā 10; tikai cilvēkiem, grupai nav | M-14 |
 | Ziņojumu derīgums | Beidzas pēc 30 dienām | Pagaidām nebeidzas; noteikums vēlāk | M-14 |
 | Paziņojums par atbildi | Nav izvēles | Slēdzis profilā, sākumā izslēgts | M-14 |
