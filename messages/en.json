@@ -1140,7 +1140,9 @@
         "home": "Home",
         "jaunumi": "News",
         "talk": "Announcements and Square",
-        "atklat": "Discover"
+        "atklat": "Discover",
+        "admin-tools": "Admin tools",
+        "admin-overview": "Administration overview"
       }
     },
     "handbook": {

@@ -119,3 +119,6 @@ Aizvietotie ieraksti (Changed) un atbildētie jautājumi.
 Atvērtie jautājumi, visi atrisināti: 1 M-35 (C; A zīmēts) · 2 M-32 · 3 M-22 · 4 M-16 · 5 M-14 · 6 M-36 · 7 M-09 · 8 M-34.
 
 Piezīmes: 13.11. jauna lietotāja atsauksme: atklāšana kā pirmā lapa nospiež; vajag mājas, veidu būt redzamam pirms grupas, vienu vietu jaunumiem un pirmo iespaidu bez pārbagātības, un īpašnieka vēlmi atgūt tiešraides tuvumu (kā rindā vai pie tējas katla pasākumā). 16.11. īpašnieks: grupas paziņojums ir Ziņojums (M-14); Ziņojumiem nav 30 dienu termiņa pagaidām. 18.11. īpašnieks: atbildes nekad neskaita limitā; limits pēc kopienas; bez limita grupai; atbilžu paziņojums pēc izvēles.
+
+## Citi plāni: Admin rīki
+Atsevišķs plāns: Admin rīki un Administrācijas pārskats. Ledžers: `docs/development/specs/admin-tools.md` (AT-01 līdz AT-09). Zīmējumi: [Admin rīki](?d=admin-tools) (vairoga izvēlne, Atsauksmes un Tulkot josla, Dizains, Šī grupa), [Administrācijas pārskats](?d=admin-overview) (Jādara, pulss, Sūdzības). Atvērti: AT-03a un AT-09, abi mani ieteikumi.

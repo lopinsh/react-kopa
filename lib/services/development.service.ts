@@ -21,6 +21,8 @@ export const PLAN = {
         { id: 'jaunumi', file: 'majas/jaunumi.html' },
         { id: 'talk', file: 'majas/talk.html' },
         { id: 'atklat', file: 'majas/atklat.html' },
+        { id: 'admin-tools', file: 'admin-tools/tools.html' },
+        { id: 'admin-overview', file: 'admin-tools/overview.html' },
     ],
 } as const;
 export type PlanDrawingId = (typeof PLAN.drawings)[number]['id'];

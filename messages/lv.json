@@ -1140,7 +1140,9 @@
         "home": "Mājas",
         "jaunumi": "Jaunumi",
         "talk": "Ziņojumi un Laukums",
-        "atklat": "Atklāt"
+        "atklat": "Atklāt",
+        "admin-tools": "Admin rīki",
+        "admin-overview": "Administrācijas pārskats"
       }
     },
     "handbook": {
